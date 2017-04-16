@@ -1,6 +1,6 @@
-# Deepin Text
+# Deepin System Monitor
 
-Text world to do what i want do in Emacs.
+Deepin system monitor: a more user-friendly system monitor.
 
 ## Dependencies
 
@@ -10,7 +10,7 @@ Text world to do what i want do in Emacs.
 * cd build
 * qmake ..
 * make
-* ./deepin-text
+* ./deepin-system-monitor
 
 ## Usage
 
@@ -34,4 +34,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-Deepin Text is licensed under [GPLv3](LICENSE).
+Deepin System Monitor is licensed under [GPLv3](LICENSE).
