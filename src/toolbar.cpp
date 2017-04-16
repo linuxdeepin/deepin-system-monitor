@@ -37,5 +37,13 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     QLabel *iconLabel = new QLabel();
     iconLabel->setPixmap(iconPixmap);
     
+    searchEdit = new DSearchEdit();
+    searchEdit->setFixedWidth(280);
+    searchEdit->setPlaceHolder("Search");
+    
     layout->addWidget(iconLabel);
+    layout->addSpacing(90);
+    layout->addStretch();
+    layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
+    layout->addStretch();
 }                                    

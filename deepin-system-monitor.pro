@@ -9,16 +9,21 @@ INCLUDEPATH += .
 CONFIG += link_pkgconfig
 CONFIG += c++11 
 PKGCONFIG += dtkwidget dtkbase
+RESOURCES = deepin-system-monitor.qrc
 
 # Input
 HEADERS += src/utils.h \
            src/toolbar.h \
            src/cpu_monitor.h \
+           src/status_monitor.h \
+           src/process_manager.h \
            src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
 		   src/toolbar.cpp \
            src/cpu_monitor.cpp \
+           src/status_monitor.cpp \
+           src/process_manager.cpp \
 		   src/main_window.cpp
 		   
 QT += core

@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         CpuMonitor *monitor = new CpuMonitor();
         monitor->start();
         
-        window.setMinimumSize(QSize(600, 700));
+        window.setMinimumSize(QSize(900, 700));
         DUtility::moveToCenter(&window);
         window.show();
 

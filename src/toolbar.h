@@ -21,11 +21,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#ifndef TOOLBAR_H
+#define TOOLBAR_H
+
 #include <QHBoxLayout>
 #include <QWidget>
 
-#ifndef TOOLBAR_H
-#define TOOLBAR_H
+#include <dsearchedit.h>
+
+DWIDGET_USE_NAMESPACE
 
 class Toolbar : public QWidget
 {
@@ -33,6 +37,9 @@ class Toolbar : public QWidget
     
 public:
     Toolbar(QWidget *parent = 0);
+    
+private:
+    DSearchEdit *searchEdit;
 };
 
 #endif
