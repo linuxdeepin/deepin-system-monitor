@@ -35,7 +35,7 @@ void CpuMonitor::test()
     readStatsCPU(entries2);
 
     // print output
-    printStats(entries1, entries2);
+    // printStats(entries1, entries2);
 }
 
 void CpuMonitor::readStatsCPU(std::vector<CPUData> & entries)

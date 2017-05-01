@@ -21,6 +21,8 @@ HEADERS += src/utils.h \
            src/list_view.h \
            src/process_item.h \
            src/process_view.h \
+           src/process_tools.h \
+           src/hashqstring.h \
            src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
@@ -32,6 +34,7 @@ SOURCES += src/main.cpp \
            src/list_view.cpp \
            src/process_item.cpp \
            src/process_view.cpp \
+           src/process_tools.cpp \
 		   src/main_window.cpp
 		   
 QT += core
@@ -42,3 +45,4 @@ QT += x11extras
 QT += dbus
 
 QMAKE_CXXFLAGS += -g
+LIBS += -L"libprocps" -lprocps -lstdc++fs

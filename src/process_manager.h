@@ -3,9 +3,12 @@
 
 #include <QWidget>
 #include "process_view.h"
+#include <proc/readproc.h>
 
 class ProcessManager : public QWidget
 {
+    typedef std::map<int, proc_t> storedProcType;
+    
     Q_OBJECT
     
 public:
@@ -13,6 +16,9 @@ public:
     
 private:
     ProcessView *processView;
+    
+    storedProcType prevProcs;
+    unsigned long long totalCpuTime;
 };
 
 #endif
