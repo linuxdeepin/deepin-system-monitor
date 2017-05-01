@@ -19,6 +19,8 @@ HEADERS += src/utils.h \
            src/process_manager.h \
            src/list_item.h \
            src/list_view.h \
+           src/process_item.h \
+           src/process_view.h \
            src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
@@ -28,6 +30,8 @@ SOURCES += src/main.cpp \
            src/process_manager.cpp \
            src/list_item.cpp \
            src/list_view.cpp \
+           src/process_item.cpp \
+           src/process_view.cpp \
 		   src/main_window.cpp
 		   
 QT += core
