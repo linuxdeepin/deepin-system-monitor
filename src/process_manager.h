@@ -2,6 +2,7 @@
 #define PROCESSMANAGER_H
 
 #include <QWidget>
+#include "process_view.h"
 
 class ProcessManager : public QWidget
 {
@@ -9,6 +10,9 @@ class ProcessManager : public QWidget
     
 public:
     ProcessManager(QWidget *parent = 0);
+    
+private:
+    ProcessView *processView;
 };
 
 #endif

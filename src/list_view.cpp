@@ -37,3 +37,11 @@ void ListView::setColumnWidths(QList<int> *widths) {
     
 }
 
+void ListView::paintEvent(QPaintEvent *) {
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    QPainterPath path;
+    path.addRect(QRectF(rect()));
+    painter.fillPath(path, QColor("#00A0A0"));
+}

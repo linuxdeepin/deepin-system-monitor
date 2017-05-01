@@ -21,6 +21,9 @@ public:
     void setTitles(QStringList *titles);
     void setSortAlgorithm();
     void setColumnWidths(QList<int> *widths);
+    
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif

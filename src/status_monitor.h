@@ -9,6 +9,9 @@ class StatusMonitor : public QWidget
     
 public:
     StatusMonitor(QWidget *parent = 0);
+    
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif
