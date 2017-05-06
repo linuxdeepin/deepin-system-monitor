@@ -52,4 +52,5 @@ public:
     static void removeChildren(QWidget *widget);
     static void removeLayoutChild(QLayout *layout, int index);
     static void setFontSize(QPainter &painter, int textSize);
+    static QString convertSizeUnit(int bytes);
 };

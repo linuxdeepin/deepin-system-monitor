@@ -22,14 +22,14 @@ private:
     QString name;
     QString user;
     int cpu;
-    int memory;
+    QString memory;
     int uploadBandwidth;
     int downloadBandwidth;
     int pid;
     QIcon icon;
     QPixmap iconPixmap;
     int iconSize;
-    int iconOffsetX;
+    int padding;
 };
 
 #endif

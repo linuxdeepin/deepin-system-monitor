@@ -77,7 +77,7 @@ void ListView::paintEvent(QPaintEvent *) {
             painter.setOpacity(1);
             Utils::setFontSize(painter, 11);
             painter.setPen(QPen(QColor("#666666")));
-            painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignLeft | Qt::AlignVCenter, titleNames[columnCounter]);
+            painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, titleNames[columnCounter]);
             
             columnRenderX += renderWidth;
             columnCounter++;

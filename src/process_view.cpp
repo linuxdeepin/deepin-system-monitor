@@ -8,7 +8,7 @@ ProcessView::ProcessView()
     rowHeight = 40;
     
     QList<int> widths;
-    widths << -1 << 60 << 100 << 100;
+    widths << -1 << 60 << 100 << 60;
     setColumnWidths(widths);
     
     QList<QString> titles;

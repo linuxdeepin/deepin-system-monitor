@@ -178,3 +178,17 @@ qreal Utils::easeOutQuint(qreal x)
 {
     return qPow(x - 1, 5) + 1;
 }
+
+QString Utils::convertSizeUnit(int bytes) {
+    if (bytes < qPow(2, 10)) {
+        return QString("%1 B").arg(bytes);
+    } else if (bytes < qPow(2, 20)) {
+        return QString("%1 KiB").arg(QString::number(qreal(bytes) / qPow(2, 10), 'f', 1));
+    } else if (bytes < qPow(2, 30)) {
+        return QString("%1 MiB").arg(QString::number(qreal(bytes) / qPow(2, 20), 'f', 1));
+    } else if (bytes < qPow(2, 40)) {
+        return QString("%1 GiB").arg(QString::number(qreal(bytes) / qPow(2, 30), 'f', 1));
+    } else if (bytes < qPow(2, 50)) {
+        return QString("%1 TiB").arg(QString::number(qreal(bytes) / qPow(2, 40), 'f', 1));
+    }
+}

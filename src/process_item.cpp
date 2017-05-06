@@ -13,12 +13,12 @@ ProcessItem::ProcessItem(proc_t *p)
     user = process->euser;
     cpu = process->pcpu;
     pid = process->tid;
-    memory = (process->resident - process->share) * sysconf(_SC_PAGESIZE);
+    memory = Utils::convertSizeUnit((process->resident - process->share) * sysconf(_SC_PAGESIZE));
 
     iconSize = 24;
     icon = getProcessIconFromName(name);
     iconPixmap = icon.pixmap(iconSize, iconSize);
-    iconOffsetX = 10;
+    padding = 10;
 }
 
 void ProcessItem::render(int column, QRect rect, QPainter *painter) {
@@ -27,19 +27,19 @@ void ProcessItem::render(int column, QRect rect, QPainter *painter) {
     painter->setPen(QPen(QColor("#666666")));
 
     if (column == 0) {
-        painter->drawPixmap(QRect(rect.x() + iconOffsetX,
+        painter->drawPixmap(QRect(rect.x() + padding,
                                   rect.y() + (rect.height() - iconSize) / 2,
                                   iconSize,
                                   iconSize),
                             iconPixmap);
         
-        painter->drawText(QRect(rect.x() + iconSize + iconOffsetX * 2, rect.y(), rect.width() - iconSize - iconOffsetX * 2, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
+        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
     } else if (column == 1) {
-        painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, QString("%1%").arg(cpu));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(cpu));
     } else if (column == 2) {
-        painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, QString("%1").arg(memory));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memory);
     } else if (column == 3) {
-        painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, QString("%1").arg(pid));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }
 
