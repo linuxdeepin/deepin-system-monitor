@@ -17,7 +17,7 @@ public:
     void addSelections(QList<ListItem*> items);
     void clearSelections();
     
-    void setTitles(QStringList *titles);
+    void setTitles(QList<QString> titles, int height);
     void setSortAlgorithm();
     void setColumnWidths(QList<int> widths);
     
@@ -27,8 +27,9 @@ protected:
     int rowHeight;
     
 private:
-    int renderY;
     QList<int> columnWidths;
+    int titleHeight;
+    QList<QString> titleNames;
 };
 
 #endif

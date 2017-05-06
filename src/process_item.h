@@ -29,6 +29,7 @@ private:
     QIcon icon;
     QPixmap iconPixmap;
     int iconSize;
+    int iconOffsetX;
 };
 
 #endif

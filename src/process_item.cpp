@@ -18,29 +18,27 @@ ProcessItem::ProcessItem(proc_t *p)
     iconSize = 24;
     icon = getProcessIconFromName(name);
     iconPixmap = icon.pixmap(iconSize, iconSize);
+    iconOffsetX = 10;
 }
 
 void ProcessItem::render(int column, QRect rect, QPainter *painter) {
     painter->setOpacity(1);
-
-    if (column > 0) {
-        Utils::setFontSize(*painter, 11);
-        painter->setPen(QPen(QColor("#666666")));
-    }
+    Utils::setFontSize(*painter, 11);
+    painter->setPen(QPen(QColor("#666666")));
 
     if (column == 0) {
-        painter->drawPixmap(QRect(rect.x() + (rect.width() - iconSize) / 2,
+        painter->drawPixmap(QRect(rect.x() + iconOffsetX,
                                   rect.y() + (rect.height() - iconSize) / 2,
                                   iconSize,
                                   iconSize),
                             iconPixmap);
+        
+        painter->drawText(QRect(rect.x() + iconSize + iconOffsetX * 2, rect.y(), rect.width() - iconSize - iconOffsetX * 2, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
     } else if (column == 1) {
-        painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, name);
-    } else if (column == 2) {
         painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, QString("%1%").arg(cpu));
-    } else if (column == 3) {
+    } else if (column == 2) {
         painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, QString("%1").arg(memory));
-    } else if (column == 4) {
+    } else if (column == 3) {
         painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }
