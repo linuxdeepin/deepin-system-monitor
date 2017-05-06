@@ -13,6 +13,7 @@ public:
     ProcessItem(proc_t *p);
     
     void render(int column, QRect rect, QPainter *painter);
+    void renderBackground(int index, QRect rect, QPainter *painter);
     void renderSelection(QRect rect, QPainter *painter);
     
 private:
@@ -26,6 +27,8 @@ private:
     int downloadBandwidth;
     int pid;
     QIcon icon;
+    QPixmap iconPixmap;
+    int iconSize;
 };
 
 #endif

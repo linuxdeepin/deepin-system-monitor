@@ -45,15 +45,16 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     totalCpuTime = getTotalCpuTime();
 
     // Read processes information.
-    QList<ListItem*> items; 
-    unsigned int index = 0;
+    QList<ListItem*> items;
     for(auto &i:processes) {
-        ProcessItem *item = new ProcessItem(&i.second);
-        items << item;
+        QString user = (&i.second)->euser;
         
-        index++;
+        if (user != "root") {
+            ProcessItem *item = new ProcessItem(&i.second);
+            items << item;
+        }
     }
-    
+
     processView->addItems(items);
 
     // keep processes we've read for cpu calculations next cycle

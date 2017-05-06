@@ -46,6 +46,8 @@ void ListView::paintEvent(QPaintEvent *) {
 
     int rowCounter = 0;
     for (ListItem *item:listItems) {
+        item->renderBackground(rowCounter, QRect(0, renderY + rowCounter * rowHeight, rect().width(), rowHeight), &painter);
+        
         int columnCounter = 0;
         int columnRenderX = 0;
         for (int columnWidth:columnWidths) {
