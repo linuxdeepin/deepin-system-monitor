@@ -299,14 +299,8 @@ namespace processTools {
      * @param procname The name of the process
      * @return The process' icon or the default executable icon if none was found
      */
-    QIcon getProcessIconFromName(QString procName, std::unordered_map<QString, QIcon> &processIconMapCache)
+    QIcon getProcessIconFromName(QString procName)
     {
-        // check we havent already got the icon in the cache
-        auto pos = processIconMapCache.find(procName);
-        if (pos != processIconMapCache.end()) {
-            return pos->second;
-        }
-
         // apply some corrections to the process name
         // ie, sh should look for terminal icons, not anything containing sh
         static std::map<QString, QString> procNameCorrections({
@@ -359,7 +353,6 @@ namespace processTools {
         }
         in.close();
 
-        processIconMapCache[procName] = icon;
         return icon;
     }
 }

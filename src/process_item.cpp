@@ -14,22 +14,25 @@ ProcessItem::ProcessItem(proc_t *p)
     cpu = process->pcpu;
     pid = process->tid;
     memory = (process->resident - process->share) * sysconf(_SC_PAGESIZE);
-    
+
     iconSize = 24;
-    icon = QIcon::fromTheme("application-x-executable");
+    icon = getProcessIconFromName(name);
     iconPixmap = icon.pixmap(iconSize, iconSize);
 }
 
 void ProcessItem::render(int column, QRect rect, QPainter *painter) {
-    Utils::setFontSize(*painter, 11);
     painter->setOpacity(1);
-    painter->setPen(QPen(QColor("#666666")));
-    
+
+    if (column > 0) {
+        Utils::setFontSize(*painter, 11);
+        painter->setPen(QPen(QColor("#666666")));
+    }
+
     if (column == 0) {
-        painter->drawPixmap(QRect(rect.x() + (rect.width() - iconSize) / 2, 
-                                  rect.y() + (rect.height() - iconSize) / 2, 
+        painter->drawPixmap(QRect(rect.x() + (rect.width() - iconSize) / 2,
+                                  rect.y() + (rect.height() - iconSize) / 2,
                                   iconSize,
-                                  iconSize), 
+                                  iconSize),
                             iconPixmap);
     } else if (column == 1) {
         painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, name);
@@ -45,7 +48,7 @@ void ProcessItem::render(int column, QRect rect, QPainter *painter) {
 void ProcessItem::renderBackground(int index, QRect rect, QPainter *painter) {
     QPainterPath path;
     path.addRect(QRectF(rect));
-    
+
     if (index % 2 == 0) {
         painter->setOpacity(0.1);
     } else {

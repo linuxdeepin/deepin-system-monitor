@@ -29,7 +29,7 @@ QString getProcessCmdline(pid_t pid);
 QString getProcessStartDate(unsigned long long start_time);
 QString getProcessStatus(proc_t* p);
 unsigned long long getTotalCpuTime();
-QIcon getProcessIconFromName(QString procName, std::unordered_map<QString, QIcon> &processIconMapCache);
+QIcon getProcessIconFromName(QString procName);
 }
 
 #endif // PROCESSTOOLS
