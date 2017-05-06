@@ -15,27 +15,29 @@ ProcessItem::ProcessItem(proc_t *p)
     pid = process->tid;
     memory = (process->resident - process->share) * sysconf(_SC_PAGESIZE);
     
+    icon = QIcon::fromTheme("application-x-executable");
+    
     qDebug() << name << user << cpu << pid << memory;
 }
 
-void ProcessItem::render(int column, QRect rect, QPainter &painter) {
-    Utils::setFontSize(painter, 11);
-    painter.setOpacity(1);
-    painter.setPen(QPen(QColor("#666666")));
+void ProcessItem::render(int column, QRect rect, QPainter *painter) {
+    Utils::setFontSize(*painter, 11);
+    painter->setOpacity(1);
+    painter->setPen(QPen(QColor("#666666")));
     
     if (column == 0) {
-        
+        icon.paint(painter, rect);
     } else if (column == 1) {
-        painter.drawText(rect, Qt::AlignLeft, name);
+        painter->drawText(rect, Qt::AlignLeft, name);
     } else if (column == 2) {
-        painter.drawText(rect, Qt::AlignLeft, QString("%1%").arg(cpu));
+        painter->drawText(rect, Qt::AlignLeft, QString("%1%").arg(cpu));
     } else if (column == 3) {
-        painter.drawText(rect, Qt::AlignLeft, QString("%1").arg(memory));
+        painter->drawText(rect, Qt::AlignLeft, QString("%1").arg(memory));
     } else if (column == 4) {
-        painter.drawText(rect, Qt::AlignLeft, QString("%1").arg(pid));
+        painter->drawText(rect, Qt::AlignLeft, QString("%1").arg(pid));
     }
 }
 
-void ProcessItem::renderSelection(QRect rect, QPainter &painter) {
+void ProcessItem::renderSelection(QRect rect, QPainter *painter) {
 
 }

@@ -3,6 +3,7 @@
 
 #include "list_item.h"
 #include <proc/readproc.h>
+#include <QIcon>
 
 class ProcessItem : public ListItem
 {
@@ -11,8 +12,8 @@ class ProcessItem : public ListItem
 public:
     ProcessItem(proc_t *p);
     
-    void render(int column, QRect rect, QPainter &painter);
-    void renderSelection(QRect rect, QPainter &painter);
+    void render(int column, QRect rect, QPainter *painter);
+    void renderSelection(QRect rect, QPainter *painter);
     
 private:
     proc_t *process;
@@ -24,6 +25,7 @@ private:
     int uploadBandwidth;
     int downloadBandwidth;
     int pid;
+    QIcon icon;
 };
 
 #endif

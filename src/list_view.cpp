@@ -49,7 +49,7 @@ void ListView::paintEvent(QPaintEvent *) {
         int columnCounter = 0;
         int columnRenderX = 0;
         for (int columnWidth:columnWidths) {
-            item->render(columnCounter, QRect(columnRenderX, renderY + rowCounter * rowHeight, columnWidth, rowHeight), painter);
+            item->render(columnCounter, QRect(columnRenderX, renderY + rowCounter * rowHeight, columnWidth, rowHeight), &painter);
             
             columnRenderX += columnWidth;
             columnCounter++;

@@ -11,8 +11,8 @@ class ListItem : public QObject
 public:
     ListItem();
     
-    virtual void render(int column, QRect rect, QPainter &painter)=0;
-    virtual void renderSelection(QRect rect, QPainter &painter)=0;
+    virtual void render(int column, QRect rect, QPainter *painter)=0;
+    virtual void renderSelection(QRect rect, QPainter *painter)=0;
 };
 
 #endif
