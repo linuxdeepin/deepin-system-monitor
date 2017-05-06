@@ -9,21 +9,26 @@ class ListView : public QWidget
     Q_OBJECT
     
 public:
-    ListView(QWidget *parent = 0);
+    ListView(int height=32, QWidget *parent = 0);
     
-    void addItems(QList<ListItem> *items);
-    void insertItems(ListItem *insertPosition, QList<ListItem> *items);
+    void addItems(QList<ListItem*> items);
     void clearItems();
     
-    void addSelections(QList<ListItem> *items);
+    void addSelections(QList<ListItem*> items);
     void clearSelections();
     
     void setTitles(QStringList *titles);
     void setSortAlgorithm();
-    void setColumnWidths(QList<int> *widths);
+    void setColumnWidths(QList<int> widths);
     
 protected:
     void paintEvent(QPaintEvent *event);
+    QList<ListItem*> listItems;
+    int rowHeight;
+    
+private:
+    int renderY;
+    QList<int> columnWidths;
 };
 
 #endif

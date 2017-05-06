@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         app.setApplicationName(QObject::tr("Deepin System Monitor"));
         app.setApplicationVersion("1.0");
         
-        app.setTheme("light");
+        app.setTheme("dark");
 
         MainWindow window;
         

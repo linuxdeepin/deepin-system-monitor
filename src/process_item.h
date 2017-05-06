@@ -2,25 +2,28 @@
 #define PROCESSITEM_H
 
 #include "list_item.h"
+#include <proc/readproc.h>
 
 class ProcessItem : public ListItem
 {
     Q_OBJECT
     
 public:
-    ProcessItem(QString procPath);
+    ProcessItem(proc_t *p);
     
-    void render(int column, QRect rect, QPainter *painter);
-    void renderSelection(QRect rect, QPainter *painter);
+    void render(int column, QRect rect, QPainter &painter);
+    void renderSelection(QRect rect, QPainter &painter);
     
 private:
-    QString processIconPath;
-    QString processName;
-    int processCPU;
-    int processMemory;
-    int processUploadBandwidth;
-    int processDownloadBandwidth;
-    int processPid;
+    proc_t *process;
+    QString path;
+    QString name;
+    QString user;
+    int cpu;
+    int memory;
+    int uploadBandwidth;
+    int downloadBandwidth;
+    int pid;
 };
 
 #endif
