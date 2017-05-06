@@ -41,6 +41,8 @@ void ProcessItem::render(int column, QRect rect, QPainter *painter) {
     } else if (column == 3) {
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
+    
+    qDebug() << name;
 }
 
 void ProcessItem::renderBackground(int index, QRect rect, QPainter *painter) {

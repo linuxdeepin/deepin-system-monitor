@@ -52,6 +52,7 @@ void ListView::paintEvent(QPaintEvent *) {
     
     // Draw title.
     int renderY = 0;
+    int renderHeight = 0;
     if (titleHeight > 0) {
         int columnCounter = 0;
         int columnRenderX = 0;
@@ -66,6 +67,7 @@ void ListView::paintEvent(QPaintEvent *) {
         }
         
         renderY += titleHeight;
+        renderHeight += titleHeight;
     }
     
     // Draw context.
@@ -82,7 +84,12 @@ void ListView::paintEvent(QPaintEvent *) {
             columnCounter++;
         }
         
+        renderHeight += rowHeight;
         rowCounter++;
+        
+        if (renderHeight > rect().height()) {
+            break;
+        }
     }
 }
 
