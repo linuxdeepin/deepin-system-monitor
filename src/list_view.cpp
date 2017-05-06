@@ -48,25 +48,7 @@ void ListView::paintEvent(QPaintEvent *) {
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     // Calcuate title widths;
-    QList<int> renderWidths;
-    if (columnWidths.contains(-1)) {
-        for (int columnWidth:columnWidths) {
-            if (columnWidth != -1) {
-                renderWidths << columnWidth;
-            } else {
-                int totalWidthOfOtherColumns = 0;
-                for (auto w:columnWidths) {
-                    if (w != -1) {
-                        totalWidthOfOtherColumns += w;
-                    }
-                }
-                
-                renderWidths << rect().width() - totalWidthOfOtherColumns;
-            }
-        }
-    } else {
-        renderWidths = columnWidths;
-    }
+    QList<int> renderWidths = calcuateRenderWidths();
     
     // Draw title.
     int renderY = 0;
@@ -104,3 +86,26 @@ void ListView::paintEvent(QPaintEvent *) {
     }
 }
 
+QList<int> ListView::calcuateRenderWidths() {
+    QList<int> renderWidths;
+    if (columnWidths.contains(-1)) {
+        for (int columnWidth:columnWidths) {
+            if (columnWidth != -1) {
+                renderWidths << columnWidth;
+            } else {
+                int totalWidthOfOtherColumns = 0;
+                for (auto w:columnWidths) {
+                    if (w != -1) {
+                        totalWidthOfOtherColumns += w;
+                    }
+                }
+                
+                renderWidths << rect().width() - totalWidthOfOtherColumns;
+            }
+        }
+    } else {
+        renderWidths = columnWidths;
+    }
+    
+    return renderWidths;
+}

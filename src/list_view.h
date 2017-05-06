@@ -23,6 +23,8 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *event);
+    QList<int> calcuateRenderWidths();
+    
     QList<ListItem*> listItems;
     int rowHeight;
     
