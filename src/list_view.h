@@ -2,6 +2,7 @@
 #define LISTVIEW_H
 
 #include <QWidget>
+#include <QTimer>
 #include "list_item.h"
 
 class ListView : public QWidget
@@ -21,8 +22,17 @@ public:
     void setSortAlgorithm();
     void setColumnWidths(QList<int> widths);
     
+public slots:
+    void renderAnimation();
+    
 protected:
     void paintEvent(QPaintEvent *event);
+    bool eventFilter(QObject *, QEvent *event);
+    void wheelEvent(QWheelEvent *event);
+    
+    void startScroll(int scrollOffset);
+    int adjustRenderOffset(int offset);
+
     QList<int> calcuateRenderWidths();
     
     QList<ListItem*> listItems;
@@ -31,7 +41,16 @@ protected:
 private:
     QList<int> columnWidths;
     int titleHeight;
+    int scrollUnit;
+    int scrollStartY;
+    int scrollDistance;
+    int renderOffset;
     QList<QString> titleNames;
+    
+    QTimer *renderTimer;
+    int animationDuration;
+    int animationFrames;
+    int renderTicker;
 };
 
 #endif
