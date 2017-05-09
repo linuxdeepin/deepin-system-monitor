@@ -24,7 +24,7 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
 
     listItems = new QList<ListItem*>();
     selectionItems = new QList<ListItem*>();
-    lastSelectionIndex = -1;
+    lastSelectItem = NULL;
 }
 
 void ListView::addItems(QList<ListItem*> items) {
@@ -45,7 +45,7 @@ void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection) {
     selectionItems->append(items);
 
     if (recordLastSelection) {
-        lastSelectionIndex = listItems->indexOf(selectionItems->last());
+        lastSelectItem = selectionItems->last();
     }
 }
 
@@ -53,7 +53,7 @@ void ListView::clearSelections(bool clearLastSelection) {
     selectionItems->clear();
 
     if (clearLastSelection) {
-        lastSelectionIndex = -1;
+        lastSelectItem = NULL;
     }
 }
 
@@ -89,28 +89,44 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
     if (keyEvent->key() == Qt::Key_Home) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollHome();
-        } else {
+        } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
+            shiftSelectHome();
+        }else {
             pressHome();
         }
     } else if (keyEvent->key() == Qt::Key_End) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollEnd();
+        } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
+            shiftSelectEnd();
         } else {
             pressEnd();
         }
     } else if (keyEvent->key() == Qt::Key_Up) {
-        pressUp();
+        if (keyEvent->modifiers() == Qt::ShiftModifier) {
+            shiftSelectUp();
+        } else {
+            pressUp();
+        }
     } else if (keyEvent->key() == Qt::Key_Down) {
-        pressDown();
+        if (keyEvent->modifiers() == Qt::ShiftModifier) {
+            shiftSelectDown();
+        } else {
+            pressDown();
+        }
     } else if (keyEvent->key() == Qt::Key_PageUp) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollPageUp();
+        } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
+            shiftSelectUp();
         } else {
             pressPageUp();
         }
     } else if (keyEvent->key() == Qt::Key_PageDown) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollPageDown();
+        } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
+            shiftSelectDown();
         } else {
             pressPageDown();
         }
@@ -133,6 +149,7 @@ void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
                 addSelections(items);
             }
         } else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
+            int lastSelectionIndex = listItems->indexOf(lastSelectItem); 
             int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
             int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
 
@@ -291,6 +308,30 @@ void ListView::scrollEnd() {
     renderOffset = listItems->count() * rowHeight - rect().height() + titleHeight;
 
     repaint();
+}
+
+void ListView::shiftSelectHome() {
+    
+}
+
+void ListView::shiftSelectEnd() {
+    
+}
+
+void ListView::shiftSelectUp() {
+    
+}
+
+void ListView::shiftSelectDown() {
+    
+}
+
+void ListView::shiftSelectPageUp() {
+    
+}
+
+void ListView::shiftSelectPageDown() {
+    
 }
 
 int ListView::adjustRenderOffset(int offset) {

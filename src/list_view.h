@@ -47,6 +47,13 @@ protected:
     void scrollHome();
     void scrollEnd();
     
+    void shiftSelectHome();
+    void shiftSelectEnd();
+    void shiftSelectUp();
+    void shiftSelectDown();
+    void shiftSelectPageUp();
+    void shiftSelectPageDown();
+    
     void selectUp(int scrollOffset);
     void selectDown(int scrollOffset);
     
@@ -54,8 +61,8 @@ protected:
     
     QList<ListItem*> *listItems;
     QList<ListItem*> *selectionItems;
+    ListItem *lastSelectItem;
     int rowHeight;
-    int lastSelectionIndex;
     
 private:
     QList<int> columnWidths;
