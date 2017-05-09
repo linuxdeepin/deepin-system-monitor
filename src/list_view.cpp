@@ -87,17 +87,33 @@ bool ListView::eventFilter(QObject *, QEvent *event)
 
 void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
     if (keyEvent->key() == Qt::Key_Home) {
-        pressHome();
+        if (keyEvent->modifiers() == Qt::ControlModifier) {
+            scrollHome();
+        } else {
+            pressHome();
+        }
     } else if (keyEvent->key() == Qt::Key_End) {
-        pressEnd();
+        if (keyEvent->modifiers() == Qt::ControlModifier) {
+            scrollEnd();
+        } else {
+            pressEnd();
+        }
     } else if (keyEvent->key() == Qt::Key_Up) {
         pressUp();
     } else if (keyEvent->key() == Qt::Key_Down) {
         pressDown();
     } else if (keyEvent->key() == Qt::Key_PageUp) {
-        pressPageUp();
+        if (keyEvent->modifiers() == Qt::ControlModifier) {
+            scrollPageUp();
+        } else {
+            pressPageUp();
+        }
     } else if (keyEvent->key() == Qt::Key_PageDown) {
-        pressPageDown();
+        if (keyEvent->modifiers() == Qt::ControlModifier) {
+            scrollPageDown();
+        } else {
+            pressPageDown();
+        }
     }
 }
 
@@ -251,6 +267,30 @@ void ListView::pressPageUp() {
 
 void ListView::pressPageDown() {
     selectDown((rect().height() - titleHeight) / rowHeight);
+}
+
+void ListView::scrollPageUp() {
+    renderOffset = adjustRenderOffset(renderOffset - (rect().height() - titleHeight));
+    
+    repaint();
+}
+
+void ListView::scrollPageDown() {
+    renderOffset = adjustRenderOffset(renderOffset + (rect().height() - titleHeight));
+    
+    repaint();
+}
+
+void ListView::scrollHome() {
+    renderOffset = 0;
+    
+    repaint();
+}
+
+void ListView::scrollEnd() {
+    renderOffset = listItems->count() * rowHeight - rect().height() + titleHeight;
+
+    repaint();
 }
 
 int ListView::adjustRenderOffset(int offset) {

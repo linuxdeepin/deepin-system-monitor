@@ -42,6 +42,11 @@ protected:
     void pressPageUp();
     void pressPageDown();
     
+    void scrollPageUp();
+    void scrollPageDown();
+    void scrollHome();
+    void scrollEnd();
+    
     void selectUp(int scrollOffset);
     void selectDown(int scrollOffset);
     
