@@ -1,6 +1,7 @@
 #include "list_view.h"
 #include "utils.h"
 #include <QDebug>
+#include <QApplication>
 #include <QEvent>
 #include <QWheelEvent>
 #include <QtMath>
@@ -93,17 +94,28 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
 
 void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
     int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
-    
+
     if (pressItemIndex < listItems->count()) {
-        clearSelections();
+        if (QApplication::keyboardModifiers() && Qt::ControlModifier) {
+            ListItem *item = (*listItems)[pressItemIndex];
+            
+            if (selectionItems->contains(item)) {
+                selectionItems->removeOne(item);
+            } else {
+                selectionItems->append(item);
+            }
+            
+            repaint();
+        } else {
+            clearSelections();
 
-        QList<ListItem*> items = QList<ListItem*>();
-        items << (*listItems)[pressItemIndex];
-        addSelections(items);
+            QList<ListItem*> items = QList<ListItem*>();
+            items << (*listItems)[pressItemIndex];
+            addSelections(items);
 
-        repaint();
+            repaint();
+        }
     }
-    
 }
 
 void ListView::pressHome() {
