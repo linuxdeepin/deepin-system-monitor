@@ -66,6 +66,10 @@ bool ListView::eventFilter(QObject *, QEvent *event)
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
         handleKeyPressEvent(keyEvent);
+    } else if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+
+        handleButtonPressEvent(mouseEvent);
     }
 
     return false;
@@ -85,6 +89,18 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
     } else if (keyEvent->key() == Qt::Key_PageDown) {
         pressPageDown();
     }
+}
+
+void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
+    int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
+    
+    clearSelections();
+
+    QList<ListItem*> items = QList<ListItem*>();
+    items << (*listItems)[pressItemIndex];
+    addSelections(items);
+
+    repaint();
 }
 
 void ListView::pressHome() {
@@ -138,7 +154,7 @@ void ListView::selectUp(int scrollOffset) {
             if ((renderOffset / rowHeight) > itemIndex) {
                 renderOffset = itemOffset;
             }
-            
+
             repaint();
         }
     }
@@ -171,7 +187,7 @@ void ListView::selectDown(int scrollOffset) {
             if (((renderOffset + rect().height() - titleHeight) / rowHeight) < itemIndex) {
                 renderOffset = itemOffset;
             }
-            
+
             repaint();
         }
     }

@@ -30,6 +30,7 @@ protected:
     bool eventFilter(QObject *, QEvent *event);
     void wheelEvent(QWheelEvent *event);
     void handleKeyPressEvent(QKeyEvent *keyEvent);
+    void handleButtonPressEvent(QMouseEvent *mouseEvent);
     
     void startScroll(int scrollOffset);
     int adjustRenderOffset(int offset);
