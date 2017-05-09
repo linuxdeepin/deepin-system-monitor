@@ -24,6 +24,7 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
 
     listItems = new QList<ListItem*>();
     selectionItems = new QList<ListItem*>();
+    lastSelectionIndex = -1;
 }
 
 void ListView::addItems(QList<ListItem*> items) {
@@ -40,12 +41,20 @@ void ListView::clearItems() {
     repaint();
 }
 
-void ListView::addSelections(QList<ListItem*> items) {
+void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection) {
     selectionItems->append(items);
+
+    if (recordLastSelection) {
+        lastSelectionIndex = listItems->indexOf(selectionItems->last());
+    }
 }
 
-void ListView::clearSelections() {
+void ListView::clearSelections(bool clearLastSelection) {
     selectionItems->clear();
+
+    if (clearLastSelection) {
+        lastSelectionIndex = -1;
+    }
 }
 
 void ListView::setTitles(QList<QString> titles, int height) {
@@ -96,25 +105,41 @@ void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
     int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
 
     if (pressItemIndex < listItems->count()) {
-        if (QApplication::keyboardModifiers() && Qt::ControlModifier) {
+
+        if (mouseEvent->modifiers() == Qt::ControlModifier) {
             ListItem *item = (*listItems)[pressItemIndex];
-            
+
             if (selectionItems->contains(item)) {
                 selectionItems->removeOne(item);
             } else {
-                selectionItems->append(item);
+                QList<ListItem*> items = QList<ListItem*>();
+                items << item;
+                addSelections(items);
             }
-            
-            repaint();
+        } else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
+            int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
+            int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
+
+            clearSelections(false);
+            QList<ListItem*> items = QList<ListItem*>();
+            int index = 0;
+            for (ListItem *item:*listItems) {
+                if (index >= selectionStartIndex && index <= selectionEndIndex) {
+                    items << item;
+                }
+
+                index++;
+            }
+            addSelections(items, false);
         } else {
             clearSelections();
 
             QList<ListItem*> items = QList<ListItem*>();
             items << (*listItems)[pressItemIndex];
             addSelections(items);
-
-            repaint();
         }
+
+        repaint();
     }
 }
 
@@ -190,7 +215,7 @@ void ListView::selectDown(int scrollOffset) {
         if (lastIndex != -1) {
             lastIndex = std::min(listItems->count() - 1, lastIndex + scrollOffset);
 
-            clearSelections();
+            clearSelections(false);
 
             QList<ListItem*> items = QList<ListItem*>();
             items << (*listItems)[lastIndex];

@@ -15,8 +15,8 @@ public:
     void addItems(QList<ListItem*> items);
     void clearItems();
     
-    void addSelections(QList<ListItem*> items);
-    void clearSelections();
+    void addSelections(QList<ListItem*> items, bool recordLastSelection=true);
+    void clearSelections(bool clearLastSelection=true);
     
     void setTitles(QList<QString> titles, int height);
     void setSortAlgorithm();
@@ -50,6 +50,7 @@ protected:
     QList<ListItem*> *listItems;
     QList<ListItem*> *selectionItems;
     int rowHeight;
+    int lastSelectionIndex;
     
 private:
     QList<int> columnWidths;
