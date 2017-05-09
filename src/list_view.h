@@ -27,6 +27,8 @@ public slots:
     
     void selectFirst();
     void selectLast();
+    void selectPrevious();
+    void selectNext();
     
 protected:
     void paintEvent(QPaintEvent *event);

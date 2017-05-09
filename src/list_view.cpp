@@ -76,16 +76,20 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
         selectFirst();
     } else if (keyEvent->key() == Qt::Key_End) {
         selectLast();
+    } else if (keyEvent->key() == Qt::Key_Up) {
+        selectPrevious();
+    } else if (keyEvent->key() == Qt::Key_Down) {
+        selectNext();
     }
 }
 
 void ListView::selectFirst() {
     clearSelections();
-    
+
     QList<ListItem*> items = QList<ListItem*>();
     items << listItems->first();
     addSelections(items);
-    
+
     renderOffset = 0;
 
     repaint();
@@ -93,7 +97,7 @@ void ListView::selectFirst() {
 
 void ListView::selectLast() {
     clearSelections();
-    
+
     QList<ListItem*> items = QList<ListItem*>();
     items << listItems->last();
     addSelections(items);
@@ -101,6 +105,72 @@ void ListView::selectLast() {
     renderOffset = listItems->count() * rowHeight - rect().height() + titleHeight;
 
     repaint();
+}
+
+void ListView::selectPrevious() {
+    if (selectionItems->empty()) {
+        selectFirst();
+    } else {
+        int firstIndex = listItems->count();
+        for (ListItem *item:*selectionItems) {
+            int index = listItems->indexOf(item);
+            if (index < firstIndex) {
+                firstIndex = index;
+            }
+        }
+
+        if (firstIndex != -1) {
+            firstIndex = std::max(0, firstIndex - 1);
+
+            clearSelections();
+
+            QList<ListItem*> items = QList<ListItem*>();
+            items << (*listItems)[firstIndex];
+
+            addSelections(items);
+
+            int itemIndex = firstIndex - 1;
+            int itemOffset = adjustRenderOffset(itemIndex * rowHeight + titleHeight);
+            if ((renderOffset / rowHeight) > itemIndex) {
+                renderOffset = itemOffset;
+            }
+            
+            repaint();
+        }
+    }
+}
+
+void ListView::selectNext() {
+    if (selectionItems->empty()) {
+        selectFirst();
+    } else {
+        int lastIndex = 0;
+        for (ListItem *item:*selectionItems) {
+            int index = listItems->indexOf(item);
+            if (index > lastIndex) {
+                lastIndex = index;
+            }
+        }
+
+        if (lastIndex != -1) {
+            lastIndex = std::min(listItems->count() - 1, lastIndex + 1);
+
+            clearSelections();
+
+            QList<ListItem*> items = QList<ListItem*>();
+            items << (*listItems)[lastIndex];
+
+            addSelections(items);
+
+            int itemIndex = lastIndex + 1;
+            int itemOffset = adjustRenderOffset(itemIndex * rowHeight - rect().height() + titleHeight);
+            if (((renderOffset + rect().height() - titleHeight) / rowHeight) < itemIndex) {
+                renderOffset = itemOffset;
+            }
+            
+            repaint();
+        }
+    }
 }
 
 int ListView::adjustRenderOffset(int offset) {
@@ -184,14 +254,15 @@ void ListView::paintEvent(QPaintEvent *) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
             item->renderBackground(rowCounter, QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter);
 
-            if (selectionItems->contains(item)) {
+            bool isSelectItem = selectionItems->contains(item);
+            if (isSelectItem) {
                 item->renderSelection(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter);
             }
 
             int columnCounter = 0;
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
-                item->render(columnCounter, QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter);
+                item->render(columnCounter, isSelectItem, QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter);
 
                 columnRenderX += renderWidth;
                 columnCounter++;

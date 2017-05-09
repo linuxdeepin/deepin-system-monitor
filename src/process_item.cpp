@@ -21,10 +21,14 @@ ProcessItem::ProcessItem(proc_t *p)
     padding = 10;
 }
 
-void ProcessItem::render(int column, QRect rect, QPainter *painter) {
+void ProcessItem::render(int column, bool isSelectItem, QRect rect, QPainter *painter) {
     painter->setOpacity(1);
     Utils::setFontSize(*painter, 11);
-    painter->setPen(QPen(QColor("#666666")));
+    if (isSelectItem) {
+        painter->setPen(QPen(QColor("#ffffff")));
+    } else {
+        painter->setPen(QPen(QColor("#666666")));
+    }
 
     if (column == 0) {
         painter->drawPixmap(QRect(rect.x() + padding,
