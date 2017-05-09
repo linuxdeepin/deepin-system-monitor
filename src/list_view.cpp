@@ -20,28 +20,31 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
     renderTicker = 0;
     animationFrames = 16;
     animationDuration = 25;
+
+    listItems = new QList<ListItem*>();
+    selectionItems = new QList<ListItem*>();
 }
 
 void ListView::addItems(QList<ListItem*> items) {
     QPainter painter(this);
 
-    listItems.append(items);
+    listItems->append(items);
 
     repaint();
 }
 
 void ListView::clearItems() {
-    listItems.clear();
+    listItems->clear();
 
     repaint();
 }
 
 void ListView::addSelections(QList<ListItem*> items) {
-
+    selectionItems->append(items);
 }
 
 void ListView::clearSelections() {
-    
+    selectionItems->clear();
 }
 
 void ListView::setTitles(QList<QString> titles, int height) {
@@ -50,7 +53,7 @@ void ListView::setTitles(QList<QString> titles, int height) {
 }
 
 void ListView::setSortAlgorithm() {
-    
+
 }
 
 void ListView::setColumnWidths(QList<int> widths) {
@@ -59,11 +62,49 @@ void ListView::setColumnWidths(QList<int> widths) {
 
 bool ListView::eventFilter(QObject *, QEvent *event)
 {
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+
+        handleKeyPressEvent(keyEvent);
+    }
+
     return false;
 }
 
+void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
+    if (keyEvent->key() == Qt::Key_Home) {
+        selectFirst();
+    } else if (keyEvent->key() == Qt::Key_End) {
+        selectLast();
+    }
+}
+
+void ListView::selectFirst() {
+    clearSelections();
+    
+    QList<ListItem*> items = QList<ListItem*>();
+    items << listItems->first();
+    addSelections(items);
+    
+    renderOffset = 0;
+
+    repaint();
+}
+
+void ListView::selectLast() {
+    clearSelections();
+    
+    QList<ListItem*> items = QList<ListItem*>();
+    items << listItems->last();
+    addSelections(items);
+
+    renderOffset = listItems->count() * rowHeight - rect().height() + titleHeight;
+
+    repaint();
+}
+
 int ListView::adjustRenderOffset(int offset) {
-    return std::max(0, std::min(offset, listItems.count() * rowHeight - rect().height() + titleHeight));
+    return std::max(0, std::min(offset, listItems->count() * rowHeight - rect().height() + titleHeight));
 }
 
 void ListView::wheelEvent(QWheelEvent *event)
@@ -73,7 +114,7 @@ void ListView::wheelEvent(QWheelEvent *event)
 
         int newRenderOffset = renderOffset - scrollStep * scrollUnit;
         newRenderOffset = adjustRenderOffset(newRenderOffset);
-        
+
         if (newRenderOffset != renderOffset) {
             startScroll(newRenderOffset - renderOffset);
         }
@@ -86,7 +127,7 @@ void ListView::startScroll(int scrollOffset) {
     if (renderTimer == NULL || !renderTimer->isActive()) {
         scrollStartY = renderOffset;
         scrollDistance = scrollOffset;
-    
+
         renderTicker = 0;
         renderTimer = new QTimer();
         connect(renderTimer, SIGNAL(timeout()), this, SLOT(renderAnimation()));
@@ -96,12 +137,12 @@ void ListView::startScroll(int scrollOffset) {
 
 void ListView::renderAnimation() {
     if (renderTicker <= animationFrames) {
-        
+
         renderOffset = scrollStartY + Utils::easeInOut(renderTicker / (animationFrames * 1.0)) * scrollDistance;
         renderOffset = adjustRenderOffset(renderOffset);
-        
+
         repaint();
-        
+
         renderTicker++;
     } else {
         renderTimer->stop();
@@ -134,14 +175,18 @@ void ListView::paintEvent(QPaintEvent *) {
         renderY += titleHeight;
         renderHeight += titleHeight;
     }
-    
+
     // Draw context.
     painter.setClipRect(QRectF(rect().x(), rect().y() + rowHeight, rect().width(), rect().height() - rowHeight));
-    
+
     int rowCounter = 0;
-    for (ListItem *item:listItems) {
+    for (ListItem *item:*listItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
             item->renderBackground(rowCounter, QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter);
+
+            if (selectionItems->contains(item)) {
+                item->renderSelection(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter);
+            }
 
             int columnCounter = 0;
             int columnRenderX = 0;
@@ -158,7 +203,7 @@ void ListView::paintEvent(QPaintEvent *) {
                 break;
             }
         }
-        
+
         rowCounter++;
     }
 }

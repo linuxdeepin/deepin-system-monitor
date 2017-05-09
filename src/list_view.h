@@ -25,17 +25,22 @@ public:
 public slots:
     void renderAnimation();
     
+    void selectFirst();
+    void selectLast();
+    
 protected:
     void paintEvent(QPaintEvent *event);
     bool eventFilter(QObject *, QEvent *event);
     void wheelEvent(QWheelEvent *event);
+    void handleKeyPressEvent(QKeyEvent *keyEvent);
     
     void startScroll(int scrollOffset);
     int adjustRenderOffset(int offset);
 
     QList<int> calcuateRenderWidths();
     
-    QList<ListItem*> listItems;
+    QList<ListItem*> *listItems;
+    QList<ListItem*> *selectionItems;
     int rowHeight;
     
 private:

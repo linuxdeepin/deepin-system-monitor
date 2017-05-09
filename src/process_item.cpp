@@ -56,5 +56,10 @@ void ProcessItem::renderBackground(int index, QRect rect, QPainter *painter) {
 }
 
 void ProcessItem::renderSelection(QRect rect, QPainter *painter) {
+    QPainterPath path;
+    path.addRect(QRectF(rect));
 
+    painter->setOpacity(0.8);
+    
+    painter->fillPath(path, QColor("#006BBA"));
 }
