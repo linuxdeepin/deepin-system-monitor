@@ -137,7 +137,6 @@ void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
     int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
 
     if (pressItemIndex < listItems->count()) {
-
         if (mouseEvent->modifiers() == Qt::ControlModifier) {
             ListItem *item = (*listItems)[pressItemIndex];
 
@@ -149,25 +148,11 @@ void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
                 addSelections(items);
             }
         } else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
-            int lastSelectionIndex = listItems->indexOf(lastSelectItem); 
+            int lastSelectionIndex = listItems->indexOf(lastSelectItem);
             int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
             int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
 
-            // Note: Shift operation always selection bound from last selection index to current index.
-            // So we don't need *clear* lastSelectionIndex for keep shift + button is right logic.
-            clearSelections(false);
-            QList<ListItem*> items = QList<ListItem*>();
-            int index = 0;
-            for (ListItem *item:*listItems) {
-                if (index >= selectionStartIndex && index <= selectionEndIndex) {
-                    items << item;
-                }
-
-                index++;
-            }
-            // Note: Shift operation always selection bound from last selection index to current index.
-            // So we don't need *record* lastSelectionIndex for keep shift + button is right logic.
-            addSelections(items, false);
+            shiftSelect(selectionStartIndex, selectionEndIndex);
         } else {
             clearSelections();
 
@@ -288,19 +273,19 @@ void ListView::pressPageDown() {
 
 void ListView::scrollPageUp() {
     renderOffset = adjustRenderOffset(renderOffset - (rect().height() - titleHeight));
-    
+
     repaint();
 }
 
 void ListView::scrollPageDown() {
     renderOffset = adjustRenderOffset(renderOffset + (rect().height() - titleHeight));
-    
+
     repaint();
 }
 
 void ListView::scrollHome() {
     renderOffset = 0;
-    
+
     repaint();
 }
 
@@ -310,28 +295,64 @@ void ListView::scrollEnd() {
     repaint();
 }
 
+void ListView::shiftSelect(int selectionStartIndex, int selectionEndIndex) {
+    // Note: Shift operation always selection bound from last selection index to current index.
+    // So we don't need *clear* lastSelectionIndex for keep shift + button is right logic.
+    clearSelections(false);
+    QList<ListItem*> items = QList<ListItem*>();
+    int index = 0;
+    for (ListItem *item:*listItems) {
+        if (index >= selectionStartIndex && index <= selectionEndIndex) {
+            items << item;
+        }
+
+        index++;
+    }
+    // Note: Shift operation always selection bound from last selection index to current index.
+    // So we don't need *record* lastSelectionIndex for keep shift + button is right logic.
+    addSelections(items, false);
+}
+
 void ListView::shiftSelectHome() {
-    
+    if (selectionItems->empty()) {
+        pressHome();
+    } else {
+        int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+        shiftSelect(0, lastSelectionIndex);
+        
+        renderOffset = 0;
+        
+        repaint();
+    }
 }
 
 void ListView::shiftSelectEnd() {
-    
+    if (selectionItems->empty()) {
+        pressEnd();
+    } else {
+        int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+        shiftSelect(lastSelectionIndex, listItems->count() - 1);
+        
+        renderOffset = listItems->count() * rowHeight - rect().height() + titleHeight;
+        
+        repaint();
+    }
 }
 
 void ListView::shiftSelectUp() {
-    
+
 }
 
 void ListView::shiftSelectDown() {
-    
+
 }
 
 void ListView::shiftSelectPageUp() {
-    
+
 }
 
 void ListView::shiftSelectPageDown() {
-    
+
 }
 
 int ListView::adjustRenderOffset(int offset) {

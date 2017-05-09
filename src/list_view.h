@@ -54,6 +54,8 @@ protected:
     void shiftSelectPageUp();
     void shiftSelectPageDown();
     
+    void shiftSelect(int selectionStartIndex, int selectionEndIndex);
+    
     void selectUp(int scrollOffset);
     void selectDown(int scrollOffset);
     
