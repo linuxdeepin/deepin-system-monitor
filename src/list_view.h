@@ -25,20 +25,25 @@ public:
 public slots:
     void renderAnimation();
     
-    void selectFirst();
-    void selectLast();
-    void selectPrevious();
-    void selectNext();
-    
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *);
     bool eventFilter(QObject *, QEvent *event);
     void wheelEvent(QWheelEvent *event);
     void handleKeyPressEvent(QKeyEvent *keyEvent);
     
     void startScroll(int scrollOffset);
     int adjustRenderOffset(int offset);
-
+    
+    void pressHome();
+    void pressEnd();
+    void pressUp();
+    void pressDown();
+    void pressPageUp();
+    void pressPageDown();
+    
+    void selectUp(int scrollOffset);
+    void selectDown(int scrollOffset);
+    
     QList<int> calcuateRenderWidths();
     
     QList<ListItem*> *listItems;

@@ -73,17 +73,21 @@ bool ListView::eventFilter(QObject *, QEvent *event)
 
 void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
     if (keyEvent->key() == Qt::Key_Home) {
-        selectFirst();
+        pressHome();
     } else if (keyEvent->key() == Qt::Key_End) {
-        selectLast();
+        pressEnd();
     } else if (keyEvent->key() == Qt::Key_Up) {
-        selectPrevious();
+        pressUp();
     } else if (keyEvent->key() == Qt::Key_Down) {
-        selectNext();
+        pressDown();
+    } else if (keyEvent->key() == Qt::Key_PageUp) {
+        pressPageUp();
+    } else if (keyEvent->key() == Qt::Key_PageDown) {
+        pressPageDown();
     }
 }
 
-void ListView::selectFirst() {
+void ListView::pressHome() {
     clearSelections();
 
     QList<ListItem*> items = QList<ListItem*>();
@@ -95,7 +99,7 @@ void ListView::selectFirst() {
     repaint();
 }
 
-void ListView::selectLast() {
+void ListView::pressEnd() {
     clearSelections();
 
     QList<ListItem*> items = QList<ListItem*>();
@@ -107,9 +111,9 @@ void ListView::selectLast() {
     repaint();
 }
 
-void ListView::selectPrevious() {
+void ListView::selectUp(int scrollOffset) {
     if (selectionItems->empty()) {
-        selectFirst();
+        pressHome();
     } else {
         int firstIndex = listItems->count();
         for (ListItem *item:*selectionItems) {
@@ -120,7 +124,7 @@ void ListView::selectPrevious() {
         }
 
         if (firstIndex != -1) {
-            firstIndex = std::max(0, firstIndex - 1);
+            firstIndex = std::max(0, firstIndex - scrollOffset);
 
             clearSelections();
 
@@ -140,9 +144,9 @@ void ListView::selectPrevious() {
     }
 }
 
-void ListView::selectNext() {
+void ListView::selectDown(int scrollOffset) {
     if (selectionItems->empty()) {
-        selectFirst();
+        pressHome();
     } else {
         int lastIndex = 0;
         for (ListItem *item:*selectionItems) {
@@ -153,7 +157,7 @@ void ListView::selectNext() {
         }
 
         if (lastIndex != -1) {
-            lastIndex = std::min(listItems->count() - 1, lastIndex + 1);
+            lastIndex = std::min(listItems->count() - 1, lastIndex + scrollOffset);
 
             clearSelections();
 
@@ -171,6 +175,22 @@ void ListView::selectNext() {
             repaint();
         }
     }
+}
+
+void ListView::pressUp() {
+    selectUp(1);
+}
+
+void ListView::pressDown() {
+    selectDown(1);
+}
+
+void ListView::pressPageUp() {
+    selectUp((rect().height() - titleHeight) / rowHeight);
+}
+
+void ListView::pressPageDown() {
+    selectDown((rect().height() - titleHeight) / rowHeight);
 }
 
 int ListView::adjustRenderOffset(int offset) {
