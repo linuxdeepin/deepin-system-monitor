@@ -120,6 +120,8 @@ void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
             int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
             int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
 
+            // Note: Shift operation always selection bound from last selection index to current index.
+            // So we don't need *clear* lastSelectionIndex for keep shift + button is right logic.
             clearSelections(false);
             QList<ListItem*> items = QList<ListItem*>();
             int index = 0;
@@ -130,6 +132,8 @@ void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
 
                 index++;
             }
+            // Note: Shift operation always selection bound from last selection index to current index.
+            // So we don't need *record* lastSelectionIndex for keep shift + button is right logic.
             addSelections(items, false);
         } else {
             clearSelections();
