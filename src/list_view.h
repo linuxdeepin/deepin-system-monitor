@@ -54,10 +54,14 @@ protected:
     void shiftSelectPageUp();
     void shiftSelectPageDown();
     
+    void selectAll();
+    
     void shiftSelect(int selectionStartIndex, int selectionEndIndex);
     
-    void selectUp(int scrollOffset);
-    void selectDown(int scrollOffset);
+    void selectScrollUp(int scrollOffset);
+    void selectScrollDown(int scrollOffset);
+    void shiftSelectScrollUp(int scrollOffset);
+    void shiftSelectScrollDown(int scrollOffset);
     
     QList<int> calcuateRenderWidths();
     

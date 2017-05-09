@@ -118,7 +118,7 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollPageUp();
         } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
-            shiftSelectUp();
+            shiftSelectPageUp();
         } else {
             pressPageUp();
         }
@@ -126,11 +126,25 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollPageDown();
         } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
-            shiftSelectDown();
+            shiftSelectPageDown();
         } else {
             pressPageDown();
         }
+    } else if (keyEvent->key() == Qt::Key_A) {
+        if (keyEvent->modifiers() == Qt::ControlModifier) {
+            selectAll();
+        }
     }
+}
+
+void ListView::selectAll() {
+    clearSelections();
+
+    addSelections(*listItems);
+    
+    renderOffset = 0;
+    
+    repaint();
 }
 
 void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
@@ -189,7 +203,7 @@ void ListView::pressEnd() {
     repaint();
 }
 
-void ListView::selectUp(int scrollOffset) {
+void ListView::selectScrollUp(int scrollOffset) {
     if (selectionItems->empty()) {
         pressHome();
     } else {
@@ -222,7 +236,7 @@ void ListView::selectUp(int scrollOffset) {
     }
 }
 
-void ListView::selectDown(int scrollOffset) {
+void ListView::selectScrollDown(int scrollOffset) {
     if (selectionItems->empty()) {
         pressHome();
     } else {
@@ -256,19 +270,19 @@ void ListView::selectDown(int scrollOffset) {
 }
 
 void ListView::pressUp() {
-    selectUp(1);
+    selectScrollUp(1);
 }
 
 void ListView::pressDown() {
-    selectDown(1);
+    selectScrollDown(1);
 }
 
 void ListView::pressPageUp() {
-    selectUp((rect().height() - titleHeight) / rowHeight);
+    selectScrollUp((rect().height() - titleHeight) / rowHeight);
 }
 
 void ListView::pressPageDown() {
-    selectDown((rect().height() - titleHeight) / rowHeight);
+    selectScrollDown((rect().height() - titleHeight) / rowHeight);
 }
 
 void ListView::scrollPageUp() {
@@ -319,9 +333,9 @@ void ListView::shiftSelectHome() {
     } else {
         int lastSelectionIndex = listItems->indexOf(lastSelectItem);
         shiftSelect(0, lastSelectionIndex);
-        
+
         renderOffset = 0;
-        
+
         repaint();
     }
 }
@@ -332,27 +346,105 @@ void ListView::shiftSelectEnd() {
     } else {
         int lastSelectionIndex = listItems->indexOf(lastSelectItem);
         shiftSelect(lastSelectionIndex, listItems->count() - 1);
-        
+
         renderOffset = listItems->count() * rowHeight - rect().height() + titleHeight;
-        
+
         repaint();
     }
 }
 
-void ListView::shiftSelectUp() {
+void ListView::shiftSelectScrollUp(int scrollOffset) {
+    if (selectionItems->empty()) {
+        pressHome();
+    } else {
+        int firstIndex = listItems->count();
+        int lastIndex = 0;
+        for (ListItem *item:*selectionItems) {
+            int index = listItems->indexOf(item);
 
+            if (index < firstIndex) {
+                firstIndex = index;
+            }
+
+            if (index > lastIndex) {
+                lastIndex = index;
+            }
+        }
+
+        if (firstIndex != -1) {
+            int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+            int selectionStartIndex, selectionEndIndex;
+
+            if (lastIndex == lastSelectionIndex) {
+                selectionStartIndex = std::max(0, firstIndex - scrollOffset);
+                selectionEndIndex = lastSelectionIndex;
+            } else {
+                selectionStartIndex = firstIndex;
+                selectionEndIndex = std::max(0, lastIndex - scrollOffset);
+            }
+
+            shiftSelect(selectionStartIndex, selectionEndIndex);
+
+            renderOffset = adjustRenderOffset((selectionStartIndex - 1) * rowHeight + titleHeight);
+
+            repaint();
+        }
+    }
+}
+
+void ListView::shiftSelectScrollDown(int scrollOffset) {
+    if (selectionItems->empty()) {
+        pressHome();
+    } else {
+        int firstIndex = listItems->count();
+        int lastIndex = 0;
+        for (ListItem *item:*selectionItems) {
+            int index = listItems->indexOf(item);
+
+            if (index < firstIndex) {
+                firstIndex = index;
+            }
+
+            if (index > lastIndex) {
+                lastIndex = index;
+            }
+        }
+
+        if (firstIndex != -1) {
+            int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+            int selectionStartIndex, selectionEndIndex;
+
+            if (firstIndex == lastSelectionIndex) {
+                selectionStartIndex = firstIndex;
+                selectionEndIndex = std::min(listItems->count() - 1, lastIndex + scrollOffset);
+            } else {
+                selectionStartIndex = std::min(listItems->count() - 1, firstIndex + scrollOffset);
+                selectionEndIndex = lastIndex;
+            }
+
+            shiftSelect(selectionStartIndex, selectionEndIndex);
+
+            renderOffset = adjustRenderOffset((selectionEndIndex + 1) * rowHeight + titleHeight - rect().height());
+
+            repaint();
+        }
+    }
+}
+
+void ListView::shiftSelectUp() {
+    shiftSelectScrollUp(1);
 }
 
 void ListView::shiftSelectDown() {
-
+    shiftSelectScrollDown(1);
 }
 
 void ListView::shiftSelectPageUp() {
-
+    shiftSelectScrollUp((rect().height() - titleHeight) / rowHeight);
 }
 
 void ListView::shiftSelectPageDown() {
-
+    shiftSelectScrollDown((rect().height() - titleHeight) / rowHeight);
 }
 
 int ListView::adjustRenderOffset(int offset) {
