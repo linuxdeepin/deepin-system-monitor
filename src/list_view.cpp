@@ -94,13 +94,16 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
 void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
     int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
     
-    clearSelections();
+    if (pressItemIndex < listItems->count()) {
+        clearSelections();
 
-    QList<ListItem*> items = QList<ListItem*>();
-    items << (*listItems)[pressItemIndex];
-    addSelections(items);
+        QList<ListItem*> items = QList<ListItem*>();
+        items << (*listItems)[pressItemIndex];
+        addSelections(items);
 
-    repaint();
+        repaint();
+    }
+    
 }
 
 void ListView::pressHome() {
