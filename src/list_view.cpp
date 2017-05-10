@@ -526,17 +526,13 @@ void ListView::paintEvent(QPaintEvent *) {
     int rowCounter = 0;
     for (ListItem *item:*listItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
-            item->renderBackground(rowCounter, QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter);
-
-            bool isSelectItem = selectionItems->contains(item);
-            if (isSelectItem) {
-                item->renderSelection(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter);
-            }
-
+            bool isSelect = selectionItems->contains(item);
+            item->renderBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
+            
             int columnCounter = 0;
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
-                item->render(columnCounter, isSelectItem, QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter);
+                item->render(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, isSelect);
 
                 columnRenderX += renderWidth;
                 columnCounter++;

@@ -21,10 +21,10 @@ ProcessItem::ProcessItem(proc_t *p)
     padding = 10;
 }
 
-void ProcessItem::render(int column, bool isSelectItem, QRect rect, QPainter *painter) {
+void ProcessItem::render(QRect rect, QPainter *painter, int column, bool isSelect) {
     painter->setOpacity(1);
     Utils::setFontSize(*painter, 11);
-    if (isSelectItem) {
+    if (isSelect) {
         painter->setPen(QPen(QColor("#ffffff")));
     } else {
         painter->setPen(QPen(QColor("#666666")));
@@ -36,7 +36,7 @@ void ProcessItem::render(int column, bool isSelectItem, QRect rect, QPainter *pa
                                   iconSize,
                                   iconSize),
                             iconPixmap);
-        
+
         painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
     } else if (column == 1) {
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(cpu));
@@ -47,23 +47,19 @@ void ProcessItem::render(int column, bool isSelectItem, QRect rect, QPainter *pa
     }
 }
 
-void ProcessItem::renderBackground(int index, QRect rect, QPainter *painter) {
+void ProcessItem::renderBackground(QRect rect, QPainter *painter, int index, bool isSelect) {
     QPainterPath path;
     path.addRect(QRectF(rect));
 
-    if (index % 2 == 0) {
-        painter->setOpacity(0.1);
+    if (isSelect) {
+        painter->setOpacity(0.8);
+        painter->fillPath(path, QColor("#006BBA"));
     } else {
-        painter->setOpacity(0.2);
+        if (index % 2 == 0) {
+            painter->setOpacity(0.1);
+        } else {
+            painter->setOpacity(0.2);
+        }
+        painter->fillPath(path, QColor("#000000"));
     }
-    painter->fillPath(path, QColor("#000000"));
-}
-
-void ProcessItem::renderSelection(QRect rect, QPainter *painter) {
-    QPainterPath path;
-    path.addRect(QRectF(rect));
-
-    painter->setOpacity(0.8);
-    
-    painter->fillPath(path, QColor("#006BBA"));
 }

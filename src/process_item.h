@@ -12,9 +12,8 @@ class ProcessItem : public ListItem
 public:
     ProcessItem(proc_t *p);
     
-    void render(int column, bool isSelectItem, QRect rect, QPainter *painter);
-    void renderBackground(int index, QRect rect, QPainter *painter);
-    void renderSelection(QRect rect, QPainter *painter);
+    void render(QRect rect, QPainter *painter, int column, bool isSelect);
+    void renderBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     
 private:
     proc_t *process;
