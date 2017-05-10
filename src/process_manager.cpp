@@ -46,10 +46,11 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 
     // Read processes information.
     QList<ListItem*> items;
+    QString username = qgetenv("USER");
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
         
-        if (user != "root") {
+        if (user == username) {
             ProcessItem *item = new ProcessItem(&i.second);
             items << item;
         }
