@@ -191,4 +191,6 @@ QString Utils::convertSizeUnit(int bytes) {
     } else if (bytes < qPow(2, 50)) {
         return QString("%1 TiB").arg(QString::number(qreal(bytes) / qPow(2, 40), 'f', 1));
     }
+    
+    return QString::number(bytes);
 }
