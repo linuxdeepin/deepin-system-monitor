@@ -32,8 +32,12 @@ protected:
     void handleKeyPressEvent(QKeyEvent *keyEvent);
     void handleButtonPressEvent(QMouseEvent *mouseEvent);
     
+    bool isMouseAtScrollArea(int x);
+    
     void startScroll(int scrollOffset);
     int adjustRenderOffset(int offset);
+    
+    int getScrollbarHeight();
     
     void pressHome();
     void pressEnd();
@@ -63,12 +67,19 @@ protected:
     void shiftSelectScrollUp(int scrollOffset);
     void shiftSelectScrollDown(int scrollOffset);
     
+    void paintScrollbar(QPainter *painter);
+    
     QList<int> calcuateRenderWidths();
     
     QList<ListItem*> *listItems;
     QList<ListItem*> *selectionItems;
     ListItem *lastSelectItem;
     int rowHeight;
+    
+    bool mouseAtScrollArea;
+    
+    int scrollbarDragWidth;
+    int scrollbarDefaultWidth;
     
 private:
     QList<int> columnWidths;
