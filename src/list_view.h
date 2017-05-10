@@ -28,9 +28,11 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *);
     bool eventFilter(QObject *, QEvent *event);
+    void mouseMoveEvent(QMouseEvent *mouseEvent);
+    void mousePressEvent(QMouseEvent *mouseEvent);
+    void mouseReleaseEvent(QMouseEvent *mouseEvent);
     void wheelEvent(QWheelEvent *event);
-    void handleKeyPressEvent(QKeyEvent *keyEvent);
-    void handleButtonPressEvent(QMouseEvent *mouseEvent);
+    void keyPressEvent(QKeyEvent *keyEvent);
     
     bool isMouseAtScrollArea(int x);
     
@@ -77,6 +79,7 @@ protected:
     int rowHeight;
     
     bool mouseAtScrollArea;
+    bool mouseDragScrollbar;
     
     int scrollbarDragWidth;
     int scrollbarDefaultWidth;

@@ -27,6 +27,7 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
     lastSelectItem = NULL;
 
     mouseAtScrollArea = false;
+    mouseDragScrollbar = false;
     scrollbarDefaultWidth = 3;
     scrollbarDragWidth = 8;
 }
@@ -74,19 +75,13 @@ void ListView::setColumnWidths(QList<int> widths) {
     columnWidths = widths;
 }
 
-bool ListView::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+void ListView::mouseMoveEvent(QMouseEvent *mouseEvent) {
+    if (mouseDragScrollbar) {
+        int barHeight = getScrollbarHeight();
 
-        handleKeyPressEvent(keyEvent);
-    } else if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-
-        handleButtonPressEvent(mouseEvent);
-    } else if (event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-
+        renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (rect().height() - titleHeight * 1.0) * listItems->count() * rowHeight);
+        repaint();
+    } else {
         bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
 
         if (atScrollArea != mouseAtScrollArea) {
@@ -94,15 +89,63 @@ bool ListView::eventFilter(QObject *, QEvent *event)
             repaint();
         }
     }
-
-    return false;
 }
 
-bool ListView::isMouseAtScrollArea(int x) {
-    return (x > rect().x() + rect().width() - scrollbarDragWidth) && (x < rect().x() + rect().width());
+void ListView::mousePressEvent(QMouseEvent *mouseEvent) {
+    bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
+
+    if (atScrollArea) {
+        int barHeight = getScrollbarHeight();
+
+        int barY = (renderOffset / listItems->count() * rowHeight * 1.0) * (rect().height() - titleHeight) + titleHeight;
+        if (mouseEvent->y() > barY && mouseEvent->y() < barY + barHeight) {
+            mouseDragScrollbar = true;
+        } else {
+            renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (rect().height() - titleHeight * 1.0) * listItems->count() * rowHeight);
+            repaint();
+        }
+
+    } else {
+        int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
+
+        if (pressItemIndex < listItems->count()) {
+            if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                ListItem *item = (*listItems)[pressItemIndex];
+
+                if (selectionItems->contains(item)) {
+                    selectionItems->removeOne(item);
+                } else {
+                    QList<ListItem*> items = QList<ListItem*>();
+                    items << item;
+                    addSelections(items);
+                }
+            } else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
+                int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+                int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
+                int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
+
+                shiftSelect(selectionStartIndex, selectionEndIndex);
+            } else {
+                clearSelections();
+
+                QList<ListItem*> items = QList<ListItem*>();
+                items << (*listItems)[pressItemIndex];
+                addSelections(items);
+            }
+
+            repaint();
+        }
+    }
 }
 
-void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
+void ListView::mouseReleaseEvent(QMouseEvent *) {
+    if (mouseDragScrollbar) {
+        mouseDragScrollbar = false;
+        repaint();
+    }
+}
+
+void ListView::keyPressEvent(QKeyEvent *keyEvent) {
     if (keyEvent->key() == Qt::Key_Home) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             scrollHome();
@@ -154,6 +197,15 @@ void ListView::handleKeyPressEvent(QKeyEvent *keyEvent) {
     }
 }
 
+bool ListView::eventFilter(QObject *, QEvent *)
+{
+    return false;
+}
+
+bool ListView::isMouseAtScrollArea(int x) {
+    return (x > rect().x() + rect().width() - scrollbarDragWidth) && (x < rect().x() + rect().width());
+}
+
 void ListView::selectAll() {
     clearSelections();
 
@@ -162,47 +214,6 @@ void ListView::selectAll() {
     renderOffset = 0;
 
     repaint();
-}
-
-void ListView::handleButtonPressEvent(QMouseEvent *mouseEvent) {
-    bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
-
-    if (atScrollArea) {
-        int barHeight = getScrollbarHeight();
-        
-        renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (rect().height() - titleHeight * 1.0) * listItems->count() * rowHeight);
-        repaint();
-    } else {
-        int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
-
-        if (pressItemIndex < listItems->count()) {
-            if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                ListItem *item = (*listItems)[pressItemIndex];
-
-                if (selectionItems->contains(item)) {
-                    selectionItems->removeOne(item);
-                } else {
-                    QList<ListItem*> items = QList<ListItem*>();
-                    items << item;
-                    addSelections(items);
-                }
-            } else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
-                int lastSelectionIndex = listItems->indexOf(lastSelectItem);
-                int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
-                int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
-
-                shiftSelect(selectionStartIndex, selectionEndIndex);
-            } else {
-                clearSelections();
-
-                QList<ListItem*> items = QList<ListItem*>();
-                items << (*listItems)[pressItemIndex];
-                addSelections(items);
-            }
-
-            repaint();
-        }
-    }
 }
 
 void ListView::pressHome() {
@@ -582,7 +593,17 @@ void ListView::paintEvent(QPaintEvent *) {
 
 void ListView::paintScrollbar(QPainter *painter) {
     if (listItems->count() * rowHeight > rect().height() - titleHeight) {
-        qreal barOpacitry = mouseAtScrollArea ? 0.5 : 0.1;
+        qreal barOpacitry = 0;
+        if (mouseDragScrollbar) {
+            barOpacitry = 0.8;
+        } else {
+            if (mouseAtScrollArea) {
+                barOpacitry = 0.5;
+            } else {
+                barOpacitry = 0.1;
+            }
+        }
+
         int barWidth = mouseAtScrollArea ? scrollbarDragWidth : scrollbarDefaultWidth;
         int barRadius = 5;
 
