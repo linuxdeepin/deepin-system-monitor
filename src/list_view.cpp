@@ -30,6 +30,10 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
     mouseDragScrollbar = false;
     scrollbarDefaultWidth = 3;
     scrollbarDragWidth = 8;
+
+    oldRenderOffset = 0;
+
+    hideScrollbarTimer = NULL;
 }
 
 void ListView::addItems(QList<ListItem*> items) {
@@ -83,7 +87,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent) {
         repaint();
     } else {
         bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
-
+        
         if (atScrollArea != mouseAtScrollArea) {
             mouseAtScrollArea = atScrollArea;
             repaint();
@@ -207,6 +211,8 @@ bool ListView::isMouseAtScrollArea(int x) {
 }
 
 void ListView::selectAll() {
+    oldRenderOffset = renderOffset;
+
     clearSelections();
 
     addSelections(*listItems);
@@ -217,6 +223,8 @@ void ListView::selectAll() {
 }
 
 void ListView::pressHome() {
+    oldRenderOffset = renderOffset;
+
     clearSelections();
 
     QList<ListItem*> items = QList<ListItem*>();
@@ -229,6 +237,8 @@ void ListView::pressHome() {
 }
 
 void ListView::pressEnd() {
+    oldRenderOffset = renderOffset;
+
     clearSelections();
 
     QList<ListItem*> items = QList<ListItem*>();
@@ -241,6 +251,8 @@ void ListView::pressEnd() {
 }
 
 void ListView::selectScrollUp(int scrollOffset) {
+    oldRenderOffset = renderOffset;
+
     if (selectionItems->empty()) {
         pressHome();
     } else {
@@ -274,6 +286,8 @@ void ListView::selectScrollUp(int scrollOffset) {
 }
 
 void ListView::selectScrollDown(int scrollOffset) {
+    oldRenderOffset = renderOffset;
+
     if (selectionItems->empty()) {
         pressHome();
     } else {
@@ -391,6 +405,8 @@ void ListView::shiftSelectEnd() {
 }
 
 void ListView::shiftSelectScrollUp(int scrollOffset) {
+    oldRenderOffset = renderOffset;
+
     if (selectionItems->empty()) {
         pressHome();
     } else {
@@ -430,6 +446,8 @@ void ListView::shiftSelectScrollUp(int scrollOffset) {
 }
 
 void ListView::shiftSelectScrollDown(int scrollOffset) {
+    oldRenderOffset = renderOffset;
+
     if (selectionItems->empty()) {
         pressHome();
     } else {
@@ -491,6 +509,8 @@ int ListView::adjustRenderOffset(int offset) {
 void ListView::wheelEvent(QWheelEvent *event)
 {
     if (event->orientation() == Qt::Vertical) {
+        oldRenderOffset = renderOffset;
+
         int scrollStep = event->angleDelta().y() / 120;
 
         int newRenderOffset = renderOffset - scrollStep * scrollUnit;
@@ -588,7 +608,29 @@ void ListView::paintEvent(QPaintEvent *) {
     painter.setClipRect(QRectF(rect()));
 
     // Draw scrollbar.
-    paintScrollbar(&painter);
+    if (mouseAtScrollArea) {
+        paintScrollbar(&painter);
+    } else if (oldRenderOffset != renderOffset) {
+        paintScrollbar(&painter);
+
+        startHideScrollbar();
+    }
+}
+
+void ListView::startHideScrollbar() {
+    if (hideScrollbarTimer != NULL) {
+        hideScrollbarTimer->stop();
+    }
+    
+    hideScrollbarTimer = new QTimer();
+    connect(hideScrollbarTimer, SIGNAL(timeout()), this, SLOT(hideScrollbar()));
+    hideScrollbarTimer->start(1000);
+}
+
+void ListView::hideScrollbar() {
+    oldRenderOffset = renderOffset;
+
+    repaint();
 }
 
 void ListView::paintScrollbar(QPainter *painter) {

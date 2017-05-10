@@ -24,6 +24,7 @@ public:
     
 public slots:
     void renderAnimation();
+    void hideScrollbar();
     
 protected:
     void paintEvent(QPaintEvent *);
@@ -71,6 +72,8 @@ protected:
     
     void paintScrollbar(QPainter *painter);
     
+    void startHideScrollbar();
+    
     QList<int> calcuateRenderWidths();
     
     QList<ListItem*> *listItems;
@@ -91,9 +94,11 @@ private:
     int scrollStartY;
     int scrollDistance;
     int renderOffset;
+    int oldRenderOffset;
     QList<QString> titleNames;
     
     QTimer *renderTimer;
+    QTimer *hideScrollbarTimer;
     int animationDuration;
     int animationFrames;
     int renderTicker;
