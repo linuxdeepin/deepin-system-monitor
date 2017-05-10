@@ -37,7 +37,7 @@ protected:
     
     bool isMouseAtScrollArea(int x);
     
-    void startScroll(int scrollOffset);
+    void startScroll();
     int adjustRenderOffset(int offset);
     
     int getScrollbarHeight();

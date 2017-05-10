@@ -87,7 +87,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent) {
         repaint();
     } else {
         bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
-        
+
         if (atScrollArea != mouseAtScrollArea) {
             mouseAtScrollArea = atScrollArea;
             repaint();
@@ -517,18 +517,24 @@ void ListView::wheelEvent(QWheelEvent *event)
         newRenderOffset = adjustRenderOffset(newRenderOffset);
 
         if (newRenderOffset != renderOffset) {
-            startScroll(newRenderOffset - renderOffset);
+            if (renderTimer == NULL || !renderTimer->isActive()) {
+                // If timer is inactive, start scroll timer.
+                scrollStartY = renderOffset;
+                scrollDistance = newRenderOffset - renderOffset;
+
+                startScroll();
+            } else {
+                // If timer is active, just add scroll offset make scroll faster and *smooth*.
+                scrollDistance -= scrollStep * rowHeight;
+            }
         }
     }
 
     event->accept();
 }
 
-void ListView::startScroll(int scrollOffset) {
+void ListView::startScroll() {
     if (renderTimer == NULL || !renderTimer->isActive()) {
-        scrollStartY = renderOffset;
-        scrollDistance = scrollOffset;
-
         renderTicker = 0;
         renderTimer = new QTimer();
         connect(renderTimer, SIGNAL(timeout()), this, SLOT(renderAnimation()));
@@ -539,8 +545,7 @@ void ListView::startScroll(int scrollOffset) {
 void ListView::renderAnimation() {
     if (renderTicker <= animationFrames) {
 
-        renderOffset = scrollStartY + Utils::easeInOut(renderTicker / (animationFrames * 1.0)) * scrollDistance;
-        renderOffset = adjustRenderOffset(renderOffset);
+        renderOffset = adjustRenderOffset(scrollStartY + Utils::easeInOut(renderTicker / (animationFrames * 1.0)) * scrollDistance);
 
         repaint();
 
@@ -621,7 +626,7 @@ void ListView::startHideScrollbar() {
     if (hideScrollbarTimer != NULL) {
         hideScrollbarTimer->stop();
     }
-    
+
     hideScrollbarTimer = new QTimer();
     connect(hideScrollbarTimer, SIGNAL(timeout()), this, SLOT(hideScrollbar()));
     hideScrollbarTimer->start(1000);
