@@ -116,7 +116,18 @@ bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bo
 }
 
 bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort) {
-    bool sortOrder = (static_cast<const ProcessItem*>(item1))->cpu > (static_cast<const ProcessItem*>(item2))->cpu;
+    int cpu1 = (static_cast<const ProcessItem*>(item1))->cpu;
+    int cpu2 = (static_cast<const ProcessItem*>(item2))->cpu;
+    
+    bool sortOrder;
+    if (cpu1 == cpu2) {
+        int memory1 = static_cast<const ProcessItem*>(item1)->memory;
+        int memory2 = (static_cast<const ProcessItem*>(item2))->memory;
+        
+        sortOrder = memory1 > memory2;
+    } else {
+        sortOrder = cpu1 > cpu2;
+    }
     
     return descendingSort ? sortOrder : !sortOrder;
 }
