@@ -25,8 +25,8 @@
 #include <qdiriterator.h>
 #include <QIcon>
 #include <QMap>
+#include <QDebug>
 #include <unordered_set>
-#include <unordered_map>
 #include "hashqstring.h"
 
 namespace processTools {
@@ -299,18 +299,13 @@ namespace processTools {
      * @param procname The name of the process
      * @return The process' icon or the default executable icon if none was found
      */
-    QIcon getProcessIconFromName(QString procName)
+    QIcon getProcessIconFromName(QString procName, QMap<QString, QIcon> *processIconMapCache)
     {
-        // apply some corrections to the process name
-        // ie, sh should look for terminal icons, not anything containing sh
-        static std::map<QString, QString> procNameCorrections({
-            {"sh","terminal"}, {"bash","terminal"}, {"dconf-service", "dconf"}, {"gconfd-2", "dconf"}, {"deja-dup-monitor", "deja-dup"}
-        });
-        auto procPos = procNameCorrections.find(procName);
-        if (procPos != procNameCorrections.end()) {
-            procName = procPos->second;
+        // check we havent already got the icon in the cache
+        if (processIconMapCache->contains(procName)) {
+            return processIconMapCache->value(procName);
         }
-
+        
         // search /usr/share/applications for the desktop file that corresponds to the proc and get its icon
         QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
         std::string desktopFile;
@@ -326,6 +321,8 @@ namespace processTools {
         }
 
         if (desktopFile.size() == 0) {
+            (*processIconMapCache)[procName] = defaultExecutableIcon;
+            
             return defaultExecutableIcon;
         }
 
@@ -353,6 +350,8 @@ namespace processTools {
         }
         in.close();
 
+        (*processIconMapCache)[procName] = icon;
+        
         return icon;
     }
 }

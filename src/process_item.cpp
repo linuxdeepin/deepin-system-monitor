@@ -6,7 +6,7 @@
 
 using namespace processTools;
 
-ProcessItem::ProcessItem(proc_t *p)
+ProcessItem::ProcessItem(proc_t *p, QMap<QString, QIcon> *processIconCache)
 {
     process = p;
 
@@ -18,7 +18,7 @@ ProcessItem::ProcessItem(proc_t *p)
     memoryString = Utils::convertSizeUnit(memory);
 
     iconSize = 24;
-    QIcon icon = getProcessIconFromName(name);
+    QIcon icon = getProcessIconFromName(name, processIconCache);
     iconPixmap = icon.pixmap(iconSize, iconSize);
     padding = 10;
 }

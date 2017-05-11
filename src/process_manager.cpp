@@ -14,6 +14,8 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     
+    processIconCache = new QMap<QString, QIcon> ();
+    
     processView = new ProcessView();
 
     QList<SortFunctionPtr> *alorithms = new QList<SortFunctionPtr>();
@@ -67,7 +69,7 @@ void ProcessManager::updateProcesses() {
         QString user = (&i.second)->euser;
 
         if (user == username) {
-            ProcessItem *item = new ProcessItem(&i.second);
+            ProcessItem *item = new ProcessItem(&i.second, processIconCache);
             items << item;
         }
     }

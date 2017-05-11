@@ -4,6 +4,9 @@
 #include <QWidget>
 #include "process_view.h"
 #include <proc/readproc.h>
+#include <QIcon>
+#include <QString>
+#include <QMap>
 
 class ProcessManager : public QWidget
 {
@@ -29,6 +32,7 @@ private:
     unsigned long long totalCpuTime;
     
     QTimer *updateTimer;
+    QMap<QString, QIcon> *processIconCache;
 };
 
 #endif
