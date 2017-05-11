@@ -19,7 +19,7 @@
 #define PROCESSTOOLS
 #include <QString>
 #include <proc/readproc.h>
-#include <QIcon>
+#include <QPixmap>
 #include <QMap>
 
 namespace processTools {
@@ -29,7 +29,7 @@ namespace processTools {
     QString getProcessStartDate(unsigned long long start_time);
     QString getProcessStatus(proc_t* p);
     unsigned long long getTotalCpuTime();
-    QIcon getProcessIconFromName(QString procName, QMap<QString, QIcon> *processIconMapCache);
+    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache);
 }
 
 #endif // PROCESSTOOLS

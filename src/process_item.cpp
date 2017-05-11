@@ -2,11 +2,10 @@
 #include "process_tools.h"
 #include <QDebug>
 #include "utils.h"
-#include <QIcon>
 
 using namespace processTools;
 
-ProcessItem::ProcessItem(proc_t *p, QMap<QString, QIcon> *processIconCache)
+ProcessItem::ProcessItem(proc_t *p, QMap<QString, QPixmap> *processIconCache)
 {
     process = p;
 
@@ -18,8 +17,7 @@ ProcessItem::ProcessItem(proc_t *p, QMap<QString, QIcon> *processIconCache)
     memoryString = Utils::convertSizeUnit(memory);
 
     iconSize = 24;
-    QIcon icon = getProcessIconFromName(name, processIconCache);
-    iconPixmap = icon.pixmap(iconSize, iconSize);
+    iconPixmap = getProcessIconFromName(name, processIconCache);
     padding = 10;
 }
 

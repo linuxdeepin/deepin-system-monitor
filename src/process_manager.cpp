@@ -14,7 +14,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     
-    processIconCache = new QMap<QString, QIcon> ();
+    processIconCache = new QMap<QString, QPixmap> ();
     
     processView = new ProcessView();
 
