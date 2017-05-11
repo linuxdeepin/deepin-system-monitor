@@ -14,11 +14,16 @@ class ProcessManager : public QWidget
 public:
     ProcessManager(QWidget *parent = 0);
     
+public slots:
+    void updateProcesses();
+    
 private:
     ProcessView *processView;
     
     storedProcType prevProcs;
     unsigned long long totalCpuTime;
+    
+    QTimer *updateTimer;
 };
 
 #endif

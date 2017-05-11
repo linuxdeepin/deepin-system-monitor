@@ -21,7 +21,13 @@ public:
     void setTitles(QList<QString> titles, int height);
     void setSortAlgorithm();
     void setColumnWidths(QList<int> widths);
+    int adjustRenderOffset(int offset);
     
+    QList<ListItem*> *listItems;
+    QList<ListItem*> *selectionItems;
+    ListItem *lastSelectItem;
+    int renderOffset;
+                                    
 public slots:
     void renderAnimation();
     void hideScrollbar();
@@ -38,7 +44,6 @@ protected:
     bool isMouseAtScrollArea(int x);
     
     void startScroll();
-    int adjustRenderOffset(int offset);
     
     int getScrollbarHeight();
     
@@ -76,9 +81,6 @@ protected:
     
     QList<int> calcuateRenderWidths();
     
-    QList<ListItem*> *listItems;
-    QList<ListItem*> *selectionItems;
-    ListItem *lastSelectItem;
     int rowHeight;
     
     bool mouseAtScrollArea;
@@ -93,7 +95,6 @@ private:
     int scrollUnit;
     int scrollStartY;
     int scrollDistance;
-    int renderOffset;
     int oldRenderOffset;
     QList<QString> titleNames;
     
@@ -102,6 +103,8 @@ private:
     int animationDuration;
     int animationFrames;
     int renderTicker;
+    
+    int renderCounter;
 };
 
 #endif

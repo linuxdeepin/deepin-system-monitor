@@ -34,20 +34,16 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
     oldRenderOffset = 0;
 
     hideScrollbarTimer = NULL;
+    
+    renderCounter = 0;
 }
 
 void ListView::addItems(QList<ListItem*> items) {
-    QPainter painter(this);
-
     listItems->append(items);
-
-    repaint();
 }
 
 void ListView::clearItems() {
     listItems->clear();
-
-    repaint();
 }
 
 void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection) {
@@ -556,6 +552,9 @@ void ListView::renderAnimation() {
 }
 
 void ListView::paintEvent(QPaintEvent *) {
+    // qDebug() << "************** " << renderCounter;
+    renderCounter++;
+    
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 

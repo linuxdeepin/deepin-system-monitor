@@ -17,6 +17,14 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 
     layout->addWidget(processView);
 
+    updateTimer = new QTimer();
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateProcesses()));
+    updateTimer->start(2000);
+
+    updateProcesses();
+}
+
+void ProcessManager::updateProcesses() {
     // Read the list of open processes information.
     PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
     static proc_t proc_info;
@@ -49,14 +57,45 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     QString username = qgetenv("USER");
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
-        
+
         if (user == username) {
             ProcessItem *item = new ProcessItem(&i.second);
             items << item;
         }
     }
 
+    // Save selection process pids.
+    QList<int> *selectionProcessPids = new QList<int>();
+    for (ListItem *item:*(processView->selectionItems)) {
+        selectionProcessPids->append((static_cast<ProcessItem*>(item))->pid);
+    }
+    int lastSelectProcessPid = -1;
+    if (processView->lastSelectItem != NULL) {
+        lastSelectProcessPid = ((static_cast<ProcessItem*>(processView->lastSelectItem)))->pid;
+    }
+    int renderOffset = processView->renderOffset;
+    
+    // Update processes.
+    processView->clearItems();
     processView->addItems(items);
+    
+    // Restore selection status with pid.
+    QList<ListItem*> *selectionItems = new QList<ListItem*>();
+    for (ListItem *item:*(processView->listItems)) {
+        int pid = (static_cast<ProcessItem*>(item))->pid;
+        if (selectionProcessPids->contains(pid)) {
+            selectionItems->append(item);
+        }
+        
+        if (lastSelectProcessPid != -1 && pid == lastSelectProcessPid) {
+            processView->lastSelectItem = item;
+        }
+    }
+    processView->clearSelections();
+    processView->addSelections(*selectionItems);
+    processView->renderOffset = processView->adjustRenderOffset(renderOffset);
+    
+    processView->repaint();
 
     // keep processes we've read for cpu calculations next cycle
     prevProcs = processes;

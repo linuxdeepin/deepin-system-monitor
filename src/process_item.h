@@ -15,6 +15,8 @@ public:
     void render(QRect rect, QPainter *painter, int column, bool isSelect);
     void renderBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     
+    int pid;
+    
 private:
     proc_t *process;
     QString path;
@@ -24,7 +26,6 @@ private:
     QString memory;
     int uploadBandwidth;
     int downloadBandwidth;
-    int pid;
     QIcon icon;
     QPixmap iconPixmap;
     int iconSize;
