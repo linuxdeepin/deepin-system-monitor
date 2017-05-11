@@ -110,7 +110,18 @@ void ProcessManager::updateProcesses() {
 }
 
 bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) {
-    bool sortOrder = (static_cast<const ProcessItem*>(item1))->name > (static_cast<const ProcessItem*>(item2))->name;
+    QString name1 = (static_cast<const ProcessItem*>(item1))->name;
+    QString name2 = (static_cast<const ProcessItem*>(item2))->name;
+    
+    bool sortOrder;
+    if (name1 == name2) {
+        int cpu1 = static_cast<const ProcessItem*>(item1)->cpu;
+        int cpu2 = (static_cast<const ProcessItem*>(item2))->cpu;
+        
+        sortOrder = cpu1 > cpu2;
+    } else {
+        sortOrder = name1 > name2;
+    }
     
     return descendingSort ? sortOrder : !sortOrder;
 }
