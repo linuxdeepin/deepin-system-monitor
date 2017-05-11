@@ -23,7 +23,6 @@
 #include <proc/sysinfo.h>
 #include <time.h>
 #include <qdiriterator.h>
-#include <QPixmap>
 #include <QIcon>
 #include <QMap>
 #include <QDebug>
@@ -300,7 +299,7 @@ namespace processTools {
      * @param procname The name of the process
      * @return The process' icon or the default executable icon if none was found
      */
-    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache)
+    QIcon getProcessIconFromName(QString procName, QMap<QString, QIcon> *processIconMapCache)
     {
         // check we havent already got the icon in the cache
         if (processIconMapCache->contains(procName)) {
@@ -322,10 +321,9 @@ namespace processTools {
         }
 
         if (desktopFile.size() == 0) {
-            QPixmap pixmap = defaultExecutableIcon.pixmap(24, 24);
-            (*processIconMapCache)[procName] = pixmap;
+            (*processIconMapCache)[procName] = defaultExecutableIcon;
             
-            return pixmap;
+            return defaultExecutableIcon;
         }
 
         std::ifstream in;
@@ -352,9 +350,8 @@ namespace processTools {
         }
         in.close();
 
-        QPixmap pixmap = icon.pixmap(24, 24);
-        (*processIconMapCache)[procName] = pixmap;
+        (*processIconMapCache)[procName] = icon;
         
-        return pixmap;
+        return icon;
     }
 }

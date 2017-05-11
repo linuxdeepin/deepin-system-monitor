@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "process_view.h"
 #include <proc/readproc.h>
-#include <QPixmap>
+#include <QIcon>
 #include <QString>
 #include <QMap>
 
@@ -32,7 +32,7 @@ private:
     unsigned long long totalCpuTime;
     
     QTimer *updateTimer;
-    QMap<QString, QPixmap> *processIconCache;
+    QMap<QString, QIcon> *processIconCache;
 };
 
 #endif
