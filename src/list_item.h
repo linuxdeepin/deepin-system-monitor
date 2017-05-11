@@ -13,6 +13,7 @@ public:
     
     virtual void render(QRect rect, QPainter *painter, int column, bool isSelect)=0;
     virtual void renderBackground(QRect rect, QPainter *painter, int index, bool isSelect)=0;
+    virtual bool hasSameContent(ListItem *item)=0;
 };
 
 #endif

@@ -33,6 +33,8 @@ public:
     
     void sortItems(int column, bool descendingSort);
     
+    void initItems(QList<ListItem*> items);
+    
     QList<SortFunctionPtr> *sortFunctionPtrs;
     QList<bool> *sortOrderes;
                                     

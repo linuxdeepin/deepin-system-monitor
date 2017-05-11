@@ -52,6 +52,49 @@ void ListView::setSortAlgorithm(QList<SortFunctionPtr> *ptrs, int sortColumn, bo
     defaultSortOrder = descendingSort;
 }
 
+void ListView::initItems(QList<ListItem*> items) {
+    // Init.
+    QList<ListItem*> *newSelectionItems = new QList<ListItem*>();
+    ListItem *newLastSelectionItem = NULL;
+    
+    // Save selection items and last selection item.
+    for (ListItem *item:items) {
+        for (ListItem *selectionItem:*selectionItems) {
+            if (item->hasSameContent(selectionItem)) {
+                newSelectionItems->append(item);
+                break;
+            }
+        }
+    }
+    if (lastSelectItem != NULL) {
+        for (ListItem *item:items) {
+            if (item->hasSameContent(lastSelectItem)) {
+                newLastSelectionItem = item;
+            }
+        }
+    }
+    
+    // Update items.
+    listItems->clear();
+    listItems->append(items);
+    
+    // Sort once if default sort column hasn't init.
+    if (defaultSortColumn != -1) {
+        sortItems(defaultSortColumn, defaultSortOrder);
+    }
+    
+    // Restore selection items and last selection item.
+    clearSelections();
+    addSelections(*newSelectionItems);
+    lastSelectItem = newLastSelectionItem;
+    
+    // Keep scroll position.
+    renderOffset = adjustRenderOffset(renderOffset);
+    
+    // Render.
+    repaint();
+}
+
 void ListView::addItems(QList<ListItem*> items) {
     listItems->append(items);
     

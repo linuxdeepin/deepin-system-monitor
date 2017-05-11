@@ -63,3 +63,7 @@ void ProcessItem::renderBackground(QRect rect, QPainter *painter, int index, boo
         painter->fillPath(path, QColor("#000000"));
     }
 }
+
+bool ProcessItem::hasSameContent(ListItem *item) {
+    return pid == ((static_cast<ProcessItem*>(item)))->pid;
+}
