@@ -4,6 +4,7 @@
 #include <QList>
 #include <proc/sysinfo.h>
 #include "process_tools.h"
+#include "list_view.h"
 #include "process_item.h"
 
 using namespace processTools;
@@ -12,8 +13,15 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-
+    
     processView = new ProcessView();
+
+    QList<SortFunctionPtr> *alorithms = new QList<SortFunctionPtr>();
+    alorithms->append(&ProcessManager::sortByName);
+    alorithms->append(&ProcessManager::sortByCPU);
+    alorithms->append(&ProcessManager::sortByMemory);
+    alorithms->append(&ProcessManager::sortByPid);
+    processView->setSortAlgorithm(alorithms, 1, true);
 
     layout->addWidget(processView);
 
@@ -100,3 +108,28 @@ void ProcessManager::updateProcesses() {
     // keep processes we've read for cpu calculations next cycle
     prevProcs = processes;
 }
+
+bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+    bool sortOrder = (static_cast<const ProcessItem*>(item1))->name > (static_cast<const ProcessItem*>(item2))->name;
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+
+bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+    bool sortOrder = (static_cast<const ProcessItem*>(item1))->cpu > (static_cast<const ProcessItem*>(item2))->cpu;
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+
+bool ProcessManager::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+    bool sortOrder = (static_cast<const ProcessItem*>(item1))->memory > (static_cast<const ProcessItem*>(item2))->memory;
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+
+bool ProcessManager::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+    bool sortOrder = (static_cast<const ProcessItem*>(item1))->pid > (static_cast<const ProcessItem*>(item2))->pid;
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+

@@ -5,6 +5,8 @@
 #include <QTimer>
 #include "list_item.h"
 
+typedef bool (* SortFunctionPtr) (const ListItem *item1, const ListItem *item2, bool descendingSort);
+
 class ListView : public QWidget
 {
     Q_OBJECT
@@ -19,7 +21,6 @@ public:
     void clearSelections(bool clearLastSelection=true);
     
     void setTitles(QList<QString> titles, int height);
-    void setSortAlgorithm();
     void setColumnWidths(QList<int> widths);
     int adjustRenderOffset(int offset);
     
@@ -27,6 +28,13 @@ public:
     QList<ListItem*> *selectionItems;
     ListItem *lastSelectItem;
     int renderOffset;
+    
+    void setSortAlgorithm(QList<SortFunctionPtr> *ptrs, int sortColumn=-1, bool descendingSort=false);
+    
+    void sortItems(int column, bool descendingSort);
+    
+    QList<SortFunctionPtr> *sortFunctionPtrs;
+    QList<bool> *sortOrderes;
                                     
 public slots:
     void renderAnimation();
@@ -42,6 +50,7 @@ protected:
     void keyPressEvent(QKeyEvent *keyEvent);
     
     bool isMouseAtScrollArea(int x);
+    bool isMouseAtTitleArea(int y);
     
     void startScroll();
     
@@ -105,6 +114,9 @@ private:
     int renderTicker;
     
     int renderCounter;
+    
+    int defaultSortColumn;
+    bool defaultSortOrder;
 };
 
 #endif

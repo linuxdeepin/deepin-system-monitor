@@ -13,6 +13,11 @@ class ProcessManager : public QWidget
     
 public:
     ProcessManager(QWidget *parent = 0);
+                                       
+    static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
     
 public slots:
     void updateProcesses();

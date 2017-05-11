@@ -34,12 +34,30 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
     oldRenderOffset = 0;
 
     hideScrollbarTimer = NULL;
-    
+
     renderCounter = 0;
+
+    sortFunctionPtrs = new QList<SortFunctionPtr>();
+    sortOrderes = new QList<bool>();
+}
+
+void ListView::setSortAlgorithm(QList<SortFunctionPtr> *ptrs, int sortColumn, bool descendingSort) {
+    sortFunctionPtrs = ptrs;
+
+    for (int i = 0; i < sortFunctionPtrs->count(); i++) {
+        sortOrderes->append(false);
+    }
+    
+    defaultSortColumn = sortColumn;
+    defaultSortOrder = descendingSort;
 }
 
 void ListView::addItems(QList<ListItem*> items) {
     listItems->append(items);
+    
+    if (defaultSortColumn != -1) {
+        sortItems(defaultSortColumn, defaultSortOrder);
+    }
 }
 
 void ListView::clearItems() {
@@ -67,10 +85,6 @@ void ListView::setTitles(QList<QString> titles, int height) {
     titleHeight = height;
 }
 
-void ListView::setSortAlgorithm() {
-
-}
-
 void ListView::setColumnWidths(QList<int> widths) {
     columnWidths = widths;
 }
@@ -92,9 +106,34 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent) {
 }
 
 void ListView::mousePressEvent(QMouseEvent *mouseEvent) {
+    bool atTitleArea = isMouseAtTitleArea(mouseEvent->y());
     bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
 
-    if (atScrollArea) {
+    if (atTitleArea) {
+        if (sortFunctionPtrs->count() == titleNames.count() && sortOrderes->count() == titleNames.count()) {
+            // Calcuate title widths;
+            QList<int> renderWidths = calcuateRenderWidths();
+
+            int columnCounter = 0;
+            int columnRenderX = 0;
+            for (int renderWidth:renderWidths) {
+                if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
+                    (*sortOrderes)[columnCounter] = !(*sortOrderes)[columnCounter];
+                    
+                    defaultSortColumn = columnCounter;
+                    defaultSortOrder = (*sortOrderes)[columnCounter];
+
+                    sortItems(columnCounter, (*sortOrderes)[columnCounter]);
+                    
+                    repaint();
+                    break;
+                }
+
+                columnRenderX += renderWidth;
+                columnCounter++;
+            }
+        }
+    } else if (atScrollArea) {
         int barHeight = getScrollbarHeight();
 
         int barY = (renderOffset / listItems->count() * rowHeight * 1.0) * (rect().height() - titleHeight) + titleHeight;
@@ -204,6 +243,10 @@ bool ListView::eventFilter(QObject *, QEvent *)
 
 bool ListView::isMouseAtScrollArea(int x) {
     return (x > rect().x() + rect().width() - scrollbarDragWidth) && (x < rect().x() + rect().width());
+}
+
+bool ListView::isMouseAtTitleArea(int y) {
+    return (y > rect().y() && y < rect().y() + titleHeight);
 }
 
 void ListView::selectAll() {
@@ -554,7 +597,7 @@ void ListView::renderAnimation() {
 void ListView::paintEvent(QPaintEvent *) {
     // qDebug() << "************** " << renderCounter;
     renderCounter++;
-    
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
@@ -689,4 +732,10 @@ QList<int> ListView::calcuateRenderWidths() {
     }
 
     return renderWidths;
+}
+
+void ListView::sortItems(int column, bool descendingSort) {
+    qSort(listItems->begin(), listItems->end(), [&](const ListItem *item1, const ListItem *item2) {
+            return (*sortFunctionPtrs)[column](item1, item2, descendingSort);
+        });
 }

@@ -13,7 +13,8 @@ ProcessItem::ProcessItem(proc_t *p)
     user = process->euser;
     cpu = process->pcpu;
     pid = process->tid;
-    memory = Utils::convertSizeUnit((process->resident - process->share) * sysconf(_SC_PAGESIZE));
+    memory = (process->resident - process->share) * sysconf(_SC_PAGESIZE);
+    memoryString = Utils::convertSizeUnit(memory);
 
     iconSize = 24;
     icon = getProcessIconFromName(name);
@@ -41,7 +42,7 @@ void ProcessItem::render(QRect rect, QPainter *painter, int column, bool isSelec
     } else if (column == 1) {
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(cpu));
     } else if (column == 2) {
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memory);
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memoryString);
     } else if (column == 3) {
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }

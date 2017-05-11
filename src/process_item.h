@@ -16,20 +16,21 @@ public:
     void renderBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     
     int pid;
+    QString name;
+    int cpu;
+    int memory;
     
 private:
     proc_t *process;
     QString path;
-    QString name;
     QString user;
-    int cpu;
-    QString memory;
     int uploadBandwidth;
     int downloadBandwidth;
     QIcon icon;
     QPixmap iconPixmap;
     int iconSize;
     int padding;
+    QString memoryString;
 };
 
 #endif
