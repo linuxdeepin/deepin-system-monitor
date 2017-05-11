@@ -118,7 +118,14 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent) {
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
                 if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
-                    (*sortOrderes)[columnCounter] = !(*sortOrderes)[columnCounter];
+                    // If switch other column, default order is from top to bottom.
+                    if (columnCounter != defaultSortColumn) {
+                        (*sortOrderes)[columnCounter] = true;
+                    }
+                    // If user click same column, just switch reverse order.
+                    else {    
+                        (*sortOrderes)[columnCounter] = !(*sortOrderes)[columnCounter];
+                    }
                     
                     defaultSortColumn = columnCounter;
                     defaultSortOrder = (*sortOrderes)[columnCounter];
