@@ -3,7 +3,6 @@
 
 #include "list_item.h"
 #include <proc/readproc.h>
-#include <QIcon>
 
 class ProcessItem : public ListItem
 {
@@ -26,7 +25,6 @@ private:
     QString user;
     int uploadBandwidth;
     int downloadBandwidth;
-    QIcon icon;
     QPixmap iconPixmap;
     int iconSize;
     int padding;
