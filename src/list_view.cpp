@@ -70,6 +70,7 @@ void ListView::initItems(QList<ListItem*> items) {
         for (ListItem *item:items) {
             if (item->hasSameContent(lastSelectItem)) {
                 newLastSelectionItem = item;
+                break;
             }
         }
     }
