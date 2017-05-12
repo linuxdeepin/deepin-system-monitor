@@ -78,6 +78,8 @@ private:
     bool isMouseAtTitleArea(int y);
     int adjustRenderOffset(int offset);
     int getScrollbarHeight();
+    int getBottomRenderOffset();
+    int getTopRenderOffset();
     void sortItemsByColumn(int column, bool descendingSort);
     void startScrollAnimation();
     void startScrollbarHideTimer();
