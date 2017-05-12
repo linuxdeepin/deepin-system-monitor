@@ -84,19 +84,23 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, bool
     }
 }
 
-QString ProcessItem::getName() const {
+QString ProcessItem::getName() const 
+{
     return name;
 }
 
-int ProcessItem::getCPU() const {
+int ProcessItem::getCPU() const 
+{
     return cpu;
 }
 
-int ProcessItem::getMemory() const {
+int ProcessItem::getMemory() const 
+{
     return memory;
 }
 
-int ProcessItem::getPid() const {
+int ProcessItem::getPid() const 
+{
     return pid;
 }
     

@@ -26,8 +26,9 @@ private:
     int cpu;
     int iconSize;
     int memory;
-    int padding;
     int pid;
+    
+    int padding;
     
     QPixmap iconPixmap;
     
