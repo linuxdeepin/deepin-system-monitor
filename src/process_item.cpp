@@ -1,7 +1,7 @@
 #include "process_item.h"
 #include "process_tools.h"
-#include <QDebug>
 #include "utils.h"
+#include <QDebug>
 
 using namespace processTools;
 
