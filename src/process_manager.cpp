@@ -51,10 +51,10 @@ void ProcessManager::updateProcesses()
     closeproc(proc);
 
     // Fill in CPU.
-    if (prevProcs.size()>0) {
+    if (prevProcesses.size()>0) {
         // we have previous proc info
         for(auto &newItr:processes) {
-            for(auto &prevItr:prevProcs) {
+            for(auto &prevItr:prevProcesses) {
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
                     newItr.second.pcpu = (unsigned int) calculateCPUPercentage(&prevItr.second, &newItr.second, totalCpuTime);
@@ -83,7 +83,7 @@ void ProcessManager::updateProcesses()
     processView->refreshItems(items);
     
     // Keep processes we've read for cpu calculations next cycle.
-    prevProcs = processes;
+    prevProcesses = processes;
 }
 
 bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) 

@@ -29,7 +29,7 @@ private:
     ProcessView *processView;
     QMap<QString, QPixmap> *processIconCache;
     QTimer *updateTimer;
-    storedProcType prevProcs;
+    storedProcType prevProcesses;
     unsigned long long totalCpuTime;
 };
 
