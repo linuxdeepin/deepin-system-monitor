@@ -82,13 +82,13 @@ void ProcessManager::updateProcesses() {
 }
 
 bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) {
-    QString name1 = (static_cast<const ProcessItem*>(item1))->name;
-    QString name2 = (static_cast<const ProcessItem*>(item2))->name;
+    QString name1 = (static_cast<const ProcessItem*>(item1))->getName();
+    QString name2 = (static_cast<const ProcessItem*>(item2))->getName();
     
     bool sortOrder;
     if (name1 == name2) {
-        int cpu1 = static_cast<const ProcessItem*>(item1)->cpu;
-        int cpu2 = (static_cast<const ProcessItem*>(item2))->cpu;
+        int cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
+        int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
         
         sortOrder = cpu1 > cpu2;
     } else {
@@ -99,13 +99,13 @@ bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bo
 }
 
 bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort) {
-    int cpu1 = (static_cast<const ProcessItem*>(item1))->cpu;
-    int cpu2 = (static_cast<const ProcessItem*>(item2))->cpu;
+    int cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
+    int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
     
     bool sortOrder;
     if (cpu1 == cpu2) {
-        int memory1 = static_cast<const ProcessItem*>(item1)->memory;
-        int memory2 = (static_cast<const ProcessItem*>(item2))->memory;
+        int memory1 = static_cast<const ProcessItem*>(item1)->getMemory();
+        int memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
         
         sortOrder = memory1 > memory2;
     } else {
@@ -116,13 +116,13 @@ bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, boo
 }
 
 bool ProcessManager::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort) {
-    int memory1 = (static_cast<const ProcessItem*>(item1))->memory;
-    int memory2 = (static_cast<const ProcessItem*>(item2))->memory;
+    int memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
+    int memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
     
     bool sortOrder;
     if (memory1 == memory2) {
-        int cpu1 = static_cast<const ProcessItem*>(item1)->cpu;
-        int cpu2 = (static_cast<const ProcessItem*>(item2))->cpu;
+        int cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
+        int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
         
         sortOrder = cpu1 > cpu2;
     } else {
@@ -133,7 +133,7 @@ bool ProcessManager::sortByMemory(const ListItem *item1, const ListItem *item2, 
 }
 
 bool ProcessManager::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort) {
-    bool sortOrder = (static_cast<const ProcessItem*>(item1))->pid > (static_cast<const ProcessItem*>(item2))->pid;
+    bool sortOrder = (static_cast<const ProcessItem*>(item1))->getPid() > (static_cast<const ProcessItem*>(item2))->getPid();
     
     return descendingSort ? sortOrder : !sortOrder;
 }
