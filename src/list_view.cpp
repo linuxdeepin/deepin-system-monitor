@@ -60,7 +60,7 @@ void ListView::initItems(QList<ListItem*> items) {
     // Save selection items and last selection item.
     for (ListItem *item:items) {
         for (ListItem *selectionItem:*selectionItems) {
-            if (item->hasSameContent(selectionItem)) {
+            if (item->sameAs(selectionItem)) {
                 newSelectionItems->append(item);
                 break;
             }
@@ -68,7 +68,7 @@ void ListView::initItems(QList<ListItem*> items) {
     }
     if (lastSelectItem != NULL) {
         for (ListItem *item:items) {
-            if (item->hasSameContent(lastSelectItem)) {
+            if (item->sameAs(lastSelectItem)) {
                 newLastSelectionItem = item;
                 break;
             }
@@ -682,12 +682,12 @@ void ListView::paintEvent(QPaintEvent *) {
     for (ListItem *item:*listItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
             bool isSelect = selectionItems->contains(item);
-            item->renderBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
+            item->drawBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
 
             int columnCounter = 0;
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
-                item->render(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, isSelect);
+                item->drawForeground(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, isSelect);
 
                 columnRenderX += renderWidth;
                 columnCounter++;
