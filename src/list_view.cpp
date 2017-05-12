@@ -217,12 +217,12 @@ void ListView::selectNextItem()
 
 void ListView::shiftSelectPageDown() 
 {
-    shiftSelectNextItemWithOffset((rect().height() - titleHeight) / rowHeight);
+    shiftSelectNextItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
 void ListView::shiftSelectPageUp() 
 {
-    shiftSelectPrevItemWithOffset((rect().height() - titleHeight) / rowHeight);
+    shiftSelectPrevItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
 void ListView::shiftSelectToEnd() 
@@ -277,24 +277,24 @@ void ListView::shiftSelectToPrev()
 
 void ListView::scrollPageDown() 
 {
-    selectNextItemWithOffset((rect().height() - titleHeight) / rowHeight);
+    selectNextItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
 void ListView::scrollPageUp() 
 {
-    selectPrevItemWithOffset((rect().height() - titleHeight) / rowHeight);
+    selectPrevItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
 void ListView::ctrlScrollPageUp() 
 {
-    renderOffset = adjustRenderOffset(renderOffset - (rect().height() - titleHeight));
+    renderOffset = adjustRenderOffset(renderOffset - getScrollAreaHeight());
 
     repaint();
 }
 
 void ListView::ctrlScrollPageDown() 
 {
-    renderOffset = adjustRenderOffset(renderOffset + (rect().height() - titleHeight));
+    renderOffset = adjustRenderOffset(renderOffset + getScrollAreaHeight());
 
     repaint();
 }
@@ -397,7 +397,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
     // Scroll if mouse drag at scrollbar.
     if (mouseDragScrollbar) {
         int barHeight = getScrollbarHeight();
-        renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (rect().height() - titleHeight * 1.0) * listItems->count() * rowHeight);
+        renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (getScrollAreaHeight() * 1.0) * listItems->count() * rowHeight);
         
         repaint();
     }
@@ -454,7 +454,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
     // Scroll when click on scrollbar area.
     else if (atScrollArea) {
         int barHeight = getScrollbarHeight();
-        int barY = (renderOffset / listItems->count() * rowHeight * 1.0) * (rect().height() - titleHeight) + titleHeight;
+        int barY = (renderOffset / listItems->count() * rowHeight * 1.0) * getScrollAreaHeight() + titleHeight;
         
         // Flag mouseDragScrollbar when click on scrollbar.
         if (mouseEvent->y() > barY && mouseEvent->y() < barY + barHeight) {
@@ -462,7 +462,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
         }
         // Scroll if click out of scrollbar area.
         else {
-            renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (rect().height() - titleHeight * 1.0) * listItems->count() * rowHeight);
+            renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (getScrollAreaHeight() * 1.0) * listItems->count() * rowHeight);
             repaint();
         }
     }
@@ -573,7 +573,7 @@ void ListView::paintEvent(QPaintEvent *)
     }
 
     // Clip render area.
-    painter.setClipRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight));
+    painter.setClipRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), getScrollAreaHeight()));
 
     // Draw context.
     int rowCounter = 0;
@@ -618,7 +618,7 @@ void ListView::paintEvent(QPaintEvent *)
 
 void ListView::paintScrollbar(QPainter *painter) 
 {
-    if (listItems->count() * rowHeight > rect().height() - titleHeight) {
+    if (listItems->count() * rowHeight > getScrollAreaHeight()) {
         // Init scrollbar opacity with scrollbar status.
         qreal barOpacitry = 0;
         if (mouseDragScrollbar) {
@@ -634,7 +634,7 @@ void ListView::paintScrollbar(QPainter *painter)
         int barWidth = mouseAtScrollArea ? scrollbarDragWidth : scrollbarDefaultWidth;
         int barRadius = 5;
 
-        int barY = static_cast<int>((renderOffset / (listItems->count() * rowHeight * 1.0)) * (rect().height() - titleHeight) + titleHeight);
+        int barY = static_cast<int>((renderOffset / (listItems->count() * rowHeight * 1.0)) * getScrollAreaHeight() + titleHeight);
         int barHeight = getScrollbarHeight();
 
         painter->setOpacity(barOpacitry);
@@ -672,7 +672,7 @@ void ListView::selectNextItemWithOffset(int scrollOffset)
 
             int itemIndex = lastIndex + 1;
             int itemOffset = adjustRenderOffset(itemIndex * rowHeight - rect().height() + titleHeight);
-            if (((renderOffset + rect().height() - titleHeight) / rowHeight) < itemIndex) {
+            if (((renderOffset + getScrollAreaHeight()) / rowHeight) < itemIndex) {
                 renderOffset = itemOffset;
             }
 
@@ -866,7 +866,12 @@ int ListView::adjustRenderOffset(int offset)
 
 int ListView::getScrollbarHeight() 
 {
-    return std::max(static_cast<int>((rect().height() - titleHeight) / (listItems->count() * rowHeight * 1.0) * rect().height()), 30);
+    return std::max(static_cast<int>(getScrollAreaHeight() / (listItems->count() * rowHeight * 1.0) * rect().height()), 30);
+}
+
+int ListView::getScrollAreaHeight()
+{
+    return rect().height() - titleHeight;
 }
 
 int ListView::getTopRenderOffset()
