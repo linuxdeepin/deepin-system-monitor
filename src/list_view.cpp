@@ -548,7 +548,7 @@ void ListView::paintEvent(QPaintEvent *)
     // Init.
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
+    
     // Calcuate title widths;
     QList<int> renderWidths = getRenderWidths();
 
@@ -573,7 +573,7 @@ void ListView::paintEvent(QPaintEvent *)
     }
 
     // Clip render area.
-    painter.setClipRect(QRectF(rect().x(), rect().y() + rowHeight, rect().width(), rect().height() - rowHeight));
+    painter.setClipRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight));
 
     // Draw context.
     int rowCounter = 0;
