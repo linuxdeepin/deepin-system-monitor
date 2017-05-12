@@ -18,12 +18,12 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     layout->addWidget(processView);
 
     // Set sort algorithms.
-    QList<SortFunctionPtr> *alorithms = new QList<SortFunctionPtr>();
+    QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
     alorithms->append(&ProcessManager::sortByName);
     alorithms->append(&ProcessManager::sortByCPU);
     alorithms->append(&ProcessManager::sortByMemory);
     alorithms->append(&ProcessManager::sortByPid);
-    processView->setSortAlgorithm(alorithms, 1, true);
+    processView->setColumnSortingAlgorithms(alorithms, 1, true);
 
     // Init process icon cache.
     processIconCache = new QMap<QString, QPixmap>();
@@ -79,7 +79,7 @@ void ProcessManager::updateProcesses() {
     }
 
     // Init items.
-    processView->initItems(items);
+    processView->refreshItems(items);
     
     // Keep processes we've read for cpu calculations next cycle.
     prevProcs = processes;

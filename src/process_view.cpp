@@ -14,7 +14,7 @@ ProcessView::ProcessView()
     // Set column titles.
     QList<QString> titles;
     titles << "进程名" << "CPU" << "内存" << "PID";
-    setTitles(titles, 36);
+    setColumnTitles(titles, 36);
     
     // Focus keyboard when create.
     QTimer::singleShot(0, this, SLOT(setFocus()));
