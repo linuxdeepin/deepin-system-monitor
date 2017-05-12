@@ -37,7 +37,8 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     updateProcesses();
 }
 
-void ProcessManager::updateProcesses() {
+void ProcessManager::updateProcesses() 
+{
     // Read the list of open processes information.
     PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
     static proc_t proc_info;
@@ -85,7 +86,8 @@ void ProcessManager::updateProcesses() {
     prevProcs = processes;
 }
 
-bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) 
+{
     // Init.
     QString name1 = (static_cast<const ProcessItem*>(item1))->getName();
     QString name2 = (static_cast<const ProcessItem*>(item2))->getName();
@@ -106,7 +108,8 @@ bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bo
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort) 
+{
     // Init.
     int cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
     int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
@@ -127,7 +130,8 @@ bool ProcessManager::sortByCPU(const ListItem *item1, const ListItem *item2, boo
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessManager::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+bool ProcessManager::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort) 
+{
     // Init.
     int memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
     int memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
@@ -148,7 +152,8 @@ bool ProcessManager::sortByMemory(const ListItem *item1, const ListItem *item2, 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessManager::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort) {
+bool ProcessManager::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort) 
+{
     bool sortOrder = (static_cast<const ProcessItem*>(item1))->getPid() > (static_cast<const ProcessItem*>(item2))->getPid();
     
     return descendingSort ? sortOrder : !sortOrder;

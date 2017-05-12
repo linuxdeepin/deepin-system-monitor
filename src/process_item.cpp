@@ -22,11 +22,13 @@ ProcessItem::ProcessItem(proc_t *p, QMap<QString, QPixmap> *processIconCache)
     padding = 10;
 }
 
-bool ProcessItem::sameAs(ListItem *item) {
+bool ProcessItem::sameAs(ListItem *item) 
+{
     return pid == ((static_cast<ProcessItem*>(item)))->pid;
 }
 
-void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect) {
+void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect) 
+{
     // Init draw path.
     QPainterPath path;
     path.addRect(QRectF(rect));
@@ -49,7 +51,8 @@ void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool 
     }
 }
 
-void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, bool isSelect) {
+void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, bool isSelect) 
+{
     // Init opacity and font size.
     painter->setOpacity(1);
     Utils::setFontSize(*painter, 11);

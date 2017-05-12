@@ -77,7 +77,8 @@ void ListView::clearSelections(bool clearLastSelection)
     }
 }
 
-void ListView::refreshItems(QList<ListItem*> items) {
+void ListView::refreshItems(QList<ListItem*> items) 
+{
     // Init.
     QList<ListItem*> *newSelectionItems = new QList<ListItem*>();
     ListItem *newLastSelectionItem = NULL;

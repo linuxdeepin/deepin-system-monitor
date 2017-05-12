@@ -179,7 +179,8 @@ qreal Utils::easeOutQuint(qreal x)
     return qPow(x - 1, 5) + 1;
 }
 
-QString Utils::convertSizeUnit(int bytes) {
+QString Utils::convertSizeUnit(int bytes) 
+{
     if (bytes < qPow(2, 10)) {
         return QString("%1 B").arg(bytes);
     } else if (bytes < qPow(2, 20)) {
