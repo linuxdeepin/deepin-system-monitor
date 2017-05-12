@@ -1,18 +1,16 @@
 #include "list_view.h"
 #include "utils.h"
-#include <QDebug>
 #include <QApplication>
+#include <QDebug>
 #include <QEvent>
 #include <QWheelEvent>
 #include <QtMath>
 
-ListView::ListView(int height, QWidget *parent) : QWidget(parent)
+ListView::ListView(QWidget *parent) : QWidget(parent)
 {
     installEventFilter(this);  // add event filter
     setMouseTracking(true);   // make MouseMove can response
 
-    rowHeight = height;
-    scrollUnit = rowHeight * 9;
     scrollDistance = 0;
     renderOffset = 0;
     titleHeight = 0;
@@ -39,6 +37,11 @@ ListView::ListView(int height, QWidget *parent) : QWidget(parent)
 
     sortFunctionPtrs = new QList<SortFunctionPtr>();
     sortOrderes = new QList<bool>();
+}
+
+void ListView::setRowHeight(int height) {
+    rowHeight = height;
+    scrollUnit = rowHeight * 9;
 }
 
 void ListView::setSortAlgorithm(QList<SortFunctionPtr> *ptrs, int sortColumn, bool descendingSort) {

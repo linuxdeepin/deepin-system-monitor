@@ -3,15 +3,19 @@
 
 ProcessView::ProcessView()
 {
-    QTimer::singleShot(0, this, SLOT(setFocus()));
+    // Set row height.
+    setRowHeight(40);
     
-    rowHeight = 40;
-    
+    // Set column widths.
     QList<int> widths;
     widths << -1 << 60 << 100 << 60;
     setColumnWidths(widths);
     
+    // Set column titles.
     QList<QString> titles;
     titles << "进程名" << "CPU" << "内存" << "PID";
     setTitles(titles, 36);
+    
+    // Focus keyboard when create.
+    QTimer::singleShot(0, this, SLOT(setFocus()));
 }
