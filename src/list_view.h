@@ -138,6 +138,7 @@ private:
     int adjustRenderOffset(int offset);
     int getBottomRenderOffset();
     int getScrollAreaHeight();
+    int getScrollbarY();
     int getScrollbarHeight();
     int getTopRenderOffset();
     void sortItemsByColumn(int column, bool descendingSort);

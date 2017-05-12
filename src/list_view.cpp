@@ -454,7 +454,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
     // Scroll when click on scrollbar area.
     else if (atScrollArea) {
         int barHeight = getScrollbarHeight();
-        int barY = (renderOffset / listItems->count() * rowHeight * 1.0) * getScrollAreaHeight() + titleHeight;
+        int barY = getScrollbarY();
         
         // Flag mouseDragScrollbar when click on scrollbar.
         if (mouseEvent->y() > barY && mouseEvent->y() < barY + barHeight) {
@@ -634,7 +634,7 @@ void ListView::paintScrollbar(QPainter *painter)
         int barWidth = mouseAtScrollArea ? scrollbarDragWidth : scrollbarDefaultWidth;
         int barRadius = 5;
 
-        int barY = static_cast<int>((renderOffset / (listItems->count() * rowHeight * 1.0)) * getScrollAreaHeight() + titleHeight);
+        int barY = getScrollbarY();
         int barHeight = getScrollbarHeight();
 
         painter->setOpacity(barOpacitry);
@@ -862,6 +862,11 @@ bool ListView::isMouseAtTitleArea(int y)
 int ListView::adjustRenderOffset(int offset) 
 {
     return std::max(0, std::min(offset, listItems->count() * rowHeight - rect().height() + titleHeight));
+}
+
+int ListView::getScrollbarY()
+{
+    return static_cast<int>((renderOffset / (listItems->count() * rowHeight * 1.0)) * getScrollAreaHeight() + titleHeight);
 }
 
 int ListView::getScrollbarHeight() 
