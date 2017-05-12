@@ -86,7 +86,7 @@ void ListView::initItems(QList<ListItem*> items) {
     
     // Restore selection items and last selection item.
     clearSelections();
-    addSelections(*newSelectionItems);
+    addSelections(*newSelectionItems, false);
     lastSelectItem = newLastSelectionItem;
     
     // Keep scroll position.
@@ -111,7 +111,7 @@ void ListView::clearItems() {
 void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection) {
     selectionItems->append(items);
 
-    if (recordLastSelection) {
+    if (recordLastSelection && selectionItems->count() > 0) {
         lastSelectItem = selectionItems->last();
     }
 }
