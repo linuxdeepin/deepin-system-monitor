@@ -15,10 +15,10 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     renderOffset = 0;
     titleHeight = 0;
 
-    renderTimer = NULL;
-    renderTicker = 0;
-    animationFrames = 16;
-    animationDuration = 25;
+    scrollAnimationTimer = NULL;
+    scrollAnimationTicker = 0;
+    scrollAnimationFrames = 16;
+    scrollAnimationDuration = 25;
 
     listItems = new QList<ListItem*>();
     selectionItems = new QList<ListItem*>();
@@ -33,10 +33,8 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
 
     hideScrollbarTimer = NULL;
 
-    renderCounter = 0;
-
     sortingAlgorithms = new QList<SortAlgorithm>();
-    sortOrderes = new QList<bool>();
+    sortingOrderes = new QList<bool>();
 }
 
 void ListView::setRowHeight(int height)
@@ -49,8 +47,8 @@ void ListView::addItems(QList<ListItem*> items)
 {
     listItems->append(items);
     
-    if (defaultSortColumn != -1) {
-        sortItemsByColumn(defaultSortColumn, defaultSortOrder);
+    if (defaultSortingColumn != -1) {
+        sortItemsByColumn(defaultSortingColumn, defaultSortingOrder);
     }
 }
 
@@ -106,8 +104,8 @@ void ListView::refreshItems(QList<ListItem*> items)
     listItems->append(items);
     
     // Sort once if default sort column hasn't init.
-    if (defaultSortColumn != -1) {
-        sortItemsByColumn(defaultSortColumn, defaultSortOrder);
+    if (defaultSortingColumn != -1) {
+        sortItemsByColumn(defaultSortingColumn, defaultSortingOrder);
     }
     
     // Restore selection items and last selection item.
@@ -124,7 +122,7 @@ void ListView::refreshItems(QList<ListItem*> items)
 
 void ListView::setColumnTitles(QList<QString> titles, int height) 
 {
-    titleNames = titles;
+    columnTitles = titles;
     titleHeight = height;
 }
 
@@ -138,11 +136,11 @@ void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int 
     sortingAlgorithms = algorithms;
 
     for (int i = 0; i < sortingAlgorithms->count(); i++) {
-        sortOrderes->append(false);
+        sortingOrderes->append(false);
     }
     
-    defaultSortColumn = sortColumn;
-    defaultSortOrder = descendingSort;
+    defaultSortingColumn = sortColumn;
+    defaultSortingOrder = descendingSort;
 }
 
 void ListView::selectAllItems() 
@@ -286,15 +284,15 @@ void ListView::ctrlScrollToEnd()
 
 void ListView::scrollAnimation() 
 {
-    if (renderTicker <= animationFrames) {
+    if (scrollAnimationTicker <= scrollAnimationFrames) {
 
-        renderOffset = adjustRenderOffset(scrollStartY + Utils::easeInOut(renderTicker / (animationFrames * 1.0)) * scrollDistance);
+        renderOffset = adjustRenderOffset(scrollStartY + Utils::easeInOut(scrollAnimationTicker / (scrollAnimationFrames * 1.0)) * scrollDistance);
 
         repaint();
 
-        renderTicker++;
+        scrollAnimationTicker++;
     } else {
-        renderTimer->stop();
+        scrollAnimationTimer->stop();
     }
 }
 
@@ -386,7 +384,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
     bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
 
     if (atTitleArea) {
-        if (sortingAlgorithms->count() == titleNames.count() && sortOrderes->count() == titleNames.count()) {
+        if (sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
             // Calcuate title widths;
             QList<int> renderWidths = getRenderWidths();
 
@@ -395,18 +393,18 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
             for (int renderWidth:renderWidths) {
                 if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
                     // If switch other column, default order is from top to bottom.
-                    if (columnCounter != defaultSortColumn) {
-                        (*sortOrderes)[columnCounter] = true;
+                    if (columnCounter != defaultSortingColumn) {
+                        (*sortingOrderes)[columnCounter] = true;
                     }
                     // If user click same column, just switch reverse order.
                     else {    
-                        (*sortOrderes)[columnCounter] = !(*sortOrderes)[columnCounter];
+                        (*sortingOrderes)[columnCounter] = !(*sortingOrderes)[columnCounter];
                     }
                     
-                    defaultSortColumn = columnCounter;
-                    defaultSortOrder = (*sortOrderes)[columnCounter];
+                    defaultSortingColumn = columnCounter;
+                    defaultSortingOrder = (*sortingOrderes)[columnCounter];
 
-                    sortItemsByColumn(columnCounter, (*sortOrderes)[columnCounter]);
+                    sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
                     
                     repaint();
                     break;
@@ -479,7 +477,7 @@ void ListView::wheelEvent(QWheelEvent *event)
         newRenderOffset = adjustRenderOffset(newRenderOffset);
 
         if (newRenderOffset != renderOffset) {
-            if (renderTimer == NULL || !renderTimer->isActive()) {
+            if (scrollAnimationTimer == NULL || !scrollAnimationTimer->isActive()) {
                 // If timer is inactive, start scroll timer.
                 scrollStartY = renderOffset;
                 scrollDistance = newRenderOffset - renderOffset;
@@ -497,9 +495,6 @@ void ListView::wheelEvent(QWheelEvent *event)
 
 void ListView::paintEvent(QPaintEvent *) 
 {
-    // qDebug() << "************** " << renderCounter;
-    renderCounter++;
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
@@ -516,7 +511,7 @@ void ListView::paintEvent(QPaintEvent *)
             painter.setOpacity(1);
             Utils::setFontSize(painter, 11);
             painter.setPen(QPen(QColor("#666666")));
-            painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, titleNames[columnCounter]);
+            painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, columnTitles[columnCounter]);
 
             columnRenderX += renderWidth;
             columnCounter++;
@@ -822,11 +817,11 @@ void ListView::sortItemsByColumn(int column, bool descendingSort)
 
 void ListView::startScrollAnimation() 
 {
-    if (renderTimer == NULL || !renderTimer->isActive()) {
-        renderTicker = 0;
-        renderTimer = new QTimer();
-        connect(renderTimer, SIGNAL(timeout()), this, SLOT(scrollAnimation()));
-        renderTimer->start(animationDuration);
+    if (scrollAnimationTimer == NULL || !scrollAnimationTimer->isActive()) {
+        scrollAnimationTicker = 0;
+        scrollAnimationTimer = new QTimer();
+        connect(scrollAnimationTimer, SIGNAL(timeout()), this, SLOT(scrollAnimation()));
+        scrollAnimationTimer->start(scrollAnimationDuration);
     }
 }
 
