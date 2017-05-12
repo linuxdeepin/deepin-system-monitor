@@ -15,19 +15,78 @@ public:
     ListView(QWidget *parent = 0);
 
     // ListView interfaces.
-    void setRowHeight(int height);
     
+    /* 
+     * Set row height of ListView.
+     * 
+     * @height the height of row
+     */
+    void setRowHeight(int height);
+
+    /*
+     * Set column titles.
+     * ListView won't display titlebar if not call this function when create ListView.
+     * 
+     * @titles a list to contains titles
+     * @height height of titlebar
+     */
+    void setColumnTitles(QList<QString> titles, int height);
+    
+    /*
+     * Set column widths
+     * If you want some column use expand space, please set width with -1
+     * Only allowed one -1 to set in width list.
+     * 
+     * @widths the width of column, list length same as titles list
+     */
+    void setColumnWidths(QList<int> widths);
+    
+    /*
+     * Set column sorting algorithms.
+     * Note SortAlgorithm function type must be 'static', otherwise function pointer can't match type.
+     * 
+     * @algorithms a list of SortAlgorithm, SortAlgorithm is function pointer, it's type is: 'bool (*) (const ListItem *item1, const ListItem *item2, bool descendingSort)'
+     * @sortColumn default sort column, -1 mean don't sort any column default
+     * @descendingSort whether sort column descending, default is false
+     */
+    void setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn=-1, bool descendingSort=false);
+    
+    /* 
+     * Add ListItem list to ListView.
+     * If user has click title to sort, sort items after add items to list. 
+     * 
+     * @items List of LiteItem*
+     */
     void addItems(QList<ListItem*> items);
+    
+    /* 
+     * Clear items from ListView.
+     */
     void clearItems();
     
+    /*
+     * Add ListItem list to mark selected effect in ListView.
+     * 
+     * @items List of ListItem* to mark selected
+     * @recordLastSelection record last selection item to make selected operation continuously, default is true
+     */
     void addSelections(QList<ListItem*> items, bool recordLastSelection=true);
+    
+    /*
+     * Clear selection items from ListView.
+     * 
+     * @clearLastSelection clear last selection item if option is true, default is true
+     */
     void clearSelections(bool clearLastSelection=true);
     
+    /*
+     * Refresh all items in ListView.
+     * This function is different that addItems is: it will clear items first before add new items.
+     * This function will keep selection status and scroll offset when add items.
+     * 
+     * @items List of ListItem* to add
+     */
     void refreshItems(QList<ListItem*> items);
-    
-    void setColumnTitles(QList<QString> titles, int height);
-    void setColumnWidths(QList<int> widths);
-    void setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn=-1, bool descendingSort=false);
     
     // ListView operations.
     void selectAllItems();

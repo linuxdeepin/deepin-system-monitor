@@ -44,6 +44,31 @@ void ListView::setRowHeight(int height)
     scrollUnit = rowHeight * 9;
 }
 
+void ListView::setColumnTitles(QList<QString> titles, int height) 
+{
+    columnTitles = titles;
+    titleHeight = height;
+}
+
+void ListView::setColumnWidths(QList<int> widths) 
+{
+    columnWidths = widths;
+}
+
+void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn, bool descendingSort) 
+{
+    // Add sort algorithms.
+    sortingAlgorithms = algorithms;
+
+    for (int i = 0; i < sortingAlgorithms->count(); i++) {
+        sortingOrderes->append(false);
+    }
+    
+    // If sort column is -1, don't sort default.
+    defaultSortingColumn = sortColumn;
+    defaultSortingOrder = descendingSort;
+}
+
 void ListView::addItems(QList<ListItem*> items)
 {
     // Add item to list.
@@ -124,31 +149,6 @@ void ListView::refreshItems(QList<ListItem*> items)
     
     // Render.
     repaint();
-}
-
-void ListView::setColumnTitles(QList<QString> titles, int height) 
-{
-    columnTitles = titles;
-    titleHeight = height;
-}
-
-void ListView::setColumnWidths(QList<int> widths) 
-{
-    columnWidths = widths;
-}
-
-void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn, bool descendingSort) 
-{
-    // Add sort algorithms.
-    sortingAlgorithms = algorithms;
-
-    for (int i = 0; i < sortingAlgorithms->count(); i++) {
-        sortingOrderes->append(false);
-    }
-    
-    // If sort column is -1, don't sort default.
-    defaultSortingColumn = sortColumn;
-    defaultSortingOrder = descendingSort;
 }
 
 void ListView::selectAllItems() 
