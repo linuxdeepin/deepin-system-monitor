@@ -397,7 +397,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
     // Scroll if mouse drag at scrollbar.
     if (mouseDragScrollbar) {
         int barHeight = getScrollbarHeight();
-        renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (getScrollAreaHeight() * 1.0) * listItems->count() * rowHeight);
+        renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (getScrollAreaHeight() * 1.0) * getItemsTotalHeight());
         
         repaint();
     }
@@ -462,7 +462,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
         }
         // Scroll if click out of scrollbar area.
         else {
-            renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (getScrollAreaHeight() * 1.0) * listItems->count() * rowHeight);
+            renderOffset = adjustRenderOffset((mouseEvent->y() - barHeight / 2 - titleHeight) / (getScrollAreaHeight() * 1.0) * getItemsTotalHeight());
             repaint();
         }
     }
@@ -618,7 +618,7 @@ void ListView::paintEvent(QPaintEvent *)
 
 void ListView::paintScrollbar(QPainter *painter) 
 {
-    if (listItems->count() * rowHeight > getScrollAreaHeight()) {
+    if (getItemsTotalHeight() > getScrollAreaHeight()) {
         // Init scrollbar opacity with scrollbar status.
         qreal barOpacitry = 0;
         if (mouseDragScrollbar) {
@@ -861,22 +861,27 @@ bool ListView::isMouseAtTitleArea(int y)
 
 int ListView::adjustRenderOffset(int offset) 
 {
-    return std::max(0, std::min(offset, listItems->count() * rowHeight - rect().height() + titleHeight));
+    return std::max(0, std::min(offset, getBottomRenderOffset()));
 }
 
-int ListView::getScrollbarY()
+int ListView::getItemsTotalHeight()
 {
-    return static_cast<int>((renderOffset / (listItems->count() * rowHeight * 1.0)) * getScrollAreaHeight() + titleHeight);
-}
-
-int ListView::getScrollbarHeight() 
-{
-    return std::max(static_cast<int>(getScrollAreaHeight() / (listItems->count() * rowHeight * 1.0) * rect().height()), 30);
+    return listItems->count() * rowHeight;
 }
 
 int ListView::getScrollAreaHeight()
 {
     return rect().height() - titleHeight;
+}
+
+int ListView::getScrollbarY()
+{
+    return static_cast<int>((renderOffset / (getItemsTotalHeight() * 1.0)) * getScrollAreaHeight() + titleHeight);
+}
+
+int ListView::getScrollbarHeight() 
+{
+    return std::max(static_cast<int>(getScrollAreaHeight() / (getItemsTotalHeight() * 1.0) * rect().height()), 30);
 }
 
 int ListView::getTopRenderOffset()
@@ -886,7 +891,7 @@ int ListView::getTopRenderOffset()
 
 int ListView::getBottomRenderOffset()
 {
-    return listItems->count() * rowHeight - rect().height() + titleHeight;
+    return getItemsTotalHeight() - rect().height() + titleHeight;
 }
 
 void ListView::sortItemsByColumn(int column, bool descendingSort) 
