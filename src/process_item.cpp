@@ -5,20 +5,21 @@
 
 using namespace processTools;
 
-ProcessItem::ProcessItem()
+ProcessItem::ProcessItem(proc_t *p, QMap<QString, QPixmap> *processIconCache)
 {
-    iconSize = 24;
-    padding = 10;
-}
+    process = p;
 
-void ProcessItem::init(QPixmap pPixmap, QString pName, int pCpu, int pMemory, int pPid)
-{
-    iconPixmap = pPixmap;
-    name = pName;
-    cpu = pCpu;
-    memory = pMemory;
-    pid = pPid;
+    name = getProcessName(process);
+    user = process->euser;
+    cpu = process->pcpu;
+    pid = process->tid;
+    memory = (process->resident - process->share) * sysconf(_SC_PAGESIZE);
     memoryString = Utils::convertSizeUnit(memory);
+
+    iconSize = 24;
+    iconPixmap = getProcessIconFromName(name, processIconCache);
+    
+    padding = 10;
 }
 
 bool ProcessItem::sameAs(ListItem *item) 
