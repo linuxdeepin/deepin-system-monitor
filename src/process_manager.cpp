@@ -31,7 +31,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     // Add timer to update process information.
     updateTimer = new QTimer();
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateProcesses()));
-    updateTimer->start(100);
+    updateTimer->start(50);
 
     // Update process information when created.
     updateProcesses();

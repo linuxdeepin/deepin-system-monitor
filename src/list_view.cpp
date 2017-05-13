@@ -84,6 +84,9 @@ void ListView::addItems(QList<ListItem*> items)
 
 void ListView::clearItems()
 {
+    // NOTE:
+    // We need delete items in QList before clear QList to avoid *MEMORY LEAK* .
+    qDeleteAll(listItems->begin(), listItems->end());
     listItems->clear();
 }
 
@@ -133,7 +136,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     }
     
     // Update items.
-    listItems->clear();
+    clearItems();
     listItems->append(items);
     
     // Sort once if default sort column hasn't init.
