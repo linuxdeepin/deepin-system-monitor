@@ -159,6 +159,7 @@ private:
     bool mouseAtScrollArea;
     bool mouseDragScrollbar;
     int defaultSortingColumn;
+    int hideScrollbarDuration;
     int oldRenderOffset;
     int renderOffset;
     int rowHeight;

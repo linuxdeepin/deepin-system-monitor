@@ -30,6 +30,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     scrollbarDefaultWidth = 3;
     scrollbarDragWidth = 8;
     scrollbarMinHeight = 30;
+    hideScrollbarDuration = 1000;
 
     oldRenderOffset = 0;
 
@@ -920,5 +921,5 @@ void ListView::startScrollbarHideTimer()
 
     hideScrollbarTimer = new QTimer();
     connect(hideScrollbarTimer, SIGNAL(timeout()), this, SLOT(hideScrollbar()));
-    hideScrollbarTimer->start(1000);
+    hideScrollbarTimer->start(hideScrollbarDuration);
 }
