@@ -170,6 +170,7 @@ private:
     int scrollUnit;
     int scrollbarDefaultWidth;
     int scrollbarDragWidth;
+    int scrollbarMinHeight;
     int titleHeight;
 };
 

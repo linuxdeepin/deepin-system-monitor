@@ -29,6 +29,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     mouseDragScrollbar = false;
     scrollbarDefaultWidth = 3;
     scrollbarDragWidth = 8;
+    scrollbarMinHeight = 30;
 
     oldRenderOffset = 0;
 
@@ -881,7 +882,7 @@ int ListView::getScrollbarY()
 
 int ListView::getScrollbarHeight() 
 {
-    return std::max(static_cast<int>(getScrollAreaHeight() / (getItemsTotalHeight() * 1.0) * rect().height()), 30);
+    return std::max(static_cast<int>(getScrollAreaHeight() / (getItemsTotalHeight() * 1.0) * rect().height()), scrollbarMinHeight);
 }
 
 int ListView::getTopRenderOffset()
