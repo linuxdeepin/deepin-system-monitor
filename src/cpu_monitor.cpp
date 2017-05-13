@@ -10,9 +10,9 @@
 
 CpuMonitor::CpuMonitor(QObject *parent) : QThread(parent)
 {
-    timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(test()));
-    timer->start(1000);
+    // timer = new QTimer();
+    // connect(timer, SIGNAL(timeout()), this, SLOT(test()));
+    // timer->start(1000);
 }
 
 void CpuMonitor::run()
