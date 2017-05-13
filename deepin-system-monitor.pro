@@ -14,8 +14,7 @@ RESOURCES = deepin-system-monitor.qrc
 # Input
 HEADERS += src/utils.h \
            src/toolbar.h \
-           src/cpu_monitor.h \
-           src/status_monitor.h \
+		   src/status_monitor.h \
            src/process_manager.h \
            src/list_item.h \
            src/list_view.h \
@@ -27,8 +26,7 @@ HEADERS += src/utils.h \
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
 		   src/toolbar.cpp \
-           src/cpu_monitor.cpp \
-           src/status_monitor.cpp \
+		   src/status_monitor.cpp \
            src/process_manager.cpp \
            src/list_item.cpp \
            src/list_view.cpp \

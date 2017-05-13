@@ -7,8 +7,6 @@
 #include "utils.h"
 #include "main_window.h"
 
-#include "cpu_monitor.h"
-
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[]) 
@@ -27,9 +25,6 @@ int main(int argc, char *argv[])
         app.setTheme("dark");
 
         MainWindow window;
-        
-        CpuMonitor *monitor = new CpuMonitor();
-        monitor->start();
         
         window.setMinimumSize(QSize(900, 700));
         DUtility::moveToCenter(&window);
