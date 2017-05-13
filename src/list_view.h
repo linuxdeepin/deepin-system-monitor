@@ -13,6 +13,7 @@ class ListView : public QWidget
     
 public:
     ListView(QWidget *parent = 0);
+    ~ListView();
 
     // ListView interfaces.
     

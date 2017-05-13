@@ -37,6 +37,7 @@ class Toolbar : public QWidget
     
 public:
     Toolbar(QWidget *parent = 0);
+    ~Toolbar();
     
 private:
     DSearchEdit *searchEdit;

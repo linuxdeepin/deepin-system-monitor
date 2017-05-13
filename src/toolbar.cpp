@@ -47,3 +47,8 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
 }                                    
+
+Toolbar::~Toolbar()
+{
+    delete searchEdit;
+}

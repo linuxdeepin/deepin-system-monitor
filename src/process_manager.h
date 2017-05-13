@@ -16,6 +16,7 @@ class ProcessManager : public QWidget
     
 public:
     ProcessManager(QWidget *parent = 0);
+    ~ProcessManager();
                                        
 public slots:
     void updateProcesses();

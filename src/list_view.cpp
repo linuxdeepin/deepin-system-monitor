@@ -40,6 +40,17 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     sortingOrderes = new QList<bool>();
 }
 
+ListView::~ListView()
+{
+    delete lastSelectItem;
+    delete listItems;
+    delete selectionItems;
+    delete sortingAlgorithms;
+    delete sortingOrderes;
+    delete hideScrollbarTimer;
+    delete scrollAnimationTimer;
+}
+
 void ListView::setRowHeight(int height)
 {
     rowHeight = height;

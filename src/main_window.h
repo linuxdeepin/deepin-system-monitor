@@ -16,11 +16,10 @@ public:
     MainWindow(DMainWindow *parent = 0);
     
 private:
+    ProcessManager *processManager;
     QHBoxLayout *layout;
     QWidget *layoutWidget;
-    
     StatusMonitor *statusMonitor;
-    ProcessManager *processManager;
 };
 
 #endif

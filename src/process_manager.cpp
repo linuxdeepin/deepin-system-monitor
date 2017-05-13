@@ -37,6 +37,13 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     updateProcesses();
 }
 
+ProcessManager::~ProcessManager()
+{
+    delete processView;
+    delete processIconCache;
+    delete updateTimer;
+}
+
 void ProcessManager::updateProcesses()
 {
     // Read the list of open processes information.
