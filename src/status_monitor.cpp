@@ -4,6 +4,16 @@
 StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedWidth(300);
+    
+    layout = new QVBoxLayout(this);
+    
+    cpuMonitor = new CpuMonitor();
+    memoryMonitor = new MemoryMonitor();
+    networkMonitor = new NetworkMonitor();
+    
+    layout->addWidget(cpuMonitor);
+    layout->addWidget(memoryMonitor);
+    layout->addWidget(networkMonitor);
 }
 
 void StatusMonitor::paintEvent(QPaintEvent *) 
