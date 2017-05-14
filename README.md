@@ -3,7 +3,7 @@
 Deepin system monitor: a more user-friendly system monitor.
 
 ## Dependencies
-
+* make
 ## Installation
 
 * mkdir build
