@@ -13,7 +13,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
     
     Utils::setFontSize(painter, 20);
-    painter.setPen(QPen(QColor("#ffffff")));
+    painter.setPen(QPen(QColor("#aaaaaa")));
     
     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "网络");
 }
