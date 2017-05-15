@@ -21,6 +21,11 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *event);
+                                       
+signals:
+    void updateCpuStatus();
+    void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
+    void updateNetworkStatus();
     
 private slots:
     void updateStatus();

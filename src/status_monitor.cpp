@@ -21,6 +21,8 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(networkMonitor);
 
     plottingData = nullptr;
+    
+    connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
 
     meminfo(); // have procps read the memory
 
@@ -94,23 +96,16 @@ void StatusMonitor::updateCpu()
         }
     }
 
-    qDebug() << *plottingData;
+    // qDebug() << *plottingData;
     // emit(updateCpuPlotSIG(plottingData));
 }
 
 void StatusMonitor::updateMemory()
 {
-    double memory = ((double)kb_main_used / kb_main_total) * 100;
-
-    qDebug() << "Memory " << memory;
-
-    if (kb_swap_total > 0.0) {
-        // swap is active
-        double swap = ((double)kb_swap_used / kb_swap_total) * 100;
-        qDebug() << "Swap " << swap;
+    if (kb_swap_total > 0.0)  {
+        updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, kb_swap_used * 1024, kb_swap_total * 1024);
     } else {
-        // there is no swap
-        qDebug() << "Swap " << 0;
+        updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, 0, 0);
     }
 }
 

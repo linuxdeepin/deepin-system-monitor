@@ -179,18 +179,18 @@ qreal Utils::easeOutQuint(qreal x)
     return qPow(x - 1, 5) + 1;
 }
 
-QString Utils::convertSizeUnit(int bytes) 
+QString Utils::convertSizeUnit(long bytes, QString unitSuffix) 
 {
     if (bytes < qPow(2, 10)) {
-        return QString("%1 B").arg(bytes);
+        return QString("%1 %2").arg(bytes).arg(unitSuffix);
     } else if (bytes < qPow(2, 20)) {
-        return QString("%1 KiB").arg(QString::number(qreal(bytes) / qPow(2, 10), 'f', 1));
+        return QString("%1 K%2").arg(QString::number(qreal(bytes) / qPow(2, 10), 'f', 1)).arg(unitSuffix);
     } else if (bytes < qPow(2, 30)) {
-        return QString("%1 MiB").arg(QString::number(qreal(bytes) / qPow(2, 20), 'f', 1));
+        return QString("%1 M%2").arg(QString::number(qreal(bytes) / qPow(2, 20), 'f', 1)).arg(unitSuffix);
     } else if (bytes < qPow(2, 40)) {
-        return QString("%1 GiB").arg(QString::number(qreal(bytes) / qPow(2, 30), 'f', 1));
+        return QString("%1 G%2").arg(QString::number(qreal(bytes) / qPow(2, 30), 'f', 1)).arg(unitSuffix);
     } else if (bytes < qPow(2, 50)) {
-        return QString("%1 TiB").arg(QString::number(qreal(bytes) / qPow(2, 40), 'f', 1));
+        return QString("%1 T%2").arg(QString::number(qreal(bytes) / qPow(2, 40), 'f', 1)).arg(unitSuffix);
     }
     
     return QString::number(bytes);
