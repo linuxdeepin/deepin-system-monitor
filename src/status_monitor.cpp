@@ -24,8 +24,6 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
 
-    meminfo(); // have procps read the memory
-
     updateCpuTimer = new QTimer();
     connect(updateCpuTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
     updateCpuTimer->start(2000);
@@ -41,6 +39,8 @@ void StatusMonitor::paintEvent(QPaintEvent *)
 
 void StatusMonitor::updateStatus()
 {
+    meminfo(); // have procps read the memory
+
     updateCpu();
     updateMemory();
     updateNetwork();

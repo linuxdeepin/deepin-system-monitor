@@ -22,8 +22,6 @@ void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tS
         usedSwap = uSwap;
         totalSwap = tSwap;
 
-        qDebug() << usedMemory << totalMemory << usedSwap << totalSwap;
-
         repaint();
     }
 }
