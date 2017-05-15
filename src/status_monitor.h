@@ -23,7 +23,7 @@ protected:
     void paintEvent(QPaintEvent *event);
                                        
 signals:
-    void updateCpuStatus();
+    void updateCpuStatus(QVector<QVector<double>> *values);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     

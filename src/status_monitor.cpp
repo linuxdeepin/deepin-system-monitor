@@ -23,10 +23,11 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     plottingData = nullptr;
     
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
 
     updateCpuTimer = new QTimer();
     connect(updateCpuTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
-    updateCpuTimer->start(2000);
+    updateCpuTimer->start(500);
     
     updateStatus();
 }
@@ -98,6 +99,8 @@ void StatusMonitor::updateCpu()
 
     // qDebug() << *plottingData;
     // emit(updateCpuPlotSIG(plottingData));
+    
+    updateCpuStatus(plottingData);
 }
 
 void StatusMonitor::updateMemory()

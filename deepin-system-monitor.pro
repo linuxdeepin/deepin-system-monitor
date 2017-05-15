@@ -26,6 +26,7 @@ HEADERS += src/utils.h \
            src/cpu_tools.h \
            src/process_tools.h \
            src/hashqstring.h \
+           src/qcustomplot.h \
            src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
@@ -41,6 +42,7 @@ SOURCES += src/main.cpp \
            src/process_view.cpp \
            src/cpu_tools.cpp \
            src/process_tools.cpp \
+           src/qcustomplot.cpp \
 		   src/main_window.cpp
 		   
 QT += core
@@ -49,6 +51,7 @@ QT += gui
 QT += network
 QT += x11extras
 QT += dbus
+QT += printsupport
 
 QMAKE_CXXFLAGS += -g
 LIBS += -L"libprocps" -lprocps -lstdc++fs
