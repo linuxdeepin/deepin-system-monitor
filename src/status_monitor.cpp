@@ -20,14 +20,12 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(memoryMonitor);
     layout->addWidget(networkMonitor);
 
-    plottingData = nullptr;
-    
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
 
     updateCpuTimer = new QTimer();
     connect(updateCpuTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
-    updateCpuTimer->start(100);
+    updateCpuTimer->start(2000);
     
     updateStatus();
 }
@@ -53,53 +51,10 @@ void StatusMonitor::updateCpu()
     if (prevCpuTimes.size() != 0) {
         std::vector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
         
-        if (cpuPlotData.size() == 60) {
-            cpuPlotData.pop_front();
-        }
-        cpuPlotData.push_back(cpuPercentages);
+        updateCpuStatus(cpuPercentages);
     }
+    
     prevCpuTimes = cpuTimes;
-
-    // construct the qvectors to use to plot
-    if (plottingData != nullptr) {
-        delete plottingData;
-    }
-    plottingData = new QVector<QVector<double>>();
-
-    // The data is arranged in vectors but each vector has points that are intended
-    // for multiple plots on multi core machines.
-    // Seperate out the data by reading the number of doubles in the initial vector
-    if (cpuPlotData.size() == 0) {
-        return; // obviously we cant read the initial vector if it is blank
-    }
-
-    for(unsigned int i=0; i<cpuPlotData.at(0).size(); i++) {
-        QVector<double> headingVector;
-        headingVector.push_back(cpuPlotData.at(0).at(i));
-        plottingData->push_back(headingVector);
-    }
-
-    // now that the initial qvectors are filled, we can append the rest of the data
-    for(unsigned int i=1; i<cpuPlotData.size(); i++) {
-        for(unsigned int j=0; j<cpuPlotData.at(i).size(); j++) {
-            (*plottingData)[j].push_back(cpuPlotData.at(i).at(j));
-        }
-    }
-
-    // there might not be enough data in each array so pad with 0s on the front if so
-    for(int i=0; i<plottingData->size(); i++) {
-        for(unsigned int j=60 - plottingData->at(i).size(); j>0; j--) {
-            (*plottingData)[i].push_front((double)0);
-        }
-    }
-    
-    points.clear();
-    
-    for (int i = 0; i < plottingData->at(0).size(); i++) {
-        points.append(QPointF(i * 4, plottingData->at(0).at(i)));
-    }
-    
-    updateCpuStatus(points);
 }
 
 void StatusMonitor::updateMemory()

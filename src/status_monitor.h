@@ -24,7 +24,7 @@ protected:
     void paintEvent(QPaintEvent *event);
                                        
 signals:
-    void updateCpuStatus(QList<QPointF> points);
+    void updateCpuStatus(std::vector<double> cpuPercentages);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     
@@ -43,10 +43,6 @@ private:
     NetworkMonitor *networkMonitor;
     
     std::vector<cpuTools::cpuStruct> prevCpuTimes;
-    std::deque<std::vector<double>> cpuPlotData;
-    QVector<QVector<double>> *plottingData;
-    
-    QList<QPointF> points;
     
     QTimer *updateCpuTimer;
 };

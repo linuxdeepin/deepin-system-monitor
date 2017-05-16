@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QList>
+#include <QTimer>
 #include <QPointF>
 #include <QVBoxLayout>
 
@@ -14,15 +15,19 @@ public:
     CpuMonitor(QWidget *parent = 0);
     
 public slots:
-    void updateStatus(QList<QPointF> points);
+    void updateStatus(std::vector<double> cpuPercentages);
+    void render();
     
 protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QVBoxLayout *layout;
+    QList<QList<double>*> *cpuPoints;
+    QList<QPainterPath> *cpuPaths;
     
-    QPainterPath smoothCurve;
+    QTimer *timer;
+    
+    int pointsNumber = 40;
 };
 
 #endif    
