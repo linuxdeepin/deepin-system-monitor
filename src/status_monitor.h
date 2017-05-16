@@ -2,6 +2,7 @@
 #define STATUSMONITOR_H
 
 #include <QWidget>
+#include <QPointF>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <deque>
@@ -23,7 +24,7 @@ protected:
     void paintEvent(QPaintEvent *event);
                                        
 signals:
-    void updateCpuStatus(QVector<QVector<double>> *values);
+    void updateCpuStatus(QList<QPointF> points);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     
@@ -44,6 +45,8 @@ private:
     std::vector<cpuTools::cpuStruct> prevCpuTimes;
     std::deque<std::vector<double>> cpuPlotData;
     QVector<QVector<double>> *plottingData;
+    
+    QList<QPointF> points;
     
     QTimer *updateCpuTimer;
 };

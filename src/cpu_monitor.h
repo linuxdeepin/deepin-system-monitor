@@ -2,8 +2,9 @@
 #define CpuMONITOR_H
 
 #include <QWidget>
+#include <QList>
+#include <QPointF>
 #include <QVBoxLayout>
-#include "qcustomplot.h"
 
 class CpuMonitor : public QWidget
 {
@@ -13,14 +14,15 @@ public:
     CpuMonitor(QWidget *parent = 0);
     
 public slots:
-    void updateStatus(QVector<QVector<double>> *values);
+    void updateStatus(QList<QPointF> points);
     
 protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QCustomPlot *cpuPlot;
     QVBoxLayout *layout;
+    
+    QPainterPath smoothCurve;
 };
 
 #endif    

@@ -27,7 +27,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 
     updateCpuTimer = new QTimer();
     connect(updateCpuTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
-    updateCpuTimer->start(500);
+    updateCpuTimer->start(100);
     
     updateStatus();
 }
@@ -52,11 +52,7 @@ void StatusMonitor::updateCpu()
     std::vector<cpuStruct> cpuTimes = getCpuTimes();
     if (prevCpuTimes.size() != 0) {
         std::vector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
-
-        /*for(unsigned int i=0; i<cpuPercentages.size(); i++) {
-          std::cout << cpuPercentages.at(i) << std::endl;
-          }*/
-
+        
         if (cpuPlotData.size() == 60) {
             cpuPlotData.pop_front();
         }
@@ -96,11 +92,14 @@ void StatusMonitor::updateCpu()
             (*plottingData)[i].push_front((double)0);
         }
     }
-
-    // qDebug() << *plottingData;
-    // emit(updateCpuPlotSIG(plottingData));
     
-    updateCpuStatus(plottingData);
+    points.clear();
+    
+    for (int i = 0; i < plottingData->at(0).size(); i++) {
+        points.append(QPointF(i * 4, plottingData->at(0).at(i)));
+    }
+    
+    updateCpuStatus(points);
 }
 
 void StatusMonitor::updateMemory()
