@@ -16,6 +16,7 @@ public:
     
 public slots:
     void updateStatus(std::vector<double> cpuPercentages);
+    void initStatus(std::vector<double> cpuPercentages);
     void render();
     
 protected:
@@ -27,7 +28,9 @@ private:
     
     QTimer *timer;
     
-    int pointsNumber = 40;
+    int pointsNumber = 24;
+    
+    int renderOffsetIndex;
 };
 
 #endif    
