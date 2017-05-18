@@ -29,11 +29,14 @@ private:
     
     int pointsNumber = 24;
     
-    int waveformsRenderOffsetX = 150;
-    int waveformsRenderOffsetY = 150;
-    int ringRenderOffsetY = 150;
+    int waveformsRenderOffsetX = 80;
+    int waveformsRenderOffsetY = 110;
+    int ringRenderOffsetY = 100;
     int ringRadius = 90;
     int ringWidth = 9;
+    
+    int titleRenderOffsetY = 150;
+    int percentRenderOffsetY = 180;
 };
 
 #endif    

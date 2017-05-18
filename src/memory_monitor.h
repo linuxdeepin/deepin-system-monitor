@@ -46,8 +46,11 @@ protected:
     int insideRingRadius = 43;
     
     int ringCenterPointerX = 220;
-    int ringCenterPointerY = 60;
+    int ringCenterPointerY = 50;
     QString ringBackgroundColor = "#252525";
+    
+    int topAppsTitleRenderSize = 11;
+    int topAppsTitleRenderOffsetY = 100;
 };
 
 #endif    

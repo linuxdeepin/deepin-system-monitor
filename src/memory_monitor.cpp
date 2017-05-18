@@ -8,6 +8,8 @@
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
+    setFixedHeight(230);
+    
     usedMemory = 0;
     totalMemory = 0;
     usedSwap = 0;
@@ -114,6 +116,13 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius, rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2, insideRingRadius * 2),
                      Qt::AlignCenter,
                      QString("%1%").arg(static_cast<int>(memoryPercent * 100)));
+
+    // Draw top 5 apps.
+    Utils::setFontSize(painter, topAppsTitleRenderSize);
+    painter.setPen(QPen(QColor("#333333")));
+    painter.drawText(QRect(rect().x(), topAppsTitleRenderOffsetY, rect().width(), 20),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     "高内存消耗前五名");
 }
 
 QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)

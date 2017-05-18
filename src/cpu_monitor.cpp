@@ -7,7 +7,7 @@
 
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedSize(280, 300);
+    setFixedSize(280, 250);
 
     cpuPercents = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
@@ -24,16 +24,22 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    Utils::setFontSize(painter, 20);
+    Utils::setFontSize(painter, 22);
     painter.setPen(QPen(QColor("#aaaaaa")));
 
-    painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "CPU");
+    painter.drawText(QRect(rect().x(),
+                           rect().y() + titleRenderOffsetY,
+                           rect().width(),
+                           30
+                         ), Qt::AlignCenter, "CPU");
 
-    // painter.translate(0, waveformsRenderOffsetY);
-    // painter.scale(1, -1);
-
-    // painter.setPen(QPen(QColor("#8442FB"), 2));
-    // painter.drawPath(cpuPath);
+    Utils::setFontSize(painter, 15);
+    painter.setPen(QPen(QColor("#aaaaaa")));
+    painter.drawText(QRect(rect().x(),
+                           rect().y() + percentRenderOffsetY,
+                           rect().width(),
+                           30
+                         ), Qt::AlignCenter, QString("%1%").arg(QString::number(cpuPercents->last(), 'f', 1)));
     
     Utils::drawLoadingRing(
         painter,
@@ -47,6 +53,12 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         0.2,
         cpuPercents->last() / 100
         );
+
+    painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
+    painter.scale(1, -1);
+
+    painter.setPen(QPen(QColor("#8442FB"), 2));
+    painter.drawPath(cpuPath);
 }
 
 void CpuMonitor::updateStatus(double cpuPercent)
