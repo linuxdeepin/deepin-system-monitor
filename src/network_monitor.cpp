@@ -5,6 +5,7 @@
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
+    setFixedHeight(180);
 }
 
 void NetworkMonitor::paintEvent(QPaintEvent *) 

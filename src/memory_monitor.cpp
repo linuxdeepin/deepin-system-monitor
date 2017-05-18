@@ -8,8 +8,6 @@
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedHeight(250);
-    
     usedMemory = 0;
     totalMemory = 0;
     usedSwap = 0;
@@ -19,7 +17,7 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     layout->setContentsMargins(0, 120, 0, 0);
     topProcessView = new TopProcessView();
     
-    layout->addWidget(topProcessView);
+    layout->addWidget(topProcessView, 0, Qt::AlignTop);
 }
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
@@ -128,7 +126,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#333333")));
     painter.drawText(QRect(rect().x(), topAppsTitleRenderOffsetY, rect().width(), 20),
                      Qt::AlignLeft | Qt::AlignTop,
-                     "高内存消耗前五名");
+                     "高内存消耗应用");
 }
 
 QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)

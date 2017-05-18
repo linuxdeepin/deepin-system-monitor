@@ -10,5 +10,5 @@ TopProcessView::TopProcessView()
     widths << 30 << -1 << 80;
     setColumnWidths(widths);
     
-    setFixedHeight(108);
+    setFixedHeight(360);
 }
