@@ -24,73 +24,16 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     alorithms->append(&ProcessManager::sortByMemory);
     alorithms->append(&ProcessManager::sortByPid);
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
-
-    // Init process icon cache.
-    processIconCache = new QMap<QString, QPixmap>();
-    
-    // Add timer to update process information.
-    updateTimer = new QTimer();
-    connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateProcesses()));
-    updateTimer->start(2000);
-
-    // Update process information when created.
-    updateProcesses();
 }
 
 ProcessManager::~ProcessManager()
 {
     delete processView;
-    delete processIconCache;
-    delete updateTimer;
 }
 
-void ProcessManager::updateProcesses()
+void ProcessManager::updateStatus(QList<ListItem*> items)
 {
-    // Read the list of open processes information.
-    PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
-    static proc_t proc_info;
-    memset(&proc_info, 0, sizeof(proc_t));
-
-    storedProcType processes;
-    while (readproc(proc, &proc_info) != NULL) {
-        processes[proc_info.tid]=proc_info;
-    }
-    closeproc(proc);
-
-    // Fill in CPU.
-    if (prevProcesses.size()>0) {
-        // we have previous proc info
-        for(auto &newItr:processes) {
-            for(auto &prevItr:prevProcesses) {
-                if (newItr.first == prevItr.first) {
-                    // PID matches, calculate the cpu
-                    newItr.second.pcpu = (unsigned int) calculateCPUPercentage(&prevItr.second, &newItr.second, totalCpuTime);
-                    break;
-                }
-            }
-        }
-    }
-    
-    // Update the cpu time for next loop.
-    totalCpuTime = getTotalCpuTime();
-
-    // Read processes information.
-    QList<ListItem*> items;
-    QString username = qgetenv("USER");
-    for(auto &i:processes) {
-        QString user = (&i.second)->euser;
-
-        if (user == username) {
-            ProcessItem *item = new ProcessItem(&i.second, processIconCache);
-            items << item;
-        }
-    }
-
-    // Init items.
     processView->refreshItems(items);
-    
-    // Keep processes we've read for cpu calculations next cycle.
-    prevProcesses = processes;
 }
 
 bool ProcessManager::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) 

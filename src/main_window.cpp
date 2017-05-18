@@ -15,8 +15,12 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     
     this->setCentralWidget(layoutWidget);
     
-    statusMonitor = new StatusMonitor();
     processManager = new ProcessManager();
+    statusMonitor = new StatusMonitor();
+    
+    connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
+    
+    statusMonitor->updateStatus();
     
     layout->addWidget(statusMonitor);
     layout->addWidget(processManager);

@@ -5,19 +5,18 @@
 
 using namespace processTools;
 
-ProcessItem::ProcessItem(proc_t *p, QMap<QString, QPixmap> *processIconCache)
+ProcessItem::ProcessItem(QPixmap processIcon, QString processName, int processCpu, int processMemory, int processPid, QString processUser)
 {
-    process = p;
-
-    name = getProcessName(process);
-    user = process->euser;
-    cpu = process->pcpu;
-    pid = process->tid;
-    memory = (process->resident - process->share) * sysconf(_SC_PAGESIZE);
+    iconPixmap = processIcon;
+    name = processName;
+    cpu = processCpu;
+    pid = processPid;
+    memory = processMemory;
+    user = processUser;
+    
     memoryString = Utils::convertSizeUnit(memory);
 
     iconSize = 24;
-    iconPixmap = getProcessIconFromName(name, processIconCache);
     
     padding = 10;
 }

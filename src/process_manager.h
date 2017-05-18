@@ -12,15 +12,13 @@ class ProcessManager : public QWidget
 {
     Q_OBJECT
     
-    typedef std::map<int, proc_t> storedProcType;
-    
 public:
     ProcessManager(QWidget *parent = 0);
     ~ProcessManager();
-                                       
-public slots:
-    void updateProcesses();
     
+public slots:
+    void updateStatus(QList<ListItem*> items);
+                                       
 private:
     static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
@@ -28,10 +26,6 @@ private:
     static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
     
     ProcessView *processView;
-    QMap<QString, QPixmap> *processIconCache;
-    QTimer *updateTimer;
-    storedProcType prevProcesses;
-    unsigned long long totalCpuTime;
 };
 
 #endif

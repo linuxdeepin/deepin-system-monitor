@@ -9,7 +9,7 @@ class ProcessItem : public ListItem
     Q_OBJECT
     
 public:
-    ProcessItem(proc_t *p, QMap<QString, QPixmap> *processIconCache);
+    ProcessItem(QPixmap processIcon, QString processName, int processCpu, int processMemory, int processPid, QString processUser);
     
     bool sameAs(ListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
@@ -21,8 +21,6 @@ public:
     int getPid() const;
     
 private:
-    proc_t *process;
-    
     int cpu;
     int iconSize;
     int memory;
