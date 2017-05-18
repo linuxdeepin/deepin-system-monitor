@@ -29,11 +29,24 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "CPU");
 
-    painter.translate(0, renderOffsetY);
-    painter.scale(1, -1);
+    // painter.translate(0, waveformsRenderOffsetY);
+    // painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor("#8442FB"), 2));
-    painter.drawPath(cpuPath);
+    // painter.setPen(QPen(QColor("#8442FB"), 2));
+    // painter.drawPath(cpuPath);
+    
+    Utils::drawLoadingRing(
+        painter,
+        rect().x() + rect().width() / 2,
+        rect().y() + ringRenderOffsetY,
+        ringRadius,
+        ringWidth,
+        300,
+        150,
+        "#8442FB",
+        0.2,
+        cpuPercents->last() / 100
+        );
 }
 
 void CpuMonitor::updateStatus(double cpuPercent)

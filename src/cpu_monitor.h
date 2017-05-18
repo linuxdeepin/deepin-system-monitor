@@ -29,7 +29,11 @@ private:
     
     int pointsNumber = 24;
     
-    int renderOffsetY = 150;
+    int waveformsRenderOffsetX = 150;
+    int waveformsRenderOffsetY = 150;
+    int ringRenderOffsetY = 150;
+    int ringRadius = 90;
+    int ringWidth = 9;
 };
 
 #endif    

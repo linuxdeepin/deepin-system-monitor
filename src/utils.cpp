@@ -37,7 +37,7 @@
 
 Utils::Utils(QObject *parent) : QObject(parent)
 {
-    
+
 }
 
 QString Utils::getImagePath(QString imageName)
@@ -135,7 +135,7 @@ QString Utils::getRecordingSaveDirectory()
     QDir musicDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).first());
     QString subDirectory = tr("Recording");
     musicDirectory.mkdir(subDirectory);
-    
+
     return musicDirectory.filePath(subDirectory);
 }
 
@@ -146,10 +146,10 @@ QFileInfoList Utils::getRecordingFileinfos()
     return QDir(Utils::getRecordingSaveDirectory()).entryInfoList(filters, QDir::Files|QDir::NoDotAndDotDot);
 }
 
-bool Utils::fileExists(QString path) 
+bool Utils::fileExists(QString path)
 {
     QFileInfo check_file(path);
-    
+
     // check if file exists and if yes: Is it really a file and no directory?
     return check_file.exists() && check_file.isFile();
 }
@@ -179,7 +179,7 @@ qreal Utils::easeOutQuint(qreal x)
     return qPow(x - 1, 5) + 1;
 }
 
-QString Utils::convertSizeUnit(long bytes, QString unitSuffix) 
+QString Utils::convertSizeUnit(long bytes, QString unitSuffix)
 {
     if (bytes < qPow(2, 10)) {
         return QString("%1 %2").arg(bytes).arg(unitSuffix);
@@ -192,6 +192,32 @@ QString Utils::convertSizeUnit(long bytes, QString unitSuffix)
     } else if (bytes < qPow(2, 50)) {
         return QString("%1 T%2").arg(QString::number(qreal(bytes) / qPow(2, 40), 'f', 1)).arg(unitSuffix);
     }
-    
+
     return QString::number(bytes);
+}
+
+void Utils::drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity)
+{
+    QRect drawingRect;
+
+    drawingRect.setX(centerX - radius + penWidth);
+    drawingRect.setY(centerY - radius + penWidth);
+    drawingRect.setWidth(radius * 2 - penWidth * 2);
+    drawingRect.setHeight(radius * 2 - penWidth * 2);
+
+    painter.setOpacity(opacity);
+    painter.setRenderHint(QPainter::Antialiasing);
+    
+    QPen pen(QBrush(QColor(color)), penWidth);
+    pen.setCapStyle(Qt::RoundCap);
+    painter.setPen(pen);
+    
+    int arcLengthApproximation = penWidth + penWidth / 3;
+    painter.drawArc(drawingRect, 90 * 16 - arcLengthApproximation + rotationAngle * 16, -loadingAngle * 16);
+}
+
+void Utils::drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double backgroundOpacity, double percent)
+{
+    Utils::drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle, rotationAngle, color, backgroundOpacity);
+    Utils::drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle * percent, rotationAngle, color, 1);
 }

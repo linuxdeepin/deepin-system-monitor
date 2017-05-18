@@ -29,6 +29,8 @@ protected:
     int pointerRenderPaddingY = 9;
     int pointerRadius = 3;
     
+    int ringWidth = 6;
+    
     int memoryRenderSize = 9;
     int memoryRenderPaddingX = 13;
     int memoryRenderPaddingY = 50;

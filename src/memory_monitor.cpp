@@ -79,102 +79,34 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      Qt::AlignLeft | Qt::AlignTop,
                      swapString);
 
-    // Draw ring background.
-    painter.setPen(QPen(QColor(ringBackgroundColor)));
-    painter.setBrush(QBrush(QColor(ringBackgroundColor)));
-    painter.drawEllipse(QPointF(rect().x() + ringCenterPointerX + outsideRingRadius,
-                                rect().y() + ringCenterPointerY - pointerRadius),
-                        pointerRadius,
-                        pointerRadius);
-
-    painter.setPen(QPen(QColor(ringBackgroundColor)));
-    painter.setBrush(QBrush(QColor(ringBackgroundColor)));
-    painter.drawEllipse(QPointF(rect().x() + ringCenterPointerX + pointerRadius,
-                                rect().y() + ringCenterPointerY - outsideRingRadius),
-                        pointerRadius,
-                        pointerRadius);
-
-    painter.setPen(QPen(QColor(ringBackgroundColor), pointerRadius * 2));
-    painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
-    painter.drawArc(QRectF(rect().x() + ringCenterPointerX - outsideRingRadius,
-                           rect().y() + ringCenterPointerY - outsideRingRadius,
-                           outsideRingRadius * 2,
-                           outsideRingRadius * 2),
-                    90 * 16,
-                    270 * 16);
-
-    painter.setPen(QPen(QColor(ringBackgroundColor)));
-    painter.setBrush(QBrush(QColor(ringBackgroundColor)));
-    painter.drawEllipse(QPointF(rect().x() + ringCenterPointerX + insideRingRadius,
-                                rect().y() + ringCenterPointerY - pointerRadius),
-                        pointerRadius,
-                        pointerRadius);
-
-    painter.setPen(QPen(QColor(ringBackgroundColor)));
-    painter.setBrush(QBrush(QColor(ringBackgroundColor)));
-    painter.drawEllipse(QPointF(rect().x() + ringCenterPointerX + pointerRadius,
-                                rect().y() + ringCenterPointerY - insideRingRadius),
-                        pointerRadius,
-                        pointerRadius);
-
-    painter.setPen(QPen(QColor(ringBackgroundColor), pointerRadius * 2));
-    painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
-    painter.drawArc(QRectF(rect().x() + ringCenterPointerX - insideRingRadius,
-                           rect().y() + ringCenterPointerY - insideRingRadius,
-                           insideRingRadius * 2,
-                           insideRingRadius * 2),
-                    90 * 16,
-                    270 * 16);
-
-    // Draw memory ring foreground.
-    painter.setPen(QPen(QColor(0, 0, 0, 0)));
-    painter.setBrush(QBrush(QColor(memoryColor)));
-    painter.drawEllipse(QPointF(rect().x() + ringCenterPointerX + outsideRingRadius,
-                                rect().y() + ringCenterPointerY - pointerRadius),
-                        pointerRadius,
-                        pointerRadius);
-
-    painter.setPen(QPen(QColor(memoryColor), pointerRadius * 2));
-    painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
-    painter.drawArc(QRectF(rect().x() + ringCenterPointerX - outsideRingRadius,
-                           rect().y() + ringCenterPointerY - outsideRingRadius,
-                           outsideRingRadius * 2,
-                           outsideRingRadius * 2),
-                    (360 - (270 * memoryPercent)) * 16,
-                    (270 * memoryPercent) * 16);
-
-    if (memoryPercent > 0) {
-        painter.setPen(QPen(QColor(0, 0, 0, 0)));
-        painter.setBrush(QBrush(QColor(memoryColor)));
-        painter.drawEllipse(getEndPointerCoordinate(memoryPercent, outsideRingRadius),
-                            pointerRadius,
-                            pointerRadius);
-    }
-
-    // Draw swap ring foreground.
-    painter.setPen(QPen(QColor(0, 0, 0, 0)));
-    painter.setBrush(QBrush(QColor(swapColor)));
-    painter.drawEllipse(QPointF(rect().x() + ringCenterPointerX + insideRingRadius,
-                                rect().y() + ringCenterPointerY - pointerRadius),
-                        pointerRadius,
-                        pointerRadius);
-
-    painter.setPen(QPen(QColor(swapColor), pointerRadius * 2));
-    painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
-    painter.drawArc(QRectF(rect().x() + ringCenterPointerX - insideRingRadius,
-                           rect().y() + ringCenterPointerY - insideRingRadius,
-                           insideRingRadius * 2,
-                           insideRingRadius * 2),
-                    (360 - (270 * swapPercent)) * 16,
-                    (270 * swapPercent) * 16);
-
-    if (swapPercent > 0) {
-        painter.setPen(QPen(QColor(0, 0, 0, 0)));
-        painter.setBrush(QBrush(QColor(swapColor)));
-        painter.drawEllipse(getEndPointerCoordinate(swapPercent, insideRingRadius),
-                            pointerRadius,
-                            pointerRadius);
-    }
+    // Draw memory ring.
+    Utils::drawLoadingRing(
+        painter,
+        rect().x() + ringCenterPointerX,
+        rect().y() + ringCenterPointerY,
+        outsideRingRadius,
+        ringWidth,
+        270,
+        270,
+        memoryColor,
+        0.2,
+        memoryPercent
+        );
+    
+    // Draw swap ring.
+    Utils::drawLoadingRing(
+        painter,
+        rect().x() + ringCenterPointerX,
+        rect().y() + ringCenterPointerY,
+        insideRingRadius,
+        ringWidth,
+        270,
+        270,
+        swapColor,
+        0.2,
+        swapPercent
+        );
+    
 
     // Draw percent text.
     Utils::setFontSize(painter, memoryPercentRenderSize);
