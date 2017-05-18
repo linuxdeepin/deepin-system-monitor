@@ -17,8 +17,6 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start(200);
-
-    renderOffsetIndex = 0;
 }
 
 void CpuMonitor::paintEvent(QPaintEvent *)
@@ -34,7 +32,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.translate(0, renderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor("#CC0000"), 2));
+    painter.setPen(QPen(QColor("#8442FB"), 2));
     painter.drawPath(cpuPath);
 }
 
@@ -49,19 +47,12 @@ void CpuMonitor::updateStatus(double cpuPercent)
 
 void CpuMonitor::render()
 {
-    if (renderOffsetIndex >= 10) {
-        renderOffsetIndex = 0;
-    }
-
     QList<QPointF> points;
     for (int i = 0; i < cpuPercents->size(); i++) {
-        // points.append(QPointF(i * 10 - renderOffsetIndex, cpuPercents->at(i)));
-        points.append(QPointF(i * 10, cpuPercents->at(i)));
+        points.append(QPointF(i * 5, cpuPercents->at(i)));
     }
 
     cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
 
     repaint();
-
-    renderOffsetIndex++;
 }

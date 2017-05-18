@@ -104,7 +104,6 @@ void StatusMonitor::updateStatus()
         totalCpuPercent += cpu;
     }
 
-    qDebug() << totalCpuPercent / cpuNumber;
     updateCpuStatus(totalCpuPercent / cpuNumber);
 
     // Init items.

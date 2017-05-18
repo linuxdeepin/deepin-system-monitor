@@ -29,8 +29,6 @@ private:
     
     int pointsNumber = 24;
     
-    int renderOffsetIndex;
-    
     int renderOffsetY = 150;
 };
 
