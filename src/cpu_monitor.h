@@ -15,7 +15,7 @@ public:
     CpuMonitor(QWidget *parent = 0);
     
 public slots:
-    void updateStatus(int cpuPercent);
+    void updateStatus(double cpuPercent);
     void render();
     
 protected:
@@ -23,7 +23,7 @@ protected:
     
 private:
     QPainterPath cpuPath;
-    QList<int> *cpuPercents;
+    QList<double> *cpuPercents;
     
     QTimer *timer;
     

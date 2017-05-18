@@ -84,28 +84,28 @@ void StatusMonitor::updateStatus()
     QList<ListItem*> items;
     QString username = qgetenv("USER");
 
-    int totalCpuPercent = 0;
+    int cpuNumber = getCpuTimes().size();
+    double totalCpuPercent = 0;
 
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
-        int cpu = (&i.second)->pcpu;
+        double cpu = (&i.second)->pcpu;
 
         if (user == username) {
             QString name = getProcessName(&i.second);
             int pid = (&i.second)->tid;
             int memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
             QPixmap icon = getProcessIconFromName(name, processIconCache);
-            ProcessItem *item = new ProcessItem(icon, name, cpu, memory, pid, user);
+            ProcessItem *item = new ProcessItem(icon, name, cpu / cpuNumber, memory, pid, user);
             items << item;
         }
 
         totalCpuPercent += cpu;
     }
 
-    std::vector<cpuStruct> cpuTimes = getCpuTimes();
-    qDebug() << totalCpuPercent / cpuTimes.size();
-    updateCpuStatus(static_cast<int>(totalCpuPercent / cpuTimes.size()));
+    qDebug() << totalCpuPercent / cpuNumber;
+    updateCpuStatus(totalCpuPercent / cpuNumber);
 
     // Init items.
     updateProcessStatus(items);
@@ -115,7 +115,7 @@ void StatusMonitor::updateStatus()
 
     // Have procps read the memory。
     meminfo();
-    
+
     // Update memory status.
     if (kb_swap_total > 0.0)  {
         updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, kb_swap_used * 1024, kb_swap_total * 1024);

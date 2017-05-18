@@ -9,7 +9,7 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(280, 300);
 
-    cpuPercents = new QList<int>();
+    cpuPercents = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
         cpuPercents->append(0);
     }
@@ -38,7 +38,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.drawPath(cpuPath);
 }
 
-void CpuMonitor::updateStatus(int cpuPercent)
+void CpuMonitor::updateStatus(double cpuPercent)
 {
     cpuPercents->append(cpuPercent);
 

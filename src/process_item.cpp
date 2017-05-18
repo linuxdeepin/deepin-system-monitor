@@ -5,7 +5,7 @@
 
 using namespace processTools;
 
-ProcessItem::ProcessItem(QPixmap processIcon, QString processName, int processCpu, int processMemory, int processPid, QString processUser)
+ProcessItem::ProcessItem(QPixmap processIcon, QString processName, double processCpu, int processMemory, int processPid, QString processUser)
 {
     iconPixmap = processIcon;
     name = processName;
@@ -71,7 +71,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, bool
     }
     // Draw CPU.
     else if (column == 1) {
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(cpu));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
@@ -88,7 +88,7 @@ QString ProcessItem::getName() const
     return name;
 }
 
-int ProcessItem::getCPU() const 
+double ProcessItem::getCPU() const 
 {
     return cpu;
 }

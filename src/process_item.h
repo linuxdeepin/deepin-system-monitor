@@ -9,19 +9,19 @@ class ProcessItem : public ListItem
     Q_OBJECT
     
 public:
-    ProcessItem(QPixmap processIcon, QString processName, int processCpu, int processMemory, int processPid, QString processUser);
+    ProcessItem(QPixmap processIcon, QString processName, double processCpu, int processMemory, int processPid, QString processUser);
     
     bool sameAs(ListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     void drawForeground(QRect rect, QPainter *painter, int column, bool isSelect);
     
     QString getName() const;
-    int getCPU() const;
+    double getCPU() const;
     int getMemory() const;
     int getPid() const;
     
 private:
-    int cpu;
+    double cpu;
     int iconSize;
     int memory;
     int pid;

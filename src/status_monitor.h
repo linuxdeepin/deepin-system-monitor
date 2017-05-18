@@ -30,7 +30,7 @@ protected:
     void paintEvent(QPaintEvent *event);
                                        
 signals:
-    void updateCpuStatus(int cpuPercent);
+    void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     void updateProcessStatus(QList<ListItem*> items);
