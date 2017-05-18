@@ -436,7 +436,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
     // Sort items with column's sorting algorithms when click on title area.
     if (atTitleArea) {
-        if (sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
+        if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
             // Calcuate title widths;
             QList<int> renderWidths = getRenderWidths();
 
@@ -595,6 +595,9 @@ void ListView::paintEvent(QPaintEvent *)
     int rowCounter = 0;
     for (ListItem *item:*listItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
+            // Clip item rect.
+            painter.setClipRect(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight));
+    
             // Draw item backround.
             bool isSelect = selectionItems->contains(item);
             item->drawBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
@@ -603,7 +606,7 @@ void ListView::paintEvent(QPaintEvent *)
             int columnCounter = 0;
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
-                item->drawForeground(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, isSelect);
+                item->drawForeground(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, rowCounter, isSelect);
 
                 columnRenderX += renderWidth;
                 columnCounter++;
@@ -912,9 +915,11 @@ int ListView::getBottomRenderOffset()
 
 void ListView::sortItemsByColumn(int column, bool descendingSort) 
 {
-    qSort(listItems->begin(), listItems->end(), [&](const ListItem *item1, const ListItem *item2) {
-            return (*sortingAlgorithms)[column](item1, item2, descendingSort);
-        });
+    if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
+        qSort(listItems->begin(), listItems->end(), [&](const ListItem *item1, const ListItem *item2) {
+                return (*sortingAlgorithms)[column](item1, item2, descendingSort);
+            });
+    }
 }
 
 void ListView::startScrollAnimation() 

@@ -2,6 +2,7 @@
 #include <QPainter>
 
 #include "process_item.h"
+#include "top_process_item.h"
 #include "process_tools.h"
 #include <proc/sysinfo.h>
 #include <QDebug>
@@ -27,6 +28,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     processIconCache = new QMap<QString, QPixmap>();
 
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateTopProcessStatus, memoryMonitor, &MemoryMonitor::updateTopStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
 
     updateStatusTimer = new QTimer();
@@ -86,6 +88,8 @@ void StatusMonitor::updateStatus()
 
     int cpuNumber = getCpuTimes().size();
     double totalCpuPercent = 0;
+    
+    QList<ListItem*> topItems;
 
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
@@ -99,6 +103,9 @@ void StatusMonitor::updateStatus()
             QPixmap icon = getProcessIconFromName(name, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, cpu / cpuNumber, memory, pid, user);
             items << item;
+            
+            TopProcessItem *topItem = new TopProcessItem(icon, name, memory, pid);
+            topItems << topItem;
         }
 
         totalCpuPercent += cpu;
@@ -108,6 +115,10 @@ void StatusMonitor::updateStatus()
 
     // Init items.
     updateProcessStatus(items);
+    
+    qSort(topItems.begin(), topItems.end(), TopProcessItem::sortByMemory);
+    
+    updateTopProcessStatus(topItems);
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;

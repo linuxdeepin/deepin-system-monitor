@@ -2,6 +2,8 @@
 #define MemoryMONITOR_H
 
 #include <QWidget>
+#include <QVBoxLayout>
+#include "top_process_view.h"
 
 class MemoryMonitor : public QWidget
 {
@@ -12,6 +14,7 @@ public:
     
 public slots:
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
+    void updateTopStatus(QList<ListItem*> items);
     
 protected:
     void paintEvent(QPaintEvent *event);
@@ -51,6 +54,9 @@ protected:
     
     int topAppsTitleRenderSize = 11;
     int topAppsTitleRenderOffsetY = 100;
+    
+    QVBoxLayout *layout;
+    TopProcessView *topProcessView;
 };
 
 #endif    

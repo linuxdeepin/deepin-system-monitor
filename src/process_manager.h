@@ -20,11 +20,6 @@ public slots:
     void updateStatus(QList<ListItem*> items);
                                        
 private:
-    static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    
     ProcessView *processView;
 };
 

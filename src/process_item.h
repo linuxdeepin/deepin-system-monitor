@@ -13,7 +13,12 @@ public:
     
     bool sameAs(ListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
-    void drawForeground(QRect rect, QPainter *painter, int column, bool isSelect);
+    void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect);
+    
+    static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
     
     QString getName() const;
     double getCPU() const;

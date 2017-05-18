@@ -23,6 +23,8 @@ HEADERS += src/utils.h \
            src/list_view.h \
            src/process_item.h \
            src/process_view.h \
+           src/top_process_item.h \
+           src/top_process_view.h \
            src/cpu_tools.h \
            src/process_tools.h \
            src/hashqstring.h \
@@ -40,6 +42,8 @@ SOURCES += src/main.cpp \
            src/list_view.cpp \
            src/process_item.cpp \
            src/process_view.cpp \
+           src/top_process_item.cpp \
+           src/top_process_view.cpp \
            src/cpu_tools.cpp \
            src/process_tools.cpp \
 		   src/smooth_curve_generator.cpp \

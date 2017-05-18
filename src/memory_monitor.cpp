@@ -8,12 +8,18 @@
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedHeight(230);
+    setFixedHeight(250);
     
     usedMemory = 0;
     totalMemory = 0;
     usedSwap = 0;
     totalSwap = 0;
+    
+    layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 120, 0, 0);
+    topProcessView = new TopProcessView();
+    
+    layout->addWidget(topProcessView);
 }
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
@@ -142,3 +148,9 @@ QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
 
     return QPointF(pointerX, pointerY);
 }
+
+void MemoryMonitor::updateTopStatus(QList<ListItem*> items)
+{
+    topProcessView->refreshItems(items);
+}
+

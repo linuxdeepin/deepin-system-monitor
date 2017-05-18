@@ -36,10 +36,11 @@ public:
      * 
      * @rect column corresponding to the drawing of the rectangular area
      * @painter the painter used to draw anything you want
-     * @index the column of ListItem, you can draw different column content based on the column index
+     * @column the column of ListItem, you can draw different column content based on the column index
+     * @index the index of ListItem, you can draw different rows effect based on the index, such as the zebra crossing
      * @isSelect current item is selected, you can draw selected effect under content when isSelect is true
      */
-    virtual void drawForeground(QRect rect, QPainter *painter, int column, bool isSelect)=0;
+    virtual void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect)=0;
 };
 
 #endif
