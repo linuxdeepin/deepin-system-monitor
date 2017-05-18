@@ -30,11 +30,11 @@ protected:
     void paintEvent(QPaintEvent *event);
                                        
 signals:
-    void updateCpuStatus(std::vector<double> cpuPercentages);
+    void updateCpuStatus(int cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     void updateProcessStatus(QList<ListItem*> items);
-    
+                                                    
 public slots:
     void updateStatus();
     
@@ -44,8 +44,6 @@ private:
     CpuMonitor *cpuMonitor;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
-    
-    std::vector<cpuTools::cpuStruct> prevCpuTimes;
     
     QMap<QString, QPixmap> *processIconCache;
     QTimer *updateStatusTimer;

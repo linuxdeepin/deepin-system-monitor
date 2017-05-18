@@ -9,13 +9,15 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(280, 300);
 
-    cpuPoints = nullptr;
-    cpuPaths = nullptr;
+    cpuPercents = new QList<int>();
+    for (int i = 0; i < pointsNumber; i++) {
+        cpuPercents->append(0);
+    }
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start(200);
-    
+
     renderOffsetIndex = 0;
 }
 
@@ -29,74 +31,37 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "CPU");
 
-    if (cpuPaths != nullptr) {
-        painter.translate(0, height() / 2);
-        painter.scale(1, -1);
+    painter.translate(0, renderOffsetY);
+    painter.scale(1, -1);
 
-        painter.setClipRect(QRectF(rect().x(), rect().y(), 220, rect().height()));
-
-        const QString colourNames[] = {
-            "#CC0000", "#E69138", "#6AA84F", "#3C78D8", "#45818E", "#3D85C6", "#A64D79", "#674EA7",
-        };
-        for (int i = 0; i < cpuPaths->size(); i++) {
-            painter.setPen(QPen(QColor(colourNames[i % colourNames->size()]), 2));
-            painter.drawPath(cpuPaths->at(i));
-        }
-    }
+    painter.setPen(QPen(QColor("#CC0000"), 2));
+    painter.drawPath(cpuPath);
 }
 
-void CpuMonitor::initStatus(std::vector<double> cpuPercentages)
+void CpuMonitor::updateStatus(int cpuPercent)
 {
-    cpuPoints = new QList<QList<double>*>();
+    cpuPercents->append(cpuPercent);
 
-    for (unsigned int i = 0; i < cpuPercentages.size(); i++) {
-        QList<double> *list = new QList<double>();
-
-        for (int j = 0; j < pointsNumber; j++) {
-            list->append(0);
-        }
-        cpuPoints->append(list);
-    }
-
-    cpuPaths = new QList<QPainterPath>();
-}
-
-void CpuMonitor::updateStatus(std::vector<double> cpuPercentages)
-{
-    if (cpuPoints == nullptr) {
-        initStatus(cpuPercentages);
-    }
-
-    for (unsigned int i = 0; i < cpuPercentages.size(); i++) {
-        cpuPoints->at(i)->append(cpuPercentages.at(i));
-
-        if (cpuPoints->at(i)->size() > pointsNumber) {
-            cpuPoints->at(i)->pop_front();
-        }
+    if (cpuPercents->size() > pointsNumber) {
+        cpuPercents->pop_front();
     }
 }
 
 void CpuMonitor::render()
 {
-    if (cpuPaths != nullptr) {
-        cpuPaths->clear();
-        
-        if (renderOffsetIndex >= 10) {
-            renderOffsetIndex = 0;
-        }
-
-        for (int i = 0; i < cpuPoints->size(); i++) {
-            QList<QPointF> points;
-
-            for (int j = 0; j < cpuPoints->at(i)->size(); j++) {
-                points.append(QPointF(j * 10 - renderOffsetIndex, cpuPoints->at(i)->at(j)));
-            }
-
-            cpuPaths->append(SmoothCurveGenerator::generateSmoothCurve(points));
-        }
-
-        repaint();
-        
-        renderOffsetIndex++;
+    if (renderOffsetIndex >= 10) {
+        renderOffsetIndex = 0;
     }
+
+    QList<QPointF> points;
+    for (int i = 0; i < cpuPercents->size(); i++) {
+        // points.append(QPointF(i * 10 - renderOffsetIndex, cpuPercents->at(i)));
+        points.append(QPointF(i * 10, cpuPercents->at(i)));
+    }
+
+    cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
+
+    repaint();
+
+    renderOffsetIndex++;
 }

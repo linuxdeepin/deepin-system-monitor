@@ -15,22 +15,23 @@ public:
     CpuMonitor(QWidget *parent = 0);
     
 public slots:
-    void updateStatus(std::vector<double> cpuPercentages);
-    void initStatus(std::vector<double> cpuPercentages);
+    void updateStatus(int cpuPercent);
     void render();
     
 protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QList<QList<double>*> *cpuPoints;
-    QList<QPainterPath> *cpuPaths;
+    QPainterPath cpuPath;
+    QList<int> *cpuPercents;
     
     QTimer *timer;
     
     int pointsNumber = 24;
     
     int renderOffsetIndex;
+    
+    int renderOffsetY = 150;
 };
 
 #endif    

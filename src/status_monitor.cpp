@@ -25,7 +25,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 
     // Init process icon cache.
     processIconCache = new QMap<QString, QPixmap>();
-    
+
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
 
@@ -76,45 +76,45 @@ void StatusMonitor::updateStatus()
             }
         }
     }
-    
+
     // Update the cpu time for next loop.
     totalCpuTime = getTotalCpuTime();
 
     // Read processes information.
     QList<ListItem*> items;
     QString username = qgetenv("USER");
+
+    int totalCpuPercent = 0;
+
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
+        int cpu = (&i.second)->pcpu;
+
         if (user == username) {
             QString name = getProcessName(&i.second);
-            int cpu = (&i.second)->pcpu;
             int pid = (&i.second)->tid;
             int memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
             QPixmap icon = getProcessIconFromName(name, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, cpu, memory, pid, user);
             items << item;
         }
+
+        totalCpuPercent += cpu;
     }
+
+    std::vector<cpuStruct> cpuTimes = getCpuTimes();
+    qDebug() << totalCpuPercent / cpuTimes.size();
+    updateCpuStatus(static_cast<int>(totalCpuPercent / cpuTimes.size()));
 
     // Init items.
     updateProcessStatus(items);
-    
+
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
-    
-    // Have procps read the memory。
-    meminfo();                  
 
-    // Update cpu status.
-    std::vector<cpuStruct> cpuTimes = getCpuTimes();
-    if (prevCpuTimes.size() != 0) {
-        std::vector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
-        
-        updateCpuStatus(cpuPercentages);
-    }
-    
-    prevCpuTimes = cpuTimes;
+    // Have procps read the memory。
+    meminfo();
     
     // Update memory status.
     if (kb_swap_total > 0.0)  {
