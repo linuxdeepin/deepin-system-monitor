@@ -87,7 +87,11 @@ int TopProcessItem::getPid() const
 {
     return pid;
 }
-    
+
+QPixmap TopProcessItem::getIcon() const
+{
+    return iconPixmap;
+}
 
 bool TopProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2) 
 {
@@ -97,3 +101,5 @@ bool TopProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2)
     
     return memory1 > memory2;
 }
+
+

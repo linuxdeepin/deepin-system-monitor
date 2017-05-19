@@ -28,7 +28,6 @@ HEADERS += src/utils.h \
            src/cpu_tools.h \
            src/process_tools.h \
            src/hashqstring.h \
-           src/tools.h \
 		   src/smooth_curve_generator.h \
            src/main_window.h
 SOURCES += src/main.cpp \

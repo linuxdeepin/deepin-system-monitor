@@ -20,6 +20,7 @@ public:
     QString getName() const;
     int getMemory() const;
     int getPid() const;
+    QPixmap getIcon() const;
     
 private:
     int iconSize;

@@ -5,7 +5,6 @@
 #include "top_process_item.h"
 #include "process_tools.h"
 #include <proc/sysinfo.h>
-#include "tools.h"
 #include <QDebug>
 
 using namespace cpuTools;
@@ -112,14 +111,24 @@ void StatusMonitor::updateStatus()
         totalCpuPercent += cpu;
     }
 
+    // Update cpu status.
     updateCpuStatus(totalCpuPercent / cpuNumber);
 
-    // Init items.
+    // Init process status.
     updateProcessStatus(items);
     
+    // Update top 10 app stauts.
     qSort(topItems.begin(), topItems.end(), TopProcessItem::sortByMemory);
-    resizeList(topItems, 10);
-    updateTopProcessStatus(topItems);
+    QList<ListItem*> top10Items;
+    for (int i = 0; i < std::min(items.size(), 10); i++) {
+        TopProcessItem *topItem = static_cast<TopProcessItem*>(topItems.at(i));
+        TopProcessItem *top10Item = new TopProcessItem(topItem->getIcon(), topItem->getName(), topItem->getMemory(), topItem->getPid());
+            
+        top10Items << top10Item;
+    }
+    qDeleteAll(topItems);
+    
+    updateTopProcessStatus(top10Items);
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
