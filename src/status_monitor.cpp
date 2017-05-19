@@ -5,6 +5,7 @@
 #include "top_process_item.h"
 #include "process_tools.h"
 #include <proc/sysinfo.h>
+#include "tools.h"
 #include <QDebug>
 
 using namespace cpuTools;
@@ -117,7 +118,7 @@ void StatusMonitor::updateStatus()
     updateProcessStatus(items);
     
     qSort(topItems.begin(), topItems.end(), TopProcessItem::sortByMemory);
-    
+    resizeList(topItems, 10);
     updateTopProcessStatus(topItems);
 
     // Keep processes we've read for cpu calculations next cycle.

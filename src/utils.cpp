@@ -221,3 +221,4 @@ void Utils::drawLoadingRing(QPainter &painter, int centerX, int centerY, int rad
     Utils::drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle, rotationAngle, color, backgroundOpacity);
     Utils::drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle * percent, rotationAngle, color, 1);
 }
+
