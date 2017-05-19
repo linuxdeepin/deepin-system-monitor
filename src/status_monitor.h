@@ -34,7 +34,6 @@ signals:
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     void updateProcessStatus(QList<ListItem*> items);
-    void updateTopProcessStatus(QList<ListItem*> items);
                                                     
 public slots:
     void updateStatus();

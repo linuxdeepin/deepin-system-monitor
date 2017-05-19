@@ -16,7 +16,7 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-    timer->start(200);
+    timer->start(30);
 }
 
 void CpuMonitor::paintEvent(QPaintEvent *)
@@ -33,14 +33,16 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                            30
                          ), Qt::AlignCenter, "CPU");
 
+    double percent = (cpuPercents->at(cpuPercents->size() - 2) + Utils::easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
+
     Utils::setFontSize(painter, 15);
     painter.setPen(QPen(QColor("#aaaaaa")));
     painter.drawText(QRect(rect().x(),
                            rect().y() + percentRenderOffsetY,
                            rect().width(),
                            30
-                         ), Qt::AlignCenter, QString("%1%").arg(QString::number(cpuPercents->last(), 'f', 1)));
-    
+                         ), Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
+
     Utils::drawLoadingRing(
         painter,
         rect().x() + rect().width() / 2,
@@ -51,7 +53,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         150,
         "#8442FB",
         0.2,
-        cpuPercents->last() / 100
+        percent / 100
         );
 
     painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
@@ -68,16 +70,40 @@ void CpuMonitor::updateStatus(double cpuPercent)
     if (cpuPercents->size() > pointsNumber) {
         cpuPercents->pop_front();
     }
-}
 
-void CpuMonitor::render()
-{
     QList<QPointF> points;
+
+    double cpuMaxHeight = 0;
     for (int i = 0; i < cpuPercents->size(); i++) {
-        points.append(QPointF(i * 5, cpuPercents->at(i)));
+        if (cpuPercents->at(i) > cpuMaxHeight) {
+            cpuMaxHeight = cpuPercents->at(i);
+        }
+    }
+
+    for (int i = 0; i < cpuPercents->size(); i++) {
+        if (cpuMaxHeight < cpuRenderMaxHeight) {
+            points.append(QPointF(i * 5, cpuPercents->at(i)));
+        } else {
+            points.append(QPointF(i * 5, cpuPercents->at(i) * 45 / cpuMaxHeight));
+        }
     }
 
     cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
 
-    repaint();
+    if (cpuPercents->last() != cpuPercents->at(cpuPercents->size() - 2)) {
+        timer->start(30);
+    }
+}
+
+void CpuMonitor::render()
+{
+    if (animationIndex < animationFrames) {
+        animationIndex++;
+
+        repaint();
+    } else {
+        animationIndex = 0;
+
+        timer->stop();
+    }
 }

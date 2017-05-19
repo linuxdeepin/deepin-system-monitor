@@ -13,22 +13,38 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     usedSwap = 0;
     totalSwap = 0;
     
-    layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 120, 0, 0);
-    topProcessView = new TopProcessView();
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(render()));
+    timer->start();
     
-    layout->addWidget(topProcessView, 0, Qt::AlignTop);
+    setFixedHeight(120);
 }
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
     if (uMemory != usedMemory || tMemory != totalMemory || uSwap != usedSwap || tSwap != totalSwap) {
+        prevUsedMemory = usedMemory;
+        prevUsedSwap = usedSwap;
+        
         usedMemory = uMemory;
         totalMemory = tMemory;
         usedSwap = uSwap;
         totalSwap = tSwap;
 
+        timer->start(30);
+    }
+}
+
+void MemoryMonitor::render()
+{
+    if (animationIndex < animationFrames) {
+        animationIndex++;
+
         repaint();
+    } else {
+        animationIndex = 0;
+
+        timer->stop();
     }
 }
 
@@ -38,12 +54,12 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    double memoryPercent = usedMemory * 1.0 / totalMemory;
+    double memoryPercent = (prevUsedMemory + Utils::easeInOut(animationIndex / animationFrames) * (usedMemory - prevUsedMemory)) * 1.0 / totalMemory;
     double swapPercent;
     if (totalSwap == 0) {
         swapPercent = 0;
     } else {
-        swapPercent = usedSwap * 1.0 / totalSwap;
+        swapPercent = (prevUsedSwap + Utils::easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) * 1.0 / totalSwap;
     }
 
     // Draw title.
@@ -120,13 +136,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius, rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2, insideRingRadius * 2),
                      Qt::AlignCenter,
                      QString("%1%").arg(static_cast<int>(memoryPercent * 100)));
-
-    // Draw top 5 apps.
-    Utils::setFontSize(painter, topAppsTitleRenderSize);
-    painter.setPen(QPen(QColor("#333333")));
-    painter.drawText(QRect(rect().x(), topAppsTitleRenderOffsetY, rect().width(), 20),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     "高内存消耗应用");
 }
 
 QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
@@ -145,10 +154,5 @@ QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
     }
 
     return QPointF(pointerX, pointerY);
-}
-
-void MemoryMonitor::updateTopStatus(QList<ListItem*> items)
-{
-    topProcessView->refreshItems(items);
 }
 

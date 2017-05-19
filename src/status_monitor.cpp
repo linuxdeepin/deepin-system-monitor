@@ -2,7 +2,6 @@
 #include <QPainter>
 
 #include "process_item.h"
-#include "top_process_item.h"
 #include "process_tools.h"
 #include <proc/sysinfo.h>
 #include <QDebug>
@@ -19,7 +18,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     cpuMonitor = new CpuMonitor();
     memoryMonitor = new MemoryMonitor();
     networkMonitor = new NetworkMonitor();
-
+    
     layout->addWidget(cpuMonitor);
     layout->addWidget(memoryMonitor);
     layout->addWidget(networkMonitor);
@@ -28,7 +27,6 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     processIconCache = new QMap<QString, QPixmap>();
 
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateTopProcessStatus, memoryMonitor, &MemoryMonitor::updateTopStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
 
     updateStatusTimer = new QTimer();
@@ -89,8 +87,6 @@ void StatusMonitor::updateStatus()
     int cpuNumber = getCpuTimes().size();
     double totalCpuPercent = 0;
     
-    QList<ListItem*> topItems;
-
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
@@ -103,9 +99,6 @@ void StatusMonitor::updateStatus()
             QPixmap icon = getProcessIconFromName(name, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, cpu / cpuNumber, memory, pid, user);
             items << item;
-            
-            TopProcessItem *topItem = new TopProcessItem(icon, name, memory, pid);
-            topItems << topItem;
         }
 
         totalCpuPercent += cpu;
@@ -117,19 +110,6 @@ void StatusMonitor::updateStatus()
     // Init process status.
     updateProcessStatus(items);
     
-    // Update top 10 app stauts.
-    qSort(topItems.begin(), topItems.end(), TopProcessItem::sortByMemory);
-    QList<ListItem*> top10Items;
-    for (int i = 0; i < std::min(items.size(), 10); i++) {
-        TopProcessItem *topItem = static_cast<TopProcessItem*>(topItems.at(i));
-        TopProcessItem *top10Item = new TopProcessItem(topItem->getIcon(), topItem->getName(), topItem->getMemory(), topItem->getPid());
-            
-        top10Items << top10Item;
-    }
-    qDeleteAll(topItems);
-    
-    updateTopProcessStatus(top10Items);
-
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
 
@@ -143,3 +123,4 @@ void StatusMonitor::updateStatus()
         updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, 0, 0);
     }
 }
+

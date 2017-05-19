@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include "top_process_view.h"
+#include <QTimer>
 
 class MemoryMonitor : public QWidget
 {
@@ -14,11 +14,14 @@ public:
     
 public slots:
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
-    void updateTopStatus(QList<ListItem*> items);
+    void render();
     
 protected:
     void paintEvent(QPaintEvent *event);
     QPointF getEndPointerCoordinate(double percent, int r);
+    
+    long prevUsedMemory;
+    long prevUsedSwap;
     
     long usedMemory;
     long totalMemory;
@@ -56,7 +59,10 @@ protected:
     int topAppsTitleRenderOffsetY = 100;
     
     QVBoxLayout *layout;
-    TopProcessView *topProcessView;
+
+    QTimer *timer;
+    int animationIndex = 0;
+    double animationFrames = 20;
 };
 
 #endif    

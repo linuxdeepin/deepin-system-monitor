@@ -37,6 +37,10 @@ private:
     
     int titleRenderOffsetY = 150;
     int percentRenderOffsetY = 180;
+    
+    int animationIndex = 0;
+    double animationFrames = 20;
+    int cpuRenderMaxHeight = 45;
 };
 
 #endif    

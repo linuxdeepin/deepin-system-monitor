@@ -112,8 +112,8 @@ bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool 
 
     // Sort item with cpu if name is same.
     if (name1 == name2) {
-        int cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
-        int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+        double cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
+        double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
         
         sortOrder = cpu1 > cpu2;
     }
@@ -128,8 +128,8 @@ bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool 
 bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort) 
 {
     // Init.
-    int cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
-    int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+    double cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
+    double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
     bool sortOrder;
     
     // Sort item with memory if cpu is same.
@@ -156,8 +156,8 @@ bool ProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2, boo
     
     // Sort item with cpu if memory is same.
     if (memory1 == memory2) {
-        int cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
-        int cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+        double cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
+        double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
         
         sortOrder = cpu1 > cpu2;
     }
