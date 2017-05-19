@@ -22,7 +22,8 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
-    if (uMemory != usedMemory || tMemory != totalMemory || uSwap != usedSwap || tSwap != totalSwap) {
+    if ((Utils::convertSizeUnit(uMemory, "") != Utils::convertSizeUnit(usedMemory, "")) || 
+        (Utils::convertSizeUnit(uSwap, "") != Utils::convertSizeUnit(usedSwap, ""))) {
         prevUsedMemory = usedMemory;
         prevUsedSwap = usedSwap;
         
