@@ -5,7 +5,8 @@
 TEMPLATE = app
 TARGET = deepin-system-monitor
 INCLUDEPATH += .
-
+INCLUDEPATH += /usr/local/include
+				
 CONFIG += link_pkgconfig
 CONFIG += c++11 
 PKGCONFIG += dtkwidget dtkbase
@@ -17,6 +18,7 @@ HEADERS += src/utils.h \
 		   src/cpu_monitor.h \
 		   src/memory_monitor.h \
 		   src/network_monitor.h \
+		   src/network_traffic_filter.h \
 		   src/status_monitor.h \
            src/process_manager.h \
            src/list_item.h \
@@ -27,13 +29,14 @@ HEADERS += src/utils.h \
            src/process_tools.h \
            src/hashqstring.h \
 		   src/smooth_curve_generator.h \
-           src/main_window.h
+		   src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
 		   src/toolbar.cpp \
 		   src/cpu_monitor.cpp \
 		   src/memory_monitor.cpp \
 		   src/network_monitor.cpp \
+		   src/network_traffic_filter.cpp \
 		   src/status_monitor.cpp \
            src/process_manager.cpp \
            src/list_item.cpp \
@@ -54,3 +57,4 @@ QT += dbus
 
 QMAKE_CXXFLAGS += -g
 LIBS += -L"libprocps" -lprocps -lstdc++fs
+LIBS += /usr/local/lib/libnethogs.so

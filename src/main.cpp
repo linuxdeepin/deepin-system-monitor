@@ -6,8 +6,22 @@
 
 #include "utils.h"
 #include "main_window.h"
+#include "network_traffic_filter.h"
+#include <iostream>
+#include <thread>
 
 DWIDGET_USE_NAMESPACE
+
+static void onNethogsUpdate(int action, NethogsMonitorRecord const* update)
+{
+	NetworkTrafficFilter::setRowUpdate(action, *update);
+}
+
+static void nethogsMonitorThreadProc()
+{
+	const int status = nethogsmonitor_loop(&onNethogsUpdate);
+	NetworkTrafficFilter::setNetHogsMonitorStatus(status);
+}
 
 int main(int argc, char *argv[]) 
 {
@@ -23,6 +37,8 @@ int main(int argc, char *argv[])
         app.setApplicationVersion("1.0");
         
         app.setTheme("dark");
+        
+        std::thread nethogs_monitor_thread(&nethogsMonitorThreadProc);
 
         MainWindow window;
         
@@ -31,6 +47,9 @@ int main(int argc, char *argv[])
         window.show();
 
         return app.exec();
+        
+        nethogsmonitor_breakloop();	
+        nethogs_monitor_thread.join();
     }
 
     return 0;

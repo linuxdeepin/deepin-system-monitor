@@ -4,6 +4,7 @@
 #include "process_item.h"
 #include "process_tools.h"
 #include <proc/sysinfo.h>
+#include <thread>
 #include <QDebug>
 
 using namespace cpuTools;
@@ -18,7 +19,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     cpuMonitor = new CpuMonitor();
     memoryMonitor = new MemoryMonitor();
     networkMonitor = new NetworkMonitor();
-    
+
     layout->addWidget(cpuMonitor);
     layout->addWidget(memoryMonitor);
     layout->addWidget(networkMonitor);
@@ -86,7 +87,7 @@ void StatusMonitor::updateStatus()
 
     int cpuNumber = getCpuTimes().size();
     double totalCpuPercent = 0;
-    
+
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
@@ -109,7 +110,7 @@ void StatusMonitor::updateStatus()
 
     // Init process status.
     updateProcessStatus(items);
-    
+
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
 
@@ -121,6 +122,21 @@ void StatusMonitor::updateStatus()
         updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, kb_swap_used * 1024, kb_swap_total * 1024);
     } else {
         updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, 0, 0);
+    }
+
+    if (NetworkTrafficFilter::getNetHogsMonitorStatus() != NETHOGS_STATUS_OK) {
+        qDebug() << "Failed to access network device(s).";
+    }
+    
+    qDebug() << NetworkTrafficFilter::getNetHogsMonitorStatus() << NETHOGS_STATUS_OK;
+
+    NetworkTrafficFilter::Update update;
+
+    qDebug() << NetworkTrafficFilter::getRowUpdate(update);
+    
+    qDebug() << "*********** " << update.record.name << update.record.pid << update.action << NETHOGS_APP_ACTION_REMOVE;
+    if (update.action != NETHOGS_APP_ACTION_REMOVE) {
+        qDebug() << "######## " << update.record.name << update.record.pid << update.record.device_name << update.record.sent_bytes << update.record.recv_bytes << update.record.sent_kbs << update.record.recv_kbs;
     }
 }
 

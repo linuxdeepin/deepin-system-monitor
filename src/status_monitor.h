@@ -15,6 +15,7 @@
 #include "process_item.h"
 #include <proc/sysinfo.h>
 #include "cpu_tools.h"
+#include "network_traffic_filter.h"
 
 class StatusMonitor : public QWidget
 {
@@ -34,7 +35,7 @@ signals:
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     void updateProcessStatus(QList<ListItem*> items);
-                                                    
+    
 public slots:
     void updateStatus();
     
