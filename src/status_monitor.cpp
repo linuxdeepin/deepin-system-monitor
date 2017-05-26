@@ -4,11 +4,13 @@
 #include "process_item.h"
 #include "utils.h"
 #include "process_tools.h"
+#include "network_tools.h"
 #include <proc/sysinfo.h>
 #include <thread>
 #include <QDebug>
 
 using namespace cpuTools;
+using namespace networkTools;
 using namespace processTools;
 
 StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
@@ -25,8 +27,16 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(memoryMonitor);
     layout->addWidget(networkMonitor);
     
+    totalSentBytes = 0;
+    totalRecvBytes = 0;
+    totalSentKbs = 0;
+    totalRecvKbs = 0;
+    
     // Init process icon cache.
     processIconCache = new QMap<QString, QPixmap>();
+    
+    processSentBytes = new QMap<int, uint32_t>();
+    processRecvBytes = new QMap<int, uint32_t>();
 
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
@@ -106,15 +116,38 @@ void StatusMonitor::updateStatus()
         totalCpuPercent += cpu;
     }
 
-    // Update cpu status.
-    updateCpuStatus(totalCpuPercent / cpuNumber);
-
-    // Init process status.
-    updateProcessStatus(items);
-
-    // Keep processes we've read for cpu calculations next cycle.
-    prevProcesses = processes;
-
+    // Remove dead process from network status maps.
+    for (auto pid : processSentBytes->keys()) {
+        bool foundProcess = false;
+        for (ListItem *item : items) {
+            if ((static_cast<ProcessItem*>(item))->getPid() == pid) {
+                foundProcess = true;
+                break;
+            }
+        }
+        
+        if (!foundProcess) {
+            processSentBytes->remove(pid);
+            
+            qDebug() << QString("Remove %1 from sent bytes map.").arg(pid);
+        }
+    }
+    for (auto pid : processRecvBytes->keys()) {
+        bool foundProcess = false;
+        for (ListItem *item : items) {
+            if ((static_cast<ProcessItem*>(item))->getPid() == pid) {
+                foundProcess = true;
+                break;
+            }
+        }
+        
+        if (!foundProcess) {
+            processRecvBytes->remove(pid);
+            
+            qDebug() << QString("Remove %1 from recv bytes map.").arg(pid);
+        }
+    }
+    
     // Have procps read the memory。
     meminfo();
 
@@ -129,25 +162,77 @@ void StatusMonitor::updateStatus()
         qDebug() << "Failed to access network device(s).";
     }
 
+    // Update network status.
     qDebug() << NetworkTrafficFilter::getNetHogsMonitorStatus() << NETHOGS_STATUS_OK;
 
     NetworkTrafficFilter::Update update;
 
     qDebug() << "!!!!!!!!!!!!!!!!!!!!";
 
-    sent_kbs = 0;
-    recv_kbs = 0;
+    QMap<int, networkStatus> *networkStatusSnapshot = new QMap<int, networkStatus>();
+    totalSentKbs = 0;
+    totalRecvKbs = 0;
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-            qDebug() << "######## " << update.record.name << update.record.pid << update.record.device_name << update.record.sent_bytes << update.record.recv_bytes << update.record.sent_kbs << update.record.recv_kbs;
+            qDebug() << "######## " 
+                     << update.record.name
+                     << update.record.pid
+                     << update.record.device_name
+                     << Utils::formatByteCount(update.record.sent_bytes)
+                     << Utils::formatByteCount(update.record.recv_bytes)
+                     << Utils::formatBandwidth(update.record.sent_kbs)
+                     << Utils::formatBandwidth(update.record.recv_kbs);
 
-            sent_kbs += update.record.sent_kbs;
-            recv_kbs += update.record.recv_kbs;
+            uint32_t prevSentBytes = 0;
+            uint32_t prevRecvBytes = 0;
             
-            sent_bytes += update.record.sent_bytes;
-            recv_bytes += update.record.recv_bytes;
+            if (processSentBytes->contains(update.record.pid)) {
+                prevSentBytes = processSentBytes->value(update.record.pid);
+            }
+            if (processRecvBytes->contains(update.record.pid)) {
+                prevRecvBytes = processRecvBytes->value(update.record.pid);
+            }
+            
+            totalSentKbs += update.record.sent_kbs;
+            totalRecvKbs += update.record.recv_kbs;
+            
+            totalSentBytes += (update.record.sent_bytes - prevSentBytes);
+            totalRecvBytes += (update.record.recv_bytes - prevRecvBytes);
+            
+            (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
+            (*processRecvBytes)[update.record.pid] = update.record.recv_bytes;
+            
+            networkStatus status = {
+                update.record.sent_bytes,
+                update.record.recv_bytes,
+                update.record.sent_kbs,
+                update.record.recv_kbs
+            };
+                
+            (*networkStatusSnapshot)[update.record.pid] = status;
         }
     }
     
-    qDebug() << Utils::formatByteCount(sent_bytes) << Utils::formatByteCount(recv_bytes) << Utils::formatBandwidth(sent_kbs) << Utils::formatBandwidth(recv_kbs);
+    qDebug() << Utils::formatByteCount(totalSentBytes)
+             << Utils::formatByteCount(totalRecvBytes)
+             << Utils::formatBandwidth(totalSentKbs)
+             << Utils::formatBandwidth(totalRecvKbs);
+    
+    // Update ProcessItem's network status.
+    for (ListItem *item : items) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        if (networkStatusSnapshot->contains(processItem->getPid())) {
+            processItem->setNetworkStatus(networkStatusSnapshot->value(processItem->getPid()));
+        }
+    }
+
+    // Update cpu status.
+    updateCpuStatus(totalCpuPercent / cpuNumber);
+
+    // Init process status.
+    updateProcessStatus(items);
+
+    // Keep processes we've read for cpu calculations next cycle.
+    prevProcesses = processes;
+
 }

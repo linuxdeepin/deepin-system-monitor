@@ -26,6 +26,7 @@ HEADERS += src/utils.h \
            src/process_item.h \
            src/process_view.h \
 		   src/cpu_tools.h \
+		   src/network_tools.h \
            src/process_tools.h \
            src/hashqstring.h \
 		   src/smooth_curve_generator.h \

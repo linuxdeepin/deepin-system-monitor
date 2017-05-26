@@ -19,6 +19,11 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, double proces
     iconSize = 24;
     
     padding = 10;
+    
+    status.sentBytes = 0;
+    status.recvBytes = 0;
+    status.sentKbs = 0;
+    status.recvKbs = 0;
 }
 
 bool ProcessItem::sameAs(ListItem *item) 
@@ -77,10 +82,27 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     else if (column == 2) {
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memoryString);
     }
-    // Draw pid.
+    // Draw download.
     else if (column == 3) {
+        if (status.recvKbs > 0) {
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.recvKbs));
+        }
+    }
+    // Draw upload.
+    else if (column == 4) {
+        if (status.sentKbs > 0) {
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.sentKbs));
+        }
+    }
+    // Draw pid.
+    else if (column == 5) {
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
+}
+
+void ProcessItem::setNetworkStatus(networkStatus nStatus)
+{
+    status = nStatus;
 }
 
 QString ProcessItem::getName() const 
@@ -101,6 +123,11 @@ int ProcessItem::getMemory() const
 int ProcessItem::getPid() const 
 {
     return pid;
+}
+
+networkStatus ProcessItem::getNetworkStatus() const
+{
+    return status;
 }
     
 bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) 
@@ -177,3 +204,40 @@ bool ProcessItem::sortByPid(const ListItem *item1, const ListItem *item2, bool d
 }
 
 
+bool ProcessItem::sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort)
+{
+    // Init.
+    networkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
+    networkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
+    bool sortOrder;
+
+    // Sort item with download bytes if download speed is same.
+    if (status1.recvKbs == status2.recvKbs) {
+        sortOrder = status1.recvBytes > status2.recvBytes;
+    }
+    // Otherwise sort by download speed.
+    else {
+        sortOrder = status1.recvKbs > status2.recvKbs;
+    }
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+
+bool ProcessItem::sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort)
+{
+    // Init.
+    networkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
+    networkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
+    bool sortOrder;
+
+    // Sort item with upload bytes if upload speed is same.
+    if (status1.sentKbs == status2.sentKbs) {
+        sortOrder = status1.sentBytes > status2.sentBytes;
+    }
+    // Otherwise sort by upload speed.
+    else {
+        sortOrder = status1.sentKbs > status2.sentKbs;
+    }
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}

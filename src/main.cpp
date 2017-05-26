@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
         MainWindow window;
         
-        window.setMinimumSize(QSize(900, 700));
+        window.setMinimumSize(QSize(1024, 700));
         DUtility::moveToCenter(&window);
         window.show();
 

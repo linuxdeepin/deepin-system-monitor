@@ -47,14 +47,16 @@ private:
     NetworkMonitor *networkMonitor;
 
     QMap<QString, QPixmap> *processIconCache;
+    QMap<int, uint32_t> *processSentBytes;
+    QMap<int, uint32_t> *processRecvBytes;
     QTimer *updateStatusTimer;
     storedProcType prevProcesses;
     unsigned long long totalCpuTime;
 
-    uint32_t sent_bytes;
-    uint32_t recv_bytes;
-    float sent_kbs;
-    float recv_kbs;
+    uint32_t totalSentBytes;
+    uint32_t totalRecvBytes;
+    float totalSentKbs;
+    float totalRecvKbs;
 };
 
 #endif

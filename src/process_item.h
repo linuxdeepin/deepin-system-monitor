@@ -2,7 +2,10 @@
 #define PROCESSITEM_H
 
 #include "list_item.h"
+#include "network_tools.h"
 #include <proc/readproc.h>
+
+using namespace networkTools;
 
 class ProcessItem : public ListItem
 {
@@ -19,11 +22,16 @@ public:
     static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    
+    void setNetworkStatus(networkStatus nStatus);
     
     QString getName() const;
     double getCPU() const;
     int getMemory() const;
     int getPid() const;
+    networkStatus getNetworkStatus() const;
     
 private:
     double cpu;
@@ -32,6 +40,8 @@ private:
     int pid;
     
     int padding;
+    
+    networkStatus status;
     
     QPixmap iconPixmap;
     

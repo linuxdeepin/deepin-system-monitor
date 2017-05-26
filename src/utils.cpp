@@ -244,7 +244,7 @@ QString Utils::formatByteCount(double v)
 
 QString Utils::formatBandwidth(double v)
 {
-	static const char* orders[] = { "KB/sec", "MB/sec", "GB/sec" };
+	static const char* orders[] = { "KB/s", "MB/s", "GB/s" };
     
 	return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
 }

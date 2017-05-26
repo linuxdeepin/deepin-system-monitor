@@ -22,6 +22,8 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     alorithms->append(&ProcessItem::sortByName);
     alorithms->append(&ProcessItem::sortByCPU);
     alorithms->append(&ProcessItem::sortByMemory);
+    alorithms->append(&ProcessItem::sortByDownload);
+    alorithms->append(&ProcessItem::sortByUpload);
     alorithms->append(&ProcessItem::sortByPid);
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
 }
