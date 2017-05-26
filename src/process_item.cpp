@@ -91,14 +91,14 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     else if (column == 3) {
         if (diskStatus.writeKbs > 0) {
             Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatByteCount(diskStatus.writeKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(Utils::formatByteCount(diskStatus.writeKbs)));
         }
     }
     // Draw read.
     else if (column == 4) {
         if (diskStatus.readKbs > 0) {
             Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatByteCount(diskStatus.readKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(Utils::formatByteCount(diskStatus.readKbs)));
         }
     }
     // Draw download.
