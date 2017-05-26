@@ -49,6 +49,8 @@ private:
     QMap<QString, QPixmap> *processIconCache;
     QMap<int, uint32_t> *processSentBytes;
     QMap<int, uint32_t> *processRecvBytes;
+    QMap<int, unsigned long> *processWriteKbs;
+    QMap<int, unsigned long> *processReadKbs;
     QTimer *updateStatusTimer;
     storedProcType prevProcesses;
     unsigned long long totalCpuTime;

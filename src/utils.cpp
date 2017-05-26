@@ -32,7 +32,8 @@
 #include <QString>
 #include <QWidget>
 #include <QtMath>
-
+#include <sstream>
+#include <string>
 #include "utils.h"
 
 Utils::Utils(QObject *parent) : QObject(parent)
@@ -207,11 +208,11 @@ void Utils::drawRing(QPainter &painter, int centerX, int centerY, int radius, in
 
     painter.setOpacity(opacity);
     painter.setRenderHint(QPainter::Antialiasing);
-    
+
     QPen pen(QBrush(QColor(color)), penWidth);
     pen.setCapStyle(Qt::RoundCap);
     painter.setPen(pen);
-    
+
     int arcLengthApproximation = penWidth + penWidth / 3;
     painter.drawArc(drawingRect, 90 * 16 - arcLengthApproximation + rotationAngle * 16, -loadingAngle * 16);
 }
@@ -224,28 +225,27 @@ void Utils::drawLoadingRing(QPainter &painter, int centerX, int centerY, int rad
 
 QString Utils::formatByteCount(double v, const char** orders, int nb_orders)
 {
-	int order = 0;
-	while (v >= 1024 && order + 1 < nb_orders) {
-		order++;
-		v  = v/1024;
-	}
-	char buffer1[30];
-	snprintf(buffer1, sizeof(buffer1), "%.1lf %s", v, orders[order]);
-    
-	return QString(buffer1);
+    int order = 0;
+    while (v >= 1024 && order + 1 < nb_orders) {
+        order++;
+        v  = v/1024;
+    }
+    char buffer1[30];
+    snprintf(buffer1, sizeof(buffer1), "%.1lf %s", v, orders[order]);
+
+    return QString(buffer1);
 }
 
 QString Utils::formatByteCount(double v)
 {
-	static const char* orders[] = { "B", "KB", "MB", "GB" };
-    
-	return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
+    static const char* orders[] = { "B", "KB", "MB", "GB" };
+
+    return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
 }
 
 QString Utils::formatBandwidth(double v)
 {
-	static const char* orders[] = { "KB/s", "MB/s", "GB/s" };
-    
-	return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
-}
+    static const char* orders[] = { "KB/s", "MB/s", "GB/s" };
 
+    return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
+}

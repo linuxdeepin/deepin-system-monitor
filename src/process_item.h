@@ -3,9 +3,11 @@
 
 #include "list_item.h"
 #include "network_tools.h"
+#include "disk_tools.h"
 #include <proc/readproc.h>
 
 using namespace networkTools;
+using namespace diskTools;
 
 class ProcessItem : public ListItem
 {
@@ -24,14 +26,18 @@ public:
     static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByWrite(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
     
-    void setNetworkStatus(networkStatus nStatus);
+    void setNetworkStatus(NetworkStatus nStatus);
+    void setDiskStatus(DiskStatus dStatus);
     
     QString getName() const;
     double getCPU() const;
     int getMemory() const;
     int getPid() const;
-    networkStatus getNetworkStatus() const;
+    NetworkStatus getNetworkStatus() const;
+    DiskStatus getDiskStatus() const;
     
 private:
     double cpu;
@@ -41,7 +47,8 @@ private:
     
     int padding;
     
-    networkStatus status;
+    NetworkStatus networkStatus;
+    DiskStatus diskStatus;
     
     QPixmap iconPixmap;
     

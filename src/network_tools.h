@@ -2,12 +2,12 @@
 #define NETWORKTOOLS_H
 
 namespace networkTools {
-    typedef struct networkStatus {
+    typedef struct NetworkStatus {
         uint32_t sentBytes;
         uint32_t recvBytes;
         float sentKbs;
         float recvKbs;
-    } networkStatus;
+    } NetworkStatus;
 }
 
 #endif // NETWORKTOOLS_H

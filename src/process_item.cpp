@@ -20,10 +20,13 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, double proces
     
     padding = 10;
     
-    status.sentBytes = 0;
-    status.recvBytes = 0;
-    status.sentKbs = 0;
-    status.recvKbs = 0;
+    networkStatus.sentBytes = 0;
+    networkStatus.recvBytes = 0;
+    networkStatus.sentKbs = 0;
+    networkStatus.recvKbs = 0;
+    
+    diskStatus.readKbs = 0;
+    diskStatus.writeKbs = 0;
 }
 
 bool ProcessItem::sameAs(ListItem *item) 
@@ -84,32 +87,32 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         Utils::setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memoryString);
     }
-    // Draw download.
+    // Draw write.
     else if (column == 3) {
-        if (status.recvKbs > 0) {
+        if (diskStatus.writeKbs > 0) {
             Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.recvKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatByteCount(diskStatus.writeKbs));
         }
     }
-    // Draw upload.
+    // Draw read.
     else if (column == 4) {
-        if (status.sentKbs > 0) {
+        if (diskStatus.readKbs > 0) {
             Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.sentKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatByteCount(diskStatus.readKbs));
         }
     }
     // Draw download.
     else if (column == 5) {
-        if (status.recvKbs > 0) {
+        if (networkStatus.recvKbs > 0) {
             Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.recvKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(networkStatus.recvKbs));
         }
     }
     // Draw upload.
     else if (column == 6) {
-        if (status.sentKbs > 0) {
+        if (networkStatus.sentKbs > 0) {
             Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.sentKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(networkStatus.sentKbs));
         }
     }
     // Draw pid.
@@ -119,9 +122,14 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     }
 }
 
-void ProcessItem::setNetworkStatus(networkStatus nStatus)
+void ProcessItem::setNetworkStatus(NetworkStatus nStatus)
 {
-    status = nStatus;
+    networkStatus = nStatus;
+}
+
+void ProcessItem::setDiskStatus(DiskStatus dStatus)
+{
+    diskStatus = dStatus;
 }
 
 QString ProcessItem::getName() const 
@@ -144,9 +152,14 @@ int ProcessItem::getPid() const
     return pid;
 }
 
-networkStatus ProcessItem::getNetworkStatus() const
+NetworkStatus ProcessItem::getNetworkStatus() const
 {
-    return status;
+    return networkStatus;
+}
+    
+DiskStatus ProcessItem::getDiskStatus() const
+{
+    return diskStatus;
 }
     
 bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) 
@@ -226,8 +239,8 @@ bool ProcessItem::sortByPid(const ListItem *item1, const ListItem *item2, bool d
 bool ProcessItem::sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
     // Init.
-    networkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
-    networkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
+    NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
+    NetworkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
     bool sortOrder;
 
     // Sort item with download bytes if download speed is same.
@@ -245,8 +258,8 @@ bool ProcessItem::sortByDownload(const ListItem *item1, const ListItem *item2, b
 bool ProcessItem::sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
     // Init.
-    networkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
-    networkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
+    NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
+    NetworkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
     bool sortOrder;
 
     // Sort item with upload bytes if upload speed is same.
@@ -257,6 +270,26 @@ bool ProcessItem::sortByUpload(const ListItem *item1, const ListItem *item2, boo
     else {
         sortOrder = status1.sentKbs > status2.sentKbs;
     }
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+
+bool ProcessItem::sortByWrite(const ListItem *item1, const ListItem *item2, bool descendingSort)
+{
+    // Init.
+    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
+    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
+    bool sortOrder = status1.writeKbs > status2.writeKbs;
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
+
+bool ProcessItem::sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort)
+{
+    // Init.
+    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
+    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
+    bool sortOrder = status1.readKbs > status2.readKbs;
     
     return descendingSort ? sortOrder : !sortOrder;
 }

@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "process_tools.h"
 #include "network_tools.h"
+#include "disk_tools.h"
 #include <proc/sysinfo.h>
 #include <thread>
 #include <QDebug>
@@ -38,6 +39,9 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     processSentBytes = new QMap<int, uint32_t>();
     processRecvBytes = new QMap<int, uint32_t>();
 
+    processWriteKbs = new QMap<int, unsigned long>();
+    processReadKbs = new QMap<int, unsigned long>();
+    
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
@@ -166,7 +170,7 @@ void StatusMonitor::updateStatus()
     // Update network status.
     NetworkTrafficFilter::Update update;
     
-    QMap<int, networkStatus> *networkStatusSnapshot = new QMap<int, networkStatus>();
+    QMap<int, NetworkStatus> *networkStatusSnapshot = new QMap<int, NetworkStatus>();
     totalSentKbs = 0;
     totalRecvKbs = 0;
     while (NetworkTrafficFilter::getRowUpdate(update)) {
@@ -190,7 +194,7 @@ void StatusMonitor::updateStatus()
             (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
             (*processRecvBytes)[update.record.pid] = update.record.recv_bytes;
             
-            networkStatus status = {
+            NetworkStatus status = {
                 update.record.sent_bytes,
                 update.record.recv_bytes,
                 update.record.sent_kbs,
@@ -207,6 +211,23 @@ void StatusMonitor::updateStatus()
         if (networkStatusSnapshot->contains(processItem->getPid())) {
             processItem->setNetworkStatus(networkStatusSnapshot->value(processItem->getPid()));
         }
+        
+        diskTools::ProcPidIO pidIO;
+        getProcPidIO(processItem->getPid(), pidIO);
+        
+        DiskStatus status = {0, 0};
+        
+        if (processWriteKbs->contains(processItem->getPid())) {
+            status.writeKbs = (pidIO.wchar - processWriteKbs->value(processItem->getPid())) / 2.0;
+        }
+        (*processWriteKbs)[processItem->getPid()] = pidIO.wchar;
+        
+        if (processReadKbs->contains(processItem->getPid())) {
+            status.readKbs = (pidIO.rchar - processReadKbs->value(processItem->getPid())) / 2.0;
+        }
+        (*processReadKbs)[processItem->getPid()] = pidIO.rchar;
+        
+        processItem->setDiskStatus(status);
     }
 
     // Update cpu status.
