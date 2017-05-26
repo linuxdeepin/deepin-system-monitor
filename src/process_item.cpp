@@ -59,7 +59,6 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
 {
     // Init opacity and font size.
     painter->setOpacity(1);
-    Utils::setFontSize(*painter, 11);
     
     // Set font color with selected status.
     if (isSelect) {
@@ -70,32 +69,52 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
 
     // Draw icon and process name.
     if (column == 0) {
+        Utils::setFontSize(*painter, 11);
         painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
 
         painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
     }
     // Draw CPU.
     else if (column == 1) {
+        Utils::setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
+        Utils::setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memoryString);
     }
     // Draw download.
     else if (column == 3) {
         if (status.recvKbs > 0) {
+            Utils::setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.recvKbs));
         }
     }
     // Draw upload.
     else if (column == 4) {
         if (status.sentKbs > 0) {
+            Utils::setFontSize(*painter, 9);
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.sentKbs));
+        }
+    }
+    // Draw download.
+    else if (column == 5) {
+        if (status.recvKbs > 0) {
+            Utils::setFontSize(*painter, 9);
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.recvKbs));
+        }
+    }
+    // Draw upload.
+    else if (column == 6) {
+        if (status.sentKbs > 0) {
+            Utils::setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(status.sentKbs));
         }
     }
     // Draw pid.
-    else if (column == 5) {
+    else if (column == 7) {
+        Utils::setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }

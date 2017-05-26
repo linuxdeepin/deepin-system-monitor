@@ -8,12 +8,12 @@ ProcessView::ProcessView()
     
     // Set column widths.
     QList<int> widths;
-    widths << -1 << 60 << 100 << 100 << 100 << 60;
+    widths << -1 << 50 << 70 << 70 << 70 << 70 << 70 << 50;
     setColumnWidths(widths);
     
     // Set column titles.
     QList<QString> titles;
-    titles << "进程名" << "CPU" << "内存" << "下载" << "上传" << "PID";
+    titles << "进程名" << "CPU" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "PID";
     setColumnTitles(titles, 36);
     
     // Focus keyboard when create.

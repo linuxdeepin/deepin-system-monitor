@@ -62,14 +62,14 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor(downloadColor), 2));
+    painter.setPen(QPen(QColor(downloadColor), 1.6));
     painter.setBrush(QBrush());
     painter.drawPath(downloadPath);
 
     painter.translate(uploadWaveformsRenderOffsetX, uploadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor(uploadColor), 2));
+    painter.setPen(QPen(QColor(uploadColor), 1.6));
     painter.setBrush(QBrush());
     painter.drawPath(uploadPath);
 }

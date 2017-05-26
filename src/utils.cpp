@@ -230,7 +230,7 @@ QString Utils::formatByteCount(double v, const char** orders, int nb_orders)
 		v  = v/1024;
 	}
 	char buffer1[30];
-	snprintf(buffer1, sizeof(buffer1), "%.2lf %s", v, orders[order]);
+	snprintf(buffer1, sizeof(buffer1), "%.1lf %s", v, orders[order]);
     
 	return QString(buffer1);
 }
