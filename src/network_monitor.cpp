@@ -1,11 +1,23 @@
 #include "network_monitor.h"
 #include <QPainter>
+#include <QDebug>
 
 #include "utils.h"
+#include "smooth_curve_generator.h"
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedHeight(180);
+    
+    downloadSpeeds = new QList<double>();
+    for (int i = 0; i < pointsNumber; i++) {
+        downloadSpeeds->append(0);
+    }
+
+    uploadSpeeds = new QList<double>();
+    for (int i = 0; i < pointsNumber; i++) {
+        uploadSpeeds->append(0);
+    }
 }
 
 void NetworkMonitor::paintEvent(QPaintEvent *) 
@@ -17,108 +29,109 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#aaaaaa")));
     
     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "网络");
+    
+    // Draw network summary.
+    painter.setPen(QPen(QColor(downloadColor)));
+    painter.setBrush(QBrush(QColor(downloadColor)));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    
+    Utils::setFontSize(painter, downloadRenderSize);
+    painter.setPen(QPen(QColor("#666666")));
+    painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
+                           rect().y() + downloadRenderPaddingY,
+                           rect().width(),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     QString("下载速度 %1 累计下载 %2").arg(Utils::formatBandwidth(totalRecvKbs)).arg(Utils::formatByteCount(totalRecvBytes))
+        );
+
+    painter.setPen(QPen(QColor(uploadColor)));
+    painter.setBrush(QBrush(QColor(uploadColor)));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    
+    Utils::setFontSize(painter, uploadRenderSize);
+    painter.setPen(QPen(QColor("#666666")));
+    painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
+                           rect().y() + uploadRenderPaddingY,
+                           rect().width(),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     QString("上传速度 %1 累计上传 %2").arg(Utils::formatBandwidth(totalSentKbs)).arg(Utils::formatByteCount(totalSentBytes))
+        );
+    
+    painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY);
+    painter.scale(1, -1);
+
+    painter.setPen(QPen(QColor(downloadColor), 2));
+    painter.setBrush(QBrush());
+    painter.drawPath(downloadPath);
+
+    painter.translate(uploadWaveformsRenderOffsetX, uploadWaveformsRenderOffsetY);
+    painter.scale(1, -1);
+
+    painter.setPen(QPen(QColor(uploadColor), 2));
+    painter.setBrush(QBrush());
+    painter.drawPath(uploadPath);
 }
 
-
-// #include "cpu_monitor.h"
-// #include <QPainter>
-// #include <QDebug>
-
-// #include "utils.h"
-// #include "smooth_curve_generator.h"
-
-// CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
-// {
-//     setFixedSize(280, 300);
-
-//     cpuPoints = nullptr;
-//     cpuPaths = nullptr;
-
-//     timer = new QTimer();
-//     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-//     timer->start(200);
+void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, float tRecvKbs, float tSentKbs)
+{
+    totalRecvBytes = tRecvBytes;
+    totalSentBytes = tSentBytes;
+    totalRecvKbs = tRecvKbs;
+    totalSentKbs = tSentKbs;
     
-//     renderOffsetIndex = 0;
-// }
+    // Init download path.
+    downloadSpeeds->append(totalRecvKbs);
 
-// void CpuMonitor::paintEvent(QPaintEvent *)
-// {
-//     QPainter painter(this);
-//     painter.setRenderHint(QPainter::Antialiasing, true);
+    if (downloadSpeeds->size() > pointsNumber) {
+        downloadSpeeds->pop_front();
+    }
 
-//     Utils::setFontSize(painter, 20);
-//     painter.setPen(QPen(QColor("#aaaaaa")));
+    QList<QPointF> downloadPoints;
 
-//     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "CPU");
+    double downloadMaxHeight = 0;
+    for (int i = 0; i < downloadSpeeds->size(); i++) {
+        if (downloadSpeeds->at(i) > downloadMaxHeight) {
+            downloadMaxHeight = downloadSpeeds->at(i);
+        }
+    }
 
-//     if (cpuPaths != nullptr) {
-//         painter.translate(0, height() / 2);
-//         painter.scale(1, -1);
+    for (int i = 0; i < downloadSpeeds->size(); i++) {
+        if (downloadMaxHeight < downloadRenderMaxHeight) {
+            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
+        } else {
+            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * 45 / downloadMaxHeight));
+        }
+    }
 
-//         painter.setClipRect(QRectF(rect().x(), rect().y(), 220, rect().height()));
+    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
+    
+    // Init upload path.
+    uploadSpeeds->append(totalSentKbs);
 
-//         const QString colourNames[] = {
-//             "#CC0000", "#E69138", "#6AA84F", "#3C78D8", "#45818E", "#3D85C6", "#A64D79", "#674EA7",
-//         };
-//         for (int i = 0; i < cpuPaths->size(); i++) {
-//             painter.setPen(QPen(QColor(colourNames[i % colourNames->size()]), 2));
-//             painter.drawPath(cpuPaths->at(i));
-//         }
-//     }
-// }
+    if (uploadSpeeds->size() > pointsNumber) {
+        uploadSpeeds->pop_front();
+    }
 
-// void CpuMonitor::initStatus(std::vector<double> cpuPercentages)
-// {
-//     cpuPoints = new QList<QList<double>*>();
+    QList<QPointF> uploadPoints;
 
-//     for (unsigned int i = 0; i < cpuPercentages.size(); i++) {
-//         QList<double> *list = new QList<double>();
+    double uploadMaxHeight = 0;
+    for (int i = 0; i < uploadSpeeds->size(); i++) {
+        if (uploadSpeeds->at(i) > uploadMaxHeight) {
+            uploadMaxHeight = uploadSpeeds->at(i);
+        }
+    }
 
-//         for (int j = 0; j < pointsNumber; j++) {
-//             list->append(0);
-//         }
-//         cpuPoints->append(list);
-//     }
+    for (int i = 0; i < uploadSpeeds->size(); i++) {
+        if (uploadMaxHeight < uploadRenderMaxHeight) {
+            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
+        } else {
+            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * 45 / uploadMaxHeight));
+        }
+    }
 
-//     cpuPaths = new QList<QPainterPath>();
-// }
-
-// void CpuMonitor::updateStatus(std::vector<double> cpuPercentages)
-// {
-//     if (cpuPoints == nullptr) {
-//         initStatus(cpuPercentages);
-//     }
-
-//     for (unsigned int i = 0; i < cpuPercentages.size(); i++) {
-//         cpuPoints->at(i)->append(cpuPercentages.at(i));
-
-//         if (cpuPoints->at(i)->size() > pointsNumber) {
-//             cpuPoints->at(i)->pop_front();
-//         }
-//     }
-// }
-
-// void CpuMonitor::render()
-// {
-//     if (cpuPaths != nullptr) {
-//         cpuPaths->clear();
-        
-//         if (renderOffsetIndex >= 10) {
-//             renderOffsetIndex = 0;
-//         }
-
-//         for (int i = 0; i < cpuPoints->size(); i++) {
-//             QList<QPointF> points;
-
-//             for (int j = 0; j < cpuPoints->at(i)->size(); j++) {
-//                 points.append(QPointF(j * 10 - renderOffsetIndex, cpuPoints->at(i)->at(j)));
-//             }
-
-//             cpuPaths->append(SmoothCurveGenerator::generateSmoothCurve(points));
-//         }
-
-//         repaint();
-        
-//         renderOffsetIndex++;
-//     }
-// }
+    uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
+    
+    repaint();
+}

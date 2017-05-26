@@ -40,6 +40,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
 
     updateStatusTimer = new QTimer();
     connect(updateStatusTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
@@ -163,26 +164,13 @@ void StatusMonitor::updateStatus()
     }
 
     // Update network status.
-    qDebug() << NetworkTrafficFilter::getNetHogsMonitorStatus() << NETHOGS_STATUS_OK;
-
     NetworkTrafficFilter::Update update;
-
-    qDebug() << "!!!!!!!!!!!!!!!!!!!!";
-
+    
     QMap<int, networkStatus> *networkStatusSnapshot = new QMap<int, networkStatus>();
     totalSentKbs = 0;
     totalRecvKbs = 0;
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-            qDebug() << "######## " 
-                     << update.record.name
-                     << update.record.pid
-                     << update.record.device_name
-                     << Utils::formatByteCount(update.record.sent_bytes)
-                     << Utils::formatByteCount(update.record.recv_bytes)
-                     << Utils::formatBandwidth(update.record.sent_kbs)
-                     << Utils::formatBandwidth(update.record.recv_kbs);
-
             uint32_t prevSentBytes = 0;
             uint32_t prevRecvBytes = 0;
             
@@ -213,11 +201,6 @@ void StatusMonitor::updateStatus()
         }
     }
     
-    qDebug() << Utils::formatByteCount(totalSentBytes)
-             << Utils::formatByteCount(totalRecvBytes)
-             << Utils::formatBandwidth(totalSentKbs)
-             << Utils::formatBandwidth(totalRecvKbs);
-    
     // Update ProcessItem's network status.
     for (ListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
@@ -229,10 +212,12 @@ void StatusMonitor::updateStatus()
     // Update cpu status.
     updateCpuStatus(totalCpuPercent / cpuNumber);
 
-    // Init process status.
+    // Update process status.
     updateProcessStatus(items);
+    
+    // Update network status.
+    updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
-
 }
