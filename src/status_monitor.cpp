@@ -48,7 +48,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 
     updateStatusTimer = new QTimer();
     connect(updateStatusTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
-    updateStatusTimer->start(2000);
+    updateStatusTimer->start(updateDuration);
 }
 
 StatusMonitor::~StatusMonitor()
@@ -218,12 +218,12 @@ void StatusMonitor::updateStatus()
         DiskStatus status = {0, 0};
         
         if (processWriteKbs->contains(processItem->getPid())) {
-            status.writeKbs = (pidIO.wchar - processWriteKbs->value(processItem->getPid())) / 2.0;
+            status.writeKbs = (pidIO.wchar - processWriteKbs->value(processItem->getPid())) / (updateDuration / 1000.0);
         }
         (*processWriteKbs)[processItem->getPid()] = pidIO.wchar;
         
         if (processReadKbs->contains(processItem->getPid())) {
-            status.readKbs = (pidIO.rchar - processReadKbs->value(processItem->getPid())) / 2.0;
+            status.readKbs = (pidIO.rchar - processReadKbs->value(processItem->getPid())) / (updateDuration / 1000.0);
         }
         (*processReadKbs)[processItem->getPid()] = pidIO.rchar;
         

@@ -59,6 +59,8 @@ private:
     uint32_t totalRecvBytes;
     float totalSentKbs;
     float totalRecvKbs;
+    
+    int updateDuration = 2000;
 };
 
 #endif
