@@ -22,6 +22,9 @@ public:
 	static int  getNetHogsMonitorStatus();
 	static bool getRowUpdate(Update& update);
     
+    static void onNethogsUpdate(int action, NethogsMonitorRecord const* update);
+    static void nethogsMonitorThreadProc();
+    
 private:
 	typedef std::map<int, Update> RowUpdatesMap;
 	

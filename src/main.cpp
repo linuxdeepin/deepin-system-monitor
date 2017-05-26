@@ -12,17 +12,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-static void onNethogsUpdate(int action, NethogsMonitorRecord const* update)
-{
-	NetworkTrafficFilter::setRowUpdate(action, *update);
-}
-
-static void nethogsMonitorThreadProc()
-{
-	const int status = nethogsmonitor_loop(&onNethogsUpdate);
-	NetworkTrafficFilter::setNetHogsMonitorStatus(status);
-}
-
 int main(int argc, char *argv[]) 
 {
     DApplication::loadDXcbPlugin();
@@ -38,7 +27,7 @@ int main(int argc, char *argv[])
         
         app.setTheme("dark");
         
-        std::thread nethogs_monitor_thread(&nethogsMonitorThreadProc);
+        std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
 
         MainWindow window;
         
@@ -47,9 +36,6 @@ int main(int argc, char *argv[])
         window.show();
 
         return app.exec();
-        
-        nethogsmonitor_breakloop();	
-        nethogs_monitor_thread.join();
     }
 
     return 0;

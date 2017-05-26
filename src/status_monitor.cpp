@@ -24,7 +24,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(cpuMonitor);
     layout->addWidget(memoryMonitor);
     layout->addWidget(networkMonitor);
-
+    
     // Init process icon cache.
     processIconCache = new QMap<QString, QPixmap>();
 

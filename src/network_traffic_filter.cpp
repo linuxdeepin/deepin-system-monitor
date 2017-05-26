@@ -41,3 +41,14 @@ int NetworkTrafficFilter::getNetHogsMonitorStatus()
 	return m_nethogs_monitor_status;
 }
 
+void NetworkTrafficFilter::onNethogsUpdate(int action, NethogsMonitorRecord const* update)
+{
+	NetworkTrafficFilter::setRowUpdate(action, *update);
+}
+
+void NetworkTrafficFilter::nethogsMonitorThreadProc()
+{
+	const int status = nethogsmonitor_loop(&onNethogsUpdate);
+	NetworkTrafficFilter::setNetHogsMonitorStatus(status);
+}
+
