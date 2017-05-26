@@ -222,3 +222,30 @@ void Utils::drawLoadingRing(QPainter &painter, int centerX, int centerY, int rad
     Utils::drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle * percent, rotationAngle, color, 1);
 }
 
+QString Utils::formatByteCount(double v, const char** orders, int nb_orders)
+{
+	int order = 0;
+	while (v >= 1024 && order + 1 < nb_orders) {
+		order++;
+		v  = v/1024;
+	}
+	char buffer1[30];
+	snprintf(buffer1, sizeof(buffer1), "%.2lf %s", v, orders[order]);
+    
+	return QString(buffer1);
+}
+
+QString Utils::formatByteCount(double v)
+{
+	static const char* orders[] = { "B", "KB", "MB", "GB" };
+    
+	return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
+}
+
+QString Utils::formatBandwidth(double v)
+{
+	static const char* orders[] = { "KB/sec", "MB/sec", "GB/sec" };
+    
+	return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
+}
+

@@ -2,6 +2,7 @@
 #include <QPainter>
 
 #include "process_item.h"
+#include "utils.h"
 #include "process_tools.h"
 #include <proc/sysinfo.h>
 #include <thread>
@@ -127,16 +128,26 @@ void StatusMonitor::updateStatus()
     if (NetworkTrafficFilter::getNetHogsMonitorStatus() != NETHOGS_STATUS_OK) {
         qDebug() << "Failed to access network device(s).";
     }
-    
+
     qDebug() << NetworkTrafficFilter::getNetHogsMonitorStatus() << NETHOGS_STATUS_OK;
 
     NetworkTrafficFilter::Update update;
 
-    qDebug() << NetworkTrafficFilter::getRowUpdate(update);
-    
-    qDebug() << "*********** " << update.record.name << update.record.pid << update.action << NETHOGS_APP_ACTION_REMOVE;
-    if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-        qDebug() << "######## " << update.record.name << update.record.pid << update.record.device_name << update.record.sent_bytes << update.record.recv_bytes << update.record.sent_kbs << update.record.recv_kbs;
-    }
-}
+    qDebug() << "!!!!!!!!!!!!!!!!!!!!";
 
+    sent_kbs = 0;
+    recv_kbs = 0;
+    while (NetworkTrafficFilter::getRowUpdate(update)) {
+        if (update.action != NETHOGS_APP_ACTION_REMOVE) {
+            qDebug() << "######## " << update.record.name << update.record.pid << update.record.device_name << update.record.sent_bytes << update.record.recv_bytes << update.record.sent_kbs << update.record.recv_kbs;
+
+            sent_kbs += update.record.sent_kbs;
+            recv_kbs += update.record.recv_kbs;
+            
+            sent_bytes += update.record.sent_bytes;
+            recv_bytes += update.record.recv_bytes;
+        }
+    }
+    
+    qDebug() << Utils::formatByteCount(sent_bytes) << Utils::formatByteCount(recv_bytes) << Utils::formatBandwidth(sent_kbs) << Utils::formatBandwidth(recv_kbs);
+}

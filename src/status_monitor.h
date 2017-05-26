@@ -20,36 +20,41 @@
 class StatusMonitor : public QWidget
 {
     Q_OBJECT
-    
+
     typedef std::map<int, proc_t> storedProcType;
-    
+
 public:
     StatusMonitor(QWidget *parent = 0);
     ~StatusMonitor();
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
-                                       
+
 signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus();
     void updateProcessStatus(QList<ListItem*> items);
-    
+
 public slots:
     void updateStatus();
-    
+
 private:
-    QVBoxLayout *layout; 
-    
+    QVBoxLayout *layout;
+
     CpuMonitor *cpuMonitor;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
-    
+
     QMap<QString, QPixmap> *processIconCache;
     QTimer *updateStatusTimer;
     storedProcType prevProcesses;
     unsigned long long totalCpuTime;
+
+    uint32_t sent_bytes;
+    uint32_t recv_bytes;
+    float sent_kbs;
+    float recv_kbs;
 };
 
 #endif

@@ -55,4 +55,7 @@ public:
     static QString convertSizeUnit(long bytes, QString unitSuffix="B");
     static void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity);
     static void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double backgroundOpacity, double percent);
+    static QString formatByteCount(double v, const char** orders, int nb_orders);
+    static QString formatByteCount(double v);
+    static QString formatBandwidth(double v);
 };
