@@ -41,13 +41,13 @@ private:
     
     QPainterPath downloadPath;
     QList<double> *downloadSpeeds;
-    int downloadRenderMaxHeight = 45;
+    int downloadRenderMaxHeight = 30;
     int downloadWaveformsRenderOffsetX = 0;
     int downloadWaveformsRenderOffsetY = 150;
 
     QPainterPath uploadPath;
     QList<double> *uploadSpeeds;
-    int uploadRenderMaxHeight = 30;
+    int uploadRenderMaxHeight = 20;
     int uploadWaveformsRenderOffsetX = 0;
     int uploadWaveformsRenderOffsetY = -5;
 };
