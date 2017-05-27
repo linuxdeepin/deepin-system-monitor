@@ -14,7 +14,6 @@
 #include "network_monitor.h"
 #include "process_item.h"
 #include <proc/sysinfo.h>
-#include "cpu_tools.h"
 #include "network_traffic_filter.h"
 #include "find_window_title.h"
 

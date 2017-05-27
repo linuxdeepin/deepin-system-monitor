@@ -29,11 +29,13 @@
 #include "toolbar.h"
 #include "utils.h"
 
+using namespace Utils;
+
 Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     
-    QPixmap iconPixmap = QPixmap(Utils::getQrcPath("titlebar_icon.png"));
+    QPixmap iconPixmap = QPixmap(getQrcPath("titlebar_icon.png"));
     QLabel *iconLabel = new QLabel();
     iconLabel->setPixmap(iconPixmap);
     

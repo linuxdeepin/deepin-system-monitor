@@ -2,12 +2,10 @@
 #define PROCESSITEM_H
 
 #include "list_item.h"
-#include "network_tools.h"
-#include "disk_tools.h"
 #include <proc/readproc.h>
+#include "utils.h"
 
-using namespace networkTools;
-using namespace diskTools;
+using namespace Utils;
 
 class ProcessItem : public ListItem
 {

@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "smooth_curve_generator.h"
 
+using namespace Utils;
+
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(280, 250);
@@ -24,7 +26,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    Utils::setFontSize(painter, 22);
+    setFontSize(painter, 22);
     painter.setPen(QPen(QColor("#aaaaaa")));
 
     painter.drawText(QRect(rect().x(),
@@ -33,9 +35,9 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                            30
                          ), Qt::AlignCenter, "CPU");
 
-    double percent = (cpuPercents->at(cpuPercents->size() - 2) + Utils::easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
+    double percent = (cpuPercents->at(cpuPercents->size() - 2) + easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
 
-    Utils::setFontSize(painter, 15);
+    setFontSize(painter, 15);
     painter.setPen(QPen(QColor("#aaaaaa")));
     painter.drawText(QRect(rect().x(),
                            rect().y() + percentRenderOffsetY,
@@ -43,7 +45,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                            30
                          ), Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
 
-    Utils::drawLoadingRing(
+    drawLoadingRing(
         painter,
         rect().x() + rect().width() / 2,
         rect().y() + ringRenderOffsetY,

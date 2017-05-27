@@ -1,11 +1,10 @@
 #include "process_item.h"
-#include "process_tools.h"
 #include "utils.h"
 #include <QDebug>
 #include <QLocale>
 #include <QCollator>
 
-using namespace processTools;
+using namespace Utils;
 
 ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser)
 {
@@ -17,7 +16,7 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
     memory = processMemory;
     user = processUser;
 
-    memoryString = Utils::convertSizeUnit(memory);
+    memoryString = convertSizeUnit(memory);
 
     iconSize = 24;
 
@@ -75,52 +74,52 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
 
     // Draw icon and process name.
     if (column == 0) {
-        Utils::setFontSize(*painter, 10);
+        setFontSize(*painter, 10);
         painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
 
         painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, displayName);
     }
     // Draw CPU.
     else if (column == 1) {
-        Utils::setFontSize(*painter, 9);
+        setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
-        Utils::setFontSize(*painter, 9);
+        setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memoryString);
     }
     // Draw write.
     else if (column == 3) {
         if (diskStatus.writeKbs > 0) {
-            Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(Utils::formatByteCount(diskStatus.writeKbs)));
+            setFontSize(*painter, 9);
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
         }
     }
     // Draw read.
     else if (column == 4) {
         if (diskStatus.readKbs > 0) {
-            Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(Utils::formatByteCount(diskStatus.readKbs)));
+            setFontSize(*painter, 9);
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
         }
     }
     // Draw download.
     else if (column == 5) {
         if (networkStatus.recvKbs > 0) {
-            Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(networkStatus.recvKbs));
+            setFontSize(*painter, 9);
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
         }
     }
     // Draw upload.
     else if (column == 6) {
         if (networkStatus.sentKbs > 0) {
-            Utils::setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, Utils::formatBandwidth(networkStatus.sentKbs));
+            setFontSize(*painter, 9);
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.sentKbs));
         }
     }
     // Draw pid.
     else if (column == 7) {
-        Utils::setFontSize(*painter, 9);
+        setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }

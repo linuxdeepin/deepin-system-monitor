@@ -6,6 +6,8 @@
 #include <QWheelEvent>
 #include <QtMath>
 
+using namespace Utils;
+
 ListView::ListView(QWidget *parent) : QWidget(parent)
 {
     // Init.
@@ -332,7 +334,7 @@ void ListView::ctrlScrollToEnd()
 void ListView::scrollAnimation()
 {
     if (scrollAnimationTicker <= scrollAnimationFrames) {
-        renderOffset = adjustRenderOffset(scrollStartY + Utils::easeInOut(scrollAnimationTicker / (scrollAnimationFrames * 1.0)) * scrollDistance);
+        renderOffset = adjustRenderOffset(scrollStartY + easeInOut(scrollAnimationTicker / (scrollAnimationFrames * 1.0)) * scrollDistance);
 
         repaint();
 
@@ -601,7 +603,7 @@ void ListView::paintEvent(QPaintEvent *)
         int columnRenderX = 0;
         for (int renderWidth:renderWidths) {
             painter.setOpacity(1);
-            Utils::setFontSize(painter, 10);
+            setFontSize(painter, 10);
             painter.setPen(QPen(QColor("#666666")));
             painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, columnTitles[columnCounter]);
 

@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "smooth_curve_generator.h"
 
+using namespace Utils;
+
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedHeight(180);
@@ -25,7 +27,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     
-    Utils::setFontSize(painter, 20);
+    setFontSize(painter, 20);
     painter.setPen(QPen(QColor("#aaaaaa")));
     
     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "网络");
@@ -35,28 +37,28 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setBrush(QBrush(QColor(downloadColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
     
-    Utils::setFontSize(painter, downloadRenderSize);
+    setFontSize(painter, downloadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
                            rect().y() + downloadRenderPaddingY,
                            rect().width(),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("下载速度 %1 累计下载 %2").arg(Utils::formatBandwidth(totalRecvKbs)).arg(Utils::formatByteCount(totalRecvBytes))
+                     QString("下载速度 %1 累计下载 %2").arg(formatBandwidth(totalRecvKbs)).arg(formatByteCount(totalRecvBytes))
         );
 
     painter.setPen(QPen(QColor(uploadColor)));
     painter.setBrush(QBrush(QColor(uploadColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
     
-    Utils::setFontSize(painter, uploadRenderSize);
+    setFontSize(painter, uploadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
                            rect().y() + uploadRenderPaddingY,
                            rect().width(),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("上传速度 %1 累计上传 %2").arg(Utils::formatBandwidth(totalSentKbs)).arg(Utils::formatByteCount(totalSentBytes))
+                     QString("上传速度 %1 累计上传 %2").arg(formatBandwidth(totalSentKbs)).arg(formatByteCount(totalSentBytes))
         );
     
     painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY);

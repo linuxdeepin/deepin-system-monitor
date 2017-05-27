@@ -1,18 +1,14 @@
 #include "status_monitor.h"
 #include <QPainter>
 
+#include <unistd.h>
 #include "process_item.h"
 #include "utils.h"
-#include "process_tools.h"
-#include "network_tools.h"
-#include "disk_tools.h"
 #include <proc/sysinfo.h>
 #include <thread>
 #include <QDebug>
 
-using namespace cpuTools;
-using namespace networkTools;
-using namespace processTools;
+using namespace Utils;
 
 StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 {
@@ -27,23 +23,23 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(cpuMonitor);
     layout->addWidget(memoryMonitor);
     layout->addWidget(networkMonitor);
-    
+
     totalSentBytes = 0;
     totalRecvBytes = 0;
     totalSentKbs = 0;
     totalRecvKbs = 0;
-    
+
     findWindowTitle = new FindWindowTitle();
-    
+
     // Init process icon cache.
     processIconCache = new QMap<QString, QPixmap>();
-    
+
     processSentBytes = new QMap<int, uint32_t>();
     processRecvBytes = new QMap<int, uint32_t>();
 
     processWriteKbs = new QMap<int, unsigned long>();
     processReadKbs = new QMap<int, unsigned long>();
-    
+
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
@@ -103,11 +99,11 @@ void StatusMonitor::updateStatus()
     QList<ListItem*> items;
     QString username = qgetenv("USER");
 
-    int cpuNumber = getCpuTimes().size();
+    int cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
     double totalCpuPercent = 0;
 
     findWindowTitle->updateWindowInfos();
-    
+
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
@@ -117,7 +113,7 @@ void StatusMonitor::updateStatus()
             QString name = getProcessName(&i.second);
             int pid = (&i.second)->tid;
             QString displayName;
-            
+
             QString title = findWindowTitle->findWindowTitle(pid);
             if (title != "") {
                 displayName = title;
@@ -142,10 +138,10 @@ void StatusMonitor::updateStatus()
                 break;
             }
         }
-        
+
         if (!foundProcess) {
             processSentBytes->remove(pid);
-            
+
             qDebug() << QString("Remove %1 from sent bytes map.").arg(pid);
         }
     }
@@ -157,14 +153,14 @@ void StatusMonitor::updateStatus()
                 break;
             }
         }
-        
+
         if (!foundProcess) {
             processRecvBytes->remove(pid);
-            
+
             qDebug() << QString("Remove %1 from recv bytes map.").arg(pid);
         }
     }
-    
+
     // Have procps read the memory。
     meminfo();
 
@@ -181,7 +177,7 @@ void StatusMonitor::updateStatus()
 
     // Update network status.
     NetworkTrafficFilter::Update update;
-    
+
     QMap<int, NetworkStatus> *networkStatusSnapshot = new QMap<int, NetworkStatus>();
     totalSentKbs = 0;
     totalRecvKbs = 0;
@@ -189,56 +185,56 @@ void StatusMonitor::updateStatus()
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
             uint32_t prevSentBytes = 0;
             uint32_t prevRecvBytes = 0;
-            
+
             if (processSentBytes->contains(update.record.pid)) {
                 prevSentBytes = processSentBytes->value(update.record.pid);
             }
             if (processRecvBytes->contains(update.record.pid)) {
                 prevRecvBytes = processRecvBytes->value(update.record.pid);
             }
-            
+
             totalSentKbs += update.record.sent_kbs;
             totalRecvKbs += update.record.recv_kbs;
-            
+
             totalSentBytes += (update.record.sent_bytes - prevSentBytes);
             totalRecvBytes += (update.record.recv_bytes - prevRecvBytes);
-            
+
             (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
             (*processRecvBytes)[update.record.pid] = update.record.recv_bytes;
-            
+
             NetworkStatus status = {
                 update.record.sent_bytes,
                 update.record.recv_bytes,
                 update.record.sent_kbs,
                 update.record.recv_kbs
             };
-                
+
             (*networkStatusSnapshot)[update.record.pid] = status;
         }
     }
-    
+
     // Update ProcessItem's network status.
     for (ListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         if (networkStatusSnapshot->contains(processItem->getPid())) {
             processItem->setNetworkStatus(networkStatusSnapshot->value(processItem->getPid()));
         }
-        
-        diskTools::ProcPidIO pidIO;
+
+        ProcPidIO pidIO;
         getProcPidIO(processItem->getPid(), pidIO);
-        
+
         DiskStatus status = {0, 0};
-        
+
         if (processWriteKbs->contains(processItem->getPid())) {
             status.writeKbs = (pidIO.wchar - processWriteKbs->value(processItem->getPid())) / (updateDuration / 1000.0);
         }
         (*processWriteKbs)[processItem->getPid()] = pidIO.wchar;
-        
+
         if (processReadKbs->contains(processItem->getPid())) {
             status.readKbs = (pidIO.rchar - processReadKbs->value(processItem->getPid())) / (updateDuration / 1000.0);
         }
         (*processReadKbs)[processItem->getPid()] = pidIO.rchar;
-        
+
         processItem->setDiskStatus(status);
     }
 
@@ -247,7 +243,7 @@ void StatusMonitor::updateStatus()
 
     // Update process status.
     updateProcessStatus(items);
-    
+
     // Update network status.
     updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
 

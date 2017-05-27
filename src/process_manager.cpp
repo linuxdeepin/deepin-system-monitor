@@ -2,13 +2,12 @@
 #include "list_view.h"
 #include "process_item.h"
 #include "process_manager.h"
-#include "process_tools.h"
 #include <QDebug>
 #include <QList>
 #include <proc/sysinfo.h>
 #include <signal.h>
 
-using namespace processTools;
+using namespace Utils;
 
 ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 {

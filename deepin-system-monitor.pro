@@ -25,11 +25,7 @@ HEADERS += src/utils.h \
            src/list_view.h \
            src/process_item.h \
            src/process_view.h \
-		   src/cpu_tools.h \
-		   src/disk_tools.h \
-		   src/network_tools.h \
-           src/process_tools.h \
-           src/hashqstring.h \
+		   src/hashqstring.h \
            src/find_window_title.h \
 		   src/smooth_curve_generator.h \
 		   src/main_window.h
@@ -46,10 +42,7 @@ SOURCES += src/main.cpp \
            src/list_view.cpp \
            src/process_item.cpp \
            src/process_view.cpp \
-		   src/cpu_tools.cpp \
-		   src/disk_tools.cpp \
-           src/process_tools.cpp \
-           src/find_window_title.cpp \
+		   src/find_window_title.cpp \
 		   src/smooth_curve_generator.cpp \
 		   src/main_window.cpp
 		   

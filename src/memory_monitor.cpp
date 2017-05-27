@@ -6,6 +6,8 @@
 
 #include <QDebug>
 
+using namespace Utils;
+
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
     usedMemory = 0;
@@ -22,8 +24,8 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
-    if ((Utils::convertSizeUnit(uMemory, "") != Utils::convertSizeUnit(usedMemory, "")) || 
-        (Utils::convertSizeUnit(uSwap, "") != Utils::convertSizeUnit(usedSwap, ""))) {
+    if ((convertSizeUnit(uMemory, "") != convertSizeUnit(usedMemory, "")) || 
+        (convertSizeUnit(uSwap, "") != convertSizeUnit(usedSwap, ""))) {
         prevUsedMemory = usedMemory;
         prevUsedSwap = usedSwap;
         
@@ -55,16 +57,16 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    double memoryPercent = (prevUsedMemory + Utils::easeInOut(animationIndex / animationFrames) * (usedMemory - prevUsedMemory)) * 1.0 / totalMemory;
+    double memoryPercent = (prevUsedMemory + easeInOut(animationIndex / animationFrames) * (usedMemory - prevUsedMemory)) * 1.0 / totalMemory;
     double swapPercent;
     if (totalSwap == 0) {
         swapPercent = 0;
     } else {
-        swapPercent = (prevUsedSwap + Utils::easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) * 1.0 / totalSwap;
+        swapPercent = (prevUsedSwap + easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) * 1.0 / totalSwap;
     }
 
     // Draw title.
-    Utils::setFontSize(painter, titleRenderSize);
+    setFontSize(painter, titleRenderSize);
     painter.setPen(QPen(QColor("#aaaaaa")));
     painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "内存");
 
@@ -73,27 +75,27 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setBrush(QBrush(QColor(memoryColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + memoryRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
 
-    Utils::setFontSize(painter, memoryRenderSize);
+    setFontSize(painter, memoryRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + memoryRenderPaddingX,
                            rect().y() + memoryRenderPaddingY,
                            rect().width(),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("内存(%1%) %2/%3").arg(static_cast<int>(memoryPercent * 100)).arg(Utils::convertSizeUnit(usedMemory, "")).arg(Utils::convertSizeUnit(totalMemory, "")));
+                     QString("内存(%1%) %2/%3").arg(static_cast<int>(memoryPercent * 100)).arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, "")));
 
     // Draw swap summary.
     painter.setPen(QPen(QColor(swapColor)));
     painter.setBrush(QBrush(QColor(swapColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + swapRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
 
-    Utils::setFontSize(painter, swapRenderSize);
+    setFontSize(painter, swapRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     QString swapString;
     if (usedSwap == 0 && totalSwap == 0) {
         swapString = "交换空间 (未使用)";
     } else {
-        swapString = QString("交换空间 (%1%) %2/%3").arg(static_cast<int>(swapPercent * 100)).arg(Utils::convertSizeUnit(usedSwap, "")).arg(Utils::convertSizeUnit(totalSwap, ""));
+        swapString = QString("交换空间 (%1%) %2/%3").arg(static_cast<int>(swapPercent * 100)).arg(convertSizeUnit(usedSwap, "")).arg(convertSizeUnit(totalSwap, ""));
     }
     painter.drawText(QRect(rect().x() + swapRenderPaddingX,
                            rect().y() + swapRenderPaddingY,
@@ -103,7 +105,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      swapString);
 
     // Draw memory ring.
-    Utils::drawLoadingRing(
+    drawLoadingRing(
         painter,
         rect().x() + ringCenterPointerX,
         rect().y() + ringCenterPointerY,
@@ -117,7 +119,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         );
     
     // Draw swap ring.
-    Utils::drawLoadingRing(
+    drawLoadingRing(
         painter,
         rect().x() + ringCenterPointerX,
         rect().y() + ringCenterPointerY,
@@ -132,7 +134,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     
 
     // Draw percent text.
-    Utils::setFontSize(painter, memoryPercentRenderSize);
+    setFontSize(painter, memoryPercentRenderSize);
     painter.setPen(QPen(QColor("#aaaaaa")));
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius, rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2, insideRingRadius * 2),
                      Qt::AlignCenter,
