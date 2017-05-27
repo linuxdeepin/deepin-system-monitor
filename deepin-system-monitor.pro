@@ -9,7 +9,7 @@ INCLUDEPATH += /usr/local/include
 				
 CONFIG += link_pkgconfig
 CONFIG += c++11 
-PKGCONFIG += dtkwidget dtkbase
+PKGCONFIG += xcb xcb-util dtkwidget dtkbase
 RESOURCES = deepin-system-monitor.qrc
 
 # Input
@@ -30,6 +30,7 @@ HEADERS += src/utils.h \
 		   src/network_tools.h \
            src/process_tools.h \
            src/hashqstring.h \
+           src/find_window_title.h \
 		   src/smooth_curve_generator.h \
 		   src/main_window.h
 SOURCES += src/main.cpp \
@@ -48,6 +49,7 @@ SOURCES += src/main.cpp \
 		   src/cpu_tools.cpp \
 		   src/disk_tools.cpp \
            src/process_tools.cpp \
+           src/find_window_title.cpp \
 		   src/smooth_curve_generator.cpp \
 		   src/main_window.cpp
 		   
@@ -61,3 +63,4 @@ QT += dbus
 QMAKE_CXXFLAGS += -g
 LIBS += -L"libprocps" -lprocps -lstdc++fs
 LIBS += /usr/local/lib/libnethogs.so
+LIBS += -lX11 -lXext -lXtst

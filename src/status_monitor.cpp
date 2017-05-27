@@ -33,6 +33,8 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     totalSentKbs = 0;
     totalRecvKbs = 0;
     
+    findWindowTitle = new FindWindowTitle();
+    
     // Init process icon cache.
     processIconCache = new QMap<QString, QPixmap>();
     
@@ -104,6 +106,8 @@ void StatusMonitor::updateStatus()
     int cpuNumber = getCpuTimes().size();
     double totalCpuPercent = 0;
 
+    findWindowTitle->updateWindowInfos();
+    
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
@@ -111,8 +115,15 @@ void StatusMonitor::updateStatus()
 
         if (user == username) {
             QString name = getProcessName(&i.second);
-            QString displayName = getDisplayNameFromName(name);
             int pid = (&i.second)->tid;
+            QString displayName;
+            
+            QString title = findWindowTitle->findWindowTitle(pid);
+            if (title != "") {
+                displayName = title;
+            } else {
+                displayName = getDisplayNameFromName(name);
+            }
             int memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
             QPixmap icon = getProcessIconFromName(name, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user);

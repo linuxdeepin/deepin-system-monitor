@@ -16,6 +16,7 @@
 #include <proc/sysinfo.h>
 #include "cpu_tools.h"
 #include "network_traffic_filter.h"
+#include "find_window_title.h"
 
 class StatusMonitor : public QWidget
 {
@@ -61,6 +62,8 @@ private:
     float totalRecvKbs;
     
     int updateDuration = 2000;
+    
+    FindWindowTitle *findWindowTitle;
 };
 
 #endif
