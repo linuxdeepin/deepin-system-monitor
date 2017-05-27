@@ -5,10 +5,11 @@
 
 using namespace processTools;
 
-ProcessItem::ProcessItem(QPixmap processIcon, QString processName, double processCpu, int processMemory, int processPid, QString processUser)
+ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser)
 {
     iconPixmap = processIcon;
     name = processName;
+    displayName = dName;
     cpu = processCpu;
     pid = processPid;
     memory = processMemory;
@@ -75,7 +76,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         Utils::setFontSize(*painter, 11);
         painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
 
-        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
+        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, displayName);
     }
     // Draw CPU.
     else if (column == 1) {
@@ -137,6 +138,11 @@ QString ProcessItem::getName() const
     return name;
 }
 
+QString ProcessItem::getDisplayName() const 
+{
+    return name;
+}
+
 double ProcessItem::getCPU() const 
 {
     return cpu;
@@ -165,8 +171,8 @@ DiskStatus ProcessItem::getDiskStatus() const
 bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort) 
 {
     // Init.
-    QString name1 = (static_cast<const ProcessItem*>(item1))->getName();
-    QString name2 = (static_cast<const ProcessItem*>(item2))->getName();
+    QString name1 = (static_cast<const ProcessItem*>(item1))->getDisplayName();
+    QString name2 = (static_cast<const ProcessItem*>(item2))->getDisplayName();
     bool sortOrder;
 
     // Sort item with cpu if name is same.

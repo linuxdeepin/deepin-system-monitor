@@ -25,6 +25,7 @@
 #include <qdiriterator.h>
 #include <QPixmap>
 #include <QIcon>
+#include <QLocale>
 #include <QMap>
 #include <QDebug>
 #include <unordered_set>
@@ -293,6 +294,61 @@ namespace processTools {
             default:
                 return "Unknown state: '" + QString(p->state) + "'";
         }
+    }
+    
+    QString getDisplayNameFromName(QString procName)
+    {
+        // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.
+        QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
+        std::string desktopFile;
+        while(dir.hasNext()) {
+            if (dir.fileInfo().suffix() == "desktop") {
+                if (dir.fileName().toLower().contains(procName.toLower())) {
+                    desktopFile = dir.filePath().toStdString();
+                    break;
+                }
+            }
+            dir.next();
+        }
+
+        if (desktopFile.size() == 0) {
+            return procName;
+        }
+
+        std::ifstream in;
+        in.open(desktopFile);
+        QString displayName;
+        while(!in.eof()) {
+            std::string line;
+            std::getline(in,line);
+            
+            QString lineContent = QString::fromStdString(line);
+            
+            QString localNameFlag = QString("Name[%1]=").arg(QLocale::system().name());
+            QString nameFlag = "Name=";
+            QString genericNameFlag = QString("GenericName[%1]=").arg(QLocale::system().name());
+            
+            // qDebug() << lineContent;
+            
+            if (lineContent.startsWith(localNameFlag)) {
+                displayName = lineContent.remove(0, localNameFlag.size());
+                
+                break;
+            } else if (lineContent.startsWith(genericNameFlag)) {
+                displayName = lineContent.remove(0, genericNameFlag.size());
+                
+                break;
+            } else if (lineContent.startsWith(nameFlag)) {
+                displayName = lineContent.remove(0, nameFlag.size());
+                
+                continue;
+            } else {
+                continue;
+            }
+        }
+        in.close();
+
+        return displayName;
     }
 
     /**

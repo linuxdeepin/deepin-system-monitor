@@ -30,6 +30,7 @@ namespace processTools {
     QString getProcessStatus(proc_t* p);
     unsigned long long getTotalCpuTime();
     QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache);
+    QString getDisplayNameFromName(QString procName);
 }
 
 #endif // PROCESSTOOLS

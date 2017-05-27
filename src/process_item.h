@@ -14,7 +14,7 @@ class ProcessItem : public ListItem
     Q_OBJECT
     
 public:
-    ProcessItem(QPixmap processIcon, QString processName, double processCpu, int processMemory, int processPid, QString processUser);
+    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser);
     
     bool sameAs(ListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
@@ -33,6 +33,7 @@ public:
     void setDiskStatus(DiskStatus dStatus);
     
     QString getName() const;
+    QString getDisplayName() const;
     double getCPU() const;
     int getMemory() const;
     int getPid() const;
@@ -54,6 +55,7 @@ private:
     
     QString memoryString;
     QString name;
+    QString displayName;
     QString path;
     QString user;
 };

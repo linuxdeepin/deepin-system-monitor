@@ -111,10 +111,11 @@ void StatusMonitor::updateStatus()
 
         if (user == username) {
             QString name = getProcessName(&i.second);
+            QString displayName = getDisplayNameFromName(name);
             int pid = (&i.second)->tid;
             int memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
             QPixmap icon = getProcessIconFromName(name, processIconCache);
-            ProcessItem *item = new ProcessItem(icon, name, cpu / cpuNumber, memory, pid, user);
+            ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user);
             items << item;
         }
 
