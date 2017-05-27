@@ -75,7 +75,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
 
     // Draw icon and process name.
     if (column == 0) {
-        Utils::setFontSize(*painter, 11);
+        Utils::setFontSize(*painter, 10);
         painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
 
         painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, displayName);
