@@ -110,6 +110,9 @@ public:
     void ctrlScrollPageUp();
     void ctrlScrollToEnd();
     void ctrlScrollToHome();
+    
+protected:
+    virtual void leaveEvent(QEvent * event);
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);

@@ -331,6 +331,12 @@ void ListView::ctrlScrollToEnd()
     repaint();
 }
 
+void ListView::leaveEvent(QEvent * event){
+    hideScrollbar();    
+    
+    QWidget::leaveEvent(event);
+}
+
 void ListView::scrollAnimation()
 {
     if (scrollAnimationTicker <= scrollAnimationFrames) {
@@ -347,6 +353,7 @@ void ListView::scrollAnimation()
 void ListView::hideScrollbar()
 {
     // Record old render offset to control scrollbar whether display.
+    mouseAtScrollArea = false;
     oldRenderOffset = renderOffset;
 
     repaint();
