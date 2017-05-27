@@ -513,6 +513,24 @@ namespace Utils {
         }
     }
 
+    bool isGuiApp(QString procName)
+    {
+        // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.
+        QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
+        std::string desktopFile;
+        while(dir.hasNext()) {
+            if (dir.fileInfo().suffix() == "desktop") {
+                if (dir.fileName().toLower().contains(procName.toLower())) {
+                    desktopFile = dir.filePath().toStdString();
+                    break;
+                }
+            }
+            dir.next();
+        }
+
+        return desktopFile.size() != 0;
+    }
+    
     QString getDisplayNameFromName(QString procName)
     {
         // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.

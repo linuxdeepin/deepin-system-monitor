@@ -22,6 +22,8 @@ class StatusMonitor : public QWidget
     Q_OBJECT
 
     typedef std::map<int, proc_t> storedProcType;
+    
+    enum FilterType {OnlyGUI, OnlyMe, All};
 
 public:
     StatusMonitor(QWidget *parent = 0);
@@ -63,6 +65,8 @@ private:
     int updateDuration = 2000;
     
     FindWindowTitle *findWindowTitle;
+    
+    FilterType filterType;
 };
 
 #endif

@@ -124,6 +124,7 @@ namespace Utils {
     unsigned long long getTotalCpuTime();
     QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache);
     QString getDisplayNameFromName(QString procName);
+    bool isGuiApp(QString procName);
 }
 
 

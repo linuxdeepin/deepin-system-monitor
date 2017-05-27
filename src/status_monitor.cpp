@@ -14,6 +14,8 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedWidth(300);
 
+    filterType = OnlyGUI;
+
     layout = new QVBoxLayout(this);
 
     cpuMonitor = new CpuMonitor();
@@ -96,9 +98,9 @@ void StatusMonitor::updateStatus()
     totalCpuTime = getTotalCpuTime();
 
     // Read processes information.
-    QList<ListItem*> items;
     QString username = qgetenv("USER");
 
+    QList<ListItem*> items;
     int cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
     double totalCpuPercent = 0;
 
@@ -108,9 +110,18 @@ void StatusMonitor::updateStatus()
         QString user = (&i.second)->euser;
 
         double cpu = (&i.second)->pcpu;
+        QString name = getProcessName(&i.second);
 
-        if (user == username) {
-            QString name = getProcessName(&i.second);
+        bool appendItem = false;
+        if (filterType == OnlyGUI) {
+            appendItem = (user == username && isGuiApp(name));
+        } else if (filterType == OnlyMe) {
+            appendItem = (user == username);
+        } else if (filterType == All) {
+            appendItem = true;
+        }
+
+        if (appendItem) {
             int pid = (&i.second)->tid;
             QString displayName;
 
