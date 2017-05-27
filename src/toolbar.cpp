@@ -35,7 +35,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     
-    QPixmap iconPixmap = QPixmap(getQrcPath("titlebar_icon.png"));
+    QPixmap iconPixmap = QPixmap(getQrcPath("titlebar_icon.svg"));
     QLabel *iconLabel = new QLabel();
     iconLabel->setPixmap(iconPixmap);
     

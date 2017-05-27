@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
         app.setApplicationVersion("1.0");
         
         app.setTheme("dark");
+        app.setWindowIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
         
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
 

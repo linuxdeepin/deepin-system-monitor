@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
-    <file>image/titlebar_icon.png</file>
+    <file>image/titlebar_icon.svg</file>
+    <file>image/deepin-system-monitor.svg</file>
   </qresource>
 </RCC>
