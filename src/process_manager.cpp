@@ -33,11 +33,11 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     actionItems = new QList<ListItem*>();
     
     rightMenu = new QMenu();
-    killAction = new QAction("Kill", this);
+    killAction = new QAction("结束进程", this);
     connect(killAction, &QAction::triggered, this, &ProcessManager::killProcesses);
-    pauseAction = new QAction("Pause", this);
+    pauseAction = new QAction("暂停进程", this);
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
-    resumeAction = new QAction("Resume", this);
+    resumeAction = new QAction("继续进程", this);
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
