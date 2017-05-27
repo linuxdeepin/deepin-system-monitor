@@ -34,6 +34,7 @@ void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tS
         usedSwap = uSwap;
         totalSwap = tSwap;
 
+        animationIndex = 0;
         timer->start(30);
     }
 }
@@ -45,8 +46,6 @@ void MemoryMonitor::render()
 
         repaint();
     } else {
-        animationIndex = 0;
-
         timer->stop();
     }
 }

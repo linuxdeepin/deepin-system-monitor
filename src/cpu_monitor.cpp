@@ -93,6 +93,7 @@ void CpuMonitor::updateStatus(double cpuPercent)
     cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
 
     if (cpuPercents->last() != cpuPercents->at(cpuPercents->size() - 2)) {
+        animationIndex = 0;
         timer->start(30);
     }
 }
@@ -104,8 +105,6 @@ void CpuMonitor::render()
 
         repaint();
     } else {
-        animationIndex = 0;
-
         timer->stop();
     }
 }
