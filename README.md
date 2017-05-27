@@ -14,7 +14,7 @@ Thanks alot [Lily Rivers](https://github.com/VioletDarkKitty/system-monitor), th
 * cd build
 * qmake ..
 * make
-* sudo setcap cap_kill,cap_net_raw+ep ./deepin-system-monitor
+* sudo cap_kill,cap_net_raw,cap_dac_read_search+ep ./deepin-system-monitor
 * ./deepin-system-monitor
 
 ## Usage
