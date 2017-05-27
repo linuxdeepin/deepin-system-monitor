@@ -5,9 +5,9 @@
 
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
-    if (this->titleBar()) {
+    if (this->titlebar()) {
         Toolbar *toolbar = new Toolbar();
-        this->titleBar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
+        this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
     }
     
     layoutWidget = new QWidget();
