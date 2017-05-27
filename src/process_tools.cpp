@@ -317,7 +317,7 @@ namespace processTools {
 
         std::ifstream in;
         in.open(desktopFile);
-        QString displayName;
+        QString displayName = procName;
         while(!in.eof()) {
             std::string line;
             std::getline(in,line);
