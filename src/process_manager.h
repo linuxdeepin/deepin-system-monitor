@@ -7,6 +7,7 @@
 #include <QString>
 #include <QWidget>
 #include <proc/readproc.h>
+#include <QMenu>
 
 class ProcessManager : public QWidget
 {
@@ -18,9 +19,18 @@ public:
     
 public slots:
     void updateStatus(QList<ListItem*> items);
+    void popupMenu(QPoint pos, QList<ListItem*> items);
+    
+    void killProcesses();
                                        
 private:
     ProcessView *processView;
+    QMenu *rightMenu;
+    QAction *killAction;
+    QAction *pauseAction;
+    QAction *resumeAction;
+    
+    QList<ListItem*> *actionItems;
 };
 
 #endif

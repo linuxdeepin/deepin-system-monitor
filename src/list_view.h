@@ -110,6 +110,9 @@ public:
     void ctrlScrollPageUp();
     void ctrlScrollToEnd();
     void ctrlScrollToHome();
+                           
+signals:
+    void rightClickItems(QPoint pos, QList<ListItem*> items);
     
 private slots:
     void scrollAnimation();

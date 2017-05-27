@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QList>
 #include <proc/sysinfo.h>
+#include <signal.h>
 
 using namespace processTools;
 
@@ -28,6 +29,19 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     alorithms->append(&ProcessItem::sortByUpload);
     alorithms->append(&ProcessItem::sortByPid);
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
+    
+    actionItems = new QList<ListItem*>();
+    
+    rightMenu = new QMenu();
+    killAction = new QAction("Kill", this);
+    connect(killAction, &QAction::triggered, this, &ProcessManager::killProcesses);
+    pauseAction = new QAction("Pause", this);
+    resumeAction = new QAction("Resume", this);
+    rightMenu->addAction(killAction);
+    rightMenu->addAction(pauseAction);
+    rightMenu->addAction(resumeAction);
+    
+    connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
 }
 
 ProcessManager::~ProcessManager()
@@ -38,5 +52,23 @@ ProcessManager::~ProcessManager()
 void ProcessManager::updateStatus(QList<ListItem*> items)
 {
     processView->refreshItems(items);
+}
+
+void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
+{
+    actionItems->append(items);
+    rightMenu->exec(this->mapToGlobal(pos));
+}
+
+void ProcessManager::killProcesses()
+{
+    for (ListItem *item : *actionItems) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        if (kill(processItem->getPid(), SIGTERM) != 0) {
+            qDebug() << QString("Kill process %1 failed, permission denied.").arg(processItem->getPid());
+        }
+    }
+    
+    actionItems->clear();
 }
 
