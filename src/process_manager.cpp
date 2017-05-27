@@ -36,7 +36,9 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     killAction = new QAction("Kill", this);
     connect(killAction, &QAction::triggered, this, &ProcessManager::killProcesses);
     pauseAction = new QAction("Pause", this);
+    connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
     resumeAction = new QAction("Resume", this);
+    connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
     rightMenu->addAction(resumeAction);
@@ -66,6 +68,30 @@ void ProcessManager::killProcesses()
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         if (kill(processItem->getPid(), SIGTERM) != 0) {
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(processItem->getPid());
+        }
+    }
+    
+    actionItems->clear();
+}
+
+void ProcessManager::stopProcesses()
+{
+    for (ListItem *item : *actionItems) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        if (kill(processItem->getPid(), SIGSTOP) != 0) {
+            qDebug() << QString("Stop process %1 failed, permission denied.").arg(processItem->getPid());
+        }
+    }
+    
+    actionItems->clear();
+}
+
+void ProcessManager::resumeProcesses()
+{
+    for (ListItem *item : *actionItems) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        if (kill(processItem->getPid(), SIGCONT) != 0) {
+            qDebug() << QString("Resume process %1 failed, permission denied.").arg(processItem->getPid());
         }
     }
     

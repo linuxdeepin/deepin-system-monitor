@@ -22,6 +22,8 @@ public slots:
     void popupMenu(QPoint pos, QList<ListItem*> items);
     
     void killProcesses();
+    void stopProcesses();
+    void resumeProcesses();
                                        
 private:
     ProcessView *processView;
