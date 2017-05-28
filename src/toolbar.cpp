@@ -48,9 +48,32 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     layout->addStretch();
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
+    
+    searchTimer = new QTimer();
+    searchTimer->setSingleShot(true);
+    connect(searchTimer, &QTimer::timeout, this, &Toolbar::handleSearch);
+    
+    connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged, Qt::QueuedConnection);
 }                                    
 
 Toolbar::~Toolbar()
 {
     delete searchEdit;
+}
+
+void Toolbar::handleSearchTextChanged()
+{
+    searchTextCache = searchEdit->text();
+    
+    if (searchTimer->isActive()) {
+        searchTimer->stop();
+    }
+    searchTimer->start(300);
+}
+
+void Toolbar::handleSearch()
+{
+    if (searchEdit->text() == searchTextCache) {
+        search(searchTextCache);
+    }
 }

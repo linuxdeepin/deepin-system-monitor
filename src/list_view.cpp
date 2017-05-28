@@ -23,7 +23,11 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     scrollAnimationFrames = 16;
     scrollAnimationDuration = 25;
 
+    searchContent = "";
+    searchAlgorithm = NULL;
+
     listItems = new QList<ListItem*>();
+    renderItems = new QList<ListItem*>();
     selectionItems = new QList<ListItem*>();
     lastSelectItem = NULL;
 
@@ -46,6 +50,7 @@ ListView::~ListView()
 {
     delete lastSelectItem;
     delete listItems;
+    delete renderItems;
     delete selectionItems;
     delete sortingAlgorithms;
     delete sortingOrderes;
@@ -93,6 +98,8 @@ void ListView::addItems(QList<ListItem*> items)
 {
     // Add item to list.
     listItems->append(items);
+    QList<ListItem*> searchItems = getSearchItems(items);
+    renderItems->append(searchItems);
 
     // If user has click title to sort, sort items after add items to list.
     if (defaultSortingColumn != -1) {
@@ -106,6 +113,7 @@ void ListView::clearItems()
     // We need delete items in QList before clear QList to avoid *MEMORY LEAK* .
     qDeleteAll(listItems->begin(), listItems->end());
     listItems->clear();
+    renderItems->clear();
 }
 
 void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection)
@@ -156,6 +164,8 @@ void ListView::refreshItems(QList<ListItem*> items)
     // Update items.
     clearItems();
     listItems->append(items);
+    QList<ListItem*> searchItems = getSearchItems(items);
+    renderItems->append(searchItems);
 
     // Sort once if default sort column hasn't init.
     if (defaultSortingColumn != -1) {
@@ -174,9 +184,22 @@ void ListView::refreshItems(QList<ListItem*> items)
     repaint();
 }
 
-void ListView::search(QString searchContent)
+void ListView::search(QString content)
 {
-    
+    if (content == "" && searchContent != content) {
+        searchContent = content;
+        
+        renderItems->clear();
+        renderItems->append(*listItems);
+    } else {
+        searchContent = content;
+        
+        QList<ListItem*> searchItems = getSearchItems(*listItems);
+        renderItems->clear();
+        renderItems->append(searchItems);
+    }
+
+    repaint();
 }
 
 void ListView::selectAllItems()
@@ -186,7 +209,7 @@ void ListView::selectAllItems()
 
     // Select all items.
     clearSelections();
-    addSelections(*listItems);
+    addSelections(*renderItems);
 
     // Scroll to top.
     renderOffset = getTopRenderOffset();
@@ -204,7 +227,7 @@ void ListView::selectFirstItem()
     clearSelections();
 
     QList<ListItem*> items = QList<ListItem*>();
-    items << listItems->first();
+    items << renderItems->first();
     addSelections(items);
 
     // Scroll to top.
@@ -223,7 +246,7 @@ void ListView::selectLastItem()
     clearSelections();
 
     QList<ListItem*> items = QList<ListItem*>();
-    items << listItems->last();
+    items << renderItems->last();
     addSelections(items);
 
     // Scroll to bottom.
@@ -262,8 +285,8 @@ void ListView::shiftSelectToEnd()
     // Select items from last selected item to last item.
     else {
         // Found last selected index and do select operation.
-        int lastSelectionIndex = listItems->indexOf(lastSelectItem);
-        shiftSelectItemsWithBound(lastSelectionIndex, listItems->count() - 1);
+        int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
+        shiftSelectItemsWithBound(lastSelectionIndex, renderItems->count() - 1);
 
         // Scroll to bottom.
         renderOffset = getBottomRenderOffset();
@@ -282,7 +305,7 @@ void ListView::shiftSelectToHome()
     // Select items from last selected item to first item.
     else {
         // Found last selected index and do select operation.
-        int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+        int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
         shiftSelectItemsWithBound(0, lastSelectionIndex);
 
         // Scroll to top.
@@ -342,8 +365,8 @@ void ListView::ctrlScrollToEnd()
 }
 
 void ListView::leaveEvent(QEvent * event){
-    hideScrollbar();    
-    
+    hideScrollbar();
+
     QWidget::leaveEvent(event);
 }
 
@@ -506,10 +529,10 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
         int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
 
         if (mouseEvent->button() == Qt::LeftButton) {
-            if (pressItemIndex < listItems->count()) {
+            if (pressItemIndex < renderItems->count()) {
                 // Scattered selection of items when press ctrl modifier.
                 if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                    ListItem *item = (*listItems)[pressItemIndex];
+                    ListItem *item = (*renderItems)[pressItemIndex];
 
                     if (selectionItems->contains(item)) {
                         selectionItems->removeOne(item);
@@ -521,7 +544,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 }
                 // Continuous selection of items when press shift modifier.
                 else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
-                    int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+                    int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
                     int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
                     int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
 
@@ -532,34 +555,34 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                     clearSelections();
 
                     QList<ListItem*> items = QList<ListItem*>();
-                    items << (*listItems)[pressItemIndex];
+                    items << (*renderItems)[pressItemIndex];
                     addSelections(items);
                 }
 
                 repaint();
             }
         } else if (mouseEvent->button() == Qt::RightButton) {
-            ListItem *pressItem = (*listItems)[pressItemIndex];
+            ListItem *pressItem = (*renderItems)[pressItemIndex];
             bool pressInSelectionArea = false;
-            
+
             for (ListItem *item : *selectionItems) {
                 if (item == pressItem) {
                     pressInSelectionArea = true;
-                    
+
                     break;
                 }
             }
-            
+
             if (!pressInSelectionArea) {
                 clearSelections();
-                
+
                 QList<ListItem*> items = QList<ListItem*>();
-                items << (*listItems)[pressItemIndex];
+                items << (*renderItems)[pressItemIndex];
                 addSelections(items);
-                
+
                 repaint();
             }
-            
+
             rightClickItems(mouseEvent->pos(), *selectionItems);
         }
     }
@@ -634,7 +657,7 @@ void ListView::paintEvent(QPaintEvent *)
 
     // Draw context.
     int rowCounter = 0;
-    for (ListItem *item:*listItems) {
+    for (ListItem *item:*renderItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
             // Clip item rect.
             painter.setClipRect(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight));
@@ -712,19 +735,19 @@ void ListView::selectNextItemWithOffset(int scrollOffset)
     } else {
         int lastIndex = 0;
         for (ListItem *item:*selectionItems) {
-            int index = listItems->indexOf(item);
+            int index = renderItems->indexOf(item);
             if (index > lastIndex) {
                 lastIndex = index;
             }
         }
 
         if (lastIndex != -1) {
-            lastIndex = std::min(listItems->count() - 1, lastIndex + scrollOffset);
+            lastIndex = std::min(renderItems->count() - 1, lastIndex + scrollOffset);
 
             clearSelections(false);
 
             QList<ListItem*> items = QList<ListItem*>();
-            items << (*listItems)[lastIndex];
+            items << (*renderItems)[lastIndex];
 
             addSelections(items);
 
@@ -747,9 +770,9 @@ void ListView::selectPrevItemWithOffset(int scrollOffset)
     if (selectionItems->empty()) {
         selectFirstItem();
     } else {
-        int firstIndex = listItems->count();
+        int firstIndex = renderItems->count();
         for (ListItem *item:*selectionItems) {
-            int index = listItems->indexOf(item);
+            int index = renderItems->indexOf(item);
             if (index < firstIndex) {
                 firstIndex = index;
             }
@@ -761,7 +784,7 @@ void ListView::selectPrevItemWithOffset(int scrollOffset)
             clearSelections();
 
             QList<ListItem*> items = QList<ListItem*>();
-            items << (*listItems)[firstIndex];
+            items << (*renderItems)[firstIndex];
 
             addSelections(items);
 
@@ -783,7 +806,7 @@ void ListView::shiftSelectItemsWithBound(int selectionStartIndex, int selectionE
     clearSelections(false);
     QList<ListItem*> items = QList<ListItem*>();
     int index = 0;
-    for (ListItem *item:*listItems) {
+    for (ListItem *item:*renderItems) {
         if (index >= selectionStartIndex && index <= selectionEndIndex) {
             items << item;
         }
@@ -804,10 +827,10 @@ void ListView::shiftSelectPrevItemWithOffset(int scrollOffset)
     if (selectionItems->empty()) {
         selectFirstItem();
     } else {
-        int firstIndex = listItems->count();
+        int firstIndex = renderItems->count();
         int lastIndex = 0;
         for (ListItem *item:*selectionItems) {
-            int index = listItems->indexOf(item);
+            int index = renderItems->indexOf(item);
 
             if (index < firstIndex) {
                 firstIndex = index;
@@ -819,7 +842,7 @@ void ListView::shiftSelectPrevItemWithOffset(int scrollOffset)
         }
 
         if (firstIndex != -1) {
-            int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+            int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
             int selectionStartIndex, selectionEndIndex;
 
             if (lastIndex == lastSelectionIndex) {
@@ -847,10 +870,10 @@ void ListView::shiftSelectNextItemWithOffset(int scrollOffset)
     if (selectionItems->empty()) {
         selectFirstItem();
     } else {
-        int firstIndex = listItems->count();
+        int firstIndex = renderItems->count();
         int lastIndex = 0;
         for (ListItem *item:*selectionItems) {
-            int index = listItems->indexOf(item);
+            int index = renderItems->indexOf(item);
 
             if (index < firstIndex) {
                 firstIndex = index;
@@ -862,14 +885,14 @@ void ListView::shiftSelectNextItemWithOffset(int scrollOffset)
         }
 
         if (firstIndex != -1) {
-            int lastSelectionIndex = listItems->indexOf(lastSelectItem);
+            int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
             int selectionStartIndex, selectionEndIndex;
 
             if (firstIndex == lastSelectionIndex) {
                 selectionStartIndex = firstIndex;
-                selectionEndIndex = std::min(listItems->count() - 1, lastIndex + scrollOffset);
+                selectionEndIndex = std::min(renderItems->count() - 1, lastIndex + scrollOffset);
             } else {
-                selectionStartIndex = std::min(listItems->count() - 1, firstIndex + scrollOffset);
+                selectionStartIndex = std::min(renderItems->count() - 1, firstIndex + scrollOffset);
                 selectionEndIndex = lastIndex;
             }
 
@@ -924,7 +947,7 @@ int ListView::adjustRenderOffset(int offset)
 
 int ListView::getItemsTotalHeight()
 {
-    return listItems->count() * rowHeight;
+    return renderItems->count() * rowHeight;
 }
 
 int ListView::getScrollAreaHeight()
@@ -947,6 +970,23 @@ int ListView::getTopRenderOffset()
     return 0;
 }
 
+QList<ListItem*> ListView::getSearchItems(QList<ListItem*> items)
+{
+    if (searchContent == "" || searchAlgorithm == NULL) {
+        return items;
+    } else {
+        QList<ListItem*> *searchItems = new QList<ListItem*>();
+
+        for (ListItem *item : items) {
+            if (searchAlgorithm(item, searchContent)) {
+                searchItems->append(item);
+            }
+        }
+
+        return *searchItems;
+    }
+}
+
 int ListView::getBottomRenderOffset()
 {
     return getItemsTotalHeight() - rect().height() + titleHeight;
@@ -955,7 +995,7 @@ int ListView::getBottomRenderOffset()
 void ListView::sortItemsByColumn(int column, bool descendingSort)
 {
     if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
-        qSort(listItems->begin(), listItems->end(), [&](const ListItem *item1, const ListItem *item2) {
+        qSort(renderItems->begin(), renderItems->end(), [&](const ListItem *item1, const ListItem *item2) {
                 return (*sortingAlgorithms)[column](item1, item2, descendingSort);
             });
     }

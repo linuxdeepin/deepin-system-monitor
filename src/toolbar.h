@@ -26,6 +26,7 @@
 
 #include <QHBoxLayout>
 #include <QWidget>
+#include <QTimer>
 
 #include <dsearchedit.h>
 
@@ -39,8 +40,18 @@ public:
     Toolbar(QWidget *parent = 0);
     ~Toolbar();
     
+public slots:
+    void handleSearchTextChanged();
+    void handleSearch();
+    
+signals:
+    void search(QString searchContent);
+    
 private:
     DSearchEdit *searchEdit;
+    QString searchTextCache;
+    
+    QTimer *searchTimer;
 };
 
 #endif

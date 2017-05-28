@@ -55,6 +55,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     alorithms->append(&ProcessItem::sortByUpload);
     alorithms->append(&ProcessItem::sortByPid);
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
+    processView->setSearchAlgorithm(&ProcessItem::search);
     
     actionItems = new QList<ListItem*>();
     
@@ -80,6 +81,11 @@ ProcessManager::~ProcessManager()
 void ProcessManager::updateStatus(QList<ListItem*> items)
 {
     processView->refreshItems(items);
+}
+
+void ProcessManager::handleSearch(QString searchContent)
+{
+    processView->search(searchContent);
 }
 
 void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)

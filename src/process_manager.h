@@ -33,6 +33,8 @@ public slots:
     void stopProcesses();
     void resumeProcesses();
     
+    void handleSearch(QString searchContent);
+    
 private:
     ProcessView *processView;
     QMenu *rightMenu;

@@ -5,6 +5,7 @@
 #include "dmainwindow.h"
 #include "status_monitor.h"
 #include "process_manager.h"
+#include "toolbar.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -20,6 +21,7 @@ private:
     QHBoxLayout *layout;
     QWidget *layoutWidget;
     StatusMonitor *statusMonitor;
+    Toolbar *toolbar;
 };
 
 #endif

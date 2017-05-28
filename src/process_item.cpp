@@ -303,3 +303,11 @@ bool ProcessItem::sortByRead(const ListItem *item1, const ListItem *item2, bool 
 
     return descendingSort ? sortOrder : !sortOrder;
 }
+
+bool ProcessItem::search(const ListItem *item, QString searchContent)
+{
+    const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
+    return processItem->getName().contains(searchContent) || 
+        processItem->getDisplayName().contains(searchContent) || 
+        QString(processItem->getPid()).contains(searchContent);
+}

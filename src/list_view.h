@@ -162,17 +162,20 @@ private:
     int getScrollbarHeight();
     int getScrollbarY();
     int getTopRenderOffset();
+    QList<ListItem*> getSearchItems(QList<ListItem*> items);
     void sortItemsByColumn(int column, bool descendingSort);
     void startScrollAnimation();
     void startScrollbarHideTimer();
     
     ListItem *lastSelectItem;
     QList<ListItem*> *listItems;
+    QList<ListItem*> *renderItems;
     QList<ListItem*> *selectionItems;
     QList<QString> columnTitles;
     QList<SortAlgorithm> *sortingAlgorithms;
     QList<bool> *sortingOrderes;
     QList<int> columnWidths;
+    QString searchContent;
     QTimer *hideScrollbarTimer;
     QTimer *scrollAnimationTimer;
     SearchAlgorithm searchAlgorithm;

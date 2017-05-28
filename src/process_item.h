@@ -26,6 +26,7 @@ public:
     static bool sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByWrite(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool search(const ListItem *item, QString searchContent);
     
     void setNetworkStatus(NetworkStatus nStatus);
     void setDiskStatus(DiskStatus dStatus);
