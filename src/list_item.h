@@ -12,7 +12,7 @@ public:
     ListItem();
     
     /*
-     * The interface function that used to compare the two ListItems
+     * The interface function that used to compare the two ListItem
      * The ListView requires this interface to keep the selected items unchanged when refreshed
      * 
      * @item any subclass of ListItem, you can use static_cast in implementation to access any attribute to compare two items

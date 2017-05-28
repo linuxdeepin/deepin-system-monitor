@@ -84,6 +84,11 @@ void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int 
     defaultSortingOrder = descendingSort;
 }
 
+void ListView::setSearchAlgorithm(SearchAlgorithm algorithm)
+{
+    searchAlgorithm = algorithm;
+}
+
 void ListView::addItems(QList<ListItem*> items)
 {
     // Add item to list.
@@ -167,6 +172,11 @@ void ListView::refreshItems(QList<ListItem*> items)
 
     // Render.
     repaint();
+}
+
+void ListView::search(QString searchContent)
+{
+    
 }
 
 void ListView::selectAllItems()

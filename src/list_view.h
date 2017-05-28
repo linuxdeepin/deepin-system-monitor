@@ -6,6 +6,7 @@
 #include <QWidget>
 
 typedef bool (* SortAlgorithm) (const ListItem *item1, const ListItem *item2, bool descendingSort);
+typedef bool (* SearchAlgorithm) (const ListItem *item, QString searchContent);
 
 class ListView : public QWidget
 {
@@ -52,6 +53,13 @@ public:
      */
     void setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn=-1, bool descendingSort=false);
     
+    /*
+     * Set search algorithm to filter match items.
+     * 
+     * @algorithm the search algorithm, it's type is: 'bool (*) (const ListItem *item, QString searchContent)'
+     */
+    void setSearchAlgorithm(SearchAlgorithm algorithm);
+    
     /* 
      * Add ListItem list to ListView.
      * If user has click title to sort, sort items after add items to list. 
@@ -88,6 +96,11 @@ public:
      * @items List of ListItem* to add
      */
     void refreshItems(QList<ListItem*> items);
+    
+    /*
+     * Search
+     */
+    void search(QString searchContent);
     
     // ListView operations.
     void selectAllItems();
@@ -162,6 +175,7 @@ private:
     QList<int> columnWidths;
     QTimer *hideScrollbarTimer;
     QTimer *scrollAnimationTimer;
+    SearchAlgorithm searchAlgorithm;
     bool defaultSortingOrder;
     bool mouseAtScrollArea;
     bool mouseDragScrollbar;
