@@ -14,9 +14,36 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
+    
+    QWidget *topWidget = new QWidget();
+    topWidget->setFixedHeight(48);
+    QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     processView = new ProcessView();
+    layout->addWidget(topWidget);
     layout->addWidget(processView);
-
+    
+    statusLabel = new QLabel("我还没有想好这里应该放什么状态，也许你可以告诉我。;)");
+    onlyGuiButton = new DImageButton(
+        Utils::getQrcPath("only_gui_normal.png"),
+        Utils::getQrcPath("only_gui_hover.png"),
+        Utils::getQrcPath("only_gui_press.png")
+        );
+    onlyMeButton = new DImageButton(
+        Utils::getQrcPath("only_me_normal.png"),
+        Utils::getQrcPath("only_me_hover.png"),
+        Utils::getQrcPath("only_me_press.png")
+        );
+    allProcessButton = new DImageButton(
+        Utils::getQrcPath("all_process_normal.png"),
+        Utils::getQrcPath("all_process_hover.png"),
+        Utils::getQrcPath("all_process_press.png")
+        );
+    topLayout->addWidget(statusLabel);
+    topLayout->addStretch();
+    topLayout->addWidget(onlyGuiButton);
+    topLayout->addWidget(onlyMeButton);
+    topLayout->addWidget(allProcessButton);
+    
     // Set sort algorithms.
     QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
     alorithms->append(&ProcessItem::sortByName);

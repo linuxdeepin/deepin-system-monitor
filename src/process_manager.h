@@ -3,11 +3,15 @@
 
 #include "process_view.h"
 #include <QMap>
+#include <QLabel>
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
 #include <proc/readproc.h>
 #include <QMenu>
+#include "dimagebutton.h"
+
+DWIDGET_USE_NAMESPACE
 
 class ProcessManager : public QWidget
 {
@@ -17,6 +21,10 @@ public:
     ProcessManager(QWidget *parent = 0);
     ~ProcessManager();
     
+    DImageButton *onlyGuiButton;
+    DImageButton *onlyMeButton;
+    DImageButton *allProcessButton;
+                                  
 public slots:
     void updateStatus(QList<ListItem*> items);
     void popupMenu(QPoint pos, QList<ListItem*> items);
@@ -24,7 +32,7 @@ public slots:
     void killProcesses();
     void stopProcesses();
     void resumeProcesses();
-                                       
+    
 private:
     ProcessView *processView;
     QMenu *rightMenu;
@@ -33,6 +41,8 @@ private:
     QAction *resumeAction;
     
     QList<ListItem*> *actionItems;
+    
+    QLabel *statusLabel;
 };
 
 #endif

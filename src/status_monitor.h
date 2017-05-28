@@ -23,7 +23,7 @@ class StatusMonitor : public QWidget
 
     typedef std::map<int, proc_t> storedProcType;
     
-    enum FilterType {OnlyGUI, OnlyMe, All};
+    enum FilterType {OnlyGUI, OnlyMe, AllProcess};
 
 public:
     StatusMonitor(QWidget *parent = 0);
@@ -40,7 +40,11 @@ signals:
 
 public slots:
     void updateStatus();
-
+    
+    void switchToOnlyGui();
+    void switchToOnlyMe();
+    void switchToAllProcess();
+                                       
 private:
     QVBoxLayout *layout;
 

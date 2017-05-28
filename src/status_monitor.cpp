@@ -117,7 +117,7 @@ void StatusMonitor::updateStatus()
             appendItem = (user == username && isGuiApp(name));
         } else if (filterType == OnlyMe) {
             appendItem = (user == username);
-        } else if (filterType == All) {
+        } else if (filterType == AllProcess) {
             appendItem = true;
         }
 
@@ -261,3 +261,25 @@ void StatusMonitor::updateStatus()
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
 }
+
+void StatusMonitor::switchToOnlyGui()
+{
+    filterType = OnlyGUI;
+
+    updateStatus();
+}
+
+void StatusMonitor::switchToOnlyMe()
+{
+    filterType = OnlyMe;
+
+    updateStatus();
+}
+
+void StatusMonitor::switchToAllProcess()
+{
+    filterType = AllProcess;
+
+    updateStatus();
+}
+
