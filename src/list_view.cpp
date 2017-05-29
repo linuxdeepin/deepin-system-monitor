@@ -5,6 +5,7 @@
 #include <QEvent>
 #include <QWheelEvent>
 #include <QtMath>
+#include <QMenu>
 
 using namespace Utils;
 
@@ -69,6 +70,20 @@ void ListView::setColumnTitles(QList<QString> titles, int height)
     columnTitles = titles;
     titleHeight = height;
 }
+
+void ListView::setColumnHideFlags(QList<bool> toggleHideFlags)
+{
+    Q_ASSERT_X(!toggleHideFlags.contains(false), "toggleHideFlags", "at least have one 'false' in list.");
+    Q_ASSERT_X(toggleHideFlags.count() != columnTitles.count(), "toggleHideFlags", "hide flags length is not same as titles list.");
+
+    columnToggleHideFlags = toggleHideFlags;
+    
+    columnVisibles.clear();
+    for (int i = 0; i < toggleHideFlags.count(); i++) {
+        columnVisibles.append(true);
+    }
+}
+
 
 void ListView::setColumnWidths(QList<int> widths)
 {
@@ -188,12 +203,12 @@ void ListView::search(QString content)
 {
     if (content == "" && searchContent != content) {
         searchContent = content;
-        
+
         renderItems->clear();
         renderItems->append(*listItems);
     } else {
         searchContent = content;
-        
+
         QList<ListItem*> searchItems = getSearchItems(*listItems);
         renderItems->clear();
         renderItems->append(searchItems);
@@ -478,34 +493,60 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
     // Sort items with column's sorting algorithms when click on title area.
     if (atTitleArea) {
-        if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
-            // Calcuate title widths;
-            QList<int> renderWidths = getRenderWidths();
+        if (mouseEvent->button() == Qt::LeftButton) {
+            if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
+                // Calcuate title widths;
+                QList<int> renderWidths = getRenderWidths();
 
-            int columnCounter = 0;
-            int columnRenderX = 0;
-            for (int renderWidth:renderWidths) {
-                if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
-                    // If switch other column, default order is from top to bottom.
-                    if (columnCounter != defaultSortingColumn) {
-                        (*sortingOrderes)[columnCounter] = true;
+                int columnCounter = 0;
+                int columnRenderX = 0;
+                for (int renderWidth:renderWidths) {
+                    if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
+                        // If switch other column, default order is from top to bottom.
+                        if (columnCounter != defaultSortingColumn) {
+                            (*sortingOrderes)[columnCounter] = true;
+                        }
+                        // If user click same column, just switch reverse order.
+                        else {
+                            (*sortingOrderes)[columnCounter] = !(*sortingOrderes)[columnCounter];
+                        }
+
+                        defaultSortingColumn = columnCounter;
+                        defaultSortingOrder = (*sortingOrderes)[columnCounter];
+
+                        sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
+
+                        repaint();
+                        break;
                     }
-                    // If user click same column, just switch reverse order.
-                    else {
-                        (*sortingOrderes)[columnCounter] = !(*sortingOrderes)[columnCounter];
+
+                    columnRenderX += renderWidth;
+                    columnCounter++;
+                }
+            }
+        } else if (mouseEvent->button() == Qt::RightButton) {
+            if (columnToggleHideFlags.count() == columnTitles.count()) {
+                QMenu *menu = new QMenu();
+
+                for (int i = 0; i < columnToggleHideFlags.count(); i++) {
+                    if (columnToggleHideFlags[i]) {
+                        QAction *action = new QAction(menu);
+
+                        action->setText(columnTitles[i]);
+                        action->setCheckable(true);
+                        action->setChecked(columnVisibles[i]);
+
+                        connect(action, &QAction::triggered, this, [this, action, i] {
+                                columnVisibles[i] = !columnVisibles[i];
+                            });
+
+                        menu->addAction(action);
+                    } else {
+                        columnVisibles[i] = true;
                     }
-
-                    defaultSortingColumn = columnCounter;
-                    defaultSortingOrder = (*sortingOrderes)[columnCounter];
-
-                    sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
-
-                    repaint();
-                    break;
                 }
 
-                columnRenderX += renderWidth;
-                columnCounter++;
+                menu->exec(this->mapToGlobal(mouseEvent->pos()));
             }
         }
     }

@@ -35,6 +35,14 @@ public:
     void setColumnTitles(QList<QString> titles, int height);
     
     /*
+     * Set column hide flags.
+     * At least have false in hide flags list, and hide flags count must same as titles list.
+     *
+     * @toggleHideFlags the hide flags to control column wether toggle show/hide.
+     */
+    void setColumnHideFlags(QList<bool> toggleHideFlags);
+    
+    /*
      * Set column widths
      * If you want some column use expand space, please set width with -1
      * Only allowed one -1 to set in width list.
@@ -174,6 +182,8 @@ private:
     QList<QString> columnTitles;
     QList<SortAlgorithm> *sortingAlgorithms;
     QList<bool> *sortingOrderes;
+    QList<bool> columnToggleHideFlags;
+    QList<bool> columnVisibles;
     QList<int> columnWidths;
     QString searchContent;
     QTimer *hideScrollbarTimer;

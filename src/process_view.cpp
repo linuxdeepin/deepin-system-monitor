@@ -16,6 +16,11 @@ ProcessView::ProcessView()
     titles << "进程名" << "CPU" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "PID";
     setColumnTitles(titles, 36);
     
+    // Set column hide flags.
+    QList<bool> toggleHideFlags;
+    toggleHideFlags << false << true << true << true << true << true << true << true;
+    setColumnHideFlags(toggleHideFlags);
+    
     // Focus keyboard when create.
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
