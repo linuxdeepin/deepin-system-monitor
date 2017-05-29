@@ -77,7 +77,7 @@ void ListView::setColumnHideFlags(QList<bool> toggleHideFlags)
     Q_ASSERT_X(toggleHideFlags.count() != columnTitles.count(), "toggleHideFlags", "hide flags length is not same as titles list.");
 
     columnToggleHideFlags = toggleHideFlags;
-    
+
     columnVisibles.clear();
     for (int i = 0; i < toggleHideFlags.count(); i++) {
         columnVisibles.append(true);
@@ -501,26 +501,29 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 int columnCounter = 0;
                 int columnRenderX = 0;
                 for (int renderWidth:renderWidths) {
-                    if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
-                        // If switch other column, default order is from top to bottom.
-                        if (columnCounter != defaultSortingColumn) {
-                            (*sortingOrderes)[columnCounter] = true;
+                    if (renderWidth > 0) {
+                        if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
+                            // If switch other column, default order is from top to bottom.
+                            if (columnCounter != defaultSortingColumn) {
+                                (*sortingOrderes)[columnCounter] = true;
+                            }
+                            // If user click same column, just switch reverse order.
+                            else {
+                                (*sortingOrderes)[columnCounter] = !(*sortingOrderes)[columnCounter];
+                            }
+
+                            defaultSortingColumn = columnCounter;
+                            defaultSortingOrder = (*sortingOrderes)[columnCounter];
+
+                            sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
+
+                            repaint();
+                            break;
                         }
-                        // If user click same column, just switch reverse order.
-                        else {
-                            (*sortingOrderes)[columnCounter] = !(*sortingOrderes)[columnCounter];
-                        }
 
-                        defaultSortingColumn = columnCounter;
-                        defaultSortingOrder = (*sortingOrderes)[columnCounter];
-
-                        sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
-
-                        repaint();
-                        break;
+                        columnRenderX += renderWidth;
                     }
-
-                    columnRenderX += renderWidth;
+                    
                     columnCounter++;
                 }
             }
@@ -538,6 +541,8 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
                         connect(action, &QAction::triggered, this, [this, action, i] {
                                 columnVisibles[i] = !columnVisibles[i];
+                                
+                                repaint();
                             });
 
                         menu->addAction(action);
@@ -683,12 +688,14 @@ void ListView::paintEvent(QPaintEvent *)
         int columnCounter = 0;
         int columnRenderX = 0;
         for (int renderWidth:renderWidths) {
-            painter.setOpacity(1);
-            setFontSize(painter, 10);
-            painter.setPen(QPen(QColor("#666666")));
-            painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, columnTitles[columnCounter]);
+            if (renderWidth > 0) {
+                painter.setOpacity(1);
+                setFontSize(painter, 10);
+                painter.setPen(QPen(QColor("#666666")));
+                painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, columnTitles[columnCounter]);
 
-            columnRenderX += renderWidth;
+                columnRenderX += renderWidth;
+            }
             columnCounter++;
         }
 
@@ -712,9 +719,11 @@ void ListView::paintEvent(QPaintEvent *)
             int columnCounter = 0;
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
-                item->drawForeground(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, rowCounter, isSelect);
+                if (renderWidth > 0) {
+                    item->drawForeground(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, rowCounter, isSelect);
 
-                columnRenderX += renderWidth;
+                    columnRenderX += renderWidth;
+                }
                 columnCounter++;
             }
 
@@ -950,22 +959,37 @@ QList<int> ListView::getRenderWidths()
 {
     QList<int> renderWidths;
     if (columnWidths.contains(-1)) {
-        for (int columnWidth:columnWidths) {
-            if (columnWidth != -1) {
-                renderWidths << columnWidth;
-            } else {
-                int totalWidthOfOtherColumns = 0;
-                for (auto w:columnWidths) {
-                    if (w != -1) {
-                        totalWidthOfOtherColumns += w;
-                    }
+        for (int i = 0; i < columnWidths.count(); i++) {
+            if (columnWidths[i] != -1) {
+                if (columnVisibles[i]) {
+                    renderWidths << columnWidths[i];
+                } else {
+                    renderWidths << 0;
                 }
-
-                renderWidths << rect().width() - totalWidthOfOtherColumns;
+            } else {
+                if (columnVisibles[i]) {
+                    int totalWidthOfOtherColumns = 0;
+                    
+                    for (int j = 0; j < columnWidths.count(); j++) {
+                        if (columnWidths[j] != -1 && columnVisibles[j]) {
+                            totalWidthOfOtherColumns += columnWidths[j];
+                        }
+                    }
+                    
+                    renderWidths << rect().width() - totalWidthOfOtherColumns;
+                } else {
+                    renderWidths << 0;
+                }
             }
         }
     } else {
-        renderWidths = columnWidths;
+        for (int i = 0; i < columnWidths.count(); i++) {
+            if (columnVisibles[i]) {
+                renderWidths << columnWidths[i];
+            } else {
+                renderWidths << 0;
+            }
+        }
     }
 
     return renderWidths;
