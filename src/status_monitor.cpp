@@ -127,9 +127,17 @@ void StatusMonitor::updateStatus()
 
             QString title = findWindowTitle->findWindowTitle(pid);
             if (title != "") {
-                displayName = title;
+                if (filterType == AllProcess) {
+                    displayName = QString("[%1] %2").arg(user).arg(title);
+                } else {
+                    displayName = title;
+                }
             } else {
-                displayName = getDisplayNameFromName(name);
+                if (filterType == AllProcess) {
+                    displayName = QString("[%1] %2").arg(user).arg(getDisplayNameFromName(name));
+                } else {
+                    displayName = getDisplayNameFromName(name);
+                }
             }
             int memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
             QPixmap icon = getProcessIconFromName(name, processIconCache);
