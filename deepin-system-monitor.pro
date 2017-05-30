@@ -9,7 +9,7 @@ INCLUDEPATH += /usr/local/include
 				
 CONFIG += link_pkgconfig
 CONFIG += c++11 
-PKGCONFIG += xcb xcb-util dtkwidget dtkbase
+PKGCONFIG += xcb xcb-util dtkwidget dtkbase dtkutil
 RESOURCES = deepin-system-monitor.qrc
 
 # Input

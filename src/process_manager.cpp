@@ -1,27 +1,30 @@
+#include <DDesktopServices>
 #include "QVBoxLayout"
 #include "list_view.h"
 #include "process_item.h"
 #include "process_manager.h"
 #include <QDebug>
+#include <QProcess>
 #include <QList>
 #include <proc/sysinfo.h>
 #include <signal.h>
 
 using namespace Utils;
+DUTIL_USE_NAMESPACE
 
 ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 {
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     QWidget *topWidget = new QWidget();
     topWidget->setFixedHeight(48);
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     processView = new ProcessView();
     layout->addWidget(topWidget);
     layout->addWidget(processView);
-    
+
     statusLabel = new QLabel("我还没有想好这里应该放什么状态，也许你可以告诉我。;)");
     onlyGuiButton = new DImageButton(
         Utils::getQrcPath("only_gui_normal.png"),
@@ -43,7 +46,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     topLayout->addWidget(onlyGuiButton);
     topLayout->addWidget(onlyMeButton);
     topLayout->addWidget(allProcessButton);
-    
+
     // Set sort algorithms.
     QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
     alorithms->append(&ProcessItem::sortByName);
@@ -56,9 +59,9 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     alorithms->append(&ProcessItem::sortByPid);
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
     processView->setSearchAlgorithm(&ProcessItem::search);
-    
+
     actionPids = new QList<int>();
-    
+
     rightMenu = new QMenu();
     killAction = new QAction("结束进程", this);
     connect(killAction, &QAction::triggered, this, &ProcessManager::killProcesses);
@@ -66,10 +69,13 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
     resumeAction = new QAction("继续进程", this);
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
+    openDirectoryAction = new QAction("打开程序所在目录", this);
+    connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
     rightMenu->addAction(resumeAction);
-    
+    rightMenu->addAction(openDirectoryAction);
+
     connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
 }
 
@@ -104,7 +110,7 @@ void ProcessManager::killProcesses()
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
         }
     }
-    
+
     actionPids->clear();
 }
 
@@ -115,7 +121,7 @@ void ProcessManager::stopProcesses()
             qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
         }
     }
-    
+
     actionPids->clear();
 }
 
@@ -126,7 +132,29 @@ void ProcessManager::resumeProcesses()
             qDebug() << QString("Resume process %1 failed, permission denied.").arg(pid);
         }
     }
-    
+
     actionPids->clear();
 }
 
+void ProcessManager::openProcessDirectory()
+{
+    for (int pid : *actionPids) {
+        QString cmdline = Utils::getProcessCmdline(pid);
+        if (cmdline.size() > 0) {
+            cmdline = cmdline.split(QRegExp("\\s")).at(0);
+
+            QProcess whichProcess;
+            QString exec = "which";
+            QStringList params;
+            params << cmdline;
+            whichProcess.start(exec, params);
+            whichProcess.waitForFinished();
+            QString output(whichProcess.readAllStandardOutput());
+            
+            QString processPath = output.split("\n")[0];
+            DDesktopServices::showFileItem(processPath);
+        }
+    }
+
+    actionPids->clear();
+}

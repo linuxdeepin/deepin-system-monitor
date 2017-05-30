@@ -32,6 +32,7 @@ public slots:
     void killProcesses();
     void stopProcesses();
     void resumeProcesses();
+    void openProcessDirectory();
     
     void handleSearch(QString searchContent);
     
@@ -41,6 +42,7 @@ private:
     QAction *killAction;
     QAction *pauseAction;
     QAction *resumeAction;
+    QAction *openDirectoryAction;
     
     QList<int> *actionPids;
     
