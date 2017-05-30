@@ -120,7 +120,6 @@ namespace Utils {
     QString getProcessName(proc_t* p);
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
     QString getProcessCmdline(pid_t pid);
-    QString getProcessStatus(proc_t* p);
     unsigned long long getTotalCpuTime();
     QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache);
     QString getDisplayNameFromName(QString procName);

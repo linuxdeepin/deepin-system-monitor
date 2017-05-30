@@ -487,32 +487,6 @@ namespace Utils {
         return (processcpuTime / cpuTimeA) * 100.0 * sysconf(_SC_NPROCESSORS_CONF);
     }
 
-
-    /**
-     * @brief getProcessStatus Get the status of a process as a long string from its proc_t
-     * @param p The proc_t structure of the process
-     * @return The long string form of the process status
-     */
-    QString getProcessStatus(proc_t* p)
-    {
-        switch(p->state) {
-        case 'S':
-            return "Sleeping";
-            break;
-
-        case 'R':
-            return "Running";
-            break;
-
-        case 'Z':
-            return "Zombie";
-            break;
-
-        default:
-            return "Unknown state: '" + QString(p->state) + "'";
-        }
-    }
-
     bool isGuiApp(QString procName)
     {
         // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.
