@@ -12,7 +12,7 @@ class ProcessItem : public ListItem
     Q_OBJECT
     
 public:
-    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser);
+    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser, char processState);
     
     bool sameAs(ListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
@@ -57,6 +57,7 @@ private:
     QString displayName;
     QString path;
     QString user;
+    char state;
 };
 
 #endif

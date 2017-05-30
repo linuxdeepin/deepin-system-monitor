@@ -6,7 +6,7 @@
 
 using namespace Utils;
 
-ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser)
+ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser, char processState)
 {
     iconPixmap = processIcon;
     name = processName;
@@ -15,6 +15,7 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
     pid = processPid;
     memory = processMemory;
     user = processUser;
+    state = processState;
 
     memoryString = convertSizeUnit(memory);
 
@@ -76,8 +77,21 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     if (column == 0) {
         setFontSize(*painter, 10);
         painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
+        
+        QString name = displayName;
+        
+        switch(state) {
+        case 'Z':
+            painter->setPen(QPen(QColor("#FF0056")));
+            name = QString("(%1) %2").arg("无响应").arg(displayName);
+            break;
+        case 'T':
+            painter->setPen(QPen(QColor("#FFA500")));
+            name = QString("(%1) %2").arg("暂停").arg(displayName);
+            break;
+        }
 
-        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, displayName);
+        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
     }
     // Draw CPU.
     else if (column == 1) {
