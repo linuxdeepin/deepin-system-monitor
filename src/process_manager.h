@@ -42,7 +42,7 @@ private:
     QAction *pauseAction;
     QAction *resumeAction;
     
-    QList<ListItem*> *actionItems;
+    QList<int> *actionPids;
     
     QLabel *statusLabel;
 };

@@ -57,7 +57,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
     processView->setSearchAlgorithm(&ProcessItem::search);
     
-    actionItems = new QList<ListItem*>();
+    actionPids = new QList<int>();
     
     rightMenu = new QMenu();
     killAction = new QAction("结束进程", this);
@@ -90,43 +90,43 @@ void ProcessManager::handleSearch(QString searchContent)
 
 void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
 {
-    actionItems->append(items);
+    for (ListItem *item : items) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        actionPids->append(processItem->getPid());
+    }
     rightMenu->exec(this->mapToGlobal(pos));
 }
 
 void ProcessManager::killProcesses()
 {
-    for (ListItem *item : *actionItems) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
-        if (kill(processItem->getPid(), SIGTERM) != 0) {
-            qDebug() << QString("Kill process %1 failed, permission denied.").arg(processItem->getPid());
+    for (int pid : *actionPids) {
+        if (kill(pid, SIGTERM) != 0) {
+            qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
         }
     }
     
-    actionItems->clear();
+    actionPids->clear();
 }
 
 void ProcessManager::stopProcesses()
 {
-    for (ListItem *item : *actionItems) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
-        if (kill(processItem->getPid(), SIGSTOP) != 0) {
-            qDebug() << QString("Stop process %1 failed, permission denied.").arg(processItem->getPid());
+    for (int pid : *actionPids) {
+        if (kill(pid, SIGSTOP) != 0) {
+            qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
         }
     }
     
-    actionItems->clear();
+    actionPids->clear();
 }
 
 void ProcessManager::resumeProcesses()
 {
-    for (ListItem *item : *actionItems) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
-        if (kill(processItem->getPid(), SIGCONT) != 0) {
-            qDebug() << QString("Resume process %1 failed, permission denied.").arg(processItem->getPid());
+    for (int pid : *actionPids) {
+        if (kill(pid, SIGCONT) != 0) {
+            qDebug() << QString("Resume process %1 failed, permission denied.").arg(pid);
         }
     }
     
-    actionItems->clear();
+    actionPids->clear();
 }
 
