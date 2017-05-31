@@ -180,5 +180,5 @@ void ProcessManager::openProcessDirectory()
 
 void ProcessManager::updateProcessNumber(int guiProcessNumber, int systemProcessNumber)
 {
-    statusLabel->setText(QString("正在运行%1个图形应用和%2个系统服务").arg(guiProcessNumber).arg(systemProcessNumber));
+    statusLabel->setText(QString("正在运行%1个应用进程和%2个系统进程").arg(guiProcessNumber).arg(systemProcessNumber));
 }
