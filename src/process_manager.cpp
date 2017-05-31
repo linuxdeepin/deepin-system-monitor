@@ -29,17 +29,17 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     onlyGuiButton = new DImageButton(
         Utils::getQrcPath("only_gui_normal.png"),
         Utils::getQrcPath("only_gui_hover.png"),
-        Utils::getQrcPath("only_gui_press.png")
+        Utils::getQrcPath("only_gui_active.png")
         );
     onlyMeButton = new DImageButton(
         Utils::getQrcPath("only_me_normal.png"),
         Utils::getQrcPath("only_me_hover.png"),
-        Utils::getQrcPath("only_me_press.png")
+        Utils::getQrcPath("only_me_active.png")
         );
     allProcessButton = new DImageButton(
         Utils::getQrcPath("all_process_normal.png"),
         Utils::getQrcPath("all_process_hover.png"),
-        Utils::getQrcPath("all_process_press.png")
+        Utils::getQrcPath("all_process_active.png")
         );
     topLayout->addWidget(statusLabel);
     topLayout->addStretch();

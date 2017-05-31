@@ -4,13 +4,13 @@
     <file>image/deepin-system-monitor.svg</file>
     <file>image/only_gui_normal.png</file>
     <file>image/only_gui_hover.png</file>
-    <file>image/only_gui_press.png</file>
+    <file>image/only_gui_active.png</file>
     <file>image/only_me_normal.png</file>
     <file>image/only_me_hover.png</file>
-    <file>image/only_me_press.png</file>
+    <file>image/only_me_active.png</file>
     <file>image/all_process_normal.png</file>
     <file>image/all_process_hover.png</file>
-    <file>image/all_process_press.png</file>
+    <file>image/all_process_active.png</file>
     <file>image/logo_96.svg</file>
   </qresource>
 </RCC>
