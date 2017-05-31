@@ -68,6 +68,13 @@ public:
      */
     void setSearchAlgorithm(SearchAlgorithm algorithm);
     
+    /*
+     * Set radius to clip listview.
+     * 
+     * @radius the radius of clip area, default is 8 pixel.
+     */
+    void setClipRadius(int radius);
+    
     /* 
      * Add ListItem list to ListView.
      * If user has click title to sort, sort items after add items to list. 
@@ -192,6 +199,7 @@ private:
     bool defaultSortingOrder;
     bool mouseAtScrollArea;
     bool mouseDragScrollbar;
+    int clipRadius;
     int defaultSortingColumn;
     int hideScrollbarDuration;
     int oldRenderOffset;
@@ -206,6 +214,7 @@ private:
     int scrollbarDefaultWidth;
     int scrollbarDragWidth;
     int scrollbarMinHeight;
+    int scrollbarPadding;
     int titleHeight;
 };
 

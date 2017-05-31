@@ -37,9 +37,11 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     scrollbarDefaultWidth = 3;
     scrollbarDragWidth = 8;
     scrollbarMinHeight = 30;
+    scrollbarPadding = 4;
     hideScrollbarDuration = 1000;
 
     oldRenderOffset = 0;
+    clipRadius = 8;
 
     hideScrollbarTimer = NULL;
 
@@ -108,6 +110,12 @@ void ListView::setSearchAlgorithm(SearchAlgorithm algorithm)
 {
     searchAlgorithm = algorithm;
 }
+
+void ListView::setClipRadius(int radius)
+{
+    clipRadius = radius;
+}
+
 
 void ListView::addItems(QList<ListItem*> items)
 {
@@ -523,7 +531,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
                         columnRenderX += renderWidth;
                     }
-                    
+
                     columnCounter++;
                 }
             }
@@ -541,7 +549,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
                         connect(action, &QAction::triggered, this, [this, action, i] {
                                 columnVisibles[i] = !columnVisibles[i];
-                                
+
                                 repaint();
                             });
 
@@ -681,7 +689,20 @@ void ListView::paintEvent(QPaintEvent *)
     // Calcuate title widths;
     QList<int> renderWidths = getRenderWidths();
 
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setOpacity(0.05);
+
+    int penWidth = 1;
+    QPainterPath clipPath;
+    clipPath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
+    painter.setClipPath(clipPath);
+
     // Draw title.
+    QPainterPath titlePath;
+    titlePath.addRect(QRectF(rect().x(), rect().y(), rect().width(), titleHeight));
+    painter.setOpacity(0.02);
+    painter.fillPath(titlePath, QColor("#ffffff"));
+
     int renderY = 0;
     int renderHeight = 0;
     if (titleHeight > 0) {
@@ -704,13 +725,17 @@ void ListView::paintEvent(QPaintEvent *)
     }
 
     // Draw context.
+    QPainterPath scrollAreaPath;
+    scrollAreaPath.addRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), getScrollAreaHeight()));
+    
     int rowCounter = 0;
     for (ListItem *item:*renderItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
             // Clip item rect.
-            painter.setClipRect(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight));
-            painter.setClipRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), getScrollAreaHeight()));
-
+            QPainterPath itemPath;
+            itemPath.addRect(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight));
+            painter.setClipPath((clipPath.intersected(scrollAreaPath)).intersected(itemPath));
+            
             // Draw item backround.
             bool isSelect = selectionItems->contains(item);
             item->drawBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
@@ -737,6 +762,8 @@ void ListView::paintEvent(QPaintEvent *)
         rowCounter++;
     }
 
+    painter.setClipPath(clipPath);
+    
     // Draw scrollbar.
     if (mouseAtScrollArea) {
         paintScrollbar(&painter);
@@ -770,7 +797,7 @@ void ListView::paintScrollbar(QPainter *painter)
 
         painter->setOpacity(barOpacitry);
         QPainterPath path;
-        path.addRoundedRect(QRectF(rect().x() + rect().width() - barWidth, barY + barRadius, barWidth, barHeight - barRadius * 2), barRadius, barRadius);
+        path.addRoundedRect(QRectF(rect().x() + rect().width() - barWidth - scrollbarPadding, barY + barRadius, barWidth, barHeight - barRadius * 2), barRadius, barRadius);
         painter->fillPath(path, QColor("#F5F5F5"));
     }
 }
@@ -969,13 +996,13 @@ QList<int> ListView::getRenderWidths()
             } else {
                 if (columnVisibles[i]) {
                     int totalWidthOfOtherColumns = 0;
-                    
+
                     for (int j = 0; j < columnWidths.count(); j++) {
                         if (columnWidths[j] != -1 && columnVisibles[j]) {
                             totalWidthOfOtherColumns += columnWidths[j];
                         }
                     }
-                    
+
                     renderWidths << rect().width() - totalWidthOfOtherColumns;
                 } else {
                     renderWidths << 0;

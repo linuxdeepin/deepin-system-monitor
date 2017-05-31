@@ -19,7 +19,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     QWidget *topWidget = new QWidget();
-    topWidget->setFixedHeight(48);
+    topWidget->setFixedHeight(32);
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     processView = new ProcessView();
     layout->addWidget(topWidget);
