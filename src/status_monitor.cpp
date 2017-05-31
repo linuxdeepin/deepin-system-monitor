@@ -5,6 +5,7 @@
 #include "process_item.h"
 #include "utils.h"
 #include <proc/sysinfo.h>
+#include "process_tree.h"
 #include <thread>
 #include <QDebug>
 
@@ -108,14 +109,18 @@ void StatusMonitor::updateStatus()
 
     int guiProcessNumber = 0;
     int systemProcessNumber = 0;
+
+    ProcessTree *processTree = new ProcessTree();
+    processTree->scanProcesses(processes);
+
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
         double cpu = (&i.second)->pcpu;
         QString name = getProcessName(&i.second);
-        
+
         bool isGui = isGuiApp(name);
-        
+
         if (isGui) {
             guiProcessNumber++;
         } else {
@@ -270,12 +275,47 @@ void StatusMonitor::updateStatus()
     // Update cpu status.
     updateCpuStatus(totalCpuPercent / cpuNumber);
 
+    // Merge chrome processes.
+    ListItem *chromeRootItem = nullptr;
+    QList<int> chromeChildPids;
+    for (ListItem *item : items) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        QString cmdline = Utils::getProcessCmdline(processItem->getPid());
+        QStringList cmdArgs = cmdline.split(QRegExp("\\s"));
+        cmdArgs.removeAll("");
+
+        if (cmdArgs.size() == 1 && cmdArgs.at(0) == "/opt/google/chrome/chrome") {
+            chromeRootItem = item;
+            chromeChildPids = processTree->getAllChildPids(processItem->getPid());
+
+            // Because chrome root process always have one whatever how manay chrome *window* or *tab* opened.
+            // So we break loop once found chrome processes.
+            break;
+        }
+    }
+
+    QList<ListItem*> mergeItems;
+    if (chromeRootItem != nullptr) {
+        ProcessItem *chromeRootProcessItem = static_cast<ProcessItem*>(chromeRootItem);
+        for (ListItem *item : items) {
+            ProcessItem *processItem = static_cast<ProcessItem*>(item);
+            if (chromeChildPids.contains(processItem->getPid())) {
+                chromeRootProcessItem->mergeItem(processItem);
+            } else if (processItem->getPid() != chromeRootProcessItem->getPid()) {
+                mergeItems.append(item);
+            }
+        }
+        mergeItems.append(chromeRootItem);
+    } else {
+        mergeItems = items;
+    }
+    
     // Update process status.
-    updateProcessStatus(items);
+    updateProcessStatus(mergeItems);
 
     // Update network status.
     updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
-    
+
     // Update process number.
     updateProcessNumber(guiProcessNumber, systemProcessNumber);
 
@@ -303,4 +343,3 @@ void StatusMonitor::switchToAllProcess()
 
     updateStatus();
 }
-

@@ -17,8 +17,6 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
     user = processUser;
     state = processState;
 
-    memoryString = convertSizeUnit(memory);
-
     iconSize = 24;
 
     padding = 10;
@@ -101,7 +99,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw memory.
     else if (column == 2) {
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, memoryString);
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, convertSizeUnit(memory));
     }
     // Draw write.
     else if (column == 3) {
@@ -324,4 +322,18 @@ bool ProcessItem::search(const ListItem *item, QString searchContent)
     return processItem->getName().contains(searchContent) || 
         processItem->getDisplayName().contains(searchContent) || 
         QString(processItem->getPid()).contains(searchContent);
+}
+
+void ProcessItem::mergeItem(ListItem *item)
+{
+    const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
+    
+    cpu += processItem->getCPU();
+    memory += processItem->getMemory();
+    diskStatus.readKbs += processItem->getDiskStatus().readKbs;
+    diskStatus.writeKbs += processItem->getDiskStatus().writeKbs;
+    networkStatus.sentBytes += processItem->getNetworkStatus().sentBytes;
+    networkStatus.recvBytes += processItem->getNetworkStatus().recvBytes;
+    networkStatus.sentKbs += processItem->getNetworkStatus().sentKbs;
+    networkStatus.recvKbs += processItem->getNetworkStatus().recvKbs;
 }

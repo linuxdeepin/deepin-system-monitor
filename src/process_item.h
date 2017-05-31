@@ -31,6 +31,8 @@ public:
     void setNetworkStatus(NetworkStatus nStatus);
     void setDiskStatus(DiskStatus dStatus);
     
+    void mergeItem(ListItem *item);
+    
     QString getName() const;
     QString getDisplayName() const;
     double getCPU() const;
@@ -52,7 +54,6 @@ private:
     
     QPixmap iconPixmap;
     
-    QString memoryString;
     QString name;
     QString displayName;
     QString path;
