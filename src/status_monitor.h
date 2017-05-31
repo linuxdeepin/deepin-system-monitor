@@ -37,6 +37,7 @@ signals:
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);
     void updateProcessStatus(QList<ListItem*> items);
+    void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
 
 public slots:
     void updateStatus();

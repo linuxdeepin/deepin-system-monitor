@@ -106,15 +106,25 @@ void StatusMonitor::updateStatus()
 
     findWindowTitle->updateWindowInfos();
 
+    int guiProcessNumber = 0;
+    int systemProcessNumber = 0;
     for(auto &i:processes) {
         QString user = (&i.second)->euser;
 
         double cpu = (&i.second)->pcpu;
         QString name = getProcessName(&i.second);
+        
+        bool isGui = isGuiApp(name);
+        
+        if (isGui) {
+            guiProcessNumber++;
+        } else {
+            systemProcessNumber++;
+        }
 
         bool appendItem = false;
         if (filterType == OnlyGUI) {
-            appendItem = (user == username && isGuiApp(name));
+            appendItem = (user == username && isGui);
         } else if (filterType == OnlyMe) {
             appendItem = (user == username);
         } else if (filterType == AllProcess) {
@@ -265,6 +275,9 @@ void StatusMonitor::updateStatus()
 
     // Update network status.
     updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
+    
+    // Update process number.
+    updateProcessNumber(guiProcessNumber, systemProcessNumber);
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;

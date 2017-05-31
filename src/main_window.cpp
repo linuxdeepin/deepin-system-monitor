@@ -21,6 +21,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         connect(processManager->allProcessButton, &DImageButton::clicked, statusMonitor, &StatusMonitor::switchToAllProcess);
 
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
+        connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
         
         connect(toolbar, &Toolbar::search, processManager, &ProcessManager::handleSearch, Qt::QueuedConnection);
 

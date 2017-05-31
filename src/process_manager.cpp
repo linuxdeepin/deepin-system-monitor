@@ -25,7 +25,8 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     layout->addWidget(topWidget);
     layout->addWidget(processView);
 
-    statusLabel = new QLabel("我还没有想好这里应该放什么状态，也许你可以告诉我。;)");
+    statusLabel = new QLabel("");
+    statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     onlyGuiButton = new DImageButton(
         Utils::getQrcPath("only_gui_normal.png"),
         Utils::getQrcPath("only_gui_hover.png"),
@@ -175,4 +176,9 @@ void ProcessManager::openProcessDirectory()
     }
 
     actionPids->clear();
+}
+
+void ProcessManager::updateProcessNumber(int guiProcessNumber, int systemProcessNumber)
+{
+    statusLabel->setText(QString("正在运行%1个图形应用和%2个系统服务").arg(guiProcessNumber).arg(systemProcessNumber));
 }

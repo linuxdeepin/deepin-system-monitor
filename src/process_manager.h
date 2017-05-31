@@ -41,6 +41,8 @@ public slots:
     
     void dialogButtonClicked(int index, QString buttonText);
     
+    void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
+    
 private:
     ProcessView *processView;
     QMenu *rightMenu;
