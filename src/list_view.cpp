@@ -716,6 +716,13 @@ void ListView::paintEvent(QPaintEvent *)
                 painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, columnTitles[columnCounter]);
 
                 columnRenderX += renderWidth;
+
+                if (columnCounter < renderWidths.size() - 1) {
+                    painter.setOpacity(0.03);
+                    QPainterPath separatorPath;
+                    separatorPath.addRect(QRectF(rect().x() + columnRenderX - 1, rect().y() + 4, 1, titleHeight - 8));
+                    painter.fillPath(separatorPath, QColor("#ffffff"));
+                }
             }
             columnCounter++;
         }
@@ -727,7 +734,7 @@ void ListView::paintEvent(QPaintEvent *)
     // Draw context.
     QPainterPath scrollAreaPath;
     scrollAreaPath.addRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), getScrollAreaHeight()));
-    
+
     int rowCounter = 0;
     for (ListItem *item:*renderItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
@@ -735,7 +742,7 @@ void ListView::paintEvent(QPaintEvent *)
             QPainterPath itemPath;
             itemPath.addRect(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight));
             painter.setClipPath((clipPath.intersected(scrollAreaPath)).intersected(itemPath));
-            
+
             // Draw item backround.
             bool isSelect = selectionItems->contains(item);
             item->drawBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
@@ -764,14 +771,14 @@ void ListView::paintEvent(QPaintEvent *)
 
     // Keep clip area.
     painter.setClipPath(clipPath);
-    
+
     // Draw search tooltip.
     if (searchContent != "" && renderItems->size() == 0) {
         painter.setPen(QPen(QColor("#666666")));
         setFontSize(painter, 20);
         painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, "无搜索结果");
     }
-    
+
     // Draw scrollbar.
     if (mouseAtScrollArea) {
         paintScrollbar(&painter);
