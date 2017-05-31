@@ -29,6 +29,9 @@ HEADERS += src/utils.h \
            src/find_window_title.h \
            src/window_manager.h \
 		   src/smooth_curve_generator.h \
+		   src/interactive_kill.h \
+		   src/start_tooltip.h \
+		   src/event_monitor.h \
 		   src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
@@ -46,6 +49,9 @@ SOURCES += src/main.cpp \
 		   src/find_window_title.cpp \
 		   src/window_manager.cpp \
 		   src/smooth_curve_generator.cpp \
+		   src/interactive_kill.cpp \
+		   src/start_tooltip.cpp \
+		   src/event_monitor.cpp \
 		   src/main_window.cpp
 		   
 QT += core

@@ -43,6 +43,8 @@
 #include <string>
 #include <time.h>
 #include <unordered_set>
+#include <X11/extensions/shape.h>
+#include <QtX11Extras/QX11Info>
 
 namespace Utils {
     QString getImagePath(QString imageName)
@@ -623,3 +625,64 @@ namespace Utils {
         return pixmap;
     }
 }
+
+void Utils::passInputEvent(int wid)
+{
+    XRectangle* reponseArea = new XRectangle;
+    reponseArea->x = 0;
+    reponseArea->y = 0;
+    reponseArea->width = 0;
+    reponseArea->height = 0;
+
+    XShapeCombineRectangles(QX11Info::display(), wid, ShapeInput, 0, 0, reponseArea ,1 ,ShapeSet, YXBanded);
+
+    delete reponseArea;
+}
+
+void Utils::drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity)
+{
+    painter.setOpacity(opacity);
+    QPainterPath path;
+    path.addRoundedRect(QRectF(rect), RECTANGLE_RADIUS, RECTANGLE_RADIUS);
+    painter.fillPath(path, QColor("#F5F5F5"));
+
+    QPen pen(QColor("#000000"));
+    painter.setOpacity(0.04);
+    pen.setWidth(1);
+    painter.setPen(pen);
+    painter.drawPath(path);
+}    
+
+void Utils::drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect)
+{
+    Utils::setFontSize(painter, textSize);
+    painter.setOpacity(1);
+    painter.setPen(QPen(QColor(textColor)));
+    painter.drawText(rect, Qt::AlignCenter, text);
+}    
+
+void Utils::blurRect(WindowManager *windowManager, int widgetId, QRectF rect)
+{
+    QVector<uint32_t> data;
+    
+    data << rect.x() << rect.y() << rect.width() << rect.height() << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
+    windowManager->setWindowBlur(widgetId, data);
+}    
+
+void Utils::blurRects(WindowManager *windowManager, int widgetId, QList<QRectF> rects)
+{
+    QVector<uint32_t> data;
+    foreach (auto rect, rects) {
+        data << rect.x() << rect.y() << rect.width() << rect.height() << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
+    }
+    windowManager->setWindowBlur(widgetId, data);
+}    
+
+void Utils::clearBlur(WindowManager *windowManager, int widgetId)
+{
+    QVector<uint32_t> data;
+    data << 0 << 0 << 0 << 0 << 0 << 0;
+    windowManager->setWindowBlur(widgetId, data);
+}
+
+

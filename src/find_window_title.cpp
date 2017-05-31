@@ -42,19 +42,7 @@ void FindWindowTitle::updateWindowInfos()
     }
 }
 
-int FindWindowTitle::getWindowPid(xcb_window_t window)
-{
-    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_PID", XCB_ATOM_CARDINAL);
-    int pid = 0;
 
-    if (reply) {
-        pid = *((int *) xcb_get_property_value(reply));
-
-        free(reply);
-    }
-
-    return pid;
-}
 
 QString FindWindowTitle::findWindowTitle(int pid)
 {

@@ -15,7 +15,6 @@ public:
     
     void updateWindowInfos();
     QString findWindowTitle(int pid);
-    int getWindowPid(xcb_window_t window);
     
 private:
     QMap<int, QString> *windowTitles;

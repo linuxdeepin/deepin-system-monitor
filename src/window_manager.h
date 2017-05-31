@@ -59,6 +59,7 @@ public:
     void setWindowBlur(int wid, QVector<uint32_t> &data);
     void translateCoords(xcb_window_t window, int32_t& x, int32_t& y);
     WindowRect adjustRectInScreenArea(WindowRect rect);
+    int getWindowPid(xcb_window_t window);
 
     xcb_window_t rootWindow;
     

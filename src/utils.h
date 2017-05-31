@@ -29,6 +29,11 @@
 #include <QPainter>
 #include <QString>
 #include <proc/readproc.h>
+#include "window_manager.h"
+
+const int RECTANGLE_PADDING = 24;
+const int RECTANGLE_RADIUS = 8;
+const int RECTANGLE_FONT_SIZE = 11;
 
 namespace Utils {
     typedef struct DiskStatus {
@@ -124,6 +129,12 @@ namespace Utils {
     QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache);
     QString getDisplayNameFromName(QString procName);
     bool isGuiApp(QString procName);
+    void passInputEvent(int wid);
+    void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
+    void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
+    void blurRect(WindowManager *windowManager, int widgetId, QRectF rect);
+    void blurRects(WindowManager *windowManager, int widgetId, QList<QRectF> rects);
+    void clearBlur(WindowManager *windowManager, int widgetId);
 }
 
 
