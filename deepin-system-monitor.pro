@@ -27,6 +27,7 @@ HEADERS += src/utils.h \
            src/process_view.h \
 		   src/hashqstring.h \
            src/find_window_title.h \
+           src/window_manager.h \
 		   src/smooth_curve_generator.h \
 		   src/main_window.h
 SOURCES += src/main.cpp \
@@ -43,6 +44,7 @@ SOURCES += src/main.cpp \
            src/process_item.cpp \
            src/process_view.cpp \
 		   src/find_window_title.cpp \
+		   src/window_manager.cpp \
 		   src/smooth_curve_generator.cpp \
 		   src/main_window.cpp
 		   
