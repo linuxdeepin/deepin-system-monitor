@@ -60,11 +60,17 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
     processView->setSearchAlgorithm(&ProcessItem::search);
 
+    killProcessDialog = new DDialog(QString("结束进程"), QString("结束进程会有丢失数据的风险\n您确定要结束选中的进程吗？"));
+    killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
+    killProcessDialog->addButton(QString("取消"), false, DDialog::ButtonNormal);
+    killProcessDialog->addButton(QString("结束进程"), true, DDialog::ButtonNormal);
+    connect(killProcessDialog, &DDialog::buttonClicked, this, &ProcessManager::dialogButtonClicked);
+    
     actionPids = new QList<int>();
 
     rightMenu = new QMenu();
     killAction = new QAction("结束进程", this);
-    connect(killAction, &QAction::triggered, this, &ProcessManager::killProcesses);
+    connect(killAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
     pauseAction = new QAction("暂停进程", this);
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
     resumeAction = new QAction("继续进程", this);
@@ -101,6 +107,18 @@ void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
         actionPids->append(processItem->getPid());
     }
     rightMenu->exec(this->mapToGlobal(pos));
+}
+
+void ProcessManager::showKillProcessDialog()
+{
+    killProcessDialog->show();
+}
+
+void ProcessManager::dialogButtonClicked(int index, QString)
+{
+    if (index == 1) {
+        killProcesses();
+    }
 }
 
 void ProcessManager::killProcesses()
@@ -150,7 +168,7 @@ void ProcessManager::openProcessDirectory()
             whichProcess.start(exec, params);
             whichProcess.waitForFinished();
             QString output(whichProcess.readAllStandardOutput());
-            
+
             QString processPath = output.split("\n")[0];
             DDesktopServices::showFileItem(processPath);
         }

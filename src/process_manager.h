@@ -1,6 +1,7 @@
 #ifndef PROCESSMANAGER_H
 #define PROCESSMANAGER_H
 
+#include "ddialog.h"
 #include "process_view.h"
 #include <QMap>
 #include <QLabel>
@@ -36,6 +37,10 @@ public slots:
     
     void handleSearch(QString searchContent);
     
+    void showKillProcessDialog();
+    
+    void dialogButtonClicked(int index, QString buttonText);
+    
 private:
     ProcessView *processView;
     QMenu *rightMenu;
@@ -47,6 +52,8 @@ private:
     QList<int> *actionPids;
     
     QLabel *statusLabel;
+    
+    DDialog *killProcessDialog;
 };
 
 #endif
