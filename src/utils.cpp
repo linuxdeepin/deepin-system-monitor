@@ -496,7 +496,7 @@ namespace Utils {
         std::string desktopFile;
         while(dir.hasNext()) {
             if (dir.fileInfo().suffix() == "desktop") {
-                if (dir.fileName().toLower().contains(procName.toLower())) {
+                if ((!GUI_BLACKLIST.contains(procName.toLower())) && dir.fileName().toLower().contains(procName.toLower())) {
                     desktopFile = dir.filePath().toStdString();
                     break;
                 }
@@ -509,12 +509,16 @@ namespace Utils {
     
     QString getDisplayNameFromName(QString procName)
     {
+        if (procName.toLower() == "deepin-wm") {
+            return "深度窗口管理器";
+        }
+        
         // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.
         QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
         std::string desktopFile;
         while(dir.hasNext()) {
             if (dir.fileInfo().suffix() == "desktop") {
-                if (dir.fileName().toLower().contains(procName.toLower())) {
+                if ((!GUI_BLACKLIST.contains(procName.toLower())) && dir.fileName().toLower().contains(procName.toLower())) {
                     desktopFile = dir.filePath().toStdString();
                     break;
                 }
@@ -558,7 +562,7 @@ namespace Utils {
             }
         }
         in.close();
-
+        
         return displayName;
     }
 
