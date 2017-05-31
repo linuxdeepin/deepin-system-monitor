@@ -1,0 +1,4 @@
+#!/bin/sh
+setcap cap_kill,cap_net_raw,cap_dac_read_search+ep /usr/bin/deepin-system-monitor
+
+exit 0
