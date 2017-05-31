@@ -1,0 +1,12 @@
+Source: deepin-system-monitor
+Section: utils
+Priority: optional
+Maintainer: Deepin Packages Builder <packages@deepin.com>
+Build-Depends: debhelper (>= 9), qt5-qmake, qt5-default, qtbase5-dev, pkg-config, libdtkbase-dev, libdtkutil-dev, libdtkwidget-dev, libxcb-util0-dev, libxcb1-dev, libqt5widgets5, libqt5x11extras5-dev, libqt5dbus5, libqt5gui5, libqt5network5, libprocps-dev, libxext-dev, libxtst-dev, nethogs
+Standards-Version: 3.9.8
+Homepage: https://github.com/manateelazycat/deepin-system-monitor
+
+Package: deepin-system-monitor
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin
+Description: Deepin system monitor: a more user-friendly system monitor.

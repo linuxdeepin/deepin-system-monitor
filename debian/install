@@ -1,0 +1,3 @@
+deepin-system-monitor   /usr/bin/
+image/deepin-system-monitor.svg /usr/share/icons/hicolor/scalable/apps/
+debian/deepin-system-monitor.desktop  /usr/share/applications/
