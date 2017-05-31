@@ -762,7 +762,15 @@ void ListView::paintEvent(QPaintEvent *)
         rowCounter++;
     }
 
+    // Keep clip area.
     painter.setClipPath(clipPath);
+    
+    // Draw search tooltip.
+    if (searchContent != "" && renderItems->size() == 0) {
+        painter.setPen(QPen(QColor("#666666")));
+        setFontSize(painter, 20);
+        painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, "无搜索结果");
+    }
     
     // Draw scrollbar.
     if (mouseAtScrollArea) {
