@@ -30,6 +30,11 @@ protected:
     
     int memoryPercentRenderSize = 13;
     
+    int iconRenderOffsetX = -5;
+    int iconRenderOffsetY = 10;
+    
+    int titleRenderOffsetX = 30;
+    
     int titleRenderSize = 20;
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
@@ -63,6 +68,8 @@ protected:
     QTimer *timer;
     int animationIndex = 0;
     double animationFrames = 20;
+    
+    QImage iconImage;
 };
 
 #endif    

@@ -35,12 +35,18 @@ private:
     int ringRadius = 90;
     int ringWidth = 8;
     
-    int titleRenderOffsetY = 150;
+    int iconRenderOffsetX = 98;
+    int iconRenderOffsetY = 155;
+    
+    int titleRenderOffsetX = 11;
+    int titleRenderOffsetY = 153;
     int percentRenderOffsetY = 180;
     
     int animationIndex = 0;
     double animationFrames = 20;
     int cpuRenderMaxHeight = 45;
+    
+    QImage iconImage;
 };
 
 #endif    

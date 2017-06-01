@@ -15,6 +15,8 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     usedSwap = 0;
     totalSwap = 0;
     
+    iconImage = QImage(Utils::getQrcPath("icon_memory.png"));
+    
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start();
@@ -64,10 +66,13 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         swapPercent = (prevUsedSwap + easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) * 1.0 / totalSwap;
     }
 
+    // Draw icon.
+    painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
+    
     // Draw title.
     setFontSize(painter, titleRenderSize);
     painter.setPen(QPen(QColor("#aaaaaa")));
-    painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "内存");
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "内存");
 
     // Draw memory summary.
     painter.setPen(QPen(QColor(memoryColor)));

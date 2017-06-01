@@ -11,6 +11,8 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(280, 250);
 
+    iconImage = QImage(Utils::getQrcPath("icon_cpu.png"));
+    
     cpuPercents = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
         cpuPercents->append(0);
@@ -29,10 +31,12 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, 22);
     painter.setPen(QPen(QColor("#aaaaaa")));
 
-    painter.drawText(QRect(rect().x(),
+    painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
+    
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX,
                            rect().y() + titleRenderOffsetY,
                            rect().width(),
-                           30
+                           24
                          ), Qt::AlignCenter, "CPU");
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) + easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
@@ -51,8 +55,8 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         rect().y() + ringRenderOffsetY,
         ringRadius,
         ringWidth,
-        300,
-        150,
+        280,
+        140,
         "#8442FB",
         0.2,
         percent / 100

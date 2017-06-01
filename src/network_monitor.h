@@ -22,6 +22,12 @@ private:
     float totalSentKbs;
     float totalRecvKbs;
     
+    int iconRenderOffsetX = -5;
+    int iconRenderOffsetY = 10;
+    
+    int titleRenderOffsetX = 30;
+    
+    int titleRenderSize = 20;
     
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
@@ -50,6 +56,8 @@ private:
     int uploadRenderMaxHeight = 20;
     int uploadWaveformsRenderOffsetX = 0;
     int uploadWaveformsRenderOffsetY = -5;
+
+    QImage iconImage;
 };
 
 #endif    

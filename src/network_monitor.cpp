@@ -11,6 +11,8 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedHeight(180);
     
+    iconImage = QImage(Utils::getQrcPath("icon_network.png"));
+    
     downloadSpeeds = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
         downloadSpeeds->append(0);
@@ -30,7 +32,13 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, 20);
     painter.setPen(QPen(QColor("#aaaaaa")));
     
-    painter.drawText(QRect(rect()), Qt::AlignLeft | Qt::AlignTop, "网络");
+    // Draw icon.
+    painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
+    
+    // Draw title.
+    setFontSize(painter, titleRenderSize);
+    painter.setPen(QPen(QColor("#aaaaaa")));
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "网络");
     
     // Draw network summary.
     painter.setPen(QPen(QColor(downloadColor)));

@@ -14,5 +14,8 @@
     <file>image/logo_24.svg</file>
     <file>image/kill.png</file>
     <file>image/kill_cursor.png</file>
+    <file>image/icon_cpu.png</file>
+    <file>image/icon_network.png</file>
+    <file>image/icon_memory.png</file>
   </qresource>
 </RCC>
