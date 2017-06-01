@@ -33,7 +33,7 @@ private:
     int waveformsRenderOffsetY = 110;
     int ringRenderOffsetY = 100;
     int ringRadius = 90;
-    int ringWidth = 9;
+    int ringWidth = 8;
     
     int titleRenderOffsetY = 150;
     int percentRenderOffsetY = 180;

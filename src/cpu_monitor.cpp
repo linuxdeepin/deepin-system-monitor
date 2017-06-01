@@ -61,7 +61,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor("#8442FB"), 1.2));
+    painter.setPen(QPen(QColor("#8442FB"), 2));
     painter.drawPath(cpuPath);
 }
 
