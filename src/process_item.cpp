@@ -19,7 +19,7 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
 
     iconSize = 24;
 
-    padding = 10;
+    padding = 14;
 
     networkStatus.sentBytes = 0;
     networkStatus.recvBytes = 0;
