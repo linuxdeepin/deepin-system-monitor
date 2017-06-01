@@ -39,6 +39,11 @@ InteractiveKill::~InteractiveKill()
 
 void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 {
+    if (startTooltip != NULL) {
+        delete startTooltip;
+        startTooltip = NULL;
+    }
+    
     QList<xcb_window_t> windows = windowManager->getWindows();
 
     for (int i = 0; i < windowRects.length(); i++) {
@@ -57,12 +62,7 @@ void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 
 void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    if (startTooltip != NULL) {
-        delete startTooltip;
-        startTooltip = NULL;
-        
-        QApplication::setOverrideCursor(Qt::BlankCursor);
-    }
+    QApplication::setOverrideCursor(Qt::BlankCursor);
     
     cursorX = mouseEvent->x();
     cursorY = mouseEvent->y();
