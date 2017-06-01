@@ -118,7 +118,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         270,
         270,
         memoryColor,
-        0.2,
+        0.1,
         memoryPercent
         );
     
@@ -132,7 +132,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         270,
         270,
         swapColor,
-        0.2,
+        0.1,
         swapPercent
         );
     

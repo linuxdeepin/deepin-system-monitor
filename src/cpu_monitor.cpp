@@ -58,7 +58,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         280,
         140,
         "#8442FB",
-        0.2,
+        0.1,
         percent / 100
         );
 
