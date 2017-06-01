@@ -36,7 +36,7 @@ const int RECTANGLE_RADIUS = 8;
 const int RECTANGLE_FONT_SIZE = 11;
 
 const QList<QString> GUI_BLACKLIST = {
-    "sh", "fcitx"
+    "sh", "fcitx", "ssh", "python2", "pulseaudio"
 };
 
 namespace Utils {
