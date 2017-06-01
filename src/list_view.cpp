@@ -731,6 +731,12 @@ void ListView::paintEvent(QPaintEvent *)
         renderHeight += titleHeight;
     }
 
+    // Draw background.
+    painter.setOpacity(0.03);
+    QPainterPath backgroundPath;
+    backgroundPath.addRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight));
+    painter.fillPath(backgroundPath, QColor("#ffffff"));
+
     // Draw context.
     QPainterPath scrollAreaPath;
     scrollAreaPath.addRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), getScrollAreaHeight()));
@@ -774,6 +780,7 @@ void ListView::paintEvent(QPaintEvent *)
 
     // Draw search tooltip.
     if (searchContent != "" && renderItems->size() == 0) {
+        painter.setOpacity(1);
         painter.setPen(QPen(QColor("#666666")));
         setFontSize(painter, 20);
         painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, "无搜索结果");
