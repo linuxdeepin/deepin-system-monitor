@@ -33,6 +33,7 @@ HEADERS += src/utils.h \
 		   src/start_tooltip.h \
 		   src/event_monitor.h \
 		   src/process_tree.h \
+		   src/process_switch_tab.h \
 		   src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
@@ -54,6 +55,7 @@ SOURCES += src/main.cpp \
 		   src/start_tooltip.cpp \
 		   src/event_monitor.cpp \
 		   src/process_tree.cpp \
+		   src/process_switch_tab.cpp \
 		   src/main_window.cpp
 		   
 QT += core

@@ -30,10 +30,8 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         processManager = new ProcessManager();
         statusMonitor = new StatusMonitor();
 
-        connect(processManager->onlyGuiButton, &DImageButton::clicked, statusMonitor, &StatusMonitor::switchToOnlyGui);
-        connect(processManager->onlyMeButton, &DImageButton::clicked, statusMonitor, &StatusMonitor::switchToOnlyMe);
-        connect(processManager->allProcessButton, &DImageButton::clicked, statusMonitor, &StatusMonitor::switchToAllProcess);
-
+        connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
+        
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
         connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
 
@@ -100,5 +98,16 @@ void MainWindow::dialogButtonClicked(int index, QString)
 
             killPid = -1;
         }
+    }
+}
+
+void MainWindow::switchTab(int index) 
+{
+    if (index == 0) {
+        statusMonitor->switchToOnlyGui();
+    } else if (index == 1) {
+        statusMonitor->switchToOnlyMe();
+    } else {
+        statusMonitor->switchToAllProcess();
     }
 }

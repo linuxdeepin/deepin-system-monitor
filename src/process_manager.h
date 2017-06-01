@@ -10,7 +10,7 @@
 #include <QWidget>
 #include <proc/readproc.h>
 #include <QMenu>
-#include "dimagebutton.h"
+#include "process_switch_tab.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -21,11 +21,10 @@ class ProcessManager : public QWidget
 public:
     ProcessManager(QWidget *parent = 0);
     ~ProcessManager();
+                     
+signals:
+    void activeTab(int index);
     
-    DImageButton *onlyGuiButton;
-    DImageButton *onlyMeButton;
-    DImageButton *allProcessButton;
-                                  
 public slots:
     void updateStatus(QList<ListItem*> items);
     void popupMenu(QPoint pos, QList<ListItem*> items);
@@ -56,6 +55,8 @@ private:
     QLabel *statusLabel;
     
     DDialog *killProcessDialog;
+    
+    ProcessSwitchTab *processSwitchTab;
 };
 
 #endif

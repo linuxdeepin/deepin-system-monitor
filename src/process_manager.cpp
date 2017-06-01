@@ -28,26 +28,14 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 
     statusLabel = new QLabel("");
     statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
-    onlyGuiButton = new DImageButton(
-        Utils::getQrcPath("only_gui_normal.png"),
-        Utils::getQrcPath("only_gui_hover.png"),
-        Utils::getQrcPath("only_gui_active.png")
-        );
-    onlyMeButton = new DImageButton(
-        Utils::getQrcPath("only_me_normal.png"),
-        Utils::getQrcPath("only_me_hover.png"),
-        Utils::getQrcPath("only_me_active.png")
-        );
-    allProcessButton = new DImageButton(
-        Utils::getQrcPath("all_process_normal.png"),
-        Utils::getQrcPath("all_process_hover.png"),
-        Utils::getQrcPath("all_process_active.png")
-        );
-    topLayout->addWidget(statusLabel);
+    
+    processSwitchTab = new ProcessSwitchTab();
+    
+    connect(processSwitchTab, &ProcessSwitchTab::activeTab, this, &ProcessManager::activeTab);
+    
+    topLayout->addWidget(statusLabel, 0, Qt::AlignVCenter);
     topLayout->addStretch();
-    topLayout->addWidget(onlyGuiButton);
-    topLayout->addWidget(onlyMeButton);
-    topLayout->addWidget(allProcessButton);
+    topLayout->addWidget(processSwitchTab, 0, Qt::AlignVCenter);
 
     // Set sort algorithms.
     QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();

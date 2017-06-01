@@ -29,6 +29,8 @@ public slots:
     void popupKillConfirmDialog(int pid);
     void dialogButtonClicked(int index, QString);
     
+    void switchTab(int index);
+    
 private:
     ProcessManager *processManager;
     QHBoxLayout *layout;
