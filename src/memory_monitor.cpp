@@ -10,6 +10,8 @@ using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
+    setFixedWidth(280);
+    
     usedMemory = 0;
     totalMemory = 0;
     usedSwap = 0;

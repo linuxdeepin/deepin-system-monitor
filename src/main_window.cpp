@@ -1,5 +1,7 @@
 #include <DTitlebar>
 #include <QStyleFactory>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QDebug>
 #include <signal.h>
 
@@ -9,6 +11,8 @@ using namespace std;
 
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
+    installEventFilter(this);   // add event filter
+
     if (this->titlebar()) {
         toolbar = new Toolbar();
 
@@ -31,7 +35,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         statusMonitor = new StatusMonitor();
 
         connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
-        
+
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
         connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
 
@@ -58,13 +62,32 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    
+
     QPainterPath path;
     path.addRect(QRectF(rect()));
     painter.setOpacity(1);
     painter.fillPath(path, QColor("#0E0E0E"));
 }
-    
+
+bool MainWindow::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange) {
+        QRect rect = QApplication::desktop()->screenGeometry();
+        
+        // Just change status monitor width when screen width is more than 1024.
+        if (rect.width() > 1024) {
+            if (windowState() == Qt::WindowMaximized) {
+                statusMonitor->setFixedWidth(rect.width() * 0.2);
+            } else {
+                statusMonitor->setFixedWidth(300);
+            }
+        }
+        
+    }
+
+    return false;
+}
+
 void MainWindow::showWindowKiller()
 {
     killer = new InteractiveKill();
@@ -84,7 +107,7 @@ void MainWindow::responseEsc()
 void MainWindow::popupKillConfirmDialog(int pid)
 {
     killPid = pid;
-    
+
     killProcessDialog->show();
 }
 
@@ -101,7 +124,7 @@ void MainWindow::dialogButtonClicked(int index, QString)
     }
 }
 
-void MainWindow::switchTab(int index) 
+void MainWindow::switchTab(int index)
 {
     if (index == 0) {
         statusMonitor->switchToOnlyGui();

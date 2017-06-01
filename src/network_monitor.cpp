@@ -9,6 +9,7 @@ using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
+    setFixedWidth(280);
     setFixedHeight(180);
     
     iconImage = QImage(Utils::getQrcPath("icon_network.png"));

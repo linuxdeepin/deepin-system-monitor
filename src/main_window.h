@@ -22,6 +22,7 @@ public:
     MainWindow(DMainWindow *parent = 0);
                                        
     void paintEvent(QPaintEvent *);
+    bool eventFilter(QObject *, QEvent *);
     
 public slots:
     void showWindowKiller();

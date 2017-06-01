@@ -23,10 +23,10 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     memoryMonitor = new MemoryMonitor();
     networkMonitor = new NetworkMonitor();
 
-    layout->addWidget(cpuMonitor);
-    layout->addWidget(memoryMonitor);
-    layout->addWidget(networkMonitor);
-
+    layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
+    layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
+    layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
+    
     totalSentBytes = 0;
     totalRecvBytes = 0;
     totalSentKbs = 0;
