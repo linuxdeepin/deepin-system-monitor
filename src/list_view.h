@@ -4,6 +4,7 @@
 #include "list_item.h"
 #include <QTimer>
 #include <QWidget>
+#include <QImage>
 
 typedef bool (* SortAlgorithm) (const ListItem *item1, const ListItem *item2, bool descendingSort);
 typedef bool (* SearchAlgorithm) (const ListItem *item, QString searchContent);
@@ -183,6 +184,8 @@ private:
     void startScrollbarHideTimer();
     
     ListItem *lastSelectItem;
+    QImage arrowDownImage;
+    QImage arrowUpImage;
     QList<ListItem*> *listItems;
     QList<ListItem*> *renderItems;
     QList<ListItem*> *selectionItems;
@@ -216,6 +219,7 @@ private:
     int scrollbarMinHeight;
     int scrollbarPadding;
     int titleHeight;
+    int titleArrowPadding;
 };
 
 #endif

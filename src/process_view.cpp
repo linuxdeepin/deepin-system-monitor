@@ -8,7 +8,7 @@ ProcessView::ProcessView()
     
     // Set column widths.
     QList<int> widths;
-    widths << -1 << 50 << 70 << 70 << 70 << 70 << 70 << 50;
+    widths << -1 << 60 << 70 << 80 << 80 << 70 << 70 << 60;
     setColumnWidths(widths);
     
     // Set column titles.

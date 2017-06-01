@@ -19,6 +19,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     scrollDistance = 0;
     renderOffset = 0;
     titleHeight = 0;
+    titleArrowPadding = 4;
 
     scrollAnimationTimer = NULL;
     scrollAnimationTicker = 0;
@@ -27,6 +28,9 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
 
     searchContent = "";
     searchAlgorithm = NULL;
+    
+    arrowUpImage = QImage(Utils::getQrcPath("listview_arrow_up.png"));
+    arrowDownImage = QImage(Utils::getQrcPath("listview_arrow_down.png"));
 
     listItems = new QList<ListItem*>();
     renderItems = new QList<ListItem*>();
@@ -724,6 +728,15 @@ void ListView::paintEvent(QPaintEvent *)
                     QPainterPath separatorPath;
                     separatorPath.addRect(QRectF(rect().x() + columnRenderX - 1, rect().y() + 4, 1, titleHeight - 8));
                     painter.fillPath(separatorPath, QColor("#ffffff"));
+                }
+                
+                if (defaultSortingColumn == columnCounter) {
+                    painter.setOpacity(1);
+                    if (defaultSortingOrder) {
+                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(), rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowUpImage);
+                    } else {
+                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(), rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
+                    }
                 }
             }
             columnCounter++;

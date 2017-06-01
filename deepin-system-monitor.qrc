@@ -17,5 +17,7 @@
     <file>image/icon_cpu.png</file>
     <file>image/icon_network.png</file>
     <file>image/icon_memory.png</file>
+    <file>image/listview_arrow_up.png</file>
+    <file>image/listview_arrow_down.png</file>
   </qresource>
 </RCC>
