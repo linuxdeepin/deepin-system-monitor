@@ -1,4 +1,5 @@
 #include <DDesktopServices>
+#include <QStyleFactory>
 #include "QVBoxLayout"
 #include "list_view.h"
 #include "process_item.h"
@@ -70,6 +71,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     actionPids = new QList<int>();
 
     rightMenu = new QMenu();
+    rightMenu->setStyle(QStyleFactory::create("dlight"));
     killAction = new QAction("结束进程", this);
     connect(killAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
     pauseAction = new QAction("暂停进程", this);

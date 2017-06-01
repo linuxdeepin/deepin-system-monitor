@@ -20,6 +20,8 @@ class MainWindow : public DMainWindow
     
 public:
     MainWindow(DMainWindow *parent = 0);
+                                       
+    void paintEvent(QPaintEvent *);
     
 public slots:
     void showWindowKiller();

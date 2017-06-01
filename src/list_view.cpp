@@ -1,6 +1,7 @@
 #include "list_view.h"
 #include "utils.h"
 #include <QApplication>
+#include <QStyleFactory>
 #include <QDebug>
 #include <QEvent>
 #include <QWheelEvent>
@@ -538,6 +539,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
         } else if (mouseEvent->button() == Qt::RightButton) {
             if (columnToggleHideFlags.count() == columnTitles.count()) {
                 QMenu *menu = new QMenu();
+                menu->setStyle(QStyleFactory::create("dlight"));
 
                 for (int i = 0; i < columnToggleHideFlags.count(); i++) {
                     if (columnToggleHideFlags[i]) {

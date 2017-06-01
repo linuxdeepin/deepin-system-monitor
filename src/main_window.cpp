@@ -1,4 +1,6 @@
 #include <DTitlebar>
+#include <QStyleFactory>
+#include <QDebug>
 #include <signal.h>
 
 #include "main_window.h"
@@ -11,6 +13,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         toolbar = new Toolbar();
 
         menu = new QMenu();
+        menu->setStyle(QStyleFactory::create("dlight"));
         killAction = new QAction("结束无响应程序", this);
         connect(killAction, &QAction::triggered, this, &MainWindow::showWindowKiller);
         menu->addAction(killAction);
@@ -54,6 +57,16 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     }
 }
 
+void MainWindow::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    
+    QPainterPath path;
+    path.addRect(QRectF(rect()));
+    painter.setOpacity(1);
+    painter.fillPath(path, QColor("#0E0E0E"));
+}
+    
 void MainWindow::showWindowKiller()
 {
     killer = new InteractiveKill();
