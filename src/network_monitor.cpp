@@ -55,9 +55,17 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                            rect().width(),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("下载速度 %1 累计下载 %2").arg(formatBandwidth(totalRecvKbs)).arg(formatByteCount(totalRecvBytes))
-        );
+                     QString("下载速度 %1").arg(formatBandwidth(totalRecvKbs)));
 
+    setFontSize(painter, downloadRenderSize);
+    painter.setPen(QPen(QColor("#666666")));
+    painter.drawText(QRect(rect().x() + downloadRenderPaddingX + textPadding,
+                           rect().y() + downloadRenderPaddingY,
+                           rect().width(),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     QString("累计下载 %1").arg(formatByteCount(totalRecvBytes)));
+    
     painter.setPen(QPen(QColor(uploadColor)));
     painter.setBrush(QBrush(QColor(uploadColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
@@ -69,7 +77,16 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                            rect().width(),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("上传速度 %1 累计上传 %2").arg(formatBandwidth(totalSentKbs)).arg(formatByteCount(totalSentBytes))
+                     QString("上传速度 %1").arg(formatBandwidth(totalSentKbs)));
+    
+    setFontSize(painter, uploadRenderSize);
+    painter.setPen(QPen(QColor("#666666")));
+    painter.drawText(QRect(rect().x() + uploadRenderPaddingX + textPadding,
+                           rect().y() + uploadRenderPaddingY,
+                           rect().width(),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     QString("累计上传 %1").arg(formatByteCount(totalSentBytes))
         );
     
     painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY);

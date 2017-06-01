@@ -70,6 +70,8 @@ protected:
     double animationFrames = 20;
     
     QImage iconImage;
+    
+    int textPadding = 60;
 };
 
 #endif    

@@ -89,7 +89,16 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                            rect().width(),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("内存(%1%) %2/%3").arg(static_cast<int>(memoryPercent * 100)).arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, "")));
+                     QString("内存(%1%)").arg(static_cast<int>(memoryPercent * 100)));
+
+    setFontSize(painter, memoryRenderSize);
+    painter.setPen(QPen(QColor("#666666")));
+    painter.drawText(QRect(rect().x() + memoryRenderPaddingX + textPadding,
+                           rect().y() + memoryRenderPaddingY,
+                           rect().width(),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     QString("%1/%2").arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, "")));
 
     // Draw swap summary.
     painter.setPen(QPen(QColor(swapColor)));
@@ -98,13 +107,23 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     setFontSize(painter, swapRenderSize);
     painter.setPen(QPen(QColor("#666666")));
+    QString swapTitleString = "交换空间";
+    painter.drawText(QRect(rect().x() + swapRenderPaddingX,
+                           rect().y() + swapRenderPaddingY,
+                           rect().width(),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     swapTitleString);
+    
+    setFontSize(painter, swapRenderSize);
+    painter.setPen(QPen(QColor("#666666")));
     QString swapString;
     if (usedSwap == 0 && totalSwap == 0) {
-        swapString = "交换空间 (未使用)";
+        swapString = "(未使用)";
     } else {
-        swapString = QString("交换空间 (%1%) %2/%3").arg(static_cast<int>(swapPercent * 100)).arg(convertSizeUnit(usedSwap, "")).arg(convertSizeUnit(totalSwap, ""));
+        swapString = QString("(%1%) %2/%3").arg(static_cast<int>(swapPercent * 100)).arg(convertSizeUnit(usedSwap, "")).arg(convertSizeUnit(totalSwap, ""));
     }
-    painter.drawText(QRect(rect().x() + swapRenderPaddingX,
+    painter.drawText(QRect(rect().x() + swapRenderPaddingX + textPadding,
                            rect().y() + swapRenderPaddingY,
                            rect().width(),
                            rect().height()),

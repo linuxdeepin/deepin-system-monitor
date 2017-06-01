@@ -58,6 +58,8 @@ private:
     int uploadWaveformsRenderOffsetY = -5;
 
     QImage iconImage;
+    
+    int textPadding = 100;
 };
 
 #endif    
