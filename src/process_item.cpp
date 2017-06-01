@@ -333,9 +333,9 @@ bool ProcessItem::sortByRead(const ListItem *item1, const ListItem *item2, bool 
 bool ProcessItem::search(const ListItem *item, QString searchContent)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
-    return processItem->getName().contains(searchContent) || 
-        processItem->getDisplayName().contains(searchContent) || 
-        QString(processItem->getPid()).contains(searchContent);
+    return processItem->getName().toLower().contains(searchContent.toLower()) || 
+        processItem->getDisplayName().toLower().contains(searchContent.toLower()) || 
+        QString(processItem->getPid()).toLower().contains(searchContent.toLower());
 }
 
 void ProcessItem::mergeItem(ListItem *item)
