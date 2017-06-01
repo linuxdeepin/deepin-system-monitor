@@ -33,7 +33,7 @@ protected:
     int iconRenderOffsetX = -5;
     int iconRenderOffsetY = 10;
     
-    int titleRenderOffsetX = 30;
+    int titleRenderOffsetX = 20;
     
     int titleRenderSize = 20;
     int pointerRenderPaddingX = 4;
