@@ -20,6 +20,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     renderOffset = 0;
     titleHeight = 0;
     titleArrowPadding = 4;
+    titlePadding = 14;
 
     scrollAnimationTimer = NULL;
     scrollAnimationTicker = 0;
@@ -719,7 +720,7 @@ void ListView::paintEvent(QPaintEvent *)
                 painter.setOpacity(1);
                 setFontSize(painter, 10);
                 painter.setPen(QPen(QColor("#666666")));
-                painter.drawText(QRect(columnRenderX, 0, renderWidth, titleHeight), Qt::AlignCenter, columnTitles[columnCounter]);
+                painter.drawText(QRect(columnRenderX + titlePadding, 0, renderWidth, titleHeight), Qt::AlignVCenter | Qt::AlignLeft, columnTitles[columnCounter]);
 
                 columnRenderX += renderWidth;
 
@@ -733,9 +734,11 @@ void ListView::paintEvent(QPaintEvent *)
                 if (defaultSortingColumn == columnCounter) {
                     painter.setOpacity(1);
                     if (defaultSortingOrder) {
-                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(), rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowUpImage);
+                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(), 
+                                                 rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowUpImage);
                     } else {
-                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(), rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
+                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(), 
+                                                 rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
                     }
                 }
             }

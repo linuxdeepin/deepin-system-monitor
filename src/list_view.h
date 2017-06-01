@@ -220,6 +220,7 @@ private:
     int scrollbarPadding;
     int titleHeight;
     int titleArrowPadding;
+    int titlePadding;
 };
 
 #endif
