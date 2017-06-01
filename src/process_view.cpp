@@ -4,7 +4,7 @@
 ProcessView::ProcessView()
 {
     // Set row height.
-    setRowHeight(40);
+    setRowHeight(36);
     
     // Set column widths.
     QList<int> widths;
