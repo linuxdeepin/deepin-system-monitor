@@ -70,8 +70,11 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
     
     // Draw title.
-    setFontSize(painter, titleRenderSize);
-    painter.setPen(QPen(QColor("#aaaaaa")));
+    QFont font = painter.font() ;
+    font.setPointSize(titleRenderSize);
+    font.setWeight(QFont::Light);
+    painter.setFont(font);
+    painter.setPen(QPen(QColor("#ffffff")));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "内存");
 
     // Draw memory summary.

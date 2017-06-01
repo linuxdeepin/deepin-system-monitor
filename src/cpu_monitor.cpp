@@ -33,6 +33,11 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
     
+    QFont font = painter.font() ;
+    font.setPointSize(22);
+    font.setWeight(QFont::Light);
+    painter.setFont(font);
+    painter.setPen(QPen(QColor("#ffffff")));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX,
                            rect().y() + titleRenderOffsetY,
                            rect().width(),
