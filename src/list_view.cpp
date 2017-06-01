@@ -502,6 +502,8 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
 
 void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 {
+    setFocus();
+    
     bool atTitleArea = isMouseAtTitleArea(mouseEvent->y());
     bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
 
