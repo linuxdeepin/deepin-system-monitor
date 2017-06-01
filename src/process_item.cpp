@@ -93,17 +93,23 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     }
     // Draw CPU.
     else if (column == 1) {
+        painter->setOpacity(0.6);
+        
         setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
+        painter->setOpacity(0.5);
+        
         setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, convertSizeUnit(memory));
     }
     // Draw write.
     else if (column == 3) {
         if (diskStatus.writeKbs > 0) {
+            painter->setOpacity(0.5);
+        
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
         }
@@ -111,6 +117,8 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw read.
     else if (column == 4) {
         if (diskStatus.readKbs > 0) {
+            painter->setOpacity(0.5);
+        
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
         }
@@ -118,6 +126,8 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw download.
     else if (column == 5) {
         if (networkStatus.recvKbs > 0) {
+            painter->setOpacity(0.5);
+        
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
         }
@@ -125,12 +135,16 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw upload.
     else if (column == 6) {
         if (networkStatus.sentKbs > 0) {
+            painter->setOpacity(0.5);
+        
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.sentKbs));
         }
     }
     // Draw pid.
     else if (column == 7) {
+        painter->setOpacity(0.5);
+        
         setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
