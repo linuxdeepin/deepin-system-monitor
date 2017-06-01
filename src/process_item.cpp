@@ -51,11 +51,11 @@ void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool 
         // Use different opacity with item index.
         if (index % 2 == 0) {
             painter->setOpacity(0.1);
+            painter->fillPath(path, QColor("#000000"));
         } else {
-            painter->setOpacity(0.2);
+            painter->setOpacity(0.02);
+            painter->fillPath(path, QColor("#D8D8D8"));
         }
-
-        painter->fillPath(path, QColor("#000000"));
     }
 }
 
