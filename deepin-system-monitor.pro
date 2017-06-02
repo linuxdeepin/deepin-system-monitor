@@ -66,6 +66,6 @@ QT += x11extras
 QT += dbus
 
 QMAKE_CXXFLAGS += -g
-LIBS += -L"libprocps" -lprocps -lstdc++fs
+LIBS += -L"libprocps" -lprocps
 LIBS += /usr/local/lib/libnethogs.so
 LIBS += -lX11 -lXext -lXtst
