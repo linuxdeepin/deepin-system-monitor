@@ -38,6 +38,7 @@ public:
     double getCPU() const;
     int getMemory() const;
     int getPid() const;
+    QString getUser() const;
     NetworkStatus getNetworkStatus() const;
     DiskStatus getDiskStatus() const;
     

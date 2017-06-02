@@ -214,6 +214,11 @@ int ProcessItem::getPid() const
     return pid;
 }
 
+QString ProcessItem::getUser() const
+{
+    return user;
+}
+
 NetworkStatus ProcessItem::getNetworkStatus() const
 {
     return networkStatus;
@@ -364,7 +369,8 @@ bool ProcessItem::search(const ListItem *item, QString searchContent)
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
     return processItem->getName().toLower().contains(searchContent.toLower()) ||
         processItem->getDisplayName().toLower().contains(searchContent.toLower()) ||
-        QString(processItem->getPid()).toLower().contains(searchContent.toLower());
+        QString(processItem->getPid()).toLower().contains(searchContent.toLower()) || 
+        processItem->getUser().toLower().contains(searchContent.toLower());
 }
 
 void ProcessItem::mergeItem(ListItem *item)
