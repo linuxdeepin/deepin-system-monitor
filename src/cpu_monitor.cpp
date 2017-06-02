@@ -95,7 +95,7 @@ void CpuMonitor::updateStatus(double cpuPercent)
         if (cpuMaxHeight < cpuRenderMaxHeight) {
             points.append(QPointF(i * 5, cpuPercents->at(i)));
         } else {
-            points.append(QPointF(i * 5, cpuPercents->at(i) * 45 / cpuMaxHeight));
+            points.append(QPointF(i * 5, cpuPercents->at(i) * cpuRenderMaxHeight / cpuMaxHeight));
         }
     }
 
