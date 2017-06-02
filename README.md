@@ -8,8 +8,6 @@ Thanks alot [Lily Rivers](https://github.com/VioletDarkKitty/system-monitor), th
 
 ## Installation
 
-* `git clone https://github.com/raboof/nethogs.git`
-* `cd ~/nethogs && make libnethogs && sudo make install_dev`
 * mkdir build
 * cd build
 * qmake ..
