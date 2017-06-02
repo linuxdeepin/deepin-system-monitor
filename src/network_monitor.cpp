@@ -44,7 +44,22 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#ffffff")));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "网络");
     
+    // Draw background grid.
+    int penSize = 1;
+    QPainterPath framePath;
+    framePath.addRect(QRect(rect().x() + penSize, 
+                            rect().y() + rect().height() - downloadRenderMaxHeight - uploadRenderMaxHeight - waveformRenderPadding - penSize, 
+                            rect().width() - penSize * 2, 
+                            downloadRenderMaxHeight + uploadRenderMaxHeight + waveformRenderPadding));
+    
+    QPen pen(QColor("#ffffff"));
+    painter.setOpacity(0.05);
+    pen.setWidth(penSize);
+    painter.setPen(pen);
+    painter.drawPath(framePath);
+    
     // Draw network summary.
+    painter.setOpacity(1);
     painter.setPen(QPen(QColor(downloadColor)));
     painter.setBrush(QBrush(QColor(downloadColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
@@ -132,7 +147,7 @@ void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, floa
         if (downloadMaxHeight < downloadRenderMaxHeight) {
             downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
         } else {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * 45 / downloadMaxHeight));
+            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
         }
     }
 
@@ -158,7 +173,7 @@ void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, floa
         if (uploadMaxHeight < uploadRenderMaxHeight) {
             uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
         } else {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * 45 / uploadMaxHeight));
+            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
         }
     }
 

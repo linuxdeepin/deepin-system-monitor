@@ -17,49 +17,39 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    uint32_t totalSentBytes;
-    uint32_t totalRecvBytes;
-    float totalSentKbs;
-    float totalRecvKbs;
-    
-    int iconRenderOffsetX = -5;
-    int iconRenderOffsetY = 10;
-    
-    int titleRenderOffsetX = 20;
-    
-    int titleRenderSize = 20;
-    
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
-    int pointerRadius = 3;
-    
+    QImage iconImage;
+    QList<double> *downloadSpeeds;
+    QList<double> *uploadSpeeds;
+    QPainterPath downloadPath;
+    QPainterPath uploadPath;
     QString downloadColor = "#E14300";
+    QString uploadColor = "#004EEF";
+    float totalRecvKbs;
+    float totalSentKbs;
+    int downloadRenderMaxHeight = 30;
     int downloadRenderPaddingX = 13;
     int downloadRenderPaddingY = 50;
     int downloadRenderSize = 9;
-    
-    QString uploadColor = "#004EEF";
+    int downloadWaveformsRenderOffsetX = 0;
+    int downloadWaveformsRenderOffsetY = 150;
+    int iconRenderOffsetX = -5;
+    int iconRenderOffsetY = 10;
+    int pointerRadius = 3;
+    int pointerRenderPaddingX = 4;
+    int pointerRenderPaddingY = 9;
+    int pointsNumber = 50;
+    int textPadding = 100;
+    int titleRenderOffsetX = 20;
+    int titleRenderSize = 20;
+    int uploadRenderMaxHeight = 20;
     int uploadRenderPaddingX = 13;
     int uploadRenderPaddingY = 70;
     int uploadRenderSize = 9;
-    
-    int pointsNumber = 50;
-    
-    QPainterPath downloadPath;
-    QList<double> *downloadSpeeds;
-    int downloadRenderMaxHeight = 30;
-    int downloadWaveformsRenderOffsetX = 0;
-    int downloadWaveformsRenderOffsetY = 150;
-
-    QPainterPath uploadPath;
-    QList<double> *uploadSpeeds;
-    int uploadRenderMaxHeight = 20;
     int uploadWaveformsRenderOffsetX = 0;
     int uploadWaveformsRenderOffsetY = -5;
-
-    QImage iconImage;
-    
-    int textPadding = 100;
+    int waveformRenderPadding = 15;
+    uint32_t totalRecvBytes;
+    uint32_t totalSentBytes;
 };
 
 #endif    
