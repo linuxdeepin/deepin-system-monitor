@@ -75,9 +75,9 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     if (column == 0) {
         setFontSize(*painter, 10);
         painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
-        
+
         QString name = displayName;
-        
+
         switch(state) {
         case 'Z':
             painter->setPen(QPen(QColor("#FF0056")));
@@ -93,23 +93,35 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     }
     // Draw CPU.
     else if (column == 1) {
-        painter->setOpacity(0.6);
-        
+        if (isSelect) {
+            painter->setOpacity(1);
+        } else {
+            painter->setOpacity(0.6);
+        }
+
         setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
-        painter->setOpacity(0.5);
-        
+        if (isSelect) {
+            painter->setOpacity(1);
+        } else {
+            painter->setOpacity(0.5);
+        }
+
         setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, convertSizeUnit(memory));
     }
     // Draw write.
     else if (column == 3) {
         if (diskStatus.writeKbs > 0) {
-            painter->setOpacity(0.5);
-        
+            if (isSelect) {
+                painter->setOpacity(1);
+            } else {
+                painter->setOpacity(0.5);
+            }
+
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
         }
@@ -117,8 +129,12 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw read.
     else if (column == 4) {
         if (diskStatus.readKbs > 0) {
-            painter->setOpacity(0.5);
-        
+            if (isSelect) {
+                painter->setOpacity(1);
+            } else {
+                painter->setOpacity(0.5);
+            }
+
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
         }
@@ -126,8 +142,12 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw download.
     else if (column == 5) {
         if (networkStatus.recvKbs > 0) {
-            painter->setOpacity(0.5);
-        
+            if (isSelect) {
+                painter->setOpacity(1);
+            } else {
+                painter->setOpacity(0.5);
+            }
+
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
         }
@@ -135,16 +155,24 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     // Draw upload.
     else if (column == 6) {
         if (networkStatus.sentKbs > 0) {
-            painter->setOpacity(0.5);
-        
+            if (isSelect) {
+                painter->setOpacity(1);
+            } else {
+                painter->setOpacity(0.5);
+            }
+
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.sentKbs));
         }
     }
     // Draw pid.
     else if (column == 7) {
-        painter->setOpacity(0.5);
-        
+        if (isSelect) {
+            painter->setOpacity(1);
+        } else {
+            painter->setOpacity(0.5);
+        }
+
         setFontSize(*painter, 9);
         painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
@@ -213,7 +241,7 @@ bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool 
     else {
         QCollator qco(QLocale::system());
         int result = qco.compare(name1, name2);
-        
+
         sortOrder = result < 0;
     }
 
@@ -333,15 +361,15 @@ bool ProcessItem::sortByRead(const ListItem *item1, const ListItem *item2, bool 
 bool ProcessItem::search(const ListItem *item, QString searchContent)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
-    return processItem->getName().toLower().contains(searchContent.toLower()) || 
-        processItem->getDisplayName().toLower().contains(searchContent.toLower()) || 
+    return processItem->getName().toLower().contains(searchContent.toLower()) ||
+        processItem->getDisplayName().toLower().contains(searchContent.toLower()) ||
         QString(processItem->getPid()).toLower().contains(searchContent.toLower());
 }
 
 void ProcessItem::mergeItem(ListItem *item)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
-    
+
     cpu += processItem->getCPU();
     memory += processItem->getMemory();
     diskStatus.readKbs += processItem->getDiskStatus().readKbs;
