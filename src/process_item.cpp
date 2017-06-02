@@ -175,7 +175,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         }
 
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }
 
