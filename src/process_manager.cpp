@@ -20,8 +20,9 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     QWidget *topWidget = new QWidget();
-    topWidget->setFixedHeight(32);
+    topWidget->setFixedHeight(24);
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
+    topLayout->setContentsMargins(2, 0, 2, 0);
     processView = new ProcessView();
     layout->addWidget(topWidget);
     layout->addWidget(processView);
@@ -33,9 +34,9 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     
     connect(processSwitchTab, &ProcessSwitchTab::activeTab, this, &ProcessManager::activeTab);
     
-    topLayout->addWidget(statusLabel, 0, Qt::AlignVCenter);
+    topLayout->addWidget(statusLabel, 0, Qt::AlignBottom);
     topLayout->addStretch();
-    topLayout->addWidget(processSwitchTab, 0, Qt::AlignVCenter);
+    topLayout->addWidget(processSwitchTab, 0, Qt::AlignBottom);
 
     // Set sort algorithms.
     QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
