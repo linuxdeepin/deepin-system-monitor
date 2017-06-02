@@ -10,11 +10,11 @@ all: $(LIBNAME) libnethogs.a
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
-  LDFLAGS:= -shared -Wl,-soname,$(SO_NAME)
+  LDFLAGS= -shared -Wl,-soname,$(SO_NAME)
 else ifeq ($(UNAME_S),FreeBSD)
-  LDFLAGS:= -shared -Wl,-soname,$(SO_NAME)
+  LDFLAGS= -shared -Wl,-soname,$(SO_NAME)
 else
-  LDFLAGS:= -shared -Wl,-install_name,$(SO_NAME)
+  LDFLAGS= -shared -Wl,-install_name,$(SO_NAME)
 endif
 
 CXXINCLUDES :=
@@ -25,13 +25,13 @@ ifeq ($(DEBUG),1)
   # Debug mode options
   $(info Building debug version)
   ODIR:=$(ODIR_BASE)/lib/debug
-  CFLAGS?=-Wall -Wextra -O0 -g -fPIC $(VISIBILITY)
-  CXXFLAGS?=-Wall -Wextra -Wno-missing-field-initializers --std=c++0x -O0 -g -fPIC $(VISIBILITY) $(CXXINCLUDES)
+  CFLAGS=-Wall -Wextra -O0 -g -fPIC $(VISIBILITY)
+  CXXFLAGS=-Wall -Wextra -Wno-missing-field-initializers --std=c++0x -O0 -g -fPIC $(VISIBILITY) $(CXXINCLUDES)
 else
   # Release mode options
   ODIR:=$(ODIR_BASE)/lib/release
-  CFLAGS?=-Wall -Wextra -O3 -fPIC $(VISIBILITY)
-  CXXFLAGS?=-Wall -Wextra -Wno-missing-field-initializers --std=c++0x -O3 -fPIC $(VISIBILITY) $(CXXINCLUDES)
+  CFLAGS=-Wall -Wextra -O3 -fPIC $(VISIBILITY)
+  CXXFLAGS=-Wall -Wextra -Wno-missing-field-initializers --std=c++0x -O3 -fPIC $(VISIBILITY) $(CXXINCLUDES)
 endif
 
 OBJ_NAMES= libnethogs.o packet.o connection.o process.o decpcap.o inode2prog.o conninode.o devices.o

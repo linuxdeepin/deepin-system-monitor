@@ -11,7 +11,9 @@ CONFIG += c++11
 PKGCONFIG += xcb xcb-util dtkwidget dtkbase dtkutil
 RESOURCES = deepin-system-monitor.qrc
 
-system(cd $$PWD/nethogs && make libnethogs && cd -)
+!system(cd $$PWD/nethogs && make libnethogs){
+	error("Build nethogs static library failed.")
+}
 
 # Input
 HEADERS += src/utils.h \
