@@ -20,6 +20,7 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
     iconSize = 24;
 
     padding = 14;
+    textPadding = 5;
 
     networkStatus.sentBytes = 0;
     networkStatus.recvBytes = 0;
@@ -100,7 +101,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         }
 
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
@@ -111,7 +112,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         }
 
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, convertSizeUnit(memory));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, convertSizeUnit(memory));
     }
     // Draw write.
     else if (column == 3) {
@@ -123,7 +124,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             }
 
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
         }
     }
     // Draw read.
@@ -136,7 +137,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             }
 
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
         }
     }
     // Draw download.
@@ -149,7 +150,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             }
 
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
         }
     }
     // Draw upload.
@@ -162,7 +163,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             }
 
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.sentKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.sentKbs));
         }
     }
     // Draw pid.
@@ -174,7 +175,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         }
 
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }
 

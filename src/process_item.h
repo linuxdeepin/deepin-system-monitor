@@ -48,6 +48,7 @@ private:
     int pid;
     
     int padding;
+    int textPadding;
     
     NetworkStatus networkStatus;
     DiskStatus diskStatus;
