@@ -1,0 +1,79 @@
+.\" This page Copyright (C) 2004 Fabian Frederick <fabian.frederick@gmx.fr>
+.\" Content based on Nethogs homepage by Arnout Engelen
+.TH NETHOGS 8 "14 February 2004"
+.SH NAME
+nethogs \- Net top tool grouping bandwidth per process
+.SH SYNOPSIS
+.ft B
+.B nethogs
+.RB [ "\-h" ]
+.RB [ "\-V" ] 
+.RB [ "\-d" ]
+.RB [ "\-v" ]
+.RB [ "\-t" ]
+.RB [ "\-c" ]
+.RB [ "\-p" ]
+.RB [ "\-a" ]
+.RB [ "\-s" ]
+.RB [ "\-l" ]
+.RI [device(s)]
+.SH DESCRIPTION
+NetHogs is a small 'net top' tool. Instead of breaking the traffic down per protocol or per subnet, like most such tools do, it groups bandwidth by process - and does not rely on a special kernel module to be loaded. So if there's suddenly a lot of network traffic, you can fire up NetHogs and immediately see which PID is causing this, and if it's some kind of spinning process, kill it. 
+
+.SS Options
+.TP
+\fB-h\fP
+display available commands usage
+.TP
+\fB-V\fP
+print version info
+.TP
+\fB-d\fP
+delay for refresh rate
+.TP
+\fB-v\fP
+select view mode
+.TP
+\fB-p\fP
+sniff in promiscious mode (not recommended)
+.TP
+\fB-a\fP
+monitor all devices, even loopback/stopped ones
+.TP
+\fB-t\fP
+tracemode
+.TP
+\fB-c\fP
+limit number of refreshes
+.TP
+\fB-s\fP
+sort by traffic sent
+.TP
+\fB-l\fP
+display command line
+.PP
+.I device(s)
+to monitor. By default eth0 is being used
+
+.SH "INTERACTIVE CONTROL"
+.TP
+m
+cycle between display modes (KB/s, KB, B, MB)
+.TP
+l
+display command line
+.TP
+r
+sort by 'received'
+.TP
+s
+sort by 'sent'
+.TP
+q
+quit
+.RE
+.SH "SEE ALSO"
+.I netstat(8) tcpdump(1) pcap(3)
+.SH AUTHOR
+.nf
+Written by Arnout Engelen <arnouten@bzzt.net>.

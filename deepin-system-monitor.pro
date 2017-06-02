@@ -4,13 +4,14 @@
 
 TEMPLATE = app
 TARGET = deepin-system-monitor
-INCLUDEPATH += .
-INCLUDEPATH += /usr/local/include
+INCLUDEPATH += $$PWD/nethogs/src/
 				
 CONFIG += link_pkgconfig
 CONFIG += c++11 
 PKGCONFIG += xcb xcb-util dtkwidget dtkbase dtkutil
 RESOURCES = deepin-system-monitor.qrc
+
+system(cd $$PWD/nethogs && make libnethogs && cd -)
 
 # Input
 HEADERS += src/utils.h \
@@ -66,6 +67,6 @@ QT += x11extras
 QT += dbus
 
 QMAKE_CXXFLAGS += -g
-LIBS += -L"libprocps" -lprocps
-LIBS += /usr/local/lib/libnethogs.so
+LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
+LIBS += -L"libprocps" -lprocps -lstdc++fs
 LIBS += -lX11 -lXext -lXtst

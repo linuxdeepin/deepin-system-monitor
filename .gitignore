@@ -3,3 +3,4 @@ moc_*.o
 moc_*.cpp
 build/
 *.qm
+!nethogs/Makefile

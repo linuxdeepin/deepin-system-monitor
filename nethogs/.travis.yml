@@ -1,0 +1,12 @@
+language: cpp
+
+addons:
+  apt:
+    packages:
+    - libpcap0.8-dev
+
+script: make
+
+os:
+  - linux
+  - osx
