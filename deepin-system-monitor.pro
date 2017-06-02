@@ -68,5 +68,5 @@ QT += dbus
 
 QMAKE_CXXFLAGS += -g
 LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
-LIBS += -L"libprocps" -lprocps -lstdc++fs
+LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst
