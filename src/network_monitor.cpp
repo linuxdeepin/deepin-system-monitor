@@ -10,10 +10,10 @@ using namespace Utils;
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
     setFixedWidth(280);
-    setFixedHeight(180);
-    
+    setFixedHeight(190);
+
     iconImage = QImage(Utils::getQrcPath("icon_network.png"));
-    
+
     downloadSpeeds = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
         downloadSpeeds->append(0);
@@ -25,17 +25,17 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
     }
 }
 
-void NetworkMonitor::paintEvent(QPaintEvent *) 
+void NetworkMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    
+
     setFontSize(painter, 20);
     painter.setPen(QPen(QColor("#aaaaaa")));
-    
+
     // Draw icon.
     painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
-    
+
     // Draw title.
     QFont font = painter.font() ;
     font.setPointSize(titleRenderSize);
@@ -43,27 +43,50 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setFont(font);
     painter.setPen(QPen(QColor("#ffffff")));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "网络");
-    
+
     // Draw background grid.
-    int penSize = 1;
-    QPainterPath framePath;
-    framePath.addRect(QRect(rect().x() + penSize, 
-                            rect().y() + rect().height() - downloadRenderMaxHeight - uploadRenderMaxHeight - waveformRenderPadding - penSize, 
-                            rect().width() - penSize * 2, 
-                            downloadRenderMaxHeight + uploadRenderMaxHeight + waveformRenderPadding));
-    
-    QPen pen(QColor("#ffffff"));
+    QPen framePen(QColor("#ffffff"));
     painter.setOpacity(0.05);
-    pen.setWidth(penSize);
-    painter.setPen(pen);
-    painter.drawPath(framePath);
+    framePen.setWidth(0.5);
+    painter.setPen(framePen);
     
+    int penSize = 1;
+    int gridX = rect().x() + penSize;
+    int gridY = rect().y() + gridRenderOffsetY + gridPaddingTop;
+    int gridWidth = rect().width() - gridPaddingRight - penSize * 2;
+    int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + waveformRenderPadding;
+
+    QPainterPath framePath;
+    framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
+    painter.drawPath(framePath);
+
+    // Draw grid.
+    QPen gridPen(QColor("#ffffff"));
+    QVector<qreal> dashes;
+    qreal space = 3;
+    dashes << 5 << space;
+    painter.setOpacity(0.05);
+    gridPen.setWidth(0.5);
+    gridPen.setDashPattern(dashes);
+    painter.setPen(gridPen);
+
+    int gridLineX = gridX;
+    while (gridLineX < gridX + gridWidth - gridSize) {
+        gridLineX += gridSize;
+        painter.drawLine(gridLineX, gridY + 1, gridLineX, gridY + gridHeight - 1);
+    }
+    int gridLineY = gridY;
+    while (gridLineY < gridY + gridHeight - gridSize) {
+        gridLineY += gridSize;
+        painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
+    }
+
     // Draw network summary.
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(downloadColor)));
     painter.setBrush(QBrush(QColor(downloadColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
-    
+
     setFontSize(painter, downloadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
@@ -81,11 +104,11 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
                      QString("累计下载 %1").arg(formatByteCount(totalRecvBytes)));
-    
+
     painter.setPen(QPen(QColor(uploadColor)));
     painter.setBrush(QBrush(QColor(uploadColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
-    
+
     setFontSize(painter, uploadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
@@ -94,7 +117,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
                      QString("上传速度 %1").arg(formatBandwidth(totalSentKbs)));
-    
+
     setFontSize(painter, uploadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + uploadRenderPaddingX + textPadding,
@@ -104,15 +127,15 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                      Qt::AlignLeft | Qt::AlignTop,
                      QString("累计上传 %1").arg(formatByteCount(totalSentBytes))
         );
-    
-    painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY);
+
+    painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     painter.setPen(QPen(QColor(downloadColor), 1.6));
     painter.setBrush(QBrush());
     painter.drawPath(downloadPath);
 
-    painter.translate(uploadWaveformsRenderOffsetX, uploadWaveformsRenderOffsetY);
+    painter.translate(0, uploadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
     painter.setPen(QPen(QColor(uploadColor), 1.6));
@@ -126,7 +149,7 @@ void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, floa
     totalSentBytes = tSentBytes;
     totalRecvKbs = tRecvKbs;
     totalSentKbs = tSentKbs;
-    
+
     // Init download path.
     downloadSpeeds->append(totalRecvKbs);
 
@@ -152,7 +175,7 @@ void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, floa
     }
 
     downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
-    
+
     // Init upload path.
     uploadSpeeds->append(totalSentKbs);
 
@@ -178,6 +201,6 @@ void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, floa
     }
 
     uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
-    
+
     repaint();
 }
