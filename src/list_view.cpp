@@ -1123,7 +1123,12 @@ QList<ListItem*> ListView::getSearchItems(QList<ListItem*> items)
 
 int ListView::getBottomRenderOffset()
 {
-    return getItemsTotalHeight() - rect().height() + titleHeight;
+    int itemsHeight = getItemsTotalHeight();
+    if (itemsHeight > rect().height() - titleHeight) {
+        return getItemsTotalHeight() - rect().height() + titleHeight;
+    } else {
+        return 0;
+    }
 }
 
 void ListView::sortItemsByColumn(int column, bool descendingSort)
