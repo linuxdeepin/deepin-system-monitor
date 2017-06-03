@@ -40,7 +40,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
 
     mouseAtScrollArea = false;
     mouseDragScrollbar = false;
-    scrollbarDefaultWidth = 3;
+    scrollbarDefaultWidth = 4;
     scrollbarDragWidth = 8;
     scrollbarMinHeight = 30;
     scrollbarPadding = 4;
@@ -821,26 +821,40 @@ void ListView::paintScrollbar(QPainter *painter)
     if (getItemsTotalHeight() > getScrollAreaHeight()) {
         // Init scrollbar opacity with scrollbar status.
         qreal barOpacitry = 0;
+        qreal barFrameOpacitry = 0;
         if (mouseDragScrollbar) {
-            barOpacitry = 0.8;
+            barOpacitry = 0.3;
+            barFrameOpacitry = 0.05;
         } else {
             if (mouseAtScrollArea) {
-                barOpacitry = 0.5;
+                barOpacitry = 0.4;
+                barFrameOpacitry = 0.1;
             } else {
-                barOpacitry = 0.1;
+                barOpacitry = 0.2;
+                barFrameOpacitry = 0.05;
             }
         }
 
-        int barWidth = mouseAtScrollArea ? scrollbarDragWidth : scrollbarDefaultWidth;
-        int barRadius = 5;
+        int barWidth = (mouseAtScrollArea || mouseDragScrollbar) ? scrollbarDragWidth : scrollbarDefaultWidth;
+        int barRadius = 4;
 
         int barY = getScrollbarY();
         int barHeight = getScrollbarHeight();
 
         painter->setOpacity(barOpacitry);
         QPainterPath path;
-        path.addRoundedRect(QRectF(rect().x() + rect().width() - barWidth - scrollbarPadding, barY + barRadius, barWidth, barHeight - barRadius * 2), barRadius, barRadius);
-        painter->fillPath(path, QColor("#F5F5F5"));
+        path.addRoundedRect(
+            QRectF(rect().x() + rect().width() - barWidth - scrollbarPadding, 
+                   barY + barRadius, 
+                   barWidth, 
+                   barHeight - barRadius * 2), barRadius, barRadius);
+        painter->fillPath(path, QColor("#ffffff"));
+        
+        QPen pen(QColor("#ffffff"));
+        pen.setWidth(1);
+        painter->setOpacity(barFrameOpacitry);
+        painter->setPen(pen);
+        painter->drawPath(path);
     }
 }
 
