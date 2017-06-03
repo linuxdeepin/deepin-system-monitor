@@ -41,7 +41,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     
     searchEdit = new DSearchEdit();
     searchEdit->setFixedWidth(280);
-    searchEdit->setPlaceHolder("Search");
+    searchEdit->setPlaceHolder("搜索");
     
     layout->addWidget(iconLabel);
     layout->addSpacing(90);
