@@ -38,7 +38,7 @@ private:
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
     int pointsNumber = 51;
-    int textPadding = 100;
+    int textPadding = 12;
     int titleRenderOffsetX = 20;
     int titleRenderSize = 20;
     int uploadRenderMaxHeight = 30;

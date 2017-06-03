@@ -46,7 +46,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     // Draw background grid.
     QPen framePen(QColor("#ffffff"));
-    painter.setOpacity(0.05);
+    painter.setOpacity(0.1);
     framePen.setWidth(0.5);
     painter.setPen(framePen);
     
@@ -82,6 +82,15 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     }
 
     // Draw network summary.
+    setFontSize(painter, downloadRenderSize);
+    QFontMetrics fm = painter.fontMetrics();
+    
+    QString downloadTitle = QString("下载速度 %1").arg(formatBandwidth(totalRecvKbs));
+    QString downloadContent = QString("累计下载 %1").arg(formatByteCount(totalRecvBytes));
+    QString uploadTitle = QString("上传速度 %1").arg(formatBandwidth(totalSentKbs));
+    QString uploadContent = QString("累计上传 %1").arg(formatByteCount(totalSentBytes));
+    int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
+    
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(downloadColor)));
     painter.setBrush(QBrush(QColor(downloadColor)));
@@ -91,19 +100,19 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
                            rect().y() + downloadRenderPaddingY,
-                           rect().width(),
+                           fm.width(downloadTitle),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("下载速度 %1").arg(formatBandwidth(totalRecvKbs)));
+                     downloadTitle);
 
     setFontSize(painter, downloadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
-    painter.drawText(QRect(rect().x() + downloadRenderPaddingX + textPadding,
+    painter.drawText(QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
                            rect().y() + downloadRenderPaddingY,
-                           rect().width(),
+                           fm.width(downloadContent),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("累计下载 %1").arg(formatByteCount(totalRecvBytes)));
+                     downloadContent);
 
     painter.setPen(QPen(QColor(uploadColor)));
     painter.setBrush(QBrush(QColor(uploadColor)));
@@ -113,20 +122,19 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
                            rect().y() + uploadRenderPaddingY,
-                           rect().width(),
+                           fm.width(uploadTitle),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("上传速度 %1").arg(formatBandwidth(totalSentKbs)));
+                     uploadTitle);
 
     setFontSize(painter, uploadRenderSize);
     painter.setPen(QPen(QColor("#666666")));
-    painter.drawText(QRect(rect().x() + uploadRenderPaddingX + textPadding,
+    painter.drawText(QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
                            rect().y() + uploadRenderPaddingY,
-                           rect().width(),
+                           fm.width(uploadContent),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("累计上传 %1").arg(formatByteCount(totalSentBytes))
-        );
+                     uploadContent);
 
     painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);

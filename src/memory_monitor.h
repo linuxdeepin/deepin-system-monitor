@@ -71,7 +71,7 @@ protected:
     
     QImage iconImage;
     
-    int textPadding = 60;
+    int textPadding = 12;
 };
 
 #endif    

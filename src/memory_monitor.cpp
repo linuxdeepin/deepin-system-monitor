@@ -78,8 +78,17 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setFont(font);
     painter.setPen(QPen(QColor("#ffffff")));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "内存");
-
+    
     // Draw memory summary.
+    setFontSize(painter, memoryRenderSize);
+    QFontMetrics fm = painter.fontMetrics();
+    
+    QString memoryTitle = QString("内存(%1%)").arg(QString::number(memoryPercent * 100, 'f', 1));
+    QString memoryContent = QString("%1/%2").arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, ""));
+    QString swapTitle = "交换空间";
+    QString swapContent;
+    int titleWidth = std::max(fm.width(memoryTitle), fm.width(swapTitle));
+    
     painter.setPen(QPen(QColor(memoryColor)));
     painter.setBrush(QBrush(QColor(memoryColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + memoryRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
@@ -88,19 +97,19 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#666666")));
     painter.drawText(QRect(rect().x() + memoryRenderPaddingX,
                            rect().y() + memoryRenderPaddingY,
-                           rect().width(),
+                           titleWidth,
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("内存(%1%)").arg(static_cast<int>(memoryPercent * 100)));
+                     memoryTitle);
 
     setFontSize(painter, memoryRenderSize);
     painter.setPen(QPen(QColor("#666666")));
-    painter.drawText(QRect(rect().x() + memoryRenderPaddingX + textPadding,
+    painter.drawText(QRect(rect().x() + memoryRenderPaddingX + titleWidth + textPadding,
                            rect().y() + memoryRenderPaddingY,
-                           rect().width(),
+                           fm.width(memoryContent),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     QString("%1/%2").arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, "")));
+                     memoryContent);
 
     // Draw swap summary.
     painter.setPen(QPen(QColor(swapColor)));
@@ -109,28 +118,26 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     setFontSize(painter, swapRenderSize);
     painter.setPen(QPen(QColor("#666666")));
-    QString swapTitleString = "交换空间";
     painter.drawText(QRect(rect().x() + swapRenderPaddingX,
                            rect().y() + swapRenderPaddingY,
-                           rect().width(),
+                           titleWidth,
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     swapTitleString);
+                     swapTitle);
     
     setFontSize(painter, swapRenderSize);
     painter.setPen(QPen(QColor("#666666")));
-    QString swapString;
     if (usedSwap == 0 && totalSwap == 0) {
-        swapString = "(未使用)";
+        swapContent = "(未使用)";
     } else {
-        swapString = QString("(%1%) %2/%3").arg(static_cast<int>(swapPercent * 100)).arg(convertSizeUnit(usedSwap, "")).arg(convertSizeUnit(totalSwap, ""));
+        swapContent = QString("(%1%) %2/%3").arg(QString::number(swapPercent * 100, 'f', 1)).arg(convertSizeUnit(usedSwap, "")).arg(convertSizeUnit(totalSwap, ""));
     }
-    painter.drawText(QRect(rect().x() + swapRenderPaddingX + textPadding,
+    painter.drawText(QRect(rect().x() + swapRenderPaddingX + titleWidth + textPadding,
                            rect().y() + swapRenderPaddingY,
-                           rect().width(),
+                           fm.width(swapContent),
                            rect().height()),
                      Qt::AlignLeft | Qt::AlignTop,
-                     swapString);
+                     swapContent);
 
     // Draw memory ring.
     drawLoadingRing(
