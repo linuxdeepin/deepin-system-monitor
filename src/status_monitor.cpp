@@ -26,7 +26,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
     layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
     layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
-    
+
     totalSentBytes = 0;
     totalRecvBytes = 0;
     totalSentKbs = 0;
@@ -275,41 +275,46 @@ void StatusMonitor::updateStatus()
     // Update cpu status.
     updateCpuStatus(totalCpuPercent / cpuNumber);
 
-    // Merge chrome processes.
-    ListItem *chromeRootItem = nullptr;
-    QList<int> chromeChildPids;
-    for (ListItem *item : items) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
-        QString cmdline = Utils::getProcessCmdline(processItem->getPid());
-        QStringList cmdArgs = cmdline.split(QRegExp("\\s"));
-        cmdArgs.removeAll("");
-
-        if (cmdArgs.size() == 1 && cmdArgs.at(0) == "/opt/google/chrome/chrome") {
-            chromeRootItem = item;
-            chromeChildPids = processTree->getAllChildPids(processItem->getPid());
-
-            // Because chrome root process always have one whatever how manay chrome *window* or *tab* opened.
-            // So we break loop once found chrome processes.
-            break;
-        }
-    }
-
     QList<ListItem*> mergeItems;
-    if (chromeRootItem != nullptr) {
-        ProcessItem *chromeRootProcessItem = static_cast<ProcessItem*>(chromeRootItem);
+
+    if (filterType == OnlyGUI) {
+        // Merge chrome processes.
+        ListItem *chromeRootItem = nullptr;
+        QList<int> chromeChildPids;
         for (ListItem *item : items) {
             ProcessItem *processItem = static_cast<ProcessItem*>(item);
-            if (chromeChildPids.contains(processItem->getPid())) {
-                chromeRootProcessItem->mergeItem(processItem);
-            } else if (processItem->getPid() != chromeRootProcessItem->getPid()) {
-                mergeItems.append(item);
+            QString cmdline = Utils::getProcessCmdline(processItem->getPid());
+            QStringList cmdArgs = cmdline.split(QRegExp("\\s"));
+            cmdArgs.removeAll("");
+
+            if (cmdArgs.size() == 1 && cmdArgs.at(0) == "/opt/google/chrome/chrome") {
+                chromeRootItem = item;
+                chromeChildPids = processTree->getAllChildPids(processItem->getPid());
+
+                // Because chrome root process always have one whatever how manay chrome *window* or *tab* opened.
+                // So we break loop once found chrome processes.
+                break;
             }
         }
-        mergeItems.append(chromeRootItem);
+
+        if (chromeRootItem != nullptr) {
+            ProcessItem *chromeRootProcessItem = static_cast<ProcessItem*>(chromeRootItem);
+            for (ListItem *item : items) {
+                ProcessItem *processItem = static_cast<ProcessItem*>(item);
+                if (chromeChildPids.contains(processItem->getPid())) {
+                    chromeRootProcessItem->mergeItem(processItem);
+                } else if (processItem->getPid() != chromeRootProcessItem->getPid()) {
+                    mergeItems.append(item);
+                }
+            }
+            mergeItems.append(chromeRootItem);
+        } else {
+            mergeItems = items;
+        }
     } else {
         mergeItems = items;
     }
-    
+
     // Update process status.
     updateProcessStatus(mergeItems);
 
