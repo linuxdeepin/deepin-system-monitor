@@ -130,7 +130,7 @@ namespace Utils {
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
     QString getProcessCmdline(pid_t pid);
     unsigned long long getTotalCpuTime();
-    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache);
+    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QString getDisplayNameFromName(QString procName);
     bool isGuiApp(QString procName);
     void passInputEvent(int wid);

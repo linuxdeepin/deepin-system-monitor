@@ -571,7 +571,7 @@ namespace Utils {
      * @param procname The name of the process
      * @return The process' icon or the default executable icon if none was found
      */
-    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache)
+    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize)
     {
         // check we havent already got the icon in the cache
         if (processIconMapCache->contains(procName)) {
@@ -593,7 +593,7 @@ namespace Utils {
         }
 
         if (desktopFile.size() == 0) {
-            QPixmap pixmap = defaultExecutableIcon.pixmap(24, 24);
+            QPixmap pixmap = defaultExecutableIcon.pixmap(iconSize, iconSize);
             (*processIconMapCache)[procName] = pixmap;
 
             return pixmap;
@@ -623,7 +623,7 @@ namespace Utils {
         }
         in.close();
 
-        QPixmap pixmap = icon.pixmap(24, 24);
+        QPixmap pixmap = icon.pixmap(iconSize, iconSize);
         (*processIconMapCache)[procName] = pixmap;
 
         return pixmap;

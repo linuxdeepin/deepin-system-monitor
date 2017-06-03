@@ -9,6 +9,7 @@
 #include <QList>
 #include <proc/sysinfo.h>
 #include <signal.h>
+#include "attributes_dialog.h"
 
 using namespace Utils;
 DUTIL_USE_NAMESPACE
@@ -69,10 +70,13 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
     openDirectoryAction = new QAction("打开程序所在目录", this);
     connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
+    attributesAction = new QAction("属性", this);
+    connect(attributesAction, &QAction::triggered, this, &ProcessManager::showAttributes);
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
     rightMenu->addAction(resumeAction);
     rightMenu->addAction(openDirectoryAction);
+    rightMenu->addAction(attributesAction);
 
     connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
 }
@@ -164,6 +168,16 @@ void ProcessManager::openProcessDirectory()
             QString processPath = output.split("\n")[0];
             DDesktopServices::showFileItem(processPath);
         }
+    }
+
+    actionPids->clear();
+}
+
+void ProcessManager::showAttributes()
+{
+    for (int pid : *actionPids) {
+        AttributesDialog *dialog = new AttributesDialog(pid);
+        dialog->show();
     }
 
     actionPids->clear();

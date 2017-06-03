@@ -42,6 +42,8 @@ public slots:
     
     void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
     
+    void showAttributes();
+    
 private:
     ProcessView *processView;
     QMenu *rightMenu;
@@ -49,6 +51,7 @@ private:
     QAction *pauseAction;
     QAction *resumeAction;
     QAction *openDirectoryAction;
+    QAction *attributesAction;
     
     QList<int> *actionPids;
     
