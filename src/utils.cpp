@@ -554,8 +554,6 @@ namespace Utils {
             QString nameFlag = "Name=";
             QString genericNameFlag = QString("GenericName[%1]=").arg(QLocale::system().name());
 
-            // qDebug() << lineContent;
-
             if (lineContent.startsWith(localNameFlag)) {
                 displayName = lineContent.remove(0, localNameFlag.size());
 
@@ -626,8 +624,6 @@ namespace Utils {
         QIcon icon = defaultExecutableIcon;
         QString iconName;
         while(!in.eof()) {
-            qDebug() << procName << QString(QString::fromLocal8Bit(desktopFile.c_str()));
-            
             std::string line;
             std::getline(in,line);
             iconName = QString::fromStdString(line);
