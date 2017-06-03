@@ -11,7 +11,7 @@ using namespace Utils;
 
 AttributesDialog::AttributesDialog(int pid)
 {
-    setFixedSize(320, 360);
+    setFixedSize(320, 300);
     
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -28,6 +28,7 @@ AttributesDialog::AttributesDialog(int pid)
     auto nameTitleLabel = new QLabel("程序:");
     nameTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     nameTitleLabel->setFixedWidth(100);
+    nameTitleLabel->setAlignment(Qt::AlignRight);
     
     auto nameLabel = new QLabel();
     nameLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
@@ -35,22 +36,25 @@ AttributesDialog::AttributesDialog(int pid)
     auto cmdlineTitleLabel = new QLabel("命令行:");
     cmdlineTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     cmdlineTitleLabel->setFixedWidth(100);
+    cmdlineTitleLabel->setAlignment(Qt::AlignRight);
     
     auto cmdlineLabel = new QLabel();
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     cmdlineLabel->setWordWrap(true);
     
-    nameLayout->addWidget(nameTitleLabel, 0, Qt::AlignRight);
-    nameLayout->addWidget(nameLabel, 0, Qt::AlignLeft);
+    nameLayout->addWidget(nameTitleLabel);
+    nameLayout->addWidget(nameLabel);
 
-    cmdlineLayout->addWidget(cmdlineTitleLabel, 0, Qt::AlignRight);
-    cmdlineLayout->addWidget(cmdlineLabel, 0, Qt::AlignLeft);
+    cmdlineLayout->addWidget(cmdlineTitleLabel);
+    cmdlineLayout->addWidget(cmdlineLabel);
     
     layout->addWidget(closeButton, 0, Qt::AlignTop | Qt::AlignRight);
+    layout->addSpacing(20);
     layout->addWidget(iconLabel, 0, Qt::AlignHCenter);
     layout->addStretch();
     layout->addLayout(nameLayout);
     layout->addLayout(cmdlineLayout);
+    layout->addSpacing(20);
     
     // Read the list of open processes information.
     PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
