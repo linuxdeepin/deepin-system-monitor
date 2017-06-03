@@ -12,7 +12,7 @@ class ProcessItem : public ListItem
     Q_OBJECT
     
 public:
-    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser, char processState);
+    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState);
     
     bool sameAs(ListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
@@ -36,7 +36,7 @@ public:
     QString getName() const;
     QString getDisplayName() const;
     double getCPU() const;
-    int getMemory() const;
+    long getMemory() const;
     int getPid() const;
     QString getUser() const;
     NetworkStatus getNetworkStatus() const;
@@ -45,7 +45,7 @@ public:
 private:
     double cpu;
     int iconSize;
-    int memory;
+    long memory;
     int pid;
     
     int padding;
