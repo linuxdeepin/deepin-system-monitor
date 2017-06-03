@@ -83,7 +83,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, memoryRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString memoryTitle = QString("内存(%1%)").arg(QString::number(memoryPercent * 100, 'f', 1));
+    QString memoryTitle = QString("内存 (%1%)").arg(QString::number(memoryPercent * 100, 'f', 1));
     QString memoryContent = QString("%1/%2").arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, ""));
     QString swapTitle = "";
     QString swapContent = "";
