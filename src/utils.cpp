@@ -518,12 +518,23 @@ namespace Utils {
         std::string desktopFile;
         while(dir.hasNext()) {
             if (dir.fileInfo().suffix() == "desktop") {
-                if ((!GUI_BLACKLIST.contains(procName.toLower())) && dir.fileName().toLower().contains(procName.toLower())) {
+                if (dir.fileName().toLower().contains(procName.toLower() + ".desktop")) {
                     desktopFile = dir.filePath().toStdString();
                     break;
                 }
             }
             dir.next();
+        }
+        if (desktopFile.size() == 0) {
+            while(dir.hasNext()) {
+                if (dir.fileInfo().suffix() == "desktop") {
+                    if (dir.fileName().toLower().contains(procName.toLower())) {
+                        desktopFile = dir.filePath().toStdString();
+                        break;
+                    }
+                }
+                dir.next();
+            }
         }
 
         if (desktopFile.size() == 0) {
@@ -584,12 +595,23 @@ namespace Utils {
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
         while(dir.hasNext()) {
             if (dir.fileInfo().suffix() == "desktop") {
-                if (dir.fileName().toLower().contains(procName.toLower())) {
+                if (dir.fileName().toLower().contains(procName.toLower() + ".desktop")) {
                     desktopFile = dir.filePath().toStdString();
                     break;
                 }
             }
             dir.next();
+        }
+        if (desktopFile.size() == 0) {
+            while(dir.hasNext()) {
+                if (dir.fileInfo().suffix() == "desktop") {
+                    if (dir.fileName().toLower().contains(procName.toLower())) {
+                        desktopFile = dir.filePath().toStdString();
+                        break;
+                    }
+                }
+                dir.next();
+            }
         }
 
         if (desktopFile.size() == 0) {
@@ -604,6 +626,8 @@ namespace Utils {
         QIcon icon = defaultExecutableIcon;
         QString iconName;
         while(!in.eof()) {
+            qDebug() << procName << QString(QString::fromLocal8Bit(desktopFile.c_str()));
+            
             std::string line;
             std::getline(in,line);
             iconName = QString::fromStdString(line);
