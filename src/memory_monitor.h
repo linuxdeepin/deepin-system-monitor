@@ -49,15 +49,17 @@ protected:
     
     int swapRenderSize = 9;
     int swapRenderPaddingX = 13;
-    int swapRenderPaddingY = 70;
+    int swapRenderPaddingY = 90;
     QString swapColor = "#FEDF19";
     
-    int outsideRingRadius = 50;
+    int lineHeight = 16;
     
-    int insideRingRadius = 43;
+    int outsideRingRadius = 60;
     
-    int ringCenterPointerX = 220;
-    int ringCenterPointerY = 50;
+    int insideRingRadius = 53;
+    
+    int ringCenterPointerX = 200;
+    int ringCenterPointerY = 60;
     QString ringBackgroundColor = "#252525";
     
     int topAppsTitleRenderSize = 11;
