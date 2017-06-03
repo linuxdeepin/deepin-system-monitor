@@ -35,12 +35,11 @@ private:
     int ringRadius = 90;
     int ringWidth = 8;
     
-    int iconRenderOffsetX = 98;
-    int iconRenderOffsetY = 155;
-    
-    int titleRenderOffsetX = 11;
-    int titleRenderOffsetY = 153;
-    int percentRenderOffsetY = 180;
+    int iconRenderOffsetY = 195;
+    int titleRenderOffsetY = 190;
+    int iconPadding = 0;
+    int titleAreaPaddingX = 5;
+    int percentRenderOffsetY = 157;
     
     int animationIndex = 0;
     double animationFrames = 20;

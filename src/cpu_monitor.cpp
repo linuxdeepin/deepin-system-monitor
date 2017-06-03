@@ -12,7 +12,7 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
     setFixedSize(280, 250);
 
     iconImage = QImage(Utils::getQrcPath("icon_cpu.png"));
-    
+
     cpuPercents = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
         cpuPercents->append(0);
@@ -28,21 +28,25 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    setFontSize(painter, 22);
-    painter.setPen(QPen(QColor("#aaaaaa")));
 
-    painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
-    
     QFont font = painter.font() ;
-    font.setPointSize(22);
+    font.setPointSize(20);
     font.setWeight(QFont::Light);
+    
+    QFontMetrics fm(font);
+    int titleWidth = fm.width("处理器");
+    
+    int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
+    
+    painter.drawImage(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX, iconRenderOffsetY), iconImage);
+    
     painter.setFont(font);
     painter.setPen(QPen(QColor("#ffffff")));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX,
+    painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) + iconImage.width() + iconPadding - titleAreaPaddingX,
                            rect().y() + titleRenderOffsetY,
-                           rect().width(),
-                           24
-                         ), Qt::AlignCenter, "CPU");
+                           titleWidth,
+                           30
+                         ), Qt::AlignCenter, "处理器");
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) + easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
 
@@ -60,8 +64,8 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         rect().y() + ringRenderOffsetY,
         ringRadius,
         ringWidth,
-        280,
-        140,
+        300,
+        150,
         "#8442FB",
         0.1,
         percent / 100
