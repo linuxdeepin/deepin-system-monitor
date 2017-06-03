@@ -6,7 +6,7 @@
 
 using namespace Utils;
 
-ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, int processMemory, int processPid, QString processUser, char processState)
+ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState)
 {
     iconPixmap = processIcon;
     name = processName;
@@ -204,7 +204,7 @@ double ProcessItem::getCPU() const
     return cpu;
 }
 
-int ProcessItem::getMemory() const
+long ProcessItem::getMemory() const
 {
     return memory;
 }
@@ -263,8 +263,8 @@ bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool d
 
     // Sort item with memory if cpu is same.
     if (cpu1 == cpu2) {
-        int memory1 = static_cast<const ProcessItem*>(item1)->getMemory();
-        int memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
+        long memory1 = static_cast<const ProcessItem*>(item1)->getMemory();
+        long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
 
         sortOrder = memory1 > memory2;
     }
@@ -279,8 +279,8 @@ bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool d
 bool ProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
     // Init.
-    int memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
-    int memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
+    long memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
+    long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
     bool sortOrder;
 
     // Sort item with cpu if memory is same.

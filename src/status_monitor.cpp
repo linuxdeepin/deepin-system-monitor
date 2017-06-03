@@ -154,7 +154,7 @@ void StatusMonitor::updateStatus()
                     displayName = getDisplayNameFromName(name);
                 }
             }
-            int memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
+            long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
             QPixmap icon = getProcessIconFromName(name, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
