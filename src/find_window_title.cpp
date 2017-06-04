@@ -10,6 +10,15 @@ FindWindowTitle::FindWindowTitle()
 {
 }
 
+QString FindWindowTitle::findWindowTitle(int pid)
+{
+    if (windowTitles->contains(pid)) {
+        return windowTitles->value(pid);
+    } else {
+        return QString("");
+    }
+}
+
 void FindWindowTitle::updateWindowInfos()
 {
     QList<xcb_window_t> windows;
@@ -39,16 +48,5 @@ void FindWindowTitle::updateWindowInfos()
         if (!windowTitles->contains(pid)) {
             (*windowTitles)[pid] = getWindowName(window);
         }
-    }
-}
-
-
-
-QString FindWindowTitle::findWindowTitle(int pid)
-{
-    if (windowTitles->contains(pid)) {
-        return windowTitles->value(pid);
-    } else {
-        return QString("");
     }
 }
