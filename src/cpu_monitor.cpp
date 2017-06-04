@@ -46,6 +46,12 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
     timer->start(30);
 }
 
+CpuMonitor::~CpuMonitor()
+{
+    delete cpuPercents;
+    delete timer;
+}
+
 void CpuMonitor::render()
 {
     if (animationIndex < animationFrames) {

@@ -36,6 +36,7 @@ class CpuMonitor : public QWidget
     
 public:
     CpuMonitor(QWidget *parent = 0);
+    ~CpuMonitor();
     
 public slots:
     void render();
