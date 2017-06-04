@@ -59,6 +59,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
 Toolbar::~Toolbar()
 {
     delete searchEdit;
+    delete searchTimer;
 }
 
 void Toolbar::handleSearch()
