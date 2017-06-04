@@ -28,6 +28,12 @@
 #include <xcb/xcb_aux.h>
 #include "window_manager.h"
 
+template <typename... ArgTypes, typename... ArgTypes2>
+static inline unsigned int XcbCallVoid(xcb_void_cookie_t (*func)(xcb_connection_t *, ArgTypes...), ArgTypes2... args...)
+{
+    return func(QX11Info::connection(), args...).sequence;
+}
+
 WindowManager::WindowManager(QObject *parent) : QObject(parent)
 {
     int screenNum;
@@ -39,80 +45,6 @@ WindowManager::WindowManager(QObject *parent) : QObject(parent)
 WindowManager::~WindowManager()
 {
     delete conn;
-}
-
-xcb_atom_t WindowManager::getAtom(QString name)
-{
-    QByteArray rawName = name.toLatin1();
-    xcb_atom_t result = XCB_ATOM_NONE;
-    xcb_intern_atom_cookie_t cookie = xcb_intern_atom(conn, 0, rawName.size(), rawName.data());
-    xcb_intern_atom_reply_t *reply = xcb_intern_atom_reply(conn, cookie, NULL);
-    if(reply) {
-        result = reply->atom;
-
-        free(reply);
-    }
-
-    return result;
-}
-
-xcb_get_property_reply_t* WindowManager::getProperty(xcb_window_t window, QString propertyName, xcb_atom_t type)
-{
-    xcb_get_property_cookie_t cookie = xcb_get_property(conn, 0, window, getAtom(propertyName), type, 0, UINT32_MAX);
-    return xcb_get_property_reply(conn, cookie, NULL);
-}
-
-QString WindowManager::getAtomName(xcb_atom_t atom)
-{
-    QString result;
-
-    xcb_get_atom_name_cookie_t cookie = xcb_get_atom_name(conn, atom);
-    xcb_get_atom_name_reply_t *reply = xcb_get_atom_name_reply(conn, cookie, NULL);
-
-    if (reply) {
-        result = QString::fromLatin1(xcb_get_atom_name_name(reply), xcb_get_atom_name_name_length(reply));
-        free(reply);
-    }
-
-    return result;
-}
-
-QStringList WindowManager::getWindowTypes(xcb_window_t window)
-{
-    QStringList types;
-    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_WINDOW_TYPE", XCB_ATOM_ATOM);
-
-    if(reply) {
-        xcb_atom_t *typesA = static_cast<xcb_atom_t*>(xcb_get_property_value(reply));
-        int typeNum = reply->length;
-
-        for(int i = 0; i < typeNum; i++) {
-            types.append(getAtomName(typesA[i]));
-        }
-
-        free(reply);
-    }
-
-    return types;
-}
-
-QStringList WindowManager::getWindowStates(xcb_window_t window)
-{
-    QStringList types;
-    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_STATE", XCB_ATOM_ATOM);
-
-    if(reply) {
-        xcb_atom_t *typesA = static_cast<xcb_atom_t*>(xcb_get_property_value(reply));
-        int typeNum = reply->length;
-
-        for(int i = 0; i < typeNum; i++) {
-            types.append(getAtomName(typesA[i]));
-        }
-
-        free(reply);
-    }
-
-    return types;
 }
 
 QList<int> WindowManager::getWindowFrameExtents(xcb_window_t window)
@@ -142,76 +74,6 @@ QList<int> WindowManager::getWindowFrameExtents(xcb_window_t window)
     }
 
     return extents;
-}
-
-QString WindowManager::getWindowClass(xcb_window_t window)
-{
-    if (window == rootWindow) {
-        return tr("Desktop");
-    } else {
-        xcb_get_property_reply_t *reply = getProperty(window, "WM_CLASS", getAtom("STRING"));
-
-        if(reply) {
-            QList<QByteArray> rawClasses = QByteArray(static_cast<char*>(xcb_get_property_value(reply)), xcb_get_property_value_length(reply)).split('\0');
-
-            free(reply);
-
-            return QString::fromLatin1(rawClasses[0]);
-        } else {
-            return QString();
-        }
-    }
-}
-
-QString WindowManager::getWindowName(xcb_window_t window)
-{
-    if (window == rootWindow) {
-        return tr("Desktop");
-    } else {
-        xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_NAME", getAtom("UTF8_STRING"));
-
-        if(reply) {
-            QString result = QString::fromUtf8(static_cast<char*>(xcb_get_property_value(reply)), xcb_get_property_value_length(reply));
-
-            free(reply);
-
-            return result;
-        } else {
-            return QString();
-        }
-    }
-}
-
-int WindowManager::getCurrentWorkspace(xcb_window_t window)
-{
-    xcb_get_property_reply_t *reply = getProperty(window, "_NET_CURRENT_DESKTOP", XCB_ATOM_CARDINAL);
-    int desktop = 0;
-
-    if (reply) {
-        desktop = *((int *) xcb_get_property_value(reply));
-
-        free(reply);
-    }
-
-    return desktop;
-}
-
-int WindowManager::getWindowWorkspace(xcb_window_t window)
-{
-    if (window == rootWindow) {
-        return getCurrentWorkspace(rootWindow);
-    } else {
-        xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_DESKTOP", XCB_ATOM_CARDINAL);
-        int desktop = 0;
-
-        if (reply) {
-            desktop = *((int *) xcb_get_property_value(reply));
-
-            free(reply);
-        }
-
-        return desktop;
-    }
 }
 
 QList<xcb_window_t> WindowManager::getWindows()
@@ -266,6 +128,118 @@ QList<xcb_window_t> WindowManager::getWindows()
     return windows;
 }
 
+QString WindowManager::getAtomName(xcb_atom_t atom)
+{
+    QString result;
+
+    xcb_get_atom_name_cookie_t cookie = xcb_get_atom_name(conn, atom);
+    xcb_get_atom_name_reply_t *reply = xcb_get_atom_name_reply(conn, cookie, NULL);
+
+    if (reply) {
+        result = QString::fromLatin1(xcb_get_atom_name_name(reply), xcb_get_atom_name_name_length(reply));
+        free(reply);
+    }
+
+    return result;
+}
+
+QString WindowManager::getWindowClass(xcb_window_t window)
+{
+    if (window == rootWindow) {
+        return tr("Desktop");
+    } else {
+        xcb_get_property_reply_t *reply = getProperty(window, "WM_CLASS", getAtom("STRING"));
+
+        if(reply) {
+            QList<QByteArray> rawClasses = QByteArray(static_cast<char*>(xcb_get_property_value(reply)), xcb_get_property_value_length(reply)).split('\0');
+
+            free(reply);
+
+            return QString::fromLatin1(rawClasses[0]);
+        } else {
+            return QString();
+        }
+    }
+}
+
+QString WindowManager::getWindowName(xcb_window_t window)
+{
+    if (window == rootWindow) {
+        return tr("Desktop");
+    } else {
+        xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_NAME", getAtom("UTF8_STRING"));
+
+        if(reply) {
+            QString result = QString::fromUtf8(static_cast<char*>(xcb_get_property_value(reply)), xcb_get_property_value_length(reply));
+
+            free(reply);
+
+            return result;
+        } else {
+            return QString();
+        }
+    }
+}
+
+QStringList WindowManager::getWindowStates(xcb_window_t window)
+{
+    QStringList types;
+    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_STATE", XCB_ATOM_ATOM);
+
+    if(reply) {
+        xcb_atom_t *typesA = static_cast<xcb_atom_t*>(xcb_get_property_value(reply));
+        int typeNum = reply->length;
+
+        for(int i = 0; i < typeNum; i++) {
+            types.append(getAtomName(typesA[i]));
+        }
+
+        free(reply);
+    }
+
+    return types;
+}
+
+QStringList WindowManager::getWindowTypes(xcb_window_t window)
+{
+    QStringList types;
+    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_WINDOW_TYPE", XCB_ATOM_ATOM);
+
+    if(reply) {
+        xcb_atom_t *typesA = static_cast<xcb_atom_t*>(xcb_get_property_value(reply));
+        int typeNum = reply->length;
+
+        for(int i = 0; i < typeNum; i++) {
+            types.append(getAtomName(typesA[i]));
+        }
+
+        free(reply);
+    }
+
+    return types;
+}
+
+WindowRect WindowManager::adjustRectInScreenArea(WindowRect rect)
+{
+    WindowRect newRect;
+    newRect.x = rect.x >= 0 ? rect.x : 0;
+    newRect.y = rect.y >= 0 ? rect.y : 0;
+    newRect.width = rect.x >= 0 ? rect.width : rect.width + rect.x;
+    newRect.height = rect.y >= 0 ? rect.height : rect.height + rect.y;
+    
+    WindowRect rootWindowRect = getRootWindowRect();
+    
+    if (newRect.x + newRect.width > rootWindowRect.width) {
+        newRect.width = rootWindowRect.width - newRect.x;
+    }
+    
+    if (newRect.y + newRect.height > rootWindowRect.height) {
+        newRect.height = rootWindowRect.height - newRect.y;
+    }
+    
+    return newRect;
+}
+
 WindowRect WindowManager::getRootWindowRect() {
     WindowRect rect;
     xcb_get_geometry_reply_t *geometry = xcb_get_geometry_reply(conn, xcb_get_geometry(conn, rootWindow), 0);
@@ -278,19 +252,6 @@ WindowRect WindowManager::getRootWindowRect() {
     free(geometry);
 
     return rect;
-}
-
-void WindowManager::translateCoords(xcb_window_t window, int32_t& x, int32_t& y)
-{
-    xcb_translate_coordinates_cookie_t c = xcb_translate_coordinates(conn, rootWindow, window, x, y);
-    xcb_translate_coordinates_reply_t* reply = xcb_translate_coordinates_reply(conn, c, NULL);
-
-    if (reply) {
-        x = reply->dst_x;
-        y = reply->dst_y;
-
-        free(reply);
-    }
 }
 
 WindowRect WindowManager::getWindowRect(xcb_window_t window)
@@ -321,31 +282,50 @@ WindowRect WindowManager::getWindowRect(xcb_window_t window)
     return rect;
 }
 
-WindowRect WindowManager::adjustRectInScreenArea(WindowRect rect)
+int WindowManager::getCurrentWorkspace(xcb_window_t window)
 {
-    WindowRect newRect;
-    newRect.x = rect.x >= 0 ? rect.x : 0;
-    newRect.y = rect.y >= 0 ? rect.y : 0;
-    newRect.width = rect.x >= 0 ? rect.width : rect.width + rect.x;
-    newRect.height = rect.y >= 0 ? rect.height : rect.height + rect.y;
-    
-    WindowRect rootWindowRect = getRootWindowRect();
-    
-    if (newRect.x + newRect.width > rootWindowRect.width) {
-        newRect.width = rootWindowRect.width - newRect.x;
+    xcb_get_property_reply_t *reply = getProperty(window, "_NET_CURRENT_DESKTOP", XCB_ATOM_CARDINAL);
+    int desktop = 0;
+
+    if (reply) {
+        desktop = *((int *) xcb_get_property_value(reply));
+
+        free(reply);
     }
-    
-    if (newRect.y + newRect.height > rootWindowRect.height) {
-        newRect.height = rootWindowRect.height - newRect.y;
-    }
-    
-    return newRect;
+
+    return desktop;
 }
 
-template <typename... ArgTypes, typename... ArgTypes2>
-static inline unsigned int XcbCallVoid(xcb_void_cookie_t (*func)(xcb_connection_t *, ArgTypes...), ArgTypes2... args...)
+int WindowManager::getWindowPid(xcb_window_t window)
 {
-    return func(QX11Info::connection(), args...).sequence;
+    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_PID", XCB_ATOM_CARDINAL);
+    int pid = 0;
+
+    if (reply) {
+        pid = *((int *) xcb_get_property_value(reply));
+
+        free(reply);
+    }
+
+    return pid;
+}
+
+int WindowManager::getWindowWorkspace(xcb_window_t window)
+{
+    if (window == rootWindow) {
+        return getCurrentWorkspace(rootWindow);
+    } else {
+        xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_DESKTOP", XCB_ATOM_CARDINAL);
+        int desktop = 0;
+
+        if (reply) {
+            desktop = *((int *) xcb_get_property_value(reply));
+
+            free(reply);
+        }
+
+        return desktop;
+    }
 }
 
 void WindowManager::setWindowBlur(int wid, QVector<uint32_t> &data)
@@ -363,21 +343,42 @@ void WindowManager::setWindowBlur(int wid, QVector<uint32_t> &data)
     xcb_flush(conn);
 }
 
-int WindowManager::getWindowPid(xcb_window_t window)
+void WindowManager::translateCoords(xcb_window_t window, int32_t& x, int32_t& y)
 {
-    xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_PID", XCB_ATOM_CARDINAL);
-    int pid = 0;
+    xcb_translate_coordinates_cookie_t c = xcb_translate_coordinates(conn, rootWindow, window, x, y);
+    xcb_translate_coordinates_reply_t* reply = xcb_translate_coordinates_reply(conn, c, NULL);
 
     if (reply) {
-        pid = *((int *) xcb_get_property_value(reply));
+        x = reply->dst_x;
+        y = reply->dst_y;
+
+        free(reply);
+    }
+}
+
+xcb_atom_t WindowManager::getAtom(QString name)
+{
+    QByteArray rawName = name.toLatin1();
+    xcb_atom_t result = XCB_ATOM_NONE;
+    xcb_intern_atom_cookie_t cookie = xcb_intern_atom(conn, 0, rawName.size(), rawName.data());
+    xcb_intern_atom_reply_t *reply = xcb_intern_atom_reply(conn, cookie, NULL);
+    if(reply) {
+        result = reply->atom;
 
         free(reply);
     }
 
-    return pid;
+    return result;
+}
+
+xcb_get_property_reply_t* WindowManager::getProperty(xcb_window_t window, QString propertyName, xcb_atom_t type)
+{
+    xcb_get_property_cookie_t cookie = xcb_get_property(conn, 0, window, getAtom(propertyName), type, 0, UINT32_MAX);
+    return xcb_get_property_reply(conn, cookie, NULL);
 }
 
 xcb_window_t WindowManager::getRootWindow()
 {
     return rootWindow;
 }
+
