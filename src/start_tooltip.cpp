@@ -59,6 +59,11 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
     Utils::passInputEvent(this->winId());
 }
 
+StartTooltip::~StartTooltip()
+{
+    delete windowManager;
+}
+
 void StartTooltip::setWindowManager(WindowManager *wm)
 {
     windowManager = wm;

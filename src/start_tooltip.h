@@ -33,6 +33,8 @@ class StartTooltip : public QWidget
     
 public:
     StartTooltip(QWidget *parent = 0);
+    ~StartTooltip();
+    
     void setWindowManager(WindowManager *wm);
     
 protected:
@@ -42,7 +44,7 @@ protected:
 private:
     QImage iconImg;
     QString text;
-    WindowManager* windowManager;
+    WindowManager *windowManager;
 };
 
 #endif
