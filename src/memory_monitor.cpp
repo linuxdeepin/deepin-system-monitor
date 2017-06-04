@@ -26,6 +26,17 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     setFixedHeight(120);
 }
 
+void MemoryMonitor::render()
+{
+    if (animationIndex < animationFrames) {
+        animationIndex++;
+
+        repaint();
+    } else {
+        timer->stop();
+    }
+}
+
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
     if ((convertSizeUnit(uMemory, "") != convertSizeUnit(usedMemory, "")) ||
@@ -43,15 +54,22 @@ void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tS
     }
 }
 
-void MemoryMonitor::render()
+QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
 {
-    if (animationIndex < animationFrames) {
-        animationIndex++;
+    int angle = 360 - (270 * percent);
 
-        repaint();
-    } else {
-        timer->stop();
+    double sinValue = qSin((angle / 360.0) * 2 * M_PI);
+    double cosValue = qCos((angle / 360.0) * 2 * M_PI);
+
+    int pointerX = rect().x() + ringCenterPointerX + static_cast<int>(r * cosValue) + static_cast<int>(pointerRadius * sinValue);
+    int pointerY = rect().y() + ringCenterPointerY - static_cast<int>(r * sinValue) + static_cast<int>(pointerRadius * cosValue);
+
+    // I don't why this need adjust 1 pixel, it's weird.
+    if (angle > 270) {
+        pointerY += 1;
     }
+
+    return QPointF(pointerX, pointerY);
 }
 
 void MemoryMonitor::paintEvent(QPaintEvent *)
@@ -177,20 +195,3 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      QString("%1%").arg(static_cast<int>(memoryPercent * 100)));
 }
 
-QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
-{
-    int angle = 360 - (270 * percent);
-
-    double sinValue = qSin((angle / 360.0) * 2 * M_PI);
-    double cosValue = qCos((angle / 360.0) * 2 * M_PI);
-
-    int pointerX = rect().x() + ringCenterPointerX + static_cast<int>(r * cosValue) + static_cast<int>(pointerRadius * sinValue);
-    int pointerY = rect().y() + ringCenterPointerY - static_cast<int>(r * sinValue) + static_cast<int>(pointerRadius * cosValue);
-
-    // I don't why this need adjust 1 pixel, it's weird.
-    if (angle > 270) {
-        pointerY += 1;
-    }
-
-    return QPointF(pointerX, pointerY);
-}
