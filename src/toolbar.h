@@ -25,9 +25,8 @@
 #define TOOLBAR_H
 
 #include <QHBoxLayout>
-#include <QWidget>
 #include <QTimer>
-
+#include <QWidget>
 #include <dsearchedit.h>
 
 DWIDGET_USE_NAMESPACE
@@ -41,8 +40,8 @@ public:
     ~Toolbar();
     
 public slots:
-    void handleSearchTextChanged();
     void handleSearch();
+    void handleSearchTextChanged();
     
 signals:
     void search(QString searchContent);
@@ -50,7 +49,6 @@ signals:
 private:
     DSearchEdit *searchEdit;
     QString searchTextCache;
-    
     QTimer *searchTimer;
 };
 

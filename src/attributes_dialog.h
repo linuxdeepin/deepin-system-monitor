@@ -1,11 +1,11 @@
 #ifndef ATTRIBUTESDIALOG_H
 #define ATTRIBUTESDIALOG_H 
 
-#include <ddialog.h>
-#include <QWidget>
+#include <QLabel>
 #include <QPaintEvent>
 #include <QVBoxLayout>
-#include <QLabel>
+#include <QWidget>
+#include <ddialog.h>
 
 class AttributesDialog : public Dtk::Widget::DAbstractDialog
 {

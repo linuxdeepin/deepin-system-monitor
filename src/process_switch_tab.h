@@ -1,8 +1,8 @@
 #ifndef PROCESSSWITCHTAB_H
 #define PROCESSSWITCHTAB_H
 
-#include <QWidget>
 #include <QMouseEvent>
+#include <QWidget>
 
 class ProcessSwitchTab : public QWidget 
 {
@@ -11,9 +11,9 @@ class ProcessSwitchTab : public QWidget
 public:
     ProcessSwitchTab(QWidget *parent = 0);
     
-    void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
+    void paintEvent(QPaintEvent *);
     
 signals:
     void activeTab(int index);
@@ -22,21 +22,19 @@ protected:
     virtual void leaveEvent(QEvent * event);
     
 private:
-    QImage onlyGuiNormalImage;
-    QImage onlyGuiHoverImage;
-    QImage onlyGuiActiveImage;
-    QImage onlyMeNormalImage;
-    QImage onlyMeHoverImage;
-    QImage onlyMeActiveImage;
-    QImage allProcessNormalImage;
-    QImage allProcessHoverImage;
     QImage allProcessActiveImage;
-    
-    int width = 26;
-    int height = 24;
-    
+    QImage allProcessHoverImage;
+    QImage allProcessNormalImage;
+    QImage onlyGuiActiveImage;
+    QImage onlyGuiHoverImage;
+    QImage onlyGuiNormalImage;
+    QImage onlyMeActiveImage;
+    QImage onlyMeHoverImage;
+    QImage onlyMeNormalImage;
     int activeIndex = 0;
+    int height = 24;
     int hoverIndex = -1;
+    int width = 26;
 };
 
 #endif 

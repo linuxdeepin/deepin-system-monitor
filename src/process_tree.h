@@ -1,10 +1,10 @@
 #ifndef PROCESSTREE_H
 #define PROCESSTREE_H
 
+#include <QMap>
+#include <QObject>
 #include <proc/readproc.h>
 #include <proc/sysinfo.h>
-#include <QObject>
-#include <QMap>
 
 class ProcessTree : public QObject
 {
@@ -22,18 +22,16 @@ public:
     ProcessTree();
     ~ProcessTree();
     
-    void scanProcesses(storedProcType processes);
     QList<int> getAllChildPids(int pid);
     void getChildPids(int pid);
-    
-    void printTree();
     void printNode(int pid);
+    void printTree();
+    void scanProcesses(storedProcType processes);
     
 private:
+    QList<int> childrenPids;
     QMap<int, Process> *processMap;
     int rootPid;
-    
-    QList<int> childrenPids;
 };
 
 #endif

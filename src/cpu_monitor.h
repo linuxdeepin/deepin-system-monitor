@@ -1,11 +1,11 @@
 #ifndef CpuMONITOR_H
 #define CpuMONITOR_H
 
-#include <QWidget>
 #include <QList>
-#include <QTimer>
 #include <QPointF>
+#include <QTimer>
 #include <QVBoxLayout>
+#include <QWidget>
 
 class CpuMonitor : public QWidget
 {
@@ -15,37 +15,31 @@ public:
     CpuMonitor(QWidget *parent = 0);
     
 public slots:
-    void updateStatus(double cpuPercent);
     void render();
+    void updateStatus(double cpuPercent);
     
 protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QPainterPath cpuPath;
+    QImage iconImage;
     QList<double> *cpuPercents;
-    
+    QPainterPath cpuPath;
     QTimer *timer;
-    
+    double animationFrames = 20;
+    int animationIndex = 0;
+    int cpuRenderMaxHeight = 45;
+    int iconPadding = 0;
+    int iconRenderOffsetY = 195;
+    int percentRenderOffsetY = 157;
     int pointsNumber = 24;
-    
+    int ringRadius = 90;
+    int ringRenderOffsetY = 100;
+    int ringWidth = 8;
+    int titleAreaPaddingX = 5;
+    int titleRenderOffsetY = 190;
     int waveformsRenderOffsetX = 80;
     int waveformsRenderOffsetY = 110;
-    int ringRenderOffsetY = 100;
-    int ringRadius = 90;
-    int ringWidth = 8;
-    
-    int iconRenderOffsetY = 195;
-    int titleRenderOffsetY = 190;
-    int iconPadding = 0;
-    int titleAreaPaddingX = 5;
-    int percentRenderOffsetY = 157;
-    
-    int animationIndex = 0;
-    double animationFrames = 20;
-    int cpuRenderMaxHeight = 45;
-    
-    QImage iconImage;
 };
 
 #endif    

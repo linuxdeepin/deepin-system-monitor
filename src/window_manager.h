@@ -46,25 +46,25 @@ public:
     QList<int> getWindowFrameExtents(xcb_window_t window);
     QList<xcb_window_t> getWindows();
     QString getAtomName(xcb_atom_t atom);
-    QString getWindowName(xcb_window_t window);
     QString getWindowClass(xcb_window_t window);
-    QStringList getWindowTypes(xcb_window_t window);
+    QString getWindowName(xcb_window_t window);
     QStringList getWindowStates(xcb_window_t window);
+    QStringList getWindowTypes(xcb_window_t window);
+    WindowRect adjustRectInScreenArea(WindowRect rect);
     WindowRect getRootWindowRect();
     WindowRect getWindowRect(xcb_window_t window);
     int getCurrentWorkspace(xcb_window_t window);
+    int getWindowPid(xcb_window_t window);
     int getWindowWorkspace(xcb_window_t window);
-    xcb_atom_t getAtom(QString name);
-    xcb_get_property_reply_t* getProperty(xcb_window_t window, QString propertyName, xcb_atom_t type);
     void setWindowBlur(int wid, QVector<uint32_t> &data);
     void translateCoords(xcb_window_t window, int32_t& x, int32_t& y);
-    WindowRect adjustRectInScreenArea(WindowRect rect);
-    int getWindowPid(xcb_window_t window);
-
-    xcb_window_t rootWindow;
+    xcb_atom_t getAtom(QString name);
+    xcb_get_property_reply_t* getProperty(xcb_window_t window, QString propertyName, xcb_atom_t type);
+    xcb_window_t getRootWindow();
     
 private:
     xcb_connection_t* conn;
+    xcb_window_t rootWindow;
 };
 
 #endif

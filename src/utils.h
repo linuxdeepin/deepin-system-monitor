@@ -23,13 +23,13 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "window_manager.h"
 #include <QFileInfoList>
 #include <QLayout>
 #include <QObject>
 #include <QPainter>
 #include <QString>
 #include <proc/readproc.h>
-#include "window_manager.h"
 
 const int RECTANGLE_PADDING = 24;
 const int RECTANGLE_RADIUS = 8;
@@ -103,42 +103,50 @@ namespace Utils {
      */
     bool getProcPidIO(int pid, ProcPidIO &io );
 
+    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
+    QString convertSizeUnit(long bytes, QString unitSuffix="B");
+    QString formatBandwidth(double v);
+    QString formatByteCount(double v);
+    QString formatByteCount(double v, const char** orders, int nb_orders);
     QString formatMillisecond(int millisecond);
+    QString getDisplayNameFromName(QString procName);
     QString getImagePath(QString imageName);
+    QString getProcessCmdline(pid_t pid);
+    QString getProcessName(proc_t* p);
     QString getQrcPath(QString imageName);
     QString getQssPath(QString qssName);
     bool fileExists(QString path);
+    bool isGuiApp(QString procName);
+    double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
     qreal easeInOut(qreal x);
     qreal easeInQuad(qreal x);
     qreal easeInQuint(qreal x);
     qreal easeOutQuad(qreal x);
     qreal easeOutQuint(qreal x);
+    unsigned long long getTotalCpuTime();
     void addLayoutWidget(QLayout *layout, QWidget *widget);
     void applyQss(QWidget *widget, QString qssName);
-    void removeChildren(QWidget *widget);
-    void removeLayoutChild(QLayout *layout, int index);
-    void setFontSize(QPainter &painter, int textSize);
-    QString convertSizeUnit(long bytes, QString unitSuffix="B");
-    void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity);
-    void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double backgroundOpacity, double percent);
-    QString formatByteCount(double v, const char** orders, int nb_orders);
-    QString formatByteCount(double v);
-    QString formatBandwidth(double v);
-    
-    QString getProcessName(proc_t* p);
-    double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
-    QString getProcessCmdline(pid_t pid);
-    unsigned long long getTotalCpuTime();
-    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
-    QString getDisplayNameFromName(QString procName);
-    bool isGuiApp(QString procName);
-    void passInputEvent(int wid);
-    void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
-    void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
     void blurRect(WindowManager *windowManager, int widgetId, QRectF rect);
     void blurRects(WindowManager *windowManager, int widgetId, QList<QRectF> rects);
     void clearBlur(WindowManager *windowManager, int widgetId);
+    void drawLoadingRing(QPainter &painter, 
+                         int centerX, 
+                         int centerY, 
+                         int radius, 
+                         int penWidth, 
+                         int loadingAngle, 
+                         int rotationAngle, 
+                         QString color, 
+                         double backgroundOpacity, 
+                         double percent);
+    void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity);
+    void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
+    void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
+    void passInputEvent(int wid);
+    void removeChildren(QWidget *widget);
+    void removeLayoutChild(QLayout *layout, int index);
+    void setFontSize(QPainter &painter, int textSize);
 }
 
 

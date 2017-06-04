@@ -1,13 +1,11 @@
 #ifndef INTERACTIVEKILL_H
 #define INTERACTIVEKILL_H
 
-#include <QWidget>
-#include <QPaintEvent>
-#include <QKeyEvent>
 #include "start_tooltip.h"
 #include "window_manager.h"
-
-// #undef Bool
+#include <QKeyEvent>
+#include <QPaintEvent>
+#include <QWidget>
 
 class InteractiveKill : public QWidget
 {
@@ -17,27 +15,24 @@ public:
     InteractiveKill(QWidget *parent = 0);
     ~InteractiveKill();
     
-    void mousePressEvent(QMouseEvent *mouseEvent);
-    void mouseMoveEvent(QMouseEvent *mouseEvent);
     void keyPressEvent(QKeyEvent *keyEvent);
+    void mouseMoveEvent(QMouseEvent *mouseEvent);
+    void mousePressEvent(QMouseEvent *mouseEvent);
     void paintEvent(QPaintEvent *);
     
 signals:
     void killWindow(int pid);
     
 private:
-    StartTooltip* startTooltip;
-    WindowManager* windowManager;
-    
     QImage cursorImage;
-    int cursorX;
-    int cursorY;
-    
     QList<WindowRect> windowRects;
     QList<int> windowPids;
     QPixmap screenPixmap;
-    
+    StartTooltip* startTooltip;
+    WindowManager* windowManager;
     WindowRect killWindowRect;
+    int cursorX;
+    int cursorY;
 };
 
 #endif

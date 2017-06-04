@@ -32,6 +32,10 @@ private:
     int downloadRenderSize = 9;
     int downloadWaveformsRenderOffsetX = 4;
     int downloadWaveformsRenderOffsetY = 136;
+    int gridPaddingRight = 21;
+    int gridPaddingTop = 10;
+    int gridRenderOffsetY = 99;
+    int gridSize = 20;
     int iconRenderOffsetX = -5;
     int iconRenderOffsetY = 10;
     int pointerRadius = 3;
@@ -47,10 +51,6 @@ private:
     int uploadRenderSize = 9;
     int uploadWaveformsRenderOffsetY = -5;
     int waveformRenderPadding = 20;
-    int gridRenderOffsetY = 99;
-    int gridPaddingTop = 10;
-    int gridPaddingRight = 21;
-    int gridSize = 20;
     uint32_t totalRecvBytes;
     uint32_t totalSentBytes;
 };

@@ -2,8 +2,8 @@
 #define SMOOTHCURVEGENERATOR_H
 
 #include <QList>
-#include <QPointF>
 #include <QPainterPath>
+#include <QPointF>
 
 class SmoothCurveGenerator {
 public:

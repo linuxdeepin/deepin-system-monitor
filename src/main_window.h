@@ -1,15 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QHBoxLayout>
-#include <QMenu>
-#include <QAction>
+#include "ddialog.h"
 #include "dmainwindow.h"
-#include "status_monitor.h"
 #include "interactive_kill.h"
 #include "process_manager.h"
+#include "status_monitor.h"
 #include "toolbar.h"
-#include "ddialog.h"
+#include <QAction>
+#include <QHBoxLayout>
+#include <QMenu>
 
 DWIDGET_USE_NAMESPACE
 
@@ -20,28 +20,26 @@ class MainWindow : public DMainWindow
 public:
     MainWindow(DMainWindow *parent = 0);
                                        
-    void paintEvent(QPaintEvent *);
     bool eventFilter(QObject *, QEvent *);
+    void paintEvent(QPaintEvent *);
     
 public slots:
-    void showWindowKiller();
     void createWindowKiller();
-    void popupKillConfirmDialog(int pid);
     void dialogButtonClicked(int index, QString);
-    
+    void popupKillConfirmDialog(int pid);
+    void showWindowKiller();
     void switchTab(int index);
     
 private:
+    DDialog *killProcessDialog;
+    InteractiveKill *killer;
     ProcessManager *processManager;
+    QAction *killAction;
     QHBoxLayout *layout;
+    QMenu *menu;
     QWidget *layoutWidget;
     StatusMonitor *statusMonitor;
     Toolbar *toolbar;
-    QMenu *menu;
-    QAction *killAction;
-    InteractiveKill *killer;
-    DDialog *killProcessDialog;
-    
     int killPid;
 };
 

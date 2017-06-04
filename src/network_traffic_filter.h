@@ -2,35 +2,32 @@
 #define NETWORKTRAFFICFILTER_H
 
 #include "libnethogs.h"
-#include <mutex>
 #include <map>
+#include <mutex>
 
 class NetworkTrafficFilter final
 {
-	NetworkTrafficFilter() = delete;
-	
 public:
+	NetworkTrafficFilter() = delete;
+    
 	struct Update
 	{
 		int action;
 		NethogsMonitorRecord record;
 	};
 	
-	static void setRowUpdate(int action, NethogsMonitorRecord const& record);
-	static void setNetHogsMonitorStatus(int status);
-
-	static int  getNetHogsMonitorStatus();
 	static bool getRowUpdate(Update& update);
-    
-    static void onNethogsUpdate(int action, NethogsMonitorRecord const* update);
+	static int  getNetHogsMonitorStatus();
+	static void setNetHogsMonitorStatus(int status);
+	static void setRowUpdate(int action, NethogsMonitorRecord const& record);
     static void nethogsMonitorThreadProc();
+    static void onNethogsUpdate(int action, NethogsMonitorRecord const* update);
     
 private:
 	typedef std::map<int, Update> RowUpdatesMap;
-	
-	static std::mutex m_mutex;
 	static RowUpdatesMap m_row_updates_map;
 	static int m_nethogs_monitor_status;
+	static std::mutex m_mutex;
 };
 
 #endif // NETWORKTRAFFICFILTER_H

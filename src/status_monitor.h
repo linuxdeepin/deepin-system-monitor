@@ -1,21 +1,20 @@
 #ifndef STATUSMONITOR_H
 #define STATUSMONITOR_H
 
-#include <QWidget>
-#include <QPointF>
-#include <QTimer>
-#include <QMap>
-#include <QVBoxLayout>
-#include <deque>
-#include <proc/readproc.h>
-
 #include "cpu_monitor.h"
+#include "find_window_title.h"
 #include "memory_monitor.h"
 #include "network_monitor.h"
-#include "process_item.h"
-#include <proc/sysinfo.h>
 #include "network_traffic_filter.h"
-#include "find_window_title.h"
+#include "process_item.h"
+#include <QMap>
+#include <QPointF>
+#include <QTimer>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <deque>
+#include <proc/readproc.h>
+#include <proc/sysinfo.h>
 
 class StatusMonitor : public QWidget
 {
@@ -36,42 +35,35 @@ signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);
-    void updateProcessStatus(QList<ListItem*> items);
     void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
+    void updateProcessStatus(QList<ListItem*> items);
 
 public slots:
-    void updateStatus();
-    
+    void switchToAllProcess();
     void switchToOnlyGui();
     void switchToOnlyMe();
-    void switchToAllProcess();
+    void updateStatus();
                                        
 private:
-    QVBoxLayout *layout;
-
     CpuMonitor *cpuMonitor;
+    FilterType filterType;
+    FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
-
     QMap<QString, QPixmap> *processIconCache;
-    QMap<int, uint32_t> *processSentBytes;
     QMap<int, uint32_t> *processRecvBytes;
-    QMap<int, unsigned long> *processWriteKbs;
+    QMap<int, uint32_t> *processSentBytes;
     QMap<int, unsigned long> *processReadKbs;
+    QMap<int, unsigned long> *processWriteKbs;
     QTimer *updateStatusTimer;
-    storedProcType prevProcesses;
-    unsigned long long totalCpuTime;
-
-    uint32_t totalSentBytes;
-    uint32_t totalRecvBytes;
-    float totalSentKbs;
+    QVBoxLayout *layout;
     float totalRecvKbs;
-    
+    float totalSentKbs;
     int updateDuration = 2000;
-    
-    FindWindowTitle *findWindowTitle;
-    
-    FilterType filterType;
+    storedProcType prevProcesses;
+    uint32_t totalRecvBytes;
+    uint32_t totalSentBytes;
+    unsigned long long totalCpuTime;
 };
 
 #endif

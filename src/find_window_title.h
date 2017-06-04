@@ -1,10 +1,10 @@
 #ifndef FINDWINDOWTITLE_H
 #define FINDWINDOWTITLE_H
 
+#include "window_manager.h"
 #include <QObject>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
-#include "window_manager.h"
 
 class FindWindowTitle : public WindowManager
 {
@@ -13,8 +13,8 @@ class FindWindowTitle : public WindowManager
 public:
     FindWindowTitle();
     
-    void updateWindowInfos();
     QString findWindowTitle(int pid);
+    void updateWindowInfos();
     
 private:
     QMap<int, QString> *windowTitles;

@@ -2,8 +2,8 @@
 #define PROCESSITEM_H
 
 #include "list_item.h"
-#include <proc/readproc.h>
 #include "utils.h"
+#include <proc/readproc.h>
 
 using namespace Utils;
 
@@ -18,49 +18,43 @@ public:
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect);
     
-    static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool search(const ListItem *item, QString searchContent);
     static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByWrite(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool search(const ListItem *item, QString searchContent);
     
-    void setNetworkStatus(NetworkStatus nStatus);
-    void setDiskStatus(DiskStatus dStatus);
-    
-    void mergeItem(ListItem *item);
-    
-    QString getName() const;
-    QString getDisplayName() const;
-    double getCPU() const;
-    long getMemory() const;
-    int getPid() const;
-    QString getUser() const;
-    NetworkStatus getNetworkStatus() const;
     DiskStatus getDiskStatus() const;
+    NetworkStatus getNetworkStatus() const;
+    QString getDisplayName() const;
+    QString getName() const;
+    QString getUser() const;
+    double getCPU() const;
+    int getPid() const;
+    long getMemory() const;
+    void mergeItem(ListItem *item);
+    void setDiskStatus(DiskStatus dStatus);
+    void setNetworkStatus(NetworkStatus nStatus);
     
 private:
-    double cpu;
-    int iconSize;
-    long memory;
-    int pid;
-    
-    int padding;
-    int textPadding;
-    
-    NetworkStatus networkStatus;
     DiskStatus diskStatus;
-    
+    NetworkStatus networkStatus;
     QPixmap iconPixmap;
-    
-    QString name;
     QString displayName;
+    QString name;
     QString path;
     QString user;
     char state;
+    double cpu;
+    int iconSize;
+    int padding;
+    int pid;
+    int textPadding;
+    long memory;
 };
 
 #endif

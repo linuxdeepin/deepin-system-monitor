@@ -2,9 +2,9 @@
 #define LISTVIEW_H
 
 #include "list_item.h"
+#include <QImage>
 #include <QTimer>
 #include <QWidget>
-#include <QImage>
 
 typedef bool (* SortAlgorithm) (const ListItem *item1, const ListItem *item2, bool descendingSort);
 typedef bool (* SearchAlgorithm) (const ListItem *item, QString searchContent);
@@ -156,18 +156,16 @@ private:
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
     void mouseReleaseEvent(QMouseEvent *mouseEvent);
-    void wheelEvent(QWheelEvent *event);
-    
     void paintEvent(QPaintEvent *);
     void paintScrollbar(QPainter *painter);
-    
     void selectNextItemWithOffset(int scrollOffset);
     void selectPrevItemWithOffset(int scrollOffset);
-    
     void shiftSelectItemsWithBound(int selectionStartIndex, int selectionEndIndex);
     void shiftSelectNextItemWithOffset(int scrollOffset);
     void shiftSelectPrevItemWithOffset(int scrollOffset);
+    void wheelEvent(QWheelEvent *event);
                         
+    QList<ListItem*> getSearchItems(QList<ListItem*> items);
     QList<int> getRenderWidths();
     bool isMouseAtScrollArea(int x);
     bool isMouseAtTitleArea(int y);
@@ -178,7 +176,6 @@ private:
     int getScrollbarHeight();
     int getScrollbarY();
     int getTopRenderOffset();
-    QList<ListItem*> getSearchItems(QList<ListItem*> items);
     void sortItemsByColumn(int column, bool descendingSort);
     void startScrollAnimation();
     void startScrollbarHideTimer();
@@ -218,8 +215,8 @@ private:
     int scrollbarDragWidth;
     int scrollbarMinHeight;
     int scrollbarPadding;
-    int titleHeight;
     int titleArrowPadding;
+    int titleHeight;
     int titlePadding;
 };
 

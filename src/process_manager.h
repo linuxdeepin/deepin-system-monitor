@@ -2,15 +2,15 @@
 #define PROCESSMANAGER_H
 
 #include "ddialog.h"
+#include "process_switch_tab.h"
 #include "process_view.h"
-#include <QMap>
 #include <QLabel>
+#include <QMap>
+#include <QMenu>
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
 #include <proc/readproc.h>
-#include <QMenu>
-#include "process_switch_tab.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -26,40 +26,30 @@ signals:
     void activeTab(int index);
     
 public slots:
-    void updateStatus(QList<ListItem*> items);
-    void popupMenu(QPoint pos, QList<ListItem*> items);
-    
-    void killProcesses();
-    void stopProcesses();
-    void resumeProcesses();
-    void openProcessDirectory();
-    
-    void handleSearch(QString searchContent);
-    
-    void showKillProcessDialog();
-    
     void dialogButtonClicked(int index, QString buttonText);
-    
-    void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
-    
+    void handleSearch(QString searchContent);
+    void killProcesses();
+    void openProcessDirectory();
+    void popupMenu(QPoint pos, QList<ListItem*> items);
+    void resumeProcesses();
     void showAttributes();
+    void showKillProcessDialog();
+    void stopProcesses();
+    void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
+    void updateStatus(QList<ListItem*> items);
     
 private:
+    DDialog *killProcessDialog;
+    ProcessSwitchTab *processSwitchTab;
     ProcessView *processView;
-    QMenu *rightMenu;
+    QAction *attributesAction;
     QAction *killAction;
+    QAction *openDirectoryAction;
     QAction *pauseAction;
     QAction *resumeAction;
-    QAction *openDirectoryAction;
-    QAction *attributesAction;
-    
-    QList<int> *actionPids;
-    
     QLabel *statusLabel;
-    
-    DDialog *killProcessDialog;
-    
-    ProcessSwitchTab *processSwitchTab;
+    QList<int> *actionPids;
+    QMenu *rightMenu;
 };
 
 #endif

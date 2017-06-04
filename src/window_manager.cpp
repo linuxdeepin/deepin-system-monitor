@@ -376,3 +376,8 @@ int WindowManager::getWindowPid(xcb_window_t window)
 
     return pid;
 }
+
+xcb_window_t WindowManager::getRootWindow()
+{
+    return rootWindow;
+}
