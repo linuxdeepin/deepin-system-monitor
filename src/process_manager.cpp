@@ -86,30 +86,6 @@ ProcessManager::~ProcessManager()
     delete processView;
 }
 
-void ProcessManager::updateStatus(QList<ListItem*> items)
-{
-    processView->refreshItems(items);
-}
-
-void ProcessManager::handleSearch(QString searchContent)
-{
-    processView->search(searchContent);
-}
-
-void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
-{
-    for (ListItem *item : items) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
-        actionPids->append(processItem->getPid());
-    }
-    rightMenu->exec(this->mapToGlobal(pos));
-}
-
-void ProcessManager::showKillProcessDialog()
-{
-    killProcessDialog->show();
-}
-
 void ProcessManager::dialogButtonClicked(int index, QString)
 {
     if (index == 1) {
@@ -117,33 +93,16 @@ void ProcessManager::dialogButtonClicked(int index, QString)
     }
 }
 
+void ProcessManager::handleSearch(QString searchContent)
+{
+    processView->search(searchContent);
+}
+
 void ProcessManager::killProcesses()
 {
     for (int pid : *actionPids) {
         if (kill(pid, SIGTERM) != 0) {
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
-        }
-    }
-
-    actionPids->clear();
-}
-
-void ProcessManager::stopProcesses()
-{
-    for (int pid : *actionPids) {
-        if (kill(pid, SIGSTOP) != 0) {
-            qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
-        }
-    }
-
-    actionPids->clear();
-}
-
-void ProcessManager::resumeProcesses()
-{
-    for (int pid : *actionPids) {
-        if (kill(pid, SIGCONT) != 0) {
-            qDebug() << QString("Resume process %1 failed, permission denied.").arg(pid);
         }
     }
 
@@ -173,6 +132,26 @@ void ProcessManager::openProcessDirectory()
     actionPids->clear();
 }
 
+void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
+{
+    for (ListItem *item : items) {
+        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        actionPids->append(processItem->getPid());
+    }
+    rightMenu->exec(this->mapToGlobal(pos));
+}
+
+void ProcessManager::resumeProcesses()
+{
+    for (int pid : *actionPids) {
+        if (kill(pid, SIGCONT) != 0) {
+            qDebug() << QString("Resume process %1 failed, permission denied.").arg(pid);
+        }
+    }
+
+    actionPids->clear();
+}
+
 void ProcessManager::showAttributes()
 {
     for (int pid : *actionPids) {
@@ -183,7 +162,28 @@ void ProcessManager::showAttributes()
     actionPids->clear();
 }
 
+void ProcessManager::showKillProcessDialog()
+{
+    killProcessDialog->show();
+}
+
+void ProcessManager::stopProcesses()
+{
+    for (int pid : *actionPids) {
+        if (kill(pid, SIGSTOP) != 0) {
+            qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
+        }
+    }
+
+    actionPids->clear();
+}
+
 void ProcessManager::updateProcessNumber(int guiProcessNumber, int systemProcessNumber)
 {
     statusLabel->setText(QString("正在运行%1个应用进程和%2个系统进程").arg(guiProcessNumber).arg(systemProcessNumber));
+}
+
+void ProcessManager::updateStatus(QList<ListItem*> items)
+{
+    processView->refreshItems(items);
 }
