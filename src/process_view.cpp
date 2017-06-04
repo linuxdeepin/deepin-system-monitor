@@ -36,7 +36,7 @@ ProcessView::ProcessView()
     
     // Set column titles.
     QList<QString> titles;
-    titles << "进程名" << "CPU" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "进程号";
+    titles << "名称" << "CPU" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "进程号";
     setColumnTitles(titles, 36);
     
     // Set column hide flags.

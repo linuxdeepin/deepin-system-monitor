@@ -39,6 +39,7 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     setFixedWidth(300);
 
     filterType = OnlyGUI;
+    tabName = "应用程序";
 
     layout = new QVBoxLayout(this);
 
@@ -99,6 +100,7 @@ void StatusMonitor::paintEvent(QPaintEvent *)
 void StatusMonitor::switchToAllProcess()
 {
     filterType = AllProcess;
+    tabName = "所有进程";
 
     updateStatus();
 }
@@ -106,6 +108,7 @@ void StatusMonitor::switchToAllProcess()
 void StatusMonitor::switchToOnlyGui()
 {
     filterType = OnlyGUI;
+    tabName = "应用程序";
 
     updateStatus();
 }
@@ -113,6 +116,7 @@ void StatusMonitor::switchToOnlyGui()
 void StatusMonitor::switchToOnlyMe()
 {
     filterType = OnlyMe;
+    tabName = "我的进程";
 
     updateStatus();
 }
@@ -372,7 +376,7 @@ void StatusMonitor::updateStatus()
     updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
 
     // Update process number.
-    updateProcessNumber(guiProcessNumber, systemProcessNumber);
+    updateProcessNumber(tabName, guiProcessNumber, systemProcessNumber);
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;

@@ -211,9 +211,9 @@ void ProcessManager::stopProcesses()
     actionPids->clear();
 }
 
-void ProcessManager::updateProcessNumber(int guiProcessNumber, int systemProcessNumber)
+void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber)
 {
-    statusLabel->setText(QString("正在运行%1个应用进程和%2个系统进程").arg(guiProcessNumber).arg(systemProcessNumber));
+    statusLabel->setText(QString("%1 (正在运行%2个应用进程和%3个系统进程)").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
 }
 
 void ProcessManager::updateStatus(QList<ListItem*> items)

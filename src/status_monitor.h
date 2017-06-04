@@ -58,7 +58,7 @@ signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);
-    void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
+    void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
     void updateProcessStatus(QList<ListItem*> items);
 
 public slots:
@@ -78,6 +78,7 @@ private:
     QMap<int, uint32_t> *processSentBytes;
     QMap<int, unsigned long> *processReadKbs;
     QMap<int, unsigned long> *processWriteKbs;
+    QString tabName;
     QTimer *updateStatusTimer;
     QVBoxLayout *layout;
     float totalRecvKbs;

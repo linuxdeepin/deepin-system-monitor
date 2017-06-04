@@ -58,7 +58,7 @@ public slots:
     void showAttributes();
     void showKillProcessDialog();
     void stopProcesses();
-    void updateProcessNumber(int guiProcessNumber, int systemProcessNumber);
+    void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
     void updateStatus(QList<ListItem*> items);
     
 private:
