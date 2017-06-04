@@ -34,6 +34,7 @@ class MemoryMonitor : public QWidget
     
 public:
     MemoryMonitor(QWidget *parent = 0);
+    ~MemoryMonitor();
     
 public slots:
     void render();

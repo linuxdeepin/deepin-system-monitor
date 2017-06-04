@@ -49,6 +49,12 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     setFixedHeight(120);
 }
 
+MemoryMonitor::~MemoryMonitor()
+{
+    delete timer;
+    delete layout;
+}
+
 void MemoryMonitor::render()
 {
     if (animationIndex < animationFrames) {
