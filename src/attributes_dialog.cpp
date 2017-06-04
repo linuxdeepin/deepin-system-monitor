@@ -96,14 +96,13 @@ AttributesDialog::AttributesDialog(int pid)
         
         if (pid == processId) {
             QString name = getProcessName(&i.second);
+            std::string desktopFile = getDesktopFileFromName(name);
             QString cmdline = Utils::getProcessCmdline(processId);
-            QPixmap icon = getProcessIconFromName(name, processIconCache, 96);
+            QPixmap icon = getProcessIconFromName(name, desktopFile, processIconCache, 96);
             
             iconLabel->setPixmap(icon);
             nameLabel->setText(name);
             cmdlineLabel->setText(cmdline);
-            
-            // qDebug() << name << cmdline;
             
             break;
         }

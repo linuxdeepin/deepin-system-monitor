@@ -52,38 +52,14 @@ namespace Utils {
      * @param procname The name of the process
      * @return The process' icon or the default executable icon if none was found
      */
-    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize)
+    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QMap<QString, QPixmap> *processIconMapCache, int iconSize)
     {
         // check we havent already got the icon in the cache
         if (processIconMapCache->contains(procName)) {
             return processIconMapCache->value(procName);
         }
 
-        // search /usr/share/applications for the desktop file that corresponds to the proc and get its icon
-        QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
-        std::string desktopFile;
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
-        while(dir.hasNext()) {
-            if (dir.fileInfo().suffix() == "desktop") {
-                if (dir.fileName().toLower().contains(procName.toLower() + ".desktop")) {
-                    desktopFile = dir.filePath().toStdString();
-                    break;
-                }
-            }
-            dir.next();
-        }
-        if (desktopFile.size() == 0) {
-            while(dir.hasNext()) {
-                if (dir.fileInfo().suffix() == "desktop") {
-                    if (dir.fileName().toLower().contains(procName.toLower())) {
-                        desktopFile = dir.filePath().toStdString();
-                        break;
-                    }
-                }
-                dir.next();
-            }
-        }
-
         if (desktopFile.size() == 0) {
             QPixmap pixmap = defaultExecutableIcon.pixmap(iconSize, iconSize);
             (*processIconMapCache)[procName] = pixmap;
@@ -196,34 +172,10 @@ namespace Utils {
         }
     }
 
-    QString getDisplayNameFromName(QString procName)
+    QString getDisplayNameFromName(QString procName, std::string desktopFile)
     {
         if (procName.toLower() == "deepin-wm") {
             return "深度窗口管理器";
-        }
-
-        // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.
-        QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
-        std::string desktopFile;
-        while(dir.hasNext()) {
-            if (dir.fileInfo().suffix() == "desktop") {
-                if (dir.fileName().toLower().contains(procName.toLower() + ".desktop")) {
-                    desktopFile = dir.filePath().toStdString();
-                    break;
-                }
-            }
-            dir.next();
-        }
-        if (desktopFile.size() == 0) {
-            while(dir.hasNext()) {
-                if (dir.fileInfo().suffix() == "desktop") {
-                    if (dir.fileName().toLower().contains(procName.toLower())) {
-                        desktopFile = dir.filePath().toStdString();
-                        break;
-                    }
-                }
-                dir.next();
-            }
         }
 
         if (desktopFile.size() == 0) {
@@ -388,22 +340,37 @@ namespace Utils {
         return true;
     }
 
-    bool isGuiApp(QString procName)
+    std::string getDesktopFileFromName(QString procName)
     {
-        // search /usr/share/applications for the desktop file that corresponds to the proc and get its locale name.
         QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
         std::string desktopFile;
-        while(dir.hasNext()) {
-            if (dir.fileInfo().suffix() == "desktop") {
-                if ((!GUI_BLACKLIST.contains(procName.toLower())) && dir.fileName().toLower().contains(procName.toLower())) {
-                    desktopFile = dir.filePath().toStdString();
-                    break;
+        
+        QString procname = procName.toLower();
+
+        if (!GUI_BLACKLIST.contains(procname)) {
+            while(dir.hasNext()) {
+                if (dir.fileInfo().suffix() == "desktop") {
+                    if (dir.fileName().toLower().contains(procname + ".desktop")) {
+                        desktopFile = dir.filePath().toStdString();
+                        break;
+                    }
+                }
+                dir.next();
+            }
+            if (desktopFile.size() == 0) {
+                while(dir.hasNext()) {
+                    if (dir.fileInfo().suffix() == "desktop") {
+                        if (dir.fileName().toLower().contains(procname)) {
+                            desktopFile = dir.filePath().toStdString();
+                            break;
+                        }
+                    }
+                    dir.next();
                 }
             }
-            dir.next();
         }
 
-        return desktopFile.size() != 0;
+        return desktopFile;
     }
 
     /**

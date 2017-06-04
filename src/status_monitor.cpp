@@ -168,7 +168,8 @@ void StatusMonitor::updateStatus()
         double cpu = (&i.second)->pcpu;
         QString name = getProcessName(&i.second);
 
-        bool isGui = isGuiApp(name);
+        std::string desktopFile = getDesktopFileFromName(name);
+        bool isGui = desktopFile.size() != 0;
 
         if (isGui) {
             guiProcessNumber++;
@@ -198,13 +199,13 @@ void StatusMonitor::updateStatus()
                 }
             } else {
                 if (filterType == AllProcess) {
-                    displayName = QString("[%1] %2").arg(user).arg(getDisplayNameFromName(name));
+                    displayName = QString("[%1] %2").arg(user).arg(getDisplayNameFromName(name, desktopFile));
                 } else {
-                    displayName = getDisplayNameFromName(name);
+                    displayName = getDisplayNameFromName(name, desktopFile);
                 }
             }
             long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
-            QPixmap icon = getProcessIconFromName(name, processIconCache);
+            QPixmap icon = getProcessIconFromName(name, desktopFile, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
         }

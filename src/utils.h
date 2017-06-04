@@ -93,14 +93,14 @@ namespace Utils {
         float recvKbs;
     } NetworkStatus;
     
-    QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
+    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
     QString convertSizeUnit(long bytes, QString unitSuffix="B");
     QString formatBandwidth(double v);
     QString formatByteCount(double v);
     QString formatByteCount(double v, const char** orders, int nb_orders);
     QString formatMillisecond(int millisecond);
-    QString getDisplayNameFromName(QString procName);
+    QString getDisplayNameFromName(QString procName, std::string desktopFile);
     QString getImagePath(QString imageName);
     QString getProcessCmdline(pid_t pid);
     QString getProcessName(proc_t* p);
@@ -109,8 +109,8 @@ namespace Utils {
     QString getQssPath(QString qssName);
     bool fileExists(QString path);
     bool getProcPidIO(int pid, ProcPidIO &io );
-    bool isGuiApp(QString procName);
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
+    std::string getDesktopFileFromName(QString procName);
     qreal easeInOut(qreal x);
     qreal easeInQuad(qreal x);
     qreal easeInQuint(qreal x);
