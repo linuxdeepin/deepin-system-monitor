@@ -58,16 +58,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     }
 }
 
-void MainWindow::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-
-    QPainterPath path;
-    path.addRect(QRectF(rect()));
-    painter.setOpacity(1);
-    painter.fillPath(path, QColor("#0E0E0E"));
-}
-
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::WindowStateChange) {
@@ -87,9 +77,14 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void MainWindow::showWindowKiller()
+void MainWindow::paintEvent(QPaintEvent *)
 {
-    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
+    QPainter painter(this);
+
+    QPainterPath path;
+    path.addRect(QRectF(rect()));
+    painter.setOpacity(1);
+    painter.fillPath(path, QColor("#0E0E0E"));
 }
 
 void MainWindow::createWindowKiller()
@@ -97,14 +92,6 @@ void MainWindow::createWindowKiller()
     killer = new InteractiveKill();
     killer->setFocus();
     connect(killer, &InteractiveKill::killWindow, this, &MainWindow::popupKillConfirmDialog, Qt::QueuedConnection);
-}
-
-void MainWindow::popupKillConfirmDialog(int pid)
-{
-    killer->close();
-    
-    killPid = pid;
-    killProcessDialog->show();
 }
 
 void MainWindow::dialogButtonClicked(int index, QString)
@@ -118,6 +105,19 @@ void MainWindow::dialogButtonClicked(int index, QString)
             killPid = -1;
         }
     }
+}
+
+void MainWindow::popupKillConfirmDialog(int pid)
+{
+    killer->close();
+    
+    killPid = pid;
+    killProcessDialog->show();
+}
+
+void MainWindow::showWindowKiller()
+{
+    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
 }
 
 void MainWindow::switchTab(int index)
