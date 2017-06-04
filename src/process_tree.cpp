@@ -50,24 +50,6 @@ void ProcessTree::scanProcesses(storedProcType processes)
     }
 }
 
-void ProcessTree::printTree()
-{
-    printNode(rootPid);
-}
-
-void ProcessTree::printNode(int pid)
-{
-    qDebug() << "* Node " << pid;
-
-    if (processMap->contains(pid)) {
-        qDebug() << "### Child " << *(*processMap)[pid].childProcesses;
-
-        for (int childPid : *((*processMap)[pid].childProcesses)) {
-            printNode(childPid);
-        }
-    }
-}
-
 QList<int> ProcessTree::getAllChildPids(int pid)
 {
     childrenPids.clear();
@@ -87,3 +69,22 @@ void ProcessTree::getChildPids(int pid)
         }
     }
 }
+
+void ProcessTree::printNode(int pid)
+{
+    qDebug() << "* Node " << pid;
+
+    if (processMap->contains(pid)) {
+        qDebug() << "### Child " << *(*processMap)[pid].childProcesses;
+
+        for (int childPid : *((*processMap)[pid].childProcesses)) {
+            printNode(childPid);
+        }
+    }
+}
+
+void ProcessTree::printTree()
+{
+    printNode(rootPid);
+}
+
