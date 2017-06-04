@@ -65,6 +65,7 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 InteractiveKill::~InteractiveKill()
 {
     delete startTooltip;
+    delete windowManager;
 }
 
 void InteractiveKill::keyPressEvent(QKeyEvent *keyEvent)

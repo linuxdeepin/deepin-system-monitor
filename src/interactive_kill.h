@@ -51,8 +51,8 @@ private:
     QList<WindowRect> windowRects;
     QList<int> windowPids;
     QPixmap screenPixmap;
-    StartTooltip* startTooltip;
-    WindowManager* windowManager;
+    StartTooltip *startTooltip;
+    WindowManager *windowManager;
     WindowRect killWindowRect;
     int cursorX;
     int cursorY;
