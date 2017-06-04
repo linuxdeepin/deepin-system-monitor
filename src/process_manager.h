@@ -47,6 +47,7 @@ public:
                      
 signals:
     void activeTab(int index);
+    void pressSearchKey();
     
 public slots:
     void dialogButtonClicked(int index, QString buttonText);

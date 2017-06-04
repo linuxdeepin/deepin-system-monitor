@@ -167,6 +167,7 @@ protected:
     virtual void leaveEvent(QEvent * event);
                            
 signals:
+    void pressSearchKey();
     void rightClickItems(QPoint pos, QList<ListItem*> items);
     
 private slots:

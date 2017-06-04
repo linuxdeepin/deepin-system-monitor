@@ -78,3 +78,8 @@ void Toolbar::handleSearchTextChanged()
     }
     searchTimer->start(300);
 }
+
+void Toolbar::focusInput()
+{
+    searchEdit->setFocus();
+}

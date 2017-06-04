@@ -42,6 +42,7 @@ public:
 public slots:
     void handleSearch();
     void handleSearchTextChanged();
+    void focusInput();
     
 signals:
     void search(QString searchContent);

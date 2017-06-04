@@ -48,6 +48,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     topLayout->setContentsMargins(2, 0, 2, 0);
     processView = new ProcessView();
+    connect(processView, &ListView::pressSearchKey, this, &ProcessManager::pressSearchKey);
     layout->addWidget(topWidget);
     layout->addWidget(processView);
 

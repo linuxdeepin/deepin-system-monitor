@@ -58,6 +58,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         statusMonitor = new StatusMonitor();
 
         connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
+        connect(processManager, &ProcessManager::pressSearchKey, toolbar, &Toolbar::focusInput);
 
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
         connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
