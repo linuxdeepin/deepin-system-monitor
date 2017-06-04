@@ -5,6 +5,28 @@ std::mutex NetworkTrafficFilter::m_mutex;
 NetworkTrafficFilter::RowUpdatesMap NetworkTrafficFilter::m_row_updates_map;
 int NetworkTrafficFilter::m_nethogs_monitor_status = NETHOGS_STATUS_OK;
 
+bool NetworkTrafficFilter::getRowUpdate(NetworkTrafficFilter::Update& update)
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	if( m_row_updates_map.empty() )
+		return false;
+	update = m_row_updates_map.begin()->second;
+	m_row_updates_map.erase(m_row_updates_map.begin());
+	return true;
+}
+
+int NetworkTrafficFilter::getNetHogsMonitorStatus()
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_nethogs_monitor_status;
+}
+
+void NetworkTrafficFilter::setNetHogsMonitorStatus(int status) 
+{ 
+	std::lock_guard<std::mutex> lock(m_mutex);
+	m_nethogs_monitor_status = status; 
+}
+
 void NetworkTrafficFilter::setRowUpdate(int action, NethogsMonitorRecord const& record)
 {
 	if( action == NETHOGS_APP_ACTION_REMOVE || record.sent_bytes || record.recv_bytes )
@@ -19,36 +41,14 @@ void NetworkTrafficFilter::setRowUpdate(int action, NethogsMonitorRecord const& 
 	}	
 }
 
-bool NetworkTrafficFilter::getRowUpdate(NetworkTrafficFilter::Update& update)
+void NetworkTrafficFilter::nethogsMonitorThreadProc()
 {
-	std::lock_guard<std::mutex> lock(m_mutex);
-	if( m_row_updates_map.empty() )
-		return false;
-	update = m_row_updates_map.begin()->second;
-	m_row_updates_map.erase(m_row_updates_map.begin());
-	return true;
-}
-
-void NetworkTrafficFilter::setNetHogsMonitorStatus(int status) 
-{ 
-	std::lock_guard<std::mutex> lock(m_mutex);
-	m_nethogs_monitor_status = status; 
-}
-
-int NetworkTrafficFilter::getNetHogsMonitorStatus()
-{
-	std::lock_guard<std::mutex> lock(m_mutex);
-	return m_nethogs_monitor_status;
+	const int status = nethogsmonitor_loop(&onNethogsUpdate);
+	NetworkTrafficFilter::setNetHogsMonitorStatus(status);
 }
 
 void NetworkTrafficFilter::onNethogsUpdate(int action, NethogsMonitorRecord const* update)
 {
 	NetworkTrafficFilter::setRowUpdate(action, *update);
-}
-
-void NetworkTrafficFilter::nethogsMonitorThreadProc()
-{
-	const int status = nethogsmonitor_loop(&onNethogsUpdate);
-	NetworkTrafficFilter::setNetHogsMonitorStatus(status);
 }
 
