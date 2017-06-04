@@ -81,6 +81,19 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     }
 }
 
+MainWindow::~MainWindow()
+{
+    delete killProcessDialog;
+    delete killer;
+    delete processManager;
+    delete killAction;
+    delete layout;
+    delete menu;
+    delete layoutWidget;
+    delete statusMonitor;
+    delete toolbar;
+}
+
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::WindowStateChange) {

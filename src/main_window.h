@@ -42,6 +42,7 @@ class MainWindow : public DMainWindow
     
 public:
     MainWindow(DMainWindow *parent = 0);
+    ~MainWindow();
                                        
     bool eventFilter(QObject *, QEvent *);
     void paintEvent(QPaintEvent *);
