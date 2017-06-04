@@ -23,45 +23,47 @@
 
 #include "attributes_dialog.h"
 #include <QPainter>
-#include <dwindowclosebutton.h>
 #include <proc/sysinfo.h>
 #include <proc/readproc.h>
 #include <QDebug>
 #include "utils.h"
 
 DWIDGET_USE_NAMESPACE
+
 using namespace Utils;
 
 AttributesDialog::AttributesDialog(int pid)
 {
+    setAttribute(Qt::WA_DeleteOnClose, true);
+
     setFixedSize(320, 300);
     
-    auto layout = new QVBoxLayout(this);
+    layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     
-    auto nameLayout = new QHBoxLayout();
-    auto cmdlineLayout = new QHBoxLayout();
+    nameLayout = new QHBoxLayout();
+    cmdlineLayout = new QHBoxLayout();
     
-    auto closeButton = new DWindowCloseButton;
+    closeButton = new DWindowCloseButton;
     closeButton->setFixedSize(27, 23);
-    connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::hide);
+    connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
 
-    auto iconLabel = new QLabel();
+    iconLabel = new QLabel();
     
-    auto nameTitleLabel = new QLabel("程序:");
+    nameTitleLabel = new QLabel("程序:");
     nameTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     nameTitleLabel->setFixedWidth(100);
     nameTitleLabel->setAlignment(Qt::AlignRight);
     
-    auto nameLabel = new QLabel();
+    nameLabel = new QLabel();
     nameLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     
-    auto cmdlineTitleLabel = new QLabel("命令行:");
+    cmdlineTitleLabel = new QLabel("命令行:");
     cmdlineTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     cmdlineTitleLabel->setFixedWidth(100);
     cmdlineTitleLabel->setAlignment(Qt::AlignRight);
     
-    auto cmdlineLabel = new QLabel();
+    cmdlineLabel = new QLabel();
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     cmdlineLabel->setWordWrap(true);
     
@@ -90,7 +92,6 @@ AttributesDialog::AttributesDialog(int pid)
     }
     closeproc(proc);
 
-    QMap<QString, QPixmap> *processIconCache = new QMap<QString, QPixmap>();
     for(auto &i:processes) {
         int processId = (&i.second)->tid;
         
@@ -98,7 +99,7 @@ AttributesDialog::AttributesDialog(int pid)
             QString name = getProcessName(&i.second);
             std::string desktopFile = getDesktopFileFromName(name);
             QString cmdline = Utils::getProcessCmdline(processId);
-            QPixmap icon = getProcessIconFromName(name, desktopFile, processIconCache, 96);
+            QPixmap icon = getProcessIconFromName(name, desktopFile, nullptr, 96);
             
             iconLabel->setPixmap(icon);
             nameLabel->setText(name);
@@ -107,6 +108,19 @@ AttributesDialog::AttributesDialog(int pid)
             break;
         }
     }
+}
+
+AttributesDialog::~AttributesDialog()
+{
+    delete closeButton;
+    delete iconLabel;
+    delete nameTitleLabel;
+    delete nameLabel;
+    delete cmdlineTitleLabel;
+    delete cmdlineLabel;
+    delete nameLayout;
+    delete cmdlineLayout;
+    delete layout;
 }
 
 void AttributesDialog::paintEvent(QPaintEvent *)

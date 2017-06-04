@@ -29,6 +29,9 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <ddialog.h>
+#include <dwindowclosebutton.h>
+
+DWIDGET_USE_NAMESPACE
 
 class AttributesDialog : public Dtk::Widget::DAbstractDialog
 {
@@ -36,8 +39,20 @@ class AttributesDialog : public Dtk::Widget::DAbstractDialog
     
 public:
     AttributesDialog(int pid);
+    ~AttributesDialog();
 
     void paintEvent(QPaintEvent *);
+    
+private:
+    QVBoxLayout *layout;
+    QHBoxLayout *nameLayout;
+    QHBoxLayout *cmdlineLayout;
+    DWindowCloseButton *closeButton;
+    QLabel *iconLabel;
+    QLabel *nameTitleLabel;
+    QLabel *nameLabel;
+    QLabel *cmdlineTitleLabel;
+    QLabel *cmdlineLabel;
 };
 
 #endif
