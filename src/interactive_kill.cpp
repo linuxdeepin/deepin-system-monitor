@@ -44,25 +44,11 @@ InteractiveKill::~InteractiveKill()
     delete startTooltip;
 }
 
-void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
+void InteractiveKill::keyPressEvent(QKeyEvent *keyEvent)
 {
-    if (startTooltip != NULL) {
-        delete startTooltip;
-        startTooltip = NULL;
+    if (keyEvent->key() == Qt::Key_Escape) {
+        close();
     }
-
-    for (int i = 0; i < windowRects.length(); i++) {
-        WindowRect rect = windowRects[i];
-
-        if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
-            mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
-            killWindow(windowPids[i]);
-
-            break;
-        }
-    }
-
-    close();
 }
 
 void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
@@ -86,11 +72,25 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
     repaint();
 }
 
-void InteractiveKill::keyPressEvent(QKeyEvent *keyEvent)
+void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    if (keyEvent->key() == Qt::Key_Escape) {
-        close();
+    if (startTooltip != NULL) {
+        delete startTooltip;
+        startTooltip = NULL;
     }
+
+    for (int i = 0; i < windowRects.length(); i++) {
+        WindowRect rect = windowRects[i];
+
+        if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
+            mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
+            killWindow(windowPids[i]);
+
+            break;
+        }
+    }
+
+    close();
 }
 
 void InteractiveKill::paintEvent(QPaintEvent *)
