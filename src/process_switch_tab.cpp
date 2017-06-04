@@ -55,14 +55,6 @@ void ProcessSwitchTab::mousePressEvent(QMouseEvent *mouseEvent)
     }
 }
 
-void ProcessSwitchTab::leaveEvent(QEvent * event){
-    hoverIndex = -1;
-
-    QWidget::leaveEvent(event);
-    
-    repaint();
-}
-
 void ProcessSwitchTab::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -110,6 +102,14 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
             }
         }
     }
+}
+
+void ProcessSwitchTab::leaveEvent(QEvent * event){
+    hoverIndex = -1;
+
+    QWidget::leaveEvent(event);
+    
+    repaint();
 }
 
 
