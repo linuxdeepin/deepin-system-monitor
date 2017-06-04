@@ -61,6 +61,13 @@ Toolbar::~Toolbar()
     delete searchEdit;
 }
 
+void Toolbar::handleSearch()
+{
+    if (searchEdit->text() == searchTextCache) {
+        search(searchTextCache);
+    }
+}
+
 void Toolbar::handleSearchTextChanged()
 {
     searchTextCache = searchEdit->text();
@@ -69,11 +76,4 @@ void Toolbar::handleSearchTextChanged()
         searchTimer->stop();
     }
     searchTimer->start(300);
-}
-
-void Toolbar::handleSearch()
-{
-    if (searchEdit->text() == searchTextCache) {
-        search(searchTextCache);
-    }
 }
