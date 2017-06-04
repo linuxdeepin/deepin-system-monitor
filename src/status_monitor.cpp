@@ -68,6 +68,27 @@ void StatusMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 }
 
+void StatusMonitor::switchToAllProcess()
+{
+    filterType = AllProcess;
+
+    updateStatus();
+}
+
+void StatusMonitor::switchToOnlyGui()
+{
+    filterType = OnlyGUI;
+
+    updateStatus();
+}
+
+void StatusMonitor::switchToOnlyMe()
+{
+    filterType = OnlyMe;
+
+    updateStatus();
+}
+
 void StatusMonitor::updateStatus()
 {
     // Read the list of open processes information.
@@ -328,23 +349,3 @@ void StatusMonitor::updateStatus()
     prevProcesses = processes;
 }
 
-void StatusMonitor::switchToOnlyGui()
-{
-    filterType = OnlyGUI;
-
-    updateStatus();
-}
-
-void StatusMonitor::switchToOnlyMe()
-{
-    filterType = OnlyMe;
-
-    updateStatus();
-}
-
-void StatusMonitor::switchToAllProcess()
-{
-    filterType = AllProcess;
-
-    updateStatus();
-}
