@@ -64,6 +64,17 @@ void StartTooltip::setWindowManager(WindowManager *wm)
     windowManager = wm;
 }
 
+bool StartTooltip::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::ShowToParent) {
+        Utils::blurRect(windowManager, this->winId(), rect());
+    } else if (event->type() == QEvent::HideToParent) {
+        Utils::clearBlur(windowManager, this->winId());
+    }
+    
+    return false;
+}
+
 void StartTooltip::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -80,15 +91,4 @@ void StartTooltip::paintEvent(QPaintEvent *)
                                   rect().width(),
                                   rect().height() - RECTANGLE_PADDING - iconImg.height()
                                ));
-}
-
-bool StartTooltip::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::ShowToParent) {
-        Utils::blurRect(windowManager, this->winId(), rect());
-    } else if (event->type() == QEvent::HideToParent) {
-        Utils::clearBlur(windowManager, this->winId());
-    }
-    
-    return false;
 }
