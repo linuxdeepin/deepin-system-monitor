@@ -25,6 +25,68 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
     }
 }
 
+void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, float tRecvKbs, float tSentKbs)
+{
+    totalRecvBytes = tRecvBytes;
+    totalSentBytes = tSentBytes;
+    totalRecvKbs = tRecvKbs;
+    totalSentKbs = tSentKbs;
+
+    // Init download path.
+    downloadSpeeds->append(totalRecvKbs);
+
+    if (downloadSpeeds->size() > pointsNumber) {
+        downloadSpeeds->pop_front();
+    }
+
+    QList<QPointF> downloadPoints;
+
+    double downloadMaxHeight = 0;
+    for (int i = 0; i < downloadSpeeds->size(); i++) {
+        if (downloadSpeeds->at(i) > downloadMaxHeight) {
+            downloadMaxHeight = downloadSpeeds->at(i);
+        }
+    }
+
+    for (int i = 0; i < downloadSpeeds->size(); i++) {
+        if (downloadMaxHeight < downloadRenderMaxHeight) {
+            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
+        } else {
+            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
+        }
+    }
+
+    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
+
+    // Init upload path.
+    uploadSpeeds->append(totalSentKbs);
+
+    if (uploadSpeeds->size() > pointsNumber) {
+        uploadSpeeds->pop_front();
+    }
+
+    QList<QPointF> uploadPoints;
+
+    double uploadMaxHeight = 0;
+    for (int i = 0; i < uploadSpeeds->size(); i++) {
+        if (uploadSpeeds->at(i) > uploadMaxHeight) {
+            uploadMaxHeight = uploadSpeeds->at(i);
+        }
+    }
+
+    for (int i = 0; i < uploadSpeeds->size(); i++) {
+        if (uploadMaxHeight < uploadRenderMaxHeight) {
+            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
+        } else {
+            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
+        }
+    }
+
+    uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
+
+    repaint();
+}
+
 void NetworkMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -149,66 +211,4 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor(uploadColor), 1.6));
     painter.setBrush(QBrush());
     painter.drawPath(uploadPath);
-}
-
-void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, float tRecvKbs, float tSentKbs)
-{
-    totalRecvBytes = tRecvBytes;
-    totalSentBytes = tSentBytes;
-    totalRecvKbs = tRecvKbs;
-    totalSentKbs = tSentKbs;
-
-    // Init download path.
-    downloadSpeeds->append(totalRecvKbs);
-
-    if (downloadSpeeds->size() > pointsNumber) {
-        downloadSpeeds->pop_front();
-    }
-
-    QList<QPointF> downloadPoints;
-
-    double downloadMaxHeight = 0;
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadSpeeds->at(i) > downloadMaxHeight) {
-            downloadMaxHeight = downloadSpeeds->at(i);
-        }
-    }
-
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadMaxHeight < downloadRenderMaxHeight) {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
-        } else {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
-        }
-    }
-
-    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
-
-    // Init upload path.
-    uploadSpeeds->append(totalSentKbs);
-
-    if (uploadSpeeds->size() > pointsNumber) {
-        uploadSpeeds->pop_front();
-    }
-
-    QList<QPointF> uploadPoints;
-
-    double uploadMaxHeight = 0;
-    for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadSpeeds->at(i) > uploadMaxHeight) {
-            uploadMaxHeight = uploadSpeeds->at(i);
-        }
-    }
-
-    for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadMaxHeight < uploadRenderMaxHeight) {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
-        } else {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
-        }
-    }
-
-    uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
-
-    repaint();
 }
