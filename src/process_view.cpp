@@ -31,12 +31,12 @@ ProcessView::ProcessView()
     
     // Set column widths.
     QList<int> widths;
-    widths << -1 << 60 << 70 << 80 << 80 << 70 << 70 << 60;
+    widths << -1 << 60 << 70 << 80 << 80 << 70 << 70 << 70;
     setColumnWidths(widths);
     
     // Set column titles.
     QList<QString> titles;
-    titles << "进程名" << "CPU" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "序号";
+    titles << "进程名" << "CPU" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "进程号";
     setColumnTitles(titles, 36);
     
     // Set column hide flags.
