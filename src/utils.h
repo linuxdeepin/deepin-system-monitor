@@ -93,16 +93,6 @@ namespace Utils {
         float recvKbs;
     } NetworkStatus;
     
-    /**
-     * Get process IO details, root access required.
-     * @param pid the process id.
-     * @param io the ProcPidIO struct to fill.
-     * @return false if the operation failed (no permission, pid does not exist).
-     * @root root access is required even for processes the caller owns (as the information in this file
-     * might be used to deduce the size of an entered password).
-     */
-    bool getProcPidIO(int pid, ProcPidIO &io );
-
     QPixmap getProcessIconFromName(QString procName, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
     QString convertSizeUnit(long bytes, QString unitSuffix="B");
@@ -114,9 +104,11 @@ namespace Utils {
     QString getImagePath(QString imageName);
     QString getProcessCmdline(pid_t pid);
     QString getProcessName(proc_t* p);
+    QString getProcessNameFromCmdLine(const pid_t pid);
     QString getQrcPath(QString imageName);
     QString getQssPath(QString qssName);
     bool fileExists(QString path);
+    bool getProcPidIO(int pid, ProcPidIO &io );
     bool isGuiApp(QString procName);
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
     qreal easeInOut(qreal x);
@@ -147,6 +139,7 @@ namespace Utils {
     void removeChildren(QWidget *widget);
     void removeLayoutChild(QLayout *layout, int index);
     void setFontSize(QPainter &painter, int textSize);
+    const std::vector<std::string> explode(const std::string& s, const char& c);
 }
 
 
