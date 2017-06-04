@@ -179,54 +179,77 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     }
 }
 
-void ProcessItem::setNetworkStatus(NetworkStatus nStatus)
+bool ProcessItem::search(const ListItem *item, QString searchContent)
 {
-    networkStatus = nStatus;
+    const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
+    return processItem->getName().toLower().contains(searchContent.toLower()) ||
+        processItem->getDisplayName().toLower().contains(searchContent.toLower()) ||
+        QString(processItem->getPid()).toLower().contains(searchContent.toLower()) || 
+        processItem->getUser().toLower().contains(searchContent.toLower());
 }
 
-void ProcessItem::setDiskStatus(DiskStatus dStatus)
+bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
-    diskStatus = dStatus;
+    // Init.
+    double cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
+    double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+    bool sortOrder;
+
+    // Sort item with memory if cpu is same.
+    if (cpu1 == cpu2) {
+        long memory1 = static_cast<const ProcessItem*>(item1)->getMemory();
+        long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
+
+        sortOrder = memory1 > memory2;
+    }
+    // Otherwise sort by cpu.
+    else {
+        sortOrder = cpu1 > cpu2;
+    }
+
+    return descendingSort ? sortOrder : !sortOrder;
 }
 
-QString ProcessItem::getName() const
+bool ProcessItem::sortByDiskRead(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
-    return name;
+    // Init.
+    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
+    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
+    bool sortOrder = status1.readKbs > status2.readKbs;
+
+    return descendingSort ? sortOrder : !sortOrder;
 }
 
-QString ProcessItem::getDisplayName() const
+bool ProcessItem::sortByDiskWrite(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
-    return displayName;
+    // Init.
+    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
+    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
+    bool sortOrder = status1.writeKbs > status2.writeKbs;
+
+    return descendingSort ? sortOrder : !sortOrder;
 }
 
-double ProcessItem::getCPU() const
+bool ProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
-    return cpu;
-}
+    // Init.
+    long memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
+    long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
+    bool sortOrder;
 
-long ProcessItem::getMemory() const
-{
-    return memory;
-}
+    // Sort item with cpu if memory is same.
+    if (memory1 == memory2) {
+        double cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
+        double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
 
-int ProcessItem::getPid() const
-{
-    return pid;
-}
+        sortOrder = cpu1 > cpu2;
+    }
+    // Otherwise sort by memory.
+    else {
+        sortOrder = memory1 > memory2;
+    }
 
-QString ProcessItem::getUser() const
-{
-    return user;
-}
-
-NetworkStatus ProcessItem::getNetworkStatus() const
-{
-    return networkStatus;
-}
-
-DiskStatus ProcessItem::getDiskStatus() const
-{
-    return diskStatus;
+    return descendingSort ? sortOrder : !sortOrder;
 }
 
 bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort)
@@ -254,59 +277,7 @@ bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort)
-{
-    // Init.
-    double cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
-    double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
-    bool sortOrder;
-
-    // Sort item with memory if cpu is same.
-    if (cpu1 == cpu2) {
-        long memory1 = static_cast<const ProcessItem*>(item1)->getMemory();
-        long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
-
-        sortOrder = memory1 > memory2;
-    }
-    // Otherwise sort by cpu.
-    else {
-        sortOrder = cpu1 > cpu2;
-    }
-
-    return descendingSort ? sortOrder : !sortOrder;
-}
-
-bool ProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort)
-{
-    // Init.
-    long memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
-    long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
-    bool sortOrder;
-
-    // Sort item with cpu if memory is same.
-    if (memory1 == memory2) {
-        double cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
-        double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
-
-        sortOrder = cpu1 > cpu2;
-    }
-    // Otherwise sort by memory.
-    else {
-        sortOrder = memory1 > memory2;
-    }
-
-    return descendingSort ? sortOrder : !sortOrder;
-}
-
-bool ProcessItem::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort)
-{
-    bool sortOrder = (static_cast<const ProcessItem*>(item1))->getPid() > (static_cast<const ProcessItem*>(item2))->getPid();
-
-    return descendingSort ? sortOrder : !sortOrder;
-}
-
-
-bool ProcessItem::sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByNetworkDownload(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
     // Init.
     NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
@@ -325,7 +296,7 @@ bool ProcessItem::sortByDownload(const ListItem *item1, const ListItem *item2, b
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByNetworkUpload(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
     // Init.
     NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
@@ -344,33 +315,51 @@ bool ProcessItem::sortByUpload(const ListItem *item1, const ListItem *item2, boo
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByWrite(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort)
 {
-    // Init.
-    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
-    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
-    bool sortOrder = status1.writeKbs > status2.writeKbs;
+    bool sortOrder = (static_cast<const ProcessItem*>(item1))->getPid() > (static_cast<const ProcessItem*>(item2))->getPid();
 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort)
+DiskStatus ProcessItem::getDiskStatus() const
 {
-    // Init.
-    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
-    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
-    bool sortOrder = status1.readKbs > status2.readKbs;
-
-    return descendingSort ? sortOrder : !sortOrder;
+    return diskStatus;
 }
 
-bool ProcessItem::search(const ListItem *item, QString searchContent)
+NetworkStatus ProcessItem::getNetworkStatus() const
 {
-    const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
-    return processItem->getName().toLower().contains(searchContent.toLower()) ||
-        processItem->getDisplayName().toLower().contains(searchContent.toLower()) ||
-        QString(processItem->getPid()).toLower().contains(searchContent.toLower()) || 
-        processItem->getUser().toLower().contains(searchContent.toLower());
+    return networkStatus;
+}
+
+QString ProcessItem::getDisplayName() const
+{
+    return displayName;
+}
+
+QString ProcessItem::getName() const
+{
+    return name;
+}
+
+QString ProcessItem::getUser() const
+{
+    return user;
+}
+
+double ProcessItem::getCPU() const
+{
+    return cpu;
+}
+
+int ProcessItem::getPid() const
+{
+    return pid;
+}
+
+long ProcessItem::getMemory() const
+{
+    return memory;
 }
 
 void ProcessItem::mergeItem(ListItem *item)
@@ -385,4 +374,14 @@ void ProcessItem::mergeItem(ListItem *item)
     networkStatus.recvBytes += processItem->getNetworkStatus().recvBytes;
     networkStatus.sentKbs += processItem->getNetworkStatus().sentKbs;
     networkStatus.recvKbs += processItem->getNetworkStatus().recvKbs;
+}
+
+void ProcessItem::setDiskStatus(DiskStatus dStatus)
+{
+    diskStatus = dStatus;
+}
+
+void ProcessItem::setNetworkStatus(NetworkStatus nStatus)
+{
+    networkStatus = nStatus;
 }

@@ -20,13 +20,13 @@ public:
     
     static bool search(const ListItem *item, QString searchContent);
     static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByDownload(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByDiskRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByDiskWrite(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByNetworkDownload(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool sortByNetworkUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
     static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByWrite(const ListItem *item1, const ListItem *item2, bool descendingSort);
     
     DiskStatus getDiskStatus() const;
     NetworkStatus getNetworkStatus() const;

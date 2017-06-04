@@ -44,10 +44,10 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     alorithms->append(&ProcessItem::sortByName);
     alorithms->append(&ProcessItem::sortByCPU);
     alorithms->append(&ProcessItem::sortByMemory);
-    alorithms->append(&ProcessItem::sortByWrite);
-    alorithms->append(&ProcessItem::sortByRead);
-    alorithms->append(&ProcessItem::sortByDownload);
-    alorithms->append(&ProcessItem::sortByUpload);
+    alorithms->append(&ProcessItem::sortByDiskWrite);
+    alorithms->append(&ProcessItem::sortByDiskRead);
+    alorithms->append(&ProcessItem::sortByNetworkDownload);
+    alorithms->append(&ProcessItem::sortByNetworkUpload);
     alorithms->append(&ProcessItem::sortByPid);
     processView->setColumnSortingAlgorithms(alorithms, 1, true);
     processView->setSearchAlgorithm(&ProcessItem::search);
