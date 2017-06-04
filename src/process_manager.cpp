@@ -106,7 +106,17 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
 
 ProcessManager::~ProcessManager()
 {
+    delete killProcessDialog;
+    delete processSwitchTab;
     delete processView;
+    delete attributesAction;
+    delete killAction;
+    delete openDirectoryAction;
+    delete pauseAction;
+    delete resumeAction;
+    delete statusLabel;
+    delete actionPids;
+    delete rightMenu;
 }
 
 void ProcessManager::dialogButtonClicked(int index, QString)
