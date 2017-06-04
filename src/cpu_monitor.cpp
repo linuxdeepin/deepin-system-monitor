@@ -23,6 +23,50 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
     timer->start(30);
 }
 
+void CpuMonitor::render()
+{
+    if (animationIndex < animationFrames) {
+        animationIndex++;
+
+        repaint();
+    } else {
+        timer->stop();
+    }
+}
+
+void CpuMonitor::updateStatus(double cpuPercent)
+{
+    cpuPercents->append(cpuPercent);
+
+    if (cpuPercents->size() > pointsNumber) {
+        cpuPercents->pop_front();
+    }
+
+    QList<QPointF> points;
+
+    double cpuMaxHeight = 0;
+    for (int i = 0; i < cpuPercents->size(); i++) {
+        if (cpuPercents->at(i) > cpuMaxHeight) {
+            cpuMaxHeight = cpuPercents->at(i);
+        }
+    }
+
+    for (int i = 0; i < cpuPercents->size(); i++) {
+        if (cpuMaxHeight < cpuRenderMaxHeight) {
+            points.append(QPointF(i * 5, cpuPercents->at(i)));
+        } else {
+            points.append(QPointF(i * 5, cpuPercents->at(i) * cpuRenderMaxHeight / cpuMaxHeight));
+        }
+    }
+
+    cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
+
+    if (cpuPercents->last() != cpuPercents->at(cpuPercents->size() - 2)) {
+        animationIndex = 0;
+        timer->start(30);
+    }
+}
+
 void CpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -76,48 +120,4 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     painter.setPen(QPen(QColor("#8442FB"), 2));
     painter.drawPath(cpuPath);
-}
-
-void CpuMonitor::updateStatus(double cpuPercent)
-{
-    cpuPercents->append(cpuPercent);
-
-    if (cpuPercents->size() > pointsNumber) {
-        cpuPercents->pop_front();
-    }
-
-    QList<QPointF> points;
-
-    double cpuMaxHeight = 0;
-    for (int i = 0; i < cpuPercents->size(); i++) {
-        if (cpuPercents->at(i) > cpuMaxHeight) {
-            cpuMaxHeight = cpuPercents->at(i);
-        }
-    }
-
-    for (int i = 0; i < cpuPercents->size(); i++) {
-        if (cpuMaxHeight < cpuRenderMaxHeight) {
-            points.append(QPointF(i * 5, cpuPercents->at(i)));
-        } else {
-            points.append(QPointF(i * 5, cpuPercents->at(i) * cpuRenderMaxHeight / cpuMaxHeight));
-        }
-    }
-
-    cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
-
-    if (cpuPercents->last() != cpuPercents->at(cpuPercents->size() - 2)) {
-        animationIndex = 0;
-        timer->start(30);
-    }
-}
-
-void CpuMonitor::render()
-{
-    if (animationIndex < animationFrames) {
-        animationIndex++;
-
-        repaint();
-    } else {
-        timer->stop();
-    }
 }
