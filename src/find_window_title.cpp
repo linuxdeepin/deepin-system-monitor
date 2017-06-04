@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include <QObject>
 #include <QDebug>
@@ -31,10 +31,12 @@
 
 FindWindowTitle::FindWindowTitle()
 {
+    windowTitles = new QMap<int, QString>();
 }
 
 FindWindowTitle::~FindWindowTitle()
 {
+    windowTitles->clear();
     delete windowTitles;
 }
 
@@ -50,7 +52,7 @@ QString FindWindowTitle::findWindowTitle(int pid)
 void FindWindowTitle::updateWindowInfos()
 {
     QList<xcb_window_t> windows;
-    
+
     xcb_get_property_reply_t *listReply = getProperty(getRootWindow(), "_NET_CLIENT_LIST_STACKING", XCB_ATOM_WINDOW);
 
     if (listReply) {
@@ -68,13 +70,13 @@ void FindWindowTitle::updateWindowInfos()
         }
 
         free(listReply);
-    }
 
-    windowTitles = new QMap<int, QString>();
-    foreach (auto window, windows) {
-        int pid = getWindowPid(window);
-        if (!windowTitles->contains(pid)) {
-            (*windowTitles)[pid] = getWindowName(window);
+        windowTitles->clear();
+        foreach (auto window, windows) {
+            int pid = getWindowPid(window);
+            if (!windowTitles->contains(pid)) {
+                (*windowTitles)[pid] = getWindowName(window);
+            }
         }
     }
 }

@@ -111,19 +111,19 @@ QList<xcb_window_t> WindowManager::getWindows()
         }
 
         free(listReply);
+        
+        // We need re-sort windows list from up to bottom,
+        // to make compare cursor with window area from up to bottom.
+        std::reverse(windows.begin(), windows.end());
+
+        // Add desktop window.
+        windows.append(rootWindow);
+
+        // Just use for debug.
+        // foreach (auto window, windows) {
+        //     qDebug() << getWindowName(window);
+        // }
     }
-
-    // We need re-sort windows list from up to bottom,
-    // to make compare cursor with window area from up to bottom.
-    std::reverse(windows.begin(), windows.end());
-
-    // Add desktop window.
-    windows.append(rootWindow);
-
-    // Just use for debug.
-    // foreach (auto window, windows) {
-    //     qDebug() << getWindowName(window);
-    // }
 
     return windows;
 }
@@ -226,17 +226,17 @@ WindowRect WindowManager::adjustRectInScreenArea(WindowRect rect)
     newRect.y = rect.y >= 0 ? rect.y : 0;
     newRect.width = rect.x >= 0 ? rect.width : rect.width + rect.x;
     newRect.height = rect.y >= 0 ? rect.height : rect.height + rect.y;
-    
+
     WindowRect rootWindowRect = getRootWindowRect();
-    
+
     if (newRect.x + newRect.width > rootWindowRect.width) {
         newRect.width = rootWindowRect.width - newRect.x;
     }
-    
+
     if (newRect.y + newRect.height > rootWindowRect.height) {
         newRect.height = rootWindowRect.height - newRect.y;
     }
-    
+
     return newRect;
 }
 
@@ -381,4 +381,3 @@ xcb_window_t WindowManager::getRootWindow()
 {
     return rootWindow;
 }
-

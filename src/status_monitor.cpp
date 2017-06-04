@@ -266,7 +266,7 @@ void StatusMonitor::updateStatus()
     // Update network status.
     NetworkTrafficFilter::Update update;
 
-    QMap<int, NetworkStatus> *networkStatusSnapshot = new QMap<int, NetworkStatus>();
+    QMap<int, NetworkStatus> networkStatusSnapshot;
     totalSentKbs = 0;
     totalRecvKbs = 0;
     while (NetworkTrafficFilter::getRowUpdate(update)) {
@@ -297,15 +297,15 @@ void StatusMonitor::updateStatus()
                 update.record.recv_kbs
             };
 
-            (*networkStatusSnapshot)[update.record.pid] = status;
+            (networkStatusSnapshot)[update.record.pid] = status;
         }
     }
 
     // Update ProcessItem's network status.
     for (ListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
-        if (networkStatusSnapshot->contains(processItem->getPid())) {
-            processItem->setNetworkStatus(networkStatusSnapshot->value(processItem->getPid()));
+        if (networkStatusSnapshot.contains(processItem->getPid())) {
+            processItem->setNetworkStatus(networkStatusSnapshot.value(processItem->getPid()));
         }
 
         ProcPidIO pidIO;
@@ -380,5 +380,7 @@ void StatusMonitor::updateStatus()
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
+    
+    delete processTree;
 }
 

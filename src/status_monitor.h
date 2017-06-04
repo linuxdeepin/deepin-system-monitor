@@ -83,6 +83,7 @@ private:
     QVBoxLayout *layout;
     float totalRecvKbs;
     float totalSentKbs;
+    // int updateDuration = 200;
     int updateDuration = 2000;
     storedProcType prevProcesses;
     uint32_t totalRecvBytes;

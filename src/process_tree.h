@@ -38,7 +38,7 @@ class ProcessTree : public QObject
     struct Process
     {
         int parentPid;
-        QList<int> *childProcesses;
+        QList<int> childProcesses;
     };
     
 public:
