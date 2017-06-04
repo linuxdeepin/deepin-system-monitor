@@ -21,8 +21,10 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     QList<xcb_window_t> windows = windowManager->getWindows();
 
     for (int i = 0; i < windows.length(); i++) {
-        windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
-        windowPids.append(windowManager->getWindowPid(windows[i]));
+        if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
+            windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
+            windowPids.append(windowManager->getWindowPid(windows[i]));
+        }
     }
 
     startTooltip = new StartTooltip();

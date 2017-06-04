@@ -101,8 +101,9 @@ void MainWindow::createWindowKiller()
 
 void MainWindow::popupKillConfirmDialog(int pid)
 {
+    killer->close();
+    
     killPid = pid;
-
     killProcessDialog->show();
 }
 
