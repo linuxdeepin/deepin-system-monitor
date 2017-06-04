@@ -34,7 +34,6 @@ HEADERS += src/utils.h \
 		   src/smooth_curve_generator.h \
 		   src/interactive_kill.h \
 		   src/start_tooltip.h \
-		   src/event_monitor.h \
 		   src/process_tree.h \
 		   src/process_switch_tab.h \
 		   src/attributes_dialog.h \
@@ -57,7 +56,6 @@ SOURCES += src/main.cpp \
 		   src/smooth_curve_generator.cpp \
 		   src/interactive_kill.cpp \
 		   src/start_tooltip.cpp \
-		   src/event_monitor.cpp \
 		   src/process_tree.cpp \
 		   src/process_switch_tab.cpp \
 		   src/attributes_dialog.cpp \

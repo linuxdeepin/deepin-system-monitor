@@ -19,6 +19,7 @@ public:
     
     void mousePressEvent(QMouseEvent *mouseEvent);
     void mouseMoveEvent(QMouseEvent *mouseEvent);
+    void keyPressEvent(QKeyEvent *keyEvent);
     void paintEvent(QPaintEvent *);
     
 signals:
@@ -34,6 +35,9 @@ private:
     
     QList<WindowRect> windowRects;
     QList<int> windowPids;
+    QPixmap screenPixmap;
+    
+    WindowRect killWindowRect;
 };
 
 #endif

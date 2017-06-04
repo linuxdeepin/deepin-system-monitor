@@ -9,7 +9,6 @@
 #include "interactive_kill.h"
 #include "process_manager.h"
 #include "toolbar.h"
-#include "event_monitor.h"
 #include "ddialog.h"
 
 DWIDGET_USE_NAMESPACE
@@ -26,7 +25,7 @@ public:
     
 public slots:
     void showWindowKiller();
-    void responseEsc();
+    void createWindowKiller();
     void popupKillConfirmDialog(int pid);
     void dialogButtonClicked(int index, QString);
     
@@ -41,7 +40,6 @@ private:
     QMenu *menu;
     QAction *killAction;
     InteractiveKill *killer;
-    EventMonitor eventMonitor;
     DDialog *killProcessDialog;
     
     int killPid;

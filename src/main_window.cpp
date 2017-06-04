@@ -55,7 +55,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         connect(killProcessDialog, &DDialog::buttonClicked, this, &MainWindow::dialogButtonClicked);
 
         killer = NULL;
-        connect(&eventMonitor, &EventMonitor::pressEsc, this, &MainWindow::responseEsc, Qt::QueuedConnection);
     }
 }
 
@@ -90,18 +89,14 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
 void MainWindow::showWindowKiller()
 {
-    killer = new InteractiveKill();
-    connect(killer, &InteractiveKill::killWindow, this, &MainWindow::popupKillConfirmDialog, Qt::QueuedConnection);
-
-    eventMonitor.start();
+    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
 }
 
-void MainWindow::responseEsc()
+void MainWindow::createWindowKiller()
 {
-    if (killer != NULL) {
-        killer->close();
-        killer = NULL;
-    }
+    killer = new InteractiveKill();
+    killer->setFocus();
+    connect(killer, &InteractiveKill::killWindow, this, &MainWindow::popupKillConfirmDialog, Qt::QueuedConnection);
 }
 
 void MainWindow::popupKillConfirmDialog(int pid)
