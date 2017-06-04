@@ -77,12 +77,17 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 
 StatusMonitor::~StatusMonitor()
 {
-    delete layout;
     delete cpuMonitor;
+    delete findWindowTitle;
     delete memoryMonitor;
     delete networkMonitor;
     delete processIconCache;
+    delete processRecvBytes;
+    delete processSentBytes;
+    delete processReadKbs;
+    delete processWriteKbs;
     delete updateStatusTimer;
+    delete layout;
 }
 
 void StatusMonitor::paintEvent(QPaintEvent *)
