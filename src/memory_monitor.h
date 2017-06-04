@@ -49,8 +49,6 @@ protected:
     int textPadding = 12;
     int titleRenderOffsetX = 20;
     int titleRenderSize = 20;
-    int topAppsTitleRenderOffsetY = 100;
-    int topAppsTitleRenderSize = 11;
     long prevUsedMemory;
     long prevUsedSwap;
     long totalMemory;
