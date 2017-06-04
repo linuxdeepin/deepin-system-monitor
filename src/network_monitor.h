@@ -32,6 +32,7 @@ class NetworkMonitor : public QWidget
     
 public:
     NetworkMonitor(QWidget *parent = 0);
+    ~NetworkMonitor();
     
 public slots:
     void updateStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);

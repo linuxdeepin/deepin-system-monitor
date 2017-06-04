@@ -48,6 +48,12 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
     }
 }
 
+NetworkMonitor::~NetworkMonitor()
+{
+    delete downloadSpeeds;
+    delete uploadSpeeds;
+}
+
 void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, float tRecvKbs, float tSentKbs)
 {
     totalRecvBytes = tRecvBytes;
