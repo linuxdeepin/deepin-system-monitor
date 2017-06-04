@@ -118,31 +118,21 @@ namespace Utils {
         return QSize(width, height);
     }
 
-    QString convertSizeUnit(long bytes, QString unitSuffix)
-    {
-        if (bytes < qPow(2, 10)) {
-            return QString("%1 %2").arg(bytes).arg(unitSuffix);
-        } else if (bytes < qPow(2, 20)) {
-            return QString("%1 K%2").arg(QString::number(qreal(bytes) / qPow(2, 10), 'f', 1)).arg(unitSuffix);
-        } else if (bytes < qPow(2, 30)) {
-            return QString("%1 M%2").arg(QString::number(qreal(bytes) / qPow(2, 20), 'f', 1)).arg(unitSuffix);
-        } else if (bytes < qPow(2, 40)) {
-            return QString("%1 G%2").arg(QString::number(qreal(bytes) / qPow(2, 30), 'f', 1)).arg(unitSuffix);
-        } else if (bytes < qPow(2, 50)) {
-            return QString("%1 T%2").arg(QString::number(qreal(bytes) / qPow(2, 40), 'f', 1)).arg(unitSuffix);
-        }
-
-        return QString::number(bytes);
-    }
-
     QString formatBandwidth(double v)
     {
-        static const char* orders[] = { "KB/s", "MB/s", "GB/s" };
+        static const char* orders[] = { "KB/s", "MB/s", "GB/s", "TB/s" };
 
-        return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
+        return formatUnitSize(v, orders, sizeof(orders)/sizeof(orders[0]));
     }
 
-    QString formatByteCount(double v, const char** orders, int nb_orders)
+    QString formatByteCount(double v)
+    {
+        static const char* orders[] = { "B", "KB", "MB", "GB", "TB" };
+
+        return formatUnitSize(v, orders, sizeof(orders)/sizeof(orders[0]));
+    }
+
+    QString formatUnitSize(double v, const char** orders, int nb_orders)
     {
         int order = 0;
         while (v >= 1024 && order + 1 < nb_orders) {
@@ -153,13 +143,6 @@ namespace Utils {
         snprintf(buffer1, sizeof(buffer1), "%.1lf %s", v, orders[order]);
 
         return QString(buffer1);
-    }
-
-    QString formatByteCount(double v)
-    {
-        static const char* orders[] = { "B", "KB", "MB", "GB" };
-
-        return formatByteCount(v, orders, sizeof(orders)/sizeof(orders[0]));
     }
 
     QString formatMillisecond(int millisecond)

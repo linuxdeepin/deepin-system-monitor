@@ -95,10 +95,9 @@ namespace Utils {
     
     QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
-    QString convertSizeUnit(long bytes, QString unitSuffix="B");
     QString formatBandwidth(double v);
     QString formatByteCount(double v);
-    QString formatByteCount(double v, const char** orders, int nb_orders);
+    QString formatUnitSize(double v, const char** orders, int nb_orders);
     QString formatMillisecond(int millisecond);
     QString getDisplayNameFromName(QString procName, std::string desktopFile);
     QString getImagePath(QString imageName);

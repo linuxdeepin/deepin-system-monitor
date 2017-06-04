@@ -68,8 +68,8 @@ void MemoryMonitor::render()
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
-    if ((convertSizeUnit(uMemory, "") != convertSizeUnit(usedMemory, "")) ||
-        (convertSizeUnit(uSwap, "") != convertSizeUnit(usedSwap, ""))) {
+    if ((formatByteCount(uMemory) != formatByteCount(usedMemory)) ||
+        (formatByteCount(uSwap) != formatByteCount(usedSwap))) {
         prevUsedMemory = usedMemory;
         prevUsedSwap = usedSwap;
 
@@ -131,7 +131,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fm = painter.fontMetrics();
 
     QString memoryTitle = QString("内存 (%1%)").arg(QString::number(memoryPercent * 100, 'f', 1));
-    QString memoryContent = QString("%1/%2").arg(convertSizeUnit(usedMemory, "")).arg(convertSizeUnit(totalMemory, ""));
+    QString memoryContent = QString("%1/%2").arg(formatByteCount(usedMemory)).arg(formatByteCount(totalMemory));
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
@@ -139,7 +139,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         swapContent = "";
     } else {
         swapTitle = QString("交换空间 (%1%)").arg(QString::number(swapPercent * 100, 'f', 1));
-        swapContent = QString("%2/%3").arg(convertSizeUnit(usedSwap, "")).arg(convertSizeUnit(totalSwap, ""));
+        swapContent = QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
     }
     
     painter.setPen(QPen(QColor(memoryColor)));
