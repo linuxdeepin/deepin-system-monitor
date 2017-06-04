@@ -35,6 +35,7 @@ class FindWindowTitle : public WindowManager
     
 public:
     FindWindowTitle();
+    ~FindWindowTitle();
     
     QString findWindowTitle(int pid);
     void updateWindowInfos();

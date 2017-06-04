@@ -33,6 +33,11 @@ FindWindowTitle::FindWindowTitle()
 {
 }
 
+FindWindowTitle::~FindWindowTitle()
+{
+    delete windowTitles;
+}
+
 QString FindWindowTitle::findWindowTitle(int pid)
 {
     if (windowTitles->contains(pid)) {
