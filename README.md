@@ -2,7 +2,7 @@
 
 Deepin system monitor: a more user-friendly system monitor.
 
-Thanks alot [Lily Rivers](https://github.com/VioletDarkKitty/system-monitor), this project used a lot of his code.
+Thanks a lot for [Lily Rivers](https://github.com/VioletDarkKitty/system-monitor)'s working, this project used a lot of his code.
 
 ## Dependencies
 
