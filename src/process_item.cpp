@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "process_item.h"
 #include "utils.h"
@@ -113,7 +113,11 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             break;
         }
 
-        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), rect.width() - iconSize - padding * 3, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
+        int renderWidth = rect.width() - iconSize - padding * 3;
+        QFont font = painter->font();
+        QFontMetrics fm(font);
+        QString renderName = fm.elidedText(name, Qt::ElideRight, renderWidth);
+        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), renderWidth, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, renderName);
     }
     // Draw CPU.
     else if (column == 1) {
@@ -207,7 +211,7 @@ bool ProcessItem::search(const ListItem *item, QString searchContent)
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
     return processItem->getName().toLower().contains(searchContent.toLower()) ||
         processItem->getDisplayName().toLower().contains(searchContent.toLower()) ||
-        QString(processItem->getPid()).toLower().contains(searchContent.toLower()) || 
+        QString(processItem->getPid()).toLower().contains(searchContent.toLower()) ||
         processItem->getUser().toLower().contains(searchContent.toLower());
 }
 
