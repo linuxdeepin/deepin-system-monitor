@@ -50,12 +50,12 @@ private:
     QString uploadColor = "#004EEF";
     float totalRecvKbs;
     float totalSentKbs;
-    int downloadRenderMaxHeight = 30;
+    int downloadRenderMaxHeight = 50;
     int downloadRenderPaddingX = 13;
     int downloadRenderPaddingY = 50;
     int downloadRenderSize = 9;
     int downloadWaveformsRenderOffsetX = 4;
-    int downloadWaveformsRenderOffsetY = 136;
+    int downloadWaveformsRenderOffsetY = 156;
     int gridPaddingRight = 21;
     int gridPaddingTop = 10;
     int gridRenderOffsetY = 99;
@@ -69,7 +69,7 @@ private:
     int textPadding = 12;
     int titleRenderOffsetX = 20;
     int titleRenderSize = 20;
-    int uploadRenderMaxHeight = 30;
+    int uploadRenderMaxHeight = 10;
     int uploadRenderPaddingX = 13;
     int uploadRenderPaddingY = 70;
     int uploadRenderSize = 9;
