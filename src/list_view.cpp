@@ -764,10 +764,10 @@ void ListView::paintEvent(QPaintEvent *)
                     painter.setOpacity(1);
                     if (defaultSortingOrder) {
                         painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(), 
-                                                 rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowUpImage);
+                                                 rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
                     } else {
                         painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(), 
-                                                 rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
+                                                 rect().y() + (titleHeight - arrowUpImage.height()) / 2), arrowUpImage);
                     }
                 }
             }
