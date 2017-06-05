@@ -69,9 +69,11 @@ AttributesDialog::AttributesDialog(int pid)
     
     nameLayout->addWidget(nameTitleLabel);
     nameLayout->addWidget(nameLabel);
+    nameLayout->addSpacing(20);
 
     cmdlineLayout->addWidget(cmdlineTitleLabel);
     cmdlineLayout->addWidget(cmdlineLabel);
+    cmdlineLayout->addSpacing(20);
     
     layout->addWidget(closeButton, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addSpacing(20);
