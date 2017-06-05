@@ -41,7 +41,7 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
 
     installEventFilter(this);
 
-    text = tr("点击你想结束的应用程序");
+    text = tr("点击您想结束的应用程序");
     QSize size = Utils::getRenderSize(RECTANGLE_FONT_SIZE, text);
 
     setFixedSize(size.width() + RECTANGLE_PADDING * 2,
