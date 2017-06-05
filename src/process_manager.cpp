@@ -189,7 +189,7 @@ void ProcessManager::resumeProcesses()
 void ProcessManager::showAttributes()
 {
     for (int pid : *actionPids) {
-        AttributesDialog *dialog = new AttributesDialog(pid);
+        AttributesDialog *dialog = new AttributesDialog(this, pid);
         dialog->show();
     }
 

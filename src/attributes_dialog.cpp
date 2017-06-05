@@ -32,7 +32,7 @@ DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-AttributesDialog::AttributesDialog(int pid)
+AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
 

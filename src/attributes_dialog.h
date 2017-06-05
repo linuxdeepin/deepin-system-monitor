@@ -38,7 +38,7 @@ class AttributesDialog : public Dtk::Widget::DAbstractDialog
     Q_OBJECT
     
 public:
-    AttributesDialog(int pid);
+    AttributesDialog(QWidget *parent = 0, int pid=-1);
     ~AttributesDialog();
 
     void paintEvent(QPaintEvent *);

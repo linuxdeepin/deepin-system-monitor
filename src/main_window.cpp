@@ -84,15 +84,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
 MainWindow::~MainWindow()
 {
-    delete killProcessDialog;
-    delete killer;
-    delete processManager;
-    delete killAction;
-    delete layout;
-    delete menu;
-    delete layoutWidget;
-    delete statusMonitor;
-    delete toolbar;
+    // We don't need clean pointers because application has exit here.
 }
 
 bool MainWindow::eventFilter(QObject *, QEvent *event)
