@@ -124,9 +124,12 @@ void InteractiveKill::paintEvent(QPaintEvent *)
 
     if (cursorX >=0 && cursorY >= 0) {
         QPainterPath path;
+        QPen framePen(QColor("#ff0000"));
         path.addRect(QRectF(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
-        painter.setOpacity(0.5);
-        painter.fillPath(path, QColor("#ff0000"));
+        painter.setOpacity(1);
+        framePen.setWidth(2);
+        painter.setPen(framePen);
+        painter.drawPath(path);
         
         painter.setOpacity(1);
         painter.drawImage(QPoint(cursorX, cursorY), cursorImage);
