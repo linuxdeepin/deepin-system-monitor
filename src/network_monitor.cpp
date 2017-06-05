@@ -136,6 +136,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "网络");
 
     // Draw background grid.
+    painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen(QColor("#ffffff"));
     painter.setOpacity(0.1);
     framePen.setWidth(0.5);
@@ -171,6 +172,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
         gridLineY += gridSize;
         painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
     }
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
     // Draw network summary.
     setFontSize(painter, downloadRenderSize);
