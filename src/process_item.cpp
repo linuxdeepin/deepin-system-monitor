@@ -23,9 +23,9 @@
 
 #include "process_item.h"
 #include "utils.h"
+#include <QCollator>
 #include <QDebug>
 #include <QLocale>
-#include <QCollator>
 
 using namespace Utils;
 

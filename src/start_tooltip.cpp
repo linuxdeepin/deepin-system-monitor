@@ -21,16 +21,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QWidget>
-#include <QPainter>
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QStyle>
-#include <QEvent>
 #include "start_tooltip.h"
 #include "utils.h"
-
+#include <QApplication>
 #include <QDebug>
+#include <QDesktopWidget>
+#include <QEvent>
+#include <QPainter>
+#include <QStyle>
+#include <QWidget>
 
 StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
 {

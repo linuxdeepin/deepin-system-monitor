@@ -21,18 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#include <DDesktopServices>
-#include <QStyleFactory>
 #include "QVBoxLayout"
+#include "attributes_dialog.h"
 #include "list_view.h"
 #include "process_item.h"
 #include "process_manager.h"
+#include <DDesktopServices>
 #include <QDebug>
-#include <QProcess>
 #include <QList>
+#include <QProcess>
+#include <QStyleFactory>
 #include <proc/sysinfo.h>
 #include <signal.h>
-#include "attributes_dialog.h"
 
 using namespace Utils;
 DUTIL_USE_NAMESPACE

@@ -23,10 +23,9 @@
 
 #include "interactive_kill.h"
 #include "utils.h"
-
+#include <QApplication>
 #include <QDebug>
 #include <QScreen>
-#include <QApplication>
 
 InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 {

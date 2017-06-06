@@ -21,13 +21,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QObject>
+#include "find_window_title.h"
 #include <QDebug>
+#include <QObject>
 #include <QtX11Extras/QX11Info>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
-
-#include "find_window_title.h"
 
 FindWindowTitle::FindWindowTitle()
 {

@@ -21,12 +21,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QObject>
+#include "window_manager.h"
 #include <QDebug>
+#include <QObject>
 #include <QtX11Extras/QX11Info>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
-#include "window_manager.h"
 
 template <typename... ArgTypes, typename... ArgTypes2>
 static inline unsigned int XcbCallVoid(xcb_void_cookie_t (*func)(xcb_connection_t *, ArgTypes...), ArgTypes2... args...)

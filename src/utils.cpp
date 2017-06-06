@@ -36,6 +36,8 @@
 #include <QString>
 #include <QWidget>
 #include <QtMath>
+#include <QtX11Extras/QX11Info>
+#include <X11/extensions/shape.h>
 #include <fstream>
 #include <qdiriterator.h>
 #include <sstream>
@@ -43,8 +45,6 @@
 #include <string>
 #include <time.h>
 #include <unordered_set>
-#include <X11/extensions/shape.h>
-#include <QtX11Extras/QX11Info>
 
 namespace Utils {
     /**

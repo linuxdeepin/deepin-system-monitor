@@ -21,15 +21,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "main_window.h"
+#include "network_traffic_filter.h"
+#include "utils.h"
 #include <DApplication>
 #include <DMainWindow>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <dutility.h>
-
-#include "utils.h"
-#include "main_window.h"
-#include "network_traffic_filter.h"
 #include <iostream>
 #include <thread>
 

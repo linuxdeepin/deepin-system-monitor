@@ -24,12 +24,12 @@
 #include "list_view.h"
 #include "utils.h"
 #include <QApplication>
-#include <QStyleFactory>
 #include <QDebug>
 #include <QEvent>
+#include <QMenu>
+#include <QStyleFactory>
 #include <QWheelEvent>
 #include <QtMath>
-#include <QMenu>
 
 using namespace Utils;
 
