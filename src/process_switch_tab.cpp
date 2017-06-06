@@ -23,6 +23,7 @@
 
 #include "process_switch_tab.h"
 #include "utils.h"
+#include <QDebug>
 
 ProcessSwitchTab::ProcessSwitchTab(QWidget *parent) : QWidget(parent)
 {
@@ -99,29 +100,31 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
     
     painter.setOpacity(1);
     for (int i = 0; i < 3; i++) {
+        int iconX = rect().x() + width * i + (width - onlyGuiActiveImage.width()) / 2;
+        int iconY = rect().y() + (height - onlyGuiActiveImage.height()) / 2;
         if (i == activeIndex) {
             if (i == 0) {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), onlyGuiActiveImage);
+                painter.drawImage(QPoint(iconX, iconY), onlyGuiActiveImage);
             } else if (i == 1) {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), onlyMeActiveImage);
+                painter.drawImage(QPoint(iconX, iconY), onlyMeActiveImage);
             } else {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), allProcessActiveImage);
+                painter.drawImage(QPoint(iconX, iconY), allProcessActiveImage);
             }
         } else if (i == hoverIndex) {
             if (i == 0) {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), onlyGuiHoverImage);
+                painter.drawImage(QPoint(iconX, iconY), onlyGuiHoverImage);
             } else if (i == 1) {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), onlyMeHoverImage);
+                painter.drawImage(QPoint(iconX, iconY), onlyMeHoverImage);
             } else {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), allProcessHoverImage);
+                painter.drawImage(QPoint(iconX, iconY), allProcessHoverImage);
             }
         } else {
             if (i == 0) {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), onlyGuiNormalImage);
+                painter.drawImage(QPoint(iconX, iconY), onlyGuiNormalImage);
             } else if (i == 1) {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), onlyMeNormalImage);
+                painter.drawImage(QPoint(iconX, iconY), onlyMeNormalImage);
             } else {
-                painter.drawImage(QPoint(rect().x() + width * i, rect().y()), allProcessNormalImage);
+                painter.drawImage(QPoint(iconX, iconY), allProcessNormalImage);
             }
         }
     }
