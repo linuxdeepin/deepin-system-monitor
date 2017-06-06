@@ -21,22 +21,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#include "status_monitor.h"
-#include <QPainter>
-
-#include <unistd.h>
+#include "constant.h"
 #include "process_item.h"
-#include "utils.h"
-#include <proc/sysinfo.h>
 #include "process_tree.h"
-#include <thread>
+#include "status_monitor.h"
+#include "utils.h"
 #include <QDebug>
+#include <QPainter>
+#include <proc/sysinfo.h>
+#include <thread>
+#include <unistd.h>
 
 using namespace Utils;
 
 StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedWidth(280);
+    setFixedWidth(Constant::STATUS_BAR_WIDTH);
 
     filterType = OnlyGUI;
     tabName = "应用程序";

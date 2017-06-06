@@ -21,19 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
 #include "memory_monitor.h"
+#include "utils.h"
+#include <QDebug>
 #include <QPainter>
 #include <QtMath>
-
-#include "utils.h"
-
-#include <QDebug>
 
 using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedWidth(280);
+    setFixedWidth(Constant::STATUS_BAR_WIDTH);
 
     usedMemory = 0;
     totalMemory = 0;

@@ -37,6 +37,7 @@ HEADERS += src/utils.h \
 		   src/process_tree.h \
 		   src/process_switch_tab.h \
 		   src/attributes_dialog.h \
+		   src/constant.h \
 		   src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \

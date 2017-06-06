@@ -21,15 +21,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
+#include "main_window.h"
 #include <DTitlebar>
-#include <QStyleFactory>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QDebug>
+#include <QDesktopWidget>
+#include <QStyleFactory>
+#include <iostream>
 #include <signal.h>
 
-#include "main_window.h"
-#include <iostream>
 using namespace std;
 
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
@@ -93,11 +94,11 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
         QRect rect = QApplication::desktop()->screenGeometry();
         
         // Just change status monitor width when screen width is more than 1024.
-        if (rect.width() * 0.2 > 280) {
+        if (rect.width() * 0.2 > Constant::STATUS_BAR_WIDTH) {
             if (windowState() == Qt::WindowMaximized) {
                 statusMonitor->setFixedWidth(rect.width() * 0.2);
             } else {
-                statusMonitor->setFixedWidth(280);
+                statusMonitor->setFixedWidth(Constant::STATUS_BAR_WIDTH);
             }
         }
         

@@ -21,18 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
 #include "cpu_monitor.h"
-#include <QPainter>
-#include <QDebug>
-
-#include "utils.h"
 #include "smooth_curve_generator.h"
+#include "utils.h"
+#include <QDebug>
+#include <QPainter>
 
 using namespace Utils;
 
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedSize(280, 250);
+    setFixedSize(Constant::STATUS_BAR_WIDTH, 250);
 
     iconImage = QImage(Utils::getQrcPath("icon_cpu.png"));
 

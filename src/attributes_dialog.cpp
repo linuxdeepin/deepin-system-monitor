@@ -22,11 +22,12 @@
  */ 
 
 #include "attributes_dialog.h"
-#include <QPainter>
-#include <proc/sysinfo.h>
-#include <proc/readproc.h>
-#include <QDebug>
+#include "constant.h"
 #include "utils.h"
+#include <QDebug>
+#include <QPainter>
+#include <proc/readproc.h>
+#include <proc/sysinfo.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,7 +37,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
 
-    setFixedSize(320, 280);
+    setFixedSize(320, Constant::STATUS_BAR_WIDTH);
     
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

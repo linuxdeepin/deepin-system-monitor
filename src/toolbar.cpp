@@ -21,13 +21,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
+#include "toolbar.h"
+#include "utils.h"
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
-
-#include "toolbar.h"
-#include "utils.h"
 
 using namespace Utils;
 
@@ -43,7 +43,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     iconLabel->setPixmap(iconPixmap);
     
     searchEdit = new DSearchEdit();
-    searchEdit->setFixedWidth(280);
+    searchEdit->setFixedWidth(Constant::STATUS_BAR_WIDTH);
     searchEdit->setPlaceHolder("搜索");
     
     layout->addWidget(iconLabel);

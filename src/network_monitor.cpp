@@ -21,18 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
 #include "network_monitor.h"
-#include <QPainter>
-#include <QDebug>
-
-#include "utils.h"
 #include "smooth_curve_generator.h"
+#include "utils.h"
+#include <QDebug>
+#include <QPainter>
 
 using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedWidth(280);
+    setFixedWidth(Constant::STATUS_BAR_WIDTH);
     setFixedHeight(190);
 
     iconImage = QImage(Utils::getQrcPath("icon_network.png"));
