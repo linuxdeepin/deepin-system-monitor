@@ -36,7 +36,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
 
-    setFixedSize(320, 300);
+    setFixedSize(320, 280);
     
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -49,6 +49,9 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
 
     iconLabel = new QLabel();
+    
+    titleLabel = new QLabel();
+    titleLabel->setStyleSheet("QLabel { background-color : transparent; font-size: 14px; font-weight: 500; color : #303030; }");
     
     nameTitleLabel = new QLabel("程序:");
     nameTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
@@ -78,6 +81,8 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     layout->addWidget(closeButton, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addSpacing(20);
     layout->addWidget(iconLabel, 0, Qt::AlignHCenter);
+    layout->addSpacing(14);
+    layout->addWidget(titleLabel, 0, Qt::AlignHCenter);
     layout->addStretch();
     layout->addLayout(nameLayout);
     layout->addLayout(cmdlineLayout);
@@ -102,8 +107,10 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
             std::string desktopFile = getDesktopFileFromName(name);
             QString cmdline = Utils::getProcessCmdline(processId);
             QPixmap icon = getProcessIconFromName(name, desktopFile, nullptr, 96);
+            QString displayName = getDisplayNameFromName(name, desktopFile);
             
             iconLabel->setPixmap(icon);
+            titleLabel->setText(displayName);
             nameLabel->setText(name);
             cmdlineLabel->setText(cmdline);
             

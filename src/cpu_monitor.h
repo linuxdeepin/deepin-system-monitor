@@ -55,6 +55,7 @@ private:
     int cpuRenderMaxHeight = 45;
     int iconPadding = 0;
     int iconRenderOffsetY = 195;
+    int paddingRight = 10;
     int percentRenderOffsetY = 157;
     int pointsNumber = 24;
     int ringRadius = 90;

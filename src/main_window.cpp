@@ -93,11 +93,11 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
         QRect rect = QApplication::desktop()->screenGeometry();
         
         // Just change status monitor width when screen width is more than 1024.
-        if (rect.width() * 0.2 > 300) {
+        if (rect.width() * 0.2 > 280) {
             if (windowState() == Qt::WindowMaximized) {
                 statusMonitor->setFixedWidth(rect.width() * 0.2);
             } else {
-                statusMonitor->setFixedWidth(300);
+                statusMonitor->setFixedWidth(280);
             }
         }
         

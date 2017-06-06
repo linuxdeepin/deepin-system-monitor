@@ -33,7 +33,10 @@ using namespace Utils;
 
 Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
 {
+    setFixedHeight(24);
+    
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
     
     QPixmap iconPixmap = QPixmap(getQrcPath("logo_24.svg"));
     QLabel *iconLabel = new QLabel();

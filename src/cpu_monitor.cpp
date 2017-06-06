@@ -111,11 +111,11 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     
     int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
     
-    painter.drawImage(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX, iconRenderOffsetY), iconImage);
+    painter.drawImage(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX - paddingRight, iconRenderOffsetY), iconImage);
     
     painter.setFont(font);
     painter.setPen(QPen(QColor("#ffffff")));
-    painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) + iconImage.width() + iconPadding - titleAreaPaddingX,
+    painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) + iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,
                            rect().y() + titleRenderOffsetY,
                            titleWidth,
                            30
@@ -125,7 +125,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     setFontSize(painter, 15);
     painter.setPen(QPen(QColor("#aaaaaa")));
-    painter.drawText(QRect(rect().x(),
+    painter.drawText(QRect(rect().x() - paddingRight,
                            rect().y() + percentRenderOffsetY,
                            rect().width(),
                            30
@@ -133,7 +133,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     drawLoadingRing(
         painter,
-        rect().x() + rect().width() / 2,
+        rect().x() + rect().width() / 2 - paddingRight,
         rect().y() + ringRenderOffsetY,
         ringRadius,
         ringWidth,
@@ -144,7 +144,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         percent / 100
         );
 
-    painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
+    painter.translate(waveformsRenderOffsetX - paddingRight, waveformsRenderOffsetY);
     painter.scale(1, -1);
 
     painter.setPen(QPen(QColor("#8442FB"), 2));

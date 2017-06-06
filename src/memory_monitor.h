@@ -64,7 +64,7 @@ protected:
     int pointerRadius = 3;
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
-    int ringCenterPointerX = 200;
+    int ringCenterPointerX = 190;
     int ringCenterPointerY = 60;
     int ringWidth = 6;
     int swapRenderPaddingX = 13;

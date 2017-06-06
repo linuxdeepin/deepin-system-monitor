@@ -51,6 +51,7 @@ private:
     QLabel *iconLabel;
     QLabel *nameTitleLabel;
     QLabel *nameLabel;
+    QLabel *titleLabel;
     QLabel *cmdlineTitleLabel;
     QLabel *cmdlineLabel;
 };

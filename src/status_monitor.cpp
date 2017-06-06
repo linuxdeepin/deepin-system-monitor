@@ -36,7 +36,7 @@ using namespace Utils;
 
 StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 {
-    setFixedWidth(300);
+    setFixedWidth(280);
 
     filterType = OnlyGUI;
     tabName = "应用程序";

@@ -81,7 +81,7 @@ void ProcessSwitchTab::mousePressEvent(QMouseEvent *mouseEvent)
 void ProcessSwitchTab::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::Antialiasing, false);
 
     int penSize = 1;
     
