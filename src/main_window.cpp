@@ -36,6 +36,8 @@ using namespace std;
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
     installEventFilter(this);   // add event filter
+    
+    setBorderColor("#101010");
 
     if (this->titlebar()) {
         toolbar = new Toolbar();
