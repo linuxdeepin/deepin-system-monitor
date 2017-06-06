@@ -5,7 +5,7 @@ Deepin system monitor: a more user-friendly system monitor.
 Thanks alot [Lily Rivers](https://github.com/VioletDarkKitty/system-monitor), this project used a lot of his code.
 
 ## Dependencies
-
+* make
 ## Installation
 
 * mkdir build
