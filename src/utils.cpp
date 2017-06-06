@@ -47,6 +47,43 @@
 #include <unordered_set>
 
 namespace Utils {
+    QMap<QString, QString> getProcessDescriptions() {
+        QMap<QString, QString> map;
+        
+        map["startdde"] =  "深度桌面环境-进程启动服务" ;
+        map["dde-desktop"] =  "深度桌面环境-桌面" ;
+        map["dde-launcher"] =  "深度桌面环境-启动器";
+        map["dde-dock"] =  "深度桌面环境-任务栏";
+        map["dde-osd"] =  "深度桌面环境-屏幕显示";
+        map["dde-system-daemon"] =  "深度桌面环境-系统守护进程";
+        map["dde-session-daemon"] =  "深度桌面环境-会话守护进程";
+        map["dde-file-manager-daemon"] =  "深度文件管理器守护进程";
+        map["dde-lock-service"] =  "深度桌面环境-锁屏服务";
+        map["deepin-wm"] =  "深度窗口管理器";
+        map["deepin-wm-switcher"] =  "深度窗口管理器切换器";
+        map["deepin-notifications"] =  "深度系统通知";
+        map["deepin-cloud-print-agent"] =  "深度云打印代理";
+        map["deepin-menu"] =  "深度系统菜单服务";
+        map["lastore-daemon"] =  "深度商店守护进程";
+        map["bamfdaemon"] =  "窗口匹配守护进程";
+        map["lastore-session-helper"] =  "深度商店客户端助手进程";
+        map["networkmanager"] =  "网络管理器";
+        map["polkitd"] =  "PolicyKit DBus 服务";
+        map["smbd"] =  "文件共享服务守护进程";
+        map["xorg"] = "X服务";
+        map["fcitx"] = "小企鹅输入法";
+        map["sogou-qimpanel-watchdog"] = "搜狗输入法守护进程";
+        map["sslocal"] = "ShadowSocks 本地客户端";
+        map["pulseaudio"] = "声音服务";
+        map["cupsd"] = "打印守护进程";
+        map["lightdm"] = "简单显示管理器";
+        map["systemd"] = "系统服务管理器";
+        map["accounts-daemon"] = "账户守护进程";
+        map["dbus-daemon"] = "DBus 守护进程";
+        
+        return map;
+    }
+    
     /**
      * @brief getProcessIconFromName Get the icon for a process given its name
      * @param procname The name of the process
@@ -163,8 +200,10 @@ namespace Utils {
 
     QString getDisplayNameFromName(QString procName, std::string desktopFile)
     {
-        if (procName.toLower() == "deepin-wm") {
-            return "深度窗口管理器";
+        QString procname = procName.toLower();
+        QMap<QString, QString> map = getProcessDescriptions();
+        if (map.contains(procname)) {
+            return map[procname];
         }
 
         if (desktopFile.size() == 0) {

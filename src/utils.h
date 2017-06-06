@@ -93,6 +93,7 @@ namespace Utils {
         float recvKbs;
     } NetworkStatus;
     
+    QMap<QString, QString> getProcessDescriptions();
     QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
     QString formatBandwidth(double v);
