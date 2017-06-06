@@ -220,8 +220,8 @@ void StatusMonitor::updateStatus()
     // Remove dead process from network status maps.
     for (auto pid : processSentBytes->keys()) {
         bool foundProcess = false;
-        for (ListItem *item : items) {
-            if ((static_cast<ProcessItem*>(item))->getPid() == pid) {
+        for (auto &i:processes) {
+            if ((&i.second)->tid == pid) {
                 foundProcess = true;
                 break;
             }
@@ -235,8 +235,8 @@ void StatusMonitor::updateStatus()
     }
     for (auto pid : processRecvBytes->keys()) {
         bool foundProcess = false;
-        for (ListItem *item : items) {
-            if ((static_cast<ProcessItem*>(item))->getPid() == pid) {
+        for (auto &i:processes) {
+            if ((&i.second)->tid == pid) {
                 foundProcess = true;
                 break;
             }
