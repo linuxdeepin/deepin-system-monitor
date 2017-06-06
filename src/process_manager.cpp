@@ -99,7 +99,9 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
     rightMenu->addAction(resumeAction);
+    rightMenu->addSeparator();
     rightMenu->addAction(openDirectoryAction);
+    rightMenu->addSeparator();
     rightMenu->addAction(attributesAction);
 
     connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
