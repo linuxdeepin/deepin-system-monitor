@@ -172,7 +172,7 @@ void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         actionPids->append(processItem->getPid());
     }
-    rightMenu->exec(this->mapToGlobal(pos));
+    rightMenu->exec(pos);
 }
 
 void ProcessManager::resumeProcesses()

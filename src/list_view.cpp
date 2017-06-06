@@ -673,7 +673,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 repaint();
             }
 
-            rightClickItems(mouseEvent->pos(), *selectionItems);
+            rightClickItems(this->mapToGlobal(mouseEvent->pos()), *selectionItems);
         }
     }
 }
