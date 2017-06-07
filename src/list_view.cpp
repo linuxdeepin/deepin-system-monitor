@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QEvent>
 #include <QMenu>
+#include <QStyleFactory>
 #include <QWheelEvent>
 #include <QtMath>
 
@@ -572,6 +573,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
         } else if (mouseEvent->button() == Qt::RightButton) {
             if (columnToggleHideFlags.count() == columnTitles.count()) {
                 QMenu *menu = new QMenu();
+                menu->setStyle(QStyleFactory::create("dlight"));
 
                 for (int i = 0; i < columnToggleHideFlags.count(); i++) {
                     if (columnToggleHideFlags[i]) {

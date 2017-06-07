@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
         app.setApplicationAcknowledgementPage(acknowledgementLink);
         
-        app.setTheme("light");
+        app.setTheme("dark");
         app.setWindowIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
         
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);

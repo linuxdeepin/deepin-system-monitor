@@ -26,6 +26,7 @@
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
+#include <dthememanager.h>
 #include <proc/readproc.h>
 #include <proc/sysinfo.h>
 
@@ -49,6 +50,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     closeButton = new DWindowCloseButton;
     closeButton->setFixedSize(27, 23);
     connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
+    Dtk::Widget::DThemeManager::instance()->setTheme(closeButton, "light") ;
 
     iconLabel = new QLabel();
     
