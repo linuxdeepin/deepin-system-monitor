@@ -28,6 +28,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <dthememanager.h>
 
 using namespace Utils;
 
@@ -45,6 +46,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     searchEdit = new DSearchEdit();
     searchEdit->setFixedWidth(Constant::STATUS_BAR_WIDTH);
     searchEdit->setPlaceHolder("搜索");
+    Dtk::Widget::DThemeManager::instance()->setTheme(searchEdit, "dark") ;
     
     layout->addWidget(iconLabel);
     layout->addSpacing(90);

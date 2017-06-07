@@ -32,6 +32,7 @@
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
+using namespace Dtk;
 
 AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(parent)
 {

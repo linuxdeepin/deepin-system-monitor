@@ -27,7 +27,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
-#include <QStyleFactory>
 #include <iostream>
 #include <signal.h>
 
@@ -43,7 +42,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         toolbar = new Toolbar();
 
         menu = new QMenu();
-        menu->setStyle(QStyleFactory::create("dlight"));
         killAction = new QAction("结束应用程序", this);
         connect(killAction, &QAction::triggered, this, &MainWindow::showWindowKiller);
         menu->addAction(killAction);
