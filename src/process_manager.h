@@ -44,10 +44,11 @@ class ProcessManager : public QWidget
 public:
     ProcessManager(QWidget *parent = 0);
     ~ProcessManager();
+    
+    ProcessView* getProcessView();
                      
 signals:
     void activeTab(int index);
-    void pressSearchKey();
     
 public slots:
     void dialogButtonClicked(int index, QString buttonText);

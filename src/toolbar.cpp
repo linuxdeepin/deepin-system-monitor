@@ -52,7 +52,8 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     searchEdit->setFixedWidth(Constant::STATUS_BAR_WIDTH);
     searchEdit->setPlaceHolder("搜索");
     Dtk::Widget::DThemeManager::instance()->setTheme(searchEdit, "dark") ;
-
+    searchEdit->getLineEdit()->installEventFilter(this);
+    
     layout->addWidget(iconLabel);
     layout->addSpacing(90);
     layout->addStretch();
@@ -75,11 +76,18 @@ Toolbar::~Toolbar()
 bool Toolbar::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (keyEvent->key() == Qt::Key_Escape) {
-            searchEdit->clear();
+        if (obj == this) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                searchEdit->clear();
             
-            pressEsc();
+                pressEsc();
+            } 
+        } else if (obj == searchEdit->getLineEdit()) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Tab) {
+                pressTab();
+            } 
         }
     }
 

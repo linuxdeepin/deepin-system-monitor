@@ -49,6 +49,7 @@ public slots:
 signals:
     void search(QString searchContent);
     void pressEsc();
+    void pressTab();
     
 private:
     DSearchEdit *searchEdit;

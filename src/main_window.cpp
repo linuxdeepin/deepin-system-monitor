@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "main_window.h"
@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
+#include <QKeyEvent>
 #include <QStyleFactory>
 #include <iostream>
 #include <signal.h>
@@ -36,7 +37,7 @@ using namespace std;
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
     installEventFilter(this);   // add event filter
-    
+
     setBorderColor("#101010");
 
     if (this->titlebar()) {
@@ -58,12 +59,13 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         this->setCentralWidget(layoutWidget);
 
         processManager = new ProcessManager();
+        processManager->getProcessView()->installEventFilter(this);
         statusMonitor = new StatusMonitor();
 
         connect(toolbar, &Toolbar::pressEsc, processManager, &ProcessManager::focusProcessView);
-        
+        connect(toolbar, &Toolbar::pressTab, processManager, &ProcessManager::focusProcessView);
+
         connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
-        connect(processManager, &ProcessManager::pressSearchKey, toolbar, &Toolbar::focusInput);
 
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
         connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
@@ -96,7 +98,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::WindowStateChange) {
         QRect rect = QApplication::desktop()->screenGeometry();
-        
+
         // Just change status monitor width when screen width is more than 1024.
         if (rect.width() * 0.2 > Constant::STATUS_BAR_WIDTH) {
             if (windowState() == Qt::WindowMaximized) {
@@ -105,7 +107,14 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
                 statusMonitor->setFixedWidth(Constant::STATUS_BAR_WIDTH);
             }
         }
-        
+
+    } else if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_F) {
+            if (keyEvent->modifiers() == Qt::ControlModifier) {
+                toolbar->focusInput();
+            }
+        }
     }
 
     return false;
@@ -144,7 +153,7 @@ void MainWindow::dialogButtonClicked(int index, QString)
 void MainWindow::popupKillConfirmDialog(int pid)
 {
     killer->close();
-    
+
     killPid = pid;
     killProcessDialog->show();
 }

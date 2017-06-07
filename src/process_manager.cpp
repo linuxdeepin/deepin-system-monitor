@@ -48,7 +48,6 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     topLayout->setContentsMargins(2, 0, 2, 0);
     processView = new ProcessView();
-    connect(processView, &ListView::pressSearchKey, this, &ProcessManager::pressSearchKey);
     layout->addWidget(topWidget);
     layout->addWidget(processView);
 
@@ -122,6 +121,11 @@ ProcessManager::~ProcessManager()
     delete rightMenu;
 }
 
+ProcessView* ProcessManager::getProcessView()
+{
+    return processView;
+}
+
 void ProcessManager::dialogButtonClicked(int index, QString)
 {
     if (index == 1) {
@@ -131,7 +135,8 @@ void ProcessManager::dialogButtonClicked(int index, QString)
 
 void ProcessManager::focusProcessView()
 {
-    processView->setFocus();
+    // Use QTimer to avoid user press Tab key to override setFocus.
+    QTimer::singleShot(100, processView, SLOT(setFocus()));
 }
 
 void ProcessManager::handleSearch(QString searchContent)

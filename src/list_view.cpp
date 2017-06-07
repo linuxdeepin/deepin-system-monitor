@@ -499,10 +499,6 @@ void ListView::keyPressEvent(QKeyEvent *keyEvent)
         if (keyEvent->modifiers() == Qt::ControlModifier) {
             selectAllItems();
         }
-    } else if (keyEvent->key() == Qt::Key_F) {
-        if (keyEvent->modifiers() == Qt::ControlModifier) {
-            pressSearchKey();
-        }
     }
 }
 
