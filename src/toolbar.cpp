@@ -113,5 +113,9 @@ void Toolbar::handleSearchTextChanged()
 
 void Toolbar::focusInput()
 {
-    searchEdit->setFocus();
+    if (searchEdit->text() != "") {
+        searchEdit->getLineEdit()->setFocus();
+    } else {
+        searchEdit->setFocus();
+    }
 }
