@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef STATUSMONITOR_H
 #define STATUSMONITOR_H
@@ -44,8 +44,15 @@ class StatusMonitor : public QWidget
     Q_OBJECT
 
     typedef std::map<int, proc_t> storedProcType;
-    
+
     enum FilterType {OnlyGUI, OnlyMe, AllProcess};
+
+    struct ChildPidInfo {
+        double cpu;
+        long memory;
+        DiskStatus diskStatus;
+        NetworkStatus networkStatus;
+    };
 
 public:
     StatusMonitor(QWidget *parent = 0);
@@ -66,7 +73,7 @@ public slots:
     void switchToOnlyGui();
     void switchToOnlyMe();
     void updateStatus();
-                                       
+
 private:
     CpuMonitor *cpuMonitor;
     FilterType filterType;

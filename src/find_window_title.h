@@ -37,6 +37,7 @@ public:
     FindWindowTitle();
     ~FindWindowTitle();
     
+    QList<int> getWindowPids();
     QString findWindowTitle(int pid);
     void updateWindowInfos();
     

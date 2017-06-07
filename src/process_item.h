@@ -59,7 +59,7 @@ public:
     double getCPU() const;
     int getPid() const;
     long getMemory() const;
-    void mergeItem(ListItem *item);
+    void mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus, NetworkStatus childNetworkStatus);
     void setDiskStatus(DiskStatus dStatus);
     void setNetworkStatus(NetworkStatus nStatus);
     

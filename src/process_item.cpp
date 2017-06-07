@@ -389,18 +389,16 @@ long ProcessItem::getMemory() const
     return memory;
 }
 
-void ProcessItem::mergeItem(ListItem *item)
+void ProcessItem::mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus, NetworkStatus childNetworkStatus)
 {
-    const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
-
-    cpu += processItem->getCPU();
-    memory += processItem->getMemory();
-    diskStatus.readKbs += processItem->getDiskStatus().readKbs;
-    diskStatus.writeKbs += processItem->getDiskStatus().writeKbs;
-    networkStatus.sentBytes += processItem->getNetworkStatus().sentBytes;
-    networkStatus.recvBytes += processItem->getNetworkStatus().recvBytes;
-    networkStatus.sentKbs += processItem->getNetworkStatus().sentKbs;
-    networkStatus.recvKbs += processItem->getNetworkStatus().recvKbs;
+    cpu += childCpu;
+    memory += childMemory;
+    diskStatus.readKbs += childDiskStatus.readKbs;
+    diskStatus.writeKbs += childDiskStatus.writeKbs;
+    networkStatus.sentBytes += childNetworkStatus.sentBytes;
+    networkStatus.recvBytes += childNetworkStatus.recvBytes;
+    networkStatus.sentKbs += childNetworkStatus.sentKbs;
+    networkStatus.recvKbs += childNetworkStatus.recvKbs;
 }
 
 void ProcessItem::setDiskStatus(DiskStatus dStatus)

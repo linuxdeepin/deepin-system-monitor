@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "process_item.h"
@@ -166,14 +166,42 @@ void StatusMonitor::updateStatus()
     ProcessTree *processTree = new ProcessTree();
     processTree->scanProcesses(processes);
 
+    // Fill gui chlid process information when filterType is OnlyGUI.
+    QMap<int, ChildPidInfo> childInfoMap;
+    if (filterType == OnlyGUI) {
+        QList<int> guiPids = findWindowTitle->getWindowPids();
+        for (int guiPid : guiPids) {
+            QList<int> childPids;
+            childPids = processTree->getAllChildPids(guiPid);
+
+            for (int childPid : childPids) {
+                DiskStatus dStatus = {
+                    0, 0
+                };
+                NetworkStatus nStatus = {
+                    0, 0, 0, 0
+                };
+                ChildPidInfo childPidInfo;
+
+                childPidInfo.cpu = 0;
+                childPidInfo.memory = 0;
+                childPidInfo.diskStatus = dStatus;
+                childPidInfo.networkStatus = nStatus;
+
+                childInfoMap[childPid] = childPidInfo;
+            }
+        }
+    }
+
     for(auto &i:processes) {
+        int pid = (&i.second)->tid;
         QString user = (&i.second)->euser;
 
         double cpu = (&i.second)->pcpu;
         QString name = getProcessName(&i.second);
 
         std::string desktopFile = getDesktopFileFromName(name);
-        bool isGui = desktopFile.size() != 0;
+        bool isGui = (findWindowTitle->findWindowTitle(pid) != "");
 
         if (isGui) {
             guiProcessNumber++;
@@ -191,7 +219,6 @@ void StatusMonitor::updateStatus()
         }
 
         if (appendItem) {
-            int pid = (&i.second)->tid;
             QString displayName;
 
             QString title = findWindowTitle->findWindowTitle(pid);
@@ -212,6 +239,14 @@ void StatusMonitor::updateStatus()
             QPixmap icon = getProcessIconFromName(name, desktopFile, processIconCache);
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
+        } else {
+            if (filterType == OnlyGUI) {
+                if (childInfoMap.contains(pid)) {
+                    long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
+                    childInfoMap[pid].cpu = cpu / cpuNumber;
+                    childInfoMap[pid].memory = memory;
+                }
+            }
         }
 
         totalCpuPercent += cpu;
@@ -326,51 +361,57 @@ void StatusMonitor::updateStatus()
         processItem->setDiskStatus(status);
     }
 
+    for (int childPid : childInfoMap.keys()) {
+        // Update network status.
+        if (networkStatusSnapshot.contains(childPid)) {
+            childInfoMap[childPid].networkStatus = networkStatusSnapshot.value(childPid);
+        }
+        
+        // Update disk status.
+        ProcPidIO pidIO;
+        getProcPidIO(childPid, pidIO);
+
+        DiskStatus status = {0, 0};
+
+        if (processWriteKbs->contains(childPid)) {
+            status.writeKbs = (pidIO.wchar - processWriteKbs->value(childPid)) / (updateDuration / 1000.0);
+        }
+        (*processWriteKbs)[childPid] = pidIO.wchar;
+
+        if (processReadKbs->contains(childPid)) {
+            status.readKbs = (pidIO.rchar - processReadKbs->value(childPid)) / (updateDuration / 1000.0);
+        }
+        (*processReadKbs)[childPid] = pidIO.rchar;
+
+        childInfoMap[childPid].diskStatus = status;
+    }
+
     // Update cpu status.
     updateCpuStatus(totalCpuPercent / cpuNumber);
 
-    QList<ListItem*> mergeItems;
-
+    // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
-        // Merge chrome processes.
-        ListItem *chromeRootItem = nullptr;
-        QList<int> chromeChildPids;
         for (ListItem *item : items) {
             ProcessItem *processItem = static_cast<ProcessItem*>(item);
-            QString cmdline = Utils::getProcessCmdline(processItem->getPid());
-            QStringList cmdArgs = cmdline.split(QRegExp("\\s"));
-            cmdArgs.removeAll("");
+            QList<int> childPids;
+            childPids = processTree->getAllChildPids(processItem->getPid());
 
-            if (cmdArgs.size() == 1 && cmdArgs.at(0) == "/opt/google/chrome/chrome") {
-                chromeRootItem = item;
-                chromeChildPids = processTree->getAllChildPids(processItem->getPid());
-
-                // Because chrome root process always have one whatever how manay chrome *window* or *tab* opened.
-                // So we break loop once found chrome processes.
-                break;
-            }
-        }
-
-        if (chromeRootItem != nullptr) {
-            ProcessItem *chromeRootProcessItem = static_cast<ProcessItem*>(chromeRootItem);
-            for (ListItem *item : items) {
-                ProcessItem *processItem = static_cast<ProcessItem*>(item);
-                if (chromeChildPids.contains(processItem->getPid())) {
-                    chromeRootProcessItem->mergeItem(processItem);
-                } else if (processItem->getPid() != chromeRootProcessItem->getPid()) {
-                    mergeItems.append(item);
+            for (int childPid : childPids) {
+                if (childInfoMap.contains(childPid)) {
+                    ChildPidInfo info = childInfoMap[childPid];
+                    
+                    processItem->mergeItemInfo(info.cpu, info.memory, info.diskStatus, info.networkStatus);
+                } else {
+                    qDebug() << QString("IMPOSSIBLE: process %1 not exist in childInfoMap").arg(childPid);
                 }
             }
-            mergeItems.append(chromeRootItem);
-        } else {
-            mergeItems = items;
         }
-    } else {
-        mergeItems = items;
+
     }
+    delete processTree;
 
     // Update process status.
-    updateProcessStatus(mergeItems);
+    updateProcessStatus(items);
 
     // Update network status.
     updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
@@ -380,7 +421,4 @@ void StatusMonitor::updateStatus()
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
-    
-    delete processTree;
 }
-
