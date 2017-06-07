@@ -127,6 +127,11 @@ void ProcessManager::dialogButtonClicked(int index, QString)
     }
 }
 
+void ProcessManager::focusProcessView()
+{
+    processView->setFocus();
+}
+
 void ProcessManager::handleSearch(QString searchContent)
 {
     processView->search(searchContent);

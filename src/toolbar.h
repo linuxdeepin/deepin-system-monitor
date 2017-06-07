@@ -39,6 +39,8 @@ public:
     Toolbar(QWidget *parent = 0);
     ~Toolbar();
     
+    bool eventFilter(QObject *, QEvent *event);
+                                              
 public slots:
     void handleSearch();
     void handleSearchTextChanged();
@@ -46,6 +48,7 @@ public slots:
     
 signals:
     void search(QString searchContent);
+    void pressEsc();
     
 private:
     DSearchEdit *searchEdit;

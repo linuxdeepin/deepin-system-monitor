@@ -19,13 +19,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "toolbar.h"
 #include "utils.h"
 #include <QDebug>
+#include <QEvent>
 #include <QHBoxLayout>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QPushButton>
 #include <dthememanager.h>
@@ -34,37 +36,54 @@ using namespace Utils;
 
 Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
 {
+    installEventFilter(this);   // add event filter
+    setMouseTracking(true);    // make MouseMove can response
+
     setFixedHeight(24);
-    
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     QPixmap iconPixmap = QPixmap(getQrcPath("logo_24.svg"));
     QLabel *iconLabel = new QLabel();
     iconLabel->setPixmap(iconPixmap);
-    
+
     searchEdit = new DSearchEdit();
     searchEdit->setFixedWidth(Constant::STATUS_BAR_WIDTH);
     searchEdit->setPlaceHolder("搜索");
     Dtk::Widget::DThemeManager::instance()->setTheme(searchEdit, "dark") ;
-    
+
     layout->addWidget(iconLabel);
     layout->addSpacing(90);
     layout->addStretch();
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
-    
+
     searchTimer = new QTimer();
     searchTimer->setSingleShot(true);
     connect(searchTimer, &QTimer::timeout, this, &Toolbar::handleSearch);
-    
+
     connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged, Qt::QueuedConnection);
-}                                    
+}
 
 Toolbar::~Toolbar()
 {
     delete searchEdit;
     delete searchTimer;
+}
+
+bool Toolbar::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Escape) {
+            searchEdit->clear();
+            
+            pressEsc();
+        }
+    }
+
+    return QObject::eventFilter(obj, event);
 }
 
 void Toolbar::handleSearch()
@@ -77,7 +96,7 @@ void Toolbar::handleSearch()
 void Toolbar::handleSearchTextChanged()
 {
     searchTextCache = searchEdit->text();
-    
+
     if (searchTimer->isActive()) {
         searchTimer->stop();
     }

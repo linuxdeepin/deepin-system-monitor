@@ -58,6 +58,8 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         processManager = new ProcessManager();
         statusMonitor = new StatusMonitor();
 
+        connect(toolbar, &Toolbar::pressEsc, processManager, &ProcessManager::focusProcessView);
+        
         connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
         connect(processManager, &ProcessManager::pressSearchKey, toolbar, &Toolbar::focusInput);
 

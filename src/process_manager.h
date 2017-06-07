@@ -51,6 +51,7 @@ signals:
     
 public slots:
     void dialogButtonClicked(int index, QString buttonText);
+    void focusProcessView();
     void handleSearch(QString searchContent);
     void killProcesses();
     void openProcessDirectory();
