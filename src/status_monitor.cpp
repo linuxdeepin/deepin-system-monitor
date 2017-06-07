@@ -343,22 +343,7 @@ void StatusMonitor::updateStatus()
             processItem->setNetworkStatus(networkStatusSnapshot.value(processItem->getPid()));
         }
 
-        ProcPidIO pidIO;
-        getProcPidIO(processItem->getPid(), pidIO);
-
-        DiskStatus status = {0, 0};
-
-        if (processWriteKbs->contains(processItem->getPid())) {
-            status.writeKbs = (pidIO.wchar - processWriteKbs->value(processItem->getPid())) / (updateDuration / 1000.0);
-        }
-        (*processWriteKbs)[processItem->getPid()] = pidIO.wchar;
-
-        if (processReadKbs->contains(processItem->getPid())) {
-            status.readKbs = (pidIO.rchar - processReadKbs->value(processItem->getPid())) / (updateDuration / 1000.0);
-        }
-        (*processReadKbs)[processItem->getPid()] = pidIO.rchar;
-
-        processItem->setDiskStatus(status);
+        processItem->setDiskStatus(getProcessDiskStatus(processItem->getPid()));
     }
 
     for (int childPid : childInfoMap.keys()) {
@@ -366,24 +351,9 @@ void StatusMonitor::updateStatus()
         if (networkStatusSnapshot.contains(childPid)) {
             childInfoMap[childPid].networkStatus = networkStatusSnapshot.value(childPid);
         }
-        
+
         // Update disk status.
-        ProcPidIO pidIO;
-        getProcPidIO(childPid, pidIO);
-
-        DiskStatus status = {0, 0};
-
-        if (processWriteKbs->contains(childPid)) {
-            status.writeKbs = (pidIO.wchar - processWriteKbs->value(childPid)) / (updateDuration / 1000.0);
-        }
-        (*processWriteKbs)[childPid] = pidIO.wchar;
-
-        if (processReadKbs->contains(childPid)) {
-            status.readKbs = (pidIO.rchar - processReadKbs->value(childPid)) / (updateDuration / 1000.0);
-        }
-        (*processReadKbs)[childPid] = pidIO.rchar;
-
-        childInfoMap[childPid].diskStatus = status;
+        childInfoMap[childPid].diskStatus = getProcessDiskStatus(childPid);
     }
 
     // Update cpu status.
@@ -399,7 +369,7 @@ void StatusMonitor::updateStatus()
             for (int childPid : childPids) {
                 if (childInfoMap.contains(childPid)) {
                     ChildPidInfo info = childInfoMap[childPid];
-                    
+
                     processItem->mergeItemInfo(info.cpu, info.memory, info.diskStatus, info.networkStatus);
                 } else {
                     qDebug() << QString("IMPOSSIBLE: process %1 not exist in childInfoMap").arg(childPid);
@@ -421,4 +391,24 @@ void StatusMonitor::updateStatus()
 
     // Keep processes we've read for cpu calculations next cycle.
     prevProcesses = processes;
+}
+
+DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
+{
+    ProcPidIO pidIO;
+    getProcPidIO(pid, pidIO);
+
+    DiskStatus status = {0, 0};
+
+    if (processWriteKbs->contains(pid)) {
+        status.writeKbs = (pidIO.wchar - processWriteKbs->value(pid)) / (updateDuration / 1000.0);
+    }
+    (*processWriteKbs)[pid] = pidIO.wchar;
+
+    if (processReadKbs->contains(pid)) {
+        status.readKbs = (pidIO.rchar - processReadKbs->value(pid)) / (updateDuration / 1000.0);
+    }
+    (*processReadKbs)[pid] = pidIO.rchar;
+
+    return status;
 }

@@ -75,6 +75,8 @@ public slots:
     void updateStatus();
 
 private:
+    DiskStatus getProcessDiskStatus(int pid);
+    
     CpuMonitor *cpuMonitor;
     FilterType filterType;
     FindWindowTitle *findWindowTitle;
