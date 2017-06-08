@@ -129,6 +129,7 @@ AttributesDialog::~AttributesDialog()
     delete iconLabel;
     delete nameTitleLabel;
     delete nameLabel;
+    delete titleLabel;
     delete cmdlineTitleLabel;
     delete cmdlineLabel;
     delete nameLayout;
