@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "interactive_kill.h"
 #include "utils.h"
@@ -52,7 +52,7 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     startTooltip = new StartTooltip();
     startTooltip->setWindowManager(windowManager);
     startTooltip->show();
-    
+
     QScreen *screen = QGuiApplication::primaryScreen();
     if (screen) {
         screenPixmap = screen->grabWindow(0);
@@ -80,13 +80,14 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 
     cursorX = mouseEvent->x();
     cursorY = mouseEvent->y();
-    
+
     for (int i = 0; i < windowRects.length(); i++) {
         WindowRect rect = windowRects[i];
 
         if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
             mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
             killWindowRect = rect;
+            killWindowIndex = i;
 
             break;
         }
@@ -122,11 +123,31 @@ void InteractiveKill::paintEvent(QPaintEvent *)
     painter.drawPixmap(QPoint(0, 0), screenPixmap);
 
     if (cursorX >=0 && cursorY >= 0) {
-        QPainterPath path;
-        path.addRect(QRectF(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
+        // Just render kill window with window index.
+        QRegion windowRegion = QRegion(QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
+
+        for (int i = 0; i < killWindowIndex; i++) {
+            WindowRect rect = windowRects[i];
+
+            if (rect.x > killWindowRect.x || 
+                rect.x + rect.width < killWindowRect.x + killWindowRect.width ||
+                rect.y > killWindowRect.y ||
+                rect.y + rect.height < killWindowRect.y + killWindowRect.height) {
+                windowRegion = windowRegion.subtracted(QRegion(rect.x, rect.y, rect.width, rect.height));
+            }
+        }
+
+        painter.setBrush(QBrush("#ff0000"));
         painter.setOpacity(0.2);
-        painter.fillPath(path, QColor("#ff0000"));
-        
+
+        painter.setClipping(true);
+        painter.setClipRegion(windowRegion);
+        painter.drawRect(QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
+
+        // Draw kill cursor.
+        WindowRect rootRect = windowManager->getRootWindowRect();
+        painter.setClipRegion(QRegion(rootRect.x, rootRect.y, rootRect.width, rootRect.height));
+
         painter.setOpacity(1);
         painter.drawImage(QPoint(cursorX, cursorY), cursorImage);
     }

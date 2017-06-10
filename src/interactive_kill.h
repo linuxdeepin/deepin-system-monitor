@@ -56,6 +56,7 @@ private:
     WindowRect killWindowRect;
     int cursorX;
     int cursorY;
+    int killWindowIndex;
 };
 
 #endif
