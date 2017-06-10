@@ -30,7 +30,7 @@
 
 FindWindowTitle::FindWindowTitle()
 {
-    windowTitles = new QMap<int, QString>();
+    windowTitles = new QMap<int, xcb_window_t>();
 }
 
 FindWindowTitle::~FindWindowTitle()
@@ -44,10 +44,10 @@ QList<int> FindWindowTitle::getWindowPids()
     return windowTitles->keys();
 }
 
-QString FindWindowTitle::findWindowTitle(int pid)
+QString FindWindowTitle::getWindowTitle(int pid)
 {
     if (windowTitles->contains(pid)) {
-        return windowTitles->value(pid); 
+        return getWindowName(windowTitles->value(pid));
     } else {
         return QString("");
     }
@@ -79,8 +79,18 @@ void FindWindowTitle::updateWindowInfos()
         foreach (auto window, windows) {
             int pid = getWindowPid(window);
             if (!windowTitles->contains(pid)) {
-                (*windowTitles)[pid] = getWindowName(window);
+                (*windowTitles)[pid] = window;
             }
         }
     }
 }
+
+xcb_window_t FindWindowTitle::getWindow(int pid)
+{
+    if (windowTitles->contains(pid)) {
+        return windowTitles->value(pid);
+    } else {
+        return -1;
+    }
+}
+

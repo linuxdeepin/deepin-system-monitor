@@ -49,7 +49,7 @@
 namespace Utils {
     QMap<QString, QString> getProcessDescriptions() {
         QMap<QString, QString> map;
-        
+
         map["startdde"] =  "深度桌面环境-进程启动服务" ;
         map["dde-desktop"] =  "深度桌面环境-桌面" ;
         map["dde-launcher"] =  "深度桌面环境-启动器";
@@ -80,16 +80,16 @@ namespace Utils {
         map["systemd"] = "系统服务管理器";
         map["accounts-daemon"] = "账户守护进程";
         map["dbus-daemon"] = "DBus 守护进程";
-        
+
         return map;
     }
-    
+
     /**
      * @brief getProcessIconFromName Get the icon for a process given its name
      * @param procname The name of the process
      * @return The process' icon or the default executable icon if none was found
      */
-    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QMap<QString, QPixmap> *processIconMapCache, int iconSize)
+    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QPixmap xwindowIcon, QMap<QString, QPixmap> *processIconMapCache, int iconSize)
     {
         // check we havent already got the icon in the cache
         if (processIconMapCache != nullptr) {
@@ -98,18 +98,17 @@ namespace Utils {
             }
         }
 
-        QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
         if (desktopFile.size() == 0) {
-            QPixmap pixmap = defaultExecutableIcon.pixmap(iconSize, iconSize);
             if (processIconMapCache != nullptr) {
-                (*processIconMapCache)[procName] = pixmap;
+                (*processIconMapCache)[procName] = xwindowIcon;
             }
 
-            return pixmap;
+            return xwindowIcon;
         }
 
         std::ifstream in;
         in.open(desktopFile);
+        QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
         QIcon icon = defaultExecutableIcon;
         QString iconName;
         while(!in.eof()) {
@@ -139,6 +138,7 @@ namespace Utils {
 
         return pixmap;
     }
+
 
     QSize getRenderSize(int fontSize, QString string)
     {
@@ -372,7 +372,7 @@ namespace Utils {
     {
         QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
         std::string desktopFile;
-        
+
         QString procname = procName.toLower();
 
         if (!GUI_BLACKLIST.contains(procname)) {

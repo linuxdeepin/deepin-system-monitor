@@ -103,6 +103,9 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     }
     closeproc(proc);
 
+    findWindowTitle = new FindWindowTitle();
+    findWindowTitle->updateWindowInfos();
+    
     for(auto &i:processes) {
         int processId = (&i.second)->tid;
         
@@ -110,7 +113,8 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
             QString name = getProcessName(&i.second);
             std::string desktopFile = getDesktopFileFromName(name);
             QString cmdline = Utils::getProcessCmdline(processId);
-            QPixmap icon = getProcessIconFromName(name, desktopFile, nullptr, 96);
+            QPixmap xwindowIcon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
+            QPixmap icon = getProcessIconFromName(name, desktopFile, xwindowIcon, nullptr, 96);
             QString displayName = getDisplayNameFromName(name, desktopFile);
             
             iconLabel->setPixmap(icon);
@@ -125,6 +129,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
 
 AttributesDialog::~AttributesDialog()
 {
+    delete findWindowTitle;
     delete closeButton;
     delete iconLabel;
     delete nameTitleLabel;

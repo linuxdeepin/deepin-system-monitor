@@ -24,6 +24,7 @@
 #ifndef ATTRIBUTESDIALOG_H
 #define ATTRIBUTESDIALOG_H 
 
+#include "find_window_title.h"
 #include <QLabel>
 #include <QPaintEvent>
 #include <QVBoxLayout>
@@ -44,16 +45,17 @@ public:
     void paintEvent(QPaintEvent *);
     
 private:
-    QVBoxLayout *layout;
-    QHBoxLayout *nameLayout;
-    QHBoxLayout *cmdlineLayout;
     DWindowCloseButton *closeButton;
-    QLabel *iconLabel;
-    QLabel *nameTitleLabel;
-    QLabel *nameLabel;
-    QLabel *titleLabel;
-    QLabel *cmdlineTitleLabel;
+    FindWindowTitle *findWindowTitle;
+    QHBoxLayout *cmdlineLayout;
+    QHBoxLayout *nameLayout;
     QLabel *cmdlineLabel;
+    QLabel *cmdlineTitleLabel;
+    QLabel *iconLabel;
+    QLabel *nameLabel;
+    QLabel *nameTitleLabel;
+    QLabel *titleLabel;
+    QVBoxLayout *layout;
 };
 
 #endif

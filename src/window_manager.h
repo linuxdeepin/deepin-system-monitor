@@ -27,6 +27,7 @@
 #include <QObject>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
+#include <QX11Info>
 
 struct WindowRect {
     int x;
@@ -42,9 +43,10 @@ class WindowManager : public QObject
 public:
     WindowManager(QObject *parent = 0);
     ~WindowManager();
-
+    
     QList<int> getWindowFrameExtents(xcb_window_t window);
     QList<xcb_window_t> getWindows();
+    QPixmap getWindowIcon(xcb_window_t win, int iconSize);
     QString getAtomName(xcb_atom_t atom);
     QString getWindowClass(xcb_window_t window);
     QString getWindowName(xcb_window_t window);

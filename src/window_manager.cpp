@@ -23,8 +23,11 @@
 
 #include "window_manager.h"
 #include <QDebug>
+#include <QIcon>
 #include <QObject>
-#include <QtX11Extras/QX11Info>
+#include <QPixmap>
+#include <X11/Xatom.h>
+#include <X11/Xlib.h>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
 
@@ -111,7 +114,7 @@ QList<xcb_window_t> WindowManager::getWindows()
         }
 
         free(listReply);
-        
+
         // We need re-sort windows list from up to bottom,
         // to make compare cursor with window area from up to bottom.
         std::reverse(windows.begin(), windows.end());
@@ -126,6 +129,38 @@ QList<xcb_window_t> WindowManager::getWindows()
     }
 
     return windows;
+}
+
+QPixmap WindowManager::getWindowIcon(xcb_window_t win, int iconSize)
+{
+    QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
+    QPixmap defaultPixmap = defaultExecutableIcon.pixmap(iconSize, iconSize);
+    
+    if (win > 0) {
+        int format;
+        ulong type, nitems, extra;
+        ulong* data = 0;
+
+        XGetWindowProperty(QX11Info::display(), win, getAtom("_NET_WM_ICON"),
+                           0, LONG_MAX, False, AnyPropertyType,
+                           &type, &format, &nitems, &extra,
+                           (uchar**)&data);
+        if (!data) {
+            return defaultPixmap;
+        }
+
+        QImage img (data[0], data[1], QImage::Format_ARGB32);
+        for (int i=0; i<img.byteCount()/4; ++i) {
+            ((uint*)img.bits())[i] = data[i+2];
+        }
+
+        QPixmap pixmap = QPixmap::fromImage(img).scaled(iconSize, iconSize);
+        XFree(data);
+        
+        return pixmap;
+    }
+
+    return defaultPixmap;
 }
 
 QString WindowManager::getAtomName(xcb_atom_t atom)

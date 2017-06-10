@@ -94,7 +94,7 @@ namespace Utils {
     } NetworkStatus;
     
     QMap<QString, QString> getProcessDescriptions();
-    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
+    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QPixmap xwindowIcon, QMap<QString, QPixmap> *processIconMapCache, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
     QString formatBandwidth(double v);
     QString formatByteCount(double v);

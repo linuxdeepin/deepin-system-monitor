@@ -38,11 +38,12 @@ public:
     ~FindWindowTitle();
     
     QList<int> getWindowPids();
-    QString findWindowTitle(int pid);
+    QString getWindowTitle(int pid);
     void updateWindowInfos();
+    xcb_window_t getWindow(int pid);
     
 private:
-    QMap<int, QString> *windowTitles;
+    QMap<int, xcb_window_t> *windowTitles;
 };
 
 #endif
