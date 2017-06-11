@@ -36,11 +36,25 @@ using namespace Utils;
 
 StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 {
+    // Init size.
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
 
+    // Init attributes.
+    cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
     filterType = OnlyGUI;
+    findWindowTitle = new FindWindowTitle();
+    processReadKbs = new QMap<int, unsigned long>();
+    processRecvBytes = new QMap<int, uint32_t>();
+    processSentBytes = new QMap<int, uint32_t>();
+    processWriteKbs = new QMap<int, unsigned long>();
     tabName = "应用程序";
+    totalRecvBytes = 0;
+    totalRecvKbs = 0;
+    totalSentBytes = 0;
+    totalSentKbs = 0;
+    currentUsername = qgetenv("USER");
 
+    // Init widgets.
     layout = new QVBoxLayout(this);
 
     cpuMonitor = new CpuMonitor();
@@ -51,23 +65,11 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
     layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
 
-    totalSentBytes = 0;
-    totalRecvBytes = 0;
-    totalSentKbs = 0;
-    totalRecvKbs = 0;
-
-    findWindowTitle = new FindWindowTitle();
-
-    processSentBytes = new QMap<int, uint32_t>();
-    processRecvBytes = new QMap<int, uint32_t>();
-
-    processWriteKbs = new QMap<int, unsigned long>();
-    processReadKbs = new QMap<int, unsigned long>();
-
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
 
+    // Start timer.
     updateStatusTimer = new QTimer();
     connect(updateStatusTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
     updateStatusTimer->start(updateDuration);
@@ -85,12 +87,6 @@ StatusMonitor::~StatusMonitor()
     delete processWriteKbs;
     delete updateStatusTimer;
     delete layout;
-}
-
-void StatusMonitor::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
 }
 
 void StatusMonitor::switchToAllProcess()
@@ -178,18 +174,16 @@ void StatusMonitor::updateStatus()
     }
 
     // Read processes information.
-    int cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
     double totalCpuPercent = 0;
     int guiProcessNumber = 0;
     int systemProcessNumber = 0;
-    QString username = qgetenv("USER");
     QList<ListItem*> items;
-    
+
     for (auto &i:processes) {
-        int pid = (&i.second)->tid;
+        QString name = getProcessName(&i.second);
         QString user = (&i.second)->euser;
         double cpu = (&i.second)->pcpu;
-        QString name = getProcessName(&i.second);
+        int pid = (&i.second)->tid;
 
         std::string desktopFile = getDesktopFileFromName(name);
         QString title = findWindowTitle->getWindowTitle(pid);
@@ -203,42 +197,37 @@ void StatusMonitor::updateStatus()
 
         bool appendItem = false;
         if (filterType == OnlyGUI) {
-            appendItem = (user == username && isGui);
+            appendItem = (user == currentUsername && isGui);
         } else if (filterType == OnlyMe) {
-            appendItem = (user == username);
+            appendItem = (user == currentUsername);
         } else if (filterType == AllProcess) {
             appendItem = true;
         }
 
         if (appendItem) {
-            QString displayName;
-
-            if (title != "") {
-                if (filterType == AllProcess) {
-                    displayName = QString("[%1] %2").arg(user).arg(title);
-                } else {
-                    displayName = title;
-                }
-            } else {
-                if (filterType == AllProcess) {
-                    displayName = QString("[%1] %2").arg(user).arg(getDisplayNameFromName(name, desktopFile));
-                } else {
-                    displayName = getDisplayNameFromName(name, desktopFile);
-                }
+            if (title == "") {
+                title = getDisplayNameFromName(name, desktopFile);
             }
+            QString displayName;
+            if (filterType == AllProcess) {
+                displayName = QString("[%1] %2").arg(user).arg(title);
+            } else {
+                displayName = title;
+            }
+
             long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
-            
+
             QPixmap icon;
             if (desktopFile.size() == 0) {
                 icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
             } else {
                 icon = getDesktopFileIcon(desktopFile, 24);
             }
-            
+
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
         } else {
-            // Fill GUI processes information for continue merge action. 
+            // Fill GUI processes information for continue merge action.
             if (filterType == OnlyGUI) {
                 if (childInfoMap.contains(pid)) {
                     long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
@@ -295,7 +284,7 @@ void StatusMonitor::updateStatus()
     QMap<int, NetworkStatus> networkStatusSnapshot;
     totalSentKbs = 0;
     totalRecvKbs = 0;
-    
+
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
             uint32_t prevSentBytes = 0;

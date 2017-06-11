@@ -58,9 +58,6 @@ public:
     StatusMonitor(QWidget *parent = 0);
     ~StatusMonitor();
 
-protected:
-    void paintEvent(QPaintEvent *event);
-
 signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
@@ -87,13 +84,14 @@ private:
     QMap<int, unsigned long> *processReadKbs;
     QMap<int, unsigned long> *processWriteKbs;
     QString tabName;
+    QString currentUsername;
     QTimer *updateStatusTimer;
     QVBoxLayout *layout;
+    StoredProcType prevProcesses;
     float totalRecvKbs;
     float totalSentKbs;
-    // int updateDuration = 200;
+    int cpuNumber;
     int updateDuration = 2000;
-    StoredProcType prevProcesses;
     uint32_t totalRecvBytes;
     uint32_t totalSentBytes;
     unsigned long long totalCpuTime;

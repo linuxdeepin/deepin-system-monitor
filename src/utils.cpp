@@ -356,11 +356,12 @@ namespace Utils {
         std::string desktopFile;
 
         QString procname = procName.toLower();
+        QString processFilename = procname + ".desktop";
 
         if (!GUI_BLACKLIST.contains(procname)) {
             while(dir.hasNext()) {
                 if (dir.fileInfo().suffix() == "desktop") {
-                    if (dir.fileName().toLower().contains(procname + ".desktop")) {
+                    if (dir.fileName().toLower().contains(processFilename)) {
                         desktopFile = dir.filePath().toStdString();
                         break;
                     }
@@ -372,19 +373,11 @@ namespace Utils {
         return desktopFile;
     }
 
-    /**
-     * @brief calculateCPUPercentage
-     * @param before - old proc_t of the process
-     * @param after - new proc_t of the process
-     * @param cpuTime - the last total cpu time measurement
-     * @return The cpu percentage of the process
-     */
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime)
     {
         double cpuTimeA = getTotalCpuTime() - cpuTime;
-        unsigned long long processcpuTime = ((after->utime + after->stime)
-                                             - (before->utime + before->stime));
-        /// TODO: GSM has an option to divide by # cpus
+        unsigned long long processcpuTime = ((after->utime + after->stime) - (before->utime + before->stime));
+        
         return (processcpuTime / cpuTimeA) * 100.0 * sysconf(_SC_NPROCESSORS_CONF);
     }
 
