@@ -60,7 +60,7 @@ namespace Utils {
         map["dde-session-daemon"] =  "深度桌面环境-会话守护进程";
         map["dde-session-initializer"] =  "深度桌面环境-会话初始化进程";
         map["dde-file-manager-daemon"] =  "深度文件管理器守护进程";
-        map["dde-lock-service"] =  "深度桌面环境-锁屏服务";
+        map["dde-lockservice"] =  "深度桌面环境-锁屏服务";
         map["deepin-wm"] =  "深度窗口管理器";
         map["deepin-wm-switcher"] =  "深度窗口管理器切换器";
         map["deepin-notifications"] =  "深度系统通知";
@@ -91,6 +91,7 @@ namespace Utils {
         map["bluetoothd"] = "蓝牙守护进程";
         map["upowerd"] = "电源守护进程";
         map["modemmanager"] = "Modem设备管理器";
+        map["applet.py"] = "系统打印托盘服务";
 
         return map;
     }
