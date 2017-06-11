@@ -133,8 +133,8 @@ void StatusMonitor::updateStatus()
     // Fill in CPU.
     if (prevProcesses.size()>0) {
         // we have previous proc info
-        for(auto &newItr:processes) {
-            for(auto &prevItr:prevProcesses) {
+        for (auto &newItr:processes) {
+            for (auto &prevItr:prevProcesses) {
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
                     newItr.second.pcpu = (unsigned int) calculateCPUPercentage(&prevItr.second, &newItr.second, totalCpuTime);
@@ -181,7 +181,7 @@ void StatusMonitor::updateStatus()
     QString username = qgetenv("USER");
     QList<ListItem*> items;
     
-    for(auto &i:processes) {
+    for (auto &i:processes) {
         int pid = (&i.second)->tid;
         QString user = (&i.second)->euser;
         double cpu = (&i.second)->pcpu;

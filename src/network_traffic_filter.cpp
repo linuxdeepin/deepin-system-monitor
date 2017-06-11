@@ -31,7 +31,7 @@ int NetworkTrafficFilter::m_nethogs_monitor_status = NETHOGS_STATUS_OK;
 bool NetworkTrafficFilter::getRowUpdate(NetworkTrafficFilter::Update& update)
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
-	if( m_row_updates_map.empty() )
+	if (m_row_updates_map.empty())
 		return false;
 	update = m_row_updates_map.begin()->second;
 	m_row_updates_map.erase(m_row_updates_map.begin());
@@ -52,7 +52,7 @@ void NetworkTrafficFilter::setNetHogsMonitorStatus(int status)
 
 void NetworkTrafficFilter::setRowUpdate(int action, NethogsMonitorRecord const& record)
 {
-	if( action == NETHOGS_APP_ACTION_REMOVE || record.sent_bytes || record.recv_bytes )
+	if (action == NETHOGS_APP_ACTION_REMOVE || record.sent_bytes || record.recv_bytes)
 	{
 		//save the update for GUI use
 		std::lock_guard<std::mutex> lock(m_mutex);

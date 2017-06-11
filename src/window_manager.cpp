@@ -186,7 +186,7 @@ QString WindowManager::getWindowClass(xcb_window_t window)
     } else {
         xcb_get_property_reply_t *reply = getProperty(window, "WM_CLASS", getAtom("STRING"));
 
-        if(reply) {
+        if (reply) {
             QList<QByteArray> rawClasses = QByteArray(static_cast<char*>(xcb_get_property_value(reply)), xcb_get_property_value_length(reply)).split('\0');
 
             free(reply);
@@ -205,7 +205,7 @@ QString WindowManager::getWindowName(xcb_window_t window)
     } else {
         xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_NAME", getAtom("UTF8_STRING"));
 
-        if(reply) {
+        if (reply) {
             QString result = QString::fromUtf8(static_cast<char*>(xcb_get_property_value(reply)), xcb_get_property_value_length(reply));
 
             free(reply);
@@ -222,11 +222,11 @@ QStringList WindowManager::getWindowStates(xcb_window_t window)
     QStringList types;
     xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_STATE", XCB_ATOM_ATOM);
 
-    if(reply) {
+    if (reply) {
         xcb_atom_t *typesA = static_cast<xcb_atom_t*>(xcb_get_property_value(reply));
         int typeNum = reply->length;
 
-        for(int i = 0; i < typeNum; i++) {
+        for (int i = 0; i < typeNum; i++) {
             types.append(getAtomName(typesA[i]));
         }
 
@@ -241,11 +241,11 @@ QStringList WindowManager::getWindowTypes(xcb_window_t window)
     QStringList types;
     xcb_get_property_reply_t *reply = getProperty(window, "_NET_WM_WINDOW_TYPE", XCB_ATOM_ATOM);
 
-    if(reply) {
+    if (reply) {
         xcb_atom_t *typesA = static_cast<xcb_atom_t*>(xcb_get_property_value(reply));
         int typeNum = reply->length;
 
-        for(int i = 0; i < typeNum; i++) {
+        for (int i = 0; i < typeNum; i++) {
             types.append(getAtomName(typesA[i]));
         }
 
@@ -398,7 +398,7 @@ xcb_atom_t WindowManager::getAtom(QString name)
     xcb_atom_t result = XCB_ATOM_NONE;
     xcb_intern_atom_cookie_t cookie = xcb_intern_atom(conn, 0, rawName.size(), rawName.data());
     xcb_intern_atom_reply_t *reply = xcb_intern_atom_reply(conn, cookie, NULL);
-    if(reply) {
+    if (reply) {
         result = reply->atom;
 
         free(reply);

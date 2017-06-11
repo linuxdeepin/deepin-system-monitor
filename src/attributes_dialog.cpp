@@ -106,7 +106,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     findWindowTitle = new FindWindowTitle();
     findWindowTitle->updateWindowInfos();
     
-    for(auto &i:processes) {
+    for (auto &i:processes) {
         int processId = (&i.second)->tid;
         
         if (pid == processId) {

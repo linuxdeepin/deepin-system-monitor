@@ -45,7 +45,7 @@ ProcessTree::~ProcessTree()
 
 void ProcessTree::scanProcesses(storedProcType processes)
 {
-    for(auto &i:processes) {
+    for (auto &i:processes) {
         int ppid = (&i.second)->ppid;
         int pid = (&i.second)->tid;
 
