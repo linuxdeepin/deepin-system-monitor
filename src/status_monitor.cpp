@@ -232,7 +232,12 @@ void StatusMonitor::updateStatus()
                 }
             }
             long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
-            QPixmap icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
+            QPixmap icon;
+            if (desktopFile.size() == 0) {
+                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
+            } else {
+                icon = getDesktopFileIcon(desktopFile, 24);
+            }
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
         } else {

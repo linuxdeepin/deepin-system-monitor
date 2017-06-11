@@ -86,6 +86,7 @@ namespace Utils {
 
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     {
+        
         std::ifstream in;
         in.open(desktopFile);
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
@@ -95,6 +96,7 @@ namespace Utils {
             std::string line;
             std::getline(in,line);
             iconName = QString::fromStdString(line);
+            
             if (iconName.startsWith("Icon=")) {
                 iconName.remove(0,5); // remove the first 5 chars
             } else {
@@ -361,17 +363,6 @@ namespace Utils {
                     }
                 }
                 dir.next();
-            }
-            if (desktopFile.size() == 0) {
-                while(dir.hasNext()) {
-                    if (dir.fileInfo().suffix() == "desktop") {
-                        if (dir.fileName().toLower().contains(procname)) {
-                            desktopFile = dir.filePath().toStdString();
-                            break;
-                        }
-                    }
-                    dir.next();
-                }
             }
         }
 
