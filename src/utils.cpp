@@ -50,13 +50,15 @@ namespace Utils {
     QMap<QString, QString> getProcessDescriptions() {
         QMap<QString, QString> map;
 
-        map["startdde"] =  "深度桌面环境-进程启动服务" ;
-        map["dde-desktop"] =  "深度桌面环境-桌面" ;
+        map["startdde"] =  "深度桌面环境-进程启动服务";
+        map["dde-desktop"] =  "深度桌面环境-桌面";
+        map["dde-polkit-agent"] =  "深度桌面环境-Polkit代理";
         map["dde-launcher"] =  "深度桌面环境-启动器";
         map["dde-dock"] =  "深度桌面环境-任务栏";
         map["dde-osd"] =  "深度桌面环境-屏幕显示";
         map["dde-system-daemon"] =  "深度桌面环境-系统守护进程";
         map["dde-session-daemon"] =  "深度桌面环境-会话守护进程";
+        map["dde-session-initializer"] =  "深度桌面环境-会话初始化进程";
         map["dde-file-manager-daemon"] =  "深度文件管理器守护进程";
         map["dde-lock-service"] =  "深度桌面环境-锁屏服务";
         map["deepin-wm"] =  "深度窗口管理器";
@@ -72,14 +74,23 @@ namespace Utils {
         map["smbd"] =  "文件共享服务守护进程";
         map["xorg"] = "X服务";
         map["fcitx"] = "小企鹅输入法";
+        map["fcitx-dbus-watcher"] = "小企鹅输入法 DBus 守护进程";
         map["sogou-qimpanel-watchdog"] = "搜狗输入法守护进程";
         map["sslocal"] = "ShadowSocks 本地客户端";
         map["pulseaudio"] = "声音服务";
         map["cupsd"] = "打印守护进程";
         map["lightdm"] = "简单显示管理器";
         map["systemd"] = "系统服务管理器";
+        map["systemd-udevd"] = "系统服务管理器-设备管理守护进程";
+        map["udisksd"] = "磁盘守护进程";
         map["accounts-daemon"] = "账户守护进程";
         map["dbus-daemon"] = "DBus 守护进程";
+        map["mousearea"] = "鼠标事件守护进程";
+        map["dconf-service"] = "DConf服务";
+        map["gnome-keyring-daemon"] = "Gnome 密钥环守护进程";
+        map["bluetoothd"] = "蓝牙守护进程";
+        map["upowerd"] = "电源守护进程";
+        map["modemmanager"] = "Modem设备管理器";
 
         return map;
     }
