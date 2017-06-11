@@ -153,8 +153,9 @@ QPixmap WindowManager::getWindowIcon(xcb_window_t win, int iconSize)
         for (int i=0; i<img.byteCount()/4; ++i) {
             ((uint*)img.bits())[i] = data[i+2];
         }
-
-        QPixmap pixmap = QPixmap::fromImage(img).scaled(iconSize, iconSize);
+        
+        // Need add options Qt::KeepAspectRatio and Qt::SmoothTransformation to keep window icon scaled smoothly.
+        QPixmap pixmap = QPixmap::fromImage(img).scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         XFree(data);
         
         return pixmap;

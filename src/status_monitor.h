@@ -82,7 +82,6 @@ private:
     FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
-    QMap<QString, QPixmap> *processIconCache;
     QMap<int, uint32_t> *processRecvBytes;
     QMap<int, uint32_t> *processSentBytes;
     QMap<int, unsigned long> *processReadKbs;

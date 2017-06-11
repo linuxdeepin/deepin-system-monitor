@@ -84,28 +84,8 @@ namespace Utils {
         return map;
     }
 
-    /**
-     * @brief getProcessIconFromName Get the icon for a process given its name
-     * @param procname The name of the process
-     * @return The process' icon or the default executable icon if none was found
-     */
-    QPixmap getProcessIconFromName(QString procName, std::string desktopFile, QPixmap xwindowIcon, QMap<QString, QPixmap> *processIconMapCache, int iconSize)
+    QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     {
-        // check we havent already got the icon in the cache
-        if (processIconMapCache != nullptr) {
-            if (processIconMapCache->contains(procName)) {
-                return processIconMapCache->value(procName);
-            }
-        }
-
-        if (desktopFile.size() == 0) {
-            if (processIconMapCache != nullptr) {
-                (*processIconMapCache)[procName] = xwindowIcon;
-            }
-
-            return xwindowIcon;
-        }
-
         std::ifstream in;
         in.open(desktopFile);
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
@@ -132,9 +112,6 @@ namespace Utils {
         in.close();
 
         QPixmap pixmap = icon.pixmap(iconSize, iconSize);
-        if (processIconMapCache != nullptr) {
-            (*processIconMapCache)[procName] = pixmap;
-        }
 
         return pixmap;
     }

@@ -58,9 +58,6 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
 
     findWindowTitle = new FindWindowTitle();
 
-    // Init process icon cache.
-    processIconCache = new QMap<QString, QPixmap>();
-
     processSentBytes = new QMap<int, uint32_t>();
     processRecvBytes = new QMap<int, uint32_t>();
 
@@ -82,7 +79,6 @@ StatusMonitor::~StatusMonitor()
     delete findWindowTitle;
     delete memoryMonitor;
     delete networkMonitor;
-    delete processIconCache;
     delete processRecvBytes;
     delete processSentBytes;
     delete processReadKbs;
@@ -236,8 +232,7 @@ void StatusMonitor::updateStatus()
                 }
             }
             long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
-            QPixmap xwindowIcon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
-            QPixmap icon = getProcessIconFromName(name, desktopFile, xwindowIcon, processIconCache);
+            QPixmap icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
         } else {
