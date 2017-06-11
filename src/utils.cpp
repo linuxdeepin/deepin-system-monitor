@@ -47,6 +47,8 @@
 #include <unordered_set>
 
 namespace Utils {
+    QMap<QString, QString> processDescriptions = getProcessDescriptions();
+    
     QMap<QString, QString> getProcessDescriptions() {
         QMap<QString, QString> map;
 
@@ -192,9 +194,8 @@ namespace Utils {
     QString getDisplayNameFromName(QString procName, std::string desktopFile)
     {
         QString procname = procName.toLower();
-        QMap<QString, QString> map = getProcessDescriptions();
-        if (map.contains(procname)) {
-            return map[procname];
+        if (processDescriptions.contains(procname)) {
+            return processDescriptions[procname];
         }
 
         if (desktopFile.size() == 0) {

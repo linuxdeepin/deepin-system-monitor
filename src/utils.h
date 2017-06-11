@@ -93,6 +93,7 @@ namespace Utils {
         float recvKbs;
     } NetworkStatus;
     
+    
     QMap<QString, QString> getProcessDescriptions();
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
