@@ -285,10 +285,6 @@ void StatusMonitor::updateStatus()
         updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, 0, 0);
     }
 
-    if (NetworkTrafficFilter::getNetHogsMonitorStatus() != NETHOGS_STATUS_OK) {
-        qDebug() << "Failed to access network device(s).";
-    }
-
     // Update network status.
     NetworkTrafficFilter::Update update;
 
