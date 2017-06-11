@@ -120,13 +120,17 @@ void StatusMonitor::switchToOnlyMe()
 void StatusMonitor::updateStatus()
 {
     // Read the list of open processes information.
-    PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
+    PROCTAB* proc = openproc(
+        PROC_FILLMEM |          // memory status: read information from /proc/#pid/statm
+        PROC_FILLSTAT |         // cpu status: read information from /proc/#pid/stat
+        PROC_FILLUSR            // user status: resolve user ids to names via /etc/passwd
+        );
     static proc_t proc_info;
     memset(&proc_info, 0, sizeof(proc_t));
 
-    storedProcType processes;
+    StoredProcType processes;
     while (readproc(proc, &proc_info) != NULL) {
-        processes[proc_info.tid]=proc_info;
+        processes[proc_info.tid] = proc_info;
     }
     closeproc(proc);
 

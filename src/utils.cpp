@@ -244,11 +244,6 @@ namespace Utils {
         return QDir(dir.filePath("image")).filePath(imageName);
     }
 
-    /**
-     * @brief getProcessCmdline Get the command line that the process was executed with from its PID
-     * @param pid The pid of the process to get
-     * @return The command line that the process was run from
-     */
     QString getProcessCmdline(pid_t pid)
     {
         std::string temp;
@@ -289,11 +284,6 @@ namespace Utils {
         return processName;
     }
 
-    /**
-     * @brief getProcessNameFromCmdLine Get the name of the process from its PID
-     * @param pid the pid of the process to get the name for
-     * @return The name of the process
-     */
     QString getProcessNameFromCmdLine(const pid_t pid)
     {
         std::string cmdline = getProcessCmdline(pid).toStdString();

@@ -43,7 +43,7 @@ class StatusMonitor : public QWidget
 {
     Q_OBJECT
 
-    typedef std::map<int, proc_t> storedProcType;
+    typedef std::map<int, proc_t> StoredProcType;
 
     enum FilterType {OnlyGUI, OnlyMe, AllProcess};
 
@@ -93,7 +93,7 @@ private:
     float totalSentKbs;
     // int updateDuration = 200;
     int updateDuration = 2000;
-    storedProcType prevProcesses;
+    StoredProcType prevProcesses;
     uint32_t totalRecvBytes;
     uint32_t totalSentBytes;
     unsigned long long totalCpuTime;

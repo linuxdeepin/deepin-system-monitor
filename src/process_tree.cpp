@@ -43,7 +43,7 @@ ProcessTree::~ProcessTree()
     delete processMap;
 }
 
-void ProcessTree::scanProcesses(storedProcType processes)
+void ProcessTree::scanProcesses(StoredProcType processes)
 {
     for (auto &i:processes) {
         int ppid = (&i.second)->ppid;

@@ -33,7 +33,7 @@ class ProcessTree : public QObject
 {
     Q_OBJECT
     
-    typedef std::map<int, proc_t> storedProcType;
+    typedef std::map<int, proc_t> StoredProcType;
     
     struct Process
     {
@@ -49,7 +49,7 @@ public:
     void getChildPids(int pid);
     void printNode(int pid);
     void printTree();
-    void scanProcesses(storedProcType processes);
+    void scanProcesses(StoredProcType processes);
     
 private:
     QList<int> childrenPids;
