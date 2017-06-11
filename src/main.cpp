@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         app.setApplicationAcknowledgementPage(acknowledgementLink);
         
         app.setTheme("dark");
-        app.setWindowIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
+        app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));
         
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
 
