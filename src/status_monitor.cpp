@@ -147,22 +147,10 @@ void StatusMonitor::updateStatus()
     // Update the cpu time for next loop.
     totalCpuTime = getTotalCpuTime();
 
-    // Read processes information.
-    QString username = qgetenv("USER");
-
-    QList<ListItem*> items;
-    int cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
-    double totalCpuPercent = 0;
-
+    // Fill gui chlid process information when filterType is OnlyGUI.
     findWindowTitle->updateWindowInfos();
-
-    int guiProcessNumber = 0;
-    int systemProcessNumber = 0;
-
     ProcessTree *processTree = new ProcessTree();
     processTree->scanProcesses(processes);
-
-    // Fill gui chlid process information when filterType is OnlyGUI.
     QMap<int, ChildPidInfo> childInfoMap;
     if (filterType == OnlyGUI) {
         QList<int> guiPids = findWindowTitle->getWindowPids();
@@ -171,12 +159,8 @@ void StatusMonitor::updateStatus()
             childPids = processTree->getAllChildPids(guiPid);
 
             for (int childPid : childPids) {
-                DiskStatus dStatus = {
-                    0, 0
-                };
-                NetworkStatus nStatus = {
-                    0, 0, 0, 0
-                };
+                DiskStatus dStatus = {0, 0};
+                NetworkStatus nStatus = {0, 0, 0, 0};
                 ChildPidInfo childPidInfo;
 
                 childPidInfo.cpu = 0;
@@ -189,10 +173,17 @@ void StatusMonitor::updateStatus()
         }
     }
 
+    // Read processes information.
+    int cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
+    double totalCpuPercent = 0;
+    int guiProcessNumber = 0;
+    int systemProcessNumber = 0;
+    QString username = qgetenv("USER");
+    QList<ListItem*> items;
+    
     for(auto &i:processes) {
         int pid = (&i.second)->tid;
         QString user = (&i.second)->euser;
-
         double cpu = (&i.second)->pcpu;
         QString name = getProcessName(&i.second);
 
@@ -232,15 +223,18 @@ void StatusMonitor::updateStatus()
                 }
             }
             long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
+            
             QPixmap icon;
             if (desktopFile.size() == 0) {
                 icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
             } else {
                 icon = getDesktopFileIcon(desktopFile, 24);
             }
+            
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
             items << item;
         } else {
+            // Fill GUI processes information for continue merge action. 
             if (filterType == OnlyGUI) {
                 if (childInfoMap.contains(pid)) {
                     long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
@@ -265,8 +259,6 @@ void StatusMonitor::updateStatus()
 
         if (!foundProcess) {
             processSentBytes->remove(pid);
-
-            qDebug() << QString("Remove %1 from sent bytes map.").arg(pid);
         }
     }
     for (auto pid : processRecvBytes->keys()) {
@@ -280,12 +272,10 @@ void StatusMonitor::updateStatus()
 
         if (!foundProcess) {
             processRecvBytes->remove(pid);
-
-            qDebug() << QString("Remove %1 from recv bytes map.").arg(pid);
         }
     }
 
-    // Have procps read the memory。
+    // Read memory information.
     meminfo();
 
     // Update memory status.
@@ -305,6 +295,7 @@ void StatusMonitor::updateStatus()
     QMap<int, NetworkStatus> networkStatusSnapshot;
     totalSentKbs = 0;
     totalRecvKbs = 0;
+    
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
             uint32_t prevSentBytes = 0;
