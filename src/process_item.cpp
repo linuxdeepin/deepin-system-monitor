@@ -209,10 +209,12 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
 bool ProcessItem::search(const ListItem *item, QString searchContent)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
-    return processItem->getName().toLower().contains(searchContent.toLower()) ||
-        processItem->getDisplayName().toLower().contains(searchContent.toLower()) ||
-        QString(processItem->getPid()).toLower().contains(searchContent.toLower()) ||
-        processItem->getUser().toLower().contains(searchContent.toLower());
+    QString content = searchContent.toLower();
+    
+    return processItem->getName().toLower().contains(content) ||
+        processItem->getDisplayName().toLower().contains(content) ||
+        QString::number(processItem->getPid()).contains(content) ||
+        processItem->getUser().toLower().contains(content);
 }
 
 bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort)
