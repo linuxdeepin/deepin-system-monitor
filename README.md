@@ -6,6 +6,25 @@ Thanks alot [Lily Rivers](https://github.com/VioletDarkKitty/system-monitor), th
 
 ## Dependencies
 
+## Build Dependencies
+
+* debhelper (>= 9)
+* qt5-qmake
+* qt5-default
+* qtbase5-dev
+* pkg-config
+* libdtkbase-dev
+* libdtkutil-dev
+* libdtkwidget-dev
+* libxcb-util0-dev
+* libxcb1-dev
+* libqt5x11extras5-dev
+* libprocps-dev
+* libxext-dev
+* libxtst-dev
+* libncurses-dev
+* libpcap-dev
+
 ## Installation
 
 * mkdir build
