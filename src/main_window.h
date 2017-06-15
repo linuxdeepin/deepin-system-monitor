@@ -47,6 +47,7 @@ public:
                                        
     QList<bool> getColumnHideFlags();
     bool eventFilter(QObject *, QEvent *);
+    void initThemeAction();
     void paintEvent(QPaintEvent *);
     
 public slots:
@@ -56,12 +57,16 @@ public slots:
     void recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles);
     void showWindowKiller();
     void switchTab(int index);
+    void switchToDarkTheme();
+    void switchToLightTheme();
     
 private:
     DDialog *killProcessDialog;
     InteractiveKill *killer;
     ProcessManager *processManager;
     QAction *killAction;
+    QAction *lightThemeAction;
+    QAction *darkThemeAction;
     QHBoxLayout *layout;
     QMenu *menu;
     QWidget *layoutWidget;

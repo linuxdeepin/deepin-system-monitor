@@ -50,9 +50,17 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         menu->setStyle(QStyleFactory::create("dlight"));
         killAction = new QAction("结束应用程序", this);
         connect(killAction, &QAction::triggered, this, &MainWindow::showWindowKiller);
+        lightThemeAction = new QAction("浅色主题", this);
+        connect(lightThemeAction, &QAction::triggered, this, &MainWindow::switchToLightTheme);
+        darkThemeAction = new QAction("深色主题", this);
+        connect(darkThemeAction, &QAction::triggered, this, &MainWindow::switchToDarkTheme);
         menu->addAction(killAction);
+        menu->addAction(lightThemeAction);
+        menu->addAction(darkThemeAction);
         menu->addSeparator();
 
+        initThemeAction();
+        
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
         this->titlebar()->setMenu(menu);
 
@@ -114,8 +122,6 @@ QList<bool> MainWindow::getColumnHideFlags()
     toggleHideFlags << processColumns.contains("upload");
     toggleHideFlags << processColumns.contains("pid");
     
-    qDebug() << toggleHideFlags;
-    
     return toggleHideFlags;
 }
 
@@ -145,14 +151,32 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void MainWindow::initThemeAction()
+{
+    if (settings->getOption("theme_style") == "light") {
+        darkThemeAction->setVisible(true);
+        lightThemeAction->setVisible(false);
+    } else {
+        darkThemeAction->setVisible(false);
+        lightThemeAction->setVisible(true);
+    }
+}
+
 void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
+    
+    QString backgroundColor;
+    if (settings->getOption("theme_style") == "light") {
+        backgroundColor = "#FFFFFF";
+    } else {
+        backgroundColor = "#0E0E0E";
+    }
 
     QPainterPath path;
     path.addRect(QRectF(rect()));
     painter.setOpacity(1);
-    painter.fillPath(path, QColor("#0E0E0E"));
+    painter.fillPath(path, QColor(backgroundColor));
 }
 
 void MainWindow::createWindowKiller()
@@ -183,10 +207,8 @@ void MainWindow::popupKillConfirmDialog(int pid)
     killProcessDialog->show();
 }
 
-void MainWindow::recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles)
+void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
 {
-    qDebug() << index << visible;
-    
     QList<QString> visibleColumns;
     visibleColumns << "name";
     
@@ -228,8 +250,6 @@ void MainWindow::recordVisibleColumn(int index, bool visible, QList<bool> column
         }
     }
     
-    qDebug() << processColumns;
-    
     settings->setOption("process_columns", processColumns);
 }
 
@@ -251,3 +271,20 @@ void MainWindow::switchTab(int index)
     settings->setOption("process_tab_index", index);
 }
 
+void MainWindow::switchToLightTheme()
+{
+    qDebug() << "Switch to light theme";
+    settings->setOption("theme_style", "light");
+    initThemeAction();
+
+    repaint();
+}
+
+void MainWindow::switchToDarkTheme()
+{
+    qDebug() << "Switch to dark theme";
+    settings->setOption("theme_style", "dark");
+    initThemeAction();
+    
+    repaint();
+}
