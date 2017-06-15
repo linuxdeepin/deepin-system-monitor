@@ -50,35 +50,32 @@ protected:
     
 private:
     QImage allProcessActiveImage;
-    QImage allProcessHoverImage;
-    QImage allProcessNormalImage;
-    QImage onlyGuiActiveImage;
-    QImage onlyGuiHoverImage;
-    QImage onlyGuiNormalImage;
-    QImage onlyMeActiveImage;
-    QImage onlyMeHoverImage;
-    QImage onlyMeNormalImage;
-    
     QImage allProcessDarkActiveImage;
     QImage allProcessDarkHoverImage;
     QImage allProcessDarkNormalImage;
-    QImage onlyGuiDarkActiveImage;
-    QImage onlyGuiDarkHoverImage;
-    QImage onlyGuiDarkNormalImage;
-    QImage onlyMeDarkActiveImage;
-    QImage onlyMeDarkHoverImage;
-    QImage onlyMeDarkNormalImage;
-
+    QImage allProcessHoverImage;
     QImage allProcessLightActiveImage;
     QImage allProcessLightHoverImage;
     QImage allProcessLightNormalImage;
+    QImage allProcessNormalImage;
+    QImage onlyGuiActiveImage;
+    QImage onlyGuiDarkActiveImage;
+    QImage onlyGuiDarkHoverImage;
+    QImage onlyGuiDarkNormalImage;
+    QImage onlyGuiHoverImage;
     QImage onlyGuiLightActiveImage;
     QImage onlyGuiLightHoverImage;
     QImage onlyGuiLightNormalImage;
+    QImage onlyGuiNormalImage;
+    QImage onlyMeActiveImage;
+    QImage onlyMeDarkActiveImage;
+    QImage onlyMeDarkHoverImage;
+    QImage onlyMeDarkNormalImage;
+    QImage onlyMeHoverImage;
     QImage onlyMeLightActiveImage;
     QImage onlyMeLightHoverImage;
     QImage onlyMeLightNormalImage;
-    
+    QImage onlyMeNormalImage;
     QString frameColor;
     double frameOpacity;
     int activeIndex = 0;
