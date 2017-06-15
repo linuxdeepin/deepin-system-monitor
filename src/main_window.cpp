@@ -22,6 +22,7 @@
  */
 
 #include "constant.h"
+#include "dthememanager.h"
 #include "main_window.h"
 #include <DTitlebar>
 #include <QApplication>
@@ -59,8 +60,11 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         menu->addAction(darkThemeAction);
         menu->addSeparator();
 
-        initThemeAction();
-        
+        initTheme();
+
+        connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MainWindow::changeTheme);
+
+
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
         this->titlebar()->setMenu(menu);
 
@@ -68,7 +72,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         layout = new QHBoxLayout(layoutWidget);
 
         this->setCentralWidget(layoutWidget);
-        
+
         int tab_index = settings->getOption("process_tab_index").toInt();
 
         processManager = new ProcessManager(tab_index, getColumnHideFlags());
@@ -108,10 +112,21 @@ MainWindow::~MainWindow()
     // We don't need clean pointers because application has exit here.
 }
 
+void MainWindow::changeTheme(QString theme)
+{
+    if (theme == "light") {
+        backgroundColor = "#FFFFFF";
+    } else {
+        backgroundColor = "#0E0E0E";
+    }
+
+    initThemeAction();
+}
+
 QList<bool> MainWindow::getColumnHideFlags()
 {
     QString processColumns = settings->getOption("process_columns").toString();
-    
+
     QList<bool> toggleHideFlags;
     toggleHideFlags << processColumns.contains("name");
     toggleHideFlags << processColumns.contains("cpu");
@@ -121,7 +136,7 @@ QList<bool> MainWindow::getColumnHideFlags()
     toggleHideFlags << processColumns.contains("download");
     toggleHideFlags << processColumns.contains("upload");
     toggleHideFlags << processColumns.contains("pid");
-    
+
     return toggleHideFlags;
 }
 
@@ -151,6 +166,14 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void MainWindow::initTheme()
+{
+    QString theme = settings->getOption("theme_style").toString();
+    DThemeManager::instance()->setTheme(theme);
+
+    changeTheme(theme);
+}
+
 void MainWindow::initThemeAction()
 {
     if (settings->getOption("theme_style") == "light") {
@@ -165,13 +188,6 @@ void MainWindow::initThemeAction()
 void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    
-    QString backgroundColor;
-    if (settings->getOption("theme_style") == "light") {
-        backgroundColor = "#FFFFFF";
-    } else {
-        backgroundColor = "#0E0E0E";
-    }
 
     QPainterPath path;
     path.addRect(QRectF(rect()));
@@ -211,36 +227,36 @@ void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
 {
     QList<QString> visibleColumns;
     visibleColumns << "name";
-    
-    
+
+
     if (columnVisibles[1]) {
         visibleColumns << "cpu";
     }
-    
+
     if (columnVisibles[2]) {
         visibleColumns << "memory";
     }
-    
+
     if (columnVisibles[3]) {
         visibleColumns << "disk_write";
     }
-    
+
     if (columnVisibles[4]) {
         visibleColumns << "disk_read";
     }
-    
+
     if (columnVisibles[5]) {
         visibleColumns << "download";
     }
-    
+
     if (columnVisibles[6]) {
         visibleColumns << "upload";
     }
-    
+
     if (columnVisibles[7]) {
         visibleColumns << "pid";
     }
-    
+
     QString processColumns = "";
     for (int i = 0; i < visibleColumns.length(); i++) {
         if (i != visibleColumns.length() - 1) {
@@ -249,7 +265,7 @@ void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
             processColumns += visibleColumns[i];
         }
     }
-    
+
     settings->setOption("process_columns", processColumns);
 }
 
@@ -267,24 +283,24 @@ void MainWindow::switchTab(int index)
     } else {
         statusMonitor->switchToAllProcess();
     }
-    
+
     settings->setOption("process_tab_index", index);
 }
 
 void MainWindow::switchToLightTheme()
 {
-    qDebug() << "Switch to light theme";
     settings->setOption("theme_style", "light");
-    initThemeAction();
+
+    DThemeManager::instance()->setTheme("light");
 
     repaint();
 }
 
 void MainWindow::switchToDarkTheme()
 {
-    qDebug() << "Switch to dark theme";
     settings->setOption("theme_style", "dark");
-    initThemeAction();
-    
+
+    DThemeManager::instance()->setTheme("dark");
+
     repaint();
 }

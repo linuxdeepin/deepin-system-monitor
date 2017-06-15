@@ -47,10 +47,12 @@ public:
                                        
     QList<bool> getColumnHideFlags();
     bool eventFilter(QObject *, QEvent *);
+    void initTheme();
     void initThemeAction();
     void paintEvent(QPaintEvent *);
     
 public slots:
+    void changeTheme(QString theme);
     void createWindowKiller();
     void dialogButtonClicked(int index, QString);
     void popupKillConfirmDialog(int pid);
@@ -64,11 +66,12 @@ private:
     DDialog *killProcessDialog;
     InteractiveKill *killer;
     ProcessManager *processManager;
+    QAction *darkThemeAction;
     QAction *killAction;
     QAction *lightThemeAction;
-    QAction *darkThemeAction;
     QHBoxLayout *layout;
     QMenu *menu;
+    QString backgroundColor;
     QWidget *layoutWidget;
     Settings *settings;
     StatusMonitor *statusMonitor;

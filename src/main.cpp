@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
         app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
         app.setApplicationAcknowledgementPage(acknowledgementLink);
         
-        app.setTheme("dark");
         app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));
         
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
