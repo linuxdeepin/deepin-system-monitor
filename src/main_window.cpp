@@ -42,8 +42,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     settings = new Settings();
     settings->init();
 
-    setBorderColor("#101010");
-
     if (this->titlebar()) {
         toolbar = new Toolbar();
 
@@ -115,8 +113,12 @@ void MainWindow::changeTheme(QString theme)
 {
     if (theme == "light") {
         backgroundColor = "#FFFFFF";
+        
+        setBorderColor("#d9d9d9");
     } else {
         backgroundColor = "#0E0E0E";
+        
+        setBorderColor("#101010");
     }
 
     initThemeAction();
