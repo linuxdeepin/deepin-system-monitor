@@ -47,14 +47,22 @@ protected:
     void paintEvent(QPaintEvent *event);
     
     QImage iconImage;
+    QString memoryBackgroundColor;
     QString memoryColor = "#FF2997";
+    QString memoryForegroundColor;
     QString numberColor;
     QString summaryColor;
+    QString swapBackgroundColor;
     QString swapColor = "#FCB712";
+    QString swapForegroundColor;
     QString textColor;
     QTimer *timer;
     QVBoxLayout *layout;
     double animationFrames = 20;
+    double memoryBackgroundOpacity;
+    double memoryForegroundOpacity;
+    double swapBackgroundOpacity;
+    double swapForegroundOpacity;
     int animationIndex = 0;
     int iconRenderOffsetX = -5;
     int iconRenderOffsetY = 10;
@@ -83,16 +91,6 @@ protected:
     long totalSwap;
     long usedMemory;
     long usedSwap;
-    
-    QString memoryForegroundColor;
-    double memoryForegroundOpacity;
-    QString memoryBackgroundColor;
-    double memoryBackgroundOpacity;
-
-    QString swapForegroundColor;
-    double swapForegroundOpacity;
-    QString swapBackgroundColor;
-    double swapBackgroundOpacity;
 };
 
 #endif    
