@@ -42,7 +42,7 @@ class ProcessManager : public QWidget
     Q_OBJECT
     
 public:
-    ProcessManager(QWidget *parent = 0);
+    ProcessManager(int tab_index);
     ~ProcessManager();
     
     ProcessView* getProcessView();

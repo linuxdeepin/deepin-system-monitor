@@ -34,14 +34,13 @@
 
 using namespace Utils;
 
-StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
+StatusMonitor::StatusMonitor(int tab_index)
 {
     // Init size.
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
 
     // Init attributes.
     cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
-    filterType = OnlyGUI;
     findWindowTitle = new FindWindowTitle();
     processReadKbs = new QMap<int, unsigned long>();
     processRecvBytes = new QMap<int, uint32_t>();
@@ -53,6 +52,14 @@ StatusMonitor::StatusMonitor(QWidget *parent) : QWidget(parent)
     totalSentBytes = 0;
     totalSentKbs = 0;
     currentUsername = qgetenv("USER");
+
+    if (tab_index == 0) {
+        filterType = OnlyGUI;
+    } else if (tab_index == 1) {
+        filterType = OnlyMe;
+    } else {
+        filterType = AllProcess;
+    }
 
     // Init widgets.
     layout = new QVBoxLayout(this);

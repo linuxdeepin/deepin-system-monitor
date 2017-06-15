@@ -25,8 +25,10 @@
 #include "utils.h"
 #include <QDebug>
 
-ProcessSwitchTab::ProcessSwitchTab(QWidget *parent) : QWidget(parent)
+ProcessSwitchTab::ProcessSwitchTab(int tab_index)
 {
+    activeIndex = tab_index;
+    
     installEventFilter(this);   // add event filter
     setMouseTracking(true);    // make MouseMove can response
     

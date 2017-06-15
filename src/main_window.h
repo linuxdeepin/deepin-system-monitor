@@ -28,6 +28,7 @@
 #include "dmainwindow.h"
 #include "interactive_kill.h"
 #include "process_manager.h"
+#include "settings.h"
 #include "status_monitor.h"
 #include "toolbar.h"
 #include <QAction>
@@ -62,6 +63,7 @@ private:
     QHBoxLayout *layout;
     QMenu *menu;
     QWidget *layoutWidget;
+    Settings *settings;
     StatusMonitor *statusMonitor;
     Toolbar *toolbar;
     int killPid;

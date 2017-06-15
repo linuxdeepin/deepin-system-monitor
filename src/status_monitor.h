@@ -55,7 +55,7 @@ class StatusMonitor : public QWidget
     };
 
 public:
-    StatusMonitor(QWidget *parent = 0);
+    StatusMonitor(int tab_index);
     ~StatusMonitor();
 
 signals:

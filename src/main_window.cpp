@@ -38,6 +38,9 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
     installEventFilter(this);   // add event filter
 
+    settings = new Settings();
+    settings->init();
+
     setBorderColor("#101010");
 
     if (this->titlebar()) {
@@ -57,10 +60,12 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         layout = new QHBoxLayout(layoutWidget);
 
         this->setCentralWidget(layoutWidget);
+        
+        int tab_index = settings->getOption("process_tab_index").toInt();
 
-        processManager = new ProcessManager();
+        processManager = new ProcessManager(tab_index);
         processManager->getProcessView()->installEventFilter(this);
-        statusMonitor = new StatusMonitor();
+        statusMonitor = new StatusMonitor(tab_index);
 
         connect(toolbar, &Toolbar::pressEsc, processManager, &ProcessManager::focusProcessView);
         connect(toolbar, &Toolbar::pressTab, processManager, &ProcessManager::focusProcessView);
@@ -172,4 +177,6 @@ void MainWindow::switchTab(int index)
     } else {
         statusMonitor->switchToAllProcess();
     }
+    
+    settings->setOption("process_tab_index", index);
 }

@@ -37,7 +37,7 @@
 using namespace Utils;
 DUTIL_USE_NAMESPACE
 
-ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
+ProcessManager::ProcessManager(int tab_index)
 {
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -54,7 +54,7 @@ ProcessManager::ProcessManager(QWidget *parent) : QWidget(parent)
     statusLabel = new QLabel("");
     statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     
-    processSwitchTab = new ProcessSwitchTab();
+    processSwitchTab = new ProcessSwitchTab(tab_index);
     
     connect(processSwitchTab, &ProcessSwitchTab::activeTab, this, &ProcessManager::activeTab);
     
