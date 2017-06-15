@@ -826,7 +826,7 @@ void ListView::paintEvent(QPaintEvent *)
     // Draw search tooltip.
     if (searchContent != "" && renderItems->size() == 0) {
         painter.setOpacity(1);
-        painter.setPen(QPen(QColor("#666666")));
+        painter.setPen(QPen(QColor(searchColor)));
         setFontSize(painter, 20);
         painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, "无搜索结果");
     }

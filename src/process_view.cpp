@@ -67,6 +67,8 @@ void ProcessView::initTheme()
         
         frameColor = "#000000";
         frameOpacity = 0.1;
+        
+        searchColor = "#D0D0D0";
     } else {
         titleColor = "#9A9A9A";
         titleLineColor = "#ffffff";
@@ -79,6 +81,8 @@ void ProcessView::initTheme()
 
         frameColor = "#000000";
         frameOpacity = 0;
+        
+        searchColor = "#666666";
     }
 }
 

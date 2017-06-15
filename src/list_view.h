@@ -178,6 +178,8 @@ protected:
     
     QString frameColor = "#000000";
     double frameOpacity = 0.1;
+    
+    QString searchColor = "#000000";
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);
