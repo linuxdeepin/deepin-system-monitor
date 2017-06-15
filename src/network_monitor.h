@@ -37,7 +37,7 @@ public:
 public slots:
     void changeTheme(QString theme);
     void initTheme();
-    void updateStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);
+    void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
     
 protected:
     void paintEvent(QPaintEvent *event);
@@ -81,8 +81,8 @@ private:
     int uploadRenderSize = 9;
     int uploadWaveformsRenderOffsetY = -5;
     int waveformRenderPadding = 20;
-    uint32_t totalRecvBytes;
-    uint32_t totalSentBytes;
+    long totalRecvBytes;
+    long totalSentBytes;
 };
 
 #endif    

@@ -87,8 +87,8 @@ namespace Utils {
     };
 
     typedef struct NetworkStatus {
-        uint32_t sentBytes;
-        uint32_t recvBytes;
+        long sentBytes;
+        long recvBytes;
         float sentKbs;
         float recvKbs;
     } NetworkStatus;

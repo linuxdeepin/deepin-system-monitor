@@ -82,7 +82,7 @@ void NetworkMonitor::changeTheme(QString )
     initTheme();
 }
 
-void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, float tRecvKbs, float tSentKbs)
+void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs, float tSentKbs)
 {
     totalRecvBytes = tRecvBytes;
     totalSentBytes = tSentBytes;

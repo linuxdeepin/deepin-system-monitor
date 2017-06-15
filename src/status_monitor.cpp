@@ -43,8 +43,8 @@ StatusMonitor::StatusMonitor(int tab_index)
     cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
     findWindowTitle = new FindWindowTitle();
     processReadKbs = new QMap<int, unsigned long>();
-    processRecvBytes = new QMap<int, uint32_t>();
-    processSentBytes = new QMap<int, uint32_t>();
+    processRecvBytes = new QMap<int, long>();
+    processSentBytes = new QMap<int, long>();
     processWriteKbs = new QMap<int, unsigned long>();
     tabName = "应用程序";
     totalRecvBytes = 0;
@@ -294,8 +294,8 @@ void StatusMonitor::updateStatus()
 
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-            uint32_t prevSentBytes = 0;
-            uint32_t prevRecvBytes = 0;
+            long prevSentBytes = 0;
+            long prevRecvBytes = 0;
 
             if (processSentBytes->contains(update.record.pid)) {
                 prevSentBytes = processSentBytes->value(update.record.pid);
@@ -309,7 +309,7 @@ void StatusMonitor::updateStatus()
 
             totalSentBytes += (update.record.sent_bytes - prevSentBytes);
             totalRecvBytes += (update.record.recv_bytes - prevRecvBytes);
-
+            
             (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
             (*processRecvBytes)[update.record.pid] = update.record.recv_bytes;
 

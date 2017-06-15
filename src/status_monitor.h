@@ -61,7 +61,7 @@ public:
 signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
-    void updateNetworkStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);
+    void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
     void updateProcessStatus(QList<ListItem*> items);
 
@@ -79,8 +79,8 @@ private:
     FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
-    QMap<int, uint32_t> *processRecvBytes;
-    QMap<int, uint32_t> *processSentBytes;
+    QMap<int, long> *processRecvBytes;
+    QMap<int, long> *processSentBytes;
     QMap<int, unsigned long> *processReadKbs;
     QMap<int, unsigned long> *processWriteKbs;
     QString tabName;
@@ -92,8 +92,8 @@ private:
     float totalSentKbs;
     int cpuNumber;
     int updateDuration = 2000;
-    uint32_t totalRecvBytes;
-    uint32_t totalSentBytes;
+    long totalRecvBytes;
+    long totalSentBytes;
     unsigned long long totalCpuTime;
 };
 
