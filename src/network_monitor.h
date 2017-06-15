@@ -44,6 +44,8 @@ protected:
     
 private:
     QImage iconImage;
+    QImage iconDarkImage;
+    QImage iconLightImage;
     QList<double> *downloadSpeeds;
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;

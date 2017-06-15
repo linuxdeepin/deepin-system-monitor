@@ -58,6 +58,27 @@ private:
     QImage onlyMeActiveImage;
     QImage onlyMeHoverImage;
     QImage onlyMeNormalImage;
+    
+    QImage allProcessDarkActiveImage;
+    QImage allProcessDarkHoverImage;
+    QImage allProcessDarkNormalImage;
+    QImage onlyGuiDarkActiveImage;
+    QImage onlyGuiDarkHoverImage;
+    QImage onlyGuiDarkNormalImage;
+    QImage onlyMeDarkActiveImage;
+    QImage onlyMeDarkHoverImage;
+    QImage onlyMeDarkNormalImage;
+
+    QImage allProcessLightActiveImage;
+    QImage allProcessLightHoverImage;
+    QImage allProcessLightNormalImage;
+    QImage onlyGuiLightActiveImage;
+    QImage onlyGuiLightHoverImage;
+    QImage onlyGuiLightNormalImage;
+    QImage onlyMeLightActiveImage;
+    QImage onlyMeLightHoverImage;
+    QImage onlyMeLightNormalImage;
+    
     QString frameColor;
     double frameOpacity;
     int activeIndex = 0;

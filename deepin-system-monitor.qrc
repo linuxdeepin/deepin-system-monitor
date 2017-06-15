@@ -1,23 +1,35 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
 	<file>image/deepin-system-monitor.svg</file>
-    <file>image/only_gui_normal.png</file>
-    <file>image/only_gui_hover.png</file>
-    <file>image/only_gui_active.png</file>
-    <file>image/only_me_normal.png</file>
-    <file>image/only_me_hover.png</file>
-    <file>image/only_me_active.png</file>
-    <file>image/all_process_normal.png</file>
-    <file>image/all_process_hover.png</file>
-    <file>image/all_process_active.png</file>
+    <file>image/only_gui_dark_normal.png</file>
+    <file>image/only_gui_dark_hover.png</file>
+    <file>image/only_gui_dark_active.png</file>
+    <file>image/only_me_dark_normal.png</file>
+    <file>image/only_me_dark_hover.png</file>
+    <file>image/only_me_dark_active.png</file>
+    <file>image/all_process_dark_normal.png</file>
+    <file>image/all_process_dark_hover.png</file>
+    <file>image/all_process_dark_active.png</file>
+    <file>image/only_gui_light_normal.png</file>
+    <file>image/only_gui_light_hover.png</file>
+    <file>image/only_gui_light_active.png</file>
+    <file>image/only_me_light_normal.png</file>
+    <file>image/only_me_light_hover.png</file>
+    <file>image/only_me_light_active.png</file>
+    <file>image/all_process_light_normal.png</file>
+    <file>image/all_process_light_hover.png</file>
+    <file>image/all_process_light_active.png</file>
     <file>image/logo_96.svg</file>
     <file>image/logo_24.svg</file>
     <file>image/logo_48.png</file>
     <file>image/kill.png</file>
     <file>image/kill_cursor.png</file>
-    <file>image/icon_cpu.png</file>
-    <file>image/icon_network.png</file>
-    <file>image/icon_memory.png</file>
+    <file>image/icon_cpu_dark.png</file>
+    <file>image/icon_cpu_light.png</file>
+    <file>image/icon_network_dark.png</file>
+    <file>image/icon_network_light.png</file>
+    <file>image/icon_memory_dark.png</file>
+    <file>image/icon_memory_light.png</file>
     <file>image/listview_arrow_up.png</file>
     <file>image/listview_arrow_down.png</file>
   </qresource>

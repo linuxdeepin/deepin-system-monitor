@@ -47,6 +47,8 @@ protected:
     void paintEvent(QPaintEvent *event);
     
     QImage iconImage;
+    QImage iconDarkImage;
+    QImage iconLightImage;
     QString memoryBackgroundColor;
     QString memoryColor = "#FF2997";
     QString memoryForegroundColor;

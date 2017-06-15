@@ -35,14 +35,15 @@ using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
+    iconDarkImage = QImage(Utils::getQrcPath("icon_network_dark.png"));
+    iconLightImage = QImage(Utils::getQrcPath("icon_network_light.png"));
+    
     initTheme();
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &NetworkMonitor::changeTheme);
     
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
     setFixedHeight(190);
-
-    iconImage = QImage(Utils::getQrcPath("icon_network.png"));
 
     downloadSpeeds = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
@@ -66,9 +67,13 @@ void NetworkMonitor::initTheme()
     if (DThemeManager::instance()->theme() == "light") {
         textColor = "#303030";
         summaryColor = "#505050";
+        
+        iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         summaryColor = "#909090";
+        
+        iconImage = iconDarkImage;
     }
 }
 

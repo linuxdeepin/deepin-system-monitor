@@ -35,13 +35,14 @@ using namespace Utils;
 
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
+    iconDarkImage = QImage(Utils::getQrcPath("icon_cpu_dark.png"));
+    iconLightImage = QImage(Utils::getQrcPath("icon_cpu_light.png"));
+
     initTheme();
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CpuMonitor::changeTheme);
     
     setFixedSize(Constant::STATUS_BAR_WIDTH, 250);
-
-    iconImage = QImage(Utils::getQrcPath("icon_cpu.png"));
 
     cpuPercents = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
@@ -70,6 +71,8 @@ void CpuMonitor::initTheme()
 
         ringBackgroundColor = "#000000";
         ringBackgroundOpacity = 0.05;
+        
+        iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
@@ -79,6 +82,8 @@ void CpuMonitor::initTheme()
 
         ringBackgroundColor = "#2CA7F8";
         ringBackgroundOpacity = 0.1;
+        
+        iconImage = iconDarkImage;
     }
 }
 

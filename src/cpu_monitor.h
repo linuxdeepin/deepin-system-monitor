@@ -49,6 +49,8 @@ protected:
     
 private:
     QImage iconImage;
+    QImage iconLightImage;
+    QImage iconDarkImage;
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
     QString numberColor;

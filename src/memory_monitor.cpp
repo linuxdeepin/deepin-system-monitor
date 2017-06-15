@@ -35,6 +35,9 @@ using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
+    iconDarkImage = QImage(Utils::getQrcPath("icon_memory_dark.png"));
+    iconLightImage = QImage(Utils::getQrcPath("icon_memory_light.png"));
+    
     initTheme();
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MemoryMonitor::changeTheme);
@@ -46,7 +49,6 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     usedSwap = 0;
     totalSwap = 0;
 
-    iconImage = QImage(Utils::getQrcPath("icon_memory.png"));
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
@@ -77,6 +79,8 @@ void MemoryMonitor::initTheme()
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#000000";
         swapBackgroundOpacity = 0.05;
+        
+        iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
@@ -91,6 +95,8 @@ void MemoryMonitor::initTheme()
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#FCB712";
         swapBackgroundOpacity = 0.1;
+        
+        iconImage = iconDarkImage;
     }
 }
 
