@@ -166,6 +166,18 @@ public:
     
 protected:
     virtual void leaveEvent(QEvent * event);
+    
+    QString titleColor = "#000000";
+    QString titleLineColor = "#000000";
+    
+    QString titleAreaColor = "#ffffff";
+    double titleAreaOpacity = 0.02;
+    
+    QString backgroundColor = "#ffffff";
+    double backgroundOpacity = 0.03;
+    
+    QString frameColor = "#000000";
+    double frameOpacity = 0.1;
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);

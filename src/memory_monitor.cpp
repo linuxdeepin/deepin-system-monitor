@@ -23,15 +23,22 @@
 
 #include "constant.h"
 #include "memory_monitor.h"
+#include "dthememanager.h"
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
 
+DWIDGET_USE_NAMESPACE
+
 using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
+    initTheme();
+    
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MemoryMonitor::changeTheme);
+    
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
 
     usedMemory = 0;
@@ -52,6 +59,24 @@ MemoryMonitor::~MemoryMonitor()
 {
     delete timer;
     delete layout;
+}
+
+void MemoryMonitor::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        textColor = "#303030";
+        numberColor = "#000000";
+        summaryColor = "#505050";
+    } else {
+        textColor = "#ffffff";
+        numberColor = "#D4D4D4";
+        summaryColor = "#909090";
+    }
+}
+
+void MemoryMonitor::changeTheme(QString )
+{
+    initTheme();
 }
 
 void MemoryMonitor::render()
@@ -122,7 +147,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     font.setPointSize(titleRenderSize);
     font.setWeight(QFont::Light);
     painter.setFont(font);
-    painter.setPen(QPen(QColor("#ffffff")));
+    painter.setPen(QPen(QColor(textColor)));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "内存");
 
     // Draw memory summary.
@@ -146,7 +171,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + memoryRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
 
     setFontSize(painter, memoryRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + memoryRenderPaddingX,
                            rect().y() + memoryRenderPaddingY,
                            fm.width(memoryTitle),
@@ -155,7 +180,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      memoryTitle);
 
     setFontSize(painter, memoryRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + memoryRenderPaddingX,
                            rect().y() + memoryRenderPaddingY + lineHeight,
                            fm.width(memoryContent),
@@ -169,7 +194,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + swapRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
 
     setFontSize(painter, swapRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + swapRenderPaddingX,
                            rect().y() + swapRenderPaddingY,
                            fm.width(swapTitle),
@@ -178,7 +203,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      swapTitle);
 
     setFontSize(painter, swapRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + swapRenderPaddingX,
                            rect().y() + swapRenderPaddingY + lineHeight,
                            fm.width(swapContent),
@@ -217,7 +242,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     // Draw percent text.
     setFontSize(painter, memoryPercentRenderSize);
-    painter.setPen(QPen(QColor("#aaaaaa")));
+    painter.setPen(QPen(QColor(numberColor)));
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius, rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2, insideRingRadius * 2),
                      Qt::AlignCenter,
                      QString("%1%").arg(static_cast<int>(memoryPercent * 100)));

@@ -37,8 +37,10 @@ class CpuMonitor : public QWidget
 public:
     CpuMonitor(QWidget *parent = 0);
     ~CpuMonitor();
-    
+                 
 public slots:
+    void changeTheme(QString theme);
+    void initTheme();
     void render();
     void updateStatus(double cpuPercent);
     
@@ -49,6 +51,8 @@ private:
     QImage iconImage;
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
+    QString textColor;
+    QString numberColor;
     QTimer *timer;
     double animationFrames = 20;
     int animationIndex = 0;

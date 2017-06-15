@@ -23,15 +23,22 @@
 
 #include "constant.h"
 #include "cpu_monitor.h"
+#include "dthememanager.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
 
+DWIDGET_USE_NAMESPACE
+
 using namespace Utils;
 
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
+    initTheme();
+    
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CpuMonitor::changeTheme);
+    
     setFixedSize(Constant::STATUS_BAR_WIDTH, 250);
 
     iconImage = QImage(Utils::getQrcPath("icon_cpu.png"));
@@ -50,6 +57,22 @@ CpuMonitor::~CpuMonitor()
 {
     delete cpuPercents;
     delete timer;
+}
+
+void CpuMonitor::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        textColor = "#303030";
+        numberColor = "#000000";
+    } else {
+        textColor = "#ffffff";
+        numberColor = "#D4D4D4";
+    }
+}
+
+void CpuMonitor::changeTheme(QString )
+{
+    initTheme();
 }
 
 void CpuMonitor::render()
@@ -114,7 +137,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.drawImage(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX - paddingRight, iconRenderOffsetY), iconImage);
     
     painter.setFont(font);
-    painter.setPen(QPen(QColor("#ffffff")));
+    painter.setPen(QPen(QColor(textColor)));
     painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) + iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,
                            rect().y() + titleRenderOffsetY,
                            titleWidth,
@@ -124,7 +147,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     double percent = (cpuPercents->at(cpuPercents->size() - 2) + easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
 
     setFontSize(painter, 15);
-    painter.setPen(QPen(QColor("#aaaaaa")));
+    painter.setPen(QPen(QColor(numberColor)));
     painter.drawText(QRect(rect().x() - paddingRight,
                            rect().y() + percentRenderOffsetY,
                            rect().width(),

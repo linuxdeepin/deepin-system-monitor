@@ -38,6 +38,10 @@ public:
     void mousePressEvent(QMouseEvent *mouseEvent);
     void paintEvent(QPaintEvent *);
     
+public slots:
+    void changeTheme(QString theme);
+    void initTheme();
+    
 signals:
     void activeTab(int index);
     
@@ -54,6 +58,8 @@ private:
     QImage onlyMeActiveImage;
     QImage onlyMeHoverImage;
     QImage onlyMeNormalImage;
+    QString frameColor;
+    double frameOpacity;
     int activeIndex = 0;
     int height = 24;
     int hoverIndex = -1;

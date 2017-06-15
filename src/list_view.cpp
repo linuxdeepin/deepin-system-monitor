@@ -734,8 +734,8 @@ void ListView::paintEvent(QPaintEvent *)
     // Draw title.
     QPainterPath titlePath;
     titlePath.addRect(QRectF(rect().x(), rect().y(), rect().width(), titleHeight));
-    painter.setOpacity(0.02);
-    painter.fillPath(titlePath, QColor("#ffffff"));
+    painter.setOpacity(titleAreaOpacity);
+    painter.fillPath(titlePath, QColor(titleAreaColor));
 
     int renderY = 0;
     int renderHeight = 0;
@@ -746,16 +746,16 @@ void ListView::paintEvent(QPaintEvent *)
             if (renderWidth > 0) {
                 painter.setOpacity(1);
                 setFontSize(painter, 10);
-                painter.setPen(QPen(QColor("#666666")));
+                painter.setPen(QPen(QColor(titleColor)));
                 painter.drawText(QRect(columnRenderX + titlePadding, 0, renderWidth, titleHeight), Qt::AlignVCenter | Qt::AlignLeft, columnTitles[columnCounter]);
 
                 columnRenderX += renderWidth;
 
                 if (columnCounter < renderWidths.size() - 1) {
-                    painter.setOpacity(0.03);
+                    painter.setOpacity(0.05);
                     QPainterPath separatorPath;
                     separatorPath.addRect(QRectF(rect().x() + columnRenderX - 1, rect().y() + 4, 1, titleHeight - 8));
-                    painter.fillPath(separatorPath, QColor("#ffffff"));
+                    painter.fillPath(separatorPath, QColor(titleLineColor));
                 }
 
                 if (defaultSortingColumn == columnCounter) {
@@ -777,10 +777,10 @@ void ListView::paintEvent(QPaintEvent *)
     }
 
     // Draw background.
-    painter.setOpacity(0.03);
+    painter.setOpacity(backgroundOpacity);
     QPainterPath backgroundPath;
     backgroundPath.addRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight));
-    painter.fillPath(backgroundPath, QColor("#ffffff"));
+    painter.fillPath(backgroundPath, QColor(backgroundColor));
 
     // Draw context.
     QPainterPath scrollAreaPath;
@@ -839,6 +839,16 @@ void ListView::paintEvent(QPaintEvent *)
 
         startScrollbarHideTimer();
     }
+    
+    // Draw frame.
+    QPainterPath framePath;
+    framePath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
+    
+    QPen framePen;
+    framePen.setColor(frameColor);
+    
+    painter.setOpacity(frameOpacity);
+    painter.drawPath(framePath);
 }
 
 void ListView::paintScrollbar(QPainter *painter)

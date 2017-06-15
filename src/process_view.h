@@ -32,6 +32,10 @@ class ProcessView : public ListView
     
 public:
     ProcessView(QList<bool> columnHideFlags);
+
+public slots:
+    void changeTheme(QString theme);
+    void initTheme();
 };
 
 #endif

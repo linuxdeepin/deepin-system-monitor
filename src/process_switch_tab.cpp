@@ -21,12 +21,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "dthememanager.h"
 #include "process_switch_tab.h"
 #include "utils.h"
 #include <QDebug>
 
+DWIDGET_USE_NAMESPACE
+
 ProcessSwitchTab::ProcessSwitchTab(int tab_index)
 {
+    initTheme();
+    
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessSwitchTab::changeTheme);
+    
     activeIndex = tab_index;
     
     installEventFilter(this);   // add event filter
@@ -91,8 +98,9 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
     QPainterPath path;
     path.addRoundedRect(QRect(rect().x() + penSize, rect().y() + penSize, rect().width() - penSize * 2, rect().height() - penSize * 2 - 1), 5, 5);
     
-    QPen pen(QColor("#ffffff"));
-    painter.setOpacity(0.05);
+    QPen pen;
+    pen.setColor(QColor(frameColor));
+    painter.setOpacity(frameOpacity);
     pen.setWidth(penSize);
     painter.setPen(pen);
     painter.drawPath(path);
@@ -140,4 +148,20 @@ void ProcessSwitchTab::leaveEvent(QEvent * event){
     repaint();
 }
 
+
+void ProcessSwitchTab::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        frameColor = "#000000";
+        frameOpacity = 0.05;
+    } else {
+        frameColor = "#ffffff";
+        frameOpacity = 0.05;
+    }
+}
+
+void ProcessSwitchTab::changeTheme(QString )
+{
+    initTheme();
+}
 

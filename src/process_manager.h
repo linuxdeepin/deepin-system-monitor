@@ -52,6 +52,8 @@ signals:
     void columnToggleStatus(int index, bool visible, QList<bool> columnVisibles);
     
 public slots:
+    void changeTheme(QString theme);
+    void initTheme();
     void dialogButtonClicked(int index, QString buttonText);
     void focusProcessView();
     void handleSearch(QString searchContent);

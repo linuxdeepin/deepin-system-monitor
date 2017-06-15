@@ -64,7 +64,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MainWindow::changeTheme);
 
-
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
         this->titlebar()->setMenu(menu);
 

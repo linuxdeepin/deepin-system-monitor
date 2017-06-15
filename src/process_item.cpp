@@ -21,16 +21,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "dthememanager.h"
 #include "process_item.h"
 #include "utils.h"
 #include <QCollator>
 #include <QDebug>
 #include <QLocale>
 
+DWIDGET_USE_NAMESPACE
+
 using namespace Utils;
 
 ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState)
 {
+    initTheme();
+
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessItem::changeTheme);
+
     iconPixmap = processIcon;
     name = processName;
     displayName = dName;
@@ -67,18 +74,18 @@ void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool 
 
     // Draw selected effect.
     if (isSelect) {
-        painter->setOpacity(0.8);
-        painter->fillPath(path, QColor("#006BBA"));
+        painter->setOpacity(selectOpacity);
+        painter->fillPath(path, QColor(selectLineColor));
     }
     // Draw background effect.
     else {
         // Use different opacity with item index.
         if (index % 2 == 0) {
-            painter->setOpacity(0.1);
-            painter->fillPath(path, QColor("#000000"));
+            painter->setOpacity(evenLineOpacity);
+            painter->fillPath(path, QColor(evenLineColor));
         } else {
-            painter->setOpacity(0.02);
-            painter->fillPath(path, QColor("#D8D8D8"));
+            painter->setOpacity(oddLineOpacity);
+            painter->fillPath(path, QColor(oddLineColor));
         }
     }
 }
@@ -92,7 +99,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     if (isSelect) {
         painter->setPen(QPen(QColor("#ffffff")));
     } else {
-        painter->setPen(QPen(QColor("#666666")));
+        painter->setPen(QPen(QColor(textColor)));
     }
 
     // Draw icon and process name.
@@ -113,6 +120,12 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             break;
         }
 
+        if (isSelect) {
+            painter->setOpacity(1);
+        } else {
+            painter->setOpacity(textLeftOpacity);
+        }
+        
         int renderWidth = rect.width() - iconSize - padding * 3;
         QFont font = painter->font();
         QFontMetrics fm(font);
@@ -124,7 +137,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         if (isSelect) {
             painter->setOpacity(1);
         } else {
-            painter->setOpacity(0.6);
+            painter->setOpacity(textRightOpacity);
         }
 
         setFontSize(*painter, 9);
@@ -135,7 +148,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         if (isSelect) {
             painter->setOpacity(1);
         } else {
-            painter->setOpacity(0.5);
+            painter->setOpacity(textRightOpacity);
         }
 
         setFontSize(*painter, 9);
@@ -147,7 +160,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             if (isSelect) {
                 painter->setOpacity(1);
             } else {
-                painter->setOpacity(0.5);
+                painter->setOpacity(textRightOpacity);
             }
 
             setFontSize(*painter, 9);
@@ -160,7 +173,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             if (isSelect) {
                 painter->setOpacity(1);
             } else {
-                painter->setOpacity(0.5);
+                painter->setOpacity(textRightOpacity);
             }
 
             setFontSize(*painter, 9);
@@ -173,7 +186,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             if (isSelect) {
                 painter->setOpacity(1);
             } else {
-                painter->setOpacity(0.5);
+                painter->setOpacity(textRightOpacity);
             }
 
             setFontSize(*painter, 9);
@@ -186,7 +199,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             if (isSelect) {
                 painter->setOpacity(1);
             } else {
-                painter->setOpacity(0.5);
+                painter->setOpacity(textRightOpacity);
             }
 
             setFontSize(*painter, 9);
@@ -198,7 +211,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         if (isSelect) {
             painter->setOpacity(1);
         } else {
-            painter->setOpacity(0.5);
+            painter->setOpacity(textRightOpacity);
         }
 
         setFontSize(*painter, 9);
@@ -210,7 +223,7 @@ bool ProcessItem::search(const ListItem *item, QString searchContent)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
     QString content = searchContent.toLower();
-    
+
     return processItem->getName().toLower().contains(content) ||
         processItem->getDisplayName().toLower().contains(content) ||
         QString::number(processItem->getPid()).contains(content) ||
@@ -411,4 +424,40 @@ void ProcessItem::setDiskStatus(DiskStatus dStatus)
 void ProcessItem::setNetworkStatus(NetworkStatus nStatus)
 {
     networkStatus = nStatus;
+}
+
+void ProcessItem::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        evenLineColor = "#000000";
+        evenLineOpacity = 0.02;
+        
+        oddLineColor = "#D8D8D8";
+        oddLineOpacity = 0.02;
+        
+        selectLineColor = "#2CA7F8";
+        selectOpacity = 1.0;
+        
+        textColor = "#303030";
+        textLeftOpacity = 1.0;
+        textRightOpacity = 0.8;
+    } else {
+        evenLineColor = "#D8D8D8";
+        evenLineOpacity = 0.02;
+        
+        oddLineColor = "#000000";
+        oddLineOpacity = 0.1;
+        
+        selectLineColor = "#006BBA";
+        selectOpacity = 0.8;
+        
+        textColor = "#ffffff";
+        textLeftOpacity = 0.6;
+        textRightOpacity = 0.5;
+    }
+}
+
+void ProcessItem::changeTheme(QString )
+{
+    initTheme();
 }

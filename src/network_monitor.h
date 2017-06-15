@@ -35,6 +35,8 @@ public:
     ~NetworkMonitor();
     
 public slots:
+    void changeTheme(QString theme);
+    void initTheme();
     void updateStatus(uint32_t totalRecvBytes, uint32_t totalSentBytes, float totalRecvKbs, float totalSentKbs);
     
 protected:
@@ -47,6 +49,8 @@ private:
     QPainterPath downloadPath;
     QPainterPath uploadPath;
     QString downloadColor = "#E14300";
+    QString summaryColor;
+    QString textColor;
     QString uploadColor = "#004EEF";
     float totalRecvKbs;
     float totalSentKbs;

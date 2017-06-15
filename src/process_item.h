@@ -63,16 +63,29 @@ public:
     void setDiskStatus(DiskStatus dStatus);
     void setNetworkStatus(NetworkStatus nStatus);
     
+public slots:
+    void changeTheme(QString theme);
+    void initTheme();
+    
 private:
     DiskStatus diskStatus;
     NetworkStatus networkStatus;
     QPixmap iconPixmap;
     QString displayName;
+    QString evenLineColor;
     QString name;
+    QString oddLineColor;
     QString path;
+    QString selectLineColor;
+    QString textColor;
     QString user;
     char state;
     double cpu;
+    double evenLineOpacity;
+    double oddLineOpacity;
+    double selectOpacity;
+    double textLeftOpacity;
+    double textRightOpacity;
     int iconSize;
     int padding;
     int pid;

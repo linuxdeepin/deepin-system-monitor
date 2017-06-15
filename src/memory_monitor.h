@@ -37,6 +37,8 @@ public:
     ~MemoryMonitor();
     
 public slots:
+    void changeTheme(QString theme);
+    void initTheme();
     void render();
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
     
@@ -46,8 +48,11 @@ protected:
     
     QImage iconImage;
     QString memoryColor = "#00C5C0";
+    QString numberColor;
     QString ringBackgroundColor = "#252525";
+    QString summaryColor;
     QString swapColor = "#FEDF19";
+    QString textColor;
     QTimer *timer;
     QVBoxLayout *layout;
     double animationFrames = 20;

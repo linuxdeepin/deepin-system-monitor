@@ -23,6 +23,7 @@
 
 #include "QVBoxLayout"
 #include "attributes_dialog.h"
+#include "dthememanager.h"
 #include "list_view.h"
 #include "process_item.h"
 #include "process_manager.h"
@@ -34,8 +35,9 @@
 #include <proc/sysinfo.h>
 #include <signal.h>
 
-using namespace Utils;
 DUTIL_USE_NAMESPACE
+
+using namespace Utils;
 
 ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags)
 {
@@ -55,7 +57,10 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags)
     layout->addWidget(processView);
 
     statusLabel = new QLabel("");
-    statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
+    
+    initTheme();
+    
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessManager::changeTheme);
     
     processSwitchTab = new ProcessSwitchTab(tab_index);
     
@@ -122,6 +127,20 @@ ProcessManager::~ProcessManager()
     delete statusLabel;
     delete actionPids;
     delete rightMenu;
+}
+
+void ProcessManager::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #505050; }");
+    } else {
+        statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
+    }
+}
+
+void ProcessManager::changeTheme(QString )
+{
+    initTheme();
 }
 
 ProcessView* ProcessManager::getProcessView()

@@ -21,11 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "dthememanager.h"
 #include "process_view.h"
 #include <QTimer>
 
+DWIDGET_USE_NAMESPACE
+
 ProcessView::ProcessView(QList<bool> columnHideFlags)
 {
+    initTheme();
+    
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessView::changeTheme);
+    
     // Set row height.
     setRowHeight(36);
     
@@ -45,3 +52,38 @@ ProcessView::ProcessView(QList<bool> columnHideFlags)
     // Focus keyboard when create.
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
+
+void ProcessView::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        titleColor = "#000000";
+        titleLineColor = "#000000";
+        
+        titleAreaColor = "#ffffff";
+        titleAreaOpacity = 0.02;
+
+        backgroundColor = "#ffffff";
+        backgroundOpacity = 0.03;
+        
+        frameColor = "#000000";
+        frameOpacity = 0.1;
+    } else {
+        titleColor = "#9A9A9A";
+        titleLineColor = "#ffffff";
+
+        titleAreaColor = "#ffffff";
+        titleAreaOpacity = 0.02;
+        
+        backgroundColor = "#ffffff";
+        backgroundOpacity = 0.03;
+
+        frameColor = "#000000";
+        frameOpacity = 0;
+    }
+}
+
+void ProcessView::changeTheme(QString )
+{
+    initTheme();
+}
+

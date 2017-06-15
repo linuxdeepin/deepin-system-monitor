@@ -22,16 +22,23 @@
  */ 
 
 #include "constant.h"
+#include "dthememanager.h"
 #include "network_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
 
+DWIDGET_USE_NAMESPACE
+
 using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
+    initTheme();
+    
+    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &NetworkMonitor::changeTheme);
+    
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
     setFixedHeight(190);
 
@@ -52,6 +59,22 @@ NetworkMonitor::~NetworkMonitor()
 {
     delete downloadSpeeds;
     delete uploadSpeeds;
+}
+
+void NetworkMonitor::initTheme()
+{
+    if (DThemeManager::instance()->theme() == "light") {
+        textColor = "#303030";
+        summaryColor = "#505050";
+    } else {
+        textColor = "#ffffff";
+        summaryColor = "#909090";
+    }
+}
+
+void NetworkMonitor::changeTheme(QString )
+{
+    initTheme();
 }
 
 void NetworkMonitor::updateStatus(uint32_t tRecvBytes, uint32_t tSentBytes, float tRecvKbs, float tSentKbs)
@@ -121,9 +144,6 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    setFontSize(painter, 20);
-    painter.setPen(QPen(QColor("#aaaaaa")));
-
     // Draw icon.
     painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
 
@@ -132,13 +152,14 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     font.setPointSize(titleRenderSize);
     font.setWeight(QFont::Light);
     painter.setFont(font);
-    painter.setPen(QPen(QColor("#ffffff")));
+    painter.setPen(QPen(QColor(textColor)));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "网络");
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
-    QPen framePen(QColor("#ffffff"));
+    QPen framePen;
     painter.setOpacity(0.1);
+    framePen.setColor(QColor(textColor));
     framePen.setWidth(0.5);
     painter.setPen(framePen);
     
@@ -153,11 +174,12 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.drawPath(framePath);
 
     // Draw grid.
-    QPen gridPen(QColor("#ffffff"));
+    QPen gridPen;
     QVector<qreal> dashes;
     qreal space = 3;
     dashes << 5 << space;
     painter.setOpacity(0.05);
+    gridPen.setColor(QColor(textColor));
     gridPen.setWidth(0.5);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
@@ -190,7 +212,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
 
     setFontSize(painter, downloadRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
                            rect().y() + downloadRenderPaddingY,
                            fm.width(downloadTitle),
@@ -199,7 +221,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                      downloadTitle);
 
     setFontSize(painter, downloadRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
                            rect().y() + downloadRenderPaddingY,
                            fm.width(downloadContent),
@@ -212,7 +234,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
 
     setFontSize(painter, uploadRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
                            rect().y() + uploadRenderPaddingY,
                            fm.width(uploadTitle),
@@ -221,7 +243,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                      uploadTitle);
 
     setFontSize(painter, uploadRenderSize);
-    painter.setPen(QPen(QColor("#666666")));
+    painter.setPen(QPen(QColor(summaryColor)));
     painter.drawText(QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
                            rect().y() + uploadRenderPaddingY,
                            fm.width(uploadContent),
