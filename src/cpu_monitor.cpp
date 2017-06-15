@@ -139,7 +139,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         ringWidth,
         300,
         150,
-        "#8442FB",
+        "#2CA7F8",
         0.1,
         percent / 100
         );
@@ -147,6 +147,6 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.translate(waveformsRenderOffsetX - paddingRight, waveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor("#8442FB"), 2));
+    painter.setPen(QPen(QColor("#2CA7F8"), 2));
     painter.drawPath(cpuPath);
 }
