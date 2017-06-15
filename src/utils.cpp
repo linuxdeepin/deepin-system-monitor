@@ -481,10 +481,21 @@ namespace Utils {
         windowManager->setWindowBlur(widgetId, data);
     }
 
-    void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double backgroundOpacity, double percent)
+    void drawLoadingRing(QPainter &painter, 
+                         int centerX, 
+                         int centerY, 
+                         int radius, 
+                         int penWidth, 
+                         int loadingAngle, 
+                         int rotationAngle, 
+                         QString foregroundColor, 
+                         double foregroundOpacity,
+                         QString backgroundColor, 
+                         double backgroundOpacity,
+                         double percent)
     {
-        drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle, rotationAngle, color, backgroundOpacity);
-        drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle * percent, rotationAngle, color, 1);
+        drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle, rotationAngle, backgroundColor, backgroundOpacity);
+        drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle * percent, rotationAngle, foregroundColor, foregroundOpacity);
     }
 
     void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity)

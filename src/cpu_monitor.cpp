@@ -64,9 +64,21 @@ void CpuMonitor::initTheme()
     if (DThemeManager::instance()->theme() == "light") {
         textColor = "#303030";
         numberColor = "#000000";
+
+        ringForegroundColor = "#2CA7F8";
+        ringForegroundOpacity = 1;
+
+        ringBackgroundColor = "#000000";
+        ringBackgroundOpacity = 0.05;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
+        
+        ringForegroundColor = "#2CA7F8";
+        ringForegroundOpacity = 1;
+
+        ringBackgroundColor = "#2CA7F8";
+        ringBackgroundOpacity = 0.1;
     }
 }
 
@@ -162,8 +174,8 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         ringWidth,
         300,
         150,
-        "#2CA7F8",
-        0.1,
+        ringForegroundColor, ringForegroundOpacity,
+        ringBackgroundColor, ringBackgroundOpacity,
         percent / 100
         );
 

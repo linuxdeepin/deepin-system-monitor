@@ -51,10 +51,14 @@ private:
     QImage iconImage;
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
-    QString textColor;
     QString numberColor;
+    QString ringBackgroundColor;
+    QString ringForegroundColor;
+    QString textColor;
     QTimer *timer;
     double animationFrames = 20;
+    double ringBackgroundOpacity;
+    double ringForegroundOpacity;
     int animationIndex = 0;
     int cpuRenderMaxHeight = 45;
     int iconPadding = 0;

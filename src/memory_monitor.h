@@ -49,7 +49,6 @@ protected:
     QImage iconImage;
     QString memoryColor = "#FF2997";
     QString numberColor;
-    QString ringBackgroundColor = "#252525";
     QString summaryColor;
     QString swapColor = "#FCB712";
     QString textColor;
@@ -84,6 +83,16 @@ protected:
     long totalSwap;
     long usedMemory;
     long usedSwap;
+    
+    QString memoryForegroundColor;
+    double memoryForegroundOpacity;
+    QString memoryBackgroundColor;
+    double memoryBackgroundOpacity;
+
+    QString swapForegroundColor;
+    double swapForegroundOpacity;
+    QString swapBackgroundColor;
+    double swapBackgroundOpacity;
 };
 
 #endif    

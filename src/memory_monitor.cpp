@@ -67,10 +67,30 @@ void MemoryMonitor::initTheme()
         textColor = "#303030";
         numberColor = "#000000";
         summaryColor = "#505050";
+        
+        memoryForegroundColor = "#FF2997";
+        memoryForegroundOpacity = 1;
+        memoryBackgroundColor = "#000000";
+        memoryBackgroundOpacity = 0.05;
+
+        swapForegroundColor = "#FCB712";
+        swapForegroundOpacity = 1;
+        swapBackgroundColor = "#000000";
+        swapBackgroundOpacity = 0.05;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
         summaryColor = "#909090";
+        
+        memoryForegroundColor = "#FF2997";
+        memoryForegroundOpacity = 1;
+        memoryBackgroundColor = "#FF2997";
+        memoryBackgroundOpacity = 0.1;
+
+        swapForegroundColor = "#FCB712";
+        swapForegroundOpacity = 1;
+        swapBackgroundColor = "#FCB712";
+        swapBackgroundOpacity = 0.1;
     }
 }
 
@@ -220,8 +240,8 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         ringWidth,
         270,
         270,
-        memoryColor,
-        0.1,
+        memoryForegroundColor, memoryForegroundOpacity,
+        memoryBackgroundColor, memoryBackgroundOpacity,
         memoryPercent
         );
 
@@ -234,8 +254,8 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         ringWidth,
         270,
         270,
-        swapColor,
-        0.1,
+        swapForegroundColor, swapForegroundOpacity,
+        swapBackgroundColor, swapBackgroundOpacity,
         swapPercent
         );
 
