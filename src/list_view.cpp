@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "list_view.h"
 #include "utils.h"
@@ -52,7 +52,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
 
     searchContent = "";
     searchAlgorithm = NULL;
-    
+
     arrowUpImage = QImage(Utils::getQrcPath("listview_arrow_up.png"));
     arrowDownImage = QImage(Utils::getQrcPath("listview_arrow_down.png"));
 
@@ -102,16 +102,16 @@ void ListView::setColumnTitles(QList<QString> titles, int height)
     titleHeight = height;
 }
 
-void ListView::setColumnHideFlags(QList<bool> toggleHideFlags)
+void ListView::setColumnHideFlags(QList<bool> toggleHideFlags, int visibleColumnIndex)
 {
     Q_ASSERT_X(!toggleHideFlags.contains(false), "toggleHideFlags", "at least have one 'false' in list.");
     Q_ASSERT_X(toggleHideFlags.count() != columnTitles.count(), "toggleHideFlags", "hide flags length is not same as titles list.");
 
-    columnToggleHideFlags = toggleHideFlags;
+    alwaysVisibleColumn = visibleColumnIndex;
 
     columnVisibles.clear();
     for (int i = 0; i < toggleHideFlags.count(); i++) {
-        columnVisibles.append(true);
+        columnVisibles.append(toggleHideFlags[i]);
     }
 }
 
@@ -526,7 +526,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
 void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 {
     setFocus();
-    
+
     bool atTitleArea = isMouseAtTitleArea(mouseEvent->y());
     bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
 
@@ -567,28 +567,30 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 }
             }
         } else if (mouseEvent->button() == Qt::RightButton) {
-            if (columnToggleHideFlags.count() == columnTitles.count()) {
+            if (columnVisibles.count() == columnTitles.count()) {
                 QMenu *menu = new QMenu();
                 menu->setStyle(QStyleFactory::create("dlight"));
 
-                for (int i = 0; i < columnToggleHideFlags.count(); i++) {
-                    if (columnToggleHideFlags[i]) {
-                        QAction *action = new QAction(menu);
+                for (int i = 0; i < columnVisibles.count(); i++) {
+                    QAction *action = new QAction(menu);
+                    action->setText(columnTitles[i]);
 
-                        action->setText(columnTitles[i]);
+                    if (i != alwaysVisibleColumn) {
                         action->setCheckable(true);
                         action->setChecked(columnVisibles[i]);
+                    }
 
-                        connect(action, &QAction::triggered, this, [this, action, i] {
+                    connect(action, &QAction::triggered, this, [this, action, i] {
+                            if (i != alwaysVisibleColumn) {
                                 columnVisibles[i] = !columnVisibles[i];
+                                
+                                columnToggleStatus(i, columnVisibles[i], columnVisibles);
 
                                 repaint();
-                            });
+                            }
+                        });
 
-                        menu->addAction(action);
-                    } else {
-                        columnVisibles[i] = true;
-                    }
+                    menu->addAction(action);
                 }
 
                 menu->exec(this->mapToGlobal(mouseEvent->pos()));
@@ -755,14 +757,14 @@ void ListView::paintEvent(QPaintEvent *)
                     separatorPath.addRect(QRectF(rect().x() + columnRenderX - 1, rect().y() + 4, 1, titleHeight - 8));
                     painter.fillPath(separatorPath, QColor("#ffffff"));
                 }
-                
+
                 if (defaultSortingColumn == columnCounter) {
                     painter.setOpacity(1);
                     if (defaultSortingOrder) {
-                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(), 
+                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(),
                                                  rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
                     } else {
-                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(), 
+                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(),
                                                  rect().y() + (titleHeight - arrowUpImage.height()) / 2), arrowUpImage);
                     }
                 }
@@ -867,12 +869,12 @@ void ListView::paintScrollbar(QPainter *painter)
         painter->setOpacity(barOpacitry);
         QPainterPath path;
         path.addRoundedRect(
-            QRectF(rect().x() + rect().width() - barWidth - scrollbarPadding, 
-                   barY + barRadius, 
-                   barWidth, 
+            QRectF(rect().x() + rect().width() - barWidth - scrollbarPadding,
+                   barY + barRadius,
+                   barWidth,
                    barHeight - barRadius * 2), barRadius, barRadius);
         painter->fillPath(path, QColor("#ffffff"));
-        
+
         QPen pen(QColor("#ffffff"));
         pen.setWidth(1);
         painter->setOpacity(barFrameOpacitry);

@@ -63,8 +63,9 @@ public:
      * At least have false in hide flags list, and hide flags count must same as titles list.
      *
      * @toggleHideFlags the hide flags to control column wether toggle show/hide.
+     * @alwaysVisibleColumn the column index that column is always visible, default is -1, mean no column can always visible.
      */
-    void setColumnHideFlags(QList<bool> toggleHideFlags);
+    void setColumnHideFlags(QList<bool> toggleHideFlags, int alwaysVisibleColumn=-1);
     
     /*
      * Set column widths
@@ -168,6 +169,7 @@ protected:
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);
+    void columnToggleStatus(int index, bool visible, QList<bool> columnVisibles);
     
 private slots:
     void scrollAnimation();
@@ -212,7 +214,6 @@ private:
     QList<QString> columnTitles;
     QList<SortAlgorithm> *sortingAlgorithms;
     QList<bool> *sortingOrderes;
-    QList<bool> columnToggleHideFlags;
     QList<bool> columnVisibles;
     QList<int> columnWidths;
     QString searchContent;
@@ -222,6 +223,7 @@ private:
     bool defaultSortingOrder;
     bool mouseAtScrollArea;
     bool mouseDragScrollbar;
+    int alwaysVisibleColumn;
     int clipRadius;
     int defaultSortingColumn;
     int hideScrollbarDuration;

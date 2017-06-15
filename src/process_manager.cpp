@@ -37,7 +37,7 @@
 using namespace Utils;
 DUTIL_USE_NAMESPACE
 
-ProcessManager::ProcessManager(int tab_index)
+ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags)
 {
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -47,7 +47,10 @@ ProcessManager::ProcessManager(int tab_index)
     topWidget->setFixedHeight(24);
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     topLayout->setContentsMargins(2, 0, 2, 0);
-    processView = new ProcessView();
+    
+    processView = new ProcessView(columnHideFlags);
+    connect(processView, &ListView::columnToggleStatus, this, &ProcessManager::columnToggleStatus);
+    
     layout->addWidget(topWidget);
     layout->addWidget(processView);
 

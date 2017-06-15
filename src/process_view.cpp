@@ -24,7 +24,7 @@
 #include "process_view.h"
 #include <QTimer>
 
-ProcessView::ProcessView()
+ProcessView::ProcessView(QList<bool> columnHideFlags)
 {
     // Set row height.
     setRowHeight(36);
@@ -40,9 +40,7 @@ ProcessView::ProcessView()
     setColumnTitles(titles, 36);
     
     // Set column hide flags.
-    QList<bool> toggleHideFlags;
-    toggleHideFlags << false << true << true << true << true << true << true << true;
-    setColumnHideFlags(toggleHideFlags);
+    setColumnHideFlags(columnHideFlags, 0);
     
     // Focus keyboard when create.
     QTimer::singleShot(0, this, SLOT(setFocus()));

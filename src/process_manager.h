@@ -42,13 +42,14 @@ class ProcessManager : public QWidget
     Q_OBJECT
     
 public:
-    ProcessManager(int tab_index);
+    ProcessManager(int tab_index, QList<bool> columnHideFlags);
     ~ProcessManager();
     
     ProcessView* getProcessView();
                      
 signals:
     void activeTab(int index);
+    void columnToggleStatus(int index, bool visible, QList<bool> columnVisibles);
     
 public slots:
     void dialogButtonClicked(int index, QString buttonText);

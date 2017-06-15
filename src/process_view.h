@@ -31,7 +31,7 @@ class ProcessView : public ListView
     Q_OBJECT
     
 public:
-    ProcessView();
+    ProcessView(QList<bool> columnHideFlags);
 };
 
 #endif

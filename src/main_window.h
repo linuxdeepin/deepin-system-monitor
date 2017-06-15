@@ -45,6 +45,7 @@ public:
     MainWindow(DMainWindow *parent = 0);
     ~MainWindow();
                                        
+    QList<bool> getColumnHideFlags();
     bool eventFilter(QObject *, QEvent *);
     void paintEvent(QPaintEvent *);
     
@@ -52,6 +53,7 @@ public slots:
     void createWindowKiller();
     void dialogButtonClicked(int index, QString);
     void popupKillConfirmDialog(int pid);
+    void recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles);
     void showWindowKiller();
     void switchTab(int index);
     

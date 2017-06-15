@@ -63,7 +63,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         
         int tab_index = settings->getOption("process_tab_index").toInt();
 
-        processManager = new ProcessManager(tab_index);
+        processManager = new ProcessManager(tab_index, getColumnHideFlags());
         processManager->getProcessView()->installEventFilter(this);
         statusMonitor = new StatusMonitor(tab_index);
 
@@ -71,6 +71,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         connect(toolbar, &Toolbar::pressTab, processManager, &ProcessManager::focusProcessView);
 
         connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
+        connect(processManager, &ProcessManager::columnToggleStatus, this, &MainWindow::recordVisibleColumn);
 
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
         connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
@@ -97,6 +98,25 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 MainWindow::~MainWindow()
 {
     // We don't need clean pointers because application has exit here.
+}
+
+QList<bool> MainWindow::getColumnHideFlags()
+{
+    QString processColumns = settings->getOption("process_columns").toString();
+    
+    QList<bool> toggleHideFlags;
+    toggleHideFlags << processColumns.contains("name");
+    toggleHideFlags << processColumns.contains("cpu");
+    toggleHideFlags << processColumns.contains("memory");
+    toggleHideFlags << processColumns.contains("disk_write");
+    toggleHideFlags << processColumns.contains("disk_read");
+    toggleHideFlags << processColumns.contains("download");
+    toggleHideFlags << processColumns.contains("upload");
+    toggleHideFlags << processColumns.contains("pid");
+    
+    qDebug() << toggleHideFlags;
+    
+    return toggleHideFlags;
 }
 
 bool MainWindow::eventFilter(QObject *, QEvent *event)
@@ -163,6 +183,56 @@ void MainWindow::popupKillConfirmDialog(int pid)
     killProcessDialog->show();
 }
 
+void MainWindow::recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles)
+{
+    qDebug() << index << visible;
+    
+    QList<QString> visibleColumns;
+    visibleColumns << "name";
+    
+    
+    if (columnVisibles[1]) {
+        visibleColumns << "cpu";
+    }
+    
+    if (columnVisibles[2]) {
+        visibleColumns << "memory";
+    }
+    
+    if (columnVisibles[3]) {
+        visibleColumns << "disk_write";
+    }
+    
+    if (columnVisibles[4]) {
+        visibleColumns << "disk_read";
+    }
+    
+    if (columnVisibles[5]) {
+        visibleColumns << "download";
+    }
+    
+    if (columnVisibles[6]) {
+        visibleColumns << "upload";
+    }
+    
+    if (columnVisibles[7]) {
+        visibleColumns << "pid";
+    }
+    
+    QString processColumns = "";
+    for (int i = 0; i < visibleColumns.length(); i++) {
+        if (i != visibleColumns.length() - 1) {
+            processColumns += QString("%1,").arg(visibleColumns[i]);
+        } else {
+            processColumns += visibleColumns[i];
+        }
+    }
+    
+    qDebug() << processColumns;
+    
+    settings->setOption("process_columns", processColumns);
+}
+
 void MainWindow::showWindowKiller()
 {
     QTimer::singleShot(200, this, SLOT(createWindowKiller()));
@@ -180,3 +250,4 @@ void MainWindow::switchTab(int index)
     
     settings->setOption("process_tab_index", index);
 }
+
