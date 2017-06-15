@@ -572,25 +572,23 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 menu->setStyle(QStyleFactory::create("dlight"));
 
                 for (int i = 0; i < columnVisibles.count(); i++) {
-                    QAction *action = new QAction(menu);
-                    action->setText(columnTitles[i]);
-
                     if (i != alwaysVisibleColumn) {
+                        QAction *action = new QAction(menu);
+                        action->setText(columnTitles[i]);
+
                         action->setCheckable(true);
                         action->setChecked(columnVisibles[i]);
-                    }
 
-                    connect(action, &QAction::triggered, this, [this, action, i] {
-                            if (i != alwaysVisibleColumn) {
+                        connect(action, &QAction::triggered, this, [this, action, i] {
                                 columnVisibles[i] = !columnVisibles[i];
                                 
                                 columnToggleStatus(i, columnVisibles[i], columnVisibles);
 
                                 repaint();
-                            }
-                        });
+                            });
 
-                    menu->addAction(action);
+                        menu->addAction(action);
+                    }
                 }
 
                 menu->exec(this->mapToGlobal(mouseEvent->pos()));
