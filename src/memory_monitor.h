@@ -47,11 +47,11 @@ protected:
     void paintEvent(QPaintEvent *event);
     
     QImage iconImage;
-    QString memoryColor = "#00C5C0";
+    QString memoryColor = "#FF2997";
     QString numberColor;
     QString ringBackgroundColor = "#252525";
     QString summaryColor;
-    QString swapColor = "#FEDF19";
+    QString swapColor = "#FCB712";
     QString textColor;
     QTimer *timer;
     QVBoxLayout *layout;
