@@ -120,8 +120,8 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
     
     painter.setOpacity(1);
     for (int i = 0; i < 3; i++) {
-        int iconX = rect().x() + width * i + (width - onlyGuiActiveImage.width()) / 2;
-        int iconY = rect().y() + (height - onlyGuiActiveImage.height()) / 2;
+        int iconX = rect().x() + width * i;
+        int iconY = rect().y();
         if (i == activeIndex) {
             if (i == 0) {
                 painter.drawImage(QPoint(iconX, iconY), onlyGuiActiveImage);
