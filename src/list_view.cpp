@@ -902,15 +902,6 @@ void ListView::paintEvent(QPaintEvent *)
         painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, "无搜索结果");
     }
 
-    // Draw scrollbar.
-    if (mouseAtScrollArea) {
-        paintScrollbar(&painter);
-    } else if (oldRenderOffset != renderOffset) {
-        paintScrollbar(&painter);
-
-        startScrollbarHideTimer();
-    }
-
     // Draw frame.
     QPainterPath framePath;
     framePath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
@@ -920,6 +911,15 @@ void ListView::paintEvent(QPaintEvent *)
 
     painter.setOpacity(frameOpacity);
     painter.drawPath(framePath);
+    
+    // Draw scrollbar.
+    if (mouseAtScrollArea) {
+        paintScrollbar(&painter);
+    } else if (oldRenderOffset != renderOffset) {
+        paintScrollbar(&painter);
+
+        startScrollbarHideTimer();
+    }
 }
 
 void ListView::paintScrollbar(QPainter *painter)
