@@ -88,7 +88,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     scrollbarDragWidth = 8;
     scrollbarMinHeight = 30;
     scrollbarPadding = 4;
-    hideScrollbarDuration = 1000;
+    hideScrollbarDuration = 2000;
 
     oldRenderOffset = 0;
     clipRadius = 8;
