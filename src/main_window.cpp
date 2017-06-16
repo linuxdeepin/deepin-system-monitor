@@ -43,8 +43,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     settings->init();
 
     if (this->titlebar()) {
-        toolbar = new Toolbar();
-
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
         killAction = new QAction("结束应用程序", this);
@@ -62,6 +60,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MainWindow::changeTheme);
 
+        toolbar = new Toolbar();
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
         this->titlebar()->setMenu(menu);
 
