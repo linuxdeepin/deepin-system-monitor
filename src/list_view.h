@@ -187,6 +187,7 @@ protected:
     QImage arrowUpPressImage;
     QString backgroundColor = "#ffffff";
     QString frameColor = "#000000";
+    QString scrollbarColor = "#ffffff";
     QString searchColor = "#000000";
     QString titleAreaColor = "#ffffff";
     QString titleColor = "#000000";
@@ -194,6 +195,14 @@ protected:
     double backgroundOpacity = 0.03;
     double frameOpacity = 0.1;
     double titleAreaOpacity = 0.02;
+    
+    qreal scrollbarNormalOpacity = 0.5;
+    qreal scrollbarHoverOpacity = 0.7;
+    qreal scrollbarPressOpacity = 0.8;
+    
+    qreal scrollbarFrameNormalOpacity = 0;
+    qreal scrollbarFrameHoverOpacity = 0;
+    qreal scrollbarFramePressOpacity = 0;
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);

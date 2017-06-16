@@ -928,16 +928,21 @@ void ListView::paintScrollbar(QPainter *painter)
         // Init scrollbar opacity with scrollbar status.
         qreal barOpacitry = 0;
         qreal barFrameOpacitry = 0;
+        
+        // Press.
         if (mouseDragScrollbar) {
-            barOpacitry = 0.3;
-            barFrameOpacitry = 0.05;
+            barOpacitry = scrollbarPressOpacity;
+                barFrameOpacitry = scrollbarFramePressOpacity;
         } else {
+            // Hover.
             if (mouseAtScrollArea) {
-                barOpacitry = 0.4;
-                barFrameOpacitry = 0.1;
-            } else {
-                barOpacitry = 0.2;
-                barFrameOpacitry = 0.05;
+                barOpacitry = scrollbarHoverOpacity;
+                barFrameOpacitry = scrollbarFrameHoverOpacity;
+            }
+            // Normal.
+            else {
+                barOpacitry = scrollbarNormalOpacity;
+                barFrameOpacitry = scrollbarFrameNormalOpacity;
             }
         }
 
@@ -954,9 +959,10 @@ void ListView::paintScrollbar(QPainter *painter)
                    barY + barRadius,
                    barWidth,
                    barHeight - barRadius * 2), barRadius, barRadius);
-        painter->fillPath(path, QColor("#ffffff"));
+        painter->fillPath(path, QColor(scrollbarColor));
 
-        QPen pen(QColor("#ffffff"));
+        QPen pen;
+        pen.setColor(QColor(scrollbarColor));
         pen.setWidth(1);
         painter->setOpacity(barFrameOpacitry);
         painter->setPen(pen);

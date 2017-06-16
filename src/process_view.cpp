@@ -76,6 +76,16 @@ void ProcessView::initTheme()
         arrowDownNormalImage = arrowDownLightNormalImage;
         arrowDownHoverImage = arrowDownLightHoverImage;
         arrowDownPressImage = arrowDownLightPressImage;
+
+        scrollbarColor = "#101010";
+
+        scrollbarNormalOpacity = 0.5;
+        scrollbarHoverOpacity = 0.7;
+        scrollbarPressOpacity = 0.8;
+
+        scrollbarFrameNormalOpacity = 0;
+        scrollbarFrameHoverOpacity = 0;
+        scrollbarFramePressOpacity = 0;
     } else {
         titleColor = "#9A9A9A";
         titleLineColor = "#ffffff";
@@ -90,13 +100,23 @@ void ProcessView::initTheme()
         frameOpacity = 0;
 
         searchColor = "#666666";
-        
+
         arrowUpNormalImage = arrowUpDarkNormalImage;
         arrowUpHoverImage = arrowUpDarkHoverImage;
         arrowUpPressImage = arrowUpDarkPressImage;
         arrowDownNormalImage = arrowDownDarkNormalImage;
         arrowDownHoverImage = arrowDownDarkHoverImage;
         arrowDownPressImage = arrowDownDarkPressImage;
+
+        scrollbarColor = "#ffffff";
+        
+        scrollbarNormalOpacity = 0.2;
+        scrollbarHoverOpacity = 0.4;
+        scrollbarPressOpacity = 0.15;
+
+        scrollbarFrameNormalOpacity = 0.05;
+        scrollbarFrameHoverOpacity = 0.1;
+        scrollbarFramePressOpacity = 0.05;
     }
 }
 
