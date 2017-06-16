@@ -50,10 +50,10 @@ private:
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;
     QPainterPath uploadPath;
-    QString downloadColor = "#E14300";
+    QString downloadColor = "#55D500";
     QString summaryColor;
     QString textColor;
-    QString uploadColor = "#004EEF";
+    QString uploadColor = "#C362FF";
     float totalRecvKbs;
     float totalSentKbs;
     int downloadRenderMaxHeight = 50;

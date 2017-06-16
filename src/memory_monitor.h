@@ -55,7 +55,7 @@ protected:
     QString numberColor;
     QString summaryColor;
     QString swapBackgroundColor;
-    QString swapColor = "#FCB712";
+    QString swapColor = "#00B4C7";
     QString swapForegroundColor;
     QString textColor;
     QTimer *timer;

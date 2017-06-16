@@ -195,14 +195,12 @@ protected:
     double backgroundOpacity = 0.03;
     double frameOpacity = 0.1;
     double titleAreaOpacity = 0.02;
-    
-    qreal scrollbarNormalOpacity = 0.5;
-    qreal scrollbarHoverOpacity = 0.7;
-    qreal scrollbarPressOpacity = 0.8;
-    
-    qreal scrollbarFrameNormalOpacity = 0;
     qreal scrollbarFrameHoverOpacity = 0;
+    qreal scrollbarFrameNormalOpacity = 0;
     qreal scrollbarFramePressOpacity = 0;
+    qreal scrollbarHoverOpacity = 0.7;
+    qreal scrollbarNormalOpacity = 0.5;
+    qreal scrollbarPressOpacity = 0.8;
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);

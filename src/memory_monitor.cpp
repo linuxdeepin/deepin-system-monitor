@@ -75,7 +75,7 @@ void MemoryMonitor::initTheme()
         memoryBackgroundColor = "#000000";
         memoryBackgroundOpacity = 0.05;
 
-        swapForegroundColor = "#FCB712";
+        swapForegroundColor = "#00B4C7";
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#000000";
         swapBackgroundOpacity = 0.05;
@@ -91,9 +91,9 @@ void MemoryMonitor::initTheme()
         memoryBackgroundColor = "#FF2997";
         memoryBackgroundOpacity = 0.1;
 
-        swapForegroundColor = "#FCB712";
+        swapForegroundColor = "#00B4C7";
         swapForegroundOpacity = 1;
-        swapBackgroundColor = "#FCB712";
+        swapBackgroundColor = "#00B4C7";
         swapBackgroundOpacity = 0.1;
         
         iconImage = iconDarkImage;
