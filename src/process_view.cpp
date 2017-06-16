@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "dthememanager.h"
 #include "process_view.h"
@@ -30,25 +30,25 @@ DWIDGET_USE_NAMESPACE
 ProcessView::ProcessView(QList<bool> columnHideFlags)
 {
     initTheme();
-    
+
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessView::changeTheme);
-    
+
     // Set row height.
     setRowHeight(36);
-    
+
     // Set column widths.
     QList<int> widths;
     widths << -1 << 70 << 70 << 80 << 80 << 70 << 70 << 70;
     setColumnWidths(widths);
-    
+
     // Set column titles.
     QList<QString> titles;
     titles << "名称" << "处理器" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "进程号";
     setColumnTitles(titles, 36);
-    
+
     // Set column hide flags.
     setColumnHideFlags(columnHideFlags, 0);
-    
+
     // Focus keyboard when create.
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
@@ -58,31 +58,45 @@ void ProcessView::initTheme()
     if (DThemeManager::instance()->theme() == "light") {
         titleColor = "#000000";
         titleLineColor = "#000000";
-        
+
         titleAreaColor = "#ffffff";
         titleAreaOpacity = 0.02;
 
         backgroundColor = "#ffffff";
         backgroundOpacity = 0.03;
-        
+
         frameColor = "#000000";
         frameOpacity = 0.1;
-        
+
         searchColor = "#D0D0D0";
+
+        arrowUpNormalImage = arrowUpLightNormalImage;
+        arrowUpHoverImage = arrowUpLightHoverImage;
+        arrowUpPressImage = arrowUpLightPressImage;
+        arrowDownNormalImage = arrowDownLightNormalImage;
+        arrowDownHoverImage = arrowDownLightHoverImage;
+        arrowDownPressImage = arrowDownLightPressImage;
     } else {
         titleColor = "#9A9A9A";
         titleLineColor = "#ffffff";
 
         titleAreaColor = "#ffffff";
         titleAreaOpacity = 0.02;
-        
+
         backgroundColor = "#ffffff";
         backgroundOpacity = 0.03;
 
         frameColor = "#000000";
         frameOpacity = 0;
-        
+
         searchColor = "#666666";
+        
+        arrowUpNormalImage = arrowUpDarkNormalImage;
+        arrowUpHoverImage = arrowUpDarkHoverImage;
+        arrowUpPressImage = arrowUpDarkPressImage;
+        arrowDownNormalImage = arrowDownDarkNormalImage;
+        arrowDownHoverImage = arrowDownDarkHoverImage;
+        arrowDownPressImage = arrowDownDarkPressImage;
     }
 }
 
@@ -90,4 +104,3 @@ void ProcessView::changeTheme(QString )
 {
     initTheme();
 }
-

@@ -30,7 +30,17 @@
     <file>image/icon_network_light.png</file>
     <file>image/icon_memory_dark.png</file>
     <file>image/icon_memory_light.png</file>
-    <file>image/listview_arrow_up.png</file>
-    <file>image/listview_arrow_down.png</file>
+    <file>image/arrow_down_dark_hover.png</file>
+    <file>image/arrow_down_dark_normal.png</file>
+    <file>image/arrow_down_dark_press.png</file>
+    <file>image/arrow_up_dark_hover.png</file>
+    <file>image/arrow_up_dark_normal.png</file>
+    <file>image/arrow_up_dark_press.png</file>
+    <file>image/arrow_down_light_hover.png</file>
+    <file>image/arrow_down_light_normal.png</file>
+    <file>image/arrow_down_light_press.png</file>
+    <file>image/arrow_up_light_hover.png</file>
+    <file>image/arrow_up_light_normal.png</file>
+    <file>image/arrow_up_light_press.png</file>
   </qresource>
 </RCC>

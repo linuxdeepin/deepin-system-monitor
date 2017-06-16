@@ -167,19 +167,33 @@ public:
 protected:
     virtual void leaveEvent(QEvent * event);
     
+    QImage arrowDownDarkHoverImage;
+    QImage arrowDownDarkNormalImage;
+    QImage arrowDownDarkPressImage;
+    QImage arrowDownHoverImage;
+    QImage arrowDownLightHoverImage;
+    QImage arrowDownLightNormalImage;
+    QImage arrowDownLightPressImage;
+    QImage arrowDownNormalImage;
+    QImage arrowDownPressImage;
+    QImage arrowUpDarkHoverImage;
+    QImage arrowUpDarkNormalImage;
+    QImage arrowUpDarkPressImage;
+    QImage arrowUpHoverImage;
+    QImage arrowUpLightHoverImage;
+    QImage arrowUpLightNormalImage;
+    QImage arrowUpLightPressImage;
+    QImage arrowUpNormalImage;
+    QImage arrowUpPressImage;
+    QString backgroundColor = "#ffffff";
+    QString frameColor = "#000000";
+    QString searchColor = "#000000";
+    QString titleAreaColor = "#ffffff";
     QString titleColor = "#000000";
     QString titleLineColor = "#000000";
-    
-    QString titleAreaColor = "#ffffff";
-    double titleAreaOpacity = 0.02;
-    
-    QString backgroundColor = "#ffffff";
     double backgroundOpacity = 0.03;
-    
-    QString frameColor = "#000000";
     double frameOpacity = 0.1;
-    
-    QString searchColor = "#000000";
+    double titleAreaOpacity = 0.02;
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);
@@ -220,8 +234,6 @@ private:
     void startScrollbarHideTimer();
     
     ListItem *lastSelectItem;
-    QImage arrowDownImage;
-    QImage arrowUpImage;
     QList<ListItem*> *listItems;
     QList<ListItem*> *renderItems;
     QList<ListItem*> *selectionItems;
@@ -257,6 +269,8 @@ private:
     int titleArrowPadding;
     int titleHeight;
     int titlePadding;
+    int titleHoverColumn;
+    int titlePressColumn;
 };
 
 #endif

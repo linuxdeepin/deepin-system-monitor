@@ -53,8 +53,29 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     searchContent = "";
     searchAlgorithm = NULL;
 
-    arrowUpImage = QImage(Utils::getQrcPath("listview_arrow_up.png"));
-    arrowDownImage = QImage(Utils::getQrcPath("listview_arrow_down.png"));
+    titleHoverColumn = -1;
+    titlePressColumn = -1;
+
+    arrowUpDarkNormalImage = QImage(Utils::getQrcPath("arrow_up_dark_normal.png"));
+    arrowUpDarkHoverImage = QImage(Utils::getQrcPath("arrow_up_dark_hover.png"));
+    arrowUpDarkPressImage = QImage(Utils::getQrcPath("arrow_up_dark_press.png"));
+    arrowDownDarkNormalImage = QImage(Utils::getQrcPath("arrow_down_dark_normal.png"));
+    arrowDownDarkHoverImage = QImage(Utils::getQrcPath("arrow_down_dark_hover.png"));
+    arrowDownDarkPressImage = QImage(Utils::getQrcPath("arrow_down_dark_press.png"));
+
+    arrowUpLightNormalImage = QImage(Utils::getQrcPath("arrow_up_light_normal.png"));
+    arrowUpLightHoverImage = QImage(Utils::getQrcPath("arrow_up_light_hover.png"));
+    arrowUpLightPressImage = QImage(Utils::getQrcPath("arrow_up_light_press.png"));
+    arrowDownLightNormalImage = QImage(Utils::getQrcPath("arrow_down_light_normal.png"));
+    arrowDownLightHoverImage = QImage(Utils::getQrcPath("arrow_down_light_hover.png"));
+    arrowDownLightPressImage = QImage(Utils::getQrcPath("arrow_down_light_press.png"));
+
+    arrowUpNormalImage = arrowUpLightNormalImage;
+    arrowUpHoverImage = arrowUpLightHoverImage;
+    arrowUpPressImage = arrowUpLightPressImage;
+    arrowDownNormalImage = arrowDownLightNormalImage;
+    arrowDownHoverImage = arrowDownLightHoverImage;
+    arrowDownPressImage = arrowDownLightPressImage;
 
     listItems = new QList<ListItem*>();
     renderItems = new QList<ListItem*>();
@@ -511,13 +532,42 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
 
         repaint();
     }
-    // Otherwise update scrollbar status with mouse position.
+    // Update scrollbar status with mouse position.
+    else if (isMouseAtScrollArea(mouseEvent->x()) != mouseAtScrollArea) {
+        mouseAtScrollArea = isMouseAtScrollArea(mouseEvent->x());
+        repaint();
+    }
+    // Otherwise to check titlebar arrow status.
     else {
-        bool atScrollArea = isMouseAtScrollArea(mouseEvent->x());
+        bool atTitleArea = isMouseAtTitleArea(mouseEvent->y());
+        int hoverColumn = -1;
 
-        // Update scrollbar status when mouse in or out of scrollbar area.
-        if (atScrollArea != mouseAtScrollArea) {
-            mouseAtScrollArea = atScrollArea;
+        if (atTitleArea) {
+            if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
+                // Calcuate title widths;
+                QList<int> renderWidths = getRenderWidths();
+
+                int columnCounter = 0;
+                int columnRenderX = 0;
+                for (int renderWidth:renderWidths) {
+                    if (renderWidth > 0) {
+                        if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
+                            hoverColumn = columnCounter;
+                            
+                            break;
+                        }
+
+                        columnRenderX += renderWidth;
+                    }
+
+                    columnCounter++;
+                }
+            }
+        }
+        
+        if (hoverColumn != titleHoverColumn) {
+            titleHoverColumn = hoverColumn;
+            
             repaint();
         }
     }
@@ -555,6 +605,10 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                             defaultSortingOrder = (*sortingOrderes)[columnCounter];
 
                             sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
+                            
+                            if (columnCounter != titlePressColumn) {
+                                titlePressColumn = columnCounter;
+                            }
 
                             repaint();
                             break;
@@ -581,7 +635,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
                         connect(action, &QAction::triggered, this, [this, action, i] {
                                 columnVisibles[i] = !columnVisibles[i];
-                                
+
                                 columnToggleStatus(i, columnVisibles[i], columnVisibles);
 
                                 repaint();
@@ -681,6 +735,11 @@ void ListView::mouseReleaseEvent(QMouseEvent *)
         mouseDragScrollbar = false;
 
         repaint();
+    } else {
+        if (titlePressColumn != -1) {
+            titlePressColumn = -1;
+            repaint();
+        }
     }
 }
 
@@ -756,14 +815,28 @@ void ListView::paintEvent(QPaintEvent *)
                     painter.fillPath(separatorPath, QColor(titleLineColor));
                 }
 
+                // Draw sort arrow.
                 if (defaultSortingColumn == columnCounter) {
                     painter.setOpacity(1);
+                    int arrowX = rect().x() + columnRenderX - titleArrowPadding - arrowUpNormalImage.width();
+                    int arrowY = rect().y() + (titleHeight - arrowDownNormalImage.height()) / 2;
+                    
                     if (defaultSortingOrder) {
-                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowUpImage.width(),
-                                                 rect().y() + (titleHeight - arrowDownImage.height()) / 2), arrowDownImage);
+                        if (titlePressColumn == defaultSortingColumn) {
+                            painter.drawImage(QPoint(arrowX, arrowY), arrowDownPressImage);
+                        } else if (titleHoverColumn == defaultSortingColumn) {
+                            painter.drawImage(QPoint(arrowX, arrowY), arrowDownHoverImage);
+                        } else {
+                            painter.drawImage(QPoint(arrowX, arrowY), arrowDownNormalImage);
+                        }
                     } else {
-                        painter.drawImage(QPoint(rect().x() + columnRenderX - titleArrowPadding - arrowDownImage.width(),
-                                                 rect().y() + (titleHeight - arrowUpImage.height()) / 2), arrowUpImage);
+                        if (titlePressColumn == defaultSortingColumn) {
+                            painter.drawImage(QPoint(arrowX, arrowY), arrowUpPressImage);
+                        } else if (titleHoverColumn == defaultSortingColumn) {
+                            painter.drawImage(QPoint(arrowX, arrowY), arrowUpHoverImage);
+                        } else {
+                            painter.drawImage(QPoint(arrowX, arrowY), arrowUpNormalImage);
+                        }
                     }
                 }
             }
@@ -837,14 +910,14 @@ void ListView::paintEvent(QPaintEvent *)
 
         startScrollbarHideTimer();
     }
-    
+
     // Draw frame.
     QPainterPath framePath;
     framePath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
-    
+
     QPen framePen;
     framePen.setColor(frameColor);
-    
+
     painter.setOpacity(frameOpacity);
     painter.drawPath(framePath);
 }
