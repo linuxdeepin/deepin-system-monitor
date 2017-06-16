@@ -23,6 +23,7 @@
 
 #include "constant.h"
 #include "dthememanager.h"
+#include "dwindowmanagerhelper.h"
 #include "main_window.h"
 #include <DTitlebar>
 #include <QApplication>
@@ -59,6 +60,9 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         initTheme();
 
         connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MainWindow::changeTheme);
+        connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, [=] () {
+                changeTheme(DThemeManager::instance()->theme());
+            });
 
         toolbar = new Toolbar();
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
@@ -112,8 +116,20 @@ void MainWindow::changeTheme(QString theme)
 {
     if (theme == "light") {
         backgroundColor = "#FFFFFF";
+        
+        if (DWindowManagerHelper::instance()->hasComposite()) {
+            setBorderColor(QColor(0, 0, 0, 0.15 * 255));
+        } else {
+            setBorderColor(QColor(217, 217, 217));
+        }
     } else {
         backgroundColor = "#0E0E0E";
+
+        if (DWindowManagerHelper::instance()->hasComposite()) {
+            setBorderColor(QColor(0, 0, 0, 0.15 * 255));
+        } else {
+            setBorderColor(QColor(16, 16, 16));
+        }
     }
 
     initThemeAction();
