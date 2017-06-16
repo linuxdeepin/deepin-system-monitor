@@ -713,7 +713,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 }
             }
 
-            if (!pressInSelectionArea) {
+            if (!pressInSelectionArea && pressItemIndex < renderItems->length()) {
                 clearSelections();
 
                 QList<ListItem*> items = QList<ListItem*>();
@@ -723,7 +723,9 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 repaint();
             }
 
-            rightClickItems(this->mapToGlobal(mouseEvent->pos()), *selectionItems);
+            if (selectionitems->length() > 0) {
+                rightClickItems(this->mapToGlobal(mouseEvent->pos()), *selectionItems);
+            }
         }
     }
 }
