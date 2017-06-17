@@ -37,7 +37,7 @@ const int RECTANGLE_PADDING = 24;
 const int RECTANGLE_RADIUS = 8;
 const int RECTANGLE_FONT_SIZE = 11;
 
-static std::unordered_set<QString> GUI_BLACKLIST_MAP({"sh", "fcitx", "ssh", "python2", "pulseaudio", "deepin-wm"});
+static std::unordered_set<QString> GUI_BLACKLIST_MAP({"sh", "fcitx", "ssh", "python2", "pulseaudio", "deepin-wm", "vim"});
 static std::unordered_set<QString> SCRIPT_PROGRAM_MAP({"python", "python3", "ruby", "php", "perl", "sh", "bash"});
 
 namespace Utils {
