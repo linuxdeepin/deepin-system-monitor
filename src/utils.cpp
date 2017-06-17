@@ -301,12 +301,21 @@ namespace Utils {
         
         // Get first argument that start with '/' if first argument is script program, such as 'python'.
         auto pos = SCRIPT_PROGRAM_MAP.find(name);
-        if (pos != SCRIPT_PROGRAM_MAP.end()) {
+        if (pos != SCRIPT_PROGRAM_MAP.end() && args.size() > 1) {
             for (unsigned int i = 1; i < args.size(); i++) {
                 QString argument = QString::fromStdString(args[i]);
                 
                 // Return first argument that start with '/'.
                 if (argument.startsWith("/")) {
+                    return QFileInfo(argument).fileName();
+                }
+            }
+            
+            for (unsigned int j = 1; j < args.size(); j++) {
+                QString argument = QString::fromStdString(args[j]);
+                
+                // Return first argument that not start with '-'.
+                if (!argument.startsWith("-")) {
                     return QFileInfo(argument).fileName();
                 }
             }
