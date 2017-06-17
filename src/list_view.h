@@ -50,13 +50,15 @@ public:
     void setRowHeight(int height);
 
     /*
-     * Set column titles.
-     * ListView won't display titlebar if not call this function when create ListView.
+     * Set column titles, widths and height.
+     * If you want some column use expand space, please set width with -1
+     * Only allowed one -1 to set in width list.
      * 
      * @titles a list to contains titles
-     * @height height of titlebar
+     * @widths the width of column, list length same as titles list
+     * @height height of titlebar, don't display titlebar if set height with 0
      */
-    void setColumnTitles(QList<QString> titles, int height);
+    void setColumnTitleInfo(QList<QString> titles, QList<int> widths, int height);
     
     /*
      * Set column hide flags.
@@ -66,15 +68,6 @@ public:
      * @alwaysVisibleColumn the column index that column is always visible, default is -1, mean no column can always visible.
      */
     void setColumnHideFlags(QList<bool> toggleHideFlags, int alwaysVisibleColumn=-1);
-    
-    /*
-     * Set column widths
-     * If you want some column use expand space, please set width with -1
-     * Only allowed one -1 to set in width list.
-     * 
-     * @widths the width of column, list length same as titles list
-     */
-    void setColumnWidths(QList<int> widths);
     
     /*
      * Set column sorting algorithms.
@@ -195,6 +188,7 @@ protected:
     double backgroundOpacity = 0.03;
     double frameOpacity = 0.1;
     double titleAreaOpacity = 0.02;
+    int titleSize = 10;
     qreal scrollbarFrameHoverOpacity = 0;
     qreal scrollbarFrameNormalOpacity = 0;
     qreal scrollbarFramePressOpacity = 0;

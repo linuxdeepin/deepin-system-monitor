@@ -117,9 +117,27 @@ void ListView::setRowHeight(int height)
     scrollUnit = rowHeight * 9;
 }
 
-void ListView::setColumnTitles(QList<QString> titles, int height)
+void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int height)
 {
+    // Set column titles.
     columnTitles = titles;
+    
+    // Calcuate column title widths.
+    columnWidths.clear();
+    QFont font;
+    font.setPointSize(titleSize);
+    QFontMetrics fm(font);
+    
+    for (int i = 0; i < widths.length(); i++) {
+        if (widths[i] == -1) {
+            columnWidths << widths[i];
+        } else {
+            int renderTitleWidth = fm.width(titles[i]) + titlePadding + arrowUpNormalImage.width() + titleArrowPadding * 2;
+            columnWidths << std::max(widths[i], renderTitleWidth);
+        }
+    }
+    
+    // Set title height.
     titleHeight = height;
 }
 
@@ -134,12 +152,6 @@ void ListView::setColumnHideFlags(QList<bool> toggleHideFlags, int visibleColumn
     for (int i = 0; i < toggleHideFlags.count(); i++) {
         columnVisibles.append(toggleHideFlags[i]);
     }
-}
-
-
-void ListView::setColumnWidths(QList<int> widths)
-{
-    columnWidths = widths;
 }
 
 void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn, bool descendingSort)
@@ -804,7 +816,7 @@ void ListView::paintEvent(QPaintEvent *)
         for (int renderWidth:renderWidths) {
             if (renderWidth > 0) {
                 painter.setOpacity(1);
-                setFontSize(painter, 10);
+                setFontSize(painter, titleSize);
                 painter.setPen(QPen(QColor(titleColor)));
                 painter.drawText(QRect(columnRenderX + titlePadding, 0, renderWidth, titleHeight), Qt::AlignVCenter | Qt::AlignLeft, columnTitles[columnCounter]);
 

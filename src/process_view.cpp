@@ -37,14 +37,11 @@ ProcessView::ProcessView(QList<bool> columnHideFlags)
     setRowHeight(36);
 
     // Set column widths.
-    QList<int> widths;
-    widths << -1 << 70 << 70 << 80 << 80 << 70 << 70 << 70;
-    setColumnWidths(widths);
-
-    // Set column titles.
     QList<QString> titles;
     titles << "名称" << "处理器" << "内存" << "磁盘写入" << "磁盘读取" << "下载" << "上传" << "进程号";
-    setColumnTitles(titles, 36);
+    QList<int> widths;
+    widths << -1 << 70 << 70 << 80 << 80 << 70 << 70 << 70;
+    setColumnTitleInfo(titles, widths, 36);
 
     // Set column hide flags.
     setColumnHideFlags(columnHideFlags, 0);
