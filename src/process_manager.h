@@ -42,21 +42,22 @@ class ProcessManager : public QWidget
     Q_OBJECT
     
 public:
-    ProcessManager(int tab_index, QList<bool> columnHideFlags);
+    ProcessManager(int tab_index, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder);
     ~ProcessManager();
     
     ProcessView* getProcessView();
                      
 signals:
     void activeTab(int index);
-    void columnToggleStatus(int index, bool visible, QList<bool> columnVisibles);
+    void changeColumnVisible(int index, bool visible, QList<bool> columnVisibles);
+    void changeSortingStatus(int index, bool sortingOrder);
     
 public slots:
     void changeTheme(QString theme);
-    void initTheme();
     void dialogButtonClicked(int index, QString buttonText);
     void focusProcessView();
     void handleSearch(QString searchContent);
+    void initTheme();
     void killProcesses();
     void openProcessDirectory();
     void popupMenu(QPoint pos, QList<ListItem*> items);

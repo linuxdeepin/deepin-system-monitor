@@ -39,7 +39,7 @@ DUTIL_USE_NAMESPACE
 
 using namespace Utils;
 
-ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags)
+ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder)
 {
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -51,7 +51,8 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags)
     topLayout->setContentsMargins(2, 0, 2, 0);
     
     processView = new ProcessView(columnHideFlags);
-    connect(processView, &ListView::columnToggleStatus, this, &ProcessManager::columnToggleStatus);
+    connect(processView, &ListView::changeColumnVisible, this, &ProcessManager::changeColumnVisible);
+    connect(processView, &ListView::changeSortingStatus, this, &ProcessManager::changeSortingStatus);
     
     layout->addWidget(topWidget);
     layout->addWidget(processView);
@@ -80,7 +81,7 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags)
     alorithms->append(&ProcessItem::sortByNetworkDownload);
     alorithms->append(&ProcessItem::sortByNetworkUpload);
     alorithms->append(&ProcessItem::sortByPid);
-    processView->setColumnSortingAlgorithms(alorithms, 1, true);
+    processView->setColumnSortingAlgorithms(alorithms, sortingIndex, sortingOrder);
     processView->setSearchAlgorithm(&ProcessItem::search);
 
     killProcessDialog = new DDialog(QString("结束进程"), QString("结束进程会有丢失数据的风险\n您确定要结束选中的进程吗？"));

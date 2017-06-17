@@ -68,6 +68,14 @@ void Settings::init()
         setOption("process_columns", "name,cpu,memory,disk_write,disk_read,download,upload,pid");
     }
     
+    if (getOption("process_sorting_column").isNull()) {
+        setOption("process_sorting_column", "cpu");
+    }
+    
+    if (getOption("process_sorting_order").isNull()) {
+        setOption("process_sorting_order", true);
+    }
+        
     if (getOption("theme_style").isNull()) {
         setOption("theme_style", "light");
     }

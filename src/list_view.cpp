@@ -615,6 +615,8 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
                             defaultSortingColumn = columnCounter;
                             defaultSortingOrder = (*sortingOrderes)[columnCounter];
+                            
+                            changeSortingStatus(defaultSortingColumn, defaultSortingOrder);
 
                             sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
                             
@@ -648,7 +650,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                         connect(action, &QAction::triggered, this, [this, action, i] {
                                 columnVisibles[i] = !columnVisibles[i];
 
-                                columnToggleStatus(i, columnVisibles[i], columnVisibles);
+                                changeColumnVisible(i, columnVisibles[i], columnVisibles);
 
                                 repaint();
                             });

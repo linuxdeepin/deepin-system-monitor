@@ -198,7 +198,8 @@ protected:
                            
 signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);
-    void columnToggleStatus(int index, bool visible, QList<bool> columnVisibles);
+    void changeColumnVisible(int index, bool visible, QList<bool> columnVisibles);
+    void changeSortingStatus(int index, bool sortingOrder);
     
 private slots:
     void scrollAnimation();

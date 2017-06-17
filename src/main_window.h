@@ -47,6 +47,8 @@ public:
                                        
     QList<bool> getColumnHideFlags();
     bool eventFilter(QObject *, QEvent *);
+    bool getSortingOrder();
+    int getSortingIndex();
     void initTheme();
     void initThemeAction();
     void paintEvent(QPaintEvent *);
@@ -56,6 +58,7 @@ public slots:
     void createWindowKiller();
     void dialogButtonClicked(int index, QString);
     void popupKillConfirmDialog(int pid);
+    void recordSortingStatus(int index, bool sortingOrder);
     void recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles);
     void showWindowKiller();
     void switchTab(int index);

@@ -75,7 +75,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         int tab_index = settings->getOption("process_tab_index").toInt();
 
-        processManager = new ProcessManager(tab_index, getColumnHideFlags());
+        processManager = new ProcessManager(tab_index, getColumnHideFlags(), getSortingIndex(), getSortingOrder());
         processManager->getProcessView()->installEventFilter(this);
         statusMonitor = new StatusMonitor(tab_index);
 
@@ -83,7 +83,8 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         connect(toolbar, &Toolbar::pressTab, processManager, &ProcessManager::focusProcessView);
 
         connect(processManager, &ProcessManager::activeTab, this, &MainWindow::switchTab);
-        connect(processManager, &ProcessManager::columnToggleStatus, this, &MainWindow::recordVisibleColumn);
+        connect(processManager, &ProcessManager::changeColumnVisible, this, &MainWindow::recordVisibleColumn);
+        connect(processManager, &ProcessManager::changeSortingStatus, this, &MainWindow::recordSortingStatus);
 
         connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager, &ProcessManager::updateStatus, Qt::QueuedConnection);
         connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager, &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
@@ -178,6 +179,22 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+int MainWindow::getSortingIndex()
+{
+    QString sortingName = settings->getOption("process_sorting_column").toString();
+    
+    QList<QString> columnNames = {
+        "name", "cpu", "memory", "disk_write", "disk_read", "download", "upload", "pid"
+    };
+
+    return columnNames.indexOf(sortingName);
+}
+
+bool MainWindow::getSortingOrder()
+{
+    return settings->getOption("process_sorting_order").toBool();
+}
+
 void MainWindow::initTheme()
 {
     QString theme = settings->getOption("theme_style").toString();
@@ -233,6 +250,16 @@ void MainWindow::popupKillConfirmDialog(int pid)
 
     killPid = pid;
     killProcessDialog->show();
+}
+
+void MainWindow::recordSortingStatus(int index, bool sortingOrder)
+{
+    QList<QString> columnNames = {
+        "name", "cpu", "memory", "disk_write", "disk_read", "download", "upload", "pid"
+    };
+    
+    settings->setOption("process_sorting_column", columnNames[index]);
+    settings->setOption("process_sorting_order", sortingOrder);
 }
 
 void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
