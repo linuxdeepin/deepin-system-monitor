@@ -70,6 +70,10 @@ namespace Utils {
         map["deepin-menu"] =  "深度系统菜单服务";
         map["lastore-daemon"] =  "深度商店守护进程";
         map["bamfdaemon"] =  "窗口匹配守护进程";
+        map["bamfdaemon-dbus-runner"] =  "窗口匹配守护进程DBus服务";
+        map["ssh-agent"] =  "SSH代理";
+        map["gvfsd"] =  "用户态虚拟文件系统守护进程";
+        map["gvfsd-fuse"] =  "用户态虚拟文件系统守护进程Fuse服务器";
         map["lastore-session-helper"] =  "深度商店客户端助手进程";
         map["networkmanager"] =  "网络管理器";
         map["polkitd"] =  "PolicyKit DBus 服务";
@@ -94,6 +98,8 @@ namespace Utils {
         map["upowerd"] = "电源守护进程";
         map["modemmanager"] = "Modem设备管理器";
         map["applet.py"] = "系统打印托盘服务";
+        map["chrome-sandbox"] = "Chrome浏览器沙盒";
+        map["syndaemon"] = "Synaptics触摸板设备守护进程";
 
         return map;
     }
@@ -195,7 +201,7 @@ namespace Utils {
     {
         QString procname = procName.toLower();
         if (processDescriptions.contains(procname)) {
-            return processDescriptions[procname];
+            return QString("%1    ( %2 )").arg(processDescriptions[procname], procName);
         }
 
         if (desktopFile.size() == 0) {
