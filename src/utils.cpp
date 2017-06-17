@@ -292,20 +292,28 @@ namespace Utils {
             return "";
         }
 
-        // maintain linux paths
+        // Maintain linux paths.
         std::replace(cmdline.begin(),cmdline.end(),'\\','/');
 
-        auto args = explode(cmdline,' ');
+        // Get cmdline arguments and first argument name.
+        auto args = explode(cmdline, ' ');
         QString name = QFileInfo(QString::fromStdString(args[0])).fileName();
-        // replace the name of some processes with their first argument, eg, python, php, ruby etc
-        // QString does not support hash
+        
+        // Get first argument that start with '/' if first argument is script program, such as 'python'.
         static std::unordered_set<QString> nameMap({"python", "python3", "ruby", "php", "perl"});
         auto pos = nameMap.find(name);
         if (pos != nameMap.end()) {
-            return QFileInfo(QString::fromStdString(args[1])).fileName();
-        } else {
-            return name;
+            for (unsigned int i = 1; i < args.size(); i++) {
+                QString argument = QString::fromStdString(args[i]);
+                
+                // Return first argument that start with '/'.
+                if (argument.startsWith("/")) {
+                    return QFileInfo(argument).fileName();
+                }
+            }
         }
+        
+        return name;
     }
 
     QString getQrcPath(QString imageName)
