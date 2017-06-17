@@ -300,9 +300,8 @@ namespace Utils {
         QString name = QFileInfo(QString::fromStdString(args[0])).fileName();
         
         // Get first argument that start with '/' if first argument is script program, such as 'python'.
-        static std::unordered_set<QString> nameMap({"python", "python3", "ruby", "php", "perl"});
-        auto pos = nameMap.find(name);
-        if (pos != nameMap.end()) {
+        auto pos = SCRIPT_PROGRAM_MAP.find(name);
+        if (pos != SCRIPT_PROGRAM_MAP.end()) {
             for (unsigned int i = 1; i < args.size(); i++) {
                 QString argument = QString::fromStdString(args[i]);
                 
@@ -366,7 +365,7 @@ namespace Utils {
         QString procname = procName.toLower();
         QString processFilename = procname + ".desktop";
 
-        if (!GUI_BLACKLIST.contains(procname)) {
+        if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
             while(dir.hasNext()) {
                 if (dir.fileInfo().suffix() == "desktop") {
                     if (dir.fileName().toLower().contains(processFilename)) {

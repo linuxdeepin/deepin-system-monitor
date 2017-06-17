@@ -23,6 +23,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "hashqstring.h"
 #include "window_manager.h"
 #include <QFileInfoList>
 #include <QLayout>
@@ -30,14 +31,14 @@
 #include <QPainter>
 #include <QString>
 #include <proc/readproc.h>
+#include <unordered_set>
 
 const int RECTANGLE_PADDING = 24;
 const int RECTANGLE_RADIUS = 8;
 const int RECTANGLE_FONT_SIZE = 11;
 
-const QList<QString> GUI_BLACKLIST = {
-    "sh", "fcitx", "ssh", "python2", "pulseaudio", "deepin-wm"
-};
+static std::unordered_set<QString> GUI_BLACKLIST_MAP({"sh", "fcitx", "ssh", "python2", "pulseaudio", "deepin-wm"});
+static std::unordered_set<QString> SCRIPT_PROGRAM_MAP({"python", "python3", "ruby", "php", "perl"});
 
 namespace Utils {
     typedef struct DiskStatus {
