@@ -119,7 +119,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
             } else {
                 icon = getDesktopFileIcon(desktopFile, 96);
             }
-            QString displayName = getDisplayNameFromName(name, desktopFile);
+            QString displayName = getDisplayNameFromName(name, desktopFile, false);
             
             iconLabel->setPixmap(icon);
             titleLabel->setText(displayName);

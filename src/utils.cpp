@@ -197,11 +197,15 @@ namespace Utils {
         }
     }
 
-    QString getDisplayNameFromName(QString procName, std::string desktopFile)
+    QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName)
     {
         QString procname = procName.toLower();
         if (processDescriptions.contains(procname)) {
-            return QString("%1    ( %2 )").arg(processDescriptions[procname], procName);
+            if (displayProcessName) {
+                return QString("%1    ( %2 )").arg(processDescriptions[procname], procName);
+            } else {
+                return processDescriptions[procname];
+            }
         }
 
         if (desktopFile.size() == 0) {

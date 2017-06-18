@@ -102,7 +102,7 @@ namespace Utils {
     QString formatByteCount(double v);
     QString formatMillisecond(int millisecond);
     QString formatUnitSize(double v, const char** orders, int nb_orders);
-    QString getDisplayNameFromName(QString procName, std::string desktopFile);
+    QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName=true);
     QString getImagePath(QString imageName);
     QString getProcessCmdline(pid_t pid);
     QString getProcessName(proc_t* p);
