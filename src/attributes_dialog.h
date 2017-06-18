@@ -49,11 +49,14 @@ private:
     FindWindowTitle *findWindowTitle;
     QHBoxLayout *cmdlineLayout;
     QHBoxLayout *nameLayout;
+    QHBoxLayout *startTimeLayout;
     QLabel *cmdlineLabel;
     QLabel *cmdlineTitleLabel;
     QLabel *iconLabel;
     QLabel *nameLabel;
     QLabel *nameTitleLabel;
+    QLabel *startTimeLabel;
+    QLabel *startTimeTitleLabel;
     QLabel *titleLabel;
     QVBoxLayout *layout;
 };

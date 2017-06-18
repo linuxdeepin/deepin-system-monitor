@@ -48,7 +48,7 @@
 
 namespace Utils {
     QMap<QString, QString> processDescriptions = getProcessDescriptions();
-    
+
     QMap<QString, QString> getProcessDescriptions() {
         QMap<QString, QString> map;
 
@@ -106,7 +106,7 @@ namespace Utils {
 
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     {
-        
+
         std::ifstream in;
         in.open(desktopFile);
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
@@ -116,7 +116,7 @@ namespace Utils {
             std::string line;
             std::getline(in,line);
             iconName = QString::fromStdString(line);
-            
+
             if (iconName.startsWith("Icon=")) {
                 iconName.remove(0,5); // remove the first 5 chars
             } else {
@@ -308,30 +308,117 @@ namespace Utils {
         // Get cmdline arguments and first argument name.
         auto args = explode(cmdline, ' ');
         QString name = QFileInfo(QString::fromStdString(args[0])).fileName();
-        
+
         // Get first argument that start with '/' if first argument is script program, such as 'python'.
         auto pos = SCRIPT_PROGRAM_MAP.find(name);
         if (pos != SCRIPT_PROGRAM_MAP.end() && args.size() > 1) {
             for (unsigned int i = 1; i < args.size(); i++) {
                 QString argument = QString::fromStdString(args[i]);
-                
+
                 // Return first argument that start with '/'.
                 if (argument.startsWith("/")) {
                     return QFileInfo(argument).fileName();
                 }
             }
-            
+
             for (unsigned int j = 1; j < args.size(); j++) {
                 QString argument = QString::fromStdString(args[j]);
-                
+
                 // Return first argument that not start with '-'.
                 if (!argument.startsWith("-")) {
                     return QFileInfo(argument).fileName();
                 }
             }
         }
-        
+
         return name;
+    }
+
+    long int getSystemUptime()
+    {
+        FILE *fp;
+        char temp[128];
+        time_t systemBootTime;
+        int btimeFound;
+
+        fp = fopen("/proc/stat", "r");
+
+        if(fp == NULL){
+            return -1;
+        }
+
+        btimeFound = 0;
+        while (fscanf(fp, "%s %ld", temp, &systemBootTime) != EOF){
+            if (!strncmp(temp, "btime", sizeof("btime"))){
+                btimeFound = 1;
+                break;
+            }
+        }
+
+        fclose(fp);
+
+        if (!btimeFound){
+            return -1;
+        }
+
+        return systemBootTime;
+    }
+    
+    long int getProcessStartTime(int pid)
+    {
+        FILE *fp;
+        char readbuf[1024];
+        char filename[128], *pc, *pt;
+        int columnOn, column;
+        long long processStartTime;
+
+        snprintf(filename, sizeof(filename), "/proc/%i/stat", pid);
+
+        fp = fopen(filename, "r");
+        if (!fp){
+            return -1;
+        }
+
+        memset(readbuf, 0x00, sizeof(readbuf));
+
+        if (!fgets(readbuf, sizeof(readbuf), fp)){
+            return -1;
+        }
+
+        fclose(fp);
+
+        column = 0;
+        columnOn = 0;
+        pc = readbuf;
+        while (*pc){
+            if(*pc == ' ' || *pc == '\t'){
+                columnOn = 0;
+            }else{
+                if(!columnOn){
+                    column++;
+                }
+                columnOn = 1;
+            }
+
+            if (column == 22)
+                break;
+
+            pc++;
+        }
+
+        pt = pc;
+        while (*pc) {
+            if (*pc != ' ' && *pc != '\t') {
+                pc++;
+            } else {
+                *pc = 0x00;
+                break;
+            }
+        }
+
+        processStartTime = strtoll(pt, NULL, 10);
+
+        return processStartTime;
     }
 
     QString getQrcPath(QString imageName)
@@ -403,7 +490,7 @@ namespace Utils {
     {
         double cpuTimeA = getTotalCpuTime() - cpuTime;
         unsigned long long processcpuTime = ((after->utime + after->stime) - (before->utime + before->stime));
-        
+
         return (processcpuTime / cpuTimeA) * 100.0 * sysconf(_SC_NPROCESSORS_CONF);
     }
 
@@ -438,7 +525,6 @@ namespace Utils {
      */
     unsigned long long getTotalCpuTime()
     {
-        // from https://github.com/scaidermern/top-processes/blob/master/top_proc.c#L54
         FILE* file = fopen("/proc/stat", "r");
         if (file == NULL) {
             perror("Could not open stat file");
@@ -507,16 +593,16 @@ namespace Utils {
         windowManager->setWindowBlur(widgetId, data);
     }
 
-    void drawLoadingRing(QPainter &painter, 
-                         int centerX, 
-                         int centerY, 
-                         int radius, 
-                         int penWidth, 
-                         int loadingAngle, 
-                         int rotationAngle, 
-                         QString foregroundColor, 
+    void drawLoadingRing(QPainter &painter,
+                         int centerX,
+                         int centerY,
+                         int radius,
+                         int penWidth,
+                         int loadingAngle,
+                         int rotationAngle,
+                         QString foregroundColor,
                          double foregroundOpacity,
-                         QString backgroundColor, 
+                         QString backgroundColor,
                          double backgroundOpacity,
                          double percent)
     {
@@ -617,9 +703,9 @@ namespace Utils {
 
         for (auto n:s) {
             if (n != c) {
-              buff+=n;    
+                buff+=n;
             } else if (n == c && buff != "") {
-                v.push_back(buff); buff = ""; 
+                v.push_back(buff); buff = "";
             }
         }
         if (buff != "") {

@@ -107,6 +107,8 @@ namespace Utils {
     QString getProcessCmdline(pid_t pid);
     QString getProcessName(proc_t* p);
     QString getProcessNameFromCmdLine(const pid_t pid);
+    long int getSystemUptime();
+    long int getProcessStartTime(int pid);
     QString getQrcPath(QString imageName);
     QString getQssPath(QString qssName);
     bool fileExists(QString path);

@@ -24,6 +24,7 @@
 #include "attributes_dialog.h"
 #include "constant.h"
 #include "utils.h"
+#include <QDateTime>
 #include <QDebug>
 #include <QPainter>
 #include <dthememanager.h>
@@ -39,13 +40,14 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
 
-    setFixedSize(320, Constant::STATUS_BAR_WIDTH);
+    setFixedSize(320, 300);
     
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     
     nameLayout = new QHBoxLayout();
     cmdlineLayout = new QHBoxLayout();
+    startTimeLayout = new QHBoxLayout();
     
     closeButton = new DWindowCloseButton;
     closeButton->setFixedSize(27, 23);
@@ -65,6 +67,10 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     nameLabel = new QLabel();
     nameLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     
+    nameLayout->addWidget(nameTitleLabel);
+    nameLayout->addWidget(nameLabel);
+    nameLayout->addSpacing(20);
+
     cmdlineTitleLabel = new QLabel("命令行:");
     cmdlineTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     cmdlineTitleLabel->setFixedWidth(100);
@@ -74,13 +80,22 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     cmdlineLabel->setWordWrap(true);
     
-    nameLayout->addWidget(nameTitleLabel);
-    nameLayout->addWidget(nameLabel);
-    nameLayout->addSpacing(20);
-
     cmdlineLayout->addWidget(cmdlineTitleLabel);
     cmdlineLayout->addWidget(cmdlineLabel);
     cmdlineLayout->addSpacing(20);
+
+    startTimeTitleLabel = new QLabel("启动时间:");
+    startTimeTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
+    startTimeTitleLabel->setFixedWidth(100);
+    startTimeTitleLabel->setAlignment(Qt::AlignRight);
+    
+    startTimeLabel = new QLabel();
+    startTimeLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
+    startTimeLabel->setWordWrap(true);
+    
+    startTimeLayout->addWidget(startTimeTitleLabel);
+    startTimeLayout->addWidget(startTimeLabel);
+    startTimeLayout->addSpacing(20);
     
     layout->addWidget(closeButton, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addSpacing(20);
@@ -90,6 +105,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     layout->addStretch();
     layout->addLayout(nameLayout);
     layout->addLayout(cmdlineLayout);
+    layout->addLayout(startTimeLayout);
     layout->addSpacing(20);
     
     // Read the list of open processes information.
@@ -125,6 +141,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
             titleLabel->setText(displayName);
             nameLabel->setText(name);
             cmdlineLabel->setText(cmdline);
+            startTimeLabel->setText(QDateTime::fromTime_t(Utils::getSystemUptime() + Utils::getProcessStartTime(processId)).toUTC().toString("yyyy-MM-dd hh:mm:ss"));
             
             break;
         }
@@ -140,9 +157,12 @@ AttributesDialog::~AttributesDialog()
     delete nameLabel;
     delete titleLabel;
     delete cmdlineTitleLabel;
+    delete startTimeLabel;
+    delete startTimeTitleLabel;
     delete cmdlineLabel;
     delete nameLayout;
     delete cmdlineLayout;
+    delete startTimeLayout;
     delete layout;
 }
 
