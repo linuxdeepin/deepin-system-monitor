@@ -468,7 +468,13 @@ namespace Utils {
         QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
         std::string desktopFile;
 
+        // Convert to lower characters.
         QString procname = procName.toLower();
+        
+        // Replace "_" instead "-", avoid some applications desktop file can't found, such as, sublime text.
+        procname.replace("_", "-");
+        
+        // Concat desktop file.
         QString processFilename = procname + ".desktop";
 
         if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
