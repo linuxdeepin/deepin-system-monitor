@@ -40,7 +40,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
 
-    setFixedSize(320, 300);
+    setMinimumWidth(320);
     
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -78,6 +78,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     
     cmdlineLabel = new QLabel();
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
+    cmdlineLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     cmdlineLabel->setWordWrap(true);
     
     cmdlineLayout->addWidget(cmdlineTitleLabel);
@@ -102,6 +103,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
     layout->addWidget(iconLabel, 0, Qt::AlignHCenter);
     layout->addSpacing(14);
     layout->addWidget(titleLabel, 0, Qt::AlignHCenter);
+    layout->addSpacing(20);
     layout->addStretch();
     layout->addLayout(nameLayout);
     layout->addLayout(cmdlineLayout);
