@@ -170,6 +170,9 @@ void ProcessManager::handleSearch(QString searchContent)
 void ProcessManager::killProcesses()
 {
     for (int pid : *actionPids) {
+        // Resume process first, otherwise kill process too slow.
+        kill(pid, SIGCONT);
+        
         if (kill(pid, SIGTERM) != 0) {
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
         }
