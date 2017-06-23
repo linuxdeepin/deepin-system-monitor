@@ -143,7 +143,8 @@ AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(p
             titleLabel->setText(displayName);
             nameLabel->setText(name);
             cmdlineLabel->setText(cmdline);
-            startTimeLabel->setText(QDateTime::fromTime_t(Utils::getSystemUptime() + Utils::getProcessStartTime(processId)).toUTC().toString("yyyy-MM-dd hh:mm:ss"));
+            
+            startTimeLabel->setText(QFileInfo(QString("/proc/%1").arg(processId)).created().toString("yyyy-MM-dd hh:mm:ss"));
             
             break;
         }
