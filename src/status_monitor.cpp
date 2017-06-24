@@ -40,12 +40,12 @@ StatusMonitor::StatusMonitor(int tab_index)
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
 
     // Init attributes.
-    cpuNumber = sysconf(_SC_NPROCESSORS_ONLN);
     findWindowTitle = new FindWindowTitle();
     processReadKbs = new QMap<int, unsigned long>();
     processRecvBytes = new QMap<int, long>();
     processSentBytes = new QMap<int, long>();
     processWriteKbs = new QMap<int, unsigned long>();
+    processCpuPercents = new QMap<int, double>();
     tabName = "应用程序";
     totalRecvBytes = 0;
     totalRecvKbs = 0;
@@ -138,13 +138,15 @@ void StatusMonitor::updateStatus()
     closeproc(proc);
 
     // Fill in CPU.
+    processCpuPercents->clear();
     if (prevProcesses.size()>0) {
         // we have previous proc info
         for (auto &newItr:processes) {
             for (auto &prevItr:prevProcesses) {
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
-                    newItr.second.pcpu = (unsigned int) calculateCPUPercentage(&prevItr.second, &newItr.second, totalCpuTime);
+                    (*processCpuPercents)[newItr.second.tid] = calculateCPUPercentage(&prevItr.second, &newItr.second, totalCpuTime);
+                    
                     break;
                 }
             }
@@ -189,8 +191,8 @@ void StatusMonitor::updateStatus()
     for (auto &i:processes) {
         QString name = getProcessName(&i.second);
         QString user = (&i.second)->euser;
-        double cpu = (&i.second)->pcpu;
         int pid = (&i.second)->tid;
+        double cpu = (*processCpuPercents)[pid];
 
         std::string desktopFile = getDesktopFileFromName(name);
         QString title = findWindowTitle->getWindowTitle(pid);
@@ -231,14 +233,14 @@ void StatusMonitor::updateStatus()
                 icon = getDesktopFileIcon(desktopFile, 24);
             }
 
-            ProcessItem *item = new ProcessItem(icon, name, displayName, cpu / cpuNumber, memory, pid, user, (&i.second)->state);
+            ProcessItem *item = new ProcessItem(icon, name, displayName, cpu, memory, pid, user, (&i.second)->state);
             items << item;
         } else {
             // Fill GUI processes information for continue merge action.
             if (filterType == OnlyGUI) {
                 if (childInfoMap.contains(pid)) {
                     long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
-                    childInfoMap[pid].cpu = cpu / cpuNumber;
+                    childInfoMap[pid].cpu = cpu;
                     childInfoMap[pid].memory = memory;
                 }
             }
@@ -345,7 +347,7 @@ void StatusMonitor::updateStatus()
     }
 
     // Update cpu status.
-    updateCpuStatus(totalCpuPercent / cpuNumber);
+    updateCpuStatus(totalCpuPercent);
 
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {

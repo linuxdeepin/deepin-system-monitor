@@ -410,7 +410,7 @@ namespace Utils {
         double cpuTimeA = getTotalCpuTime() - cpuTime;
         unsigned long long processcpuTime = ((after->utime + after->stime) - (before->utime + before->stime));
 
-        return (processcpuTime / cpuTimeA) * 100.0 * sysconf(_SC_NPROCESSORS_CONF);
+        return (processcpuTime / cpuTimeA) * 100.0;
     }
 
     qreal easeInOut(qreal x)
