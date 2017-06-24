@@ -51,6 +51,10 @@ StatusMonitor::StatusMonitor(int tab_index)
     totalRecvKbs = 0;
     totalSentBytes = 0;
     totalSentKbs = 0;
+    totalCpuTime = 0;
+    workCpuTime = 0;
+    prevTotalCpuTime = 0;
+    prevWorkCpuTime = 0;
     currentUsername = qgetenv("USER");
 
     if (tab_index == 0) {
@@ -138,6 +142,10 @@ void StatusMonitor::updateStatus()
     closeproc(proc);
 
     // Fill in CPU.
+    prevWorkCpuTime = workCpuTime;
+    prevTotalCpuTime = totalCpuTime;
+    totalCpuTime = getTotalCpuTime(workCpuTime);
+    
     processCpuPercents->clear();
     if (prevProcesses.size()>0) {
         // we have previous proc info
@@ -145,16 +153,13 @@ void StatusMonitor::updateStatus()
             for (auto &prevItr:prevProcesses) {
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
-                    (*processCpuPercents)[newItr.second.tid] = calculateCPUPercentage(&prevItr.second, &newItr.second, totalCpuTime);
+                    (*processCpuPercents)[newItr.second.tid] = calculateCPUPercentage(&prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
                     
                     break;
                 }
             }
         }
     }
-
-    // Update the cpu time for next loop.
-    totalCpuTime = getTotalCpuTime();
 
     // Fill gui chlid process information when filterType is OnlyGUI.
     findWindowTitle->updateWindowInfos();
@@ -183,7 +188,6 @@ void StatusMonitor::updateStatus()
     }
 
     // Read processes information.
-    double totalCpuPercent = 0;
     int guiProcessNumber = 0;
     int systemProcessNumber = 0;
     QList<ListItem*> items;
@@ -245,8 +249,6 @@ void StatusMonitor::updateStatus()
                 }
             }
         }
-
-        totalCpuPercent += cpu;
     }
 
     // Remove dead process from network status maps.
@@ -347,8 +349,12 @@ void StatusMonitor::updateStatus()
     }
 
     // Update cpu status.
-    updateCpuStatus(totalCpuPercent);
-
+    if (prevWorkCpuTime != 0 && prevTotalCpuTime != 0) {
+        updateCpuStatus((workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime));
+    } else {
+        updateCpuStatus(0);
+    }
+    
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
         for (ListItem *item : items) {

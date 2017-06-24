@@ -405,12 +405,12 @@ namespace Utils {
         return desktopFile;
     }
 
-    double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime)
+    double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &prevCpuTime, const unsigned long long &cpuTime)
     {
-        double cpuTimeA = getTotalCpuTime() - cpuTime;
+        double totalCpuTime = cpuTime - prevCpuTime;
         unsigned long long processcpuTime = ((after->utime + after->stime) - (before->utime + before->stime));
 
-        return (processcpuTime / cpuTimeA) * 100.0;
+        return (processcpuTime / totalCpuTime) * 100.0;
     }
 
     qreal easeInOut(qreal x)
@@ -442,7 +442,7 @@ namespace Utils {
      * @brief getTotalCpuTime Read the data from /proc/stat and get the total time the cpu has been busy
      * @return The total cpu time
      */
-    unsigned long long getTotalCpuTime()
+    unsigned long long getTotalCpuTime(unsigned long long &workTime)
     {
         FILE* file = fopen("/proc/stat", "r");
         if (file == NULL) {
@@ -466,6 +466,8 @@ namespace Utils {
         sscanf(buffer,
                "cpu  %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu",
                &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guestnice);
+        
+        workTime = user + nice + system;
 
         // sum everything up (except guest and guestnice since they are already included
         // in user and nice, see http://unix.stackexchange.com/q/178045/20626)

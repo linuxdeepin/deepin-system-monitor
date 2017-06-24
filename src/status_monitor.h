@@ -95,6 +95,9 @@ private:
     long totalRecvBytes;
     long totalSentBytes;
     unsigned long long totalCpuTime;
+    unsigned long long prevTotalCpuTime;
+    unsigned long long workCpuTime;
+    unsigned long long prevWorkCpuTime;
 };
 
 #endif

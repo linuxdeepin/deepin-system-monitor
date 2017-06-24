@@ -111,14 +111,14 @@ namespace Utils {
     QString getQssPath(QString qssName);
     bool fileExists(QString path);
     bool getProcPidIO(int pid, ProcPidIO &io );
-    double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &cpuTime);
+    double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &prevCpuTime, const unsigned long long &cpuTime);
     std::string getDesktopFileFromName(QString procName);
     qreal easeInOut(qreal x);
     qreal easeInQuad(qreal x);
     qreal easeInQuint(qreal x);
     qreal easeOutQuad(qreal x);
     qreal easeOutQuint(qreal x);
-    unsigned long long getTotalCpuTime();
+    unsigned long long getTotalCpuTime(unsigned long long &workTime);
     void addLayoutWidget(QLayout *layout, QWidget *widget);
     void applyQss(QWidget *widget, QString qssName);
     void blurRect(WindowManager *windowManager, int widgetId, QRectF rect);
