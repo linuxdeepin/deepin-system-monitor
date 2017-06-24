@@ -96,6 +96,7 @@ StatusMonitor::~StatusMonitor()
     delete processSentBytes;
     delete processReadKbs;
     delete processWriteKbs;
+    delete processCpuPercents;
     delete updateStatusTimer;
     delete layout;
 }
