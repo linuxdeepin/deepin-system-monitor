@@ -207,6 +207,8 @@ void ProcessManager::openProcessDirectory()
 
 void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
 {
+    actionPids->clear();
+    
     for (ListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         actionPids->append(processItem->getPid());
