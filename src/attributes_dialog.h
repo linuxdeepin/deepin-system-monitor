@@ -42,6 +42,7 @@ public:
     AttributesDialog(QWidget *parent = 0, int pid=-1);
     ~AttributesDialog();
 
+    int getPid();
     void paintEvent(QPaintEvent *);
     
 private:
@@ -59,6 +60,7 @@ private:
     QLabel *startTimeTitleLabel;
     QLabel *titleLabel;
     QVBoxLayout *layout;
+    int pid;
 };
 
 #endif

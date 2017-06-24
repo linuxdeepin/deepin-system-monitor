@@ -28,6 +28,7 @@
 #include "process_item.h"
 #include "process_manager.h"
 #include <DDesktopServices>
+#include <QApplication>
 #include <QDebug>
 #include <QList>
 #include <QProcess>
@@ -227,6 +228,19 @@ void ProcessManager::resumeProcesses()
 void ProcessManager::showAttributes()
 {
     for (int pid : *actionPids) {
+        foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+            // Show attribute dialog if it has create, avoid create attribute dialog duplicate.
+            if (qobject_cast<const AttributesDialog*>(widget) != 0) {
+                AttributesDialog *dialog = qobject_cast<AttributesDialog*>(widget);
+                if (dialog->getPid() == pid) {
+                    dialog->show();
+                    actionPids->clear();
+                    
+                    return;
+                }
+            }
+        }
+        
         AttributesDialog *dialog = new AttributesDialog(this, pid);
         dialog->show();
     }

@@ -36,10 +36,12 @@ DWIDGET_USE_NAMESPACE
 using namespace Utils;
 using namespace Dtk;
 
-AttributesDialog::AttributesDialog(QWidget *parent, int pid) : DAbstractDialog(parent)
+AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDialog(parent)
 {
+    pid = processId;
+    
     setAttribute(Qt::WA_DeleteOnClose, true);
-
+    
     setMinimumWidth(320);
     
     layout = new QVBoxLayout(this);
@@ -167,6 +169,11 @@ AttributesDialog::~AttributesDialog()
     delete cmdlineLayout;
     delete startTimeLayout;
     delete layout;
+}
+
+int AttributesDialog::getPid()
+{
+    return pid;
 }
 
 void AttributesDialog::paintEvent(QPaintEvent *)
