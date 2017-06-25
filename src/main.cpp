@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         app.setApplicationVersion("1.0");
         
         app.setProductIcon(QPixmap::fromImage(QImage(Utils::getQrcPath("logo_96.svg"))));
-        app.setProductName(DApplication::translate("MainWindow", "Deepin System Monitor"));
+        app.setProductName(DApplication::translate("MainWindow", "深度系统监视器"));
         app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
         app.setApplicationAcknowledgementPage(acknowledgementLink);
         
