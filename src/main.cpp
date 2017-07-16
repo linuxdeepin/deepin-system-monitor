@@ -39,9 +39,8 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
     
     const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow", 
-                                                    "深度系统监视器是一款设计直观易用、功能强大的系统监视器。"
-                                                    "它支持进程的CPU、内存、网络和磁盘等多种状态显示，"
-                                                    "并简化用户进程的显示和说明，方便用户更快速的使用。"
+                                                    "深度系统监视器是一款直观易用、功能强大的系统监视器。"
+                                                    "它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。"
                                                     );
 
     const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";

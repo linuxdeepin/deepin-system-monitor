@@ -98,10 +98,10 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         killPid = -1;
 
-        killProcessDialog = new DDialog(QString("结束进程"), QString("结束应用会有丢失数据的风险\n您确定要结束选中的应用吗？"), this);
+        killProcessDialog = new DDialog(QString("结束应用"), QString("结束应用会有丢失数据的风险\n您确定要结束选中的应用吗？"), this);
         killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
         killProcessDialog->addButton(QString("取消"), false, DDialog::ButtonNormal);
-        killProcessDialog->addButton(QString("结束进程"), true, DDialog::ButtonNormal);
+        killProcessDialog->addButton(QString("结束应用"), true, DDialog::ButtonNormal);
         connect(killProcessDialog, &DDialog::buttonClicked, this, &MainWindow::dialogButtonClicked);
 
         killer = NULL;
