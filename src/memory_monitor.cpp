@@ -271,6 +271,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor(numberColor)));
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius, rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2, insideRingRadius * 2),
                      Qt::AlignCenter,
-                     QString("%1%").arg(static_cast<int>(memoryPercent * 100)));
+                     QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
 }
 
