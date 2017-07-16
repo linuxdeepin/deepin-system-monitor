@@ -101,7 +101,7 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int s
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
     resumeAction = new QAction("继续进程", this);
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
-    openDirectoryAction = new QAction("打开程序所在目录", this);
+    openDirectoryAction = new QAction("查看进程命令", this);
     connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
     attributesAction = new QAction("属性", this);
     connect(attributesAction, &QAction::triggered, this, &ProcessManager::showAttributes);
