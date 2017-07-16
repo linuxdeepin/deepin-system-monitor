@@ -46,7 +46,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     if (this->titlebar()) {
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
-        killAction = new QAction("结束应用程序", this);
+        killAction = new QAction("强制结束应用程序", this);
         connect(killAction, &QAction::triggered, this, &MainWindow::showWindowKiller);
         lightThemeAction = new QAction("浅色主题", this);
         connect(lightThemeAction, &QAction::triggered, this, &MainWindow::switchToLightTheme);
