@@ -206,9 +206,9 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fm = painter.fontMetrics();
     
     QString downloadTitle = QString("%1 %2").arg(tr("Download")).arg(formatBandwidth(totalRecvKbs));
-    QString downloadContent = QString("%1 %2").arg(tr("Total download")).arg(formatByteCount(totalRecvBytes));
+    QString downloadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
     QString uploadTitle = QString("%1 %2").arg(tr("Upload")).arg(formatBandwidth(totalSentKbs));
-    QString uploadContent = QString("%1 %2").arg(tr("Total upload")).arg(formatByteCount(totalSentBytes));
+    QString uploadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalSentBytes));
     int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
     
     painter.setOpacity(1);

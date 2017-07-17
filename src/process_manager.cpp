@@ -101,7 +101,7 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int s
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
     resumeAction = new QAction(tr("Resume process"), this);
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
-    openDirectoryAction = new QAction(tr("View process command"), this);
+    openDirectoryAction = new QAction(tr("View process location"), this);
     connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
     attributesAction = new QAction(tr("Properties"), this);
     connect(attributesAction, &QAction::triggered, this, &ProcessManager::showAttributes);

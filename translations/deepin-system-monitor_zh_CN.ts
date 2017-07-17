@@ -52,19 +52,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total download</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total upload</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -94,15 +90,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>View process command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View process location</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
