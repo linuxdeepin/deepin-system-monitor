@@ -154,6 +154,198 @@
         <source>Deepin System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Deepin Desktop Environment - Process initiation service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Desktop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Polkit proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Launcher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Screen display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Session daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Session initialization process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin File Manager daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Desktop Environment - Lock screen service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Window Manager </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Window Manager switcher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Cloud Print agent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin menu service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deepin Store daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window match daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window match daemon DBus service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SSH agent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User mode virtual file system daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fuse server of user mode virtual file system daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Helper process of Deepin Store client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PolicyKit DBus service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File sharing service daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>X service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fcitx input method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fcitx input method DBus daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sogou input method daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ShadowSocks local client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Light display manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System service manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System service manager - Device management daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disk daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DBus daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse event daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DConf service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gnome keyring daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bluetooth daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Power daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modem device manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System print tray service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chrome browser sandbox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synaptics touchpad device daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
