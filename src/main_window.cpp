@@ -40,7 +40,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
     installEventFilter(this);   // add event filter
 
-    settings = new Settings();
+    settings = new Settings(this);
     settings->init();
 
     if (this->titlebar()) {

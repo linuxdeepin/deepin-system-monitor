@@ -50,7 +50,7 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     totalSwap = 0;
 
 
-    timer = new QTimer();
+    timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start();
 
@@ -59,8 +59,6 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 
 MemoryMonitor::~MemoryMonitor()
 {
-    delete timer;
-    delete layout;
 }
 
 void MemoryMonitor::initTheme()
