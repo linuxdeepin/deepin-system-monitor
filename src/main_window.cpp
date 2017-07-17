@@ -48,13 +48,11 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         menu->setStyle(QStyleFactory::create("dlight"));
         killAction = new QAction("强制结束应用程序", this);
         connect(killAction, &QAction::triggered, this, &MainWindow::showWindowKiller);
-        lightThemeAction = new QAction("浅色主题", this);
-        connect(lightThemeAction, &QAction::triggered, this, &MainWindow::switchToLightTheme);
-        darkThemeAction = new QAction("深色主题", this);
-        connect(darkThemeAction, &QAction::triggered, this, &MainWindow::switchToDarkTheme);
+        themeAction = new QAction("深色主题", this);
+        themeAction->setCheckable(true);
+        connect(themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
         menu->addAction(killAction);
-        menu->addAction(lightThemeAction);
-        menu->addAction(darkThemeAction);
+        menu->addAction(themeAction);
         menu->addSeparator();
 
         initTheme();
@@ -117,7 +115,7 @@ void MainWindow::changeTheme(QString theme)
 {
     if (theme == "light") {
         backgroundColor = "#FFFFFF";
-        
+
         if (DWindowManagerHelper::instance()->hasComposite()) {
             setBorderColor(QColor(0, 0, 0, 0.15 * 255));
         } else {
@@ -182,7 +180,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 int MainWindow::getSortingIndex()
 {
     QString sortingName = settings->getOption("process_sorting_column").toString();
-    
+
     QList<QString> columnNames = {
         "name", "cpu", "memory", "disk_write", "disk_read", "download", "upload", "pid"
     };
@@ -205,13 +203,7 @@ void MainWindow::initTheme()
 
 void MainWindow::initThemeAction()
 {
-    if (settings->getOption("theme_style") == "light") {
-        darkThemeAction->setVisible(true);
-        lightThemeAction->setVisible(false);
-    } else {
-        darkThemeAction->setVisible(false);
-        lightThemeAction->setVisible(true);
-    }
+    themeAction->setChecked(settings->getOption("theme_style") == "dark");
 }
 
 void MainWindow::paintEvent(QPaintEvent *)
@@ -257,7 +249,7 @@ void MainWindow::recordSortingStatus(int index, bool sortingOrder)
     QList<QString> columnNames = {
         "name", "cpu", "memory", "disk_write", "disk_read", "download", "upload", "pid"
     };
-    
+
     settings->setOption("process_sorting_column", columnNames[index]);
     settings->setOption("process_sorting_order", sortingOrder);
 }
@@ -326,20 +318,19 @@ void MainWindow::switchTab(int index)
     settings->setOption("process_tab_index", index);
 }
 
-void MainWindow::switchToLightTheme()
+void MainWindow::switchTheme()
 {
-    settings->setOption("theme_style", "light");
-
-    DThemeManager::instance()->setTheme("light");
-
-    repaint();
-}
-
-void MainWindow::switchToDarkTheme()
-{
-    settings->setOption("theme_style", "dark");
-
-    DThemeManager::instance()->setTheme("dark");
+    if (settings->getOption("theme_style") == "dark") {
+        settings->setOption("theme_style", "light");
+        DThemeManager::instance()->setTheme("light");
+        
+        themeAction->setChecked(false);
+    } else {
+        settings->setOption("theme_style", "dark");
+        DThemeManager::instance()->setTheme("dark");
+        
+        themeAction->setChecked(true);
+    }
 
     repaint();
 }

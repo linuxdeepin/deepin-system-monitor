@@ -62,16 +62,14 @@ public slots:
     void recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles);
     void showWindowKiller();
     void switchTab(int index);
-    void switchToDarkTheme();
-    void switchToLightTheme();
+    void switchTheme();
     
 private:
     DDialog *killProcessDialog;
     InteractiveKill *killer;
     ProcessManager *processManager;
-    QAction *darkThemeAction;
+    QAction *themeAction;
     QAction *killAction;
-    QAction *lightThemeAction;
     QHBoxLayout *layout;
     QMenu *menu;
     QString backgroundColor;
