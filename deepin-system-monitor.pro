@@ -15,6 +15,12 @@ RESOURCES = deepin-system-monitor.qrc
 	error("Build nethogs static library failed.")
 }
 
+CONFIG(debug, debug|release) {
+  # Enable memory address sanitizer in debug mode.
+  QMAKE_CXXFLAGS += -fsanitize=address
+  LIBS += -lasan
+}
+
 # Input
 HEADERS += src/utils.h \
            src/toolbar.h \

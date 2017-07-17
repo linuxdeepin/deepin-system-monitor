@@ -4,3 +4,4 @@ moc_*.cpp
 build/
 *.qm
 !nethogs/Makefile
+*.user
