@@ -915,7 +915,7 @@ void ListView::paintEvent(QPaintEvent *)
         painter.setOpacity(1);
         painter.setPen(QPen(QColor(searchColor)));
         setFontSize(painter, 20);
-        painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, "无搜索结果");
+        painter.drawText(QRect(rect().x(), rect().y() + titleHeight, rect().width(), rect().height() - titleHeight), Qt::AlignCenter, tr("No search result"));
     }
 
     // Draw frame.

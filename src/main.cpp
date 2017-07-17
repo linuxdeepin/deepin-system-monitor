@@ -38,10 +38,7 @@ int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
     
-    const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow", 
-                                                    "深度系统监视器是一款直观易用、功能强大的系统监视器。"
-                                                    "它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。"
-                                                    );
+    const QString descriptionText = QApplication::tr("Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.");
 
     const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
 
@@ -52,11 +49,12 @@ int main(int argc, char *argv[])
         
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");
+        app.setApplicationDisplayName(QObject::tr("Deepin System Monitor"));
         app.setApplicationVersion("1.0");
         
         app.setProductIcon(QPixmap::fromImage(QImage(Utils::getQrcPath("logo_96.svg"))));
-        app.setProductName(DApplication::translate("MainWindow", "深度系统监视器"));
-        app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
+        app.setProductName(QApplication::tr("Deepin System Monitor"));
+        app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
         
         app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));

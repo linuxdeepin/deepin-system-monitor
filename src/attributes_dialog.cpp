@@ -61,7 +61,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     titleLabel = new QLabel();
     titleLabel->setStyleSheet("QLabel { background-color : transparent; font-size: 14px; font-weight: 500; color : #303030; }");
     
-    nameTitleLabel = new QLabel("进程名:");
+    nameTitleLabel = new QLabel(QString("%1:").arg("Name"));
     nameTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     nameTitleLabel->setFixedWidth(100);
     nameTitleLabel->setAlignment(Qt::AlignRight);
@@ -73,7 +73,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     nameLayout->addWidget(nameLabel);
     nameLayout->addSpacing(20);
 
-    cmdlineTitleLabel = new QLabel("命令行:");
+    cmdlineTitleLabel = new QLabel(QString("%1:").arg("Command line"));
     cmdlineTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     cmdlineTitleLabel->setFixedWidth(100);
     cmdlineTitleLabel->setAlignment(Qt::AlignRight);
@@ -87,7 +87,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     cmdlineLayout->addWidget(cmdlineLabel);
     cmdlineLayout->addSpacing(20);
 
-    startTimeTitleLabel = new QLabel("启动时间:");
+    startTimeTitleLabel = new QLabel(QString("%1:").arg("Start time"));
     startTimeTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     startTimeTitleLabel->setFixedWidth(100);
     startTimeTitleLabel->setAlignment(Qt::AlignRight);

@@ -112,11 +112,11 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         switch(state) {
         case 'Z':
             painter->setPen(QPen(QColor("#FF0056")));
-            name = QString("(%1) %2").arg("无响应").arg(displayName);
+            name = QString("(%1) %2").arg(tr("No response")).arg(displayName);
             break;
         case 'T':
             painter->setPen(QPen(QColor("#FFA500")));
-            name = QString("(%1) %2").arg("暂停").arg(displayName);
+            name = QString("(%1) %2").arg(tr("Suspend")).arg(displayName);
             break;
         }
 

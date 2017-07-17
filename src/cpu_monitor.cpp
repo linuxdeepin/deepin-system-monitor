@@ -147,7 +147,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     font.setWeight(QFont::Light);
     
     QFontMetrics fm(font);
-    int titleWidth = fm.width("处理器");
+    int titleWidth = fm.width(tr("CPU"));
     
     int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
     
@@ -159,7 +159,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                            rect().y() + titleRenderOffsetY,
                            titleWidth,
                            30
-                         ), Qt::AlignCenter, "处理器");
+                         ), Qt::AlignCenter, tr("CPU"));
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) + easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
 

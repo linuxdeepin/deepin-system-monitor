@@ -174,21 +174,21 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     font.setWeight(QFont::Light);
     painter.setFont(font);
     painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "内存");
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, tr("Memory"));
 
     // Draw memory summary.
     setFontSize(painter, memoryRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString memoryTitle = QString("内存 (%1%)").arg(QString::number(memoryPercent * 100, 'f', 1));
+    QString memoryTitle = QString("%1 (%2%)").arg(tr("Memory")).arg(QString::number(memoryPercent * 100, 'f', 1));
     QString memoryContent = QString("%1/%2").arg(formatByteCount(usedMemory)).arg(formatByteCount(totalMemory));
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
-        swapTitle = "交换空间 (未启用)";
+        swapTitle = QString("%1 (%2)").arg(tr("Swap")).arg("Not enabled");
         swapContent = "";
     } else {
-        swapTitle = QString("交换空间 (%1%)").arg(QString::number(swapPercent * 100, 'f', 1));
+        swapTitle = QString("%1 (%2%)").arg(tr("Swap")).arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
     }
     

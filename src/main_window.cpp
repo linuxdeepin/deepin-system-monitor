@@ -46,9 +46,9 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     if (this->titlebar()) {
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
-        killAction = new QAction("强制结束应用程序", this);
+        killAction = new QAction(tr("Force to end application"), this);
         connect(killAction, &QAction::triggered, this, &MainWindow::showWindowKiller);
-        themeAction = new QAction("深色主题", this);
+        themeAction = new QAction(tr("Dark theme"), this);
         themeAction->setCheckable(true);
         connect(themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
         menu->addAction(killAction);
@@ -96,10 +96,10 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         killPid = -1;
 
-        killProcessDialog = new DDialog(QString("结束应用"), QString("结束应用会有丢失数据的风险\n您确定要结束选中的应用吗？"), this);
+        killProcessDialog = new DDialog(QString(tr("End application")), QString("Ending this application may cause data loss.\nAre you sure to continue?"), this);
         killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
-        killProcessDialog->addButton(QString("取消"), false, DDialog::ButtonNormal);
-        killProcessDialog->addButton(QString("结束应用"), true, DDialog::ButtonNormal);
+        killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+        killProcessDialog->addButton(QString(tr("End application")), true, DDialog::ButtonNormal);
         connect(killProcessDialog, &DDialog::buttonClicked, this, &MainWindow::dialogButtonClicked);
 
         killer = NULL;

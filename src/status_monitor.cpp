@@ -46,7 +46,7 @@ StatusMonitor::StatusMonitor(int tab_index)
     processSentBytes = new QMap<int, long>();
     processWriteKbs = new QMap<int, unsigned long>();
     processCpuPercents = new QMap<int, double>();
-    tabName = "应用程序";
+    tabName = tr("Applications");
     totalRecvBytes = 0;
     totalRecvKbs = 0;
     totalSentBytes = 0;
@@ -104,7 +104,7 @@ StatusMonitor::~StatusMonitor()
 void StatusMonitor::switchToAllProcess()
 {
     filterType = AllProcess;
-    tabName = "所有进程";
+    tabName = tr("All processes");
 
     updateStatus();
 }
@@ -112,7 +112,7 @@ void StatusMonitor::switchToAllProcess()
 void StatusMonitor::switchToOnlyGui()
 {
     filterType = OnlyGUI;
-    tabName = "应用程序";
+    tabName = tr("Applications");
 
     updateStatus();
 }
@@ -120,7 +120,7 @@ void StatusMonitor::switchToOnlyGui()
 void StatusMonitor::switchToOnlyMe()
 {
     filterType = OnlyMe;
-    tabName = "我的进程";
+    tabName = tr("My processes");
 
     updateStatus();
 }

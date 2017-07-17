@@ -85,25 +85,25 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int s
     processView->setColumnSortingAlgorithms(alorithms, sortingIndex, sortingOrder);
     processView->setSearchAlgorithm(&ProcessItem::search);
 
-    killProcessDialog = new DDialog(QString("结束进程"), QString("结束进程会有丢失数据的风险\n您确定要结束选中的进程吗？"));
+    killProcessDialog = new DDialog(QString(tr("End process")), QString("Ending this process may cause data loss.\nAre you sure to continue?"));
     killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
-    killProcessDialog->addButton(QString("取消"), false, DDialog::ButtonNormal);
-    killProcessDialog->addButton(QString("结束进程"), true, DDialog::ButtonNormal);
+    killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+    killProcessDialog->addButton(QString(tr("End process")), true, DDialog::ButtonNormal);
     connect(killProcessDialog, &DDialog::buttonClicked, this, &ProcessManager::dialogButtonClicked);
     
     actionPids = new QList<int>();
 
     rightMenu = new QMenu();
     rightMenu->setStyle(QStyleFactory::create("dlight"));
-    killAction = new QAction("结束进程", this);
+    killAction = new QAction(tr("End process"), this);
     connect(killAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
-    pauseAction = new QAction("暂停进程", this);
+    pauseAction = new QAction(tr("Suspend process"), this);
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
-    resumeAction = new QAction("继续进程", this);
+    resumeAction = new QAction(tr("Resume process"), this);
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
-    openDirectoryAction = new QAction("查看进程命令", this);
+    openDirectoryAction = new QAction(tr("View process command"), this);
     connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
-    attributesAction = new QAction("属性", this);
+    attributesAction = new QAction(tr("Properties"), this);
     connect(attributesAction, &QAction::triggered, this, &ProcessManager::showAttributes);
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
@@ -268,7 +268,7 @@ void ProcessManager::stopProcesses()
 
 void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber)
 {
-    statusLabel->setText(QString("%1 (正在运行%2个应用进程和%3个系统进程)").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
+    statusLabel->setText(QString("%1 (%2 applications and %3 processes are running)").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
 }
 
 void ProcessManager::updateStatus(QList<ListItem*> items)

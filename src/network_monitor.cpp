@@ -158,7 +158,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     font.setWeight(QFont::Light);
     painter.setFont(font);
     painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, "网络");
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, tr("Network"));
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
@@ -205,10 +205,10 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, downloadRenderSize);
     QFontMetrics fm = painter.fontMetrics();
     
-    QString downloadTitle = QString("下载速度 %1").arg(formatBandwidth(totalRecvKbs));
-    QString downloadContent = QString("累计下载 %1").arg(formatByteCount(totalRecvBytes));
-    QString uploadTitle = QString("上传速度 %1").arg(formatBandwidth(totalSentKbs));
-    QString uploadContent = QString("累计上传 %1").arg(formatByteCount(totalSentBytes));
+    QString downloadTitle = QString("%1 %2").arg(tr("Download")).arg(formatBandwidth(totalRecvKbs));
+    QString downloadContent = QString("%1 %2").arg(tr("Total download")).arg(formatByteCount(totalRecvBytes));
+    QString uploadTitle = QString("%1 %2").arg(tr("Upload")).arg(formatBandwidth(totalSentKbs));
+    QString uploadContent = QString("%1 %2").arg(tr("Total upload")).arg(formatByteCount(totalSentBytes));
     int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
     
     painter.setOpacity(1);
