@@ -47,7 +47,10 @@ WindowManager::WindowManager(QObject *parent) : QObject(parent)
 
 WindowManager::~WindowManager()
 {
-    delete conn;
+    if (conn != nullptr) {
+        xcb_disconnect(conn);
+        conn = nullptr;
+    }
 }
 
 QList<int> WindowManager::getWindowFrameExtents(xcb_window_t window)
