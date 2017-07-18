@@ -52,6 +52,7 @@ public:
     void initTheme();
     void initThemeAction();
     void paintEvent(QPaintEvent *);
+    void adjustStatusBarWidth();
     
 public slots:
     void changeTheme(QString theme);

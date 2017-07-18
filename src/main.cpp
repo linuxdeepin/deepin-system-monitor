@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
         window.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         DUtility::moveToCenter(&window);
         window.show();
+        window.adjustStatusBarWidth();
 
         return app.exec();
     }

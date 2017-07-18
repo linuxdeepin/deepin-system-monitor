@@ -42,11 +42,11 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
     settings = new Settings(this);
     settings->init();
-    
+
     // Init window size.
     int width = Constant::WINDOW_MIN_WIDTH;
     int height = Constant::WINDOW_MIN_HEIGHT;
-    
+
     if (!settings->getOption("window_width").isNull()) {
         width = settings->getOption("window_width").toInt();
     }
@@ -54,7 +54,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     if (!settings->getOption("window_height").isNull()) {
         height = settings->getOption("window_height").toInt();
     }
-    
+
     this->resize(width, height);
     
     // Init.
@@ -169,16 +169,7 @@ QList<bool> MainWindow::getColumnHideFlags()
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::WindowStateChange) {
-        QRect rect = QApplication::desktop()->screenGeometry();
-
-        // Just change status monitor width when screen width is more than 1024.
-        if (rect.width() * 0.2 > Constant::STATUS_BAR_WIDTH) {
-            if (windowState() == Qt::WindowMaximized) {
-                statusMonitor->setFixedWidth(rect.width() * 0.2);
-            } else {
-                statusMonitor->setFixedWidth(Constant::STATUS_BAR_WIDTH);
-            }
-        }
+        adjustStatusBarWidth();
     } else if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_F) {
@@ -190,7 +181,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
         if (this->rect().width() > Constant::WINDOW_MIN_WIDTH) {
             settings->setOption("window_width", this->rect().width());
         }
-        
+
         if (this->rect().height() > Constant::WINDOW_MIN_HEIGHT) {
             settings->setOption("window_height", this->rect().height());
         }
@@ -345,14 +336,28 @@ void MainWindow::switchTheme()
     if (settings->getOption("theme_style") == "dark") {
         settings->setOption("theme_style", "light");
         DThemeManager::instance()->setTheme("light");
-        
+
         themeAction->setChecked(false);
     } else {
         settings->setOption("theme_style", "dark");
         DThemeManager::instance()->setTheme("dark");
-        
+
         themeAction->setChecked(true);
     }
 
     repaint();
+}
+
+void MainWindow::adjustStatusBarWidth()
+{
+    QRect rect = QApplication::desktop()->screenGeometry();
+
+    // Just change status monitor width when screen width is more than 1024.
+    if (rect.width() * 0.2 > Constant::STATUS_BAR_WIDTH) {
+        if (windowState() == Qt::WindowMaximized || this->rect().width() == rect.width()) {
+            statusMonitor->setFixedWidth(rect.width() * 0.2);
+        } else {
+            statusMonitor->setFixedWidth(Constant::STATUS_BAR_WIDTH);
+        }
+    }
 }
