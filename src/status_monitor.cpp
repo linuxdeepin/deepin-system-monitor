@@ -199,7 +199,8 @@ void StatusMonitor::updateStatus()
         int pid = (&i.second)->tid;
         double cpu = (*processCpuPercents)[pid];
 
-        std::string desktopFile = getDesktopFileFromName(name);
+        QString cmdline = Utils::getProcessCmdline(pid);
+        std::string desktopFile = getDesktopFileFromName(name, cmdline);
         QString title = findWindowTitle->getWindowTitle(pid);
         bool isGui = (title != "");
 

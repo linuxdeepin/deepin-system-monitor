@@ -96,6 +96,7 @@ namespace Utils {
     
     
     QMap<QString, QString> getProcessDescriptions();
+    QMap<QString, QString> getDesktopfileMap();
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
     QString formatBandwidth(double v);
@@ -112,7 +113,7 @@ namespace Utils {
     bool fileExists(QString path);
     bool getProcPidIO(int pid, ProcPidIO &io );
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &prevCpuTime, const unsigned long long &cpuTime);
-    std::string getDesktopFileFromName(QString procName);
+    std::string getDesktopFileFromName(QString procName, QString cmdline);
     qreal easeInOut(qreal x);
     qreal easeInQuad(qreal x);
     qreal easeInQuint(qreal x);

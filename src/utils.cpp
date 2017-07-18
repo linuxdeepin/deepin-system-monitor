@@ -47,6 +47,18 @@
 #include <unordered_set>
 
 namespace Utils {
+    QMap<QString, QString> desktopfileMaps = getDesktopfileMap();
+
+    QMap<QString, QString> getDesktopfileMap() {
+        QMap<QString, QString> map;
+
+        map["/opt/kingsoft/wps-office/office6/wps"] = "/usr/share/applications/wps-office-wps.desktop";
+        map["/opt/kingsoft/wps-office/office6/wpp"] = "/usr/share/applications/wps-office-wpp.desktop";
+        map["/opt/kingsoft/wps-office/office6/et"] = "/usr/share/applications/wps-office-et.desktop";
+
+        return map;
+    }
+
     QMap<QString, QString> processDescriptions = getProcessDescriptions();
 
     QMap<QString, QString> getProcessDescriptions() {
@@ -106,7 +118,6 @@ namespace Utils {
 
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     {
-
         std::ifstream in;
         in.open(desktopFile);
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
@@ -272,7 +283,8 @@ namespace Utils {
         if (temp.size()<1) {
             return "";
         }
-        return QString::fromStdString(temp);
+        
+        return QString::fromStdString(temp).trimmed();
     }
 
     /**
@@ -376,33 +388,37 @@ namespace Utils {
         return true;
     }
 
-    std::string getDesktopFileFromName(QString procName)
+    std::string getDesktopFileFromName(QString procName, QString cmdline)
     {
-        QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
-        std::string desktopFile;
+        if (desktopfileMaps.contains(cmdline)) {
+            return desktopfileMaps[cmdline].toStdString();
+        } else {
+            QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
+            std::string desktopFile;
 
-        // Convert to lower characters.
-        QString procname = procName.toLower();
-        
-        // Replace "_" instead "-", avoid some applications desktop file can't found, such as, sublime text.
-        procname.replace("_", "-");
-        
-        // Concat desktop file.
-        QString processFilename = procname + ".desktop";
+            // Convert to lower characters.
+            QString procname = procName.toLower();
 
-        if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
-            while(dir.hasNext()) {
-                if (dir.fileInfo().suffix() == "desktop") {
-                    if (dir.fileName().toLower().contains(processFilename)) {
-                        desktopFile = dir.filePath().toStdString();
-                        break;
+            // Replace "_" instead "-", avoid some applications desktop file can't found, such as, sublime text.
+            procname.replace("_", "-");
+
+            // Concat desktop file.
+            QString processFilename = procname + ".desktop";
+
+            if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
+                while(dir.hasNext()) {
+                    if (dir.fileInfo().suffix() == "desktop") {
+                        if (dir.fileName().toLower().contains(processFilename)) {
+                            desktopFile = dir.filePath().toStdString();
+                            break;
+                        }
                     }
+                    dir.next();
                 }
-                dir.next();
             }
-        }
 
-        return desktopFile;
+            return desktopFile;
+        }
     }
 
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &prevCpuTime, const unsigned long long &cpuTime)
@@ -466,7 +482,7 @@ namespace Utils {
         sscanf(buffer,
                "cpu  %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu",
                &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guestnice);
-        
+
         workTime = user + nice + system;
 
         // sum everything up (except guest and guestnice since they are already included
