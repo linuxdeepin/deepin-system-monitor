@@ -68,8 +68,8 @@ private:
     DDialog *killProcessDialog;
     InteractiveKill *killer;
     ProcessManager *processManager;
-    QAction *themeAction;
     QAction *killAction;
+    QAction *themeAction;
     QHBoxLayout *layout;
     QMenu *menu;
     QString backgroundColor;

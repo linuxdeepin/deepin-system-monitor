@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
 #include "settings.h"
 #include <QApplication>
 #include <QDir>
@@ -78,6 +79,14 @@ void Settings::init()
         
     if (getOption("theme_style").isNull()) {
         setOption("theme_style", "light");
+    }
+    
+    if (getOption("window_width").isNull()) {
+        setOption("window_width", Constant::WINDOW_MIN_WIDTH);
+    }
+
+    if (getOption("window_height").isNull()) {
+        setOption("window_height", Constant::WINDOW_MIN_HEIGHT);
     }
 }
 

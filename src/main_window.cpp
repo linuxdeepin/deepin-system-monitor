@@ -42,7 +42,22 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
     settings = new Settings(this);
     settings->init();
+    
+    // Init window size.
+    int width = Constant::WINDOW_MIN_WIDTH;
+    int height = Constant::WINDOW_MIN_HEIGHT;
+    
+    if (!settings->getOption("window_width").isNull()) {
+        width = settings->getOption("window_width").toInt();
+    }
 
+    if (!settings->getOption("window_height").isNull()) {
+        height = settings->getOption("window_height").toInt();
+    }
+    
+    this->resize(width, height);
+    
+    // Init.
     if (this->titlebar()) {
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
@@ -164,13 +179,20 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
                 statusMonitor->setFixedWidth(Constant::STATUS_BAR_WIDTH);
             }
         }
-
     } else if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_F) {
             if (keyEvent->modifiers() == Qt::ControlModifier) {
                 toolbar->focusInput();
             }
+        }
+    } else if (event->type() == QEvent::Close) {
+        if (this->rect().width() > Constant::WINDOW_MIN_WIDTH) {
+            settings->setOption("window_width", this->rect().width());
+        }
+        
+        if (this->rect().height() > Constant::WINDOW_MIN_HEIGHT) {
+            settings->setOption("window_height", this->rect().height());
         }
     }
 

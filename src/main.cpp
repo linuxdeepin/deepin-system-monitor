@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "constant.h"
 #include "main_window.h"
 #include "network_traffic_filter.h"
 #include "utils.h"
@@ -30,9 +31,9 @@
 #include <QDesktopWidget>
 #include <dutility.h>
 #include <iostream>
-#include <unistd.h>
 #include <sys/types.h>
 #include <thread>
+#include <unistd.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
 
         MainWindow window;
         
-        window.setMinimumSize(QSize(1024, 700));
+        window.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         DUtility::moveToCenter(&window);
         window.show();
 
