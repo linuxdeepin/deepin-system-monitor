@@ -71,11 +71,11 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         this->setCentralWidget(layoutWidget);
 
-        int tab_index = settings->getOption("process_tab_index").toInt();
+        int tabIndex = settings->getOption("process_tab_index").toInt();
 
-        processManager = new ProcessManager(tab_index, getColumnHideFlags(), getSortingIndex(), getSortingOrder());
+        processManager = new ProcessManager(tabIndex, getColumnHideFlags(), getSortingIndex(), getSortingOrder());
         processManager->getProcessView()->installEventFilter(this);
-        statusMonitor = new StatusMonitor(tab_index);
+        statusMonitor = new StatusMonitor(tabIndex);
 
         connect(toolbar, &Toolbar::pressEsc, processManager, &ProcessManager::focusProcessView);
         connect(toolbar, &Toolbar::pressTab, processManager, &ProcessManager::focusProcessView);

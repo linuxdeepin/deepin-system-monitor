@@ -42,7 +42,7 @@ class ProcessManager : public QWidget
     Q_OBJECT
     
 public:
-    ProcessManager(int tab_index, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder);
+    ProcessManager(int tabIndex, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder);
     ~ProcessManager();
     
     ProcessView* getProcessView();

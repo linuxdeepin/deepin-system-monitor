@@ -40,7 +40,7 @@ DUTIL_USE_NAMESPACE
 
 using namespace Utils;
 
-ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder)
+ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder)
 {
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -64,7 +64,7 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int s
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessManager::changeTheme);
     
-    processSwitchTab = new ProcessSwitchTab(tab_index);
+    processSwitchTab = new ProcessSwitchTab(tabIndex);
     
     connect(processSwitchTab, &ProcessSwitchTab::activeTab, this, &ProcessManager::activeTab);
     

@@ -34,7 +34,7 @@
 
 using namespace Utils;
 
-StatusMonitor::StatusMonitor(int tab_index)
+StatusMonitor::StatusMonitor(int tabIndex)
 {
     // Init size.
     setFixedWidth(Constant::STATUS_BAR_WIDTH);
@@ -46,7 +46,18 @@ StatusMonitor::StatusMonitor(int tab_index)
     processSentBytes = new QMap<int, long>();
     processWriteKbs = new QMap<int, unsigned long>();
     processCpuPercents = new QMap<int, double>();
-    tabName = tr("Applications");
+    
+    if (tabIndex == 0) {
+        tabName = tr("Applications");
+        filterType = OnlyGUI;
+    } else if (tabIndex == 1) {
+        tabName = tr("My processes");
+        filterType = OnlyMe;
+    } else {
+        tabName = tr("All processes");
+        filterType = AllProcess;
+    }
+    
     totalRecvBytes = 0;
     totalRecvKbs = 0;
     totalSentBytes = 0;
@@ -56,14 +67,6 @@ StatusMonitor::StatusMonitor(int tab_index)
     prevTotalCpuTime = 0;
     prevWorkCpuTime = 0;
     currentUsername = qgetenv("USER");
-
-    if (tab_index == 0) {
-        filterType = OnlyGUI;
-    } else if (tab_index == 1) {
-        filterType = OnlyMe;
-    } else {
-        filterType = AllProcess;
-    }
 
     // Init widgets.
     layout = new QVBoxLayout(this);

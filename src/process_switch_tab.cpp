@@ -28,7 +28,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-ProcessSwitchTab::ProcessSwitchTab(int tab_index)
+ProcessSwitchTab::ProcessSwitchTab(int tabIndex)
 {
     onlyGuiDarkNormalImage = QImage(Utils::getQrcPath("only_gui_dark_normal.png"));
     onlyGuiDarkHoverImage = QImage(Utils::getQrcPath("only_gui_dark_hover.png"));
@@ -54,7 +54,7 @@ ProcessSwitchTab::ProcessSwitchTab(int tab_index)
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessSwitchTab::changeTheme);
     
-    activeIndex = tab_index;
+    activeIndex = tabIndex;
     
     installEventFilter(this);   // add event filter
     setMouseTracking(true);    // make MouseMove can response

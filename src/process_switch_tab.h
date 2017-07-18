@@ -32,7 +32,7 @@ class ProcessSwitchTab : public QWidget
     Q_OBJECT
     
 public:
-    ProcessSwitchTab(int tab_index);
+    ProcessSwitchTab(int tabIndex);
     
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
