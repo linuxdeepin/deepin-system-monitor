@@ -1,0 +1,15 @@
+[main]
+host = https://www.transifex.com
+minimum_perc = 80
+mode = developer
+
+[deepin-system-monitor.deepin-system-monitor]
+file_filter = translations/deepin-system-monitor_<lang>.ts
+source_file = translations/deepin-system-monitor.ts
+source_lang = en
+type = QT
+
+[deepin-system-monitor.desktop]
+source_file = debian/deepin-system-monitor.desktop
+source_lang = en
+type = DESKTOP
