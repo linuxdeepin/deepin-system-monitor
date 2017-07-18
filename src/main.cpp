@@ -30,6 +30,8 @@
 #include <QDesktopWidget>
 #include <dutility.h>
 #include <iostream>
+#include <unistd.h>
+#include <sys/types.h>
 #include <thread>
 
 DWIDGET_USE_NAMESPACE
@@ -44,7 +46,8 @@ int main(int argc, char *argv[])
 
     DApplication app(argc, argv);
 
-    if (app.setSingleInstance("deepin-system-monitor")) {
+    const QString socket_path(QString("deepin-system-monitor_%1").arg(getuid()));
+    if (app.setSingleInstance(socket_path)) {
         app.loadTranslator();
         
         app.setOrganizationName("deepin");

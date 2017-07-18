@@ -59,7 +59,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
 
-    searchTimer = new QTimer();
+    searchTimer = new QTimer(this);
     searchTimer->setSingleShot(true);
     connect(searchTimer, &QTimer::timeout, this, &Toolbar::handleSearch);
 
@@ -68,8 +68,6 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
 
 Toolbar::~Toolbar()
 {
-    delete searchEdit;
-    delete searchTimer;
 }
 
 bool Toolbar::eventFilter(QObject *obj, QEvent *event)

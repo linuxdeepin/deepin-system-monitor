@@ -144,7 +144,7 @@ void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int 
 void ListView::setColumnHideFlags(QList<bool> toggleHideFlags, int visibleColumnIndex)
 {
     Q_ASSERT_X(!toggleHideFlags.contains(false), "toggleHideFlags", "at least have one 'false' in list.");
-    Q_ASSERT_X(toggleHideFlags.count() != columnTitles.count(), "toggleHideFlags", "hide flags length is not same as titles list.");
+    Q_ASSERT_X(toggleHideFlags.count() == columnTitles.count(), "toggleHideFlags", "hide flags length is not same as titles list.");
 
     alwaysVisibleColumn = visibleColumnIndex;
 

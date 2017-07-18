@@ -81,24 +81,19 @@ StatusMonitor::StatusMonitor(int tab_index)
     connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
 
     // Start timer.
-    updateStatusTimer = new QTimer();
+    updateStatusTimer = new QTimer(this);
     connect(updateStatusTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
     updateStatusTimer->start(updateDuration);
 }
 
 StatusMonitor::~StatusMonitor()
 {
-    delete cpuMonitor;
     delete findWindowTitle;
-    delete memoryMonitor;
-    delete networkMonitor;
     delete processRecvBytes;
     delete processSentBytes;
     delete processReadKbs;
     delete processWriteKbs;
     delete processCpuPercents;
-    delete updateStatusTimer;
-    delete layout;
 }
 
 void StatusMonitor::switchToAllProcess()

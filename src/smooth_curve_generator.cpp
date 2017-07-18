@@ -47,7 +47,6 @@ QPainterPath SmoothCurveGenerator::generateSmoothCurve(const QList<QPointF> &poi
 
 void SmoothCurveGenerator::calculateFirstControlPoints(double *&result, const double *rhs, int n) 
 {
-    result = new double[n];
     double *tmp = new double[n];
     double b = 2.0;
     result[0] = rhs[0] / b;
@@ -86,8 +85,8 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
     }
     
     // Calculate first Bezier control points
-    double *xs = 0;
-    double *ys = 0;
+    double *xs = new double[n];
+    double *ys = new double[n];
     double *rhsx = new double[n]; // Right hand side vector
     double *rhsy = new double[n]; // Right hand side vector
     
@@ -118,8 +117,8 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
         }
     }
     
-    delete xs;
-    delete ys;
+    delete[] xs;
+    delete[] ys;
     delete[] rhsx;
     delete[] rhsy;
 }
