@@ -227,7 +227,7 @@ void MainWindow::dialogButtonClicked(int index, QString)
 {
     if (index == 1) {
         if (killPid != -1) {
-            if (kill(killPid, SIGTERM) != 0) {
+            if (kill(killPid, SIGKILL) != 0) {
                 cout << "Kill failed." << endl;
             }
 

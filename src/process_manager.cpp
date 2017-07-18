@@ -174,7 +174,7 @@ void ProcessManager::killProcesses()
         // Resume process first, otherwise kill process too slow.
         kill(pid, SIGCONT);
         
-        if (kill(pid, SIGTERM) != 0) {
+        if (kill(pid, SIGKILL) != 0) {
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
         }
     }
