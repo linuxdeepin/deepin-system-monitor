@@ -85,7 +85,7 @@ ProcessManager::ProcessManager(int tab_index, QList<bool> columnHideFlags, int s
     processView->setColumnSortingAlgorithms(alorithms, sortingIndex, sortingOrder);
     processView->setSearchAlgorithm(&ProcessItem::search);
 
-    killProcessDialog = new DDialog(QString(tr("End process")), QString("Ending this process may cause data loss.\nAre you sure to continue?"));
+    killProcessDialog = new DDialog(QString(tr("End process")), QString(tr("Ending this process may cause data loss.\nAre you sure to continue?")));
     killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
     killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     killProcessDialog->addButton(QString(tr("End process")), true, DDialog::ButtonNormal);
@@ -268,7 +268,7 @@ void ProcessManager::stopProcesses()
 
 void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber)
 {
-    statusLabel->setText(QString("%1 (%2 applications and %3 processes are running)").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
+    statusLabel->setText((QString("%1 (") + tr("%2 applications and %3 processes are running") + ")").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
 }
 
 void ProcessManager::updateStatus(QList<ListItem*> items)

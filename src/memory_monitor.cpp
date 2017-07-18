@@ -185,7 +185,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
-        swapTitle = QString("%1 (%2)").arg(tr("Swap")).arg("Not enabled");
+        swapTitle = QString("%1 (%2)").arg(tr("Swap")).arg(tr("Not enabled"));
         swapContent = "";
     } else {
         swapTitle = QString("%1 (%2%)").arg(tr("Swap")).arg(QString::number(swapPercent * 100, 'f', 1));

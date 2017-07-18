@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>AttributesDialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
@@ -33,6 +48,11 @@
         <source>End application</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
@@ -42,6 +62,10 @@
     </message>
     <message>
         <source>Swap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -101,6 +125,15 @@
         <source>View process location</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ProcessView</name>
@@ -110,10 +143,6 @@
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -134,6 +163,10 @@
     </message>
     <message>
         <source>PID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
