@@ -76,6 +76,7 @@ LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst
 
+desktop.path = $$INSTROOT$$APPDIR
 translations.path = $$INSTROOT$$DSRDIR/translations
 
 isEmpty(TRANSLATIONS) {
@@ -87,7 +88,10 @@ TRANSLATIONS_COMPILED = $$TRANSLATIONS
 TRANSLATIONS_COMPILED ~= s/\.ts/.qm/g
 
 translations.files = $$TRANSLATIONS_COMPILED
-INSTALLS += translations
+desktop.files = deepin-system-monitor.desktop
+
+INSTALLS += translations desktop
+
 CONFIG *= update_translations release_translations
 
 CONFIG(update_translations) {
