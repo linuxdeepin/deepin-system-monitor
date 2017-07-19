@@ -6,3 +6,14 @@ GenericName=System Monitor
 Icon=deepin-system-monitor
 Name=Deepin System Monitor
 Type=Application
+
+
+# Translations
+Name[de]=Deepin System Monitor
+Icon[de]=deepin-system-monitor
+Comment[de]=Systemprozessstatus überwachen
+GenericName[de]=System Monitor
+Name[zh_CN]=深度系统监视器
+Icon[zh_CN]=deepin-system-monitor
+Comment[zh_CN]=监控系统进程状态
+GenericName[zh_CN]=系统监视器
