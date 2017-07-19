@@ -82,21 +82,31 @@ LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst
 
+OBJECTS_DIR=out
+MOC_DIR=out
+
+isEmpty(BINDIR):BINDIR=$${PREFIX}/bin
+isEmpty(ICONDIR):ICONDIR=$${PREFIX}/share/icons/hicolor/scalable/apps
+isEmpty(APPDIR):APPDIR=$${PREFIX}/share/applications
+isEmpty(DSRDIR):DSRDIR=$${PREFIX}/share/$${TARGET}
+isEmpty(DOCDIR):DOCDIR=$${PREFIX}/share/dman/$${TARGET}
 desktop.path = $$INSTROOT$$APPDIR
+icon.path = $$INSTROOT$$ICONDIR
+target.path = $$INSTROOT$$BINDIR
 translations.path = $$INSTROOT$$DSRDIR/translations
 
 isEmpty(TRANSLATIONS) {
      include(translations.pri)
-
 }
 
 TRANSLATIONS_COMPILED = $$TRANSLATIONS
 TRANSLATIONS_COMPILED ~= s/\.ts/.qm/g
 
-translations.files = $$TRANSLATIONS_COMPILED
 desktop.files = deepin-system-monitor.desktop
+icon.files = image/deepin-system-monitor.svg
+translations.files = $$TRANSLATIONS_COMPILED
 
-INSTALLS += translations desktop
+INSTALLS += desktop icon target translations
 
 CONFIG *= update_translations release_translations
 

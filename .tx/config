@@ -10,6 +10,6 @@ source_lang = en
 type = QT
 
 [deepin-system-monitor.desktop]
-source_file = debian/deepin-system-monitor.desktop
+source_file = deepin-system-monitor.desktop
 source_lang = en
 type = DESKTOP

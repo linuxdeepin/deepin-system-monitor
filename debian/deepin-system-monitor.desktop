@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=deepin-system-monitor
-Name[zh_CN]=深度系统监视器
-Icon=deepin-system-monitor
-Exec=deepin-system-monitor
-Terminal=false
-Categories=System;Monitor;
