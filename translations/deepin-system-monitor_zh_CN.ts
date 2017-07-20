@@ -47,7 +47,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>结束应用会有丢失数据的风险。您确定要结束选中的应用吗？</translation>
+        <translation>结束应用会有丢失数据的风险。
+您确定要结束选中的应用吗？</translation>
     </message>
     <message>
         <source>Cancel</source>
