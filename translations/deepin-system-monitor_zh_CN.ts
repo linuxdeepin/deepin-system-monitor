@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -133,7 +131,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>正在运行2%个应用程序和3%个系统进程</translation>
+        <translation>正在运行%2个应用程序和%3个系统进程</translation>
     </message>
 </context>
 <context>

@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do Processo</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Comando</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translation>Início</translation>
     </message>
 </context>
 <context>
@@ -47,7 +45,7 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Finalizar esta aplicação pode causar a perda de dados. Você tem certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -66,7 +64,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Não habilitado</translation>
     </message>
 </context>
 <context>
@@ -108,7 +106,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Finalizar esta aplicação pode causar a perda de dados. 
+Você tem certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -132,7 +131,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 aplicações e %3 processos em execução</translation>
     </message>
 </context>
 <context>

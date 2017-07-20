@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="bg">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"></translation>
+        <translation>Име на процес</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Команден ред</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translation>Време на стартиране</translation>
     </message>
 </context>
 <context>
@@ -47,7 +45,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Изключването на това приложение може да предизвика загуба на данни.
+Сигурен ли сте, че искате да продължите?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -66,7 +65,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Не е включено</translation>
     </message>
 </context>
 <context>
@@ -108,7 +107,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Изключването на този процес може да предизвика загуба на данни.
+Сигурен ли сте, че искате да продължите?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 програми и %3 процеса работят</translation>
     </message>
 </context>
 <context>
@@ -209,7 +209,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation type="unfinished"></translation>
+        <translation>Deepin Desktop Environment</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
@@ -221,7 +221,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
@@ -269,15 +269,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Демон на виртуалната файлова система в потребителски режим</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuse сървър на демона за виртуалната файлова система в потребителски режим</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network manager</source>
@@ -369,7 +369,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>

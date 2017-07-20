@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre del proceso</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Línea de comandos</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translation>Hora de inicio</translation>
     </message>
 </context>
 <context>
@@ -47,7 +45,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Finalizar esta aplicación puede causar pérdida de datos.
+¿Está seguro de que desea continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -62,11 +61,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Intercambio</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhabilitado</translation>
     </message>
 </context>
 <context>
@@ -108,7 +107,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Finalizar este proceso puede causar pérdida de datos.
+¿Está seguro de que desea continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 aplicaciones y %3 procesos están siendo ejecutados</translation>
     </message>
 </context>
 <context>
@@ -178,14 +178,14 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor del sistema de Deepin</translation>
+        <translation>Monitor del sistema Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor del sistema de Deepin</translation>
+        <translation>Monitor del sistema Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>

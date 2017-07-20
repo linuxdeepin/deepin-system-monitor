@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"></translation>
+        <translation>İşlem adı</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Komut satırı</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlama zamanı</translation>
     </message>
 </context>
 <context>
@@ -47,7 +45,7 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu uygulamayı sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz ?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -66,7 +64,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Etkin değil</translation>
     </message>
 </context>
 <context>
@@ -108,7 +106,7 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu işlemi sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz ?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -132,7 +130,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 uygulama ve %3 süreç çalışıyor</translation>
     </message>
 </context>
 <context>
@@ -174,18 +172,18 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Debian Sistem Monitörü, sezgisel ve güçlü bir sistem monitörüdür. Süreci CPU, bellek, ağ, disk ve diğer durumunu izleyebilir.</translation>
+        <translation>Debian Sistem İzleyicisi, sezgisel ve güçlü bir sistem monitörüdür. CPU, bellek, ağ, disk ve diğer süreçlerin durumunu izleyebilirsiniz.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin Sistem Monitorü</translation>
+        <translation>Deepin Sistem İzleyicisi</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin Sistem Monitorü</translation>
+        <translation>Deepin Sistem İzleyicisi</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>

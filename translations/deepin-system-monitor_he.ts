@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="he">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="he" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"></translation>
+        <translation>שם התהליך</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>שורת פקודה</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translation>מועד ההתחלה</translation>
     </message>
 </context>
 <context>
@@ -47,7 +45,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>סיום היישום עשוי לגרום לאיבוד מידע.
+להמשיך?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -66,7 +65,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>לא פעיל</translation>
     </message>
 </context>
 <context>
@@ -108,7 +107,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>סיום התהליך עשוי לגרום לאיבוד מידע.
+להמשיך?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 יישומים ו־%3 תהליכים פעילים</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"></translation>
+        <translation>צג המערכת של Deepin הוא צג מערכת ברור ורב עצמה. בצג מוצגים התהליכים, המעבד, הזיכרון, הרשת, הכונן וחיוויים נוספים.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -221,7 +221,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation type="unfinished"></translation>
+        <translation>סביבת שולחן העבודה של Deepin - תהליך הנעת הפעלה</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
@@ -229,7 +229,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation type="unfinished"></translation>
+        <translation>סביבת שולחן העבודה של Deepin - שירות נעילת מסך</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
@@ -237,15 +237,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation type="unfinished"></translation>
+        <translation>מחליף של מנהל החלונות של Deepin</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation type="unfinished"></translation>
+        <translation>התרעות של Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation type="unfinished"></translation>
+        <translation>סוכן הדפסה בענן של Deepin</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
@@ -257,11 +257,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>סוכן התאמת חלונות</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"></translation>
+        <translation>שירות DBus לסוכן התאמת חלונות</translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -269,15 +269,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>סוכן מערכת קבצים וירטואלית במצב משתמש</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>שרת Fuse של סוכן מערכת קבצים וירטואלית במצב משתמש</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"></translation>
+        <translation>תהליך סיוע של לקוח החנות של Deepin</translation>
     </message>
     <message>
         <source>Network manager</source>
@@ -285,7 +285,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation type="unfinished"></translation>
+        <translation>שירות ה־DBus של ערכת המדיניות</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
@@ -301,15 +301,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>סוכן DBus לשיטת קלט Fcitx</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>סוכן שיטת קלט Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"></translation>
+        <translation>לקוח מקומי של ShadowSocks</translation>
     </message>
     <message>
         <source>Sound service</source>
@@ -329,7 +329,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>מנהל שירות המערכת - סוכן ניהול התקנים</translation>
     </message>
     <message>
         <source>Disk daemon</source>
@@ -373,7 +373,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation type="unfinished"></translation>
+        <translation>ארגז חול של דפדפן Chrome</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>

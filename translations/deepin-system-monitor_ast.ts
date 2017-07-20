@@ -1,169 +1,169 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ast" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Název procesu</translation>
+        <translation>Nome del procesu</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Příkazový řádek</translation>
+        <translation>Llinia de comandos</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Začáteční čas</translation>
+        <translation>Tiempu d&apos;entamu</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Procesor</translation>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>ListView</name>
     <message>
         <source>No search result</source>
-        <translation>Žádný výsledek hledání</translation>
+        <translation>Nun hai resultaos de gueta</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Vynutit ukončení programu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tmavý vzhled</translation>
+        <translation>Tema escuru</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Ukončit program</translation>
+        <translation>Finar aplicación</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Ukončení tohoto programu může vést ke ztrátě dat.
-Jste si jistý, že chcete pokračovat?</translation>
+        <translation>Finar esta aplicación podría causar perda de datos.
+¿De xuru que quies siguir?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Encaboxar</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Paměť</translation>
+        <translation>Memoria</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Intercambéu</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nepovoleno</translation>
+        <translation>Nun s&apos;habilitó</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Síť</translation>
+        <translation>Rede</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Stahování</translation>
+        <translation>Descarga</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Celkem</translation>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nahrávání</translation>
+        <translation>Xuba</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Žádná odpověď</translation>
+        <translation>Ensin rempuesta</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Pozastavit</translation>
+        <translation>Suspendióse</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Ukončit proces</translation>
+        <translation>Finar procesu</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Ukončení tohoto procesu může vést ke ztrátě dat.
-Jste si jistý, že chcete pokračovat?</translation>
+        <translation>Finar esta aplicación podría causar perda de datos.
+¿De xuru que quies siguir?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Encaboxar</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Pozastavit proces</translation>
+        <translation>Suspender procesu</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Obnovit proces</translation>
+        <translation>Resumir procesu</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Zobrazit umístění procesu</translation>
+        <translation>Ver allugamientu del procesu</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Vlastnosti</translation>
+        <translation>Propiedaes</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>Běží %2 programy a %3 procesy</translation>
+        <translation>%2 aplicaciones y %3 procesos tán n&apos;execución</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Název</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Procesor</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Paměť</translation>
+        <translation>Memoria</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zápis na disk</translation>
+        <translation>Escritura en discu</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Čtení z disku</translation>
+        <translation>Llectura en discu</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Stahování</translation>
+        <translation>Descarga</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nahrávání</translation>
+        <translation>Xuba</translation>
     </message>
     <message>
         <source>PID</source>
@@ -174,246 +174,246 @@ Jste si jistý, že chcete pokračovat?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Sledování systému je lehce ovladatelný a schopný sledovač systému. Může sledovat procesy procesoru, paměť, síť, disk a další stavy.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Sledování systému</translation>
+        <translation>Monitor del sistema Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Sledování systému</translation>
+        <translation>Monitor del sistema Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Prostředí plochy - služba zahájení procesu</translation>
+        <translation>Monitor del sistema Deepin - Procesu del serviciu d&apos;aniciu</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Prostředí plochy - plocha</translation>
+        <translation>Monitor del sistema Deepin - Escritoriu</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Prostředí plochy - Polkit proxy</translation>
+        <translation>Monitor del sistema Deepin - Proxy de Polkit</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Prostředí plochy - spouštěč</translation>
+        <translation>Monitor del sistema Deepin - Llanzador</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Prostředí plochy - panel</translation>
+        <translation>Monitor del sistema Deepin - Barra d&apos;anclaxe</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Prostředí plochy - zobrazení obrazovky</translation>
+        <translation>Monitor del sistema Deepin - Pantalla</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Prostředí plochy - démon</translation>
+        <translation>Monitor del sistema Deepin - Degorriu</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Prostředí plochy - démon sezení</translation>
+        <translation>Monitor del sistema Deepin - Degorriu de sesión</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Prostředí plochy - sezení</translation>
+        <translation>Monitor del sistema Deepin - Procesu d&apos;aniciu de sesión</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Démon správce souborů</translation>
+        <translation>Degorriu del xestor Deepin de ficheros</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Prostředí plochy - služba uzamknutí obrazovky</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Serviciu de bloquéu de pantalla</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Správce oken</translation>
+        <translation>Xestor Deepin de ventanes</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Přepínač správce oken</translation>
+        <translation>Conmutador del xestor Deepin de ventanes</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Oznámení</translation>
+        <translation>Avisu de Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Agent pro serverový tisk</translation>
+        <translation>Axente Deepin d&apos;imprentación na ñube</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Služba nabídky</translation>
+        <translation>Serviciu del menú Deepín</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Démon obchodu</translation>
+        <translation>Degorriu Deepin d&apos;almacenamientu </translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Démon shody oken</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Služba DBus démona shody oken</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>Agent SSH</translation>
+        <translation>Axente SSH</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Démon virtuálního souborového systému uživatelského režimu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Server Fuse démona virtuálního souborového systému uživatelského režimu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Pomocný proces klienta pro Obchod</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Správce sítě</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>Služba DBus PolicyKit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Démon služby sdílení souborů</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>X service</source>
-        <translation>Služba X</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Metoda vstupu Fcitx</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Démon DBus vstupní metody Fcitx</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Démon vstupní metody Sogou</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>Místní klient ShadowSocks</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Služba zvuku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Tiskový démon</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Lehký správce zobrazení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Správce systémové služby</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Správce systémové služby - démon správy zařízení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Diskový démon</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Démon účtu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>Démon DBus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Démon události myši</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>Služba DConf</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Démon Gnome s klíčovými slovy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Démon Bluetooth</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Démon energie</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Správce zařízení modemu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Služba tisku zásobníka systému</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Pískoviště prohlížeče Chrome</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Démon zařízení dotykové plochy Synaptics</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klepněte na program, který chcete ukončit</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Programy</translation>
+        <translation>Aplicaciones</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Můj proces</translation>
+        <translation>Los mios procesos</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Všechny procesy</translation>
+        <translation>Tolos procesos</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Hledat</translation>
+        <translation>Guetar</translation>
     </message>
 </context>
 <context>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation>Plocha</translation>
+        <translation>Escritoriu</translation>
     </message>
 </context>
 </TS>

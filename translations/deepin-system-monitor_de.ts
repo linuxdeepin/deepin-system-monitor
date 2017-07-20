@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -47,7 +45,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Beim beenden des Programms können Daten verloren gehen. Sind Sie sicher, dass Sie fortfahren möchten?</translation>
+        <translation>Beim beenden des Programms können Daten verloren gehen.
+Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -108,7 +107,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Beim beenden des Prozesses können Daten verloren gehen. Sind Sie sicher, dass Sie fortfahren möchten?</translation>
+        <translation>Beim beenden des Prozesses können Daten verloren gehen.
+Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
         <source>Cancel</source>

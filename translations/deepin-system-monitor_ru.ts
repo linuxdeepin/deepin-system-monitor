@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя процесса</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Командная строка</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translation>Время запуска</translation>
     </message>
 </context>
 <context>
@@ -47,7 +45,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершение работы этого приложения может привести к потере данных. 
+Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -66,7 +65,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Не запущен</translation>
     </message>
 </context>
 <context>
@@ -77,7 +76,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>Загрузить</translation>
+        <translation>Получение</translation>
     </message>
     <message>
         <source>Total</source>
@@ -85,7 +84,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Выгрузить</translation>
+        <translation>Отправка</translation>
     </message>
 </context>
 <context>
@@ -108,7 +107,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершение этого процесса может привести к потере данных. 
+Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 приложений и %3 процессов выполняется</translation>
     </message>
 </context>
 <context>
@@ -159,11 +159,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>Загрузка</translation>
+        <translation>Получение</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Выгрузка</translation>
+        <translation>Отправка</translation>
     </message>
     <message>
         <source>PID</source>
