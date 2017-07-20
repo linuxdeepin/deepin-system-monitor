@@ -188,18 +188,29 @@ void ProcessManager::openProcessDirectory()
     for (int pid : *actionPids) {
         QString cmdline = Utils::getProcessCmdline(pid);
         if (cmdline.size() > 0) {
-            cmdline = cmdline.split(QRegExp("\\s")).at(0);
+            // Found wine program location if cmdline starts with c://.
+            if (cmdline.startsWith("c:\\")) {
+                QString winePrefix = Utils::getProcessEnvironmentVariable(pid, "WINEPREFIX");
+                cmdline = cmdline.replace("\\", "/").replace("c:/", "/drive_c/");
+                
+                DDesktopServices::showFileItem(winePrefix + cmdline);
+            }
+            // Else find program location through 'which' command.
+            else {
+                cmdline = cmdline.split(QRegExp("\\s")).at(0);
+            
+                QProcess whichProcess;
+                QString exec = "which";
+                QStringList params;
+                params << cmdline;
+                whichProcess.start(exec, params);
+                whichProcess.waitForFinished();
+                QString output(whichProcess.readAllStandardOutput());
 
-            QProcess whichProcess;
-            QString exec = "which";
-            QStringList params;
-            params << cmdline;
-            whichProcess.start(exec, params);
-            whichProcess.waitForFinished();
-            QString output(whichProcess.readAllStandardOutput());
-
-            QString processPath = output.split("\n")[0];
-            DDesktopServices::showFileItem(processPath);
+                QString processPath = output.split("\n")[0];
+                DDesktopServices::showFileItem(processPath);
+            }
+            
         }
     }
 

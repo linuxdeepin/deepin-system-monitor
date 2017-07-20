@@ -265,6 +265,34 @@ namespace Utils {
         return QDir(dir.filePath("image")).filePath(imageName);
     }
 
+    QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)  
+    {
+        std::string temp;
+        try {
+            std::fstream fs;
+            fs.open("/proc/"+std::to_string((long)pid)+"/environ", std::fstream::in);
+            std::getline(fs,temp);
+            fs.close();
+        } catch(std::ifstream::failure e) {
+            return "FAILED TO READ PROC";
+        }
+
+        // change \0 to ' '
+        std::replace(temp.begin(),temp.end(),'\0','\n');
+
+        if (temp.size()<1) {
+            return "";
+        }
+        
+        foreach (auto environmentVariable, QString::fromStdString(temp).trimmed().split("\n")) {
+            if (environmentVariable.startsWith(environmentName)) {
+                return environmentVariable.remove(0, QString("%1=").arg(environmentName).length());
+            }
+        }
+        
+        return "";
+    }
+    
     QString getProcessCmdline(pid_t pid)
     {
         std::string temp;
