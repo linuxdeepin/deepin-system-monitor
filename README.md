@@ -6,6 +6,8 @@ Thanks a lot for [Lily Rivers](https://github.com/VioletDarkKitty/system-monito
 
 ## Dependencies
 
+* sudo apt install libpcap-dev libncurses5-dev libprocps4-dev libxtst-dev
+
 ## Installation
 
 * mkdir build
@@ -13,11 +15,14 @@ Thanks a lot for [Lily Rivers](https://github.com/VioletDarkKitty/system-monito
 * qmake ..
 * make
 * sudo setcap cap_kill,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+ep ./deepin-system-monitor
-* ./deepin-system-monitor
 
 ## Usage
 
+* ./deepin-system-monitor
+
 ## Config file
+
+* ~/.config/deepin/deepin-system-monitor/config.conf
 
 ## Getting help
 
