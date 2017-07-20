@@ -284,9 +284,9 @@ void StatusMonitor::updateStatus()
 
     // Update memory status.
     if (kb_swap_total > 0.0)  {
-        updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, kb_swap_used * 1024, kb_swap_total * 1024);
+        updateMemoryStatus((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024, kb_swap_used * 1024, kb_swap_total * 1024);
     } else {
-        updateMemoryStatus(kb_main_used * 1024, kb_main_total * 1024, 0, 0);
+        updateMemoryStatus((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024, 0, 0);
     }
 
     // Update network status.
