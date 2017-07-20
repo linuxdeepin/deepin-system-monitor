@@ -26,8 +26,8 @@
 
 namespace Constant {
     const int STATUS_BAR_WIDTH = 280;
-    const int WINDOW_MIN_WIDTH = 1024;
-    const int WINDOW_MIN_HEIGHT = 700;
+    const int WINDOW_MIN_WIDTH = 900;
+    const int WINDOW_MIN_HEIGHT = 620;
 };
 
 #endif

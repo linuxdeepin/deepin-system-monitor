@@ -66,7 +66,7 @@ void Settings::init()
     }
     
     if (getOption("process_columns").isNull()) {
-        setOption("process_columns", "name,cpu,memory,disk_write,disk_read,download,upload,pid");
+        setOption("process_columns", "name,cpu,memory,download,upload,pid");
     }
     
     if (getOption("process_sorting_column").isNull()) {
