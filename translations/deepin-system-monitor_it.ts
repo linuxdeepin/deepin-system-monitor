@@ -1,17 +1,19 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -45,7 +47,7 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -64,7 +66,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -106,7 +108,7 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -130,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
