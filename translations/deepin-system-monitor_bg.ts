@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="bg">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -221,7 +223,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
@@ -277,7 +279,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network manager</source>
@@ -369,7 +371,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>

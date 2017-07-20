@@ -86,6 +86,7 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     processView->setSearchAlgorithm(&ProcessItem::search);
 
     killProcessDialog = new DDialog(QString(tr("End process")), QString(tr("Ending this process may cause data loss.\nAre you sure to continue?")));
+    killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
     killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
     killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     killProcessDialog->addButton(QString(tr("End process")), true, DDialog::ButtonNormal);
