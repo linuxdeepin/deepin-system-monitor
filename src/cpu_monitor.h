@@ -64,17 +64,17 @@ private:
     int animationIndex = 0;
     int cpuRenderMaxHeight = 45;
     int iconPadding = 0;
-    int iconRenderOffsetY = 195;
+    int iconRenderOffsetY = 185;
     int paddingRight = 10;
-    int percentRenderOffsetY = 157;
+    int percentRenderOffsetY = 147;
     int pointsNumber = 24;
     int ringRadius = 90;
-    int ringRenderOffsetY = 100;
+    int ringRenderOffsetY = 90;
     int ringWidth = 8;
     int titleAreaPaddingX = 5;
-    int titleRenderOffsetY = 190;
+    int titleRenderOffsetY = 180;
     int waveformsRenderOffsetX = 80;
-    int waveformsRenderOffsetY = 110;
+    int waveformsRenderOffsetY = 100;
 };
 
 #endif    
