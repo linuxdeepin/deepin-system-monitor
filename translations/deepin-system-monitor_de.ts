@@ -67,7 +67,7 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nicht aktiviert</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -380,6 +380,14 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     <message>
         <source>Synaptics touchpad device daemon</source>
         <translation>Synaptics Touchpadgerätedienst</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Auslagerungsdatei</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

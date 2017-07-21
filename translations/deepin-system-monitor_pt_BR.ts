@@ -66,7 +66,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Não habilitado</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -379,6 +379,14 @@ Você tem certeza que quer continuar?</translation>
     <message>
         <source>Synaptics touchpad device daemon</source>
         <translation>Dispositivo Synaptics touchpad</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Swap</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

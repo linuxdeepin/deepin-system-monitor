@@ -67,7 +67,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Non attivo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -380,6 +380,14 @@ Sicuro di voler terminarlo?</translation>
     <message>
         <source>Synaptics touchpad device daemon</source>
         <translation>Demone dispositivo touchpad Synaptics</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Swap</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

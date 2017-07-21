@@ -67,7 +67,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не запущен</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -380,6 +380,14 @@ Are you sure to continue?</source>
     <message>
         <source>Synaptics touchpad device daemon</source>
         <translation>демон Сенсорной панели synaptic</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Раздел подкачки</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

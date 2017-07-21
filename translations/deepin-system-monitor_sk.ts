@@ -67,7 +67,7 @@ Naozaj chcete pokračovať?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nie je povolené</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -380,6 +380,14 @@ Naozaj chcete pokračovať?</translation>
     <message>
         <source>Synaptics touchpad device daemon</source>
         <translation>Démon zariadenia Synaptics touchpad</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Swap</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

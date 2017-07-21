@@ -66,7 +66,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Etkin değil</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -378,6 +378,14 @@ Are you sure to continue?</source>
     <message>
         <source>Synaptics touchpad device daemon</source>
         <translation>Synaptics touchpad aygıt programı</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Takas</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
