@@ -42,7 +42,9 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CpuMonitor::changeTheme);
     
-    setFixedSize(Constant::STATUS_BAR_WIDTH, 250);
+    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    setFixedSize(statusBarMaxWidth, 250);
+    waveformsRenderOffsetX = (statusBarMaxWidth - 140) / 2;
 
     cpuPercents = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
@@ -184,7 +186,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         percent / 100
         );
 
-    painter.translate(waveformsRenderOffsetX - paddingRight, waveformsRenderOffsetY);
+    painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
     painter.scale(1, -1);
 
     painter.setPen(QPen(QColor("#2CA7F8"), 2));

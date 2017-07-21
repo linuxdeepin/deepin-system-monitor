@@ -49,7 +49,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     iconLabel->setPixmap(iconPixmap);
 
     searchEdit = new DSearchEdit();
-    searchEdit->setFixedWidth(Constant::STATUS_BAR_WIDTH);
+    searchEdit->setFixedWidth(280);
     searchEdit->setPlaceHolder(tr("Search"));
     searchEdit->getLineEdit()->installEventFilter(this);
     

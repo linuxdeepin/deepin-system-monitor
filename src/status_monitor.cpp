@@ -37,7 +37,7 @@ using namespace Utils;
 StatusMonitor::StatusMonitor(int tabIndex)
 {
     // Init size.
-    setFixedWidth(Constant::STATUS_BAR_WIDTH);
+    setFixedWidth(Utils::getStatusBarMaxWidth());
 
     // Init attributes.
     findWindowTitle = new FindWindowTitle();

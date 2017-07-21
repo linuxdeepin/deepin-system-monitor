@@ -42,8 +42,12 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &NetworkMonitor::changeTheme);
     
-    setFixedWidth(Constant::STATUS_BAR_WIDTH);
+    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(190);
+    
+    pointsNumber = int(statusBarMaxWidth / 5.4);
+    qDebug() << pointsNumber;
 
     downloadSpeeds = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
@@ -256,7 +260,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
                      Qt::AlignLeft | Qt::AlignTop,
                      uploadContent);
 
-    painter.translate(downloadWaveformsRenderOffsetX, downloadWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, downloadWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     painter.setPen(QPen(QColor(downloadColor), 1.6));

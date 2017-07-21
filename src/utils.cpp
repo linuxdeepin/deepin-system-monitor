@@ -116,6 +116,14 @@ namespace Utils {
         return map;
     }
 
+    int getStatusBarMaxWidth() 
+    {
+        int offset = 171;
+        QString swapTitle = QString("%1 (%2)").arg(QObject::tr("Swap")).arg(QObject::tr("Not enabled"));
+        
+        return std::max(280, getRenderSize(9, swapTitle).width() + offset);
+    }
+    
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     {
         std::ifstream in;

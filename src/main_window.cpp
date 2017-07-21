@@ -354,11 +354,12 @@ void MainWindow::adjustStatusBarWidth()
     QRect rect = QApplication::desktop()->screenGeometry();
 
     // Just change status monitor width when screen width is more than 1024.
-    if (rect.width() * 0.2 > Constant::STATUS_BAR_WIDTH) {
+    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    if (rect.width() * 0.2 > statusBarMaxWidth) {
         if (windowState() == Qt::WindowMaximized) {
             statusMonitor->setFixedWidth(rect.width() * 0.2);
         } else {
-            statusMonitor->setFixedWidth(Constant::STATUS_BAR_WIDTH);
+            statusMonitor->setFixedWidth(statusBarMaxWidth);
         }
     }
 }

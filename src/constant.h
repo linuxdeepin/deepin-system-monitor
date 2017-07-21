@@ -25,7 +25,6 @@
 #define CONSTANT_H
 
 namespace Constant {
-    const int STATUS_BAR_WIDTH = 280;
     const int WINDOW_MIN_WIDTH = 900;
     const int WINDOW_MIN_HEIGHT = 620;
 };

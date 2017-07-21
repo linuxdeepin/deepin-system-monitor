@@ -42,7 +42,9 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MemoryMonitor::changeTheme);
     
-    setFixedWidth(Constant::STATUS_BAR_WIDTH);
+    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    setFixedWidth(statusBarMaxWidth);
+    ringCenterPointerX = statusBarMaxWidth - 90;
 
     usedMemory = 0;
     totalMemory = 0;

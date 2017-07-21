@@ -95,6 +95,7 @@ namespace Utils {
     } NetworkStatus;
     
     
+    int getStatusBarMaxWidth();
     QMap<QString, QString> getProcessDescriptions();
     QMap<QString, QString> getDesktopfileMap();
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);

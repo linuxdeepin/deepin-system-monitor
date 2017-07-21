@@ -73,7 +73,7 @@ private:
     int ringWidth = 8;
     int titleAreaPaddingX = 5;
     int titleRenderOffsetY = 180;
-    int waveformsRenderOffsetX = 80;
+    int waveformsRenderOffsetX;
     int waveformsRenderOffsetY = 100;
 };
 
