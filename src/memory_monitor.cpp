@@ -118,8 +118,11 @@ void MemoryMonitor::render()
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
-    if ((formatByteCount(uMemory) != formatByteCount(usedMemory)) ||
-        (formatByteCount(uSwap) != formatByteCount(usedSwap))) {
+    if ((uMemory != usedMemory) ||
+        (tMemory != totalMemory) ||
+        (uSwap != usedSwap) || 
+        (tSwap != totalSwap)
+        ) {
         prevUsedMemory = usedMemory;
         prevUsedSwap = usedSwap;
 
