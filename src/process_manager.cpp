@@ -33,6 +33,7 @@
 #include <QList>
 #include <QProcess>
 #include <QStyleFactory>
+#include <QToolTip>
 #include <proc/sysinfo.h>
 #include <signal.h>
 
@@ -115,6 +116,7 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     rightMenu->addAction(attributesAction);
 
     connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
+    connect(processView, &ProcessView::hoverItem, this, &ProcessManager::hoverItem, Qt::QueuedConnection);
 }
 
 ProcessManager::~ProcessManager()
@@ -167,6 +169,23 @@ void ProcessManager::focusProcessView()
 void ProcessManager::handleSearch(QString searchContent)
 {
     processView->search(searchContent);
+}
+
+void ProcessManager::hoverItem(QPoint, ListItem* item, int columnIndex)
+{
+    ProcessItem *processItem = static_cast<ProcessItem*>(item);
+    
+    if (columnIndex != 0 || processItem->isNameDisplayComplete()) {
+        QToolTip::hideText();  
+    } else {
+        if (QToolTip::text() == processItem->getDisplayName()) {
+            // QToolTip won't update position if tooltip text same as current one.
+            // So we add blank char at end to force tooltip update position.
+            QToolTip::showText(QCursor::pos(), processItem->getDisplayName() + " "); 
+        } else {
+            QToolTip::showText(QCursor::pos(), processItem->getDisplayName()); 
+        }
+    }
 }
 
 void ProcessManager::killProcesses()

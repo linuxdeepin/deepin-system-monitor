@@ -200,6 +200,7 @@ signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);
     void changeColumnVisible(int index, bool visible, QList<bool> columnVisibles);
     void changeSortingStatus(int index, bool sortingOrder);
+    void hoverItem(QPoint pos, ListItem* item, int columnIndex);
     
 private slots:
     void scrollAnimation();
@@ -235,6 +236,7 @@ private:
     void startScrollAnimation();
     void startScrollbarHideTimer();
     
+    ListItem *lastHoverItem;
     ListItem *lastSelectItem;
     QList<ListItem*> *listItems;
     QList<ListItem*> *renderItems;
@@ -255,6 +257,7 @@ private:
     int clipRadius;
     int defaultSortingColumn;
     int hideScrollbarDuration;
+    int lastHoverColumnIndex;
     int oldRenderOffset;
     int renderOffset;
     int rowHeight;
@@ -270,8 +273,8 @@ private:
     int scrollbarPadding;
     int titleArrowPadding;
     int titleHeight;
-    int titlePadding;
     int titleHoverColumn;
+    int titlePadding;
     int titlePressColumn;
 };
 

@@ -81,6 +81,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     renderItems = new QList<ListItem*>();
     selectionItems = new QList<ListItem*>();
     lastSelectItem = NULL;
+    lastHoverItem = NULL;
 
     mouseAtScrollArea = false;
     mouseDragScrollbar = false;
@@ -101,6 +102,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
 
 ListView::~ListView()
 {
+    delete lastHoverItem;
     delete lastSelectItem;
     delete listItems;
     delete renderItems;
@@ -121,13 +123,13 @@ void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int 
 {
     // Set column titles.
     columnTitles = titles;
-    
+
     // Calcuate column title widths.
     columnWidths.clear();
     QFont font;
     font.setPointSize(titleSize);
     QFontMetrics fm(font);
-    
+
     for (int i = 0; i < widths.length(); i++) {
         if (widths[i] == -1) {
             columnWidths << widths[i];
@@ -136,7 +138,7 @@ void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int 
             columnWidths << std::max(widths[i], renderTitleWidth);
         }
     }
-    
+
     // Set title height.
     titleHeight = height;
 }
@@ -565,7 +567,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
                     if (renderWidth > 0) {
                         if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
                             hoverColumn = columnCounter;
-                            
+
                             break;
                         }
 
@@ -576,11 +578,40 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
                 }
             }
         }
-        
+
         if (hoverColumn != titleHoverColumn) {
             titleHoverColumn = hoverColumn;
-            
+
             repaint();
+        } else {
+            int hoverItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
+
+            if (hoverItemIndex < (*renderItems).length()) {
+                ListItem *item = (*renderItems)[hoverItemIndex];
+
+                QList<int> renderWidths = getRenderWidths();
+
+                int columnCounter = 0;
+                int columnRenderX = 0;
+                for (int renderWidth:renderWidths) {
+                    if (renderWidth > 0) {
+                        if (mouseEvent->x() > columnRenderX && mouseEvent->x() < columnRenderX + renderWidth) {
+                            break;
+                        }
+
+                        columnRenderX += renderWidth;
+                    }
+
+                    columnCounter++;
+                }
+
+                if (lastHoverItem == NULL || !item->sameAs(lastHoverItem) || columnCounter != lastHoverColumnIndex) {
+                    lastHoverItem = item;
+                    lastHoverColumnIndex = columnCounter;
+
+                    hoverItem(this->mapToGlobal(mouseEvent->pos()), lastHoverItem, columnCounter);
+                }
+            }
         }
     }
 }
@@ -615,11 +646,11 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
 
                             defaultSortingColumn = columnCounter;
                             defaultSortingOrder = (*sortingOrderes)[columnCounter];
-                            
+
                             changeSortingStatus(defaultSortingColumn, defaultSortingOrder);
 
                             sortItemsByColumn(columnCounter, (*sortingOrderes)[columnCounter]);
-                            
+
                             if (columnCounter != titlePressColumn) {
                                 titlePressColumn = columnCounter;
                             }
@@ -836,7 +867,7 @@ void ListView::paintEvent(QPaintEvent *)
                     painter.setOpacity(1);
                     int arrowX = rect().x() + columnRenderX - titleArrowPadding - arrowUpNormalImage.width();
                     int arrowY = rect().y() + (titleHeight - arrowDownNormalImage.height()) / 2;
-                    
+
                     if (defaultSortingOrder) {
                         if (titlePressColumn == defaultSortingColumn) {
                             painter.drawImage(QPoint(arrowX, arrowY), arrowDownPressImage);
@@ -927,7 +958,7 @@ void ListView::paintEvent(QPaintEvent *)
 
     painter.setOpacity(frameOpacity);
     painter.drawPath(framePath);
-    
+
     // Draw scrollbar.
     if (mouseAtScrollArea) {
         paintScrollbar(&painter);
@@ -944,11 +975,11 @@ void ListView::paintScrollbar(QPainter *painter)
         // Init scrollbar opacity with scrollbar status.
         qreal barOpacitry = 0;
         qreal barFrameOpacitry = 0;
-        
+
         // Press.
         if (mouseDragScrollbar) {
             barOpacitry = scrollbarPressOpacity;
-                barFrameOpacitry = scrollbarFramePressOpacity;
+            barFrameOpacitry = scrollbarFramePressOpacity;
         } else {
             // Hover.
             if (mouseAtScrollArea) {

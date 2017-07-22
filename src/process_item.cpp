@@ -131,6 +131,8 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
         QFontMetrics fm(font);
         QString renderName = fm.elidedText(name, Qt::ElideRight, renderWidth);
         painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), renderWidth, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, renderName);
+        
+        displayNameComplete = fm.width(name) <= renderWidth;
     }
     // Draw CPU.
     else if (column == 1) {
@@ -402,6 +404,11 @@ int ProcessItem::getPid() const
 long ProcessItem::getMemory() const
 {
     return memory;
+}
+
+bool ProcessItem::isNameDisplayComplete() 
+{
+    return displayNameComplete;
 }
 
 void ProcessItem::mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus, NetworkStatus childNetworkStatus)

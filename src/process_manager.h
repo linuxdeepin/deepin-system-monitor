@@ -57,6 +57,7 @@ public slots:
     void dialogButtonClicked(int index, QString buttonText);
     void focusProcessView();
     void handleSearch(QString searchContent);
+    void hoverItem(QPoint pos, ListItem* item, int columnIndex);
     void initTheme();
     void killProcesses();
     void openProcessDirectory();

@@ -59,6 +59,7 @@ public:
     double getCPU() const;
     int getPid() const;
     long getMemory() const;
+    bool isNameDisplayComplete();
     void mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus, NetworkStatus childNetworkStatus);
     void setDiskStatus(DiskStatus dStatus);
     void setNetworkStatus(NetworkStatus nStatus);
@@ -79,6 +80,7 @@ private:
     QString selectLineColor;
     QString textColor;
     QString user;
+    bool displayNameComplete;
     char state;
     double cpu;
     double evenLineOpacity;
