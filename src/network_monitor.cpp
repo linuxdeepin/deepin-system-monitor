@@ -47,7 +47,6 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
     setFixedHeight(190);
     
     pointsNumber = int(statusBarMaxWidth / 5.4);
-    qDebug() << pointsNumber;
 
     downloadSpeeds = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
