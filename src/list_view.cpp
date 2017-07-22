@@ -82,6 +82,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     selectionItems = new QList<ListItem*>();
     lastSelectItem = NULL;
     lastHoverItem = NULL;
+    lastHoverColumnIndex = -1;
 
     mouseAtScrollArea = false;
     mouseDragScrollbar = false;
@@ -229,6 +230,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     // Init.
     QList<ListItem*> *newSelectionItems = new QList<ListItem*>();
     ListItem *newLastSelectionItem = NULL;
+    ListItem *newLastHoverItem = NULL;
 
     // Save selection items and last selection item.
     for (ListItem *item:items) {
@@ -239,10 +241,20 @@ void ListView::refreshItems(QList<ListItem*> items)
             }
         }
     }
+    
     if (lastSelectItem != NULL) {
         for (ListItem *item:items) {
             if (item->sameAs(lastSelectItem)) {
                 newLastSelectionItem = item;
+                break;
+            }
+        }
+    }
+    
+    if (lastHoverItem != NULL) {
+        for (ListItem *item:items) {
+            if (item->sameAs(lastHoverItem)) {
+                newLastHoverItem = item;
                 break;
             }
         }
@@ -263,6 +275,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     clearSelections();
     addSelections(*newSelectionItems, false);
     lastSelectItem = newLastSelectionItem;
+    lastHoverItem = newLastHoverItem;
 
     // Keep scroll position.
     renderOffset = adjustRenderOffset(renderOffset);
