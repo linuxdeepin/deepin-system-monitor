@@ -6,7 +6,7 @@ Thanks a lot for [Lily Rivers](https://github.com/VioletDarkKitty/system-monito
 
 ## Dependencies
 
-* sudo apt install libpcap-dev libncurses5-dev libprocps4-dev libxtst-dev
+* sudo apt install libpcap-dev libncurses5-dev libprocps-dev libxtst-dev
 
 ## Installation
 
