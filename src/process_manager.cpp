@@ -275,7 +275,7 @@ void ProcessManager::showAttributes()
         }
         
         AttributesDialog *dialog = new AttributesDialog(this, pid);
-        dialog->show();
+        dialog->exec();
     }
 
     actionPids->clear();
@@ -283,7 +283,7 @@ void ProcessManager::showAttributes()
 
 void ProcessManager::showKillProcessDialog()
 {
-    killProcessDialog->show();
+    killProcessDialog->exec();
 }
 
 void ProcessManager::stopProcesses()
