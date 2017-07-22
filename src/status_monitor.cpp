@@ -46,7 +46,7 @@ StatusMonitor::StatusMonitor(int tabIndex)
     processSentBytes = new QMap<int, long>();
     processWriteKbs = new QMap<int, unsigned long>();
     processCpuPercents = new QMap<int, double>();
-    
+
     if (tabIndex == 0) {
         tabName = tr("Applications");
         filterType = OnlyGUI;
@@ -57,16 +57,15 @@ StatusMonitor::StatusMonitor(int tabIndex)
         tabName = tr("All processes");
         filterType = AllProcess;
     }
-    
-    totalRecvBytes = 0;
-    totalRecvKbs = 0;
-    totalSentBytes = 0;
-    totalSentKbs = 0;
+
     totalCpuTime = 0;
     workCpuTime = 0;
     prevTotalCpuTime = 0;
     prevWorkCpuTime = 0;
     currentUsername = qgetenv("USER");
+    
+    prevTotalRecvBytes = 0;
+    prevTotalSentBytes = 0;
 
     // Init widgets.
     layout = new QVBoxLayout(this);
@@ -144,7 +143,7 @@ void StatusMonitor::updateStatus()
     prevWorkCpuTime = workCpuTime;
     prevTotalCpuTime = totalCpuTime;
     totalCpuTime = getTotalCpuTime(workCpuTime);
-    
+
     processCpuPercents->clear();
     if (prevProcesses.size()>0) {
         // we have previous proc info
@@ -153,7 +152,7 @@ void StatusMonitor::updateStatus()
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
                     (*processCpuPercents)[newItr.second.tid] = calculateCPUPercentage(&prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
-                    
+
                     break;
                 }
             }
@@ -289,31 +288,13 @@ void StatusMonitor::updateStatus()
         updateMemoryStatus((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024, 0, 0);
     }
 
-    // Update network status.
+    // Update process's network status.
     NetworkTrafficFilter::Update update;
 
     QMap<int, NetworkStatus> networkStatusSnapshot;
-    totalSentKbs = 0;
-    totalRecvKbs = 0;
-
+    
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-            long prevSentBytes = 0;
-            long prevRecvBytes = 0;
-
-            if (processSentBytes->contains(update.record.pid)) {
-                prevSentBytes = processSentBytes->value(update.record.pid);
-            }
-            if (processRecvBytes->contains(update.record.pid)) {
-                prevRecvBytes = processRecvBytes->value(update.record.pid);
-            }
-
-            totalSentKbs += update.record.sent_kbs;
-            totalRecvKbs += update.record.recv_kbs;
-
-            totalSentBytes += (update.record.sent_bytes - prevSentBytes);
-            totalRecvBytes += (update.record.recv_bytes - prevRecvBytes);
-            
             (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
             (*processRecvBytes)[update.record.pid] = update.record.recv_bytes;
 
@@ -354,7 +335,7 @@ void StatusMonitor::updateStatus()
     } else {
         updateCpuStatus(0);
     }
-    
+
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
         for (ListItem *item : items) {
@@ -380,7 +361,19 @@ void StatusMonitor::updateStatus()
     updateProcessStatus(items);
 
     // Update network status.
-    updateNetworkStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
+    if (prevTotalRecvBytes == 0) {
+        prevTotalRecvBytes = totalRecvBytes;
+        prevTotalSentBytes = totalSentBytes;
+        
+        Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
+        updateNetworkStatus(totalRecvBytes, totalSentBytes, 0, 0);
+    } else {
+        prevTotalRecvBytes = totalRecvBytes;
+        prevTotalSentBytes = totalSentBytes;
+        
+        Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
+        updateNetworkStatus(totalRecvBytes, totalSentBytes, (totalRecvBytes - prevTotalRecvBytes) / 1024.0, (totalSentBytes - prevTotalSentBytes) / 1024.0);
+    }
 
     // Update process number.
     updateProcessNumber(tabName, guiProcessNumber, systemProcessNumber);

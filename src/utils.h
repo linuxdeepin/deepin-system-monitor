@@ -142,6 +142,7 @@ namespace Utils {
     void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity);
     void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
     void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
+    void getNetworkBandWidth(unsigned long long int &receiveBytes, unsigned long long int &sendBytes);
     void passInputEvent(int wid);
     void removeChildren(QWidget *widget);
     void removeLayoutChild(QLayout *layout, int index);

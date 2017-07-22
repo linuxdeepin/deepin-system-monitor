@@ -89,11 +89,11 @@ private:
     QTimer *updateStatusTimer;
     QVBoxLayout *layout;
     StoredProcType prevProcesses;
-    float totalRecvKbs;
-    float totalSentKbs;
     int updateDuration = 2000;
-    long totalRecvBytes;
-    long totalSentBytes;
+    unsigned long long int totalRecvBytes;
+    unsigned long long int totalSentBytes;
+    unsigned long long int prevTotalRecvBytes;
+    unsigned long long int prevTotalSentBytes;
     unsigned long long totalCpuTime;
     unsigned long long prevTotalCpuTime;
     unsigned long long workCpuTime;

@@ -116,14 +116,14 @@ namespace Utils {
         return map;
     }
 
-    int getStatusBarMaxWidth() 
+    int getStatusBarMaxWidth()
     {
         int offset = 171;
         QString swapTitle = QString("%1 (%2)").arg(QObject::tr("Swap")).arg(QObject::tr("Not enabled"));
-        
+
         return std::max(280, getRenderSize(9, swapTitle).width() + offset);
     }
-    
+
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     {
         std::ifstream in;
@@ -273,7 +273,7 @@ namespace Utils {
         return QDir(dir.filePath("image")).filePath(imageName);
     }
 
-    QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)  
+    QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
     {
         std::string temp;
         try {
@@ -291,16 +291,16 @@ namespace Utils {
         if (temp.size()<1) {
             return "";
         }
-        
+
         foreach (auto environmentVariable, QString::fromStdString(temp).trimmed().split("\n")) {
             if (environmentVariable.startsWith(environmentName)) {
                 return environmentVariable.remove(0, QString("%1=").arg(environmentName).length());
             }
         }
-        
+
         return "";
     }
-    
+
     QString getProcessCmdline(pid_t pid)
     {
         std::string temp;
@@ -319,7 +319,7 @@ namespace Utils {
         if (temp.size()<1) {
             return "";
         }
-        
+
         return QString::fromStdString(temp).trimmed();
     }
 
@@ -623,6 +623,45 @@ namespace Utils {
         painter.setOpacity(1);
         painter.setPen(QPen(QColor(textColor)));
         painter.drawText(rect, Qt::AlignCenter, text);
+    }
+
+    void getNetworkBandWidth(unsigned long long int &receiveBytes, unsigned long long int &sendBytes)
+    {
+        char *buf;
+        static int bufsize;
+        FILE *devfd;
+
+        buf = (char *) calloc(255, 1);
+        bufsize = 255;
+        devfd = fopen("/proc/net/dev", "r");
+
+        // Ignore the first two lines of the file.
+        fgets(buf, bufsize, devfd);
+        fgets(buf, bufsize, devfd);
+
+        receiveBytes = 0;
+        sendBytes = 0;
+
+        while (fgets(buf, bufsize, devfd)) {
+            unsigned long long int rBytes, sBytes;
+            char *line = strdup(buf);
+
+            char *dev;
+            dev = strtok(line, ":");
+
+            // Filter lo (virtual network device). 
+            if (QString::fromStdString(dev).trimmed() != "lo") {
+                sscanf(buf + strlen(dev) + 2, "%llu %*d %*d %*d %*d %*d %*d %*d %llu", &rBytes, &sBytes);
+
+                receiveBytes += rBytes;
+                sendBytes += sBytes;
+            }
+
+            free(line);
+        }
+
+        fclose(devfd);
+        free(buf);
     }
 
     void passInputEvent(int wid)
