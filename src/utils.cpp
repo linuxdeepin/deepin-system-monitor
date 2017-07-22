@@ -400,7 +400,8 @@ namespace Utils {
         return check_file.exists() && check_file.isFile();
     }
 
-    bool getProcPidIO(int pid, ProcPidIO &io ) {
+    bool getProcPidIO(int pid, ProcPidIO &io ) 
+    {
         std::stringstream ss;
         ss << "/proc/" << pid << "/io";
         std::ifstream ifs( ss.str().c_str() );
