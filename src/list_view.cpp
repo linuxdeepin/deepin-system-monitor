@@ -241,7 +241,7 @@ void ListView::refreshItems(QList<ListItem*> items)
             }
         }
     }
-    
+
     if (lastSelectItem != NULL) {
         for (ListItem *item:items) {
             if (item->sameAs(lastSelectItem)) {
@@ -250,7 +250,7 @@ void ListView::refreshItems(QList<ListItem*> items)
             }
         }
     }
-    
+
     if (lastHoverItem != NULL) {
         for (ListItem *item:items) {
             if (item->sameAs(lastHoverItem)) {
@@ -259,6 +259,7 @@ void ListView::refreshItems(QList<ListItem*> items)
             }
         }
     }
+    lastHoverItem = NULL;
 
     // Update items.
     clearItems();
@@ -567,9 +568,10 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
     // Otherwise to check titlebar arrow status.
     else {
         bool atTitleArea = isMouseAtTitleArea(mouseEvent->y());
-        int hoverColumn = -1;
 
         if (atTitleArea) {
+            int hoverColumn = -1;
+            
             if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
                 // Calcuate title widths;
                 QList<int> renderWidths = getRenderWidths();
@@ -590,16 +592,17 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
                     columnCounter++;
                 }
             }
-        }
 
-        if (hoverColumn != titleHoverColumn) {
-            titleHoverColumn = hoverColumn;
+            if (hoverColumn != titleHoverColumn) {
+                titleHoverColumn = hoverColumn;
 
-            repaint();
+                repaint();
+            }
         } else {
             int hoverItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
 
-            if (hoverItemIndex < (*renderItems).length()) {
+            // NOTE: hoverItemIndex may be less than 0, we need check index here.
+            if (hoverItemIndex > 0 && hoverItemIndex < (*renderItems).length()) {
                 ListItem *item = (*renderItems)[hoverItemIndex];
 
                 QList<int> renderWidths = getRenderWidths();
@@ -618,7 +621,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
                     columnCounter++;
                 }
 
-                if (lastHoverItem == NULL || lastHoverItem == nullptr || !item->sameAs(lastHoverItem) || columnCounter != lastHoverColumnIndex) {
+                if (lastHoverItem == NULL || !item->sameAs(lastHoverItem) || columnCounter != lastHoverColumnIndex) {
                     lastHoverItem = item;
                     lastHoverColumnIndex = columnCounter;
 
