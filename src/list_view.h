@@ -200,7 +200,7 @@ signals:
     void rightClickItems(QPoint pos, QList<ListItem*> items);
     void changeColumnVisible(int index, bool visible, QList<bool> columnVisibles);
     void changeSortingStatus(int index, bool sortingOrder);
-    void hoverItem(QPoint pos, ListItem* item, int columnIndex);
+    void changeHoverItem(QPoint pos, ListItem* item, int columnIndex);
     
 private slots:
     void scrollAnimation();

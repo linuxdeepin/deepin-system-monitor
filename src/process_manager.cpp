@@ -116,7 +116,7 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     rightMenu->addAction(attributesAction);
 
     connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
-    connect(processView, &ProcessView::hoverItem, this, &ProcessManager::hoverItem, Qt::QueuedConnection);
+    connect(processView, &ProcessView::changeHoverItem, this, &ProcessManager::changeHoverItem, Qt::QueuedConnection);
 }
 
 ProcessManager::~ProcessManager()
@@ -171,7 +171,7 @@ void ProcessManager::handleSearch(QString searchContent)
     processView->search(searchContent);
 }
 
-void ProcessManager::hoverItem(QPoint, ListItem* item, int columnIndex)
+void ProcessManager::changeHoverItem(QPoint, ListItem* item, int columnIndex)
 {
     ProcessItem *processItem = static_cast<ProcessItem*>(item);
     

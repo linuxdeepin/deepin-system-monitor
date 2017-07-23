@@ -622,7 +622,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
                     lastHoverItem = item;
                     lastHoverColumnIndex = columnCounter;
 
-                    hoverItem(this->mapToGlobal(mouseEvent->pos()), lastHoverItem, columnCounter);
+                    changeHoverItem(this->mapToGlobal(mouseEvent->pos()), lastHoverItem, columnCounter);
                 }
             }
         }
