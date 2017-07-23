@@ -618,7 +618,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
                     columnCounter++;
                 }
 
-                if (lastHoverItem == NULL || !item->sameAs(lastHoverItem) || columnCounter != lastHoverColumnIndex) {
+                if (lastHoverItem == NULL || lastHoverItem == nullptr || !item->sameAs(lastHoverItem) || columnCounter != lastHoverColumnIndex) {
                     lastHoverItem = item;
                     lastHoverColumnIndex = columnCounter;
 
