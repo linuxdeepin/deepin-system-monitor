@@ -600,9 +600,9 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
             }
         } else {
             int hoverItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
-
+            
             // NOTE: hoverItemIndex may be less than 0, we need check index here.
-            if (hoverItemIndex > 0 && hoverItemIndex < (*renderItems).length()) {
+            if (hoverItemIndex >= 0 && hoverItemIndex < (*renderItems).length()) {
                 ListItem *item = (*renderItems)[hoverItemIndex];
 
                 QList<int> renderWidths = getRenderWidths();
