@@ -316,6 +316,9 @@ void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
 
 void MainWindow::showWindowKiller()
 {
+    // Minimize window before show killer window.
+    this->showMinimized();
+    
     QTimer::singleShot(200, this, SLOT(createWindowKiller()));
 }
 
