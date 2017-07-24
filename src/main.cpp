@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "main_window.h"
@@ -37,36 +37,36 @@
 
 DWIDGET_USE_NAMESPACE
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
-    
-    const QString descriptionText = QApplication::tr("Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.");
-
-    const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
 
     DApplication app(argc, argv);
 
     const QString socket_path(QString("deepin-system-monitor_%1").arg(getuid()));
     if (app.setSingleInstance(socket_path)) {
         app.loadTranslator();
-        
+
+        const QString descriptionText = QApplication::tr("Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.");
+
+        const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
+
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");
         app.setApplicationDisplayName(QObject::tr("Deepin System Monitor"));
         app.setApplicationVersion("1.0");
-        
+
         app.setProductIcon(QPixmap::fromImage(QImage(Utils::getQrcPath("logo_96.svg"))));
         app.setProductName(QApplication::tr("Deepin System Monitor"));
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
-        
+
         app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));
-        
+
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
 
         MainWindow window;
-        
+
         window.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         DUtility::moveToCenter(&window);
         window.show();

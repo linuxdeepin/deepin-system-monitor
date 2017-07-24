@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -381,11 +383,11 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Auslagerungsdatei</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Nicht aktiviert</translation>
     </message>
 </context>
 <context>
