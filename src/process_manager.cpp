@@ -266,7 +266,7 @@ void ProcessManager::showAttributes()
             if (qobject_cast<const AttributesDialog*>(widget) != 0) {
                 AttributesDialog *dialog = qobject_cast<AttributesDialog*>(widget);
                 if (dialog->getPid() == pid) {
-                    dialog->exec();
+                    dialog->show();
                     actionPids->clear();
                     
                     return;
@@ -275,7 +275,7 @@ void ProcessManager::showAttributes()
         }
         
         AttributesDialog *dialog = new AttributesDialog(this, pid);
-        dialog->exec();
+        dialog->show();
     }
 
     actionPids->clear();
