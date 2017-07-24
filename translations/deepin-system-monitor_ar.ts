@@ -1,383 +1,383 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ar" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Име на процес</translation>
+        <translation>اسم العملية</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Команден ред</translation>
+        <translation>سطر الأوامر</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Време на стартиране</translation>
+        <translation>وقت البدء</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation>المعالج</translation>
     </message>
 </context>
 <context>
     <name>ListView</name>
     <message>
         <source>No search result</source>
-        <translation>Няма намерени резултати</translation>
+        <translation>لا توجد نتيجة بحث</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Принудително изключване на програмата</translation>
+        <translation>فرض إنهاء التطبيق</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Тъмна тема</translation>
+        <translation>سمة غامغة</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Изключване на програмата</translation>
+        <translation>إنهاء التطبيق</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Изключването на това приложение може да предизвика загуба на данни.
-Сигурен ли сте, че искате да продължите?</translation>
+        <translation>إنهاء هذا التطبيق قد يسبب فقدان البيانات.
+هل أنت متأكد من المتابعة؟</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отказ</translation>
+        <translation>إلغاء</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Памет</translation>
+        <translation>الذاكرة</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>ذاكرة التبديل</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не е включено</translation>
+        <translation>غير مفعل</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Мрежа</translation>
+        <translation>الشبكة</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Сваляне</translation>
+        <translation>تنزيل</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Общо</translation>
+        <translation>الإجمالي</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Качване</translation>
+        <translation>الرفع</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Няма отговор</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Приспиване</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Край на процес</translation>
+        <translation>إنهاء العملية</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Изключването на този процес може да предизвика загуба на данни.
-Сигурен ли сте, че искате да продължите?</translation>
+        <translation>قد يؤدي إنهاء هذه العملية إلى فقدان البيانات
+هل أنت متأكد من المتابعة؟</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отказ</translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Приспиване на процес</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Продължаване на процес</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Показване местоположението на процеса</translation>
+        <translation>عرض موقع العملية</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Свойства</translation>
+        <translation>الخصائص</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 програми и %3 процеса работят</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Име</translation>
+        <translation>الاسم</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation>المعالج</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Памет</translation>
+        <translation>الذاكرة</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис на диска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Четене на диска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Download</source>
-        <translation>Сваляне</translation>
+        <translation>التنزيل</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Качване</translation>
+        <translation>الرفع</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>هوية العملية</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin System Monitor е интуитивна и мощна програма за наблюдение на системните процеси. С нея, вие можете да наблюдавате работата на процесора, паметта, мрежата, диска и други състояния.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>مراقب نظام ديبين</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>مراقب نظام ديبين</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment -  Обслужване инициализацията на процесите</translation>
+        <translation>بيئة سطح مكتب ديبين - خدمة بدء العمليات</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Работен плот</translation>
+        <translation>بيئة سطح مكتب ديبين - سطح مكتب</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit прокси</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Стартер</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Док</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Демон</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Демон на сесията</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - Сесия на процеса за инициализация</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Демон на Deepin File Manager</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Услуга за заключване на екрана</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Мениджър на прозорци</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Превключване на мениджъра на прозорци на Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Deepin Уведомления</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Агент за принтиране в облак</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Deepin Меню на услугите</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Демон на Deepin Store</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Демон за подредба на прозорец</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Демон за подредба на прозорец DBus услуга</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH агент</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Демон на виртуалната файлова система в потребителски режим</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Fuse сървър на демона за виртуалната файлова система в потребителски режим</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Помощен прицес на клиента за Deepin магазин</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Network manager</translation>
+        <translation>مدير الشبكة</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus служба</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Демон на услугата за споделяне на файлове</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>X service</source>
-        <translation>X служба</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Fcitx метод за въвеждане</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx  метод за въвеждане DBus демон</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Sogou демон за метод за въвеждане</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>ShadowSocks местен клиент</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Управление на звука</translation>
+        <translation>خدمة الصوت</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Демон за управление на печата</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Light display manager</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Мениджър на системните услуги</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Мениджър на системните услуги - Демон за управление на устройства</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Демон на диска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Демон на акаунта</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>DBus демон</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Демон за събития, свързани с мишката</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>DConf служба</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Демон на ключодържателя на Gnome</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Демон на Bluetooth</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Демон на захранването</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Мениджър за модемно устройство</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>System print tray service</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Chrome browser sandbox</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Демон на Synaptics touchpad устройства</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Swap</source>
@@ -392,36 +392,36 @@ Are you sure to continue?</source>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Кликнете на приложението, което искате да спрете</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Приложения</translation>
+        <translation>تطبيقات</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Моите процеси</translation>
+        <translation>عملياتي</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Всички процеси</translation>
+        <translation>جميع العمليات</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Търсене</translation>
+        <translation>بحث</translation>
     </message>
 </context>
 <context>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation>Работен плот</translation>
+        <translation>سطح المكتب</translation>
     </message>
 </context>
 </TS>

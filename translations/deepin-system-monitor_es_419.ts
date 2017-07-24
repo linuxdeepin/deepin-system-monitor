@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es_419">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es_419" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -67,7 +65,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhabilitado</translation>
     </message>
 </context>
 <context>
@@ -176,7 +174,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>El monitor de sistema Deepin es un intuitivo y poderoso administrador de procesos y aplicaciones. Con él podrás supervisar el funcionamiento de la CPU, la memoria, la conexión a Internet, el disco y otras variables.</translation>
+        <translation>Monitor del sistema Deepin es un intuitivo y poderoso administrador de procesos y aplicaciones. Este monitor puede supervisar el uso de su procesador, la memoria, las velocidades de red, el disco y otras variables. </translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -235,11 +233,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Window Manager </translation>
+        <translation>Gestor de ventanas Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Interruptor Deepin Window Manager </translation>
+        <translation>Interruptor Gestor de ventanas Deepin</translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -383,11 +381,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Swap</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

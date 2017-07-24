@@ -379,6 +379,14 @@ Are you sure to continue?</source>
         <source>Synaptics touchpad device daemon</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
