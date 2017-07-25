@@ -48,8 +48,11 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     layout->setContentsMargins(0, 0, 0, 0);
     
     nameLayout = new QHBoxLayout();
+    nameLayout->setContentsMargins(0, 0, 0, 0);
     cmdlineLayout = new QHBoxLayout();
+    cmdlineLayout->setContentsMargins(0, 0, 0, 0);
     startTimeLayout = new QHBoxLayout();
+    startTimeLayout->setContentsMargins(0, 0, 0, 0);
     
     closeButton = new DWindowCloseButton;
     closeButton->setFixedSize(27, 23);
@@ -80,8 +83,8 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     
     cmdlineLabel = new QLabel();
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
-    cmdlineLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     cmdlineLabel->setWordWrap(true);
+    cmdlineLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     
     cmdlineLayout->addWidget(cmdlineTitleLabel);
     cmdlineLayout->addWidget(cmdlineLabel);
@@ -106,7 +109,6 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     layout->addSpacing(14);
     layout->addWidget(titleLabel, 0, Qt::AlignHCenter);
     layout->addSpacing(20);
-    layout->addStretch();
     layout->addLayout(nameLayout);
     layout->addLayout(cmdlineLayout);
     layout->addLayout(startTimeLayout);
