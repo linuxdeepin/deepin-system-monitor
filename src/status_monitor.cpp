@@ -69,6 +69,8 @@ StatusMonitor::StatusMonitor(int tabIndex)
     prevTotalRecvBytes = 0;
     prevTotalSentBytes = 0;
 
+    updateSeconds = updateDuration / 1000.0;
+
     // Init widgets.
     layout = new QVBoxLayout(this);
 
@@ -207,7 +209,7 @@ void StatusMonitor::updateStatus()
 
         std::string desktopFile = getDesktopFileFromName(pid, name, cmdline);
         QString title = findWindowTitle->getWindowTitle(pid);
-        
+
         bool isGui = (title != "");
 
         // Record wine application and wineserver.real desktop file.
@@ -225,7 +227,7 @@ void StatusMonitor::updateStatus()
                 (*wineApplicationDesktopMaps)[QString::fromStdString(desktopFile)] = pid;
             }
         }
-        
+
         if (isGui) {
             guiProcessNumber++;
         } else {
@@ -345,12 +347,12 @@ void StatusMonitor::updateStatus()
     for (i = networkStatusSnapshot.begin(); i != networkStatusSnapshot.end(); ++i) {
         if (wineServerDesktopMaps->contains(i.key())) {
             QString wineDesktopFile = (*wineServerDesktopMaps)[i.key()];
-            
+
             if (wineApplicationDesktopMaps->contains(wineDesktopFile)) {
                 // Transfer wineserver.real network traffic to the corresponding wine program.
                 int wineApplicationPid = (*wineApplicationDesktopMaps)[wineDesktopFile];
                 networkStatusSnapshot[wineApplicationPid] = networkStatusSnapshot[i.key()];
-                
+
                 // Reset wineserver network status to zero.
                 NetworkStatus networkStatus = {0, 0, 0, 0};
                 networkStatusSnapshot[i.key()] = networkStatus;
@@ -421,7 +423,10 @@ void StatusMonitor::updateStatus()
         prevTotalSentBytes = totalSentBytes;
 
         Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
-        updateNetworkStatus(totalRecvBytes, totalSentBytes, (totalRecvBytes - prevTotalRecvBytes) / 1024.0, (totalSentBytes - prevTotalSentBytes) / 1024.0);
+        updateNetworkStatus(totalRecvBytes,
+                            totalSentBytes,
+                            ((totalRecvBytes - prevTotalRecvBytes) / 1024.0) / updateSeconds,
+                            ((totalSentBytes - prevTotalSentBytes) / 1024.0) / updateSeconds);
     }
 
     // Update process number.
@@ -439,12 +444,12 @@ DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
     DiskStatus status = {0, 0};
 
     if (processWriteKbs->contains(pid)) {
-        status.writeKbs = (pidIO.wchar - processWriteKbs->value(pid)) / (updateDuration / 1000.0);
+        status.writeKbs = (pidIO.wchar - processWriteKbs->value(pid)) / updateSeconds;
     }
     (*processWriteKbs)[pid] = pidIO.wchar;
 
     if (processReadKbs->contains(pid)) {
-        status.readKbs = (pidIO.rchar - processReadKbs->value(pid)) / (updateDuration / 1000.0);
+        status.readKbs = (pidIO.rchar - processReadKbs->value(pid)) / updateSeconds;
     }
     (*processReadKbs)[pid] = pidIO.rchar;
 

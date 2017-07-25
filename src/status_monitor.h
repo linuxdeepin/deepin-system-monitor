@@ -79,27 +79,28 @@ private:
     FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
+    QMap<QString, int> *wineApplicationDesktopMaps;
+    QMap<int, QString> *wineServerDesktopMaps;
     QMap<int, double> *processCpuPercents;
     QMap<int, long> *processRecvBytes;
     QMap<int, long> *processSentBytes;
     QMap<int, unsigned long> *processReadKbs;
     QMap<int, unsigned long> *processWriteKbs;
-    QMap<QString, int> *wineApplicationDesktopMaps;
-    QMap<int, QString> *wineServerDesktopMaps;
     QString currentUsername;
     QString tabName;
     QTimer *updateStatusTimer;
     QVBoxLayout *layout;
     StoredProcType prevProcesses;
     int updateDuration = 2000;
-    unsigned long long int totalRecvBytes;
-    unsigned long long int totalSentBytes;
+    qreal updateSeconds;
     unsigned long long int prevTotalRecvBytes;
     unsigned long long int prevTotalSentBytes;
-    unsigned long long totalCpuTime;
+    unsigned long long int totalRecvBytes;
+    unsigned long long int totalSentBytes;
     unsigned long long prevTotalCpuTime;
-    unsigned long long workCpuTime;
     unsigned long long prevWorkCpuTime;
+    unsigned long long totalCpuTime;
+    unsigned long long workCpuTime;
 };
 
 #endif
