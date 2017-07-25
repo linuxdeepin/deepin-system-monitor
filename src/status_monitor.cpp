@@ -357,7 +357,6 @@ void StatusMonitor::updateStatus()
             }
         }
     }
-    // cout << i.key() << ": " << i.value() << endl;
 
     // Update ProcessItem's network status.
     for (ListItem *item : items) {
