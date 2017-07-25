@@ -328,18 +328,23 @@ namespace Utils {
      * @param p The proc_t structure to use for getting the name of the process
      * @return
      */
-    QString getProcessName(proc_t* p)
+    QString getProcessName(proc_t* p, QString cmdline)
     {
+        if (cmdline.startsWith("c:\\")) {
+            // Return exe name if process is wine program.
+            QStringList cmdlinePaths = cmdline.split("\\");
+            return cmdlinePaths[cmdlinePaths.length() - 1];
+        } else {
+            QString processName = "ERROR";
+            processName = getProcessNameFromCmdLine(p->tid);
+            if (processName == "") {
+                // fallback on /proc/*//*stat program name value
+                // bad because it is limited to 16 chars
+                processName = p->cmd;
+            }
 
-        QString processName = "ERROR";
-        processName = getProcessNameFromCmdLine(p->tid);
-        if (processName == "") {
-            // fallback on /proc/*//*stat program name value
-            // bad because it is limited to 16 chars
-            processName = p->cmd;
+            return processName;
         }
-
-        return processName;
     }
 
     QString getProcessNameFromCmdLine(const pid_t pid)
@@ -400,7 +405,7 @@ namespace Utils {
         return check_file.exists() && check_file.isFile();
     }
 
-    bool getProcPidIO(int pid, ProcPidIO &io ) 
+    bool getProcPidIO(int pid, ProcPidIO &io )
     {
         std::stringstream ss;
         ss << "/proc/" << pid << "/io";
@@ -425,36 +430,43 @@ namespace Utils {
         return true;
     }
 
-    std::string getDesktopFileFromName(QString procName, QString cmdline)
+    std::string getDesktopFileFromName(int pid, QString procName, QString cmdline)
     {
         if (desktopfileMaps.contains(cmdline)) {
             return desktopfileMaps[cmdline].toStdString();
         } else {
-            QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
-            std::string desktopFile;
+            // Need found desktop file from process environment, if process is wine program.
+            if (cmdline.startsWith("c:\\")) {
+                QString gioDesktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE");
 
-            // Convert to lower characters.
-            QString procname = procName.toLower();
+                return gioDesktopFile.toStdString();
+            } else {
+                QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
+                std::string desktopFile;
 
-            // Replace "_" instead "-", avoid some applications desktop file can't found, such as, sublime text.
-            procname.replace("_", "-");
+                // Convert to lower characters.
+                QString procname = procName.toLower();
 
-            // Concat desktop file.
-            QString processFilename = procname + ".desktop";
+                // Replace "_" instead "-", avoid some applications desktop file can't found, such as, sublime text.
+                procname.replace("_", "-");
 
-            if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
-                while(dir.hasNext()) {
-                    if (dir.fileInfo().suffix() == "desktop") {
-                        if (dir.fileName().toLower().contains(processFilename)) {
-                            desktopFile = dir.filePath().toStdString();
-                            break;
+                // Concat desktop file.
+                QString processFilename = procname + ".desktop";
+
+                if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
+                    while(dir.hasNext()) {
+                        if (dir.fileInfo().suffix() == "desktop") {
+                            if (dir.fileName().toLower().contains(processFilename)) {
+                                desktopFile = dir.filePath().toStdString();
+                                break;
+                            }
                         }
+                        dir.next();
                     }
-                    dir.next();
                 }
-            }
 
-            return desktopFile;
+                return desktopFile;
+            }
         }
     }
 
@@ -650,7 +662,7 @@ namespace Utils {
             char *dev;
             dev = strtok(line, ":");
 
-            // Filter lo (virtual network device). 
+            // Filter lo (virtual network device).
             if (QString::fromStdString(dev).trimmed() != "lo") {
                 sscanf(buf + strlen(dev) + 2, "%llu %*d %*d %*d %*d %*d %*d %*d %llu", &rBytes, &sBytes);
 

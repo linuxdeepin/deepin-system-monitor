@@ -46,6 +46,8 @@ StatusMonitor::StatusMonitor(int tabIndex)
     processSentBytes = new QMap<int, long>();
     processWriteKbs = new QMap<int, unsigned long>();
     processCpuPercents = new QMap<int, double>();
+    wineApplicationDesktopMaps = new QMap<QString, int>();
+    wineServerDesktopMaps = new QMap<int, QString>();
 
     if (tabIndex == 0) {
         tabName = tr("Applications");
@@ -63,7 +65,7 @@ StatusMonitor::StatusMonitor(int tabIndex)
     prevTotalCpuTime = 0;
     prevWorkCpuTime = 0;
     currentUsername = qgetenv("USER");
-    
+
     prevTotalRecvBytes = 0;
     prevTotalSentBytes = 0;
 
@@ -90,6 +92,8 @@ StatusMonitor::StatusMonitor(int tabIndex)
 
 StatusMonitor::~StatusMonitor()
 {
+    delete wineApplicationDesktopMaps;
+    delete wineServerDesktopMaps;
     delete findWindowTitle;
     delete processRecvBytes;
     delete processSentBytes;
@@ -190,17 +194,38 @@ void StatusMonitor::updateStatus()
     int systemProcessNumber = 0;
     QList<ListItem*> items;
 
+    wineApplicationDesktopMaps->clear();
+    wineServerDesktopMaps->clear();
+
     for (auto &i:processes) {
-        QString name = getProcessName(&i.second);
-        QString user = (&i.second)->euser;
         int pid = (&i.second)->tid;
+        QString cmdline = Utils::getProcessCmdline(pid);
+        bool isWineProcess = cmdline.startsWith("c:\\");
+        QString name = getProcessName(&i.second, cmdline);
+        QString user = (&i.second)->euser;
         double cpu = (*processCpuPercents)[pid];
 
-        QString cmdline = Utils::getProcessCmdline(pid);
-        std::string desktopFile = getDesktopFileFromName(name, cmdline);
+        std::string desktopFile = getDesktopFileFromName(pid, name, cmdline);
         QString title = findWindowTitle->getWindowTitle(pid);
+        
         bool isGui = (title != "");
 
+        // Record wine application and wineserver.real desktop file.
+        // We need transfer wineserver.real network traffic to the corresponding wine program.
+        if (name == "wineserver.real") {
+            // Insert pid<->desktopFile to map to search in all network process list.
+            QString gioDesktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE");
+            if (gioDesktopFile != "") {
+                (*wineServerDesktopMaps)[pid] = gioDesktopFile;
+            }
+        } else {
+            // Insert desktopFile<->pid to map to search in all network process list.
+            // If title is empty, it's just a wine program, but not wine GUI window.
+            if (isWineProcess && title != "") {
+                (*wineApplicationDesktopMaps)[QString::fromStdString(desktopFile)] = pid;
+            }
+        }
+        
         if (isGui) {
             guiProcessNumber++;
         } else {
@@ -218,7 +243,13 @@ void StatusMonitor::updateStatus()
 
         if (appendItem) {
             if (title == "") {
-                title = getDisplayNameFromName(name, desktopFile);
+                if (isWineProcess) {
+                    // If wine process's window title is blank, it's not GUI window process.
+                    // Title use process name instead.
+                    title = name;
+                } else {
+                    title = getDisplayNameFromName(name, desktopFile);
+                }
             }
             QString displayName;
             if (filterType == AllProcess) {
@@ -292,7 +323,7 @@ void StatusMonitor::updateStatus()
     NetworkTrafficFilter::Update update;
 
     QMap<int, NetworkStatus> networkStatusSnapshot;
-    
+
     while (NetworkTrafficFilter::getRowUpdate(update)) {
         if (update.action != NETHOGS_APP_ACTION_REMOVE) {
             (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
@@ -308,6 +339,25 @@ void StatusMonitor::updateStatus()
             (networkStatusSnapshot)[update.record.pid] = status;
         }
     }
+
+    // Transfer wineserver.real network traffic to the corresponding wine program.
+    QMap<int, NetworkStatus>::iterator i;
+    for (i = networkStatusSnapshot.begin(); i != networkStatusSnapshot.end(); ++i) {
+        if (wineServerDesktopMaps->contains(i.key())) {
+            QString wineDesktopFile = (*wineServerDesktopMaps)[i.key()];
+            
+            if (wineApplicationDesktopMaps->contains(wineDesktopFile)) {
+                // Transfer wineserver.real network traffic to the corresponding wine program.
+                int wineApplicationPid = (*wineApplicationDesktopMaps)[wineDesktopFile];
+                networkStatusSnapshot[wineApplicationPid] = networkStatusSnapshot[i.key()];
+                
+                // Reset wineserver network status to zero.
+                NetworkStatus networkStatus = {0, 0, 0, 0};
+                networkStatusSnapshot[i.key()] = networkStatus;
+            }
+        }
+    }
+    // cout << i.key() << ": " << i.value() << endl;
 
     // Update ProcessItem's network status.
     for (ListItem *item : items) {
@@ -364,13 +414,13 @@ void StatusMonitor::updateStatus()
     if (prevTotalRecvBytes == 0) {
         prevTotalRecvBytes = totalRecvBytes;
         prevTotalSentBytes = totalSentBytes;
-        
+
         Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
         updateNetworkStatus(totalRecvBytes, totalSentBytes, 0, 0);
     } else {
         prevTotalRecvBytes = totalRecvBytes;
         prevTotalSentBytes = totalSentBytes;
-        
+
         Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
         updateNetworkStatus(totalRecvBytes, totalSentBytes, (totalRecvBytes - prevTotalRecvBytes) / 1024.0, (totalSentBytes - prevTotalSentBytes) / 1024.0);
     }

@@ -84,6 +84,8 @@ private:
     QMap<int, long> *processSentBytes;
     QMap<int, unsigned long> *processReadKbs;
     QMap<int, unsigned long> *processWriteKbs;
+    QMap<QString, int> *wineApplicationDesktopMaps;
+    QMap<int, QString> *wineServerDesktopMaps;
     QString currentUsername;
     QString tabName;
     QTimer *updateStatusTimer;

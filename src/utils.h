@@ -108,14 +108,14 @@ namespace Utils {
     QString getImagePath(QString imageName);
     QString getProcessEnvironmentVariable(pid_t pid, QString environmentName);
     QString getProcessCmdline(pid_t pid);
-    QString getProcessName(proc_t* p);
+    QString getProcessName(proc_t* p, QString cmdline);
     QString getProcessNameFromCmdLine(const pid_t pid);
     QString getQrcPath(QString imageName);
     QString getQssPath(QString qssName);
     bool fileExists(QString path);
     bool getProcPidIO(int pid, ProcPidIO &io );
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &prevCpuTime, const unsigned long long &cpuTime);
-    std::string getDesktopFileFromName(QString procName, QString cmdline);
+    std::string getDesktopFileFromName(int pid, QString procName, QString cmdline);
     qreal easeInOut(qreal x);
     qreal easeInQuad(qreal x);
     qreal easeInQuint(qreal x);

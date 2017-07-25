@@ -130,9 +130,9 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
         int processId = (&i.second)->tid;
         
         if (pid == processId) {
-            QString name = getProcessName(&i.second);
             QString cmdline = Utils::getProcessCmdline(processId);
-            std::string desktopFile = getDesktopFileFromName(name, cmdline);
+            QString name = getProcessName(&i.second, cmdline);
+            std::string desktopFile = getDesktopFileFromName(processId, name, cmdline);
             QPixmap icon;
             if (desktopFile.size() == 0) {
                 icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 96);
