@@ -8,7 +8,7 @@ INCLUDEPATH += $$PWD/nethogs/src/
 				
 CONFIG += link_pkgconfig
 CONFIG += c++11 
-PKGCONFIG += xcb xcb-util dtkwidget dtkbase dtkutil
+PKGCONFIG += xcb xcb-util dtkwidget
 RESOURCES = deepin-system-monitor.qrc
 
 !system(cd $$PWD/nethogs && make libnethogs){
