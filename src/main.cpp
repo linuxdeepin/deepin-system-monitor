@@ -29,7 +29,7 @@
 #include <DMainWindow>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <dutility.h>
+#include <DWidgetUtil>
 #include <iostream>
 #include <sys/types.h>
 #include <thread>
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
         MainWindow window;
 
         window.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
-        DUtility::moveToCenter(&window);
+        Dtk::Widget::moveToCenter(&window);
         window.show();
         window.adjustStatusBarWidth();
 

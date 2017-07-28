@@ -37,7 +37,7 @@
 #include <proc/sysinfo.h>
 #include <signal.h>
 
-DUTIL_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 using namespace Utils;
 
