@@ -216,8 +216,6 @@ void ProcessManager::openProcessDirectory()
             }
             // Else find program location through 'which' command.
             else {
-                cmdline = cmdline.split(QRegExp("\\s")).at(0);
-            
                 QProcess whichProcess;
                 QString exec = "which";
                 QStringList params;
