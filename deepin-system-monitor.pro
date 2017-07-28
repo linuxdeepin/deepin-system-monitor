@@ -94,6 +94,7 @@ desktop.path = $$INSTROOT$$APPDIR
 icon.path = $$INSTROOT$$ICONDIR
 target.path = $$INSTROOT$$BINDIR
 translations.path = $$INSTROOT$$DSRDIR/translations
+manual.path = $$INSTROOT$$DOCDIR
 
 isEmpty(TRANSLATIONS) {
      include(translations.pri)
@@ -105,8 +106,9 @@ TRANSLATIONS_COMPILED ~= s/\.ts/.qm/g
 desktop.files = deepin-system-monitor.desktop
 icon.files = image/deepin-system-monitor.svg
 translations.files = $$TRANSLATIONS_COMPILED
+manual.files = manual/*
 
-INSTALLS += desktop icon target translations
+INSTALLS += desktop icon target translations manual
 
 CONFIG *= update_translations release_translations
 
