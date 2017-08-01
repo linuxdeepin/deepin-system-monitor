@@ -46,7 +46,7 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-
+    
     QWidget *topWidget = new QWidget();
     topWidget->setFixedHeight(24);
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
@@ -286,10 +286,15 @@ void ProcessManager::showKillProcessDialog()
 
 void ProcessManager::stopProcesses()
 {
+    int currentPid = getpid();
+    
     for (int pid : *actionPids) {
-        if (kill(pid, SIGSTOP) != 0) {
-            qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
+        if (pid != currentPid) {
+            if (kill(pid, SIGSTOP) != 0) {
+                qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
+            }
         }
+        
     }
 
     actionPids->clear();
