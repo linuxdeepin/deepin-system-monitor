@@ -179,11 +179,11 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             }
         }
     } else if (event->type() == QEvent::Close) {
-        if (this->rect().width() > Constant::WINDOW_MIN_WIDTH) {
+        if (this->rect().width() >= Constant::WINDOW_MIN_WIDTH) {
             settings->setOption("window_width", this->rect().width());
         }
 
-        if (this->rect().height() > Constant::WINDOW_MIN_HEIGHT) {
+        if (this->rect().height() >= Constant::WINDOW_MIN_HEIGHT) {
             settings->setOption("window_height", this->rect().height());
         }
     }
