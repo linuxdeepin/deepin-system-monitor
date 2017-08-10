@@ -419,11 +419,4 @@ Jste si jistý, že chcete pokračovat?</translation>
         <translation>Hledat</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Plocha</translation>
-    </message>
-</context>
 </TS>

@@ -57,7 +57,7 @@ void FindWindowTitle::updateWindowInfos()
 {
     QList<xcb_window_t> windows;
 
-    xcb_get_property_reply_t *listReply = getProperty(getRootWindow(), "_NET_CLIENT_LIST_STACKING", XCB_ATOM_WINDOW);
+    xcb_get_property_reply_t *listReply = getProperty(rootWindow, "_NET_CLIENT_LIST_STACKING", XCB_ATOM_WINDOW);
 
     if (listReply) {
         xcb_window_t *windowList = static_cast<xcb_window_t*>(xcb_get_property_value(listReply));

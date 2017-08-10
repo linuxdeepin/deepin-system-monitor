@@ -24,12 +24,14 @@
 #ifndef FINDWINDOWTITLE_H
 #define FINDWINDOWTITLE_H
 
-#include "window_manager.h"
+#include <dwindowmanager.h>
 #include <QObject>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
 
-class FindWindowTitle : public WindowManager
+DWM_USE_NAMESPACE
+
+class FindWindowTitle : public DWindowManager
 {
     Q_OBJECT
     

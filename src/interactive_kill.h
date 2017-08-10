@@ -25,10 +25,12 @@
 #define INTERACTIVEKILL_H
 
 #include "start_tooltip.h"
-#include "window_manager.h"
+#include <dwindowmanager.h>
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QWidget>
+
+DWM_USE_NAMESPACE
 
 class InteractiveKill : public QWidget
 {
@@ -52,7 +54,7 @@ private:
     QList<int> windowPids;
     QPixmap screenPixmap;
     StartTooltip *startTooltip;
-    WindowManager *windowManager;
+    DWindowManager *windowManager;
     WindowRect killWindowRect;
     int cursorX;
     int cursorY;

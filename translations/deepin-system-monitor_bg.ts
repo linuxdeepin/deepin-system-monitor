@@ -419,11 +419,4 @@ Are you sure to continue?</source>
         <translation>Търсене</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Работен плот</translation>
-    </message>
-</context>
 </TS>

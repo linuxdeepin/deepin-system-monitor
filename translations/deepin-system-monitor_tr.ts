@@ -417,11 +417,4 @@ Are you sure to continue?</source>
         <translation>Arama</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Masaüstü</translation>
-    </message>
-</context>
 </TS>

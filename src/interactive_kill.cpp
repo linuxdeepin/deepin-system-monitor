@@ -26,6 +26,9 @@
 #include <QApplication>
 #include <QDebug>
 #include <QScreen>
+#include <dscreenwindowsutil.h>
+
+DWM_USE_NAMESPACE
 
 InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 {
@@ -39,9 +42,13 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     setMouseTracking(true);     // make MouseMove can response
     installEventFilter(this);   // add event filter
 
-    windowManager = new WindowManager();
+    QPoint pos = this->cursor().pos();
+    DScreenWindowsUtil* screenWin = DScreenWindowsUtil::instance(pos);
+    
+    windowManager = new DWindowManager();
+    windowManager->setRootWindowRect(screenWin->backgroundRect());
     QList<xcb_window_t> windows = windowManager->getWindows();
-
+    
     for (int i = 0; i < windows.length(); i++) {
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
             windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));

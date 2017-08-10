@@ -555,7 +555,7 @@ namespace Utils {
         file.close();
     }
 
-    void blurRect(WindowManager *windowManager, int widgetId, QRectF rect)
+    void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect)
     {
         QVector<uint32_t> data;
 
@@ -563,7 +563,7 @@ namespace Utils {
         windowManager->setWindowBlur(widgetId, data);
     }
 
-    void blurRects(WindowManager *windowManager, int widgetId, QList<QRectF> rects)
+    void blurRects(DWindowManager *windowManager, int widgetId, QList<QRectF> rects)
     {
         QVector<uint32_t> data;
         foreach (auto rect, rects) {
@@ -572,7 +572,7 @@ namespace Utils {
         windowManager->setWindowBlur(widgetId, data);
     }
 
-    void clearBlur(WindowManager *windowManager, int widgetId)
+    void clearBlur(DWindowManager *windowManager, int widgetId)
     {
         QVector<uint32_t> data;
         data << 0 << 0 << 0 << 0 << 0 << 0;

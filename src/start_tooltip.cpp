@@ -62,7 +62,7 @@ StartTooltip::~StartTooltip()
 {
 }
 
-void StartTooltip::setWindowManager(WindowManager *wm)
+void StartTooltip::setWindowManager(DWindowManager *wm)
 {
     windowManager = wm;
 }

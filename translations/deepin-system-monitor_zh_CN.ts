@@ -419,11 +419,4 @@ Are you sure to continue?</source>
         <translation>搜索</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>桌面</translation>
-    </message>
-</context>
 </TS>

@@ -419,11 +419,4 @@ Are you sure to continue?</source>
         <translation>חיפוש</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>שולחן עבודה</translation>
-    </message>
-</context>
 </TS>

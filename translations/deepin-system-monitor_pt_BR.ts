@@ -418,11 +418,4 @@ Você tem certeza que quer continuar?</translation>
         <translation>Pesquisa</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Área de trabalho</translation>
-    </message>
-</context>
 </TS>

@@ -8,7 +8,7 @@ INCLUDEPATH += $$PWD/nethogs/src/
 				
 CONFIG += link_pkgconfig
 CONFIG += c++11 
-PKGCONFIG += xcb xcb-util dtkwidget
+PKGCONFIG += xcb xcb-util dtkwidget dtkwm
 RESOURCES = deepin-system-monitor.qrc
 
 !system(cd $$PWD/nethogs && make libnethogs){
@@ -36,7 +36,6 @@ HEADERS += src/utils.h \
            src/process_view.h \
 		   src/hashqstring.h \
            src/find_window_title.h \
-           src/window_manager.h \
 		   src/smooth_curve_generator.h \
 		   src/interactive_kill.h \
 		   src/start_tooltip.h \
@@ -60,7 +59,6 @@ SOURCES += src/main.cpp \
            src/process_item.cpp \
            src/process_view.cpp \
 		   src/find_window_title.cpp \
-		   src/window_manager.cpp \
 		   src/smooth_curve_generator.cpp \
 		   src/interactive_kill.cpp \
 		   src/start_tooltip.cpp \
@@ -80,7 +78,7 @@ QT += dbus
 QMAKE_CXXFLAGS += -g
 LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
-LIBS += -lX11 -lXext -lXtst
+LIBS += -lX11 -lXext -lXtst -ldtkwm
 
 OBJECTS_DIR=out
 MOC_DIR=out

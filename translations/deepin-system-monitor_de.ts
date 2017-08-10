@@ -419,11 +419,4 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
         <translation>Suchen</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Desktop</translation>
-    </message>
-</context>
 </TS>

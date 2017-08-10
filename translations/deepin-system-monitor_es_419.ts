@@ -419,11 +419,4 @@ Are you sure to continue?</source>
         <translation>Buscar</translation>
     </message>
 </context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Escritorio</translation>
-    </message>
-</context>
 </TS>
