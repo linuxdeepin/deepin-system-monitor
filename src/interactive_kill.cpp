@@ -24,6 +24,7 @@
 #include "interactive_kill.h"
 #include "utils.h"
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QDebug>
 #include <QScreen>
 #include <dscreenwindowsutil.h>
@@ -44,11 +45,14 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 
     QPoint pos = this->cursor().pos();
     DScreenWindowsUtil* screenWin = DScreenWindowsUtil::instance(pos);
-    
+    screenRect = screenWin->backgroundRect();
+    this->move(screenRect.x(), screenRect.y());
+    this->setFixedSize(screenRect.width(), screenRect.height());
+
     windowManager = new DWindowManager();
-    windowManager->setRootWindowRect(screenWin->backgroundRect());
+    windowManager->setRootWindowRect(screenRect);
     QList<xcb_window_t> windows = windowManager->getWindows();
-    
+
     for (int i = 0; i < windows.length(); i++) {
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
             windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
@@ -60,9 +64,14 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     startTooltip->setWindowManager(windowManager);
     startTooltip->show();
 
-    QScreen *screen = QGuiApplication::primaryScreen();
-    if (screen) {
-        screenPixmap = screen->grabWindow(0);
+    QList<QScreen*> screenList = qApp->screens();
+    QScreen *primaryScreen = QGuiApplication::primaryScreen();
+    int screenNum = qApp->desktop()->screenNumber(pos);
+
+    if (screenNum != 0 && screenNum < screenList.length()) {
+        screenPixmap = screenList[screenNum]->grabWindow(screenWin->rootWindowId(), screenRect.x(), screenRect.y(), screenRect.width(), screenRect.height());
+    } else {
+        screenPixmap = primaryScreen->grabWindow(screenWin->rootWindowId(), screenRect.x(), screenRect.y(), screenRect.width(), screenRect.height());
     }
 
     showFullScreen();
@@ -91,8 +100,12 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
     for (int i = 0; i < windowRects.length(); i++) {
         WindowRect rect = windowRects[i];
 
-        if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
-            mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
+        if (cursorX + screenRect.x() >= rect.x && cursorX + screenRect.x() <= rect.x + rect.width &&
+            cursorY + screenRect.y() >= rect.y && cursorY + screenRect.y() <= rect.y + rect.height) {
+
+            rect.x = rect.x - screenRect.x();
+            rect.y = rect.y - screenRect.y();
+
             killWindowRect = rect;
             killWindowIndex = i;
 
@@ -136,7 +149,7 @@ void InteractiveKill::paintEvent(QPaintEvent *)
         for (int i = 0; i < killWindowIndex; i++) {
             WindowRect rect = windowRects[i];
 
-            if (rect.x > killWindowRect.x || 
+            if (rect.x > killWindowRect.x ||
                 rect.x + rect.width < killWindowRect.x + killWindowRect.width ||
                 rect.y > killWindowRect.y ||
                 rect.y + rect.height < killWindowRect.y + killWindowRect.height) {
@@ -153,7 +166,7 @@ void InteractiveKill::paintEvent(QPaintEvent *)
 
         // Draw kill cursor.
         WindowRect rootRect = windowManager->getRootWindowRect();
-        painter.setClipRegion(QRegion(rootRect.x, rootRect.y, rootRect.width, rootRect.height));
+        painter.setClipRegion(QRegion(0, 0, rootRect.width, rootRect.height));
 
         painter.setOpacity(1);
         painter.drawImage(QPoint(cursorX, cursorY), cursorImage);

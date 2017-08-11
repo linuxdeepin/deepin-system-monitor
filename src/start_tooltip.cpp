@@ -46,15 +46,6 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
     setFixedSize(size.width() + RECTANGLE_PADDING * 2,
                  size.height() + iconImg.height() + RECTANGLE_PADDING * 3);
     
-    setGeometry(
-        QStyle::alignedRect(
-            Qt::LeftToRight,
-            Qt::AlignCenter,
-            this->size(),
-            qApp->desktop()->availableGeometry()
-            )
-        );
-    
     Utils::passInputEvent(this->winId());
 }
 
@@ -65,6 +56,16 @@ StartTooltip::~StartTooltip()
 void StartTooltip::setWindowManager(DWindowManager *wm)
 {
     windowManager = wm;
+
+    WindowRect rootWindowRect = windowManager->getRootWindowRect();
+    setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)
+            )
+        );
 }
 
 bool StartTooltip::eventFilter(QObject *, QEvent *event)

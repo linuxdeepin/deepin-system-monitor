@@ -50,6 +50,7 @@ signals:
     
 private:
     QImage cursorImage;
+    QRect screenRect;
     QList<WindowRect> windowRects;
     QList<int> windowPids;
     QPixmap screenPixmap;
