@@ -27,10 +27,12 @@
 #include <QCollator>
 #include <QDebug>
 #include <QLocale>
+#include "chinese2pinyin.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
+using namespace Pinyin;
 
 ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState)
 {
@@ -225,11 +227,26 @@ bool ProcessItem::search(const ListItem *item, QString searchContent)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
     QString content = searchContent.toLower();
-
+    
+    QString fullPinyinString = "";
+    QString charPinyinString = "";
+    
+    if (QLocale::system().name() == "zh_CN") {
+        QString displayName = processItem->getDisplayName();
+        QStringList pinyinList = Pinyin::splitChineseToPinyin(displayName);
+        fullPinyinString = pinyinList.join("");
+    
+        for (QString pinyin : pinyinList) {
+            charPinyinString += pinyin[0];
+        }
+    }
+    
     return processItem->getName().toLower().contains(content) ||
         processItem->getDisplayName().toLower().contains(content) ||
         QString::number(processItem->getPid()).contains(content) ||
-        processItem->getUser().toLower().contains(content);
+        processItem->getUser().toLower().contains(content) || 
+        fullPinyinString.contains(content) || 
+        charPinyinString.contains(content);
 }
 
 bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort)

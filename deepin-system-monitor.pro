@@ -44,6 +44,7 @@ HEADERS += src/utils.h \
 		   src/attributes_dialog.h \
 		   src/constant.h \
 		   src/settings.h \
+		   src/chinese2pinyin.h \
 		   src/main_window.h
 SOURCES += src/main.cpp \
 		   src/utils.cpp \
@@ -65,6 +66,7 @@ SOURCES += src/main.cpp \
 		   src/process_tree.cpp \
 		   src/process_switch_tab.cpp \
 		   src/attributes_dialog.cpp \
+		   src/chinese2pinyin.cpp \
 		   src/main_window.cpp \
 		   src/settings.cpp
 		   

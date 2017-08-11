@@ -1,4 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
+  <qresource prefix="/misc">
+        <file>dict/pinyin.dict</file>
+  </qresource>
   <qresource>
 	<file>image/deepin-system-monitor.svg</file>
     <file>image/only_gui_dark_normal.png</file>
