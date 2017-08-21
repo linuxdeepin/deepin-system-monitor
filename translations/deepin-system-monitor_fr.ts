@@ -1,17 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Prozessname</translation>
+        <translation>Nom du processus</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Kommandozeile</translation>
+        <translation>Ligne de commande</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Startzeit</translation>
+        <translation>Heure de début</translation>
     </message>
 </context>
 <context>
@@ -25,121 +25,121 @@
     <name>ListView</name>
     <message>
         <source>No search result</source>
-        <translation>Kein Suchergebnis</translation>
+        <translation>Aucun résultat de recherche</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Beenden des Programms erzwingen</translation>
+        <translation>Forcer l&apos;arrêt de l&apos;application</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Dunkles Thema</translation>
+        <translation>Thème sombre</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Programm beenden</translation>
+        <translation>Arrêt de l&apos;application</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Beim beenden des Programms können Daten verloren gehen.
-Sind Sie sicher, dass Sie fortfahren möchten?</translation>
+        <translation>L&apos;arrêt de cette application peut causer des pertes de données.
+Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Arbeitsspeicher</translation>
+        <translation>Mémoire</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Auslagerungsdatei</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nicht aktiviert</translation>
+        <translation>Non activé</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Netzwerk</translation>
+        <translation>Réseau</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Download</translation>
+        <translation>Réception</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Gesamt</translation>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation>Envoi</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Keine Antwort</translation>
+        <translation>Aucune réponse</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Anhalten</translation>
+        <translation>Suspendre</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Prozess beenden</translation>
+        <translation>Fin du processus</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Beim beenden des Prozesses können Daten verloren gehen.
-Sind Sie sicher, dass Sie fortfahren möchten?</translation>
+        <translation>L&apos;arrêt de ce processus peut causer des pertes de données.
+Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Prozess anhalten</translation>
+        <translation>Suspendre le processus</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Prozess fortsetzen</translation>
+        <translation>Reprendre le processus</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Prozessort anzeigen</translation>
+        <translation>Voir l&apos;emplacement du processus</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Eigenschaften</translation>
+        <translation>Propriétés</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 Programme und %3 Prozesse sind geöffnet</translation>
+        <translation>%2 applications et %3 processus sont en cours d&apos;exécution</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Name</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -147,23 +147,23 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Arbeitsspeicher</translation>
+        <translation>Mémoire</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Festplatte schreiben</translation>
+        <translation>Écriture sur le disque</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Festplatte lesen</translation>
+        <translation>Lecture du disque</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Download</translation>
+        <translation>Réception</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation>Envoi</translation>
     </message>
     <message>
         <source>PID</source>
@@ -174,254 +174,254 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin System Monitor ist ein intuitiver und leistungsstarker System Monitor. Er kann CPU, Arbeitsspeicher, Netzwerk, Festplatte und andere Werte überwachen.</translation>
+        <translation>Moniteur Système Deepin est un système de surveillance système intuitif et puissant. Il peut surveiller les processus CPU, mémoire, réseau, disque et autre statuts.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>Moniteur système Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>Moniteur système Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktopumgebung - Prozessstartdienst</translation>
+        <translation>Environnement de Bureau Deepin - Service d’initialisation de processus</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktopumgebung - Desktop</translation>
+        <translation>Environnement de Bureau Deepin - Bureau</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktopumgebung - Polkit Proxy</translation>
+        <translation>Environnement de Bureau Deepin - Proxy polkit</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktopumgebung - Starter</translation>
+        <translation>Environnement de Bureau Deepin - Lançeur</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktopumgebung - Dock</translation>
+        <translation>Environnement de Bureau Deepin - Dock</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktopumgebung - Bildschirm</translation>
+        <translation>Environnement de Bureau Deepin - Affichage d&apos;écran</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktopumgebung - Dienst</translation>
+        <translation>Environnement de Bureau Deepin - Service</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktopumgebung - Sessiondienst</translation>
+        <translation>Environnement de Bureau Deepin - Démon de session</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktopumgebung - Sessionstartprozess</translation>
+        <translation>Environnement de Bureau Deepin - Processus d’initialisation du démon</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deepin Dateimanager Dienst</translation>
+        <translation>Démon gestionnaire de fichiers Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktopumgebung - Sperrbildschirmdienst</translation>
+        <translation>Environnement de Bureau Deepin - Service de verrouillage d&apos;écran</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Fenstermanager</translation>
+        <translation>Gestionnaire de Fenêtres Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Deepin Fenstermanagerwechsler</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Deepin Benachrichtigung</translation>
+        <translation>Notification Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Clouddruckdienst</translation>
+        <translation>Agent d&apos;impression dans le Cloud Deepin</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Deepin Menüdienst</translation>
+        <translation>Service menu Deepin</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Deepin Storedienst</translation>
+        <translation>Démon boutique Deepin</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Fensterentsprechungsdienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Fensterendsprechungsdienst DBus Dienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH Dienst</translation>
+        <translation>Agent SSH</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Benutzermodus virtueller Dateisystem Dienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Fuse Server vom Benutzermodus virtuellen Dateisystem Dienstes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Hilfsdienst des Deepin Store Clients</translation>
+        <translation>Processus d&apos;aide du client boutique Deepin</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Netzwerkmanager</translation>
+        <translation>Gestionnaire de Réseaux</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus Dienst</translation>
+        <translation>Service PolicyKit DBus</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Filesharingdienst</translation>
+        <translation>Démon de service d&apos;échange de fichier</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation>X Dienst</translation>
+        <translation>Service X</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Fcitx Eingabemethode</translation>
+        <translation>Méthode d&apos;entrée Fcitx</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx Eingabemethode DBus Dienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Sogou Eingabemethode Dienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>ShadowSocks lokal Client</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Sounddienst</translation>
+        <translation>Service Son</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Druckerdienst</translation>
+        <translation>Service Impression</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Light Display Manager</translation>
+        <translation>Gestionnaire de luminosité d&apos;écran</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Systemdienstmanager</translation>
+        <translation>Gestionnaire de service système</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Systemdienstmanager - Geräteverwaltungsdienst</translation>
+        <translation>Gestionnaire de service système - Démon de gestion de périphériques</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Festplattendienst</translation>
+        <translation>Démon Disque</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Benutzerkontendienst</translation>
+        <translation>Démon Compte</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>DBus Dienst</translation>
+        <translation>Démon DBus</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Mausaktionsdienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>DConf Dienst</translation>
+        <translation>Service DConf</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Gnome Schlüsselbund Dienst</translation>
+        <translation>Démon Gnome keyring</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Bluetooth Dienst</translation>
+        <translation>Démon Bluetooth</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Energiedienst</translation>
+        <translation>Démon Energie</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Modemgerätemanager</translation>
+        <translation>Gestionnaire de périphérique modem</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Systemdruck Tray Dienst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Chrome Browser Sandbox</translation>
+        <translation>Navigateur Chrome sandbox</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics Touchpadgerätedienst</translation>
+        <translation>Démon de périphérique touchpad Synaptics</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Auslagerungsdatei</translation>
+        <translation>Partition d&apos;échange</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nicht aktiviert</translation>
+        <translation>Non activé</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klicken Sie auf das Programm, das Sie beenden möchten</translation>
+        <translation>Cliquez sur l&apos;application que vous souhaitez arrêter</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Programme</translation>
+        <translation>Applications</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Meine Prozesse</translation>
+        <translation>Mes processus</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Alle Prozesse</translation>
+        <translation>Tous les processus</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Suchen</translation>
+        <translation>Rechercher</translation>
     </message>
 </context>
 <context>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Bureau</translation>
     </message>
 </context>
 </TS>

@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>有 %2 個應用程式以及 %3 個行程正在執行</translation>
+        <translation>正在執行 %2 個應用程式以及 %3 個行程</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin 系統監控是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、硬碟和其他系統狀態。</translation>
+        <translation>Deepin 系統監視器是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、硬碟和其他系統狀態。</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -197,7 +197,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin 桌面環境－Pokiit 代理程式</translation>
+        <translation>Deepin 桌面環境－Polkit 代理程式</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
@@ -381,18 +381,18 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>停用</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>點擊欲中止的應用程式</translation>
+        <translation>點擊欲結束的應用程式</translation>
     </message>
 </context>
 <context>

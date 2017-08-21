@@ -268,159 +268,159 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do sistema de ficheiros do modo utilizador virtual</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do servidor Fuse do sistema de ficheiros do modo utilizador virtual</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation>Processo auxiliar do cliente Loja Deepin</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestor de rede</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Serviço PolicyKit DBus</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do serviço de partilha de ficheiros</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation type="unfinished"/>
+        <translation>Serviço X</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation type="unfinished"/>
+        <translation>Método de entrada Fcitx</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon DBus do método de entrada Fcitx</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do método de entrada Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"/>
+        <translation>Cliente local ShadowSocks</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation type="unfinished"/>
+        <translation>Serviço de áudio</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon de impressão</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestor do Light display</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestor de serviços do sistema</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation type="unfinished"/>
+        <translation>Gestor de serviços do sistema - Daemon do gestor de dispositivos</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do disco</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon da conta</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon DBus</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon de eventos do rato</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation type="unfinished"/>
+        <translation>Serviço Dconf</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do gnome keyring</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do bluetooth</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon de energia</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestor de dispositivos modem</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>Serviço tray do sistema de impressão</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation type="unfinished"/>
+        <translation>Sandbox do Navegador Chrome</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon do dispositivo de toque Synaptics</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Não ativo</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished"/>
+        <translation>Clique na aplicação que deseja terminar</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished"/>
+        <translation>Aplicações</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished"/>
+        <translation>Meus processos</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished"/>
+        <translation>Todos os processos</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Procurar</translation>
     </message>
 </context>
 <context>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation type="unfinished"/>
+        <translation>Ambiente de trabalho</translation>
     </message>
 </context>
 </TS>

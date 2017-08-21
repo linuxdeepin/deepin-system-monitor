@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -383,11 +381,11 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Swap</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Nepovoleno</translation>
+        <translation>Nepovoleno</translation>
     </message>
 </context>
 <context>
@@ -417,6 +415,13 @@ Jste si jistý, že chcete pokračovat?</translation>
     <message>
         <source>Search</source>
         <translation>Hledat</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Plocha</translation>
     </message>
 </context>
 </TS>

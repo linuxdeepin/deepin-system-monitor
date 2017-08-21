@@ -32,7 +32,7 @@
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation type="unfinished"/>
+        <translation>Forciar el zarru de l&apos;aplicación</translation>
     </message>
     <message>
         <source>Dark theme</source>
@@ -174,7 +174,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation>El monitor del sistema Deepin ye un monitor del sistema intuitivu y poderosu. Pue monitorizar procesos, CPU, memoria, rede, discos y otros estaos.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -257,11 +257,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu del identificador de ventanes</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Serviciu DBus del degorriu del identificador de ventanes</translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -277,122 +277,122 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation>Ayudante del procesu del veceru de Tienda Deepin</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation type="unfinished"/>
+        <translation>Xestor de redes</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Serviciu DBus de PolicyKit</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu del serviciu de compartición de ficheros</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation type="unfinished"/>
+        <translation>Serviciu X</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation type="unfinished"/>
+        <translation>Métodu d&apos;entrada de Fcitx</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu DBus de métodu d&apos;entrada de Fcitx</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu del métodu d&apos;entrada de Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"/>
+        <translation>Veceru llocal de ShadowSocks</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation type="unfinished"/>
+        <translation>Serviciu de soníu</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu d&apos;imprentación</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"/>
+        <translation>Lightdm</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation type="unfinished"/>
+        <translation>Xestor de servicios del sistema</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation type="unfinished"/>
+        <translation>Xestor de servicios del sistema - Degorriu de xestión de preseos</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu de discos</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu de cuentes</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu DBus</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorrios d&apos;eventos del mur</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation type="unfinished"/>
+        <translation>Serviciu DConf</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu del aniellu de claves de Gnome</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu Bluetooth</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu d&apos;enerxía</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation type="unfinished"/>
+        <translation>Xestor de módems</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>Sistema de la bandexa del serviciu d&apos;imprentación</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation type="unfinished"/>
+        <translation>Sandbox del restolador Chrome/Chromium</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu de paneles táutiles de Synaptics</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Intercambéu</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Nun s&apos;activó</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished"/>
+        <translation>Primi n&apos;aplicación que quieras finar</translation>
     </message>
 </context>
 <context>

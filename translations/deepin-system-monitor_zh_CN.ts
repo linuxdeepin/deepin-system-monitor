@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -417,6 +415,13 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>搜索</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>桌面</translation>
     </message>
 </context>
 </TS>

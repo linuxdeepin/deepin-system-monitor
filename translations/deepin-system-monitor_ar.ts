@@ -36,7 +36,7 @@
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>سمة غامغة</translation>
+        <translation>سمة داكنة</translation>
     </message>
     <message>
         <source>End application</source>
@@ -76,7 +76,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>تنزيل</translation>
+        <translation>التنزيل</translation>
     </message>
     <message>
         <source>Total</source>
@@ -84,14 +84,14 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation>الرفع</translation>
+        <translation>التحميل</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation type="unfinished"/>
+        <translation>لا استجابة</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -116,11 +116,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"/>
+        <translation>تعليق العملية</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"/>
+        <translation>استئناف العملية</translation>
     </message>
     <message>
         <source>View process location</source>
@@ -151,11 +151,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>الكتابة على القرص</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>القراءة على القرص</translation>
     </message>
     <message>
         <source>Download</source>
@@ -163,7 +163,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation>الرفع</translation>
+        <translation>التحميل</translation>
     </message>
     <message>
         <source>PID</source>
@@ -174,7 +174,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation>مراقب النظام من ديبين : نظام مراقبة بديهي وقوي ، لرؤية العمليات في المعالج والذواكر والشبكة والقرص وغيرها من الحالات .</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -189,7 +189,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>بيئة سطح مكتب ديبين - خدمة بدء العمليات</translation>
+        <translation>Deepin Desktop Environment - Process initiation service</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
@@ -197,39 +197,39 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Polkit proxy</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Launcher</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Dock</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Screen display</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Daemon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Session daemon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Session initialization process</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation type="unfinished"/>
+        <translation>Deepin File Manager daemon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Desktop Environment - Lock screen service</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
@@ -381,18 +381,18 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>ذاكرة التبديل</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>غير مفعلة</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished"/>
+        <translation>انقر على التطبيق الذي تريد إنهاءه</translation>
     </message>
 </context>
 <context>

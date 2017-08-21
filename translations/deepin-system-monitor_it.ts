@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -383,11 +381,11 @@ Sicuro di voler terminarlo?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Swap</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Non attivo</translation>
+        <translation>Non attivo</translation>
     </message>
 </context>
 <context>
@@ -417,6 +415,13 @@ Sicuro di voler terminarlo?</translation>
     <message>
         <source>Search</source>
         <translation>Cerca</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Desktop</translation>
     </message>
 </context>
 </TS>

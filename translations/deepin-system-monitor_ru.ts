@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -67,7 +65,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не запущен</translation>
+        <translation>Не подключен</translation>
     </message>
 </context>
 <context>
@@ -383,11 +381,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Раздел подкачки</translation>
+        <translation>Раздел подкачки</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Не запущен</translation>
+        <translation>Не включено</translation>
     </message>
 </context>
 <context>
@@ -417,6 +415,13 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>Поиск</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
     </message>
 </context>
 </TS>

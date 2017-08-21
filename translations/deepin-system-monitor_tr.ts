@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -381,11 +379,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Takas</translation>
+        <translation>Takas</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Etkin değil</translation>
+        <translation>Etkin değil</translation>
     </message>
 </context>
 <context>
@@ -415,6 +413,13 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>Arama</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Masaüstü</translation>
     </message>
 </context>
 </TS>
