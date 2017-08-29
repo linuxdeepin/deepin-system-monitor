@@ -571,7 +571,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
 
         if (atTitleArea) {
             int hoverColumn = -1;
-            
+
             if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
                 // Calcuate title widths;
                 QList<int> renderWidths = getRenderWidths();
@@ -600,7 +600,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
             }
         } else {
             int hoverItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
-            
+
             // NOTE: hoverItemIndex may be less than 0, we need check index here.
             if (hoverItemIndex >= 0 && hoverItemIndex < (*renderItems).length()) {
                 ListItem *item = (*renderItems)[hoverItemIndex];
@@ -729,63 +729,69 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
     else {
         int pressItemIndex = (renderOffset + mouseEvent->y() - titleHeight) / rowHeight;
 
-        if (mouseEvent->button() == Qt::LeftButton) {
-            if (pressItemIndex < renderItems->count()) {
-                // Scattered selection of items when press ctrl modifier.
-                if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                    ListItem *item = (*renderItems)[pressItemIndex];
+        if (pressItemIndex >= renderItems->count()) {
+            clearSelections();
 
-                    if (selectionItems->contains(item)) {
-                        selectionItems->removeOne(item);
-                    } else {
+            repaint();
+        } else {
+            if (mouseEvent->button() == Qt::LeftButton) {
+                if (pressItemIndex < renderItems->count()) {
+                    // Scattered selection of items when press ctrl modifier.
+                    if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                        ListItem *item = (*renderItems)[pressItemIndex];
+
+                        if (selectionItems->contains(item)) {
+                            selectionItems->removeOne(item);
+                        } else {
+                            QList<ListItem*> items = QList<ListItem*>();
+                            items << item;
+                            addSelections(items);
+                        }
+                    }
+                    // Continuous selection of items when press shift modifier.
+                    else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
+                        int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
+                        int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
+                        int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
+
+                        shiftSelectItemsWithBound(selectionStartIndex, selectionEndIndex);
+                    }
+                    // Just select item under mouse if user not press any modifier.
+                    else {
+                        clearSelections();
+
                         QList<ListItem*> items = QList<ListItem*>();
-                        items << item;
+                        items << (*renderItems)[pressItemIndex];
                         addSelections(items);
                     }
-                }
-                // Continuous selection of items when press shift modifier.
-                else if ((mouseEvent->modifiers() == Qt::ShiftModifier) && !selectionItems->empty()) {
-                    int lastSelectionIndex = renderItems->indexOf(lastSelectItem);
-                    int selectionStartIndex = std::min(pressItemIndex, lastSelectionIndex);
-                    int selectionEndIndex = std::max(pressItemIndex, lastSelectionIndex);
 
-                    shiftSelectItemsWithBound(selectionStartIndex, selectionEndIndex);
+                    repaint();
                 }
-                // Just select item under mouse if user not press any modifier.
-                else {
+            } else if (mouseEvent->button() == Qt::RightButton) {
+                ListItem *pressItem = (*renderItems)[pressItemIndex];
+                bool pressInSelectionArea = false;
+
+                for (ListItem *item : *selectionItems) {
+                    if (item == pressItem) {
+                        pressInSelectionArea = true;
+
+                        break;
+                    }
+                }
+
+                if (!pressInSelectionArea && pressItemIndex < renderItems->length()) {
                     clearSelections();
 
                     QList<ListItem*> items = QList<ListItem*>();
                     items << (*renderItems)[pressItemIndex];
                     addSelections(items);
+
+                    repaint();
                 }
 
-                repaint();
-            }
-        } else if (mouseEvent->button() == Qt::RightButton) {
-            ListItem *pressItem = (*renderItems)[pressItemIndex];
-            bool pressInSelectionArea = false;
-
-            for (ListItem *item : *selectionItems) {
-                if (item == pressItem) {
-                    pressInSelectionArea = true;
-
-                    break;
+                if (selectionItems->length() > 0) {
+                    rightClickItems(this->mapToGlobal(mouseEvent->pos()), *selectionItems);
                 }
-            }
-
-            if (!pressInSelectionArea && pressItemIndex < renderItems->length()) {
-                clearSelections();
-
-                QList<ListItem*> items = QList<ListItem*>();
-                items << (*renderItems)[pressItemIndex];
-                addSelections(items);
-
-                repaint();
-            }
-
-            if (selectionItems->length() > 0) {
-                rightClickItems(this->mapToGlobal(mouseEvent->pos()), *selectionItems);
             }
         }
     }
