@@ -165,6 +165,14 @@ void StatusMonitor::updateStatus()
         }
     }
 
+    // Read tray icon process.
+    QList<int> trayProcessXids = Utils::getTrayWindows();
+    QMap<int, int> trayProcessMap;
+
+    for (u_int32_t xid : trayProcessXids) {
+        trayProcessMap[findWindowTitle->getWindowPid(xid)] = xid;
+    }
+
     // Fill gui chlid process information when filterType is OnlyGUI.
     findWindowTitle->updateWindowInfos();
     ProcessTree *processTree = new ProcessTree();
@@ -172,6 +180,14 @@ void StatusMonitor::updateStatus()
     QMap<int, ChildPidInfo> childInfoMap;
     if (filterType == OnlyGUI) {
         QList<int> guiPids = findWindowTitle->getWindowPids();
+        
+        // Tray pid also need add in gui pids list.
+        for (int pid : trayProcessMap.keys()) {
+            if (!guiPids.contains(pid)) {
+                guiPids << pid;
+            }
+        }
+        
         for (int guiPid : guiPids) {
             QList<int> childPids;
             childPids = processTree->getAllChildPids(guiPid);
@@ -207,10 +223,16 @@ void StatusMonitor::updateStatus()
         QString user = (&i.second)->euser;
         double cpu = (*processCpuPercents)[pid];
 
-        std::string desktopFile = getDesktopFileFromName(pid, name, cmdline);
+        std::string desktopFile;
+        if (trayProcessMap.contains(pid)) {
+            desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
+        } else {
+            desktopFile = getDesktopFileFromName(pid, name, cmdline);
+        }
+        
         QString title = findWindowTitle->getWindowTitle(pid);
 
-        bool isGui = (title != "");
+        bool isGui = trayProcessMap.contains(pid) || (title != "");
 
         // Record wine application and wineserver.real desktop file.
         // We need transfer wineserver.real network traffic to the corresponding wine program.

@@ -98,6 +98,7 @@ namespace Utils {
     
     
     int getStatusBarMaxWidth();
+    QList<int> getTrayWindows();
     QMap<QString, QString> getProcessDescriptions();
     QMap<QString, QString> getDesktopfileMap();
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);

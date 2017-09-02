@@ -77,7 +77,7 @@ QT += network
 QT += x11extras
 QT += dbus
 
-QMAKE_CXXFLAGS += -g
+# QMAKE_CXXFLAGS += -g
 LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst -ldtkwm

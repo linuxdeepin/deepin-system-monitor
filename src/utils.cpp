@@ -32,6 +32,7 @@
 #include <QLayout>
 #include <QPainter>
 #include <QPixmap>
+#include <QtDBus>
 #include <QStandardPaths>
 #include <QString>
 #include <QWidget>
@@ -114,6 +115,31 @@ namespace Utils {
         map["syndaemon"] = QObject::tr("Synaptics touchpad device daemon");
 
         return map;
+    }
+
+    QList<int> getTrayWindows()
+    {
+        QDBusInterface busInterface("com.deepin.dde.TrayManager",
+                                    "/com/deepin/dde/TrayManager",
+                                    "org.freedesktop.DBus.Properties",
+                                    QDBusConnection::sessionBus());
+        QDBusMessage reply = busInterface.call("Get",
+                                               "com.deepin.dde.TrayManager",
+                                               "TrayIcons");
+        QVariant v = reply.arguments().first();
+        QDBusArgument argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+
+        argument.beginArray();
+        QList<int> xids;
+        while (!argument.atEnd()) {
+            int xid;
+
+            argument >> xid;
+            xids << xid;
+        }
+        argument.endArray();
+        
+        return xids;
     }
 
     int getStatusBarMaxWidth()

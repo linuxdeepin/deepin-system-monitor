@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "attributes_dialog.h"
 #include "constant.h"
@@ -39,39 +39,39 @@ using namespace Dtk;
 AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDialog(parent)
 {
     pid = processId;
-    
+
     setAttribute(Qt::WA_DeleteOnClose, true);
-    
+
     setMinimumWidth(320);
-    
+
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     nameLayout = new QHBoxLayout();
     nameLayout->setContentsMargins(0, 0, 0, 0);
     cmdlineLayout = new QHBoxLayout();
     cmdlineLayout->setContentsMargins(0, 0, 0, 0);
     startTimeLayout = new QHBoxLayout();
     startTimeLayout->setContentsMargins(0, 0, 0, 0);
-    
+
     closeButton = new DWindowCloseButton;
     closeButton->setFixedSize(27, 23);
     connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
     Dtk::Widget::DThemeManager::instance()->setTheme(closeButton, "light") ;
 
     iconLabel = new QLabel();
-    
+
     titleLabel = new QLabel();
     titleLabel->setStyleSheet("QLabel { background-color : transparent; font-size: 14px; font-weight: 500; color : #303030; }");
-    
+
     nameTitleLabel = new QLabel(QString("%1:").arg(tr("Process name")));
     nameTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     nameTitleLabel->setFixedWidth(100);
     nameTitleLabel->setAlignment(Qt::AlignRight);
-    
+
     nameLabel = new QLabel();
     nameLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
-    
+
     nameLayout->addWidget(nameTitleLabel);
     nameLayout->addWidget(nameLabel);
     nameLayout->addSpacing(20);
@@ -80,12 +80,12 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     cmdlineTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     cmdlineTitleLabel->setFixedWidth(100);
     cmdlineTitleLabel->setAlignment(Qt::AlignRight);
-    
+
     cmdlineLabel = new QLabel();
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     cmdlineLabel->setWordWrap(true);
     cmdlineLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
-    
+
     cmdlineLayout->addWidget(cmdlineTitleLabel);
     cmdlineLayout->addWidget(cmdlineLabel);
     cmdlineLayout->addSpacing(20);
@@ -94,15 +94,15 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     startTimeTitleLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
     startTimeTitleLabel->setFixedWidth(100);
     startTimeTitleLabel->setAlignment(Qt::AlignRight);
-    
+
     startTimeLabel = new QLabel();
     startTimeLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     startTimeLabel->setWordWrap(true);
-    
+
     startTimeLayout->addWidget(startTimeTitleLabel);
     startTimeLayout->addWidget(startTimeLabel);
     startTimeLayout->addSpacing(20);
-    
+
     layout->addWidget(closeButton, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addSpacing(20);
     layout->addWidget(iconLabel, 0, Qt::AlignHCenter);
@@ -113,7 +113,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     layout->addLayout(cmdlineLayout);
     layout->addLayout(startTimeLayout);
     layout->addSpacing(20);
-    
+
     // Read the list of open processes information.
     PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
     static proc_t proc_info;
@@ -127,14 +127,29 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
 
     findWindowTitle = new FindWindowTitle();
     findWindowTitle->updateWindowInfos();
-    
+
+    // Read tray icon process.
+    QList<int> trayProcessXids = Utils::getTrayWindows();
+    QMap<int, int> trayProcessMap;
+
+    for (u_int32_t xid : trayProcessXids) {
+        trayProcessMap[findWindowTitle->getWindowPid(xid)] = xid;
+    }
+
     for (auto &i:processes) {
         int processId = (&i.second)->tid;
-        
+
         if (pid == processId) {
             QString cmdline = Utils::getProcessCmdline(processId);
             QString name = getProcessName(&i.second, cmdline);
-            std::string desktopFile = getDesktopFileFromName(processId, name, cmdline);
+            
+            std::string desktopFile;
+            if (trayProcessMap.contains(pid)) {
+                desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
+            } else {
+                desktopFile = getDesktopFileFromName(pid, name, cmdline);
+            }
+
             QPixmap icon;
             if (desktopFile.size() == 0) {
                 icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 96);
@@ -142,14 +157,14 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
                 icon = getDesktopFileIcon(desktopFile, 96);
             }
             QString displayName = getDisplayNameFromName(name, desktopFile, false);
-            
+
             iconLabel->setPixmap(icon);
             titleLabel->setText(displayName);
             nameLabel->setText(name);
             cmdlineLabel->setText(cmdline);
-            
+
             startTimeLabel->setText(QFileInfo(QString("/proc/%1").arg(processId)).created().toString("yyyy-MM-dd hh:mm:ss"));
-            
+
             break;
         }
     }
