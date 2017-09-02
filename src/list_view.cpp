@@ -904,14 +904,18 @@ void ListView::paintEvent(QPaintEvent *)
 
             // Draw item backround.
             bool isSelect = selectionItems->contains(item);
+            painter.save();
             item->drawBackground(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight), &painter, rowCounter, isSelect);
+            painter.restore();
 
             // Draw item foreground.
             int columnCounter = 0;
             int columnRenderX = 0;
             for (int renderWidth:renderWidths) {
                 if (renderWidth > 0) {
+                    painter.save();
                     item->drawForeground(QRect(columnRenderX, renderY + rowCounter * rowHeight - renderOffset, renderWidth, rowHeight), &painter, columnCounter, rowCounter, isSelect);
+                    painter.restore();
 
                     columnRenderX += renderWidth;
                 }
