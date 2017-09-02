@@ -821,9 +821,9 @@ void ListView::paintEvent(QPaintEvent *)
     painter.setOpacity(0.05);
 
     int penWidth = 1;
-    QPainterPath clipPath;
-    clipPath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
-    painter.setClipPath(clipPath);
+    QPainterPath framePath;
+    framePath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
+    painter.setClipPath(framePath);
 
     // Draw title.
     QPainterPath titlePath;
@@ -900,7 +900,7 @@ void ListView::paintEvent(QPaintEvent *)
             // Clip item rect.
             QPainterPath itemPath;
             itemPath.addRect(QRect(0, renderY + rowCounter * rowHeight - renderOffset, rect().width(), rowHeight));
-            painter.setClipPath((clipPath.intersected(scrollAreaPath)).intersected(itemPath));
+            painter.setClipPath((framePath.intersected(scrollAreaPath)).intersected(itemPath));
 
             // Draw item backround.
             bool isSelect = selectionItems->contains(item);
@@ -929,7 +929,7 @@ void ListView::paintEvent(QPaintEvent *)
     }
 
     // Keep clip area.
-    painter.setClipPath(clipPath);
+    painter.setClipPath(framePath);
 
     // Draw search tooltip.
     if (searchContent != "" && renderItems->size() == 0) {
@@ -940,9 +940,6 @@ void ListView::paintEvent(QPaintEvent *)
     }
 
     // Draw frame.
-    QPainterPath framePath;
-    framePath.addRoundedRect(QRect(rect().x() + penWidth, rect().y() + penWidth, rect().width() - penWidth * 2, rect().height() - penWidth * 2), clipRadius, clipRadius);
-
     QPen framePen;
     framePen.setColor(frameColor);
 
