@@ -32,7 +32,7 @@
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Gennemtving for at afslutte applikationen</translation>
+        <translation>Gennemtving afslutning af program</translation>
     </message>
     <message>
         <source>Dark theme</source>
@@ -40,17 +40,17 @@
     </message>
     <message>
         <source>End application</source>
-        <translation>Afslut applikation</translation>
+        <translation>Afslut program</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Afslutning af denne applikation kan medføre tab af data.
-Er du sikker på at du vil fortsætte?</translation>
+        <translation>Afslutning af dette program kan medføre tab af data.
+Er du sikker på, at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annulere</translation>
+        <translation>Annuller</translation>
     </message>
 </context>
 <context>
@@ -95,7 +95,7 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendere</translation>
+        <translation>Suspender</translation>
     </message>
 </context>
 <context>
@@ -108,15 +108,15 @@ Er du sikker på at du vil fortsætte?</translation>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
         <translation>Afslutning af denne proces kan forårsage tab af data.
-Er du sikker på at du vil fortsætte?</translation>
+Er du sikker på, at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anullere</translation>
+        <translation>Annuller</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Suspendere proces</translation>
+        <translation>Suspender proces</translation>
     </message>
     <message>
         <source>Resume process</source>
@@ -124,15 +124,15 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Se procesplacering</translation>
+        <translation>Vis procesplacering</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Ejeregenskaber</translation>
+        <translation>Egenskaber</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 applikationer og %3 processer kører</translation>
+        <translation>%2 programmer og %3 processer kører</translation>
     </message>
 </context>
 <context>
@@ -151,11 +151,11 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Skrives til harddisk</translation>
+        <translation>Diskskrivning</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Harddisk læsning</translation>
+        <translation>Disklæsning</translation>
     </message>
     <message>
         <source>Download</source>
@@ -174,62 +174,62 @@ Er du sikker på at du vil fortsætte?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin System Monitor er en intuitiv og kraftfuld systemskærm. Det kan overvåge processens CPU, hukommelse, netværk, disk og anden status.</translation>
+        <translation>Deepin systemovervågning er en intuitiv og kraftfuld systemovervågning Den kan overvåge processers CPU, hukommelse, netværk, disk og anden status.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>Deepin systemovervågning</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>Deepin systemovervågning</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment - Procesinitieringstjeneste</translation>
+        <translation>Deepin-skrivebordsmiljø - Procesinitiering-tjeneste</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Desktop</translation>
+        <translation>Deepin-skrivebordsmiljø - Skrivebord</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit proxy</translation>
+        <translation>Deepin-skrivebordsmiljø - Polkit-proxy</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Launcher</translation>
+        <translation>Deepin-skrivebordsmiljø - Starter</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Dock</translation>
+        <translation>Deepin-skrivebordsmiljø - Dok</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment - Skærmvisning</translation>
+        <translation>Deepin-skrivebordsmiljø - Skærmvisning</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Dæmon</translation>
+        <translation>Deepin-skrivebordsmiljø - Dæmon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Session dæmon</translation>
+        <translation>Deepin-skrivebordsmiljø - Session-dæmon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - Session initialiseringsproces</translation>
+        <translation>Deepin-skrivebordsmiljø - Session initialiseringsproces</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deepin filhåndtering dæmon</translation>
+        <translation>Deepin filhåndtering-dæmon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Lås skærm service</translation>
+        <translation>Deepin-skrivebordsmiljø - Låseskærm-tjeneste</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
@@ -237,7 +237,7 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Deepin vindueshåndtering skifter</translation>
+        <translation>Deepin vindueshåndteringsskifter</translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -245,67 +245,67 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Cloud Print agent</translation>
+        <translation>Deepin skyprint-agent</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Deepin menu service</translation>
+        <translation>Deepin menu-tjeneste</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Deepin butik dæmon</translation>
+        <translation>Deepin butik-dæmon</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Vidue find dæmon</translation>
+        <translation>Vindue match-dæmon</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Vindue find dæmon DBus service</translation>
+        <translation>Vindue match-dæmon DBus-tjeneste</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH agent</translation>
+        <translation>SSH-agent</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Bruger-tilstand virtuelle filsystemdæmon</translation>
+        <translation>Brugertilstand virtuelt filsystem-dæmon</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Fuse server  til virtuelt filsystemdæmon med brugermondul</translation>
+        <translation>Fuse-server for brugertilstand virtuelt filsystem-dæmon</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Hjælper proces til Deepin butik klient</translation>
+        <translation>Hjælper-proces til Deepin butik-klient</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Netværksadministrator</translation>
+        <translation>Netværkshåndtering</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus service</translation>
+        <translation>PolicyKit-DBus-tjeneste</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Fildeling service dæmon</translation>
+        <translation>Fildelingstjeneste-dæmon</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation>X service</translation>
+        <translation>X-tjeneste</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Fcitx input method</translation>
+        <translation>Fcitx-inputmetode</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx input metode DBus dæmon</translation>
+        <translation>Fcitx-inputmetode-DBus-dæmon</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Sogou input metode dæmon</translation>
+        <translation>Sogou-inputmetode-dæmon</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
@@ -317,59 +317,59 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Print dæmon</translation>
+        <translation>Print-dæmon</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Lysdisplayadministrator</translation>
+        <translation>Lysvisningshåndtering</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>System service håndtering</translation>
+        <translation>Systemtjeneste-håndtering</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>System service håndtering - Enhedshåndtering dæmon</translation>
+        <translation>Systemtjeneste-håndtering - Enhedshåndtering-dæmon</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Disk dæmon</translation>
+        <translation>Disk-dæmon</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Konto dæmon</translation>
+        <translation>Konto-dæmon</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>DBus dæmon</translation>
+        <translation>DBus-dæmon</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Mushændelse dæmon</translation>
+        <translation>Musehændelse-dæmon</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>DConf tjeneste</translation>
+        <translation>DConf-tjeneste</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Gnome nøgle dæmon</translation>
+        <translation>Gnome nøglerings-dæmon</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Bluetooth dæmon</translation>
+        <translation>Bluetooth-dæmon</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Strøm dæmon</translation>
+        <translation>Strøm-dæmon</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Moden enhedshåndtering</translation>
+        <translation>Modem-enhedshåndtering</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>System udskriftsbakke tjeneste</translation>
+        <translation>Systemets udskriftsbakketjeneste</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
@@ -377,7 +377,7 @@ Er du sikker på at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics touchpad håndteringsdæmon</translation>
+        <translation>Synaptics touchpad-enhed-dæmon</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -421,7 +421,7 @@ Er du sikker på at du vil fortsætte?</translation>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation>Skrivebord</translation>
     </message>
 </context>
 </TS>

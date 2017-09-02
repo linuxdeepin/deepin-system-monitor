@@ -269,11 +269,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Degorriu del sistema de ficheros virtual del mou d&apos;usuariu</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Sirvidor fuse del degorriu del sistema de ficheros virtual del mou d&apos;usuariu</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>

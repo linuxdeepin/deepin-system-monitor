@@ -95,7 +95,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>إسبات</translation>
     </message>
 </context>
 <context>
@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"/>
+        <translation>%2 من التطبيقات و %3 من العملبات قيد التشغيل</translation>
     </message>
 </context>
 <context>
@@ -193,7 +193,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>بيئة سطح مكتب ديبين - سطح مكتب</translation>
+        <translation>Deepin Desktop Environment - Desktop</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
@@ -233,51 +233,51 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation type="unfinished"/>
+        <translation>مدير نوافذ ديبين</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation type="unfinished"/>
+        <translation>مبدل مدير نوافذ ديبين</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation type="unfinished"/>
+        <translation>إشعارات ديبين</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Cloud Print agent</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation type="unfinished"/>
+        <translation>خدمة القوائم لديبين</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Store daemon</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation type="unfinished"/>
+        <translation>Window match daemon</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Window match daemon DBus service</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation type="unfinished"/>
+        <translation>وكيل SSH</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>User mode virtual file system daemon</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Fuse server of user mode virtual file system daemon</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation>Helper process of Deepin Store client</translation>
     </message>
     <message>
         <source>Network manager</source>
@@ -285,31 +285,31 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation type="unfinished"/>
+        <translation>PolicyKit DBus service</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation type="unfinished"/>
+        <translation>File sharing service daemon</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation type="unfinished"/>
+        <translation>X service</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation type="unfinished"/>
+        <translation>Fcitx input method</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Fcitx input method DBus daemon</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"/>
+        <translation>Sogou input method daemon</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"/>
+        <translation>ShadowSocks local client</translation>
     </message>
     <message>
         <source>Sound service</source>
@@ -317,67 +317,67 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation type="unfinished"/>
+        <translation>Print daemon</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"/>
+        <translation>Light display manager</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation type="unfinished"/>
+        <translation>System service manager</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation type="unfinished"/>
+        <translation>System service manager - Device management daemon</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation type="unfinished"/>
+        <translation>Disk daemon</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation type="unfinished"/>
+        <translation>Account daemon</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>DBus daemon</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"/>
+        <translation>Mouse event daemon</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation type="unfinished"/>
+        <translation>DConf service</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation type="unfinished"/>
+        <translation>Gnome keyring daemon</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth daemon</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation type="unfinished"/>
+        <translation>Power daemon</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation type="unfinished"/>
+        <translation>مدير جهاز المودم</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>System print tray service</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation type="unfinished"/>
+        <translation>Chrome browser sandbox</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation type="unfinished"/>
+        <translation>Synaptics touchpad device daemon</translation>
     </message>
     <message>
         <source>Swap</source>
