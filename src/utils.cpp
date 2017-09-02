@@ -293,7 +293,7 @@ namespace Utils {
         }
 
         foreach (auto environmentVariable, QString::fromStdString(temp).trimmed().split("\n")) {
-            if (environmentVariable.startsWith(environmentName)) {
+            if (environmentVariable.startsWith(QString("%1=").arg(environmentName))) {
                 return environmentVariable.remove(0, QString("%1=").arg(environmentName).length());
             }
         }
