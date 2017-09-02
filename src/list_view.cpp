@@ -45,11 +45,6 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     titleArrowPadding = 4;
     titlePadding = 14;
 
-    scrollAnimationTimer = NULL;
-    scrollAnimationTicker = 0;
-    scrollAnimationFrames = 16;
-    scrollAnimationDuration = 25;
-
     searchContent = "";
     searchAlgorithm = NULL;
 
@@ -111,13 +106,12 @@ ListView::~ListView()
     delete sortingAlgorithms;
     delete sortingOrderes;
     delete hideScrollbarTimer;
-    delete scrollAnimationTimer;
 }
 
 void ListView::setRowHeight(int height)
 {
     rowHeight = height;
-    scrollUnit = rowHeight * 9;
+    scrollUnit = rowHeight;
 }
 
 void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int height)
@@ -471,19 +465,6 @@ void ListView::leaveEvent(QEvent * event){
     QWidget::leaveEvent(event);
 }
 
-void ListView::scrollAnimation()
-{
-    if (scrollAnimationTicker <= scrollAnimationFrames) {
-        renderOffset = adjustRenderOffset(scrollStartY + easeInOut(scrollAnimationTicker / (scrollAnimationFrames * 1.0)) * scrollDistance);
-
-        repaint();
-
-        scrollAnimationTicker++;
-    } else {
-        scrollAnimationTimer->stop();
-    }
-}
-
 void ListView::hideScrollbar()
 {
     // Record old render offset to control scrollbar whether display.
@@ -818,23 +799,10 @@ void ListView::wheelEvent(QWheelEvent *event)
         // Record old render offset to control scrollbar whether display.
         oldRenderOffset = renderOffset;
 
-        int scrollStep = event->angleDelta().y() / 120;
-        int newRenderOffset = renderOffset - scrollStep * scrollUnit;
-        newRenderOffset = adjustRenderOffset(newRenderOffset);
-
-        if (newRenderOffset != renderOffset) {
-            // If timer is inactive, start scroll timer.
-            if (scrollAnimationTimer == NULL || !scrollAnimationTimer->isActive()) {
-                scrollStartY = renderOffset;
-                scrollDistance = newRenderOffset - renderOffset;
-
-                startScrollAnimation();
-            }
-            // If timer is active, just add scroll offset make scroll faster and *smooth*.
-            else {
-                scrollDistance -= scrollStep * rowHeight;
-            }
-        }
+        qreal scrollStep = event->angleDelta().y() / 120.0;
+        renderOffset = adjustRenderOffset(renderOffset - scrollStep * scrollUnit);
+        
+        repaint();
     }
 
     event->accept();
@@ -1332,16 +1300,6 @@ void ListView::sortItemsByColumn(int column, bool descendingSort)
         qSort(renderItems->begin(), renderItems->end(), [&](const ListItem *item1, const ListItem *item2) {
                 return (*sortingAlgorithms)[column](item1, item2, descendingSort);
             });
-    }
-}
-
-void ListView::startScrollAnimation()
-{
-    if (scrollAnimationTimer == NULL || !scrollAnimationTimer->isActive()) {
-        scrollAnimationTicker = 0;
-        scrollAnimationTimer = new QTimer();
-        connect(scrollAnimationTimer, SIGNAL(timeout()), this, SLOT(scrollAnimation()));
-        scrollAnimationTimer->start(scrollAnimationDuration);
     }
 }
 

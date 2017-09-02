@@ -203,7 +203,6 @@ signals:
     void changeHoverItem(QPoint pos, ListItem* item, int columnIndex);
     
 private slots:
-    void scrollAnimation();
     void hideScrollbar();
     
 private:
@@ -233,7 +232,6 @@ private:
     int getScrollbarY();
     int getTopRenderOffset();
     void sortItemsByColumn(int column, bool descendingSort);
-    void startScrollAnimation();
     void startScrollbarHideTimer();
     
     ListItem *lastHoverItem;
@@ -248,7 +246,6 @@ private:
     QList<int> columnWidths;
     QString searchContent;
     QTimer *hideScrollbarTimer;
-    QTimer *scrollAnimationTimer;
     SearchAlgorithm searchAlgorithm;
     bool defaultSortingOrder;
     bool mouseAtScrollArea;
@@ -261,9 +258,6 @@ private:
     int oldRenderOffset;
     int renderOffset;
     int rowHeight;
-    int scrollAnimationDuration;
-    int scrollAnimationFrames;
-    int scrollAnimationTicker;
     int scrollDistance;
     int scrollStartY;
     int scrollUnit;
