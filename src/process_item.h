@@ -24,32 +24,32 @@
 #ifndef PROCESSITEM_H
 #define PROCESSITEM_H
 
-#include "list_item.h"
+#include "dsimplelistitem.h"
 #include "utils.h"
 #include <proc/readproc.h>
 
 using namespace Utils;
 
-class ProcessItem : public ListItem
+class ProcessItem : public DSimpleListItem
 {
     Q_OBJECT
     
 public:
     ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState);
     
-    bool sameAs(ListItem *item);
+    bool sameAs(DSimpleListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect);
     
-    static bool search(const ListItem *item, QString searchContent);
-    static bool sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByDiskRead(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByDiskWrite(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByNetworkDownload(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByNetworkUpload(const ListItem *item1, const ListItem *item2, bool descendingSort);
-    static bool sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort);
+    static bool search(const DSimpleListItem *item, QString searchContent);
+    static bool sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByDiskRead(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByDiskWrite(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByMemory(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByName(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByNetworkDownload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByNetworkUpload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    static bool sortByPid(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
     
     DiskStatus getDiskStatus() const;
     NetworkStatus getNetworkStatus() const;

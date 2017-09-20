@@ -57,17 +57,17 @@ public slots:
     void dialogButtonClicked(int index, QString buttonText);
     void focusProcessView();
     void handleSearch(QString searchContent);
-    void changeHoverItem(QPoint pos, ListItem* item, int columnIndex);
+    void changeHoverItem(QPoint pos, DSimpleListItem* item, int columnIndex);
     void initTheme();
     void killProcesses();
     void openProcessDirectory();
-    void popupMenu(QPoint pos, QList<ListItem*> items);
+    void popupMenu(QPoint pos, QList<DSimpleListItem*> items);
     void resumeProcesses();
     void showAttributes();
     void showKillProcessDialog();
     void stopProcesses();
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
-    void updateStatus(QList<ListItem*> items);
+    void updateStatus(QList<DSimpleListItem*> items);
     
 private:
     DDialog *killProcessDialog;

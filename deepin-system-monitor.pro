@@ -30,8 +30,8 @@ HEADERS += src/utils.h \
 		   src/network_traffic_filter.h \
 		   src/status_monitor.h \
            src/process_manager.h \
-           src/list_item.h \
-           src/list_view.h \
+           src/dsimplelistitem.h \
+           src/dsimplelistview.h \
            src/process_item.h \
            src/process_view.h \
 		   src/hashqstring.h \
@@ -55,8 +55,8 @@ SOURCES += src/main.cpp \
 		   src/network_traffic_filter.cpp \
 		   src/status_monitor.cpp \
            src/process_manager.cpp \
-           src/list_item.cpp \
-           src/list_view.cpp \
+           src/dsimplelistitem.cpp \
+           src/dsimplelistview.cpp \
            src/process_item.cpp \
            src/process_view.cpp \
 		   src/find_window_title.cpp \

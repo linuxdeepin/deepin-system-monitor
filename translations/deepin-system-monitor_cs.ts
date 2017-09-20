@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -22,10 +24,10 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
-        <translation>Žádný výsledek hledání</translation>
+        <translation type="unfinished">Žádný výsledek hledání</translation>
     </message>
 </context>
 <context>
@@ -415,13 +417,6 @@ Jste si jistý, že chcete pokračovat?</translation>
     <message>
         <source>Search</source>
         <translation>Hledat</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Plocha</translation>
     </message>
 </context>
 </TS>

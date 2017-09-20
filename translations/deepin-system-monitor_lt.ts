@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="lt">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -22,10 +24,10 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
-        <translation>Nėra paieškos rezultatų</translation>
+        <translation type="unfinished">Nėra paieškos rezultatų</translation>
     </message>
 </context>
 <context>
@@ -61,7 +63,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -76,15 +78,15 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -159,11 +161,11 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID</source>
@@ -174,7 +176,7 @@ Ar tikrai norite tęsti?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -261,7 +263,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -269,11 +271,11 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
@@ -321,7 +323,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>System service manager</source>
@@ -345,7 +347,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>DConf service</source>
@@ -365,11 +367,11 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
@@ -381,7 +383,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -392,7 +394,7 @@ Ar tikrai norite tęsti?</translation>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -415,13 +417,6 @@ Ar tikrai norite tęsti?</translation>
     <message>
         <source>Search</source>
         <translation>Paieška</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Darbalaukis</translation>
     </message>
 </context>
 </TS>

@@ -210,7 +210,7 @@ void StatusMonitor::updateStatus()
     // Read processes information.
     int guiProcessNumber = 0;
     int systemProcessNumber = 0;
-    QList<ListItem*> items;
+    QList<DSimpleListItem*> items;
 
     wineApplicationDesktopMaps->clear();
     wineServerDesktopMaps->clear();
@@ -383,7 +383,7 @@ void StatusMonitor::updateStatus()
     }
 
     // Update ProcessItem's network status.
-    for (ListItem *item : items) {
+    for (DSimpleListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         if (networkStatusSnapshot.contains(processItem->getPid())) {
             processItem->setNetworkStatus(networkStatusSnapshot.value(processItem->getPid()));
@@ -411,7 +411,7 @@ void StatusMonitor::updateStatus()
 
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
-        for (ListItem *item : items) {
+        for (DSimpleListItem *item : items) {
             ProcessItem *processItem = static_cast<ProcessItem*>(item);
             QList<int> childPids;
             childPids = processTree->getAllChildPids(processItem->getPid());

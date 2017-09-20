@@ -24,9 +24,9 @@
 #ifndef PROCESSVIEW_H
 #define PROCESSVIEW_H
 
-#include "list_view.h"
+#include "dsimplelistview.h"
 
-class ProcessView : public ListView
+class ProcessView : public DSimpleListView
 {
     Q_OBJECT
     

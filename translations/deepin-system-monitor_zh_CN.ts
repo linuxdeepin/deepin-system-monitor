@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -22,10 +24,10 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
-        <translation>无搜索结果</translation>
+        <translation type="unfinished">无搜索结果</translation>
     </message>
 </context>
 <context>
@@ -415,13 +417,6 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>搜索</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>桌面</translation>
     </message>
 </context>
 </TS>

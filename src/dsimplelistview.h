@@ -24,26 +24,26 @@
 #ifndef LISTVIEW_H
 #define LISTVIEW_H
 
-#include "list_item.h"
+#include "dsimplelistitem.h"
 #include <QImage>
 #include <QTimer>
 #include <QWidget>
 
-typedef bool (* SortAlgorithm) (const ListItem *item1, const ListItem *item2, bool descendingSort);
-typedef bool (* SearchAlgorithm) (const ListItem *item, QString searchContent);
+typedef bool (* SortAlgorithm) (const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+typedef bool (* SearchAlgorithm) (const DSimpleListItem *item, QString searchContent);
 
-class ListView : public QWidget
+class DSimpleListView : public QWidget
 {
     Q_OBJECT
     
 public:
-    ListView(QWidget *parent = 0);
-    ~ListView();
+    DSimpleListView(QWidget *parent = 0);
+    ~DSimpleListView();
 
-    // ListView interfaces.
+    // DSimpleListView interfaces.
     
     /* 
-     * Set row height of ListView.
+     * Set row height of DSimpleListView.
      * 
      * @height the height of row
      */
@@ -73,7 +73,7 @@ public:
      * Set column sorting algorithms.
      * Note SortAlgorithm function type must be 'static', otherwise function pointer can't match type.
      * 
-     * @algorithms a list of SortAlgorithm, SortAlgorithm is function pointer, it's type is: 'bool (*) (const ListItem *item1, const ListItem *item2, bool descendingSort)'
+     * @algorithms a list of SortAlgorithm, SortAlgorithm is function pointer, it's type is: 'bool (*) (const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)'
      * @sortColumn default sort column, -1 mean don't sort any column default
      * @descendingSort whether sort column descending, default is false
      */
@@ -82,7 +82,7 @@ public:
     /*
      * Set search algorithm to filter match items.
      * 
-     * @algorithm the search algorithm, it's type is: 'bool (*) (const ListItem *item, QString searchContent)'
+     * @algorithm the search algorithm, it's type is: 'bool (*) (const DSimpleListItem *item, QString searchContent)'
      */
     void setSearchAlgorithm(SearchAlgorithm algorithm);
     
@@ -94,48 +94,48 @@ public:
     void setClipRadius(int radius);
     
     /* 
-     * Add ListItem list to ListView.
+     * Add DSimpleListItem list to ListView.
      * If user has click title to sort, sort items after add items to list. 
      * 
      * @items List of LiteItem*
      */
-    void addItems(QList<ListItem*> items);
+    void addItems(QList<DSimpleListItem*> items);
     
     /* 
-     * Clear items from ListView.
+     * Clear items from DSimpleListView.
      */
     void clearItems();
     
     /*
-     * Add ListItem list to mark selected effect in ListView.
+     * Add DSimpleListItem list to mark selected effect in ListView.
      * 
-     * @items List of ListItem* to mark selected
+     * @items List of DSimpleListItem* to mark selected
      * @recordLastSelection record last selection item to make selected operation continuously, default is true
      */
-    void addSelections(QList<ListItem*> items, bool recordLastSelection=true);
+    void addSelections(QList<DSimpleListItem*> items, bool recordLastSelection=true);
     
     /*
-     * Clear selection items from ListView.
+     * Clear selection items from DSimpleListView.
      * 
      * @clearLastSelection clear last selection item if option is true, default is true
      */
     void clearSelections(bool clearLastSelection=true);
     
     /*
-     * Refresh all items in ListView.
+     * Refresh all items in DSimpleListView.
      * This function is different that addItems is: it will clear items first before add new items.
      * This function will keep selection status and scroll offset when add items.
      * 
-     * @items List of ListItem* to add
+     * @items List of DSimpleListItem* to add
      */
-    void refreshItems(QList<ListItem*> items);
+    void refreshItems(QList<DSimpleListItem*> items);
     
     /*
      * Search
      */
     void search(QString searchContent);
     
-    // ListView operations.
+    // DSimpleListView operations.
     void selectAllItems();
     void selectFirstItem();
     void selectLastItem();
@@ -197,10 +197,10 @@ protected:
     qreal scrollbarPressOpacity = 0.8;
                            
 signals:
-    void rightClickItems(QPoint pos, QList<ListItem*> items);
+    void rightClickItems(QPoint pos, QList<DSimpleListItem*> items);
     void changeColumnVisible(int index, bool visible, QList<bool> columnVisibles);
     void changeSortingStatus(int index, bool sortingOrder);
-    void changeHoverItem(QPoint pos, ListItem* item, int columnIndex);
+    void changeHoverItem(QPoint pos, DSimpleListItem* item, int columnIndex);
     
 private slots:
     void hideScrollbar();
@@ -220,7 +220,7 @@ private:
     void shiftSelectPrevItemWithOffset(int scrollOffset);
     void wheelEvent(QWheelEvent *event);
                         
-    QList<ListItem*> getSearchItems(QList<ListItem*> items);
+    QList<DSimpleListItem*> getSearchItems(QList<DSimpleListItem*> items);
     QList<int> getRenderWidths();
     bool isMouseAtScrollArea(int x);
     bool isMouseAtTitleArea(int y);
@@ -234,11 +234,11 @@ private:
     void sortItemsByColumn(int column, bool descendingSort);
     void startScrollbarHideTimer();
     
-    ListItem *lastHoverItem;
-    ListItem *lastSelectItem;
-    QList<ListItem*> *listItems;
-    QList<ListItem*> *renderItems;
-    QList<ListItem*> *selectionItems;
+    DSimpleListItem *lastHoverItem;
+    DSimpleListItem *lastSelectItem;
+    QList<DSimpleListItem*> *listItems;
+    QList<DSimpleListItem*> *renderItems;
+    QList<DSimpleListItem*> *selectionItems;
     QList<QString> columnTitles;
     QList<SortAlgorithm> *sortingAlgorithms;
     QList<bool> *sortingOrderes;

@@ -63,7 +63,7 @@ signals:
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
-    void updateProcessStatus(QList<ListItem*> items);
+    void updateProcessStatus(QList<DSimpleListItem*> items);
 
 public slots:
     void switchToAllProcess();

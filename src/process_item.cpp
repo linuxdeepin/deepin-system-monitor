@@ -63,7 +63,7 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
     diskStatus.writeKbs = 0;
 }
 
-bool ProcessItem::sameAs(ListItem *item)
+bool ProcessItem::sameAs(DSimpleListItem *item)
 {
     return pid == ((static_cast<ProcessItem*>(item)))->pid;
 }
@@ -223,7 +223,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
     }
 }
 
-bool ProcessItem::search(const ListItem *item, QString searchContent)
+bool ProcessItem::search(const DSimpleListItem *item, QString searchContent)
 {
     const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
     QString content = searchContent.toLower();
@@ -249,7 +249,7 @@ bool ProcessItem::search(const ListItem *item, QString searchContent)
         charPinyinString.contains(content);
 }
 
-bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     double cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
@@ -271,7 +271,7 @@ bool ProcessItem::sortByCPU(const ListItem *item1, const ListItem *item2, bool d
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByDiskRead(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByDiskRead(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
@@ -281,7 +281,7 @@ bool ProcessItem::sortByDiskRead(const ListItem *item1, const ListItem *item2, b
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByDiskWrite(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByDiskWrite(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
@@ -291,7 +291,7 @@ bool ProcessItem::sortByDiskWrite(const ListItem *item1, const ListItem *item2, 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByMemory(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     long memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
@@ -313,7 +313,7 @@ bool ProcessItem::sortByMemory(const ListItem *item1, const ListItem *item2, boo
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByName(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     QString name1 = (static_cast<const ProcessItem*>(item1))->getDisplayName();
@@ -338,7 +338,7 @@ bool ProcessItem::sortByName(const ListItem *item1, const ListItem *item2, bool 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByNetworkDownload(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByNetworkDownload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
@@ -357,7 +357,7 @@ bool ProcessItem::sortByNetworkDownload(const ListItem *item1, const ListItem *i
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByNetworkUpload(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByNetworkUpload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     // Init.
     NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
@@ -376,7 +376,7 @@ bool ProcessItem::sortByNetworkUpload(const ListItem *item1, const ListItem *ite
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByPid(const ListItem *item1, const ListItem *item2, bool descendingSort)
+bool ProcessItem::sortByPid(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
 {
     bool sortOrder = (static_cast<const ProcessItem*>(item1))->getPid() > (static_cast<const ProcessItem*>(item2))->getPid();
 

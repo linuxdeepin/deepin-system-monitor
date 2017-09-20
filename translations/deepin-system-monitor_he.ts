@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="he" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="he">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -22,10 +24,10 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
-        <translation>אין תוצאות לחיפוש</translation>
+        <translation type="unfinished">אין תוצאות לחיפוש</translation>
     </message>
 </context>
 <context>
@@ -381,11 +383,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">החלפה</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">לא פעיל</translation>
     </message>
 </context>
 <context>
@@ -415,13 +417,6 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>חיפוש</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>שולחן עבודה</translation>
     </message>
 </context>
 </TS>

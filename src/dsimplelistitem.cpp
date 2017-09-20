@@ -21,9 +21,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#include "list_item.h"
+#include "dsimplelistitem.h"
 
-ListItem::ListItem()
+DSimpleListItem::DSimpleListItem()
 {
     
 }

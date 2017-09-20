@@ -24,7 +24,7 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
         <translation type="unfinished"></translation>

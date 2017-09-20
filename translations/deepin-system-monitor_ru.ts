@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -22,10 +24,10 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
-        <translation>Результаты поиска отсутствуют</translation>
+        <translation type="unfinished">Результаты поиска отсутствуют</translation>
     </message>
 </context>
 <context>
@@ -415,13 +417,6 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>Поиск</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Рабочий стол</translation>
     </message>
 </context>
 </TS>

@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "list_view.h"
+#include "dsimplelistview.h"
 #include "utils.h"
 #include <QApplication>
 #include <QDebug>
@@ -33,7 +33,7 @@
 
 using namespace Utils;
 
-ListView::ListView(QWidget *parent) : QWidget(parent)
+DSimpleListView::DSimpleListView(QWidget *parent) : QWidget(parent)
 {
     // Init.
     installEventFilter(this);   // add event filter
@@ -72,9 +72,9 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     arrowDownHoverImage = arrowDownLightHoverImage;
     arrowDownPressImage = arrowDownLightPressImage;
 
-    listItems = new QList<ListItem*>();
-    renderItems = new QList<ListItem*>();
-    selectionItems = new QList<ListItem*>();
+    listItems = new QList<DSimpleListItem*>();
+    renderItems = new QList<DSimpleListItem*>();
+    selectionItems = new QList<DSimpleListItem*>();
     lastSelectItem = NULL;
     lastHoverItem = NULL;
     lastHoverColumnIndex = -1;
@@ -96,7 +96,7 @@ ListView::ListView(QWidget *parent) : QWidget(parent)
     sortingOrderes = new QList<bool>();
 }
 
-ListView::~ListView()
+DSimpleListView::~DSimpleListView()
 {
     delete lastHoverItem;
     delete lastSelectItem;
@@ -108,13 +108,13 @@ ListView::~ListView()
     delete hideScrollbarTimer;
 }
 
-void ListView::setRowHeight(int height)
+void DSimpleListView::setRowHeight(int height)
 {
     rowHeight = height;
     scrollUnit = rowHeight;
 }
 
-void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int height)
+void DSimpleListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int height)
 {
     // Set column titles.
     columnTitles = titles;
@@ -138,7 +138,7 @@ void ListView::setColumnTitleInfo(QList<QString> titles, QList<int> widths, int 
     titleHeight = height;
 }
 
-void ListView::setColumnHideFlags(QList<bool> toggleHideFlags, int visibleColumnIndex)
+void DSimpleListView::setColumnHideFlags(QList<bool> toggleHideFlags, int visibleColumnIndex)
 {
     Q_ASSERT_X(toggleHideFlags.contains(false), "toggleHideFlags", "at least have one 'false' in list.");
     Q_ASSERT_X(toggleHideFlags.count() == columnTitles.count(), "toggleHideFlags", "hide flags length is not same as titles list.");
@@ -151,7 +151,7 @@ void ListView::setColumnHideFlags(QList<bool> toggleHideFlags, int visibleColumn
     }
 }
 
-void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn, bool descendingSort)
+void DSimpleListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int sortColumn, bool descendingSort)
 {
     // Add sort algorithms.
     sortingAlgorithms = algorithms;
@@ -165,22 +165,22 @@ void ListView::setColumnSortingAlgorithms(QList<SortAlgorithm> *algorithms, int 
     defaultSortingOrder = descendingSort;
 }
 
-void ListView::setSearchAlgorithm(SearchAlgorithm algorithm)
+void DSimpleListView::setSearchAlgorithm(SearchAlgorithm algorithm)
 {
     searchAlgorithm = algorithm;
 }
 
-void ListView::setClipRadius(int radius)
+void DSimpleListView::setClipRadius(int radius)
 {
     clipRadius = radius;
 }
 
 
-void ListView::addItems(QList<ListItem*> items)
+void DSimpleListView::addItems(QList<DSimpleListItem*> items)
 {
     // Add item to list.
     listItems->append(items);
-    QList<ListItem*> searchItems = getSearchItems(items);
+    QList<DSimpleListItem*> searchItems = getSearchItems(items);
     renderItems->append(searchItems);
 
     // If user has click title to sort, sort items after add items to list.
@@ -189,7 +189,7 @@ void ListView::addItems(QList<ListItem*> items)
     }
 }
 
-void ListView::clearItems()
+void DSimpleListView::clearItems()
 {
     // NOTE:
     // We need delete items in QList before clear QList to avoid *MEMORY LEAK* .
@@ -198,7 +198,7 @@ void ListView::clearItems()
     renderItems->clear();
 }
 
-void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection)
+void DSimpleListView::addSelections(QList<DSimpleListItem*> items, bool recordLastSelection)
 {
     // Add item to selection list.
     selectionItems->append(items);
@@ -209,7 +209,7 @@ void ListView::addSelections(QList<ListItem*> items, bool recordLastSelection)
     }
 }
 
-void ListView::clearSelections(bool clearLastSelection)
+void DSimpleListView::clearSelections(bool clearLastSelection)
 {
     // Clear selection list.
     selectionItems->clear();
@@ -219,16 +219,16 @@ void ListView::clearSelections(bool clearLastSelection)
     }
 }
 
-void ListView::refreshItems(QList<ListItem*> items)
+void DSimpleListView::refreshItems(QList<DSimpleListItem*> items)
 {
     // Init.
-    QList<ListItem*> *newSelectionItems = new QList<ListItem*>();
-    ListItem *newLastSelectionItem = NULL;
-    ListItem *newLastHoverItem = NULL;
+    QList<DSimpleListItem*> *newSelectionItems = new QList<DSimpleListItem*>();
+    DSimpleListItem *newLastSelectionItem = NULL;
+    DSimpleListItem *newLastHoverItem = NULL;
 
     // Save selection items and last selection item.
-    for (ListItem *item:items) {
-        for (ListItem *selectionItem:*selectionItems) {
+    for (DSimpleListItem *item:items) {
+        for (DSimpleListItem *selectionItem:*selectionItems) {
             if (item->sameAs(selectionItem)) {
                 newSelectionItems->append(item);
                 break;
@@ -237,7 +237,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     }
 
     if (lastSelectItem != NULL) {
-        for (ListItem *item:items) {
+        for (DSimpleListItem *item:items) {
             if (item->sameAs(lastSelectItem)) {
                 newLastSelectionItem = item;
                 break;
@@ -246,7 +246,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     }
 
     if (lastHoverItem != NULL) {
-        for (ListItem *item:items) {
+        for (DSimpleListItem *item:items) {
             if (item->sameAs(lastHoverItem)) {
                 newLastHoverItem = item;
                 break;
@@ -258,7 +258,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     // Update items.
     clearItems();
     listItems->append(items);
-    QList<ListItem*> searchItems = getSearchItems(items);
+    QList<DSimpleListItem*> searchItems = getSearchItems(items);
     renderItems->append(searchItems);
 
     // Sort once if default sort column hasn't init.
@@ -279,7 +279,7 @@ void ListView::refreshItems(QList<ListItem*> items)
     repaint();
 }
 
-void ListView::search(QString content)
+void DSimpleListView::search(QString content)
 {
     if (content == "" && searchContent != content) {
         searchContent = content;
@@ -289,7 +289,7 @@ void ListView::search(QString content)
     } else {
         searchContent = content;
 
-        QList<ListItem*> searchItems = getSearchItems(*listItems);
+        QList<DSimpleListItem*> searchItems = getSearchItems(*listItems);
         renderItems->clear();
         renderItems->append(searchItems);
     }
@@ -297,7 +297,7 @@ void ListView::search(QString content)
     repaint();
 }
 
-void ListView::selectAllItems()
+void DSimpleListView::selectAllItems()
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -313,7 +313,7 @@ void ListView::selectAllItems()
     repaint();
 }
 
-void ListView::selectFirstItem()
+void DSimpleListView::selectFirstItem()
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -321,7 +321,7 @@ void ListView::selectFirstItem()
     // Select first item.
     clearSelections();
 
-    QList<ListItem*> items = QList<ListItem*>();
+    QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
     items << renderItems->first();
     addSelections(items);
 
@@ -332,7 +332,7 @@ void ListView::selectFirstItem()
     repaint();
 }
 
-void ListView::selectLastItem()
+void DSimpleListView::selectLastItem()
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -340,7 +340,7 @@ void ListView::selectLastItem()
     // Select last item.
     clearSelections();
 
-    QList<ListItem*> items = QList<ListItem*>();
+    QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
     items << renderItems->last();
     addSelections(items);
 
@@ -351,27 +351,27 @@ void ListView::selectLastItem()
     repaint();
 }
 
-void ListView::selectPrevItem()
+void DSimpleListView::selectPrevItem()
 {
     selectPrevItemWithOffset(1);
 }
 
-void ListView::selectNextItem()
+void DSimpleListView::selectNextItem()
 {
     selectNextItemWithOffset(1);
 }
 
-void ListView::shiftSelectPageDown()
+void DSimpleListView::shiftSelectPageDown()
 {
     shiftSelectNextItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
-void ListView::shiftSelectPageUp()
+void DSimpleListView::shiftSelectPageUp()
 {
     shiftSelectPrevItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
-void ListView::shiftSelectToEnd()
+void DSimpleListView::shiftSelectToEnd()
 {
     // Select last item if nothing selected yet.
     if (selectionItems->empty()) {
@@ -391,7 +391,7 @@ void ListView::shiftSelectToEnd()
     }
 }
 
-void ListView::shiftSelectToHome()
+void DSimpleListView::shiftSelectToHome()
 {
     // Select first item if nothing selected yet.
     if (selectionItems->empty()) {
@@ -411,61 +411,61 @@ void ListView::shiftSelectToHome()
     }
 }
 
-void ListView::shiftSelectToNext()
+void DSimpleListView::shiftSelectToNext()
 {
     shiftSelectNextItemWithOffset(1);
 }
 
-void ListView::shiftSelectToPrev()
+void DSimpleListView::shiftSelectToPrev()
 {
     shiftSelectPrevItemWithOffset(1);
 }
 
-void ListView::scrollPageDown()
+void DSimpleListView::scrollPageDown()
 {
     selectNextItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
-void ListView::scrollPageUp()
+void DSimpleListView::scrollPageUp()
 {
     selectPrevItemWithOffset(getScrollAreaHeight() / rowHeight);
 }
 
-void ListView::ctrlScrollPageUp()
+void DSimpleListView::ctrlScrollPageUp()
 {
     renderOffset = adjustRenderOffset(renderOffset - getScrollAreaHeight());
 
     repaint();
 }
 
-void ListView::ctrlScrollPageDown()
+void DSimpleListView::ctrlScrollPageDown()
 {
     renderOffset = adjustRenderOffset(renderOffset + getScrollAreaHeight());
 
     repaint();
 }
 
-void ListView::ctrlScrollToHome()
+void DSimpleListView::ctrlScrollToHome()
 {
     renderOffset = getTopRenderOffset();
 
     repaint();
 }
 
-void ListView::ctrlScrollToEnd()
+void DSimpleListView::ctrlScrollToEnd()
 {
     renderOffset = getBottomRenderOffset();
 
     repaint();
 }
 
-void ListView::leaveEvent(QEvent * event){
+void DSimpleListView::leaveEvent(QEvent * event){
     hideScrollbar();
 
     QWidget::leaveEvent(event);
 }
 
-void ListView::hideScrollbar()
+void DSimpleListView::hideScrollbar()
 {
     // Record old render offset to control scrollbar whether display.
     mouseAtScrollArea = false;
@@ -474,12 +474,12 @@ void ListView::hideScrollbar()
     repaint();
 }
 
-bool ListView::eventFilter(QObject *, QEvent *)
+bool DSimpleListView::eventFilter(QObject *, QEvent *)
 {
     return false;
 }
 
-void ListView::keyPressEvent(QKeyEvent *keyEvent)
+void DSimpleListView::keyPressEvent(QKeyEvent *keyEvent)
 {
     if (keyEvent->key() == Qt::Key_Home) {
         if (keyEvent->modifiers() == Qt::ControlModifier) {
@@ -532,7 +532,7 @@ void ListView::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
+void DSimpleListView::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
     // Scroll if mouse drag at scrollbar.
     if (mouseDragScrollbar) {
@@ -584,7 +584,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
 
             // NOTE: hoverItemIndex may be less than 0, we need check index here.
             if (hoverItemIndex >= 0 && hoverItemIndex < (*renderItems).length()) {
-                ListItem *item = (*renderItems)[hoverItemIndex];
+                DSimpleListItem *item = (*renderItems)[hoverItemIndex];
 
                 QList<int> renderWidths = getRenderWidths();
 
@@ -613,7 +613,7 @@ void ListView::mouseMoveEvent(QMouseEvent *mouseEvent)
     }
 }
 
-void ListView::mousePressEvent(QMouseEvent *mouseEvent)
+void DSimpleListView::mousePressEvent(QMouseEvent *mouseEvent)
 {
     setFocus();
 
@@ -719,12 +719,12 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 if (pressItemIndex < renderItems->count()) {
                     // Scattered selection of items when press ctrl modifier.
                     if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                        ListItem *item = (*renderItems)[pressItemIndex];
+                        DSimpleListItem *item = (*renderItems)[pressItemIndex];
 
                         if (selectionItems->contains(item)) {
                             selectionItems->removeOne(item);
                         } else {
-                            QList<ListItem*> items = QList<ListItem*>();
+                            QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
                             items << item;
                             addSelections(items);
                         }
@@ -741,7 +741,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                     else {
                         clearSelections();
 
-                        QList<ListItem*> items = QList<ListItem*>();
+                        QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
                         items << (*renderItems)[pressItemIndex];
                         addSelections(items);
                     }
@@ -749,10 +749,10 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                     repaint();
                 }
             } else if (mouseEvent->button() == Qt::RightButton) {
-                ListItem *pressItem = (*renderItems)[pressItemIndex];
+                DSimpleListItem *pressItem = (*renderItems)[pressItemIndex];
                 bool pressInSelectionArea = false;
 
-                for (ListItem *item : *selectionItems) {
+                for (DSimpleListItem *item : *selectionItems) {
                     if (item == pressItem) {
                         pressInSelectionArea = true;
 
@@ -763,7 +763,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
                 if (!pressInSelectionArea && pressItemIndex < renderItems->length()) {
                     clearSelections();
 
-                    QList<ListItem*> items = QList<ListItem*>();
+                    QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
                     items << (*renderItems)[pressItemIndex];
                     addSelections(items);
 
@@ -778,7 +778,7 @@ void ListView::mousePressEvent(QMouseEvent *mouseEvent)
     }
 }
 
-void ListView::mouseReleaseEvent(QMouseEvent *)
+void DSimpleListView::mouseReleaseEvent(QMouseEvent *)
 {
     if (mouseDragScrollbar) {
         // Reset mouseDragScrollbar.
@@ -793,7 +793,7 @@ void ListView::mouseReleaseEvent(QMouseEvent *)
     }
 }
 
-void ListView::wheelEvent(QWheelEvent *event)
+void DSimpleListView::wheelEvent(QWheelEvent *event)
 {
     if (event->orientation() == Qt::Vertical) {
         // Record old render offset to control scrollbar whether display.
@@ -808,7 +808,7 @@ void ListView::wheelEvent(QWheelEvent *event)
     event->accept();
 }
 
-void ListView::paintEvent(QPaintEvent *)
+void DSimpleListView::paintEvent(QPaintEvent *)
 {
     // Init.
     QPainter painter(this);
@@ -895,7 +895,7 @@ void ListView::paintEvent(QPaintEvent *)
     scrollAreaPath.addRect(QRectF(rect().x(), rect().y() + titleHeight, rect().width(), getScrollAreaHeight()));
 
     int rowCounter = 0;
-    for (ListItem *item:*renderItems) {
+    for (DSimpleListItem *item:*renderItems) {
         if (rowCounter > ((renderOffset - rowHeight) / rowHeight)) {
             // Clip item rect.
             QPainterPath itemPath;
@@ -960,7 +960,7 @@ void ListView::paintEvent(QPaintEvent *)
     }
 }
 
-void ListView::paintScrollbar(QPainter *painter)
+void DSimpleListView::paintScrollbar(QPainter *painter)
 {
     if (getItemsTotalHeight() > getScrollAreaHeight()) {
         // Init scrollbar opacity with scrollbar status.
@@ -1008,7 +1008,7 @@ void ListView::paintScrollbar(QPainter *painter)
     }
 }
 
-void ListView::selectNextItemWithOffset(int scrollOffset)
+void DSimpleListView::selectNextItemWithOffset(int scrollOffset)
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -1017,7 +1017,7 @@ void ListView::selectNextItemWithOffset(int scrollOffset)
         selectFirstItem();
     } else {
         int lastIndex = 0;
-        for (ListItem *item:*selectionItems) {
+        for (DSimpleListItem *item:*selectionItems) {
             int index = renderItems->indexOf(item);
             if (index > lastIndex) {
                 lastIndex = index;
@@ -1029,7 +1029,7 @@ void ListView::selectNextItemWithOffset(int scrollOffset)
 
             clearSelections(false);
 
-            QList<ListItem*> items = QList<ListItem*>();
+            QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
             items << (*renderItems)[lastIndex];
 
             addSelections(items);
@@ -1045,7 +1045,7 @@ void ListView::selectNextItemWithOffset(int scrollOffset)
     }
 }
 
-void ListView::selectPrevItemWithOffset(int scrollOffset)
+void DSimpleListView::selectPrevItemWithOffset(int scrollOffset)
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -1054,7 +1054,7 @@ void ListView::selectPrevItemWithOffset(int scrollOffset)
         selectFirstItem();
     } else {
         int firstIndex = renderItems->count();
-        for (ListItem *item:*selectionItems) {
+        for (DSimpleListItem *item:*selectionItems) {
             int index = renderItems->indexOf(item);
             if (index < firstIndex) {
                 firstIndex = index;
@@ -1066,7 +1066,7 @@ void ListView::selectPrevItemWithOffset(int scrollOffset)
 
             clearSelections();
 
-            QList<ListItem*> items = QList<ListItem*>();
+            QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
             items << (*renderItems)[firstIndex];
 
             addSelections(items);
@@ -1082,14 +1082,14 @@ void ListView::selectPrevItemWithOffset(int scrollOffset)
     }
 }
 
-void ListView::shiftSelectItemsWithBound(int selectionStartIndex, int selectionEndIndex)
+void DSimpleListView::shiftSelectItemsWithBound(int selectionStartIndex, int selectionEndIndex)
 {
     // Note: Shift operation always selection bound from last selection index to current index.
     // So we don't need *clear* lastSelectionIndex for keep shift + button is right logic.
     clearSelections(false);
-    QList<ListItem*> items = QList<ListItem*>();
+    QList<DSimpleListItem*> items = QList<DSimpleListItem*>();
     int index = 0;
-    for (ListItem *item:*renderItems) {
+    for (DSimpleListItem *item:*renderItems) {
         if (index >= selectionStartIndex && index <= selectionEndIndex) {
             items << item;
         }
@@ -1102,7 +1102,7 @@ void ListView::shiftSelectItemsWithBound(int selectionStartIndex, int selectionE
     addSelections(items, false);
 }
 
-void ListView::shiftSelectPrevItemWithOffset(int scrollOffset)
+void DSimpleListView::shiftSelectPrevItemWithOffset(int scrollOffset)
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -1112,7 +1112,7 @@ void ListView::shiftSelectPrevItemWithOffset(int scrollOffset)
     } else {
         int firstIndex = renderItems->count();
         int lastIndex = 0;
-        for (ListItem *item:*selectionItems) {
+        for (DSimpleListItem *item:*selectionItems) {
             int index = renderItems->indexOf(item);
 
             if (index < firstIndex) {
@@ -1145,7 +1145,7 @@ void ListView::shiftSelectPrevItemWithOffset(int scrollOffset)
     }
 }
 
-void ListView::shiftSelectNextItemWithOffset(int scrollOffset)
+void DSimpleListView::shiftSelectNextItemWithOffset(int scrollOffset)
 {
     // Record old render offset to control scrollbar whether display.
     oldRenderOffset = renderOffset;
@@ -1155,7 +1155,7 @@ void ListView::shiftSelectNextItemWithOffset(int scrollOffset)
     } else {
         int firstIndex = renderItems->count();
         int lastIndex = 0;
-        for (ListItem *item:*selectionItems) {
+        for (DSimpleListItem *item:*selectionItems) {
             int index = renderItems->indexOf(item);
 
             if (index < firstIndex) {
@@ -1188,7 +1188,7 @@ void ListView::shiftSelectNextItemWithOffset(int scrollOffset)
     }
 }
 
-QList<int> ListView::getRenderWidths()
+QList<int> DSimpleListView::getRenderWidths()
 {
     QList<int> renderWidths;
     if (columnWidths.contains(-1)) {
@@ -1228,54 +1228,54 @@ QList<int> ListView::getRenderWidths()
     return renderWidths;
 }
 
-bool ListView::isMouseAtScrollArea(int x)
+bool DSimpleListView::isMouseAtScrollArea(int x)
 {
     return (x > rect().x() + rect().width() - scrollbarDragWidth) && (x < rect().x() + rect().width());
 }
 
-bool ListView::isMouseAtTitleArea(int y)
+bool DSimpleListView::isMouseAtTitleArea(int y)
 {
     return (y > rect().y() && y < rect().y() + titleHeight);
 }
 
-int ListView::adjustRenderOffset(int offset)
+int DSimpleListView::adjustRenderOffset(int offset)
 {
     return std::max(0, std::min(offset, getBottomRenderOffset()));
 }
 
-int ListView::getItemsTotalHeight()
+int DSimpleListView::getItemsTotalHeight()
 {
     return renderItems->count() * rowHeight;
 }
 
-int ListView::getScrollAreaHeight()
+int DSimpleListView::getScrollAreaHeight()
 {
     return rect().height() - titleHeight;
 }
 
-int ListView::getScrollbarY()
+int DSimpleListView::getScrollbarY()
 {
     return static_cast<int>((renderOffset / (getItemsTotalHeight() * 1.0)) * getScrollAreaHeight() + titleHeight);
 }
 
-int ListView::getScrollbarHeight()
+int DSimpleListView::getScrollbarHeight()
 {
     return std::max(static_cast<int>(getScrollAreaHeight() / (getItemsTotalHeight() * 1.0) * rect().height()), scrollbarMinHeight);
 }
 
-int ListView::getTopRenderOffset()
+int DSimpleListView::getTopRenderOffset()
 {
     return 0;
 }
 
-QList<ListItem*> ListView::getSearchItems(QList<ListItem*> items)
+QList<DSimpleListItem*> DSimpleListView::getSearchItems(QList<DSimpleListItem*> items)
 {
     if (searchContent == "" || searchAlgorithm == NULL) {
         return items;
     } else {
-        QList<ListItem*> *searchItems = new QList<ListItem*>();
+        QList<DSimpleListItem*> *searchItems = new QList<DSimpleListItem*>();
 
-        for (ListItem *item : items) {
+        for (DSimpleListItem *item : items) {
             if (searchAlgorithm(item, searchContent)) {
                 searchItems->append(item);
             }
@@ -1285,7 +1285,7 @@ QList<ListItem*> ListView::getSearchItems(QList<ListItem*> items)
     }
 }
 
-int ListView::getBottomRenderOffset()
+int DSimpleListView::getBottomRenderOffset()
 {
     int itemsHeight = getItemsTotalHeight();
     if (itemsHeight > rect().height() - titleHeight) {
@@ -1295,16 +1295,16 @@ int ListView::getBottomRenderOffset()
     }
 }
 
-void ListView::sortItemsByColumn(int column, bool descendingSort)
+void DSimpleListView::sortItemsByColumn(int column, bool descendingSort)
 {
     if (sortingAlgorithms->count() != 0 && sortingAlgorithms->count() == columnTitles.count() && sortingOrderes->count() == columnTitles.count()) {
-        qSort(renderItems->begin(), renderItems->end(), [&](const ListItem *item1, const ListItem *item2) {
+        qSort(renderItems->begin(), renderItems->end(), [&](const DSimpleListItem *item1, const DSimpleListItem *item2) {
                 return (*sortingAlgorithms)[column](item1, item2, descendingSort);
             });
     }
 }
 
-void ListView::startScrollbarHideTimer()
+void DSimpleListView::startScrollbarHideTimer()
 {
     if (hideScrollbarTimer != NULL) {
         hideScrollbarTimer->stop();

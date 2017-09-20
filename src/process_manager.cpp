@@ -24,7 +24,7 @@
 #include "QVBoxLayout"
 #include "attributes_dialog.h"
 #include "dthememanager.h"
-#include "list_view.h"
+#include "dsimplelistview.h"
 #include "process_item.h"
 #include "process_manager.h"
 #include <DDesktopServices>
@@ -53,8 +53,8 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     topLayout->setContentsMargins(2, 0, 2, 0);
     
     processView = new ProcessView(columnHideFlags);
-    connect(processView, &ListView::changeColumnVisible, this, &ProcessManager::changeColumnVisible);
-    connect(processView, &ListView::changeSortingStatus, this, &ProcessManager::changeSortingStatus);
+    connect(processView, &DSimpleListView::changeColumnVisible, this, &ProcessManager::changeColumnVisible);
+    connect(processView, &DSimpleListView::changeSortingStatus, this, &ProcessManager::changeSortingStatus);
     
     layout->addWidget(topWidget);
     layout->addWidget(processView);
@@ -171,7 +171,7 @@ void ProcessManager::handleSearch(QString searchContent)
     processView->search(searchContent);
 }
 
-void ProcessManager::changeHoverItem(QPoint, ListItem* item, int columnIndex)
+void ProcessManager::changeHoverItem(QPoint, DSimpleListItem* item, int columnIndex)
 {
     ProcessItem *processItem = static_cast<ProcessItem*>(item);
     
@@ -234,11 +234,11 @@ void ProcessManager::openProcessDirectory()
     actionPids->clear();
 }
 
-void ProcessManager::popupMenu(QPoint pos, QList<ListItem*> items)
+void ProcessManager::popupMenu(QPoint pos, QList<DSimpleListItem*> items)
 {
     actionPids->clear();
     
-    for (ListItem *item : items) {
+    for (DSimpleListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         actionPids->append(processItem->getPid());
     }
@@ -305,7 +305,7 @@ void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber, 
     statusLabel->setText((QString("%1 (") + tr("%2 applications and %3 processes are running") + ")").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
 }
 
-void ProcessManager::updateStatus(QList<ListItem*> items)
+void ProcessManager::updateStatus(QList<DSimpleListItem*> items)
 {
     processView->refreshItems(items);
 }

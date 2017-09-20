@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -22,10 +24,10 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DSimpleListView</name>
     <message>
         <source>No search result</source>
-        <translation>Arama sonucu yok</translation>
+        <translation type="unfinished">Arama sonucu yok</translation>
     </message>
 </context>
 <context>
@@ -413,13 +415,6 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>Arama</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Masaüstü</translation>
     </message>
 </context>
 </TS>
