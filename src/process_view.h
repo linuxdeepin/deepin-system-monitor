@@ -24,7 +24,7 @@
 #ifndef PROCESSVIEW_H
 #define PROCESSVIEW_H
 
-#include <dsimplelistview.h>
+#include <DSimpleListView>
 
 DWIDGET_USE_NAMESPACE
 

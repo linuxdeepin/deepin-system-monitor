@@ -24,7 +24,7 @@
 #ifndef PROCESSITEM_H
 #define PROCESSITEM_H
 
-#include <dsimplelistitem.h>
+#include <DSimpleListItem>
 #include "utils.h"
 #include <proc/readproc.h>
 
