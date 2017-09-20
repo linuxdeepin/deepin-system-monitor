@@ -24,9 +24,11 @@
 #ifndef PROCESSITEM_H
 #define PROCESSITEM_H
 
-#include "dsimplelistitem.h"
+#include <dsimplelistitem.h>
 #include "utils.h"
 #include <proc/readproc.h>
+
+DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 

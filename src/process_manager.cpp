@@ -24,7 +24,7 @@
 #include "QVBoxLayout"
 #include "attributes_dialog.h"
 #include "dthememanager.h"
-#include "dsimplelistview.h"
+#include <dsimplelistview.h>
 #include "process_item.h"
 #include "process_manager.h"
 #include <DDesktopServices>

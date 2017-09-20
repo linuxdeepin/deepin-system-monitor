@@ -24,13 +24,6 @@
     </message>
 </context>
 <context>
-    <name>DSimpleListView</name>
-    <message>
-        <source>No search result</source>
-        <translation type="unfinished">Nessun risultato</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>

@@ -24,7 +24,9 @@
 #ifndef PROCESSVIEW_H
 #define PROCESSVIEW_H
 
-#include "dsimplelistview.h"
+#include <dsimplelistview.h>
+
+DWIDGET_USE_NAMESPACE
 
 class ProcessView : public DSimpleListView
 {
