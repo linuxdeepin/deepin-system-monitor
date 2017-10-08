@@ -95,9 +95,10 @@ namespace Utils {
         float sentKbs;
         float recvKbs;
     } NetworkStatus;
-    
-    
+
+
     int getStatusBarMaxWidth();
+    long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory);
     QList<int> getTrayWindows();
     QMap<QString, QString> getProcessDescriptions();
     QMap<QString, QString> getDesktopfileMap();
@@ -130,16 +131,16 @@ namespace Utils {
     void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect);
     void blurRects(DWindowManager *windowManager, int widgetId, QList<QRectF> rects);
     void clearBlur(DWindowManager *windowManager, int widgetId);
-    void drawLoadingRing(QPainter &painter, 
-                         int centerX, 
-                         int centerY, 
-                         int radius, 
-                         int penWidth, 
-                         int loadingAngle, 
-                         int rotationAngle, 
-                         QString foregroundColor, 
+    void drawLoadingRing(QPainter &painter,
+                         int centerX,
+                         int centerY,
+                         int radius,
+                         int penWidth,
+                         int loadingAngle,
+                         int rotationAngle,
+                         QString foregroundColor,
                          double foregroundOpacity,
-                         QString backgroundColor, 
+                         QString backgroundColor,
                          double backgroundOpacity,
                          double percent);
     void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth, int loadingAngle, int rotationAngle, QString color, double opacity);

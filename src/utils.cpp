@@ -138,7 +138,7 @@ namespace Utils {
             xids << xid;
         }
         argument.endArray();
-        
+
         return xids;
     }
 
@@ -148,6 +148,15 @@ namespace Utils {
         QString swapTitle = QString("%1 (%2)").arg(QObject::tr("Swap")).arg(QObject::tr("Not enabled"));
 
         return std::max(280, getRenderSize(9, swapTitle).width() + offset);
+    }
+
+    long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory)
+    {
+        if (cmdline.startsWith("/usr/lib/virtualbox/VirtualBox") && cmdline.contains("--startvm")) {
+            return residentMemroy * sysconf(_SC_PAGESIZE);
+        } else {
+            return (residentMemroy - shareMemory) * sysconf(_SC_PAGESIZE);
+        }
     }
 
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)

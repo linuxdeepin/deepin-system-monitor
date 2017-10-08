@@ -180,14 +180,14 @@ void StatusMonitor::updateStatus()
     QMap<int, ChildPidInfo> childInfoMap;
     if (filterType == OnlyGUI) {
         QList<int> guiPids = findWindowTitle->getWindowPids();
-        
+
         // Tray pid also need add in gui pids list.
         for (int pid : trayProcessMap.keys()) {
             if (!guiPids.contains(pid)) {
                 guiPids << pid;
             }
         }
-        
+
         for (int guiPid : guiPids) {
             QList<int> childPids;
             childPids = processTree->getAllChildPids(guiPid);
@@ -229,7 +229,7 @@ void StatusMonitor::updateStatus()
         } else {
             desktopFile = getDesktopFileFromName(pid, name, cmdline);
         }
-        
+
         QString title = findWindowTitle->getWindowTitle(pid);
 
         bool isGui = trayProcessMap.contains(pid) || (title != "");
@@ -282,8 +282,8 @@ void StatusMonitor::updateStatus()
                 displayName = title;
             }
 
-            long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
-
+            long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
+            
             QPixmap icon;
             if (desktopFile.size() == 0) {
                 icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
@@ -297,7 +297,8 @@ void StatusMonitor::updateStatus()
             // Fill GUI processes information for continue merge action.
             if (filterType == OnlyGUI) {
                 if (childInfoMap.contains(pid)) {
-                    long memory = ((&i.second)->resident - (&i.second)->share) * sysconf(_SC_PAGESIZE);
+                    long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
+                                
                     childInfoMap[pid].cpu = cpu;
                     childInfoMap[pid].memory = memory;
                 }
