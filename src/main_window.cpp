@@ -109,7 +109,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         layout->addWidget(statusMonitor);
         layout->addWidget(processManager);
 
-        killPid = -1;
+        killXid = -1;
 
         killProcessDialog = new DDialog(QString(tr("End application")), QString(tr("Ending this application may cause data loss.\nAre you sure to continue?")), this);
         killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
@@ -240,21 +240,24 @@ void MainWindow::createWindowKiller()
 void MainWindow::dialogButtonClicked(int index, QString)
 {
     if (index == 1) {
-        if (killPid != -1) {
-            if (kill(killPid, SIGKILL) != 0) {
-                cout << "Kill failed." << endl;
-            }
+        if (killXid != -1) {
+            // if (kill(killXid, SIGKILL) != 0) {
+            //     cout << "Kill failed." << endl;
+            // }
+            // XKillClient(QX11Info::display(), window);
+            
+            killer->killWindowByXid(killXid);
 
-            killPid = -1;
+            killXid = -1;
         }
     }
 }
 
-void MainWindow::popupKillConfirmDialog(int pid)
+void MainWindow::popupKillConfirmDialog(xcb_window_t window)
 {
     killer->close();
 
-    killPid = pid;
+    killXid = window;
     killProcessDialog->show();
 }
 
