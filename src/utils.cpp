@@ -113,6 +113,7 @@ namespace Utils {
         map["applet.py"] = QObject::tr("System print tray service");
         map["chrome-sandbox"] = QObject::tr("Chrome browser sandbox");
         map["syndaemon"] = QObject::tr("Synaptics touchpad device daemon");
+        map["sogou-qimpanel"] = QObject::tr("Sogou input method");
 
         return map;
     }
