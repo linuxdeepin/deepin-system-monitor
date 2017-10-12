@@ -65,9 +65,9 @@ void FindWindowTitle::updateWindowInfos()
 
         for (int i = 0; i < windowListLength; i++) {
             xcb_window_t window = windowList[i];
-
+            
             foreach(QString type, getWindowTypes(window)) {
-                if (type == "_NET_WM_WINDOW_TYPE_NORMAL" || type == "_NET_WM_WINDOW_TYPE_DIALOG") {
+                if (type.contains("_NET_WM_WINDOW_TYPE_NORMAL") || type.contains("_NET_WM_WINDOW_TYPE_DIALOG")) {
                     windows.append(window);
                 }
             }
@@ -78,6 +78,7 @@ void FindWindowTitle::updateWindowInfos()
         windowTitles->clear();
         foreach (auto window, windows) {
             int pid = getWindowPid(window);
+            
             if (!windowTitles->contains(pid)) {
                 (*windowTitles)[pid] = window;
             }
