@@ -128,7 +128,7 @@ namespace Utils {
                                                "com.deepin.dde.TrayManager",
                                                "TrayIcons");
         QVariant v = reply.arguments().first();
-        QDBusArgument argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+        const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 
         argument.beginArray();
         QList<int> xids;
