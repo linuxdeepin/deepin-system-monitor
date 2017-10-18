@@ -24,6 +24,7 @@
 #include "attributes_dialog.h"
 #include "constant.h"
 #include "utils.h"
+#include <QApplication>
 #include <QDateTime>
 #include <QDebug>
 #include <QPainter>
@@ -152,7 +153,9 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
 
             QPixmap icon;
             if (desktopFile.size() == 0) {
-                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 96);
+                qreal devicePixelRatio = qApp->devicePixelRatio();
+                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 96 * devicePixelRatio);
+                icon.setDevicePixelRatio(devicePixelRatio);
             } else {
                 icon = getDesktopFileIcon(desktopFile, 96);
             }

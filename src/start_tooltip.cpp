@@ -36,7 +36,7 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | Qt::BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    iconImg = QImage(Utils::getQrcPath("kill.png"));
+    iconImg = Utils::loadPixmap(Utils::getQrcPath("kill.png"));
 
     installEventFilter(this);
 
@@ -45,7 +45,7 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
 
     setFixedSize(size.width() + RECTANGLE_PADDING * 2,
                  size.height() + iconImg.height() + RECTANGLE_PADDING * 3);
-    
+
     Utils::passInputEvent(this->winId());
 }
 
@@ -75,7 +75,7 @@ bool StartTooltip::eventFilter(QObject *, QEvent *event)
     } else if (event->type() == QEvent::HideToParent) {
         Utils::clearBlur(windowManager, this->winId());
     }
-    
+
     return false;
 }
 
@@ -87,7 +87,8 @@ void StartTooltip::paintEvent(QPaintEvent *)
     Utils::drawTooltipBackground(painter, rect());
 
     painter.setOpacity(1);
-    painter.drawImage(QPoint((rect().width() - iconImg.width()) / 2, RECTANGLE_PADDING), iconImg);
+    qreal devicePixelRatio = qApp->devicePixelRatio();
+    painter.drawPixmap(QPoint((rect().width() - iconImg.width() / devicePixelRatio) / 2, RECTANGLE_PADDING * devicePixelRatio), iconImg);
 
     Utils::drawTooltipText(painter, text, "#000000", RECTANGLE_FONT_SIZE,
                            QRectF(rect().x(),

@@ -29,13 +29,14 @@
 #include <QDir>
 #include <QFontMetrics>
 #include <QIcon>
+#include <QImageReader>
 #include <QLayout>
 #include <QPainter>
 #include <QPixmap>
-#include <QtDBus>
 #include <QStandardPaths>
 #include <QString>
 #include <QWidget>
+#include <QtDBus>
 #include <QtMath>
 #include <QtX11Extras/QX11Info>
 #include <X11/extensions/shape.h>
@@ -165,7 +166,7 @@ namespace Utils {
         std::ifstream in;
         in.open(desktopFile);
         QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
-        QIcon icon = defaultExecutableIcon;
+        QIcon icon;
         QString iconName;
         while(!in.eof()) {
             std::string line;
@@ -182,13 +183,16 @@ namespace Utils {
                 // this is probably a path to the file, use that instead of the theme icon name
                 icon = QIcon(iconName);
             } else {
-                icon = QIcon::fromTheme(iconName,defaultExecutableIcon);
+                icon = QIcon::fromTheme(iconName, defaultExecutableIcon);
                 break;
             }
         }
         in.close();
 
-        QPixmap pixmap = icon.pixmap(iconSize, iconSize);
+        qreal devicePixelRatio = qApp->devicePixelRatio();
+        
+        QPixmap pixmap = icon.pixmap(iconSize * devicePixelRatio, iconSize * devicePixelRatio);
+        pixmap.setDevicePixelRatio(devicePixelRatio);
 
         return pixmap;
     }
@@ -595,15 +599,17 @@ namespace Utils {
     {
         QVector<uint32_t> data;
 
-        data << rect.x() << rect.y() << rect.width() << rect.height() << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
+        qreal devicePixelRatio = qApp->devicePixelRatio();
+        data << rect.x() << rect.y() << rect.width() * devicePixelRatio  << rect.height() * devicePixelRatio << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
         windowManager->setWindowBlur(widgetId, data);
     }
 
     void blurRects(DWindowManager *windowManager, int widgetId, QList<QRectF> rects)
     {
         QVector<uint32_t> data;
+        qreal devicePixelRatio = qApp->devicePixelRatio();
         foreach (auto rect, rects) {
-            data << rect.x() << rect.y() << rect.width() << rect.height() << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
+            data << rect.x() << rect.y() << rect.width() * devicePixelRatio << rect.height() * devicePixelRatio << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
         }
         windowManager->setWindowBlur(widgetId, data);
     }
@@ -774,5 +780,28 @@ namespace Utils {
         }
 
         return v;
+    }
+
+
+    QPixmap loadPixmap(const QString &fileName)
+    {
+        qreal sourceDevicePixelRatio = 1.0;
+        qreal devicePixelRatio = qApp->devicePixelRatio();
+        QPixmap pixmap;
+
+        if (!qFuzzyCompare(sourceDevicePixelRatio, devicePixelRatio)) {
+            QImageReader reader;
+
+            reader.setFileName(qt_findAtNxFile(fileName, devicePixelRatio, &sourceDevicePixelRatio));
+            if (reader.canRead()) {
+                reader.setScaledSize(reader.size() * (devicePixelRatio / sourceDevicePixelRatio));
+                pixmap = QPixmap::fromImage(reader.read());
+                pixmap.setDevicePixelRatio(devicePixelRatio);
+            }
+        } else {
+            pixmap.load(fileName);
+        }
+
+        return pixmap;
     }
 }

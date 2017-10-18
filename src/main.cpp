@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         app.setApplicationDisplayName(QObject::tr("Deepin System Monitor"));
         app.setApplicationVersion("1.0");
 
-        app.setProductIcon(QPixmap::fromImage(QImage(Utils::getQrcPath("logo_96.svg"))));
+        app.setProductIcon(Utils::loadPixmap(Utils::getQrcPath("logo_96.svg")));
         app.setProductName(QApplication::tr("Deepin System Monitor"));
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);

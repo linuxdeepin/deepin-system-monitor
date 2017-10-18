@@ -382,6 +382,10 @@ Ar tikrai norite tęsti?</translation>
         <source>Not enabled</source>
         <translation>Neįjungta</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>

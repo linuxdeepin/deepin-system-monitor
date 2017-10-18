@@ -382,6 +382,10 @@ Naozaj chcete pokračovať?</translation>
         <source>Not enabled</source>
         <translation>Nie je povolené</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>

@@ -33,7 +33,7 @@ DWM_USE_NAMESPACE
 
 InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 {
-    cursorImage = QImage(Utils::getQrcPath("kill_cursor.png"));
+    cursorImage = Utils::loadPixmap(Utils::getQrcPath("kill_cursor.png"));
     cursorX = -1;
     cursorY = -1;
 
@@ -127,7 +127,7 @@ void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 
         if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
             mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
-            
+
             killWindow(windows[i]);
 
             break;
@@ -169,7 +169,7 @@ void InteractiveKill::paintEvent(QPaintEvent *)
         painter.setClipRegion(QRegion(0, 0, rootRect.width, rootRect.height));
 
         painter.setOpacity(1);
-        painter.drawImage(QPoint(cursorX, cursorY), cursorImage);
+        painter.drawPixmap(QPoint(cursorX, cursorY), cursorImage);
     }
 }
 

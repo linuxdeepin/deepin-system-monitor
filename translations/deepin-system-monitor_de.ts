@@ -382,6 +382,10 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
         <source>Not enabled</source>
         <translation>Nicht aktiviert</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>

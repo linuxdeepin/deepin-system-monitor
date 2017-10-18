@@ -151,6 +151,7 @@ namespace Utils {
     void removeChildren(QWidget *widget);
     void removeLayoutChild(QLayout *layout, int index);
     void setFontSize(QPainter &painter, int textSize);
+    QPixmap loadPixmap(const QString &fileName);
     const std::vector<std::string> explode(const std::string& s, const char& c);
 }
 

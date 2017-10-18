@@ -382,6 +382,10 @@ Sicuro di voler terminarlo?</translation>
         <source>Not enabled</source>
         <translation>Non attivo</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>

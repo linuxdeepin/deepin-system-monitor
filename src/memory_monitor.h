@@ -46,9 +46,9 @@ protected:
     QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
     
-    QImage iconImage;
-    QImage iconDarkImage;
-    QImage iconLightImage;
+    QPixmap iconImage;
+    QPixmap iconDarkImage;
+    QPixmap iconLightImage;
     QString memoryBackgroundColor;
     QString memoryColor = "#FF2997";
     QString memoryForegroundColor;

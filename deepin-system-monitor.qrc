@@ -3,35 +3,61 @@
         <file>dict/pinyin.dict</file>
   </qresource>
   <qresource>
-	<file>image/deepin-system-monitor.svg</file>
+    <file>image/deepin-system-monitor.svg</file>
     <file>image/only_gui_dark_normal.png</file>
+    <file>image/only_gui_dark_normal@2x.png</file>
     <file>image/only_gui_dark_hover.png</file>
+    <file>image/only_gui_dark_hover@2x.png</file>
     <file>image/only_gui_dark_active.png</file>
+    <file>image/only_gui_dark_active@2x.png</file>
     <file>image/only_me_dark_normal.png</file>
+    <file>image/only_me_dark_normal@2x.png</file>
     <file>image/only_me_dark_hover.png</file>
+    <file>image/only_me_dark_hover@2x.png</file>
     <file>image/only_me_dark_active.png</file>
+    <file>image/only_me_dark_active@2x.png</file>
     <file>image/all_process_dark_normal.png</file>
+    <file>image/all_process_dark_normal@2x.png</file>
     <file>image/all_process_dark_hover.png</file>
+    <file>image/all_process_dark_hover@2x.png</file>
     <file>image/all_process_dark_active.png</file>
+    <file>image/all_process_dark_active@2x.png</file>
     <file>image/only_gui_light_normal.png</file>
+    <file>image/only_gui_light_normal@2x.png</file>
     <file>image/only_gui_light_hover.png</file>
+    <file>image/only_gui_light_hover@2x.png</file>
     <file>image/only_gui_light_active.png</file>
+    <file>image/only_gui_light_active@2x.png</file>
     <file>image/only_me_light_normal.png</file>
+    <file>image/only_me_light_normal@2x.png</file>
     <file>image/only_me_light_hover.png</file>
+    <file>image/only_me_light_hover@2x.png</file>
     <file>image/only_me_light_active.png</file>
+    <file>image/only_me_light_active@2x.png</file>
     <file>image/all_process_light_normal.png</file>
+    <file>image/all_process_light_normal@2x.png</file>
     <file>image/all_process_light_hover.png</file>
+    <file>image/all_process_light_hover@2x.png</file>
     <file>image/all_process_light_active.png</file>
+    <file>image/all_process_light_active@2x.png</file>
     <file>image/logo_96.svg</file>
     <file>image/logo_24.svg</file>
     <file>image/logo_48.png</file>
     <file>image/kill.png</file>
+    <file>image/kill@2x.png</file>
     <file>image/kill_cursor.png</file>
+    <file>image/kill_cursor@2x.png</file>
     <file>image/icon_cpu_dark.png</file>
+    <file>image/icon_cpu_dark@2x.png</file>
     <file>image/icon_cpu_light.png</file>
+    <file>image/icon_cpu_light@2x.png</file>
     <file>image/icon_network_dark.png</file>
+    <file>image/icon_network_dark@2x.png</file>
     <file>image/icon_network_light.png</file>
+    <file>image/icon_network_light@2x.png</file>
     <file>image/icon_memory_dark.png</file>
+    <file>image/icon_memory_dark@2x.png</file>
     <file>image/icon_memory_light.png</file>
+    <file>image/icon_memory_light@2x.png</file>
   </qresource>
 </RCC>

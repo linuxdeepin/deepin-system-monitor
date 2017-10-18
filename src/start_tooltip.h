@@ -44,7 +44,7 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QImage iconImg;
+    QPixmap iconImg;
     QString text;
     DWindowManager *windowManager;
 };

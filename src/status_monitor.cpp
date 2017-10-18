@@ -24,6 +24,7 @@
 #include "constant.h"
 #include "process_item.h"
 #include "process_tree.h"
+#include <QApplication>
 #include "status_monitor.h"
 #include "utils.h"
 #include <QDebug>
@@ -286,7 +287,9 @@ void StatusMonitor::updateStatus()
             
             QPixmap icon;
             if (desktopFile.size() == 0) {
-                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24);
+                qreal devicePixelRatio = qApp->devicePixelRatio();
+                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24 * devicePixelRatio);
+                icon.setDevicePixelRatio(devicePixelRatio);
             } else {
                 icon = getDesktopFileIcon(desktopFile, 24);
             }

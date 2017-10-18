@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "memory_monitor.h"
@@ -35,13 +35,13 @@ using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = QImage(Utils::getQrcPath("icon_memory_dark.png"));
-    iconLightImage = QImage(Utils::getQrcPath("icon_memory_light.png"));
-    
+    iconDarkImage = Utils::loadPixmap(Utils::getQrcPath("icon_memory_dark.png"));
+    iconLightImage = Utils::loadPixmap(Utils::getQrcPath("icon_memory_light.png"));
+
     initTheme();
-    
+
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MemoryMonitor::changeTheme);
-    
+
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     ringCenterPointerX = statusBarMaxWidth - 90;
@@ -69,7 +69,7 @@ void MemoryMonitor::initTheme()
         textColor = "#303030";
         numberColor = "#000000";
         summaryColor = "#505050";
-        
+
         memoryForegroundColor = "#FF2997";
         memoryForegroundOpacity = 1;
         memoryBackgroundColor = "#000000";
@@ -79,13 +79,13 @@ void MemoryMonitor::initTheme()
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#000000";
         swapBackgroundOpacity = 0.05;
-        
+
         iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
         summaryColor = "#909090";
-        
+
         memoryForegroundColor = "#FF2997";
         memoryForegroundOpacity = 1;
         memoryBackgroundColor = "#FF2997";
@@ -95,7 +95,7 @@ void MemoryMonitor::initTheme()
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#00B4C7";
         swapBackgroundOpacity = 0.1;
-        
+
         iconImage = iconDarkImage;
     }
 }
@@ -120,7 +120,7 @@ void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tS
 {
     if ((uMemory != usedMemory) ||
         (tMemory != totalMemory) ||
-        (uSwap != usedSwap) || 
+        (uSwap != usedSwap) ||
         (tSwap != totalSwap)
         ) {
         prevUsedMemory = usedMemory;
@@ -169,7 +169,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     }
 
     // Draw icon.
-    painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
+    painter.drawPixmap(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
 
     // Draw title.
     QFont font = painter.font() ;
@@ -194,7 +194,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         swapTitle = QString("%1 (%2%)").arg(tr("Swap")).arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
     }
-    
+
     painter.setPen(QPen(QColor(memoryColor)));
     painter.setBrush(QBrush(QColor(memoryColor)));
     painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + memoryRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
@@ -276,4 +276,3 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      Qt::AlignCenter,
                      QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
 }
-

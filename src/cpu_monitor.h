@@ -48,9 +48,9 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QImage iconImage;
-    QImage iconLightImage;
-    QImage iconDarkImage;
+    QPixmap iconImage;
+    QPixmap iconLightImage;
+    QPixmap iconDarkImage;
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
     QString numberColor;

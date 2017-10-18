@@ -50,7 +50,7 @@ signals:
     void killWindow(xcb_window_t window);
     
 private:
-    QImage cursorImage;
+    QPixmap cursorImage;
     QRect screenRect;
     QList<xcb_window_t> windows;
     QList<WindowRect> windowRects;

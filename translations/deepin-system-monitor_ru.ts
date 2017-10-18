@@ -382,6 +382,10 @@ Are you sure to continue?</source>
         <source>Not enabled</source>
         <translation>Не включено</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>

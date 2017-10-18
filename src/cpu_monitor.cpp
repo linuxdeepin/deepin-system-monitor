@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "cpu_monitor.h"
@@ -35,13 +35,13 @@ using namespace Utils;
 
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = QImage(Utils::getQrcPath("icon_cpu_dark.png"));
-    iconLightImage = QImage(Utils::getQrcPath("icon_cpu_light.png"));
+    iconDarkImage = Utils::loadPixmap(Utils::getQrcPath("icon_cpu_dark.png"));
+    iconLightImage = Utils::loadPixmap(Utils::getQrcPath("icon_cpu_light.png"));
 
     initTheme();
-    
+
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CpuMonitor::changeTheme);
-    
+
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedSize(statusBarMaxWidth, 250);
     waveformsRenderOffsetX = (statusBarMaxWidth - 140) / 2;
@@ -51,10 +51,10 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
         cpuPercents->append(0);
     }
 
-    timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-    timer->start(30);
-}
+                                                                         timer = new QTimer();
+                                                                         connect(timer, SIGNAL(timeout()), this, SLOT(render()));
+                                                                         timer->start(30);
+                                                                         }
 
 CpuMonitor::~CpuMonitor()
 {
@@ -73,18 +73,18 @@ void CpuMonitor::initTheme()
 
         ringBackgroundColor = "#000000";
         ringBackgroundOpacity = 0.05;
-        
+
         iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
-        
+
         ringForegroundColor = "#2CA7F8";
         ringForegroundOpacity = 1;
 
         ringBackgroundColor = "#2CA7F8";
         ringBackgroundOpacity = 0.1;
-        
+
         iconImage = iconDarkImage;
     }
 }
@@ -147,14 +147,14 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QFont font = painter.font() ;
     font.setPointSize(20);
     font.setWeight(QFont::Light);
-    
+
     QFontMetrics fm(font);
     int titleWidth = fm.width(tr("CPU"));
-    
+
     int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
-    
-    painter.drawImage(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX - paddingRight, iconRenderOffsetY), iconImage);
-    
+
+    painter.drawPixmap(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX - paddingRight, iconRenderOffsetY), iconImage);
+
     painter.setFont(font);
     painter.setPen(QPen(QColor(textColor)));
     painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) + iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,

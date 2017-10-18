@@ -43,9 +43,9 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QImage iconImage;
-    QImage iconDarkImage;
-    QImage iconLightImage;
+    QPixmap iconImage;
+    QPixmap iconDarkImage;
+    QPixmap iconLightImage;
     QList<double> *downloadSpeeds;
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;

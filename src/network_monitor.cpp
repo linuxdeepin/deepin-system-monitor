@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "constant.h"
 #include "dthememanager.h"
@@ -35,17 +35,17 @@ using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = QImage(Utils::getQrcPath("icon_network_dark.png"));
-    iconLightImage = QImage(Utils::getQrcPath("icon_network_light.png"));
-    
+    iconDarkImage = Utils::loadPixmap(Utils::getQrcPath("icon_network_dark.png"));
+    iconLightImage = Utils::loadPixmap(Utils::getQrcPath("icon_network_light.png"));
+
     initTheme();
-    
+
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &NetworkMonitor::changeTheme);
-    
+
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     setFixedHeight(190);
-    
+
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
     downloadSpeeds = new QList<double>();
@@ -70,12 +70,12 @@ void NetworkMonitor::initTheme()
     if (DThemeManager::instance()->theme() == "light") {
         textColor = "#303030";
         summaryColor = "#505050";
-        
+
         iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         summaryColor = "#909090";
-        
+
         iconImage = iconDarkImage;
     }
 }
@@ -153,7 +153,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     // Draw icon.
-    painter.drawImage(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
+    painter.drawPixmap(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
 
     // Draw title.
     QFont font = painter.font() ;
@@ -170,7 +170,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     framePen.setColor(QColor(textColor));
     framePen.setWidth(0.5);
     painter.setPen(framePen);
-    
+
     int penSize = 1;
     int gridX = rect().x() + penSize;
     int gridY = rect().y() + gridRenderOffsetY + gridPaddingTop;
@@ -207,13 +207,13 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     // Draw network summary.
     setFontSize(painter, downloadRenderSize);
     QFontMetrics fm = painter.fontMetrics();
-    
+
     QString downloadTitle = QString("%1 %2").arg(tr("Download")).arg(formatBandwidth(totalRecvKbs));
     QString downloadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
     QString uploadTitle = QString("%1 %2").arg(tr("Upload")).arg(formatBandwidth(totalSentKbs));
     QString uploadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalSentBytes));
     int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
-    
+
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(downloadColor)));
     painter.setBrush(QBrush(QColor(downloadColor)));
