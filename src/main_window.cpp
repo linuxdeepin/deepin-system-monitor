@@ -241,11 +241,6 @@ void MainWindow::dialogButtonClicked(int index, QString)
 {
     if (index == 1) {
         if (killXid != -1) {
-            // if (kill(killXid, SIGKILL) != 0) {
-            //     cout << "Kill failed." << endl;
-            // }
-            // XKillClient(QX11Info::display(), window);
-            
             killer->killWindowByXid(killXid);
 
             killXid = -1;
