@@ -30,13 +30,16 @@
 #include <QPainter>
 #include <QStyle>
 #include <QWidget>
+#include <DHiDPIHelper>
+
+DWIDGET_USE_NAMESPACE
 
 StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
 {
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | Qt::BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    iconImg = Utils::loadPixmap(Utils::getQrcPath("kill.png"));
+    iconImg = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill.png"));
 
     installEventFilter(this);
 

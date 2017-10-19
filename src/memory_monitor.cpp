@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -35,8 +36,8 @@ using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = Utils::loadPixmap(Utils::getQrcPath("icon_memory_dark.png"));
-    iconLightImage = Utils::loadPixmap(Utils::getQrcPath("icon_memory_light.png"));
+    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_dark.png"));
+    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_light.png"));
 
     initTheme();
 

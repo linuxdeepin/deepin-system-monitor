@@ -28,6 +28,7 @@
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -35,8 +36,8 @@ using namespace Utils;
 
 CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = Utils::loadPixmap(Utils::getQrcPath("icon_cpu_dark.png"));
-    iconLightImage = Utils::loadPixmap(Utils::getQrcPath("icon_cpu_light.png"));
+    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_dark.png"));
+    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_light.png"));
 
     initTheme();
 

@@ -31,6 +31,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <dthememanager.h>
+#include <DHiDPIHelper>
 
 using namespace Utils;
 
@@ -44,7 +45,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    QPixmap iconPixmap = Utils::loadPixmap(getQrcPath("logo_24.svg"));
+    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(getQrcPath("logo_24.svg"));
     QLabel *iconLabel = new QLabel();
     iconLabel->setPixmap(iconPixmap);
 

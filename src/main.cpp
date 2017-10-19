@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include <thread>
 #include <unistd.h>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -56,7 +57,7 @@ int main(int argc, char *argv[])
         app.setApplicationDisplayName(QObject::tr("Deepin System Monitor"));
         app.setApplicationVersion("1.0");
 
-        app.setProductIcon(Utils::loadPixmap(Utils::getQrcPath("logo_96.svg")));
+        app.setProductIcon(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo_96.svg")));
         app.setProductName(QApplication::tr("Deepin System Monitor"));
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);

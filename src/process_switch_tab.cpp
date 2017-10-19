@@ -25,30 +25,31 @@
 #include "process_switch_tab.h"
 #include "utils.h"
 #include <QDebug>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
 ProcessSwitchTab::ProcessSwitchTab(int tabIndex)
 {
-    onlyGuiDarkNormalImage = Utils::loadPixmap(Utils::getQrcPath("only_gui_dark_normal.png"));
-    onlyGuiDarkHoverImage = Utils::loadPixmap(Utils::getQrcPath("only_gui_dark_hover.png"));
-    onlyGuiDarkActiveImage = Utils::loadPixmap(Utils::getQrcPath("only_gui_dark_active.png"));
-    onlyMeDarkNormalImage = Utils::loadPixmap(Utils::getQrcPath("only_me_dark_normal.png"));
-    onlyMeDarkHoverImage = Utils::loadPixmap(Utils::getQrcPath("only_me_dark_hover.png"));
-    onlyMeDarkActiveImage = Utils::loadPixmap(Utils::getQrcPath("only_me_dark_active.png"));
-    allProcessDarkNormalImage = Utils::loadPixmap(Utils::getQrcPath("all_process_dark_normal.png"));
-    allProcessDarkHoverImage = Utils::loadPixmap(Utils::getQrcPath("all_process_dark_hover.png"));
-    allProcessDarkActiveImage = Utils::loadPixmap(Utils::getQrcPath("all_process_dark_active.png"));
+    onlyGuiDarkNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_normal.png"));
+    onlyGuiDarkHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_hover.png"));
+    onlyGuiDarkActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_active.png"));
+    onlyMeDarkNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_normal.png"));
+    onlyMeDarkHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_hover.png"));
+    onlyMeDarkActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_active.png"));
+    allProcessDarkNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_normal.png"));
+    allProcessDarkHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_hover.png"));
+    allProcessDarkActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_active.png"));
 
-    onlyGuiLightNormalImage = Utils::loadPixmap(Utils::getQrcPath("only_gui_light_normal.png"));
-    onlyGuiLightHoverImage = Utils::loadPixmap(Utils::getQrcPath("only_gui_light_hover.png"));
-    onlyGuiLightActiveImage = Utils::loadPixmap(Utils::getQrcPath("only_gui_light_active.png"));
-    onlyMeLightNormalImage = Utils::loadPixmap(Utils::getQrcPath("only_me_light_normal.png"));
-    onlyMeLightHoverImage = Utils::loadPixmap(Utils::getQrcPath("only_me_light_hover.png"));
-    onlyMeLightActiveImage = Utils::loadPixmap(Utils::getQrcPath("only_me_light_active.png"));
-    allProcessLightNormalImage = Utils::loadPixmap(Utils::getQrcPath("all_process_light_normal.png"));
-    allProcessLightHoverImage = Utils::loadPixmap(Utils::getQrcPath("all_process_light_hover.png"));
-    allProcessLightActiveImage = Utils::loadPixmap(Utils::getQrcPath("all_process_light_active.png"));
+    onlyGuiLightNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_normal.png"));
+    onlyGuiLightHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_hover.png"));
+    onlyGuiLightActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_active.png"));
+    onlyMeLightNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_normal.png"));
+    onlyMeLightHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_hover.png"));
+    onlyMeLightActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_active.png"));
+    allProcessLightNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_normal.png"));
+    allProcessLightHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_hover.png"));
+    allProcessLightActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_active.png"));
 
     initTheme();
 

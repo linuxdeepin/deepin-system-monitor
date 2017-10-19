@@ -28,6 +28,7 @@
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
+#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -35,8 +36,8 @@ using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = Utils::loadPixmap(Utils::getQrcPath("icon_network_dark.png"));
-    iconLightImage = Utils::loadPixmap(Utils::getQrcPath("icon_network_light.png"));
+    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_dark.png"));
+    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_light.png"));
 
     initTheme();
 
