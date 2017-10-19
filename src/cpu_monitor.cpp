@@ -52,10 +52,10 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
         cpuPercents->append(0);
     }
 
-                                                                         timer = new QTimer();
-                                                                         connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-                                                                         timer->start(30);
-                                                                         }
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(render()));
+    timer->start(30);
+}
 
 CpuMonitor::~CpuMonitor()
 {
@@ -143,7 +143,6 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
 
     QFont font = painter.font() ;
     font.setPointSize(20);
