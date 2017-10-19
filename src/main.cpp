@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));
+        app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
 
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
 

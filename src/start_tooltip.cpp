@@ -39,7 +39,7 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | Qt::BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    iconImg = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill.png"));
+    iconImg = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill.svg"));
 
     installEventFilter(this);
 

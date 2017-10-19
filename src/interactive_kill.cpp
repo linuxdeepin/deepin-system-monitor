@@ -35,7 +35,7 @@ DWIDGET_USE_NAMESPACE
 
 InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 {
-    cursorImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill_cursor.png"));
+    cursorImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill_cursor.svg"));
     cursorX = -1;
     cursorY = -1;
 

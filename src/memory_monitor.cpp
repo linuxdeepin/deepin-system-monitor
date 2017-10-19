@@ -36,8 +36,8 @@ using namespace Utils;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_dark.png"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_light.png"));
+    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_dark.svg"));
+    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_light.svg"));
 
     initTheme();
 

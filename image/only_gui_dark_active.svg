@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="24px" viewBox="0 0 26 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+    <title>only_gui_dark_active</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="only_gui_dark_active">
+            <g id="Group-13" transform="translate(5.000000, 5.000000)">
+                <path d="M7.94098301,10 L8.5527864,11.2236068 L9.4472136,10.7763932 L6.5,4.88196601 L3.5527864,10.7763932 L4.4472136,11.2236068 L5.05901699,10 L7.94098301,10 Z M7.44098301,9 L5.55901699,9 L6.5,7.11803399 L7.44098301,9 Z M0,3 L13,3 L13,14 L0,14 L0,3 Z" id="Combined-Shape" fill="#2CA7F8"></path>
+                <polyline id="Path-7" stroke="#2CA7F8" points="2 0.5 15.5 0.5 15.5 11"></polyline>
+                <g id="Group-12" transform="translate(3.000000, 4.000000)"></g>
+            </g>
+        </g>
+    </g>
+</svg>

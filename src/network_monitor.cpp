@@ -36,8 +36,8 @@ using namespace Utils;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_dark.png"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_light.png"));
+    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_dark.svg"));
+    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_light.svg"));
 
     initTheme();
 
