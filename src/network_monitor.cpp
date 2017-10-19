@@ -28,6 +28,7 @@
 #include "utils.h"
 #include <QDebug>
 #include <QPainter>
+#include <QApplication>
 #include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
@@ -263,14 +264,19 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, downloadWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor(downloadColor), 1.6));
+    qreal devicePixelRatio = qApp->devicePixelRatio();
+    qreal networkCurveWidth = 1.6;
+    if (devicePixelRatio > 1) {
+        networkCurveWidth = 2;
+    }
+    painter.setPen(QPen(QColor(downloadColor), networkCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(downloadPath);
 
     painter.translate(0, uploadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor(uploadColor), 1.6));
+    painter.setPen(QPen(QColor(uploadColor), networkCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(uploadPath);
 }
