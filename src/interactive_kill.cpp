@@ -38,6 +38,7 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     cursorImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill_cursor.svg"));
     cursorX = -1;
     cursorY = -1;
+    killWindowIndex = -1;
 
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
@@ -93,28 +94,36 @@ void InteractiveKill::keyPressEvent(QKeyEvent *keyEvent)
 
 void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    QApplication::setOverrideCursor(Qt::BlankCursor);
+    QApplication::setOverrideCursor(QCursor(cursorImage));
 
     cursorX = mouseEvent->x();
     cursorY = mouseEvent->y();
+    
+    bool needRepaint = false;
 
     for (int i = 0; i < windowRects.length(); i++) {
         WindowRect rect = windowRects[i];
 
         if (cursorX + screenRect.x() >= rect.x && cursorX + screenRect.x() <= rect.x + rect.width &&
             cursorY + screenRect.y() >= rect.y && cursorY + screenRect.y() <= rect.y + rect.height) {
+            
+            if (killWindowIndex != i) {
+                needRepaint = true;
+            }
 
             rect.x = rect.x - screenRect.x();
             rect.y = rect.y - screenRect.y();
 
             killWindowRect = rect;
             killWindowIndex = i;
-
+            
             break;
         }
     }
 
-    repaint();
+    if (needRepaint) {
+        update();
+    }
 }
 
 void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
@@ -165,13 +174,6 @@ void InteractiveKill::paintEvent(QPaintEvent *)
         painter.setClipping(true);
         painter.setClipRegion(windowRegion);
         painter.drawRect(QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
-
-        // Draw kill cursor.
-        WindowRect rootRect = windowManager->getRootWindowRect();
-        painter.setClipRegion(QRegion(0, 0, rootRect.width, rootRect.height));
-
-        painter.setOpacity(1);
-        painter.drawPixmap(QPoint(cursorX, cursorY), cursorImage);
     }
 }
 
