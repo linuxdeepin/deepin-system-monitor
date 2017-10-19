@@ -85,7 +85,7 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
     cmdlineLabel = new QLabel();
     cmdlineLabel->setStyleSheet("QLabel { background-color : transparent; color : #000000; }");
     cmdlineLabel->setWordWrap(true);
-    cmdlineLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+    cmdlineLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     cmdlineLayout->addWidget(cmdlineTitleLabel);
     cmdlineLayout->addWidget(cmdlineLabel);
