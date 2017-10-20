@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="lt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -21,6 +19,13 @@
     <message>
         <source>CPU</source>
         <translation>CPU</translation>
+    </message>
+</context>
+<context>
+    <name>ListView</name>
+    <message>
+        <source>No search result</source>
+        <translation>Nėra paieškos rezultatų</translation>
     </message>
 </context>
 <context>
@@ -56,7 +61,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"></translation>
+        <translation>Sukeitimų skaidinys</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -71,15 +76,15 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Atsiuntimas</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation>Viso</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Išsiuntimas</translation>
     </message>
 </context>
 <context>
@@ -154,11 +159,11 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Atsiuntimas</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Išsiuntimas</translation>
     </message>
     <message>
         <source>PID</source>
@@ -169,7 +174,7 @@ Ar tikrai norite tęsti?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -256,7 +261,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
@@ -264,11 +269,11 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
@@ -316,7 +321,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager</source>
@@ -340,7 +345,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Pelės įvykių tarnyba</translation>
     </message>
     <message>
         <source>DConf service</source>
@@ -360,11 +365,11 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Modemo įrenginio tvarkytuvė</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
@@ -376,22 +381,18 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"></translation>
+        <translation>Sukeitimų skaidinys</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>Neįjungta</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished"></translation>
+        <translation>Spustelėkite ant programos, kurią norite sustabdyti</translation>
     </message>
 </context>
 <context>
@@ -414,6 +415,13 @@ Ar tikrai norite tęsti?</translation>
     <message>
         <source>Search</source>
         <translation>Paieška</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Darbalaukis</translation>
     </message>
 </context>
 </TS>

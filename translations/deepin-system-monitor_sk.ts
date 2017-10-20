@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sk" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -21,6 +19,13 @@
     <message>
         <source>CPU</source>
         <translation>CPU</translation>
+    </message>
+</context>
+<context>
+    <name>ListView</name>
+    <message>
+        <source>No search result</source>
+        <translation>Žiadny výsledok vyhľadávania</translation>
     </message>
 </context>
 <context>
@@ -382,10 +387,6 @@ Naozaj chcete pokračovať?</translation>
         <source>Not enabled</source>
         <translation>Nie je povolené</translation>
     </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>StartTooltip</name>
@@ -414,6 +415,13 @@ Naozaj chcete pokračovať?</translation>
     <message>
         <source>Search</source>
         <translation>Vyhľadávanie</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Plocha</translation>
     </message>
 </context>
 </TS>

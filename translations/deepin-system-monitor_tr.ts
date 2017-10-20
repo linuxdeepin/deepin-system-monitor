@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -24,6 +22,13 @@
     </message>
 </context>
 <context>
+    <name>ListView</name>
+    <message>
+        <source>No search result</source>
+        <translation>Arama sonucu yok</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
@@ -40,7 +45,7 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Bu uygulamayı sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz ?</translation>
+        <translation>Bu uygulamayı sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -101,11 +106,11 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Bu işlemi sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz ?</translation>
+        <translation>Bu işlemi sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Vazgeç</translation>
+        <translation>İptal Et</translation>
     </message>
     <message>
         <source>Suspend process</source>
@@ -171,14 +176,14 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin Sistem İzleyicisi</translation>
+        <translation>Deepin Sistem İzleyici</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin Sistem İzleyicisi</translation>
+        <translation>Deepin Sistem İzleyici</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -190,7 +195,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Masaüstü Ortamı - Polkit proxy</translation>
+        <translation>Deepin Masaüstü Ortamı - Polkit vekil</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
@@ -218,7 +223,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deepin Dosya Yöneticisi programı</translation>
+        <translation>Deepin Dosya Yönetici programı</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
@@ -226,19 +231,19 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Derin Pencere Yöneticisi</translation>
+        <translation>Deepin Pencere Yönetici</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Derin Pencere Yöneticisi değiştirici</translation>
+        <translation>Derin Pencere Yönetici değiştiricisi</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Deepin bildirimi</translation>
+        <translation>Deepin bildirim</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Cloud Print ajanı</translation>
+        <translation>Deepin Bulut Yazıcı ajanı</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
@@ -246,7 +251,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Deepin Store programı</translation>
+        <translation>Deepin Mağaza programı</translation>
     </message>
     <message>
         <source>Window match daemon</source>
@@ -270,11 +275,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Deepin Store müşterisinin yardımcı işlemi</translation>
+        <translation>Deepin Mağaza müşterisinin yardımcı işlemi</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Ağ yöneticisi</translation>
+        <translation>Ağ yönetici</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
@@ -314,15 +319,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Işık ekran yöneticisi</translation>
+        <translation>Hafif ekran yönetici</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Sistem servis yöneticisi</translation>
+        <translation>Sistem servis yönetici</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Sistem servis yöneticisi - Aygıt yönetim programı</translation>
+        <translation>Sistem servis yönetici - Aygıt yönetim programı</translation>
     </message>
     <message>
         <source>Disk daemon</source>
@@ -358,7 +363,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Modem aygıt yöneticisi</translation>
+        <translation>Modem aygıt yönetici</translation>
     </message>
     <message>
         <source>System print tray service</source>
@@ -370,7 +375,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics touchpad aygıt programı</translation>
+        <translation>Synaptics dokunmatik yüzey aygıt programı</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -380,16 +385,12 @@ Are you sure to continue?</source>
         <source>Not enabled</source>
         <translation>Etkin değil</translation>
     </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Sonlandırmak istediğiniz uygulamaya tıklayın</translation>
+        <translation>Sonlandırmak istediğiniz uygulamaya tıklayınız</translation>
     </message>
 </context>
 <context>
@@ -411,7 +412,14 @@ Are you sure to continue?</source>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Arama</translation>
+        <translation>Ara</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Masaüstü</translation>
     </message>
 </context>
 </TS>

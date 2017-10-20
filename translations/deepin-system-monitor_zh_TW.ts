@@ -120,7 +120,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>恢復行程</translation>
+        <translation>繼續行程</translation>
     </message>
     <message>
         <source>View process location</source>
@@ -151,11 +151,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>硬碟寫入</translation>
+        <translation>磁碟寫入</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>硬碟讀取</translation>
+        <translation>磁碟讀取</translation>
     </message>
     <message>
         <source>Download</source>
@@ -174,7 +174,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin 系統監視器是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、硬碟和其他系統狀態。</translation>
+        <translation>Deepin 系統監視器是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、磁碟和其他系統狀態。</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -333,7 +333,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>硬碟守護行程</translation>
+        <translation>磁碟守護行程</translation>
     </message>
     <message>
         <source>Account daemon</source>

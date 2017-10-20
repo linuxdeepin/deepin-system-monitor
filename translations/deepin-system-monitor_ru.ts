@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
@@ -21,6 +19,13 @@
     <message>
         <source>CPU</source>
         <translation>Процессор</translation>
+    </message>
+</context>
+<context>
+    <name>ListView</name>
+    <message>
+        <source>No search result</source>
+        <translation>Результаты поиска отсутствуют</translation>
     </message>
 </context>
 <context>
@@ -382,10 +387,6 @@ Are you sure to continue?</source>
         <source>Not enabled</source>
         <translation>Не включено</translation>
     </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>StartTooltip</name>
@@ -414,6 +415,13 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>Поиск</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
     </message>
 </context>
 </TS>

@@ -132,7 +132,7 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"/>
+        <translation>%2 aplikasi dan %3 proses masih berjalan</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@ Anda pasti mahu teruskan?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation>Pemantau Sistem Deepin merupakan pemantau sistem yang hebat dan berintiutif. Ia dapat memantau proses CPU, ingatan, rangkaian, cakera dan lain-lain status.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -189,7 +189,7 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation type="unfinished"/>
+        <translation>Persekitaran Desktop Deepin - Proses perkhidmatan pengawalan</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
@@ -257,11 +257,11 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon pandanan tetingkap</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Perkhidmatan DBus daemon padanan tetingkap</translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -269,15 +269,15 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon sistem fail maya mod pengguna</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Pelayan fuse bagi daemon sistem fail maya mod pengguna</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation>Proses pembantu bagi klien Kedai Deepin</translation>
     </message>
     <message>
         <source>Network manager</source>
@@ -297,19 +297,19 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation type="unfinished"/>
+        <translation>Kaedah masukan Fcitx</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon DBus kaedah masukan Fcitx</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon kaedah masukan Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"/>
+        <translation>Klien setempat ShadowSocks</translation>
     </message>
     <message>
         <source>Sound service</source>
@@ -329,7 +329,7 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation type="unfinished"/>
+        <translation>Pengurus perkhidmatan sistem - Daemon pengurusan peranti</translation>
     </message>
     <message>
         <source>Disk daemon</source>
@@ -369,15 +369,15 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>Perkhidmatan talam cetak sistem</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation type="unfinished"/>
+        <translation>Kotak pasir pelayar Chrome</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon peranti pad sentuh Synaptics</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -392,7 +392,7 @@ Anda pasti mahu teruskan?</translation>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished"/>
+        <translation>Klik aplikasi yang mahu ditamatkan</translation>
     </message>
 </context>
 <context>
