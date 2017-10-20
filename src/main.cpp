@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     const QString socket_path(QString("deepin-system-monitor_%1").arg(getuid()));
     if (app.setSingleInstance(socket_path)) {
