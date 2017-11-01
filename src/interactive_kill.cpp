@@ -56,44 +56,11 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     windowManager->setRootWindowRect(screenRect);
     windows = windowManager->getWindows();
 
-    // Read the list of open processes information.
-    PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
-    static proc_t proc_info;
-    memset(&proc_info, 0, sizeof(proc_t));
-
-    std::map<int, proc_t> processes;
-    while (readproc(proc, &proc_info) != NULL) {
-        processes[proc_info.tid]=proc_info;
-    }
-    closeproc(proc);
-
     for (int i = 0; i < windows.length(); i++) {
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
             windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
 
-            QString flatpakAppid = windowManager->getWindowFlatpakAppid(windows[i]);
-            if (flatpakAppid != "") {
-                for (auto &p:processes) {
-                    int pid = (&p.second)->tid;
-
-                    QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
-                    if (flatpakAppidEnv == flatpakAppid) {
-                        QString tempName = windowManager->getWindowName(windows[i]);
-
-                        if (windowPids.length() == i + 1) {
-                            // Update flatpak app process id if find newer process id.
-                            if (windowPids[i] < pid) {
-                                windowPids[i] = pid;
-                            }
-                        } else {
-                            // Append flatpak app process id.
-                            windowPids.append(pid);
-                        }
-                    }
-                }
-            } else {
-                windowPids.append(windowManager->getWindowPid(windows[i]));
-            }
+            windowPids.append(Utils::getWindowPid(windows[i]));
         }
     }
 

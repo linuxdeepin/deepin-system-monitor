@@ -22,6 +22,7 @@
  */
 
 #include "find_window_title.h"
+#include "utils.h"
 #include <QDebug>
 #include <QObject>
 #include <QtX11Extras/QX11Info>
@@ -77,7 +78,7 @@ void FindWindowTitle::updateWindowInfos()
 
         windowTitles->clear();
         foreach (auto window, windows) {
-            int pid = getWindowPid(window);
+            int pid = Utils::getWindowPid(window);
             
             if (!windowTitles->contains(pid)) {
                 (*windowTitles)[pid] = window;

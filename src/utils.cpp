@@ -152,6 +152,42 @@ namespace Utils {
         return std::max(280, getRenderSize(9, swapTitle).width() + offset);
     }
 
+    int getWindowPid(xcb_window_t window)
+    {
+        int windowPid = -1;
+        
+        DWindowManager* windowManager = new DWindowManager();
+        QString flatpakAppid = windowManager->getWindowFlatpakAppid(window);
+        if (flatpakAppid != "") {
+            PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
+            static proc_t proc_info;
+            memset(&proc_info, 0, sizeof(proc_t));
+
+            std::map<int, proc_t> processes;
+            while (readproc(proc, &proc_info) != NULL) {
+                processes[proc_info.tid]=proc_info;
+            }
+            closeproc(proc);
+
+            for (auto &p:processes) {
+                int pid = (&p.second)->tid;
+
+                QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+                if (flatpakAppidEnv == flatpakAppid) {
+                    QString tempName = windowManager->getWindowName(window);
+                    
+                    if (windowPid < pid) {
+                        windowPid = pid;
+                    }
+                }
+            }
+        } else {
+            windowPid = windowManager->getWindowPid(window);
+        }
+        
+        return windowPid;
+    }
+
     long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory)
     {
         if (cmdline.startsWith("/usr/lib/virtualbox/VirtualBox") && cmdline.contains("--startvm")) {
@@ -190,7 +226,7 @@ namespace Utils {
         in.close();
 
         qreal devicePixelRatio = qApp->devicePixelRatio();
-        
+
         QPixmap pixmap = icon.pixmap(iconSize * devicePixelRatio, iconSize * devicePixelRatio);
         pixmap.setDevicePixelRatio(devicePixelRatio);
 
