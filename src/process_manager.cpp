@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "QVBoxLayout"
 #include "attributes_dialog.h"
@@ -30,6 +30,7 @@
 #include <DDesktopServices>
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
 #include <QList>
 #include <QProcess>
 #include <QStyleFactory>
@@ -46,29 +47,29 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     QWidget *topWidget = new QWidget();
     topWidget->setFixedHeight(24);
     QHBoxLayout *topLayout = new QHBoxLayout(topWidget);
     topLayout->setContentsMargins(2, 0, 2, 0);
-    
+
     processView = new ProcessView(columnHideFlags);
     connect(processView, &DSimpleListView::changeColumnVisible, this, &ProcessManager::changeColumnVisible);
     connect(processView, &DSimpleListView::changeSortingStatus, this, &ProcessManager::changeSortingStatus);
-    
+
     layout->addWidget(topWidget);
     layout->addWidget(processView);
 
     statusLabel = new QLabel("");
-    
+
     initTheme();
-    
+
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessManager::changeTheme);
-    
+
     processSwitchTab = new ProcessSwitchTab(tabIndex);
-    
+
     connect(processSwitchTab, &ProcessSwitchTab::activeTab, this, &ProcessManager::activeTab);
-    
+
     topLayout->addWidget(statusLabel, 0, Qt::AlignBottom);
     topLayout->addStretch();
     topLayout->addWidget(processSwitchTab, 0, Qt::AlignBottom);
@@ -92,7 +93,7 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     killProcessDialog->addButton(QString(tr("End process")), true, DDialog::ButtonNormal);
     connect(killProcessDialog, &DDialog::buttonClicked, this, &ProcessManager::dialogButtonClicked);
-    
+
     actionPids = new QList<int>();
 
     rightMenu = new QMenu();
@@ -174,16 +175,16 @@ void ProcessManager::handleSearch(QString searchContent)
 void ProcessManager::changeHoverItem(QPoint, DSimpleListItem* item, int columnIndex)
 {
     ProcessItem *processItem = static_cast<ProcessItem*>(item);
-    
+
     if (columnIndex != 0 || processItem->isNameDisplayComplete()) {
-        QToolTip::hideText();  
+        QToolTip::hideText();
     } else {
         if (QToolTip::text() == processItem->getDisplayName()) {
             // QToolTip won't update position if tooltip text same as current one.
             // So we add blank char at end to force tooltip update position.
-            QToolTip::showText(QCursor::pos(), processItem->getDisplayName() + " "); 
+            QToolTip::showText(QCursor::pos(), processItem->getDisplayName() + " ");
         } else {
-            QToolTip::showText(QCursor::pos(), processItem->getDisplayName()); 
+            QToolTip::showText(QCursor::pos(), processItem->getDisplayName());
         }
     }
 }
@@ -193,7 +194,7 @@ void ProcessManager::killProcesses()
     for (int pid : *actionPids) {
         // Resume process first, otherwise kill process too slow.
         kill(pid, SIGCONT);
-        
+
         if (kill(pid, SIGKILL) != 0) {
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
         }
@@ -206,28 +207,49 @@ void ProcessManager::openProcessDirectory()
 {
     for (int pid : *actionPids) {
         QString cmdline = Utils::getProcessCmdline(pid);
+
         if (cmdline.size() > 0) {
             // Found wine program location if cmdline starts with c://.
             if (cmdline.startsWith("c:\\")) {
                 QString winePrefix = Utils::getProcessEnvironmentVariable(pid, "WINEPREFIX");
                 cmdline = cmdline.replace("\\", "/").replace("c:/", "/drive_c/");
-                
-                DDesktopServices::showFileItem(winePrefix + cmdline);
-            }
-            // Else find program location through 'which' command.
-            else {
-                QProcess whichProcess;
-                QString exec = "which";
-                QStringList params;
-                params << cmdline;
-                whichProcess.start(exec, params);
-                whichProcess.waitForFinished();
-                QString output(whichProcess.readAllStandardOutput());
 
-                QString processPath = output.split("\n")[0];
-                DDesktopServices::showFileItem(processPath);
+                DDesktopServices::showFileItem(winePrefix + cmdline);
+            } else {
+                QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+
+                // Else find program location through 'which' command.
+                if (flatpakAppidEnv == "") {
+                    QProcess whichProcess;
+                    QString exec = "which";
+                    QStringList params;
+                    params << cmdline;
+                    whichProcess.start(exec, params);
+                    whichProcess.waitForFinished();
+                    QString output(whichProcess.readAllStandardOutput());
+
+                    QString processPath = output.split("\n")[0];
+                    DDesktopServices::showFileItem(processPath);
+                }
+                // Find flatpak application location.
+                else {
+                    QProcess whichProcess;
+                    QString exec = "flatpak";
+                    QStringList params;
+                    params << "info";
+                    params << flatpakAppidEnv;
+                    whichProcess.start(exec, params);
+                    whichProcess.waitForFinished();
+                    QString output(whichProcess.readAllStandardOutput());
+
+                    QDir flatpakRootDir = QDir(output.split("Location:")[1].split("\n")[0].simplified());
+                    flatpakRootDir.cd("files");
+                    flatpakRootDir.cd("bin");
+
+                    DDesktopServices::showFileItem(flatpakRootDir.absoluteFilePath(cmdline));
+                }
             }
-            
+
         }
     }
 
@@ -237,7 +259,7 @@ void ProcessManager::openProcessDirectory()
 void ProcessManager::popupMenu(QPoint pos, QList<DSimpleListItem*> items)
 {
     actionPids->clear();
-    
+
     for (DSimpleListItem *item : items) {
         ProcessItem *processItem = static_cast<ProcessItem*>(item);
         actionPids->append(processItem->getPid());
@@ -266,12 +288,12 @@ void ProcessManager::showAttributes()
                 if (dialog->getPid() == pid) {
                     dialog->show();
                     actionPids->clear();
-                    
+
                     return;
                 }
             }
         }
-        
+
         AttributesDialog *dialog = new AttributesDialog(this, pid);
         dialog->show();
     }
@@ -287,14 +309,14 @@ void ProcessManager::showKillProcessDialog()
 void ProcessManager::stopProcesses()
 {
     int currentPid = getpid();
-    
+
     for (int pid : *actionPids) {
         if (pid != currentPid) {
             if (kill(pid, SIGSTOP) != 0) {
                 qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
             }
         }
-        
+
     }
 
     actionPids->clear();
