@@ -96,7 +96,7 @@ void InteractiveKill::keyPressEvent(QKeyEvent *keyEvent)
 
 void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    QApplication::setOverrideCursor(QCursor(cursorImage));
+    setCursor(QCursor(cursorImage));
 
     cursorX = mouseEvent->x();
     cursorY = mouseEvent->y();
