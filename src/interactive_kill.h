@@ -44,16 +44,16 @@ public:
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
     void paintEvent(QPaintEvent *);
-    void killWindowByXid(xcb_window_t window);
     
 signals:
-    void killWindow(xcb_window_t window);
+    void killWindow(int pid);
     
 private:
     QPixmap cursorImage;
     QRect screenRect;
     QList<xcb_window_t> windows;
     QList<WindowRect> windowRects;
+    QList<int> windowPids;
     QPixmap screenPixmap;
     StartTooltip *startTooltip;
     DWindowManager *windowManager;

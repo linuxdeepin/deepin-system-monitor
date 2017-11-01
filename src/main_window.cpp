@@ -56,7 +56,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     }
 
     this->resize(width, height);
-    
+
     // Init.
     if (this->titlebar()) {
         menu = new QMenu();
@@ -74,8 +74,8 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MainWindow::changeTheme);
         connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, [=] () {
-                changeTheme(DThemeManager::instance()->theme());
-            });
+                                                                                                        changeTheme(DThemeManager::instance()->theme());
+                                                                                                    });
 
         toolbar = new Toolbar();
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
@@ -109,7 +109,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         layout->addWidget(statusMonitor);
         layout->addWidget(processManager);
 
-        killXid = -1;
+        killPid = -1;
 
         killProcessDialog = new DDialog(QString(tr("End application")), QString(tr("Ending this application may cause data loss.\nAre you sure to continue?")), this);
         killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
@@ -240,19 +240,21 @@ void MainWindow::createWindowKiller()
 void MainWindow::dialogButtonClicked(int index, QString)
 {
     if (index == 1) {
-        if (killXid != -1) {
-            killer->killWindowByXid(killXid);
-
-            killXid = -1;
+        if (killPid != -1) {
+            if (kill(killPid, SIGKILL) != 0) {
+                cout << "Kill failed." << endl;
+            }
+            
+            killPid = -1;
         }
     }
 }
 
-void MainWindow::popupKillConfirmDialog(xcb_window_t window)
+void MainWindow::popupKillConfirmDialog(int pid)
 {
     killer->close();
 
-    killXid = window;
+    killPid = pid;
     killProcessDialog->show();
 }
 
@@ -260,107 +262,107 @@ void MainWindow::recordSortingStatus(int index, bool sortingOrder)
 {
     QList<QString> columnNames = {
         "name", "cpu", "memory", "disk_write", "disk_read", "download", "upload", "pid"
-    };
+        };
 
-    settings->setOption("process_sorting_column", columnNames[index]);
-    settings->setOption("process_sorting_order", sortingOrder);
-}
-
-void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
-{
-    QList<QString> visibleColumns;
-    visibleColumns << "name";
-
-
-    if (columnVisibles[1]) {
-        visibleColumns << "cpu";
+        settings->setOption("process_sorting_column", columnNames[index]);
+        settings->setOption("process_sorting_order", sortingOrder);
     }
 
-    if (columnVisibles[2]) {
-        visibleColumns << "memory";
+    void MainWindow::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
+    {
+        QList<QString> visibleColumns;
+        visibleColumns << "name";
+
+
+        if (columnVisibles[1]) {
+            visibleColumns << "cpu";
+        }
+
+        if (columnVisibles[2]) {
+            visibleColumns << "memory";
+        }
+
+        if (columnVisibles[3]) {
+            visibleColumns << "disk_write";
+        }
+
+        if (columnVisibles[4]) {
+            visibleColumns << "disk_read";
+        }
+
+        if (columnVisibles[5]) {
+            visibleColumns << "download";
+        }
+
+        if (columnVisibles[6]) {
+            visibleColumns << "upload";
+        }
+
+        if (columnVisibles[7]) {
+            visibleColumns << "pid";
+        }
+
+        QString processColumns = "";
+        for (int i = 0; i < visibleColumns.length(); i++) {
+            if (i != visibleColumns.length() - 1) {
+                processColumns += QString("%1,").arg(visibleColumns[i]);
+            } else {
+                processColumns += visibleColumns[i];
+            }
+        }
+
+        settings->setOption("process_columns", processColumns);
     }
 
-    if (columnVisibles[3]) {
-        visibleColumns << "disk_write";
+    void MainWindow::showWindowKiller()
+    {
+        // Minimize window before show killer window.
+        this->showMinimized();
+
+        QTimer::singleShot(200, this, SLOT(createWindowKiller()));
     }
 
-    if (columnVisibles[4]) {
-        visibleColumns << "disk_read";
-    }
-
-    if (columnVisibles[5]) {
-        visibleColumns << "download";
-    }
-
-    if (columnVisibles[6]) {
-        visibleColumns << "upload";
-    }
-
-    if (columnVisibles[7]) {
-        visibleColumns << "pid";
-    }
-
-    QString processColumns = "";
-    for (int i = 0; i < visibleColumns.length(); i++) {
-        if (i != visibleColumns.length() - 1) {
-            processColumns += QString("%1,").arg(visibleColumns[i]);
+    void MainWindow::switchTab(int index)
+    {
+        if (index == 0) {
+            statusMonitor->switchToOnlyGui();
+        } else if (index == 1) {
+            statusMonitor->switchToOnlyMe();
         } else {
-            processColumns += visibleColumns[i];
+            statusMonitor->switchToAllProcess();
+        }
+
+        settings->setOption("process_tab_index", index);
+    }
+
+    void MainWindow::switchTheme()
+    {
+        if (settings->getOption("theme_style") == "dark") {
+            settings->setOption("theme_style", "light");
+            DThemeManager::instance()->setTheme("light");
+
+            themeAction->setChecked(false);
+        } else {
+            settings->setOption("theme_style", "dark");
+            DThemeManager::instance()->setTheme("dark");
+
+            themeAction->setChecked(true);
+        }
+
+        repaint();
+    }
+
+    void MainWindow::adjustStatusBarWidth()
+    {
+        QRect rect = QApplication::desktop()->screenGeometry();
+
+        // Just change status monitor width when screen width is more than 1024.
+        int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+        if (rect.width() * 0.2 > statusBarMaxWidth) {
+            if (windowState() == Qt::WindowMaximized) {
+                statusMonitor->setFixedWidth(rect.width() * 0.2);
+            } else {
+                statusMonitor->setFixedWidth(statusBarMaxWidth);
+            }
         }
     }
-
-    settings->setOption("process_columns", processColumns);
-}
-
-void MainWindow::showWindowKiller()
-{
-    // Minimize window before show killer window.
-    this->showMinimized();
-    
-    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
-}
-
-void MainWindow::switchTab(int index)
-{
-    if (index == 0) {
-        statusMonitor->switchToOnlyGui();
-    } else if (index == 1) {
-        statusMonitor->switchToOnlyMe();
-    } else {
-        statusMonitor->switchToAllProcess();
-    }
-
-    settings->setOption("process_tab_index", index);
-}
-
-void MainWindow::switchTheme()
-{
-    if (settings->getOption("theme_style") == "dark") {
-        settings->setOption("theme_style", "light");
-        DThemeManager::instance()->setTheme("light");
-
-        themeAction->setChecked(false);
-    } else {
-        settings->setOption("theme_style", "dark");
-        DThemeManager::instance()->setTheme("dark");
-
-        themeAction->setChecked(true);
-    }
-
-    repaint();
-}
-
-void MainWindow::adjustStatusBarWidth()
-{
-    QRect rect = QApplication::desktop()->screenGeometry();
-
-    // Just change status monitor width when screen width is more than 1024.
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    if (rect.width() * 0.2 > statusBarMaxWidth) {
-        if (windowState() == Qt::WindowMaximized) {
-            statusMonitor->setFixedWidth(rect.width() * 0.2);
-        } else {
-            statusMonitor->setFixedWidth(statusBarMaxWidth);
-        }
-    }
-}

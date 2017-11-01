@@ -58,7 +58,7 @@ public slots:
     void changeTheme(QString theme);
     void createWindowKiller();
     void dialogButtonClicked(int index, QString);
-    void popupKillConfirmDialog(xcb_window_t window);
+    void popupKillConfirmDialog(int pid);
     void recordSortingStatus(int index, bool sortingOrder);
     void recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles);
     void showWindowKiller();
@@ -78,7 +78,7 @@ private:
     Settings *settings;
     StatusMonitor *statusMonitor;
     Toolbar *toolbar;
-    int killXid;
+    int killPid;
 };
 
 #endif

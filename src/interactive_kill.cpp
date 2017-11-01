@@ -59,6 +59,7 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     for (int i = 0; i < windows.length(); i++) {
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
             windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
+            windowPids.append(windowManager->getWindowPid(windows[i]));
         }
     }
 
@@ -139,7 +140,7 @@ void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
         if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
             mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
 
-            killWindow(windows[i]);
+            killWindow(windowPids[i]);
 
             break;
         }
@@ -177,7 +178,3 @@ void InteractiveKill::paintEvent(QPaintEvent *)
     }
 }
 
-void InteractiveKill::killWindowByXid(xcb_window_t window)
-{
-    windowManager->killWindow(window);
-}
