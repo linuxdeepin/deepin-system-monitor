@@ -223,7 +223,7 @@ void ProcessManager::openProcessDirectory()
                     QProcess whichProcess;
                     QString exec = "which";
                     QStringList params;
-                    params << cmdline;
+                    params << cmdline.split(" ");
                     whichProcess.start(exec, params);
                     whichProcess.waitForFinished();
                     QString output(whichProcess.readAllStandardOutput());
