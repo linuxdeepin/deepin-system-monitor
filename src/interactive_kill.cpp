@@ -56,10 +56,44 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     windowManager->setRootWindowRect(screenRect);
     windows = windowManager->getWindows();
 
+    // Read the list of open processes information.
+    PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
+    static proc_t proc_info;
+    memset(&proc_info, 0, sizeof(proc_t));
+
+    std::map<int, proc_t> processes;
+    while (readproc(proc, &proc_info) != NULL) {
+        processes[proc_info.tid]=proc_info;
+    }
+    closeproc(proc);
+
     for (int i = 0; i < windows.length(); i++) {
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
             windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
-            windowPids.append(windowManager->getWindowPid(windows[i]));
+
+            QString flatpakAppid = windowManager->getWindowFlatpakAppid(windows[i]);
+            if (flatpakAppid != "") {
+                for (auto &p:processes) {
+                    int pid = (&p.second)->tid;
+
+                    QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+                    if (flatpakAppidEnv == flatpakAppid) {
+                        QString tempName = windowManager->getWindowName(windows[i]);
+
+                        if (windowPids.length() == i + 1) {
+                            // Update flatpak app process id if find newer process id.
+                            if (windowPids[i] < pid) {
+                                windowPids[i] = pid;
+                            }
+                        } else {
+                            // Append flatpak app process id.
+                            windowPids.append(pid);
+                        }
+                    }
+                }
+            } else {
+                windowPids.append(windowManager->getWindowPid(windows[i]));
+            }
         }
     }
 
@@ -99,7 +133,7 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 
     cursorX = mouseEvent->x();
     cursorY = mouseEvent->y();
-    
+
     bool needRepaint = false;
 
     for (int i = 0; i < windowRects.length(); i++) {
@@ -107,7 +141,7 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 
         if (cursorX + screenRect.x() >= rect.x && cursorX + screenRect.x() <= rect.x + rect.width &&
             cursorY + screenRect.y() >= rect.y && cursorY + screenRect.y() <= rect.y + rect.height) {
-            
+
             if (killWindowIndex != i) {
                 needRepaint = true;
             }
@@ -117,7 +151,7 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 
             killWindowRect = rect;
             killWindowIndex = i;
-            
+
             break;
         }
     }
@@ -177,4 +211,3 @@ void InteractiveKill::paintEvent(QPaintEvent *)
         painter.drawRect(QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
     }
 }
-
