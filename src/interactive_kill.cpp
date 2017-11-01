@@ -60,7 +60,7 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
             windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
 
-            windowPids.append(Utils::getWindowPid(windows[i]));
+            windowPids.append(Utils::getWindowPid(windowManager, windows[i]));
         }
     }
 

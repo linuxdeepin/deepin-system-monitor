@@ -152,11 +152,10 @@ namespace Utils {
         return std::max(280, getRenderSize(9, swapTitle).width() + offset);
     }
 
-    int getWindowPid(xcb_window_t window)
+    int getWindowPid(DWindowManager* windowManager, xcb_window_t window)
     {
         int windowPid = -1;
         
-        DWindowManager* windowManager = new DWindowManager();
         QString flatpakAppid = windowManager->getWindowFlatpakAppid(window);
         if (flatpakAppid != "") {
             PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);

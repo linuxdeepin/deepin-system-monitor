@@ -98,7 +98,7 @@ namespace Utils {
 
 
     int getStatusBarMaxWidth();
-    int getWindowPid(xcb_window_t window);
+    int getWindowPid(DWindowManager* windowManager, xcb_window_t window);
     long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory);
     QList<int> getTrayWindows();
     QMap<QString, QString> getProcessDescriptions();

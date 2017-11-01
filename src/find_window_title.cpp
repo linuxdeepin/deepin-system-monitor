@@ -78,7 +78,7 @@ void FindWindowTitle::updateWindowInfos()
 
         windowTitles->clear();
         foreach (auto window, windows) {
-            int pid = Utils::getWindowPid(window);
+            int pid = Utils::getWindowPid(this, window);
             
             if (!windowTitles->contains(pid)) {
                 (*windowTitles)[pid] = window;
