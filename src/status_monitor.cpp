@@ -227,6 +227,11 @@ void StatusMonitor::updateStatus()
         std::string desktopFile;
         if (trayProcessMap.contains(pid)) {
             desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
+            
+            // Find desktop file from process name if found environ variable 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process.
+            if (desktopFile.size() == 0) {
+                desktopFile = getDesktopFileFromName(pid, name, cmdline);    
+            }
         } else {
             desktopFile = getDesktopFileFromName(pid, name, cmdline);
         }
