@@ -155,7 +155,7 @@ namespace Utils {
     int getWindowPid(DWindowManager* windowManager, xcb_window_t window)
     {
         int windowPid = -1;
-        
+
         QString flatpakAppid = windowManager->getWindowFlatpakAppid(window);
         if (flatpakAppid != "") {
             PROCTAB* proc = openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
@@ -174,7 +174,7 @@ namespace Utils {
                 QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
                 if (flatpakAppidEnv == flatpakAppid) {
                     QString tempName = windowManager->getWindowName(window);
-                    
+
                     if (windowPid < pid) {
                         windowPid = pid;
                     }
@@ -183,7 +183,7 @@ namespace Utils {
         } else {
             windowPid = windowManager->getWindowPid(window);
         }
-        
+
         return windowPid;
     }
 
@@ -470,6 +470,42 @@ namespace Utils {
     QString getQssPath(QString qssName)
     {
         return QString(":/qss/%1").arg(qssName);
+    }
+
+    QDir getFlatpakAppPath(QString flatpakAppid)
+    {
+        QProcess whichProcess;
+        QString exec = "flatpak";
+        QStringList params;
+        params << "info";
+        params << flatpakAppid;
+        whichProcess.start(exec, params);
+        whichProcess.waitForFinished();
+        QString output(whichProcess.readAllStandardOutput());
+
+        return QDir(output.split("Location:")[1].split("\n")[0].simplified());
+    }
+    
+    QString getFlatpakAppIcon(QString flatpakAppid)
+    {
+        QProcess whichProcess;
+        QString exec = "flatpak";
+        QStringList params;
+        params << "info";
+        params << flatpakAppid;
+        whichProcess.start(exec, params);
+        whichProcess.waitForFinished();
+        QString output(whichProcess.readAllStandardOutput());
+
+        QDir flatpakDir = QDir(output.split("Location:")[1].split("\n")[0].simplified());
+        flatpakDir.cd("export");
+        flatpakDir.cd("share");
+        flatpakDir.cd("icons");
+        flatpakDir.cd("hicolor");
+        flatpakDir.cd("scalable");
+        flatpakDir.cd("apps");
+        
+        return flatpakDir.filePath(QString("%1.svg").arg(flatpakAppid.split("app/")[1].split("/")[0]));
     }
 
     bool fileExists(QString path)

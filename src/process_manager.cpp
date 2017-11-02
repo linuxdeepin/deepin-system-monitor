@@ -233,16 +233,7 @@ void ProcessManager::openProcessDirectory()
                 }
                 // Find flatpak application location.
                 else {
-                    QProcess whichProcess;
-                    QString exec = "flatpak";
-                    QStringList params;
-                    params << "info";
-                    params << flatpakAppidEnv;
-                    whichProcess.start(exec, params);
-                    whichProcess.waitForFinished();
-                    QString output(whichProcess.readAllStandardOutput());
-
-                    QDir flatpakRootDir = QDir(output.split("Location:")[1].split("\n")[0].simplified());
+                    QDir flatpakRootDir = Utils::getFlatpakAppPath(flatpakAppidEnv);
                     flatpakRootDir.cd("files");
                     flatpakRootDir.cd("bin");
 

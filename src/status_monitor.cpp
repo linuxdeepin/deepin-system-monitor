@@ -28,6 +28,7 @@
 #include "status_monitor.h"
 #include "utils.h"
 #include <QDebug>
+#include <QIcon>
 #include <QPainter>
 #include <proc/sysinfo.h>
 #include <thread>
@@ -227,10 +228,10 @@ void StatusMonitor::updateStatus()
         std::string desktopFile;
         if (trayProcessMap.contains(pid)) {
             desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
-            
+
             // Find desktop file from process name if found environ variable 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process.
             if (desktopFile.size() == 0) {
-                desktopFile = getDesktopFileFromName(pid, name, cmdline);    
+                desktopFile = getDesktopFileFromName(pid, name, cmdline);
             }
         } else {
             desktopFile = getDesktopFileFromName(pid, name, cmdline);
@@ -289,9 +290,18 @@ void StatusMonitor::updateStatus()
             }
 
             long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
-            
+
             QPixmap icon;
-            if (desktopFile.size() == 0) {
+            QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+            if (flatpakAppidEnv != "") {
+                QIcon flatpakAppIcon = QIcon(getFlatpakAppIcon(flatpakAppidEnv));
+
+                qreal devicePixelRatio = qApp->devicePixelRatio();
+                QPixmap pixmap = flatpakAppIcon.pixmap(24 * devicePixelRatio, 24 * devicePixelRatio);
+                pixmap.setDevicePixelRatio(devicePixelRatio);
+
+                icon = pixmap;
+            } else if (desktopFile.size() == 0) {
                 qreal devicePixelRatio = qApp->devicePixelRatio();
                 icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24 * devicePixelRatio);
                 icon.setDevicePixelRatio(devicePixelRatio);
@@ -306,7 +316,7 @@ void StatusMonitor::updateStatus()
             if (filterType == OnlyGUI) {
                 if (childInfoMap.contains(pid)) {
                     long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
-                                
+
                     childInfoMap[pid].cpu = cpu;
                     childInfoMap[pid].memory = memory;
                 }

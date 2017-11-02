@@ -117,6 +117,8 @@ namespace Utils {
     QString getProcessNameFromCmdLine(const pid_t pid);
     QString getQrcPath(QString imageName);
     QString getQssPath(QString qssName);
+    QString getFlatpakAppIcon(QString flatpakAppid);
+    QDir getFlatpakAppPath(QString flatpakAppid);
     bool fileExists(QString path);
     bool getProcPidIO(int pid, ProcPidIO &io );
     double calculateCPUPercentage(const proc_t* before, const proc_t* after, const unsigned long long &prevCpuTime, const unsigned long long &cpuTime);
