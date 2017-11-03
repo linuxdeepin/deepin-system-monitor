@@ -32,6 +32,10 @@ ProcessView::ProcessView(QList<bool> columnHideFlags)
     initTheme();
 
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessView::changeTheme);
+    
+    // Enable frame and radius.
+    setFrame(true);
+    setClipRadius(8);
 
     // Set row height.
     setRowHeight(36);
