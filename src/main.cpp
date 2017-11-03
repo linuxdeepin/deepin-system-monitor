@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
 
         MainWindow window;
+        
+        QObject::connect(&app, &DApplication::newInstanceStarted, &window, &MainWindow::activateWindow);
 
         window.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         Dtk::Widget::moveToCenter(&window);
