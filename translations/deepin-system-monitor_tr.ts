@@ -172,7 +172,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Debian Sistem İzleyicisi, sezgisel ve güçlü bir sistem monitörüdür. CPU, bellek, ağ, disk ve diğer süreçlerin durumunu izleyebilirsiniz.</translation>
+        <translation>Deepin Sistem İzleyici, sezgisel ve güçlü bir sistem izleyicidir. CPU, bellek, ağ, disk ve diğer süreçlerin durumunu izleyebilirsiniz.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>

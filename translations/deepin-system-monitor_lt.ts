@@ -174,7 +174,7 @@ Ar tikrai norite tęsti?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation>Deepin sistemos monitorius yra intuityvus ir galingas sistemos monitorius. Jis gali stebėti proceso CPU, atminties, tinklo, disko ir kitas būsenas.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -269,7 +269,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojo veiksenos virtualios failų sistemos tarnyba</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
