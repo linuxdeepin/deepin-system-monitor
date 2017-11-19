@@ -132,7 +132,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 aplicaciones y %3 procesos están siendo ejecutados</translation>
+        <translation>%2 aplicaciones y %3 procesos están en ejecución</translation>
     </message>
 </context>
 <context>
@@ -189,7 +189,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Entorno de escritorio Deepin . Proceso de servicio de inicialización</translation>
+        <translation>Entorno de escritorio Deepin - Proceso de servicio de inicialización</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>

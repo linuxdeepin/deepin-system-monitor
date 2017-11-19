@@ -174,7 +174,7 @@ Biztos benne, hogy folytatja?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>A Deepin Rendszerfigyelő egy erőforrás-állapot  megjelenítő alkalmazás.  Folyamatosan kijelzi -többek között- egy folyamat, a CPU, a memória, a hálózat, a lemez és más erőforrások állapotát.</translation>
+        <translation>A Deepin Rendszerfigyelő egy erőforrás-állapot  megjelenítő alkalmazás.  Folyamatosan kijelzi -többek között- a folyamatok, a CPU, a memória, a hálózat, a lemez és más erőforrások állapotát.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>

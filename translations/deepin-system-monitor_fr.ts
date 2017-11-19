@@ -174,7 +174,7 @@ Souhaitez-vous vraiment continuer ?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Moniteur Système Deepin est un système de surveillance système intuitif et puissant. Il peut surveiller l&apos;utilisation du processeur, mémoire, réseau, disque et autre statuts.</translation>
+        <translation>Deepin Moniteur Système est un logiciel de surveillance du système intuitif et puissant. Il peut surveiller le processeur, la mémoire, le réseau, le disque dur et autres.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -257,11 +257,11 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Démon correspondant de fenêtre</translation>
+        <translation>Processus de fenêtre</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Démon DBus du correspondant de fenêtre</translation>
+        <translation>Processus DBus de fenêtre</translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -269,11 +269,11 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Démon système de fichiers virtuels de mode utilisateur</translation>
+        <translation>Processus du système de fichiers virtuels en mode utilisateur</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Démon fuse serveur du système de fichiers virtuels de mode utilisateur</translation>
+        <translation>Processus de serveur Fuse du système de fichiers virtuels en mode utilisateur</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
@@ -301,11 +301,11 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Démon DBus de la méthode d&apos;entrée Fcitx</translation>
+        <translation>Processus DBus de la méthode d&apos;entrée Fcitx</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Démon méthode d&apos;entrée Sogou</translation>
+        <translation>Processus méthode d&apos;entrée Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
@@ -345,7 +345,7 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Démon événement de la souris</translation>
+        <translation>Processus événement de la souris</translation>
     </message>
     <message>
         <source>DConf service</source>
@@ -369,7 +369,7 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Service plateau du système de l&apos;impression</translation>
+        <translation>Processus du système de plateau d&apos;impression</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
