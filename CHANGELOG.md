@@ -3,6 +3,8 @@ Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
+## [1.3.6.1] - 2017-11-22
+- Update translation
 
 ## [1.3.6] - 2017-11-06
 - Make interactive kill support FlatPak application window
