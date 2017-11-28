@@ -3,6 +3,9 @@ Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
+## [1.3.7] - 2017-11-28
+- Split flatpak cmdline's fullpath to get real filename to find location of flatpak application.
+
 ## [1.3.6.1] - 2017-11-22
 - Update translation
 
