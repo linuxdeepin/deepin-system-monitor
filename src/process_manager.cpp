@@ -237,7 +237,8 @@ void ProcessManager::openProcessDirectory()
                     flatpakRootDir.cd("files");
                     flatpakRootDir.cd("bin");
 
-                    DDesktopServices::showFileItem(flatpakRootDir.absoluteFilePath(cmdline));
+                    // Need split full path to get last filename.
+                    DDesktopServices::showFileItem(flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
                 }
             }
 
