@@ -1,63 +1,63 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="am_ET" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Ім&apos;я процесу</translation>
+        <translation>የ ሂደት ስም</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Командний рядок</translation>
+        <translation>የ ትእዛዝ መስመር</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Час початку</translation>
+        <translation>ማስጀመሪያ ጊዜ</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>ሲፒዩ</translation>
     </message>
 </context>
 <context>
     <name>ListView</name>
     <message>
         <source>No search result</source>
-        <translation>Пошук не дав результатів</translation>
+        <translation>ምንም ውጤት የለም</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Примусово завершити програму</translation>
+        <translation>መተግበሪያ አስገድዶ መጨረሻ</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Темна тема</translation>
+        <translation>ጥቁር ገጽታ</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Завершити програму</translation>
+        <translation>መተግበሪያ መጨረሻ</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Завершення цієї програми може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation>መተግበሪያውን ማቋረጥ የ ዳታ መጥፋት ሊያስከትል ይችላል:
+እርስዎ በ እርግጥ መቀጠል ይፈልጋሉ?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation>መሰረዣ</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>ማስታወሻ</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -65,105 +65,105 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>አላስቻሉም</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Мережа</translation>
+        <translation>ኔትዎርክ</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>የ ወረደ</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Загалом</translation>
+        <translation>ጠቅላላ</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>መጫኛ</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Немає відповіді</translation>
+        <translation>መልስ አልተገኘም</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Призупинити</translation>
+        <translation>ማገጃ</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Завершити процес</translation>
+        <translation>ሂደት መጨረሻ</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Завершення цього процесу може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation>ሂደቱን ማቋረጥ የ ዳታ መጥፋት ሊያስከትል ይችላል:
+እርስዎ በ እርግጥ መቀጠል ይፈልጋሉ?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation>መሰረዣ</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Призупинити процес</translation>
+        <translation>ሂደት ማገጃ</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Відновити процес</translation>
+        <translation>ሂደቱን መቀጠያ</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Переглянути місце розташування процесу</translation>
+        <translation>የ ሂደቱን አካባቢ መመልከቻ</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Властивості</translation>
+        <translation>ባህሪዎች</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 програм і %3 процесів запущено</translation>
+        <translation>%2 መተግበሪያ እና %3 ሂደቶች እየሄዱ ነው</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Ім&apos;я</translation>
+        <translation>ስም</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>ሲፒዩ</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>ማስታወሻ</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис диску</translation>
+        <translation>ዲስክ ላይ መጻፊያ</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Читати диску</translation>
+        <translation>ዲስክ ማንበቢያ</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>የ ወረደ</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>መጫኛ</translation>
     </message>
     <message>
         <source>PID</source>
@@ -174,210 +174,210 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Системний Монітор Deepin - це інтуїтивно зрозумілий і потужний системний монітор. Він може контролювати процес ЦП, пам&apos;ять, мережу, диск і інший статус.</translation>
+        <translation>ድዲፕኢን የ ስርአት መቆጣጠሪያ ጠንካራ እና ሐይለኛ የ ስርአት መቆጣጠሪያ ነው: የ ሲፒዩ ሂደቶች: ማስታወሻ: ኔትዎርክ: ዲስክ እና ሌሎች ሁኔታዎችን ይቆጣጠራል</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Системний Монітор Deepin</translation>
+        <translation>ዲፕኢን ስርአት መቆጣጠሪያ</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Системний Монітор Deepin</translation>
+        <translation>ዲፕኢን ስርአት መቆጣጠሪያ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment - служба ініціації процесу</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - የ ሂደት መግጠሚያ ግልጋሎት</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Стільниця</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - ዴስክቶፕ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit proxy</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - ወኪል መቆጣጠሪያ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Launcher</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - ማስጀመሪያ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Док</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - ዶክ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment - Екранний дисплей</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - መመልከቻ ማሳያ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Демон</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - እረዳት</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Сесійний демон</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - የ ክፍለ ጊዜ እረዳት</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - процес ініціалізації сеансу</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - የ ክፍለ ጊዜ ማስጀመሪያ ሂደት</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Демон Deepin File Manager</translation>
+        <translation>ዲፕኢን የ ፋይል አስተዳዳሪ እረዳት</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Служба блокування екрану</translation>
+        <translation>የ ዲፕኢን ዴስክቶፕ አካባቢ - የ መመልከቻ መቆለፊያ ግልጋሎት</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Менеджер вікон Deepin</translation>
+        <translation>ዲፕኢን የ መስኮት አስተዳዳሪ </translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Перемикач Менеджера Вікон Deepin</translation>
+        <translation>የ ዲፕኢን የ መስኮት አስተዳዳሪ መቀያየሪያ</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Повідомлення Deepin</translation>
+        <translation>ዲፕኢን ማስታወቂያ</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Агент Deepin Cloud Print</translation>
+        <translation>የ ዲፕኢን ዳመና ማተሚያ ወኪል</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Сервіс меню Deepin</translation>
+        <translation>የ ዲፕኢን ዝርዝር ግልጋሎት</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Демон Магазину Deepin</translation>
+        <translation>የ ዲፕኢን መደብር እረዳት</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Демон вікна відповідності</translation>
+        <translation>የ ተመሳሳይ መስኮት እረዳት</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Демон вікна відповідності DBus служби</translation>
+        <translation>የ ተመሳሳይ መስኮት እረዳት DBus ግልጋሎት</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH агент</translation>
+        <translation>SSH agent</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Демон віртуальної файлової системи в режимі користувача</translation>
+        <translation>የ ተጠቃሚ ዘዴ የ virtual ፋይል ስርአት እረዳት</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Демон запобіжного серверу віртуальної файлової системи користувацького режиму</translation>
+        <translation>Fuse server የ ተጠቃሚ ዘዴ የ virtual ፋይል ስርአት እረዳት</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Допоміжний процес клієнта Deepin Store</translation>
+        <translation>ለ ዲፕኢን የ መደብር ደንበኛ ሂደት እረዳት</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Менеджер мережі</translation>
+        <translation>የ ኔትዎርክ አስተዳዳሪ</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>Служба PolicyKit DBus</translation>
+        <translation>PolicyKit DBus service</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Демон служби обміну файлами</translation>
+        <translation>የ ፋይል መካፈያ ግልጋሎት እረዳት</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation>Х сервіс</translation>
+        <translation>X service</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Метод вводу Fcitx</translation>
+        <translation>Fcitx ማስገቢያ ዘዴ</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Демон методу вводу Fcitx DBus</translation>
+        <translation>Fcitx ማስገቢያ ዘዴ DBus daemon</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Демон методу введення Sogou</translation>
+        <translation>የ Sogou ማስገቢያ ዘዴ እረዳት</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>Локальний клієнт ShadowSocks</translation>
+        <translation>ShadowSocks local client</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Звуковий сервіс</translation>
+        <translation>የ ድምፅ ግልጋሎት</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Демон друку</translation>
+        <translation>የ ማተሚያ እረዳት</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Дисплей з підсвічуванням</translation>
+        <translation>የ ብርሃን ማሳያ አስተዳዳሪ</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Менеджер системних служб</translation>
+        <translation>የ ስርአት ግልጋሎት አስተዳዳሪ</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Менеджер системних служб - Демон керування пристроями</translation>
+        <translation>የ ስርአት ግልጋሎት አስተዳዳሪ - የ አካሎች አስተዳዳሪ እረዳት</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Демон диску</translation>
+        <translation>የ ዲስክ እረዳት</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Демон облікового запису</translation>
+        <translation>የ መግለጫ እረዳት</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>Демон DBus</translation>
+        <translation>የ DBus እረዳት</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Демон подій миші</translation>
+        <translation>የ አይጥ ሁኔታ እረዳት</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>Сервіс DConf</translation>
+        <translation>DConf ግልጋሎት</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Демон Gnome keyring</translation>
+        <translation>የ ኖም keyring እረዳት </translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Демон Bluetooth</translation>
+        <translation>የ ብሉቱዝ እረዳት</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Демон живлення</translation>
+        <translation>የ ሀይል እረዳት</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Диспетчер модемів</translation>
+        <translation>የ ሞደም አካል አስተዳዳሪ</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Обслуговування системного лотка</translation>
+        <translation>የ ስርአት ማተሚያ ትሪ ግልጋሎት</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Пісочниця веб-переглядача Chrome</translation>
+        <translation>የ ክሮም መቃኛ መሞከሪያ</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Демон демонтажу сенсорної панелі Synaptics</translation>
+        <translation>የ ሲናፕቲክ የ ተችፓድ አካል እረዳት</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -385,43 +385,43 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>አላስቻሉም</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Натисніть програму, яку потрібно завершити</translation>
+        <translation>ይጫኑ መተግበሪያ ላይ መጨረስ የሚፈልጉትን</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Програми</translation>
+        <translation>መተግበሪያ</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Мої процеси</translation>
+        <translation>የ እኔ ሂደቶች</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Всі процеси</translation>
+        <translation>ሁሉም ሂደቶች</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Пошук</translation>
+        <translation>መፈለጊያ</translation>
     </message>
 </context>
 <context>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation>Стільниця</translation>
+        <translation>ዴስክቶፕ</translation>
     </message>
 </context>
 </TS>

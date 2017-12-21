@@ -1,169 +1,169 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Ім&apos;я процесу</translation>
+        <translation>Nom del procés</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Командний рядок</translation>
+        <translation>Línia d&apos;ordres</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Час початку</translation>
+        <translation>Hora d&apos;inici</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>ListView</name>
     <message>
         <source>No search result</source>
-        <translation>Пошук не дав результатів</translation>
+        <translation>Cap resultat de la cerca</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Примусово завершити програму</translation>
+        <translation>Força l&apos;aturada de l&apos;aplicació</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Темна тема</translation>
+        <translation>Tema fosc</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Завершити програму</translation>
+        <translation>Atura l&apos;aplicació</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Завершення цієї програми може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation>Aturar aquesta aplicació pot causar pèrdua de dades.
+Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>Memòria</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Intercanvi</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>No habilitat</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Мережа</translation>
+        <translation>Xarxa</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>Baixada</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Загалом</translation>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>Càrrega</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Немає відповіді</translation>
+        <translation>Sense resposta</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Призупинити</translation>
+        <translation>Suspèn</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Завершити процес</translation>
+        <translation>Atura el procés</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Завершення цього процесу може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation>Aturar aquest procés pot causar pèrdua de dades.
+Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Призупинити процес</translation>
+        <translation>Suspèn el procés</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Відновити процес</translation>
+        <translation>Reprèn el procés</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Переглянути місце розташування процесу</translation>
+        <translation>Mostra la ubicació del procés</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Властивості</translation>
+        <translation>Propietats</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 програм і %3 процесів запущено</translation>
+        <translation>S&apos;executen %2 aplicacions i %3 processos.</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Ім&apos;я</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>Memòria</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис диску</translation>
+        <translation>Escriptura de disc</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Читати диску</translation>
+        <translation>Lectura de disc</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>Baixada</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>Càrrega</translation>
     </message>
     <message>
         <source>PID</source>
@@ -174,254 +174,254 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Системний Монітор Deepin - це інтуїтивно зрозумілий і потужний системний монітор. Він може контролювати процес ЦП, пам&apos;ять, мережу, диск і інший статус.</translation>
+        <translation>El Monitor del sistema del Deepin és un monitor de sistema intuïtiu i potent. Pot monitorar el procés de la CPU, la memòria, la xarxa, el disc i altres estats.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Системний Монітор Deepin</translation>
+        <translation>Monitor del sistema del Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Системний Монітор Deepin</translation>
+        <translation>Monitor del sistema del Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment - служба ініціації процесу</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Servei d&apos;iniciació de procés</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Стільниця</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Escriptori</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit proxy</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Intermediari Polkit</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Launcher</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Llançador</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Док</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Acoblador</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment - Екранний дисплей</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Pantalla</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Демон</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Dimoni</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Сесійний демон</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Dimoni de sessions</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - процес ініціалізації сеансу</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Procés d&apos;inici de sessió</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Демон Deepin File Manager</translation>
+        <translation>Dimoni del Gestor de fitxers del Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Служба блокування екрану</translation>
+        <translation>Entorn d&apos;escriptori del Deepin. Servei de bloqueig de la pantalla</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Менеджер вікон Deepin</translation>
+        <translation>Gestor de finestres del Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Перемикач Менеджера Вікон Deepin</translation>
+        <translation>Commutador del Gestor de finestres del Deepin</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Повідомлення Deepin</translation>
+        <translation>Notificació del Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Агент Deepin Cloud Print</translation>
+        <translation>Agent d&apos;impressió al núvol del Deepin</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Сервіс меню Deepin</translation>
+        <translation>Servei de menú del Deepin</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Демон Магазину Deepin</translation>
+        <translation>Dimoni de la botiga del Deepin</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Демон вікна відповідності</translation>
+        <translation>Dimoni de coincidència de finestres</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Демон вікна відповідності DBus служби</translation>
+        <translation>Servei DBus del dimoni de coincidència de finestres</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH агент</translation>
+        <translation>Agent SSH</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Демон віртуальної файлової системи в режимі користувача</translation>
+        <translation>Dimoni del sistema de fitxers virtual en mode d&apos;usuari</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Демон запобіжного серверу віртуальної файлової системи користувацького режиму</translation>
+        <translation>Servidor de fusió del dimoni del sistema de fitxers virtual en mode d&apos;usuari</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Допоміжний процес клієнта Deepin Store</translation>
+        <translation>Procés d&apos;ajuda del client de la botiga del Deepin</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Менеджер мережі</translation>
+        <translation>Gestor de xarxes</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>Служба PolicyKit DBus</translation>
+        <translation>Servei DBus PolicyKit</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Демон служби обміну файлами</translation>
+        <translation>Dimoni del servei de compartició de fitxers</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation>Х сервіс</translation>
+        <translation>Servei X</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Метод вводу Fcitx</translation>
+        <translation>Mètode d&apos;entrada Fcitx</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Демон методу вводу Fcitx DBus</translation>
+        <translation>Dimoni DBus del mètode d&apos;entrada Fcitx</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Демон методу введення Sogou</translation>
+        <translation>Dimoni del mètode d&apos;entrada Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>Локальний клієнт ShadowSocks</translation>
+        <translation>Client local de ShadowSocks</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Звуковий сервіс</translation>
+        <translation>Servei de so</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Демон друку</translation>
+        <translation>Dimoni d&apos;impressió</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Дисплей з підсвічуванням</translation>
+        <translation>Gestor de pantalla lleuger</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Менеджер системних служб</translation>
+        <translation>Gestor de serveis del sistema</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Менеджер системних служб - Демон керування пристроями</translation>
+        <translation>Gestor de serveis del sistema. Dimoni de gestió de dispositius</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Демон диску</translation>
+        <translation>Dimoni de disc</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Демон облікового запису</translation>
+        <translation>Dimoni de compte</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>Демон DBus</translation>
+        <translation>Dimoni DBus</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Демон подій миші</translation>
+        <translation>Dimoni d&apos;esdeveniment de ratolí</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>Сервіс DConf</translation>
+        <translation>Servei DConf</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Демон Gnome keyring</translation>
+        <translation>Dimoni de l&apos;anell de claus del Gnome</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Демон Bluetooth</translation>
+        <translation>Dimoni del Bluetooth</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Демон живлення</translation>
+        <translation>Dimoni d&apos;energia</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Диспетчер модемів</translation>
+        <translation>Gestor del dispositiu de mòdem</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Обслуговування системного лотка</translation>
+        <translation>Servei de la safata d&apos;impressió del sistema</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Пісочниця веб-переглядача Chrome</translation>
+        <translation>Safata de navegació del navegador Chrome</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Демон демонтажу сенсорної панелі Synaptics</translation>
+        <translation>Dimoni del dispositiu de ratolí tàctil Synaptics</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Intercanvi</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>No habilitat</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Натисніть програму, яку потрібно завершити</translation>
+        <translation>Cliqueu a l&apos;aplicació que vulgueu aturar.</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Програми</translation>
+        <translation>Aplicacions</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Мої процеси</translation>
+        <translation>Els meus processos</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Всі процеси</translation>
+        <translation>Tots els processos</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Пошук</translation>
+        <translation>Cerca</translation>
     </message>
 </context>
 <context>
     <name>WindowManager</name>
     <message>
         <source>Desktop</source>
-        <translation>Стільниця</translation>
+        <translation>Escriptori</translation>
     </message>
 </context>
 </TS>

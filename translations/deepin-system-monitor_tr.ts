@@ -110,7 +110,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation>İptal et</translation>
     </message>
     <message>
         <source>Suspend process</source>
@@ -172,7 +172,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin Sistem İzleyici, sezgisel ve güçlü bir sistem izleyicidir. CPU, bellek, ağ, disk ve diğer süreçlerin durumunu izleyebilirsiniz.</translation>
+        <translation>Deepin Sistem İzleyici, sezgisel ve güçlü bir sistem izleyicidir. İşlemci, bellek, ağ, disk ve diğer süreçlerin durumunu izleyebilirsiniz.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>

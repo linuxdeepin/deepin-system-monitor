@@ -173,86 +173,86 @@ Tem a certeza que quer continuar?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>O Monitor de Sistema Deepin é um intuitivo e potente monitor de sistema. Pode monitorizar os processos em CPU, memória, rede, disco e outros estados.</translation>
+        <translation>O Deepin System Monitor é um intuitivo e potente monitor de sistema. Pode monitorizar os processos em CPU, memória, rede, disco e outros estados.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor de Sistema Deepin</translation>
+        <translation>Deepin System Monitor</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor de Sistema Deepin</translation>
+        <translation>Deepin System Monitor</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Ambiente Gráfico Deepin - Serviço de iniciação de processos</translation>
+        <translation>Deepin Desktop Environment - Serviço de iniciação de processos</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Ambiente Gráfico Deepin - Ambiente de trabalho</translation>
+        <translation>Deepin Desktop Environment - Ambiente de trabalho</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Ambiente Gráfico Deepin - Proxy polkit</translation>
+        <translation>Deepin Desktop Environment - Proxy polkit</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Ambiente Gráfico Deepin - Lançador</translation>
+        <translation>Deepin Desktop Environment - Lançador</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Ambiente Gráfico Deepin - Dock</translation>
+        <translation>Deepin Desktop Environment - Dock</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Ambiente Gráfico Deepin - Gestor de ecrã</translation>
+        <translation>Deepin Desktop Environment - Gestor de ecrã</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Ambiente Gráfico Deepin - Daemon</translation>
+        <translation>Deepin Desktop Environment - Daemon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Ambiente Gráfico Deepin - Daemon da sessão</translation>
+        <translation>Deepin Desktop Environment - Daemon da sessão</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Ambiente Gráfico Deepin - Processo de inicialização de sessão</translation>
+        <translation>Deepin Desktop Environment - Processo de inicialização de sessão</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deamon do Gestor de Ficheiros Deepin</translation>
+        <translation>Daemon do Deepin File Manager</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Ambiente Gráfico Deepin - Serviço de ecrã de bloqueio</translation>
+        <translation>Deepin Desktop Environment - Serviço do ecrã de bloqueio</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Gestor de Janelas Deepin</translation>
+        <translation>Deepin Window Manager</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Alternador do Gestor de Janelas Deepin</translation>
+        <translation>Alternador do Deepin Window Manager</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Notificações Deepin</translation>
+        <translation>Notificações do Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Agente da Impressão na nuvem Deepin</translation>
+        <translation>Agente do Deepin Cloud Print</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Menu de serviço Deepin</translation>
+        <translation>Menu de serviço do Deepin</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Daemon da Loja Deepin</translation>
+        <translation>Daemon da Deepin Store</translation>
     </message>
     <message>
         <source>Window match daemon</source>
@@ -276,7 +276,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Processo auxiliar do cliente Loja Deepin</translation>
+        <translation>Processo auxiliar do cliente da Deepin Store</translation>
     </message>
     <message>
         <source>Network manager</source>
