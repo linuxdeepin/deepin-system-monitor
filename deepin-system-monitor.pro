@@ -89,33 +89,16 @@ isEmpty(DOCDIR):DOCDIR=$${PREFIX}/share/dman/$${TARGET}
 desktop.path = $$INSTROOT$$APPDIR
 icon.path = $$INSTROOT$$ICONDIR
 target.path = $$INSTROOT$$BINDIR
-translations.path = $$INSTROOT$$DSRDIR/translations
 manual.path = $$INSTROOT$$DOCDIR
 
-isEmpty(TRANSLATIONS) {
-     include(translations.pri)
-}
+# Automating generation .qm files from .ts files
+!system($$PWD/translations/translate_generation.sh): error("Failed to generate translation")
 
-TRANSLATIONS_COMPILED = $$TRANSLATIONS
-TRANSLATIONS_COMPILED ~= s/\.ts/.qm/g
+qm_files.path = /usr/share/deepin-system-monitor/translations/
+qm_files.files = translations/*.qm
 
 desktop.files = deepin-system-monitor.desktop
 icon.files = image/deepin-system-monitor.svg
-translations.files = $$TRANSLATIONS_COMPILED
 manual.files = manual/*
 
-INSTALLS += desktop icon target translations manual
-
-CONFIG *= update_translations release_translations
-
-CONFIG(update_translations) {
-    isEmpty(lupdate):lupdate=lupdate
-    system($$lupdate -no-obsolete -locations none $$_PRO_FILE_)
-}
-CONFIG(release_translations) {
-    isEmpty(lrelease):lrelease=lrelease
-    system($$lrelease $$_PRO_FILE_)
-}
-
-DSR_LANG_PATH += $$DSRDIR/translations
-DEFINES += "DSR_LANG_PATH=\\\"$$DSR_LANG_PATH\\\""
+INSTALLS += desktop icon target qm_files manual
