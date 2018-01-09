@@ -40,6 +40,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     installEventFilter(this);   // add event filter
     setMouseTracking(true);    // make MouseMove can response
 
+    setFocusPolicy(Qt::ClickFocus);
     setFixedHeight(24);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
