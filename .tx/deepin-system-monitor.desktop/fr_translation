@@ -1,0 +1,18 @@
+[Desktop Entry]
+Categories=System;Qt;
+Comment=Monitor system process status
+Exec=deepin-system-monitor
+GenericName=System Monitor
+Icon=deepin-system-monitor
+Name=Deepin System Monitor
+Type=Application
+
+
+# Translations
+
+
+# Translations
+Name[fr]=Moniteur système Deepin
+Icon[fr]=moniteur-système-deepin
+Comment[fr]=Surveiller le statut des processus système
+GenericName[fr]=Moniteur système
