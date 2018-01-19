@@ -374,7 +374,7 @@ void MainWindow::adjustStatusBarWidth()
 
 void MainWindow::adjustDiskMoitor()
 {
-    if (this->rect().height() > 768) {
+    if (this->rect().height() > 830) {
         statusMonitor->showDiskMonitor();
     } else {
         statusMonitor->hideDiskMonitor();

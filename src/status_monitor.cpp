@@ -514,7 +514,7 @@ DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
 void StatusMonitor::showDiskMonitor()
 {
     // Set height to show disk monitor.
-    diskMonitor->setFixedHeight(200);
+    diskMonitor->setFixedHeight(190);
 }
 
 void StatusMonitor::hideDiskMonitor()
