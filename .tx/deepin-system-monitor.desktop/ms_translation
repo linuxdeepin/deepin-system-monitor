@@ -1,0 +1,18 @@
+[Desktop Entry]
+Categories=System;Qt;
+Comment=Monitor system process status
+Exec=deepin-system-monitor
+GenericName=System Monitor
+Icon=deepin-system-monitor
+Name=Deepin System Monitor
+Type=Application
+
+
+# Translations
+
+
+# Translations
+Name[ms]=Pemantau Sistem Deepin
+Icon[ms]=deepin-system-monitor
+Comment[ms]=Pantau status proses sistem
+GenericName[ms]=Pemantau Sistem
