@@ -66,8 +66,12 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         themeAction = new QAction(tr("Dark theme"), this);
         themeAction->setCheckable(true);
         connect(themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
+        compactModeAction = new QAction(tr("Compact mode"), this);
+        compactModeAction->setCheckable(true);
+        connect(compactModeAction, &QAction::triggered, this, &MainWindow::switchCompactMode);
         menu->addAction(killAction);
         menu->addAction(themeAction);
+        menu->addAction(compactModeAction);
         menu->addSeparator();
 
         initTheme();
@@ -149,6 +153,7 @@ void MainWindow::changeTheme(QString theme)
     }
 
     initThemeAction();
+    initCompactModeAction();
 }
 
 QList<bool> MainWindow::getColumnHideFlags()
@@ -223,6 +228,11 @@ void MainWindow::initTheme()
 void MainWindow::initThemeAction()
 {
     themeAction->setChecked(settings->getOption("theme_style") == "dark");
+}
+
+void MainWindow::initCompactModeAction()
+{
+    compactModeAction->setChecked(settings->getOption("compact_mode").toBool());
 }
 
 void MainWindow::paintEvent(QPaintEvent *)
@@ -355,6 +365,25 @@ void MainWindow::switchTheme()
     }
 
     repaint();
+}
+
+void MainWindow::switchCompactMode()
+{
+    if (settings->getOption("compact_mode").toBool()) {
+        settings->setOption("compact_mode", false);
+        
+        compactModeAction->setChecked(false);
+        
+        statusMonitor->disableCompactMode();
+        
+        adjustDiskMoitor();
+    } else {
+        settings->setOption("compact_mode", true);
+        
+        compactModeAction->setChecked(true);
+        
+        statusMonitor->enableCompactMode();
+    }
 }
 
 void MainWindow::adjustStatusBarWidth()

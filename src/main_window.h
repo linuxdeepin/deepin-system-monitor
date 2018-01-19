@@ -51,6 +51,7 @@ public:
     int getSortingIndex();
     void initTheme();
     void initThemeAction();
+    void initCompactModeAction();
     void paintEvent(QPaintEvent *);
     void adjustStatusBarWidth();
     void adjustDiskMoitor();
@@ -65,6 +66,7 @@ public slots:
     void showWindowKiller();
     void switchTab(int index);
     void switchTheme();
+    void switchCompactMode();
     
 private:
     DDialog *killProcessDialog;
@@ -72,6 +74,7 @@ private:
     ProcessManager *processManager;
     QAction *killAction;
     QAction *themeAction;
+    QAction *compactModeAction;
     QHBoxLayout *layout;
     QMenu *menu;
     QString backgroundColor;

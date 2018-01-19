@@ -51,6 +51,10 @@ StatusMonitor::StatusMonitor(int tabIndex)
     wineApplicationDesktopMaps = new QMap<QString, int>();
     wineServerDesktopMaps = new QMap<int, QString>();
 
+    settings = new Settings(this);
+    settings->init();
+    isCompactMode = settings->getOption("compact_mode").toBool();
+
     if (tabIndex == 0) {
         tabName = tr("Applications");
         filterType = OnlyGUI;
@@ -76,20 +80,12 @@ StatusMonitor::StatusMonitor(int tabIndex)
     // Init widgets.
     layout = new QVBoxLayout(this);
 
-    cpuMonitor = new CpuMonitor();
-    memoryMonitor = new MemoryMonitor();
-    networkMonitor = new NetworkMonitor();
-    diskMonitor = new DiskMonitor();
+    initCompactMode();
 
-    layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
-    layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
-    layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
-    layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
-
-    connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateDiskStatus, diskMonitor, &DiskMonitor::updateStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateMemoryStatus, this, &StatusMonitor::handleMemoryStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateCpuStatus, this, &StatusMonitor::handleCpuStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateNetworkStatus, this, &StatusMonitor::handleNetworkStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateDiskStatus, this, &StatusMonitor::handleDiskStatus, Qt::QueuedConnection);
 
     // Start timer.
     updateStatusTimer = new QTimer(this);
@@ -219,7 +215,7 @@ void StatusMonitor::updateStatus()
 
     wineApplicationDesktopMaps->clear();
     wineServerDesktopMaps->clear();
-    
+
     float diskReadTotalKbs = 0;
     float diskWriteTotalKbs = 0;
 
@@ -328,13 +324,13 @@ void StatusMonitor::updateStatus()
                 }
             }
         }
-        
+
         // Calculate disk IO kbs.
         DiskStatus diskStatus = getProcessDiskStatus(pid);
         diskReadTotalKbs += diskStatus.readKbs;
         diskWriteTotalKbs += diskStatus.writeKbs;
     }
-    
+
     // Remove dead process from network status maps.
     for (auto pid : processSentBytes->keys()) {
         bool foundProcess = false;
@@ -438,7 +434,7 @@ void StatusMonitor::updateStatus()
     } else {
         updateCpuStatus(0);
     }
-    
+
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
         for (DSimpleListItem *item : items) {
@@ -480,7 +476,7 @@ void StatusMonitor::updateStatus()
                             ((totalRecvBytes - prevTotalRecvBytes) / 1024.0) / updateSeconds,
                             ((totalSentBytes - prevTotalSentBytes) / 1024.0) / updateSeconds);
     }
-    
+
     // Update disk status.
     updateDiskStatus(diskReadTotalKbs / 1000.0, diskWriteTotalKbs / 1000.0);
 
@@ -513,12 +509,131 @@ DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
 
 void StatusMonitor::showDiskMonitor()
 {
-    // Set height to show disk monitor.
-    diskMonitor->setFixedHeight(190);
+    if (!isCompactMode) {
+        // Set height to show disk monitor.
+        diskMonitor->setFixedHeight(190);
+    }
 }
 
 void StatusMonitor::hideDiskMonitor()
 {
-    // Set height to 0 to make disk monitor hide.
-    diskMonitor->setFixedHeight(0);
+    if (!isCompactMode) {
+        // Set height to 0 to make disk monitor hide.
+        diskMonitor->setFixedHeight(0);
+    }
+}
+
+void StatusMonitor::handleMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap)
+{
+    if (isCompactMode) {
+        compactMemoryMonitor->updateStatus(usedMemory, totalMemory, usedSwap, totalSwap);
+    } else {
+        memoryMonitor->updateStatus(usedMemory, totalMemory, usedSwap, totalSwap);
+    }
+}
+
+void StatusMonitor::handleCpuStatus(double cpuPercent)
+{
+    if (isCompactMode) {
+        compactCpuMonitor->updateStatus(cpuPercent);
+    } else {
+        cpuMonitor->updateStatus(cpuPercent);
+    }
+}
+
+void StatusMonitor::handleNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs)
+{
+    if (isCompactMode) {
+        compactNetworkMonitor->updateStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
+    } else {
+        networkMonitor->updateStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
+    }
+}
+
+void StatusMonitor::handleDiskStatus(float totalReadKbs, float totalWriteKbs)
+{
+    if (isCompactMode) {
+        compactDiskMonitor->updateStatus(totalReadKbs, totalWriteKbs);
+    } else {
+        diskMonitor->updateStatus(totalReadKbs, totalWriteKbs);
+    }
+}
+
+void StatusMonitor::initCompactMode()
+{
+    if (isCompactMode) {
+        compactCpuMonitor = new CompactCpuMonitor();
+        compactMemoryMonitor = new CompactMemoryMonitor();
+        compactNetworkMonitor = new CompactNetworkMonitor();
+        compactDiskMonitor = new CompactDiskMonitor();
+
+        layout->addWidget(compactCpuMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(compactMemoryMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(compactNetworkMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(compactDiskMonitor, 0, Qt::AlignHCenter);
+    } else {
+        cpuMonitor = new CpuMonitor();
+        memoryMonitor = new MemoryMonitor();
+        networkMonitor = new NetworkMonitor();
+        diskMonitor = new DiskMonitor();
+
+        layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
+    }
+}
+
+void StatusMonitor::enableCompactMode()
+{
+    if (!isCompactMode) {
+        layout->removeWidget(cpuMonitor);
+        layout->removeWidget(memoryMonitor);
+        layout->removeWidget(networkMonitor);
+        layout->removeWidget(diskMonitor);
+        
+        cpuMonitor->deleteLater();
+        memoryMonitor->deleteLater();
+        networkMonitor->deleteLater();
+        diskMonitor->deleteLater();
+        
+        compactCpuMonitor = new CompactCpuMonitor();
+        compactMemoryMonitor = new CompactMemoryMonitor();
+        compactNetworkMonitor = new CompactNetworkMonitor();
+        compactDiskMonitor = new CompactDiskMonitor();
+
+        layout->addWidget(compactCpuMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(compactMemoryMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(compactNetworkMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(compactDiskMonitor, 0, Qt::AlignHCenter);
+    }
+    
+    isCompactMode = true;
+}
+
+void StatusMonitor::disableCompactMode()
+{
+    if (isCompactMode) {
+        layout->removeWidget(compactCpuMonitor);
+        layout->removeWidget(compactMemoryMonitor);
+        layout->removeWidget(compactNetworkMonitor);
+        layout->removeWidget(compactDiskMonitor);
+        
+        compactCpuMonitor->deleteLater();
+        compactMemoryMonitor->deleteLater();
+        compactNetworkMonitor->deleteLater();
+        compactDiskMonitor->deleteLater();
+        
+        cpuMonitor = new CpuMonitor();
+        memoryMonitor = new MemoryMonitor();
+        networkMonitor = new NetworkMonitor();
+        diskMonitor = new DiskMonitor();
+
+        layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
+        layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
+    }
+    
+    isCompactMode = false;
 }

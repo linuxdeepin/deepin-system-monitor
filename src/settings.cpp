@@ -76,6 +76,10 @@ void Settings::init()
     if (getOption("process_sorting_order").isNull()) {
         setOption("process_sorting_order", true);
     }
+    
+    if (getOption("compact_mode").isNull()) {
+        setOption("compact_mode", false);
+    }
         
     if (getOption("theme_style").isNull()) {
         setOption("theme_style", "light");

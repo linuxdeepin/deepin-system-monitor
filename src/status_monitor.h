@@ -26,11 +26,16 @@
 
 #include "cpu_monitor.h"
 #include "find_window_title.h"
+#include "settings.h"
 #include "memory_monitor.h"
 #include "network_monitor.h"
 #include "disk_monitor.h"
 #include "network_traffic_filter.h"
 #include "process_item.h"
+#include "compact_cpu_monitor.h"
+#include "compact_memory_monitor.h"
+#include "compact_disk_monitor.h"
+#include "compact_network_monitor.h"
 #include <QMap>
 #include <QPointF>
 #include <QTimer>
@@ -63,7 +68,7 @@ signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
-    void updateDiskStatus(float totalRecvKbs, float totalSentKbs);
+    void updateDiskStatus(float totalReadKbs, float totalWriteKbs);
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
     void updateProcessStatus(QList<DSimpleListItem*> items);
 
@@ -74,16 +79,31 @@ public slots:
     void updateStatus();
     void showDiskMonitor();
     void hideDiskMonitor();
-
+    
+    void handleMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
+    void handleCpuStatus(double cpuPercent);
+    void handleNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
+    void handleDiskStatus(float totalReadKbs, float totalWriteKbs);
+    
+    void initCompactMode();
+    
+    void enableCompactMode();
+    void disableCompactMode();
+    
 private:
     DiskStatus getProcessDiskStatus(int pid);
     
+    bool isCompactMode;
     CpuMonitor *cpuMonitor;
     FilterType filterType;
     FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
     DiskMonitor *diskMonitor;
+    CompactCpuMonitor *compactCpuMonitor;
+    CompactNetworkMonitor *compactNetworkMonitor;
+    CompactDiskMonitor *compactDiskMonitor;
+    CompactMemoryMonitor *compactMemoryMonitor;
     QMap<QString, int> *wineApplicationDesktopMaps;
     QMap<int, QString> *wineServerDesktopMaps;
     QMap<int, double> *processCpuPercents;
@@ -96,6 +116,7 @@ private:
     QTimer *updateStatusTimer;
     QVBoxLayout *layout;
     StoredProcType prevProcesses;
+    Settings *settings;
     int updateDuration = 2000;
     qreal updateSeconds;
     unsigned long long int prevTotalRecvBytes;

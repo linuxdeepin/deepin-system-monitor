@@ -28,6 +28,10 @@ HEADERS += src/utils.h \
            src/memory_monitor.h \
            src/network_monitor.h \
            src/disk_monitor.h \
+           src/compact_cpu_monitor.h \
+           src/compact_memory_monitor.h \
+           src/compact_network_monitor.h \
+           src/compact_disk_monitor.h \
            src/network_traffic_filter.h \
            src/status_monitor.h \
            src/process_manager.h \
@@ -52,6 +56,10 @@ SOURCES += src/main.cpp \
 	   src/memory_monitor.cpp \
 	   src/network_monitor.cpp \
 	   src/disk_monitor.cpp \
+	   src/compact_cpu_monitor.cpp \
+	   src/compact_memory_monitor.cpp \
+	   src/compact_network_monitor.cpp \
+	   src/compact_disk_monitor.cpp \
 	   src/network_traffic_filter.cpp \
 	   src/status_monitor.cpp \
            src/process_manager.cpp \
