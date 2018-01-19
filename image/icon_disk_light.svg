@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_disk_light</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="归档" fill="#303030" fill-rule="nonzero">
+            <path d="M7,4 L7,19 L6,18 L19,18 L18,19 L18,4 L19,5 L6,5 L7,4 Z M6,4 L19,4 L19,19 L6,19 L6,4 Z M17.5416667,15 L18,15 L18,14 L17.5416667,14 L7.45833333,14 L7,14 L7,15 L7.45833333,15 L17.5416667,15 Z M15.7083333,17 L16.2083333,17 L16.2083333,16 L15.7083333,16 L9.29166667,16 L8.79166667,16 L8.79166667,17 L9.29166667,17 L15.7083333,17 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

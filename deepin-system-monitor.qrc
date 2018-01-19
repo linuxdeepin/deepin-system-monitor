@@ -30,6 +30,8 @@
     <file>image/icon_cpu_light.svg</file>
     <file>image/icon_network_dark.svg</file>
     <file>image/icon_network_light.svg</file>
+    <file>image/icon_disk_dark.svg</file>
+    <file>image/icon_disk_light.svg</file>
     <file>image/icon_memory_dark.svg</file>
     <file>image/icon_memory_light.svg</file>
   </qresource>

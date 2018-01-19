@@ -79,14 +79,17 @@ StatusMonitor::StatusMonitor(int tabIndex)
     cpuMonitor = new CpuMonitor();
     memoryMonitor = new MemoryMonitor();
     networkMonitor = new NetworkMonitor();
+    diskMonitor = new DiskMonitor();
 
     layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
     layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
     layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
+    layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
 
     connect(this, &StatusMonitor::updateMemoryStatus, memoryMonitor, &MemoryMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateCpuStatus, cpuMonitor, &CpuMonitor::updateStatus, Qt::QueuedConnection);
     connect(this, &StatusMonitor::updateNetworkStatus, networkMonitor, &NetworkMonitor::updateStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateDiskStatus, diskMonitor, &DiskMonitor::updateStatus, Qt::QueuedConnection);
 
     // Start timer.
     updateStatusTimer = new QTimer(this);
@@ -216,6 +219,9 @@ void StatusMonitor::updateStatus()
 
     wineApplicationDesktopMaps->clear();
     wineServerDesktopMaps->clear();
+    
+    float diskReadTotalKbs = 0;
+    float diskWriteTotalKbs = 0;
 
     for (auto &i:processes) {
         int pid = (&i.second)->tid;
@@ -322,8 +328,13 @@ void StatusMonitor::updateStatus()
                 }
             }
         }
+        
+        // Calculate disk IO kbs.
+        DiskStatus diskStatus = getProcessDiskStatus(pid);
+        diskReadTotalKbs += diskStatus.readKbs;
+        diskWriteTotalKbs += diskStatus.writeKbs;
     }
-
+    
     // Remove dead process from network status maps.
     for (auto pid : processSentBytes->keys()) {
         bool foundProcess = false;
@@ -427,7 +438,7 @@ void StatusMonitor::updateStatus()
     } else {
         updateCpuStatus(0);
     }
-
+    
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
         for (DSimpleListItem *item : items) {
@@ -469,6 +480,9 @@ void StatusMonitor::updateStatus()
                             ((totalRecvBytes - prevTotalRecvBytes) / 1024.0) / updateSeconds,
                             ((totalSentBytes - prevTotalSentBytes) / 1024.0) / updateSeconds);
     }
+    
+    // Update disk status.
+    updateDiskStatus(diskReadTotalKbs / 1000.0, diskWriteTotalKbs / 1000.0);
 
     // Update process number.
     updateProcessNumber(tabName, guiProcessNumber, systemProcessNumber);
@@ -495,4 +509,16 @@ DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
     (*processReadKbs)[pid] = pidIO.rchar;
 
     return status;
+}
+
+void StatusMonitor::showDiskMonitor()
+{
+    // Set height to show disk monitor.
+    diskMonitor->setFixedHeight(200);
+}
+
+void StatusMonitor::hideDiskMonitor()
+{
+    // Set height to 0 to make disk monitor hide.
+    diskMonitor->setFixedHeight(0);
 }

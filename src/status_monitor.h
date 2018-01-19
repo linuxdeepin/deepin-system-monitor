@@ -28,6 +28,7 @@
 #include "find_window_title.h"
 #include "memory_monitor.h"
 #include "network_monitor.h"
+#include "disk_monitor.h"
 #include "network_traffic_filter.h"
 #include "process_item.h"
 #include <QMap>
@@ -62,6 +63,7 @@ signals:
     void updateCpuStatus(double cpuPercent);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
+    void updateDiskStatus(float totalRecvKbs, float totalSentKbs);
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
     void updateProcessStatus(QList<DSimpleListItem*> items);
 
@@ -70,6 +72,8 @@ public slots:
     void switchToOnlyGui();
     void switchToOnlyMe();
     void updateStatus();
+    void showDiskMonitor();
+    void hideDiskMonitor();
 
 private:
     DiskStatus getProcessDiskStatus(int pid);
@@ -79,6 +83,7 @@ private:
     FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
+    DiskMonitor *diskMonitor;
     QMap<QString, int> *wineApplicationDesktopMaps;
     QMap<int, QString> *wineServerDesktopMaps;
     QMap<int, double> *processCpuPercents;

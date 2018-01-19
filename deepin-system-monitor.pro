@@ -24,47 +24,49 @@ CONFIG(debug, debug|release) {
 # Input
 HEADERS += src/utils.h \
            src/toolbar.h \
-		   src/cpu_monitor.h \
-		   src/memory_monitor.h \
-		   src/network_monitor.h \
-		   src/network_traffic_filter.h \
-		   src/status_monitor.h \
+           src/cpu_monitor.h \
+           src/memory_monitor.h \
+           src/network_monitor.h \
+           src/disk_monitor.h \
+           src/network_traffic_filter.h \
+           src/status_monitor.h \
            src/process_manager.h \
-		   src/process_item.h \
+           src/process_item.h \
            src/process_view.h \
-		   src/hashqstring.h \
+           src/hashqstring.h \
            src/find_window_title.h \
-		   src/smooth_curve_generator.h \
-		   src/interactive_kill.h \
-		   src/start_tooltip.h \
-		   src/process_tree.h \
-		   src/process_switch_tab.h \
-		   src/attributes_dialog.h \
-		   src/constant.h \
-		   src/settings.h \
-		   src/chinese2pinyin.h \
-		   src/main_window.h
+           src/smooth_curve_generator.h \
+	   src/interactive_kill.h \
+	   src/start_tooltip.h \
+	   src/process_tree.h \
+	   src/process_switch_tab.h \
+	   src/attributes_dialog.h \
+	   src/constant.h \
+	   src/settings.h \
+	   src/chinese2pinyin.h \
+	   src/main_window.h
 SOURCES += src/main.cpp \
-		   src/utils.cpp \
-		   src/toolbar.cpp \
-		   src/cpu_monitor.cpp \
-		   src/memory_monitor.cpp \
-		   src/network_monitor.cpp \
-		   src/network_traffic_filter.cpp \
-		   src/status_monitor.cpp \
+	   src/utils.cpp \
+	   src/toolbar.cpp \
+	   src/cpu_monitor.cpp \
+	   src/memory_monitor.cpp \
+	   src/network_monitor.cpp \
+	   src/disk_monitor.cpp \
+	   src/network_traffic_filter.cpp \
+	   src/status_monitor.cpp \
            src/process_manager.cpp \
-		   src/process_item.cpp \
+	   src/process_item.cpp \
            src/process_view.cpp \
-		   src/find_window_title.cpp \
-		   src/smooth_curve_generator.cpp \
-		   src/interactive_kill.cpp \
-		   src/start_tooltip.cpp \
-		   src/process_tree.cpp \
-		   src/process_switch_tab.cpp \
-		   src/attributes_dialog.cpp \
-		   src/chinese2pinyin.cpp \
-		   src/main_window.cpp \
-		   src/settings.cpp
+	   src/find_window_title.cpp \
+	   src/smooth_curve_generator.cpp \
+	   src/interactive_kill.cpp \
+	   src/start_tooltip.cpp \
+	   src/process_tree.cpp \
+	   src/process_switch_tab.cpp \
+	   src/attributes_dialog.cpp \
+	   src/chinese2pinyin.cpp \
+	   src/main_window.cpp \
+	   src/settings.cpp
 		   
 QT += core
 QT += widgets

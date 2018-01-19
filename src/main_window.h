@@ -53,6 +53,7 @@ public:
     void initThemeAction();
     void paintEvent(QPaintEvent *);
     void adjustStatusBarWidth();
+    void adjustDiskMoitor();
     
 public slots:
     void changeTheme(QString theme);
