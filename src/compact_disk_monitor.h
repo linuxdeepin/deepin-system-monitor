@@ -43,9 +43,6 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QPixmap iconImage;
-    QPixmap iconDarkImage;
-    QPixmap iconLightImage;
     QList<double> *readSpeeds;
     QList<double> *writeSpeeds;
     QPainterPath readPath;
@@ -66,15 +63,10 @@ private:
     int gridPaddingTop = 10;
     int gridRenderOffsetY = 55;
     int gridSize = 20;
-    int iconRenderOffsetX = -5;
-    int iconRenderOffsetY = 10;
     int pointerRadius = 3;
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
     int pointsNumber = 51;
-    int textPadding = 12;
-    int titleRenderOffsetX = 20;
-    int titleRenderSize = 20;
     int writeRenderMaxHeight = 10;
     int writeRenderPaddingX = 13;
     int writeRenderPaddingY = 40;

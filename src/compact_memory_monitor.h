@@ -46,9 +46,6 @@ protected:
     QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
     
-    QPixmap iconImage;
-    QPixmap iconDarkImage;
-    QPixmap iconLightImage;
     QString memoryBackgroundColor;
     QString memoryColor = "#FF2997";
     QString memoryForegroundColor;
@@ -66,8 +63,6 @@ protected:
     double swapBackgroundOpacity;
     double swapForegroundOpacity;
     int animationIndex = 0;
-    int iconRenderOffsetX = -5;
-    int iconRenderOffsetY = 10;
     int insideRingRadius = 35;
     int lineHeight = 16;
     int memoryPercentRenderSize = 10;
@@ -84,9 +79,6 @@ protected:
     int swapRenderPaddingX = 13;
     int swapRenderPaddingY = 70;
     int swapRenderSize = 9;
-    int textPadding = 12;
-    int titleRenderOffsetX = 20;
-    int titleRenderSize = 20;
     long prevUsedMemory;
     long prevUsedSwap;
     long totalMemory;

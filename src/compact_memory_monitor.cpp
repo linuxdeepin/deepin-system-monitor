@@ -36,9 +36,6 @@ using namespace Utils;
 
 CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_dark.svg"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_light.svg"));
-
     initTheme();
 
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CompactMemoryMonitor::changeTheme);
@@ -80,8 +77,6 @@ void CompactMemoryMonitor::initTheme()
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#000000";
         swapBackgroundOpacity = 0.05;
-
-        iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         numberColor = "#D4D4D4";
@@ -96,8 +91,6 @@ void CompactMemoryMonitor::initTheme()
         swapForegroundOpacity = 1;
         swapBackgroundColor = "#00B4C7";
         swapBackgroundOpacity = 0.1;
-
-        iconImage = iconDarkImage;
     }
 }
 

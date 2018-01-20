@@ -37,9 +37,6 @@ using namespace Utils;
 
 CompactDiskMonitor::CompactDiskMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_disk_dark.svg"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_disk_light.svg"));
-
     initTheme();
 
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CompactDiskMonitor::changeTheme);
@@ -72,13 +69,9 @@ void CompactDiskMonitor::initTheme()
     if (DThemeManager::instance()->theme() == "light") {
         textColor = "#303030";
         summaryColor = "#505050";
-
-        iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
         summaryColor = "#909090";
-
-        iconImage = iconDarkImage;
     }
 }
 
