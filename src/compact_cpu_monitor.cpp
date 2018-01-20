@@ -49,16 +49,23 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent) : QWidget(parent)
     setFixedHeight(160);
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
-
-    readSpeeds = new QList<double>();
-    for (int i = 0; i < pointsNumber; i++) {
-        readSpeeds->append(0);
+    
+    numCPU = sysconf(_SC_NPROCESSORS_ONLN);
+    
+    for (int i = 0; i < numCPU; i++) {
+        QList<double> cpuPercent;
+        for (int j = 0; j < pointsNumber; j++) {
+            cpuPercent.append(0);
+        }
+        
+        cpuPercents.append(cpuPercent);
     }
+    
+    cpuColors << "#1094D8" << "#1094D8" << "#F7B300" << "#55D500" << "#C362FF" << "#FF2997" << "#00B4C7";
 }
 
 CompactCpuMonitor::~CompactCpuMonitor()
 {
-    delete readSpeeds;
 }
 
 void CompactCpuMonitor::initTheme()
@@ -81,41 +88,48 @@ void CompactCpuMonitor::changeTheme(QString )
     initTheme();
 }
 
-void CompactCpuMonitor::updateStatus(double tReadKbs, std::vector<double> cPercents)
+void CompactCpuMonitor::updateStatus(double, std::vector<double> cPercents)
 {
-    qDebug() << "--------------";
+    qDebug() << "----------------";
+    
     for (unsigned int i = 0; i < cPercents.size(); i++) {
+        QList<double> cpuPercent = cpuPercents[i];
+        
+        cpuPercent.append(cPercents[i]);
+        
         qDebug() << cPercents[i];
+        
+        if (cpuPercent.size() > pointsNumber) {
+            cpuPercent.pop_front();
+        }
+        
+        cpuPercents[i] = cpuPercent;
+        
+        QList<QPointF> readPoints;
+
+        double readMaxHeight = 0;
+        for (int i = 0; i < cpuPercent.size(); i++) {
+            if (cpuPercent.at(i) > readMaxHeight) {
+                readMaxHeight = cpuPercent.at(i);
+            }
+        }
+
+        for (int i = 0; i < cpuPercent.size(); i++) {
+            if (readMaxHeight < readRenderMaxHeight) {
+                readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
+            } else {
+                readPoints.append(QPointF(i * 5, cpuPercent.at(i) * readRenderMaxHeight / readMaxHeight));
+            }
+        }
+
+        QPainterPath cpuPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
+        if ((unsigned int) cpuPaths.size() <= i) {
+            cpuPaths.append(cpuPath);
+        } else {
+            cpuPaths[i] = cpuPath;
+        }
     }
     
-    totalReadKbs = tReadKbs;
-
-    // Init read path.
-    readSpeeds->append(totalReadKbs);
-
-    if (readSpeeds->size() > pointsNumber) {
-        readSpeeds->pop_front();
-    }
-
-    QList<QPointF> readPoints;
-
-    double readMaxHeight = 0;
-    for (int i = 0; i < readSpeeds->size(); i++) {
-        if (readSpeeds->at(i) > readMaxHeight) {
-            readMaxHeight = readSpeeds->at(i);
-        }
-    }
-
-    for (int i = 0; i < readSpeeds->size(); i++) {
-        if (readMaxHeight < readRenderMaxHeight) {
-            readPoints.append(QPointF(i * 5, readSpeeds->at(i)));
-        } else {
-            readPoints.append(QPointF(i * 5, readSpeeds->at(i) * readRenderMaxHeight / readMaxHeight));
-        }
-    }
-
-    readPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
-
     repaint();
 }
 
@@ -174,7 +188,10 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     if (devicePixelRatio > 1) {
         diskCurveWidth = 2;
     }
-    painter.setPen(QPen(QColor(readColor), diskCurveWidth));
-    painter.setBrush(QBrush());
-    painter.drawPath(readPath);
+    
+    for (int i = 0; i < cpuPaths.size(); i++) {
+        painter.setPen(QPen(QColor(cpuColors[i]), diskCurveWidth));
+        painter.setBrush(QBrush());
+        painter.drawPath(cpuPaths[i]);
+    }
 }

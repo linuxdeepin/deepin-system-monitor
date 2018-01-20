@@ -46,8 +46,9 @@ private:
     QPixmap iconImage;
     QPixmap iconDarkImage;
     QPixmap iconLightImage;
-    QList<double> *readSpeeds;
-    QPainterPath readPath;
+    QList<QList<double>> cpuPercents;
+    QList<QPainterPath> cpuPaths;
+    QList<QString> cpuColors;
     QString readColor = "#1094D8";
     QString summaryColor;
     QString textColor;
@@ -57,7 +58,7 @@ private:
     int readRenderPaddingY = 50;
     int readRenderSize = 9;
     int readWaveformsRenderOffsetX = 4;
-    int readWaveformsRenderOffsetY = 95;
+    int readWaveformsRenderOffsetY = 120;
     int gridPaddingRight = 21;
     int gridPaddingTop = 10;
     int gridRenderOffsetY = 18;
@@ -72,6 +73,7 @@ private:
     int titleRenderOffsetX = 20;
     int titleRenderSize = 20;
     int waveformRenderPadding = 20;
+    int numCPU;
 };
 
 #endif    
