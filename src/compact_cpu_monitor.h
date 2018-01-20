@@ -58,7 +58,7 @@ private:
     int readRenderPaddingY = 50;
     int readRenderSize = 9;
     int readWaveformsRenderOffsetX = 4;
-    int readWaveformsRenderOffsetY = 120;
+    int readWaveformsRenderOffsetY = 130;
     int gridPaddingRight = 21;
     int gridPaddingTop = 10;
     int gridRenderOffsetY = 18;

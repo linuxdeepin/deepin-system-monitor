@@ -61,7 +61,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent) : QWidget(parent)
         cpuPercents.append(cpuPercent);
     }
     
-    cpuColors << "#1094D8" << "#1094D8" << "#F7B300" << "#55D500" << "#C362FF" << "#FF2997" << "#00B4C7";
+    cpuColors << "#1094D8" << "#F7B300" << "#55D500" << "#C362FF" << "#FF2997" << "#00B4C7" << "#F8E71C" << "#FB1818" << "#8544FF" << "#00D7AB" << "#00D7AB" << "#FF00FF" << "#30BF03" << "#7E41F1" << "#2CA7F8" << "#A005CE";
 }
 
 CompactCpuMonitor::~CompactCpuMonitor()
@@ -90,14 +90,10 @@ void CompactCpuMonitor::changeTheme(QString )
 
 void CompactCpuMonitor::updateStatus(double, std::vector<double> cPercents)
 {
-    qDebug() << "----------------";
-    
     for (unsigned int i = 0; i < cPercents.size(); i++) {
         QList<double> cpuPercent = cpuPercents[i];
         
         cpuPercent.append(cPercents[i]);
-        
-        qDebug() << cPercents[i];
         
         if (cpuPercent.size() > pointsNumber) {
             cpuPercent.pop_front();
@@ -189,8 +185,15 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         diskCurveWidth = 2;
     }
     
-    for (int i = 0; i < cpuPaths.size(); i++) {
-        painter.setPen(QPen(QColor(cpuColors[i]), diskCurveWidth));
+    for (int i = cpuPaths.size() - 1; i >= 0; i--) {
+        int colorIndex;
+        if (cpuPaths.size() > cpuColors.size()) {
+            colorIndex = i % cpuColors.size();
+        } else {
+            colorIndex = i;
+        }
+        
+        painter.setPen(QPen(QColor(cpuColors[colorIndex]), diskCurveWidth));
         painter.setBrush(QBrush());
         painter.drawPath(cpuPaths[i]);
     }
