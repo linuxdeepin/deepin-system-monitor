@@ -37,7 +37,7 @@ public:
 public slots:
     void changeTheme(QString theme);
     void initTheme();
-    void updateStatus(double totalReadKbs, std::vector<double> cPercents);
+    void updateStatus(double totalCpuPercent, std::vector<double> cPercents);
     
 protected:
     void paintEvent(QPaintEvent *event);
@@ -47,15 +47,25 @@ private:
     QList<QPainterPath> cpuPaths;
     QList<QString> cpuColors;
     QString textColor;
-    int cpuRenderMaxHeight = 100;
-    int cpuWaveformsRenderOffsetY = 130;
+    int cpuRenderMaxHeight = 80;
+    int cpuWaveformsRenderOffsetY = 112;
     int gridPaddingRight = 21;
     int gridPaddingTop = 10;
-    int gridRenderOffsetY = 18;
+    int gridRenderOffsetY = 16;
     int gridSize = 20;
     int pointsNumber = 51;
     int waveformRenderPadding = 20;
     int numCPU;
+    double totalCpuPercent;
+    
+    int cpuTextRenderSize = 9;
+    QString cpuColor = "#1094D8";
+    int pointerRenderPaddingX = 4;
+    int pointerRenderPaddingY = 9;
+    int cpuRenderPaddingX = 13;
+    int cpuRenderPaddingY = 2;
+    int pointerRadius = 3;
+    QString summaryColor;
 };
 
 #endif    

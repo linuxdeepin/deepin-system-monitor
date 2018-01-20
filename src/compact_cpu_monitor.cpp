@@ -69,8 +69,10 @@ void CompactCpuMonitor::initTheme()
 {
     if (DThemeManager::instance()->theme() == "light") {
         textColor = "#303030";
+        summaryColor = "#505050";
     } else {
         textColor = "#ffffff";
+        summaryColor = "#909090";
     }
 }
 
@@ -79,8 +81,10 @@ void CompactCpuMonitor::changeTheme(QString )
     initTheme();
 }
 
-void CompactCpuMonitor::updateStatus(double, std::vector<double> cPercents)
+void CompactCpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPercents)
 {
+    totalCpuPercent = cpuPercent;
+    
     for (unsigned int i = 0; i < cPercents.size(); i++) {
         QList<double> cpuPercent = cpuPercents[i];
         
@@ -125,6 +129,26 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // Draw cpu summary.
+    setFontSize(painter, cpuTextRenderSize);
+    QFontMetrics fm = painter.fontMetrics();
+
+    QString readTitle = QString("%1 %2%").arg(tr("CPU")).arg(QString::number(totalCpuPercent, 'f', 1));
+
+    painter.setOpacity(1);
+    painter.setPen(QPen(QColor(cpuColor)));
+    painter.setBrush(QBrush(QColor(cpuColor)));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + cpuRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+
+    setFontSize(painter, cpuTextRenderSize);
+    painter.setPen(QPen(QColor(summaryColor)));
+    painter.drawText(QRect(rect().x() + cpuRenderPaddingX,
+                           rect().y() + cpuRenderPaddingY,
+                           fm.width(readTitle),
+                           rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     readTitle);
+
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
@@ -140,6 +164,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     int gridHeight = cpuRenderMaxHeight + waveformRenderPadding;
 
     QPainterPath framePath;
+    painter.setBrush(QBrush()); // clear brush to got transparent background
     framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
     painter.drawPath(framePath);
 
