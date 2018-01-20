@@ -37,7 +37,7 @@ public:
 public slots:
     void changeTheme(QString theme);
     void initTheme();
-    void updateStatus(double totalReadKbs);
+    void updateStatus(double totalReadKbs, std::vector<double> cPercents);
     
 protected:
     void paintEvent(QPaintEvent *event);

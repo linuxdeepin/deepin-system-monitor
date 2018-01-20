@@ -25,6 +25,7 @@
 #define STATUSMONITOR_H
 
 #include "cpu_monitor.h"
+#include "utils.h"
 #include "find_window_title.h"
 #include "settings.h"
 #include "memory_monitor.h"
@@ -65,7 +66,7 @@ public:
     ~StatusMonitor();
 
 signals:
-    void updateCpuStatus(double cpuPercent);
+    void updateCpuStatus(double cpuPercent, std::vector<double> cpuPercents);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
     void updateDiskStatus(float totalReadKbs, float totalWriteKbs);
@@ -81,7 +82,7 @@ public slots:
     void hideDiskMonitor();
     
     void handleMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
-    void handleCpuStatus(double cpuPercent);
+    void handleCpuStatus(double cpuPercent, std::vector<double> cpuPercents);
     void handleNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
     void handleDiskStatus(float totalReadKbs, float totalWriteKbs);
     
@@ -127,6 +128,7 @@ private:
     unsigned long long prevWorkCpuTime;
     unsigned long long totalCpuTime;
     unsigned long long workCpuTime;
+    std::vector<CpuStruct> prevCpuTimes;
 };
 
 #endif

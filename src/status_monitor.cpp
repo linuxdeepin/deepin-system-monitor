@@ -429,11 +429,22 @@ void StatusMonitor::updateStatus()
     }
 
     // Update cpu status.
+    std::vector<CpuStruct> cpuTimes = getCpuTimes();
     if (prevWorkCpuTime != 0 && prevTotalCpuTime != 0) {
-        updateCpuStatus((workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime));
+        std::vector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
+
+        updateCpuStatus((workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime), cpuPercentages);
     } else {
-        updateCpuStatus(0);
+        std::vector<double> cpuPercentages;
+        
+        int numCPU = sysconf(_SC_NPROCESSORS_ONLN);
+        for (int i = 0; i < numCPU; i ++) {
+            cpuPercentages.push_back(0);
+        }
+        
+        updateCpuStatus(0, cpuPercentages);
     }
+    prevCpuTimes = cpuTimes;
 
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
@@ -532,12 +543,12 @@ void StatusMonitor::handleMemoryStatus(long usedMemory, long totalMemory, long u
     }
 }
 
-void StatusMonitor::handleCpuStatus(double cpuPercent)
+void StatusMonitor::handleCpuStatus(double cpuPercent, std::vector<double> cpuPercents)
 {
     if (isCompactMode) {
-        compactCpuMonitor->updateStatus(cpuPercent);
+        compactCpuMonitor->updateStatus(cpuPercent, cpuPercents);
     } else {
-        cpuMonitor->updateStatus(cpuPercent);
+        cpuMonitor->updateStatus(cpuPercent, cpuPercents);
     }
 }
 
@@ -591,12 +602,12 @@ void StatusMonitor::enableCompactMode()
         layout->removeWidget(memoryMonitor);
         layout->removeWidget(networkMonitor);
         layout->removeWidget(diskMonitor);
-        
+
         cpuMonitor->deleteLater();
         memoryMonitor->deleteLater();
         networkMonitor->deleteLater();
         diskMonitor->deleteLater();
-        
+
         compactCpuMonitor = new CompactCpuMonitor();
         compactMemoryMonitor = new CompactMemoryMonitor();
         compactNetworkMonitor = new CompactNetworkMonitor();
@@ -607,7 +618,7 @@ void StatusMonitor::enableCompactMode()
         layout->addWidget(compactNetworkMonitor, 0, Qt::AlignHCenter);
         layout->addWidget(compactDiskMonitor, 0, Qt::AlignHCenter);
     }
-    
+
     isCompactMode = true;
 }
 
@@ -618,12 +629,12 @@ void StatusMonitor::disableCompactMode()
         layout->removeWidget(compactMemoryMonitor);
         layout->removeWidget(compactNetworkMonitor);
         layout->removeWidget(compactDiskMonitor);
-        
+
         compactCpuMonitor->deleteLater();
         compactMemoryMonitor->deleteLater();
         compactNetworkMonitor->deleteLater();
         compactDiskMonitor->deleteLater();
-        
+
         cpuMonitor = new CpuMonitor();
         memoryMonitor = new MemoryMonitor();
         networkMonitor = new NetworkMonitor();
@@ -634,6 +645,6 @@ void StatusMonitor::disableCompactMode()
         layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
         layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
     }
-    
+
     isCompactMode = false;
 }

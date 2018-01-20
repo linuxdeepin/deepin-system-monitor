@@ -81,8 +81,13 @@ void CompactCpuMonitor::changeTheme(QString )
     initTheme();
 }
 
-void CompactCpuMonitor::updateStatus(double tReadKbs)
+void CompactCpuMonitor::updateStatus(double tReadKbs, std::vector<double> cPercents)
 {
+    qDebug() << "--------------";
+    for (unsigned int i = 0; i < cPercents.size(); i++) {
+        qDebug() << cPercents[i];
+    }
+    
     totalReadKbs = tReadKbs;
 
     // Init read path.

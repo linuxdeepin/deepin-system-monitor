@@ -43,6 +43,10 @@ static std::unordered_set<QString> GUI_BLACKLIST_MAP({"sh", "cat", "fcitx", "ssh
 static std::unordered_set<QString> SCRIPT_PROGRAM_MAP({"python", "python3", "ruby", "php", "perl", "sh", "bash"});
 
 namespace Utils {
+    typedef struct CpuStruct {
+        long long unsigned idle, nonIdle;
+    } CpuStruct;
+    
     typedef struct DiskStatus {
         float readKbs;
         float writeKbs;
@@ -129,6 +133,8 @@ namespace Utils {
     qreal easeOutQuad(qreal x);
     qreal easeOutQuint(qreal x);
     unsigned long long getTotalCpuTime(unsigned long long &workTime);
+    std::vector<CpuStruct> getCpuTimes();
+    std::vector<double> calculateCpuPercentages(std::vector<CpuStruct> now, std::vector<CpuStruct> prev);
     void addLayoutWidget(QLayout *layout, QWidget *widget);
     void applyQss(QWidget *widget, QString qssName);
     void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect);

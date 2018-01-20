@@ -42,7 +42,7 @@ public slots:
     void changeTheme(QString theme);
     void initTheme();
     void render();
-    void updateStatus(double cpuPercent);
+    void updateStatus(double cpuPercent, std::vector<double> cPercents);
     
 protected:
     void paintEvent(QPaintEvent *event);
