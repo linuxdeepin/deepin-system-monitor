@@ -37,9 +37,6 @@ using namespace Utils;
 
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent) : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_dark.svg"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_light.svg"));
-
     initTheme();
 
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CompactCpuMonitor::changeTheme);
@@ -72,14 +69,8 @@ void CompactCpuMonitor::initTheme()
 {
     if (DThemeManager::instance()->theme() == "light") {
         textColor = "#303030";
-        summaryColor = "#505050";
-
-        iconImage = iconLightImage;
     } else {
         textColor = "#ffffff";
-        summaryColor = "#909090";
-
-        iconImage = iconDarkImage;
     }
 }
 
@@ -111,10 +102,10 @@ void CompactCpuMonitor::updateStatus(double, std::vector<double> cPercents)
         }
 
         for (int i = 0; i < cpuPercent.size(); i++) {
-            if (readMaxHeight < readRenderMaxHeight) {
+            if (readMaxHeight < cpuRenderMaxHeight) {
                 readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
             } else {
-                readPoints.append(QPointF(i * 5, cpuPercent.at(i) * readRenderMaxHeight / readMaxHeight));
+                readPoints.append(QPointF(i * 5, cpuPercent.at(i) * cpuRenderMaxHeight / readMaxHeight));
             }
         }
 
@@ -146,7 +137,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     int gridX = rect().x() + penSize;
     int gridY = rect().y() + gridRenderOffsetY + gridPaddingTop;
     int gridWidth = rect().width() - gridPaddingRight - penSize * 2;
-    int gridHeight = readRenderMaxHeight + waveformRenderPadding;
+    int gridHeight = cpuRenderMaxHeight + waveformRenderPadding;
 
     QPainterPath framePath;
     framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
@@ -176,7 +167,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.setOpacity(1);
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, readWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, cpuWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();

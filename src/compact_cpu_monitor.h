@@ -43,35 +43,17 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QPixmap iconImage;
-    QPixmap iconDarkImage;
-    QPixmap iconLightImage;
     QList<QList<double>> cpuPercents;
     QList<QPainterPath> cpuPaths;
     QList<QString> cpuColors;
-    QString readColor = "#1094D8";
-    QString summaryColor;
     QString textColor;
-    double totalReadKbs;
-    int readRenderMaxHeight = 100;
-    int readRenderPaddingX = 13;
-    int readRenderPaddingY = 50;
-    int readRenderSize = 9;
-    int readWaveformsRenderOffsetX = 4;
-    int readWaveformsRenderOffsetY = 130;
+    int cpuRenderMaxHeight = 100;
+    int cpuWaveformsRenderOffsetY = 130;
     int gridPaddingRight = 21;
     int gridPaddingTop = 10;
     int gridRenderOffsetY = 18;
     int gridSize = 20;
-    int iconRenderOffsetX = -5;
-    int iconRenderOffsetY = 10;
-    int pointerRadius = 3;
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
     int pointsNumber = 51;
-    int textPadding = 12;
-    int titleRenderOffsetX = 20;
-    int titleRenderSize = 20;
     int waveformRenderPadding = 20;
     int numCPU;
 };
