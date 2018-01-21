@@ -106,7 +106,7 @@ void CpuMonitor::render()
     }
 }
 
-void CpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPercents)
+void CpuMonitor::updateStatus(double cpuPercent, std::vector<double>)
 {
     cpuPercents->append(cpuPercent);
 
