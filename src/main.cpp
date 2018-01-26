@@ -45,8 +45,7 @@ int main(int argc, char *argv[])
     DApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    const QString socket_path(QString("deepin-system-monitor_%1").arg(getuid()));
-    if (app.setSingleInstance(socket_path)) {
+    if (app.setSingleInstance(QString("deepin-system-monitor"), DApplication::UserScope)) {
         app.loadTranslator();
 
         const QString descriptionText = QApplication::tr("Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.");
