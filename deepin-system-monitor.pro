@@ -91,6 +91,7 @@ LIBS += -lX11 -lXext -lXtst -ldtkwm
 OBJECTS_DIR=out
 MOC_DIR=out
 
+isEmpty(PREFIX):PREFIX=/usr
 isEmpty(BINDIR):BINDIR=$${PREFIX}/bin
 isEmpty(ICONDIR):ICONDIR=$${PREFIX}/share/icons/hicolor/scalable/apps
 isEmpty(APPDIR):APPDIR=$${PREFIX}/share/applications
@@ -104,7 +105,7 @@ manual.path = $$INSTROOT$$DOCDIR
 # Automating generation .qm files from .ts files
 !system($$PWD/translations/translate_generation.sh): error("Failed to generate translation")
 
-qm_files.path = /usr/share/deepin-system-monitor/translations/
+qm_files.path = $${PREFIX}/share/deepin-system-monitor/translations/
 qm_files.files = translations/*.qm
 
 desktop.files = deepin-system-monitor.desktop
