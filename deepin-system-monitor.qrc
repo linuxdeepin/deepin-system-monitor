@@ -34,5 +34,6 @@
     <file>image/icon_disk_light.svg</file>
     <file>image/icon_memory_dark.svg</file>
     <file>image/icon_memory_light.svg</file>
+    <file>qss/main.qss</file>
   </qresource>
 </RCC>
