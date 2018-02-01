@@ -85,6 +85,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         toolbar = new Toolbar();
         this->titlebar()->setCustomWidget(toolbar, Qt::AlignVCenter, false);
         this->titlebar()->setMenu(menu);
+        this->titlebar()->setBackgroundTransparent(true);
 
         layoutWidget = new QWidget();
         layout = new QHBoxLayout(layoutWidget);
