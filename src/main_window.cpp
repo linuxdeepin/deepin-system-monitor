@@ -134,8 +134,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeTheme(QString theme)
 {
-    Utils::applyQss(this->titlebar(), "main.qss");
-
     if (theme == "light") {
         backgroundColor = "#FFFFFF";
 
