@@ -42,6 +42,7 @@ public:
     bool sameAs(DSimpleListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect);
     void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect);
+    void drawHover(QRect rect, QPainter *painter);
     
     static bool search(const DSimpleListItem *item, QString searchContent);
     static bool sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);

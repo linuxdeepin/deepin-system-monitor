@@ -92,6 +92,11 @@ void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool 
     }
 }
 
+void ProcessItem::drawHover(QRect, QPainter *)
+{
+    
+}
+
 void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int, bool isSelect)
 {
     // Init opacity and font size.
