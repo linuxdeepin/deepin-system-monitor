@@ -15,6 +15,54 @@
     </message>
 </context>
 <context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactDiskMonitor</name>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactMemoryMonitor</name>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactNetworkMonitor</name>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
@@ -22,10 +70,18 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DiskMonitor</name>
     <message>
-        <source>No search result</source>
-        <translation>Nėra paieškos rezultatų</translation>
+        <source>Disk</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -51,6 +107,10 @@ Ar tikrai norite tęsti?</translation>
     <message>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
+    </message>
+    <message>
+        <source>Compact mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -261,7 +321,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Langų atitikimo tarnybos DBus paslauga</translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -273,7 +333,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojo veiksenos virtualios failų sistemos Fuse serverio tarnyba</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
@@ -321,7 +381,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"/>
+        <translation>Light monitoriaus tvarkytuvė</translation>
     </message>
     <message>
         <source>System service manager</source>
@@ -369,7 +429,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos spausdinimo dėklo tarnyba</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
@@ -386,6 +446,10 @@ Ar tikrai norite tęsti?</translation>
     <message>
         <source>Not enabled</source>
         <translation>Neįjungta</translation>
+    </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -415,13 +479,6 @@ Ar tikrai norite tęsti?</translation>
     <message>
         <source>Search</source>
         <translation>Paieška</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Darbalaukis</translation>
     </message>
 </context>
 </TS>

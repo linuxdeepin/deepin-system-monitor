@@ -15,6 +15,54 @@
     </message>
 </context>
 <context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactDiskMonitor</name>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactMemoryMonitor</name>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactNetworkMonitor</name>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
@@ -22,10 +70,18 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DiskMonitor</name>
     <message>
-        <source>No search result</source>
-        <translation>Nenhum resultado</translation>
+        <source>Disk</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -51,6 +107,10 @@ Tem certeza que deseja continuar?</translation>
     <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Compact mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -387,6 +447,10 @@ Tem certeza que deseja continuar?</translation>
         <source>Not enabled</source>
         <translation>Não habilitado</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
@@ -415,13 +479,6 @@ Tem certeza que deseja continuar?</translation>
     <message>
         <source>Search</source>
         <translation>Pesquisar</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Área de trabalho</translation>
     </message>
 </context>
 </TS>

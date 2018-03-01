@@ -15,6 +15,54 @@
     </message>
 </context>
 <context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactDiskMonitor</name>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactMemoryMonitor</name>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CompactNetworkMonitor</name>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
@@ -22,10 +70,18 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DiskMonitor</name>
     <message>
-        <source>No search result</source>
-        <translation>Arama sonucu yok</translation>
+        <source>Disk</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -50,6 +106,10 @@ Are you sure to continue?</source>
     <message>
         <source>Cancel</source>
         <translation>Vazgeç</translation>
+    </message>
+    <message>
+        <source>Compact mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -385,6 +445,10 @@ Are you sure to continue?</source>
         <source>Not enabled</source>
         <translation>Etkin değil</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
@@ -413,13 +477,6 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>Ara</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>Masaüstü</translation>
     </message>
 </context>
 </TS>

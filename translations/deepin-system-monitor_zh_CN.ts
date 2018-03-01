@@ -15,6 +15,54 @@
     </message>
 </context>
 <context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>CPU</source>
+        <translation>处理器</translation>
+    </message>
+</context>
+<context>
+    <name>CompactDiskMonitor</name>
+    <message>
+        <source>Disk read</source>
+        <translation>磁盘读取</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation>磁盘写入</translation>
+    </message>
+</context>
+<context>
+    <name>CompactMemoryMonitor</name>
+    <message>
+        <source>Memory</source>
+        <translation>内存</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation>交换空间</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation>未启用</translation>
+    </message>
+</context>
+<context>
+    <name>CompactNetworkMonitor</name>
+    <message>
+        <source>Download</source>
+        <translation>下载</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation>总量</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation>上传</translation>
+    </message>
+</context>
+<context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
@@ -22,10 +70,18 @@
     </message>
 </context>
 <context>
-    <name>ListView</name>
+    <name>DiskMonitor</name>
     <message>
-        <source>No search result</source>
-        <translation>无搜索结果</translation>
+        <source>Disk</source>
+        <translation>磁盘</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation>磁盘读取</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation>磁盘写入</translation>
     </message>
 </context>
 <context>
@@ -51,6 +107,10 @@ Are you sure to continue?</source>
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
+    </message>
+    <message>
+        <source>Compact mode</source>
+        <translation>紧凑模式</translation>
     </message>
 </context>
 <context>
@@ -387,6 +447,10 @@ Are you sure to continue?</source>
         <source>Not enabled</source>
         <translation>未启用</translation>
     </message>
+    <message>
+        <source>Sogou input method</source>
+        <translation>搜狗输入法</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
@@ -415,13 +479,6 @@ Are you sure to continue?</source>
     <message>
         <source>Search</source>
         <translation>搜索</translation>
-    </message>
-</context>
-<context>
-    <name>WindowManager</name>
-    <message>
-        <source>Desktop</source>
-        <translation>桌面</translation>
     </message>
 </context>
 </TS>
