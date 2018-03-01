@@ -3,6 +3,16 @@ Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
+## [1.4] - 2018-03-01
+- Update translations.
+- Follow DTK's API
+- Move end process dialog at center of window.
+- Add compact mode, provide multi-cpu graphics.
+- Add disk monitor graphics.
+- Fixed getcmdline crash error cause by cmdline.length() == 0
+- Fix searchbar focus problem.
+- Use default icon instead, if not found "Icon=" line in desktop file.
+
 ## [1.3.7] - 2017-11-28
 - Split flatpak cmdline's fullpath to get real filename to find location of flatpak application.
 
