@@ -51,8 +51,8 @@ private:
     QString summaryColor;
     QString textColor;
     QString writeColor = "#F7B300";
-    float totalReadKbs;
-    float totalWriteKbs;
+    float totalReadKbs = 0;
+    float totalWriteKbs = 0;
     int readRenderMaxHeight = 50;
     int readRenderPaddingX = 13;
     int readRenderPaddingY = 20;

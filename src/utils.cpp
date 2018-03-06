@@ -926,4 +926,14 @@ namespace Utils {
 
         return v;
     }
+    
+    double filterInvalidNumber(double number)
+    {
+        if (qIsInf(number) || qIsNaN(number)) {
+            return 0;
+        } else {
+            return number;
+        }
+    }
 }
+

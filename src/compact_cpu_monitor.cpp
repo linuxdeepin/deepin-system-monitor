@@ -134,7 +134,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fm = painter.fontMetrics();
 
     QString readTitle = QString("%1 %2%").arg(tr("CPU")).arg(QString::number(totalCpuPercent, 'f', 1));
-
+    
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(cpuColor)));
     painter.setBrush(QBrush(QColor(cpuColor)));

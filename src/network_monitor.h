@@ -54,8 +54,8 @@ private:
     QString summaryColor;
     QString textColor;
     QString uploadColor = "#C362FF";
-    float totalRecvKbs;
-    float totalSentKbs;
+    float totalRecvKbs = 0;
+    float totalSentKbs = 0;
     int downloadRenderMaxHeight = 50;
     int downloadRenderPaddingX = 13;
     int downloadRenderPaddingY = 50;
@@ -81,8 +81,8 @@ private:
     int uploadRenderSize = 9;
     int uploadWaveformsRenderOffsetY = -5;
     int waveformRenderPadding = 20;
-    long totalRecvBytes;
-    long totalSentBytes;
+    long totalRecvBytes = 0;
+    long totalSentBytes = 0;
 };
 
 #endif    

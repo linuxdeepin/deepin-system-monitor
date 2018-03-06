@@ -56,7 +56,7 @@ private:
     int pointsNumber = 51;
     int waveformRenderPadding = 20;
     int numCPU;
-    double totalCpuPercent;
+    double totalCpuPercent = 0;
     
     int cpuTextRenderSize = 9;
     QString cpuColor = "#1094D8";

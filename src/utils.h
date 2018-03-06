@@ -161,6 +161,8 @@ namespace Utils {
     void removeLayoutChild(QLayout *layout, int index);
     void setFontSize(QPainter &painter, int textSize);
     const std::vector<std::string> explode(const std::string& s, const char& c);
+    
+    double filterInvalidNumber(double number);
 }
 
 

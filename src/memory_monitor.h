@@ -87,12 +87,12 @@ protected:
     int textPadding = 12;
     int titleRenderOffsetX = 20;
     int titleRenderSize = 20;
-    long prevUsedMemory;
-    long prevUsedSwap;
-    long totalMemory;
-    long totalSwap;
-    long usedMemory;
-    long usedSwap;
+    long prevUsedMemory = 0;
+    long prevUsedSwap = 0;
+    long totalMemory = 0;
+    long totalSwap = 0;
+    long usedMemory = 0;
+    long usedSwap = 0;
 };
 
 #endif    

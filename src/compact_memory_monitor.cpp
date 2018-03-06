@@ -154,7 +154,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    double memoryPercent = (prevUsedMemory + easeInOut(animationIndex / animationFrames) * (usedMemory - prevUsedMemory)) * 1.0 / totalMemory;
+    double memoryPercent = Utils::filterInvalidNumber((prevUsedMemory + easeInOut(animationIndex / animationFrames) * (usedMemory - prevUsedMemory)) * 1.0 / totalMemory);
     double swapPercent;
     if (totalSwap == 0) {
         swapPercent = 0;
