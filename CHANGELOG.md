@@ -3,6 +3,9 @@ Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
+## [1.4.2] - 2018-03-06
+- Change code version.
+
 ## [1.4.1] - 2018-03-06
 - Init object double/float value, avoid use un-init value to draw wrong result. Create function 'filterInvalidNumber' to filter Inf/NaN numnber.
 

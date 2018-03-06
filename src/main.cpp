@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");
         app.setApplicationDisplayName(QObject::tr("Deepin System Monitor"));
-        app.setApplicationVersion("1.4");
+        app.setApplicationVersion("1.4.2");
 
         app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
         app.setProductName(QApplication::tr("Deepin System Monitor"));
