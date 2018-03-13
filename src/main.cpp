@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
         app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
 
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
+        nethogs_monitor_thread.detach();
 
         MainWindow window;
         
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
         Dtk::Widget::moveToCenter(&window);
         window.show();
         window.adjustStatusBarWidth();
-
+        
         return app.exec();
     }
 
