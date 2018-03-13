@@ -216,8 +216,8 @@ void StatusMonitor::updateStatus()
     wineApplicationDesktopMaps->clear();
     wineServerDesktopMaps->clear();
 
-    float diskReadTotalKbs = 0;
-    float diskWriteTotalKbs = 0;
+    unsigned long diskReadTotalKbs = 0;
+    unsigned long diskWriteTotalKbs = 0;
 
     for (auto &i:processes) {
         int pid = (&i.second)->tid;
@@ -504,7 +504,7 @@ DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
     getProcPidIO(pid, pidIO);
 
     DiskStatus status = {0, 0};
-
+    
     if (processWriteKbs->contains(pid)) {
         status.writeKbs = (pidIO.wchar - processWriteKbs->value(pid)) / updateSeconds;
     }

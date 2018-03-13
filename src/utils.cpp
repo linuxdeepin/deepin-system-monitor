@@ -262,14 +262,14 @@ namespace Utils {
         return QSize(width, height);
     }
 
-    QString formatBandwidth(double v)
+    QString formatBandwidth(unsigned long v)
     {
         static const char* orders[] = { "KB/s", "MB/s", "GB/s", "TB/s" };
 
         return formatUnitSize(v, orders, sizeof(orders)/sizeof(orders[0]));
     }
 
-    QString formatByteCount(double v)
+    QString formatByteCount(unsigned long v)
     {
         static const char* orders[] = { "B", "KB", "MB", "GB", "TB" };
 
@@ -524,25 +524,28 @@ namespace Utils {
         return check_file.exists() && check_file.isFile();
     }
 
-    bool getProcPidIO(int pid, ProcPidIO &io )
+    bool getProcPidIO(int pid, ProcPidIO &io)
     {
         std::stringstream ss;
         ss << "/proc/" << pid << "/io";
-        std::ifstream ifs( ss.str().c_str() );
-        if ( ifs.good() ) {
-            while ( ifs.good() && !ifs.eof() ) {
+        std::ifstream ifs(ss.str().c_str());
+        if (ifs.good()) {
+            while (ifs.good() && !ifs.eof()) {
                 std::string s;
-                getline( ifs, s );
+                getline(ifs, s);
                 unsigned long t;
-                if ( sscanf( s.c_str(), "rchar: %lu", &t ) == 1 ) io.rchar = t;
-                else if ( sscanf( s.c_str(), "wchar: %lu", &t ) == 1 ) io.wchar = t;
-                else if ( sscanf( s.c_str(), "syscr: %lu", &t ) == 1 ) io.syscr = t;
-                else if ( sscanf( s.c_str(), "syscw: %lu", &t ) == 1 ) io.syscw = t;
-                else if ( sscanf( s.c_str(), "read_bytes: %lu", &t ) == 1 ) io.read_bytes = t;
-                else if ( sscanf( s.c_str(), "write_bytes: %lu", &t ) == 1 ) io.write_bytes = t;
-                else if ( sscanf( s.c_str(), "cancelled_write_bytes: %lu", &t ) == 1 ) io.cancelled_write_bytes = t;
+                if (sscanf(s.c_str(), "rchar: %lu", &t) == 1) io.rchar = t;
+                else if (sscanf(s.c_str(), "wchar: %lu", &t) == 1) io.wchar = t;
+                else if (sscanf(s.c_str(), "syscr: %lu", &t) == 1) io.syscr = t;
+                else if (sscanf(s.c_str(), "syscw: %lu", &t) == 1) io.syscw = t;
+                else if (sscanf(s.c_str(), "read_bytes: %lu", &t) == 1) io.read_bytes = t;
+                else if (sscanf(s.c_str(), "write_bytes: %lu", &t) == 1) io.write_bytes = t;
+                else if (sscanf(s.c_str(), "cancelled_write_bytes: %lu", &t) == 1) io.cancelled_write_bytes = t;
             }
         } else {
+            io.rchar = 0;
+            io.wchar = 0;
+            
             return false;
         }
 

@@ -48,8 +48,8 @@ namespace Utils {
     } CpuStruct;
     
     typedef struct DiskStatus {
-        float readKbs;
-        float writeKbs;
+        unsigned long readKbs;
+        unsigned long writeKbs;
     } DiskStatus;
 
     /**
@@ -109,8 +109,8 @@ namespace Utils {
     QMap<QString, QString> getDesktopfileMap();
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
     QSize getRenderSize(int fontSize, QString string);
-    QString formatBandwidth(double v);
-    QString formatByteCount(double v);
+    QString formatBandwidth(unsigned long v);
+    QString formatByteCount(unsigned long v);
     QString formatMillisecond(int millisecond);
     QString formatUnitSize(double v, const char** orders, int nb_orders);
     QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName=true);

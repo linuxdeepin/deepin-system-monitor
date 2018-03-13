@@ -179,7 +179,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             } else {
                 painter->setOpacity(textRightOpacity);
             }
-
+            
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
         }
@@ -192,7 +192,7 @@ void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int,
             } else {
                 painter->setOpacity(textRightOpacity);
             }
-
+            
             setFontSize(*painter, 9);
             painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
         }

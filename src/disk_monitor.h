@@ -37,7 +37,7 @@ public:
 public slots:
     void changeTheme(QString theme);
     void initTheme();
-    void updateStatus(float totalReadKbs, float totalWriteKbs);
+    void updateStatus(unsigned long totalReadKbs, unsigned long totalWriteKbs);
     
 protected:
     void paintEvent(QPaintEvent *event);
@@ -46,16 +46,16 @@ private:
     QPixmap iconImage;
     QPixmap iconDarkImage;
     QPixmap iconLightImage;
-    QList<double> *readSpeeds;
-    QList<double> *writeSpeeds;
+    QList<unsigned long> *readSpeeds;
+    QList<unsigned long> *writeSpeeds;
     QPainterPath readPath;
     QPainterPath writePath;
     QString readColor = "#1094D8";
     QString summaryColor;
     QString textColor;
     QString writeColor = "#F7B300";
-    float totalReadKbs = 0;
-    float totalWriteKbs = 0;
+    unsigned long totalReadKbs = 0;
+    unsigned long totalWriteKbs = 0;
     int readRenderMaxHeight = 50;
     int readRenderPaddingX = 13;
     int readRenderPaddingY = 50;

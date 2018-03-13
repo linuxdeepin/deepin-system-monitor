@@ -50,12 +50,12 @@ DiskMonitor::DiskMonitor(QWidget *parent) : QWidget(parent)
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
-    readSpeeds = new QList<double>();
+    readSpeeds = new QList<unsigned long>();
     for (int i = 0; i < pointsNumber; i++) {
         readSpeeds->append(0);
     }
 
-    writeSpeeds = new QList<double>();
+    writeSpeeds = new QList<unsigned long>();
     for (int i = 0; i < pointsNumber; i++) {
         writeSpeeds->append(0);
     }
@@ -87,7 +87,7 @@ void DiskMonitor::changeTheme(QString )
     initTheme();
 }
 
-void DiskMonitor::updateStatus(float tReadKbs, float tWriteKbs)
+void DiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
 {
     totalReadKbs = tReadKbs;
     totalWriteKbs = tWriteKbs;
