@@ -3,6 +3,11 @@ Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
+## [1.4.3] - 2018-03-14
+- Update manual.
+- Fixed display error cause by mismatch type: double -> unsigned long.
+- Add detach function to avoid segfault when exit application.
+
 ## [1.4.2] - 2018-03-06
 - Change code version.
 
