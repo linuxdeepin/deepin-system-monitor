@@ -239,7 +239,29 @@ namespace Utils {
 
         return pixmap;
     }
+    
+    QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWindowTitle, int iconSize)
+    {
+        QPixmap icon;
+        QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+        if (flatpakAppidEnv != "") {
+            QIcon flatpakAppIcon = QIcon(getFlatpakAppIcon(flatpakAppidEnv));
 
+            qreal devicePixelRatio = qApp->devicePixelRatio();
+            QPixmap pixmap = flatpakAppIcon.pixmap(iconSize * devicePixelRatio, iconSize * devicePixelRatio);
+            pixmap.setDevicePixelRatio(devicePixelRatio);
+
+            icon = pixmap;
+        } else if (desktopFile.size() == 0) {
+            qreal devicePixelRatio = qApp->devicePixelRatio();
+            icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), iconSize * devicePixelRatio);
+            icon.setDevicePixelRatio(devicePixelRatio);
+        } else {
+            icon = getDesktopFileIcon(desktopFile, iconSize);
+        }
+
+        return icon;
+    }
 
     QSize getRenderSize(int fontSize, QString string)
     {
@@ -469,7 +491,24 @@ namespace Utils {
 
         return name;
     }
+    
+    std::string getProcessDesktopFile(int pid, QString name, QString cmdline, QMap<int, int> trayProcessMap)
+    {
+        std::string desktopFile;
+        if (trayProcessMap.contains(pid)) {
+            desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
 
+            // Find desktop file from process name if found environ variable 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process.
+            if (desktopFile.size() == 0) {
+                desktopFile = getDesktopFileFromName(pid, name, cmdline);
+            }
+        } else {
+            desktopFile = getDesktopFileFromName(pid, name, cmdline);
+        }
+
+        return desktopFile;        
+    }
+    
     QString getQrcPath(QString imageName)
     {
         return QString(":/image/%1").arg(imageName);

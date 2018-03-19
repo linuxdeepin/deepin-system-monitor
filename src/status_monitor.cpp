@@ -227,20 +227,8 @@ void StatusMonitor::updateStatus()
         QString user = (&i.second)->euser;
         double cpu = (*processCpuPercents)[pid];
 
-        std::string desktopFile;
-        if (trayProcessMap.contains(pid)) {
-            desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
-
-            // Find desktop file from process name if found environ variable 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process.
-            if (desktopFile.size() == 0) {
-                desktopFile = getDesktopFileFromName(pid, name, cmdline);
-            }
-        } else {
-            desktopFile = getDesktopFileFromName(pid, name, cmdline);
-        }
-
+        std::string desktopFile = getProcessDesktopFile(pid, name, cmdline, trayProcessMap);
         QString title = findWindowTitle->getWindowTitle(pid);
-
         bool isGui = trayProcessMap.contains(pid) || (title != "");
 
         // Record wine application and wineserver.real desktop file.
@@ -284,6 +272,7 @@ void StatusMonitor::updateStatus()
                     title = getDisplayNameFromName(name, desktopFile);
                 }
             }
+            
             QString displayName;
             if (filterType == AllProcess) {
                 displayName = QString("[%1] %2").arg(user).arg(title);
@@ -292,25 +281,7 @@ void StatusMonitor::updateStatus()
             }
 
             long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
-
-            QPixmap icon;
-            QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
-            if (flatpakAppidEnv != "") {
-                QIcon flatpakAppIcon = QIcon(getFlatpakAppIcon(flatpakAppidEnv));
-
-                qreal devicePixelRatio = qApp->devicePixelRatio();
-                QPixmap pixmap = flatpakAppIcon.pixmap(24 * devicePixelRatio, 24 * devicePixelRatio);
-                pixmap.setDevicePixelRatio(devicePixelRatio);
-
-                icon = pixmap;
-            } else if (desktopFile.size() == 0) {
-                qreal devicePixelRatio = qApp->devicePixelRatio();
-                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 24 * devicePixelRatio);
-                icon.setDevicePixelRatio(devicePixelRatio);
-            } else {
-                icon = getDesktopFileIcon(desktopFile, 24);
-            }
-
+            QPixmap icon = getProcessIcon(pid, desktopFile, findWindowTitle, 24);
             ProcessItem *item = new ProcessItem(icon, name, displayName, cpu, memory, pid, user, (&i.second)->state);
             items << item;
         } else {

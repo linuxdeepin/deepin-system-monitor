@@ -143,22 +143,8 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId) : DAbstractDi
         if (pid == processId) {
             QString cmdline = Utils::getProcessCmdline(processId);
             QString name = getProcessName(&i.second, cmdline);
-            
-            std::string desktopFile;
-            if (trayProcessMap.contains(pid)) {
-                desktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
-            } else {
-                desktopFile = getDesktopFileFromName(pid, name, cmdline);
-            }
-
-            QPixmap icon;
-            if (desktopFile.size() == 0) {
-                qreal devicePixelRatio = qApp->devicePixelRatio();
-                icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), 96 * devicePixelRatio);
-                icon.setDevicePixelRatio(devicePixelRatio);
-            } else {
-                icon = getDesktopFileIcon(desktopFile, 96);
-            }
+            std::string desktopFile = getProcessDesktopFile(pid, name, cmdline, trayProcessMap);
+            QPixmap icon = getProcessIcon(pid, desktopFile, findWindowTitle, 96);
             QString displayName = getDisplayNameFromName(name, desktopFile, false);
 
             iconLabel->setPixmap(icon);

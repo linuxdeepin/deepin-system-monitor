@@ -24,6 +24,7 @@
 #define UTILS_H
 
 #include "hashqstring.h"
+#include "find_window_title.h"
 #include <dwindowmanager.h>
 #include <QFileInfoList>
 #include <QLayout>
@@ -108,6 +109,7 @@ namespace Utils {
     QMap<QString, QString> getProcessDescriptions();
     QMap<QString, QString> getDesktopfileMap();
     QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
+    QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWindowTitle, int iconSize);
     QSize getRenderSize(int fontSize, QString string);
     QString formatBandwidth(unsigned long v);
     QString formatByteCount(unsigned long v);
@@ -119,6 +121,7 @@ namespace Utils {
     QString getProcessCmdline(pid_t pid);
     QString getProcessName(proc_t* p, QString cmdline);
     QString getProcessNameFromCmdLine(const pid_t pid);
+    std::string getProcessDesktopFile(int pid, QString name, QString cmdline, QMap<int, int> trayProcessMap);
     QString getQrcPath(QString imageName);
     QString getQssPath(QString qssName);
     QString getFlatpakAppIcon(QString flatpakAppid);
