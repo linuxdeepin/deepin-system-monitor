@@ -230,7 +230,7 @@ void StatusMonitor::updateStatus()
         std::string desktopFile = getProcessDesktopFile(pid, name, cmdline, trayProcessMap);
         QString title = findWindowTitle->getWindowTitle(pid);
         bool isGui = trayProcessMap.contains(pid) || (title != "");
-
+        
         // Record wine application and wineserver.real desktop file.
         // We need transfer wineserver.real network traffic to the corresponding wine program.
         if (name == "wineserver.real") {
@@ -271,6 +271,11 @@ void StatusMonitor::updateStatus()
                 } else {
                     title = getDisplayNameFromName(name, desktopFile);
                 }
+            }
+            
+            // Add tray prefix in title if process is tray process.
+            if (trayProcessMap.contains(pid)) {
+                title = QString("%1: %2").arg(tr("Tray")).arg(title);
             }
             
             QString displayName;
