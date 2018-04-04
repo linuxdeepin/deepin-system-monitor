@@ -247,7 +247,7 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
-    qreal networkCurveWidth = 1.6;
+    qreal networkCurveWidth = 1.2;
     if (devicePixelRatio > 1) {
         networkCurveWidth = 2;
     }

@@ -224,7 +224,7 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
-    qreal diskCurveWidth = 1.6;
+    qreal diskCurveWidth = 1.2;
     if (devicePixelRatio > 1) {
         diskCurveWidth = 2;
     }
