@@ -227,17 +227,13 @@ namespace Utils {
         }
         in.close();
         
+        
         // Use default icon instead, if not found "Icon=" line in desktop file.
         if (!foundIconLine) {
             icon = defaultExecutableIcon;
         }
 
-        qreal devicePixelRatio = qApp->devicePixelRatio();
-
-        QPixmap pixmap = icon.pixmap(iconSize * devicePixelRatio, iconSize * devicePixelRatio);
-        pixmap.setDevicePixelRatio(devicePixelRatio);
-
-        return pixmap;
+        return icon.pixmap(iconSize, iconSize);
     }
     
     QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWindowTitle, int iconSize)
@@ -246,12 +242,7 @@ namespace Utils {
         QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
         if (flatpakAppidEnv != "") {
             QIcon flatpakAppIcon = QIcon(getFlatpakAppIcon(flatpakAppidEnv));
-
-            qreal devicePixelRatio = qApp->devicePixelRatio();
-            QPixmap pixmap = flatpakAppIcon.pixmap(iconSize * devicePixelRatio, iconSize * devicePixelRatio);
-            pixmap.setDevicePixelRatio(devicePixelRatio);
-
-            icon = pixmap;
+            icon = flatpakAppIcon.pixmap(iconSize, iconSize);
         } else if (desktopFile.size() == 0) {
             qreal devicePixelRatio = qApp->devicePixelRatio();
             icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid), iconSize * devicePixelRatio);

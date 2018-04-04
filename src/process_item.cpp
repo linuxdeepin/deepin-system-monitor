@@ -94,6 +94,9 @@ void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool 
 
 void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int, bool isSelect, bool)
 {
+    // NOTE: Use 'SmoothPixmapTransform' for draw HiDPI icon, otherwise pixmap's edge is not smooth.
+    painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+    
     // Init opacity and font size.
     painter->setOpacity(1);
 
