@@ -114,7 +114,7 @@ namespace Utils {
     QString formatBandwidth(unsigned long v);
     QString formatByteCount(unsigned long v);
     QString formatMillisecond(int millisecond);
-    QString formatUnitSize(double v, const char** orders, int nb_orders);
+    QString formatUnitSize(unsigned long v, const char** orders, int nb_orders);
     QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName=true);
     QString getImagePath(QString imageName);
     QString getProcessEnvironmentVariable(pid_t pid, QString environmentName);

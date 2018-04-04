@@ -230,7 +230,7 @@ void StatusMonitor::updateStatus()
         std::string desktopFile = getProcessDesktopFile(pid, name, cmdline, trayProcessMap);
         QString title = findWindowTitle->getWindowTitle(pid);
         bool isGui = trayProcessMap.contains(pid) || (title != "");
-        
+
         // Record wine application and wineserver.real desktop file.
         // We need transfer wineserver.real network traffic to the corresponding wine program.
         if (name == "wineserver.real") {
@@ -272,12 +272,12 @@ void StatusMonitor::updateStatus()
                     title = getDisplayNameFromName(name, desktopFile);
                 }
             }
-            
+
             // Add tray prefix in title if process is tray process.
             if (trayProcessMap.contains(pid)) {
                 title = QString("%1: %2").arg(tr("Tray")).arg(title);
             }
-            
+
             QString displayName;
             if (filterType == AllProcess) {
                 displayName = QString("[%1] %2").arg(user).arg(title);
@@ -412,12 +412,12 @@ void StatusMonitor::updateStatus()
         updateCpuStatus((workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime), cpuPercentages);
     } else {
         std::vector<double> cpuPercentages;
-        
+
         int numCPU = sysconf(_SC_NPROCESSORS_ONLN);
         for (int i = 0; i < numCPU; i ++) {
             cpuPercentages.push_back(0);
         }
-        
+
         updateCpuStatus(0, cpuPercentages);
     }
     prevCpuTimes = cpuTimes;
@@ -480,13 +480,13 @@ DiskStatus StatusMonitor::getProcessDiskStatus(int pid)
     getProcPidIO(pid, pidIO);
 
     DiskStatus status = {0, 0};
-    
-    if (processWriteKbs->contains(pid)) {
+
+    if (processWriteKbs->contains(pid) && pidIO.wchar > 0) {
         status.writeKbs = (pidIO.wchar - processWriteKbs->value(pid)) / updateSeconds;
     }
     (*processWriteKbs)[pid] = pidIO.wchar;
 
-    if (processReadKbs->contains(pid)) {
+    if (processReadKbs->contains(pid) && pidIO.rchar > 0) {
         status.readKbs = (pidIO.rchar - processReadKbs->value(pid)) / updateSeconds;
     }
     (*processReadKbs)[pid] = pidIO.rchar;
