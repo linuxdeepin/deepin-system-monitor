@@ -473,6 +473,10 @@ Are you sure to continue?</source>
         <source>All processes</source>
         <translation>所有进程</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation>托盘</translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

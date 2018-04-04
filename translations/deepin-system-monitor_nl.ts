@@ -473,6 +473,10 @@ Weet u zeker dat u verder wilt gaan?</translation>
         <source>All processes</source>
         <translation>Alle processen</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

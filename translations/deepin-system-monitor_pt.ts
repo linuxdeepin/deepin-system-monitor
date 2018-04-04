@@ -472,6 +472,10 @@ Tem a certeza que quer continuar?</translation>
         <source>All processes</source>
         <translation>Todos os processos</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

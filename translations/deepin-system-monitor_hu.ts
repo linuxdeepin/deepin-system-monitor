@@ -473,6 +473,10 @@ Biztos benne, hogy folytatja?</translation>
         <source>All processes</source>
         <translation>Minden szolgáltatás</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

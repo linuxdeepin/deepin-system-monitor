@@ -473,6 +473,10 @@ Are you sure to continue?</source>
         <source>All processes</source>
         <translation>Todos los procesos</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

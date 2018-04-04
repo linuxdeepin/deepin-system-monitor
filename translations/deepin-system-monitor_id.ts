@@ -18,48 +18,48 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Baca disk</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Tulis disk</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Memori</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Tidak dihidupkan</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Unduh</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Unggah</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Disk</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Baca disk</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Tulis disk</translation>
     </message>
 </context>
 <context>
@@ -110,7 +110,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Compact mode</translation>
     </message>
 </context>
 <context>
@@ -234,7 +234,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation>Pemantau Sistem Deepin adalah pemantau sistem yang intuitif dan dapat diandalkan. Dapat memantau proses CPU, memori, jaringan, disk, dan status lainnya.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -281,7 +281,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation type="unfinished"/>
+        <translation>Desktop Environment Deepin - Sesi proses inisialisasi</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
@@ -289,7 +289,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation type="unfinished"/>
+        <translation>Desktop Environment Deepin - Layanan kunci layar</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
@@ -297,7 +297,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation type="unfinished"/>
+        <translation>Pengalih Manajer Jendela Deepin </translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -313,15 +313,15 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Store daemon</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation type="unfinished"/>
+        <translation>Window match daemon</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Window match daemon layanan DBus</translation>
     </message>
     <message>
         <source>SSH agent</source>
@@ -329,15 +329,15 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Mode Pengguna daemon berkas sistem</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Fuse server dari mode virtual berkas pengguna daemon</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation>Proses helper dari klien Deepin Store</translation>
     </message>
     <message>
         <source>Network manager</source>
@@ -345,11 +345,11 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Layanan PolicyKit DBus</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon layanan berbagi berkas</translation>
     </message>
     <message>
         <source>X service</source>
@@ -361,15 +361,15 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon metode masukan Fcitx DBus</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon metode masukan Sogou</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"/>
+        <translation>Klien lokal ShadowSocks</translation>
     </message>
     <message>
         <source>Sound service</source>
@@ -385,11 +385,11 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation type="unfinished"/>
+        <translation>Manajer layanan sistem</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation type="unfinished"/>
+        <translation>Manajer layanan sistem - Daemon manajemen perangkat</translation>
     </message>
     <message>
         <source>Disk daemon</source>
@@ -405,7 +405,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon event mouse</translation>
     </message>
     <message>
         <source>DConf service</source>
@@ -429,7 +429,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>Sistem layanan penampan cetak</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
@@ -437,7 +437,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation type="unfinished"/>
+        <translation>Daemon perangkat papan sentuh Synaptics</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -449,7 +449,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>Metode masukan Sogou</translation>
     </message>
 </context>
 <context>
@@ -472,6 +472,10 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     <message>
         <source>All processes</source>
         <translation>Semua proses</translation>
+    </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -473,6 +473,10 @@ Jeste li sigurni da želite nastaviti?</translation>
         <source>All processes</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

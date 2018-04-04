@@ -473,6 +473,10 @@ Are you sure to continue?</source>
         <source>All processes</source>
         <translation>כל התהליכים</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

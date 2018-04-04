@@ -473,6 +473,10 @@ Doriți să continuați?</translation>
         <source>All processes</source>
         <translation>Alte procese</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

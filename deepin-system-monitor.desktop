@@ -129,3 +129,7 @@ Name[bg] = Deepin системен монитор
 Icon[bg] = deepin-system-monitor
 Comment[bg] = Монитор на състоянието на системните процеси
 GenericName[bg] = Системен монитор
+Name[id] = Pemantau Sistem Deepin
+Icon[id] = pemantau-sistem-deepin
+Comment[id] = Pantau status proses sistem
+GenericName[id] = Pemantau Sistem
