@@ -55,13 +55,13 @@ private:
     float totalSentKbs = 0;
     int downloadRenderMaxHeight = 50;
     int downloadRenderPaddingX = 13;
-    int downloadRenderPaddingY = 10;
+    int downloadRenderPaddingY = 15;
     int downloadRenderSize = 9;
     int downloadWaveformsRenderOffsetX = 4;
-    int downloadWaveformsRenderOffsetY = 107;
+    int downloadWaveformsRenderOffsetY = 112;
     int gridPaddingRight = 21;
     int gridPaddingTop = 10;
-    int gridRenderOffsetY = 47;
+    int gridRenderOffsetY = 52;
     int gridSize = 20;
     int pointerRadius = 3;
     int pointerRenderPaddingX = 4;
@@ -70,7 +70,7 @@ private:
     int textPadding = 12;
     int uploadRenderMaxHeight = 10;
     int uploadRenderPaddingX = 13;
-    int uploadRenderPaddingY = 32;
+    int uploadRenderPaddingY = 37;
     int uploadRenderSize = 9;
     int uploadWaveformsRenderOffsetY = -4;
     int waveformRenderPadding = 20;

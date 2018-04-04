@@ -43,7 +43,7 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent) : QWidget(parent)
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
-    setFixedHeight(190);
+    setFixedHeight(160);
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
