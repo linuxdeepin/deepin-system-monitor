@@ -3,6 +3,14 @@ Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
+## [1.4.4] - 2018-05-14
+- HiDPI: fixed attribute dialog's icon is not clear.
+- HiDPI: fixed listview icon is not render smooth.
+- Add tray prefix in title if process is tray process.
+- Adjust network grid padding, make it in visible center of left panel.
+- Fixed arithmetic overflow error when calcuate disk read/write io.
+- Adjust curve width.
+
 ## [1.4.3] - 2018-03-14
 - Update manual.
 - Fixed display error cause by mismatch type: double -> unsigned long.
