@@ -95,11 +95,9 @@ isEmpty(BINDIR):BINDIR=$${PREFIX}/bin
 isEmpty(ICONDIR):ICONDIR=$${PREFIX}/share/icons/hicolor/scalable/apps
 isEmpty(APPDIR):APPDIR=$${PREFIX}/share/applications
 isEmpty(DSRDIR):DSRDIR=$${PREFIX}/share/$${TARGET}
-isEmpty(DOCDIR):DOCDIR=$${PREFIX}/share/dman/$${TARGET}
 desktop.path = $$INSTROOT$$APPDIR
 icon.path = $$INSTROOT$$ICONDIR
 target.path = $$INSTROOT$$BINDIR
-manual.path = $$INSTROOT$$DOCDIR
 
 # Automating generation .qm files from .ts files
 !system($$PWD/translations/translate_generation.sh): error("Failed to generate translation")
@@ -109,6 +107,5 @@ qm_files.files = translations/*.qm
 
 desktop.files = deepin-system-monitor.desktop
 icon.files = image/deepin-system-monitor.svg
-manual.files = manual/*
 
-INSTALLS += desktop icon target qm_files manual
+INSTALLS += desktop icon target qm_files
