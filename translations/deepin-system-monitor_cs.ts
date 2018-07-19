@@ -475,7 +475,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Panel</translation>
     </message>
 </context>
 <context>

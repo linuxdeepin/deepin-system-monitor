@@ -18,7 +18,7 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Prozessor</translation>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
@@ -475,7 +475,7 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Benachrichtigungsfeld</translation>
     </message>
 </context>
 <context>

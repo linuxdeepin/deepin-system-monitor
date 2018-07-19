@@ -18,48 +18,48 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>ЦП</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Читання диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Запис диска</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Пам&apos;ять</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Підкачка</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Не ввімкнено</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Завантажити</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Загалом</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Вивантаження</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Диск</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Читання диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Запис диска</translation>
     </message>
 </context>
 <context>
@@ -110,7 +110,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Компактний режим</translation>
     </message>
 </context>
 <context>
@@ -121,7 +121,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Підкачка</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -215,7 +215,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Читати диску</translation>
+        <translation>Читання диска</translation>
     </message>
     <message>
         <source>Download</source>
@@ -305,7 +305,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Агент Deepin Cloud Print</translation>
+        <translation>Агент Хмарного Друкування Deepin</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
@@ -441,7 +441,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Підкачка</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -449,7 +449,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>Демон методу введення Sogou</translation>
     </message>
 </context>
 <context>
@@ -475,7 +475,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Лоток</translation>
     </message>
 </context>
 <context>

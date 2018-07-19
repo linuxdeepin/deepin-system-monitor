@@ -14,5 +14,5 @@ Type=Application
 # Translations
 Name[tr]=Deepin Sistem İzleyici
 Icon[tr]=deepin-sistem-izleyici
-Comment[tr]=Sistem işlem durumunu izleyiniz
-GenericName[tr]=Sistem İzleyicisi
+Comment[tr]=Sistem işlem durumunu izleme
+GenericName[tr]=Sistem İzleyici

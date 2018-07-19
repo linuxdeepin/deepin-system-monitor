@@ -475,7 +475,7 @@ Er du sikker på, at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Bakke</translation>
     </message>
 </context>
 <context>

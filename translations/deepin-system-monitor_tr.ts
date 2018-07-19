@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Etkin değil</translation>
+        <translation>Devre dışı</translation>
     </message>
 </context>
 <context>
@@ -88,7 +88,7 @@
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Uygulamayı sonlandırmak için zorla</translation>
+        <translation>Uygulamayı zorla sonlandır</translation>
     </message>
     <message>
         <source>Dark theme</source>
@@ -101,15 +101,15 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Bu uygulamayı sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz?</translation>
+        <translation>Bu uygulamayı sonlandırmak veri kaybına neden olabilir. Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Vazgeç</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Mini kip</translation>
+        <translation>Sade kip</translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Etkin değil</translation>
+        <translation>Devre dışı</translation>
     </message>
 </context>
 <context>
@@ -150,7 +150,7 @@ Are you sure to continue?</source>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Cevap yok</translation>
+        <translation>Yanıt yok</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -166,11 +166,12 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Bu işlemi sonlandırmak veri kaybına neden olabilir. Devam etmeye emin misiniz?</translation>
+        <translation>Bu işlemi sonlandırmak veri kaybına neden olabilir.
+Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal et</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <source>Suspend process</source>
@@ -178,26 +179,26 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>İşlemi devam ettir</translation>
+        <translation>İşlemi sürdür</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>İşlem yerini görüntüle</translation>
+        <translation>İşlem konumunu görüntüle</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Özellikleri</translation>
+        <translation>Özellikler</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 uygulama ve %3 süreç çalışıyor</translation>
+        <translation>%2 uygulama ve %3 işlem çalışıyor</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -232,7 +233,7 @@ Are you sure to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin Sistem İzleyici, sezgisel ve güçlü bir sistem izleyicidir. İşlemci, bellek, ağ, disk ve diğer süreçlerin durumunu izleyebilirsiniz.</translation>
+        <translation>Deepin Sistem İzleyici, sezgisel olarak kullanılabilen güçlü bir sistem izleme uygulamasıdır. İşlemci, bellek, ağ, disk ve diğer işlemlerin durumunun izlenmesini sağlar.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -247,7 +248,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Masaüstü Ortamı - Süreç başlatma hizmeti</translation>
+        <translation>Deepin Masaüstü Ortamı - İşlem başlatma hizmeti</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
@@ -263,7 +264,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Masaüstü Ortamı - Rıhtım</translation>
+        <translation>Deepin Masaüstü Ortamı - Görev Çubuğu</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
@@ -271,11 +272,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Masaüstü Ortamı - Program</translation>
+        <translation>Deepin Masaüstü Ortamı - Art Hizmet</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Masaüstü Ortamı - Oturum programı</translation>
+        <translation>Deepin Masaüstü Ortamı - Oturum art hizmeti</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
@@ -283,19 +284,19 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deepin Dosya Yönetici programı</translation>
+        <translation>Deepin Dosya Yöneticisi art hizmeti</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Masaüstü Ortamı - Kilit ekran hizmeti</translation>
+        <translation>Deepin Masaüstü Ortamı - Ekran kilitleme hizmeti</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Pencere Yönetici</translation>
+        <translation>Deepin Pencere Yöneticisi</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Derin Pencere Yönetici değiştiricisi</translation>
+        <translation>Deepin Pencere Yöneticisi değiştirici</translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -303,139 +304,139 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Bulut Yazıcı ajanı</translation>
+        <translation>Deepin Bulut Yazdırma programı</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Deepin menü servisi</translation>
+        <translation>Deepin menü hizmeti</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Deepin Mağaza programı</translation>
+        <translation>Deepin Mağaza art hizmeti</translation>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Pencere eşleştirme programı</translation>
+        <translation>Pencere eşleştirme art hizmeti</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Pencere eşleştirme programı DBus servisi</translation>
+        <translation>Pencere eşleştirme art hizmeti DBus hizmeti</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH ajanı</translation>
+        <translation>SSH programı</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Kullanıcı modu sanal dosya sistemi programı</translation>
+        <translation>Kullanıcı kipi sanal dosya sistemi art hizmeti</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Kullanıcı modu sanal dosya sistem sigorta sunucu programı</translation>
+        <translation>Kullanıcı kipi sanal dosya sistemi art hizmeti Fuse sunucusu</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Deepin Mağaza müşterisinin yardımcı işlemi</translation>
+        <translation>Deepin Mağaza istemcisi yardımcı işlemi</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Ağ yönetici</translation>
+        <translation>Ağ yöneticisi</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus servisi</translation>
+        <translation>PolicyKit DBus hizmeti</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Dosya paylaşım hizmeti programı</translation>
+        <translation>Dosya paylaşım hizmeti art hizmeti</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation>X servisi</translation>
+        <translation>X hizmeti</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Fcitx giriş metodu</translation>
+        <translation>Fcitx giriş yöntemi</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx giriş metodu DBus programı</translation>
+        <translation>Fcitx giriş yöntemi DBus art hizmeti</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Sogou giriş metodu programı</translation>
+        <translation>Sogou giriş yöntemi art hizmeti</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>ShadowSocks yerel istemci</translation>
+        <translation>ShadowSocks yerel istemcisi</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Ses servisi</translation>
+        <translation>Ses hizmeti</translation>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Yazıcı programı</translation>
+        <translation>Yazdırma art hizmeti</translation>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Hafif ekran yönetici</translation>
+        <translation>Açık ekran yöneticisi</translation>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Sistem servis yönetici</translation>
+        <translation>Sistem hizmeti yöneticisi</translation>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Sistem servis yönetici - Aygıt yönetim programı</translation>
+        <translation>Sistem hizmeti yöneticisi - Aygıt yönetimi art hizmeti</translation>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Disk programı</translation>
+        <translation>Disk art hizmeti</translation>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Hesap programı</translation>
+        <translation>Hesap art hizmeti</translation>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>DBus programı</translation>
+        <translation>DBus art hizmeti</translation>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Fare durum programı</translation>
+        <translation>Fare işlemi art hizmeti</translation>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>DConf servisi</translation>
+        <translation>DConf hizmeti</translation>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Gnome anahtarlık programı</translation>
+        <translation>Gnome anahtarlık art hizmeti</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Bluetooth programı</translation>
+        <translation>Bluetooth art hizmeti</translation>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Güç programı</translation>
+        <translation>Güç art hizmeti</translation>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Modem aygıt yönetici</translation>
+        <translation>Modem aygıtı yöneticisi</translation>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Sistem baskı tepsisi servisi</translation>
+        <translation>Sistem yazdırma tepsisi hizmeti</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Chrome tarayıcı sanal alanı</translation>
+        <translation>Chrome tarayıcı kum havuzu</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics dokunmatik yüzey aygıt programı</translation>
+        <translation>Synaptics dokunmatik yüzey aygıtı art hizmeti</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -443,7 +444,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Etkin değil</translation>
+        <translation>Devre dışı</translation>
     </message>
     <message>
         <source>Sogou input method</source>
@@ -454,7 +455,7 @@ Are you sure to continue?</source>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Sonlandırmak istediğiniz uygulamaya tıklayınız</translation>
+        <translation>Sonlandırmak istediğiniz uygulamaya tıklayın</translation>
     </message>
 </context>
 <context>
@@ -473,14 +474,14 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Tepsi</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Ara</translation>
+        <translation>Arama</translation>
     </message>
 </context>
 </TS>

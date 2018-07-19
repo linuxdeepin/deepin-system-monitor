@@ -18,48 +18,48 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Llectura en discu</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Escritura en discu</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Memoria</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Intercambéu</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Nun s&apos;activó</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Descarga</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Xuba</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Discu</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Llectura en discu</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Escritura en discu</translation>
     </message>
 </context>
 <context>
@@ -110,7 +110,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Mou compautu</translation>
     </message>
 </context>
 <context>
@@ -449,7 +449,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>Métodu d&apos;entrada Sogou</translation>
     </message>
 </context>
 <context>
@@ -475,7 +475,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Bandexa</translation>
     </message>
 </context>
 <context>

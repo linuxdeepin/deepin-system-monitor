@@ -7,59 +7,59 @@
     </message>
     <message>
         <source>Command line</source>
-        <translation>Comando</translation>
+        <translation>Linha de comando</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Iniciado a</translation>
+        <translation>Hora de início</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Leitura em disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Gravação em disco</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Memória</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Troca</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Não ativado</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Transferir</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Enviar</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Disco</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Leitura em disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Gravação em disco</translation>
     </message>
 </context>
 <context>
@@ -101,7 +101,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Terminar esta aplicação poderá causar perda de dados.Tem a certeza que quer continuar?</translation>
+        <translation>Terminar esta aplicação poderá causar a perda de dados.
+Tem a certeza que pretende continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -109,7 +110,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo compacto</translation>
     </message>
 </context>
 <context>
@@ -120,7 +121,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Troca</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -135,7 +136,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>Download</translation>
+        <translation>Transferir</translation>
     </message>
     <message>
         <source>Total</source>
@@ -143,7 +144,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation>Enviar</translation>
     </message>
 </context>
 <context>
@@ -166,8 +167,8 @@ Are you sure to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Terminar este processo poderá causar perda de dados.
-Tem a certeza que quer continuar?</translation>
+        <translation>Terminar este processo poderá causar a perda de dados.
+Tem a certeza que pretende continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -179,7 +180,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Resumir processo</translation>
+        <translation>Retomar processo</translation>
     </message>
     <message>
         <source>View process location</source>
@@ -210,7 +211,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escrita em disco</translation>
+        <translation>Gravação em disco</translation>
     </message>
     <message>
         <source>Disk read</source>
@@ -218,11 +219,11 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Download</translation>
+        <translation>Transferir</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation>Enviar</translation>
     </message>
     <message>
         <source>PID</source>
@@ -233,7 +234,7 @@ Tem a certeza que quer continuar?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>O Deepin System Monitor é um intuitivo e potente monitor de sistema. Pode monitorizar os processos em CPU, memória, rede, disco e outros estados.</translation>
+        <translation>O Deepin System Monitor é monitor do sistema poderoso e intuitivo. Este pode monitorizar os processos da CPU, memória, rede, disco e outros estados.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -252,7 +253,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Ambiente de trabalho</translation>
+        <translation>Deepin Desktop Environment - Ambiente de Trabalho</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
@@ -268,7 +269,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment - Gestor de ecrã</translation>
+        <translation>Deepin Desktop Environment - Gestor de Ecrã</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
@@ -284,7 +285,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Daemon do Deepin File Manager</translation>
+        <translation>Deepin File Manager - Daemon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
@@ -300,7 +301,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Notificações do Deepin</translation>
+        <translation>Notificação do Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
@@ -312,7 +313,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Daemon da Deepin Store</translation>
+        <translation>Deepin Store - Daemon</translation>
     </message>
     <message>
         <source>Window match daemon</source>
@@ -440,15 +441,15 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Troca</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Não ativo</translation>
+        <translation>Não ativado</translation>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>Método de introdução Sogou</translation>
     </message>
 </context>
 <context>
@@ -466,7 +467,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Meus processos</translation>
+        <translation>Os meus processos</translation>
     </message>
     <message>
         <source>All processes</source>
@@ -474,7 +475,7 @@ Tem a certeza que quer continuar?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Bandeja</translation>
     </message>
 </context>
 <context>

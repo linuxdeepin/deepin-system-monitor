@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[pt_BR]=Monitor do Sistema
-Icon[pt_BR]=monitor-do-sistema
-Comment[pt_BR]=Monitorar status do processo do sistema
-GenericName[pt_BR]=Monitor do Sistema
+Name[sr]=Дипин Праћење Система
+Icon[sr]=deepin-system-monitor
+Comment[sr]=Прати статус процеса система
+GenericName[sr]=Праћење Система

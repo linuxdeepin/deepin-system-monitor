@@ -92,7 +92,7 @@
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tema dark</translation>
+        <translation>Tema Escuro</translation>
     </message>
     <message>
         <source>End application</source>
@@ -234,18 +234,18 @@ Tem certeza que deseja continuar?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin System Monitor é um intuitivo e poderoso monitor de sistema. Pode monitorar os processos da CPU, memória, rede, disco e outros status.</translation>
+        <translation>Monitor do Sistema é um intuitivo e poderoso monitor. Pode monitorar e analisar os processos da CPU, memória, rede, disco e outros status.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>Monitor do Sistema</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation>Monitor do Sistema</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -285,7 +285,7 @@ Tem certeza que deseja continuar?</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deepin Gerenciando de Arquivos daemon</translation>
+        <translation>Gerenciando de Arquivos daemon</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
@@ -293,11 +293,11 @@ Tem certeza que deseja continuar?</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Gerenciador de Janelas</translation>
+        <translation>Gerenciador de Janelas</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Alternador do Deepin Gerenciador de Janelas</translation>
+        <translation>Alternador do Gerenciador de Janelas</translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -475,7 +475,7 @@ Tem certeza que deseja continuar?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Bandeja</translation>
     </message>
 </context>
 <context>

@@ -475,7 +475,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Tacka</translation>
     </message>
 </context>
 <context>

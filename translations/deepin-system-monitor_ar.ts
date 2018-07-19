@@ -18,48 +18,48 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>المعالج</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>القراءة من القرص</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>الكتابة على القرص</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>الذاكرة</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>ذاكرة التبديل</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>غير مفعلة</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>التنزيل</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>الإجمالي</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>التحميل</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>القرص</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>القراءة من القرص</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>الكتابة على القرص</translation>
     </message>
 </context>
 <context>
@@ -110,7 +110,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>الوضع المدمج</translation>
     </message>
 </context>
 <context>
@@ -289,7 +289,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Lock screen service</translation>
+        <translation>بيئة سطح مكتب ديبين - خدمة قفل الشاشة</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
@@ -449,7 +449,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>أسلوب اﻹدخال Sogou</translation>
     </message>
 </context>
 <context>

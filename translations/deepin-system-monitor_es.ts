@@ -475,7 +475,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Bandeja</translation>
     </message>
 </context>
 <context>

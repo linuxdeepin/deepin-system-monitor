@@ -18,48 +18,48 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>Процесор</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Четене на диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Запис на диска</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Памет</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Не е включено</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Сваляне</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Общо</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Качване</translation>
     </message>
 </context>
 <context>
@@ -73,15 +73,15 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Диск</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Четене на диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Запис на диска</translation>
     </message>
 </context>
 <context>
@@ -110,7 +110,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Компактен режим</translation>
     </message>
 </context>
 <context>
@@ -449,7 +449,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>Sogou метод за въвеждане</translation>
     </message>
 </context>
 <context>
@@ -475,7 +475,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Лента на задачи</translation>
     </message>
 </context>
 <context>

@@ -475,7 +475,7 @@ Anda pasti mahu teruskan?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Talam</translation>
     </message>
 </context>
 <context>

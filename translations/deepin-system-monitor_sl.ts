@@ -475,7 +475,7 @@ Res želite nadaljevati?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Sistemska vrstica</translation>
     </message>
 </context>
 <context>

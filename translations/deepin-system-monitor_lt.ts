@@ -475,7 +475,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Dėklas</translation>
     </message>
 </context>
 <context>

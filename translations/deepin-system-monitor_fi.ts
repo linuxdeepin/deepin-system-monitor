@@ -1,17 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Nom del procés</translation>
+        <translation>Prosessin nimi</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Línia d&apos;ordres</translation>
+        <translation>Komentorivi</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Hora d&apos;inici</translation>
+        <translation>Aloitusaika</translation>
     </message>
 </context>
 <context>
@@ -25,41 +25,41 @@
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Lectura de disc</translation>
+        <translation>Levyn luku</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escriptura de disc</translation>
+        <translation>Levylle kirjoitus</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Memòria</translation>
+        <translation>Muisti</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Intercanvi</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>No habilitat</translation>
+        <translation>Ei käytössä</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Baixada</translation>
+        <translation>Lataus</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Total</translation>
+        <translation>Yhteensä</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Càrrega</translation>
+        <translation>Lähetys</translation>
     </message>
 </context>
 <context>
@@ -73,133 +73,133 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Disc</translation>
+        <translation>Levy</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Lectura de disc</translation>
+        <translation>Levyn luku</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escriptura de disc</translation>
+        <translation>Levylle kirjoitus</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Força l&apos;aturada de l&apos;aplicació</translation>
+        <translation>Pakota sovelluksen lopettaminen</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tema fosc</translation>
+        <translation>Tumma teema</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Atura l&apos;aplicació</translation>
+        <translation>Lopeta sovellus</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Aturar aquesta aplicació pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
+        <translation>Tämän sovelluksen lopettaminen saattaa aiheuttaa tietojen menetystä.
+Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel·la</translation>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Mode compacte</translation>
+        <translation>Kompakti tila</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Memòria</translation>
+        <translation>Muisti</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Intercanvi</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>No habilitat</translation>
+        <translation>Ei käytössä</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Xarxa</translation>
+        <translation>Verkko</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Baixada</translation>
+        <translation>Lataus</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Total</translation>
+        <translation>Yhteensä</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Càrrega</translation>
+        <translation>Lähetys</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Sense resposta</translation>
+        <translation>Ei vastausta</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspèn</translation>
+        <translation>Keskeytä</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Atura el procés</translation>
+        <translation>Lopeta prosessi</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Aturar aquest procés pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
+        <translation>Tämän prosessin lopettaminen saattaa aiheuttaa tietojen menetystä.
+Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel·la</translation>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Suspèn el procés</translation>
+        <translation>Keskeytä prosessi</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Reprèn el procés</translation>
+        <translation>Jatka prosessia</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Mostra la ubicació del procés</translation>
+        <translation>Näytä prosessin sijainti</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Propietats</translation>
+        <translation>Ominaisuudet</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>S&apos;executen %2 aplicacions i %3 processos.</translation>
+        <translation>%2 sovellusta ja %3 prosessia on käynnissä</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation>Nimi</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -207,23 +207,23 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Memòria</translation>
+        <translation>Muisti</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escriptura de disc</translation>
+        <translation>Levylle kirjoitus</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Lectura de disc</translation>
+        <translation>Levyn luku</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Baixada</translation>
+        <translation>Lataus</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Càrrega</translation>
+        <translation>Lähetys</translation>
     </message>
     <message>
         <source>PID</source>
@@ -234,255 +234,255 @@ Segur que voleu continuar?</translation>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>El Monitor del sistema del Deepin és un monitor de sistema intuïtiu i potent. Pot monitorar el procés de la CPU, la memòria, la xarxa, el disc i altres estats.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor del sistema del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor del sistema del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Servei d&apos;iniciació de procés</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Escriptori</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Intermediari Polkit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Llançador</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Acoblador</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Pantalla</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Dimoni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Dimoni de sessions</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Procés d&apos;inici de sessió</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Dimoni del Gestor de fitxers del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Entorn d&apos;escriptori del Deepin. Servei de bloqueig de la pantalla</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Gestor de finestres del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Commutador del Gestor de finestres del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Notificació del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Agent d&apos;impressió al núvol del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Servei de menú del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Dimoni de la botiga del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Dimoni de coincidència de finestres</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Servei DBus del dimoni de coincidència de finestres</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>Agent SSH</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Dimoni del sistema de fitxers virtual en mode d&apos;usuari</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Servidor de fusió del dimoni del sistema de fitxers virtual en mode d&apos;usuari</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Procés d&apos;ajuda del client de la botiga del Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Gestor de xarxes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>Servei DBus PolicyKit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Dimoni del servei de compartició de fitxers</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>X service</source>
-        <translation>Servei X</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Mètode d&apos;entrada Fcitx</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Dimoni DBus del mètode d&apos;entrada Fcitx</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Dimoni del mètode d&apos;entrada Sogou</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>Client local de ShadowSocks</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Servei de so</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Dimoni d&apos;impressió</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Gestor de pantalla lleuger</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Gestor de serveis del sistema</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Gestor de serveis del sistema. Dimoni de gestió de dispositius</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Dimoni de disc</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Dimoni de compte</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>Dimoni DBus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Dimoni d&apos;esdeveniment de ratolí</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>Servei DConf</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Dimoni de l&apos;anell de claus del Gnome</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Dimoni del Bluetooth</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Dimoni d&apos;energia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Gestor del dispositiu de mòdem</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Servei de la safata d&apos;impressió del sistema</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Safata de navegació del navegador Chrome</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Dimoni del dispositiu de ratolí tàctil Synaptics</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Intercanvi</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>No habilitat</translation>
+        <translation>Ei käytössä</translation>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation>Mètode d&apos;entrada Sogou</translation>
+        <translation>Sogou-syöttötapa</translation>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Cliqueu a l&apos;aplicació que vulgueu aturar.</translation>
+        <translation>Napsauta sovellusta, jonka haluat lopettaa</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Aplicacions</translation>
+        <translation>Sovellukset</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Els meus processos</translation>
+        <translation>Omat prosessit</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Tots els processos</translation>
+        <translation>Kaikki prosessit</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Safata</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Cerca</translation>
+        <translation>Hae</translation>
     </message>
 </context>
 </TS>

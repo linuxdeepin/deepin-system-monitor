@@ -301,7 +301,7 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Notification Deepin</translation>
+        <translation>Notification(s) Deepin</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
@@ -475,7 +475,7 @@ Souhaitez-vous vraiment continuer ?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Plateau</translation>
     </message>
 </context>
 <context>
