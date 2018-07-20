@@ -1,3 +1,9 @@
+<a name="1.4.5"></a>
+### 1.4.5 (2018-07-20)
+
+
+
+
 # Change Log
 Deepin system monitor: a more user-friendly system monitor.
 
