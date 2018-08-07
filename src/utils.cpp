@@ -211,7 +211,7 @@ namespace Utils {
 
             if (iconName.startsWith("Icon=")) {
                 iconName.remove(0,5); // remove the first 5 chars
-                
+
                 foundIconLine = true;
             } else {
                 continue;
@@ -226,8 +226,8 @@ namespace Utils {
             }
         }
         in.close();
-        
-        
+
+
         // Use default icon instead, if not found "Icon=" line in desktop file.
         if (!foundIconLine) {
             icon = defaultExecutableIcon;
@@ -235,7 +235,7 @@ namespace Utils {
 
         return icon.pixmap(iconSize, iconSize);
     }
-    
+
     QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWindowTitle, int iconSize)
     {
         QPixmap icon;
@@ -277,29 +277,32 @@ namespace Utils {
 
     QString formatBandwidth(unsigned long v)
     {
-        static const char* orders[] = { "KB/s", "MB/s", "GB/s", "TB/s" };
+        QStringList orders;
+        orders << "KB/s" << "MB/s" << "GB/s" << "TB/s";
 
-        return formatUnitSize(v, orders, sizeof(orders)/sizeof(orders[0]));
+        return formatUnitSize(v, orders);
     }
 
     QString formatByteCount(unsigned long v)
     {
-        static const char* orders[] = { "B", "KB", "MB", "GB", "TB" };
+        QStringList orders;
+        orders << "B" << "KB" << "MB" << "GB" << "TB";
 
-        return formatUnitSize(v, orders, sizeof(orders)/sizeof(orders[0]));
+        return formatUnitSize(v, orders);
     }
 
-    QString formatUnitSize(unsigned long v, const char** orders, int nb_orders)
+    QString formatUnitSize(unsigned long v, QStringList orders)
     {
         int order = 0;
-        while (v >= 1024 && order + 1 < nb_orders) {
+        long double value = v;
+        while (value >= 1024 && order + 1 < orders.size()) {
             order++;
-            v  = v/1024;
+            value  = value / 1024.0;
         }
-        char buffer1[30];
-        snprintf(buffer1, sizeof(buffer1), "%.1lu %s", v, orders[order]);
-        
-        return QString(buffer1);
+
+        QString size = QString::number(static_cast<double>(value), 'r', 1);
+
+        return QString("%1 %2").arg(size).arg(orders[order]);
     }
 
     QString formatMillisecond(int millisecond)
@@ -482,7 +485,7 @@ namespace Utils {
 
         return name;
     }
-    
+
     std::string getProcessDesktopFile(int pid, QString name, QString cmdline, QMap<int, int> trayProcessMap)
     {
         std::string desktopFile;
@@ -497,9 +500,9 @@ namespace Utils {
             desktopFile = getDesktopFileFromName(pid, name, cmdline);
         }
 
-        return desktopFile;        
+        return desktopFile;
     }
-    
+
     QString getQrcPath(QString imageName)
     {
         return QString(":/image/%1").arg(imageName);
@@ -523,7 +526,7 @@ namespace Utils {
 
         return QDir(output.split("Location:")[1].split("\n")[0].simplified());
     }
-    
+
     QString getFlatpakAppIcon(QString flatpakAppid)
     {
         QProcess whichProcess;
@@ -542,7 +545,7 @@ namespace Utils {
         flatpakDir.cd("hicolor");
         flatpakDir.cd("scalable");
         flatpakDir.cd("apps");
-        
+
         return flatpakDir.filePath(QString("%1.svg").arg(flatpakAppid.split("app/")[1].split("/")[0]));
     }
 
@@ -577,7 +580,7 @@ namespace Utils {
             io.wchar = 0;
             io.read_bytes = 0;
             io.write_bytes = 0;
-            
+
             return false;
         }
 
@@ -692,7 +695,7 @@ namespace Utils {
         // in user and nice, see http://unix.stackexchange.com/q/178045/20626)
         return user + nice + system + idle + iowait + irq + softirq + steal;
     }
-    
+
     std::vector<CpuStruct> getCpuTimes()
     {
         std::vector<CpuStruct> times;
@@ -961,7 +964,7 @@ namespace Utils {
 
         return v;
     }
-    
+
     double filterInvalidNumber(double number)
     {
         if (qIsInf(number) || qIsNaN(number)) {
@@ -971,4 +974,3 @@ namespace Utils {
         }
     }
 }
-

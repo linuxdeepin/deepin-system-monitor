@@ -47,7 +47,7 @@ namespace Utils {
     typedef struct CpuStruct {
         long long unsigned idle, nonIdle;
     } CpuStruct;
-    
+
     typedef struct DiskStatus {
         unsigned long readKbs;
         unsigned long writeKbs;
@@ -114,7 +114,7 @@ namespace Utils {
     QString formatBandwidth(unsigned long v);
     QString formatByteCount(unsigned long v);
     QString formatMillisecond(int millisecond);
-    QString formatUnitSize(unsigned long v, const char** orders, int nb_orders);
+    QString formatUnitSize(unsigned long v, QStringList orders);
     QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName=true);
     QString getImagePath(QString imageName);
     QString getProcessEnvironmentVariable(pid_t pid, QString environmentName);
@@ -164,7 +164,7 @@ namespace Utils {
     void removeLayoutChild(QLayout *layout, int index);
     void setFontSize(QPainter &painter, int textSize);
     const std::vector<std::string> explode(const std::string& s, const char& c);
-    
+
     double filterInvalidNumber(double number);
 }
 

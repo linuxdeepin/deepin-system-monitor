@@ -90,6 +90,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         layoutWidget = new QWidget();
         layout = new QHBoxLayout(layoutWidget);
 
+        this->setFocusPolicy(Qt::ClickFocus);
         this->setCentralWidget(layoutWidget);
 
         int tabIndex = settings->getOption("process_tab_index").toInt();
