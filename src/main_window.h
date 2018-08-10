@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
@@ -40,11 +40,11 @@ DWIDGET_USE_NAMESPACE
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
-    
+
 public:
     MainWindow(DMainWindow *parent = 0);
     ~MainWindow();
-                                       
+
     QList<bool> getColumnHideFlags();
     bool eventFilter(QObject *, QEvent *);
     bool getSortingOrder();
@@ -55,7 +55,7 @@ public:
     void paintEvent(QPaintEvent *);
     void adjustStatusBarWidth();
     void adjustDiskMoitor();
-    
+
 public slots:
     void changeTheme(QString theme);
     void createWindowKiller();
@@ -67,7 +67,7 @@ public slots:
     void switchTab(int index);
     void switchTheme();
     void switchCompactMode();
-    
+
 private:
     DDialog *killProcessDialog;
     InteractiveKill *killer;

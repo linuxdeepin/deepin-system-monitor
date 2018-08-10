@@ -90,7 +90,6 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
         layoutWidget = new QWidget();
         layout = new QHBoxLayout(layoutWidget);
 
-        this->setFocusPolicy(Qt::ClickFocus);
         this->setCentralWidget(layoutWidget);
 
         int tabIndex = settings->getOption("process_tab_index").toInt();
@@ -180,7 +179,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     if (event->type() == QEvent::Resize) {
         adjustDiskMoitor();
     }
-    
+
     if (event->type() == QEvent::WindowStateChange) {
         adjustStatusBarWidth();
     } else if (event->type() == QEvent::KeyPress) {
@@ -373,17 +372,17 @@ void MainWindow::switchCompactMode()
 {
     if (settings->getOption("compact_mode").toBool()) {
         settings->setOption("compact_mode", false);
-        
+
         compactModeAction->setChecked(false);
-        
+
         statusMonitor->disableCompactMode();
-        
+
         adjustDiskMoitor();
     } else {
         settings->setOption("compact_mode", true);
-        
+
         compactModeAction->setChecked(true);
-        
+
         statusMonitor->enableCompactMode();
     }
 }

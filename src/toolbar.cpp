@@ -40,7 +40,6 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     installEventFilter(this);   // add event filter
     setMouseTracking(true);    // make MouseMove can response
 
-    setFocusPolicy(Qt::ClickFocus);
     setFixedHeight(24);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -54,7 +53,7 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     searchEdit->setFixedWidth(280);
     searchEdit->setPlaceHolder(tr("Search"));
     searchEdit->getLineEdit()->installEventFilter(this);
-    
+
     layout->addWidget(iconLabel);
     layout->addSpacing(90);
     layout->addStretch();
@@ -79,14 +78,14 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 searchEdit->clear();
-            
+
                 pressEsc();
-            } 
+            }
         } else if (obj == searchEdit->getLineEdit()) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Tab) {
                 pressTab();
-            } 
+            }
         }
     }
 
