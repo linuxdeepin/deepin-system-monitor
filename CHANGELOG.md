@@ -1,3 +1,14 @@
+<a name="1.4.6"></a>
+### 1.4.6 (2018-08-12)
+
+
+#### Bug Fixes
+
+*   remove click focus. ([c55009ed](https://github.com/linuxdeepin/deepin-system-monitor/commit/c55009ede66ba61c45236ad8885788d10e68bdca))
+*   no display decimals. ([8d229df7](https://github.com/linuxdeepin/deepin-system-monitor/commit/8d229df7585564350c1a00af4b856728a36d2d4f))
+
+
+
 <a name="1.4.5"></a>
 ### 1.4.5 (2018-07-20)
 
