@@ -204,14 +204,14 @@ namespace Utils {
         QIcon icon;
         QString iconName;
         bool foundIconLine = false;
+
         while(!in.eof()) {
             std::string line;
             std::getline(in,line);
             iconName = QString::fromStdString(line);
 
-            if (iconName.startsWith("Icon=")) {
-                iconName.remove(0,5); // remove the first 5 chars
-
+            if (iconName.startsWith("Icon")) {
+                iconName = iconName.split("=").last().simplified();
                 foundIconLine = true;
             } else {
                 continue;
@@ -226,7 +226,6 @@ namespace Utils {
             }
         }
         in.close();
-
 
         // Use default icon instead, if not found "Icon=" line in desktop file.
         if (!foundIconLine) {
