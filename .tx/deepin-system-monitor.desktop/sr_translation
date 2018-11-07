@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[sr]=Дипин Праћење Система
-Icon[sr]=deepin-system-monitor
 Comment[sr]=Прати статус процеса система
+Icon[sr]=deepin-system-monitor
+Name[sr]=Дипин Праћење Система
 GenericName[sr]=Праћење Система

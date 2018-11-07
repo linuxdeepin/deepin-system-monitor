@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[cs]=Sledovač systému
-Icon[cs]=Sledovač systému
 Comment[cs]=Stav procesu sledování systému
+Icon[cs]=Sledovač systému
+Name[cs]=Sledovač systému
 GenericName[cs]=Sledovač systému

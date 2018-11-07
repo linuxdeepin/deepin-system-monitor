@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[sl]=Sistemski nadzor Deepin
-Icon[sl]=sistemski-nadzor-deepin
 Comment[sl]=Stanje izvajanja sistemskega nadzora
+Icon[sl]=sistemski-nadzor-deepin
+Name[sl]=Sistemski nadzor Deepin
 GenericName[sl]=Sistemski nadzor

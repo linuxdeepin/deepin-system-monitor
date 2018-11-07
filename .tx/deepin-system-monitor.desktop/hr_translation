@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[hr]=Deepin nadzor sustava
-Icon[hr]=deepin-nadzor-sustava
 Comment[hr]=Nadzor statusa procesa sustava
+Icon[hr]=deepin-nadzor-sustava
+Name[hr]=Deepin nadzor sustava
 GenericName[hr]=Nadzor sustava

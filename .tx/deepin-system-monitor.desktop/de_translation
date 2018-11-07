@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[de]=Deepin System Monitor
-Icon[de]=deepin-system-monitor
 Comment[de]=Systemprozessstatus überwachen
+Icon[de]=deepin-system-monitor
+Name[de]=Deepin System Monitor
 GenericName[de]=System Monitor

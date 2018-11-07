@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Comment[ro]=Monitorizarea stării proceselor de sistem
-Icon[ro]=deepin-system-monitor
-Name[ro]=Monitor de sistem Deepin
-GenericName[ro]=Monitor de sistem
+Comment[gl_ES]=Estado dos procesos do monitor do sistema
+Icon[gl_ES]=deepin-system-monitor
+Name[gl_ES]=Monitor do sistema do Deepin
+GenericName[gl_ES]=Monitor do sistema

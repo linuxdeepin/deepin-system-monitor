@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[hu]=Deepin Rendszerfigyelő
-Icon[hu]=deepin-system-monitor
 Comment[hu]=A rendszer állapotának figyelése
+Icon[hu]=deepin-system-monitor
+Name[hu]=Deepin Rendszerfigyelő
 GenericName[hu]=Rendszer figyelő

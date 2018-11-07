@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[he]=צג המערכת של Deepin
-Icon[he]=deepin-system-monitor
 Comment[he]=הצגת מצב תהליך המערכת
+Icon[he]=deepin-system-monitor
+Name[he]=צג המערכת של Deepin
 GenericName[he]=צג המערכת

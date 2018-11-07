@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[it]=Deepin System Monitor
-Icon[it]=deepin-system-monitor
 Comment[it]=Dashboard dello stato processi di Sistema
+Icon[it]=deepin-system-monitor
+Name[it]=Deepin System Monitor
 GenericName[it]=Dashboard di Sistema

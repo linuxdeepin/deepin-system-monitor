@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[ru]=Системный монитор Deepin
-Icon[ru]=deepin-system-monitor
 Comment[ru]=Мониторинг состояния процесса системы
+Icon[ru]=deepin-system-monitor
+Name[ru]=Системный монитор Deepin
 GenericName[ru]=Системный Монитор

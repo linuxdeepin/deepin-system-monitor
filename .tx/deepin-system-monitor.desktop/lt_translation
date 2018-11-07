@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[lt]=Deepin sistemos monitorius
-Icon[lt]=deepin-system-monitor
 Comment[lt]=Stebėti sistemos procesų būseną
+Icon[lt]=deepin-system-monitor
+Name[lt]=Deepin sistemos monitorius
 GenericName[lt]=Sistemos monitorius

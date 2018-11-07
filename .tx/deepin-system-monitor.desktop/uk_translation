@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[uk]=Системний Монітор Deepin
-Icon[uk]=deepin-system-monitor
 Comment[uk]=Моніторинг стану процесу системи
+Icon[uk]=deepin-system-monitor
+Name[uk]=Системний Монітор Deepin
 GenericName[uk]=Системний Монітор

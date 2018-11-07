@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[zh_CN]=深度系统监视器
-Icon[zh_CN]=deepin-system-monitor
 Comment[zh_CN]=监控系统进程状态
+Icon[zh_CN]=deepin-system-monitor
+Name[zh_CN]=深度系统监视器
 GenericName[zh_CN]=系统监视器

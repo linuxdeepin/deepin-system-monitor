@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[es_419]=Monitor del sistema Deepin
-Icon[es_419]=deepin-sistema-monitor
 Comment[es_419]=Estado de proceso del monitor de sistema
+Icon[es_419]=deepin-sistema-monitor
+Name[es_419]=Monitor del sistema Deepin
 GenericName[es_419]=Monitor del sistema

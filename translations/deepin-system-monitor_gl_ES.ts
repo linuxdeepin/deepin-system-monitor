@@ -1,17 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl_ES" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Ime procesa</translation>
+        <translation>Nome do proceso</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Naredbeni redak</translation>
+        <translation>Liña de ordes</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Vrijeme početka</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -25,41 +25,41 @@
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Lectura no disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Escritura no disco</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Memorija</translation>
+        <translation>Memoria</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Intercambio</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nije omogućeno</translation>
+        <translation>Desactivado</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Preuzimanje</translation>
+        <translation>Entrante</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Ukupno</translation>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Pošalji</translation>
+        <translation>Saínte</translation>
     </message>
 </context>
 <context>
@@ -73,78 +73,78 @@
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Disk</translation>
+        <translation>Disco</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Lectura no disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Escritura no disco</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Prisili završetak programa</translation>
+        <translation>Forzar o pechado da aplicación</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tamna tema</translation>
+        <translation>Tema escuro</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Završi program</translation>
+        <translation>Pechar aplicación</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Završavanje ovog programa može uzrokovati gubitak podataka.
-Jeste li sigurni da želite nastaviti?</translation>
+        <translation>Pechar esta aplicación pode causar a perda de datos.
+Tes a certeza de quere continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Otkaži</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo compacto</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Memorija</translation>
+        <translation>Memoria</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Intercambio</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nije omogućeno</translation>
+        <translation>Desactivado</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Mreža</translation>
+        <translation>Rede</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Preuzimanje</translation>
+        <translation>Entrante</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Ukupno</translation>
+        <translation>Total</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Slanje</translation>
+        <translation>Saínte</translation>
     </message>
 </context>
 <context>
@@ -155,51 +155,51 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendiraj</translation>
+        <translation>Suspender</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Završi proces</translation>
+        <translation>Rematar proceso</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure to continue?</source>
-        <translation>Završetak ovog procesa može uzrokovati gubitak podataka.
-Jeste li sigurni da želite nastaviti?</translation>
+        <translation>Rematar este proceso pode causar a perda de datos.
+Tes a certeza de quere continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Otkaži</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"/>
+        <translation>Suspender proceso</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"/>
+        <translation>Continuar proceso</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation type="unfinished"/>
+        <translation>Ver localización do proceso</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Svojstva</translation>
+        <translation>Propiedades</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"/>
+        <translation>%2 aplicacións e %3 procesos en execución</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Ime</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -207,23 +207,23 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Memorija</translation>
+        <translation>Memoria</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Escritura no disco</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Lectura no disco</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Preuzimanje</translation>
+        <translation>Entrante</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Slanje</translation>
+        <translation>Saínte</translation>
     </message>
     <message>
         <source>PID</source>
@@ -238,14 +238,14 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation type="unfinished"/>
+        <translation>Monitor do sistema do Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation type="unfinished"/>
+        <translation>Monitor do sistema do Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +293,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin upravitelj prozorima</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -301,7 +301,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Deepin obavijest</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
@@ -325,7 +325,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation type="unfinished"/>
+        <translation>Axente SSH</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
@@ -341,7 +341,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Upravitelj mrežom</translation>
+        <translation>Xestor de redes</translation>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
@@ -353,7 +353,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>X service</source>
-        <translation type="unfinished"/>
+        <translation>Servizo X</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
@@ -373,7 +373,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation type="unfinished"/>
+        <translation>Servizo de son</translation>
     </message>
     <message>
         <source>Print daemon</source>
@@ -441,7 +441,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Intercambio</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -463,15 +463,15 @@ Jeste li sigurni da želite nastaviti?</translation>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished"/>
+        <translation>Aplicacións</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished"/>
+        <translation>Os meus procesos</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished"/>
+        <translation>Tódolos procesos</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -482,7 +482,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Buscar</translation>
     </message>
 </context>
 </TS>

@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[ms]=Pemantau Sistem Deepin
-Icon[ms]=deepin-system-monitor
 Comment[ms]=Pantau status proses sistem
+Icon[ms]=deepin-system-monitor
+Name[ms]=Pemantau Sistem Deepin
 GenericName[ms]=Pemantau Sistem

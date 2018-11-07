@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[ca]=Monitor del sistema del Deepin
-Icon[ca]=monitor-sistema-deepin
 Comment[ca]=Monitor de l'estat dels processos del sistema
+Icon[ca]=monitor-sistema-deepin
+Name[ca]=Monitor del sistema del Deepin
 GenericName[ca]=Monitor del sistema

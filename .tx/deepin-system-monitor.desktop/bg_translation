@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[bg]=Deepin системен монитор
-Icon[bg]=deepin-system-monitor
 Comment[bg]=Монитор на състоянието на системните процеси
+Icon[bg]=deepin-system-monitor
+Name[bg]=Deepin системен монитор
 GenericName[bg]=Системен монитор

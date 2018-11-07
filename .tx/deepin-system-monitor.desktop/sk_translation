@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[sk]=Deepin Systémový Monitor
-Icon[sk]=deepin-system-monitor
 Comment[sk]=Stav procesu monitorovania systému
+Icon[sk]=deepin-system-monitor
+Name[sk]=Deepin Systémový Monitor
 GenericName[sk]=Systémový Monitor

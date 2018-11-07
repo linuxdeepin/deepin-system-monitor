@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[tr]=Deepin Sistem İzleyici
-Icon[tr]=deepin-sistem-izleyici
 Comment[tr]=Sistem işlem durumunu izleme
+Icon[tr]=deepin-sistem-izleyici
+Name[tr]=Deepin Sistem İzleyici
 GenericName[tr]=Sistem İzleyici

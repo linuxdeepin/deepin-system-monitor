@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[da]=Deepin systemovervågning
-Icon[da]=deepin-system-monitor
 Comment[da]=Overvåg systemproces status
+Icon[da]=deepin-system-monitor
+Name[da]=Deepin systemovervågning
 GenericName[da]=Systemovervågning

@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[id]=Pemantau Sistem Deepin
-Icon[id]=pemantau-sistem-deepin
 Comment[id]=Pantau status proses sistem
+Icon[id]=pemantau-sistem-deepin
+Name[id]=Pemantau Sistem Deepin
 GenericName[id]=Pemantau Sistem

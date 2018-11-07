@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[zh_TW]=Deepin 系統監視器
-Icon[zh_TW]=deepin-system-monitor
 Comment[zh_TW]=監視與控制系統運作情形
+Icon[zh_TW]=deepin-system-monitor
+Name[zh_TW]=Deepin 系統監視器
 GenericName[zh_TW]=系統監視器

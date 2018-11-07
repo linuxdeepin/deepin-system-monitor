@@ -12,7 +12,7 @@ Type=Application
 
 
 # Translations
-Name[fr]=Moniteur système Deepin
-Icon[fr]=moniteur-système-deepin
 Comment[fr]=Surveiller le statut des processus système
+Icon[fr]=moniteur-système-deepin
+Name[fr]=Moniteur système Deepin
 GenericName[fr]=Moniteur système
