@@ -177,7 +177,12 @@ void ProcessManager::changeHoverItem(QPoint, DSimpleListItem* item, int columnIn
     ProcessItem *processItem = static_cast<ProcessItem*>(item);
 
     if (columnIndex != 0 || processItem->isNameDisplayComplete()) {
-        QToolTip::hideText();
+        QWidgetList qwl = QApplication::topLevelWidgets();
+        for (QWidget *qw : qwl) {
+            if (qw->metaObject()->className() == QStringLiteral("QTipLabel")) {
+                qw->close();
+            }
+        }
     } else {
         if (QToolTip::text() == processItem->getDisplayName()) {
             // QToolTip won't update position if tooltip text same as current one.
