@@ -1,3 +1,14 @@
+<a name="1.4.7"></a>
+## 1.4.7 (2018-11-09)
+
+
+#### Bug Fixes
+
+*   can not find some icons. ([9b5f6e32](https://github.com/linuxdeepin/deepin-system-monitor/commit/9b5f6e32dc76d4cc95e155efab5c7108ba8c5502))
+*   remove tooltip delay hiding. ([2491c04d](https://github.com/linuxdeepin/deepin-system-monitor/commit/2491c04dd90c351149ca47a9b2de929850aebfe8))
+
+
+
 <a name="1.4.6"></a>
 ### 1.4.6 (2018-08-12)
 
