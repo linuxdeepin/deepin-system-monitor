@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>Start time</source>
-        <translation>Tiempu d&apos;entamu</translation>
+        <translation>Data del aniciu</translation>
     </message>
 </context>
 <context>
@@ -25,11 +25,11 @@
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Llectura en discu</translation>
+        <translation>Llectura nel discu</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escritura en discu</translation>
+        <translation>Escritura nel discu</translation>
     </message>
 </context>
 <context>
@@ -51,7 +51,7 @@
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Descarga</translation>
+        <translation>Baxada</translation>
     </message>
     <message>
         <source>Total</source>
@@ -77,18 +77,18 @@
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Llectura en discu</translation>
+        <translation>Llectura nel discu</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escritura en discu</translation>
+        <translation>Escritura nel discu</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Forciar el zarru de l&apos;aplicación</translation>
+        <translation>Forciar el zarru d&apos;una aplicación</translation>
     </message>
     <message>
         <source>Dark theme</source>
@@ -96,12 +96,12 @@
     </message>
     <message>
         <source>End application</source>
-        <translation>Finar aplicación</translation>
+        <translation>Zarru de l&apos;aplicación</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure to continue?</source>
-        <translation>Finar esta aplicación podría causar perda de datos.
+        <translation>Zarrar esta aplicación podría causar una perda de datos.
 ¿De xuru que quies siguir?</translation>
     </message>
     <message>
@@ -136,7 +136,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>Descarga</translation>
+        <translation>Baxada</translation>
     </message>
     <message>
         <source>Total</source>
@@ -211,15 +211,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escritura en discu</translation>
+        <translation>Escritura nel discu</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Llectura en discu</translation>
+        <translation>Llectura nel discu</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Descarga</translation>
+        <translation>Baxada</translation>
     </message>
     <message>
         <source>Upload</source>
@@ -238,14 +238,14 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor del sistema Deepin</translation>
+        <translation>Deepin System Monitor</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor del sistema Deepin</translation>
+        <translation>Deepin System Monitor</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -253,27 +253,27 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Monitor del sistema Deepin - Escritoriu</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Escritoriu</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Monitor del sistema Deepin - Proxy de Polkit</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Proxy de Polkit</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Monitor del sistema Deepin - Llanzador</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Llanzador</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Monitor del sistema Deepin - Barra d&apos;anclaxe</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Barra d&apos;anclaxe</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Monitor del sistema Deepin - Pantalla</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Pantalla</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Monitor del sistema Deepin - Degorriu</translation>
+        <translation>Entornu d&apos;escritoriu Deepin - Degorriu</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
@@ -285,7 +285,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Degorriu del xestor Deepin de ficheros</translation>
+        <translation>Degorriu de Deepin File Manager</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
@@ -353,7 +353,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>X service</source>
-        <translation>Serviciu X</translation>
+        <translation>Serviciu de X</translation>
     </message>
     <message>
         <source>Fcitx input method</source>

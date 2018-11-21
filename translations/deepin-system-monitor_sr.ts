@@ -188,11 +188,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Особине</translation>
+        <translation>Својства</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 програма и %3 процеса у току</translation>
+        <translation>%2 програм(а) и %3 процеса у току</translation>
     </message>
 </context>
 <context>
@@ -261,7 +261,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Дипин Радно Окружење - Полетник</translation>
+        <translation>Дипин Радно Окружење - Покретач Програма</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
@@ -305,7 +305,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation type="unfinished"/>
+        <translation>Агент Дипин Штампања из Облака</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
@@ -381,7 +381,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation type="unfinished"/>
+        <translation>Контролер позадинског осветљења</translation>
     </message>
     <message>
         <source>System service manager</source>
@@ -425,7 +425,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation type="unfinished"/>
+        <translation>Контролер модема</translation>
     </message>
     <message>
         <source>System print tray service</source>
@@ -482,7 +482,7 @@ Are you sure to continue?</source>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Тражи</translation>
+        <translation>Претражи</translation>
     </message>
 </context>
 </TS>

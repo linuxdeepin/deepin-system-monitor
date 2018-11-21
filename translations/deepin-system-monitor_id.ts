@@ -110,7 +110,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Compact mode</translation>
+        <translation>Mode kompak</translation>
     </message>
 </context>
 <context>
@@ -475,7 +475,7 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Penampang</translation>
     </message>
 </context>
 <context>

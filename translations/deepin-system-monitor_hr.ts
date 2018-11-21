@@ -176,7 +176,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"/>
+        <translation>Suspendiraj proces</translation>
     </message>
     <message>
         <source>Resume process</source>
@@ -184,7 +184,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation type="unfinished"/>
+        <translation>Pogledaj lokaciju procesa</translation>
     </message>
     <message>
         <source>Properties</source>
@@ -238,14 +238,14 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation type="unfinished"/>
+        <translation>Deepin nadzor sustava</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation type="unfinished"/>
+        <translation>Deepin nadzor sustava</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -445,7 +445,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Nije omogućeno</translation>
     </message>
     <message>
         <source>Sogou input method</source>
@@ -463,15 +463,15 @@ Jeste li sigurni da želite nastaviti?</translation>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished"/>
+        <translation>Programi</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished"/>
+        <translation>Moji procesi</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished"/>
+        <translation>Svi procesi</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -482,7 +482,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Traži</translation>
     </message>
 </context>
 </TS>

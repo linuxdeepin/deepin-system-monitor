@@ -25,11 +25,11 @@
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Leitura em disco</translation>
+        <translation>Leitura no disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Gravação em disco</translation>
+        <translation>Escrita no disco</translation>
     </message>
 </context>
 <context>

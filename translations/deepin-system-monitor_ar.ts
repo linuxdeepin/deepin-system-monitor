@@ -475,7 +475,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>صينية النظام</translation>
     </message>
 </context>
 <context>
