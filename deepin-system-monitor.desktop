@@ -5,6 +5,7 @@ Exec=deepin-system-monitor
 GenericName=System Monitor
 Icon=deepin-system-monitor
 Name=Deepin System Monitor
+X-Deepin-Vendor=deepin
 Type=Application
 
 
