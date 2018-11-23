@@ -1,3 +1,13 @@
+<a name="1.4.8"></a>
+##  1.4.8 (2018-11-23)
+
+
+#### Features
+
+* **desktop:**  add deepin vendor. ([d48d0ad3](https://github.com/linuxdeepin/deepin-system-monitor/commit/d48d0ad34c9ed869b36e6df1fb23a448008a19c5))
+
+
+
 <a name="1.4.7"></a>
 ## 1.4.7 (2018-11-09)
 
