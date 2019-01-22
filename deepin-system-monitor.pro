@@ -5,9 +5,9 @@
 TEMPLATE = app
 TARGET = deepin-system-monitor
 INCLUDEPATH += $$PWD/nethogs/src/
-				
+
 CONFIG += link_pkgconfig
-CONFIG += c++11 
+CONFIG += c++11
 PKGCONFIG += xcb xcb-util dtkwidget dtkwm
 RESOURCES = deepin-system-monitor.qrc
 
@@ -75,7 +75,7 @@ SOURCES += src/main.cpp \
 	   src/chinese2pinyin.cpp \
 	   src/main_window.cpp \
 	   src/settings.cpp
-		   
+
 QT += core
 QT += widgets
 QT += gui
@@ -87,6 +87,11 @@ QT += dbus
 LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst -ldtkwm
+
+load(deepin_qt)
+host_sw_64: {
+    QMAKE_CXXFLAGS += -mieee
+}
 
 OBJECTS_DIR=out
 MOC_DIR=out
