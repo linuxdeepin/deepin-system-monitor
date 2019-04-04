@@ -6,3 +6,4 @@ build/
 !nethogs/Makefile
 *.user
 *.user.*
+.vscode/*
