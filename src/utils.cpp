@@ -528,16 +528,29 @@ namespace Utils {
 
     QString getFlatpakAppIcon(QString flatpakAppid)
     {
-        QProcess whichProcess;
+
         QString exec = "flatpak";
+
         QStringList params;
         params << "info";
         params << flatpakAppid;
+
+        // set the LANGUAGE env so that the output is fixed to be English,
+        // or below code may break in other locales like pt_BR.
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        env.insert("LANGUAGE", "en_US");
+
+        QProcess whichProcess;
+        whichProcess.setProcessEnvironment(env);
         whichProcess.start(exec, params);
         whichProcess.waitForFinished();
         QString output(whichProcess.readAllStandardOutput());
 
-        QDir flatpakDir = QDir(output.split("Location:")[1].split("\n")[0].simplified());
+        const QString dirPath = output.split("Location:")[1]\
+                                      .split("\n")[0]\
+                                      .simplified();
+
+        QDir flatpakDir = QDir(dirPath);
         flatpakDir.cd("export");
         flatpakDir.cd("share");
         flatpakDir.cd("icons");
@@ -545,7 +558,8 @@ namespace Utils {
         flatpakDir.cd("scalable");
         flatpakDir.cd("apps");
 
-        return flatpakDir.filePath(QString("%1.svg").arg(flatpakAppid.split("app/")[1].split("/")[0]));
+        const QString appID = flatpakAppid.split("app/")[1].split("/")[0];
+        return flatpakDir.filePath(QString("%1.svg").arg(appID));
     }
 
     bool fileExists(QString path)
