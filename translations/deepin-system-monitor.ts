@@ -110,7 +110,7 @@
     </message>
     <message>
         <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -191,7 +191,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

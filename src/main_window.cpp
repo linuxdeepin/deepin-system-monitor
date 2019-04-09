@@ -117,7 +117,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 
         killPid = -1;
 
-        killProcessDialog = new DDialog(QString(tr("End application")), QString(tr("Ending this application may cause data loss.\nAre you sure you want to continue?")), this);
+        killProcessDialog = new DDialog(QString(tr("End application")), QString(tr("Ending this application may cause data loss.\nAre you sure you want to continue?")), this);
         killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
         killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
         killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
