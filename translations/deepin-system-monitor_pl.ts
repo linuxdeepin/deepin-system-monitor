@@ -99,18 +99,17 @@
         <translation>Zakończ program</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Zakończenie działania tego programu może spowodować utratę danych.
-Czy na pewno chcesz kontynuować?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Tryb kompaktowy</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Czy na pewno chcesz kontynuować?</translation>
         <translation>Zakończ proces</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Zakończenie działania tego procesu może spowodować utratę danych.
-Czy na pewno chcesz kontynuować?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
@@ -193,6 +186,11 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>Uruchomionych programów: %2 i procesów: %3 </translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

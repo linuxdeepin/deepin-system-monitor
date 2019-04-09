@@ -40,7 +40,7 @@
     </message>
     <message>
         <source>Swap</source>
-        <translation>Troca</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -99,18 +99,17 @@
         <translation>Terminar aplicação</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Terminar esta aplicação poderá causar a perda de dados.
-Tem a certeza que pretende continuar?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Modo compacto</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -121,7 +120,7 @@ Tem a certeza que pretende continuar?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Troca</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -165,12 +164,6 @@ Tem a certeza que pretende continuar?</translation>
         <translation>Terminar processo</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Terminar este processo poderá causar a perda de dados.
-Tem a certeza que pretende continuar?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -193,6 +186,11 @@ Tem a certeza que pretende continuar?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplicações e %3 processos em execução</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -441,7 +439,7 @@ Tem a certeza que pretende continuar?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Troca</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -475,7 +473,7 @@ Tem a certeza que pretende continuar?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Bandeja</translation>
+        <translation>Área de notificação</translation>
     </message>
 </context>
 <context>

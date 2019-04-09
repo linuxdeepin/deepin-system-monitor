@@ -99,17 +99,16 @@
         <translation>סיום פעולת היישום</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>סיום היישום עשוי לגרום לאיבוד מידע.
-להמשיך?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
         <source>Compact mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>סיום התהליך</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>סיום התהליך עשוי לגרום לאיבוד מידע.
-להמשיך?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 יישומים ו־%3 תהליכים פעילים</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

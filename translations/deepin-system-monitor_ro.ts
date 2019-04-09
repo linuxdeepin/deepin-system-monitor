@@ -99,17 +99,16 @@
         <translation>Închide aplicația</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Închiderea acestei aplicații poate duce la pierderea de date
-Doriți să continuați?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Anulare</translation>
     </message>
     <message>
         <source>Compact mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -165,12 +164,6 @@ Doriți să continuați?</translation>
         <translation>Închidere proces</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Închiderea acestui proces poate duce la pierderea de date
-Doriți să continuați?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Anulare</translation>
     </message>
@@ -193,6 +186,11 @@ Doriți să continuați?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplicații și %3 procese rulează</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

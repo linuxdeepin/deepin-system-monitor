@@ -99,18 +99,17 @@
         <translation>Окончај програм</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Окончање овог програма може изазвати губитак података.
-Да ли желите да наставите?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Компактан режим</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>Окончај процес</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Окончање овог процеса може изазвати губитак података.
-Да ли желите да наставите?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 програм(а) и %3 процеса у току</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +295,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation type="unfinished"/>
+        <translation>Дипинов мењач Управника Прозора</translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -317,27 +315,27 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation type="unfinished"/>
+        <translation>Демон подударања прозора</translation>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation type="unfinished"/>
+        <translation>Демон подударања прозора ДБус услуга</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation type="unfinished"/>
+        <translation>ССХ агент</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Кориснички режим виртуалног датотечног демона</translation>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation type="unfinished"/>
+        <translation>Осигурач сервер за кориснички режим виртуалног датотечног демона</translation>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation type="unfinished"/>
+        <translation>Помоћни процес клијента Дипинове Продавнице</translation>
     </message>
     <message>
         <source>Network manager</source>
@@ -345,7 +343,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation type="unfinished"/>
+        <translation>PolicyKit ДБус услуга</translation>
     </message>
     <message>
         <source>File sharing service daemon</source>
@@ -353,23 +351,23 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>X service</source>
-        <translation>Икс сервис</translation>
+        <translation>Икс услуга</translation>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation type="unfinished"/>
+        <translation>Fcitx метод уноса</translation>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation type="unfinished"/>
+        <translation>Fcitx метод уноса ДБус демон</translation>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation type="unfinished"/>
+        <translation>Демон Sogou метода уноса</translation>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation type="unfinished"/>
+        <translation>ShadowSocks локални клијент</translation>
     </message>
     <message>
         <source>Sound service</source>
@@ -405,7 +403,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation type="unfinished"/>
+        <translation>Демон догађаја миша</translation>
     </message>
     <message>
         <source>DConf service</source>
@@ -413,11 +411,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation type="unfinished"/>
+        <translation>Демон Гномовог привеска</translation>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation type="unfinished"/>
+        <translation>Блутут демон</translation>
     </message>
     <message>
         <source>Power daemon</source>
@@ -429,15 +427,15 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation type="unfinished"/>
+        <translation>Услуга системске касете за штампање</translation>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation type="unfinished"/>
+        <translation>Преграда Хром прегледача</translation>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation type="unfinished"/>
+        <translation>Демон Синаптиксове додирне табле</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -449,7 +447,7 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation type="unfinished"/>
+        <translation>Sogou метод уноса</translation>
     </message>
 </context>
 <context>

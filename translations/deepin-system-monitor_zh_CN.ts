@@ -99,18 +99,18 @@
         <translation>结束应用</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>结束应用会有丢失数据的风险。
-您确定要结束选中的应用吗？</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>紧凑模式</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>结束应用会有丢失数据的风险。
+您确定要结束选中的应用吗？</translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,6 @@ Are you sure to continue?</source>
         <translation>结束进程</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>结束进程会有丢失数据的风险。
-您确定要结束选中的进程吗？</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -193,6 +187,12 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>正在运行%2个应用程序和%3个系统进程</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>结束进程会有丢失数据的风险。
+您确定要结束选中的进程吗？</translation>
     </message>
 </context>
 <context>

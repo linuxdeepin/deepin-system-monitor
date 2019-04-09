@@ -99,18 +99,17 @@
         <translation>Matikan aplikasi</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Mematikan aplikasi ini boleh menyebabkan kehilangan data.
-Anda pasti mahu teruskan?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Mod padat</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Anda pasti mahu teruskan?</translation>
         <translation>Matikan proses</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Mematikan proses ini boleh menyebabkan kehilangan data.
-Anda pasti mahu teruskan?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
@@ -193,6 +186,11 @@ Anda pasti mahu teruskan?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplikasi dan %3 proses masih berjalan</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

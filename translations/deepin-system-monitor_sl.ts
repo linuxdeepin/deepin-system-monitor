@@ -99,18 +99,17 @@
         <translation>Zapri program</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Zaprtje te aplikacije lahko povzroči izgubo podatkov.
-Res želite nadaljevati?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Kompaktni način</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Res želite nadaljevati?</translation>
         <translation>Končaj proces</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Če končate ta proces, lahko utrpite izgubo podatkov.
-Res želite nadaljevati?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
@@ -193,6 +186,11 @@ Res želite nadaljevati?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplikacij in %3 procesov v teku</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

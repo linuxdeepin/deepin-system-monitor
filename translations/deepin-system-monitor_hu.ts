@@ -99,18 +99,17 @@
         <translation>Alkalmazás leállítása</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Az alkalmazás leállítása adatvesztéshez vezethet.
-Biztos benne, hogy folytatja?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Kompakt méret</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Biztos benne, hogy folytatja?</translation>
         <translation>Folyamat leállítása</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>A folyamat leállítása adatvesztéshez vezethet.
-Biztos benne, hogy folytatja?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Mégse</translation>
     </message>
@@ -193,6 +186,11 @@ Biztos benne, hogy folytatja?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 alkalmazás és %3 folyamat fut</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
