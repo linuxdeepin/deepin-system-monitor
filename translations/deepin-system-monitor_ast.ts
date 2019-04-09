@@ -99,18 +99,17 @@
         <translation>Zarru de l&apos;aplicación</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Zarrar esta aplicación podría causar una perda de datos.
-¿De xuru que quies siguir?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Encaboxar</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Mou compautu</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>Finar procesu</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Finar esta aplicación podría causar perda de datos.
-¿De xuru que quies siguir?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Encaboxar</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplicaciones y %3 procesos tán n&apos;execución</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

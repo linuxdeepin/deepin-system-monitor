@@ -1,110 +1,110 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="mn" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Proceso pavadinimas</translation>
+        <translation>Процессын нэр</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Komandų eilutė</translation>
+        <translation>Коммандын мөр</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Paleidimo laikas</translation>
+        <translation>Эхлэх цаг</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Процессор</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation>Дискнээс унших</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation>Дискэнд бичих</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation>Санах ой</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Sukeitimų skaidinys</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Neįjungta</translation>
+        <translation>Идэвхжээгүй</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation>Татах</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Viso</translation>
+        <translation>Нийт</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation>Байршуулсан</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Процессор</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Diskas</translation>
+        <translation>Диск</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation>Дискнээс унших</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation>Дискэнд бичих</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Priverstinai sustabdyti programą</translation>
+        <translation>Програмыг хүчээр зогсоох</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tamsi tema</translation>
+        <translation>Бараан загвар</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Sustabdyti programą</translation>
+        <translation>Програмыг зогсоох</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Atsisakyti</translation>
+        <translation>Цуцлах</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Kompaktiška veiksena</translation>
+        <translation>Авсаархан горим</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
@@ -116,76 +116,76 @@ Are you sure you want to continue?</source>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation>Санах ой</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Sukeitimų skaidinys</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Neįjungta</translation>
+        <translation>Идэвхжээгүй</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Tinklas</translation>
+        <translation>Сүлжээ</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation>Татах</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Viso</translation>
+        <translation>Нийлбэр</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation>Байршуулах</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Nėra atsakymo</translation>
+        <translation>Хариу ирээгүй</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Pristabdyti</translation>
+        <translation>Түр зогсоох</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Užbaigti procesą</translation>
+        <translation>Процесс зогсоох</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Atsisakyti</translation>
+        <translation>Цуцлах</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Pristabdyti procesą</translation>
+        <translation>Процессыг түр зогсоох</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Pratęsti procesą</translation>
+        <translation>Процессыг үргэлжлүүлэх</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Žiūrėti proceso vietą</translation>
+        <translation>Процессын байршлыг харах</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Savybės</translation>
+        <translation>Шинж чанарууд</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>Veikia %2 programos ir %3 procesai</translation>
+        <translation>%2 програм, %3 процесс ажиллаж байна</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
@@ -197,31 +197,31 @@ Are you sure you want to continue?</source>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Pavadinimas</translation>
+        <translation>Нэр</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Процессор</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation>Санах ой</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation>Дискэнд бичих</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation>Дискнээс унших</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation>Татах</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation>Байршуулсан</translation>
     </message>
     <message>
         <source>PID</source>
@@ -232,255 +232,255 @@ Are you sure you want to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin sistemos monitorius yra intuityvus ir galingas sistemos monitorius. Jis gali stebėti proceso CPU, atminties, tinklo, disko ir kitas būsenas.</translation>
+        <translation>Дээпин системийн хяналт нь хялбархан хэрнээ хүчирхэг системийн хяналт юм. Энэ нь процесс, санах ой, процессор, сүлжээ, диск болон бусад зүйлийг хянах боломж олгодог.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin sistemos monitorius</translation>
+        <translation>Дээпин системийн хяналт</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin sistemos monitorius</translation>
+        <translation>Дээпин системийн хяналт</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin darbalaukio aplinka - Procesų inicijavimo paslauga</translation>
+        <translation>Дээпин дэлгэцийн орчин - Процесс хяналтын үйлчилгээ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin darbalaukio aplinka - Darbalaukis</translation>
+        <translation>Дээпин дэлгэцийн орчин - Дэлгэц</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin darbalaukio aplinka - Polkit įgaliotoji programa</translation>
+        <translation>Дээпин дэлгэцийн орчин - Полкит прокси</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin darbalaukio aplinka - Leistukas</translation>
+        <translation>Дээпин дэлгэцийн орчин - Эхлүүлэгч</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin darbalaukio aplinka - Dokas</translation>
+        <translation>Дээпин дэлгэцийн орчин - Байршуулагч</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin darbalaukio aplinka - Ekrano rodymas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin darbalaukio aplinka - Tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin darbalaukio aplinka - Seansų tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin darbalaukio aplinka - Seansų inicijavimo procesas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Deepin failų tvarkytuvės tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin darbalaukio aplinka - Ekrano užrakinimo paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin langų tvarkytuvė </translation>
+        <translation>Дээпин цонх зохицуулагч</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Deepin langų tvarkytuvės perjungiklis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Deepin notifikacijos</translation>
+        <translation>Дээпин мэдэгдэл</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin debesijos spausdinimo agentas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Deepin meniu paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Deepin parduotuvės tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Langų atitikimo tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Langų atitikimo tarnybos DBus paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH agentas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Naudotojo veiksenos virtualios failų sistemos tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Naudotojo veiksenos virtualios failų sistemos Fuse serverio tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Deepin parduotuvės pagalbinis procesas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Tinklo tvarkytuvė</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Failų bendrinimo paslaugos tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>X service</source>
-        <translation>X paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Fcitx įvesties metodas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx įvesties metodo DBus tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Sogou įvesties metodo tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>ShadowSocks vietinis klientas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Garso paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Spausdinimo tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Light monitoriaus tvarkytuvė</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Sistemos paslaugų tvarkytuvė</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Sistemos paslaugų tvarkytuvė - Įrenginio valdymo tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Disko tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Paskyros tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>DBus tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Pelės įvykių tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>DConf paslauga</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Gnome raktinės tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Bluetooth tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Energijos tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Modemo įrenginio tvarkytuvė</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Sistemos spausdinimo dėklo tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Chrome naršyklės smėliadėžė</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics jutiklinio kilimėlio įrenginio tarnyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Sukeitimų skaidinys</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Neįjungta</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation>Sogou įvesties metodas</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Spustelėkite ant programos, kurią norite sustabdyti</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Programos</translation>
+        <translation>Програмууд</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Mano procesai</translation>
+        <translation>Миний процессууд</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Visi procesai</translation>
+        <translation>Бүх процессууд</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Dėklas</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Paieška</translation>
+        <translation>Хайх</translation>
     </message>
 </context>
 </TS>

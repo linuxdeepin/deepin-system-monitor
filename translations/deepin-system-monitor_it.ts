@@ -99,18 +99,17 @@
         <translation>Chiudi app</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Terminare questa app potrebbe causare una perdita di dati.
-Sicuro di voler terminarla?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Modalità compatta</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Sicuro di voler terminarla?</translation>
         <translation>Termina processo</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Terminare questo processo potrebbe causare una perdita di dati.
-Sicuro di voler terminarlo?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
@@ -193,6 +186,11 @@ Sicuro di voler terminarlo?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 applicazioni e %3 processi in esecuzione</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

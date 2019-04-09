@@ -99,18 +99,17 @@
         <translation>Изключване на програмата</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Изключването на това приложение може да предизвика загуба на данни.
-Сигурен ли сте, че искате да продължите?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Отказ</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Компактен режим</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>Край на процес</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Изключването на този процес може да предизвика загуба на данни.
-Сигурен ли сте, че искате да продължите?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Отказ</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 програми и %3 процеса работят</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

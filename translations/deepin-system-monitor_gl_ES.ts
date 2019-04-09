@@ -99,18 +99,17 @@
         <translation>Pechar aplicación</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Pechar esta aplicación pode causar a perda de datos.
-Tes a certeza de quere continuar?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Modo compacto</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Tes a certeza de quere continuar?</translation>
         <translation>Rematar proceso</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Rematar este proceso pode causar a perda de datos.
-Tes a certeza de quere continuar?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -193,6 +186,11 @@ Tes a certeza de quere continuar?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplicacións e %3 procesos en execución</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

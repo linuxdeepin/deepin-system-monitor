@@ -99,17 +99,17 @@
         <translation>Uygulamayı sonlandır</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Bu uygulamayı sonlandırmak veri kaybına neden olabilir. Devam etmek istediğinize emin misiniz?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Sade kip</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -164,12 +164,6 @@ Are you sure to continue?</source>
         <translation>İşlemi sonlandır</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Bu işlemi sonlandırmak veri kaybına neden olabilir.
-Devam etmek istediğinize emin misiniz?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
@@ -192,6 +186,11 @@ Devam etmek istediğinize emin misiniz?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 uygulama ve %3 işlem çalışıyor</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
