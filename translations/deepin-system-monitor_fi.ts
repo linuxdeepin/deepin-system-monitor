@@ -109,7 +109,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Sovelluksen lopettaminen voi aiheuttaa tietojen häviämisen.
+Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
@@ -190,7 +191,8 @@ Are you sure you want to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Tämän prosessin lopettaminen voi aiheuttaa tietojen häviämistä.
+Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
@@ -287,19 +289,19 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin työpöytäympäristö - Lukitun näyttönpalvelu</translation>
+        <translation>Deepin työpöytäympäristö - Lukituksen palvelu</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin-ikkunanhallinta</translation>
+        <translation>Deepin ikkunanhallinta</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Deepin-ikkunanhallinnan vaihtaja</translation>
+        <translation>Deepin ikkunanhallinnan vaihtaja</translation>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Deepin-ilmoitus</translation>
+        <translation>Deepin ilmoitukset</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
@@ -307,7 +309,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Deepin-valikkopalvelu</translation>
+        <translation>Deepin valikkopalvelu</translation>
     </message>
     <message>
         <source>Deepin Store daemon</source>
@@ -323,7 +325,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH-agentti</translation>
+        <translation>SSH agentti</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
@@ -423,7 +425,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Modeemilaitehallinta</translation>
+        <translation>Modeemien laitehallinta</translation>
     </message>
     <message>
         <source>System print tray service</source>
