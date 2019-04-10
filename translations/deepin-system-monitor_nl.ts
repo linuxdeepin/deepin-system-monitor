@@ -109,7 +109,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Het beëindigen van deze applicatie kan gegevensverlies veroorzaken.
+Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
@@ -190,7 +191,8 @@ Are you sure you want to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
+Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
