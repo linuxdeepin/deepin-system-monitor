@@ -99,18 +99,17 @@
         <translation>Akhiri aplikasi</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Mengakhiri aplikasi ini mengakibatkan data hilang.
-Apakah Anda yakin ingin melanjutkan?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Mode kompak</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Apakah Anda yakin ingin melanjutkan?</translation>
         <translation>Akhiri proses</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Mengakhiri aplikasi ini mengakibatkan data hilang.
-Apakah Anda yakin ingin melanjutkan?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
@@ -193,6 +186,11 @@ Apakah Anda yakin ingin melanjutkan?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplikasi dan %3 proses sedang berjalan</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -1,110 +1,110 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ne" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="mn" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>प्रक्रियाको नाम</translation>
+        <translation>Процессын нэр</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>कमांड लाइन</translation>
+        <translation>Коммандын мөр</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>सुरु समय</translation>
+        <translation>Эхлэх цаг</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>सि.पी. यु</translation>
+        <translation>Процессор</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>डिस्क रिड</translation>
+        <translation>Дискнээс унших</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>डिस्क राइट</translation>
+        <translation>Дискэнд бичих</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>मेमोरी</translation>
+        <translation>Санах ой</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Идэвхжээгүй</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Татах</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Нийт</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Байршуулсан</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>Процессор</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Диск</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Дискнээс унших</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Дискэнд бичих</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation type="unfinished"/>
+        <translation>Програмыг хүчээр зогсоох</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation type="unfinished"/>
+        <translation>Бараан загвар</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation type="unfinished"/>
+        <translation>Програмыг зогсоох</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Цуцлах</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation type="unfinished"/>
+        <translation>Авсаархан горим</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
@@ -116,76 +116,76 @@ Are you sure you want to continue?</source>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Санах ой</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"/>
+        <translation>Идэвхжээгүй</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation type="unfinished"/>
+        <translation>Сүлжээ</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Татах</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Нийлбэр</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Байршуулах</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation type="unfinished"/>
+        <translation>Хариу ирээгүй</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>Түр зогсоох</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation type="unfinished"/>
+        <translation>Процесс зогсоох</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Цуцлах</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"/>
+        <translation>Процессыг түр зогсоох</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"/>
+        <translation>Процессыг үргэлжлүүлэх</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation type="unfinished"/>
+        <translation>Процессын байршлыг харах</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation type="unfinished"/>
+        <translation>Шинж чанарууд</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished"/>
+        <translation>%2 програм, %3 процесс ажиллаж байна</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
@@ -197,73 +197,73 @@ Are you sure you want to continue?</source>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Нэр</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>Процессор</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"/>
+        <translation>Санах ой</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Дискэнд бичих</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Дискнээс унших</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"/>
+        <translation>Татах</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"/>
+        <translation>Байршуулсан</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished"/>
+        <translation>PID</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин системийн хяналт нь хялбархан хэрнээ хүчирхэг системийн хяналт юм. Энэ нь процесс, санах ой, процессор, сүлжээ, диск болон бусад зүйлийг хянах боломж олгодог.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин системийн хяналт</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин системийн хяналт</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин дэлгэцийн орчин - Процесс хяналтын үйлчилгээ</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин дэлгэцийн орчин - Дэлгэц</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин дэлгэцийн орчин - Полкит прокси</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин дэлгэцийн орчин - Эхлүүлэгч</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин дэлгэцийн орчин - Байршуулагч</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
@@ -291,7 +291,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation type="unfinished"/>
+        <translation>Дээпин цонх зохицуулагч</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -299,7 +299,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation type="unfinished"/>
+        <translation>Дээпин мэдэгдэл</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
@@ -461,15 +461,15 @@ Are you sure you want to continue?</source>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished"/>
+        <translation>Програмууд</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished"/>
+        <translation>Миний процессууд</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished"/>
+        <translation>Бүх процессууд</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -480,7 +480,7 @@ Are you sure you want to continue?</source>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Хайх</translation>
     </message>
 </context>
 </TS>

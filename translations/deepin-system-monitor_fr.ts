@@ -99,18 +99,17 @@
         <translation>Arrêt de l&apos;application</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>L&apos;arrêt de cette application peut causer des pertes de données.
-Souhaitez-vous vraiment continuer ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Mode compacte</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>L&apos;arrêt de cette application peut causer des pertes de données. Souhaitez-vous vraiment continuer ?</translation>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Souhaitez-vous vraiment continuer ?</translation>
         <translation>Terminer le processus</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>L&apos;arrêt de ce processus peut causer des pertes de données.
-Souhaitez-vous vraiment continuer ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -193,6 +186,11 @@ Souhaitez-vous vraiment continuer ?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 applications et %3 processus sont en cours d&apos;exécution</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>L&apos;arrêt de ce traitement peut causer des pertes de données. Souhaitez-vous vraiment continuer ?</translation>
     </message>
 </context>
 <context>

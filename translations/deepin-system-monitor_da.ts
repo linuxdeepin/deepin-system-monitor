@@ -99,18 +99,17 @@
         <translation>Afslut program</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Afslutning af dette program kan medføre tab af data.
-Er du sikker på, at du vil fortsætte?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Kompakt tilstand</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Er du sikker på, at du vil fortsætte?</translation>
         <translation>Afslut proces</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Afslutning af denne proces kan forårsage tab af data.
-Er du sikker på, at du vil fortsætte?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
@@ -193,6 +186,11 @@ Er du sikker på, at du vil fortsætte?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 programmer og %3 processer kører</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

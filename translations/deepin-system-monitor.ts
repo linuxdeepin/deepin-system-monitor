@@ -101,16 +101,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Compact mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -166,11 +166,6 @@ Are you sure to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -192,6 +187,11 @@ Are you sure to continue?</source>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

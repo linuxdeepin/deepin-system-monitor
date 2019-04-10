@@ -99,17 +99,16 @@
         <translation>መተግበሪያ መጨረሻ</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>መተግበሪያውን ማቋረጥ የ ዳታ መጥፋት ሊያስከትል ይችላል:
-እርስዎ በ እርግጥ መቀጠል ይፈልጋሉ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
         <source>Compact mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>ሂደት መጨረሻ</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>ሂደቱን ማቋረጥ የ ዳታ መጥፋት ሊያስከትል ይችላል:
-እርስዎ በ እርግጥ መቀጠል ይፈልጋሉ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 መተግበሪያ እና %3 ሂደቶች እየሄዱ ነው</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -99,18 +99,17 @@
         <translation>إنهاء التطبيق</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>إنهاء هذا التطبيق قد يسبب فقدان البيانات.
-هل أنت متأكد من المتابعة؟</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>الوضع المدمج</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>إنهاء العملية</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>قد يؤدي إنهاء هذه العملية إلى فقدان البيانات
-هل أنت متأكد من المتابعة؟</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 من التطبيقات و %3 من العملبات قيد التشغيل</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

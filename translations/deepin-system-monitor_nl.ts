@@ -99,18 +99,18 @@
         <translation>Applicatie beëindigen</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Het beëindigen van deze applicatie kan gegevensverlies veroorzaken.
-Weet je zeker dat je door wilt gaan?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Compacte modus</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Het beëindigen van deze applicatie kan gegevensverlies veroorzaken.
+Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,6 @@ Weet je zeker dat je door wilt gaan?</translation>
         <translation>Proces beëindigen</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
-Weet je zeker dat je door wilt gaan?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -193,6 +187,12 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>Er worden %2 applicaties en %3 processen uitgevoerd</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
+Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>

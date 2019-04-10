@@ -99,18 +99,17 @@
         <translation>Ukončiť aplikáciu</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Ukončenie tejto aplikácie môže spôsobiť stratu údajov.
-Naozaj chcete pokračovať?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Kompaktný režim</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Naozaj chcete pokračovať?</translation>
         <translation>Ukončiť proces</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Ukončenie tohto procesu môže spôsobiť stratu údajov.
-Naozaj chcete pokračovať?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
@@ -193,6 +186,11 @@ Naozaj chcete pokračovať?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 aplikácie a %3 procesy sú spustené</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

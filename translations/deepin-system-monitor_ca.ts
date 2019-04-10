@@ -99,18 +99,18 @@
         <translation>Atura l&apos;aplicació</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Aturar aquesta aplicació pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Mode compacte</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Aturar aquesta aplicació pot causar pèrdua de dades.
+Segur que voleu continuar?</translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,6 @@ Segur que voleu continuar?</translation>
         <translation>Atura el procés</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Aturar aquest procés pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
@@ -193,6 +187,12 @@ Segur que voleu continuar?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>S&apos;executen %2 aplicacions i %3 processos.</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Aturar aquest procés pot causar pèrdua de dades.
+Segur que voleu continuar?</translation>
     </message>
 </context>
 <context>

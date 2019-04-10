@@ -99,18 +99,18 @@
         <translation>Sustabdyti programą</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Šio proceso užbaigimas gali sukelti duomenų praradimą?
-Ar tikrai norite tęsti?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Kompaktiška veiksena</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Šios programos darbo užbaigimas gali sukelti duomenų praradimą?
+Ar tikrai norite tęsti?</translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,6 @@ Ar tikrai norite tęsti?</translation>
         <translation>Užbaigti procesą</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Šio proceso užbaigimas gali sukelti duomenų praradimą?
-Ar tikrai norite tęsti?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
@@ -193,6 +187,12 @@ Ar tikrai norite tęsti?</translation>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>Veikia %2 programos ir %3 procesai</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Šio proceso užbaigimas gali sukelti duomenų praradimą?
+Ar tikrai norite tęsti?</translation>
     </message>
 </context>
 <context>

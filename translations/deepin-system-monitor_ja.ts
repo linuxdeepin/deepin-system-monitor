@@ -99,18 +99,17 @@
         <translation>アプリケーションを終了</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>このアプリケーションを終了させるとデータを失う可能性があります。
-本当に終了させますか？</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>コンパクトモード</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -165,12 +164,6 @@ Are you sure to continue?</source>
         <translation>プロセスを終了</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>このプロセスを終了させるとデータを失う可能性があります。
-本当に終了させますか？</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -193,6 +186,11 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 個のアプリケーションと %3 個のプロセスが実行中です</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -99,18 +99,18 @@
         <translation>Завершение работы приложения</translation>
     </message>
     <message>
-        <source>Ending this application may cause data loss.
-Are you sure to continue?</source>
-        <translation>Завершение работы этого приложения может привести к потере данных. 
-Вы уверены, что хотите продолжить?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
         <source>Compact mode</source>
         <translation>Компактный режим</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Завершение работы этого приложения может привести к потере данных.
+Вы уверены, что хотите продолжить?</translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,6 @@ Are you sure to continue?</source>
         <translation>Завершить процесс</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure to continue?</source>
-        <translation>Завершение этого процесса может привести к потере данных. 
-Вы уверены, что хотите продолжить?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -193,6 +187,12 @@ Are you sure to continue?</source>
     <message>
         <source>%2 applications and %3 processes are running</source>
         <translation>%2 приложений и %3 процессов выполняется</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>Завершение этого процесса может привести к потере данных.
+Вы уверены, что хотите продолжить?</translation>
     </message>
 </context>
 <context>
