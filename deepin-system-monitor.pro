@@ -88,8 +88,9 @@ LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst -ldtkwm
 
-load(deepin_qt)
+load(dtk_qmake)
 host_sw_64: {
+    QMAKE_CFLAGS += -mieee
     QMAKE_CXXFLAGS += -mieee
 }
 
