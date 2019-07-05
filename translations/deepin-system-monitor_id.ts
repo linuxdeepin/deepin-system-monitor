@@ -104,12 +104,13 @@
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Mode kompak</translation>
+        <translation>Mode sederhana</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Mengakhiri aplikasi ini mengakibatkan data hilang.
+Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
 </context>
 <context>
@@ -120,7 +121,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Tukar</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -190,7 +191,8 @@ Are you sure you want to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Mengakhiri aplikasi ini mengakibatkan data hilang.
+Apakah Anda yakin ingin melanjutkan?</translation>
     </message>
 </context>
 <context>
@@ -295,7 +297,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Pengalih Manajer Jendela Deepin </translation>
+        <translation>Manajer Pengalihan Jendela Deepin </translation>
     </message>
     <message>
         <source>Deepin notification</source>
@@ -439,7 +441,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Alihkan</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
