@@ -232,7 +232,7 @@ Are you sure you want to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin Moniteur Système est un logiciel de surveillance du système intuitif et puissant. Il peut surveiller le processeur, la mémoire, le réseau, le disque dur et autres.</translation>
+        <translation>Deepin System Monitor est un logiciel de surveillance du système intuitif et puissant. Il peut surveiller le processeur, la mémoire, le réseau, le disque dur et autres.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
@@ -247,39 +247,39 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Environnement de Bureau Deepin - Service d’initialisation de processus</translation>
+        <translation>Environnement de bureau Deepin - Service d’initialisation de processus</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Environnement de Bureau Deepin - Bureau</translation>
+        <translation>Environnement de bureau Deepin - Bureau</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Environnement de Bureau Deepin - Proxy polkit</translation>
+        <translation>Environnement de bureau Deepin - Proxy polkit</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Environnement de Bureau Deepin - Lançeur</translation>
+        <translation>Environnement de bureau Deepin - Lançeur</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Environnement de Bureau Deepin - Dock</translation>
+        <translation>Environnement de bureau Deepin - Dock</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Environnement de Bureau Deepin - Affichage d&apos;écran</translation>
+        <translation>Environnement de bureau Deepin - Affichage d&apos;écran</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Environnement de Bureau Deepin - Service</translation>
+        <translation>Environnement de bureau Deepin - Service</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Environnement de Bureau Deepin - Démon de session</translation>
+        <translation>Environnement de bureau Deepin - Démon de session</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Environnement de Bureau Deepin - Processus d’initialisation du démon</translation>
+        <translation>Environnement de bureau Deepin - Processus d’initialisation du démon</translation>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
@@ -287,11 +287,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Environnement de Bureau Deepin - Service de verrouillage d&apos;écran</translation>
+        <translation>Environnement de bureau Deepin - Service de verrouillage d&apos;écran</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Gestionnaire de Fenêtres Deepin</translation>
+        <translation>Gestionnaire de fenêtres Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -335,7 +335,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Processus d&apos;aide du client boutique Deepin</translation>
+        <translation>Processus d&apos;assistance du client Deepin Store</translation>
     </message>
     <message>
         <source>Network manager</source>

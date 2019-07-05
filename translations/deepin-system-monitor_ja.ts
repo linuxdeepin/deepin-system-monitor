@@ -201,7 +201,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"/>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -225,7 +225,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished"/>
+        <translation>PID</translation>
     </message>
 </context>
 <context>

@@ -1,229 +1,227 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Ім&apos;я процесу</translation>
+        <translation>Processnamn</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Командний рядок</translation>
+        <translation>Kommandorad</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Час початку</translation>
+        <translation>Starttid</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Читання диску</translation>
+        <translation>Diskläsning</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис диску</translation>
+        <translation>Diskskrivning</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Підкачка</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>Ej aktiverad</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>Nedladdning</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Загалом</translation>
+        <translation>Totalt</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>Uppladdning</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>CPU</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Диск</translation>
+        <translation>Disk</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Читання диску</translation>
+        <translation>Diskläsning</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис диску</translation>
+        <translation>Diskskrivning</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Примусово завершити програму</translation>
+        <translation>Tvinga avslutning</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Темна тема</translation>
+        <translation>Mörkt tema</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Завершити програму</translation>
+        <translation>Avsluta program</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Компактний режим</translation>
+        <translation>Kompaktläge</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Завершення цієї програми може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Підкачка</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>Ej aktiverad</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Мережа</translation>
+        <translation>Nätverk</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>Nedladdning</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Загалом</translation>
+        <translation>Totalt</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>Uppladdning</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Немає відповіді</translation>
+        <translation>Inget svar</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Призупинити</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Завершити процес</translation>
+        <translation>Avsluta process</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Скасувати</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Призупинити процес</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Відновити процес</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Переглянути місце розташування процесу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Властивості</translation>
+        <translation>Egenskaper</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 програм і %3 процесів запущено</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Завершення цього процесу може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Ім&apos;я</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>ЦП</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Пам&apos;ять</translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис диску</translation>
+        <translation>Diskskrivning</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Читання диску</translation>
+        <translation>Diskläsning</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Завантаження</translation>
+        <translation>Nedladdning</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Вивантаження</translation>
+        <translation>Uppladdning</translation>
     </message>
     <message>
         <source>PID</source>
@@ -234,255 +232,255 @@ Are you sure you want to continue?</source>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Системний Монітор Deepin - це інтуїтивно зрозумілий і потужний системний монітор. Він може контролювати процес ЦП, пам&apos;ять, мережу, диск і інший статус.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Системний Монітор Deepin</translation>
+        <translation>Deepin Systemövervakning</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Системний Монітор Deepin</translation>
+        <translation>Deepin Systemövervakning</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment - служба ініціації процесу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Стільниця</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit proxy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Launcher</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Док</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment - Екранний дисплей</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Демон</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Сесійний демон</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - процес ініціалізації сеансу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin File Manager daemon</source>
-        <translation>Демон Deepin File Manager</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Служба блокування екрану</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Менеджер вікон Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
-        <translation>Перемикач Менеджера Вікон Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin notification</source>
-        <translation>Повідомлення Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Агент Хмарного Друкування Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin menu service</source>
-        <translation>Сервіс меню Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Deepin Store daemon</source>
-        <translation>Демон Магазину Deepin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon</source>
-        <translation>Демон вікна відповідності</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Window match daemon DBus service</source>
-        <translation>Демон вікна відповідності DBus служби</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH агент</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
-        <translation>Демон віртуальної файлової системи в режимі користувача</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Демон запобіжного серверу віртуальної файлової системи користувацького режиму</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Helper process of Deepin Store client</source>
-        <translation>Допоміжний процес клієнта Deepin Store</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Network manager</source>
-        <translation>Менеджер мережі</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>PolicyKit DBus service</source>
-        <translation>Служба PolicyKit DBus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>File sharing service daemon</source>
-        <translation>Демон служби обміну файлами</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>X service</source>
-        <translation>Х сервіс</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method</source>
-        <translation>Метод вводу Fcitx</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fcitx input method DBus daemon</source>
-        <translation>Демон методу вводу Fcitx DBus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sogou input method daemon</source>
-        <translation>Демон методу введення Sogou</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>ShadowSocks local client</source>
-        <translation>Локальний клієнт ShadowSocks</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Звуковий сервіс</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Print daemon</source>
-        <translation>Демон друку</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Light display manager</source>
-        <translation>Дисплей з підсвічуванням</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager</source>
-        <translation>Менеджер системних служб</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System service manager - Device management daemon</source>
-        <translation>Менеджер системних служб - Демон керування пристроями</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk daemon</source>
-        <translation>Демон диску</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Account daemon</source>
-        <translation>Демон облікового запису</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DBus daemon</source>
-        <translation>Демон DBus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mouse event daemon</source>
-        <translation>Демон подій миші</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>DConf service</source>
-        <translation>Сервіс DConf</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Gnome keyring daemon</source>
-        <translation>Демон Gnome keyring</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bluetooth daemon</source>
-        <translation>Демон Bluetooth</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power daemon</source>
-        <translation>Демон живлення</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Modem device manager</source>
-        <translation>Диспетчер модемів</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System print tray service</source>
-        <translation>Обслуговування системного лотка</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chrome browser sandbox</source>
-        <translation>Пісочниця веб-переглядача Chrome</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Synaptics touchpad device daemon</source>
-        <translation>Демон демонтажу сенсорної панелі Synaptics</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Підкачка</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation>Ej aktiverad</translation>
     </message>
     <message>
         <source>Sogou input method</source>
-        <translation>Демон методу введення Sogou</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Натисніть програму, яку потрібно завершити</translation>
+        <translation>Klicka på programmet som du vill avsluta</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Програми</translation>
+        <translation>Program</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Мої процеси</translation>
+        <translation>Mina processer</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Всі процеси</translation>
+        <translation>Alla processer</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Лоток</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Пошук</translation>
+        <translation>Sök</translation>
     </message>
 </context>
 </TS>

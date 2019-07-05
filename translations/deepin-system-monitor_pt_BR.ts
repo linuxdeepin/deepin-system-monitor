@@ -7,29 +7,29 @@
     </message>
     <message>
         <source>Command line</source>
-        <translation>Comando</translation>
+        <translation>Linha de comando</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Início</translation>
+        <translation>Hora de início</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Processador</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Leitura do disco</translation>
+        <translation>Leitura de disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Gravação do disco</translation>
+        <translation>Escrita de disco</translation>
     </message>
 </context>
 <context>
@@ -66,7 +66,7 @@
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Processador</translation>
     </message>
 </context>
 <context>
@@ -77,22 +77,22 @@
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Leitura do disco</translation>
+        <translation>Leitura de disco</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Gravação do Disco</translation>
+        <translation>Escrita de Disco</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Forçar para encerrar aplicação</translation>
+        <translation>Forçar a finalização da aplicação</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tema Escuro</translation>
+        <translation>Tema escuro</translation>
     </message>
     <message>
         <source>End application</source>
@@ -109,8 +109,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Finalizar esta aplicação pode causar perda de dados.
-Quer realmente continuar?</translation>
+        <translation>Ao finalizar esta aplicação, poderá ocorrer perca de dados.
+Deseja continuar?</translation>
     </message>
 </context>
 <context>
@@ -178,7 +178,7 @@ Quer realmente continuar?</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Visualizar a localização do processo</translation>
+        <translation>Visualizar a local do processo</translation>
     </message>
     <message>
         <source>Properties</source>
@@ -203,7 +203,7 @@ Quer realmente continuar?</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Processador</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -211,11 +211,11 @@ Quer realmente continuar?</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Escrever disco</translation>
+        <translation>Escrita de disco</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Ler disco</translation>
+        <translation>Leitura de disco</translation>
     </message>
     <message>
         <source>Download</source>
@@ -227,25 +227,25 @@ Quer realmente continuar?</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>Identificação do Processo</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Monitor do Sistema é um intuitivo e poderoso monitor. Pode monitorar e analisar os processos da CPU, memória, rede, disco e outros status.</translation>
+        <translation>Monitor de Sistema é um intuitivo e poderoso monitor. Pode monitorar e analisar os processos da CPU, memória, rede, disco e outros status.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor do Sistema</translation>
+        <translation>Deepin Monitor de Sistema</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor do Sistema</translation>
+        <translation>Monitor de Sistema</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +293,7 @@ Quer realmente continuar?</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Gerenciador de Janelas</translation>
+        <translation>Deepin Gerenciador de Janelas</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -373,7 +373,7 @@ Quer realmente continuar?</translation>
     </message>
     <message>
         <source>Sound service</source>
-        <translation>Serviço de som</translation>
+        <translation>Serviço de áudio</translation>
     </message>
     <message>
         <source>Print daemon</source>
@@ -456,7 +456,7 @@ Quer realmente continuar?</translation>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Clique na aplicação que deseja finalizar</translation>
+        <translation>Clique no aplicativo que deseja finalizar</translation>
     </message>
 </context>
 <context>

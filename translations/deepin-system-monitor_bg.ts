@@ -109,7 +109,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Прекратяването на това приложение може да причини загуба на данни.
+Сигурни ли сте, че искате да продължите?</translation>
     </message>
 </context>
 <context>
@@ -190,7 +191,8 @@ Are you sure you want to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Прекратяването на този процес може да причини загуба на данни.
+Сигурни ли сте, че искате да продължите? </translation>
     </message>
 </context>
 <context>

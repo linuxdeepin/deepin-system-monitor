@@ -155,7 +155,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Обустави</translation>
+        <translation>Обустављено</translation>
     </message>
 </context>
 <context>

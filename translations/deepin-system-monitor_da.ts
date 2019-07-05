@@ -109,7 +109,8 @@
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Afslutning af programmet kan medføre tab af data.
+Er du sikker på, at du vil fortsætte?</translation>
     </message>
 </context>
 <context>
@@ -190,7 +191,8 @@ Are you sure you want to continue?</source>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Afslutning af processen kan forårsage tab af data.
+Er du sikker på, at du vil fortsætte?</translation>
     </message>
 </context>
 <context>

@@ -305,7 +305,7 @@ Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Bulut Yazdırma programı</translation>
+        <translation>Deepin Bulut Yazdırma istemci</translation>
     </message>
     <message>
         <source>Deepin menu service</source>
@@ -325,7 +325,7 @@ Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>SSH agent</source>
-        <translation>SSH programı</translation>
+        <translation>SSH istemci</translation>
     </message>
     <message>
         <source>User mode virtual file system daemon</source>
@@ -482,7 +482,7 @@ Devam etmek istediğinize emin misiniz?</translation>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Arama</translation>
+        <translation>Ara</translation>
     </message>
 </context>
 </TS>
