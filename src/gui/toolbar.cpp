@@ -21,41 +21,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "toolbar.h"
-#include "utils.h"
+#include <QAction>
 #include <QDebug>
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QKeyEvent>
-#include <QLabel>
-#include <QPushButton>
-#include <dthememanager.h>
-#include <DHiDPIHelper>
+#include <QTimer>
 
+#include <DButtonBox>
+#include <DSearchEdit>
+
+#include "constant.h"
+#include "toolbar.h"
+#include "utils.h"
+
+DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
-Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
+Toolbar::Toolbar(MainWindow *m, QWidget *parent)
+    : QWidget(parent)
+    , m_mainWindow(m)
 {
-    installEventFilter(this);   // add event filter
+    installEventFilter(this);  // add event filter
     setMouseTracking(true);    // make MouseMove can response
 
-    setFixedHeight(24);
+    setFixedHeight(36);
 
+    // =========layout=========
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(getQrcPath("logo_24.svg"));
-    QLabel *iconLabel = new QLabel();
-    iconLabel->setPixmap(iconPixmap);
+    // =========tab button=========
+    m_switchFuncTabBtnGrp = new DButtonBox();
+    m_switchFuncTabBtnGrp->setFixedWidth(240);
+    DButtonBoxButton *procBtn = new DButtonBoxButton(tr("Process"), m_switchFuncTabBtnGrp);
+    procBtn->setCheckable(true);
+    procBtn->setChecked(true);
+    DButtonBoxButton *svcBtn = new DButtonBoxButton(tr("Service"), m_switchFuncTabBtnGrp);
+    svcBtn->setCheckable(true);
+    QList<DButtonBoxButton *> list;
+    list << procBtn << svcBtn;
+    m_switchFuncTabBtnGrp->setButtonList(list, true);
 
+    connect(procBtn, &DButtonBoxButton::clicked, this, [=]() { Q_EMIT procTabButtonClicked(); });
+    connect(svcBtn, &DButtonBoxButton::clicked, this, [=]() { Q_EMIT serviceTabButtonClicked(); });
+
+    // =========search=========
     searchEdit = new DSearchEdit();
-    searchEdit->setFixedWidth(280);
+    searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(tr("Search"));
-    searchEdit->getLineEdit()->installEventFilter(this);
+    this->installEventFilter(this);
 
-    layout->addWidget(iconLabel);
-    layout->addSpacing(90);
+    layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
     layout->addStretch();
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
@@ -64,12 +81,11 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
     searchTimer->setSingleShot(true);
     connect(searchTimer, &QTimer::timeout, this, &Toolbar::handleSearch);
 
-    connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged, Qt::QueuedConnection);
+    connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged,
+            Qt::QueuedConnection);
 }
 
-Toolbar::~Toolbar()
-{
-}
+Toolbar::~Toolbar() {}
 
 bool Toolbar::eventFilter(QObject *obj, QEvent *event)
 {
@@ -81,7 +97,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
 
                 pressEsc();
             }
-        } else if (obj == searchEdit->getLineEdit()) {
+        } else if (obj == searchEdit) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Tab) {
                 pressTab();
@@ -112,7 +128,7 @@ void Toolbar::handleSearchTextChanged()
 void Toolbar::focusInput()
 {
     if (searchEdit->text() != "") {
-        searchEdit->getLineEdit()->setFocus();
+        searchEdit->setFocus();
     } else {
         searchEdit->setFocus();
     }

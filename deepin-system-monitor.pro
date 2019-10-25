@@ -21,60 +21,101 @@ CONFIG(debug, debug|release) {
   LIBS += -lasan
 }
 
+INCLUDEPATH += $$PWD/src/
+
 # Input
 HEADERS += src/utils.h \
-           src/toolbar.h \
-           src/cpu_monitor.h \
-           src/memory_monitor.h \
-           src/network_monitor.h \
-           src/disk_monitor.h \
-           src/compact_cpu_monitor.h \
-           src/compact_memory_monitor.h \
-           src/compact_network_monitor.h \
-           src/compact_disk_monitor.h \
-           src/network_traffic_filter.h \
-           src/status_monitor.h \
-           src/process_manager.h \
-           src/process_item.h \
-           src/process_view.h \
-           src/hashqstring.h \
-           src/find_window_title.h \
-           src/smooth_curve_generator.h \
-	   src/interactive_kill.h \
-	   src/start_tooltip.h \
-	   src/process_tree.h \
-	   src/process_switch_tab.h \
-	   src/attributes_dialog.h \
-	   src/constant.h \
-	   src/settings.h \
-	   src/chinese2pinyin.h \
-	   src/main_window.h
+        src/gui/toolbar.h \
+        src/cpu_monitor.h \
+        src/memory_monitor.h \
+        src/network_monitor.h \
+        src/disk_monitor.h \
+        src/compact_cpu_monitor.h \
+        src/compact_memory_monitor.h \
+        src/compact_network_monitor.h \
+        src/compact_disk_monitor.h \
+        src/network_traffic_filter.h \
+        src/status_monitor.h \
+        src/process_manager.h \
+        src/process_item.h \
+        src/process_view.h \
+        src/hashqstring.h \
+        src/find_window_title.h \
+        src/smooth_curve_generator.h \
+        src/interactive_kill.h \
+        src/start_tooltip.h \
+        src/process_tree.h \
+        src/process_switch_tab.h \
+        src/attributes_dialog.h \
+        src/constant.h \
+        src/settings.h \
+        src/chinese2pinyin.h \
+        src/dbus/systemd1_manager_interface.h \
+        src/dbus/systemd1_service_interface.h \
+        src/dbus/systemd1_unit_interface.h \
+        src/dbus/dbus_properties_interface.h \
+        src/dbus/dbus_common.h \
+        src/model/system_service_table_model.h \
+        src/model/system_service_sort_filter_proxy_model.h \
+        src/gui/system_service_table_view.h \
+        src/service/service_manager.h \
+        src/service/system_service_entry_data.h \
+        src/service/system_service_entry.h \
+    src/gui/main_window.h \
+    src/gui/system_service_page_widget.h \
+    src/gui/process_page_widget.h \
+    src/dbus/environment_file.h \
+    src/dbus/unit_file_info.h \
+    src/dbus/unit_info.h \
+    src/gui/system_service_item_delegate.h \
+    src/common/error_context.h \
+    src/gui/service_name_sub_input_dialog.h \
+    src/gui/ui_common.h
+
 SOURCES += src/main.cpp \
-	   src/utils.cpp \
-	   src/toolbar.cpp \
-	   src/cpu_monitor.cpp \
-	   src/memory_monitor.cpp \
-	   src/network_monitor.cpp \
-	   src/disk_monitor.cpp \
-	   src/compact_cpu_monitor.cpp \
-	   src/compact_memory_monitor.cpp \
-	   src/compact_network_monitor.cpp \
-	   src/compact_disk_monitor.cpp \
-	   src/network_traffic_filter.cpp \
-	   src/status_monitor.cpp \
-           src/process_manager.cpp \
-	   src/process_item.cpp \
-           src/process_view.cpp \
-	   src/find_window_title.cpp \
-	   src/smooth_curve_generator.cpp \
-	   src/interactive_kill.cpp \
-	   src/start_tooltip.cpp \
-	   src/process_tree.cpp \
-	   src/process_switch_tab.cpp \
-	   src/attributes_dialog.cpp \
-	   src/chinese2pinyin.cpp \
-	   src/main_window.cpp \
-	   src/settings.cpp
+        src/utils.cpp \
+        src/gui/toolbar.cpp \
+        src/cpu_monitor.cpp \
+        src/memory_monitor.cpp \
+        src/network_monitor.cpp \
+        src/disk_monitor.cpp \
+        src/compact_cpu_monitor.cpp \
+        src/compact_memory_monitor.cpp \
+        src/compact_network_monitor.cpp \
+        src/compact_disk_monitor.cpp \
+        src/network_traffic_filter.cpp \
+        src/status_monitor.cpp \
+        src/process_manager.cpp \
+        src/process_item.cpp \
+        src/process_view.cpp \
+        src/find_window_title.cpp \
+        src/smooth_curve_generator.cpp \
+        src/interactive_kill.cpp \
+        src/start_tooltip.cpp \
+        src/process_tree.cpp \
+        src/process_switch_tab.cpp \
+        src/attributes_dialog.cpp \
+        src/chinese2pinyin.cpp \
+        src/settings.cpp \
+        src/dbus/systemd1_manager_interface.cpp \
+        src/dbus/systemd1_service_interface.cpp \
+        src/dbus/systemd1_unit_interface.cpp \
+        src/dbus/dbus_properties_interface.cpp \
+        src/model/system_service_table_model.cpp \
+        src/model/system_service_sort_filter_proxy_model.cpp \
+        src/service/service_manager.cpp \
+        src/service/system_service_entry_data.cpp \
+        src/service/system_service_entry.cpp \
+        src/gui/system_service_table_view.cpp \
+    src/gui/main_window.cpp \
+    src/gui/system_service_page_widget.cpp \
+    src/gui/process_page_widget.cpp \
+    src/dbus/environment_file.cpp \
+    src/dbus/unit_file_info.cpp \
+    src/dbus/unit_info.cpp \
+    src/gui/system_service_item_delegate.cpp \
+    src/common/error_context.cpp \
+    src/gui/service_name_sub_input_dialog.cpp
 
 QT += core
 QT += widgets
@@ -82,6 +123,7 @@ QT += gui
 QT += network
 QT += x11extras
 QT += dbus
+QT += concurrent
 
 # QMAKE_CXXFLAGS += -g
 LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap

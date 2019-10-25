@@ -19,14 +19,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CONSTANT_H
 #define CONSTANT_H
 
 namespace Constant {
-    const int WINDOW_MIN_WIDTH = 900;
-    const int WINDOW_MIN_HEIGHT = 620;
-};
+const int WINDOW_MIN_WIDTH = 900;
+const int WINDOW_MIN_HEIGHT = 620;
+};  // namespace Constant
 
 #endif

@@ -21,27 +21,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "memory_monitor.h"
-#include "dthememanager.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
-#include <DHiDPIHelper>
+
+#include "constant.h"
+#include "dthememanager.h"
+#include "memory_monitor.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
+MemoryMonitor::MemoryMonitor(QWidget *parent)
+    : QWidget(parent)
 {
     iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_dark.svg"));
     iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_memory_light.svg"));
-
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &MemoryMonitor::changeTheme);
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
@@ -52,58 +52,50 @@ MemoryMonitor::MemoryMonitor(QWidget *parent) : QWidget(parent)
     usedSwap = 0;
     totalSwap = 0;
 
-
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start();
 
     setFixedHeight(120);
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MemoryMonitor::changeTheme);
 }
 
-MemoryMonitor::~MemoryMonitor()
+MemoryMonitor::~MemoryMonitor() {}
+
+void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-}
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+            memoryForegroundColor = "#FF2997";
+            memoryForegroundOpacity = 1;
+            memoryBackgroundColor = "#000000";
+            memoryBackgroundOpacity = 0.05;
 
-void MemoryMonitor::initTheme()
-{
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        numberColor = "#000000";
-        summaryColor = "#505050";
+            swapForegroundColor = "#00B4C7";
+            swapForegroundOpacity = 1;
+            swapBackgroundColor = "#000000";
+            swapBackgroundOpacity = 0.05;
 
-        memoryForegroundColor = "#FF2997";
-        memoryForegroundOpacity = 1;
-        memoryBackgroundColor = "#000000";
-        memoryBackgroundOpacity = 0.05;
+            iconImage = iconLightImage;
+            break;
+        case DApplicationHelper::DarkType:
+            memoryForegroundColor = "#FF2997";
+            memoryForegroundOpacity = 1;
+            memoryBackgroundColor = "#FF2997";
+            memoryBackgroundOpacity = 0.1;
 
-        swapForegroundColor = "#00B4C7";
-        swapForegroundOpacity = 1;
-        swapBackgroundColor = "#000000";
-        swapBackgroundOpacity = 0.05;
+            swapForegroundColor = "#00B4C7";
+            swapForegroundOpacity = 1;
+            swapBackgroundColor = "#00B4C7";
+            swapBackgroundOpacity = 0.1;
 
-        iconImage = iconLightImage;
-    } else {
-        textColor = "#ffffff";
-        numberColor = "#D4D4D4";
-        summaryColor = "#909090";
-
-        memoryForegroundColor = "#FF2997";
-        memoryForegroundOpacity = 1;
-        memoryBackgroundColor = "#FF2997";
-        memoryBackgroundOpacity = 0.1;
-
-        swapForegroundColor = "#00B4C7";
-        swapForegroundOpacity = 1;
-        swapBackgroundColor = "#00B4C7";
-        swapBackgroundOpacity = 0.1;
-
-        iconImage = iconDarkImage;
+            iconImage = iconDarkImage;
+            break;
+        default:
+            break;
     }
-}
-
-void MemoryMonitor::changeTheme(QString )
-{
-    initTheme();
 }
 
 void MemoryMonitor::render()
@@ -119,11 +111,8 @@ void MemoryMonitor::render()
 
 void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
 {
-    if ((uMemory != usedMemory) ||
-        (tMemory != totalMemory) ||
-        (uSwap != usedSwap) ||
-        (tSwap != totalSwap)
-        ) {
+    if ((uMemory != usedMemory) || (tMemory != totalMemory) || (uSwap != usedSwap) ||
+        (tSwap != totalSwap)) {
         prevUsedMemory = usedMemory;
         prevUsedSwap = usedSwap;
 
@@ -144,8 +133,10 @@ QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
     double sinValue = qSin((angle / 360.0) * 2 * M_PI);
     double cosValue = qCos((angle / 360.0) * 2 * M_PI);
 
-    int pointerX = rect().x() + ringCenterPointerX + static_cast<int>(r * cosValue) + static_cast<int>(pointerRadius * sinValue);
-    int pointerY = rect().y() + ringCenterPointerY - static_cast<int>(r * sinValue) + static_cast<int>(pointerRadius * cosValue);
+    int pointerX = rect().x() + ringCenterPointerX + static_cast<int>(r * cosValue) +
+                   static_cast<int>(pointerRadius * sinValue);
+    int pointerY = rect().y() + ringCenterPointerY - static_cast<int>(r * sinValue) +
+                   static_cast<int>(pointerRadius * cosValue);
 
     // I don't why this need adjust 1 pixel, it's weird.
     if (angle > 270) {
@@ -161,119 +152,116 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    double memoryPercent = Utils::filterInvalidNumber((prevUsedMemory + easeInOut(animationIndex / animationFrames) * (usedMemory - prevUsedMemory)) * 1.0 / totalMemory);
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color
+    textColor = palette.color(DPalette::Text);
+    numberColor = palette.color(DPalette::Text);
+    summaryColor = palette.color(DPalette::Text);
+
+    double memoryPercent =
+        Utils::filterInvalidNumber((prevUsedMemory + easeInOut(animationIndex / animationFrames) *
+                                                         (usedMemory - prevUsedMemory)) *
+                                   1.0 / totalMemory);
     double swapPercent;
     if (totalSwap == 0) {
         swapPercent = 0;
     } else {
-        swapPercent = (prevUsedSwap + easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) * 1.0 / totalSwap;
+        swapPercent = (prevUsedSwap +
+                       easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) *
+                      1.0 / totalSwap;
     }
 
     // Draw icon.
     painter.drawPixmap(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
 
     // Draw title.
-    QFont font = painter.font() ;
+    QFont font = painter.font();
     font.setPointSize(titleRenderSize);
     font.setWeight(QFont::Light);
     painter.setFont(font);
-    painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, tr("Memory"));
+    painter.setPen(QPen(textColor));
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(),
+                           rect().width() - titleRenderOffsetX, rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, tr("Memory"));
 
     // Draw memory summary.
     setFontSize(painter, memoryRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString memoryTitle = QString("%1 (%2%)").arg(tr("Memory")).arg(QString::number(memoryPercent * 100, 'f', 1));
-    QString memoryContent = QString("%1/%2").arg(formatByteCount(usedMemory)).arg(formatByteCount(totalMemory));
+    QString memoryTitle =
+        QString("%1 (%2%)").arg(tr("Memory")).arg(QString::number(memoryPercent * 100, 'f', 1));
+    QString memoryContent =
+        QString("%1/%2").arg(formatByteCount(usedMemory)).arg(formatByteCount(totalMemory));
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
         swapTitle = QString("%1 (%2)").arg(tr("Swap")).arg(tr("Not enabled"));
         swapContent = "";
     } else {
-        swapTitle = QString("%1 (%2%)").arg(tr("Swap")).arg(QString::number(swapPercent * 100, 'f', 1));
-        swapContent = QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
+        swapTitle =
+            QString("%1 (%2%)").arg(tr("Swap")).arg(QString::number(swapPercent * 100, 'f', 1));
+        swapContent =
+            QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
     }
 
-    painter.setPen(QPen(QColor(memoryColor)));
-    painter.setBrush(QBrush(QColor(memoryColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + memoryRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.setPen(QPen(memoryColor));
+    painter.setBrush(QBrush(memoryColor));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + memoryRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, memoryRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + memoryRenderPaddingX,
-                           rect().y() + memoryRenderPaddingY,
-                           fm.width(memoryTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     memoryTitle);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(QRect(rect().x() + memoryRenderPaddingX, rect().y() + memoryRenderPaddingY,
+                           fm.width(memoryTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, memoryTitle);
 
     setFontSize(painter, memoryRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + memoryRenderPaddingX,
-                           rect().y() + memoryRenderPaddingY + lineHeight,
-                           fm.width(memoryContent),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     memoryContent);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(
+        QRect(rect().x() + memoryRenderPaddingX, rect().y() + memoryRenderPaddingY + lineHeight,
+              fm.width(memoryContent), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, memoryContent);
 
     // Draw swap summary.
-    painter.setPen(QPen(QColor(swapColor)));
-    painter.setBrush(QBrush(QColor(swapColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + swapRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.setPen(QPen(swapColor));
+    painter.setBrush(QBrush(swapColor));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + swapRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, swapRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + swapRenderPaddingX,
-                           rect().y() + swapRenderPaddingY,
-                           fm.width(swapTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     swapTitle);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(QRect(rect().x() + swapRenderPaddingX, rect().y() + swapRenderPaddingY,
+                           fm.width(swapTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, swapTitle);
 
     setFontSize(painter, swapRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + swapRenderPaddingX,
-                           rect().y() + swapRenderPaddingY + lineHeight,
-                           fm.width(swapContent),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     swapContent);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(
+        QRect(rect().x() + swapRenderPaddingX, rect().y() + swapRenderPaddingY + lineHeight,
+              fm.width(swapContent), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, swapContent);
 
     // Draw memory ring.
-    drawLoadingRing(
-        painter,
-        rect().x() + ringCenterPointerX,
-        rect().y() + ringCenterPointerY,
-        outsideRingRadius,
-        ringWidth,
-        270,
-        270,
-        memoryForegroundColor, memoryForegroundOpacity,
-        memoryBackgroundColor, memoryBackgroundOpacity,
-        memoryPercent
-        );
+    drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
+                    outsideRingRadius, ringWidth, 270, 270, memoryForegroundColor,
+                    memoryForegroundOpacity, memoryBackgroundColor, memoryBackgroundOpacity,
+                    memoryPercent);
 
     // Draw swap ring.
-    drawLoadingRing(
-        painter,
-        rect().x() + ringCenterPointerX,
-        rect().y() + ringCenterPointerY,
-        insideRingRadius,
-        ringWidth,
-        270,
-        270,
-        swapForegroundColor, swapForegroundOpacity,
-        swapBackgroundColor, swapBackgroundOpacity,
-        swapPercent
-        );
-
+    drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
+                    insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
+                    swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, swapPercent);
 
     // Draw percent text.
     setFontSize(painter, memoryPercentRenderSize);
-    painter.setPen(QPen(QColor(numberColor)));
-    painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius, rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2, insideRingRadius * 2),
+    painter.setPen(QPen(numberColor));
+    painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius,
+                           rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
+                           insideRingRadius * 2),
                      Qt::AlignCenter,
                      QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
 }

@@ -21,46 +21,66 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <QDebug>
+
 #include "dthememanager.h"
 #include "process_switch_tab.h"
 #include "utils.h"
-#include <QDebug>
-#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
 ProcessSwitchTab::ProcessSwitchTab(int tabIndex)
 {
-    onlyGuiDarkNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_normal.svg"));
-    onlyGuiDarkHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_hover.svg"));
-    onlyGuiDarkActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_active.svg"));
-    onlyMeDarkNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_normal.svg"));
+    onlyGuiDarkNormalImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_normal.svg"));
+    onlyGuiDarkHoverImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_hover.svg"));
+    onlyGuiDarkActiveImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_dark_active.svg"));
+    onlyMeDarkNormalImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_normal.svg"));
     onlyMeDarkHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_hover.svg"));
-    onlyMeDarkActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_active.svg"));
-    allProcessDarkNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_normal.svg"));
-    allProcessDarkHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_hover.svg"));
-    allProcessDarkActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_active.svg"));
+    onlyMeDarkActiveImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_dark_active.svg"));
+    allProcessDarkNormalImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_normal.svg"));
+    allProcessDarkHoverImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_hover.svg"));
+    allProcessDarkActiveImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_dark_active.svg"));
 
-    onlyGuiLightNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_normal.svg"));
-    onlyGuiLightHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_hover.svg"));
-    onlyGuiLightActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_active.svg"));
-    onlyMeLightNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_normal.svg"));
-    onlyMeLightHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_hover.svg"));
-    onlyMeLightActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_active.svg"));
-    allProcessLightNormalImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_normal.svg"));
-    allProcessLightHoverImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_hover.svg"));
-    allProcessLightActiveImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_active.svg"));
-
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessSwitchTab::changeTheme);
+    onlyGuiLightNormalImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_normal.svg"));
+    onlyGuiLightHoverImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_hover.svg"));
+    onlyGuiLightActiveImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_gui_light_active.svg"));
+    onlyMeLightNormalImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_normal.svg"));
+    onlyMeLightHoverImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_hover.svg"));
+    onlyMeLightActiveImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("only_me_light_active.svg"));
+    allProcessLightNormalImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_normal.svg"));
+    allProcessLightHoverImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_hover.svg"));
+    allProcessLightActiveImage =
+        DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("all_process_light_active.svg"));
 
     activeIndex = tabIndex;
 
-    installEventFilter(this);   // add event filter
+    installEventFilter(this);  // add event filter
     setMouseTracking(true);    // make MouseMove can response
 
     setFixedSize(width * 3, height);
+
+    auto *pAppHelper = DApplicationHelper::instance();
+    connect(pAppHelper, &DApplicationHelper::themeTypeChanged, this,
+            &ProcessSwitchTab::changeTheme);
 }
 
 void ProcessSwitchTab::mouseMoveEvent(QMouseEvent *mouseEvent)
@@ -107,7 +127,9 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
     int penSize = 1;
 
     QPainterPath path;
-    path.addRoundedRect(QRect(rect().x() + penSize, rect().y() + penSize, rect().width() - penSize * 2, rect().height() - penSize * 2 - 1), 5, 5);
+    path.addRoundedRect(QRect(rect().x() + penSize, rect().y() + penSize,
+                              rect().width() - penSize * 2, rect().height() - penSize * 2 - 1),
+                        5, 5);
 
     QPen pen;
     pen.setColor(QColor(frameColor));
@@ -116,8 +138,10 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
     painter.setPen(pen);
     painter.drawPath(path);
 
-    painter.drawLine(rect().x() + width, rect().y() + penSize + 1, rect().x() + width, rect().y() + rect().height() - penSize * 2 - 1);
-    painter.drawLine(rect().x() + width * 2, rect().y() + penSize + 1, rect().x() + width * 2, rect().y() + rect().height() - penSize * 2 - 1);
+    painter.drawLine(rect().x() + width, rect().y() + penSize + 1, rect().x() + width,
+                     rect().y() + rect().height() - penSize * 2 - 1);
+    painter.drawLine(rect().x() + width * 2, rect().y() + penSize + 1, rect().x() + width * 2,
+                     rect().y() + rect().height() - penSize * 2 - 1);
 
     painter.setOpacity(1);
     for (int i = 0; i < 3; i++) {
@@ -151,7 +175,8 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
     }
 }
 
-void ProcessSwitchTab::leaveEvent(QEvent * event){
+void ProcessSwitchTab::leaveEvent(QEvent *event)
+{
     hoverIndex = -1;
 
     QWidget::leaveEvent(event);
@@ -159,39 +184,38 @@ void ProcessSwitchTab::leaveEvent(QEvent * event){
     repaint();
 }
 
-
-void ProcessSwitchTab::initTheme()
+void ProcessSwitchTab::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    if (DThemeManager::instance()->theme() == "light") {
-        frameColor = "#000000";
-        frameOpacity = 0.05;
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+            frameColor = "#000000";
+            frameOpacity = 0.05;
 
-        onlyGuiNormalImage = onlyGuiLightNormalImage;
-        onlyGuiHoverImage = onlyGuiLightHoverImage;
-        onlyGuiActiveImage = onlyGuiLightActiveImage;
-        onlyMeNormalImage = onlyMeLightNormalImage;
-        onlyMeHoverImage = onlyMeLightHoverImage;
-        onlyMeActiveImage = onlyMeLightActiveImage;
-        allProcessNormalImage = allProcessLightNormalImage;
-        allProcessHoverImage = allProcessLightHoverImage;
-        allProcessActiveImage = allProcessLightActiveImage;
-    } else {
-        frameColor = "#ffffff";
-        frameOpacity = 0.05;
+            onlyGuiNormalImage = onlyGuiLightNormalImage;
+            onlyGuiHoverImage = onlyGuiLightHoverImage;
+            onlyGuiActiveImage = onlyGuiLightActiveImage;
+            onlyMeNormalImage = onlyMeLightNormalImage;
+            onlyMeHoverImage = onlyMeLightHoverImage;
+            onlyMeActiveImage = onlyMeLightActiveImage;
+            allProcessNormalImage = allProcessLightNormalImage;
+            allProcessHoverImage = allProcessLightHoverImage;
+            allProcessActiveImage = allProcessLightActiveImage;
+            break;
+        case DApplicationHelper::DarkType:
+            frameColor = "#ffffff";
+            frameOpacity = 0.05;
 
-        onlyGuiNormalImage = onlyGuiDarkNormalImage;
-        onlyGuiHoverImage = onlyGuiDarkHoverImage;
-        onlyGuiActiveImage = onlyGuiDarkActiveImage;
-        onlyMeNormalImage = onlyMeDarkNormalImage;
-        onlyMeHoverImage = onlyMeDarkHoverImage;
-        onlyMeActiveImage = onlyMeDarkActiveImage;
-        allProcessNormalImage = allProcessDarkNormalImage;
-        allProcessHoverImage = allProcessDarkHoverImage;
-        allProcessActiveImage = allProcessDarkActiveImage;
+            onlyGuiNormalImage = onlyGuiDarkNormalImage;
+            onlyGuiHoverImage = onlyGuiDarkHoverImage;
+            onlyGuiActiveImage = onlyGuiDarkActiveImage;
+            onlyMeNormalImage = onlyMeDarkNormalImage;
+            onlyMeHoverImage = onlyMeDarkHoverImage;
+            onlyMeActiveImage = onlyMeDarkActiveImage;
+            allProcessNormalImage = allProcessDarkNormalImage;
+            allProcessHoverImage = allProcessDarkHoverImage;
+            allProcessActiveImage = allProcessDarkActiveImage;
+            break;
+        default:
+            break;
     }
-}
-
-void ProcessSwitchTab::changeTheme(QString )
-{
-    initTheme();
 }

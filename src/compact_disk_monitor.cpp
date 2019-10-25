@@ -21,26 +21,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "dthememanager.h"
-#include "compact_disk_monitor.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <QApplication>
 #include <QDebug>
 #include <QPainter>
-#include <QApplication>
-#include <DHiDPIHelper>
+
+#include "compact_disk_monitor.h"
+#include "constant.h"
+#include "dthememanager.h"
+#include "smooth_curve_generator.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-CompactDiskMonitor::CompactDiskMonitor(QWidget *parent) : QWidget(parent)
+CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
+    : QWidget(parent)
 {
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CompactDiskMonitor::changeTheme);
-
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     setFixedHeight(160);
@@ -62,22 +62,6 @@ CompactDiskMonitor::~CompactDiskMonitor()
 {
     delete readSpeeds;
     delete writeSpeeds;
-}
-
-void CompactDiskMonitor::initTheme()
-{
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        summaryColor = "#505050";
-    } else {
-        textColor = "#ffffff";
-        summaryColor = "#909090";
-    }
-}
-
-void CompactDiskMonitor::changeTheme(QString )
-{
-    initTheme();
 }
 
 void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
@@ -105,7 +89,8 @@ void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWri
         if (readMaxHeight < readRenderMaxHeight) {
             readPoints.append(QPointF(i * 5, readSpeeds->at(i)));
         } else {
-            readPoints.append(QPointF(i * 5, readSpeeds->at(i) * readRenderMaxHeight / readMaxHeight));
+            readPoints.append(
+                QPointF(i * 5, readSpeeds->at(i) * readRenderMaxHeight / readMaxHeight));
         }
     }
 
@@ -131,7 +116,8 @@ void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWri
         if (writeMaxHeight < writeRenderMaxHeight) {
             writePoints.append(QPointF(i * 5, writeSpeeds->at(i)));
         } else {
-            writePoints.append(QPointF(i * 5, writeSpeeds->at(i) * writeRenderMaxHeight / writeMaxHeight));
+            writePoints.append(
+                QPointF(i * 5, writeSpeeds->at(i) * writeRenderMaxHeight / writeMaxHeight));
         }
     }
 
@@ -145,12 +131,21 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color when UE ready
+    QColor textColor = palette.color(DPalette::Text);
+    QColor summaryColor = palette.color(DPalette::Text);
+    QColor readColor = "#1094D8";
+    QColor writeColor = "#F7B300";
+
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
     painter.setOpacity(0.1);
     framePen.setColor(QColor(textColor));
-    framePen.setWidth(0.5);
+    framePen.setWidth(1);
     painter.setPen(framePen);
 
     int penSize = 1;
@@ -170,7 +165,7 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     dashes << 5 << space;
     painter.setOpacity(0.05);
     gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(0.5);
+    gridPen.setWidth(1);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
@@ -196,31 +191,30 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(readColor)));
     painter.setBrush(QBrush(QColor(readColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + readRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + readRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, readRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + readRenderPaddingX,
-                           rect().y() + readRenderPaddingY,
-                           fm.width(readTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     readTitle);
+    painter.drawText(QRect(rect().x() + readRenderPaddingX, rect().y() + readRenderPaddingY,
+                           fm.width(readTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, readTitle);
 
     painter.setPen(QPen(QColor(writeColor)));
     painter.setBrush(QBrush(QColor(writeColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + writeRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + writeRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, writeRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + writeRenderPaddingX,
-                           rect().y() + writeRenderPaddingY,
-                           fm.width(writeTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     writeTitle);
+    painter.drawText(QRect(rect().x() + writeRenderPaddingX, rect().y() + writeRenderPaddingY,
+                           fm.width(writeTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, writeTitle);
 
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, readWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
+                      readWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();

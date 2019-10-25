@@ -21,24 +21,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dthememanager.h"
-#include "process_item.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DPalette>
 #include <QCollator>
 #include <QDebug>
 #include <QLocale>
+
 #include "chinese2pinyin.h"
+#include "dthememanager.h"
+#include "process_item.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 using namespace Pinyin;
 
-ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState)
+ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu,
+                         long processMemory, int processPid, QString processUser, char processState)
 {
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessItem::changeTheme);
+    changeTheme(DApplicationHelper::LightType);
 
     iconPixmap = processIcon;
     name = processName;
@@ -61,11 +63,14 @@ ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName
 
     diskStatus.readKbs = 0;
     diskStatus.writeKbs = 0;
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &ProcessItem::changeTheme);
 }
 
 bool ProcessItem::sameAs(DSimpleListItem *item)
 {
-    return pid == ((static_cast<ProcessItem*>(item)))->pid;
+    return pid == ((static_cast<ProcessItem *>(item)))->pid;
 }
 
 void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool)
@@ -74,196 +79,164 @@ void ProcessItem::drawBackground(QRect rect, QPainter *painter, int index, bool 
     QPainterPath path;
     path.addRect(QRectF(rect));
 
+    painter->setOpacity(1);
+
     // Draw selected effect.
     if (isSelect) {
-        painter->setOpacity(selectOpacity);
-        painter->fillPath(path, QColor(selectLineColor));
+        painter->fillPath(path, QBrush(selectLineColor));
     }
     // Draw background effect.
     else {
         // Use different opacity with item index.
         if (index % 2 == 0) {
-            painter->setOpacity(evenLineOpacity);
-            painter->fillPath(path, QColor(evenLineColor));
+            painter->fillPath(path, QBrush(evenLineColor));
         } else {
-            painter->setOpacity(oddLineOpacity);
-            painter->fillPath(path, QColor(oddLineColor));
+            painter->fillPath(path, QBrush(oddLineColor));
         }
     }
 }
 
-void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int, bool isSelect, bool)
+void ProcessItem::drawForeground(QRect rect, QPainter *painter, int column, int, bool isSelect,
+                                 bool)
 {
     // NOTE: Use 'SmoothPixmapTransform' for draw HiDPI icon, otherwise pixmap's edge is not smooth.
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-    
+
     // Init opacity and font size.
     painter->setOpacity(1);
 
     // Set font color with selected status.
     if (isSelect) {
-        painter->setPen(QPen(QColor("#ffffff")));
+        painter->setPen(QPen(selectedTextColor));
     } else {
-        painter->setPen(QPen(QColor(textColor)));
+        painter->setPen(QPen(textColor));
     }
 
     // Draw icon and process name.
     if (column == 0) {
         setFontSize(*painter, 10);
-        painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize), iconPixmap);
+        painter->drawPixmap(QRect(rect.x() + padding, rect.y() + (rect.height() - iconSize) / 2,
+                                  iconSize, iconSize),
+                            iconPixmap);
 
         QString name = displayName;
 
-        switch(state) {
-        case 'Z':
-            painter->setPen(QPen(QColor("#FF0056")));
-            name = QString("(%1) %2").arg(tr("No response")).arg(displayName);
-            break;
-        case 'T':
-            painter->setPen(QPen(QColor("#FFA500")));
-            name = QString("(%1) %2").arg(tr("Suspend")).arg(displayName);
-            break;
+        switch (state) {
+            case 'Z':
+                painter->setPen(QPen(QColor("#FF0056")));
+                name = QString("(%1) %2").arg(tr("No response")).arg(displayName);
+                break;
+            case 'T':
+                painter->setPen(QPen(QColor("#FFA500")));
+                name = QString("(%1) %2").arg(tr("Suspend")).arg(displayName);
+                break;
         }
 
-        if (isSelect) {
-            painter->setOpacity(1);
-        } else {
-            painter->setOpacity(textLeftOpacity);
-        }
-        
         int renderWidth = rect.width() - iconSize - padding * 3;
         QFont font = painter->font();
         QFontMetrics fm(font);
         QString renderName = fm.elidedText(name, Qt::ElideRight, renderWidth);
-        painter->drawText(QRect(rect.x() + iconSize + padding * 2, rect.y(), renderWidth, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, renderName);
-        
+        painter->drawText(
+            QRect(rect.x() + iconSize + padding * 2, rect.y(), renderWidth, rect.height()),
+            Qt::AlignLeft | Qt::AlignVCenter, renderName);
+
         displayNameComplete = fm.width(name) <= renderWidth;
     }
     // Draw CPU.
     else if (column == 1) {
-        if (isSelect) {
-            painter->setOpacity(1);
-        } else {
-            painter->setOpacity(textRightOpacity);
-        }
-
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1%").arg(QString::number(cpu, 'f', 1)));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()),
+                          Qt::AlignRight | Qt::AlignVCenter,
+                          QString("%1%").arg(QString::number(cpu, 'f', 1)));
     }
     // Draw memory.
     else if (column == 2) {
-        if (isSelect) {
-            painter->setOpacity(1);
-        } else {
-            painter->setOpacity(textRightOpacity);
-        }
-
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatByteCount(memory));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()),
+                          Qt::AlignRight | Qt::AlignVCenter, formatByteCount(memory));
     }
     // Draw write.
     else if (column == 3) {
         if (diskStatus.writeKbs > 0) {
-            if (isSelect) {
-                painter->setOpacity(1);
-            } else {
-                painter->setOpacity(textRightOpacity);
-            }
-
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()),
+                              Qt::AlignRight | Qt::AlignVCenter,
+                              QString("%1/s").arg(formatByteCount(diskStatus.writeKbs)));
         }
     }
     // Draw read.
     else if (column == 4) {
         if (diskStatus.readKbs > 0) {
-            if (isSelect) {
-                painter->setOpacity(1);
-            } else {
-                painter->setOpacity(textRightOpacity);
-            }
-            
             setFontSize(*painter, 9);
-            
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
+
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()),
+                              Qt::AlignRight | Qt::AlignVCenter,
+                              QString("%1/s").arg(formatByteCount(diskStatus.readKbs)));
         }
     }
     // Draw download.
     else if (column == 5) {
         if (networkStatus.recvKbs > 0) {
-            if (isSelect) {
-                painter->setOpacity(1);
-            } else {
-                painter->setOpacity(textRightOpacity);
-            }
-            
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.recvKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()),
+                              Qt::AlignRight | Qt::AlignVCenter,
+                              formatBandwidth(networkStatus.recvKbs));
         }
     }
     // Draw upload.
     else if (column == 6) {
         if (networkStatus.sentKbs > 0) {
-            if (isSelect) {
-                painter->setOpacity(1);
-            } else {
-                painter->setOpacity(textRightOpacity);
-            }
-
             setFontSize(*painter, 9);
-            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, formatBandwidth(networkStatus.sentKbs));
+            painter->drawText(QRect(rect.x(), rect.y(), rect.width() - textPadding, rect.height()),
+                              Qt::AlignRight | Qt::AlignVCenter,
+                              formatBandwidth(networkStatus.sentKbs));
         }
     }
     // Draw pid.
     else if (column == 7) {
-        if (isSelect) {
-            painter->setOpacity(1);
-        } else {
-            painter->setOpacity(textRightOpacity);
-        }
-
         setFontSize(*painter, 9);
-        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()), Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
+        painter->drawText(QRect(rect.x(), rect.y(), rect.width() - padding, rect.height()),
+                          Qt::AlignRight | Qt::AlignVCenter, QString("%1").arg(pid));
     }
 }
 
 bool ProcessItem::search(const DSimpleListItem *item, QString searchContent)
 {
-    const ProcessItem *processItem = static_cast<const ProcessItem*>(item);
+    const ProcessItem *processItem = static_cast<const ProcessItem *>(item);
     QString content = searchContent.toLower();
-    
+
     QString fullPinyinString = "";
     QString charPinyinString = "";
-    
+
     if (QLocale::system().name() == "zh_CN") {
         QString displayName = processItem->getDisplayName();
         QStringList pinyinList = Pinyin::splitChineseToPinyin(displayName);
         fullPinyinString = pinyinList.join("");
-    
+
         for (QString pinyin : pinyinList) {
             charPinyinString += pinyin[0];
         }
     }
-    
+
     return processItem->getName().toLower().contains(content) ||
-        processItem->getDisplayName().toLower().contains(content) ||
-        QString::number(processItem->getPid()).contains(content) ||
-        processItem->getUser().toLower().contains(content) || 
-        fullPinyinString.contains(content) || 
-        charPinyinString.contains(content);
+           processItem->getDisplayName().toLower().contains(content) ||
+           QString::number(processItem->getPid()).contains(content) ||
+           processItem->getUser().toLower().contains(content) ||
+           fullPinyinString.contains(content) || charPinyinString.contains(content);
 }
 
-bool ProcessItem::sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                            bool descendingSort)
 {
     // Init.
-    double cpu1 = (static_cast<const ProcessItem*>(item1))->getCPU();
-    double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+    double cpu1 = (static_cast<const ProcessItem *>(item1))->getCPU();
+    double cpu2 = (static_cast<const ProcessItem *>(item2))->getCPU();
     bool sortOrder;
 
     // Sort item with memory if cpu is same.
     if (cpu1 == cpu2) {
-        long memory1 = static_cast<const ProcessItem*>(item1)->getMemory();
-        long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
+        long memory1 = static_cast<const ProcessItem *>(item1)->getMemory();
+        long memory2 = (static_cast<const ProcessItem *>(item2))->getMemory();
 
         sortOrder = memory1 > memory2;
     }
@@ -275,37 +248,40 @@ bool ProcessItem::sortByCPU(const DSimpleListItem *item1, const DSimpleListItem 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByDiskRead(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByDiskRead(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                 bool descendingSort)
 {
     // Init.
-    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
-    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
+    DiskStatus status1 = (static_cast<const ProcessItem *>(item1))->getDiskStatus();
+    DiskStatus status2 = (static_cast<const ProcessItem *>(item2))->getDiskStatus();
     bool sortOrder = status1.readKbs > status2.readKbs;
 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByDiskWrite(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByDiskWrite(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                  bool descendingSort)
 {
     // Init.
-    DiskStatus status1 = (static_cast<const ProcessItem*>(item1))->getDiskStatus();
-    DiskStatus status2 = (static_cast<const ProcessItem*>(item2))->getDiskStatus();
+    DiskStatus status1 = (static_cast<const ProcessItem *>(item1))->getDiskStatus();
+    DiskStatus status2 = (static_cast<const ProcessItem *>(item2))->getDiskStatus();
     bool sortOrder = status1.writeKbs > status2.writeKbs;
 
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByMemory(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByMemory(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                               bool descendingSort)
 {
     // Init.
-    long memory1 = (static_cast<const ProcessItem*>(item1))->getMemory();
-    long memory2 = (static_cast<const ProcessItem*>(item2))->getMemory();
+    long memory1 = (static_cast<const ProcessItem *>(item1))->getMemory();
+    long memory2 = (static_cast<const ProcessItem *>(item2))->getMemory();
     bool sortOrder;
 
     // Sort item with cpu if memory is same.
     if (memory1 == memory2) {
-        double cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
-        double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+        double cpu1 = static_cast<const ProcessItem *>(item1)->getCPU();
+        double cpu2 = (static_cast<const ProcessItem *>(item2))->getCPU();
 
         sortOrder = cpu1 > cpu2;
     }
@@ -317,17 +293,18 @@ bool ProcessItem::sortByMemory(const DSimpleListItem *item1, const DSimpleListIt
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByName(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByName(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                             bool descendingSort)
 {
     // Init.
-    QString name1 = (static_cast<const ProcessItem*>(item1))->getDisplayName();
-    QString name2 = (static_cast<const ProcessItem*>(item2))->getDisplayName();
+    QString name1 = (static_cast<const ProcessItem *>(item1))->getDisplayName();
+    QString name2 = (static_cast<const ProcessItem *>(item2))->getDisplayName();
     bool sortOrder;
 
     // Sort item with cpu if name is same.
     if (name1 == name2) {
-        double cpu1 = static_cast<const ProcessItem*>(item1)->getCPU();
-        double cpu2 = (static_cast<const ProcessItem*>(item2))->getCPU();
+        double cpu1 = static_cast<const ProcessItem *>(item1)->getCPU();
+        double cpu2 = (static_cast<const ProcessItem *>(item2))->getCPU();
 
         sortOrder = cpu1 > cpu2;
     }
@@ -342,11 +319,12 @@ bool ProcessItem::sortByName(const DSimpleListItem *item1, const DSimpleListItem
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByNetworkDownload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByNetworkDownload(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                        bool descendingSort)
 {
     // Init.
-    NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
-    NetworkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
+    NetworkStatus status1 = (static_cast<const ProcessItem *>(item1))->getNetworkStatus();
+    NetworkStatus status2 = (static_cast<const ProcessItem *>(item2))->getNetworkStatus();
     bool sortOrder;
 
     // Sort item with download bytes if download speed is same.
@@ -361,11 +339,12 @@ bool ProcessItem::sortByNetworkDownload(const DSimpleListItem *item1, const DSim
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByNetworkUpload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByNetworkUpload(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                      bool descendingSort)
 {
     // Init.
-    NetworkStatus status1 = (static_cast<const ProcessItem*>(item1))->getNetworkStatus();
-    NetworkStatus status2 = (static_cast<const ProcessItem*>(item2))->getNetworkStatus();
+    NetworkStatus status1 = (static_cast<const ProcessItem *>(item1))->getNetworkStatus();
+    NetworkStatus status2 = (static_cast<const ProcessItem *>(item2))->getNetworkStatus();
     bool sortOrder;
 
     // Sort item with upload bytes if upload speed is same.
@@ -380,9 +359,11 @@ bool ProcessItem::sortByNetworkUpload(const DSimpleListItem *item1, const DSimpl
     return descendingSort ? sortOrder : !sortOrder;
 }
 
-bool ProcessItem::sortByPid(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+bool ProcessItem::sortByPid(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                            bool descendingSort)
 {
-    bool sortOrder = (static_cast<const ProcessItem*>(item1))->getPid() > (static_cast<const ProcessItem*>(item2))->getPid();
+    bool sortOrder = (static_cast<const ProcessItem *>(item1))->getPid() >
+                     (static_cast<const ProcessItem *>(item2))->getPid();
 
     return descendingSort ? sortOrder : !sortOrder;
 }
@@ -427,12 +408,13 @@ long ProcessItem::getMemory() const
     return memory;
 }
 
-bool ProcessItem::isNameDisplayComplete() 
+bool ProcessItem::isNameDisplayComplete()
 {
     return displayNameComplete;
 }
 
-void ProcessItem::mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus, NetworkStatus childNetworkStatus)
+void ProcessItem::mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus,
+                                NetworkStatus childNetworkStatus)
 {
     cpu += childCpu;
     memory += childMemory;
@@ -454,38 +436,14 @@ void ProcessItem::setNetworkStatus(NetworkStatus nStatus)
     networkStatus = nStatus;
 }
 
-void ProcessItem::initTheme()
+void ProcessItem::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    if (DThemeManager::instance()->theme() == "light") {
-        evenLineColor = "#000000";
-        evenLineOpacity = 0.02;
-        
-        oddLineColor = "#D8D8D8";
-        oddLineOpacity = 0.02;
-        
-        selectLineColor = "#2CA7F8";
-        selectOpacity = 1.0;
-        
-        textColor = "#303030";
-        textLeftOpacity = 1.0;
-        textRightOpacity = 0.8;
-    } else {
-        evenLineColor = "#D8D8D8";
-        evenLineOpacity = 0.02;
-        
-        oddLineColor = "#000000";
-        oddLineOpacity = 0.1;
-        
-        selectLineColor = "#006BBA";
-        selectOpacity = 0.8;
-        
-        textColor = "#ffffff";
-        textLeftOpacity = 0.6;
-        textRightOpacity = 0.5;
-    }
-}
-
-void ProcessItem::changeTheme(QString )
-{
-    initTheme();
+    Q_UNUSED(themeType);
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    textColor = palette.color(DPalette::Text);
+    evenLineColor = palette.color(DPalette::AlternateBase);
+    oddLineColor = palette.color(DPalette::Base);
+    selectLineColor = palette.color(DPalette::Highlight);
+    selectedTextColor = palette.color(DPalette::HighlightedText);
 }

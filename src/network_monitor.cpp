@@ -21,28 +21,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <QApplication>
+#include <QDebug>
+#include <QPainter>
+
 #include "constant.h"
 #include "dthememanager.h"
 #include "network_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
-#include <QDebug>
-#include <QPainter>
-#include <QApplication>
-#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
+NetworkMonitor::NetworkMonitor(QWidget *parent)
+    : QWidget(parent)
 {
     iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_dark.svg"));
     iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_light.svg"));
-
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &NetworkMonitor::changeTheme);
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
@@ -59,6 +59,9 @@ NetworkMonitor::NetworkMonitor(QWidget *parent) : QWidget(parent)
     for (int i = 0; i < pointsNumber; i++) {
         uploadSpeeds->append(0);
     }
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
 }
 
 NetworkMonitor::~NetworkMonitor()
@@ -67,24 +70,18 @@ NetworkMonitor::~NetworkMonitor()
     delete uploadSpeeds;
 }
 
-void NetworkMonitor::initTheme()
+void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        summaryColor = "#505050";
-
-        iconImage = iconLightImage;
-    } else {
-        textColor = "#ffffff";
-        summaryColor = "#909090";
-
-        iconImage = iconDarkImage;
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+            iconImage = iconLightImage;
+            break;
+        case DApplicationHelper::DarkType:
+            iconImage = iconDarkImage;
+            break;
+        default:
+            break;
     }
-}
-
-void NetworkMonitor::changeTheme(QString )
-{
-    initTheme();
 }
 
 void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs, float tSentKbs)
@@ -114,7 +111,8 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
         if (downloadMaxHeight < downloadRenderMaxHeight) {
             downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
         } else {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
+            downloadPoints.append(QPointF(
+                i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
         }
     }
 
@@ -140,7 +138,8 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
         if (uploadMaxHeight < uploadRenderMaxHeight) {
             uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
         } else {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
+            uploadPoints.append(
+                QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
         }
     }
 
@@ -154,23 +153,32 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color
+    textColor = palette.color(DPalette::Text);
+    summaryColor = palette.color(DPalette::Text);
+
     // Draw icon.
     painter.drawPixmap(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
 
     // Draw title.
-    QFont font = painter.font() ;
+    QFont font = painter.font();
     font.setPointSize(titleRenderSize);
     font.setWeight(QFont::Light);
     painter.setFont(font);
-    painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, tr("Network"));
+    painter.setPen(QPen(textColor));
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(),
+                           rect().width() - titleRenderOffsetX, rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, tr("Network"));
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
     painter.setOpacity(0.1);
-    framePen.setColor(QColor(textColor));
-    framePen.setWidth(0.5);
+    framePen.setColor(textColor);
+    framePen.setWidth(1);
     painter.setPen(framePen);
 
     int penSize = 1;
@@ -189,8 +197,8 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     qreal space = 3;
     dashes << 5 << space;
     painter.setOpacity(0.05);
-    gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(0.5);
+    gridPen.setColor(textColor);
+    gridPen.setWidth(1);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
@@ -211,57 +219,53 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fm = painter.fontMetrics();
 
     QString downloadTitle = QString("%1 %2").arg(tr("Download")).arg(formatBandwidth(totalRecvKbs));
-    QString downloadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
+    QString downloadContent =
+        QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
     QString uploadTitle = QString("%1 %2").arg(tr("Upload")).arg(formatBandwidth(totalSentKbs));
     QString uploadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalSentBytes));
     int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
 
     painter.setOpacity(1);
-    painter.setPen(QPen(QColor(downloadColor)));
-    painter.setBrush(QBrush(QColor(downloadColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.setPen(QPen(downloadColor));
+    painter.setBrush(QBrush(downloadColor));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + downloadRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, downloadRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
-                           rect().y() + downloadRenderPaddingY,
-                           fm.width(downloadTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     downloadTitle);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(QRect(rect().x() + downloadRenderPaddingX, rect().y() + downloadRenderPaddingY,
+                           fm.width(downloadTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, downloadTitle);
 
     setFontSize(painter, downloadRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
-                           rect().y() + downloadRenderPaddingY,
-                           fm.width(downloadContent),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     downloadContent);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(
+        QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
+              rect().y() + downloadRenderPaddingY, fm.width(downloadContent), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, downloadContent);
 
-    painter.setPen(QPen(QColor(uploadColor)));
-    painter.setBrush(QBrush(QColor(uploadColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
-
-    setFontSize(painter, uploadRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
-                           rect().y() + uploadRenderPaddingY,
-                           fm.width(uploadTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     uploadTitle);
+    painter.setPen(QPen(uploadColor));
+    painter.setBrush(QBrush(uploadColor));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + uploadRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, uploadRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
-                           rect().y() + uploadRenderPaddingY,
-                           fm.width(uploadContent),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     uploadContent);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(QRect(rect().x() + uploadRenderPaddingX, rect().y() + uploadRenderPaddingY,
+                           fm.width(uploadTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, uploadTitle);
 
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, downloadWaveformsRenderOffsetY + gridPaddingTop);
+    setFontSize(painter, uploadRenderSize);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(
+        QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
+              rect().y() + uploadRenderPaddingY, fm.width(uploadContent), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, uploadContent);
+
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
+                      downloadWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
@@ -269,14 +273,14 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     if (devicePixelRatio > 1) {
         networkCurveWidth = 2;
     }
-    painter.setPen(QPen(QColor(downloadColor), networkCurveWidth));
+    painter.setPen(QPen(downloadColor, networkCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(downloadPath);
 
     painter.translate(0, uploadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor(uploadColor), networkCurveWidth));
+    painter.setPen(QPen(uploadColor, networkCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(uploadPath);
 }

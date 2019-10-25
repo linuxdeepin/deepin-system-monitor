@@ -19,29 +19,51 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <mutex>
+#include <thread>
+
 #include <QSettings>
 
-class Settings : public QObject 
+class Settings : public QObject
 {
     Q_OBJECT
-    
+
 public:
-    Settings(QObject *parent = 0);
-    ~Settings();
-    QString configPath();
-    
+    inline static Settings *instance()
+    {
+        Settings *sin = m_instance.load();
+        if (!sin) {
+            std::lock_guard<std::mutex> lock(m_mutex);
+            sin = m_instance.load();
+            if (!sin) {
+                sin = new Settings();
+                m_instance.store(sin);
+            }
+        }
+        return sin;
+    }
+
+    static QString configPath();
     QVariant getOption(const QString &key);
     void init();
     void setOption(const QString &key, const QVariant &value);
-    
+    inline void flush() { m_settings->sync(); }
+
 private:
-    QSettings* settings;
-    QString groupName;
+    Settings(QObject *parent = nullptr);
+    ~Settings();
+    Q_DISABLE_COPY(Settings)
+
+    QSettings *m_settings;
+    QString m_groupName;
+
+    static std::atomic<Settings *> m_instance;
+    static std::mutex m_mutex;
 };
 
-#endif // SETTINGS_H
+#endif  // SETTINGS_H

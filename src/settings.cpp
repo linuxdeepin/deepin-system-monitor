@@ -19,42 +19,50 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
-#include "constant.h"
-#include "settings.h"
 #include <QApplication>
+#include <QDebug>
 #include <QDir>
 #include <QStandardPaths>
 
-Settings::Settings(QObject *parent) : QObject(parent)
+#include "constant.h"
+#include "gui/ui_common.h"
+#include "settings.h"
+
+std::atomic<Settings *> Settings::m_instance;
+std::mutex Settings::m_mutex;
+
+Settings::Settings(QObject *parent)
+    : QObject(parent)
 {
-    settings = new QSettings(QDir(configPath()).filePath("config.conf"), QSettings::IniFormat);
-    
-    groupName = "settings";
-    
+    m_settings = new QSettings(QDir(configPath()).filePath("config.conf"), QSettings::IniFormat);
+    m_groupName = "settings";
 }
 
 Settings::~Settings()
 {
-    delete settings;
+    m_settings->sync();
+    m_settings->deleteLater();
 }
 
 QString Settings::configPath()
 {
-    return QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName());
+    return QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first())
+                    .filePath(qApp->organizationName()))
+        .filePath(qApp->applicationName());
 }
 
 QVariant Settings::getOption(const QString &key)
 {
-    settings->beginGroup(groupName);
+    m_settings->beginGroup(m_groupName);
     QVariant result;
-    if (settings->contains(key)) {
-        result = settings->value(key);
+    if (m_settings->contains(key)) {
+        result = m_settings->value(key);
     } else {
         result = QVariant();
     }
-    settings->endGroup();
+    m_settings->endGroup();
 
     return result;
 }
@@ -64,27 +72,23 @@ void Settings::init()
     if (getOption("process_tab_index").isNull()) {
         setOption("process_tab_index", 0);
     }
-    
+
     if (getOption("process_columns").isNull()) {
         setOption("process_columns", "name,cpu,memory,download,upload,pid");
     }
-    
+
     if (getOption("process_sorting_column").isNull()) {
         setOption("process_sorting_column", "cpu");
     }
-    
+
     if (getOption("process_sorting_order").isNull()) {
         setOption("process_sorting_order", true);
     }
-    
-    if (getOption("compact_mode").isNull()) {
-        setOption("compact_mode", false);
+
+    if (getOption("display_mode").isNull()) {
+        setOption("display_mode", kDisplayModeCompact);
     }
-        
-    if (getOption("theme_style").isNull()) {
-        setOption("theme_style", "light");
-    }
-    
+
     if (getOption("window_width").isNull()) {
         setOption("window_width", Constant::WINDOW_MIN_WIDTH);
     }
@@ -94,11 +98,9 @@ void Settings::init()
     }
 }
 
-void Settings::setOption(const QString &key, const QVariant &value) {
-    settings->beginGroup(groupName);
-    settings->setValue(key, value);
-    settings->endGroup();
-
-    settings->sync();
+void Settings::setOption(const QString &key, const QVariant &value)
+{
+    m_settings->beginGroup(m_groupName);
+    m_settings->setValue(key, value);
+    m_settings->endGroup();
 }
-

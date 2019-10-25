@@ -19,56 +19,55 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef PROCESSMANAGER_H
 #define PROCESSMANAGER_H
 
-#include "ddialog.h"
-#include "process_switch_tab.h"
-#include "process_view.h"
-#include <QLabel>
+#include <proc/readproc.h>
+#include <DLabel>
 #include <QMap>
 #include <QMenu>
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
-#include <proc/readproc.h>
+
+#include "ddialog.h"
+#include "process_switch_tab.h"
+#include "process_view.h"
 
 DWIDGET_USE_NAMESPACE
 
 class ProcessManager : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     ProcessManager(int tabIndex, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder);
     ~ProcessManager();
-    
-    ProcessView* getProcessView();
-                     
+
+    ProcessView *getProcessView();
+
 signals:
     void activeTab(int index);
     void changeColumnVisible(int index, bool visible, QList<bool> columnVisibles);
     void changeSortingStatus(int index, bool sortingOrder);
-    
+
 public slots:
-    void changeTheme(QString theme);
     void dialogButtonClicked(int index, QString buttonText);
     void focusProcessView();
     void handleSearch(QString searchContent);
-    void changeHoverItem(QPoint pos, DSimpleListItem* item, int columnIndex);
-    void initTheme();
+    void changeHoverItem(QPoint pos, DSimpleListItem *item, int columnIndex);
     void killProcesses();
     void openProcessDirectory();
-    void popupMenu(QPoint pos, QList<DSimpleListItem*> items);
+    void popupMenu(QPoint pos, QList<DSimpleListItem *> items);
     void resumeProcesses();
     void showAttributes();
     void showKillProcessDialog();
     void stopProcesses();
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
-    void updateStatus(QList<DSimpleListItem*> items);
-    
+    void updateStatus(QList<DSimpleListItem *> items);
+
 private:
     DDialog *killProcessDialog;
     ProcessSwitchTab *processSwitchTab;
@@ -78,9 +77,9 @@ private:
     QAction *openDirectoryAction;
     QAction *pauseAction;
     QAction *resumeAction;
-    QLabel *statusLabel;
+    DLabel *statusLabel;
     QList<int> *actionPids;
-    QMenu *rightMenu;
+    DMenu *rightMenu;
 };
 
 #endif

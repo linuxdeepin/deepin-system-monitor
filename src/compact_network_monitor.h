@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef COMPACTNETWORKMONITOR_H
 #define COMPACTNETWORKMONITOR_H
@@ -29,28 +29,27 @@
 class CompactNetworkMonitor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    CompactNetworkMonitor(QWidget *parent = 0);
+    CompactNetworkMonitor(QWidget *parent = nullptr);
     ~CompactNetworkMonitor();
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
-    void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
-    
+    void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs,
+                      float totalSentKbs);
+
 protected:
     void paintEvent(QPaintEvent *event);
-    
+
 private:
     QList<double> *downloadSpeeds;
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;
     QPainterPath uploadPath;
-    QString downloadColor = "#55D500";
-    QString summaryColor;
-    QString textColor;
-    QString uploadColor = "#C362FF";
+    QColor downloadColor {"#55D500"};
+    QColor summaryColor;
+    QColor textColor;
+    QColor uploadColor = {"#C362FF"};
     float totalRecvKbs = 0;
     float totalSentKbs = 0;
     int downloadRenderMaxHeight = 50;
@@ -78,4 +77,4 @@ private:
     long totalSentBytes = 0;
 };
 
-#endif    
+#endif

@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef COMPACTCPUMONITOR_H
 #define COMPACTCPUMONITOR_H
@@ -29,24 +29,21 @@
 class CompactCpuMonitor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    CompactCpuMonitor(QWidget *parent = 0);
+    CompactCpuMonitor(QWidget *parent = nullptr);
     ~CompactCpuMonitor();
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
     void updateStatus(double totalCpuPercent, std::vector<double> cPercents);
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
-    
+
 private:
     QList<QList<double>> cpuPercents;
     QList<QPainterPath> cpuPaths;
     QList<QString> cpuColors;
-    QString textColor;
     int cpuRenderMaxHeight = 80;
     int cpuWaveformsRenderOffsetY = 112;
     int gridPaddingRight = 21;
@@ -57,15 +54,13 @@ private:
     int waveformRenderPadding = 20;
     int numCPU;
     double totalCpuPercent = 0;
-    
+
     int cpuTextRenderSize = 9;
-    QString cpuColor = "#1094D8";
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
     int cpuRenderPaddingX = 13;
     int cpuRenderPaddingY = 2;
     int pointerRadius = 3;
-    QString summaryColor;
 };
 
-#endif    
+#endif

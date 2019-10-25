@@ -19,29 +19,31 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef DISKMONITOR_H
 #define DISKMONITOR_H
 
+#include <DApplicationHelper>
 #include <QWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class DiskMonitor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    DiskMonitor(QWidget *parent = 0);
+    DiskMonitor(QWidget *parent = nullptr);
     ~DiskMonitor();
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
+    void changeTheme(DApplicationHelper::ColorType themeType);
     void updateStatus(unsigned long totalReadKbs, unsigned long totalWriteKbs);
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
-    
+
 private:
     QPixmap iconImage;
     QPixmap iconDarkImage;
@@ -50,10 +52,10 @@ private:
     QList<unsigned long> *writeSpeeds;
     QPainterPath readPath;
     QPainterPath writePath;
-    QString readColor = "#1094D8";
-    QString summaryColor;
-    QString textColor;
-    QString writeColor = "#F7B300";
+    QColor readColor {"#1094D8"};
+    QColor summaryColor;
+    QColor textColor;
+    QColor writeColor {"#F7B300"};
     unsigned long totalReadKbs = 0;
     unsigned long totalWriteKbs = 0;
     int readRenderMaxHeight = 50;
@@ -83,4 +85,4 @@ private:
     int waveformRenderPadding = 20;
 };
 
-#endif    
+#endif

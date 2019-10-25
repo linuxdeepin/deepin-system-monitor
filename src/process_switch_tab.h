@@ -19,35 +19,37 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef PROCESSSWITCHTAB_H
 #define PROCESSSWITCHTAB_H
 
+#include <DApplicationHelper>
 #include <QMouseEvent>
 #include <QWidget>
 
-class ProcessSwitchTab : public QWidget 
+DWIDGET_USE_NAMESPACE
+
+class ProcessSwitchTab : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     ProcessSwitchTab(int tabIndex);
-    
+
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
     void paintEvent(QPaintEvent *);
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
-    
+    void changeTheme(DApplicationHelper::ColorType themeType);
+
 signals:
     void activeTab(int index);
-    
+
 protected:
-    virtual void leaveEvent(QEvent * event);
-    
+    virtual void leaveEvent(QEvent *event);
+
 private:
     QPixmap allProcessActiveImage;
     QPixmap allProcessDarkActiveImage;
@@ -76,7 +78,7 @@ private:
     QPixmap onlyMeLightHoverImage;
     QPixmap onlyMeLightNormalImage;
     QPixmap onlyMeNormalImage;
-    QString frameColor;
+    QColor frameColor;
     double frameOpacity;
     int activeIndex = 0;
     int height = 24;
@@ -84,4 +86,4 @@ private:
     int width = 26;
 };
 
-#endif 
+#endif

@@ -21,81 +21,79 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "dthememanager.h"
 #include "compact_cpu_monitor.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <DStyleHelper>
+#include <QApplication>
 #include <QDebug>
 #include <QPainter>
-#include <QApplication>
-#include <DHiDPIHelper>
+
+#include "constant.h"
+#include "dthememanager.h"
+#include "smooth_curve_generator.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-CompactCpuMonitor::CompactCpuMonitor(QWidget *parent) : QWidget(parent)
+CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
+    : QWidget(parent)
 {
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CompactCpuMonitor::changeTheme);
-
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     setFixedHeight(160);
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
-    
-    numCPU = sysconf(_SC_NPROCESSORS_ONLN);
-    
+
+    numCPU = static_cast<int>(sysconf(_SC_NPROCESSORS_ONLN));
+
     for (int i = 0; i < numCPU; i++) {
         QList<double> cpuPercent;
         for (int j = 0; j < pointsNumber; j++) {
             cpuPercent.append(0);
         }
-        
+
         cpuPercents.append(cpuPercent);
     }
-    
-    cpuColors << "#1094D8" << "#F7B300" << "#55D500" << "#C362FF" << "#FF2997" << "#00B4C7" << "#F8E71C" << "#FB1818" << "#8544FF" << "#00D7AB" << "#00D7AB" << "#FF00FF" << "#30BF03" << "#7E41F1" << "#2CA7F8" << "#A005CE";
+
+    cpuColors << "#1094D8"
+              << "#F7B300"
+              << "#55D500"
+              << "#C362FF"
+              << "#FF2997"
+              << "#00B4C7"
+              << "#F8E71C"
+              << "#FB1818"
+              << "#8544FF"
+              << "#00D7AB"
+              << "#00D7AB"
+              << "#FF00FF"
+              << "#30BF03"
+              << "#7E41F1"
+              << "#2CA7F8"
+              << "#A005CE";
 }
 
-CompactCpuMonitor::~CompactCpuMonitor()
-{
-}
-
-void CompactCpuMonitor::initTheme()
-{
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        summaryColor = "#505050";
-    } else {
-        textColor = "#ffffff";
-        summaryColor = "#909090";
-    }
-}
-
-void CompactCpuMonitor::changeTheme(QString )
-{
-    initTheme();
-}
+CompactCpuMonitor::~CompactCpuMonitor() {}
 
 void CompactCpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPercents)
 {
     totalCpuPercent = cpuPercent;
-    
+
     for (unsigned int i = 0; i < cPercents.size(); i++) {
         QList<double> cpuPercent = cpuPercents[i];
-        
+
         cpuPercent.append(cPercents[i]);
-        
+
         if (cpuPercent.size() > pointsNumber) {
             cpuPercent.pop_front();
         }
-        
+
         cpuPercents[i] = cpuPercent;
-        
+
         QList<QPointF> readPoints;
 
         double readMaxHeight = 0;
@@ -109,18 +107,19 @@ void CompactCpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPer
             if (readMaxHeight < cpuRenderMaxHeight) {
                 readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
             } else {
-                readPoints.append(QPointF(i * 5, cpuPercent.at(i) * cpuRenderMaxHeight / readMaxHeight));
+                readPoints.append(
+                    QPointF(i * 5, cpuPercent.at(i) * cpuRenderMaxHeight / readMaxHeight));
             }
         }
 
         QPainterPath cpuPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
-        if ((unsigned int) cpuPaths.size() <= i) {
+        if ((unsigned int)cpuPaths.size() <= i) {
             cpuPaths.append(cpuPath);
         } else {
             cpuPaths[i] = cpuPath;
         }
     }
-    
+
     repaint();
 }
 
@@ -129,32 +128,40 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color
+    QColor textColor = palette.color(DPalette::Text);
+    QColor cpuColor = palette.color(DPalette::Text);
+    QColor summaryColor = palette.color(DPalette::Text);
+
     // Draw cpu summary.
     setFontSize(painter, cpuTextRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString readTitle = QString("%1 %2%").arg(tr("CPU")).arg(QString::number(totalCpuPercent, 'f', 1));
-    
+    QString readTitle =
+        QString("%1 %2%").arg(tr("CPU")).arg(QString::number(totalCpuPercent, 'f', 1));
+
     painter.setOpacity(1);
-    painter.setPen(QPen(QColor(cpuColor)));
+    painter.setPen(QPen(textColor));
     painter.setBrush(QBrush(QColor(cpuColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + cpuRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + cpuRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, cpuTextRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + cpuRenderPaddingX,
-                           rect().y() + cpuRenderPaddingY,
-                           fm.width(readTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     readTitle);
+    painter.drawText(QRect(rect().x() + cpuRenderPaddingX, rect().y() + cpuRenderPaddingY,
+                           fm.width(readTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, readTitle);
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
     painter.setOpacity(0.1);
     framePen.setColor(QColor(textColor));
-    framePen.setWidth(0.5);
+    framePen.setWidth(1);
     painter.setPen(framePen);
 
     int penSize = 1;
@@ -164,7 +171,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     int gridHeight = cpuRenderMaxHeight + waveformRenderPadding;
 
     QPainterPath framePath;
-    painter.setBrush(QBrush()); // clear brush to got transparent background
+    painter.setBrush(QBrush());  // clear brush to got transparent background
     framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
     painter.drawPath(framePath);
 
@@ -175,7 +182,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     dashes << 5 << space;
     painter.setOpacity(0.05);
     gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(0.5);
+    gridPen.setWidth(1);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
@@ -192,7 +199,8 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.setOpacity(1);
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, cpuWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
+                      cpuWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
@@ -200,7 +208,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     if (devicePixelRatio > 1) {
         diskCurveWidth = 2;
     }
-    
+
     for (int i = cpuPaths.size() - 1; i >= 0; i--) {
         int colorIndex;
         if (cpuPaths.size() > cpuColors.size()) {
@@ -208,7 +216,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         } else {
             colorIndex = i;
         }
-        
+
         painter.setPen(QPen(QColor(cpuColors[colorIndex]), diskCurveWidth));
         painter.setBrush(QBrush());
         painter.drawPath(cpuPaths[i]);

@@ -19,29 +19,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef NETWORKMONITOR_H
 #define NETWORKMONITOR_H
 
+#include <DApplicationHelper>
 #include <QWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class NetworkMonitor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    NetworkMonitor(QWidget *parent = 0);
+    NetworkMonitor(QWidget *parent = nullptr);
     ~NetworkMonitor();
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
-    void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
-    
+    void changeTheme(DApplicationHelper::ColorType themeType);
+    void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs,
+                      float totalSentKbs);
+
 protected:
     void paintEvent(QPaintEvent *event);
-    
+
 private:
     QPixmap iconImage;
     QPixmap iconDarkImage;
@@ -50,10 +53,12 @@ private:
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;
     QPainterPath uploadPath;
-    QString downloadColor = "#55D500";
-    QString summaryColor;
-    QString textColor;
-    QString uploadColor = "#C362FF";
+
+    QColor downloadColor = "#55D500";
+    QColor summaryColor;
+    QColor textColor;
+    QColor uploadColor = "#C362FF";
+
     float totalRecvKbs = 0;
     float totalSentKbs = 0;
     int downloadRenderMaxHeight = 50;
@@ -85,4 +90,4 @@ private:
     long totalSentBytes = 0;
 };
 
-#endif    
+#endif

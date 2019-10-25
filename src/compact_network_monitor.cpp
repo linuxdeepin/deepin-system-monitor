@@ -21,26 +21,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "dthememanager.h"
 #include "compact_network_monitor.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <QApplication>
 #include <QDebug>
 #include <QPainter>
-#include <QApplication>
-#include <DHiDPIHelper>
+
+#include "constant.h"
+#include "dthememanager.h"
+#include "smooth_curve_generator.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent) : QWidget(parent)
+CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
+    : QWidget(parent)
 {
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CompactNetworkMonitor::changeTheme);
-
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     setFixedHeight(160);
@@ -64,23 +64,8 @@ CompactNetworkMonitor::~CompactNetworkMonitor()
     delete uploadSpeeds;
 }
 
-void CompactNetworkMonitor::initTheme()
-{
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        summaryColor = "#505050";
-    } else {
-        textColor = "#ffffff";
-        summaryColor = "#909090";
-    }
-}
-
-void CompactNetworkMonitor::changeTheme(QString )
-{
-    initTheme();
-}
-
-void CompactNetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs, float tSentKbs)
+void CompactNetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs,
+                                         float tSentKbs)
 {
     totalRecvBytes = tRecvBytes;
     totalSentBytes = tSentBytes;
@@ -107,7 +92,8 @@ void CompactNetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float
         if (downloadMaxHeight < downloadRenderMaxHeight) {
             downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
         } else {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
+            downloadPoints.append(QPointF(
+                i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
         }
     }
 
@@ -133,7 +119,8 @@ void CompactNetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float
         if (uploadMaxHeight < uploadRenderMaxHeight) {
             uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
         } else {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
+            uploadPoints.append(
+                QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
         }
     }
 
@@ -147,12 +134,18 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color
+    textColor = palette.color(DPalette::Text);
+    summaryColor = palette.color(DPalette::Text);
+
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
     painter.setOpacity(0.1);
     framePen.setColor(QColor(textColor));
-    framePen.setWidth(0.5);
+    framePen.setWidth(1);
     painter.setPen(framePen);
 
     int penSize = 1;
@@ -172,7 +165,7 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     dashes << 5 << space;
     painter.setOpacity(0.05);
     gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(0.5);
+    gridPen.setWidth(1);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
@@ -193,7 +186,8 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fm = painter.fontMetrics();
 
     QString downloadTitle = QString("%1 %2").arg(tr("Download")).arg(formatBandwidth(totalRecvKbs));
-    QString downloadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
+    QString downloadContent =
+        QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
     QString uploadTitle = QString("%1 %2").arg(tr("Upload")).arg(formatBandwidth(totalSentKbs));
     QString uploadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalSentBytes));
     int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
@@ -201,49 +195,44 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(downloadColor)));
     painter.setBrush(QBrush(QColor(downloadColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + downloadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + downloadRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, downloadRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + downloadRenderPaddingX,
-                           rect().y() + downloadRenderPaddingY,
-                           fm.width(downloadTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     downloadTitle);
+    painter.drawText(QRect(rect().x() + downloadRenderPaddingX, rect().y() + downloadRenderPaddingY,
+                           fm.width(downloadTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, downloadTitle);
 
     setFontSize(painter, downloadRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
-                           rect().y() + downloadRenderPaddingY,
-                           fm.width(downloadContent),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     downloadContent);
+    painter.drawText(
+        QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
+              rect().y() + downloadRenderPaddingY, fm.width(downloadContent), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, downloadContent);
 
     painter.setPen(QPen(QColor(uploadColor)));
     painter.setBrush(QBrush(QColor(uploadColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + uploadRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + uploadRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, uploadRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + uploadRenderPaddingX,
-                           rect().y() + uploadRenderPaddingY,
-                           fm.width(uploadTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     uploadTitle);
+    painter.drawText(QRect(rect().x() + uploadRenderPaddingX, rect().y() + uploadRenderPaddingY,
+                           fm.width(uploadTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, uploadTitle);
 
     setFontSize(painter, uploadRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
-                           rect().y() + uploadRenderPaddingY,
-                           fm.width(uploadContent),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     uploadContent);
+    painter.drawText(
+        QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
+              rect().y() + uploadRenderPaddingY, fm.width(uploadContent), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, uploadContent);
 
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, downloadWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
+                      downloadWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();

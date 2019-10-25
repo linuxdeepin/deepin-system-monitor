@@ -19,14 +19,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef PROCESSITEM_H
 #define PROCESSITEM_H
 
-#include <DSimpleListItem>
-#include "utils.h"
 #include <proc/readproc.h>
+#include <DApplicationHelper>
+#include <DSimpleListItem>
+
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -35,24 +37,34 @@ using namespace Utils;
 class ProcessItem : public DSimpleListItem
 {
     Q_OBJECT
-    
+
 public:
-    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu, long processMemory, int processPid, QString processUser, char processState);
-    
+    ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu,
+                long processMemory, int processPid, QString processUser, char processState);
+
     bool sameAs(DSimpleListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover);
-    void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover);
-    
+    void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect,
+                        bool isHover);
+
     static bool search(const DSimpleListItem *item, QString searchContent);
-    static bool sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByDiskRead(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByDiskWrite(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByMemory(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByName(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByNetworkDownload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByNetworkUpload(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    static bool sortByPid(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
-    
+    static bool sortByCPU(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                          bool descendingSort);
+    static bool sortByDiskRead(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                               bool descendingSort);
+    static bool sortByDiskWrite(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                bool descendingSort);
+    static bool sortByMemory(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                             bool descendingSort);
+    static bool sortByName(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                           bool descendingSort);
+    static bool sortByNetworkDownload(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                      bool descendingSort);
+    static bool sortByNetworkUpload(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                                    bool descendingSort);
+    static bool sortByPid(const DSimpleListItem *item1, const DSimpleListItem *item2,
+                          bool descendingSort);
+
     DiskStatus getDiskStatus() const;
     NetworkStatus getNetworkStatus() const;
     QString getDisplayName() const;
@@ -62,34 +74,32 @@ public:
     int getPid() const;
     long getMemory() const;
     bool isNameDisplayComplete();
-    void mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus, NetworkStatus childNetworkStatus);
+    void mergeItemInfo(double childCpu, long childMemory, DiskStatus childDiskStatus,
+                       NetworkStatus childNetworkStatus);
     void setDiskStatus(DiskStatus dStatus);
     void setNetworkStatus(NetworkStatus nStatus);
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
-    
+    void changeTheme(DApplicationHelper::ColorType themeType);
+
 private:
     DiskStatus diskStatus;
     NetworkStatus networkStatus;
     QPixmap iconPixmap;
     QString displayName;
-    QString evenLineColor;
     QString name;
-    QString oddLineColor;
     QString path;
-    QString selectLineColor;
-    QString textColor;
     QString user;
+
+    QColor textColor;
+    QColor selectLineColor;
+    QColor evenLineColor;
+    QColor oddLineColor;
+    QColor selectedTextColor;
+
     bool displayNameComplete;
     char state;
     double cpu;
-    double evenLineOpacity;
-    double oddLineOpacity;
-    double selectOpacity;
-    double textLeftOpacity;
-    double textRightOpacity;
     int iconSize;
     int padding;
     int pid;

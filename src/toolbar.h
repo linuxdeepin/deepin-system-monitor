@@ -19,42 +19,54 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
-#include <QHBoxLayout>
-#include <QTimer>
-#include <QWidget>
-#include <dsearchedit.h>
+#include <DButtonBox>
+#include <DSearchEdit>
+#include <DWidget>
+
+//#include "main_window.h"
 
 DWIDGET_USE_NAMESPACE
+
+class MainWindow;
+class QTimer;
+class QAction;
 
 class Toolbar : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    Toolbar(QWidget *parent = 0);
+    Toolbar(MainWindow *m, QWidget *parent = nullptr);
     ~Toolbar();
-    
+
     bool eventFilter(QObject *, QEvent *event);
-                                              
-public slots:
+
+public Q_SLOTS:
     void handleSearch();
     void handleSearchTextChanged();
     void focusInput();
-    
-signals:
+
+Q_SIGNALS:
     void search(QString searchContent);
     void pressEsc();
     void pressTab();
-    
+
+    void procTabButtonClicked();
+    void serviceTabButtonClicked();
+
 private:
+    DButtonBox *m_switchFuncTabBtnGrp;
+
     DSearchEdit *searchEdit;
     QString searchTextCache;
     QTimer *searchTimer;
+
+    MainWindow *m_mainWindow;
 };
 
 #endif

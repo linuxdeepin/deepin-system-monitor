@@ -21,18 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "process_item.h"
-#include "process_tree.h"
-#include <QApplication>
 #include "status_monitor.h"
-#include "utils.h"
+#include <proc/sysinfo.h>
+#include <unistd.h>
+#include <QApplication>
 #include <QDebug>
 #include <QIcon>
 #include <QPainter>
-#include <proc/sysinfo.h>
 #include <thread>
-#include <unistd.h>
+#include "constant.h"
+#include "process_item.h"
+#include "process_tree.h"
+#include "utils.h"
 
 using namespace Utils;
 
@@ -51,7 +51,8 @@ StatusMonitor::StatusMonitor(int tabIndex)
     wineApplicationDesktopMaps = new QMap<QString, int>();
     wineServerDesktopMaps = new QMap<int, QString>();
 
-    settings = new Settings(this);
+    settings = Settings::instance();
+    Q_ASSERT(settings != nullptr);
     settings->init();
     isCompactMode = settings->getOption("compact_mode").toBool();
 
@@ -82,10 +83,14 @@ StatusMonitor::StatusMonitor(int tabIndex)
 
     initCompactMode();
 
-    connect(this, &StatusMonitor::updateMemoryStatus, this, &StatusMonitor::handleMemoryStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateCpuStatus, this, &StatusMonitor::handleCpuStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateNetworkStatus, this, &StatusMonitor::handleNetworkStatus, Qt::QueuedConnection);
-    connect(this, &StatusMonitor::updateDiskStatus, this, &StatusMonitor::handleDiskStatus, Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateMemoryStatus, this, &StatusMonitor::handleMemoryStatus,
+            Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateCpuStatus, this, &StatusMonitor::handleCpuStatus,
+            Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateNetworkStatus, this, &StatusMonitor::handleNetworkStatus,
+            Qt::QueuedConnection);
+    connect(this, &StatusMonitor::updateDiskStatus, this, &StatusMonitor::handleDiskStatus,
+            Qt::QueuedConnection);
 
     // Start timer.
     updateStatusTimer = new QTimer(this);
@@ -132,10 +137,10 @@ void StatusMonitor::switchToOnlyMe()
 void StatusMonitor::updateStatus()
 {
     // Read the list of open processes information.
-    PROCTAB* proc = openproc(
-        PROC_FILLMEM |          // memory status: read information from /proc/#pid/statm
-        PROC_FILLSTAT |         // cpu status: read information from /proc/#pid/stat
-        PROC_FILLUSR            // user status: resolve user ids to names via /etc/passwd
+    PROCTAB *proc =
+        openproc(PROC_FILLMEM |   // memory status: read information from /proc/#pid/statm
+                 PROC_FILLSTAT |  // cpu status: read information from /proc/#pid/stat
+                 PROC_FILLUSR     // user status: resolve user ids to names via /etc/passwd
         );
     static proc_t proc_info;
     memset(&proc_info, 0, sizeof(proc_t));
@@ -152,13 +157,14 @@ void StatusMonitor::updateStatus()
     totalCpuTime = getTotalCpuTime(workCpuTime);
 
     processCpuPercents->clear();
-    if (prevProcesses.size()>0) {
+    if (prevProcesses.size() > 0) {
         // we have previous proc info
-        for (auto &newItr:processes) {
-            for (auto &prevItr:prevProcesses) {
+        for (auto &newItr : processes) {
+            for (auto &prevItr : prevProcesses) {
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
-                    (*processCpuPercents)[newItr.second.tid] = calculateCPUPercentage(&prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
+                    (*processCpuPercents)[newItr.second.tid] = calculateCPUPercentage(
+                        &prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
 
                     break;
                 }
@@ -211,7 +217,7 @@ void StatusMonitor::updateStatus()
     // Read processes information.
     int guiProcessNumber = 0;
     int systemProcessNumber = 0;
-    QList<DSimpleListItem*> items;
+    QList<DSimpleListItem *> items;
 
     wineApplicationDesktopMaps->clear();
     wineServerDesktopMaps->clear();
@@ -219,7 +225,7 @@ void StatusMonitor::updateStatus()
     unsigned long diskReadTotalKbs = 0;
     unsigned long diskWriteTotalKbs = 0;
 
-    for (auto &i:processes) {
+    for (auto &i : processes) {
         int pid = (&i.second)->tid;
         QString cmdline = Utils::getProcessCmdline(pid);
         bool isWineProcess = cmdline.startsWith("c:\\");
@@ -235,7 +241,8 @@ void StatusMonitor::updateStatus()
         // We need transfer wineserver.real network traffic to the corresponding wine program.
         if (name == "wineserver.real") {
             // Insert pid<->desktopFile to map to search in all network process list.
-            QString gioDesktopFile = Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE");
+            QString gioDesktopFile =
+                Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE");
             if (gioDesktopFile != "") {
                 (*wineServerDesktopMaps)[pid] = gioDesktopFile;
             }
@@ -287,13 +294,15 @@ void StatusMonitor::updateStatus()
 
             long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
             QPixmap icon = getProcessIcon(pid, desktopFile, findWindowTitle, 24);
-            ProcessItem *item = new ProcessItem(icon, name, displayName, cpu, memory, pid, user, (&i.second)->state);
+            ProcessItem *item = new ProcessItem(icon, name, displayName, cpu, memory, pid, user,
+                                                (&i.second)->state);
             items << item;
         } else {
             // Fill GUI processes information for continue merge action.
             if (filterType == OnlyGUI) {
                 if (childInfoMap.contains(pid)) {
-                    long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
+                    long memory =
+                        getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
 
                     childInfoMap[pid].cpu = cpu;
                     childInfoMap[pid].memory = memory;
@@ -310,7 +319,7 @@ void StatusMonitor::updateStatus()
     // Remove dead process from network status maps.
     for (auto pid : processSentBytes->keys()) {
         bool foundProcess = false;
-        for (auto &i:processes) {
+        for (auto &i : processes) {
             if ((&i.second)->tid == pid) {
                 foundProcess = true;
                 break;
@@ -323,7 +332,7 @@ void StatusMonitor::updateStatus()
     }
     for (auto pid : processRecvBytes->keys()) {
         bool foundProcess = false;
-        for (auto &i:processes) {
+        for (auto &i : processes) {
             if ((&i.second)->tid == pid) {
                 foundProcess = true;
                 break;
@@ -339,8 +348,9 @@ void StatusMonitor::updateStatus()
     meminfo();
 
     // Update memory status.
-    if (kb_swap_total > 0.0)  {
-        updateMemoryStatus((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024, kb_swap_used * 1024, kb_swap_total * 1024);
+    if (kb_swap_total > 0.0) {
+        updateMemoryStatus((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024,
+                           kb_swap_used * 1024, kb_swap_total * 1024);
     } else {
         updateMemoryStatus((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024, 0, 0);
     }
@@ -355,12 +365,8 @@ void StatusMonitor::updateStatus()
             (*processSentBytes)[update.record.pid] = update.record.sent_bytes;
             (*processRecvBytes)[update.record.pid] = update.record.recv_bytes;
 
-            NetworkStatus status = {
-                update.record.sent_bytes,
-                update.record.recv_bytes,
-                update.record.sent_kbs,
-                update.record.recv_kbs
-            };
+            NetworkStatus status = {update.record.sent_bytes, update.record.recv_bytes,
+                                    update.record.sent_kbs, update.record.recv_kbs};
 
             (networkStatusSnapshot)[update.record.pid] = status;
         }
@@ -386,7 +392,7 @@ void StatusMonitor::updateStatus()
 
     // Update ProcessItem's network status.
     for (DSimpleListItem *item : items) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        ProcessItem *processItem = static_cast<ProcessItem *>(item);
         if (networkStatusSnapshot.contains(processItem->getPid())) {
             processItem->setNetworkStatus(networkStatusSnapshot.value(processItem->getPid()));
         }
@@ -409,12 +415,13 @@ void StatusMonitor::updateStatus()
     if (prevWorkCpuTime != 0 && prevTotalCpuTime != 0) {
         std::vector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
 
-        updateCpuStatus((workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime), cpuPercentages);
+        updateCpuStatus((workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime),
+                        cpuPercentages);
     } else {
         std::vector<double> cpuPercentages;
 
         int numCPU = sysconf(_SC_NPROCESSORS_ONLN);
-        for (int i = 0; i < numCPU; i ++) {
+        for (int i = 0; i < numCPU; i++) {
             cpuPercentages.push_back(0);
         }
 
@@ -425,7 +432,7 @@ void StatusMonitor::updateStatus()
     // Merge child process when filterType is OnlyGUI.
     if (filterType == OnlyGUI) {
         for (DSimpleListItem *item : items) {
-            ProcessItem *processItem = static_cast<ProcessItem*>(item);
+            ProcessItem *processItem = static_cast<ProcessItem *>(item);
             QList<int> childPids;
             childPids = processTree->getAllChildPids(processItem->getPid());
 
@@ -433,13 +440,14 @@ void StatusMonitor::updateStatus()
                 if (childInfoMap.contains(childPid)) {
                     ChildPidInfo info = childInfoMap[childPid];
 
-                    processItem->mergeItemInfo(info.cpu, info.memory, info.diskStatus, info.networkStatus);
+                    processItem->mergeItemInfo(info.cpu, info.memory, info.diskStatus,
+                                               info.networkStatus);
                 } else {
-                    qDebug() << QString("IMPOSSIBLE: process %1 not exist in childInfoMap").arg(childPid);
+                    qDebug() << QString("IMPOSSIBLE: process %1 not exist in childInfoMap")
+                                    .arg(childPid);
                 }
             }
         }
-
     }
     delete processTree;
 
@@ -458,8 +466,7 @@ void StatusMonitor::updateStatus()
         prevTotalSentBytes = totalSentBytes;
 
         Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
-        updateNetworkStatus(totalRecvBytes,
-                            totalSentBytes,
+        updateNetworkStatus(totalRecvBytes, totalSentBytes,
                             ((totalRecvBytes - prevTotalRecvBytes) / 1024.0) / updateSeconds,
                             ((totalSentBytes - prevTotalSentBytes) / 1024.0) / updateSeconds);
     }
@@ -510,7 +517,8 @@ void StatusMonitor::hideDiskMonitor()
     }
 }
 
-void StatusMonitor::handleMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap)
+void StatusMonitor::handleMemoryStatus(long usedMemory, long totalMemory, long usedSwap,
+                                       long totalSwap)
 {
     if (isCompactMode) {
         compactMemoryMonitor->updateStatus(usedMemory, totalMemory, usedSwap, totalSwap);
@@ -528,10 +536,12 @@ void StatusMonitor::handleCpuStatus(double cpuPercent, std::vector<double> cpuPe
     }
 }
 
-void StatusMonitor::handleNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs)
+void StatusMonitor::handleNetworkStatus(long totalRecvBytes, long totalSentBytes,
+                                        float totalRecvKbs, float totalSentKbs)
 {
     if (isCompactMode) {
-        compactNetworkMonitor->updateStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
+        compactNetworkMonitor->updateStatus(totalRecvBytes, totalSentBytes, totalRecvKbs,
+                                            totalSentKbs);
     } else {
         networkMonitor->updateStatus(totalRecvBytes, totalSentBytes, totalRecvKbs, totalSentKbs);
     }

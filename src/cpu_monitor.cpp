@@ -21,27 +21,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <QDebug>
+#include <QPainter>
+
 #include "constant.h"
 #include "cpu_monitor.h"
 #include "dthememanager.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
-#include <QDebug>
-#include <QPainter>
-#include <DHiDPIHelper>
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
+CpuMonitor::CpuMonitor(QWidget *parent)
+    : QWidget(parent)
 {
     iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_dark.svg"));
     iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_light.svg"));
-
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &CpuMonitor::changeTheme);
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedSize(statusBarMaxWidth, 250);
@@ -55,6 +55,9 @@ CpuMonitor::CpuMonitor(QWidget *parent) : QWidget(parent)
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start(30);
+
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
 }
 
 CpuMonitor::~CpuMonitor()
@@ -63,36 +66,32 @@ CpuMonitor::~CpuMonitor()
     delete timer;
 }
 
-void CpuMonitor::initTheme()
+void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        numberColor = "#000000";
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+            ringForegroundColor = "#2CA7F8";
+            ringForegroundOpacity = 1;
 
-        ringForegroundColor = "#2CA7F8";
-        ringForegroundOpacity = 1;
+            ringBackgroundColor = "#000000";
+            ringBackgroundOpacity = 0.05;
 
-        ringBackgroundColor = "#000000";
-        ringBackgroundOpacity = 0.05;
+            iconImage = iconLightImage;
 
-        iconImage = iconLightImage;
-    } else {
-        textColor = "#ffffff";
-        numberColor = "#D4D4D4";
+            break;
+        case DApplicationHelper::DarkType:
+            ringForegroundColor = "#2CA7F8";
+            ringForegroundOpacity = 1;
 
-        ringForegroundColor = "#2CA7F8";
-        ringForegroundOpacity = 1;
+            ringBackgroundColor = "#2CA7F8";
+            ringBackgroundOpacity = 0.1;
 
-        ringBackgroundColor = "#2CA7F8";
-        ringBackgroundOpacity = 0.1;
+            iconImage = iconDarkImage;
 
-        iconImage = iconDarkImage;
+            break;
+        default:
+            break;
     }
-}
-
-void CpuMonitor::changeTheme(QString )
-{
-    initTheme();
 }
 
 void CpuMonitor::render()
@@ -144,7 +143,14 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    QFont font = painter.font() ;
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color
+    textColor = palette.color(DPalette::Text);
+    numberColor = palette.color(DPalette::Text);
+
+    QFont font = painter.font();
     font.setPointSize(20);
     font.setWeight(QFont::Light);
 
@@ -153,38 +159,32 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
 
-    painter.drawPixmap(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) - titleAreaPaddingX - paddingRight, iconRenderOffsetY), iconImage);
+    painter.drawPixmap(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) -
+                                  titleAreaPaddingX - paddingRight,
+                              iconRenderOffsetY),
+                       iconImage);
 
     painter.setFont(font);
-    painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) + iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,
-                           rect().y() + titleRenderOffsetY,
-                           titleWidth,
-                           30
-                         ), Qt::AlignCenter, tr("CPU"));
+    painter.setPen(QPen(textColor));
+    painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) +
+                               iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,
+                           rect().y() + titleRenderOffsetY, titleWidth, 30),
+                     Qt::AlignCenter, tr("CPU"));
 
-    double percent = (cpuPercents->at(cpuPercents->size() - 2) + easeInOut(animationIndex / animationFrames) * (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
+    double percent = (cpuPercents->at(cpuPercents->size() - 2) +
+                      easeInOut(animationIndex / animationFrames) *
+                          (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
 
     setFontSize(painter, 15);
-    painter.setPen(QPen(QColor(numberColor)));
-    painter.drawText(QRect(rect().x() - paddingRight,
-                           rect().y() + percentRenderOffsetY,
-                           rect().width(),
-                           30
-                         ), Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
+    painter.setPen(QPen(numberColor));
+    painter.drawText(
+        QRect(rect().x() - paddingRight, rect().y() + percentRenderOffsetY, rect().width(), 30),
+        Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
 
-    drawLoadingRing(
-        painter,
-        rect().x() + rect().width() / 2 - paddingRight,
-        rect().y() + ringRenderOffsetY,
-        ringRadius,
-        ringWidth,
-        300,
-        150,
-        ringForegroundColor, ringForegroundOpacity,
-        ringBackgroundColor, ringBackgroundOpacity,
-        percent / 100
-        );
+    drawLoadingRing(painter, rect().x() + rect().width() / 2 - paddingRight,
+                    rect().y() + ringRenderOffsetY, ringRadius, ringWidth, 300, 150,
+                    ringForegroundColor, ringForegroundOpacity, ringBackgroundColor,
+                    ringBackgroundOpacity, percent / 100);
 
     painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
     painter.scale(1, -1);

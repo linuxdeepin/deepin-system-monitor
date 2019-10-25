@@ -21,28 +21,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "constant.h"
-#include "dthememanager.h"
-#include "disk_monitor.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
+#include <QApplication>
 #include <QDebug>
 #include <QPainter>
-#include <QApplication>
-#include <DHiDPIHelper>
+
+#include "constant.h"
+#include "disk_monitor.h"
+#include "dthememanager.h"
+#include "smooth_curve_generator.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
 
-DiskMonitor::DiskMonitor(QWidget *parent) : QWidget(parent)
+DiskMonitor::DiskMonitor(QWidget *parent)
+    : QWidget(parent)
 {
     iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_disk_dark.svg"));
     iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_disk_light.svg"));
-
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &DiskMonitor::changeTheme);
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
@@ -59,6 +59,9 @@ DiskMonitor::DiskMonitor(QWidget *parent) : QWidget(parent)
     for (int i = 0; i < pointsNumber; i++) {
         writeSpeeds->append(0);
     }
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskMonitor::changeTheme);
 }
 
 DiskMonitor::~DiskMonitor()
@@ -67,24 +70,18 @@ DiskMonitor::~DiskMonitor()
     delete writeSpeeds;
 }
 
-void DiskMonitor::initTheme()
+void DiskMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    if (DThemeManager::instance()->theme() == "light") {
-        textColor = "#303030";
-        summaryColor = "#505050";
-
-        iconImage = iconLightImage;
-    } else {
-        textColor = "#ffffff";
-        summaryColor = "#909090";
-
-        iconImage = iconDarkImage;
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+            iconImage = iconLightImage;
+            break;
+        case DApplicationHelper::DarkType:
+            iconImage = iconDarkImage;
+            break;
+        default:
+            break;
     }
-}
-
-void DiskMonitor::changeTheme(QString )
-{
-    initTheme();
 }
 
 void DiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
@@ -112,7 +109,8 @@ void DiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
         if (readMaxHeight < readRenderMaxHeight) {
             readPoints.append(QPointF(i * 5, readSpeeds->at(i)));
         } else {
-            readPoints.append(QPointF(i * 5, readSpeeds->at(i) * readRenderMaxHeight / readMaxHeight));
+            readPoints.append(
+                QPointF(i * 5, readSpeeds->at(i) * readRenderMaxHeight / readMaxHeight));
         }
     }
 
@@ -138,7 +136,8 @@ void DiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
         if (writeMaxHeight < writeRenderMaxHeight) {
             writePoints.append(QPointF(i * 5, writeSpeeds->at(i)));
         } else {
-            writePoints.append(QPointF(i * 5, writeSpeeds->at(i) * writeRenderMaxHeight / writeMaxHeight));
+            writePoints.append(
+                QPointF(i * 5, writeSpeeds->at(i) * writeRenderMaxHeight / writeMaxHeight));
         }
     }
 
@@ -152,23 +151,32 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    // TODO: change color
+    textColor = palette.color(DPalette::Text);
+    summaryColor = palette.color(DPalette::Text);
+
     // Draw icon.
     painter.drawPixmap(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
 
     // Draw title.
-    QFont font = painter.font() ;
+    QFont font = painter.font();
     font.setPointSize(titleRenderSize);
     font.setWeight(QFont::Light);
     painter.setFont(font);
-    painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(), rect().width() - titleRenderOffsetX, rect().height()), Qt::AlignLeft | Qt::AlignTop, tr("Disk"));
+    painter.setPen(QPen(textColor));
+    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(),
+                           rect().width() - titleRenderOffsetX, rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, tr("Disk"));
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
     painter.setOpacity(0.1);
-    framePen.setColor(QColor(textColor));
-    framePen.setWidth(0.5);
+    framePen.setColor(textColor);
+    framePen.setWidth(1);
     painter.setPen(framePen);
 
     int penSize = 1;
@@ -187,8 +195,8 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     qreal space = 3;
     dashes << 5 << space;
     painter.setOpacity(0.05);
-    gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(0.5);
+    gridPen.setColor(textColor);
+    gridPen.setWidth(1);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
@@ -212,33 +220,32 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     QString writeTitle = QString("%1 %2").arg(tr("Disk write")).arg(formatBandwidth(totalWriteKbs));
 
     painter.setOpacity(1);
-    painter.setPen(QPen(QColor(readColor)));
-    painter.setBrush(QBrush(QColor(readColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + readRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.setPen(QPen(readColor));
+    painter.setBrush(QBrush(readColor));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + readRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, readRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + readRenderPaddingX,
-                           rect().y() + readRenderPaddingY,
-                           fm.width(readTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     readTitle);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(QRect(rect().x() + readRenderPaddingX, rect().y() + readRenderPaddingY,
+                           fm.width(readTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, readTitle);
 
-    painter.setPen(QPen(QColor(writeColor)));
-    painter.setBrush(QBrush(QColor(writeColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX, rect().y() + writeRenderPaddingY + pointerRenderPaddingY), pointerRadius, pointerRadius);
+    painter.setPen(QPen(writeColor));
+    painter.setBrush(QBrush(writeColor));
+    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
+                                rect().y() + writeRenderPaddingY + pointerRenderPaddingY),
+                        pointerRadius, pointerRadius);
 
     setFontSize(painter, writeRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + writeRenderPaddingX,
-                           rect().y() + writeRenderPaddingY,
-                           fm.width(writeTitle),
-                           rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     writeTitle);
+    painter.setPen(QPen(summaryColor));
+    painter.drawText(QRect(rect().x() + writeRenderPaddingX, rect().y() + writeRenderPaddingY,
+                           fm.width(writeTitle), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, writeTitle);
 
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, readWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
+                      readWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
@@ -246,14 +253,14 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     if (devicePixelRatio > 1) {
         diskCurveWidth = 2;
     }
-    painter.setPen(QPen(QColor(readColor), diskCurveWidth));
+    painter.setPen(QPen(readColor, diskCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(readPath);
 
     painter.translate(0, writeWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor(writeColor), diskCurveWidth));
+    painter.setPen(QPen(writeColor, diskCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(writePath);
 }

@@ -19,45 +19,49 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef MemoryMONITOR_H
 #define MemoryMONITOR_H
 
+#include <DApplicationHelper>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
+DWIDGET_USE_NAMESPACE
+
 class MemoryMonitor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    MemoryMonitor(QWidget *parent = 0);
+    MemoryMonitor(QWidget *parent = nullptr);
     ~MemoryMonitor();
-    
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
+    void changeTheme(DApplicationHelper::ColorType themeType);
     void render();
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
-    
+
 protected:
     QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
-    
+
     QPixmap iconImage;
     QPixmap iconDarkImage;
     QPixmap iconLightImage;
-    QString memoryBackgroundColor;
-    QString memoryColor = "#FF2997";
-    QString memoryForegroundColor;
-    QString numberColor;
-    QString summaryColor;
-    QString swapBackgroundColor;
-    QString swapColor = "#00B4C7";
-    QString swapForegroundColor;
-    QString textColor;
+
+    QColor memoryBackgroundColor;
+    QColor memoryColor {"#FF2997"};
+    QColor memoryForegroundColor;
+    QColor numberColor;
+    QColor summaryColor;
+    QColor swapBackgroundColor;
+    QColor swapColor {"#00B4C7"};
+    QColor swapForegroundColor;
+    QColor textColor;
+
     QTimer *timer;
     QVBoxLayout *layout;
     double animationFrames = 20;
@@ -95,4 +99,4 @@ protected:
     long usedSwap = 0;
 };
 
-#endif    
+#endif

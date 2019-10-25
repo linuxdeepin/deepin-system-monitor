@@ -19,44 +19,46 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CpuMONITOR_H
 #define CpuMONITOR_H
 
+#include <DApplicationHelper>
 #include <QList>
 #include <QPointF>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
+DWIDGET_USE_NAMESPACE
+
 class CpuMonitor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
-    CpuMonitor(QWidget *parent = 0);
+    CpuMonitor(QWidget *parent = nullptr);
     ~CpuMonitor();
-                 
+
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
+    void changeTheme(DApplicationHelper::ColorType themeType);
     void render();
     void updateStatus(double cpuPercent, std::vector<double> cPercents);
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
-    
+
 private:
     QPixmap iconImage;
     QPixmap iconLightImage;
     QPixmap iconDarkImage;
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
-    QString numberColor;
-    QString ringBackgroundColor;
-    QString ringForegroundColor;
-    QString textColor;
+    QColor numberColor;
+    QColor ringBackgroundColor;
+    QColor ringForegroundColor;
+    QColor textColor;
     QTimer *timer;
     double animationFrames = 20;
     double ringBackgroundOpacity;
@@ -77,4 +79,4 @@ private:
     int waveformsRenderOffsetY = 100;
 };
 
-#endif    
+#endif

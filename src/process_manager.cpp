@@ -21,13 +21,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QVBoxLayout"
-#include "attributes_dialog.h"
-#include "dthememanager.h"
-#include <DSimpleListView>
-#include "process_item.h"
 #include "process_manager.h"
+#include <proc/sysinfo.h>
+#include <signal.h>
 #include <DDesktopServices>
+#include <DSimpleListView>
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -35,14 +33,17 @@
 #include <QProcess>
 #include <QStyleFactory>
 #include <QToolTip>
-#include <proc/sysinfo.h>
-#include <signal.h>
+#include "QVBoxLayout"
+#include "attributes_dialog.h"
+#include "dthememanager.h"
+#include "process_item.h"
 
 DCORE_USE_NAMESPACE
 
 using namespace Utils;
 
-ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int sortingIndex, bool sortingOrder)
+ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int sortingIndex,
+                               bool sortingOrder)
 {
     // Init widget.
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -54,17 +55,15 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     topLayout->setContentsMargins(2, 0, 2, 0);
 
     processView = new ProcessView(columnHideFlags);
-    connect(processView, &DSimpleListView::changeColumnVisible, this, &ProcessManager::changeColumnVisible);
-    connect(processView, &DSimpleListView::changeSortingStatus, this, &ProcessManager::changeSortingStatus);
+    connect(processView, &DSimpleListView::changeColumnVisible, this,
+            &ProcessManager::changeColumnVisible);
+    connect(processView, &DSimpleListView::changeSortingStatus, this,
+            &ProcessManager::changeSortingStatus);
 
     layout->addWidget(topWidget);
     layout->addWidget(processView);
 
-    statusLabel = new QLabel("");
-
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessManager::changeTheme);
+    statusLabel = new QLabel("", this);
 
     processSwitchTab = new ProcessSwitchTab(tabIndex);
 
@@ -87,26 +86,29 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     processView->setColumnSortingAlgorithms(alorithms, sortingIndex, sortingOrder);
     processView->setSearchAlgorithm(&ProcessItem::search);
 
-    killProcessDialog = new DDialog(QString(tr("End process")), QString(tr("Ending this process may cause data loss.\nAre you sure you want to continue?")), this);
+    killProcessDialog = new DDialog(
+        QString(tr("End process")),
+        QString(tr("Ending this process may cause data loss.\nAre you sure you want to continue?")),
+        this);
     killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
-    killProcessDialog->setIcon(QIcon(Utils::getQrcPath("deepin-system-monitor.svg")));
+    killProcessDialog->setIconPixmap(QPixmap(Utils::getQrcPath("deepin-system-monitor.svg")));
     killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     killProcessDialog->addButton(QString(tr("End process")), true, DDialog::ButtonNormal);
     connect(killProcessDialog, &DDialog::buttonClicked, this, &ProcessManager::dialogButtonClicked);
 
     actionPids = new QList<int>();
 
-    rightMenu = new QMenu();
-    rightMenu->setStyle(QStyleFactory::create("dlight"));
-    killAction = new QAction(tr("End process"), this);
+    rightMenu = new DMenu(this);
+    //    rightMenu->setStyle(QStyleFactory::create("dlight"));
+    killAction = new QAction(tr("End process"), rightMenu);
     connect(killAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
-    pauseAction = new QAction(tr("Suspend process"), this);
+    pauseAction = new QAction(tr("Suspend process"), rightMenu);
     connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
-    resumeAction = new QAction(tr("Resume process"), this);
+    resumeAction = new QAction(tr("Resume process"), rightMenu);
     connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
-    openDirectoryAction = new QAction(tr("View process location"), this);
+    openDirectoryAction = new QAction(tr("View process location"), rightMenu);
     connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
-    attributesAction = new QAction(tr("Properties"), this);
+    attributesAction = new QAction(tr("Properties"), rightMenu);
     connect(attributesAction, &QAction::triggered, this, &ProcessManager::showAttributes);
     rightMenu->addAction(killAction);
     rightMenu->addAction(pauseAction);
@@ -116,40 +118,21 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     rightMenu->addSeparator();
     rightMenu->addAction(attributesAction);
 
-    connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu, Qt::QueuedConnection);
-    connect(processView, &ProcessView::changeHoverItem, this, &ProcessManager::changeHoverItem, Qt::QueuedConnection);
+    connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu,
+            Qt::QueuedConnection);
+    connect(processView, &ProcessView::changeHoverItem, this, &ProcessManager::changeHoverItem,
+            Qt::QueuedConnection);
 }
 
 ProcessManager::~ProcessManager()
 {
-    delete killProcessDialog;
-    delete processSwitchTab;
-    delete processView;
-    delete attributesAction;
-    delete killAction;
-    delete openDirectoryAction;
-    delete pauseAction;
-    delete resumeAction;
-    delete statusLabel;
+    killProcessDialog->deleteLater();
+    processSwitchTab->deleteLater();
+    processView->deleteLater();
     delete actionPids;
-    delete rightMenu;
 }
 
-void ProcessManager::initTheme()
-{
-    if (DThemeManager::instance()->theme() == "light") {
-        statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #505050; }");
-    } else {
-        statusLabel->setStyleSheet("QLabel { background-color : transparent; color : #666666; }");
-    }
-}
-
-void ProcessManager::changeTheme(QString )
-{
-    initTheme();
-}
-
-ProcessView* ProcessManager::getProcessView()
+ProcessView *ProcessManager::getProcessView()
 {
     return processView;
 }
@@ -172,9 +155,9 @@ void ProcessManager::handleSearch(QString searchContent)
     processView->search(searchContent);
 }
 
-void ProcessManager::changeHoverItem(QPoint, DSimpleListItem* item, int columnIndex)
+void ProcessManager::changeHoverItem(QPoint, DSimpleListItem *item, int columnIndex)
 {
-    ProcessItem *processItem = static_cast<ProcessItem*>(item);
+    ProcessItem *processItem = static_cast<ProcessItem *>(item);
 
     if (columnIndex != 0 || processItem->isNameDisplayComplete()) {
         QWidgetList qwl = QApplication::topLevelWidgets();
@@ -221,7 +204,8 @@ void ProcessManager::openProcessDirectory()
 
                 DDesktopServices::showFileItem(winePrefix + cmdline);
             } else {
-                QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+                QString flatpakAppidEnv =
+                    Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
 
                 // Else find program location through 'which' command.
                 if (flatpakAppidEnv == "") {
@@ -243,22 +227,22 @@ void ProcessManager::openProcessDirectory()
                     flatpakRootDir.cd("bin");
 
                     // Need split full path to get last filename.
-                    DDesktopServices::showFileItem(flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
+                    DDesktopServices::showFileItem(
+                        flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
                 }
             }
-
         }
     }
 
     actionPids->clear();
 }
 
-void ProcessManager::popupMenu(QPoint pos, QList<DSimpleListItem*> items)
+void ProcessManager::popupMenu(QPoint pos, QList<DSimpleListItem *> items)
 {
     actionPids->clear();
 
     for (DSimpleListItem *item : items) {
-        ProcessItem *processItem = static_cast<ProcessItem*>(item);
+        ProcessItem *processItem = static_cast<ProcessItem *>(item);
         actionPids->append(processItem->getPid());
     }
     rightMenu->exec(pos);
@@ -280,8 +264,8 @@ void ProcessManager::showAttributes()
     for (int pid : *actionPids) {
         foreach (QWidget *widget, QApplication::topLevelWidgets()) {
             // Show attribute dialog if it has create, avoid create attribute dialog duplicate.
-            if (qobject_cast<const AttributesDialog*>(widget) != 0) {
-                AttributesDialog *dialog = qobject_cast<AttributesDialog*>(widget);
+            if (qobject_cast<const AttributesDialog *>(widget) != nullptr) {
+                AttributesDialog *dialog = qobject_cast<AttributesDialog *>(widget);
                 if (dialog->getPid() == pid) {
                     dialog->show();
                     actionPids->clear();
@@ -313,18 +297,22 @@ void ProcessManager::stopProcesses()
                 qDebug() << QString("Stop process %1 failed, permission denied.").arg(pid);
             }
         }
-
     }
 
     actionPids->clear();
 }
 
-void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber)
+void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber,
+                                         int systemProcessNumber)
 {
-    statusLabel->setText((QString("%1 (") + tr("%2 applications and %3 processes are running") + ")").arg(tabName).arg(guiProcessNumber).arg(systemProcessNumber));
+    statusLabel->setText(
+        (QString("%1 (") + tr("%2 applications and %3 processes are running") + ")")
+            .arg(tabName)
+            .arg(guiProcessNumber)
+            .arg(systemProcessNumber));
 }
 
-void ProcessManager::updateStatus(QList<DSimpleListItem*> items)
+void ProcessManager::updateStatus(QList<DSimpleListItem *> items)
 {
     processView->refreshItems(items);
 }
