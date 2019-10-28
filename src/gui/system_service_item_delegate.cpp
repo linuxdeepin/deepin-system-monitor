@@ -22,8 +22,10 @@ SystemServiceItemDelegate::SystemServiceItemDelegate(QObject *parent)
 void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                       const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
+        QStyledItemDelegate::paint(painter, option, index);
         return;
+    }
 
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
@@ -32,33 +34,49 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(1);
 
-    int radius = 8;
+    QWidget *wnd = DApplication::activeWindow();
+    DPalette::ColorGroup cg;
+    if (!wnd) {
+        cg = DPalette::Inactive;
+    } else {
+        cg = DPalette::Active;
+    }
+
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+
+    int radius = 8;
     radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
+    if (!radius % 2)
+        radius += 1;
+
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
     QColor bgColor, highlightColor, highlightTextColor;
-    if (index.row() % 2 == 0) {
-        bgColor = palette.color(DPalette::AlternateBase);
+    if (opt.features & QStyleOptionViewItem::Alternate) {
+        bgColor = palette.color(cg, DPalette::AlternateBase);
     } else {
-        bgColor = palette.color(DPalette::Base);
+        bgColor = palette.color(cg, DPalette::Base);
     }
 
     QPalette::ColorRole colorRole = DPalette::Foreground;
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             colorRole = DPalette::HighlightedText;
-            bgColor = Qt::blue;
+            bgColor = palette.color(cg, DPalette::Highlight);
         } else {
             colorRole = DPalette::Foreground;
         }
     }
 
+    QRect rect = opt.rect;
+
+    QFontMetrics fm(opt.font);
+
     switch (opt.viewItemPosition) {
         case QStyleOptionViewItem::Beginning: {
-            QRect rect = opt.rect;
-            rect.setX(rect.x() + 8);  // TODO: content left padding
+            rect.setX(rect.x() + margin);  // left margin
             QPainterPath path;
             path.moveTo(rect.x() + radius / 2, rect.y());
             path.arcTo(rect.x(), rect.y(), radius, radius, 90, 90);
@@ -67,40 +85,57 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
             path.lineTo(rect.x() + rect.width(), rect.y() + rect.height());
             path.lineTo(rect.x() + rect.width(), rect.y());
             path.closeSubpath();
-            // background
             painter->fillPath(path, bgColor);
-            // selected item
 
-            // text
-            style->drawItemText(painter, rect, static_cast<int>(opt.displayAlignment), palette,
-                                opt.state & DStyle::State_Enabled, opt.text, colorRole);
+            QRect textRect = rect;
+            textRect.setX(textRect.x() + margin);
+            textRect.setWidth(textRect.width() - margin * 2);
+            QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+            style->drawItemText(painter, textRect, static_cast<int>(opt.displayAlignment), palette,
+                                opt.state & DStyle::State_Enabled, text, colorRole);
         } break;
-        case QStyleOptionViewItem::Middle:
-            painter->fillRect(opt.rect, bgColor);
-            style->drawItemText(painter, opt.rect, static_cast<int>(opt.displayAlignment), palette,
-                                opt.state & DStyle::State_Enabled, opt.text, colorRole);
-            break;
-        case QStyleOptionViewItem::End: {
-            QRect rect = opt.rect;
-            rect.setWidth(rect.width() - 8);
-            QPainterPath path;
-            path.moveTo(rect.x(), rect.y());
-            path.lineTo(rect.x(), rect.y() + rect.height());
-            path.lineTo(rect.x() + rect.width() - radius / 2, rect.y() + rect.height());
-            path.arcTo(rect.x() + rect.width() - radius, rect.y() + rect.height() - radius, radius,
-                       radius, 270, 90);
-            path.lineTo(rect.x() + rect.width(), rect.y() + radius / 2);
-            path.arcTo(rect.x() + rect.width() - radius, rect.y(), radius, radius, 0, 90);
-            path.closeSubpath();
-            painter->fillPath(path, bgColor);
-            style->drawItemText(painter, rect, static_cast<int>(opt.displayAlignment), palette,
-                                opt.state & DStyle::State_Enabled, opt.text, colorRole);
-        } break;
-        default:
-            break;
+        case QStyleOptionViewItem::Middle: {
+            painter->fillRect(rect, bgColor);
+
+            QRect textRect = rect;
+            textRect.setX(textRect.x() + margin);
+            textRect.setWidth(textRect.width() - margin * 2);
+            QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+            if (cg == DPalette::Active)
+                style->drawItemText(painter, textRect, static_cast<int>(opt.displayAlignment),
+                                    palette, opt.state & DStyle::State_Enabled, text, colorRole);
+            //            else {
+            //                style->drawItemText(painter, textRect,
+            //                static_cast<int>(opt.displayAlignment),
+            //                                    palette, false, text, colorRole);
+        }
     }
+    break;
+    case QStyleOptionViewItem::End: {
+        rect.setWidth(rect.width() - margin);  // right margin
+        QPainterPath path;
+        path.moveTo(rect.x(), rect.y());
+        path.lineTo(rect.x(), rect.y() + rect.height());
+        path.lineTo(rect.x() + rect.width() - radius / 2, rect.y() + rect.height());
+        path.arcTo(rect.x() + rect.width() - radius, rect.y() + rect.height() - radius, radius,
+                   radius, 270, 90);
+        path.lineTo(rect.x() + rect.width(), rect.y() + radius / 2);
+        path.arcTo(rect.x() + rect.width() - radius, rect.y(), radius, radius, 0, 90);
+        path.closeSubpath();
+        painter->fillPath(path, bgColor);
 
-    painter->restore();
+        QRect textRect = rect;
+        textRect.setX(textRect.x() + margin);
+        textRect.setWidth(textRect.width() - margin * 2);
+        QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+        style->drawItemText(painter, textRect, static_cast<int>(opt.displayAlignment), palette,
+                            opt.state & DStyle::State_Enabled, text, colorRole);
+    } break;
+    default:
+        break;
+}
+
+painter->restore();
 }
 
 QWidget *SystemServiceItemDelegate::createEditor(QWidget *, const QStyleOptionViewItem &,
@@ -121,36 +156,17 @@ void SystemServiceItemDelegate::initStyleOption(QStyleOptionViewItem *option,
                                                 const QModelIndex &index) const
 {
     option->showDecorationSelected = true;
-    option->displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
+    bool ok = false;
+    if (index.data(Qt::TextAlignmentRole).isValid()) {
+        uint value = index.data(Qt::TextAlignmentRole).toUInt(&ok);
+        option->displayAlignment = static_cast<Qt::Alignment>(value);
+    }
+    if (!ok)
+        option->displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
     option->textElideMode = Qt::ElideRight;
     option->features = QStyleOptionViewItem::HasDisplay;
     if (index.row() % 2 == 0)
         option->features |= QStyleOptionViewItem::Alternate;
-
-    switch (index.column()) {
-        case SystemServiceTableModel::kSystemServiceNameColumn:
-            option->text = index.data().toString();
-            break;
-        case SystemServiceTableModel::kSystemServiceLoadStateColumn:
-            option->text = index.data().toString();
-            break;
-        case SystemServiceTableModel::kSystemServiceActiveStateColumn:
-            option->text = index.data().toString();
-            break;
-        case SystemServiceTableModel::kSystemServiceSubStateColumn:
-            option->text = index.data().toString();
-            break;
-        case SystemServiceTableModel::kSystemServiceStateColumn:
-            option->text = index.data().toString();
-            break;
-        case SystemServiceTableModel::kSystemServiceDescriptionColumn:
-            option->text = index.data().toString();
-            break;
-        case SystemServiceTableModel::kSystemServicePIDColumn:
-            option->text = index.data().toString();
-            option->displayAlignment = Qt::AlignRight | Qt::AlignVCenter;
-            break;
-        default:
-            break;
-    }
+    if (index.data(Qt::DisplayRole).isValid())
+        option->text = index.data().toString();
 }
