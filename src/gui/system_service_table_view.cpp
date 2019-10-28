@@ -35,10 +35,15 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     setSortingEnabled(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-    setAlternatingRowColors(true);
-    setAllColumnsShowFocus(true);
+    //    setAllColumnsShowFocus(true);
     setRootIsDecorated(false);
     setItemsExpandable(false);
+    //    setAlternatingRowColors(true);
+    setFrameStyle(QFrame::NoFrame);
+    int w, h, t, b;
+    viewport()->setContentsMargins(8, 2, 8, 2);
+    viewport()->getContentsMargins(&w, &h, &t, &b);
+    qDebug() << "w,h,t,b" << w << h << t << b;
 
     // column header options
     DHeaderView *columnHeader = header();

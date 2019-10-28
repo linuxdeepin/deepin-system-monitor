@@ -196,7 +196,7 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
-    QColor bgColor = palette.color(DPalette::Base);
+    QColor bgColor = palette.color(DPalette::Background);
 
     painter.fillPath(path, bgColor);
 }

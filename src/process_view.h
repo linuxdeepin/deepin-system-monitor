@@ -19,11 +19,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef PROCESSVIEW_H
 #define PROCESSVIEW_H
 
+#include <DApplicationHelper>
 #include <DSimpleListView>
 
 DWIDGET_USE_NAMESPACE
@@ -31,13 +32,12 @@ DWIDGET_USE_NAMESPACE
 class ProcessView : public DSimpleListView
 {
     Q_OBJECT
-    
+
 public:
     ProcessView(QList<bool> columnHideFlags);
 
 public slots:
-    void changeTheme(QString theme);
-    void initTheme();
+    void changeTheme(DApplicationHelper::ColorType theme);
 };
 
 #endif

@@ -21,8 +21,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "start_tooltip.h"
-#include "utils.h"
+#include <DApplicationHelper>
+#include <DHiDPIHelper>
+#include <DPalette>
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
@@ -30,11 +31,14 @@
 #include <QPainter>
 #include <QStyle>
 #include <QWidget>
-#include <DHiDPIHelper>
+
+#include "start_tooltip.h"
+#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
-StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
+StartTooltip::StartTooltip(QWidget *parent)
+    : QWidget(parent)
 {
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | Qt::BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
@@ -52,23 +56,16 @@ StartTooltip::StartTooltip(QWidget *parent) : QWidget(parent)
     Utils::passInputEvent(this->winId());
 }
 
-StartTooltip::~StartTooltip()
-{
-}
+StartTooltip::~StartTooltip() {}
 
 void StartTooltip::setWindowManager(DWindowManager *wm)
 {
     windowManager = wm;
 
     WindowRect rootWindowRect = windowManager->getRootWindowRect();
-    setGeometry(
-        QStyle::alignedRect(
-            Qt::LeftToRight,
-            Qt::AlignCenter,
-            this->size(),
-            QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)
-            )
-        );
+    setGeometry(QStyle::alignedRect(
+        Qt::LeftToRight, Qt::AlignCenter, this->size(),
+        QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)));
 }
 
 bool StartTooltip::eventFilter(QObject *, QEvent *event)
@@ -91,12 +88,16 @@ void StartTooltip::paintEvent(QPaintEvent *)
 
     painter.setOpacity(1);
     qreal devicePixelRatio = qApp->devicePixelRatio();
-    painter.drawPixmap(QPoint((rect().width() - iconImg.width() / devicePixelRatio) / 2, RECTANGLE_PADDING * devicePixelRatio), iconImg);
+    painter.drawPixmap(QPoint((rect().width() - iconImg.width() / devicePixelRatio) / 2,
+                              RECTANGLE_PADDING * devicePixelRatio),
+                       iconImg);
 
-    Utils::drawTooltipText(painter, text, "#000000", RECTANGLE_FONT_SIZE,
-                           QRectF(rect().x(),
-                                  rect().y() + RECTANGLE_PADDING + iconImg.height(),
-                                  rect().width(),
-                                  rect().height() - RECTANGLE_PADDING - iconImg.height()
-                               ));
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    QColor textColor = palette.color(DPalette::Text);
+
+    Utils::drawTooltipText(
+        painter, text, textColor.name(), RECTANGLE_FONT_SIZE,
+        QRectF(rect().x(), rect().y() + RECTANGLE_PADDING + iconImg.height(), rect().width(),
+               rect().height() - RECTANGLE_PADDING - iconImg.height()));
 }

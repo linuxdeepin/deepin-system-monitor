@@ -21,18 +21,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplicationHelper>
+#include <DPalette>
+#include <QTimer>
+
 #include "dthememanager.h"
 #include "process_view.h"
-#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
 ProcessView::ProcessView(QList<bool> columnHideFlags)
 {
-    initTheme();
-
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &ProcessView::changeTheme);
-    
     // Enable frame and radius.
     setFrame(true);
     setClipRadius(8);
@@ -42,7 +41,8 @@ ProcessView::ProcessView(QList<bool> columnHideFlags)
 
     // Set column widths.
     QList<QString> titles;
-    titles << tr("Name") << tr("CPU") << tr("Memory") << tr("Disk write") << tr("Disk read") << tr("Download") << tr("Upload") << tr("PID");
+    titles << tr("Name") << tr("CPU") << tr("Memory") << tr("Disk write") << tr("Disk read")
+           << tr("Download") << tr("Upload") << tr("PID");
     QList<int> widths;
     widths << -1 << 70 << 70 << 80 << 80 << 70 << 70 << 70;
     setColumnTitleInfo(titles, widths, 36);
@@ -52,76 +52,82 @@ ProcessView::ProcessView(QList<bool> columnHideFlags)
 
     // Focus keyboard when create.
     QTimer::singleShot(0, this, SLOT(setFocus()));
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &ProcessView::changeTheme);
 }
 
-void ProcessView::initTheme()
+void ProcessView::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    if (DThemeManager::instance()->theme() == "light") {
-        titleColor = "#000000";
-        titleLineColor = "#000000";
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    titleColor = palette.color(DPalette::Text).name();
+    backgroundColor = palette.color(DPalette::Base).name();
 
-        titleAreaColor = "#ffffff";
-        titleAreaOpacity = 0.02;
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+            titleLineColor = "#000000";
 
-        backgroundColor = "#ffffff";
-        backgroundOpacity = 0.03;
+            //            titleAreaColor = "#ffffff";
+            //            titleAreaOpacity = 0.02;
 
-        frameColor = "#000000";
-        frameOpacity = 0.1;
+            //            backgroundColor = "#ffffff";
+            //            backgroundOpacity = 0.03;
 
-        searchColor = "#D0D0D0";
+            //            frameColor = "#000000";
+            //            frameOpacity = 0.1;
 
-        arrowUpNormalImage = arrowUpLightNormalImage;
-        arrowUpHoverImage = arrowUpLightHoverImage;
-        arrowUpPressImage = arrowUpLightPressImage;
-        arrowDownNormalImage = arrowDownLightNormalImage;
-        arrowDownHoverImage = arrowDownLightHoverImage;
-        arrowDownPressImage = arrowDownLightPressImage;
+            //            searchColor = "#D0D0D0";
 
-        scrollbarColor = "#101010";
+            arrowUpNormalImage = arrowUpLightNormalImage;
+            arrowUpHoverImage = arrowUpLightHoverImage;
+            arrowUpPressImage = arrowUpLightPressImage;
+            arrowDownNormalImage = arrowDownLightNormalImage;
+            arrowDownHoverImage = arrowDownLightHoverImage;
+            arrowDownPressImage = arrowDownLightPressImage;
 
-        scrollbarNormalOpacity = 0.5;
-        scrollbarHoverOpacity = 0.7;
-        scrollbarPressOpacity = 0.8;
+            scrollbarColor = "#101010";
 
-        scrollbarFrameNormalOpacity = 0;
-        scrollbarFrameHoverOpacity = 0;
-        scrollbarFramePressOpacity = 0;
-    } else {
-        titleColor = "#9A9A9A";
-        titleLineColor = "#ffffff";
+            scrollbarNormalOpacity = 0.5;
+            scrollbarHoverOpacity = 0.7;
+            scrollbarPressOpacity = 0.8;
 
-        titleAreaColor = "#ffffff";
-        titleAreaOpacity = 0.02;
+            scrollbarFrameNormalOpacity = 0;
+            scrollbarFrameHoverOpacity = 0;
+            scrollbarFramePressOpacity = 0;
+            break;
+        case DApplicationHelper::DarkType:
+            titleLineColor = "#ffffff";
 
-        backgroundColor = "#ffffff";
-        backgroundOpacity = 0.03;
+            //            titleAreaColor = "#ffffff";
+            //            titleAreaOpacity = 0.02;
 
-        frameColor = "#000000";
-        frameOpacity = 0;
+            //            backgroundColor = "#ffffff";
+            //            backgroundOpacity = 0.03;
 
-        searchColor = "#666666";
+            //            frameColor = "#000000";
+            //            frameOpacity = 0;
 
-        arrowUpNormalImage = arrowUpDarkNormalImage;
-        arrowUpHoverImage = arrowUpDarkHoverImage;
-        arrowUpPressImage = arrowUpDarkPressImage;
-        arrowDownNormalImage = arrowDownDarkNormalImage;
-        arrowDownHoverImage = arrowDownDarkHoverImage;
-        arrowDownPressImage = arrowDownDarkPressImage;
+            //            searchColor = "#666666";
 
-        scrollbarColor = "#ffffff";
-        
-        scrollbarNormalOpacity = 0.2;
-        scrollbarHoverOpacity = 0.4;
-        scrollbarPressOpacity = 0.15;
+            arrowUpNormalImage = arrowUpDarkNormalImage;
+            arrowUpHoverImage = arrowUpDarkHoverImage;
+            arrowUpPressImage = arrowUpDarkPressImage;
+            arrowDownNormalImage = arrowDownDarkNormalImage;
+            arrowDownHoverImage = arrowDownDarkHoverImage;
+            arrowDownPressImage = arrowDownDarkPressImage;
 
-        scrollbarFrameNormalOpacity = 0.05;
-        scrollbarFrameHoverOpacity = 0.1;
-        scrollbarFramePressOpacity = 0.05;
+            scrollbarColor = "#ffffff";
+
+            scrollbarNormalOpacity = 0.2;
+            scrollbarHoverOpacity = 0.4;
+            scrollbarPressOpacity = 0.15;
+
+            scrollbarFrameNormalOpacity = 0.05;
+            scrollbarFrameHoverOpacity = 0.1;
+            scrollbarFramePressOpacity = 0.05;
+            break;
+        default:
+            break;
     }
-}
-
-void ProcessView::changeTheme(QString )
-{
-    initTheme();
 }

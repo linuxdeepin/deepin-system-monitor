@@ -17,33 +17,33 @@ const char kDictFile[] = ":/misc/dict/pinyin.dict";
 
 void InitDict()
 {
-    //        if (!dict.isEmpty()) {
-    //            return;
-    //        }
+    if (!dict.isEmpty()) {
+        return;
+    }
 
-    //        dict.reserve(25333);
+    dict.reserve(25333);
 
-    //        QFile file(kDictFile);
+    QFile file(kDictFile);
 
-    //        if (!file.open(QIODevice::ReadOnly)) {
-    //            qCritical() << "open dict failed";
-    //            return;
-    //        }
+    if (!file.open(QIODevice::ReadOnly)) {
+        qCritical() << "open dict failed";
+        return;
+    }
 
-    //        QByteArray content = file.readAll();
+    QByteArray content = file.readAll();
 
-    //        file.close();
+    file.close();
 
-    //        QTextStream stream(&content, QIODevice::ReadOnly);
+    QTextStream stream(&content, QIODevice::ReadOnly);
 
-    //        while (!stream.atEnd()) {
-    //            const QString line = stream.readLine();
-    //            const QStringList items = line.split(QChar(':'));
+    while (!stream.atEnd()) {
+        const QString line = stream.readLine();
+        const QStringList items = line.split(QChar(':'));
 
-    //            if (items.size() == 2) {
-    //                dict.insert(items[0].toInt(nullptr, 16), items[1]);
-    //            }
-    //        }
+        if (items.size() == 2) {
+            dict.insert(items[0].toInt(nullptr, 16), items[1]);
+        }
+    }
 }
 
 QString Chinese2Pinyin(const QString &words)
