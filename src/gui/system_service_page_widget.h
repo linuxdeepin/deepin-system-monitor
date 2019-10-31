@@ -2,6 +2,7 @@
 #define SYSTEM_SERVICE_PAGE_WIDGET_H
 
 #include <DFrame>
+#include <DWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -11,8 +12,11 @@ class SystemServiceTableView;
 class SystemServicePageWidget : public DFrame
 {
 public:
-    explicit SystemServicePageWidget(DWidget *parent = nullptr);
+    SystemServicePageWidget(DWidget *parent = nullptr);
     ~SystemServicePageWidget();
+
+protected:
+    void paintEvent(QPaintEvent *);
 
 public Q_SLOTS:
 

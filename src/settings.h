@@ -24,10 +24,14 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <QSettings>
 #include <mutex>
 #include <thread>
 
-#include <QSettings>
+const QString kSettingKeyDisplayMode = {"display_mode"};
+const QString kSettingKeyThemeType = {"theme_type"};
+const QString kSettingKeyWindowWidth = {"window_width"};
+const QString kSettingKeyWindowHeight = {"window_height"};
 
 class Settings : public QObject
 {

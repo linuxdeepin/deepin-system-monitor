@@ -93,30 +93,34 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
     killProcessDialog->setIconPixmap(QPixmap(Utils::getQrcPath("deepin-system-monitor.svg")));
     killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-    killProcessDialog->addButton(QString(tr("End process")), true, DDialog::ButtonNormal);
+    killProcessDialog->addButton(QString(tr("Kill process")), true, DDialog::ButtonNormal);
     connect(killProcessDialog, &DDialog::buttonClicked, this, &ProcessManager::dialogButtonClicked);
 
     actionPids = new QList<int>();
 
     rightMenu = new DMenu(this);
-    //    rightMenu->setStyle(QStyleFactory::create("dlight"));
-    killAction = new QAction(tr("End process"), rightMenu);
-    connect(killAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
-    pauseAction = new QAction(tr("Suspend process"), rightMenu);
-    connect(pauseAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
-    resumeAction = new QAction(tr("Resume process"), rightMenu);
-    connect(resumeAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
-    openDirectoryAction = new QAction(tr("View process location"), rightMenu);
-    connect(openDirectoryAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
-    attributesAction = new QAction(tr("Properties"), rightMenu);
-    connect(attributesAction, &QAction::triggered, this, &ProcessManager::showAttributes);
-    rightMenu->addAction(killAction);
-    rightMenu->addAction(pauseAction);
-    rightMenu->addAction(resumeAction);
+
+    m_termProcAction = new QAction(tr("End process"), rightMenu);
+    connect(m_termProcAction, &QAction::triggered, this, &ProcessManager::terminateProcess);
+    m_pauseProcAction = new QAction(tr("Suspend process"), rightMenu);
+    connect(m_pauseProcAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
+    m_resumeProcAction = new QAction(tr("Resume process"), rightMenu);
+    connect(m_resumeProcAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
+    m_openExecDirAction = new QAction(tr("View process location"), rightMenu);
+    connect(m_openExecDirAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
+    m_showAttrAction = new QAction(tr("Properties"), rightMenu);
+    connect(m_showAttrAction, &QAction::triggered, this, &ProcessManager::showAttributes);
+    m_killProcAction = new QAction(tr("Kill Process"), rightMenu);
+    connect(m_killProcAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
+
+    rightMenu->addAction(m_termProcAction);
     rightMenu->addSeparator();
-    rightMenu->addAction(openDirectoryAction);
+    rightMenu->addAction(m_pauseProcAction);
+    rightMenu->addAction(m_resumeProcAction);
+    rightMenu->addAction(m_openExecDirAction);
+    rightMenu->addAction(m_showAttrAction);
     rightMenu->addSeparator();
-    rightMenu->addAction(attributesAction);
+    rightMenu->addAction(m_killProcAction);
 
     connect(processView, &ProcessView::rightClickItems, this, &ProcessManager::popupMenu,
             Qt::QueuedConnection);
@@ -158,6 +162,8 @@ void ProcessManager::handleSearch(QString searchContent)
 void ProcessManager::changeHoverItem(QPoint, DSimpleListItem *item, int columnIndex)
 {
     ProcessItem *processItem = static_cast<ProcessItem *>(item);
+    if (!processItem)
+        return;
 
     if (columnIndex != 0 || processItem->isNameDisplayComplete()) {
         QWidgetList qwl = QApplication::topLevelWidgets();
@@ -175,6 +181,23 @@ void ProcessManager::changeHoverItem(QPoint, DSimpleListItem *item, int columnIn
             QToolTip::showText(QCursor::pos(), processItem->getDisplayName());
         }
     }
+}
+
+void ProcessManager::terminateProcess()
+{
+    for (int pid : *actionPids) {
+        // Resume process first, otherwise kill process too slow.
+        kill(pid, SIGCONT);
+
+        if (kill(pid, SIGTERM) != 0) {
+            qDebug() << QString("Kill process %1 failed, ERRNO:[%2] %3")
+                            .arg(pid)
+                            .arg(errno)
+                            .arg(strerror(errno));
+        }
+    }
+
+    actionPids->clear();
 }
 
 void ProcessManager::killProcesses()

@@ -1,11 +1,12 @@
-#include <QDebug>
-#include <QFutureWatcher>
-#include <QtConcurrent>
-
+#include <DApplication>
+#include <DApplicationHelper>
 #include <DHeaderView>
 #include <DLabel>
 #include <DMenu>
 #include <DMessageBox>
+#include <QDebug>
+#include <QFutureWatcher>
+#include <QtConcurrent>
 
 #include "common/error_context.h"
 #include "main_window.h"
@@ -16,6 +17,7 @@
 #include "service_name_sub_input_dialog.h"
 #include "settings.h"
 #include "system_service_item_delegate.h"
+#include "system_service_table_header_view.h"
 #include "system_service_table_view.h"
 #include "toolbar.h"
 
@@ -31,19 +33,16 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     m_itemDelegate = new SystemServiceItemDelegate(this);
     setItemDelegate(m_itemDelegate);
 
+    m_headerDelegate = new SystemServiceTableHeaderView(Qt::Horizontal, this);
+    setHeader(m_headerDelegate);
+
     // table options
     setSortingEnabled(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-    //    setAllColumnsShowFocus(true);
     setRootIsDecorated(false);
     setItemsExpandable(false);
-    //    setAlternatingRowColors(true);
     setFrameStyle(QFrame::NoFrame);
-    int w, h, t, b;
-    viewport()->setContentsMargins(8, 2, 8, 2);
-    viewport()->getContentsMargins(&w, &h, &t, &b);
-    qDebug() << "w,h,t,b" << w << h << t << b;
 
     // column header options
     DHeaderView *columnHeader = header();
@@ -53,7 +52,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     columnHeader->setStretchLastSection(true);
     columnHeader->setSortIndicatorShown(true);
     columnHeader->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    columnHeader->setDefaultSectionSize(36);
+    columnHeader->setAlternatingRowColors(true);
 
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
@@ -107,6 +106,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     // start service
     QAction *startServiceAction = m_contextMenu->addAction(tr("Start"));
     connect(startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
+    m_contextMenu->addSeparator();
     // stop service
     QAction *stopServiceAction = m_contextMenu->addAction(tr("Stop"));
     connect(stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
@@ -195,11 +195,53 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     QFont font = m_noMatchingResultLabel->font();
     font.setPointSize(16);
     m_noMatchingResultLabel->setFont(font);
+
+    viewport()->setAutoFillBackground(false);
 }
 
 SystemServiceTableView::~SystemServiceTableView()
 {
     saveSettings();
+}
+
+void SystemServiceTableView::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(viewport());
+    painter.save();
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.setOpacity(1);
+    painter.setClipping(true);
+
+    QWidget *wnd = DApplication::activeWindow();
+    DPalette::ColorGroup cg;
+    if (!wnd) {
+        cg = DPalette::Inactive;
+    } else {
+        cg = DPalette::Active;
+    }
+
+    auto style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+
+    QBrush bgBrush(palette.color(cg, DPalette::Base));
+
+    QStyleOptionFrame option;
+    initStyleOption(&option);
+    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
+
+    QRect rect = viewport()->rect();
+    QRectF clipRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height() * 2);
+    QRectF subRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height());
+    QPainterPath clipPath, subPath;
+    clipPath.addRoundedRect(clipRect, radius, radius);
+    subPath.addRect(subRect);
+    clipPath = clipPath.subtracted(subPath);
+
+    painter.fillPath(clipPath, bgBrush);
+
+    painter.restore();
+    DTreeView::paintEvent(event);
 }
 
 void SystemServiceTableView::saveSettings()
@@ -235,8 +277,13 @@ void SystemServiceTableView::displayTableContextMenu(const QPoint &p)
 {
     if (selectedIndexes().size() == 0)
         return;
+
+    QPoint point = mapToGlobal(p);
+    // when popup context menu for items, take table header height into consideration
+    point.setY(point.y() +
+               model()->headerData(0, Qt::Horizontal, Qt::SizeHintRole).toSize().height());
     // TODO: context menu enable status rule
-    m_contextMenu->popup(mapToGlobal(p));
+    m_contextMenu->popup(point);
 }
 
 int SystemServiceTableView::getSelectedServiceEntry(SystemServiceEntry &entry) const
@@ -269,6 +316,8 @@ void SystemServiceTableView::startService()
         dialog.setMessage(entry.getDescription());
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok)
+            // fin
+
             entry.setId(entry.getId().append(dialog.getServiceSubName()));
         else {
             return;
@@ -334,17 +383,21 @@ void SystemServiceTableView::search(const QString &pattern)
 {
     m_ProxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
 
+    setUpdatesEnabled(false);
     m_noMatchingResultLabel->setVisible(m_ProxyModel->rowCount() == 0);
     if (m_noMatchingResultLabel->isVisible())
         m_noMatchingResultLabel->move(rect().center() - m_noMatchingResultLabel->rect().center());
+    setUpdatesEnabled(true);
 }
 
 void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
 
+    setUpdatesEnabled(false);
     if (m_noMatchingResultLabel->isVisible())
         m_noMatchingResultLabel->move(rect().center() - m_noMatchingResultLabel->rect().center());
+    setUpdatesEnabled(true);
 
     DTreeView::resizeEvent(event);
 }
@@ -352,6 +405,7 @@ void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 int SystemServiceTableView::sizeHintForColumn(int column) const
 {
     int size = DTreeView::sizeHintForColumn(column);
+    // TODO: padding problem
     return size + 32;
 }
 

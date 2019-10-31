@@ -33,6 +33,8 @@
 
 DWIDGET_USE_NAMESPACE
 
+class Settings;
+
 class CpuMonitor : public QWidget
 {
     Q_OBJECT
@@ -77,6 +79,10 @@ private:
     int titleRenderOffsetY = 180;
     int waveformsRenderOffsetX;
     int waveformsRenderOffsetY = 100;
+
+    DApplicationHelper::ColorType m_themeType;
+
+    Settings *m_settings;
 };
 
 #endif

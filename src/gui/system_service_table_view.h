@@ -12,13 +12,14 @@ class MainWindow;
 class ServiceManager;
 class SystemServiceItemDelegate;
 class ErrorContext;
+class SystemServiceTableHeaderView;
 
 class SystemServiceTableView : public DTreeView
 {
     Q_OBJECT
 
 public:
-    explicit SystemServiceTableView(DWidget *parent = nullptr);
+    SystemServiceTableView(DWidget *parent = nullptr);
     ~SystemServiceTableView() override;
 
     SystemServiceTableModel *getSourceModel() const;
@@ -37,6 +38,7 @@ protected Q_SLOTS:
     virtual void saveSettings();
     void resizeEvent(QResizeEvent *event) override;
     int sizeHintForColumn(int) const override;
+    void paintEvent(QPaintEvent *event) override;
 
 Q_SIGNALS:
     void sectionVisibilityChanged(int, bool);
@@ -55,6 +57,7 @@ private:
     DMenu *m_headerContextMenu;
     DLabel *m_noMatchingResultLabel;
     SystemServiceItemDelegate *m_itemDelegate;
+    SystemServiceTableHeaderView *m_headerDelegate;
     QTimer *m_timer;
 };
 

@@ -70,7 +70,8 @@ HEADERS += src/utils.h \
     src/gui/system_service_item_delegate.h \
     src/common/error_context.h \
     src/gui/service_name_sub_input_dialog.h \
-    src/gui/ui_common.h
+    src/gui/ui_common.h \
+    src/gui/system_service_table_header_view.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -115,7 +116,8 @@ SOURCES += src/main.cpp \
     src/dbus/unit_info.cpp \
     src/gui/system_service_item_delegate.cpp \
     src/common/error_context.cpp \
-    src/gui/service_name_sub_input_dialog.cpp
+    src/gui/service_name_sub_input_dialog.cpp \
+    src/gui/system_service_table_header_view.cpp
 
 QT += core
 QT += widgets

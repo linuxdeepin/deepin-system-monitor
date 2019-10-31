@@ -24,27 +24,27 @@
 #ifndef STATUSMONITOR_H
 #define STATUSMONITOR_H
 
-#include "cpu_monitor.h"
-#include "utils.h"
-#include "find_window_title.h"
-#include "settings.h"
-#include "memory_monitor.h"
-#include "network_monitor.h"
-#include "disk_monitor.h"
-#include "network_traffic_filter.h"
-#include "process_item.h"
-#include "compact_cpu_monitor.h"
-#include "compact_memory_monitor.h"
-#include "compact_disk_monitor.h"
-#include "compact_network_monitor.h"
+#include <proc/readproc.h>
+#include <proc/sysinfo.h>
 #include <QMap>
 #include <QPointF>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 #include <deque>
-#include <proc/readproc.h>
-#include <proc/sysinfo.h>
+#include "compact_cpu_monitor.h"
+#include "compact_disk_monitor.h"
+#include "compact_memory_monitor.h"
+#include "compact_network_monitor.h"
+#include "cpu_monitor.h"
+#include "disk_monitor.h"
+#include "find_window_title.h"
+#include "memory_monitor.h"
+#include "network_monitor.h"
+#include "network_traffic_filter.h"
+#include "process_item.h"
+#include "settings.h"
+#include "utils.h"
 
 class StatusMonitor : public QWidget
 {
@@ -52,7 +52,7 @@ class StatusMonitor : public QWidget
 
     typedef std::map<int, proc_t> StoredProcType;
 
-    enum FilterType {OnlyGUI, OnlyMe, AllProcess};
+    enum FilterType { OnlyGUI, OnlyMe, AllProcess };
 
     struct ChildPidInfo {
         double cpu;
@@ -68,10 +68,11 @@ public:
 signals:
     void updateCpuStatus(double cpuPercent, std::vector<double> cpuPercents);
     void updateMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
-    void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
+    void updateNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs,
+                             float totalSentKbs);
     void updateDiskStatus(float totalReadKbs, float totalWriteKbs);
     void updateProcessNumber(QString tabName, int guiProcessNumber, int systemProcessNumber);
-    void updateProcessStatus(QList<DSimpleListItem*> items);
+    void updateProcessStatus(QList<DSimpleListItem *> items);
 
 public slots:
     void switchToAllProcess();
@@ -80,27 +81,28 @@ public slots:
     void updateStatus();
     void showDiskMonitor();
     void hideDiskMonitor();
-    
+
     void handleMemoryStatus(long usedMemory, long totalMemory, long usedSwap, long totalSwap);
     void handleCpuStatus(double cpuPercent, std::vector<double> cpuPercents);
-    void handleNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs, float totalSentKbs);
+    void handleNetworkStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs,
+                             float totalSentKbs);
     void handleDiskStatus(float totalReadKbs, float totalWriteKbs);
-    
+
     void initCompactMode();
-    
+
     void enableCompactMode();
     void disableCompactMode();
-    
+
 private:
     DiskStatus getProcessDiskStatus(int pid);
-    
+
     bool isCompactMode;
     CpuMonitor *cpuMonitor;
     FilterType filterType;
     FindWindowTitle *findWindowTitle;
     MemoryMonitor *memoryMonitor;
     NetworkMonitor *networkMonitor;
-    DiskMonitor *diskMonitor;
+    //    DiskMonitor *diskMonitor;
     CompactCpuMonitor *compactCpuMonitor;
     CompactNetworkMonitor *compactNetworkMonitor;
     CompactDiskMonitor *compactDiskMonitor;

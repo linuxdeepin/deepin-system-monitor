@@ -1,9 +1,13 @@
+#include <DApplication>
 #include <QColor>
 #include <QDebug>
+#include <QFont>
+#include <QFontMetrics>
 
 #include "system_service_table_model.h"
 #include "utils.h"
 
+DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
 SystemServiceTableModel::SystemServiceTableModel(QObject* parent)
@@ -44,6 +48,37 @@ QVariant SystemServiceTableModel::data(const QModelIndex& index, int role) const
         }
     else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+    } else if (role == Qt::SizeHintRole) {
+        QFont font = DApplication::font();
+        QFontMetrics fm(font);
+        switch (index.column()) {
+            case kSystemServiceNameColumn:
+                return QSize(fm.boundingRect(m_ServiceEntryList.at(index.row()).getId()).width(),
+                             32);
+            case kSystemServiceLoadStateColumn:
+                return QSize(
+                    fm.boundingRect(m_ServiceEntryList.at(index.row()).getLoadState()).width(), 32);
+            case kSystemServiceActiveStateColumn:
+                return QSize(
+                    fm.boundingRect(m_ServiceEntryList.at(index.row()).getActiveState()).width(),
+                    32);
+            case kSystemServiceSubStateColumn:
+                return QSize(
+                    fm.boundingRect(m_ServiceEntryList.at(index.row()).getSubState()).width(), 32);
+            case kSystemServiceStateColumn:
+                return QSize(fm.boundingRect(m_ServiceEntryList.at(index.row()).getState()).width(),
+                             32);
+            case kSystemServiceDescriptionColumn:
+                return QSize(
+                    fm.boundingRect(m_ServiceEntryList.at(index.row()).getDescription()).width(),
+                    32);
+            case kSystemServicePIDColumn: {
+                QString pidStr = QString("%1").arg(m_ServiceEntryList.at(index.row()).getMainPID());
+                return QSize(fm.boundingRect(pidStr).width(), 32);
+            }
+            default:
+                return {QSize(200, 32)};
+        }
     }
     return {};
 }
@@ -83,11 +118,27 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
                 default:
                     break;
             }
-        }  // TODO: else if (orientation == Qt::Vertical)??
+        }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     } else if (role == Qt::InitialSortOrderRole) {
         return QVariant::fromValue(Qt::DescendingOrder);
+    } else if (role == Qt::SizeHintRole) {
+        QModelIndex idx;
+        int maxWidth = 0;
+        for (int row = 0; row < rowCount(); row++) {
+            QVariant v = {};
+
+            idx = index(row, section);
+            if (idx.isValid())
+                v = idx.data(Qt::SizeHintRole);
+
+            if (v.isValid()) {
+                if (maxWidth < v.toSize().width())
+                    maxWidth = v.toSize().width();
+            }
+        }
+        return {QSize(maxWidth, 32)};
     }
     return QAbstractTableModel::headerData(section, orientation, role);
 }

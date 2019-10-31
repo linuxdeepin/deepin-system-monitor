@@ -59,6 +59,7 @@ public slots:
     void handleSearch(QString searchContent);
     void changeHoverItem(QPoint pos, DSimpleListItem *item, int columnIndex);
     void killProcesses();
+    void terminateProcess();
     void openProcessDirectory();
     void popupMenu(QPoint pos, QList<DSimpleListItem *> items);
     void resumeProcesses();
@@ -72,14 +73,16 @@ private:
     DDialog *killProcessDialog;
     ProcessSwitchTab *processSwitchTab;
     ProcessView *processView;
-    QAction *attributesAction;
-    QAction *killAction;
-    QAction *openDirectoryAction;
-    QAction *pauseAction;
-    QAction *resumeAction;
     DLabel *statusLabel;
     QList<int> *actionPids;
+
     DMenu *rightMenu;
+    QAction *m_termProcAction;     // end process
+    QAction *m_pauseProcAction;    // suspend process
+    QAction *m_resumeProcAction;   // resume process
+    QAction *m_openExecDirAction;  // open cmd dir
+    QAction *m_showAttrAction;     // show attributes
+    QAction *m_killProcAction;     // kill process
 };
 
 #endif

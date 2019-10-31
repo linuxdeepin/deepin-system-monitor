@@ -66,6 +66,9 @@ private:
 
     Settings *m_settings;
 
+    QAction *m_killAction;
+    DMenu *m_modeMenu;
+
     Toolbar *m_toolbar;
     DStackedWidget *m_pages;
     ProcessPageWidget *m_procPage;

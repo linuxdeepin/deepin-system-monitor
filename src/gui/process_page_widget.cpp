@@ -146,10 +146,6 @@ QList<bool> ProcessPageWidget::getColumnHideFlags()
 
 bool ProcessPageWidget::eventFilter(QObject *, QEvent *event)
 {
-    if (event->type() == QEvent::Resize) {
-        adjustDiskMoitor();
-    }
-
     if (event->type() == QEvent::WindowStateChange) {
         adjustStatusBarWidth();
     } else if (event->type() == QEvent::KeyPress) {
@@ -316,7 +312,6 @@ void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
     switch (mode) {
         case kDisplayModeExpand:
             statusMonitor->disableCompactMode();
-            adjustDiskMoitor();
 
             break;
         case kDisplayModeCompact:
@@ -338,14 +333,5 @@ void ProcessPageWidget::adjustStatusBarWidth()
         } else {
             statusMonitor->setFixedWidth(statusBarMaxWidth);
         }
-    }
-}
-
-void ProcessPageWidget::adjustDiskMoitor()
-{
-    if (this->rect().height() > 830) {
-        statusMonitor->showDiskMonitor();
-    } else {
-        statusMonitor->hideDiskMonitor();
     }
 }

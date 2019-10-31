@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <DApplication>
+#include <DApplicationSettings>
 #include <DHiDPIHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
 
         app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
 
-        Settings *settings = Settings::instance();
+        DApplicationSettings appSettings;
 
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
         nethogs_monitor_thread.detach();
@@ -113,22 +114,14 @@ int main(int argc, char *argv[])
 
         QObject::connect(&app, &DApplication::newInstanceStarted, window,
                          &MainWindow::activateWindow);
-        QObject::connect(&app, &QCoreApplication::aboutToQuit, window, [=]() {
-            if (settings)
-                settings->flush();
-            window->deleteLater();
-        });
+        QObject::connect(&app, &QCoreApplication::aboutToQuit, window,
+                         [=]() { window->deleteLater(); });
 
         window->setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         Dtk::Widget::moveToCenter(window);
         window->show();
-        //        window.adjustStatusBarWidth();
 
-        int rc = app.exec();
-        if (settings)
-            settings->flush();
-
-        return rc;
+        return app.exec();
     }
 
     return 0;

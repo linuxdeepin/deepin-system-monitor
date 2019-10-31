@@ -31,9 +31,7 @@ public:
     bool getSortingOrder();
     int getSortingIndex();
     void initCompactModeAction();
-    void paintEvent(QPaintEvent *);
     void adjustStatusBarWidth();
-    void adjustDiskMoitor();
 
     void initUI();
     void initConnections();
@@ -47,6 +45,9 @@ public Q_SLOTS:
     void showWindowKiller();
     void switchTab(int index);
     void switchDisplayMode(DisplayMode mode);
+
+protected:
+    void paintEvent(QPaintEvent *);
 
 private:
     Settings *m_settings;

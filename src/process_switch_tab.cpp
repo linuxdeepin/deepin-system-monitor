@@ -81,6 +81,7 @@ ProcessSwitchTab::ProcessSwitchTab(int tabIndex)
     auto *pAppHelper = DApplicationHelper::instance();
     connect(pAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &ProcessSwitchTab::changeTheme);
+    m_themeType = pAppHelper->themeType();
 }
 
 void ProcessSwitchTab::mouseMoveEvent(QMouseEvent *mouseEvent)
@@ -123,6 +124,39 @@ void ProcessSwitchTab::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, false);
+
+    switch (m_themeType) {
+        case DApplicationHelper::LightType:
+            frameColor = "#000000";
+            frameOpacity = 0.05;
+
+            onlyGuiNormalImage = onlyGuiLightNormalImage;
+            onlyGuiHoverImage = onlyGuiLightHoverImage;
+            onlyGuiActiveImage = onlyGuiLightActiveImage;
+            onlyMeNormalImage = onlyMeLightNormalImage;
+            onlyMeHoverImage = onlyMeLightHoverImage;
+            onlyMeActiveImage = onlyMeLightActiveImage;
+            allProcessNormalImage = allProcessLightNormalImage;
+            allProcessHoverImage = allProcessLightHoverImage;
+            allProcessActiveImage = allProcessLightActiveImage;
+            break;
+        case DApplicationHelper::DarkType:
+            frameColor = "#ffffff";
+            frameOpacity = 0.05;
+
+            onlyGuiNormalImage = onlyGuiDarkNormalImage;
+            onlyGuiHoverImage = onlyGuiDarkHoverImage;
+            onlyGuiActiveImage = onlyGuiDarkActiveImage;
+            onlyMeNormalImage = onlyMeDarkNormalImage;
+            onlyMeHoverImage = onlyMeDarkHoverImage;
+            onlyMeActiveImage = onlyMeDarkActiveImage;
+            allProcessNormalImage = allProcessDarkNormalImage;
+            allProcessHoverImage = allProcessDarkHoverImage;
+            allProcessActiveImage = allProcessDarkActiveImage;
+            break;
+        default:
+            break;
+    }
 
     int penSize = 1;
 
@@ -186,36 +220,5 @@ void ProcessSwitchTab::leaveEvent(QEvent *event)
 
 void ProcessSwitchTab::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    switch (themeType) {
-        case DApplicationHelper::LightType:
-            frameColor = "#000000";
-            frameOpacity = 0.05;
-
-            onlyGuiNormalImage = onlyGuiLightNormalImage;
-            onlyGuiHoverImage = onlyGuiLightHoverImage;
-            onlyGuiActiveImage = onlyGuiLightActiveImage;
-            onlyMeNormalImage = onlyMeLightNormalImage;
-            onlyMeHoverImage = onlyMeLightHoverImage;
-            onlyMeActiveImage = onlyMeLightActiveImage;
-            allProcessNormalImage = allProcessLightNormalImage;
-            allProcessHoverImage = allProcessLightHoverImage;
-            allProcessActiveImage = allProcessLightActiveImage;
-            break;
-        case DApplicationHelper::DarkType:
-            frameColor = "#ffffff";
-            frameOpacity = 0.05;
-
-            onlyGuiNormalImage = onlyGuiDarkNormalImage;
-            onlyGuiHoverImage = onlyGuiDarkHoverImage;
-            onlyGuiActiveImage = onlyGuiDarkActiveImage;
-            onlyMeNormalImage = onlyMeDarkNormalImage;
-            onlyMeHoverImage = onlyMeDarkHoverImage;
-            onlyMeActiveImage = onlyMeDarkActiveImage;
-            allProcessNormalImage = allProcessDarkNormalImage;
-            allProcessHoverImage = allProcessDarkHoverImage;
-            allProcessActiveImage = allProcessDarkActiveImage;
-            break;
-        default:
-            break;
-    }
+    m_themeType = themeType;
 }

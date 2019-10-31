@@ -29,7 +29,11 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "dapplication.h"
+
 DWIDGET_USE_NAMESPACE
+
+class Settings;
 
 class CompactMemoryMonitor : public QWidget
 {
@@ -89,6 +93,8 @@ private:
     long totalSwap;
     long usedMemory;
     long usedSwap;
+
+    DApplicationHelper::ColorType m_themeType;
 };
 
 #endif

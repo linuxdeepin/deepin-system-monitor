@@ -126,7 +126,7 @@ void CompactCpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPer
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
@@ -157,7 +157,6 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
                      Qt::AlignLeft | Qt::AlignTop, readTitle);
 
     // Draw background grid.
-    painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
     painter.setOpacity(0.1);
     framePen.setColor(QColor(textColor));

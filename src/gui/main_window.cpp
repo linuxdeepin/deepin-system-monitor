@@ -31,12 +31,12 @@ void MainWindow::initUI()
     int width = Constant::WINDOW_MIN_WIDTH;
     int height = Constant::WINDOW_MIN_HEIGHT;
 
-    if (m_settings->getOption("window_width").isValid()) {
-        width = m_settings->getOption("window_width").toInt();
+    if (m_settings->getOption(kSettingKeyWindowWidth).isValid()) {
+        width = m_settings->getOption(kSettingKeyWindowWidth).toInt();
     }
 
-    if (m_settings->getOption("window_height").isValid()) {
-        height = m_settings->getOption("window_height").toInt();
+    if (m_settings->getOption(kSettingKeyWindowHeight).isValid()) {
+        height = m_settings->getOption(kSettingKeyWindowHeight).toInt();
     }
 
     resize(width, height);
@@ -51,32 +51,52 @@ void MainWindow::initUI()
     titlebar()->setMenu(menu);
 
     // kill process
-    auto *killAction = new QAction(tr("Force to end application"), menu);
-    connect(killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
+    m_killAction = new QAction(tr("Force to end application"), menu);
+    connect(m_killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
-    auto *modeMenu = new DMenu(tr("Mode"), menu);
-    QActionGroup *modeGroup = new QActionGroup(modeMenu);
+    m_modeMenu = new DMenu(tr("Mode"), menu);
+    QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
     modeGroup->setExclusive(true);
     auto *expandModeAction = new QAction(tr("Expand"), modeGroup);
     expandModeAction->setCheckable(true);
     auto *compactModeAction = new QAction(tr("Compact"), modeGroup);
     compactModeAction->setCheckable(true);
-    compactModeAction->setChecked(true);
-    modeMenu->addAction(expandModeAction);
-    modeMenu->addAction(compactModeAction);
+    m_modeMenu->addAction(expandModeAction);
+    m_modeMenu->addAction(compactModeAction);
+
+    QVariant vmode = m_settings->getOption(kSettingKeyDisplayMode);
+    if (vmode.isValid()) {
+        bool ok = false;
+        int mode = vmode.toInt(&ok);
+        if (ok) {
+            if (mode == kDisplayModeExpand) {
+                expandModeAction->setChecked(true);
+            } else if (mode == kDisplayModeCompact) {
+                compactModeAction->setChecked(true);
+            }
+        } else {
+            expandModeAction->setChecked(true);
+            m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
+            Q_EMIT displayModeChanged(kDisplayModeExpand);
+        }
+    }
 
     connect(expandModeAction, &QAction::triggered, this, [=]() {
-        m_settings->setOption("display_mode", kDisplayModeExpand);
+        m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
         Q_EMIT displayModeChanged(kDisplayModeExpand);
     });
     connect(compactModeAction, &QAction::triggered, this, [=]() {
-        m_settings->setOption("display_mode", kDisplayModeCompact);
+        m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeCompact);
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
 
-    menu->addAction(killAction);
-    menu->addMenu(modeMenu);
+    menu->addAction(m_killAction);
+    menu->addMenu(m_modeMenu);
+
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
+            [=]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
 
     // ========stack view==========
     m_pages = new DStackedWidget(this);
@@ -93,11 +113,13 @@ void MainWindow::initConnections()
 {
     connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
-        m_procPage->setFocus();
+        m_modeMenu->setEnabled(true);
+        m_killAction->setEnabled(true);
     });
     connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
-        m_svcPage->setFocus();
+        m_modeMenu->setEnabled(false);
+        m_killAction->setEnabled(false);
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
             [=]() { m_toolbar->clearSearchText(); });
@@ -105,9 +127,19 @@ void MainWindow::initConnections()
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    // TODO
+    Q_UNUSED(event)
+
+    m_settings->setOption(kSettingKeyWindowWidth, width());
+    m_settings->setOption(kSettingKeyWindowHeight, height());
 }
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    // TODO
+    Q_UNUSED(event)
+
+    m_settings->setOption(kSettingKeyWindowWidth, width());
+    m_settings->setOption(kSettingKeyWindowHeight, height());
+
+    if (m_settings)
+        m_settings->flush();
 }

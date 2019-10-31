@@ -505,7 +505,7 @@ void StatusMonitor::showDiskMonitor()
 {
     if (!isCompactMode) {
         // Set height to show disk monitor.
-        diskMonitor->setFixedHeight(190);
+        //        diskMonitor->setFixedHeight(190);
     }
 }
 
@@ -513,7 +513,7 @@ void StatusMonitor::hideDiskMonitor()
 {
     if (!isCompactMode) {
         // Set height to 0 to make disk monitor hide.
-        diskMonitor->setFixedHeight(0);
+        //        diskMonitor->setFixedHeight(0);
     }
 }
 
@@ -552,7 +552,7 @@ void StatusMonitor::handleDiskStatus(float totalReadKbs, float totalWriteKbs)
     if (isCompactMode) {
         compactDiskMonitor->updateStatus(totalReadKbs, totalWriteKbs);
     } else {
-        diskMonitor->updateStatus(totalReadKbs, totalWriteKbs);
+        //        diskMonitor->updateStatus(totalReadKbs, totalWriteKbs);
     }
 }
 
@@ -572,12 +572,10 @@ void StatusMonitor::initCompactMode()
         cpuMonitor = new CpuMonitor();
         memoryMonitor = new MemoryMonitor();
         networkMonitor = new NetworkMonitor();
-        diskMonitor = new DiskMonitor();
 
         layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
         layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
         layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
-        layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
     }
 }
 
@@ -587,12 +585,10 @@ void StatusMonitor::enableCompactMode()
         layout->removeWidget(cpuMonitor);
         layout->removeWidget(memoryMonitor);
         layout->removeWidget(networkMonitor);
-        layout->removeWidget(diskMonitor);
 
         cpuMonitor->deleteLater();
         memoryMonitor->deleteLater();
         networkMonitor->deleteLater();
-        diskMonitor->deleteLater();
 
         compactCpuMonitor = new CompactCpuMonitor();
         compactMemoryMonitor = new CompactMemoryMonitor();
@@ -624,12 +620,12 @@ void StatusMonitor::disableCompactMode()
         cpuMonitor = new CpuMonitor();
         memoryMonitor = new MemoryMonitor();
         networkMonitor = new NetworkMonitor();
-        diskMonitor = new DiskMonitor();
+        //        diskMonitor = new DiskMonitor();
 
         layout->addWidget(cpuMonitor, 0, Qt::AlignHCenter);
         layout->addWidget(memoryMonitor, 0, Qt::AlignHCenter);
         layout->addWidget(networkMonitor, 0, Qt::AlignHCenter);
-        layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
+        //        layout->addWidget(diskMonitor, 0, Qt::AlignHCenter);
     }
 
     isCompactMode = false;

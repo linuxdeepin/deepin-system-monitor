@@ -84,6 +84,8 @@ private:
     int height = 24;
     int hoverIndex = -1;
     int width = 26;
+
+    DApplicationHelper::ColorType m_themeType;
 };
 
 #endif

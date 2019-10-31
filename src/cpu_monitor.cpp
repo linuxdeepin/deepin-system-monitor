@@ -30,6 +30,7 @@
 #include "constant.h"
 #include "cpu_monitor.h"
 #include "dthememanager.h"
+#include "settings.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -58,6 +59,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
+    m_themeType = dAppHelper->themeType();
 }
 
 CpuMonitor::~CpuMonitor()
@@ -68,30 +70,7 @@ CpuMonitor::~CpuMonitor()
 
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    switch (themeType) {
-        case DApplicationHelper::LightType:
-            ringForegroundColor = "#2CA7F8";
-            ringForegroundOpacity = 1;
-
-            ringBackgroundColor = "#000000";
-            ringBackgroundOpacity = 0.05;
-
-            iconImage = iconLightImage;
-
-            break;
-        case DApplicationHelper::DarkType:
-            ringForegroundColor = "#2CA7F8";
-            ringForegroundOpacity = 1;
-
-            ringBackgroundColor = "#2CA7F8";
-            ringBackgroundOpacity = 0.1;
-
-            iconImage = iconDarkImage;
-
-            break;
-        default:
-            break;
-    }
+    m_themeType = themeType;
 }
 
 void CpuMonitor::render()
@@ -142,6 +121,29 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
+
+    switch (m_themeType) {
+        case DApplicationHelper::LightType:
+            ringForegroundColor = "#2CA7F8";
+            ringForegroundOpacity = 1;
+
+            ringBackgroundColor = "#000000";
+            ringBackgroundOpacity = 0.05;
+
+            iconImage = iconLightImage;
+            break;
+        case DApplicationHelper::DarkType:
+            ringForegroundColor = "#2CA7F8";
+            ringForegroundOpacity = 1;
+
+            ringBackgroundColor = "#2CA7F8";
+            ringBackgroundOpacity = 0.1;
+
+            iconImage = iconDarkImage;
+            break;
+        default:
+            break;
+    }
 
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();

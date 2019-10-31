@@ -58,39 +58,15 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &CompactMemoryMonitor::changeTheme);
+
+    m_themeType = dAppHelper->themeType();
 }
 
 CompactMemoryMonitor::~CompactMemoryMonitor() {}
 
 void CompactMemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    switch (themeType) {
-        case DApplicationHelper::LightType:
-            memoryForegroundColor = "#FF2997";
-            memoryForegroundOpacity = 1;
-            memoryBackgroundColor = "#000000";
-            memoryBackgroundOpacity = 0.05;
-
-            swapForegroundColor = "#00B4C7";
-            swapForegroundOpacity = 1;
-            swapBackgroundColor = "#000000";
-            swapBackgroundOpacity = 0.05;
-
-            break;
-        case DApplicationHelper::DarkType:
-            memoryForegroundColor = "#FF2997";
-            memoryForegroundOpacity = 1;
-            memoryBackgroundColor = "#FF2997";
-            memoryBackgroundOpacity = 0.1;
-
-            swapForegroundColor = "#00B4C7";
-            swapForegroundOpacity = 1;
-            swapBackgroundColor = "#00B4C7";
-            swapBackgroundOpacity = 0.1;
-            break;
-        default:
-            break;
-    }
+    m_themeType = themeType;
 }
 
 void CompactMemoryMonitor::render()
@@ -146,6 +122,34 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     // Init.
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
+
+    switch (m_themeType) {
+        case DApplicationHelper::LightType:
+            memoryForegroundColor = "#FF2997";
+            memoryForegroundOpacity = 1;
+            memoryBackgroundColor = "#000000";
+            memoryBackgroundOpacity = 0.05;
+
+            swapForegroundColor = "#00B4C7";
+            swapForegroundOpacity = 1;
+            swapBackgroundColor = "#000000";
+            swapBackgroundOpacity = 0.05;
+
+            break;
+        case DApplicationHelper::DarkType:
+            memoryForegroundColor = "#FF2997";
+            memoryForegroundOpacity = 1;
+            memoryBackgroundColor = "#FF2997";
+            memoryBackgroundOpacity = 0.1;
+
+            swapForegroundColor = "#00B4C7";
+            swapForegroundOpacity = 1;
+            swapBackgroundColor = "#00B4C7";
+            swapBackgroundOpacity = 0.1;
+            break;
+        default:
+            break;
+    }
 
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
