@@ -86,14 +86,17 @@ void ProcessPageWidget::initUI()
 
     killPid = -1;
 
-    killProcessDialog = new DDialog(QString(tr("End application")),
-                                    QString(tr("Ending this application may cause data "
-                                               "loss.\nAre you sure you want to continue?")),
-                                    this);
+    killProcessDialog =
+        new DDialog(DApplication::translate("Kill.Process.Dialog", "End process"),
+                    DApplication::translate("Kill.Process.Dialog",
+                                            "Ending this process may cause data "
+                                            "loss.\nAre you sure you want to continue?"),
+                    this);
     killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
     killProcessDialog->setIconPixmap(QPixmap(Utils::getQrcPath("deepin-system-monitor.svg")));
-    killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-    killProcessDialog->addButton(QString(tr("End application")), true, DDialog::ButtonNormal);
+    killProcessDialog->addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
+    killProcessDialog->addButton(DApplication::translate("Kill.Process.Dialog", "Force terminate"),
+                                 true);
     connect(killProcessDialog, &DDialog::buttonClicked, this,
             &ProcessPageWidget::dialogButtonClicked);
 
@@ -175,12 +178,6 @@ bool ProcessPageWidget::getSortingOrder()
 {
     return m_settings->getOption("process_sorting_order").toBool();
 }
-
-// TODO: save compact mode check state
-// void ProcessPageWidget::initCompactModeAction()
-//{
-//    compactModeAction->setChecked(settings->getOption("compact_mode").toBool());
-//}
 
 void ProcessPageWidget::paintEvent(QPaintEvent *)
 {

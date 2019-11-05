@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "compact_cpu_monitor.h"
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -30,8 +30,8 @@
 #include <QDebug>
 #include <QPainter>
 
+#include "compact_cpu_monitor.h"
 #include "constant.h"
-#include "dthememanager.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -140,8 +140,9 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, cpuTextRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString readTitle =
-        QString("%1 %2%").arg(tr("CPU")).arg(QString::number(totalCpuPercent, 'f', 1));
+    QString readTitle = QString("%1 %2%")
+                            .arg(DApplication::translate("Process.Graph.View", "CPU"))
+                            .arg(QString::number(totalCpuPercent, 'f', 1));
 
     painter.setOpacity(1);
     painter.setPen(QPen(textColor));

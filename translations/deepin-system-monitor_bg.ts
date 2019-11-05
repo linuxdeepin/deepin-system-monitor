@@ -1,115 +1,329 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="bg">
+<context>
+    <name>App.About</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished">Deepin System Monitor е интуитивна и мощна програма за наблюдение на системните процеси. С нея, вие можете да наблюдавате работата на процесора, паметта, мрежата, диска и други състояния.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="unfinished">Deepin System Monitor</translation>
+    </message>
+</context>
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Име на процес</translation>
+        <translation type="vanished">Име на процес</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Команден ред</translation>
+        <translation type="vanished">Команден ред</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Време на стартиране</translation>
+        <translation type="vanished">Време на стартиране</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation type="vanished">Процесор</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Четене на диска</translation>
+        <translation type="vanished">Четене на диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис на диска</translation>
+        <translation type="vanished">Запис на диска</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Памет</translation>
+        <translation type="vanished">Памет</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation type="vanished">Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не е включено</translation>
+        <translation type="vanished">Не е включено</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Сваляне</translation>
+        <translation type="vanished">Сваляне</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Общо</translation>
+        <translation type="vanished">Общо</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Качване</translation>
+        <translation type="vanished">Качване</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation type="vanished">Процесор</translation>
+    </message>
+</context>
+<context>
+    <name>DApplication</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="obsolete">Deepin System Monitor е интуитивна и мощна програма за наблюдение на системните процеси. С нея, вие можете да наблюдавате работата на процесора, паметта, мрежата, диска и други състояния.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="obsolete">Deepin System Monitor</translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Active.State</name>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>activating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deactivating</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Load.State</name>
+    <message>
+        <source>stub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not-found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bad-setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.State</name>
+    <message>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>transient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>indirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Sub.State</name>
+    <message>
+        <source>dead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-pre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-watchdog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="obsolete">Прекратяването на този процес може да причини загуба на данни.
+Сигурни ли сте, че искате да продължите? </translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="obsolete">Край на процес</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Диск</translation>
+        <translation type="vanished">Диск</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Четене на диска</translation>
+        <translation type="vanished">Четене на диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис на диска</translation>
+        <translation type="vanished">Запис на диска</translation>
+    </message>
+</context>
+<context>
+    <name>Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished">Прекратяването на този процес може да причини загуба на данни.
+Сигурни ли сте, че искате да продължите? </translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Отказ</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Край на процес</translation>
+    </message>
+    <message>
+        <source>Terminate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force terminate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Принудително изключване на програмата</translation>
+        <translation type="vanished">Принудително изключване на програмата</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Тъмна тема</translation>
+        <translation type="vanished">Тъмна тема</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Изключване на програмата</translation>
+        <translation type="vanished">Изключване на програмата</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отказ</translation>
+        <translation type="vanished">Отказ</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Компактен режим</translation>
+        <translation type="vanished">Компактен режим</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Прекратяването на това приложение може да причини загуба на данни.
+        <translation type="vanished">Прекратяването на това приложение може да причини загуба на данни.
 Сигурни ли сте, че искате да продължите?</translation>
     </message>
 </context>
@@ -117,135 +331,314 @@ Are you sure you want to continue?</source>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Памет</translation>
+        <translation type="vanished">Памет</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation type="vanished">Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не е включено</translation>
+        <translation type="vanished">Не е включено</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Мрежа</translation>
+        <translation type="vanished">Мрежа</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Сваляне</translation>
+        <translation type="vanished">Сваляне</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Общо</translation>
+        <translation type="vanished">Общо</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Качване</translation>
+        <translation type="vanished">Качване</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Attributes.Dialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="unfinished">Име на процес</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished">Команден ред</translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="unfinished">Време на стартиране</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Choose.Window.Dialog</name>
+    <message>
+        <source>Click the application you want to end</source>
+        <translation type="unfinished">Кликнете на приложението, което искате да спрете</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.View</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">Процесор</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Четене на диска</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Запис на диска</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Памет</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Swap</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Сваляне</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished">Общо</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Качване</translation>
+    </message>
+    <message>
+        <source>Disk</source>
+        <translation type="unfinished">Диск</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="unfinished">Мрежа</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Show.Mode</name>
+    <message>
+        <source>Applications</source>
+        <translation type="unfinished">Приложения</translation>
+    </message>
+    <message>
+        <source>My processes</source>
+        <translation type="unfinished">Моите процеси</translation>
+    </message>
+    <message>
+        <source>All processes</source>
+        <translation type="unfinished">Всички процеси</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Summary</name>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished">%2 програми и %3 процеса работят</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table</name>
+    <message>
+        <source>No response</source>
+        <translation type="unfinished">Няма отговор</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished">Приспиване</translation>
+    </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished">Лента на задачи</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Context.Menu</name>
+    <message>
+        <source>Terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="unfinished">Приспиване на процес</translation>
+    </message>
+    <message>
+        <source>Resume process</source>
+        <translation type="unfinished">Продължаване на процес</translation>
+    </message>
+    <message>
+        <source>View command location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">Свойства</translation>
+    </message>
+    <message>
+        <source>Force terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Име</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">Процесор</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Памет</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Запис на диска</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Четене на диска</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Сваляне</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Качване</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Няма отговор</translation>
+        <translation type="vanished">Няма отговор</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Приспиване</translation>
+        <translation type="vanished">Приспиване</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Край на процес</translation>
+        <translation type="vanished">Край на процес</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отказ</translation>
+        <translation type="vanished">Отказ</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Приспиване на процес</translation>
+        <translation type="vanished">Приспиване на процес</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Продължаване на процес</translation>
+        <translation type="vanished">Продължаване на процес</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Показване местоположението на процеса</translation>
+        <translation type="vanished">Показване местоположението на процеса</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Свойства</translation>
+        <translation type="vanished">Свойства</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 програми и %3 процеса работят</translation>
+        <translation type="vanished">%2 програми и %3 процеса работят</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Прекратяването на този процес може да причини загуба на данни.
+        <translation type="vanished">Прекратяването на този процес може да причини загуба на данни.
 Сигурни ли сте, че искате да продължите? </translation>
+    </message>
+</context>
+<context>
+    <name>ProcessPageWidget</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Отказ</translation>
+    </message>
+    <message>
+        <source>End application</source>
+        <translation type="obsolete">Изключване на програмата</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Име</translation>
+        <translation type="vanished">Име</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation type="vanished">Процесор</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Памет</translation>
+        <translation type="vanished">Памет</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Запис на диска</translation>
+        <translation type="vanished">Запис на диска</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Четене на диска</translation>
+        <translation type="vanished">Четене на диска</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Сваляне</translation>
+        <translation type="vanished">Сваляне</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Качване</translation>
+        <translation type="vanished">Качване</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation type="vanished">PID</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin System Monitor е интуитивна и мощна програма за наблюдение на системните процеси. С нея, вие можете да наблюдавате работата на процесора, паметта, мрежата, диска и други състояния.</translation>
+        <translation type="vanished">Deepin System Monitor е интуитивна и мощна програма за наблюдение на системните процеси. С нея, вие можете да наблюдавате работата на процесора, паметта, мрежата, диска и други състояния.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation type="vanished">Deepin System Monitor</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin System Monitor</translation>
+        <translation type="vanished">Deepin System Monitor</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +686,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Мениджър на прозорци</translation>
+        <translation type="vanished">Deepin Мениджър на прозорци</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -451,38 +844,171 @@ Are you sure you want to continue?</source>
         <source>Sogou input method</source>
         <translation>Sogou метод за въвеждане</translation>
     </message>
+    <message>
+        <source>Deepin Window Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Отказ</translation>
+    </message>
+    <message>
+        <source>Service instance name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Context.Menu</name>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Име</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sub</source>
+        <extracomment>sub state (running status)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <extracomment>state</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Search</name>
+    <message>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ServiceNameSubInputDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Отказ</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Кликнете на приложението, което искате да спрете</translation>
+        <translation type="vanished">Кликнете на приложението, което искате да спрете</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Приложения</translation>
+        <translation type="vanished">Приложения</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Моите процеси</translation>
+        <translation type="vanished">Моите процеси</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Всички процеси</translation>
+        <translation type="vanished">Всички процеси</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Лента на задачи</translation>
+        <translation type="vanished">Лента на задачи</translation>
+    </message>
+</context>
+<context>
+    <name>SystemServiceTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Име</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="obsolete">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Context.Menu</name>
+    <message>
+        <source>Force end application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Search</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Търсене</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Switch</name>
+    <message>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Търсене</translation>
+        <translation type="vanished">Търсене</translation>
     </message>
 </context>
 </TS>

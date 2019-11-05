@@ -1,115 +1,329 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pl">
+<context>
+    <name>App.About</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished">Monitor systemu Deepin jest intuicyjnym i wydajnym monitorem systemu. Może monitorować stan procesów procesora, pamięci, sieci, dysku i innych.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="unfinished">Monitor systemu Deepin</translation>
+    </message>
+</context>
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Nazwa procesu</translation>
+        <translation type="vanished">Nazwa procesu</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Wiersz poleceń</translation>
+        <translation type="vanished">Wiersz poleceń</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Czas rozpoczęcia</translation>
+        <translation type="vanished">Czas rozpoczęcia</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Procesor</translation>
+        <translation type="vanished">Procesor</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Odczyt dysku</translation>
+        <translation type="vanished">Odczyt dysku</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zapis dysku</translation>
+        <translation type="vanished">Zapis dysku</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Pamięć</translation>
+        <translation type="vanished">Pamięć</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Przestrzeń wymiany</translation>
+        <translation type="vanished">Przestrzeń wymiany</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Niewłączone</translation>
+        <translation type="vanished">Niewłączone</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Pobieranie</translation>
+        <translation type="vanished">Pobieranie</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Łącznie</translation>
+        <translation type="vanished">Łącznie</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Przesyłanie</translation>
+        <translation type="vanished">Przesyłanie</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
+    </message>
+</context>
+<context>
+    <name>DApplication</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="obsolete">Monitor systemu Deepin jest intuicyjnym i wydajnym monitorem systemu. Może monitorować stan procesów procesora, pamięci, sieci, dysku i innych.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="obsolete">Monitor systemu Deepin</translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Active.State</name>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>activating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deactivating</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Load.State</name>
+    <message>
+        <source>stub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not-found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bad-setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.State</name>
+    <message>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>transient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>indirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Sub.State</name>
+    <message>
+        <source>dead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-pre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-watchdog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="obsolete">Zakończenie tego procesu może spowodować utratę danych
+Jesteś pewien, że chcesz kontynuować?</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="obsolete">Zakończ proces</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Dysk</translation>
+        <translation type="vanished">Dysk</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Odczyt dysku</translation>
+        <translation type="vanished">Odczyt dysku</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zapis dysku</translation>
+        <translation type="vanished">Zapis dysku</translation>
+    </message>
+</context>
+<context>
+    <name>Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished">Zakończenie tego procesu może spowodować utratę danych
+Jesteś pewien, że chcesz kontynuować?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Zakończ proces</translation>
+    </message>
+    <message>
+        <source>Terminate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force terminate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Wymuś zakończenie programu</translation>
+        <translation type="vanished">Wymuś zakończenie programu</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Motyw ciemny</translation>
+        <translation type="vanished">Motyw ciemny</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Zakończ program</translation>
+        <translation type="vanished">Zakończ program</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anuluj</translation>
+        <translation type="vanished">Anuluj</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Tryb kompaktowy</translation>
+        <translation type="vanished">Tryb kompaktowy</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Zakończenie tej aplikacji może spowodować utratę danych
+        <translation type="vanished">Zakończenie tej aplikacji może spowodować utratę danych
 Jesteś pewien, że chcesz kontynuować?</translation>
     </message>
 </context>
@@ -117,135 +331,314 @@ Jesteś pewien, że chcesz kontynuować?</translation>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Pamięć</translation>
+        <translation type="vanished">Pamięć</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Przestrzeń wymiany</translation>
+        <translation type="vanished">Przestrzeń wymiany</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Niewłączone</translation>
+        <translation type="vanished">Niewłączone</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Sieć</translation>
+        <translation type="vanished">Sieć</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Pobieranie</translation>
+        <translation type="vanished">Pobieranie</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Łącznie</translation>
+        <translation type="vanished">Łącznie</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Przesyłanie</translation>
+        <translation type="vanished">Przesyłanie</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Attributes.Dialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="unfinished">Nazwa procesu</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished">Wiersz poleceń</translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="unfinished">Czas rozpoczęcia</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Choose.Window.Dialog</name>
+    <message>
+        <source>Click the application you want to end</source>
+        <translation type="unfinished">Kliknij na program, który chcesz zakończyć</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.View</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Odczyt dysku</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Zapis dysku</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Pamięć</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Przestrzeń wymiany</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished">Niewłączone</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Pobieranie</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished">Łącznie</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Przesyłanie</translation>
+    </message>
+    <message>
+        <source>Disk</source>
+        <translation type="unfinished">Dysk</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="unfinished">Sieć</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Show.Mode</name>
+    <message>
+        <source>Applications</source>
+        <translation type="unfinished">Programy</translation>
+    </message>
+    <message>
+        <source>My processes</source>
+        <translation type="unfinished">Moje procesy</translation>
+    </message>
+    <message>
+        <source>All processes</source>
+        <translation type="unfinished">Wszystkie procesy</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Summary</name>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished">Uruchomionych programów: %2 i procesów: %3 </translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table</name>
+    <message>
+        <source>No response</source>
+        <translation type="unfinished">Brak odpowiedzi</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished">Wstrzymaj</translation>
+    </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished">Tacka</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Context.Menu</name>
+    <message>
+        <source>Terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="unfinished">Wstrzymaj proces</translation>
+    </message>
+    <message>
+        <source>Resume process</source>
+        <translation type="unfinished">Ponów proces</translation>
+    </message>
+    <message>
+        <source>View command location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">Właściwości</translation>
+    </message>
+    <message>
+        <source>Force terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nazwa</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Pamięć</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Zapis dysku</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Odczyt dysku</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Pobieranie</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Przesyłanie</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Brak odpowiedzi</translation>
+        <translation type="vanished">Brak odpowiedzi</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Wstrzymaj</translation>
+        <translation type="vanished">Wstrzymaj</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Zakończ proces</translation>
+        <translation type="vanished">Zakończ proces</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anuluj</translation>
+        <translation type="vanished">Anuluj</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Wstrzymaj proces</translation>
+        <translation type="vanished">Wstrzymaj proces</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Ponów proces</translation>
+        <translation type="vanished">Ponów proces</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Zobacz lokalizację procesu</translation>
+        <translation type="vanished">Zobacz lokalizację procesu</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Właściwości</translation>
+        <translation type="vanished">Właściwości</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>Uruchomionych programów: %2 i procesów: %3 </translation>
+        <translation type="vanished">Uruchomionych programów: %2 i procesów: %3 </translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Zakończenie tego procesu może spowodować utratę danych
+        <translation type="vanished">Zakończenie tego procesu może spowodować utratę danych
 Jesteś pewien, że chcesz kontynuować?</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessPageWidget</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Anuluj</translation>
+    </message>
+    <message>
+        <source>End application</source>
+        <translation type="obsolete">Zakończ program</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Nazwa</translation>
+        <translation type="vanished">Nazwa</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Pamięć</translation>
+        <translation type="vanished">Pamięć</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zapis dysku</translation>
+        <translation type="vanished">Zapis dysku</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Odczyt dysku</translation>
+        <translation type="vanished">Odczyt dysku</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Pobieranie</translation>
+        <translation type="vanished">Pobieranie</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Przesyłanie</translation>
+        <translation type="vanished">Przesyłanie</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation type="vanished">PID</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Monitor systemu Deepin jest intuicyjnym i wydajnym monitorem systemu. Może monitorować stan procesów procesora, pamięci, sieci, dysku i innych.</translation>
+        <translation type="vanished">Monitor systemu Deepin jest intuicyjnym i wydajnym monitorem systemu. Może monitorować stan procesów procesora, pamięci, sieci, dysku i innych.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor systemu Deepin</translation>
+        <translation type="vanished">Monitor systemu Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Monitor systemu Deepin</translation>
+        <translation type="vanished">Monitor systemu Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +686,7 @@ Jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Zarządzanie oknami Deepin</translation>
+        <translation type="vanished">Zarządzanie oknami Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -451,38 +844,171 @@ Jesteś pewien, że chcesz kontynuować?</translation>
         <source>Sogou input method</source>
         <translation>Metoda wprowadzania Sogou</translation>
     </message>
+    <message>
+        <source>Deepin Window Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>Service instance name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Context.Menu</name>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nazwa</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sub</source>
+        <extracomment>sub state (running status)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <extracomment>state</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Search</name>
+    <message>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ServiceNameSubInputDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Anuluj</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Kliknij na program, który chcesz zakończyć</translation>
+        <translation type="vanished">Kliknij na program, który chcesz zakończyć</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Programy</translation>
+        <translation type="vanished">Programy</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Moje procesy</translation>
+        <translation type="vanished">Moje procesy</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Wszystkie procesy</translation>
+        <translation type="vanished">Wszystkie procesy</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Tacka</translation>
+        <translation type="vanished">Tacka</translation>
+    </message>
+</context>
+<context>
+    <name>SystemServiceTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Nazwa</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="obsolete">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Context.Menu</name>
+    <message>
+        <source>Force end application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Search</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Wyszukaj</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Switch</name>
+    <message>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Wyszukaj</translation>
+        <translation type="vanished">Wyszukaj</translation>
     </message>
 </context>
 </TS>

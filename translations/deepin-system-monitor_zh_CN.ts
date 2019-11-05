@@ -1,6 +1,372 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
+<context>
+    <name>App.About</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation>深度系统监视器是一款直观易用、功能强大的系统监视器。它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation>深度系统监视器</translation>
+    </message>
+</context>
 <context>
     <name>AttributesDialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="vanished">进程名</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="vanished">命令行</translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="vanished">启动时间</translation>
+    </message>
+</context>
+<context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>CPU</source>
+        <translation type="vanished">处理器</translation>
+    </message>
+</context>
+<context>
+    <name>CompactDiskMonitor</name>
+    <message>
+        <source>Disk read</source>
+        <translation type="vanished">磁盘读取</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="vanished">磁盘写入</translation>
+    </message>
+</context>
+<context>
+    <name>CompactMemoryMonitor</name>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">内存</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="vanished">交换空间</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="vanished">未启用</translation>
+    </message>
+</context>
+<context>
+    <name>CompactNetworkMonitor</name>
+    <message>
+        <source>Download</source>
+        <translation type="vanished">下载</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="vanished">总量</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="vanished">上传</translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>CPU</source>
+        <translation type="vanished">处理器</translation>
+    </message>
+</context>
+<context>
+    <name>DApplication</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="obsolete">深度系统监视器是一款直观易用、功能强大的系统监视器。它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="obsolete">深度系统监视器</translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Active.State</name>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>activating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deactivating</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Load.State</name>
+    <message>
+        <source>stub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not-found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bad-setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.State</name>
+    <message>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>transient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>indirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Sub.State</name>
+    <message>
+        <source>dead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-pre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-watchdog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="obsolete">结束进程会有丢失数据的风险。
+您确定要结束选中的进程吗？</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="obsolete">结束进程</translation>
+    </message>
+</context>
+<context>
+    <name>DiskMonitor</name>
+    <message>
+        <source>Disk</source>
+        <translation type="vanished">磁盘</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="vanished">磁盘读取</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="vanished">磁盘写入</translation>
+    </message>
+</context>
+<context>
+    <name>Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>结束进程会有丢失数据的风险。
+您确定要结束选中的进程吗？</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Force Terminate</source>
+        <translation type="vanished">强制结束</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation>结束进程</translation>
+    </message>
+    <message>
+        <source>Terminate</source>
+        <translation>结束</translation>
+    </message>
+    <message>
+        <source>Force terminate</source>
+        <translation>强制结束</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Force to end application</source>
+        <translation type="vanished">强制结束应用程序</translation>
+    </message>
+    <message>
+        <source>Dark theme</source>
+        <translation type="vanished">深色主题</translation>
+    </message>
+    <message>
+        <source>End application</source>
+        <translation type="vanished">结束应用</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="vanished">取消</translation>
+    </message>
+    <message>
+        <source>Compact mode</source>
+        <translation type="vanished">紧凑模式</translation>
+    </message>
+    <message>
+        <source>Ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="vanished">结束应用会有丢失数据的风险。
+您确定要结束选中的应用吗？</translation>
+    </message>
+</context>
+<context>
+    <name>MemoryMonitor</name>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">内存</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="vanished">交换空间</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="vanished">未启用</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkMonitor</name>
+    <message>
+        <source>Network</source>
+        <translation type="vanished">网络</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="vanished">下载</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="vanished">总量</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="vanished">上传</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Attributes.Dialog</name>
     <message>
         <source>Process name</source>
         <translation>进程名</translation>
@@ -15,14 +381,18 @@
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Process.Choose.Window.Dialog</name>
+    <message>
+        <source>Click the application you want to end</source>
+        <translation>点击您想结束的应用程序</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
         <translation>处理器</translation>
     </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
         <translation>磁盘读取</translation>
@@ -31,9 +401,6 @@
         <source>Disk write</source>
         <translation>磁盘写入</translation>
     </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
         <translation>内存</translation>
@@ -46,109 +413,51 @@
         <source>Not enabled</source>
         <translation>未启用</translation>
     </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>下载</translation>
+        <translation>正在接收</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>总量</translation>
+        <translation>总计</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>上传</translation>
+        <translation>正在发送</translation>
     </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation>处理器</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
         <translation>磁盘</translation>
     </message>
     <message>
-        <source>Disk read</source>
-        <translation>磁盘读取</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation>磁盘写入</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Force to end application</source>
-        <translation>强制结束应用程序</translation>
-    </message>
-    <message>
-        <source>Dark theme</source>
-        <translation>深色主题</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation>结束应用</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation>紧凑模式</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation>结束应用会有丢失数据的风险。
-您确定要结束选中的应用吗？</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation>内存</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation>交换空间</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation>未启用</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
         <source>Network</source>
         <translation>网络</translation>
     </message>
+</context>
+<context>
+    <name>Process.Show.Mode</name>
     <message>
-        <source>Download</source>
-        <translation>下载</translation>
+        <source>Applications</source>
+        <translation>应用程序</translation>
     </message>
     <message>
-        <source>Total</source>
-        <translation>总量</translation>
+        <source>My processes</source>
+        <translation>我的进程</translation>
     </message>
     <message>
-        <source>Upload</source>
-        <translation>上传</translation>
+        <source>All processes</source>
+        <translation>所有进程</translation>
     </message>
 </context>
 <context>
-    <name>ProcessItem</name>
+    <name>Process.Summary</name>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation>正在运行%2个应用程序和%3个系统进程</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table</name>
     <message>
         <source>No response</source>
         <translation>无响应</translation>
@@ -157,16 +466,16 @@ Are you sure you want to continue?</source>
         <source>Suspend</source>
         <translation>暂停</translation>
     </message>
+    <message>
+        <source>Tray</source>
+        <translation>托盘</translation>
+    </message>
 </context>
 <context>
-    <name>ProcessManager</name>
+    <name>Process.Table.Context.Menu</name>
     <message>
-        <source>End process</source>
+        <source>Terminate process</source>
         <translation>结束进程</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
     </message>
     <message>
         <source>Suspend process</source>
@@ -174,10 +483,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>继续进程</translation>
+        <translation>恢复进程</translation>
     </message>
     <message>
-        <source>View process location</source>
+        <source>View command location</source>
         <translation>查看命令所在位置</translation>
     </message>
     <message>
@@ -185,18 +494,12 @@ Are you sure you want to continue?</source>
         <translation>属性</translation>
     </message>
     <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation>正在运行%2个应用程序和%3个系统进程</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation>结束进程会有丢失数据的风险。
-您确定要结束选中的进程吗？</translation>
+        <source>Force terminate process</source>
+        <translation>强制结束进程</translation>
     </message>
 </context>
 <context>
-    <name>ProcessView</name>
+    <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
         <translation>名称</translation>
@@ -231,21 +534,115 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>ProcessItem</name>
+    <message>
+        <source>No response</source>
+        <translation type="vanished">无响应</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="vanished">暂停</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessManager</name>
+    <message>
+        <source>End process</source>
+        <translation type="vanished">结束进程</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="vanished">取消</translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="vanished">暂停进程</translation>
+    </message>
+    <message>
+        <source>Resume process</source>
+        <translation type="vanished">恢复进程</translation>
+    </message>
+    <message>
+        <source>View process location</source>
+        <translation type="vanished">查看命令所在位置</translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="vanished">属性</translation>
+    </message>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="vanished">正在运行%2个应用程序和%3个系统进程</translation>
+    </message>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="vanished">结束进程会有丢失数据的风险。
+您确定要结束选中的进程吗？</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessPageWidget</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">取消</translation>
+    </message>
+    <message>
+        <source>End application</source>
+        <translation type="obsolete">结束应用</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessView</name>
+    <message>
+        <source>Name</source>
+        <translation type="vanished">名称</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="vanished">处理器</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="vanished">内存</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="vanished">磁盘写入</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="vanished">磁盘读取</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="vanished">下载</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="vanished">上传</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="vanished">进程号</translation>
+    </message>
+</context>
+<context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>深度系统监视器是一款直观易用、功能强大的系统监视器。它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。</translation>
+        <translation type="vanished">深度系统监视器是一款直观易用、功能强大的系统监视器。它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>深度系统监视器</translation>
+        <translation type="vanished">深度系统监视器</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>深度系统监视器</translation>
+        <translation type="vanished">深度系统监视器</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +690,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>深度窗口管理器</translation>
+        <translation type="vanished">深度窗口管理器</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -451,38 +848,171 @@ Are you sure you want to continue?</source>
         <source>Sogou input method</source>
         <translation>搜狗输入法</translation>
     </message>
+    <message>
+        <source>Deepin Window Manager</source>
+        <translation>深度窗口管理器</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation>确认</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Service instance name</source>
+        <translation>服务实例名</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Context.Menu</name>
+    <message>
+        <source>Start</source>
+        <translation>启动</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation>重新启动</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>刷新</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation>名称</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation>内存加载</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>活动</translation>
+    </message>
+    <message>
+        <source>Sub</source>
+        <extracomment>sub state (running status)</extracomment>
+        <translation>运行状态</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <extracomment>state</extracomment>
+        <translation>状态</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>描述</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation>进程号</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Search</name>
+    <message>
+        <source>Not Found</source>
+        <translation>无结果</translation>
+    </message>
+</context>
+<context>
+    <name>ServiceNameSubInputDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">取消</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>点击您想结束的应用程序</translation>
+        <translation type="vanished">点击您想结束的应用程序</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>应用程序</translation>
+        <translation type="vanished">应用程序</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>我的进程</translation>
+        <translation type="vanished">我的进程</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>所有进程</translation>
+        <translation type="vanished">所有进程</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>托盘</translation>
+        <translation type="vanished">托盘</translation>
+    </message>
+</context>
+<context>
+    <name>SystemServiceTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">名称</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="obsolete">进程号</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Context.Menu</name>
+    <message>
+        <source>Force end application</source>
+        <translation>强制结束应用程序</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>模式</translation>
+    </message>
+    <message>
+        <source>Expand</source>
+        <translation>舒展</translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation>紧凑</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Search</name>
+    <message>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Switch</name>
+    <message>
+        <source>Process</source>
+        <translation>程序进程</translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation>系统服务</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>搜索</translation>
+        <translation type="vanished">搜索</translation>
     </message>
 </context>
 </TS>

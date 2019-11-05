@@ -1,115 +1,329 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="lt">
+<context>
+    <name>App.About</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished">Deepin sistemos monitorius yra intuityvus ir galingas sistemos monitorius. Jis gali stebėti proceso CPU, atminties, tinklo, disko ir kitas būsenas.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="unfinished">Deepin sistemos monitorius</translation>
+    </message>
+</context>
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Proceso pavadinimas</translation>
+        <translation type="vanished">Proceso pavadinimas</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Komandų eilutė</translation>
+        <translation type="vanished">Komandų eilutė</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Paleidimo laikas</translation>
+        <translation type="vanished">Paleidimo laikas</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation type="vanished">Disko skaitymas</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation type="vanished">Disko rašymas</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation type="vanished">Atmintis</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Sukeitimų skaidinys</translation>
+        <translation type="vanished">Sukeitimų skaidinys</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Neįjungta</translation>
+        <translation type="vanished">Neįjungta</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation type="vanished">Atsiuntimas</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Viso</translation>
+        <translation type="vanished">Viso</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation type="vanished">Išsiuntimas</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
+    </message>
+</context>
+<context>
+    <name>DApplication</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="obsolete">Deepin sistemos monitorius yra intuityvus ir galingas sistemos monitorius. Jis gali stebėti proceso CPU, atminties, tinklo, disko ir kitas būsenas.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="obsolete">Deepin sistemos monitorius</translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Active.State</name>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>activating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deactivating</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Load.State</name>
+    <message>
+        <source>stub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not-found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bad-setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.State</name>
+    <message>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>transient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>indirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Sub.State</name>
+    <message>
+        <source>dead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-pre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-watchdog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="obsolete">Šio proceso užbaigimas gali sukelti duomenų praradimą?
+Ar tikrai norite tęsti?</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="obsolete">Užbaigti procesą</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Diskas</translation>
+        <translation type="vanished">Diskas</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation type="vanished">Disko skaitymas</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation type="vanished">Disko rašymas</translation>
+    </message>
+</context>
+<context>
+    <name>Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished">Šio proceso užbaigimas gali sukelti duomenų praradimą?
+Ar tikrai norite tęsti?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Atsisakyti</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Užbaigti procesą</translation>
+    </message>
+    <message>
+        <source>Terminate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force terminate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Priverstinai sustabdyti programą</translation>
+        <translation type="vanished">Priverstinai sustabdyti programą</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Tamsi tema</translation>
+        <translation type="vanished">Tamsi tema</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Sustabdyti programą</translation>
+        <translation type="vanished">Sustabdyti programą</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Atsisakyti</translation>
+        <translation type="vanished">Atsisakyti</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Kompaktiška veiksena</translation>
+        <translation type="vanished">Kompaktiška veiksena</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Šios programos darbo užbaigimas gali sukelti duomenų praradimą?
+        <translation type="vanished">Šios programos darbo užbaigimas gali sukelti duomenų praradimą?
 Ar tikrai norite tęsti?</translation>
     </message>
 </context>
@@ -117,135 +331,314 @@ Ar tikrai norite tęsti?</translation>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation type="vanished">Atmintis</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Sukeitimų skaidinys</translation>
+        <translation type="vanished">Sukeitimų skaidinys</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Neįjungta</translation>
+        <translation type="vanished">Neįjungta</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Tinklas</translation>
+        <translation type="vanished">Tinklas</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation type="vanished">Atsiuntimas</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Viso</translation>
+        <translation type="vanished">Viso</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation type="vanished">Išsiuntimas</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Attributes.Dialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="unfinished">Proceso pavadinimas</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished">Komandų eilutė</translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="unfinished">Paleidimo laikas</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Choose.Window.Dialog</name>
+    <message>
+        <source>Click the application you want to end</source>
+        <translation type="unfinished">Spustelėkite ant programos, kurią norite sustabdyti</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.View</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Disko skaitymas</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Disko rašymas</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Atmintis</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Sukeitimų skaidinys</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished">Neįjungta</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Atsiuntimas</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished">Viso</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Išsiuntimas</translation>
+    </message>
+    <message>
+        <source>Disk</source>
+        <translation type="unfinished">Diskas</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="unfinished">Tinklas</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Show.Mode</name>
+    <message>
+        <source>Applications</source>
+        <translation type="unfinished">Programos</translation>
+    </message>
+    <message>
+        <source>My processes</source>
+        <translation type="unfinished">Mano procesai</translation>
+    </message>
+    <message>
+        <source>All processes</source>
+        <translation type="unfinished">Visi procesai</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Summary</name>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished">Veikia %2 programos ir %3 procesai</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table</name>
+    <message>
+        <source>No response</source>
+        <translation type="unfinished">Nėra atsakymo</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished">Pristabdyti</translation>
+    </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished">Dėklas</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Context.Menu</name>
+    <message>
+        <source>Terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="unfinished">Pristabdyti procesą</translation>
+    </message>
+    <message>
+        <source>Resume process</source>
+        <translation type="unfinished">Pratęsti procesą</translation>
+    </message>
+    <message>
+        <source>View command location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">Savybės</translation>
+    </message>
+    <message>
+        <source>Force terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Pavadinimas</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Atmintis</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Disko rašymas</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Disko skaitymas</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Atsiuntimas</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Išsiuntimas</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Nėra atsakymo</translation>
+        <translation type="vanished">Nėra atsakymo</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Pristabdyti</translation>
+        <translation type="vanished">Pristabdyti</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Užbaigti procesą</translation>
+        <translation type="vanished">Užbaigti procesą</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Atsisakyti</translation>
+        <translation type="vanished">Atsisakyti</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Pristabdyti procesą</translation>
+        <translation type="vanished">Pristabdyti procesą</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Pratęsti procesą</translation>
+        <translation type="vanished">Pratęsti procesą</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Žiūrėti proceso vietą</translation>
+        <translation type="vanished">Žiūrėti proceso vietą</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Savybės</translation>
+        <translation type="vanished">Savybės</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>Veikia %2 programos ir %3 procesai</translation>
+        <translation type="vanished">Veikia %2 programos ir %3 procesai</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Šio proceso užbaigimas gali sukelti duomenų praradimą?
+        <translation type="vanished">Šio proceso užbaigimas gali sukelti duomenų praradimą?
 Ar tikrai norite tęsti?</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessPageWidget</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Atsisakyti</translation>
+    </message>
+    <message>
+        <source>End application</source>
+        <translation type="obsolete">Sustabdyti programą</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Pavadinimas</translation>
+        <translation type="vanished">Pavadinimas</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation type="vanished">Atmintis</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation type="vanished">Disko rašymas</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation type="vanished">Disko skaitymas</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation type="vanished">Atsiuntimas</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation type="vanished">Išsiuntimas</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation type="vanished">PID</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin sistemos monitorius yra intuityvus ir galingas sistemos monitorius. Jis gali stebėti proceso CPU, atminties, tinklo, disko ir kitas būsenas.</translation>
+        <translation type="vanished">Deepin sistemos monitorius yra intuityvus ir galingas sistemos monitorius. Jis gali stebėti proceso CPU, atminties, tinklo, disko ir kitas būsenas.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin sistemos monitorius</translation>
+        <translation type="vanished">Deepin sistemos monitorius</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin sistemos monitorius</translation>
+        <translation type="vanished">Deepin sistemos monitorius</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +686,7 @@ Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin langų tvarkytuvė </translation>
+        <translation type="vanished">Deepin langų tvarkytuvė </translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -451,38 +844,171 @@ Ar tikrai norite tęsti?</translation>
         <source>Sogou input method</source>
         <translation>Sogou įvesties metodas</translation>
     </message>
+    <message>
+        <source>Deepin Window Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Atsisakyti</translation>
+    </message>
+    <message>
+        <source>Service instance name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Context.Menu</name>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Pavadinimas</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sub</source>
+        <extracomment>sub state (running status)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <extracomment>state</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Search</name>
+    <message>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ServiceNameSubInputDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Atsisakyti</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Spustelėkite ant programos, kurią norite sustabdyti</translation>
+        <translation type="vanished">Spustelėkite ant programos, kurią norite sustabdyti</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Programos</translation>
+        <translation type="vanished">Programos</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Mano procesai</translation>
+        <translation type="vanished">Mano procesai</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Visi procesai</translation>
+        <translation type="vanished">Visi procesai</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Dėklas</translation>
+        <translation type="vanished">Dėklas</translation>
+    </message>
+</context>
+<context>
+    <name>SystemServiceTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Pavadinimas</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="obsolete">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Context.Menu</name>
+    <message>
+        <source>Force end application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Search</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Paieška</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Switch</name>
+    <message>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Paieška</translation>
+        <translation type="vanished">Paieška</translation>
     </message>
 </context>
 </TS>

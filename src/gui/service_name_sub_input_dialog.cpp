@@ -1,3 +1,4 @@
+#include <DApplication>
 #include <DHiDPIHelper>
 #include <QDebug>
 #include <QMessageBox>
@@ -10,14 +11,14 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
 {
     //    setFixedSize(600, 300);
     // TODO: change icon
-    setIconPixmap(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo_96.svg")));
+    setIconPixmap(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo.svg")));
 
     m_nameLineEdit = new DLineEdit(this);
     Q_ASSERT(m_nameLineEdit);
     addContent(m_nameLineEdit);
 
-    addButton(tr("OK"), true);
-    addButton(tr("Cancel"));
+    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK"), true);
+    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel"));
 
     connect(this, &ServiceNameSubInputDialog::buttonClicked, this,
             &ServiceNameSubInputDialog::onButtonCliecked);
@@ -39,5 +40,6 @@ void ServiceNameSubInputDialog::onButtonCliecked(int index, const QString &text)
 
 void ServiceNameSubInputDialog::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event);
     m_nameLineEdit->setFocus();
 }

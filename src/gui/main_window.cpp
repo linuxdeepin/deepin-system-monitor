@@ -51,16 +51,19 @@ void MainWindow::initUI()
     titlebar()->setMenu(menu);
 
     // kill process
-    m_killAction = new QAction(tr("Force to end application"), menu);
+    m_killAction = new QAction(
+        DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     connect(m_killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
-    m_modeMenu = new DMenu(tr("Mode"), menu);
+    m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "Mode"), menu);
     QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
     modeGroup->setExclusive(true);
-    auto *expandModeAction = new QAction(tr("Expand"), modeGroup);
+    auto *expandModeAction =
+        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Expand"), modeGroup);
     expandModeAction->setCheckable(true);
-    auto *compactModeAction = new QAction(tr("Compact"), modeGroup);
+    auto *compactModeAction =
+        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
     compactModeAction->setCheckable(true);
     m_modeMenu->addAction(expandModeAction);
     m_modeMenu->addAction(compactModeAction);

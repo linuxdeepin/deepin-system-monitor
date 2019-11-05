@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "compact_network_monitor.h"
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -29,8 +29,8 @@
 #include <QDebug>
 #include <QPainter>
 
+#include "compact_network_monitor.h"
 #include "constant.h"
-#include "dthememanager.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -185,11 +185,18 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, downloadRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString downloadTitle = QString("%1 %2").arg(tr("Download")).arg(formatBandwidth(totalRecvKbs));
-    QString downloadContent =
-        QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalRecvBytes));
-    QString uploadTitle = QString("%1 %2").arg(tr("Upload")).arg(formatBandwidth(totalSentKbs));
-    QString uploadContent = QString("%1 %2").arg(tr("Total")).arg(formatByteCount(totalSentBytes));
+    QString downloadTitle = QString("%1 %2")
+                                .arg(DApplication::translate("Process.Graph.View", "Download"))
+                                .arg(formatBandwidth(totalRecvKbs));
+    QString downloadContent = QString("%1 %2")
+                                  .arg(DApplication::translate("Process.Graph.View", "Total"))
+                                  .arg(formatByteCount(totalRecvBytes));
+    QString uploadTitle = QString("%1 %2")
+                              .arg(DApplication::translate("Process.Graph.View", "Upload"))
+                              .arg(formatBandwidth(totalSentKbs));
+    QString uploadContent = QString("%1 %2")
+                                .arg(DApplication::translate("Process.Graph.View", "Total"))
+                                .arg(formatByteCount(totalSentBytes));
     int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
 
     painter.setOpacity(1);

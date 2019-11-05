@@ -28,6 +28,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 
+#include <DApplication>
 #include <DButtonBox>
 #include <DSearchEdit>
 
@@ -54,10 +55,12 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     // =========tab button=========
     m_switchFuncTabBtnGrp = new DButtonBox();
     m_switchFuncTabBtnGrp->setFixedWidth(240);
-    DButtonBoxButton *procBtn = new DButtonBoxButton(tr("Process"), m_switchFuncTabBtnGrp);
+    DButtonBoxButton *procBtn = new DButtonBoxButton(
+        DApplication::translate("Title.Bar.Switch", "Process"), m_switchFuncTabBtnGrp);
     procBtn->setCheckable(true);
     procBtn->setChecked(true);
-    DButtonBoxButton *svcBtn = new DButtonBoxButton(tr("Service"), m_switchFuncTabBtnGrp);
+    DButtonBoxButton *svcBtn = new DButtonBoxButton(
+        DApplication::translate("Title.Bar.Switch", "Service"), m_switchFuncTabBtnGrp);
     svcBtn->setCheckable(true);
     QList<DButtonBoxButton *> list;
     list << procBtn << svcBtn;
@@ -69,7 +72,7 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     // =========search=========
     searchEdit = new DSearchEdit();
     searchEdit->setFixedWidth(360);
-    searchEdit->setPlaceHolder(tr("Search"));
+    searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
     this->installEventFilter(this);
 
     layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);

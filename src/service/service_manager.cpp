@@ -55,7 +55,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         return {ec, {}};
     UnitInfoList units = unitsResult.second;
 
-    foreach (auto &unit, units) {
+    foreach (const auto &unit, units) {
         if (!unit.getName().endsWith(UnitTypeServiceSuffix))
             continue;
 
@@ -111,6 +111,17 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             return {ec, {}};
         }
         entry.setMainPID(pidResult.second);
+
+        // getunitfilestate
+        auto stateResult = mgrIf.GetUnitFileState(unit.getName());
+        ec = stateResult.first;
+        if (ec) {
+            qDebug() << "getUnitFileState failed" << ec.getErrorName() << ec.getErrorMessage();
+            if (ec.getCode() != QDBusError::NoMemory) {
+                return {ec, {}};
+            }
+        }
+        entry.setState(stateResult.second);
 
         hash[unit.getName()] = entry;
         list << entry;
@@ -289,6 +300,11 @@ QPair<ErrorContext, bool> ServiceManager::stopService(SystemServiceEntry &entry)
     }
     QDBusObjectPath o = oResult.second;
     qDebug() << "object path:" << o.path();
+
+    if (buf.contains(QRegularExpression("^[^\\.@]+@[^\\.@]*\\.service$",
+                                        QRegularExpression::CaseInsensitiveOption))) {
+        return {ec, true};
+    }
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;

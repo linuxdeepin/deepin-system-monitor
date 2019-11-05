@@ -128,13 +128,15 @@ enum UnitLoadState {
     kUnitMergedState,
     kUnitMaskedState
 };
-constexpr const char* kUnitStubStateText = QT_TRANSLATE_NOOP("DBus", "stub");
-constexpr const char* kUnitLoadedStateText = QT_TRANSLATE_NOOP("DBus", "Loaded");
-constexpr const char* kUnitNotFoundStateText = QT_TRANSLATE_NOOP("DBus", "not-found");
-constexpr const char* kUnitBadSettingStateText = QT_TRANSLATE_NOOP("DBus", "bad-setting");
-constexpr const char* kUnitErrorStateText = QT_TRANSLATE_NOOP("DBus", "error");
-constexpr const char* kUnitMergedStateText = QT_TRANSLATE_NOOP("DBus", "merged");
-constexpr const char* kUnitMaskedStateText = QT_TRANSLATE_NOOP("DBus", "masked");
+constexpr const char* kUnitStubStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "stub");
+constexpr const char* kUnitLoadedStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "Loaded");
+constexpr const char* kUnitNotFoundStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "not-found");
+constexpr const char* kUnitBadSettingStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "bad-setting");
+constexpr const char* kUnitErrorStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "error");
+constexpr const char* kUnitMergedStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "merged");
+constexpr const char* kUnitMaskedStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "masked");
 
 // unit active states
 enum UnitActiveState {
@@ -145,12 +147,16 @@ enum UnitActiveState {
     kUnitActivatingState,
     kUnitDeactivatingState
 };
-constexpr const char* kUnitActiveStateText = QT_TRANSLATE_NOOP("DBus", "active");
-constexpr const char* kUnitReloadingStateText = QT_TRANSLATE_NOOP("DBus", "reloading");
-constexpr const char* kUnitInactiveStateText = QT_TRANSLATE_NOOP("DBus", "inactive");
-constexpr const char* kUnitFailedStateText = QT_TRANSLATE_NOOP("DBus", "failed");
-constexpr const char* kUnitActivatingStateText = QT_TRANSLATE_NOOP("DBus", "activating");
-constexpr const char* kUnitDeactivatingStateText = QT_TRANSLATE_NOOP("DBus", "deactivating");
+constexpr const char* kUnitActiveStateText = QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "active");
+constexpr const char* kUnitReloadingStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "reloading");
+constexpr const char* kUnitInactiveStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "inactive");
+constexpr const char* kUnitFailedStateText = QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "failed");
+constexpr const char* kUnitActivatingStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "activating");
+constexpr const char* kUnitDeactivatingStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "deactivating");
 
 // service unit substates
 enum ServiceUnitSubState {
@@ -171,28 +177,38 @@ enum ServiceUnitSubState {
     kServiceUnitFailedSubState,
     kServiceUnitAutoRestartSubState
 };
-constexpr const char* kServiceUnitDeadSubStateText = QT_TRANSLATE_NOOP("DBus", "dead");
-constexpr const char* kServiceUnitStartPreSubStateText = QT_TRANSLATE_NOOP("DBus", "start-pre");
-constexpr const char* kServiceUnitStartSubStateText = QT_TRANSLATE_NOOP("DBus", "start");
-constexpr const char* kServiceUnitStartPostSubStateText = QT_TRANSLATE_NOOP("DBus", "start-post");
-constexpr const char* kServiceUnitRunningSubStateText = QT_TRANSLATE_NOOP("DBus", "running");
-constexpr const char* kServiceUnitExitedSubStateText = QT_TRANSLATE_NOOP("DBus", "exited");
-constexpr const char* kServiceUnitReloadSubStateText = QT_TRANSLATE_NOOP("DBus", "reload");
-constexpr const char* kServiceUnitStopSubStateText = QT_TRANSLATE_NOOP("DBus", "stop");
+constexpr const char* kServiceUnitDeadSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "dead");
+constexpr const char* kServiceUnitStartPreSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "start-pre");
+constexpr const char* kServiceUnitStartSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "start");
+constexpr const char* kServiceUnitStartPostSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "start-post");
+constexpr const char* kServiceUnitRunningSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "running");
+constexpr const char* kServiceUnitExitedSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "exited");
+constexpr const char* kServiceUnitReloadSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "reload");
+constexpr const char* kServiceUnitStopSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "stop");
 constexpr const char* kServiceUnitStopWatchdogSubStateText =
-    QT_TRANSLATE_NOOP("DBus", "stop-watchdog");
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "stop-watchdog");
 constexpr const char* kServiceUnitStopSigTermSubStateText =
-    QT_TRANSLATE_NOOP("DBus", "stop-sigterm");
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "stop-sigterm");
 constexpr const char* kServiceUnitStopSigKillSubStateText =
-    QT_TRANSLATE_NOOP("DBus", "stop-sigkill");
-constexpr const char* kServiceUnitStopPostSubStateText = QT_TRANSLATE_NOOP("DBus", "stop-post");
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "stop-sigkill");
+constexpr const char* kServiceUnitStopPostSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "stop-post");
 constexpr const char* kServiceUnitFinalSigTermSubStateText =
-    QT_TRANSLATE_NOOP("DBus", "final-sigterm");
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "final-sigterm");
 constexpr const char* kServiceUnitFinalSigKillSubStateText =
-    QT_TRANSLATE_NOOP("DBus", "final-sigkill");
-constexpr const char* kServiceUnitFailedSubStateText = QT_TRANSLATE_NOOP("DBus", "failed");
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "final-sigkill");
+constexpr const char* kServiceUnitFailedSubStateText =
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "failed");
 constexpr const char* kServiceUnitAutoRestartSubStateText =
-    QT_TRANSLATE_NOOP("DBus", "auto-restart");
+    QT_TRANSLATE_NOOP("DBus.Unit.Sub.State", "auto-restart");
 
 enum ServiceStatus {
     kServiceEnabled,
@@ -202,12 +218,13 @@ enum ServiceStatus {
     kServiceIndirect,
     kServiceEnabledRuntime
 };
-constexpr const char* kServiceEnabledText = QT_TRANSLATE_NOOP("DBus", "enabled");
-constexpr const char* kServiceDisabledText = QT_TRANSLATE_NOOP("DBus", "disabled");
-constexpr const char* kServiceStaticText = QT_TRANSLATE_NOOP("DBus", "static");
-constexpr const char* kServiceTransientText = QT_TRANSLATE_NOOP("DBus", "transient");
-constexpr const char* kServiceIndirectText = QT_TRANSLATE_NOOP("DBus", "indirect");
-constexpr const char* kServiceEnabledRuntimeText = QT_TRANSLATE_NOOP("DBus", "enabled-runtime");
+constexpr const char* kServiceEnabledText = QT_TRANSLATE_NOOP("DBus.Unit.State", "enabled");
+constexpr const char* kServiceDisabledText = QT_TRANSLATE_NOOP("DBus.Unit.State", "disabled");
+constexpr const char* kServiceStaticText = QT_TRANSLATE_NOOP("DBus.Unit.State", "static");
+constexpr const char* kServiceTransientText = QT_TRANSLATE_NOOP("DBus.Unit.State", "transient");
+constexpr const char* kServiceIndirectText = QT_TRANSLATE_NOOP("DBus.Unit.State", "indirect");
+constexpr const char* kServiceEnabledRuntimeText =
+    QT_TRANSLATE_NOOP("DBus.Unit.State", "enabled-runtime");
 
 enum UnitControlJobMode {
     kJobModeFail,

@@ -21,12 +21,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hashqstring.h"
-#include "utils.h"
+#include <stdio.h>
+#include <time.h>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <unordered_set>
+
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
+#include <QDirIterator>
 #include <QFontMetrics>
 #include <QIcon>
 #include <QImageReader>
@@ -39,14 +45,11 @@
 #include <QtDBus>
 #include <QtMath>
 #include <QtX11Extras/QX11Info>
+
 #include <X11/extensions/shape.h>
-#include <fstream>
-#include <qdiriterator.h>
-#include <sstream>
-#include <stdio.h>
-#include <string>
-#include <time.h>
-#include <unordered_set>
+
+#include "hashqstring.h"
+#include "utils.h"
 
 namespace Utils {
 static QMap<QString, QString> desktopfileMaps = getDesktopfileMap();
@@ -80,7 +83,7 @@ QMap<QString, QString> getProcessDescriptions()
         QObject::tr("Deepin Desktop Environment - Session initialization process");
     map["dde-file-manager-daemon"] = QObject::tr("Deepin File Manager daemon");
     map["dde-lockservice"] = QObject::tr("Deepin Desktop Environment - Lock screen service");
-    map["deepin-wm"] = QObject::tr("Deepin Window Manager ");
+    map["deepin-wm"] = QObject::tr("Deepin Window Manager");
     map["deepin-wm-switcher"] = QObject::tr("Deepin Window Manager switcher");
     map["deepin-notifications"] = QObject::tr("Deepin notification");
     map["deepin-cloud-print-agent"] = QObject::tr("Deepin Cloud Print agent");

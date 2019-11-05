@@ -7,18 +7,17 @@
 
 #include "service/system_service_entry.h"
 
-constexpr const char* kSystemServiceName = QT_TRANSLATE_NOOP("SystemServiceTableModel", "Name");
-constexpr const char* kSystemServiceLoadState =
-    QT_TRANSLATE_NOOP("SystemServiceTableModel", "Load");
+constexpr const char* kSystemServiceName = QT_TRANSLATE_NOOP("Service.Table.Header", "Name");
+constexpr const char* kSystemServiceLoadState = QT_TRANSLATE_NOOP("Service.Table.Header", "Load");
 constexpr const char* kSystemServiceActiveState =
-    QT_TRANSLATE_NOOP("SystemServiceTableModel", "Active");
+    QT_TRANSLATE_NOOP("Service.Table.Header", "Active");
 //: sub state (running status)
-constexpr const char* kSystemServiceSubState = QT_TRANSLATE_NOOP("SystemServiceTableModel", "Sub");
+constexpr const char* kSystemServiceSubState = QT_TRANSLATE_NOOP("Service.Table.Header", "Sub");
 //: state
-constexpr const char* kSystemServiceState = QT_TRANSLATE_NOOP("SystemServiceTableModel", "State");
+constexpr const char* kSystemServiceState = QT_TRANSLATE_NOOP("Service.Table.Header", "State");
 constexpr const char* kSystemServiceDescription =
-    QT_TRANSLATE_NOOP("SystemServiceTableModel", "Description");
-constexpr const char* kSystemServicePID = QT_TRANSLATE_NOOP("SystemServiceTableModel", "PID");
+    QT_TRANSLATE_NOOP("Service.Table.Header", "Description");
+constexpr const char* kSystemServicePID = QT_TRANSLATE_NOOP("Service.Table.Header", "PID");
 
 class SystemServiceTableModel : public QAbstractTableModel
 {
@@ -56,10 +55,41 @@ public:
         }
     }
 
+    inline QModelIndex insertServiceEntry(const SystemServiceEntry& entry)
+    {
+        int row = m_ServiceEntryList.size();
+
+        beginInsertRows({}, row, row);
+        m_ServiceEntryList << entry;
+        endInsertRows();
+
+        return index(row, 0);
+    }
+
+    inline void removeServiceEntry(const QModelIndex& entryIndex)
+    {
+        if (entryIndex.row() >= 0 && entryIndex.row() < m_ServiceEntryList.size()) {
+            beginRemoveRows({}, entryIndex.row(), entryIndex.row());
+            m_ServiceEntryList.removeAt(entryIndex.row());
+            endRemoveRows();
+        }
+    }
+
     inline void updateServiceEntry(int row)
     {
         if (row >= 0)
             dataChanged(index(row, 0), index(row, columnCount() - 1));
+    }
+
+    inline QModelIndex checkServiceEntryExists(const QString& name)
+    {
+        int idx = 0;
+        foreach (const auto& entry, m_ServiceEntryList) {
+            if (name == entry.getId())
+                return index(idx, 0);
+            idx++;
+        }
+        return {};
     }
 
     QVariant data(const QModelIndex& index, int role) const override;

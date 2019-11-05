@@ -132,6 +132,49 @@ LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lX11 -lXext -lXtst -ldtkwm
 
+TRANSLATIONS += \
+        translations/deepin-system-monitor_am_ET.ts \
+        translations/deepin-system-monitor_ar.ts \
+        translations/deepin-system-monitor_ast.ts \
+        translations/deepin-system-monitor_bg.ts \
+        translations/deepin-system-monitor_ca.ts \
+        translations/deepin-system-monitor_cs.ts \
+        translations/deepin-system-monitor_da.ts \
+        translations/deepin-system-monitor_de.ts \
+        translations/deepin-system-monitor_es_419.ts \
+        translations/deepin-system-monitor_es.ts \
+        translations/deepin-system-monitor_fi.ts \
+        translations/deepin-system-monitor_fr.ts \
+        translations/deepin-system-monitor_gl_ES.ts \
+        translations/deepin-system-monitor_he.ts \
+        translations/deepin-system-monitor_hr.ts \
+        translations/deepin-system-monitor_hu.ts \
+        translations/deepin-system-monitor_id.ts \
+        translations/deepin-system-monitor_it.ts \
+        translations/deepin-system-monitor_ja.ts \
+        translations/deepin-system-monitor_ko.ts \
+        translations/deepin-system-monitor_lt.ts \
+        translations/deepin-system-monitor_mn.ts \
+        translations/deepin-system-monitor_ms.ts \
+        translations/deepin-system-monitor_nb.ts \
+        translations/deepin-system-monitor_ne.ts \
+        translations/deepin-system-monitor_nl.ts \
+        translations/deepin-system-monitor_pa.ts \
+        translations/deepin-system-monitor_pl.ts \
+        translations/deepin-system-monitor_pt_BR.ts \
+        translations/deepin-system-monitor_pt.ts \
+        translations/deepin-system-monitor_ro.ts \
+        translations/deepin-system-monitor_ru.ts \
+        translations/deepin-system-monitor_sk.ts \
+        translations/deepin-system-monitor_sl.ts \
+        translations/deepin-system-monitor_sr.ts \
+        translations/deepin-system-monitor_sv.ts \
+        translations/deepin-system-monitor_tr.ts \
+        translations/deepin-system-monitor.ts \
+        translations/deepin-system-monitor_uk.ts \
+        translations/deepin-system-monitor_zh_CN.ts \
+        translations/deepin-system-monitor_zh_TW.ts
+
 load(dtk_qmake)
 host_sw_64: {
     QMAKE_CFLAGS += -mieee

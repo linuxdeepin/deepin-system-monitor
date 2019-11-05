@@ -1,249 +1,625 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sl">
+<context>
+    <name>App.About</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished">Sistemski nadzor Deepin je intuitiven in močan nadzorni program. Nadzira porabo CPU, spomina, omrežja, diska in drugih enot pri vsakem procesu.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="unfinished">Sistemski nadzor Deepin</translation>
+    </message>
+</context>
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Ime procesa</translation>
+        <translation type="vanished">Ime procesa</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Ukazna vrstica</translation>
+        <translation type="vanished">Ukazna vrstica</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Zagonski čas</translation>
+        <translation type="vanished">Zagonski čas</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Branje z diska</translation>
+        <translation type="vanished">Branje z diska</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Pisanje na disk</translation>
+        <translation type="vanished">Pisanje na disk</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Spomin</translation>
+        <translation type="vanished">Spomin</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation type="vanished">Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Ni omogočeno</translation>
+        <translation type="vanished">Ni omogočeno</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Prenos</translation>
+        <translation type="vanished">Prenos</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Skupno</translation>
+        <translation type="vanished">Skupno</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nalaganje</translation>
+        <translation type="vanished">Nalaganje</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
+    </message>
+</context>
+<context>
+    <name>DApplication</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="obsolete">Sistemski nadzor Deepin je intuitiven in močan nadzorni program. Nadzira porabo CPU, spomina, omrežja, diska in drugih enot pri vsakem procesu.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="obsolete">Sistemski nadzor Deepin</translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Active.State</name>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>activating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deactivating</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Load.State</name>
+    <message>
+        <source>stub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not-found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bad-setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.State</name>
+    <message>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>transient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>indirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Sub.State</name>
+    <message>
+        <source>dead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-pre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-watchdog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
+    <message>
+        <source>End process</source>
+        <translation type="obsolete">Končaj proces</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Disk</translation>
+        <translation type="vanished">Disk</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Branje z diska</translation>
+        <translation type="vanished">Branje z diska</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Pisanje na disk</translation>
+        <translation type="vanished">Pisanje na disk</translation>
+    </message>
+</context>
+<context>
+    <name>Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Prekliči</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Končaj proces</translation>
+    </message>
+    <message>
+        <source>Terminate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force terminate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Na silo zapri program</translation>
+        <translation type="vanished">Na silo zapri program</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Temna tema</translation>
+        <translation type="vanished">Temna tema</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Zapri program</translation>
+        <translation type="vanished">Zapri program</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Prekliči</translation>
+        <translation type="vanished">Prekliči</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Kompaktni način</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Kompaktni način</translation>
     </message>
 </context>
 <context>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Spomin</translation>
+        <translation type="vanished">Spomin</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation type="vanished">Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Ni omogočeno</translation>
+        <translation type="vanished">Ni omogočeno</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Omrežje</translation>
+        <translation type="vanished">Omrežje</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Prenos</translation>
+        <translation type="vanished">Prenos</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Skupno</translation>
+        <translation type="vanished">Skupno</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nalaganje</translation>
+        <translation type="vanished">Nalaganje</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Attributes.Dialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="unfinished">Ime procesa</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished">Ukazna vrstica</translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="unfinished">Zagonski čas</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Choose.Window.Dialog</name>
+    <message>
+        <source>Click the application you want to end</source>
+        <translation type="unfinished">Kliknite na program, ki bi ga radi zaprli</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.View</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Branje z diska</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Pisanje na disk</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Spomin</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Swap</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished">Ni omogočeno</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Prenos</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished">Skupno</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Nalaganje</translation>
+    </message>
+    <message>
+        <source>Disk</source>
+        <translation type="unfinished">Disk</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="unfinished">Omrežje</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Show.Mode</name>
+    <message>
+        <source>Applications</source>
+        <translation type="unfinished">Programi</translation>
+    </message>
+    <message>
+        <source>My processes</source>
+        <translation type="unfinished">Moji procesi</translation>
+    </message>
+    <message>
+        <source>All processes</source>
+        <translation type="unfinished">Vsi procesi</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Summary</name>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished">%2 aplikacij in %3 procesov v teku</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table</name>
+    <message>
+        <source>No response</source>
+        <translation type="unfinished">Ni odziva</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished">Prekini</translation>
+    </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished">Sistemska vrstica</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Context.Menu</name>
+    <message>
+        <source>Terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="unfinished">Prekini proces</translation>
+    </message>
+    <message>
+        <source>Resume process</source>
+        <translation type="unfinished">Nadaljuj proces</translation>
+    </message>
+    <message>
+        <source>View command location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">Lastnosti</translation>
+    </message>
+    <message>
+        <source>Force terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Ime</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Spomin</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Pisanje na disk</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Branje z diska</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Prenos</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Nalaganje</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Ni odziva</translation>
+        <translation type="vanished">Ni odziva</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Prekini</translation>
+        <translation type="vanished">Prekini</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Končaj proces</translation>
+        <translation type="vanished">Končaj proces</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Prekliči</translation>
+        <translation type="vanished">Prekliči</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Prekini proces</translation>
+        <translation type="vanished">Prekini proces</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Nadaljuj proces</translation>
+        <translation type="vanished">Nadaljuj proces</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Pokaži lokacijo procesa</translation>
+        <translation type="vanished">Pokaži lokacijo procesa</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Lastnosti</translation>
+        <translation type="vanished">Lastnosti</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>%2 aplikacij in %3 procesov v teku</translation>
+        <translation type="vanished">%2 aplikacij in %3 procesov v teku</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessPageWidget</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Prekliči</translation>
     </message>
     <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <source>End application</source>
+        <translation type="obsolete">Zapri program</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Ime</translation>
+        <translation type="vanished">Ime</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation type="vanished">CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Spomin</translation>
+        <translation type="vanished">Spomin</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Pisanje na disk</translation>
+        <translation type="vanished">Pisanje na disk</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Branje z diska</translation>
+        <translation type="vanished">Branje z diska</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Prenos</translation>
+        <translation type="vanished">Prenos</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nalaganje</translation>
+        <translation type="vanished">Nalaganje</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation type="vanished">PID</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Sistemski nadzor Deepin je intuitiven in močan nadzorni program. Nadzira porabo CPU, spomina, omrežja, diska in drugih enot pri vsakem procesu.</translation>
+        <translation type="vanished">Sistemski nadzor Deepin je intuitiven in močan nadzorni program. Nadzira porabo CPU, spomina, omrežja, diska in drugih enot pri vsakem procesu.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Sistemski nadzor Deepin</translation>
+        <translation type="vanished">Sistemski nadzor Deepin</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Sistemski nadzor Deepin</translation>
+        <translation type="vanished">Sistemski nadzor Deepin</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -291,7 +667,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Upravitelj oken Deepin</translation>
+        <translation type="vanished">Upravitelj oken Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -449,38 +825,171 @@ Are you sure you want to continue?</source>
         <source>Sogou input method</source>
         <translation>Sogou vhodni postopek</translation>
     </message>
+    <message>
+        <source>Deepin Window Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Prekliči</translation>
+    </message>
+    <message>
+        <source>Service instance name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Context.Menu</name>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Ime</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sub</source>
+        <extracomment>sub state (running status)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <extracomment>state</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Search</name>
+    <message>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ServiceNameSubInputDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Prekliči</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Kliknite na program, ki bi ga radi zaprli</translation>
+        <translation type="vanished">Kliknite na program, ki bi ga radi zaprli</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Programi</translation>
+        <translation type="vanished">Programi</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Moji procesi</translation>
+        <translation type="vanished">Moji procesi</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Vsi procesi</translation>
+        <translation type="vanished">Vsi procesi</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Sistemska vrstica</translation>
+        <translation type="vanished">Sistemska vrstica</translation>
+    </message>
+</context>
+<context>
+    <name>SystemServiceTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Ime</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="obsolete">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Context.Menu</name>
+    <message>
+        <source>Force end application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Search</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Išči</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Switch</name>
+    <message>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Išči</translation>
+        <translation type="vanished">Išči</translation>
     </message>
 </context>
 </TS>

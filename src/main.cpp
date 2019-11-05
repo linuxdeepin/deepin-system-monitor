@@ -85,7 +85,8 @@ int main(int argc, char *argv[])
     if (app.setSingleInstance(QString("deepin-system-monitor"), DApplication::UserScope)) {
         app.loadTranslator();
 
-        const QString descriptionText = DApplication::tr(
+        const QString descriptionText = DApplication::translate(
+            "App.About",
             "Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the "
             "process CPU, memory, network, disk and other status.");
 
@@ -94,15 +95,16 @@ int main(int argc, char *argv[])
 
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");
-        app.setApplicationDisplayName(DApplication::tr("Deepin System Monitor"));
+        app.setApplicationDisplayName(
+            DApplication::translate("App.About", "Deepin System Monitor"));
         app.setApplicationVersion("1.4.2");
 
-        app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
-        app.setProductName(DApplication::tr("Deepin System Monitor"));
+        app.setProductIcon(QIcon(Utils::getQrcPath("logo.svg")));
+        app.setProductName(DApplication::translate("App.About", "Deepin System Monitor"));
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
+        app.setWindowIcon(QIcon(Utils::getQrcPath("logo.svg")));
 
         DApplicationSettings appSettings;
 

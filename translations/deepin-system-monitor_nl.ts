@@ -1,115 +1,329 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="nl">
+<context>
+    <name>App.About</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished">Deepin Systeemmonitor is een intuïtieve, krachtige systeemmonitor. Het kan processen, CPU, geheugen, netwerk, schijf en andere statussen monitoren.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="unfinished">Deepin Systeemmonitor</translation>
+    </message>
+</context>
 <context>
     <name>AttributesDialog</name>
     <message>
         <source>Process name</source>
-        <translation>Procesnaam</translation>
+        <translation type="vanished">Procesnaam</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Opdrachtregel</translation>
+        <translation type="vanished">Opdrachtregel</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Starttijd</translation>
+        <translation type="vanished">Starttijd</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Processor</translation>
+        <translation type="vanished">Processor</translation>
     </message>
 </context>
 <context>
     <name>CompactDiskMonitor</name>
     <message>
         <source>Disk read</source>
-        <translation>Schijfuitlezing</translation>
+        <translation type="vanished">Schijfuitlezing</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Schijfwegschrijving</translation>
+        <translation type="vanished">Schijfwegschrijving</translation>
     </message>
 </context>
 <context>
     <name>CompactMemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Geheugen</translation>
+        <translation type="vanished">Geheugen</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Wisselgeheugen</translation>
+        <translation type="vanished">Wisselgeheugen</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Niet ingeschakeld</translation>
+        <translation type="vanished">Niet ingeschakeld</translation>
     </message>
 </context>
 <context>
     <name>CompactNetworkMonitor</name>
     <message>
         <source>Download</source>
-        <translation>Downloaden</translation>
+        <translation type="vanished">Downloaden</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Totaal</translation>
+        <translation type="vanished">Totaal</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Uploaden</translation>
+        <translation type="vanished">Uploaden</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>CPU</source>
-        <translation>Processor</translation>
+        <translation type="vanished">Processor</translation>
+    </message>
+</context>
+<context>
+    <name>DApplication</name>
+    <message>
+        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="obsolete">Deepin Systeemmonitor is een intuïtieve, krachtige systeemmonitor. Het kan processen, CPU, geheugen, netwerk, schijf en andere statussen monitoren.</translation>
+    </message>
+    <message>
+        <source>Deepin System Monitor</source>
+        <translation type="obsolete">Deepin Systeemmonitor</translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Active.State</name>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>activating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deactivating</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Load.State</name>
+    <message>
+        <source>stub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>not-found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bad-setting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.State</name>
+    <message>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>transient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>indirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DBus.Unit.Sub.State</name>
+    <message>
+        <source>dead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-pre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>start-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exited</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-watchdog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>stop-post</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigterm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>final-sigkill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="obsolete">Het beëindigen van dit proces kan gegevensverlies veroorzaken.
+Weet je zeker dat je door wilt gaan?</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="obsolete">Proces beëindigen</translation>
     </message>
 </context>
 <context>
     <name>DiskMonitor</name>
     <message>
         <source>Disk</source>
-        <translation>Schijf</translation>
+        <translation type="vanished">Schijf</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Schijfuitlezing</translation>
+        <translation type="vanished">Schijfuitlezing</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Schijfwegschrijving</translation>
+        <translation type="vanished">Schijfwegschrijving</translation>
+    </message>
+</context>
+<context>
+    <name>Kill.Process.Dialog</name>
+    <message>
+        <source>Ending this process may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished">Het beëindigen van dit proces kan gegevensverlies veroorzaken.
+Weet je zeker dat je door wilt gaan?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuleren</translation>
+    </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Proces beëindigen</translation>
+    </message>
+    <message>
+        <source>Terminate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force terminate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Force to end application</source>
-        <translation>Applicatie geforceerd beëindigen</translation>
+        <translation type="vanished">Applicatie geforceerd beëindigen</translation>
     </message>
     <message>
         <source>Dark theme</source>
-        <translation>Donker thema</translation>
+        <translation type="vanished">Donker thema</translation>
     </message>
     <message>
         <source>End application</source>
-        <translation>Applicatie beëindigen</translation>
+        <translation type="vanished">Applicatie beëindigen</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation type="vanished">Annuleren</translation>
     </message>
     <message>
         <source>Compact mode</source>
-        <translation>Compacte modus</translation>
+        <translation type="vanished">Compacte modus</translation>
     </message>
     <message>
         <source>Ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Het beëindigen van deze applicatie kan gegevensverlies veroorzaken.
+        <translation type="vanished">Het beëindigen van deze applicatie kan gegevensverlies veroorzaken.
 Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
@@ -117,135 +331,314 @@ Weet je zeker dat je door wilt gaan?</translation>
     <name>MemoryMonitor</name>
     <message>
         <source>Memory</source>
-        <translation>Geheugen</translation>
+        <translation type="vanished">Geheugen</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Wisselgeheugen</translation>
+        <translation type="vanished">Wisselgeheugen</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Niet ingeschakeld</translation>
+        <translation type="vanished">Niet ingeschakeld</translation>
     </message>
 </context>
 <context>
     <name>NetworkMonitor</name>
     <message>
         <source>Network</source>
-        <translation>Netwerk</translation>
+        <translation type="vanished">Netwerk</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Downloaden</translation>
+        <translation type="vanished">Downloaden</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation>Totaal</translation>
+        <translation type="vanished">Totaal</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Uploaden</translation>
+        <translation type="vanished">Uploaden</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Attributes.Dialog</name>
+    <message>
+        <source>Process name</source>
+        <translation type="unfinished">Procesnaam</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished">Opdrachtregel</translation>
+    </message>
+    <message>
+        <source>Start time</source>
+        <translation type="unfinished">Starttijd</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Choose.Window.Dialog</name>
+    <message>
+        <source>Click the application you want to end</source>
+        <translation type="unfinished">Klik op de te beëindigen applicatie</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.View</name>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">Processor</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Schijfuitlezing</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Schijfwegschrijving</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Geheugen</translation>
+    </message>
+    <message>
+        <source>Swap</source>
+        <translation type="unfinished">Wisselgeheugen</translation>
+    </message>
+    <message>
+        <source>Not enabled</source>
+        <translation type="unfinished">Niet ingeschakeld</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Downloaden</translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished">Totaal</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Uploaden</translation>
+    </message>
+    <message>
+        <source>Disk</source>
+        <translation type="unfinished">Schijf</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="unfinished">Netwerk</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Show.Mode</name>
+    <message>
+        <source>Applications</source>
+        <translation type="unfinished">Applicaties</translation>
+    </message>
+    <message>
+        <source>My processes</source>
+        <translation type="unfinished">Mijn processen</translation>
+    </message>
+    <message>
+        <source>All processes</source>
+        <translation type="unfinished">Alle processen</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Summary</name>
+    <message>
+        <source>%2 applications and %3 processes are running</source>
+        <translation type="unfinished">Er worden %2 applicaties en %3 processen uitgevoerd</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table</name>
+    <message>
+        <source>No response</source>
+        <translation type="unfinished">Geen antwoord</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished">Pauzeren</translation>
+    </message>
+    <message>
+        <source>Tray</source>
+        <translation type="unfinished">Systeemvak</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Context.Menu</name>
+    <message>
+        <source>Terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="unfinished">Proces pauzeren</translation>
+    </message>
+    <message>
+        <source>Resume process</source>
+        <translation type="unfinished">Proces hervatten</translation>
+    </message>
+    <message>
+        <source>View command location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">Eigenschappen</translation>
+    </message>
+    <message>
+        <source>Force terminate process</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Process.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Naam</translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">Processor</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Geheugen</translation>
+    </message>
+    <message>
+        <source>Disk write</source>
+        <translation type="unfinished">Schijfwegschrijving</translation>
+    </message>
+    <message>
+        <source>Disk read</source>
+        <translation type="unfinished">Schijfuitlezing</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Downloaden</translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished">Uploaden</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
     </message>
 </context>
 <context>
     <name>ProcessItem</name>
     <message>
         <source>No response</source>
-        <translation>Geen antwoord</translation>
+        <translation type="vanished">Geen antwoord</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Pauzeren</translation>
+        <translation type="vanished">Pauzeren</translation>
     </message>
 </context>
 <context>
     <name>ProcessManager</name>
     <message>
         <source>End process</source>
-        <translation>Proces beëindigen</translation>
+        <translation type="vanished">Proces beëindigen</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation type="vanished">Annuleren</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Proces pauzeren</translation>
+        <translation type="vanished">Proces pauzeren</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Proces hervatten</translation>
+        <translation type="vanished">Proces hervatten</translation>
     </message>
     <message>
         <source>View process location</source>
-        <translation>Proceslocatie tonen</translation>
+        <translation type="vanished">Proceslocatie tonen</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Eigenschappen</translation>
+        <translation type="vanished">Eigenschappen</translation>
     </message>
     <message>
         <source>%2 applications and %3 processes are running</source>
-        <translation>Er worden %2 applicaties en %3 processen uitgevoerd</translation>
+        <translation type="vanished">Er worden %2 applicaties en %3 processen uitgevoerd</translation>
     </message>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
+        <translation type="vanished">Het beëindigen van dit proces kan gegevensverlies veroorzaken.
 Weet je zeker dat je door wilt gaan?</translation>
+    </message>
+</context>
+<context>
+    <name>ProcessPageWidget</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Annuleren</translation>
+    </message>
+    <message>
+        <source>End application</source>
+        <translation type="obsolete">Applicatie beëindigen</translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation type="vanished">Naam</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Processor</translation>
+        <translation type="vanished">Processor</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Geheugen</translation>
+        <translation type="vanished">Geheugen</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Schijfwegschrijving</translation>
+        <translation type="vanished">Schijfwegschrijving</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Schijfuitlezing</translation>
+        <translation type="vanished">Schijfuitlezing</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Downloaden</translation>
+        <translation type="vanished">Downloaden</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Uploaden</translation>
+        <translation type="vanished">Uploaden</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation type="vanished">PID</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin Systeemmonitor is een intuïtieve, krachtige systeemmonitor. Het kan processen, CPU, geheugen, netwerk, schijf en andere statussen monitoren.</translation>
+        <translation type="vanished">Deepin Systeemmonitor is een intuïtieve, krachtige systeemmonitor. Het kan processen, CPU, geheugen, netwerk, schijf en andere statussen monitoren.</translation>
     </message>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin Systeemmonitor</translation>
+        <translation type="vanished">Deepin Systeemmonitor</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Deepin System Monitor</source>
-        <translation>Deepin Systeemmonitor</translation>
+        <translation type="vanished">Deepin Systeemmonitor</translation>
     </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
@@ -293,7 +686,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Deepin Window Manager </source>
-        <translation>Deepin Vensterbeheer</translation>
+        <translation type="vanished">Deepin Vensterbeheer</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -451,38 +844,171 @@ Weet je zeker dat je door wilt gaan?</translation>
         <source>Sogou input method</source>
         <translation>Sogou-invoermethode</translation>
     </message>
+    <message>
+        <source>Deepin Window Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Instance.Name.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuleren</translation>
+    </message>
+    <message>
+        <source>Service instance name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Context.Menu</name>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Header</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Naam</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sub</source>
+        <extracomment>sub state (running status)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <extracomment>state</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="unfinished">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Service.Table.Search</name>
+    <message>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ServiceNameSubInputDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Annuleren</translation>
+    </message>
 </context>
 <context>
     <name>StartTooltip</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klik op de te beëindigen applicatie</translation>
+        <translation type="vanished">Klik op de te beëindigen applicatie</translation>
     </message>
 </context>
 <context>
     <name>StatusMonitor</name>
     <message>
         <source>Applications</source>
-        <translation>Applicaties</translation>
+        <translation type="vanished">Applicaties</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Mijn processen</translation>
+        <translation type="vanished">Mijn processen</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Alle processen</translation>
+        <translation type="vanished">Alle processen</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Systeemvak</translation>
+        <translation type="vanished">Systeemvak</translation>
+    </message>
+</context>
+<context>
+    <name>SystemServiceTableModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Naam</translation>
+    </message>
+    <message>
+        <source>PID</source>
+        <translation type="obsolete">PID</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Context.Menu</name>
+    <message>
+        <source>Force end application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Search</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Zoeken</translation>
+    </message>
+</context>
+<context>
+    <name>Title.Bar.Switch</name>
+    <message>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Search</source>
-        <translation>Zoeken</translation>
+        <translation type="vanished">Zoeken</translation>
     </message>
 </context>
 </TS>

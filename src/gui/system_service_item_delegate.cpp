@@ -42,7 +42,11 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
         if (!wnd) {
             cg = DPalette::Inactive;
         } else {
-            cg = DPalette::Active;
+            if (wnd->isModal()) {
+                cg = DPalette::Inactive;
+            } else {
+                cg = DPalette::Active;
+            }
         }
     }
 

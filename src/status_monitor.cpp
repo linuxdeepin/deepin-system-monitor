@@ -21,17 +21,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "status_monitor.h"
 #include <proc/sysinfo.h>
 #include <unistd.h>
+
+#include <DApplication>
 #include <QApplication>
 #include <QDebug>
 #include <QIcon>
 #include <QPainter>
 #include <thread>
+
 #include "constant.h"
 #include "process_item.h"
 #include "process_tree.h"
+#include "status_monitor.h"
 #include "utils.h"
 
 using namespace Utils;
@@ -57,13 +60,13 @@ StatusMonitor::StatusMonitor(int tabIndex)
     isCompactMode = settings->getOption("compact_mode").toBool();
 
     if (tabIndex == 0) {
-        tabName = tr("Applications");
+        tabName = DApplication::translate("Process.Show.Mode", "Applications");
         filterType = OnlyGUI;
     } else if (tabIndex == 1) {
-        tabName = tr("My processes");
+        tabName = DApplication::translate("Process.Show.Mode", "My processes");
         filterType = OnlyMe;
     } else {
-        tabName = tr("All processes");
+        tabName = DApplication::translate("Process.Show.Mode", "All processes");
         filterType = AllProcess;
     }
 
@@ -113,7 +116,7 @@ StatusMonitor::~StatusMonitor()
 void StatusMonitor::switchToAllProcess()
 {
     filterType = AllProcess;
-    tabName = tr("All processes");
+    tabName = DApplication::translate("Process.Show.Mode", "All processes");
 
     updateStatus();
 }
@@ -121,7 +124,7 @@ void StatusMonitor::switchToAllProcess()
 void StatusMonitor::switchToOnlyGui()
 {
     filterType = OnlyGUI;
-    tabName = tr("Applications");
+    tabName = DApplication::translate("Process.Show.Mode", "Applications");
 
     updateStatus();
 }
@@ -129,7 +132,7 @@ void StatusMonitor::switchToOnlyGui()
 void StatusMonitor::switchToOnlyMe()
 {
     filterType = OnlyMe;
-    tabName = tr("My processes");
+    tabName = DApplication::translate("Process.Show.Mode", "My processes");
 
     updateStatus();
 }
@@ -282,7 +285,9 @@ void StatusMonitor::updateStatus()
 
             // Add tray prefix in title if process is tray process.
             if (trayProcessMap.contains(pid)) {
-                title = QString("%1: %2").arg(tr("Tray")).arg(title);
+                title = QString("%1: %2")
+                            .arg(DApplication::translate("Process.Table", "Tray"))
+                            .arg(title);
             }
 
             QString displayName;

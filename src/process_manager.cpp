@@ -21,22 +21,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "process_manager.h"
 #include <proc/sysinfo.h>
 #include <signal.h>
+
+#include <DApplication>
 #include <DDesktopServices>
 #include <DSimpleListView>
-#include <QApplication>
 #include <QDebug>
 #include <QDir>
 #include <QList>
 #include <QProcess>
 #include <QStyleFactory>
 #include <QToolTip>
-#include "QVBoxLayout"
+#include <QVBoxLayout>
+
 #include "attributes_dialog.h"
 #include "dthememanager.h"
 #include "process_item.h"
+#include "process_manager.h"
 
 DCORE_USE_NAMESPACE
 
@@ -87,30 +89,39 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     processView->setSearchAlgorithm(&ProcessItem::search);
 
     killProcessDialog = new DDialog(
-        QString(tr("End process")),
-        QString(tr("Ending this process may cause data loss.\nAre you sure you want to continue?")),
+        DApplication::translate("Kill.Process.Dialog", "End process"),
+        DApplication::translate(
+            "Kill.Process.Dialog",
+            "Ending this process may cause data loss.\nAre you sure you want to continue?"),
         this);
     killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
     killProcessDialog->setIconPixmap(QPixmap(Utils::getQrcPath("deepin-system-monitor.svg")));
-    killProcessDialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-    killProcessDialog->addButton(QString(tr("Kill process")), true, DDialog::ButtonNormal);
+    killProcessDialog->addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
+    killProcessDialog->addButton(DApplication::translate("Kill.Process.Dialog", "Terminate"), true);
     connect(killProcessDialog, &DDialog::buttonClicked, this, &ProcessManager::dialogButtonClicked);
 
     actionPids = new QList<int>();
 
     rightMenu = new DMenu(this);
 
-    m_termProcAction = new QAction(tr("End process"), rightMenu);
+    m_termProcAction = new QAction(
+        DApplication::translate("Process.Table.Context.Menu", "Terminate process"), rightMenu);
     connect(m_termProcAction, &QAction::triggered, this, &ProcessManager::terminateProcess);
-    m_pauseProcAction = new QAction(tr("Suspend process"), rightMenu);
+    m_pauseProcAction = new QAction(
+        DApplication::translate("Process.Table.Context.Menu", "Suspend process"), rightMenu);
     connect(m_pauseProcAction, &QAction::triggered, this, &ProcessManager::stopProcesses);
-    m_resumeProcAction = new QAction(tr("Resume process"), rightMenu);
+    m_resumeProcAction = new QAction(
+        DApplication::translate("Process.Table.Context.Menu", "Resume process"), rightMenu);
     connect(m_resumeProcAction, &QAction::triggered, this, &ProcessManager::resumeProcesses);
-    m_openExecDirAction = new QAction(tr("View process location"), rightMenu);
+    m_openExecDirAction = new QAction(
+        DApplication::translate("Process.Table.Context.Menu", "View command location"), rightMenu);
     connect(m_openExecDirAction, &QAction::triggered, this, &ProcessManager::openProcessDirectory);
-    m_showAttrAction = new QAction(tr("Properties"), rightMenu);
+    m_showAttrAction =
+        new QAction(DApplication::translate("Process.Table.Context.Menu", "Properties"), rightMenu);
     connect(m_showAttrAction, &QAction::triggered, this, &ProcessManager::showAttributes);
-    m_killProcAction = new QAction(tr("Kill Process"), rightMenu);
+    m_killProcAction = new QAction(
+        DApplication::translate("Process.Table.Context.Menu", "Force terminate process"),
+        rightMenu);
     connect(m_killProcAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
 
     rightMenu->addAction(m_termProcAction);
@@ -328,11 +339,13 @@ void ProcessManager::stopProcesses()
 void ProcessManager::updateProcessNumber(QString tabName, int guiProcessNumber,
                                          int systemProcessNumber)
 {
-    statusLabel->setText(
-        (QString("%1 (") + tr("%2 applications and %3 processes are running") + ")")
-            .arg(tabName)
-            .arg(guiProcessNumber)
-            .arg(systemProcessNumber));
+    statusLabel->setText((QString("%1 (") +
+                          DApplication::translate("Process.Summary",
+                                                  "%2 applications and %3 processes are running") +
+                          ")")
+                             .arg(tabName)
+                             .arg(guiProcessNumber)
+                             .arg(systemProcessNumber));
 }
 
 void ProcessManager::updateStatus(QList<DSimpleListItem *> items)

@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -47,7 +48,8 @@ StartTooltip::StartTooltip(QWidget *parent)
 
     installEventFilter(this);
 
-    text = tr("Click the application you want to end");
+    text = DApplication::translate("Process.Choose.Window.Dialog",
+                                   "Click the application you want to end");
     QSize size = Utils::getRenderSize(RECTANGLE_FONT_SIZE, text);
 
     setFixedSize(size.width() + RECTANGLE_PADDING * 2,

@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -30,7 +31,6 @@
 
 #include "constant.h"
 #include "disk_monitor.h"
-#include "dthememanager.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -169,7 +169,8 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(textColor));
     painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(),
                            rect().width() - titleRenderOffsetX, rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, tr("Disk"));
+                     Qt::AlignLeft | Qt::AlignTop,
+                     DApplication::translate("Process.Graph.View", "Disk"));
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
@@ -216,8 +217,12 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, readRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString readTitle = QString("%1 %2").arg(tr("Disk read")).arg(formatBandwidth(totalReadKbs));
-    QString writeTitle = QString("%1 %2").arg(tr("Disk write")).arg(formatBandwidth(totalWriteKbs));
+    QString readTitle = QString("%1 %2")
+                            .arg(DApplication::translate("Process.Graph.View", "Disk read"))
+                            .arg(formatBandwidth(totalReadKbs));
+    QString writeTitle = QString("%1 %2")
+                             .arg(DApplication::translate("Process.Graph.View", "Disk write"))
+                             .arg(formatBandwidth(totalWriteKbs));
 
     painter.setOpacity(1);
     painter.setPen(QPen(readColor));

@@ -102,19 +102,21 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
         if (orientation == Qt::Horizontal) {
             switch (section) {
                 case kSystemServiceNameColumn:
-                    return tr(kSystemServiceName);
+                    return DApplication::translate("Service.Table.Header", kSystemServiceName);
                 case kSystemServiceLoadStateColumn:
-                    return tr(kSystemServiceLoadState);
+                    return DApplication::translate("Service.Table.Header", kSystemServiceLoadState);
                 case kSystemServiceActiveStateColumn:
-                    return tr(kSystemServiceActiveState);
+                    return DApplication::translate("Service.Table.Header",
+                                                   kSystemServiceActiveState);
                 case kSystemServiceSubStateColumn:
-                    return tr(kSystemServiceSubState);
+                    return DApplication::translate("Service.Table.Header", kSystemServiceSubState);
                 case kSystemServiceStateColumn:
-                    return tr(kSystemServiceState);
+                    return DApplication::translate("Service.Table.Header", kSystemServiceState);
                 case kSystemServicePIDColumn:
-                    return tr(kSystemServicePID);
+                    return DApplication::translate("Service.Table.Header", kSystemServicePID);
                 case kSystemServiceDescriptionColumn:
-                    return tr(kSystemServiceDescription);
+                    return DApplication::translate("Service.Table.Header",
+                                                   kSystemServiceDescription);
                 default:
                     break;
             }
@@ -138,7 +140,8 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
                     maxWidth = v.toSize().width();
             }
         }
-        return {QSize(maxWidth, 32)};
+        // TODO: fix size hint
+        return {QSize(maxWidth, 10 * 3 + 8)};
     }
     return QAbstractTableModel::headerData(section, orientation, role);
 }

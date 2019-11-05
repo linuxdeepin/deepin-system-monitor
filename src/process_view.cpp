@@ -21,11 +21,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
 #include <QTimer>
 
-#include "dthememanager.h"
 #include "process_view.h"
 
 DWIDGET_USE_NAMESPACE
@@ -41,8 +41,14 @@ ProcessView::ProcessView(QList<bool> columnHideFlags)
 
     // Set column widths.
     QList<QString> titles;
-    titles << tr("Name") << tr("CPU") << tr("Memory") << tr("Disk write") << tr("Disk read")
-           << tr("Download") << tr("Upload") << tr("PID");
+    titles << DApplication::translate("Process.Table.Header", "Name")
+           << DApplication::translate("Process.Table.Header", "CPU")
+           << DApplication::translate("Process.Table.Header", "Memory")
+           << DApplication::translate("Process.Table.Header", "Disk write")
+           << DApplication::translate("Process.Table.Header", "Disk read")
+           << DApplication::translate("Process.Table.Header", "Download")
+           << DApplication::translate("Process.Table.Header", "Upload")
+           << DApplication::translate("Process.Table.Header", "PID");
     QList<int> widths;
     widths << -1 << 70 << 70 << 80 << 80 << 70 << 70 << 70;
     setColumnTitleInfo(titles, widths, 36);

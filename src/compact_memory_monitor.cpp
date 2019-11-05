@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -176,18 +177,22 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, memoryRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString memoryTitle =
-        QString("%1 (%2%)").arg(tr("Memory")).arg(QString::number(memoryPercent * 100, 'f', 1));
+    QString memoryTitle = QString("%1 (%2%)")
+                              .arg(DApplication::translate("Process.Graph.View", "Memory"))
+                              .arg(QString::number(memoryPercent * 100, 'f', 1));
     QString memoryContent =
         QString("%1/%2").arg(formatByteCount(usedMemory)).arg(formatByteCount(totalMemory));
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
-        swapTitle = QString("%1 (%2)").arg(tr("Swap")).arg(tr("Not enabled"));
+        swapTitle = QString("%1 (%2)")
+                        .arg(DApplication::translate("Process.Graph.View", "Swap"))
+                        .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
         swapContent = "";
     } else {
-        swapTitle =
-            QString("%1 (%2%)").arg(tr("Swap")).arg(QString::number(swapPercent * 100, 'f', 1));
+        swapTitle = QString("%1 (%2%)")
+                        .arg(DApplication::translate("Process.Graph.View", "Swap"))
+                        .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent =
             QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
     }

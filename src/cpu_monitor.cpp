@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -29,7 +30,6 @@
 
 #include "constant.h"
 #include "cpu_monitor.h"
-#include "dthememanager.h"
 #include "settings.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
@@ -157,7 +157,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     font.setWeight(QFont::Light);
 
     QFontMetrics fm(font);
-    int titleWidth = fm.width(tr("CPU"));
+    int titleWidth = fm.width(DApplication::translate("Process.Graph.View", "CPU"));
 
     int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
 
@@ -171,7 +171,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) +
                                iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,
                            rect().y() + titleRenderOffsetY, titleWidth, 30),
-                     Qt::AlignCenter, tr("CPU"));
+                     Qt::AlignCenter, DApplication::translate("Process.Graph.View", "CPU"));
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) +
                       easeInOut(animationIndex / animationFrames) *

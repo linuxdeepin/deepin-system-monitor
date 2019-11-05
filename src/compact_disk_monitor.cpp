@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
@@ -30,7 +31,6 @@
 
 #include "compact_disk_monitor.h"
 #include "constant.h"
-#include "dthememanager.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -185,8 +185,12 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, readRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString readTitle = QString("%1 %2").arg(tr("Disk read")).arg(formatBandwidth(totalReadKbs));
-    QString writeTitle = QString("%1 %2").arg(tr("Disk write")).arg(formatBandwidth(totalWriteKbs));
+    QString readTitle = QString("%1 %2")
+                            .arg(DApplication::translate("Process.Graph.View", "Disk read"))
+                            .arg(formatBandwidth(totalReadKbs));
+    QString writeTitle = QString("%1 %2")
+                             .arg(DApplication::translate("Process.Graph.View", "Disk write"))
+                             .arg(formatBandwidth(totalWriteKbs));
 
     painter.setOpacity(1);
     painter.setPen(QPen(QColor(readColor)));
