@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <DApplication>
 #include <DApplicationSettings>
+#include <DGuiApplicationHelper>
 #include <DHiDPIHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
@@ -82,29 +83,33 @@ int main(int argc, char *argv[])
     DApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    if (app.setSingleInstance(QString("deepin-system-monitor"), DApplication::UserScope)) {
+    if (DGuiApplicationHelper::setSingleInstance(QString("system-monitor"),
+                                                 DGuiApplicationHelper::UserScope)) {
         app.loadTranslator();
 
         const QString descriptionText = DApplication::translate(
             "App.About",
-            "Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the "
+            "System Monitor is an intuitive and powerful system monitor. It can monitor the "
             "process CPU, memory, network, disk and other status.");
 
         const QString acknowledgementLink =
             "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
 
         app.setOrganizationName("deepin");
-        app.setApplicationName("deepin-system-monitor");
-        app.setApplicationDisplayName(
-            DApplication::translate("App.About", "Deepin System Monitor"));
-        app.setApplicationVersion("1.4.2");
+        app.setApplicationName("system-monitor");
+        app.setApplicationDisplayName(DApplication::translate("App.About", "System Monitor"));
+        app.setApplicationVersion(DApplication::buildVersion(""));
 
-        app.setProductIcon(QIcon(Utils::getQrcPath("logo.svg")));
-        app.setProductName(DApplication::translate("App.About", "Deepin System Monitor"));
+        // TODO: change icon
+        //        app.setProductIcon(QIcon(Utils::getQrcPath("logo.svg")));
+        app.setProductIcon(QIcon::fromTheme("deepin-system-monitor.svg"));
+        app.setProductName(DApplication::translate("App.About", "System Monitor"));
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        app.setWindowIcon(QIcon(Utils::getQrcPath("logo.svg")));
+        // TODO: change icon
+        //        app.setWindowIcon(QIcon(Utils::getQrcPath("logo.svg")));
+        app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor.svg"));
 
         DApplicationSettings appSettings;
 

@@ -141,7 +141,7 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
             }
         }
         // TODO: fix size hint
-        return {QSize(maxWidth, 10 * 3 + 8)};
+        return {QSize(maxWidth + 10 + 10, 36 + 1)};
     }
     return QAbstractTableModel::headerData(section, orientation, role);
 }

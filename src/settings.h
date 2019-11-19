@@ -32,6 +32,7 @@ const QString kSettingKeyDisplayMode = {"display_mode"};
 const QString kSettingKeyThemeType = {"theme_type"};
 const QString kSettingKeyWindowWidth = {"window_width"};
 const QString kSettingKeyWindowHeight = {"window_height"};
+const QString kSettingKeyProcessTabIndex = {"process_tab_index"};
 
 class Settings : public QObject
 {

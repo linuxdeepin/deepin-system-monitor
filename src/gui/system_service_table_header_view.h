@@ -8,8 +8,10 @@ DWIDGET_USE_NAMESPACE
 
 class SystemServiceTableHeaderView : public DHeaderView
 {
+    Q_OBJECT
+
 public:
-    SystemServiceTableHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit SystemServiceTableHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
 

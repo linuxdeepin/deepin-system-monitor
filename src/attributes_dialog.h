@@ -19,35 +19,35 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef ATTRIBUTESDIALOG_H
-#define ATTRIBUTESDIALOG_H 
+#define ATTRIBUTESDIALOG_H
 
-#include "find_window_title.h"
+#include <ddialog.h>
+#include <dwindowclosebutton.h>
 #include <QLabel>
 #include <QPaintEvent>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <ddialog.h>
-#include <dwindowclosebutton.h>
+#include "find_window_title.h"
 
 DWIDGET_USE_NAMESPACE
 
 class AttributesDialog : public Dtk::Widget::DAbstractDialog
 {
     Q_OBJECT
-    
+
 public:
-    AttributesDialog(QWidget *parent = 0, int pid=-1);
+    AttributesDialog(QWidget *parent = 0, int pid = -1);
     ~AttributesDialog();
 
     int getPid();
     void paintEvent(QPaintEvent *);
-    
+
 private:
     DWindowCloseButton *closeButton;
-    FindWindowTitle *findWindowTitle;
+    QScopedPointer<FindWindowTitle> findWindowTitle;
     QHBoxLayout *cmdlineLayout;
     QHBoxLayout *nameLayout;
     QHBoxLayout *startTimeLayout;

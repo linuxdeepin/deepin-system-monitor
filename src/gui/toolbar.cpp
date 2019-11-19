@@ -53,7 +53,7 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     // =========tab button=========
-    m_switchFuncTabBtnGrp = new DButtonBox();
+    m_switchFuncTabBtnGrp = new DButtonBox(this);
     m_switchFuncTabBtnGrp->setFixedWidth(240);
     DButtonBoxButton *procBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Process"), m_switchFuncTabBtnGrp);
@@ -73,7 +73,6 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     searchEdit = new DSearchEdit();
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
-    this->installEventFilter(this);
 
     layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
     layout->addStretch();
@@ -84,8 +83,7 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     searchTimer->setSingleShot(true);
     connect(searchTimer, &QTimer::timeout, this, &Toolbar::handleSearch);
 
-    connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged,
-            Qt::QueuedConnection);
+    connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged);
 }
 
 Toolbar::~Toolbar() {}
@@ -97,6 +95,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 searchEdit->clear();
+                searchEdit->lineEdit()->clearFocus();
 
                 pressEsc();
             }
@@ -108,7 +107,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    return QObject::eventFilter(obj, event);
+    return DWidget::eventFilter(obj, event);
 }
 
 void Toolbar::handleSearch()
@@ -125,14 +124,15 @@ void Toolbar::handleSearchTextChanged()
     if (searchTimer->isActive()) {
         searchTimer->stop();
     }
-    searchTimer->start(300);
+    searchTimer->start(50);
 }
 
 void Toolbar::focusInput()
 {
     if (searchEdit->text() != "") {
-        searchEdit->setFocus();
+        searchEdit->lineEdit()->selectAll();
+        searchEdit->lineEdit()->setFocus();
     } else {
-        searchEdit->setFocus();
+        searchEdit->lineEdit()->setFocus();
     }
 }

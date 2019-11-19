@@ -31,6 +31,7 @@
 
 #include "constant.h"
 #include "memory_monitor.h"
+#include "process/system_monitor.h"
 #include "utils.h"
 
 DWIDGET_USE_NAMESPACE
@@ -62,6 +63,11 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MemoryMonitor::changeTheme);
 
     m_themeType = dAppHelper->themeType();
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::memStatInfoUpdated, this, &MemoryMonitor::updateStatus);
+    }
 }
 
 MemoryMonitor::~MemoryMonitor() {}

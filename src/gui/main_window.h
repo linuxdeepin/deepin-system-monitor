@@ -4,6 +4,7 @@
 #include <DButtonBox>
 #include <DMainWindow>
 #include <DSearchEdit>
+#include <DStackedWidget>
 #include <DWidget>
 #include <mutex>
 #include <thread>
@@ -15,7 +16,6 @@ DWIDGET_USE_NAMESPACE
 class Toolbar;
 class SystemServicePageWidget;
 class ProcessPageWidget;
-class DStackWidget;
 class Settings;
 
 class MainWindow : public DMainWindow
@@ -59,6 +59,7 @@ protected:
 
     virtual void resizeEvent(QResizeEvent *event);
     virtual void closeEvent(QCloseEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     MainWindow(DWidget *parent = nullptr);

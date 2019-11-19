@@ -21,7 +21,7 @@ public:
     void setResult(int r) { m_result = r; }
 
 public Q_SLOTS:
-    void onButtonCliecked(int index, const QString &text);
+    void onButtonClicked(int index, const QString &text);
 
 protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;

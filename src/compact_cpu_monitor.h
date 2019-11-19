@@ -35,7 +35,7 @@ public:
     ~CompactCpuMonitor();
 
 public slots:
-    void updateStatus(double totalCpuPercent, std::vector<double> cPercents);
+    void updateStatus(qreal totalCpuPercent, QVector<qreal> cPercents);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -60,7 +60,7 @@ private:
     int pointerRenderPaddingY = 9;
     int cpuRenderPaddingX = 13;
     int cpuRenderPaddingY = 2;
-    int pointerRadius = 3;
+    int pointerRadius = 6;
 };
 
 #endif

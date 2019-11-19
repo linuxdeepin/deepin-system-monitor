@@ -31,6 +31,7 @@
 
 #include "constant.h"
 #include "disk_monitor.h"
+#include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -50,18 +51,23 @@ DiskMonitor::DiskMonitor(QWidget *parent)
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
-    readSpeeds = new QList<unsigned long>();
+    readSpeeds = new QList<qreal>();
     for (int i = 0; i < pointsNumber; i++) {
         readSpeeds->append(0);
     }
 
-    writeSpeeds = new QList<unsigned long>();
+    writeSpeeds = new QList<qreal>();
     for (int i = 0; i < pointsNumber; i++) {
         writeSpeeds->append(0);
     }
 
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskMonitor::changeTheme);
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::diskStatInfoUpdated, this, &DiskMonitor::updateStatus);
+    }
 }
 
 DiskMonitor::~DiskMonitor()
@@ -84,7 +90,7 @@ void DiskMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     }
 }
 
-void DiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
+void DiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
 {
     totalReadKbs = tReadKbs;
     totalWriteKbs = tWriteKbs;

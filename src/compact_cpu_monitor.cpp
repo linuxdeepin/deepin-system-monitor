@@ -32,6 +32,7 @@
 
 #include "compact_cpu_monitor.h"
 #include "constant.h"
+#include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -75,11 +76,16 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
               << "#7E41F1"
               << "#2CA7F8"
               << "#A005CE";
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::cpuStatInfoUpdated, this, &CompactCpuMonitor::updateStatus);
+    }
 }
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
 
-void CompactCpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPercents)
+void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
 {
     totalCpuPercent = cpuPercent;
 
@@ -126,6 +132,7 @@ void CompactCpuMonitor::updateStatus(double cpuPercent, std::vector<double> cPer
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
+    painter.save();
     painter.setRenderHint(QPainter::Antialiasing);
 
     // init colors
@@ -137,29 +144,34 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QColor summaryColor = palette.color(DPalette::Text);
 
     // Draw cpu summary.
-    setFontSize(painter, cpuTextRenderSize);
     QFontMetrics fm = painter.fontMetrics();
 
-    QString readTitle = QString("%1 %2%")
-                            .arg(DApplication::translate("Process.Graph.View", "CPU"))
-                            .arg(QString::number(totalCpuPercent, 'f', 1));
+    QString cpuText = DApplication::translate("Process.Graph.View", "CPU");
+    QString cpuStatText = QString::number(totalCpuPercent, 'f', 1);
 
     painter.setOpacity(1);
-    painter.setPen(QPen(textColor));
     painter.setBrush(QBrush(QColor(cpuColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + cpuRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
+    QPainterPath path;
+    path.addRoundedRect(
+        QRectF(rect().x(), rect().y() + pointerRenderPaddingY, pointerRadius, pointerRadius),
+        pointerRadius, pointerRadius);
+    painter.fillPath(path, QBrush("#0081FF"));
 
-    setFontSize(painter, cpuTextRenderSize);
     painter.setPen(QPen(QColor(summaryColor)));
+    QFont fn = painter.font();
+    fn.setPointSize(fn.pointSize() - 1);
+    painter.setFont(fn);
     painter.drawText(QRect(rect().x() + cpuRenderPaddingX, rect().y() + cpuRenderPaddingY,
-                           fm.width(readTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, readTitle);
+                           fm.horizontalAdvance(cpuText), rect().height()),
+                     Qt::AlignLeft | Qt::AlignTop, cpuText);
+    painter.drawText(
+        QRect(rect().x() + fm.boundingRect(cpuText).width() + 13, rect().y() + cpuRenderPaddingY,
+              fm.horizontalAdvance(cpuStatText), rect().height()),
+        Qt::AlignLeft | Qt::AlignTop, cpuStatText);
 
     // Draw background grid.
     QPen framePen;
-    painter.setOpacity(0.1);
+    painter.setOpacity(0.2);
     framePen.setColor(QColor(textColor));
     framePen.setWidth(1);
     painter.setPen(framePen);
@@ -170,10 +182,12 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     int gridWidth = rect().width() - gridPaddingRight - penSize * 2;
     int gridHeight = cpuRenderMaxHeight + waveformRenderPadding;
 
+    painter.setRenderHint(QPainter::Antialiasing, false);
     QPainterPath framePath;
     painter.setBrush(QBrush());  // clear brush to got transparent background
     framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
     painter.drawPath(framePath);
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
     // Draw grid.
     QPen gridPen;
@@ -196,7 +210,6 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         gridLineY += gridSize;
         painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
     }
-    painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.setOpacity(1);
     painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
@@ -221,4 +234,5 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         painter.setBrush(QBrush());
         painter.drawPath(cpuPaths[i]);
     }
+    painter.restore();
 }

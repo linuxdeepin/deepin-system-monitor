@@ -1,11 +1,28 @@
-#ifndef MONITOR_COMPAT_VIEW_H
-#define MONITOR_COMPAT_VIEW_H
+#ifndef MONITOR_COMPACT_VIEW_H
+#define MONITOR_COMPACT_VIEW_H
 
+#include <DFrame>
 
-class MonitorCompatView : public DFrame
+DWIDGET_USE_NAMESPACE
+
+class CompactCpuMonitor;
+class CompactMemoryMonitor;
+class CompactNetworkMonitor;
+class CompactDiskMonitor;
+
+class MonitorCompactView : public DFrame
 {
+    Q_OBJECT
+
 public:
-    MonitorCompatView();
+    explicit MonitorCompactView(QWidget *parent = nullptr);
+    ~MonitorCompactView() = default;
+
+private:
+    CompactCpuMonitor *m_cpuMonitor;
+    CompactMemoryMonitor *m_memoryMonitor;
+    CompactNetworkMonitor *m_networkMonitor;
+    CompactDiskMonitor *m_diskMonitor;
 };
 
-#endif // MONITOR_COMPAT_VIEW_H
+#endif  // MONITOR_COMPACT_VIEW_H

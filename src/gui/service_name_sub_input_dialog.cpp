@@ -21,15 +21,13 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel"));
 
     connect(this, &ServiceNameSubInputDialog::buttonClicked, this,
-            &ServiceNameSubInputDialog::onButtonCliecked);
-
-    setFocus(Qt::PopupFocusReason);
-    setFocusProxy(m_nameLineEdit);
+            &ServiceNameSubInputDialog::onButtonClicked);
 }
 
-void ServiceNameSubInputDialog::onButtonCliecked(int index, const QString &text)
+void ServiceNameSubInputDialog::onButtonClicked(int index, const QString &text)
 {
-    qDebug() << "Button clicked:" << text;
+    Q_UNUSED(text);
+
     if (index == 0) {
         m_name = m_nameLineEdit->text();
         setResult(QMessageBox::Ok);
@@ -41,5 +39,5 @@ void ServiceNameSubInputDialog::onButtonCliecked(int index, const QString &text)
 void ServiceNameSubInputDialog::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
-    m_nameLineEdit->setFocus();
+    m_nameLineEdit->lineEdit()->setFocus();
 }

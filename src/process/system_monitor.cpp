@@ -1,6 +1,492 @@
+#include <proc/sysinfo.h>
+#include <pwd.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <DApplication>
+#include <QDebug>
+#include <QIcon>
+
+#include "constant.h"
+#include "process/process_entry.h"
+#include "process_tree.h"
 #include "system_monitor.h"
+#include "utils.h"
 
-SystemMonitor::SystemMonitor(QObject *parent) : QObject(parent)
+std::atomic<SystemMonitor *> SystemMonitor::m_instance;
+std::mutex SystemMonitor::m_mutex;
+
+DWIDGET_USE_NAMESPACE
+using namespace Utils;
+
+void SystemMonitor::updateStatus()
 {
+    // Read the list of open processes information.
+    PROCTAB *proc =
+        openproc(PROC_FILLMEM |   // memory status: read information from /proc/#pid/statm
+                 PROC_FILLSTAT |  // cpu status: read information from /proc/#pid/stat
+                 PROC_FILLUSR     // user status: resolve user ids to names via /etc/passwd
+        );
+    static proc_t proc_info;
+    memset(&proc_info, 0, sizeof(proc_t));
 
+    StoredProcType processes;
+    while (readproc(proc, &proc_info) != nullptr) {
+        processes[proc_info.tid] = proc_info;
+    }
+    closeproc(proc);
+
+    // Fill in CPU.
+    prevWorkCpuTime = workCpuTime;
+    prevTotalCpuTime = totalCpuTime;
+    totalCpuTime = getTotalCpuTime(workCpuTime);
+
+    m_processCpuPercents.clear();
+    if (m_prevProcesses.size() > 0) {
+        // we have previous proc info
+        for (auto &newItr : processes) {
+            for (auto &prevItr : m_prevProcesses) {
+                if (newItr.first == prevItr.first) {
+                    // PID matches, calculate the cpu
+                    m_processCpuPercents[newItr.second.tid] = calculateCPUPercentage(
+                        &prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    // Read tray icon process.
+    QList<int> trayProcessXids = Utils::getTrayWindows();
+    QMap<int, int> trayProcessMap;
+
+    for (auto xid : trayProcessXids) {
+        trayProcessMap[m_findWindowTitle->getWindowPid(static_cast<xcb_window_t>(xid))] = xid;
+    }
+
+    // Fill gui chlid process information when filterType is OnlyGUI.
+    m_findWindowTitle->updateWindowInfos();
+    ProcessTree *processTree = new ProcessTree();
+    processTree->scanProcesses(processes);
+    QMap<int, ChildPidInfo> childInfoMap;
+    if (filterType == OnlyGUI) {
+        QList<int> guiPids = m_findWindowTitle->getWindowPids();
+
+        // Tray pid also need add in gui pids list.
+        for (int pid : trayProcessMap.keys()) {
+            if (!guiPids.contains(pid)) {
+                guiPids << pid;
+            }
+        }
+
+        for (int guiPid : guiPids) {
+            QList<int> childPids;
+            childPids = processTree->getAllChildPids(guiPid);
+
+            for (int childPid : childPids) {
+                DiskStatus dStatus = {0, 0};
+                NetworkStatus nStatus = {0, 0, 0, 0};
+                ChildPidInfo childPidInfo;
+
+                childPidInfo.cpu = 0;
+                childPidInfo.memory = 0;
+                childPidInfo.diskStatus = dStatus;
+                childPidInfo.networkStatus = nStatus;
+
+                childInfoMap[childPid] = childPidInfo;
+            }
+        }
+    }
+
+    // Read processes information.
+    int guiProcessNumber = 0;
+    int systemProcessNumber = 0;
+    QList<ProcessEntry> procList;
+
+    m_wineApplicationDesktopMaps.clear();
+    m_wineServerDesktopMaps.clear();
+
+    unsigned long diskReadTotalKbs = 0;
+    unsigned long diskWriteTotalKbs = 0;
+
+    for (auto &i : processes) {
+        int pid = (&i.second)->tid;
+        QString cmdline = Utils::getProcessCmdline(pid);
+        bool isWineProcess = cmdline.startsWith("c:\\");
+        QString name = getProcessName(&i.second, cmdline);
+        QString user = (&i.second)->euser;
+        double cpu = m_processCpuPercents[pid];
+
+        std::string desktopFile = getProcessDesktopFile(pid, name, cmdline, trayProcessMap);
+        QString title = m_findWindowTitle->getWindowTitle(pid);
+        bool isGui = trayProcessMap.contains(pid) || (title != "");
+
+        // Record wine application and wineserver.real desktop file.
+        // We need transfer wineserver.real network traffic to the corresponding wine program.
+        if (name == "wineserver.real") {
+            // Insert pid<->desktopFile to map to search in all network process list.
+            QString gioDesktopFile =
+                Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE");
+            if (gioDesktopFile != "") {
+                m_wineServerDesktopMaps[pid] = gioDesktopFile;
+            }
+        } else {
+            // Insert desktopFile<->pid to map to search in all network process list.
+            // If title is empty, it's just a wine program, but not wine GUI window.
+            if (isWineProcess && title != "") {
+                m_wineApplicationDesktopMaps[QString::fromStdString(desktopFile)] = pid;
+            }
+        }
+
+        if (isGui) {
+            guiProcessNumber++;
+        } else {
+            systemProcessNumber++;
+        }
+
+        bool appendItem = false;
+        QString currentUsername {m_euname};
+        if (filterType == OnlyGUI) {
+            appendItem = (user == currentUsername && isGui);
+        } else if (filterType == OnlyMe) {
+            appendItem = (user == currentUsername);
+        } else if (filterType == AllProcess) {
+            appendItem = true;
+        }
+
+        if (appendItem) {
+            if (title == "") {
+                if (isWineProcess) {
+                    // If wine process's window title is blank, it's not GUI window process.
+                    // Title use process name instead.
+                    title = name;
+                } else {
+                    title = getDisplayNameFromName(name, desktopFile);
+                }
+            }
+
+            // Add tray prefix in title if process is tray process.
+            if (trayProcessMap.contains(pid)) {
+                title = QString("%1: %2")
+                            .arg(DApplication::translate("Process.Table", "Tray"))
+                            .arg(title);
+            }
+
+            QString displayName;
+            //            if (filterType == AllProcess) {
+            //                displayName = QString("[%1] %2").arg(user).arg(title);
+            //            } else {
+            displayName = title;
+            //            }
+
+            long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
+            QPixmap icon = getProcessIcon(pid, desktopFile, m_findWindowTitle, 24);
+            ProcessEntry item;
+            item.setIcon(icon);
+            item.setName(name);
+            item.setDisplayName(displayName);
+            item.setCPU(cpu);
+            item.setMemory(static_cast<qulonglong>(memory));
+            item.setPID(pid);
+            item.setUserName(user);
+            item.setState((&i.second)->state);
+            procList << item;
+        } else {
+            // Fill GUI processes information for continue merge action.
+            if (filterType == OnlyGUI) {
+                if (childInfoMap.contains(pid)) {
+                    long memory =
+                        getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
+
+                    childInfoMap[pid].cpu = cpu;
+                    childInfoMap[pid].memory = static_cast<qulonglong>(memory);
+                }
+            }
+        }
+
+        // Calculate disk IO kbs.
+        DiskStatus diskStatus = getProcessDiskStatus(pid);
+        diskReadTotalKbs += diskStatus.readKbs;
+        diskWriteTotalKbs += diskStatus.writeKbs;
+    }
+
+    // Remove dead process from network status maps.
+    for (auto pid : m_processSentBytes.keys()) {
+        bool foundProcess = false;
+        for (auto &i : processes) {
+            if ((&i.second)->tid == pid) {
+                foundProcess = true;
+                break;
+            }
+        }
+
+        if (!foundProcess) {
+            m_processSentBytes.remove(pid);
+        }
+    }
+    for (auto pid : m_processRecvBytes.keys()) {
+        bool foundProcess = false;
+        for (auto &i : processes) {
+            if ((&i.second)->tid == pid) {
+                foundProcess = true;
+                break;
+            }
+        }
+
+        if (!foundProcess) {
+            m_processRecvBytes.remove(pid);
+        }
+    }
+
+    // Read memory information.
+    meminfo();
+
+    // Update memory status.
+    if (kb_swap_total > 0) {
+        memStatInfoUpdated((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024,
+                           kb_swap_used * 1024, kb_swap_total * 1024);
+    } else {
+        memStatInfoUpdated((kb_main_total - kb_main_available) * 1024, kb_main_total * 1024, 0, 0);
+    }
+
+    // Update process's network status.
+    NetworkTrafficFilter::Update update;
+
+    QMap<int, NetworkStatus> networkStatusSnapshot;
+
+    while (NetworkTrafficFilter::getRowUpdate(update)) {
+        if (update.action != NETHOGS_APP_ACTION_REMOVE) {
+            m_processSentBytes[update.record.pid] = update.record.sent_bytes;
+            m_processRecvBytes[update.record.pid] = update.record.recv_bytes;
+
+            NetworkStatus status = {update.record.sent_bytes, update.record.recv_bytes,
+                                    static_cast<qreal>(update.record.sent_kbs),
+                                    static_cast<qreal>(update.record.recv_kbs)};
+
+            (networkStatusSnapshot)[update.record.pid] = status;
+        }
+    }
+
+    // Transfer wineserver.real network traffic to the corresponding wine program.
+    QMap<int, NetworkStatus>::iterator i;
+    for (i = networkStatusSnapshot.begin(); i != networkStatusSnapshot.end(); ++i) {
+        if (m_wineServerDesktopMaps.contains(i.key())) {
+            QString wineDesktopFile = m_wineServerDesktopMaps[i.key()];
+
+            if (m_wineApplicationDesktopMaps.contains(wineDesktopFile)) {
+                // Transfer wineserver.real network traffic to the corresponding wine program.
+                int wineApplicationPid = m_wineApplicationDesktopMaps[wineDesktopFile];
+                networkStatusSnapshot[wineApplicationPid] = networkStatusSnapshot[i.key()];
+
+                // Reset wineserver network status to zero.
+                NetworkStatus networkStatus = {0, 0, 0, 0};
+                networkStatusSnapshot[i.key()] = networkStatus;
+            }
+        }
+    }
+
+    // Update ProcessItem's network status.
+    for (auto &item : procList) {
+        if (networkStatusSnapshot.contains(item.getPID())) {
+            auto nstat = networkStatusSnapshot.value(item.getPID());
+            item.setNetworkStats(nstat);
+        }
+
+        item.setDiskStats(getProcessDiskStatus(item.getPID()));
+    }
+
+    for (int childPid : childInfoMap.keys()) {
+        // Update network status.
+        if (networkStatusSnapshot.contains(childPid)) {
+            childInfoMap[childPid].networkStatus = networkStatusSnapshot.value(childPid);
+        }
+
+        // Update disk status.
+        childInfoMap[childPid].diskStatus = getProcessDiskStatus(childPid);
+    }
+
+    // Update cpu status.
+    QVector<CpuStruct> cpuTimes = getCpuTimes();
+    if (prevWorkCpuTime != 0 && prevTotalCpuTime != 0) {
+        QVector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
+
+        cpuStatInfoUpdated(
+            (workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime),
+            cpuPercentages);
+    } else {
+        QVector<double> cpuPercentages;
+
+        long int numCPU = sysconf(_SC_NPROCESSORS_ONLN);
+        for (long int i = 0; i < numCPU; i++) {
+            cpuPercentages.push_back(0);
+        }
+
+        cpuStatInfoUpdated(0, cpuPercentages);
+    }
+    prevCpuTimes = cpuTimes;
+
+    // Merge child process when filterType is OnlyGUI.
+    if (filterType == OnlyGUI) {
+        for (auto &item : procList) {
+            QList<int> childPids;
+            childPids = processTree->getAllChildPids(item.getPID());
+
+            for (int childPid : childPids) {
+                if (childInfoMap.contains(childPid)) {
+                    ChildPidInfo info = childInfoMap[childPid];
+
+                    mergeItemInfo(item, info.cpu, info.memory, info.diskStatus, info.networkStatus);
+                } else {
+                    qDebug() << QString("IMPOSSIBLE: process %1 not exist in childInfoMap")
+                                    .arg(childPid);
+                }
+            }
+        }
+    }
+    delete processTree;
+
+    // Update process number.
+    processSummaryUpdated(guiProcessNumber, systemProcessNumber);
+
+    // Update process list
+    processListUpdated(procList);
+
+    // Update network status.
+    if (prevTotalRecvBytes == 0) {
+        prevTotalRecvBytes = totalRecvBytes;
+        prevTotalSentBytes = totalSentBytes;
+
+        Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
+        networkStatInfoUpdated(totalRecvBytes, totalSentBytes, 0, 0);
+    } else {
+        prevTotalRecvBytes = totalRecvBytes;
+        prevTotalSentBytes = totalSentBytes;
+
+        Utils::getNetworkBandWidth(totalRecvBytes, totalSentBytes);
+        networkStatInfoUpdated(totalRecvBytes, totalSentBytes,
+                               ((totalRecvBytes - prevTotalRecvBytes) / 1024.0) / updateSeconds,
+                               ((totalSentBytes - prevTotalSentBytes) / 1024.0) / updateSeconds);
+    }
+
+    // Update disk status.
+    diskStatInfoUpdated(diskReadTotalKbs / 1000.0, diskWriteTotalKbs / 1000.0);
+
+    // Keep processes we've read for cpu calculations next cycle.
+    m_prevProcesses = processes;
+}
+
+void SystemMonitor::setFilterType(SystemMonitor::FilterType type)
+{
+    filterType = type;
+    m_updateStatusTimer->stop();
+    updateStatus();
+    m_updateStatusTimer->start(updateDuration);
+}
+
+void SystemMonitor::endProcess(pid_t pid)
+{
+    kill(pid, SIGCONT);
+
+    if (kill(pid, SIGTERM) != 0) {
+        qDebug() << QString("End process %1 failed, ERRNO:[%2] %3")
+                        .arg(pid)
+                        .arg(errno)
+                        .arg(strerror(errno));
+    } else {
+        Q_EMIT processEnded(pid);
+    }
+}
+
+void SystemMonitor::pauseProcess(pid_t pid)
+{
+    if (kill(pid, SIGSTOP) != 0) {
+        qDebug() << QString("Pause process %1 failed, ERRNO:[%2] %3")
+                        .arg(pid)
+                        .arg(errno)
+                        .arg(strerror(errno));
+    } else {
+        Q_EMIT processPaused(pid, 'T');
+    }
+}
+
+void SystemMonitor::resumeProcess(pid_t pid)
+{
+    if (kill(pid, SIGCONT) != 0) {
+        qDebug() << QString("Resume process %1 failed, ERRNO:[%2] %3")
+                        .arg(pid)
+                        .arg(errno)
+                        .arg(strerror(errno));
+    } else {
+        Q_EMIT processResumed(pid, 'R');
+    }
+}
+
+void SystemMonitor::killProcess(pid_t pid)
+{
+    kill(pid, SIGCONT);
+
+    if (kill(pid, SIGKILL) != 0) {
+        qDebug() << QString("Kill process %1 failed, ERRNO:[%2] %3")
+                        .arg(pid)
+                        .arg(errno)
+                        .arg(strerror(errno));
+    } else {
+        Q_EMIT processKilled(pid);
+    }
+}
+
+SystemMonitor::SystemMonitor(QObject *parent)
+    : QObject(parent)
+    , m_findWindowTitle(new FindWindowTitle)
+{
+    updateSeconds = updateDuration / 1000.0;
+
+    uid_t euid = geteuid();
+    struct passwd *pwd = getpwuid(euid);
+    if (pwd) {
+        m_euname = QString(pwd->pw_name);
+    } else {
+        m_euname = getenv("USER");
+    }
+
+    // Start timer.
+    m_updateStatusTimer = new QTimer(this);
+    connect(m_updateStatusTimer, SIGNAL(timeout()), this, SLOT(updateStatus()));
+    m_updateStatusTimer->start(updateDuration);
+}
+
+DiskStatus SystemMonitor::getProcessDiskStatus(int pid)
+{
+    ProcPidIO pidIO;
+    getProcPidIO(pid, pidIO);
+
+    DiskStatus status = {0, 0};
+
+    if (m_processWriteKbs.contains(pid) && pidIO.wchar > 0) {
+        status.writeKbs = (pidIO.wchar - m_processWriteKbs.value(pid)) / updateSeconds;
+    }
+    m_processWriteKbs[pid] = pidIO.wchar;
+
+    if (m_processReadKbs.contains(pid) && pidIO.rchar > 0) {
+        status.readKbs = (pidIO.rchar - m_processReadKbs.value(pid)) / updateSeconds;
+    }
+    m_processReadKbs[pid] = pidIO.rchar;
+
+    return status;
+}
+
+void SystemMonitor::mergeItemInfo(ProcessEntry &item, double childCpu, qulonglong childMemory,
+                                  const DiskStatus &childDiskStatus,
+                                  const NetworkStatus &childNetworkStatus)
+{
+    item.setCPU(item.getCPU() + childCpu);
+    item.setMemory(item.getMemory() + childMemory);
+    item.setDiskRead(item.getDiskRead() + childDiskStatus.readKbs);
+    item.setDiskWrite(item.getDiskWrite() + childDiskStatus.writeKbs);
+    item.setSentBytes(item.getSentBytes() + childNetworkStatus.sentBytes);
+    item.setRecvBytes(item.getRecvBytes() + childNetworkStatus.recvBytes);
+    item.setSentKbs(item.getSentKbs() + childNetworkStatus.sentKbs);
+    item.setRecvKbs(item.getRecvKbs() + childNetworkStatus.recvKbs);
 }

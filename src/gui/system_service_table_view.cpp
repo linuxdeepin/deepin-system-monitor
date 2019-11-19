@@ -23,18 +23,36 @@
 
 DWIDGET_USE_NAMESPACE
 
-static const char *kSettingsOption_ServiceTableHeaderState = "service_table_hearder_state";
+static const char *kSettingsOption_ServiceTableHeaderState = "service_table_header_state";
 
 SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     : DTreeView(parent)
 {
     bool settingsLoaded = loadSettings();
 
+    // >>> "not found" display label
+    m_noMatchingResultLabel =
+        new DLabel(DApplication::translate("Common.Search", "Not Found"), this);
+    QFont font = m_noMatchingResultLabel->font();
+    font.setPointSize(20);
+    m_noMatchingResultLabel->setFont(font);
+    auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
+    palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
+    m_noMatchingResultLabel->setPalette(palette);
+    m_noMatchingResultLabel->setVisible(false);
+
     m_itemDelegate = new SystemServiceItemDelegate(this);
     setItemDelegate(m_itemDelegate);
 
     m_headerDelegate = new SystemServiceTableHeaderView(Qt::Horizontal, this);
     setHeader(m_headerDelegate);
+    m_headerDelegate->setSectionsMovable(true);
+    m_headerDelegate->setSectionsClickable(true);
+    m_headerDelegate->setSectionResizeMode(DHeaderView::Interactive);
+    m_headerDelegate->setStretchLastSection(true);
+    m_headerDelegate->setSortIndicatorShown(true);
+    m_headerDelegate->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_headerDelegate->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // table options
     setSortingEnabled(true);
@@ -43,31 +61,26 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     setRootIsDecorated(false);
     setItemsExpandable(false);
     setFrameStyle(QFrame::NoFrame);
-
-    // column header options
-    DHeaderView *columnHeader = header();
-    columnHeader->setSectionsMovable(true);
-    columnHeader->setSectionsClickable(true);
-    columnHeader->setSectionResizeMode(DHeaderView::Interactive);
-    columnHeader->setStretchLastSection(true);
-    columnHeader->setSortIndicatorShown(true);
-    columnHeader->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    columnHeader->setAlternatingRowColors(true);
+    setAutoFillBackground(false);
+    setAlternatingRowColors(false);
+    viewport()->setAutoFillBackground(false);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
     connect(m_timer, &QTimer::timeout, this, [=]() { saveSettings(); });
 
     // table events
-    setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, &DWidget::customContextMenuRequested, this,
+    connect(this, &SystemServiceTableView::customContextMenuRequested, this,
             &SystemServiceTableView::displayTableContextMenu);
     // table header events
-    columnHeader->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(columnHeader, &QHeaderView::sectionResized, this, [=]() { m_timer->start(2000); });
-    connect(columnHeader, &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
-    connect(columnHeader, &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
-    connect(columnHeader, &QWidget::customContextMenuRequested, this,
+    connect(m_headerDelegate, &SystemServiceTableHeaderView::sectionResized, this,
+            [=]() { m_timer->start(2000); });
+    connect(m_headerDelegate, &SystemServiceTableHeaderView::sectionMoved, this,
+            [=]() { saveSettings(); });
+    connect(m_headerDelegate, &SystemServiceTableHeaderView::sortIndicatorChanged, this,
+            [=]() { saveSettings(); });
+    connect(m_headerDelegate, &SystemServiceTableHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
     MainWindow *mainWindow = MainWindow::instance();
@@ -107,7 +120,6 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     QAction *startServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
     connect(startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
-    m_contextMenu->addSeparator();
     // stop service
     QAction *stopServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
@@ -196,16 +208,6 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         b = header()->isSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn);
         pidHeaderAction->setChecked(!b);
     });
-
-    // >>> "no matching result" display label
-    m_noMatchingResultLabel =
-        new DLabel(DApplication::translate("Service.Table.Search", "Not Found"), this);
-    m_noMatchingResultLabel->setVisible(false);
-    QFont font = m_noMatchingResultLabel->font();
-    font.setPointSize(16);
-    m_noMatchingResultLabel->setFont(font);
-
-    viewport()->setAutoFillBackground(false);
 }
 
 SystemServiceTableView::~SystemServiceTableView()
@@ -450,10 +452,8 @@ void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
     DMessageBox::critical(mainWindow, ec.getErrorName(), ec.getErrorMessage());
 }
 
-void SystemServiceTableView::search(const QString &pattern)
+void SystemServiceTableView::adjustInfoLabelVisibility()
 {
-    m_ProxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
-
     setUpdatesEnabled(false);
     m_noMatchingResultLabel->setVisible(m_ProxyModel->rowCount() == 0);
     if (m_noMatchingResultLabel->isVisible())
@@ -461,14 +461,18 @@ void SystemServiceTableView::search(const QString &pattern)
     setUpdatesEnabled(true);
 }
 
+void SystemServiceTableView::search(const QString &pattern)
+{
+    m_ProxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
+
+    adjustInfoLabelVisibility();
+}
+
 void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
 
-    setUpdatesEnabled(false);
-    if (m_noMatchingResultLabel->isVisible())
-        m_noMatchingResultLabel->move(rect().center() - m_noMatchingResultLabel->rect().center());
-    setUpdatesEnabled(true);
+    adjustInfoLabelVisibility();
 
     DTreeView::resizeEvent(event);
 }
@@ -522,4 +526,5 @@ void SystemServiceTableView::resetModel(const ErrorContext &ec,
     m_ProxyModel->setSourceModel(m_Model);
     setModel(m_ProxyModel);
     loadSettings();
+    adjustInfoLabelVisibility();
 }

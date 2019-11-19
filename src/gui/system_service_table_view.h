@@ -24,7 +24,7 @@ public:
 
     SystemServiceTableModel *getSourceModel() const;
 
-public slots:
+public Q_SLOTS:
     void startService();
     void stopService();
     void restartService();
@@ -49,6 +49,7 @@ private:
     void asyncGetServiceEntryList();
     QPair<ErrorContext, QList<SystemServiceEntry>> processAsyncGetServiceListTask();
     void resetModel(const ErrorContext &ec, const QList<SystemServiceEntry> &);
+    void adjustInfoLabelVisibility();
 
 private:
     SystemServiceTableModel *m_Model;

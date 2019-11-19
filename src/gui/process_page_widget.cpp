@@ -22,32 +22,51 @@
  */
 
 #include <signal.h>
+#include <iostream>
+
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
+#include <DStackedWidget>
 #include <DTitlebar>
-#include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QKeyEvent>
-#include <QLineEdit>
+#include <QMessageBox>
 #include <QStyleFactory>
-#include <iostream>
+#include <QVBoxLayout>
 
 #include "constant.h"
-#include "dthememanager.h"
-#include "dwindowmanagerhelper.h"
+#include "kill_process_confirm_dialog.h"
 #include "main_window.h"
+#include "monitor_compact_view.h"
+#include "monitor_expand_view.h"
+#include "process/system_monitor.h"
 #include "process_page_widget.h"
+#include "process_table_view.h"
+#include "ui_common.h"
+#include "utils.h"
 
 using namespace std;
+
+DWIDGET_USE_NAMESPACE
+
+static const QString kProcSummaryTemplateText = {
+    QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)")};
+
+static const QString appText = DApplication::translate("Process.Show.Mode", "Applications");
+static const QString myProcText = DApplication::translate("Process.Show.Mode", "My processes");
+static const QString allProcText = DApplication::translate("Process.Show.Mode", "All processes");
 
 ProcessPageWidget::ProcessPageWidget(DWidget *parent)
     : DFrame(parent)
 {
     m_settings = Settings::instance();
-    Q_ASSERT(m_settings != nullptr);
-    m_settings->init();
+    if (m_settings) {
+        m_settings->init();
+    }
 
     initUI();
     initConnections();
@@ -57,126 +76,142 @@ ProcessPageWidget::~ProcessPageWidget() {}
 
 void ProcessPageWidget::initUI()
 {
-    installEventFilter(this);  // add event filter
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DPalette palette = dAppHelper->applicationPalette();
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-    // Init.
-    layout = new QHBoxLayout(this);
+    auto *tw = new QWidget(this);
+    auto *cw = new QWidget(this);
+
+    // left =====> stackview
+    m_views = new DStackedWidget(this);
+    m_views->setAutoFillBackground(false);
+    m_views->setContentsMargins(0, 0, 0, 0);
+    m_views->setAutoFillBackground(false);
+    m_compactView = new MonitorCompactView(m_views);
+    m_expandView = new MonitorExpandView(m_views);
+    m_views->addWidget(m_compactView);
+    m_views->addWidget(m_expandView);
+    m_views->setFixedWidth(280);
+    // TODO: fix size problem
+    //    adjustStatusBarWidth();
+
+    // right ====> tab button + process table
+    auto *contentlayout = new QVBoxLayout(cw);
+    contentlayout->setSpacing(margin);
+    contentlayout->setContentsMargins(0, 0, 0, 0);
+
+    auto *toolsLayout = new QHBoxLayout(tw);
+    toolsLayout->setSpacing(margin);
+    toolsLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_procViewMode = new DLabel(tw);
+    m_procViewMode->setFixedHeight(24);
+    m_procViewMode->setText(appText);  // default text
+    m_procViewMode->adjustSize();
+    QFont fn = m_procViewMode->font();
+    fn.setWeight(QFont::Medium);
+    fn.setPointSize(fn.pointSize() - 1);
+    m_procViewMode->setFont(fn);
+    m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+    m_procViewModeSummary = new DLabel(tw);
+    m_procViewMode->setFixedHeight(24);
+    fn = m_procViewModeSummary->font();
+    fn.setWeight(QFont::Medium);
+    fn.setPointSize(fn.pointSize() - 1);
+    m_procViewModeSummary->setFont(fn);
+    m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    auto pa = DApplicationHelper::instance()->palette(m_procViewModeSummary);
+    palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
+    m_procViewModeSummary->setPalette(palette);
+
+    auto *modeButtonGroup = new DButtonBox(tw);
+    modeButtonGroup->setFixedWidth(26 * 3);
+    modeButtonGroup->setFixedHeight(24);
+    m_appButton = new DButtonBoxButton(appText, modeButtonGroup);
+    m_appButton->setCheckable(true);
+    m_appButton->setChecked(true);
+    m_myProcButton = new DButtonBoxButton(myProcText, modeButtonGroup);
+    m_myProcButton->setCheckable(true);
+    m_allProcButton = new DButtonBoxButton(allProcText, modeButtonGroup);
+    m_allProcButton->setCheckable(true);
+    QList<DButtonBoxButton *> list;
+    list << m_appButton << m_myProcButton << m_allProcButton;
+    modeButtonGroup->setButtonList(list, true);
+
+    toolsLayout->addWidget(m_procViewMode, 0, Qt::AlignLeft);
+    toolsLayout->addWidget(m_procViewModeSummary, 0, Qt::AlignLeft);
+    toolsLayout->addStretch();
+    toolsLayout->addWidget(modeButtonGroup, 0, Qt::AlignRight);
+
+    tw->setLayout(toolsLayout);
+
+    m_procTable = new ProcessTableView(cw);
+    contentlayout->addWidget(tw);
+    contentlayout->addWidget(m_procTable, 1);
+    cw->setLayout(contentlayout);
+
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(margin, margin, margin, margin);
+    layout->setSpacing(margin);
+    layout->addWidget(m_views);
+    layout->addWidget(cw);
     setLayout(layout);
 
-    QVariant vindex = m_settings->getOption("process_tab_index");
-    int tabIndex = 0;
+    setAutoFillBackground(false);
+
+    QVariant vindex = m_settings->getOption(kSettingKeyProcessTabIndex);
+    int index = 0;
     if (vindex.isValid())
-        tabIndex = vindex.toInt();
-
-    processManager =
-        new ProcessManager(tabIndex, getColumnHideFlags(), getSortingIndex(), getSortingOrder());
-    processManager->getProcessView()->installEventFilter(this);
-    statusMonitor = new StatusMonitor(tabIndex);
-
-    //    connect(toolbar, &Toolbar::pressEsc, processManager, &ProcessManager::focusProcessView);
-    //    connect(toolbar, &Toolbar::pressTab, processManager, &ProcessManager::focusProcessView);
-
-    MainWindow *mainWindow = MainWindow::instance();
-    connect(mainWindow->toolbar(), &Toolbar::search, processManager, &ProcessManager::handleSearch);
-
-    statusMonitor->updateStatus();
-
-    layout->addWidget(statusMonitor);
-    layout->addWidget(processManager);
-
-    killPid = -1;
-
-    killProcessDialog =
-        new DDialog(DApplication::translate("Kill.Process.Dialog", "End process"),
-                    DApplication::translate("Kill.Process.Dialog",
-                                            "Ending this process may cause data "
-                                            "loss.\nAre you sure you want to continue?"),
-                    this);
-    killProcessDialog->setWindowFlags(killProcessDialog->windowFlags() | Qt::WindowStaysOnTopHint);
-    killProcessDialog->setIconPixmap(QPixmap(Utils::getQrcPath("deepin-system-monitor.svg")));
-    killProcessDialog->addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    killProcessDialog->addButton(DApplication::translate("Kill.Process.Dialog", "Force terminate"),
-                                 true);
-    connect(killProcessDialog, &DDialog::buttonClicked, this,
-            &ProcessPageWidget::dialogButtonClicked);
-
-    killer = nullptr;
-
-    QVariant mode = m_settings->getOption("display_mode");
-    if (mode.isValid()) {
-        switchDisplayMode(static_cast<DisplayMode>(mode.toInt()));
-    } else {
-        switchDisplayMode(kDisplayModeCompact);
+        index = vindex.toInt();
+    switch (index) {
+        case SystemMonitor::OnlyMe:
+            m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
+            break;
+        case SystemMonitor::AllProcess:
+            m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
+            break;
+        default:
+            m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
     }
 }
 
 void ProcessPageWidget::initConnections()
 {
-    connect(processManager, &ProcessManager::activeTab, this, &ProcessPageWidget::switchTab);
-    connect(processManager, &ProcessManager::changeColumnVisible, this,
-            &ProcessPageWidget::recordVisibleColumn);
-    connect(processManager, &ProcessManager::changeSortingStatus, this,
-            &ProcessPageWidget::recordSortingStatus);
-
-    connect(statusMonitor, &StatusMonitor::updateProcessStatus, processManager,
-            &ProcessManager::updateStatus, Qt::QueuedConnection);
-    connect(statusMonitor, &StatusMonitor::updateProcessNumber, processManager,
-            &ProcessManager::updateProcessNumber, Qt::QueuedConnection);
-
     MainWindow *mainWindow = MainWindow::instance();
     connect(mainWindow, &MainWindow::killProcessPerformed, this,
             &ProcessPageWidget::showWindowKiller);
     connect(mainWindow, &MainWindow::displayModeChanged, this,
             &ProcessPageWidget::switchDisplayMode);
-}
 
-QList<bool> ProcessPageWidget::getColumnHideFlags()
-{
-    QString processColumns = m_settings->getOption("process_columns").toString();
+    connect(m_appButton, &DButtonBoxButton::clicked, this, [=]() {
+        m_procViewMode->setText(appText);
+        m_procViewMode->adjustSize();
+        m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
+        m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyGUI);
+    });
+    connect(m_myProcButton, &DButtonBoxButton::clicked, this, [=]() {
+        m_procViewMode->setText(myProcText);
+        m_procViewMode->adjustSize();
+        m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
+        m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyMe);
+    });
+    connect(m_allProcButton, &DButtonBoxButton::clicked, this, [=]() {
+        m_procViewMode->setText(allProcText);
+        m_procViewMode->adjustSize();
+        m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
+        m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::AllProcess);
+    });
 
-    QList<bool> toggleHideFlags;
-    toggleHideFlags << processColumns.contains("name");
-    toggleHideFlags << processColumns.contains("cpu");
-    toggleHideFlags << processColumns.contains("memory");
-    toggleHideFlags << processColumns.contains("disk_write");
-    toggleHideFlags << processColumns.contains("disk_read");
-    toggleHideFlags << processColumns.contains("download");
-    toggleHideFlags << processColumns.contains("upload");
-    toggleHideFlags << processColumns.contains("pid");
-
-    return toggleHideFlags;
-}
-
-bool ProcessPageWidget::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::WindowStateChange) {
-        adjustStatusBarWidth();
-    } else if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (keyEvent->key() == Qt::Key_F) {
-            // TODO: control + f
-            if (keyEvent->modifiers() == Qt::ControlModifier) {
-                //                toolbar->focusInput();
-            }
-        }
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::processSummaryUpdated, this,
+                &ProcessPageWidget::updateProcessSummary);
     }
-
-    return false;
-}
-
-int ProcessPageWidget::getSortingIndex()
-{
-    QString sortingName = m_settings->getOption("process_sorting_column").toString();
-
-    QList<QString> columnNames = {"name",      "cpu",      "memory", "disk_write",
-                                  "disk_read", "download", "upload", "pid"};
-
-    return columnNames.indexOf(sortingName);
-}
-
-bool ProcessPageWidget::getSortingOrder()
-{
-    return m_settings->getOption("process_sorting_order").toBool();
 }
 
 void ProcessPageWidget::paintEvent(QPaintEvent *)
@@ -196,125 +231,63 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
 
 void ProcessPageWidget::createWindowKiller()
 {
-    killer = new InteractiveKill();
+    auto *killer = new InteractiveKill(this);
     killer->setFocus();
-    connect(killer, &InteractiveKill::killWindow, this, &ProcessPageWidget::popupKillConfirmDialog,
-            Qt::QueuedConnection);
+    connect(killer, &InteractiveKill::killWindow, [=](int pid) {
+        // TODO: popup kill
+        //        popupKillConfirmDialog(pid);
+        killer->deleteLater();
+    });
 }
 
-void ProcessPageWidget::dialogButtonClicked(int index, QString)
+void ProcessPageWidget::updateProcessSummary(int napps, int nprocs)
 {
-    if (index == 1) {
-        if (killPid != -1) {
-            if (kill(killPid, SIGKILL) != 0) {
-                cout << "Kill failed." << endl;
-            }
+    m_procViewModeSummary->setText(kProcSummaryTemplateText.arg(napps).arg(nprocs));
+}
 
-            killPid = -1;
+void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
+{
+    QString title = DApplication::translate("Kill.Process.Dialog", "End process");
+    QString description = DApplication::translate("Kill.Process.Dialog",
+                                                  "Force nding this process may cause data "
+                                                  "loss.\nAre you sure you want to continue?");
+
+    KillProcessConfirmDialog dialog(this);
+    dialog.setTitle(title);
+    dialog.setMessage(description);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true);
+    dialog.exec();
+    if (dialog.result() == QMessageBox::Ok) {
+        auto *sysmon = SystemMonitor::instance();
+        if (sysmon) {
+            sysmon->killProcess(qvariant_cast<pid_t>(pid));
         }
+    } else {
+        // restore window
+        MainWindow *mainWindow = MainWindow::instance();
+        mainWindow->showNormal();
     }
-}
-
-void ProcessPageWidget::popupKillConfirmDialog(int pid)
-{
-    killer->close();
-
-    killPid = pid;
-    killProcessDialog->show();
-}
-
-void ProcessPageWidget::recordSortingStatus(int index, bool sortingOrder)
-{
-    auto *settings = Settings::instance();
-    Q_ASSERT(settings != nullptr);
-
-    QList<QString> columnNames = {"name",      "cpu",      "memory", "disk_write",
-                                  "disk_read", "download", "upload", "pid"};
-
-    m_settings->setOption("process_sorting_column", columnNames[index]);
-    m_settings->setOption("process_sorting_order", sortingOrder);
-}
-
-void ProcessPageWidget::recordVisibleColumn(int, bool, QList<bool> columnVisibles)
-{
-    auto *settings = Settings::instance();
-    Q_ASSERT(settings != nullptr);
-
-    QList<QString> visibleColumns;
-    visibleColumns << "name";
-
-    if (columnVisibles[1]) {
-        visibleColumns << "cpu";
-    }
-
-    if (columnVisibles[2]) {
-        visibleColumns << "memory";
-    }
-
-    if (columnVisibles[3]) {
-        visibleColumns << "disk_write";
-    }
-
-    if (columnVisibles[4]) {
-        visibleColumns << "disk_read";
-    }
-
-    if (columnVisibles[5]) {
-        visibleColumns << "download";
-    }
-
-    if (columnVisibles[6]) {
-        visibleColumns << "upload";
-    }
-
-    if (columnVisibles[7]) {
-        visibleColumns << "pid";
-    }
-
-    QString processColumns = "";
-    for (int i = 0; i < visibleColumns.length(); i++) {
-        if (i != visibleColumns.length() - 1) {
-            processColumns += QString("%1,").arg(visibleColumns[i]);
-        } else {
-            processColumns += visibleColumns[i];
-        }
-    }
-
-    m_settings->setOption("process_columns", processColumns);
 }
 
 void ProcessPageWidget::showWindowKiller()
 {
     // Minimize window before show killer window.
-    this->showMinimized();
+    MainWindow *mainWindow = MainWindow::instance();
+    mainWindow->showMinimized();
 
     QTimer::singleShot(200, this, SLOT(createWindowKiller()));
-}
-
-void ProcessPageWidget::switchTab(int index)
-{
-    if (index == 0) {
-        statusMonitor->switchToOnlyGui();
-    } else if (index == 1) {
-        statusMonitor->switchToOnlyMe();
-    } else {
-        statusMonitor->switchToAllProcess();
-    }
-
-    m_settings->setOption("process_tab_index", index);
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
 {
     switch (mode) {
-        case kDisplayModeExpand:
-            statusMonitor->disableCompactMode();
-
-            break;
-        case kDisplayModeCompact:
-            statusMonitor->enableCompactMode();
-
-            break;
+        case kDisplayModeExpand: {
+            m_views->setCurrentIndex(1);
+        } break;
+        case kDisplayModeCompact: {
+            m_views->setCurrentIndex(0);
+        } break;
     }
 }
 
@@ -326,9 +299,9 @@ void ProcessPageWidget::adjustStatusBarWidth()
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     if (rect.width() * 0.2 > statusBarMaxWidth) {
         if (windowState() == Qt::WindowMaximized) {
-            statusMonitor->setFixedWidth(static_cast<int>(rect.width() * 0.2));
+            m_views->setFixedWidth(static_cast<int>(rect.width() * 0.2));
         } else {
-            statusMonitor->setFixedWidth(statusBarMaxWidth);
+            m_views->setFixedWidth(statusBarMaxWidth);
         }
     }
 }

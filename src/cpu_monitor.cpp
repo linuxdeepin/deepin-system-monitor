@@ -30,6 +30,7 @@
 
 #include "constant.h"
 #include "cpu_monitor.h"
+#include "process/system_monitor.h"
 #include "settings.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
@@ -60,6 +61,11 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
     m_themeType = dAppHelper->themeType();
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::cpuStatInfoUpdated, this, &CpuMonitor::updateStatus);
+    }
 }
 
 CpuMonitor::~CpuMonitor()
@@ -84,7 +90,7 @@ void CpuMonitor::render()
     }
 }
 
-void CpuMonitor::updateStatus(double cpuPercent, std::vector<double>)
+void CpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal>)
 {
     cpuPercents->append(cpuPercent);
 

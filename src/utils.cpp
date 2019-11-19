@@ -238,8 +238,8 @@ QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
     return icon.pixmap(iconSize, iconSize);
 }
 
-QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWindowTitle,
-                       int iconSize)
+QPixmap getProcessIcon(int pid, std::string desktopFile,
+                       QScopedPointer<FindWindowTitle> &findWindowTitle, int iconSize)
 {
     QPixmap icon;
     QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
@@ -249,7 +249,7 @@ QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWi
     } else if (desktopFile.size() == 0) {
         qreal devicePixelRatio = qApp->devicePixelRatio();
         icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid),
-                                              iconSize * devicePixelRatio);
+                                              static_cast<int>(iconSize * devicePixelRatio));
         icon.setDevicePixelRatio(devicePixelRatio);
     } else {
         icon = getDesktopFileIcon(desktopFile, iconSize);
@@ -279,7 +279,7 @@ QSize getRenderSize(int fontSize, QString string)
     return QSize(width, height);
 }
 
-QString formatBandwidth(unsigned long v)
+QString formatBandwidth(qulonglong v)
 {
     QStringList orders;
     orders << "KB/s"
@@ -290,7 +290,7 @@ QString formatBandwidth(unsigned long v)
     return formatUnitSize(v, orders);
 }
 
-QString formatByteCount(unsigned long v)
+QString formatByteCount(qulonglong v)
 {
     QStringList orders;
     orders << "B"
@@ -302,16 +302,16 @@ QString formatByteCount(unsigned long v)
     return formatUnitSize(v, orders);
 }
 
-QString formatUnitSize(unsigned long v, QStringList orders)
+QString formatUnitSize(qulonglong v, QStringList orders)
 {
     int order = 0;
-    long double value = v;
+    qreal value = v;
     while (value >= 1024 && order + 1 < orders.size()) {
         order++;
-        value = value / 1024.0;
+        value = value / 1024;
     }
 
-    QString size = QString::number(static_cast<double>(value), 'r', 1);
+    QString size = QString::number(value, 'f', 1);
 
     return QString("%1 %2").arg(size).arg(orders[order]);
 }
@@ -701,7 +701,7 @@ qreal easeOutQuint(qreal x)
  * @brief getTotalCpuTime Read the data from /proc/stat and get the total time the cpu has been busy
  * @return The total cpu time
  */
-unsigned long long getTotalCpuTime(unsigned long long &workTime)
+qulonglong getTotalCpuTime(qulonglong &workTime)
 {
     FILE *file = fopen("/proc/stat", "r");
     if (file == NULL) {
@@ -732,13 +732,13 @@ unsigned long long getTotalCpuTime(unsigned long long &workTime)
     return user + nice + system + idle + iowait + irq + softirq + steal;
 }
 
-std::vector<CpuStruct> getCpuTimes()
+QVector<CpuStruct> getCpuTimes()
 {
-    std::vector<CpuStruct> times;
+    QVector<CpuStruct> times;
 
     // adapted from https://github.com/scaidermern/top-processes/blob/master/top_proc.c#L54
     FILE *file = fopen("/proc/stat", "r");
-    if (file == NULL) {
+    if (file == nullptr) {
         perror("Could not open stat file");
         return times;
     }
@@ -747,14 +747,14 @@ std::vector<CpuStruct> getCpuTimes()
     memset(buffer, 1, 1024);  // initialise the buffer with known data but not 0 (null) so that the
                               // next while loop still works
     // skip the first line
-    while (buffer[0] != '\n' && buffer != NULL) {
-        buffer[0] = (char)fgetc(file);
+    while (buffer[0] != '\n') {
+        buffer[0] = static_cast<char>(fgetc(file));
     }
 
     while (buffer != NULL) {
-        unsigned long long user = 0, nice = 0, system = 0, idle = 0;
+        qulonglong user = 0, nice = 0, system = 0, idle = 0;
         // added between Linux 2.5.41 and 2.6.33, see man proc(5)
-        unsigned long long iowait = 0, irq = 0, softirq = 0, steal = 0, guest = 0, guestnice = 0;
+        qulonglong iowait = 0, irq = 0, softirq = 0, steal = 0, guest = 0, guestnice = 0;
 
         char *ret = fgets(buffer, sizeof(buffer) - 1, file);
         if (ret == NULL) {
@@ -779,20 +779,22 @@ std::vector<CpuStruct> getCpuTimes()
     return times;
 }
 
-std::vector<double> calculateCpuPercentages(std::vector<CpuStruct> now, std::vector<CpuStruct> prev)
+QVector<qreal> calculateCpuPercentages(const QVector<CpuStruct> &now,
+                                       const QVector<CpuStruct> &prev)
 {
-    std::vector<double> times;
+    QVector<qreal> times {};
+
     if (now.size() != prev.size()) {
         return times;
     }
 
-    for (unsigned int i = 0; i < now.size(); i++) {
+    for (int i = 0; i < now.size(); i++) {
         CpuStruct n, p;
         n = now.at(i);
         p = prev.at(i);
 
-        long long unsigned totald = ((n.idle + n.nonIdle) - (p.idle + p.nonIdle));
-        times.push_back((totald - (n.idle - p.idle)) / (double)totald * 100.0);
+        qulonglong totald = ((n.idle + n.nonIdle) - (p.idle + p.nonIdle));
+        times.push_back((totald - (n.idle - p.idle)) / totald * 100.0);
     }
 
     return times;

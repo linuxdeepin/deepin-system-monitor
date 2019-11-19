@@ -31,6 +31,7 @@
 
 #include "compact_network_monitor.h"
 #include "constant.h"
+#include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -55,6 +56,12 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     uploadSpeeds = new QList<double>();
     for (int i = 0; i < pointsNumber; i++) {
         uploadSpeeds->append(0);
+    }
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::networkStatInfoUpdated, this,
+                &CompactNetworkMonitor::updateStatus);
     }
 }
 

@@ -129,7 +129,7 @@ enum UnitLoadState {
     kUnitMaskedState
 };
 constexpr const char* kUnitStubStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "stub");
-constexpr const char* kUnitLoadedStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "Loaded");
+constexpr const char* kUnitLoadedStateText = QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "loaded");
 constexpr const char* kUnitNotFoundStateText =
     QT_TRANSLATE_NOOP("DBus.Unit.Load.State", "not-found");
 constexpr const char* kUnitBadSettingStateText =

@@ -31,7 +31,7 @@
 
 #include "compact_memory_monitor.h"
 #include "constant.h"
-#include "dthememanager.h"
+#include "process/system_monitor.h"
 #include "utils.h"
 
 DWIDGET_USE_NAMESPACE
@@ -61,6 +61,12 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
             &CompactMemoryMonitor::changeTheme);
 
     m_themeType = dAppHelper->themeType();
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::memStatInfoUpdated, this,
+                &CompactMemoryMonitor::updateStatus);
+    }
 }
 
 CompactMemoryMonitor::~CompactMemoryMonitor() {}

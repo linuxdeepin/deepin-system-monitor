@@ -22,35 +22,28 @@
  */
 
 #include "find_window_title.h"
-#include "utils.h"
+#include <xcb/xcb.h>
+#include <xcb/xcb_aux.h>
 #include <QDebug>
 #include <QObject>
 #include <QtX11Extras/QX11Info>
-#include <xcb/xcb.h>
-#include <xcb/xcb_aux.h>
+#include "utils.h"
 
-FindWindowTitle::FindWindowTitle()
-{
-    windowTitles = new QMap<int, xcb_window_t>();
-}
+FindWindowTitle::FindWindowTitle() {}
 
-FindWindowTitle::~FindWindowTitle()
-{
-    windowTitles->clear();
-    delete windowTitles;
-}
+FindWindowTitle::~FindWindowTitle() {}
 
 QList<int> FindWindowTitle::getWindowPids()
 {
-    return windowTitles->keys();
+    return m_windowTitles.keys();
 }
 
 QString FindWindowTitle::getWindowTitle(int pid)
 {
-    if (windowTitles->contains(pid)) {
-        return getWindowName(windowTitles->value(pid));
+    if (m_windowTitles.contains(pid)) {
+        return getWindowName(m_windowTitles.value(pid));
     } else {
-        return QString("");
+        return {};
     }
 }
 
@@ -58,17 +51,19 @@ void FindWindowTitle::updateWindowInfos()
 {
     QList<xcb_window_t> windows;
 
-    xcb_get_property_reply_t *listReply = getProperty(rootWindow, "_NET_CLIENT_LIST_STACKING", XCB_ATOM_WINDOW);
+    xcb_get_property_reply_t *listReply =
+        getProperty(rootWindow, "_NET_CLIENT_LIST_STACKING", XCB_ATOM_WINDOW);
 
     if (listReply) {
-        xcb_window_t *windowList = static_cast<xcb_window_t*>(xcb_get_property_value(listReply));
-        int windowListLength = listReply->length;
+        xcb_window_t *windowList = static_cast<xcb_window_t *>(xcb_get_property_value(listReply));
+        uint windowListLength = listReply->length;
 
-        for (int i = 0; i < windowListLength; i++) {
+        for (uint i = 0; i < windowListLength; i++) {
             xcb_window_t window = windowList[i];
-            
-            foreach(QString type, getWindowTypes(window)) {
-                if (type.contains("_NET_WM_WINDOW_TYPE_NORMAL") || type.contains("_NET_WM_WINDOW_TYPE_DIALOG")) {
+
+            foreach (QString type, getWindowTypes(window)) {
+                if (type.contains("_NET_WM_WINDOW_TYPE_NORMAL") ||
+                    type.contains("_NET_WM_WINDOW_TYPE_DIALOG")) {
                     windows.append(window);
                 }
             }
@@ -76,12 +71,12 @@ void FindWindowTitle::updateWindowInfos()
 
         free(listReply);
 
-        windowTitles->clear();
+        m_windowTitles.clear();
         foreach (auto window, windows) {
             int pid = Utils::getWindowPid(this, window);
-            
-            if (!windowTitles->contains(pid)) {
-                (*windowTitles)[pid] = window;
+
+            if (!m_windowTitles.contains(pid)) {
+                m_windowTitles[pid] = window;
             }
         }
     }
@@ -89,10 +84,9 @@ void FindWindowTitle::updateWindowInfos()
 
 xcb_window_t FindWindowTitle::getWindow(int pid)
 {
-    if (windowTitles->contains(pid)) {
-        return windowTitles->value(pid);
+    if (m_windowTitles.contains(pid)) {
+        return m_windowTitles.value(pid);
     } else {
-        return -1;
+        return UINT_MAX;
     }
 }
-

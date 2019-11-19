@@ -19,35 +19,35 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef INTERACTIVEKILL_H
 #define INTERACTIVEKILL_H
 
-#include "start_tooltip.h"
 #include <dwindowmanager.h>
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QWidget>
+#include "start_tooltip.h"
 
 DWM_USE_NAMESPACE
 
 class InteractiveKill : public QWidget
 {
     Q_OBJECT
- 
+
 public:
-    InteractiveKill(QWidget *parent = 0);
+    InteractiveKill(QWidget *parent = nullptr);
     ~InteractiveKill();
-    
+
     void keyPressEvent(QKeyEvent *keyEvent);
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
     void paintEvent(QPaintEvent *);
-    
+
 signals:
     void killWindow(int pid);
-    
+
 private:
     QPixmap cursorImage;
     QRect screenRect;

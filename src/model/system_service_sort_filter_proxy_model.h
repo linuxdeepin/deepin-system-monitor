@@ -8,7 +8,7 @@ class SystemServiceSortFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    SystemServiceSortFilterProxyModel(QObject *parent);
+    SystemServiceSortFilterProxyModel(QObject *parent = nullptr);
 
 protected:
     bool filterAcceptsRow(int row, const QModelIndex &parent) const override;

@@ -31,6 +31,7 @@
 
 #include "constant.h"
 #include "network_monitor.h"
+#include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -62,6 +63,12 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
 
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::networkStatInfoUpdated, this,
+                &NetworkMonitor::updateStatus);
+    }
 }
 
 NetworkMonitor::~NetworkMonitor()

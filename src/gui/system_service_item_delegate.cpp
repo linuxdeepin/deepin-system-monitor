@@ -28,7 +28,6 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     }
 
     painter->save();
-    painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(1);
 
     QStyleOptionViewItem opt = option;
@@ -117,7 +116,9 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     textRect.setWidth(textRect.width() - margin * 2);
     QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
 
+    painter->setRenderHint(QPainter::Antialiasing, false);
     painter->fillPath(path, background);
+    painter->setRenderHint(QPainter::Antialiasing, true);
     painter->drawText(textRect, static_cast<int>(opt.displayAlignment), text);
 
     painter->restore();

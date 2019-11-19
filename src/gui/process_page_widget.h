@@ -1,16 +1,20 @@
 #ifndef PROCESS_PAGE_WIDGET_H
 #define PROCESS_PAGE_WIDGET_H
 
+#include <DButtonBox>
 #include <DDialog>
 #include <DFrame>
+#include <DStackedWidget>
 #include <QAction>
 #include <QHBoxLayout>
 #include <QMenu>
 
 #include "interactive_kill.h"
+#include "monitor_compact_view.h"
+#include "monitor_expand_view.h"
 #include "process_manager.h"
+#include "process_table_view.h"
 #include "settings.h"
-#include "status_monitor.h"
 #include "toolbar.h"
 #include "ui_common.h"
 
@@ -26,40 +30,37 @@ public:
     explicit ProcessPageWidget(DWidget *parent = nullptr);
     ~ProcessPageWidget();
 
-    QList<bool> getColumnHideFlags();
-    bool eventFilter(QObject *, QEvent *);
-    bool getSortingOrder();
-    int getSortingIndex();
-    void initCompactModeAction();
     void adjustStatusBarWidth();
 
     void initUI();
     void initConnections();
 
 public Q_SLOTS:
-    void createWindowKiller();
-    void dialogButtonClicked(int index, QString);
-    void popupKillConfirmDialog(int pid);
-    void recordSortingStatus(int index, bool sortingOrder);
-    void recordVisibleColumn(int index, bool visible, QList<bool> columnVisibles);
-    void showWindowKiller();
-    void switchTab(int index);
     void switchDisplayMode(DisplayMode mode);
 
 protected:
     void paintEvent(QPaintEvent *);
 
+private Q_SLOTS:
+    void popupKillConfirmDialog(int pid);
+    void showWindowKiller();
+    void createWindowKiller();
+    void updateProcessSummary(int napps, int nprocs);
+
 private:
     Settings *m_settings;
 
-    DDialog *killProcessDialog;
-    InteractiveKill *killer;
-    ProcessManager *processManager;
-    QHBoxLayout *layout;
-    // TODO
-    QString backgroundColor;
-    StatusMonitor *statusMonitor;
-    int killPid;
+    DStackedWidget *m_views;
+    MonitorExpandView *m_expandView;
+    MonitorCompactView *m_compactView;
+
+    DLabel *m_procViewMode;
+    DLabel *m_procViewModeSummary;
+    DButtonBoxButton *m_appButton;
+    DButtonBoxButton *m_myProcButton;
+    DButtonBoxButton *m_allProcButton;
+
+    ProcessTableView *m_procTable;
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

@@ -23,16 +23,16 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "hashqstring.h"
-#include "find_window_title.h"
 #include <dwindowmanager.h>
+#include <proc/readproc.h>
 #include <QFileInfoList>
 #include <QLayout>
 #include <QObject>
 #include <QPainter>
 #include <QString>
-#include <proc/readproc.h>
 #include <unordered_set>
+#include "find_window_title.h"
+#include "hashqstring.h"
 
 DWM_USE_NAMESPACE
 
@@ -47,12 +47,12 @@ static std::unordered_set<QString> SCRIPT_PROGRAM_MAP({"python", "python3", "rub
 
 namespace Utils {
 typedef struct CpuStruct {
-    long long unsigned idle, nonIdle;
+    qulonglong idle, nonIdle;
 } CpuStruct;
 
 typedef struct DiskStatus {
-    unsigned long readKbs;
-    unsigned long writeKbs;
+    qreal readKbs;
+    qreal writeKbs;
 } DiskStatus;
 
 /**
@@ -105,10 +105,10 @@ struct ProcPidIO {
 };
 
 typedef struct NetworkStatus {
-    long sentBytes;
-    long recvBytes;
-    float sentKbs;
-    float recvKbs;
+    qulonglong sentBytes;
+    qulonglong recvBytes;
+    qreal sentKbs;
+    qreal recvKbs;
 } NetworkStatus;
 
 int getStatusBarMaxWidth();
@@ -118,13 +118,13 @@ QList<int> getTrayWindows();
 QMap<QString, QString> getProcessDescriptions();
 QMap<QString, QString> getDesktopfileMap();
 QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
-QPixmap getProcessIcon(int pid, std::string desktopFile, FindWindowTitle *findWindowTitle,
-                       int iconSize);
+QPixmap getProcessIcon(int pid, std::string desktopFile,
+                       QScopedPointer<FindWindowTitle> &findWindowTitle, int iconSize);
 QSize getRenderSize(int fontSize, QString string);
-QString formatBandwidth(unsigned long v);
-QString formatByteCount(unsigned long v);
+QString formatBandwidth(qulonglong v);
+QString formatByteCount(qulonglong v);
 QString formatMillisecond(int millisecond);
-QString formatUnitSize(unsigned long v, QStringList orders);
+QString formatUnitSize(qulonglong v, QStringList orders);
 QString getDisplayNameFromName(QString procName, std::string desktopFile,
                                bool displayProcessName = true);
 QString getImagePath(QString imageName);
@@ -149,10 +149,10 @@ qreal easeInQuad(qreal x);
 qreal easeInQuint(qreal x);
 qreal easeOutQuad(qreal x);
 qreal easeOutQuint(qreal x);
-unsigned long long getTotalCpuTime(unsigned long long &workTime);
-std::vector<CpuStruct> getCpuTimes();
-std::vector<double> calculateCpuPercentages(std::vector<CpuStruct> now,
-                                            std::vector<CpuStruct> prev);
+qulonglong getTotalCpuTime(qulonglong &workTime);
+QVector<CpuStruct> getCpuTimes();
+QVector<qreal> calculateCpuPercentages(const QVector<CpuStruct> &now,
+                                       const QVector<CpuStruct> &prev);
 void addLayoutWidget(QLayout *layout, QWidget *widget);
 void applyQss(QWidget *widget, QString qssName);
 void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect);

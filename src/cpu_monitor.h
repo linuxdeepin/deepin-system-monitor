@@ -46,7 +46,7 @@ public:
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void render();
-    void updateStatus(double cpuPercent, std::vector<double> cPercents);
+    void updateStatus(qreal cpuPercent, QVector<qreal> cPercents);
 
 protected:
     void paintEvent(QPaintEvent *event);

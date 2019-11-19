@@ -28,14 +28,12 @@
 #include <QDebug>
 #include <QLocale>
 
-#include "chinese2pinyin.h"
 #include "process_item.h"
 #include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
-using namespace Pinyin;
 
 ProcessItem::ProcessItem(QPixmap processIcon, QString processName, QString dName, double processCpu,
                          long processMemory, int processPid, QString processUser, char processState)
@@ -214,7 +212,9 @@ bool ProcessItem::search(const DSimpleListItem *item, QString searchContent)
 
     if (QLocale::system().name() == "zh_CN") {
         QString displayName = processItem->getDisplayName();
-        QStringList pinyinList = Pinyin::splitChineseToPinyin(displayName);
+        //        QStringList pinyinList = Pinyin::splitChineseToPinyin(displayName);
+        QStringList pinyinList;
+        pinyinList << displayName;
         fullPinyinString = pinyinList.join("");
 
         for (QString pinyin : pinyinList) {

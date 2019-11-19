@@ -42,6 +42,7 @@ using namespace Dtk;
 
 AttributesDialog::AttributesDialog(QWidget *parent, int processId)
     : DAbstractDialog(parent)
+    , findWindowTitle(new FindWindowTitle())
 {
     pid = processId;
 
@@ -138,7 +139,6 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId)
     }
     closeproc(proc);
 
-    findWindowTitle = new FindWindowTitle();
     findWindowTitle->updateWindowInfos();
 
     // Read tray icon process.
@@ -175,7 +175,6 @@ AttributesDialog::AttributesDialog(QWidget *parent, int processId)
 
 AttributesDialog::~AttributesDialog()
 {
-    delete findWindowTitle;
     delete closeButton;
     delete iconLabel;
     delete nameTitleLabel;

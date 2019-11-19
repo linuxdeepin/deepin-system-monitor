@@ -37,7 +37,7 @@ public:
         kSystemServiceTableColumnCount
     };
 
-    SystemServiceTableModel(QObject* parent = nullptr);
+    explicit SystemServiceTableModel(QObject* parent = nullptr);
 
     inline void setServiceEntryList(const QList<SystemServiceEntry>& list)
     {

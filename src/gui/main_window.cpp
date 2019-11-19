@@ -1,3 +1,4 @@
+#include <DApplication>
 #include <DHiDPIHelper>
 #include <DStackedWidget>
 #include <DTitlebar>
@@ -19,8 +20,8 @@ MainWindow::MainWindow(DWidget *parent)
     : DMainWindow(parent)
 {
     m_settings = Settings::instance();
-    Q_ASSERT(m_settings);
-    m_settings->init();
+    if (m_settings)
+        m_settings->init();
 }
 
 MainWindow::~MainWindow() {}
@@ -42,7 +43,8 @@ void MainWindow::initUI()
     resize(width, height);
 
     // ========title bar===========
-    titlebar()->setIcon(QIcon(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo_24.svg"))));
+    titlebar()->setIcon(QIcon(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo.svg"))));
+    //    titlebar()->setIcon(QIcon::fromTheme("logo.svg"));
     m_toolbar = new Toolbar(this, this);
     titlebar()->setCustomWidget(m_toolbar);
 
@@ -105,11 +107,12 @@ void MainWindow::initUI()
     m_pages = new DStackedWidget(this);
     m_procPage = new ProcessPageWidget(m_pages);
     m_svcPage = new SystemServicePageWidget(m_pages);
-    m_svcPage = new SystemServicePageWidget(m_pages);
     m_pages->addWidget(m_procPage);
     m_pages->addWidget(m_svcPage);
 
     setCentralWidget(m_pages);
+
+    installEventFilter(this);
 }
 
 void MainWindow::initConnections()
@@ -145,4 +148,22 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     if (m_settings)
         m_settings->flush();
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        auto *kev = dynamic_cast<QKeyEvent *>(event);
+        if (kev->matches(QKeySequence::Quit)) {
+            DApplication::quit();
+            return true;
+        } else if (kev->matches(QKeySequence::Find)) {
+            toolbar()->focusInput();
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return DMainWindow::eventFilter(obj, event);
+    }
 }

@@ -36,7 +36,6 @@
 #include <QVBoxLayout>
 
 #include "attributes_dialog.h"
-#include "dthememanager.h"
 #include "process_item.h"
 #include "process_manager.h"
 
@@ -125,7 +124,6 @@ ProcessManager::ProcessManager(int tabIndex, QList<bool> columnHideFlags, int so
     connect(m_killProcAction, &QAction::triggered, this, &ProcessManager::showKillProcessDialog);
 
     rightMenu->addAction(m_termProcAction);
-    rightMenu->addSeparator();
     rightMenu->addAction(m_pauseProcAction);
     rightMenu->addAction(m_resumeProcAction);
     rightMenu->addAction(m_openExecDirAction);
@@ -214,9 +212,6 @@ void ProcessManager::terminateProcess()
 void ProcessManager::killProcesses()
 {
     for (int pid : *actionPids) {
-        // Resume process first, otherwise kill process too slow.
-        kill(pid, SIGCONT);
-
         if (kill(pid, SIGKILL) != 0) {
             qDebug() << QString("Kill process %1 failed, permission denied.").arg(pid);
         }

@@ -73,18 +73,6 @@ void Settings::init()
         setOption("process_tab_index", 0);
     }
 
-    if (getOption("process_columns").isNull()) {
-        setOption("process_columns", "name,cpu,memory,download,upload,pid");
-    }
-
-    if (getOption("process_sorting_column").isNull()) {
-        setOption("process_sorting_column", "cpu");
-    }
-
-    if (getOption("process_sorting_order").isNull()) {
-        setOption("process_sorting_order", true);
-    }
-
     if (getOption("display_mode").isNull()) {
         setOption("display_mode", kDisplayModeCompact);
     }

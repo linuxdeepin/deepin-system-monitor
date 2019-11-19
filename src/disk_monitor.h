@@ -39,7 +39,7 @@ public:
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
-    void updateStatus(unsigned long totalReadKbs, unsigned long totalWriteKbs);
+    void updateStatus(qreal totalReadKbs, qreal totalWriteKbs);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -48,16 +48,16 @@ private:
     QPixmap iconImage;
     QPixmap iconDarkImage;
     QPixmap iconLightImage;
-    QList<unsigned long> *readSpeeds;
-    QList<unsigned long> *writeSpeeds;
+    QList<qreal> *readSpeeds;
+    QList<qreal> *writeSpeeds;
     QPainterPath readPath;
     QPainterPath writePath;
     QColor readColor {"#1094D8"};
     QColor summaryColor;
     QColor textColor;
     QColor writeColor {"#F7B300"};
-    unsigned long totalReadKbs = 0;
-    unsigned long totalWriteKbs = 0;
+    qreal totalReadKbs = 0;
+    qreal totalWriteKbs = 0;
     int readRenderMaxHeight = 50;
     int readRenderPaddingX = 13;
     int readRenderPaddingY = 50;

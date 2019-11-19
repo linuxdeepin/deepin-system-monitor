@@ -31,6 +31,7 @@
 
 #include "compact_disk_monitor.h"
 #include "constant.h"
+#include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
 
@@ -55,6 +56,12 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
     writeSpeeds = new QList<unsigned long>();
     for (int i = 0; i < pointsNumber; i++) {
         writeSpeeds->append(0);
+    }
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::diskStatInfoUpdated, this,
+                &CompactDiskMonitor::updateStatus);
     }
 }
 

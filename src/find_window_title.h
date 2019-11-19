@@ -19,33 +19,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef FINDWINDOWTITLE_H
 #define FINDWINDOWTITLE_H
 
 #include <dwindowmanager.h>
-#include <QObject>
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
+#include <QMap>
 
 DWM_USE_NAMESPACE
 
 class FindWindowTitle : public DWindowManager
 {
     Q_OBJECT
-    
+
 public:
     FindWindowTitle();
     ~FindWindowTitle();
-    
+
     QList<int> getWindowPids();
     QString getWindowTitle(int pid);
     void updateWindowInfos();
     xcb_window_t getWindow(int pid);
-    
+
 private:
-    QMap<int, xcb_window_t> *windowTitles;
+    QMap<int, xcb_window_t> m_windowTitles;
 };
 
 #endif

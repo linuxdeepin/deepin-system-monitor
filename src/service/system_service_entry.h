@@ -3,8 +3,6 @@
 
 #include "system_service_entry_data.h"
 
-class SystemServiceEntryData;
-
 class SystemServiceEntry
 {
 public:
