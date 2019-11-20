@@ -8,9 +8,7 @@
 KillProcessConfirmDialog::KillProcessConfirmDialog(QWidget *parent)
     : DDialog(parent)
 {
-    // TODO: change icon
-    setIcon(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo.svg")), QSize(32, 32));
-    //    setIcon(QIcon::fromTheme("deepin-system-monitor.svg"));
+    setIcon(QIcon::fromTheme("dialog-warning"));
 
     connect(this, &KillProcessConfirmDialog::buttonClicked, this,
             &KillProcessConfirmDialog::onButtonClicked);

@@ -249,7 +249,7 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 {
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
-                                                  "Force nding this process may cause data "
+                                                  "Force ending this process may cause data "
                                                   "loss.\nAre you sure you want to continue?");
 
     KillProcessConfirmDialog dialog(this);

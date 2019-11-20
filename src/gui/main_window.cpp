@@ -43,8 +43,7 @@ void MainWindow::initUI()
     resize(width, height);
 
     // ========title bar===========
-    titlebar()->setIcon(QIcon(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo.svg"))));
-    //    titlebar()->setIcon(QIcon::fromTheme("logo.svg"));
+    titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
     m_toolbar = new Toolbar(this, this);
     titlebar()->setCustomWidget(m_toolbar);
 

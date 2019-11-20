@@ -100,16 +100,12 @@ int main(int argc, char *argv[])
         app.setApplicationDisplayName(DApplication::translate("App.About", "System Monitor"));
         app.setApplicationVersion(DApplication::buildVersion(""));
 
-        // TODO: change icon
-        //        app.setProductIcon(QIcon(Utils::getQrcPath("logo.svg")));
-        app.setProductIcon(QIcon::fromTheme("deepin-system-monitor.svg"));
+        app.setProductIcon(QIcon::fromTheme("deepin-system-monitor"));
         app.setProductName(DApplication::translate("App.About", "System Monitor"));
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        // TODO: change icon
-        //        app.setWindowIcon(QIcon(Utils::getQrcPath("logo.svg")));
-        app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor.svg"));
+        app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor"));
 
         DApplicationSettings appSettings;
 
