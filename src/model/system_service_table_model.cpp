@@ -121,9 +121,8 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
                 case kSystemServiceStateColumn:
                     return DApplication::translate("Service.Table.Header", kSystemServiceState);
                 case kSystemServicePIDColumn:
-                    //                    return DApplication::translate("Service.Table.Header",
-                    //                    kSystemServicePID);
-                    return QString(kSystemServicePID);
+                    return DApplication::translate("Service.Table.Header", kSystemServicePID);
+                    //                    return QString(kSystemServicePID);
                 case kSystemServiceDescriptionColumn:
                     return DApplication::translate("Service.Table.Header",
                                                    kSystemServiceDescription);

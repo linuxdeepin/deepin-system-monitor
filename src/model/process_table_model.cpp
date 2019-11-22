@@ -109,9 +109,8 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
                 case kProcessDiskWriteColumn:
                     return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
                 case kProcessPIDColumn:
-                    //                    return DApplication::translate("Service.Table.Header",
-                    //                    kProcessPID);
-                    return QString(kProcessPID);
+                    return DApplication::translate("Service.Table.Header", kProcessPID);
+                    //                    return QString(kProcessPID);
                 default:
                     break;
             }

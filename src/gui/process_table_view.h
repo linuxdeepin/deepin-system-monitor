@@ -1,6 +1,7 @@
 #ifndef PROCESS_TABLE_VIEW_H
 #define PROCESS_TABLE_VIEW_H
 
+#include <DLabel>
 #include <DTreeView>
 
 #include "process/system_monitor.h"

@@ -160,6 +160,14 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         } else if (kev->matches(QKeySequence::Find)) {
             toolbar()->focusInput();
             return true;
+        } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
+                   kev->key() == Qt::Key_F) {
+            if (windowState() & Qt::WindowMaximized) {
+                showNormal();
+            } else {
+                showMaximized();
+            }
+            return true;
         } else {
             return false;
         }

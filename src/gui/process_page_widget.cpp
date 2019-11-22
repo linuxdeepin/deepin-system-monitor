@@ -48,6 +48,7 @@
 #include "process/system_monitor.h"
 #include "process_page_widget.h"
 #include "process_table_view.h"
+#include "settings.h"
 #include "ui_common.h"
 #include "utils.h"
 
@@ -100,6 +101,18 @@ void ProcessPageWidget::initUI()
     m_views->setFixedWidth(280);
     // TODO: fix size problem
     //    adjustStatusBarWidth();
+
+    auto *settings = Settings::instance();
+    if (settings) {
+        auto mode = settings->getOption(kSettingKeyDisplayMode);
+        if (mode.isValid()) {
+            if (qvariant_cast<int>(mode) == kDisplayModeCompact) {
+                m_views->setCurrentIndex(0);
+            } else {
+                m_views->setCurrentIndex(1);
+            }
+        }
+    }
 
     // right ====> tab button + process table
     auto *contentlayout = new QVBoxLayout(cw);

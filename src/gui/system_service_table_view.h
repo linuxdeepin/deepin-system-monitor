@@ -1,6 +1,7 @@
 #ifndef SYSTEM_SERVICE_TABLE_VIEW_H
 #define SYSTEM_SERVICE_TABLE_VIEW_H
 
+#include <DLabel>
 #include <DTreeView>
 
 DWIDGET_USE_NAMESPACE
