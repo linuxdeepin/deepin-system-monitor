@@ -110,12 +110,30 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
         }
     }
 
-    textRect = rect;
-    textRect.setX(textRect.x() + margin);
-    textRect.setWidth(textRect.width() - margin * 2);
-    QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+    QString text;
+    QRect iconRect;
+    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
+        textRect = rect;
+        textRect.setX(textRect.x() + margin + 34);
+        textRect.setWidth(textRect.width() - margin * 2);
+        text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+
+        iconRect = rect;
+        iconRect.setX(rect.x() + margin);
+        iconRect.setWidth(24);
+    } else {
+        textRect = rect;
+        textRect.setX(textRect.x() + margin);
+        textRect.setWidth(textRect.width() - margin * 2);
+        text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+    }
 
     painter->fillPath(path, background);
+    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
+        //        opt.icon.paint(painter, iconRect);
+        QIcon icon = opt.icon;
+        icon.paint(painter, iconRect);
+    }
     painter->drawText(textRect, static_cast<int>(opt.displayAlignment), text);
 
     painter->restore();
@@ -152,4 +170,9 @@ void ProcessItemDelegate::initStyleOption(QStyleOptionViewItem *option,
         option->features |= QStyleOptionViewItem::Alternate;
     if (index.data(Qt::DisplayRole).isValid())
         option->text = index.data().toString();
+
+    if (index.data(Qt::DecorationRole).isValid()) {
+        option->features |= QStyleOptionViewItem::HasDecoration;
+        option->icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
+    }
 }

@@ -17,6 +17,8 @@ SystemServiceTableModel::SystemServiceTableModel(QObject* parent)
 
 QVariant SystemServiceTableModel::data(const QModelIndex& index, int role) const
 {
+    QString buf;
+
     if (!index.isValid())
         return {};
 
@@ -27,14 +29,20 @@ QVariant SystemServiceTableModel::data(const QModelIndex& index, int role) const
         switch (index.column()) {
             case kSystemServiceNameColumn:
                 return m_ServiceEntryList.at(index.row()).getId();
-            case kSystemServiceLoadStateColumn:
-                return m_ServiceEntryList.at(index.row()).getLoadState();
-            case kSystemServiceActiveStateColumn:
-                return m_ServiceEntryList.at(index.row()).getActiveState();
+            case kSystemServiceLoadStateColumn: {
+                buf = m_ServiceEntryList.at(index.row()).getLoadState();
+                return DApplication::translate("DBus.Unit.Load.State", buf.toUtf8());
+            }
+            case kSystemServiceActiveStateColumn: {
+                buf = m_ServiceEntryList.at(index.row()).getActiveState();
+                return DApplication::translate("DBus.Unit.Active.State", buf.toUtf8());
+            }
             case kSystemServiceSubStateColumn:
                 return m_ServiceEntryList.at(index.row()).getSubState();
-            case kSystemServiceStateColumn:
-                return m_ServiceEntryList.at(index.row()).getState();
+            case kSystemServiceStateColumn: {
+                buf = m_ServiceEntryList.at(index.row()).getState();
+                return DApplication::translate("DBus.Unit.State", buf.toUtf8());
+            }
             case kSystemServiceDescriptionColumn:
                 return m_ServiceEntryList.at(index.row()).getDescription();
             case kSystemServicePIDColumn: {
@@ -113,7 +121,9 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
                 case kSystemServiceStateColumn:
                     return DApplication::translate("Service.Table.Header", kSystemServiceState);
                 case kSystemServicePIDColumn:
-                    return DApplication::translate("Service.Table.Header", kSystemServicePID);
+                    //                    return DApplication::translate("Service.Table.Header",
+                    //                    kSystemServicePID);
+                    return QString(kSystemServicePID);
                 case kSystemServiceDescriptionColumn:
                     return DApplication::translate("Service.Table.Header",
                                                    kSystemServiceDescription);

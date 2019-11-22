@@ -16,9 +16,13 @@ RESOURCES = deepin-system-monitor.qrc
 }
 
 CONFIG(debug, debug|release) {
-  # Enable memory address sanitizer in debug mode.
-  QMAKE_CXXFLAGS += -fsanitize=address
-  LIBS += -lasan
+        # Enable memory address sanitizer in debug mode.
+        QMAKE_CXXFLAGS += -fsanitize=address
+        LIBS += -lasan
+}
+
+CONFIG(release, debug|release) {
+        DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
 INCLUDEPATH += $$PWD/src/
@@ -35,9 +39,6 @@ HEADERS += src/utils.h \
         src/compact_network_monitor.h \
         src/compact_disk_monitor.h \
         src/network_traffic_filter.h \
-        src/process_manager.h \
-        src/process_item.h \
-        src/process_view.h \
         src/hashqstring.h \
         src/find_window_title.h \
         src/smooth_curve_generator.h \
@@ -45,7 +46,6 @@ HEADERS += src/utils.h \
         src/start_tooltip.h \
         src/process_tree.h \
         src/process_switch_tab.h \
-        src/attributes_dialog.h \
         src/constant.h \
         src/settings.h \
         src/dbus/systemd1_manager_interface.h \
@@ -80,7 +80,8 @@ HEADERS += src/utils.h \
     src/gui/monitor_expand_view.h \
     src/gui/monitor_compact_view.h \
     src/process/system_monitor.h \
-    src/gui/kill_process_confirm_dialog.h
+    src/gui/kill_process_confirm_dialog.h \
+    src/gui/process_attribute_dialog.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -94,16 +95,12 @@ SOURCES += src/main.cpp \
         src/compact_network_monitor.cpp \
         src/compact_disk_monitor.cpp \
         src/network_traffic_filter.cpp \
-        src/process_manager.cpp \
-        src/process_item.cpp \
-        src/process_view.cpp \
         src/find_window_title.cpp \
         src/smooth_curve_generator.cpp \
         src/interactive_kill.cpp \
         src/start_tooltip.cpp \
         src/process_tree.cpp \
         src/process_switch_tab.cpp \
-        src/attributes_dialog.cpp \
         src/settings.cpp \
         src/dbus/systemd1_manager_interface.cpp \
         src/dbus/systemd1_service_interface.cpp \
@@ -135,7 +132,8 @@ SOURCES += src/main.cpp \
     src/gui/monitor_expand_view.cpp \
     src/gui/monitor_compact_view.cpp \
     src/process/system_monitor.cpp \
-    src/gui/kill_process_confirm_dialog.cpp
+    src/gui/kill_process_confirm_dialog.cpp \
+    src/gui/process_attribute_dialog.cpp
 
 QT += core
 QT += widgets

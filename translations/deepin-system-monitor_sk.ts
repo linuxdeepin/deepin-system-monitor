@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">Deepin Systémový Monitor je intuitívne a výkonný systém sledovania. Môže monitorovať proces CPU, pamäť, sieť, disk a ďalšie.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">Deepin Systémový Monitor</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">Názov procesu</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">Príkazový riadok</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">Doba spustenia</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Čítanie disku</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Zápis disku</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Pamäť</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nie je povolené</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Sťahovanie</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Celkovo</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Odosielanie</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">Deepin Systémový Monitor je intuitívne a výkonný systém sledovania. Môže monitorovať proces CPU, pamäť, sieť, disk a ďalšie.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Deepin Systémový Monitor</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">Ukončenie tohto procesu môže spôsobiť stratu údajov.
-Naozaj chcete pokračovať?</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">Ukončiť proces</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">Disk</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Čítanie disku</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Zápis disku</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Naozaj chcete pokračovať?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">Vynútené ukončenie aplikácie</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Tmavá téma</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">Ukončiť aplikáciu</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Zrušiť</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">Kompaktný režim</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Ukončenie tejto aplikácie môže spôsobiť stratu údajov.
-Naozaj chcete pokračovať?</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Pamäť</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nie je povolené</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">Sieť</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Sťahovanie</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Celkovo</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Odosielanie</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +303,10 @@ Naozaj chcete pokračovať?</translation>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2 aplikácie a %3 procesy sú spustené</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Naozaj chcete pokračovať?</translation>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Ukončiť proces</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Naozaj chcete pokračovať?</translation>
         <source>PID</source>
         <translation type="unfinished">PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">Žiadna odpoveď</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Pozastaviť</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">Ukončiť proces</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Zrušiť</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">Pozastaviť proces</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">Obnoviť proces</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">Zobraziť miesto procesu</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">Vlastnosti</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2 aplikácie a %3 procesy sú spustené</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Ukončenie tohto procesu môže spôsobiť stratu údajov.
-Naozaj chcete pokračovať?</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Zrušiť</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">Ukončiť aplikáciu</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Názov</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Pamäť</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Zápis disku</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Čítanie disku</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Sťahovanie</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Odosielanie</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">Deepin Systémový Monitor je intuitívne a výkonný systém sledovania. Môže monitorovať proces CPU, pamäť, sieť, disk a ďalšie.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin Systémový Monitor</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin Systémový Monitor</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Deepin Desktop Environment - Služba iniciovania procesov</translation>
@@ -683,10 +446,6 @@ Naozaj chcete pokračovať?</translation>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Deepin Desktop Environment - Služba uzamknutej obrazovky</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Deepin Správca okien</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Naozaj chcete pokračovať?</translation>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Zrušiť</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">Kliknite na aplikáciu, ktorú chcete ukončiť</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">Aplikácie</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">Moje procesy</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">Všetky procesy</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">Zásobník</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Názov</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Naozaj chcete pokračovať?</translation>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Naozaj chcete pokračovať?</translation>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Vyhľadávanie</translation>
     </message>
 </context>
 </TS>

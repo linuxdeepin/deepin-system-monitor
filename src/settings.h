@@ -33,6 +33,8 @@ const QString kSettingKeyThemeType = {"theme_type"};
 const QString kSettingKeyWindowWidth = {"window_width"};
 const QString kSettingKeyWindowHeight = {"window_height"};
 const QString kSettingKeyProcessTabIndex = {"process_tab_index"};
+const QString kSettingKeyProcessAttributeDialogWidth = {"process_attribute_dialog_width"};
+const QString kSettingKeyProcessAttributeDialogHeight = {"process_attribute_dialog_height"};
 
 class Settings : public QObject
 {

@@ -1,4 +1,5 @@
 #include <DApplication>
+#include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DStackedWidget>
 #include <DTitlebar>
@@ -57,7 +58,7 @@ void MainWindow::initUI()
     connect(m_killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
-    m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "Mode"), menu);
+    m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
     QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
     modeGroup->setExclusive(true);
     auto *expandModeAction =

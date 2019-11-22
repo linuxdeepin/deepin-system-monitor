@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">Deepin systemovervågning er en intuitiv og kraftfuld systemovervågning Den kan overvåge processers CPU, hukommelse, netværk, disk og anden status.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">Deepin systemovervågning</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">Procesnavn</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">Kommandolinje</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">Starttidspunkt</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Disk læs</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Disk skriv</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Hukommelse</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Ikke aktiveret</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Download</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Samlet</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Upload</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">Deepin systemovervågning er en intuitiv og kraftfuld systemovervågning Den kan overvåge processers CPU, hukommelse, netværk, disk og anden status.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Deepin systemovervågning</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">Afslutning af processen kan forårsage tab af data.
-Er du sikker på, at du vil fortsætte?</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">Afslut proces</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">Disk</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Disk læs</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Disk skriv</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Er du sikker på, at du vil fortsætte?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">Gennemtving afslutning af program</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Mørkt tema</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">Afslut program</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuller</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">Kompakt tilstand</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Afslutning af programmet kan medføre tab af data.
-Er du sikker på, at du vil fortsætte?</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Hukommelse</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Ikke aktiveret</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">Netværk</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Download</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Total</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Upload</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +303,10 @@ Er du sikker på, at du vil fortsætte?</translation>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2 programmer og %3 processer kører</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Er du sikker på, at du vil fortsætte?</translation>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Afslut proces</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Er du sikker på, at du vil fortsætte?</translation>
         <source>PID</source>
         <translation type="unfinished">PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">Ingen reaktion</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Suspender</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">Afslut proces</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuller</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">Suspender proces</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">Genoptag proces</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">Vis procesplacering</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">Egenskaber</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2 programmer og %3 processer kører</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Afslutning af processen kan forårsage tab af data.
-Er du sikker på, at du vil fortsætte?</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Annuller</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">Afslut program</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Navn</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Hukommelse</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Diskskrivning</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Disklæsning</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Download</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Upload</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">Deepin systemovervågning er en intuitiv og kraftfuld systemovervågning Den kan overvåge processers CPU, hukommelse, netværk, disk og anden status.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin systemovervågning</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin systemovervågning</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Deepin-skrivebordsmiljø - Procesinitiering-tjeneste</translation>
@@ -683,10 +446,6 @@ Er du sikker på, at du vil fortsætte?</translation>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Deepin-skrivebordsmiljø - Låseskærm-tjeneste</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Deepin vindueshåndtering</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Er du sikker på, at du vil fortsætte?</translation>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Annuller</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">Klik på det program, du vil afslutte</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">Programmer</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">Mine processer</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">Alle processer</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">Bakke</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Navn</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Er du sikker på, at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Er du sikker på, at du vil fortsætte?</translation>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Søg</translation>
     </message>
 </context>
 </TS>

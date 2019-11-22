@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>Deepin 系統監視器是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、磁碟和其他系統狀態。</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation>Deepin 系統監視器</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">程序名稱</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">命令列</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">開始時間</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">處理器</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">磁碟讀取</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">磁碟寫入</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">記憶體</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">停用</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">下載</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">總計</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">上傳</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">處理器</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">Deepin 系統監視器是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、磁碟和其他系統狀態。</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Deepin 系統監視器</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">結束此執行程序可能導致資料遺失。
-確定繼續？</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">結束程序</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">磁碟</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">磁碟讀取</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">磁碟寫入</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">強制結束應用程式</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">深色模式</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">結束應用程式</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">簡潔模式</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">結束此應用程式可能導致資料遺失。
-確定繼續？</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">記憶體</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">停用</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">網路</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">下載</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">總計</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">上傳</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +303,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation>正在執行 %2 個應用程式以及 %3 個程序</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">結束程序</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation>PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">沒有回應</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">暫停</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">結束程序</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">暫停程序</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">繼續程序</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">開啟程序位置</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">內容</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">正在執行 %2 個應用程式以及 %3 個程序</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">結束此執行程序可能導致資料遺失。
-確定繼續？</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">取消</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">結束應用程式</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">名稱</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">處理器</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">記憶體</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">磁碟寫入</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">磁碟讀取</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">下載</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">上傳</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">Deepin 系統監視器是一款直覺且強大的系統監視器。能夠監視處理器、記憶體、網路、磁碟和其他系統狀態。</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin 系統監視器</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin 系統監視器</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Deepin 桌面環境－程序啟動服務</translation>
@@ -683,10 +446,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Deepin 桌面環境－鎖定畫面服務</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Deepin 視窗管理器</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">取消</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">點擊欲結束的應用程式</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">應用程式</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">我的程序</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">所有程序</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">系統匣</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">名稱</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">搜尋</translation>
     </message>
 </context>
 </TS>

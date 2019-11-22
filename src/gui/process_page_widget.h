@@ -1,6 +1,7 @@
 #ifndef PROCESS_PAGE_WIDGET_H
 #define PROCESS_PAGE_WIDGET_H
 
+#include <DApplicationHelper>
 #include <DButtonBox>
 #include <DDialog>
 #include <DFrame>
@@ -12,7 +13,6 @@
 #include "interactive_kill.h"
 #include "monitor_compact_view.h"
 #include "monitor_expand_view.h"
-#include "process_manager.h"
 #include "process_table_view.h"
 #include "settings.h"
 #include "toolbar.h"
@@ -46,21 +46,24 @@ private Q_SLOTS:
     void showWindowKiller();
     void createWindowKiller();
     void updateProcessSummary(int napps, int nprocs);
+    void changeIconTheme(DApplicationHelper::ColorType themeType);
 
 private:
     Settings *m_settings;
 
-    DStackedWidget *m_views;
-    MonitorExpandView *m_expandView;
-    MonitorCompactView *m_compactView;
+    DStackedWidget *m_views {nullptr};
+    MonitorExpandView *m_expandView {nullptr};
+    MonitorCompactView *m_compactView {nullptr};
 
-    DLabel *m_procViewMode;
-    DLabel *m_procViewModeSummary;
-    DButtonBoxButton *m_appButton;
-    DButtonBoxButton *m_myProcButton;
-    DButtonBoxButton *m_allProcButton;
+    DLabel *m_procViewMode {nullptr};
+    DLabel *m_procViewModeSummary {nullptr};
+    DButtonBoxButton *m_appButton {nullptr};
+    DButtonBoxButton *m_myProcButton {nullptr};
+    DButtonBoxButton *m_allProcButton {nullptr};
 
-    ProcessTableView *m_procTable;
+    ProcessTableView *m_procTable {nullptr};
+
+    InteractiveKill *m_wndKiller {nullptr};
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

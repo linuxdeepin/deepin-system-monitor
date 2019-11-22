@@ -1,39 +1,30 @@
 <RCC>
-    <qresource prefix="/misc">
-        <file>dict/pinyin.dict</file>
-    </qresource>
     <qresource prefix="/">
-        <file>image/deepin-system-monitor.svg</file>
-        <file>image/only_gui_dark_normal.svg</file>
-        <file>image/only_gui_dark_hover.svg</file>
-        <file>image/only_gui_dark_active.svg</file>
-        <file>image/only_me_dark_normal.svg</file>
-        <file>image/only_me_dark_hover.svg</file>
-        <file>image/only_me_dark_active.svg</file>
-        <file>image/all_process_dark_normal.svg</file>
-        <file>image/all_process_dark_hover.svg</file>
-        <file>image/all_process_dark_active.svg</file>
-        <file>image/only_gui_light_normal.svg</file>
-        <file>image/only_gui_light_hover.svg</file>
-        <file>image/only_gui_light_active.svg</file>
-        <file>image/only_me_light_normal.svg</file>
-        <file>image/only_me_light_hover.svg</file>
-        <file>image/only_me_light_active.svg</file>
-        <file>image/all_process_light_normal.svg</file>
-        <file>image/all_process_light_hover.svg</file>
-        <file>image/all_process_light_active.svg</file>
-        <file>image/logo_96.svg</file>
-        <file>image/logo_24.svg</file>
         <file>image/kill.svg</file>
         <file>image/kill_cursor.svg</file>
-        <file>image/icon_cpu_dark.svg</file>
-        <file>image/icon_cpu_light.svg</file>
-        <file>image/icon_network_dark.svg</file>
-        <file>image/icon_network_light.svg</file>
-        <file>image/icon_disk_dark.svg</file>
-        <file>image/icon_disk_light.svg</file>
-        <file>image/icon_memory_dark.svg</file>
-        <file>image/icon_memory_light.svg</file>
-        <file>image/logo.svg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>image/light/all_highlight.svg</file>
+        <file>image/light/all_normal.svg</file>
+        <file>image/light/app_highlight.svg</file>
+        <file>image/light/app_normal.svg</file>
+        <file>image/light/icon_cpu_light.svg</file>
+        <file>image/light/icon_memory_light.svg</file>
+        <file>image/light/icon_network_light.svg</file>
+        <file>image/light/me_highlight.svg</file>
+        <file>image/light/me_normal.svg</file>
+        <file>image/light/service_highlight.svg</file>
+        <file>image/light/service_normal.svg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>image/dark/all_highlight.svg</file>
+        <file>image/dark/all_normal_dark.svg</file>
+        <file>image/dark/app_highlight.svg</file>
+        <file>image/dark/app_normal_dark.svg</file>
+        <file>image/dark/icon_cpu_light.svg</file>
+        <file>image/dark/icon_memory_light.svg</file>
+        <file>image/dark/icon_network_light.svg</file>
+        <file>image/dark/me_highlight.svg</file>
+        <file>image/dark/me_normal_dark.svg</file>
     </qresource>
 </RCC>

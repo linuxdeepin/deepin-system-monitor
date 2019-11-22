@@ -33,7 +33,6 @@ public Q_SLOTS:
 protected:
     bool loadSettings();
     void saveSettings();
-    void showConfirmDialog();
     void initUI(bool settingsLoaded);
     void initConnections(bool settingsLoaded);
     void displayProcessTableContextMenu(const QPoint &p);

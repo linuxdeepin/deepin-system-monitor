@@ -13,8 +13,8 @@ constexpr const char *kProcessUser = QT_TRANSLATE_NOOP("Process.Table.Header", "
 constexpr const char *kProcessMemory = QT_TRANSLATE_NOOP("Process.Table.Header", "Memory");
 constexpr const char *kProcessUpload = QT_TRANSLATE_NOOP("Process.Table.Header", "Upload");
 constexpr const char *kProcessDownload = QT_TRANSLATE_NOOP("Process.Table.Header", "Download");
-constexpr const char *kProcessDiskRead = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk Read");
-constexpr const char *kProcessDiskWrite = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk Write");
+constexpr const char *kProcessDiskRead = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk read");
+constexpr const char *kProcessDiskWrite = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk write");
 constexpr const char *kProcessPID = QT_TRANSLATE_NOOP("Process.Table.Header", "PID");
 
 class ProcessTableModel : public QAbstractTableModel
@@ -46,6 +46,9 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+public:
+    char getProcessState(pid_t pid);
 
 Q_SIGNALS:
     void modelUpdated();

@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">El monitor de sistema Deepin es un intuitivo y poderoso administrador de procesos y aplicaciones. Con él podrás supervisar el funcionamiento de la CPU, la memoria, la conexión a Internet, el disco y otras variables.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">Monitor del sistema Deepin</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">Nombre del proceso</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">Línea de comandos</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">Hora de inicio</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Lectura de disco</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Escritura en disco</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Memoria</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercambio</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Inactivo</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Descarga</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Total</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Subida</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">El monitor de sistema Deepin es un intuitivo y poderoso administrador de procesos y aplicaciones. Con él podrás supervisar el funcionamiento de la CPU, la memoria, la conexión a Internet, el disco y otras variables.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Monitor del sistema Deepin</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">Finalizar este proceso ocasionaría pérdida de datos.
-¿Está seguro de que desea continuar?</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">Finalizar proceso</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">Disco</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Lectura de disco</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Escritura en disco</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">Forzar el cierre de la aplicación</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Tema oscuro</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">Finalizar aplicación</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancelar</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">Modo compacto</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Finalizar esta aplicación ocasionaría pérdida de datos.
-¿Está seguro de que desea continuar?</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Memoria</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercambio</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Inhabilitado</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">Red</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Descarga</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Total</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Subida</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -407,7 +259,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inactivo</translation>
     </message>
     <message>
         <source>Download</source>
@@ -451,6 +303,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2 aplicaciones y %3 procesos están en ejecución</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Finalizar proceso</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished">PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">Sin respuesta</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Suspender</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">Finalizar proceso</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancelar</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">Suspender proceso</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">Reanudar proceso</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">Ver ubicación del proceso</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">Propiedades</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2 aplicaciones y %3 procesos están en ejecución</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Finalizar este proceso ocasionaría pérdida de datos.
-¿Está seguro de que desea continuar?</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Cancelar</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">Finalizar aplicación</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nombre</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Memoria</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Escritura de disco</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Lectura de disco</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Descarga</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Subida</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">El monitor de sistema Deepin es un intuitivo y poderoso administrador de procesos y aplicaciones. Con él podrás supervisar el funcionamiento de la CPU, la memoria, la conexión a Internet, el disco y otras variables.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Monitor del sistema Deepin</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Monitor del sistema Deepin</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Entorno de escritorio Deepin - Proceso de servicio de inicialización</translation>
@@ -683,10 +446,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Entorno de escritorio Deepin - Servicio de bloqueo de pantalla</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Gestor de ventanas Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Cancelar</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">Haz clic a la aplicación que deseas finalizar</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">Aplicaciones</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">Mis procesos</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">Todos los procesos</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">Bandeja</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nombre</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Buscar</translation>
     </message>
 </context>
 </TS>

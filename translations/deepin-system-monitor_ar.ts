@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">مراقب النظام من ديبين : نظام مراقبة بديهي وقوي ، لرؤية العمليات في المعالج والذواكر والشبكة والقرص وغيرها من الحالات .</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">مراقب نظام ديبين</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">اسم العملية</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">سطر الأوامر</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">وقت البدء</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">المعالج</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">القراءة من القرص</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">الكتابة على القرص</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">الذاكرة</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">ذاكرة التبديل</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">غير مفعلة</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">التنزيل</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">الإجمالي</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">التحميل</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">المعالج</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">مراقب النظام من ديبين : نظام مراقبة بديهي وقوي ، لرؤية العمليات في المعالج والذواكر والشبكة والقرص وغيرها من الحالات .</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">مراقب نظام ديبين</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">قد يؤدي إنهاء هذه العملية إلى فقدان البيانات
-هل أنت متأكد من المتابعة؟</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">إنهاء العملية</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">القرص</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">القراءة من القرص</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">الكتابة على القرص</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,72 +200,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">فرض إنهاء التطبيق</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">سمة داكنة</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">إنهاء التطبيق</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">إلغاء</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">الوضع المدمج</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">إنهاء هذا التطبيق قد يسبب فقدان البيانات.
-هل أنت متأكد من المتابعة؟
-</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">الذاكرة</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">ذاكرة التبديل</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">غير مفعل</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">الشبكة</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">التنزيل</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">الإجمالي</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">التحميل</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -408,7 +259,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">غير مفعلة</translation>
     </message>
     <message>
         <source>Download</source>
@@ -452,6 +303,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2 من التطبيقات و %3 من العملبات قيد التشغيل</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -494,6 +349,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">إنهاء العملية</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -529,118 +396,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished">هوية العملية</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">لا استجابة</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">إسبات</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">إنهاء العملية</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">إلغاء</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">تعليق العملية</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">استئناف العملية</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">عرض موقع العملية</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">الخصائص</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2 من التطبيقات و %3 من العملبات قيد التشغيل</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">قد يؤدي إنهاء هذه العملية إلى فقدان البيانات
-هل أنت متأكد من المتابعة؟</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">إلغاء</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">إنهاء التطبيق</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">الاسم</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">المعالج</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">الذاكرة</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">الكتابة على القرص</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">القراءة على القرص</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">التنزيل</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">التحميل</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">هوية العملية</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">مراقب النظام من ديبين : نظام مراقبة بديهي وقوي ، لرؤية العمليات في المعالج والذواكر والشبكة والقرص وغيرها من الحالات .</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">مراقب نظام ديبين</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">مراقب نظام ديبين</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Deepin Desktop Environment - Process initiation service</translation>
@@ -684,10 +446,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>بيئة سطح مكتب ديبين - خدمة قفل الشاشة</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">مدير نوافذ ديبين</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -918,64 +676,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">إلغاء</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">انقر على التطبيق الذي تريد إنهاءه</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">تطبيقات</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">عملياتي</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">جميع العمليات</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">صينية النظام</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">الاسم</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">هوية العملية</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -984,6 +687,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1003,13 +710,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">بحث</translation>
     </message>
 </context>
 </TS>

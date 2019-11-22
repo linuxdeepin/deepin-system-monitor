@@ -26,7 +26,9 @@
 
 #include <DApplication>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 #include <DHiDPIHelper>
+#include <DLabel>
 #include <DStackedWidget>
 #include <DTitlebar>
 #include <QDebug>
@@ -53,12 +55,12 @@ using namespace std;
 
 DWIDGET_USE_NAMESPACE
 
-static const QString kProcSummaryTemplateText = {
-    QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)")};
+static const char *kProcSummaryTemplateText =
+    QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)");
 
-static const QString appText = DApplication::translate("Process.Show.Mode", "Applications");
-static const QString myProcText = DApplication::translate("Process.Show.Mode", "My processes");
-static const QString allProcText = DApplication::translate("Process.Show.Mode", "All processes");
+static const char *appText = QT_TRANSLATE_NOOP("Process.Show.Mode", "Applications");
+static const char *myProcText = QT_TRANSLATE_NOOP("Process.Show.Mode", "My processes");
+static const char *allProcText = QT_TRANSLATE_NOOP("Process.Show.Mode", "All processes");
 
 ProcessPageWidget::ProcessPageWidget(DWidget *parent)
     : DFrame(parent)
@@ -77,7 +79,7 @@ ProcessPageWidget::~ProcessPageWidget() {}
 void ProcessPageWidget::initUI()
 {
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    auto *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
     QStyleOption option;
     option.initFrom(this);
@@ -110,35 +112,43 @@ void ProcessPageWidget::initUI()
 
     m_procViewMode = new DLabel(tw);
     m_procViewMode->setFixedHeight(24);
-    m_procViewMode->setText(appText);  // default text
+    m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));  // default text
+    DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T7, QFont::Medium);
     m_procViewMode->adjustSize();
-    QFont fn = m_procViewMode->font();
-    fn.setWeight(QFont::Medium);
-    fn.setPointSize(fn.pointSize() - 1);
-    m_procViewMode->setFont(fn);
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     m_procViewModeSummary = new DLabel(tw);
     m_procViewMode->setFixedHeight(24);
-    fn = m_procViewModeSummary->font();
-    fn.setWeight(QFont::Medium);
-    fn.setPointSize(fn.pointSize() - 1);
-    m_procViewModeSummary->setFont(fn);
+    DFontSizeManager::instance()->bind(m_procViewModeSummary, DFontSizeManager::T7, QFont::Medium);
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     auto pa = DApplicationHelper::instance()->palette(m_procViewModeSummary);
     palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
     m_procViewModeSummary->setPalette(palette);
 
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
+            &ProcessPageWidget::changeIconTheme);
+
     auto *modeButtonGroup = new DButtonBox(tw);
-    modeButtonGroup->setFixedWidth(26 * 3);
-    modeButtonGroup->setFixedHeight(24);
-    m_appButton = new DButtonBoxButton(appText, modeButtonGroup);
+    modeButtonGroup->setFixedWidth(30 * 3);
+    modeButtonGroup->setFixedHeight(26);
+
+    m_appButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
+    m_appButton->setIconSize(QSize(26, 24));
     m_appButton->setCheckable(true);
-    m_appButton->setChecked(true);
-    m_myProcButton = new DButtonBoxButton(myProcText, modeButtonGroup);
+    m_appButton->setFocusPolicy(Qt::NoFocus);
+
+    m_myProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
+    m_myProcButton->setIconSize(QSize(26, 24));
     m_myProcButton->setCheckable(true);
-    m_allProcButton = new DButtonBoxButton(allProcText, modeButtonGroup);
+    m_myProcButton->setFocusPolicy(Qt::NoFocus);
+
+    m_allProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
+    m_allProcButton->setIconSize(QSize(26, 24));
     m_allProcButton->setCheckable(true);
+    m_allProcButton->setFocusPolicy(Qt::NoFocus);
+
+    changeIconTheme(dAppHelper->themeType());
+
     QList<DButtonBoxButton *> list;
     list << m_appButton << m_myProcButton << m_allProcButton;
     modeButtonGroup->setButtonList(list, true);
@@ -169,14 +179,18 @@ void ProcessPageWidget::initUI()
     if (vindex.isValid())
         index = vindex.toInt();
     switch (index) {
-        case SystemMonitor::OnlyMe:
+        case SystemMonitor::OnlyMe: {
+            m_myProcButton->setChecked(true);
             m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
-            break;
-        case SystemMonitor::AllProcess:
+        } break;
+        case SystemMonitor::AllProcess: {
+            m_allProcButton->setChecked(true);
             m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
-            break;
-        default:
+        } break;
+        default: {
+            m_appButton->setChecked(true);
             m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
+        }
     }
 }
 
@@ -189,19 +203,19 @@ void ProcessPageWidget::initConnections()
             &ProcessPageWidget::switchDisplayMode);
 
     connect(m_appButton, &DButtonBoxButton::clicked, this, [=]() {
-        m_procViewMode->setText(appText);
+        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyGUI);
     });
     connect(m_myProcButton, &DButtonBoxButton::clicked, this, [=]() {
-        m_procViewMode->setText(myProcText);
+        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyMe);
     });
     connect(m_allProcButton, &DButtonBoxButton::clicked, this, [=]() {
-        m_procViewMode->setText(allProcText);
+        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::AllProcess);
@@ -231,22 +245,60 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
 
 void ProcessPageWidget::createWindowKiller()
 {
-    auto *killer = new InteractiveKill(this);
-    killer->setFocus();
-    connect(killer, &InteractiveKill::killWindow, [=](int pid) {
-        // TODO: popup kill
-        //        popupKillConfirmDialog(pid);
-        killer->deleteLater();
-    });
+    m_wndKiller = new InteractiveKill(this);
+    m_wndKiller->setFocus();
+    connect(m_wndKiller, &InteractiveKill::killWindow, this,
+            &ProcessPageWidget::popupKillConfirmDialog);
 }
 
 void ProcessPageWidget::updateProcessSummary(int napps, int nprocs)
 {
-    m_procViewModeSummary->setText(kProcSummaryTemplateText.arg(napps).arg(nprocs));
+    QString buf = DApplication::translate("Process.Summary", kProcSummaryTemplateText);
+    m_procViewModeSummary->setText(buf.arg(napps).arg(nprocs));
+}
+
+void ProcessPageWidget::changeIconTheme(DGuiApplicationHelper::ColorType themeType)
+{
+    QIcon appIcon;
+    QIcon myProcIcon;
+    QIcon allProcIcon;
+
+    if (themeType == DApplicationHelper::LightType) {
+        appIcon.addFile(":/image/light/app_normal.svg", {}, QIcon::Normal, QIcon::Off);
+        appIcon.addFile(":/image/light/app_highlight.svg", {}, QIcon::Normal, QIcon::On);
+
+        myProcIcon.addFile(":/image/light/me_normal.svg", {}, QIcon::Normal, QIcon::Off);
+        myProcIcon.addFile(":/image/light/me_highlight.svg", {}, QIcon::Normal, QIcon::On);
+
+        allProcIcon.addFile(":/image/light/all_normal.svg", {}, QIcon::Normal, QIcon::Off);
+        allProcIcon.addFile(":/image/light/all_highlight.svg", {}, QIcon::Normal, QIcon::On);
+    } else if (themeType == DApplicationHelper::DarkType) {
+        appIcon.addFile(":/image/dark/app_normal_dark.svg", {}, QIcon::Normal, QIcon::Off);
+        appIcon.addFile(":/image/dark/app_highlight.svg", {}, QIcon::Normal, QIcon::On);
+
+        myProcIcon.addFile(":/image/dark/me_normal_dark.svg", {}, QIcon::Normal, QIcon::Off);
+        myProcIcon.addFile(":/image/dark/me_highlight.svg", {}, QIcon::Normal, QIcon::On);
+
+        allProcIcon.addFile(":/image/dark/all_normal_dark.svg", {}, QIcon::Normal, QIcon::Off);
+        allProcIcon.addFile(":/image/dark/all_highlight.svg", {}, QIcon::Normal, QIcon::On);
+    }
+
+    m_appButton->setIcon(appIcon);
+    m_appButton->setIconSize(QSize(26, 24));
+
+    m_myProcButton->setIcon(myProcIcon);
+    m_myProcButton->setIconSize(QSize(26, 24));
+
+    m_allProcButton->setIcon(allProcIcon);
+    m_allProcButton->setIconSize(QSize(26, 24));
 }
 
 void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 {
+    if (m_wndKiller) {
+        m_wndKiller->close();
+    }
+
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
                                                   "Force ending this process may cause data "
@@ -256,7 +308,8 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
     dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true,
+                     DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();

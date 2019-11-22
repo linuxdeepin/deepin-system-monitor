@@ -2,9 +2,12 @@
 #include <DApplicationHelper>
 #include <DDesktopServices>
 #include <DDialog>
+#include <DFrame>
 #include <DLabel>
 #include <DMenu>
 #include <DPalette>
+#include <DTitlebar>
+#include <DWidget>
 #include <QDebug>
 #include <QDir>
 #include <QMessageBox>
@@ -17,6 +20,7 @@
 #include "model/process_table_model.h"
 #include "process/process_entry.h"
 #include "process/system_monitor.h"
+#include "process_attribute_dialog.h"
 #include "process_item_delegate.h"
 #include "process_table_header_view.h"
 #include "process_table_view.h"
@@ -58,7 +62,8 @@ void ProcessTableView::endProcess()
     dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "End"), true);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "End"), true,
+                     DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();
@@ -131,7 +136,13 @@ void ProcessTableView::openExecDirWithFM()
     }
 }
 
-void ProcessTableView::showProperties() {}
+void ProcessTableView::showProperties()
+{
+    if (m_selectedPID.isValid()) {
+        auto *attr = new ProcessAttributeDialog(qvariant_cast<pid_t>(m_selectedPID), this);
+        attr->show();
+    }
+}
 
 void ProcessTableView::killProcess()
 {
@@ -145,7 +156,8 @@ void ProcessTableView::killProcess()
     dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true,
+                     DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();
@@ -194,8 +206,6 @@ void ProcessTableView::saveSettings()
         s->flush();
     }
 }
-
-void ProcessTableView::showConfirmDialog() {}
 
 void ProcessTableView::initUI(bool settingsLoaded)
 {
@@ -309,6 +319,20 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     auto *killProcAction = m_contextMenu->addAction(
         DApplication::translate("Process.Table.Context.Menu", "Kill process"));
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
+
+    connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
+        bool b = true;
+        if (m_selectedPID.isValid()) {
+            char state = m_model->getProcessState(qvariant_cast<pid_t>(m_selectedPID));
+            if (state == 'T') {
+                b = false;
+            } else if (state == 'R') {
+                b = true;
+            }
+            pauseProcAction->setEnabled(b);
+            resumeProcAction->setEnabled(!b);
+        }
+    });
 
     // header
     auto *h = header();

@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">El Monitor del sistema del Deepin és un monitor de sistema intuïtiu i potent. Pot monitorar el procés de la CPU, la memòria, la xarxa, el disc i altres estats.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">Monitor del sistema del Deepin</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">Nom del procés</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">Línia d&apos;ordres</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">Hora d&apos;inici</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Lectura de disc</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Escriptura de disc</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Memòria</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercanvi</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">No habilitat</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Baixada</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Total</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Càrrega</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">El Monitor del sistema del Deepin és un monitor de sistema intuïtiu i potent. Pot monitorar el procés de la CPU, la memòria, la xarxa, el disc i altres estats.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Monitor del sistema del Deepin</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">Aturar aquest procés pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">Atura el procés</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">Disc</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Lectura de disc</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Escriptura de disc</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Segur que voleu continuar?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">Força l&apos;aturada de l&apos;aplicació</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Tema fosc</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">Atura l&apos;aplicació</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancel·la</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">Mode compacte</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Aturar aquesta aplicació pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Memòria</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercanvi</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">No habilitat</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">Xarxa</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Baixada</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Total</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Càrrega</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +303,10 @@ Segur que voleu continuar?</translation>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">S&apos;executen %2 aplicacions i %3 processos.</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Segur que voleu continuar?</translation>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Atura el procés</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Segur que voleu continuar?</translation>
         <source>PID</source>
         <translation type="unfinished">PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">Sense resposta</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Suspèn</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">Atura el procés</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancel·la</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">Suspèn el procés</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">Reprèn el procés</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">Mostra la ubicació del procés</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">Propietats</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">S&apos;executen %2 aplicacions i %3 processos.</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Aturar aquest procés pot causar pèrdua de dades.
-Segur que voleu continuar?</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Cancel·la</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">Atura l&apos;aplicació</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Memòria</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Escriptura de disc</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Lectura de disc</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Baixada</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Càrrega</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">El Monitor del sistema del Deepin és un monitor de sistema intuïtiu i potent. Pot monitorar el procés de la CPU, la memòria, la xarxa, el disc i altres estats.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Monitor del sistema del Deepin</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Monitor del sistema del Deepin</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Entorn d&apos;escriptori del Deepin. Servei d&apos;iniciació de procés</translation>
@@ -683,10 +446,6 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Entorn d&apos;escriptori del Deepin. Servei de bloqueig de la pantalla</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Gestor de finestres del Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Segur que voleu continuar?</translation>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Cancel·la</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">Cliqueu a l&apos;aplicació que vulgueu aturar.</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">Aplicacions</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">Els meus processos</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">Tots els processos</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">Safata</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nom</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Cerca</translation>
     </message>
 </context>
 </TS>

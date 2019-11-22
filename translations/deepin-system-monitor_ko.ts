@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">Deepin 시스템 모니터는 직관적이고 강력한 시스템 모니터입니다. CPU, 메모리, 네트워크, 디스크 및 기타 상태를 모니터링할 수 있습니다.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">Deepin 시스템 모니터</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">프로세스 이름</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">명령 행</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">시작 시간</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">디스크 읽기</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">디스크 쓰기</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">메모리</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">스왑</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">활성화되지 않음</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">다운로드</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">전체</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">업로드</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">Deepin 시스템 모니터는 직관적이고 강력한 시스템 모니터입니다. CPU, 메모리, 네트워크, 디스크 및 기타 상태를 모니터링할 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Deepin 시스템 모니터</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">이 프로세스를 종료하면 데이터가 손실될 수 있습니다.
-계속하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">프로세스 종료</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">디스크</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">디스크 읽기</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">디스크 쓰기</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">응용 프로그램 강제 종료</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">어두운 테마</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">응용 프로그램 종료</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">취소</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">콤팩트 모드</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">이 응용 프로그램을 종료하면 데이터가 손실될 수 있습니다.
-계속하시겠습니까?</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">메모리</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">스왑</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">활성화되지 않음</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">네트워크</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">다운로드</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">전체</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">업로드</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +303,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2개의 응용 프로그램과 %3개의 프로세스가 실행중입니다</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">프로세스 종료</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished">PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">응답 없음</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">일시 중단</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">프로세스 종료</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">취소</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">프로세스 일시 중지</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">프로세스 재개</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">프로세스 위치 보기</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">속성</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2개의 응용 프로그램과 %3개의 프로세스가 실행중입니다</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">이 프로세스를 종료하면 데이터가 손실될 수 있습니다.
-계속하시겠습니까?</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">취소</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">응용 프로그램 종료</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">이름</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">메모리</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">디스크 쓰기</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">디스크 읽기</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">다운로드</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">업로드</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">Deepin 시스템 모니터는 직관적이고 강력한 시스템 모니터입니다. CPU, 메모리, 네트워크, 디스크 및 기타 상태를 모니터링할 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin 시스템 모니터</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Deepin 시스템 모니터</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Deepin 데스크톱 환경 - 프로세스 시작 서비스</translation>
@@ -683,10 +446,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Deepin 데스크톱 환경 - 잠금 화면 서비스</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Deepin 창 관리자 </translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">취소</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">종료할 애플리케이션을 클릭합니다</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">응용 프로그램</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">내 프로세스</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">모든 프로세스</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">트레이</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">이름</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">검색</translation>
     </message>
 </context>
 </TS>

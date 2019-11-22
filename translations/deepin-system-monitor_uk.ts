@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">Системний Монітор Deepin - це інтуїтивно зрозумілий і потужний системний монітор. Він може контролювати процес ЦП, пам&apos;ять, мережу, диск і інший статус.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">Системний Монітор Deepin</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">Ім&apos;я процесу</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">Командний рядок</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">Час початку</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="vanished">ЦП</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Читання диску</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Запис диску</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Пам&apos;ять</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Підкачка</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Не ввімкнено</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Завантаження</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Загалом</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Вивантаження</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">ЦП</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">Системний Монітор Deepin - це інтуїтивно зрозумілий і потужний системний монітор. Він може контролювати процес ЦП, пам&apos;ять, мережу, диск і інший статус.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">Системний Монітор Deepin</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,34 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="obsolete">Завершення цього процесу може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
-    </message>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">Завершити процес</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk</source>
-        <translation type="vanished">Диск</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Читання диску</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Запис диску</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -294,71 +200,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">Примусово завершити програму</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Темна тема</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">Завершити програму</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Скасувати</translation>
-    </message>
-    <message>
-        <source>Compact mode</source>
-        <translation type="vanished">Компактний режим</translation>
-    </message>
-    <message>
-        <source>Ending this application may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Завершення цієї програми може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Пам&apos;ять</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Підкачка</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Не ввімкнено</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">Мережа</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Завантаження</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">Загалом</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Вивантаження</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +303,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2 програм і %3 процесів запущено</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -493,6 +349,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">Завершити процес</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -528,118 +396,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished">PID</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">Немає відповіді</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Призупинити</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">Завершити процес</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Скасувати</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">Призупинити процес</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">Відновити процес</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">Переглянути місце розташування процесу</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">Властивості</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2 програм і %3 процесів запущено</translation>
-    </message>
-    <message>
-        <source>Ending this process may cause data loss.
-Are you sure you want to continue?</source>
-        <translation type="vanished">Завершення цього процесу може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Скасувати</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">Завершити програму</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Ім&apos;я</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">ЦП</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">Пам&apos;ять</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">Запис диску</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">Читання диску</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Завантаження</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Вивантаження</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">PID</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">Системний Монітор Deepin - це інтуїтивно зрозумілий і потужний системний монітор. Він може контролювати процес ЦП, пам&apos;ять, мережу, диск і інший статус.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Системний Монітор Deepin</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">Системний Монітор Deepin</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>Deepin Desktop Environment - служба ініціації процесу</translation>
@@ -683,10 +446,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>Deepin Desktop Environment - Служба блокування екрану</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">Менеджер вікон Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -917,64 +676,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Скасувати</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">Натисніть програму, яку потрібно завершити</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">Програми</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">Мої процеси</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">Всі процеси</translation>
-    </message>
-    <message>
-        <source>Tray</source>
-        <translation type="vanished">Лоток</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Ім&apos;я</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">PID</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -983,6 +687,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1002,13 +710,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Пошук</translation>
     </message>
 </context>
 </TS>

@@ -4,93 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="unfinished">צג המערכת של Deepin הוא צג מערכת ברור ורב עצמה. בצג מוצגים התהליכים, המעבד, הזיכרון, הרשת, הכונן וחיוויים נוספים.</translation>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">צג המערכת של Deepin</translation>
-    </message>
-</context>
-<context>
-    <name>AttributesDialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="vanished">שם התהליך</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">שורת פקודה</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">מועד ההתחלה</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>CompactCpuMonitor</name>
+    <name>Common.Search</name>
     <message>
-        <source>CPU</source>
-        <translation type="obsolete">מעבד</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="obsolete">קריאה מהכונן</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="obsolete">כתיבה לכונן</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="obsolete">זיכרון</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="obsolete">החלפה</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="obsolete">לא פעיל</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="obsolete">הורדה</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="obsolete">סך הכול</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="obsolete">העלאה</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">מעבד</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="obsolete">צג המערכת של Deepin הוא צג מערכת ברור ורב עצמה. בצג מוצגים התהליכים, המעבד, הזיכרון, הרשת, הכונן וחיוויים נוספים.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">צג המערכת של Deepin</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -127,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -175,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,24 +180,6 @@
     </message>
 </context>
 <context>
-    <name>Deepin.System.Monitor.Kill.Process.Dialog</name>
-    <message>
-        <source>End process</source>
-        <translation type="obsolete">סיום התהליך</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="obsolete">קריאה מהכונן</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="obsolete">כתיבה לכונן</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -283,61 +199,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Force to end application</source>
-        <translation type="vanished">אילוץ סגירת היישום</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">ערכת עיצוב כהה</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="vanished">סיום פעולת היישום</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">ביטול</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">זיכרון</translation>
-    </message>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">החלפה</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">לא פעיל</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">רשת</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">הורדה</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="vanished">סך הכול</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">העלאה</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -430,6 +302,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished">%2 יישומים ו־%3 תהליכים פעילים</translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -472,6 +348,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished">סיום התהליך</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -507,112 +395,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished">מזהה תהליך</translation>
     </message>
-</context>
-<context>
-    <name>ProcessItem</name>
     <message>
-        <source>No response</source>
-        <translation type="vanished">אין תגובה</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">השהיה</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessManager</name>
-    <message>
-        <source>End process</source>
-        <translation type="vanished">סיום התהליך</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">ביטול</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="vanished">השהיית תהליך</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="vanished">המשך תהליך</translation>
-    </message>
-    <message>
-        <source>View process location</source>
-        <translation type="vanished">הצגת מיקום התהליך</translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="vanished">מאפיינים</translation>
-    </message>
-    <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="vanished">%2 יישומים ו־%3 תהליכים פעילים</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">ביטול</translation>
-    </message>
-    <message>
-        <source>End application</source>
-        <translation type="obsolete">סיום פעולת היישום</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">שם</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">מעבד</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">זיכרון</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">כתיבה לכונן</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">קריאה מהכונן</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">הורדה</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">העלאה</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="vanished">מזהה תהליך</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation type="vanished">צג המערכת של Deepin הוא צג מערכת ברור ורב עצמה. בצג מוצגים התהליכים, המעבד, הזיכרון, הרשת, הכונן וחיוויים נוספים.</translation>
-    </message>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">צג המערכת של Deepin</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">צג המערכת של Deepin</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation>סביבת שולחן העבודה של Deepin - שירות הפעלת תהליכים</translation>
@@ -656,10 +445,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Deepin Desktop Environment - Lock screen service</source>
         <translation>סביבת שולחן העבודה של Deepin - שירות נעילת מסך</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager </source>
-        <translation type="vanished">מנהל החלונות של Deepin</translation>
     </message>
     <message>
         <source>Deepin Window Manager switcher</source>
@@ -890,60 +675,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">ביטול</translation>
-    </message>
-</context>
-<context>
-    <name>StartTooltip</name>
-    <message>
-        <source>Click the application you want to end</source>
-        <translation type="vanished">יש ללחוץ על היישום שברצונך לסגור</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">יישומים</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">התהליכים שלי</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">כל התהליכים</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">שם</translation>
-    </message>
-    <message>
-        <source>PID</source>
-        <translation type="obsolete">מזהה תהליך</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -952,6 +686,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -971,13 +709,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">חיפוש</translation>
     </message>
 </context>
 </TS>

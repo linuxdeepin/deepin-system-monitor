@@ -22,18 +22,19 @@
  */
 
 #include "interactive_kill.h"
-#include "utils.h"
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QDebug>
-#include <QScreen>
 #include <dscreenwindowsutil.h>
 #include <DHiDPIHelper>
+#include <QApplication>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QScreen>
+#include "utils.h"
 
 DWM_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
+InteractiveKill::InteractiveKill(QWidget *parent)
+    : QWidget(parent)
 {
     cursorImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill_cursor.svg"));
     cursorX = -1;
@@ -43,11 +44,11 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
     setAttribute(Qt::WA_DeleteOnClose, true);
-    setMouseTracking(true);     // make MouseMove can response
-    installEventFilter(this);   // add event filter
+    setMouseTracking(true);    // make MouseMove can response
+    installEventFilter(this);  // add event filter
 
     QPoint pos = this->cursor().pos();
-    DScreenWindowsUtil* screenWin = DScreenWindowsUtil::instance(pos);
+    DScreenWindowsUtil *screenWin = DScreenWindowsUtil::instance(pos);
     screenRect = screenWin->backgroundRect();
     this->move(screenRect.x(), screenRect.y());
     this->setFixedSize(screenRect.width(), screenRect.height());
@@ -58,7 +59,8 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
 
     for (int i = 0; i < windows.length(); i++) {
         if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
-            windowRects.append(windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
+            windowRects.append(
+                windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
 
             windowPids.append(Utils::getWindowPid(windowManager, windows[i]));
         }
@@ -68,14 +70,18 @@ InteractiveKill::InteractiveKill(QWidget *parent) : QWidget(parent)
     startTooltip->setWindowManager(windowManager);
     startTooltip->show();
 
-    QList<QScreen*> screenList = qApp->screens();
+    QList<QScreen *> screenList = qApp->screens();
     QScreen *primaryScreen = QGuiApplication::primaryScreen();
     int screenNum = qApp->desktop()->screenNumber(pos);
 
     if (screenNum != 0 && screenNum < screenList.length()) {
-        screenPixmap = screenList[screenNum]->grabWindow(screenWin->rootWindowId(), screenRect.x(), screenRect.y(), screenRect.width(), screenRect.height());
+        screenPixmap = screenList[screenNum]->grabWindow(screenWin->rootWindowId(), screenRect.x(),
+                                                         screenRect.y(), screenRect.width(),
+                                                         screenRect.height());
     } else {
-        screenPixmap = primaryScreen->grabWindow(screenWin->rootWindowId(), screenRect.x(), screenRect.y(), screenRect.width(), screenRect.height());
+        screenPixmap =
+            primaryScreen->grabWindow(screenWin->rootWindowId(), screenRect.x(), screenRect.y(),
+                                      screenRect.width(), screenRect.height());
     }
 
     showFullScreen();
@@ -107,8 +113,8 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
         WindowRect rect = windowRects[i];
 
         if (cursorX + screenRect.x() >= rect.x && cursorX + screenRect.x() <= rect.x + rect.width &&
-            cursorY + screenRect.y() >= rect.y && cursorY + screenRect.y() <= rect.y + rect.height) {
-
+            cursorY + screenRect.y() >= rect.y &&
+            cursorY + screenRect.y() <= rect.y + rect.height) {
             if (killWindowIndex != i) {
                 needRepaint = true;
             }
@@ -130,9 +136,9 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 
 void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    if (startTooltip != NULL) {
+    if (startTooltip != nullptr) {
         delete startTooltip;
-        startTooltip = NULL;
+        startTooltip = nullptr;
     }
 
     for (int i = 0; i < windowRects.length(); i++) {
@@ -140,7 +146,6 @@ void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 
         if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
             mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
-
             killWindow(windowPids[i]);
 
             break;
@@ -155,9 +160,10 @@ void InteractiveKill::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.drawPixmap(QPoint(0, 0), screenPixmap);
 
-    if (cursorX >=0 && cursorY >= 0) {
+    if (cursorX >= 0 && cursorY >= 0) {
         // Just render kill window with window index.
-        QRegion windowRegion = QRegion(QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
+        QRegion windowRegion = QRegion(
+            QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
 
         for (int i = 0; i < killWindowIndex; i++) {
             WindowRect rect = windowRects[i];
@@ -166,7 +172,8 @@ void InteractiveKill::paintEvent(QPaintEvent *)
                 rect.x + rect.width < killWindowRect.x + killWindowRect.width ||
                 rect.y > killWindowRect.y ||
                 rect.y + rect.height < killWindowRect.y + killWindowRect.height) {
-                windowRegion = windowRegion.subtracted(QRegion(rect.x, rect.y, rect.width, rect.height));
+                windowRegion =
+                    windowRegion.subtracted(QRegion(rect.x, rect.y, rect.width, rect.height));
             }
         }
 
@@ -175,6 +182,7 @@ void InteractiveKill::paintEvent(QPaintEvent *)
 
         painter.setClipping(true);
         painter.setClipRegion(windowRegion);
-        painter.drawRect(QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
+        painter.drawRect(
+            QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
     }
 }

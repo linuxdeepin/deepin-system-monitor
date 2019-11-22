@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
         app.setOrganizationName("deepin");
         app.setApplicationName("system-monitor");
         app.setApplicationDisplayName(DApplication::translate("App.About", "System Monitor"));
-        app.setApplicationVersion(DApplication::buildVersion(""));
+        app.setApplicationVersion(DApplication::buildVersion("1.0"));
 
         app.setProductIcon(QIcon::fromTheme("deepin-system-monitor"));
         app.setProductName(DApplication::translate("App.About", "System Monitor"));

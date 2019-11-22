@@ -4,59 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>AttributesDialog</name>
+    <name>Common.Search</name>
     <message>
-        <source>Process name</source>
-        <translation type="vanished">प्रक्रियाको नाम</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">कमांड लाइन</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">सुरु समय</translation>
-    </message>
-</context>
-<context>
-    <name>CompactCpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">सि.पी. यु</translation>
-    </message>
-</context>
-<context>
-    <name>CompactDiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="vanished">डिस्क रिड</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="vanished">डिस्क राइट</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">मेमोरी</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="obsolete">सि.पी. यु</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -93,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -141,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -212,17 +180,6 @@
     </message>
 </context>
 <context>
-    <name>DiskMonitor</name>
-    <message>
-        <source>Disk read</source>
-        <translation type="obsolete">डिस्क रिड</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="obsolete">डिस्क राइट</translation>
-    </message>
-</context>
-<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.
@@ -242,15 +199,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
     <message>
-        <source>Memory</source>
-        <translation type="obsolete">मेमोरी</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -343,6 +302,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -385,6 +348,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -420,24 +395,9 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>ProcessView</name>
     <message>
-        <source>CPU</source>
-        <translation type="obsolete">सि.पी. यु</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="obsolete">मेमोरी</translation>
-    </message>
-    <message>
-        <source>Disk write</source>
-        <translation type="obsolete">डिस्क राइट</translation>
-    </message>
-    <message>
-        <source>Disk read</source>
-        <translation type="obsolete">डिस्क रिड</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -715,20 +675,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -737,6 +686,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

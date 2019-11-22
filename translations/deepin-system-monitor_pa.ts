@@ -4,66 +4,19 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>Deepin System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deepin System Monitor</source>
-        <translation type="unfinished">ਡੀਪਿਨ ਸਿਸਟਮ ਨਿਗਰਾਨ</translation>
+        <source>System Monitor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>AttributesDialog</name>
+    <name>Common.Search</name>
     <message>
-        <source>Process name</source>
-        <translation type="vanished">ਪਰੋਸੈਸ ਦਾ ਨਾਂ</translation>
-    </message>
-    <message>
-        <source>Command line</source>
-        <translation type="vanished">ਕਮਾਂਡ ਲਾਈਨ</translation>
-    </message>
-    <message>
-        <source>Start time</source>
-        <translation type="vanished">ਸ਼ੁਰੂ ਸਮਾਂ</translation>
-    </message>
-</context>
-<context>
-    <name>CompactCpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>CompactMemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="vanished">ਮੈਮੋਰੀ</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="obsolete">ਸਮਰੱਥ ਨਹੀਂ</translation>
-    </message>
-</context>
-<context>
-    <name>CompactNetworkMonitor</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">ਡਾਊਨਲੋਡ</translation>
-    </message>
-</context>
-<context>
-    <name>CpuMonitor</name>
-    <message>
-        <source>CPU</source>
-        <translation type="obsolete">CPU</translation>
-    </message>
-</context>
-<context>
-    <name>DApplication</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="obsolete">ਡੀਪਿਨ ਸਿਸਟਮ ਨਿਗਰਾਨ</translation>
+        <source>Not Found</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -100,10 +53,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>not-found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -121,6 +70,10 @@
     </message>
     <message>
         <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -148,6 +101,14 @@
     </message>
     <message>
         <source>enabled-runtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>masked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>generated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -238,37 +199,17 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force terminate</source>
+        <source>Force ending this process may cause data loss.
+Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MainWindow</name>
     <message>
-        <source>Cancel</source>
-        <translation type="vanished">ਰੱਦ ਕਰੋ</translation>
-    </message>
-</context>
-<context>
-    <name>MemoryMonitor</name>
-    <message>
-        <source>Memory</source>
-        <translation type="obsolete">ਮੈਮੋਰੀ</translation>
+        <source>Force end</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enabled</source>
-        <translation type="vanished">ਸਮਰੱਥ ਨਹੀਂ</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkMonitor</name>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">ਨੈੱਟਵਰਕ</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="obsolete">ਡਾਊਨਲੋਡ</translation>
+        <source>End</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -361,6 +302,10 @@ Are you sure you want to continue?</source>
         <source>%2 applications and %3 processes are running</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>(%1 applications and %2 processes are running)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table</name>
@@ -403,6 +348,18 @@ Are you sure you want to continue?</source>
         <source>Force terminate process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>End process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -438,53 +395,13 @@ Are you sure you want to continue?</source>
         <source>PID</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>ProcessManager</name>
     <message>
-        <source>Cancel</source>
-        <translation type="obsolete">ਰੱਦ ਕਰੋ</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessPageWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">ਰੱਦ ਕਰੋ</translation>
-    </message>
-</context>
-<context>
-    <name>ProcessView</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">ਨਾਂ</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="obsolete">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="obsolete">ਮੈਮੋਰੀ</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="obsolete">ਡਾਊਨਲੋਡ</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">ਡੀਪਿਨ ਸਿਸਟਮ ਨਿਗਰਾਨ</translation>
+        <source>User</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <source>Deepin System Monitor</source>
-        <translation type="vanished">ਡੀਪਿਨ ਸਿਸਟਮ ਨਿਗਰਾਨ</translation>
-    </message>
     <message>
         <source>Deepin Desktop Environment - Process initiation service</source>
         <translation type="unfinished"></translation>
@@ -758,49 +675,9 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>Service.Table.Search</name>
-    <message>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ServiceNameSubInputDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">ਰੱਦ ਕਰੋ</translation>
-    </message>
-</context>
-<context>
-    <name>StatusMonitor</name>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">ਐਪਲੀਕੇਸ਼ਨ</translation>
-    </message>
-    <message>
-        <source>My processes</source>
-        <translation type="vanished">ਮੇਰੇ ਪਰੋਸੈਸ</translation>
-    </message>
-    <message>
-        <source>All processes</source>
-        <translation type="vanished">ਸਾਰੇ ਪਰੋਸੈਸ</translation>
-    </message>
-</context>
-<context>
-    <name>SystemServiceTableModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">ਨਾਂ</translation>
-    </message>
-</context>
-<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -809,6 +686,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -828,13 +709,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Toolbar</name>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">ਖੋਜੋ</translation>
     </message>
 </context>
 </TS>

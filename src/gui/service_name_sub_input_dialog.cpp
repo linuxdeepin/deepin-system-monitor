@@ -9,9 +9,7 @@
 ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     : DDialog(parent)
 {
-    //    setFixedSize(600, 300);
-    // TODO: change icon
-    setIconPixmap(DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo.svg")));
+    setIcon(QIcon::fromTheme("deepin-system-monitor"));
 
     m_nameLineEdit = new DLineEdit(this);
     Q_ASSERT(m_nameLineEdit);

@@ -216,7 +216,9 @@ enum ServiceStatus {
     kServiceStatic,
     kServiceTransient,
     kServiceIndirect,
-    kServiceEnabledRuntime
+    kServiceEnabledRuntime,
+    kServiceMasked,
+    kServiceGenerated
 };
 constexpr const char* kServiceEnabledText = QT_TRANSLATE_NOOP("DBus.Unit.State", "enabled");
 constexpr const char* kServiceDisabledText = QT_TRANSLATE_NOOP("DBus.Unit.State", "disabled");
@@ -225,6 +227,9 @@ constexpr const char* kServiceTransientText = QT_TRANSLATE_NOOP("DBus.Unit.State
 constexpr const char* kServiceIndirectText = QT_TRANSLATE_NOOP("DBus.Unit.State", "indirect");
 constexpr const char* kServiceEnabledRuntimeText =
     QT_TRANSLATE_NOOP("DBus.Unit.State", "enabled-runtime");
+constexpr const char* kServiceMaskedRuntimeText = QT_TRANSLATE_NOOP("DBus.Unit.State", "masked");
+constexpr const char* kServiceGeneratedRuntimeText =
+    QT_TRANSLATE_NOOP("DBus.Unit.State", "generated");
 
 enum UnitControlJobMode {
     kJobModeFail,

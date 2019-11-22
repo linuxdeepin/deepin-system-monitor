@@ -90,22 +90,24 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             switch (section) {
-                case kProcessNameColumn:
+                case kProcessNameColumn: {
                     return DApplication::translate("Process.Table.Header", kProcessName);
-                case kProcessCPUColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessCPU);
+                }
+                case kProcessCPUColumn: {
+                    return DApplication::translate("Process.Table.Header", kProcessCPU);
+                }
                 case kProcessUserColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessUser);
+                    return DApplication::translate("Process.Table.Header", kProcessUser);
                 case kProcessMemoryColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessMemory);
+                    return DApplication::translate("Process.Table.Header", kProcessMemory);
                 case kProcessUploadColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessUpload);
+                    return DApplication::translate("Process.Table.Header", kProcessUpload);
                 case kProcessDownloadColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessDownload);
+                    return DApplication::translate("Process.Table.Header", kProcessDownload);
                 case kProcessDiskReadColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessDiskRead);
+                    return DApplication::translate("Process.Table.Header", kProcessDiskRead);
                 case kProcessDiskWriteColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessDiskWrite);
+                    return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
                 case kProcessPIDColumn:
                     //                    return DApplication::translate("Service.Table.Header",
                     //                    kProcessPID);
@@ -241,6 +243,12 @@ Qt::ItemFlags ProcessTableModel::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+char ProcessTableModel::getProcessState(pid_t pid)
+{
+    int row = m_processMap.value(pid);
+    return m_processList.at(row).getState();
 }
 
 void ProcessTableModel::removeProcessEntry(pid_t pid)
