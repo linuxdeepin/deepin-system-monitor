@@ -55,6 +55,8 @@ void MainWindow::initUI()
     // kill process
     m_killAction = new QAction(
         DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
+    m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+    m_killAction->setShortcutVisibleInContextMenu(true);
     connect(m_killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
@@ -167,6 +169,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             } else {
                 showMaximized();
             }
+            return true;
+        } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
+                   kev->key() == Qt::Key_K) {
+            Q_EMIT killProcessPerformed();
             return true;
         } else {
             return false;

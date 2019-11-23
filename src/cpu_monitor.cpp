@@ -139,10 +139,10 @@ void CpuMonitor::paintEvent(QPaintEvent *)
             iconImage = iconLightImage;
             break;
         case DApplicationHelper::DarkType:
-            ringForegroundColor = "#2CA7F8";
+            ringForegroundColor = "#0081FF";
             ringForegroundOpacity = 1;
 
-            ringBackgroundColor = "#2CA7F8";
+            ringBackgroundColor = "#FFFFFF";
             ringBackgroundOpacity = 0.1;
 
             iconImage = iconDarkImage;
@@ -197,6 +197,6 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor("#2CA7F8"), 2));
+    painter.setPen(QPen(QColor("#0081FF"), 1.2));
     painter.drawPath(cpuPath);
 }

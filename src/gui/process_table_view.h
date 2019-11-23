@@ -3,6 +3,7 @@
 
 #include <DLabel>
 #include <DTreeView>
+#include <QShortcut>
 
 #include "process/system_monitor.h"
 
@@ -59,6 +60,12 @@ private:
     ProcessTableHeaderView *m_headerView;
 
     QVariant m_selectedPID {};
+
+    QShortcut *m_endProcKP {nullptr};
+    QShortcut *m_pauseProcKP {nullptr};
+    QShortcut *m_resumeProcKP {nullptr};
+    QShortcut *m_viewPropKP {nullptr};
+    QShortcut *m_killProcKP {nullptr};
 };
 
 #endif  // PROCESS_TABLE_VIEW_H

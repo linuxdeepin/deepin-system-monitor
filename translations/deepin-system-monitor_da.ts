@@ -196,10 +196,6 @@ Er du sikker på, at du vil fortsætte?</translation>
         <translation type="unfinished">Afslut proces</translation>
     </message>
     <message>
-        <source>Terminate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
@@ -300,10 +296,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Summary</name>
     <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation type="unfinished">%2 programmer og %3 processer kører</translation>
-    </message>
-    <message>
         <source>(%1 applications and %2 processes are running)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -326,18 +318,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
-        <source>Terminate process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation type="unfinished">Suspender proces</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation type="unfinished">Genoptag proces</translation>
-    </message>
-    <message>
         <source>View command location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,19 +326,19 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">Egenskaber</translation>
     </message>
     <message>
-        <source>Force terminate process</source>
+        <source>&amp;End process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>End process</source>
-        <translation type="unfinished">Afslut proces</translation>
-    </message>
-    <message>
-        <source>Pause process</source>
+        <source>&amp;Pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process</source>
+        <source>Resume pro&amp;cess</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Kill process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -626,19 +606,19 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
-        <source>Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Restart</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

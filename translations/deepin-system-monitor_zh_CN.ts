@@ -196,10 +196,6 @@ Are you sure you want to continue?</source>
         <translation>结束进程</translation>
     </message>
     <message>
-        <source>Terminate</source>
-        <translation>结束</translation>
-    </message>
-    <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>强制结束进程会有丢失数据的风险。
@@ -301,10 +297,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Summary</name>
     <message>
-        <source>%2 applications and %3 processes are running</source>
-        <translation>正在运行%2个应用程序和%3个系统进程</translation>
-    </message>
-    <message>
         <source>(%1 applications and %2 processes are running)</source>
         <translation>(正在运行%1个应用程序和%2个系统进程)</translation>
     </message>
@@ -327,18 +319,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
-        <source>Terminate process</source>
-        <translation>结束进程</translation>
-    </message>
-    <message>
-        <source>Suspend process</source>
-        <translation>暂停进程</translation>
-    </message>
-    <message>
-        <source>Resume process</source>
-        <translation>恢复进程</translation>
-    </message>
-    <message>
         <source>View command location</source>
         <translation>查看命令所在位置</translation>
     </message>
@@ -347,20 +327,20 @@ Are you sure you want to continue?</source>
         <translation>属性</translation>
     </message>
     <message>
-        <source>Force terminate process</source>
-        <translation>强制结束进程</translation>
+        <source>&amp;End process</source>
+        <translation>结束进程(&amp;E)</translation>
     </message>
     <message>
-        <source>End process</source>
-        <translation>结束进程</translation>
+        <source>&amp;Pause process</source>
+        <translation>暂停进程(&amp;P)</translation>
     </message>
     <message>
-        <source>Pause process</source>
-        <translation>暂停进程</translation>
+        <source>Resume pro&amp;cess</source>
+        <translation>恢复进程(&amp;C)</translation>
     </message>
     <message>
-        <source>Kill process</source>
-        <translation>强制结束进程</translation>
+        <source>&amp;Kill process</source>
+        <translation>强制结束进程(&amp;K)</translation>
     </message>
 </context>
 <context>
@@ -627,20 +607,20 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
-        <source>Start</source>
-        <translation>启动</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation>停止</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>重新启动</translation>
-    </message>
-    <message>
         <source>Refresh</source>
         <translation>刷新</translation>
+    </message>
+    <message>
+        <source>&amp;Start</source>
+        <translation>启动(&amp;S)</translation>
+    </message>
+    <message>
+        <source>S&amp;top</source>
+        <translation>停止(&amp;T)</translation>
+    </message>
+    <message>
+        <source>&amp;Restart</source>
+        <translation>重新启动(&amp;R)</translation>
     </message>
 </context>
 <context>

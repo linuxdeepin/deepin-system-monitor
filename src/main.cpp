@@ -78,10 +78,12 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(defaultMessageOutput);
 
+    DApplication::setAttribute(Qt::AA_DontShowShortcutsInContextMenus, false);
+    DApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     if (DGuiApplicationHelper::setSingleInstance(QString("system-monitor"),
                                                  DGuiApplicationHelper::UserScope)) {
@@ -96,7 +98,7 @@ int main(int argc, char *argv[])
             "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
 
         app.setOrganizationName("deepin");
-        app.setApplicationName("system-monitor");
+        app.setApplicationName("deepin-system-monitor");
         app.setApplicationDisplayName(DApplication::translate("App.About", "System Monitor"));
         app.setApplicationVersion(DApplication::buildVersion("1.0"));
 

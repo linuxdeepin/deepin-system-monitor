@@ -118,20 +118,28 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     m_contextMenu = new DMenu(this);
     // start service
     QAction *startServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "&Start"));
+    startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
+    startServiceAction->setShortcutVisibleInContextMenu(true);
     connect(startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
     // stop service
     QAction *stopServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "S&top"));
+    stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
+    stopServiceAction->setShortcutVisibleInContextMenu(true);
     connect(stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
     // restart service
     QAction *restartServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "&Restart"));
+    restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
+    restartServiceAction->setShortcutVisibleInContextMenu(true);
     connect(restartServiceAction, &QAction::triggered, this,
             &SystemServiceTableView::restartService);
     // refresh context menu item
     QAction *refreshAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
+    refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
+    refreshAction->setShortcutVisibleInContextMenu(true);
     connect(refreshAction, &QAction::triggered, this, &SystemServiceTableView::refresh);
 
     // >>> header context menu
@@ -208,6 +216,15 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         b = header()->isSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn);
         pidHeaderAction->setChecked(!b);
     });
+
+    m_refreshKP = new QShortcut(QKeySequence(QKeySequence::Refresh), this);
+    connect(m_refreshKP, &QShortcut::activated, this, &SystemServiceTableView::refresh);
+    m_startKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this);
+    connect(m_startKP, &QShortcut::activated, this, &SystemServiceTableView::startService);
+    m_stopKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_T), this);
+    connect(m_stopKP, &QShortcut::activated, this, &SystemServiceTableView::stopService);
+    m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
+    connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 }
 
 SystemServiceTableView::~SystemServiceTableView()
@@ -422,6 +439,17 @@ void SystemServiceTableView::stopService()
         if (deleteItem) {
             getSourceModel()->removeServiceEntry(rowIndex);
         } else {
+            entry.setId(opt.getId());
+            entry.setLoadState(opt.getLoadState());
+            entry.setActiveState(opt.getActiveState());
+            entry.setSubState(opt.getSubState());
+            entry.setState(opt.getState());
+            entry.setUnitObjectPath(opt.getUnitObjectPath());
+            entry.setDescription(opt.getDescription());
+            entry.setMainPID(opt.getMainPID());
+            entry.setCanReload(opt.getCanReload());
+            entry.setCanStop(opt.getCanStop());
+            entry.setCanStart(opt.getCanStart());
             getSourceModel()->updateServiceEntry(row);
         }
     }

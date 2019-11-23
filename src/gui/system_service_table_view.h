@@ -3,6 +3,7 @@
 
 #include <DLabel>
 #include <DTreeView>
+#include <QShortcut>
 
 DWIDGET_USE_NAMESPACE
 
@@ -37,8 +38,10 @@ protected Q_SLOTS:
     void displayTableContextMenu(const QPoint &);
     virtual bool loadSettings();
     virtual void saveSettings();
-    void resizeEvent(QResizeEvent *event) override;
+
+protected:
     int sizeHintForColumn(int) const override;
+    void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
 Q_SIGNALS:
@@ -61,6 +64,11 @@ private:
     SystemServiceItemDelegate *m_itemDelegate;
     SystemServiceTableHeaderView *m_headerDelegate;
     QTimer *m_timer;
+
+    QShortcut *m_refreshKP;
+    QShortcut *m_startKP;
+    QShortcut *m_stopKP;
+    QShortcut *m_restartKP;
 };
 
 #endif  // SYSTEM_SERVICE_TABLE_VIEW_H

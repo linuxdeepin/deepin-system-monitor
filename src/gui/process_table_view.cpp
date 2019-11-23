@@ -43,6 +43,8 @@ ProcessTableView::ProcessTableView(DWidget *parent)
 
     initUI(settingsLoaded);
     initConnections(settingsLoaded);
+
+    //    installEventFilter(this);
 }
 
 ProcessTableView::~ProcessTableView()
@@ -296,15 +298,21 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             &ProcessTableView::displayProcessTableContextMenu);
     // end process
     auto *endProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "End process"));
+        DApplication::translate("Process.Table.Context.Menu", "&End process"));
+    endProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_E));
+    endProcAction->setShortcutVisibleInContextMenu(true);
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
     // pause process
     auto *pauseProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Pause process"));
+        DApplication::translate("Process.Table.Context.Menu", "&Pause process"));
+    pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
+    pauseProcAction->setShortcutVisibleInContextMenu(true);
     connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
     // resume process
     auto *resumeProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Resume process"));
+        DApplication::translate("Process.Table.Context.Menu", "Resume pro&cess"));
+    resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
+    resumeProcAction->setShortcutVisibleInContextMenu(true);
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
     // show exec location
     auto *openExecDirAction = m_contextMenu->addAction(
@@ -313,11 +321,15 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     // show property
     auto *showAttrAction = m_contextMenu->addAction(
         DApplication::translate("Process.Table.Context.Menu", "Properties"));
+    showAttrAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Enter));
+    showAttrAction->setShortcutVisibleInContextMenu(true);
     connect(showAttrAction, &QAction::triggered, this, &ProcessTableView::showProperties);
     m_contextMenu->addSeparator();
     // kill process
     auto *killProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Kill process"));
+        DApplication::translate("Process.Table.Context.Menu", "&Kill process"));
+    killProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_K));
+    killProcAction->setShortcutVisibleInContextMenu(true);
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
     connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
@@ -439,6 +451,17 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             }
         }
     });
+
+    m_endProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_E), this);
+    connect(m_endProcKP, &QShortcut::activated, this, &ProcessTableView::endProcess);
+    m_pauseProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_P), this);
+    connect(m_pauseProcKP, &QShortcut::activated, this, &ProcessTableView::pauseProcess);
+    m_resumeProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_C), this);
+    connect(m_resumeProcKP, &QShortcut::activated, this, &ProcessTableView::resumeProcess);
+    m_viewPropKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Return), this);
+    connect(m_viewPropKP, &QShortcut::activated, this, &ProcessTableView::showProperties);
+    m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
+    connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
 }
 
 void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)
