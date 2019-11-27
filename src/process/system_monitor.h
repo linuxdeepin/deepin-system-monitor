@@ -3,6 +3,8 @@
 
 #include <proc/readproc.h>
 #include <proc/sysinfo.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <mutex>
 #include <thread>
 
@@ -70,6 +72,11 @@ public Q_SLOTS:
     void pauseProcess(pid_t pid);
     void resumeProcess(pid_t pid);
     void killProcess(pid_t pid);
+    inline bool isSelfProcess(pid_t pid)
+    {
+        pid_t cur = getpid();
+        return pid == cur;
+    }
 
 private:
     SystemMonitor(QObject *parent = nullptr);

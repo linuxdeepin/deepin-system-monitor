@@ -45,6 +45,7 @@ protected:
 
     void selectionChanged(const QItemSelection &selected,
                           const QItemSelection &deselected) override;
+    int sizeHintForColumn(int column) const override;
 
 private:
     void adjustInfoLabelVisibility();

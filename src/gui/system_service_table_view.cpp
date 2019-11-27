@@ -304,9 +304,7 @@ void SystemServiceTableView::displayTableContextMenu(const QPoint &p)
 
     QPoint point = mapToGlobal(p);
     // when popup context menu for items, take table header height into consideration
-    point.setY(point.y() +
-               model()->headerData(0, Qt::Horizontal, Qt::SizeHintRole).toSize().height());
-    // TODO: context menu enable status rule
+    point.setY(point.y() + header()->sizeHint().height());
     m_contextMenu->popup(point);
 }
 
@@ -503,9 +501,13 @@ void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 
 int SystemServiceTableView::sizeHintForColumn(int column) const
 {
-    int size = DTreeView::sizeHintForColumn(column);
-    // TODO: padding problem
-    return size + 32;
+    QStyleOptionHeader option;
+    option.initFrom(this);
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
+    return std::max(header()->sizeHintForColumn(column) + margin * 2,
+                    DTreeView::sizeHintForColumn(column) + margin * 2);
 }
 
 void SystemServiceTableView::refresh()

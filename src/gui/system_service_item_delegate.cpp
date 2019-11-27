@@ -34,11 +34,14 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
+#ifdef ENABLE_INACTIVE_DISPLAY
     QWidget *wnd = DApplication::activeWindow();
+#endif
     DPalette::ColorGroup cg;
     if (!(opt.state & DStyle::State_Enabled)) {
         cg = DPalette::Disabled;
     } else {
+#ifdef ENABLE_INACTIVE_DISPLAY
         if (!wnd) {
             cg = DPalette::Inactive;
         } else {
@@ -48,6 +51,9 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
                 cg = DPalette::Active;
             }
         }
+#else
+        cg = DPalette::Active;
+#endif
     }
 
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
@@ -114,7 +120,7 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
 
     textRect = rect;
     textRect.setX(textRect.x() + margin);
-    textRect.setWidth(textRect.width() - margin * 2);
+    textRect.setWidth(textRect.width() - margin);
     QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
 
     painter->fillPath(path, background);

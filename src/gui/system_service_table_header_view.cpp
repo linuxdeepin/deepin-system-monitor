@@ -24,13 +24,17 @@ void SystemServiceTableHeaderView::paintSection(QPainter *painter, const QRect &
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(1);
 
-    QWidget *wnd = DApplication::activeWindow();
     DPalette::ColorGroup cg;
+#ifdef ENABLE_INACTIVE_DISPLAY
+    QWidget *wnd = DApplication::activeWindow();
     if (!wnd) {
         cg = DPalette::Inactive;
     } else {
         cg = DPalette::Active;
     }
+#else
+    cg = DPalette::Active;
+#endif
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
@@ -63,11 +67,20 @@ void SystemServiceTableHeaderView::paintSection(QPainter *painter, const QRect &
         painter->fillRect(vSpacingRect, vSpacingBrush);
     }
 
+    QPen forground;
+    forground.setColor(palette.color(cg, DPalette::Text));
     // TODO: dropdown icon (8x5)
-    QRect textRect(contentRect.x() + margin, contentRect.y(), contentRect.width() - margin * 3 - 8,
-                   contentRect.height());
+    QRect textRect;
+    if (sortIndicatorSection() == logicalIndex) {
+        textRect = {contentRect.x() + margin, contentRect.y(), contentRect.width() - margin * 3 - 8,
+                    contentRect.height()};
+    } else {
+        textRect = {contentRect.x() + margin, contentRect.y(), contentRect.width() - margin,
+                    contentRect.height()};
+    }
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     int align = model()->headerData(logicalIndex, orientation(), Qt::TextAlignmentRole).toInt();
+    painter->setPen(forground);
     painter->drawText(textRect, static_cast<int>(align), title);
 
     // sort indicator
@@ -91,13 +104,17 @@ void SystemServiceTableHeaderView::paintEvent(QPaintEvent *event)
     QPainter painter(viewport());
     painter.save();
 
-    QWidget *wnd = DApplication::activeWindow();
     DPalette::ColorGroup cg;
+#ifdef ENABLE_INACTIVE_DISPLAY
+    QWidget *wnd = DApplication::activeWindow();
     if (!wnd) {
         cg = DPalette::Inactive;
     } else {
         cg = DPalette::Active;
     }
+#else
+    cg = DPalette::Active;
+#endif
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
@@ -126,6 +143,21 @@ void SystemServiceTableHeaderView::paintEvent(QPaintEvent *event)
 
 QSize SystemServiceTableHeaderView::sizeHint() const
 {
-    QSize size = sectionSizeFromContents(0);
-    return QSize(size.width(), size.height() + m_spacing);
+    return QSize(width(), 36 + m_spacing);
+}
+
+int SystemServiceTableHeaderView::sectionSizeHint(int logicalIndex) const
+{
+    QStyleOptionHeader option;
+    initStyleOption(&option);
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
+    QFontMetrics fm(DApplication::font());
+    QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
+    if (sortIndicatorSection() == logicalIndex) {
+        return fm.width(buf) + margin * 3 + 8;
+    } else {
+        return fm.width(buf) + margin * 2;
+    }
 }

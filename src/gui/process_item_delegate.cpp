@@ -32,11 +32,14 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
+#ifdef ENABLE_INACTIVE_DISPLAY
     QWidget *wnd = DApplication::activeWindow();
+#endif
     DPalette::ColorGroup cg;
     if (!(opt.state & DStyle::State_Enabled)) {
         cg = DPalette::Disabled;
     } else {
+#ifdef ENABLE_INACTIVE_DISPLAY
         if (!wnd) {
             cg = DPalette::Inactive;
         } else {
@@ -46,6 +49,9 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
                 cg = DPalette::Active;
             }
         }
+#else
+        cg = DPalette::Active;
+#endif
     }
 
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
@@ -114,8 +120,8 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     QRect iconRect;
     if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
         textRect = rect;
-        textRect.setX(textRect.x() + margin + 34);
-        textRect.setWidth(textRect.width() - margin * 2);
+        textRect.setX(textRect.x() + margin * 2 + 24);
+        textRect.setWidth(textRect.width() - margin);
         text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
 
         iconRect = rect;
@@ -124,7 +130,7 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     } else {
         textRect = rect;
         textRect.setX(textRect.x() + margin);
-        textRect.setWidth(textRect.width() - margin * 2);
+        textRect.setWidth(textRect.width() - margin);
         text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
     }
 

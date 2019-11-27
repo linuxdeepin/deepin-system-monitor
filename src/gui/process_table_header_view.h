@@ -14,6 +14,7 @@ public:
     explicit ProcessTableHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
+    int sectionSizeHint(int logicalIndex) const;
 
     inline int getSpacing() const { return m_spacing; }
     inline void setSpacing(int spacing) { m_spacing = spacing; }

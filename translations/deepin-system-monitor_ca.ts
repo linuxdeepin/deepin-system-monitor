@@ -180,6 +180,29 @@
     </message>
 </context>
 <context>
+    <name>Help.Shortcut.System</name>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show shortcut preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximize / Restore window</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Kill.Process.Dialog</name>
     <message>
         <source>Ending this process may cause data loss.

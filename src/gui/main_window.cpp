@@ -5,6 +5,10 @@
 #include <DTitlebar>
 #include <QDebug>
 #include <QHBoxLayout>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QProcess>
 
 #include "constant.h"
 #include "main_window.h"
@@ -27,6 +31,125 @@ MainWindow::MainWindow(DWidget *parent)
 
 MainWindow::~MainWindow() {}
 
+void MainWindow::displayShortcutHelpDialog()
+{
+    QRect rect = window()->geometry();
+    QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+
+    QJsonObject shortcutObj;
+    QJsonArray jsonGroups;
+
+    QJsonObject sysObj;
+    sysObj.insert("groupName", DApplication::translate("Help.Shortcut.System", "System"));
+    QJsonArray sysObjArr;
+
+    QJsonObject helpItem;
+    helpItem.insert("name", DApplication::translate("Help.Shortcut.System", "Help"));
+    helpItem.insert("value", "F1");
+    sysObjArr.append(helpItem);
+
+    QJsonObject closeItem;
+    closeItem.insert("name", DApplication::translate("Help.Shortcut.System", "Close application"));
+    closeItem.insert("value", "Alt+F4");
+    sysObjArr.append(closeItem);
+
+    QJsonObject shortcutItem;
+    shortcutItem.insert("name",
+                        DApplication::translate("Help.Shortcut.System", "Show shortcut preview"));
+    shortcutItem.insert("value", "Ctrl+Shift+/");
+    sysObjArr.append(shortcutItem);
+
+    QJsonObject jsonItem;
+    jsonItem.insert("name",
+                    DApplication::translate("Help.Shortcut.System", "Maximize / Restore window"));
+    jsonItem.insert("value", "Ctrl+Alt+F");
+    sysObjArr.append(jsonItem);
+
+    QJsonObject searchItem;
+    searchItem.insert("name", DApplication::translate("Title.Bar.Search", "Search"));
+    searchItem.insert("value", "Ctrl+F");
+    sysObjArr.append(searchItem);
+
+    sysObj.insert("groupItems", sysObjArr);
+    jsonGroups.append(sysObj);
+
+    QJsonObject procObj;
+    procObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Process"));
+    QJsonArray procObjArr;
+
+    QJsonObject killAppItem;
+    killAppItem.insert("name",
+                       DApplication::translate("Title.Bar.Context.Menu", "Force end application"));
+    killAppItem.insert("value", "Ctrl+Alt+K");
+    procObjArr.append(killAppItem);
+
+    QJsonObject endProcItem;
+    endProcItem.insert("name",
+                       DApplication::translate("Process.Table.Context.Menu", "End process"));
+    endProcItem.insert("value", "Alt+E");
+    procObjArr.append(endProcItem);
+    QJsonObject pauseProcItem;
+    pauseProcItem.insert("name",
+                         DApplication::translate("Process.Table.Context.Menu", "Pause process"));
+    pauseProcItem.insert("value", "Alt+P");
+    procObjArr.append(pauseProcItem);
+    QJsonObject resumeProcItem;
+    resumeProcItem.insert("name",
+                          DApplication::translate("Process.Table.Context.Menu", "Resume process"));
+    resumeProcItem.insert("value", "Alt+C");
+    procObjArr.append(resumeProcItem);
+    QJsonObject propItem;
+    propItem.insert("name", DApplication::translate("Process.Table.Context.Menu", "Properties"));
+    propItem.insert("value", "Alt+Enter");
+    procObjArr.append(propItem);
+    QJsonObject killProcItem;
+    killProcItem.insert("name",
+                        DApplication::translate("Process.Table.Context.Menu", "Kill process"));
+    killProcItem.insert("value", "Alt+K");
+    procObjArr.append(killProcItem);
+
+    procObj.insert("groupItems", procObjArr);
+    jsonGroups.append(procObj);
+
+    QJsonObject svcObj;
+    svcObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Service"));
+    QJsonArray svcObjArr;
+
+    QJsonObject startSvcItem;
+    startSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Start"));
+    startSvcItem.insert("value", "Alt+S");
+    svcObjArr.append(startSvcItem);
+    QJsonObject stopSvcItem;
+    stopSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Stop"));
+    stopSvcItem.insert("value", "Alt+T");
+    svcObjArr.append(stopSvcItem);
+    QJsonObject restartSvcItem;
+    restartSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Restart"));
+    restartSvcItem.insert("value", "Alt+R");
+    svcObjArr.append(restartSvcItem);
+    QJsonObject refreshSvcItem;
+    refreshSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Refresh"));
+    refreshSvcItem.insert("value", "F5");
+    svcObjArr.append(refreshSvcItem);
+
+    svcObj.insert("groupItems", svcObjArr);
+    jsonGroups.append(svcObj);
+
+    shortcutObj.insert("shortcut", jsonGroups);
+
+    QJsonDocument doc(shortcutObj);
+
+    QProcess *shortcutViewProcess = new QProcess();
+    QStringList shortcutString;
+    QString param1 = "-j=" + QString(doc.toJson().data());
+    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+    shortcutString << param1 << param2;
+
+    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+
+    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+}
+
 void MainWindow::initUI()
 {
     // Init window size.
@@ -43,12 +166,10 @@ void MainWindow::initUI()
 
     resize(width, height);
 
-    // ========title bar===========
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
     m_toolbar = new Toolbar(this, this);
     titlebar()->setCustomWidget(m_toolbar);
 
-    // ========add custom menu items===========
     DMenu *menu = new DMenu();
     titlebar()->setMenu(menu);
 
@@ -104,7 +225,6 @@ void MainWindow::initUI()
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             [=]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
 
-    // ========stack view==========
     m_pages = new DStackedWidget(this);
     m_procPage = new ProcessPageWidget(m_pages);
     m_svcPage = new SystemServicePageWidget(m_pages);
@@ -174,6 +294,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
                    kev->key() == Qt::Key_K) {
             Q_EMIT killProcessPerformed();
+            return true;
+        } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) &&
+                   kev->key() == Qt::Key_Question) {
+            displayShortcutHelpDialog();
             return true;
         } else {
             return false;

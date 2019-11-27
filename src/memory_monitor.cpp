@@ -142,7 +142,9 @@ void MemoryMonitor::changeFont(const QFont &font)
     m_titleFont.setPointSize(m_titleFont.pointSize() + 12);
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
+    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
     m_subContentFont = font;
+    m_subContentFont.setPointSize(m_subContentFont.pointSize() - 1);
     m_memPercentFont = font;
     m_memPercentFont.setPointSize(m_memPercentFont.pointSize());
     m_memPercentFont.setBold(true);
@@ -199,7 +201,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setFont(m_titleFont);
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
 
-    int spacing = 6;
+    int spacing = 10;
     int sectionSize = 6;
 
     // Draw memory summary.
@@ -220,7 +222,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         swapTitle = QString("%1(%2%)")
                         .arg(DApplication::translate("Process.Graph.View", "Swap"))
                         .arg(QString::number(swapPercent * 100, 'f', 1));
-        swapContent = QString("%2/%3")
+        swapContent = QString("%1/%2")
                           .arg(formatByteCount(qulonglong(usedSwap), false, 2))
                           .arg(formatByteCount(qulonglong(totalSwap), true, 0));
     }
@@ -241,7 +243,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     m_contentFont.setWeight(QFont::Medium);
     painter.setFont(m_contentFont);
     painter.setPen(QPen(textColor));
-    painter.drawText(memRect, memoryTitle);
+    painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter, memoryTitle);
 
     painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
@@ -266,7 +268,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(textColor));
     painter.drawText(swapRect, swapTitle);
 
-    m_subContentFont.setWeight(QFont::Medium);
     painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
     painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
@@ -288,6 +289,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius,
                            rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
                            insideRingRadius * 2),
-                     Qt::AlignCenter,
+                     Qt::AlignHCenter | Qt::AlignVCenter,
                      QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
 }

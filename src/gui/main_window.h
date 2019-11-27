@@ -53,6 +53,8 @@ public Q_SLOTS:
         initConnections();
     }
 
+    void displayShortcutHelpDialog();
+
 protected:
     void initUI();
     void initConnections();

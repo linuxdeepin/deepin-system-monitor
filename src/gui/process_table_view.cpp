@@ -333,14 +333,20 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 
     connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
         bool b = true;
+        auto *sysmon = SystemMonitor::instance();
         if (m_selectedPID.isValid()) {
-            char state = m_model->getProcessState(qvariant_cast<pid_t>(m_selectedPID));
+            pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
+            char state = m_model->getProcessState(pid);
             if (state == 'T') {
                 b = false;
             } else if (state == 'R') {
                 b = true;
             }
-            pauseProcAction->setEnabled(b);
+            bool b2 = b;
+            if (sysmon) {
+                b2 = b2 & !sysmon->isSelfProcess(pid);
+            }
+            pauseProcAction->setEnabled(b2);
             resumeProcAction->setEnabled(!b);
         }
     });
@@ -469,9 +475,7 @@ void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)
         return;
 
     QPoint point = mapToGlobal(p);
-    point.setY(point.y() +
-               model()->headerData(0, Qt::Horizontal, Qt::SizeHintRole).toSize().height());
-    // TODO: context menu enable status rule
+    point.setY(point.y() + header()->sizeHint().height());
     m_contextMenu->popup(point);
 }
 
@@ -539,6 +543,17 @@ void ProcessTableView::selectionChanged(const QItemSelection &selected,
     m_selectedPID = selected.indexes().value(ProcessTableModel::kProcessPIDColumn).data();
 
     DTreeView::selectionChanged(selected, deselected);
+}
+
+int ProcessTableView::sizeHintForColumn(int column) const
+{
+    QStyleOptionHeader option;
+    option.initFrom(this);
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
+    return std::max(header()->sizeHintForColumn(column) + margin * 2,
+                    DTreeView::sizeHintForColumn(column) + margin * 2);
 }
 
 void ProcessTableView::adjustInfoLabelVisibility()

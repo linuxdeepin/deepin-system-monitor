@@ -1,6 +1,7 @@
 #include <DApplication>
 #include <QDebug>
 #include <QIcon>
+#include <QStyleOption>
 
 #include "process/system_monitor.h"
 #include "process_table_model.h"
@@ -119,23 +120,6 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     } else if (role == Qt::InitialSortOrderRole) {
         return QVariant::fromValue(Qt::DescendingOrder);
-    } else if (role == Qt::SizeHintRole) {
-        QModelIndex idx;
-        int maxWidth = 0;
-        for (int row = 0; row < rowCount(); row++) {
-            QVariant v = {};
-
-            idx = index(row, section);
-            if (idx.isValid())
-                v = idx.data(Qt::SizeHintRole);
-
-            if (v.isValid()) {
-                if (maxWidth < v.toSize().width())
-                    maxWidth = v.toSize().width();
-            }
-        }
-        // TODO: fix size hint
-        return {QSize(maxWidth + 10 * 3 + 8, 36 + 1)};
     }
     return QAbstractTableModel::headerData(section, orientation, role);
 }
@@ -228,10 +212,6 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
-    } else if (role == Qt::SizeHintRole) {
-        QFont font = DApplication::font();
-        QFontMetrics fm(font);
-        return QSize(fm.boundingRect(data(index).toString()).width(), 32);
     }
     return {};
 }
