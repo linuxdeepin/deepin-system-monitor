@@ -48,41 +48,45 @@ public slots:
     void render();
     void updateStatus(qreal cpuPercent, QVector<qreal> cPercents);
 
+private:
+    void changeFont(const QFont &font);
+
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
     QPixmap iconImage;
-    QPixmap iconLightImage;
-    QPixmap iconDarkImage;
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
     QColor numberColor;
     QColor ringBackgroundColor;
-    QColor ringForegroundColor;
+    QColor ringForegroundColor {"#0081FF"};
     QColor textColor;
     QTimer *timer;
     double animationFrames = 20;
-    double ringBackgroundOpacity;
-    double ringForegroundOpacity;
+    double ringBackgroundOpacity = 0.1;
+    double ringForegroundOpacity = 1;
     int animationIndex = 0;
     int cpuRenderMaxHeight = 45;
     int iconPadding = 0;
-    int iconRenderOffsetY = 185;
+    int iconRenderOffsetY = 172;
     int paddingRight = 10;
-    int percentRenderOffsetY = 147;
-    int pointsNumber = 24;
+    int percentRenderOffsetY = 135;
+    int pointsNumber = 28;
     int ringRadius = 90;
     int ringRenderOffsetY = 90;
     int ringWidth = 8;
     int titleAreaPaddingX = 5;
-    int titleRenderOffsetY = 180;
+    int titleRenderOffsetY = 165;
     int waveformsRenderOffsetX;
     int waveformsRenderOffsetY = 100;
 
     DApplicationHelper::ColorType m_themeType;
 
     Settings *m_settings;
+
+    QFont m_cpuUsageFont;
+    QFont m_cpuDisplayFont;
 };
 
 #endif

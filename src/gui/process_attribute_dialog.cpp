@@ -3,6 +3,7 @@
 
 #include <DApplication>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 #include <DFrame>
 #include <DLabel>
 #include <DTitlebar>
@@ -83,9 +84,7 @@ void ProcessAttributeDialog::initUI()
     vlayout->addWidget(appIcon, 0, Qt::AlignVCenter | Qt::AlignHCenter);
     vlayout->addSpacing(16);
     auto *appNameLabel = new DLabel(this);
-    QFont fn = appNameLabel->font();
-    fn.setPointSize(fn.pointSize() + 2);
-    appNameLabel->setFont(fn);
+    DFontSizeManager::instance()->bind(appNameLabel, DFontSizeManager::T5, QFont::Bold);
     vlayout->addWidget(appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     vlayout->addSpacing(24);
     vlayout->addWidget(cw, 0, Qt::AlignVCenter | Qt::AlignHCenter);

@@ -25,7 +25,9 @@
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
+#include <DStyle>
 #include <QDebug>
+#include <QIcon>
 #include <QPainter>
 
 #include "constant.h"
@@ -42,11 +44,8 @@ using namespace Utils;
 CpuMonitor::CpuMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_dark.svg"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_cpu_light.svg"));
-
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    setFixedSize(statusBarMaxWidth, 250);
+    setFixedSize(statusBarMaxWidth, 240);
     waveformsRenderOffsetX = (statusBarMaxWidth - 140) / 2;
 
     cpuPercents = new QList<double>();
@@ -61,11 +60,16 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
     m_themeType = dAppHelper->themeType();
+    changeTheme(m_themeType);
 
     auto *sysmon = SystemMonitor::instance();
     if (sysmon) {
         connect(sysmon, &SystemMonitor::cpuStatInfoUpdated, this, &CpuMonitor::updateStatus);
     }
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &CpuMonitor::changeFont);
 }
 
 CpuMonitor::~CpuMonitor()
@@ -77,6 +81,27 @@ CpuMonitor::~CpuMonitor()
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
     m_themeType = themeType;
+
+    switch (m_themeType) {
+        case DApplicationHelper::LightType:
+            ringBackgroundColor = "#000000";
+            iconImage = QIcon(":/image/light/icon_cpu_light.svg").pixmap(QSize(24, 24));
+            break;
+        case DApplicationHelper::DarkType:
+            ringBackgroundColor = "#FFFFFF";
+            iconImage = QIcon(":/image/dark/icon_cpu_light.svg").pixmap(QSize(24, 24));
+            break;
+        default:
+            break;
+    }
+
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    textColor = palette.color(DPalette::Text);
+    numberColor = palette.color(DPalette::Text);
+
+    update();
 }
 
 void CpuMonitor::render()
@@ -109,9 +134,10 @@ void CpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal>)
 
     for (int i = 0; i < cpuPercents->size(); i++) {
         if (cpuMaxHeight < cpuRenderMaxHeight) {
-            points.append(QPointF(i * 5, cpuPercents->at(i)));
+            points.append(QPointF(i * 5 - 8, cpuPercents->at(i)));
         } else {
-            points.append(QPointF(i * 5, cpuPercents->at(i) * cpuRenderMaxHeight / cpuMaxHeight));
+            points.append(
+                QPointF(i * 5 - 8, cpuPercents->at(i) * cpuRenderMaxHeight / cpuMaxHeight));
         }
     }
 
@@ -123,80 +149,56 @@ void CpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal>)
     }
 }
 
+void CpuMonitor::changeFont(const QFont &font)
+{
+    m_cpuUsageFont = font;
+    m_cpuUsageFont.setBold(true);
+    m_cpuUsageFont.setPointSize(m_cpuUsageFont.pointSize() + 3);
+    m_cpuDisplayFont = font;
+    m_cpuDisplayFont.setPointSize(m_cpuDisplayFont.pointSize() + 12);
+}
+
 void CpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    switch (m_themeType) {
-        case DApplicationHelper::LightType:
-            ringForegroundColor = "#2CA7F8";
-            ringForegroundOpacity = 1;
+    auto *style = dynamic_cast<DStyle *>(DApplication::style());
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-            ringBackgroundColor = "#000000";
-            ringBackgroundOpacity = 0.05;
-
-            iconImage = iconLightImage;
-            break;
-        case DApplicationHelper::DarkType:
-            ringForegroundColor = "#0081FF";
-            ringForegroundOpacity = 1;
-
-            ringBackgroundColor = "#FFFFFF";
-            ringBackgroundOpacity = 0.1;
-
-            iconImage = iconDarkImage;
-            break;
-        default:
-            break;
-    }
-
-    // init colors
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    // TODO: change color
-    textColor = palette.color(DPalette::Text);
-    numberColor = palette.color(DPalette::Text);
-
-    QFont font = painter.font();
-    font.setPointSize(20);
-    font.setWeight(QFont::Light);
-
-    QFontMetrics fm(font);
+    QFontMetrics fm(m_cpuDisplayFont);
     int titleWidth = fm.width(DApplication::translate("Process.Graph.View", "CPU"));
 
-    int iconTitleWidth = iconImage.width() + iconPadding + titleWidth;
-
-    painter.drawPixmap(QPoint((rect().x() + (rect().width() - iconTitleWidth) / 2) -
-                                  titleAreaPaddingX - paddingRight,
-                              iconRenderOffsetY),
-                       iconImage);
-
-    painter.setFont(font);
+    painter.setFont(m_cpuDisplayFont);
     painter.setPen(QPen(textColor));
-    painter.drawText(QRect((rect().x() + (rect().width() - iconTitleWidth) / 2) +
-                               iconImage.width() + iconPadding - titleAreaPaddingX - paddingRight,
-                           rect().y() + titleRenderOffsetY, titleWidth, 30),
-                     Qt::AlignCenter, DApplication::translate("Process.Graph.View", "CPU"));
+    QRect cpuDisplayRect(((rect().x() + rect().width() - titleWidth) / 2) - paddingRight,
+                         rect().y() + titleRenderOffsetY, titleWidth, fm.height());
+    painter.drawText(cpuDisplayRect, Qt::AlignCenter,
+                     DApplication::translate("Process.Graph.View", "CPU"));
+    QPoint iconPoint(cpuDisplayRect.x() - margin - iconImage.width() + 6,
+                     cpuDisplayRect.y() + (cpuDisplayRect.height() - iconImage.height()) / 2);
+    painter.drawPixmap(iconPoint, iconImage);
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) +
                       easeInOut(animationIndex / animationFrames) *
                           (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
 
-    setFontSize(painter, 15);
+    painter.setFont(m_cpuUsageFont);
     painter.setPen(QPen(numberColor));
     painter.drawText(
         QRect(rect().x() - paddingRight, rect().y() + percentRenderOffsetY, rect().width(), 30),
         Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
 
     drawLoadingRing(painter, rect().x() + rect().width() / 2 - paddingRight,
-                    rect().y() + ringRenderOffsetY, ringRadius, ringWidth, 300, 150,
+                    rect().y() + ringRenderOffsetY, ringRadius, ringWidth, 270, 135,
                     ringForegroundColor, ringForegroundOpacity, ringBackgroundColor,
                     ringBackgroundOpacity, percent / 100);
 
     painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(QColor("#0081FF"), 1.2));
+    painter.setPen(QPen(QColor("#0081FF"), 1.5));
     painter.drawPath(cpuPath);
 }

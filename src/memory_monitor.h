@@ -48,59 +48,53 @@ public slots:
     void render();
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
 
+private:
+    void changeFont(const QFont &font);
+
 protected:
     QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
 
     QPixmap iconImage;
-    QPixmap iconDarkImage;
-    QPixmap iconLightImage;
 
     QColor memoryBackgroundColor;
-    QColor memoryColor {"#FF2997"};
-    QColor memoryForegroundColor;
+    QColor memoryColor {"#00C5C0"};
+    QColor memoryForegroundColor {"#00C5C0"};
     QColor numberColor;
     QColor summaryColor;
     QColor swapBackgroundColor;
-    QColor swapColor {"#00B4C7"};
-    QColor swapForegroundColor;
+    QColor swapColor {"#FEDF19"};
+    QColor swapForegroundColor {"#FEDF19"};
     QColor textColor;
 
     QTimer *timer;
     QVBoxLayout *layout;
     double animationFrames = 20;
-    double memoryBackgroundOpacity;
-    double memoryForegroundOpacity;
-    double swapBackgroundOpacity;
-    double swapForegroundOpacity;
+    double memoryBackgroundOpacity = 0.1;
+    double memoryForegroundOpacity = 1.0;
+    double swapBackgroundOpacity = 0.1;
+    double swapForegroundOpacity = 1.0;
     int animationIndex = 0;
-    int iconRenderOffsetX = -5;
-    int iconRenderOffsetY = 10;
-    int insideRingRadius = 53;
-    int lineHeight = 16;
-    int memoryPercentRenderSize = 13;
-    int memoryRenderPaddingX = 13;
-    int memoryRenderPaddingY = 50;
-    int memoryRenderSize = 9;
-    int outsideRingRadius = 60;
+    int insideRingRadius = 41;
+    int outsideRingRadius = 48;
     int pointerRadius = 3;
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
     int ringCenterPointerX;
-    int ringCenterPointerY = 60;
+    int ringCenterPointerY = 70;
     int ringWidth = 6;
-    int swapRenderPaddingX = 13;
-    int swapRenderPaddingY = 90;
-    int swapRenderSize = 9;
-    int textPadding = 12;
-    int titleRenderOffsetX = 20;
-    int titleRenderSize = 20;
+
     long prevUsedMemory = 0;
     long prevUsedSwap = 0;
     long totalMemory = 0;
     long totalSwap = 0;
     long usedMemory = 0;
     long usedSwap = 0;
+
+    QFont m_titleFont;
+    QFont m_contentFont;
+    QFont m_subContentFont;
+    QFont m_memPercentFont;
 
     Settings *m_settings;
     DApplicationHelper::ColorType m_themeType;

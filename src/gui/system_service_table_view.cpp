@@ -1,5 +1,6 @@
 #include <DApplication>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 #include <DHeaderView>
 #include <DLabel>
 #include <DMenu>
@@ -33,11 +34,10 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     // >>> "not found" display label
     m_noMatchingResultLabel =
         new DLabel(DApplication::translate("Common.Search", "Not Found"), this);
-    QFont font = m_noMatchingResultLabel->font();
-    font.setPointSize(20);
-    m_noMatchingResultLabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
     auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
-    palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
+    QColor labelColor = palette.color(DPalette::ToolTipText);
+    palette.setColor(DPalette::Text, labelColor);
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
 
@@ -118,28 +118,24 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     m_contextMenu = new DMenu(this);
     // start service
     QAction *startServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "&Start"));
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
     startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
-    startServiceAction->setShortcutVisibleInContextMenu(true);
     connect(startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
     // stop service
     QAction *stopServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "S&top"));
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
     stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
-    stopServiceAction->setShortcutVisibleInContextMenu(true);
     connect(stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
     // restart service
     QAction *restartServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "&Restart"));
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
     restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
-    restartServiceAction->setShortcutVisibleInContextMenu(true);
     connect(restartServiceAction, &QAction::triggered, this,
             &SystemServiceTableView::restartService);
     // refresh context menu item
     QAction *refreshAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
     refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
-    refreshAction->setShortcutVisibleInContextMenu(true);
     connect(refreshAction, &QAction::triggered, this, &SystemServiceTableView::refresh);
 
     // >>> header context menu

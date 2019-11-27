@@ -122,9 +122,9 @@ QPixmap getProcessIcon(int pid, std::string desktopFile,
                        QScopedPointer<FindWindowTitle> &findWindowTitle, int iconSize);
 QSize getRenderSize(int fontSize, QString string);
 QString formatBandwidth(qulonglong v);
-QString formatByteCount(qulonglong v);
+QString formatByteCount(qulonglong v, bool showUnit = true, int prec = 1);
 QString formatMillisecond(int millisecond);
-QString formatUnitSize(qulonglong v, QStringList orders);
+QString formatUnitSize(qulonglong v, QStringList orders, bool showUnit = true, int prec = 1);
 QString getDisplayNameFromName(QString procName, std::string desktopFile,
                                bool displayProcessName = true);
 QString getImagePath(QString imageName);

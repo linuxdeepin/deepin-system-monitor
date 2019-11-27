@@ -25,9 +25,11 @@
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
+#include <DStyle>
 #include <QApplication>
 #include <QDebug>
 #include <QPainter>
+#include <QtMath>
 
 #include "constant.h"
 #include "network_monitor.h"
@@ -42,12 +44,16 @@ using namespace Utils;
 NetworkMonitor::NetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_dark.svg"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_network_light.svg"));
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *dAppHelper = DApplicationHelper::instance();
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    m_margin = margin;
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth);
-    setFixedHeight(190);
+    setFixedWidth(statusBarMaxWidth - margin * 2);
+    setFixedHeight(180);
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
@@ -61,14 +67,18 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
         uploadSpeeds->append(0);
     }
 
-    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
+    changeTheme(dAppHelper->themeType());
 
     auto *sysmon = SystemMonitor::instance();
     if (sysmon) {
         connect(sysmon, &SystemMonitor::networkStatInfoUpdated, this,
                 &NetworkMonitor::updateStatus);
     }
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &NetworkMonitor::changeFont);
 }
 
 NetworkMonitor::~NetworkMonitor()
@@ -81,14 +91,22 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
         case DApplicationHelper::LightType:
-            iconImage = iconLightImage;
+            iconImage = QIcon(":/image/light/icon_network_light.svg").pixmap(QSize(24, 24));
             break;
         case DApplicationHelper::DarkType:
-            iconImage = iconDarkImage;
+            iconImage = QIcon(":/image/dark/icon_network_light.svg").pixmap(QSize(24, 24));
             break;
         default:
             break;
     }
+
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    textColor = palette.color(DPalette::Text);
+    summaryColor = palette.color(DPalette::TextTips);
+    //    m_frameColor = palette.color(DPalette::FrameBorder);
+    m_frameColor = "#10FFFFFF";
 }
 
 void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs, float tSentKbs)
@@ -160,40 +178,93 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    // init colors
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    // TODO: change color
-    textColor = palette.color(DPalette::Text);
-    summaryColor = palette.color(DPalette::Text);
+    //    painter.fillRect(rect(), "#10f1ab35");
 
-    // Draw icon.
-    painter.drawPixmap(QPoint(iconRenderOffsetX, iconRenderOffsetY), iconImage);
+    int spacing = 6;
+    int sectionSize = 6;
+
+    QFontMetrics fmSection(m_sectionFont);
+    QString sectionTitle = DApplication::translate("Process.Graph.View", "Network");
 
     // Draw title.
-    QFont font = painter.font();
-    font.setPointSize(titleRenderSize);
-    font.setWeight(QFont::Light);
-    painter.setFont(font);
+    QRect titleRect(rect().x() + iconImage.width() + 4, rect().y(), fmSection.width(sectionTitle),
+                    fmSection.height());
+
+    painter.setFont(m_sectionFont);
     painter.setPen(QPen(textColor));
-    painter.drawText(QRect(rect().x() + titleRenderOffsetX, rect().y(),
-                           rect().width() - titleRenderOffsetX, rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop,
-                     DApplication::translate("Process.Graph.View", "Network"));
+    painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignTop, sectionTitle);
+
+    // Draw icon.
+    QRect iconRect(rect().x(),
+                   titleRect.y() + qCeil((titleRect.height() - iconImage.height()) / 2.),
+                   iconImage.width(), iconImage.height());
+    painter.drawPixmap(iconRect, iconImage);
+
+    // Draw network summary.
+    QString recvTitle = DApplication::translate("Process.Graph.View", "Download");
+    QString recvContent = formatBandwidth(totalRecvKbs);
+    QString recvTotalTitle = DApplication::translate("Process.Graph.View", "Total Received");
+    QString recvTotalContent = formatByteCount(totalRecvBytes);
+
+    QString sentTitle = DApplication::translate("Process.Graph.View", "Upload");
+    QString sentContent = formatBandwidth(totalSentKbs);
+    QString sentTotalTitle = DApplication::translate("Process.Graph.View", "Total Sent");
+    QString sentTotalContent = formatByteCount(totalSentBytes);
+
+    QFontMetrics fmContent(m_contentFont);
+    QFontMetrics fmSubContent(m_subContentFont);
+    int cw1 = std::max(fmContent.width(recvTitle), fmContent.width(sentTitle));
+    int cw2 = std::max(fmContent.width(recvContent), fmContent.width(sentContent));
+    int cw3 = std::max(fmContent.width(recvTotalTitle), fmContent.width(recvTotalTitle));
+    int cw4 = std::max(fmContent.width(recvTotalContent), fmContent.width(sentTotalContent));
+    QRect crect11(sectionSize * 2 + 4, titleRect.y() + titleRect.height() + spacing, cw1,
+                  fmContent.height());
+    QRect crect12(crect11.x() + cw1 + 4, crect11.y(), cw2, crect11.height());
+    QRect crect14(rect().width() - cw4, crect11.y(), cw4, crect11.height());
+    QRect crect13(crect14.x() - 4 - cw3, crect11.y(), cw3, crect11.height());
+    QRect crect21(crect11.x(), crect11.y() + crect11.height(), cw1, crect11.height());
+    QRect crect22(crect12.x(), crect21.y(), cw2, crect21.height());
+    QRect crect24(crect14.x(), crect21.y(), cw4, crect21.height());
+    QRect crect23(crect13.x(), crect21.y(), cw3, crect21.height());
+    QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - sectionSize) / 2.), sectionSize,
+                 sectionSize);
+    QRectF r2Ind(3, crect21.y() + qCeil((crect21.height() - sectionSize) / 2.), sectionSize,
+                 sectionSize);
+
+    painter.setPen(textColor);
+    painter.setFont(m_contentFont);
+    painter.drawText(crect11, Qt::AlignLeft | Qt::AlignVCenter, recvTitle);
+    painter.drawText(crect21, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
+    painter.drawText(crect13, Qt::AlignLeft | Qt::AlignVCenter, recvTotalTitle);
+    painter.drawText(crect23, Qt::AlignLeft | Qt::AlignVCenter, sentTotalTitle);
+
+    painter.setPen(summaryColor);
+    painter.setFont(m_subContentFont);
+    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter, recvContent);
+    painter.drawText(crect22, Qt::AlignLeft | Qt::AlignVCenter, sentContent);
+    painter.drawText(crect14, Qt::AlignLeft | Qt::AlignVCenter, recvTotalContent);
+    painter.drawText(crect24, Qt::AlignLeft | Qt::AlignVCenter, sentTotalContent);
+
+    QPainterPath path1, path2;
+    path1.addEllipse(r1Ind);
+    path2.addEllipse(r2Ind);
+
+    painter.fillPath(path1, m_recvIndicatorColor);
+    painter.fillPath(path2, m_sentIndicatorColor);
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
-    painter.setOpacity(0.1);
-    framePen.setColor(textColor);
+    framePen.setColor(m_frameColor);
     framePen.setWidth(1);
     painter.setPen(framePen);
 
     int penSize = 1;
-    int gridX = rect().x() + penSize;
-    int gridY = rect().y() + gridRenderOffsetY + gridPaddingTop;
-    int gridWidth = rect().width() - gridPaddingRight - penSize * 2;
-    int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + waveformRenderPadding;
+    int gridX = rect().x() + penSize + 3;
+    int gridY = rect().y() + crect22.y() + crect22.height() + m_margin;
+    int gridWidth =
+        rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
+    int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + 4 * penSize;
 
     QPainterPath framePath;
     framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
@@ -202,85 +273,26 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     // Draw grid.
     QPen gridPen;
     QVector<qreal> dashes;
-    qreal space = 3;
-    dashes << 5 << space;
-    painter.setOpacity(0.05);
-    gridPen.setColor(textColor);
-    gridPen.setWidth(1);
+    qreal space = 2;
+    dashes << 2 << space;
+    gridPen.setColor(m_frameColor);
+    gridPen.setWidth(penSize);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
     int gridLineX = gridX;
-    while (gridLineX < gridX + gridWidth - gridSize) {
-        gridLineX += gridSize;
+    while (gridLineX + gridSize + penSize < gridX + gridWidth) {
+        gridLineX += gridSize + penSize;
         painter.drawLine(gridLineX, gridY + 1, gridLineX, gridY + gridHeight - 1);
     }
     int gridLineY = gridY;
-    while (gridLineY < gridY + gridHeight - gridSize) {
-        gridLineY += gridSize;
+    while (gridLineY + gridSize + penSize < gridY + gridHeight) {
+        gridLineY += gridSize + penSize;
         painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
     }
+
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-    // Draw network summary.
-    setFontSize(painter, downloadRenderSize);
-    QFontMetrics fm = painter.fontMetrics();
-
-    QString downloadTitle = QString("%1 %2")
-                                .arg(DApplication::translate("Process.Graph.View", "Download"))
-                                .arg(formatBandwidth(totalRecvKbs));
-    QString downloadContent = QString("%1 %2")
-                                  .arg(DApplication::translate("Process.Graph.View", "Total"))
-                                  .arg(formatByteCount(totalRecvBytes));
-    QString uploadTitle = QString("%1 %2")
-                              .arg(DApplication::translate("Process.Graph.View", "Upload"))
-                              .arg(formatBandwidth(totalSentKbs));
-    QString uploadContent = QString("%1 %2")
-                                .arg(DApplication::translate("Process.Graph.View", "Total"))
-                                .arg(formatByteCount(totalSentBytes));
-    int titleWidth = std::max(fm.width(downloadTitle), fm.width(uploadTitle));
-
-    painter.setOpacity(1);
-    painter.setPen(QPen(downloadColor));
-    painter.setBrush(QBrush(downloadColor));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + downloadRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
-
-    setFontSize(painter, downloadRenderSize);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(QRect(rect().x() + downloadRenderPaddingX, rect().y() + downloadRenderPaddingY,
-                           fm.width(downloadTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, downloadTitle);
-
-    setFontSize(painter, downloadRenderSize);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(
-        QRect(rect().x() + downloadRenderPaddingX + titleWidth + textPadding,
-              rect().y() + downloadRenderPaddingY, fm.width(downloadContent), rect().height()),
-        Qt::AlignLeft | Qt::AlignTop, downloadContent);
-
-    painter.setPen(QPen(uploadColor));
-    painter.setBrush(QBrush(uploadColor));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + uploadRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
-
-    setFontSize(painter, uploadRenderSize);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(QRect(rect().x() + uploadRenderPaddingX, rect().y() + uploadRenderPaddingY,
-                           fm.width(uploadTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, uploadTitle);
-
-    setFontSize(painter, uploadRenderSize);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(
-        QRect(rect().x() + uploadRenderPaddingX + titleWidth + textPadding,
-              rect().y() + uploadRenderPaddingY, fm.width(uploadContent), rect().height()),
-        Qt::AlignLeft | Qt::AlignTop, uploadContent);
-
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
-                      downloadWaveformsRenderOffsetY + gridPaddingTop);
+    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, downloadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
@@ -298,4 +310,15 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(uploadColor, networkCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(uploadPath);
+}
+
+void NetworkMonitor::changeFont(const QFont &font)
+{
+    m_sectionFont = font;
+    m_sectionFont.setPointSize(m_sectionFont.pointSize() + 12);
+    m_contentFont = font;
+    m_contentFont.setWeight(QFont::Medium);
+    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
+    m_subContentFont = font;
+    m_subContentFont.setPointSize(m_subContentFont.pointSize() - 1);
 }

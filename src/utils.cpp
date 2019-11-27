@@ -290,19 +290,19 @@ QString formatBandwidth(qulonglong v)
     return formatUnitSize(v, orders);
 }
 
-QString formatByteCount(qulonglong v)
+QString formatByteCount(qulonglong v, bool showUnit, int prec)
 {
     QStringList orders;
     orders << "B"
-           << "KB"
-           << "MB"
-           << "GB"
-           << "TB";
+           << "K"
+           << "M"
+           << "G"
+           << "T";
 
-    return formatUnitSize(v, orders);
+    return formatUnitSize(v, orders, showUnit, prec);
 }
 
-QString formatUnitSize(qulonglong v, QStringList orders)
+QString formatUnitSize(qulonglong v, QStringList orders, bool showUnit, int prec)
 {
     int order = 0;
     qreal value = v;
@@ -311,9 +311,13 @@ QString formatUnitSize(qulonglong v, QStringList orders)
         value = value / 1024;
     }
 
-    QString size = QString::number(value, 'f', 1);
+    QString size = QString::number(value, 'f', prec);
 
-    return QString("%1 %2").arg(size).arg(orders[order]);
+    if (showUnit) {
+        return QString("%1%2").arg(size).arg(orders[order]);
+    } else {
+        return QString("%1").arg(size);
+    }
 }
 
 QString formatMillisecond(int millisecond)
@@ -344,6 +348,7 @@ QString getDisplayNameFromName(QString procName, std::string desktopFile, bool d
     std::ifstream in;
     in.open(desktopFile);
     QString displayName = procName;
+    QString localName, name, genericName;
     while (!in.eof()) {
         std::string line;
         std::getline(in, line);
@@ -354,23 +359,23 @@ QString getDisplayNameFromName(QString procName, std::string desktopFile, bool d
         QString nameFlag = "Name=";
         QString genericNameFlag = QString("GenericName[%1]=").arg(QLocale::system().name());
 
-        if (lineContent.startsWith(localNameFlag)) {
-            displayName = lineContent.remove(0, localNameFlag.size());
-
-            break;
-        } else if (lineContent.startsWith(genericNameFlag)) {
-            displayName = lineContent.remove(0, genericNameFlag.size());
-
-            break;
+        if (lineContent.startsWith(genericNameFlag)) {
+            genericName = lineContent.remove(0, genericNameFlag.size());
+        } else if (lineContent.startsWith(localNameFlag)) {
+            localName = lineContent.remove(0, localNameFlag.size());
         } else if (lineContent.startsWith(nameFlag)) {
-            displayName = lineContent.remove(0, nameFlag.size());
-
-            continue;
-        } else {
-            continue;
+            name = lineContent.remove(0, nameFlag.size());
         }
     }
     in.close();
+
+    if (!genericName.isEmpty())
+        displayName = genericName;
+    else if (!localName.isEmpty())
+        displayName = localName;
+    else if (!name.isEmpty()) {
+        displayName = name;
+    }
 
     return displayName;
 }

@@ -56,7 +56,6 @@ void MainWindow::initUI()
     m_killAction = new QAction(
         DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
-    m_killAction->setShortcutVisibleInContextMenu(true);
     connect(m_killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
@@ -109,9 +108,11 @@ void MainWindow::initUI()
     m_pages = new DStackedWidget(this);
     m_procPage = new ProcessPageWidget(m_pages);
     m_svcPage = new SystemServicePageWidget(m_pages);
+    m_pages->setContentsMargins(0, 0, 0, 0);
     m_pages->addWidget(m_procPage);
     m_pages->addWidget(m_svcPage);
 
+    setContentsMargins(0, 0, 0, 0);
     setCentralWidget(m_pages);
 
     installEventFilter(this);

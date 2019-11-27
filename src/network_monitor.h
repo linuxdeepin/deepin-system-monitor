@@ -46,46 +46,54 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    void changeFont(const QFont &font);
+
+private:
     QPixmap iconImage;
-    QPixmap iconDarkImage;
-    QPixmap iconLightImage;
+
     QList<double> *downloadSpeeds;
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;
     QPainterPath uploadPath;
 
     QColor downloadColor = "#55D500";
+    QColor recvStartColor {"#FF1212"};
+    QColor recvEndColor {"#E0FF00"};
+    QColor sentStartColor {"#2357FF"};
+    QColor sentEndColor {"#00A6E3"};
+    QColor uploadColor = "#C362FF";
+    QColor m_recvIndicatorColor {"#E14300"};
+    QColor m_sentIndicatorColor {"#004EEF"};
     QColor summaryColor;
     QColor textColor;
-    QColor uploadColor = "#C362FF";
+    QColor m_frameColor;
 
-    float totalRecvKbs = 0;
-    float totalSentKbs = 0;
-    int downloadRenderMaxHeight = 50;
+    QFont m_sectionFont;
+    QFont m_contentFont;
+    QFont m_subContentFont;
+
+    int m_margin;
+
+    int downloadRenderMaxHeight = 20;
     int downloadRenderPaddingX = 13;
     int downloadRenderPaddingY = 50;
     int downloadRenderSize = 9;
     int downloadWaveformsRenderOffsetX = 4;
-    int downloadWaveformsRenderOffsetY = 156;
-    int gridPaddingRight = 21;
-    int gridPaddingTop = 10;
-    int gridRenderOffsetY = 99;
-    int gridSize = 20;
-    int iconRenderOffsetX = -5;
-    int iconRenderOffsetY = 10;
-    int pointerRadius = 3;
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
-    int pointsNumber = 51;
+    int downloadWaveformsRenderOffsetY = 0;
+    int gridSize = 10;
+    int pointsNumber = 60;
     int textPadding = 12;
     int titleRenderOffsetX = 20;
     int titleRenderSize = 20;
-    int uploadRenderMaxHeight = 10;
+    int uploadRenderMaxHeight = 20;
     int uploadRenderPaddingX = 13;
     int uploadRenderPaddingY = 70;
     int uploadRenderSize = 9;
     int uploadWaveformsRenderOffsetY = -5;
-    int waveformRenderPadding = 20;
+    int waveformRenderPadding = 4;
+
+    float totalRecvKbs = 0;
+    float totalSentKbs = 0;
     long totalRecvBytes = 0;
     long totalSentBytes = 0;
 };

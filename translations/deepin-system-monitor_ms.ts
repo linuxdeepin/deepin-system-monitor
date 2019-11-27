@@ -277,6 +277,14 @@ Are you sure you want to continue?</source>
         <source>Network</source>
         <translation type="unfinished">Rangkaian</translation>
     </message>
+    <message>
+        <source>Total Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Sent</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
@@ -326,19 +334,19 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">Sifat</translation>
     </message>
     <message>
-        <source>&amp;End process</source>
+        <source>End process</source>
+        <translation type="unfinished">Matikan proses</translation>
+    </message>
+    <message>
+        <source>Pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Pause process</source>
+        <source>Resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume pro&amp;cess</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Kill process</source>
+        <source>Kill process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -610,15 +618,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Start</source>
+        <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>S&amp;top</source>
+        <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Restart</source>
+        <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

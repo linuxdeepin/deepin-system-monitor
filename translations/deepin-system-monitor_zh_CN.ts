@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished">已失败</translation>
+        <translation></translation>
     </message>
     <message>
         <source>auto-restart</source>
@@ -278,6 +278,14 @@ Are you sure you want to continue?</source>
         <source>Network</source>
         <translation>网络</translation>
     </message>
+    <message>
+        <source>Total Received</source>
+        <translation>总计接收</translation>
+    </message>
+    <message>
+        <source>Total Sent</source>
+        <translation>总计发送</translation>
+    </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
@@ -327,20 +335,20 @@ Are you sure you want to continue?</source>
         <translation>属性</translation>
     </message>
     <message>
-        <source>&amp;End process</source>
-        <translation>结束进程(&amp;E)</translation>
+        <source>End process</source>
+        <translation>结束进程</translation>
     </message>
     <message>
-        <source>&amp;Pause process</source>
-        <translation>暂停进程(&amp;P)</translation>
+        <source>Pause process</source>
+        <translation>暂停进程</translation>
     </message>
     <message>
-        <source>Resume pro&amp;cess</source>
-        <translation>恢复进程(&amp;C)</translation>
+        <source>Resume process</source>
+        <translation>恢复进程</translation>
     </message>
     <message>
-        <source>&amp;Kill process</source>
-        <translation>强制结束进程(&amp;K)</translation>
+        <source>Kill process</source>
+        <translation>强制结束进程</translation>
     </message>
 </context>
 <context>
@@ -611,16 +619,16 @@ Are you sure you want to continue?</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <source>&amp;Start</source>
-        <translation>启动(&amp;S)</translation>
+        <source>Start</source>
+        <translation>启动</translation>
     </message>
     <message>
-        <source>S&amp;top</source>
-        <translation>停止(&amp;T)</translation>
+        <source>Stop</source>
+        <translation>停止</translation>
     </message>
     <message>
-        <source>&amp;Restart</source>
-        <translation>重新启动(&amp;R)</translation>
+        <source>Restart</source>
+        <translation>重新启动</translation>
     </message>
 </context>
 <context>

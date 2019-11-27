@@ -2,6 +2,7 @@
 #include <DApplicationHelper>
 #include <DDesktopServices>
 #include <DDialog>
+#include <DFontSizeManager>
 #include <DFrame>
 #include <DLabel>
 #include <DMenu>
@@ -44,7 +45,11 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     initUI(settingsLoaded);
     initConnections(settingsLoaded);
 
-    //    installEventFilter(this);
+    auto *dAppHelper = DApplicationHelper::instance();
+    //    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
+    //    &MemoryMonitor::changeTheme);
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
+            [=]() { m_notFoundLabel->update(); });
 }
 
 ProcessTableView::~ProcessTableView()
@@ -213,11 +218,10 @@ void ProcessTableView::initUI(bool settingsLoaded)
 {
     // not found display label
     m_notFoundLabel = new DLabel(DApplication::translate("Common.Search", "Not Found"), this);
-    QFont font = m_notFoundLabel->font();
-    font.setPointSize(20);
-    m_notFoundLabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_notFoundLabel, DFontSizeManager::T4);
     auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
-    palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
+    QColor labelColor = palette.color(DPalette::ToolTipText);
+    palette.setColor(DPalette::Text, labelColor);
     m_notFoundLabel->setPalette(palette);
     m_notFoundLabel->setVisible(false);
 
@@ -298,21 +302,18 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             &ProcessTableView::displayProcessTableContextMenu);
     // end process
     auto *endProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "&End process"));
+        DApplication::translate("Process.Table.Context.Menu", "End process"));
     endProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_E));
-    endProcAction->setShortcutVisibleInContextMenu(true);
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
     // pause process
     auto *pauseProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "&Pause process"));
+        DApplication::translate("Process.Table.Context.Menu", "Pause process"));
     pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
-    pauseProcAction->setShortcutVisibleInContextMenu(true);
     connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
     // resume process
     auto *resumeProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Resume pro&cess"));
+        DApplication::translate("Process.Table.Context.Menu", "Resume process"));
     resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
-    resumeProcAction->setShortcutVisibleInContextMenu(true);
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
     // show exec location
     auto *openExecDirAction = m_contextMenu->addAction(
@@ -322,14 +323,12 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     auto *showAttrAction = m_contextMenu->addAction(
         DApplication::translate("Process.Table.Context.Menu", "Properties"));
     showAttrAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Enter));
-    showAttrAction->setShortcutVisibleInContextMenu(true);
     connect(showAttrAction, &QAction::triggered, this, &ProcessTableView::showProperties);
     m_contextMenu->addSeparator();
     // kill process
     auto *killProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "&Kill process"));
+        DApplication::translate("Process.Table.Context.Menu", "Kill process"));
     killProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_K));
-    killProcAction->setShortcutVisibleInContextMenu(true);
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
     connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
