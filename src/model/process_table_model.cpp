@@ -1,4 +1,6 @@
 #include <DApplication>
+#include <DApplicationHelper>
+#include <DPalette>
 #include <QDebug>
 #include <QIcon>
 #include <QStyleOption>
@@ -212,6 +214,17 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+    } else if (role == Qt::ForegroundRole) {
+        DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+        DPalette palette = dAppHelper->applicationPalette();
+        DPalette::ColorGroup cg = DPalette::Active;
+        if (index.column() == kProcessNameColumn) {
+            char state = m_processList.at(index.row()).getState();
+            if (state == 'Z' || state == 'T') {
+                return QVariant(QBrush(palette.color(cg, DPalette::TextWarning)));
+            }
+        }
+        return QVariant(QBrush(palette.color(cg, DPalette::Text)));
     }
     return {};
 }

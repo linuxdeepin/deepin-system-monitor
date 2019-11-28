@@ -105,8 +105,7 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     auto palette = dAppHelper->applicationPalette();
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
-    //    m_frameColor = palette.color(DPalette::FrameBorder);
-    m_frameColor = "#10FFFFFF";
+    m_frameColor = palette.color(DPalette::FrameBorder);
 }
 
 void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs, float tSentKbs)
@@ -123,25 +122,12 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
         downloadSpeeds->pop_front();
     }
 
-    QList<QPointF> downloadPoints;
-
     double downloadMaxHeight = 0;
     for (int i = 0; i < downloadSpeeds->size(); i++) {
         if (downloadSpeeds->at(i) > downloadMaxHeight) {
             downloadMaxHeight = downloadSpeeds->at(i);
         }
     }
-
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadMaxHeight < downloadRenderMaxHeight) {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
-        } else {
-            downloadPoints.append(QPointF(
-                i * 5, downloadSpeeds->at(i) * downloadRenderMaxHeight / downloadMaxHeight));
-        }
-    }
-
-    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
 
     // Init upload path.
     uploadSpeeds->append(totalSentKbs);
@@ -159,18 +145,34 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
         }
     }
 
+    qreal maxHeight = std::max(uploadMaxHeight, downloadMaxHeight);
+    int modDownloadRenderMaxHeight = downloadRenderMaxHeight - 2;
+    int modUploadRenderMaxHeight = uploadRenderMaxHeight - 2;
+
+    QList<QPointF> downloadPoints;
+    for (int i = 0; i < downloadSpeeds->size(); i++) {
+        if (downloadMaxHeight < modDownloadRenderMaxHeight) {
+            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
+        } else {
+            downloadPoints.append(
+                QPointF(i * 5, downloadSpeeds->at(i) * modDownloadRenderMaxHeight / maxHeight));
+        }
+    }
+
+    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
+
     for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadMaxHeight < uploadRenderMaxHeight) {
+        if (uploadMaxHeight < modUploadRenderMaxHeight) {
             uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
         } else {
             uploadPoints.append(
-                QPointF(i * 5, uploadSpeeds->at(i) * uploadRenderMaxHeight / uploadMaxHeight));
+                QPointF(i * 5, uploadSpeeds->at(i) * modUploadRenderMaxHeight / maxHeight));
         }
     }
 
     uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
 
-    repaint();
+    update();
 }
 
 void NetworkMonitor::paintEvent(QPaintEvent *)
@@ -196,7 +198,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     // Draw icon.
     QRect iconRect(rect().x(),
-                   titleRect.y() + qCeil((titleRect.height() - iconImage.height()) / 2.),
+                   titleRect.y() + qCeil((titleRect.height() - iconImage.height()) / 2.) + 2,
                    iconImage.width(), iconImage.height());
     painter.drawPixmap(iconRect, iconImage);
 
@@ -267,7 +269,8 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + 4 * penSize;
 
     QPainterPath framePath;
-    framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
+    QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
+    framePath.addRect(gridFrame);
     painter.drawPath(framePath);
 
     // Draw grid.
@@ -292,23 +295,29 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     }
 
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7, downloadWaveformsRenderOffsetY);
-    painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal networkCurveWidth = 1.2;
     if (devicePixelRatio > 1) {
         networkCurveWidth = 2;
     }
-    painter.setPen(QPen(downloadColor, networkCurveWidth));
-    painter.setBrush(QBrush());
+
+    QLinearGradient lgRecv(gridX, 0, gridLineX, 0), lgSent(gridX, 0, gridLineX, 0);
+    lgRecv.setColorAt(0, recvEndColor);
+    lgRecv.setColorAt(1, recvStartColor);
+    lgSent.setColorAt(0, sentEndColor);
+    lgSent.setColorAt(1, sentStartColor);
+    QBrush recvBrush(lgRecv), sentBrush(lgSent);
+
+    painter.translate(gridFrame.x() + 2, gridFrame.y() + gridFrame.height() / 2 - 2);
+    painter.scale(1, -1);
+    painter.setPen(QPen(recvBrush, networkCurveWidth));
     painter.drawPath(downloadPath);
 
     painter.translate(0, uploadWaveformsRenderOffsetY);
     painter.scale(1, -1);
 
-    painter.setPen(QPen(uploadColor, networkCurveWidth));
-    painter.setBrush(QBrush());
+    painter.setPen(QPen(sentBrush, networkCurveWidth));
     painter.drawPath(uploadPath);
 }
 

@@ -79,7 +79,7 @@ private:
     int downloadRenderPaddingY = 50;
     int downloadRenderSize = 9;
     int downloadWaveformsRenderOffsetX = 4;
-    int downloadWaveformsRenderOffsetY = 0;
+    int downloadWaveformsRenderOffsetY = 120;
     int gridSize = 10;
     int pointsNumber = 60;
     int textPadding = 12;

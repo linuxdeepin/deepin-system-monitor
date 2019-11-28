@@ -70,6 +70,7 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     }
 
     forground.setColor(palette.color(cg, DPalette::Text));
+    forground.setColor(qvariant_cast<QBrush>(index.data(Qt::ForegroundRole)).color());
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             background = palette.color(cg, DPalette::Highlight);

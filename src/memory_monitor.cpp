@@ -194,7 +194,8 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QRect titleRect(rect().x() + iconImage.width() + 4, rect().y(), fm.width(title), fm.height());
 
     // Draw icon.
-    painter.drawPixmap(rect().x(), (titleRect.height() - iconImage.height()) / 2, iconImage);
+    painter.drawPixmap(rect().x(), qCeil((titleRect.height() - iconImage.height()) / 2.) + 2,
+                       iconImage);
 
     // Draw title.
     painter.setPen(QPen(textColor));

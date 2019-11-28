@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QIcon>
 #include <QPainter>
+#include <QtMath>
 
 #include "constant.h"
 #include "cpu_monitor.h"
@@ -177,8 +178,9 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                          rect().y() + titleRenderOffsetY, titleWidth, fm.height());
     painter.drawText(cpuDisplayRect, Qt::AlignCenter,
                      DApplication::translate("Process.Graph.View", "CPU"));
-    QPoint iconPoint(cpuDisplayRect.x() - margin - iconImage.width() + 6,
-                     cpuDisplayRect.y() + (cpuDisplayRect.height() - iconImage.height()) / 2);
+    QPoint iconPoint(
+        cpuDisplayRect.x() - margin - iconImage.width() + 6,
+        cpuDisplayRect.y() + qCeil((cpuDisplayRect.height() - iconImage.height()) / 2.) + 2);
     painter.drawPixmap(iconPoint, iconImage);
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) +
