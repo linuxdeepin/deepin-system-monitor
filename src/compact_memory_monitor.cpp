@@ -25,6 +25,7 @@
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
+#include <DStyle>
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
@@ -41,9 +42,15 @@ using namespace Utils;
 CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     : QWidget(parent)
 {
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *dAppHelper = DApplicationHelper::instance();
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth);
-    ringCenterPointerX = statusBarMaxWidth - 65;
+    setFixedWidth(statusBarMaxWidth - margin * 2);
+    ringCenterPointerX = rect().width() - outsideRingRadius - 4;
 
     usedMemory = 0;
     totalMemory = 0;
@@ -54,19 +61,22 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(render()));
     timer->start();
 
-    setFixedHeight(100);
+    setFixedHeight(150);
 
-    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &CompactMemoryMonitor::changeTheme);
-
     m_themeType = dAppHelper->themeType();
+    changeTheme(m_themeType);
 
     auto *sysmon = SystemMonitor::instance();
     if (sysmon) {
         connect(sysmon, &SystemMonitor::memStatInfoUpdated, this,
                 &CompactMemoryMonitor::updateStatus);
     }
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &CompactMemoryMonitor::changeFont);
 }
 
 CompactMemoryMonitor::~CompactMemoryMonitor() {}
@@ -74,6 +84,40 @@ CompactMemoryMonitor::~CompactMemoryMonitor() {}
 void CompactMemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
     m_themeType = themeType;
+
+    switch (m_themeType) {
+        case DApplicationHelper::LightType:
+            memoryBackgroundColor = "#000000";
+            swapBackgroundColor = "#000000";
+
+            break;
+        case DApplicationHelper::DarkType:
+            memoryBackgroundColor = "#FFFFFF";
+            swapBackgroundColor = "#FFFFFF";
+
+            break;
+        default:
+            break;
+    }
+
+    // init colors
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    textColor = palette.color(DPalette::Text);
+    numberColor = palette.color(DPalette::Text);
+    summaryColor = palette.color(DPalette::TextTips);
+}
+
+void CompactMemoryMonitor::changeFont(const QFont &font)
+{
+    m_contentFont = font;
+    m_contentFont.setWeight(QFont::Medium);
+    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
+    m_subContentFont = font;
+    m_subContentFont.setPointSize(m_subContentFont.pointSize() - 1);
+    m_memPercentFont = font;
+    m_memPercentFont.setPointSize(m_memPercentFont.pointSize());
+    m_memPercentFont.setBold(true);
 }
 
 void CompactMemoryMonitor::render()
@@ -130,42 +174,6 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    switch (m_themeType) {
-        case DApplicationHelper::LightType:
-            memoryForegroundColor = "#FF2997";
-            memoryForegroundOpacity = 1;
-            memoryBackgroundColor = "#000000";
-            memoryBackgroundOpacity = 0.05;
-
-            swapForegroundColor = "#00B4C7";
-            swapForegroundOpacity = 1;
-            swapBackgroundColor = "#000000";
-            swapBackgroundOpacity = 0.05;
-
-            break;
-        case DApplicationHelper::DarkType:
-            memoryForegroundColor = "#FF2997";
-            memoryForegroundOpacity = 1;
-            memoryBackgroundColor = "#FF2997";
-            memoryBackgroundOpacity = 0.1;
-
-            swapForegroundColor = "#00B4C7";
-            swapForegroundOpacity = 1;
-            swapBackgroundColor = "#00B4C7";
-            swapBackgroundOpacity = 0.1;
-            break;
-        default:
-            break;
-    }
-
-    // init colors
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    // TODO: change color
-    //    textColor = palette.color(DPalette::Text);
-    summaryColor = palette.color(DPalette::Text);
-    numberColor = palette.color(DPalette::Text);
-
     double memoryPercent =
         Utils::filterInvalidNumber((prevUsedMemory + easeInOut(animationIndex / animationFrames) *
                                                          (usedMemory - prevUsedMemory)) *
@@ -179,68 +187,75 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                       1.0 / totalSwap;
     }
 
-    // Draw memory summary.
-    setFontSize(painter, memoryRenderSize);
-    QFontMetrics fm = painter.fontMetrics();
+    int spacing = 10;
+    int sectionSize = 6;
 
-    QString memoryTitle = QString("%1 (%2%)")
+    // Draw memory summary.
+    QString memoryTitle = QString("%1(%2%)")
                               .arg(DApplication::translate("Process.Graph.View", "Memory"))
                               .arg(QString::number(memoryPercent * 100, 'f', 1));
-    QString memoryContent =
-        QString("%1/%2").arg(formatByteCount(usedMemory)).arg(formatByteCount(totalMemory));
+    QString memoryContent = QString("%1/%2")
+                                .arg(formatByteCount(qulonglong(usedMemory), false, 2))
+                                .arg(formatByteCount(qulonglong(totalMemory), true, 0));
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
-        swapTitle = QString("%1 (%2)")
+        swapTitle = QString("%1(%2)")
                         .arg(DApplication::translate("Process.Graph.View", "Swap"))
                         .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
         swapContent = "";
     } else {
-        swapTitle = QString("%1 (%2%)")
+        swapTitle = QString("%1(%2%)")
                         .arg(DApplication::translate("Process.Graph.View", "Swap"))
                         .arg(QString::number(swapPercent * 100, 'f', 1));
-        swapContent =
-            QString("%2/%3").arg(formatByteCount(usedSwap)).arg(formatByteCount(totalSwap));
+        swapContent = QString("%1/%2")
+                          .arg(formatByteCount(qulonglong(usedSwap), false, 2))
+                          .arg(formatByteCount(qulonglong(totalSwap), true, 0));
     }
 
-    painter.setPen(QPen(memoryColor));
-    painter.setBrush(QBrush(memoryColor));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + memoryRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
+    QFontMetrics fmMem(m_contentFont);
+    QFontMetrics fmMemStat(m_subContentFont);
+    QRect memRect(sectionSize * 2 + 2, rect().y(), fmMem.width(memoryTitle), fmMem.height());
+    QRect memStatRect(memRect.x(), memRect.y() + memRect.height(), fmMemStat.width(memoryContent),
+                      fmMemStat.height());
+    QRectF memIndicatorRect(0, memRect.y() + qCeil((memRect.height() - sectionSize) / 2.),
+                            sectionSize, sectionSize);
 
-    setFontSize(painter, memoryRenderSize);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(QRect(rect().x() + memoryRenderPaddingX, rect().y() + memoryRenderPaddingY,
-                           fm.width(memoryTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, memoryTitle);
+    QPainterPath section;
+    section.addEllipse(memIndicatorRect);
+    painter.fillPath(section, memoryColor);
 
-    setFontSize(painter, memoryRenderSize);
+    m_contentFont.setWeight(QFont::Medium);
+    painter.setFont(m_contentFont);
+    painter.setPen(QPen(textColor));
+    painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter, memoryTitle);
+
+    painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
-    painter.drawText(
-        QRect(rect().x() + memoryRenderPaddingX, rect().y() + memoryRenderPaddingY + lineHeight,
-              fm.width(memoryContent), rect().height()),
-        Qt::AlignLeft | Qt::AlignTop, memoryContent);
+    painter.drawText(memStatRect, Qt::AlignLeft | Qt::AlignVCenter, memoryContent);
 
     // Draw swap summary.
-    painter.setPen(QPen(swapColor));
-    painter.setBrush(QBrush(swapColor));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + swapRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
+    QFontMetrics fmSwap(m_contentFont);
+    QFontMetrics fmSwapStat(m_subContentFont);
+    QRect swapRect(memRect.x(), memStatRect.y() + memStatRect.height() + spacing,
+                   fmSwap.width(swapTitle), fmSwap.height());
+    QRect swapStatRect(swapRect.x(), swapRect.y() + swapRect.height(),
+                       fmSwapStat.width(swapContent), fmSwapStat.height());
+    QRectF swapIndicatorRect(memIndicatorRect.x(),
+                             swapRect.y() + qCeil((swapRect.height() - sectionSize) / 2.),
+                             sectionSize, sectionSize);
 
-    setFontSize(painter, swapRenderSize);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(QRect(rect().x() + swapRenderPaddingX, rect().y() + swapRenderPaddingY,
-                           fm.width(swapTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, swapTitle);
+    QPainterPath section2;
+    section2.addEllipse(swapIndicatorRect);
+    painter.fillPath(section2, swapColor);
 
-    setFontSize(painter, swapRenderSize);
+    painter.setFont(m_contentFont);
+    painter.setPen(QPen(textColor));
+    painter.drawText(swapRect, swapTitle);
+
+    painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
-    painter.drawText(
-        QRect(rect().x() + swapRenderPaddingX, rect().y() + swapRenderPaddingY + lineHeight,
-              fm.width(swapContent), rect().height()),
-        Qt::AlignLeft | Qt::AlignTop, swapContent);
+    painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
 
     // Draw memory ring.
     drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
@@ -254,11 +269,11 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                     swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, swapPercent);
 
     // Draw percent text.
-    setFontSize(painter, memoryPercentRenderSize);
+    painter.setFont(m_memPercentFont);
     painter.setPen(QPen(numberColor));
     painter.drawText(QRect(rect().x() + ringCenterPointerX - insideRingRadius,
                            rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
                            insideRingRadius * 2),
-                     Qt::AlignCenter,
+                     Qt::AlignHCenter | Qt::AlignVCenter,
                      QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
 }

@@ -7,6 +7,7 @@
 #include <DMessageBox>
 #include <QDebug>
 #include <QFutureWatcher>
+#include <QScrollBar>
 #include <QtConcurrent>
 
 #include "common/error_context.h"

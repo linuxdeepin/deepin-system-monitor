@@ -24,7 +24,10 @@
 #ifndef COMPACTDISKMONITOR_H
 #define COMPACTDISKMONITOR_H
 
+#include <DApplicationHelper>
 #include <QWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class CompactDiskMonitor : public QWidget
 {
@@ -41,32 +44,29 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    void changeFont(const QFont &font);
+
+private:
     QList<unsigned long> *readSpeeds;
     QList<unsigned long> *writeSpeeds;
     QPainterPath readPath;
     QPainterPath writePath;
     unsigned long totalReadKbs = 0;
     unsigned long totalWriteKbs = 0;
-    int readRenderMaxHeight = 50;
-    int readRenderPaddingX = 13;
-    int readRenderPaddingY = 20;
-    int readRenderSize = 9;
-    int readWaveformsRenderOffsetX = 4;
-    int readWaveformsRenderOffsetY = 112;
-    int gridPaddingRight = 21;
-    int gridPaddingTop = 10;
-    int gridRenderOffsetY = 55;
-    int gridSize = 20;
-    int pointerRadius = 3;
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
-    int pointsNumber = 51;
-    int writeRenderMaxHeight = 10;
-    int writeRenderPaddingX = 13;
-    int writeRenderPaddingY = 40;
-    int writeRenderSize = 9;
-    int writeWaveformsRenderOffsetY = -4;
-    int waveformRenderPadding = 20;
+
+    int m_bulletSize = 6;
+
+    QColor m_diskReadColor {"#8F88FF"};
+    QColor m_diskWriteColor {"#6AD787"};
+
+    int gridSize = 10;
+    int pointsNumber = 60;
+    int readRenderMaxHeight = 30;
+    int writeRenderMaxHeight = 30;
+    int writeWaveformsRenderOffsetY = -5;
+
+    QFont m_tagFont;
+    QFont m_statFont;
 };
 
 #endif

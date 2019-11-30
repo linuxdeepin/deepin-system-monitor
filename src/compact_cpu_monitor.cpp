@@ -29,6 +29,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QPainter>
+#include <QtMath>
 
 #include "compact_cpu_monitor.h"
 #include "constant.h"
@@ -43,13 +44,18 @@ using namespace Utils;
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     : QWidget(parent)
 {
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth);
+    setFixedWidth(statusBarMaxWidth - margin * 2);
     setFixedHeight(160);
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
-    numCPU = static_cast<int>(sysconf(_SC_NPROCESSORS_ONLN));
+    numCPU = int(sysconf(_SC_NPROCESSORS_ONLN));
 
     for (int i = 0; i < numCPU; i++) {
         QList<double> cpuPercent;
@@ -81,6 +87,10 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     if (sysmon) {
         connect(sysmon, &SystemMonitor::cpuStatInfoUpdated, this, &CompactCpuMonitor::updateStatus);
     }
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &CompactCpuMonitor::changeFont);
 }
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
@@ -89,7 +99,7 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
 {
     totalCpuPercent = cpuPercent;
 
-    for (unsigned int i = 0; i < cPercents.size(); i++) {
+    for (int i = 0; i < cPercents.size(); i++) {
         QList<double> cpuPercent = cpuPercents[i];
 
         cpuPercent.append(cPercents[i]);
@@ -109,111 +119,120 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
             }
         }
 
+        int modCPURenderMaxHeight = cpuRenderMaxHeight - 20;
+
         for (int i = 0; i < cpuPercent.size(); i++) {
-            if (readMaxHeight < cpuRenderMaxHeight) {
+            if (readMaxHeight < modCPURenderMaxHeight) {
                 readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
             } else {
                 readPoints.append(
-                    QPointF(i * 5, cpuPercent.at(i) * cpuRenderMaxHeight / readMaxHeight));
+                    QPointF(i * 5, cpuPercent.at(i) * modCPURenderMaxHeight / readMaxHeight));
             }
         }
 
         QPainterPath cpuPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
-        if ((unsigned int)cpuPaths.size() <= i) {
+        if (cpuPaths.size() <= i) {
             cpuPaths.append(cpuPath);
         } else {
             cpuPaths[i] = cpuPath;
         }
     }
 
-    repaint();
+    update();
 }
 
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.save();
     painter.setRenderHint(QPainter::Antialiasing);
 
-    // init colors
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     auto *dAppHelper = DApplicationHelper::instance();
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
+    // init colors
     auto palette = dAppHelper->applicationPalette();
-    // TODO: change color
-    QColor textColor = palette.color(DPalette::Text);
+    QColor frameColor = palette.color(DPalette::FrameBorder);
     QColor cpuColor = palette.color(DPalette::Text);
-    QColor summaryColor = palette.color(DPalette::Text);
+    QColor statColor = palette.color(DPalette::TextTips);
+    QColor sectionColor {"#0081FF"};
+
+    int spacing = 4;
 
     // Draw cpu summary.
-    QFontMetrics fm = painter.fontMetrics();
+    QFontMetrics fm(m_cpuFont);
+    QFontMetrics fmStat(m_statFont);
 
     QString cpuText = DApplication::translate("Process.Graph.View", "CPU");
     QString cpuStatText = QString::number(totalCpuPercent, 'f', 1).append('%');
 
-    painter.setOpacity(1);
-    painter.setBrush(QBrush(QColor(cpuColor)));
+    QRect cpuRect(pointerRadius * 2 + spacing - 2, 0, fm.width(cpuText), fm.height());
+    QRect sectionRect(0, cpuRect.y() + qCeil((cpuRect.height() - pointerRadius) / 2.),
+                      pointerRadius, pointerRadius);
+    QRect statRect(cpuRect.x() + cpuRect.width() + spacing, cpuRect.y(), fmStat.width(cpuStatText),
+                   fmStat.height());
+
+    // draw section
+    painter.setPen(sectionColor);
     QPainterPath path;
-    path.addRoundedRect(
-        QRectF(rect().x(), rect().y() + pointerRenderPaddingY, pointerRadius, pointerRadius),
-        pointerRadius, pointerRadius);
-    painter.fillPath(path, QBrush("#0081FF"));
+    path.addRoundedRect(sectionRect, pointerRadius, pointerRadius);
+    painter.fillPath(path, sectionColor);
 
-    painter.setPen(QPen(QColor(summaryColor)));
-    QFont fn = painter.font();
-    fn.setPointSize(fn.pointSize() - 1);
-    painter.setFont(fn);
-    painter.drawText(QRect(rect().x() + cpuRenderPaddingX, rect().y() + cpuRenderPaddingY,
-                           fm.horizontalAdvance(cpuText), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, cpuText);
-    painter.drawText(
-        QRect(rect().x() + fm.boundingRect(cpuText).width() + 13, rect().y() + cpuRenderPaddingY,
-              fm.horizontalAdvance(cpuStatText), rect().height()),
-        Qt::AlignLeft | Qt::AlignTop, cpuStatText);
+    // draw cpu title
+    painter.setPen(cpuColor);
+    painter.setFont(m_cpuFont);
+    painter.drawText(cpuRect, Qt::AlignLeft | Qt::AlignVCenter, cpuText);
 
-    // Draw background grid.
+    // draw cpu stat
+    painter.setPen(statColor);
+    painter.setFont(m_statFont);
+    painter.drawText(statRect, Qt::AlignLeft | Qt::AlignVCenter, cpuStatText);
+
+    // draw grid
     QPen framePen;
-    painter.setOpacity(0.2);
-    framePen.setColor(QColor(textColor));
-    framePen.setWidth(1);
+    int penSize = 1;
+    framePen.setColor(frameColor);
+    framePen.setWidth(penSize);
     painter.setPen(framePen);
 
-    int penSize = 1;
     int gridX = rect().x() + penSize;
-    int gridY = rect().y() + gridRenderOffsetY + gridPaddingTop;
-    int gridWidth = rect().width() - gridPaddingRight - penSize * 2;
-    int gridHeight = cpuRenderMaxHeight + waveformRenderPadding;
+    int gridY = cpuRect.y() + cpuRect.height() + margin;
+    int gridWidth =
+        rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
+    int gridHeight = cpuRenderMaxHeight + 8 * penSize;
 
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPainterPath framePath;
-    painter.setBrush(QBrush());  // clear brush to got transparent background
-    framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
+    QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
+    framePath.addRect(gridFrame);
     painter.drawPath(framePath);
-    painter.setRenderHint(QPainter::Antialiasing, true);
 
     // Draw grid.
     QPen gridPen;
     QVector<qreal> dashes;
-    qreal space = 3;
-    dashes << 5 << space;
-    painter.setOpacity(0.05);
-    gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(1);
+    qreal space = 2;
+    dashes << 2 << space;
     gridPen.setDashPattern(dashes);
+    gridPen.setColor(frameColor);
     painter.setPen(gridPen);
 
     int gridLineX = gridX;
-    while (gridLineX < gridX + gridWidth - gridSize) {
-        gridLineX += gridSize;
+    while (gridLineX + gridSize + penSize < gridX + gridWidth) {
+        gridLineX += gridSize + penSize;
         painter.drawLine(gridLineX, gridY + 1, gridLineX, gridY + gridHeight - 1);
     }
     int gridLineY = gridY;
-    while (gridLineY < gridY + gridHeight - gridSize) {
-        gridLineY += gridSize;
+    while (gridLineY + gridSize + penSize < gridY + gridHeight) {
+        gridLineY += gridSize + penSize;
         painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
     }
 
-    painter.setOpacity(1);
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
-                      cpuWaveformsRenderOffsetY + gridPaddingTop);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    painter.translate(gridFrame.x() + 2 * penSize,
+                      gridFrame.y() + gridFrame.height() - gridSize - penSize);
     painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
@@ -230,9 +249,16 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
             colorIndex = i;
         }
 
-        painter.setPen(QPen(QColor(cpuColors[colorIndex]), diskCurveWidth));
-        painter.setBrush(QBrush());
+        painter.setPen(QPen(cpuColors[colorIndex], diskCurveWidth));
         painter.drawPath(cpuPaths[i]);
     }
-    painter.restore();
+}
+
+void CompactCpuMonitor::changeFont(const QFont &font)
+{
+    m_cpuFont = font;
+    m_cpuFont.setWeight(QFont::Medium);
+    m_cpuFont.setPointSize(m_cpuFont.pointSize() - 1);
+    m_statFont = font;
+    m_statFont.setPointSize(m_statFont.pointSize() - 1);
 }

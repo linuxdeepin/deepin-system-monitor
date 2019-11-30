@@ -24,7 +24,10 @@
 #ifndef COMPACTNETWORKMONITOR_H
 #define COMPACTNETWORKMONITOR_H
 
+#include <DApplicationHelper>
 #include <QWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class CompactNetworkMonitor : public QWidget
 {
@@ -42,37 +45,49 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    void changeTheme(DApplicationHelper::ColorType themeType);
+    void changeFont(const QFont &font);
+
+private:
     QList<double> *downloadSpeeds;
     QList<double> *uploadSpeeds;
     QPainterPath downloadPath;
     QPainterPath uploadPath;
-    QColor downloadColor {"#55D500"};
+
+    QColor recvColor {"#E14300"};
+    QColor sentColor {"#004EEF"};
+    QColor m_recvIndicatorColor {"#E14300"};
+    QColor m_sentIndicatorColor {"#004EEF"};
     QColor summaryColor;
     QColor textColor;
-    QColor uploadColor = {"#C362FF"};
-    float totalRecvKbs = 0;
-    float totalSentKbs = 0;
-    int downloadRenderMaxHeight = 50;
+    QColor m_frameColor;
+
+    QFont m_sectionFont;
+    QFont m_contentFont;
+    QFont m_subContentFont;
+
+    int m_margin;
+
+    int downloadRenderMaxHeight = 30;
     int downloadRenderPaddingX = 13;
-    int downloadRenderPaddingY = 15;
+    int downloadRenderPaddingY = 50;
     int downloadRenderSize = 9;
     int downloadWaveformsRenderOffsetX = 4;
-    int downloadWaveformsRenderOffsetY = 112;
-    int gridPaddingRight = 21;
-    int gridPaddingTop = 10;
-    int gridRenderOffsetY = 52;
-    int gridSize = 20;
-    int pointerRadius = 3;
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
-    int pointsNumber = 51;
+    int downloadWaveformsRenderOffsetY = 120;
+    int gridSize = 10;
+    int pointsNumber = 60;
     int textPadding = 12;
-    int uploadRenderMaxHeight = 10;
+    int titleRenderOffsetX = 20;
+    int titleRenderSize = 20;
+    int uploadRenderMaxHeight = 30;
     int uploadRenderPaddingX = 13;
-    int uploadRenderPaddingY = 37;
+    int uploadRenderPaddingY = 70;
     int uploadRenderSize = 9;
-    int uploadWaveformsRenderOffsetY = -4;
-    int waveformRenderPadding = 20;
+    int uploadWaveformsRenderOffsetY = -5;
+    int waveformRenderPadding = 4;
+
+    float totalRecvKbs = 0;
+    float totalSentKbs = 0;
     long totalRecvBytes = 0;
     long totalSentBytes = 0;
 };

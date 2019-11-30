@@ -24,7 +24,10 @@
 #ifndef COMPACTCPUMONITOR_H
 #define COMPACTCPUMONITOR_H
 
+#include <DApplicationHelper>
 #include <QWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class CompactCpuMonitor : public QWidget
 {
@@ -41,26 +44,24 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    void changeFont(const QFont &font);
+
+private:
     QList<QList<double>> cpuPercents;
     QList<QPainterPath> cpuPaths;
-    QList<QString> cpuColors;
+    QList<QColor> cpuColors;
     int cpuRenderMaxHeight = 80;
     int cpuWaveformsRenderOffsetY = 112;
-    int gridPaddingRight = 21;
-    int gridPaddingTop = 10;
-    int gridRenderOffsetY = 16;
-    int gridSize = 20;
-    int pointsNumber = 51;
+    int gridSize = 10;
+    int pointsNumber = 60;
     int waveformRenderPadding = 20;
     int numCPU;
     double totalCpuPercent = 0;
 
-    int cpuTextRenderSize = 9;
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
-    int cpuRenderPaddingX = 13;
-    int cpuRenderPaddingY = 2;
     int pointerRadius = 6;
+
+    QFont m_cpuFont;
+    QFont m_statFont;
 };
 
 #endif

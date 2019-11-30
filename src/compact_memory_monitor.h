@@ -44,7 +44,6 @@ public:
     ~CompactMemoryMonitor();
 
 public slots:
-    void changeTheme(DApplicationHelper::ColorType themeType);
     void render();
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
 
@@ -53,46 +52,46 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    void changeTheme(DApplicationHelper::ColorType themeType);
+    void changeFont(const QFont &font);
+
+private:
     QColor memoryBackgroundColor;
-    QColor memoryColor {"#FF2997"};
-    QColor memoryForegroundColor;
+    QColor memoryColor {"#00C5C0"};
+    QColor memoryForegroundColor {"#00C5C0"};
     QColor numberColor;
     QColor summaryColor;
     QColor swapBackgroundColor;
-    QColor swapColor {"#00B4C7"};
-    QColor swapForegroundColor;
+    QColor swapColor {"#FEDF19"};
+    QColor swapForegroundColor {"#FEDF19"};
     QColor textColor;
 
     QTimer *timer;
     QVBoxLayout *layout;
     double animationFrames = 20;
-    double memoryBackgroundOpacity;
-    double memoryForegroundOpacity;
-    double swapBackgroundOpacity;
-    double swapForegroundOpacity;
+    double memoryBackgroundOpacity = 0.1;
+    double memoryForegroundOpacity = 1.0;
+    double swapBackgroundOpacity = 0.1;
+    double swapForegroundOpacity = 1.0;
     int animationIndex = 0;
-    int insideRingRadius = 35;
-    int lineHeight = 16;
-    int memoryPercentRenderSize = 10;
-    int memoryRenderPaddingX = 13;
-    int memoryRenderPaddingY = 10;
+    int insideRingRadius = 41;
     int memoryRenderSize = 9;
-    int outsideRingRadius = 42;
+    int outsideRingRadius = 48;
     int pointerRadius = 3;
-    int pointerRenderPaddingX = 4;
-    int pointerRenderPaddingY = 9;
     int ringCenterPointerX;
-    int ringCenterPointerY = 48;
+    int ringCenterPointerY = 45;
     int ringWidth = 6;
-    int swapRenderPaddingX = 13;
-    int swapRenderPaddingY = 56;
-    int swapRenderSize = 9;
+
     long prevUsedMemory;
     long prevUsedSwap;
     long totalMemory;
     long totalSwap;
     long usedMemory;
     long usedSwap;
+
+    QFont m_contentFont;
+    QFont m_subContentFont;
+    QFont m_memPercentFont;
 
     DApplicationHelper::ColorType m_themeType;
 };

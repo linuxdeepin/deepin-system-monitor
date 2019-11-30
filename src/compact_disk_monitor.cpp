@@ -25,9 +25,11 @@
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
+#include <DStyle>
 #include <QApplication>
 #include <QDebug>
 #include <QPainter>
+#include <QtMath>
 
 #include "compact_disk_monitor.h"
 #include "constant.h"
@@ -42,8 +44,13 @@ using namespace Utils;
 CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
     : QWidget(parent)
 {
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth);
+    setFixedWidth(statusBarMaxWidth - margin * 2);
     setFixedHeight(160);
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
@@ -63,6 +70,10 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
         connect(sysmon, &SystemMonitor::diskStatInfoUpdated, this,
                 &CompactDiskMonitor::updateStatus);
     }
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &CompactDiskMonitor::changeFont);
 }
 
 CompactDiskMonitor::~CompactDiskMonitor()
@@ -83,25 +94,12 @@ void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWri
         readSpeeds->pop_front();
     }
 
-    QList<QPointF> readPoints;
-
     double readMaxHeight = 0;
     for (int i = 0; i < readSpeeds->size(); i++) {
         if (readSpeeds->at(i) > readMaxHeight) {
             readMaxHeight = readSpeeds->at(i);
         }
     }
-
-    for (int i = 0; i < readSpeeds->size(); i++) {
-        if (readMaxHeight < readRenderMaxHeight) {
-            readPoints.append(QPointF(i * 5, readSpeeds->at(i)));
-        } else {
-            readPoints.append(
-                QPointF(i * 5, readSpeeds->at(i) * readRenderMaxHeight / readMaxHeight));
-        }
-    }
-
-    readPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
 
     // Init write path.
     writeSpeeds->append(totalWriteKbs);
@@ -110,8 +108,6 @@ void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWri
         writeSpeeds->pop_front();
     }
 
-    QList<QPointF> writePoints;
-
     double writeMaxHeight = 0;
     for (int i = 0; i < writeSpeeds->size(); i++) {
         if (writeSpeeds->at(i) > writeMaxHeight) {
@@ -119,18 +115,41 @@ void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWri
         }
     }
 
+    qreal maxH = std::max(readMaxHeight, writeMaxHeight);
+    int modReadMaxRenderH = readRenderMaxHeight - 2;
+    int modWriteMaxRenderH = writeRenderMaxHeight - 2;
+
+    QList<QPointF> readPoints;
+    for (int i = 0; i < readSpeeds->size(); i++) {
+        if (readMaxHeight < modReadMaxRenderH) {
+            readPoints.append(QPointF(i * 5, readSpeeds->at(i)));
+        } else {
+            qreal scale = readSpeeds->at(i) * ulong(modReadMaxRenderH) / maxH;
+            if (scale > 0 && scale < 0.5) {
+                scale = 0.5;
+            }
+            readPoints.append(QPointF(i * 5, scale));
+        }
+    }
+
+    readPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
+
+    QList<QPointF> writePoints;
     for (int i = 0; i < writeSpeeds->size(); i++) {
-        if (writeMaxHeight < writeRenderMaxHeight) {
+        if (writeMaxHeight < modWriteMaxRenderH) {
             writePoints.append(QPointF(i * 5, writeSpeeds->at(i)));
         } else {
-            writePoints.append(
-                QPointF(i * 5, writeSpeeds->at(i) * writeRenderMaxHeight / writeMaxHeight));
+            qreal scale = writeSpeeds->at(i) * ulong(modWriteMaxRenderH) / maxH;
+            if (scale > 0 && scale < 0.5) {
+                scale = 0.5;
+            }
+            writePoints.append(QPointF(i * 5, scale));
         }
     }
 
     writePath = SmoothCurveGenerator::generateSmoothCurve(writePoints);
 
-    repaint();
+    update();
 }
 
 void CompactDiskMonitor::paintEvent(QPaintEvent *)
@@ -138,109 +157,117 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    QStyleOption option;
+    option.initFrom(this);
+    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-    // TODO: change color when UE ready
-    QColor textColor = palette.color(DPalette::Text);
-    QColor summaryColor = palette.color(DPalette::Text);
-    QColor readColor = "#1094D8";
-    QColor writeColor = "#F7B300";
+    QColor tagColor = palette.color(DPalette::Text);
+    QColor statColor = palette.color(DPalette::TextTips);
+    QColor frameColor = palette.color(DPalette::FrameBorder);
+
+    // Draw disk summary.
+    QFontMetrics fm(m_tagFont);
+    QFontMetrics fmStat(m_statFont);
+
+    QString rtag = DApplication::translate("Process.Graph.View", "Disk read");
+    QString wtag = DApplication::translate("Process.Graph.View", "Disk write");
+    QString rstat = QString("%1").arg(formatBandwidth(totalReadKbs));
+    QString wstat = QString("%1").arg(formatBandwidth(totalWriteKbs));
+
+    QRect rcol1(m_bulletSize * 2 + 2, 0, fm.width(rtag), fm.height());
+    QRect rcol2(rcol1.x() + rcol1.width() + 4, rcol1.y(), fmStat.width(rstat), fmStat.height());
+    QRect wcol1(rcol1.x(), rcol1.y() + rcol1.height(), fm.width(wtag), fm.height());
+    QRect wcol2(rcol2.x(), wcol1.y(), fmStat.width(wstat), fm.height());
+    QRect bulletRect1(0, rcol1.y() + qCeil((rcol1.height() - m_bulletSize) / 2.), m_bulletSize,
+                      m_bulletSize);
+    QRect bulletRect2(0, wcol1.y() + qCeil((wcol1.height() - m_bulletSize) / 2.), m_bulletSize,
+                      m_bulletSize);
+
+    QPainterPath path1, path2;
+    path1.addEllipse(bulletRect1);
+    path2.addEllipse(bulletRect2);
+    painter.fillPath(path1, m_diskReadColor);
+    painter.fillPath(path2, m_diskWriteColor);
+
+    painter.setPen(QPen(tagColor));
+    painter.setFont(m_tagFont);
+    painter.drawText(rcol1, Qt::AlignLeft | Qt::AlignVCenter, rtag);
+    painter.drawText(wcol1, Qt::AlignLeft | Qt::AlignVCenter, wtag);
+
+    painter.setPen(QPen(statColor));
+    painter.setFont(m_statFont);
+    painter.drawText(rcol2, Qt::AlignLeft | Qt::AlignVCenter, rstat);
+    painter.drawText(wcol2, Qt::AlignLeft | Qt::AlignVCenter, wstat);
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
+
     QPen framePen;
-    painter.setOpacity(0.1);
-    framePen.setColor(QColor(textColor));
-    framePen.setWidth(1);
+    int penSize = 1;
+    framePen.setColor(frameColor);
+    framePen.setWidth(penSize);
     painter.setPen(framePen);
 
-    int penSize = 1;
-    int gridX = rect().x() + penSize;
-    int gridY = rect().y() + gridRenderOffsetY + gridPaddingTop;
-    int gridWidth = rect().width() - gridPaddingRight - penSize * 2;
-    int gridHeight = readRenderMaxHeight + writeRenderMaxHeight + waveformRenderPadding;
+    int gridX = rect().x() + penSize + 3;
+    int gridY = rect().y() + wcol1.y() + wcol1.height() + margin;
+    int gridWidth =
+        rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
+    int gridHeight = readRenderMaxHeight + writeRenderMaxHeight + 4 * penSize;
 
     QPainterPath framePath;
-    framePath.addRect(QRect(gridX, gridY, gridWidth, gridHeight));
+    QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
+    framePath.addRect(gridFrame);
     painter.drawPath(framePath);
 
     // Draw grid.
     QPen gridPen;
     QVector<qreal> dashes;
-    qreal space = 3;
-    dashes << 5 << space;
-    painter.setOpacity(0.05);
-    gridPen.setColor(QColor(textColor));
-    gridPen.setWidth(1);
+    qreal space = 2;
+    dashes << 2 << space;
+    gridPen.setColor(frameColor);
+    gridPen.setWidth(penSize);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
     int gridLineX = gridX;
-    while (gridLineX < gridX + gridWidth - gridSize) {
-        gridLineX += gridSize;
+    while (gridLineX + gridSize + penSize < gridX + gridWidth) {
+        gridLineX += gridSize + penSize;
         painter.drawLine(gridLineX, gridY + 1, gridLineX, gridY + gridHeight - 1);
     }
     int gridLineY = gridY;
-    while (gridLineY < gridY + gridHeight - gridSize) {
-        gridLineY += gridSize;
+    while (gridLineY + gridSize + penSize < gridY + gridHeight) {
+        gridLineY += gridSize + penSize;
         painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
     }
+
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-    // Draw disk summary.
-    setFontSize(painter, readRenderSize);
-    QFontMetrics fm = painter.fontMetrics();
-
-    QString readTitle = QString("%1 %2")
-                            .arg(DApplication::translate("Process.Graph.View", "Disk read"))
-                            .arg(formatBandwidth(totalReadKbs));
-    QString writeTitle = QString("%1 %2")
-                             .arg(DApplication::translate("Process.Graph.View", "Disk write"))
-                             .arg(formatBandwidth(totalWriteKbs));
-
-    painter.setOpacity(1);
-    painter.setPen(QPen(QColor(readColor)));
-    painter.setBrush(QBrush(QColor(readColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + readRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
-
-    setFontSize(painter, readRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + readRenderPaddingX, rect().y() + readRenderPaddingY,
-                           fm.width(readTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, readTitle);
-
-    painter.setPen(QPen(QColor(writeColor)));
-    painter.setBrush(QBrush(QColor(writeColor)));
-    painter.drawEllipse(QPointF(rect().x() + pointerRenderPaddingX,
-                                rect().y() + writeRenderPaddingY + pointerRenderPaddingY),
-                        pointerRadius, pointerRadius);
-
-    setFontSize(painter, writeRenderSize);
-    painter.setPen(QPen(QColor(summaryColor)));
-    painter.drawText(QRect(rect().x() + writeRenderPaddingX, rect().y() + writeRenderPaddingY,
-                           fm.width(writeTitle), rect().height()),
-                     Qt::AlignLeft | Qt::AlignTop, writeTitle);
-
-    painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,
-                      readWaveformsRenderOffsetY + gridPaddingTop);
-    painter.scale(1, -1);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal diskCurveWidth = 1.2;
     if (devicePixelRatio > 1) {
         diskCurveWidth = 2;
     }
-    painter.setPen(QPen(QColor(readColor), diskCurveWidth));
-    painter.setBrush(QBrush());
+
+    painter.translate(gridFrame.x() + 2, gridFrame.y() + gridFrame.height() / 2 - 2);
+    painter.scale(1, -1);
+    painter.setPen(QPen(m_diskReadColor, diskCurveWidth));
     painter.drawPath(readPath);
 
     painter.translate(0, writeWaveformsRenderOffsetY);
     painter.scale(1, -1);
-
-    painter.setPen(QPen(QColor(writeColor), diskCurveWidth));
-    painter.setBrush(QBrush());
+    painter.setPen(QPen(m_diskWriteColor, diskCurveWidth));
     painter.drawPath(writePath);
+}
+
+void CompactDiskMonitor::changeFont(const QFont &font)
+{
+    m_tagFont = font;
+    m_tagFont.setPointSize(m_tagFont.pointSize() - 1);
+    m_tagFont.setWeight(QFont::Medium);
+    m_statFont = font;
+    m_statFont.setPointSize(m_statFont.pointSize() - 1);
 }

@@ -91,10 +91,10 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
         case DApplicationHelper::LightType:
-            iconImage = QIcon(":/image/light/icon_network_light.svg").pixmap(QSize(24, 24));
+            m_icon = QIcon(":/image/light/icon_network_light.svg");
             break;
         case DApplicationHelper::DarkType:
-            iconImage = QIcon(":/image/dark/icon_network_light.svg").pixmap(QSize(24, 24));
+            m_icon = QIcon(":/image/dark/icon_network_light.svg");
             break;
         default:
             break;
@@ -146,6 +146,7 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
     }
 
     qreal maxHeight = std::max(uploadMaxHeight, downloadMaxHeight);
+    // top/bottom margin
     int modDownloadRenderMaxHeight = downloadRenderMaxHeight - 2;
     int modUploadRenderMaxHeight = uploadRenderMaxHeight - 2;
 
@@ -154,8 +155,11 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
         if (downloadMaxHeight < modDownloadRenderMaxHeight) {
             downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
         } else {
-            downloadPoints.append(
-                QPointF(i * 5, downloadSpeeds->at(i) * modDownloadRenderMaxHeight / maxHeight));
+            qreal scale = downloadSpeeds->at(i) * modDownloadRenderMaxHeight / maxHeight;
+            if (scale > 0 && scale < 0.5) {
+                scale = 0.5;
+            }
+            downloadPoints.append(QPointF(i * 5, scale));
         }
     }
 
@@ -165,8 +169,11 @@ void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvK
         if (uploadMaxHeight < modUploadRenderMaxHeight) {
             uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
         } else {
-            uploadPoints.append(
-                QPointF(i * 5, uploadSpeeds->at(i) * modUploadRenderMaxHeight / maxHeight));
+            qreal scale = uploadSpeeds->at(i) * modUploadRenderMaxHeight / maxHeight;
+            if (scale > 0 && scale < 0.5) {
+                scale = 0.5;
+            }
+            uploadPoints.append(QPointF(i * 5, scale));
         }
     }
 
@@ -180,16 +187,17 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    //    painter.fillRect(rect(), "#10f1ab35");
-
-    int spacing = 6;
     int sectionSize = 6;
+    int spacing = 10;
+    int padleft = sectionSize * 2 + 2;
 
     QFontMetrics fmSection(m_sectionFont);
     QString sectionTitle = DApplication::translate("Process.Graph.View", "Network");
 
+    int iconSize = 24;
+
     // Draw title.
-    QRect titleRect(rect().x() + iconImage.width() + 4, rect().y(), fmSection.width(sectionTitle),
+    QRect titleRect(rect().x() + iconSize + 4, rect().y(), fmSection.width(sectionTitle),
                     fmSection.height());
 
     painter.setFont(m_sectionFont);
@@ -197,10 +205,9 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignTop, sectionTitle);
 
     // Draw icon.
-    QRect iconRect(rect().x(),
-                   titleRect.y() + qCeil((titleRect.height() - iconImage.height()) / 2.) + 2,
-                   iconImage.width(), iconImage.height());
-    painter.drawPixmap(iconRect, iconImage);
+    QRect iconRect(rect().x(), titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,
+                   iconSize, iconSize);
+    m_icon.paint(&painter, iconRect);
 
     // Draw network summary.
     QString recvTitle = DApplication::translate("Process.Graph.View", "Download");
@@ -215,19 +222,20 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);
+    QRect contentRect(padleft, titleRect.y() + titleRect.height() + spacing,
+                      rect().x() + rect().width() - padleft, 1);
     int cw1 = std::max(fmContent.width(recvTitle), fmContent.width(sentTitle));
-    int cw2 = std::max(fmContent.width(recvContent), fmContent.width(sentContent));
+    int cw2 = qCeil(contentRect.width() / 2.) - cw1;
     int cw3 = std::max(fmContent.width(recvTotalTitle), fmContent.width(recvTotalTitle));
-    int cw4 = std::max(fmContent.width(recvTotalContent), fmContent.width(sentTotalContent));
-    QRect crect11(sectionSize * 2 + 4, titleRect.y() + titleRect.height() + spacing, cw1,
-                  fmContent.height());
+    int cw4 = contentRect.width() - cw1 - cw2 - cw3;
+    QRect crect11(contentRect.x(), contentRect.y(), cw1, fmContent.height());
     QRect crect12(crect11.x() + cw1 + 4, crect11.y(), cw2, crect11.height());
-    QRect crect14(rect().width() - cw4, crect11.y(), cw4, crect11.height());
-    QRect crect13(crect14.x() - 4 - cw3, crect11.y(), cw3, crect11.height());
+    QRect crect13(crect12.x() + cw2, crect11.y(), cw3, crect11.height());
+    QRect crect14(crect13.x() + cw3 + 4, crect11.y(), cw4, crect11.height());
     QRect crect21(crect11.x(), crect11.y() + crect11.height(), cw1, crect11.height());
     QRect crect22(crect12.x(), crect21.y(), cw2, crect21.height());
-    QRect crect24(crect14.x(), crect21.y(), cw4, crect21.height());
     QRect crect23(crect13.x(), crect21.y(), cw3, crect21.height());
+    QRect crect24(crect14.x(), crect21.y(), cw4, crect21.height());
     QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - sectionSize) / 2.), sectionSize,
                  sectionSize);
     QRectF r2Ind(3, crect21.y() + qCeil((crect21.height() - sectionSize) / 2.), sectionSize,
@@ -257,11 +265,11 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPen framePen;
+    int penSize = 1;
     framePen.setColor(m_frameColor);
-    framePen.setWidth(1);
+    framePen.setWidth(penSize);
     painter.setPen(framePen);
 
-    int penSize = 1;
     int gridX = rect().x() + penSize + 3;
     int gridY = rect().y() + crect22.y() + crect22.height() + m_margin;
     int gridWidth =

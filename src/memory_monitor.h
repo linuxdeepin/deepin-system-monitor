@@ -44,11 +44,11 @@ public:
     ~MemoryMonitor();
 
 public slots:
-    void changeTheme(DApplicationHelper::ColorType themeType);
     void render();
     void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
 
 private:
+    void changeTheme(DApplicationHelper::ColorType themeType);
     void changeFont(const QFont &font);
 
 protected:

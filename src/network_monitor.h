@@ -25,6 +25,7 @@
 #define NETWORKMONITOR_H
 
 #include <DApplicationHelper>
+#include <QIcon>
 #include <QWidget>
 
 DWIDGET_USE_NAMESPACE
@@ -38,7 +39,6 @@ public:
     ~NetworkMonitor();
 
 public slots:
-    void changeTheme(DApplicationHelper::ColorType themeType);
     void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs,
                       float totalSentKbs);
 
@@ -46,10 +46,11 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    void changeTheme(DApplicationHelper::ColorType themeType);
     void changeFont(const QFont &font);
 
 private:
-    QPixmap iconImage;
+    QIcon m_icon;
 
     QList<double> *downloadSpeeds;
     QList<double> *uploadSpeeds;
