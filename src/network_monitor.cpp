@@ -250,10 +250,14 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
-    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter, recvContent);
-    painter.drawText(crect22, Qt::AlignLeft | Qt::AlignVCenter, sentContent);
-    painter.drawText(crect14, Qt::AlignLeft | Qt::AlignVCenter, recvTotalContent);
-    painter.drawText(crect24, Qt::AlignLeft | Qt::AlignVCenter, sentTotalContent);
+    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(recvContent, Qt::ElideRight, crect12.width()));
+    painter.drawText(crect22, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(sentContent, Qt::ElideRight, crect22.width()));
+    painter.drawText(crect14, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(recvTotalContent, Qt::ElideRight, crect14.width()));
+    painter.drawText(crect24, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(sentTotalContent, Qt::ElideRight, crect14.width()));
 
     QPainterPath path1, path2;
     path1.addEllipse(r1Ind);

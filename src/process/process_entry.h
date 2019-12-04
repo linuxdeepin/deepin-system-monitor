@@ -21,6 +21,9 @@ public:
     pid_t getPID() const;
     void setPID(pid_t pid);
 
+    int getPriority() const;
+    void setPriority(int priority);
+
     char getState() const;
     void setState(char state);
 

@@ -144,6 +144,16 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         case ProcessTableModel::kProcessDiskWriteColumn: {
             return left.data(Qt::UserRole) < right.data(Qt::UserRole);
         }
+        case ProcessTableModel::kProcessNiceColumn: {
+            // higher priority has negative number
+            return !(left.data(Qt::UserRole) < right.data(Qt::UserRole));
+        }
+        case ProcessTableModel::kProcessPriorityColumn: {
+            return !(
+                left.sibling(left.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole) <
+                right.sibling(right.row(), ProcessTableModel::kProcessNiceColumn)
+                    .data(Qt::UserRole));
+        }
         default:
             break;
     }

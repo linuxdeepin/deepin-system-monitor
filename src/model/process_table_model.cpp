@@ -26,6 +26,8 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
                 &ProcessTableModel::updateProcessState);
         connect(sysmon, &SystemMonitor::processKilled, this,
                 &ProcessTableModel::removeProcessEntry);
+        connect(sysmon, &SystemMonitor::processPriorityChanged, this,
+                &ProcessTableModel::updateProcessPriority);
 
         sysmon->updateStatus();
     }
@@ -112,8 +114,11 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
                 case kProcessDiskWriteColumn:
                     return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
                 case kProcessPIDColumn:
-                    return DApplication::translate("Service.Table.Header", kProcessPID);
-                    //                    return QString(kProcessPID);
+                    return DApplication::translate("Process.Table.Header", kProcessPID);
+                case kProcessNiceColumn:
+                    return DApplication::translate("Process.Table.Header", kProcessNice);
+                case kProcessPriorityColumn:
+                    return DApplication::translate("Process.Table.Header", kProcessPriority);
                 default:
                     break;
             }
@@ -172,6 +177,12 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             case kProcessPIDColumn: {
                 return QString("%1").arg(m_processList.at(index.row()).getPID());
             }
+            case kProcessNiceColumn: {
+                return QString("%1").arg(m_processList.at(index.row()).getPriority());
+            }
+            case kProcessPriorityColumn: {
+                return SystemMonitor::getPriorityName(m_processList.at(index.row()).getPriority());
+            }
             default:
                 break;
         }
@@ -200,6 +211,8 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
                 return QVariant(m_processList.at(index.row()).getDiskRead());
             case kProcessDiskWriteColumn:
                 return QVariant(m_processList.at(index.row()).getDiskWrite());
+            case kProcessNiceColumn:
+                return QVariant(m_processList.at(index.row()).getPriority());
             default:
                 return {};
         }
@@ -237,10 +250,17 @@ Qt::ItemFlags ProcessTableModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-char ProcessTableModel::getProcessState(pid_t pid)
+char ProcessTableModel::getProcessState(pid_t pid) const
 {
     int row = m_processMap.value(pid);
     return m_processList.at(row).getState();
+}
+
+SystemMonitor::ProcessPriority ProcessTableModel::getProcessPriorityStub(pid_t pid) const
+{
+    int row = m_processMap.value(pid);
+    int prio = m_processList.at(row).getPriority();
+    return SystemMonitor::instance()->getProcessPriorityStub(prio);
 }
 
 void ProcessTableModel::removeProcessEntry(pid_t pid)
@@ -262,8 +282,19 @@ void ProcessTableModel::updateProcessState(pid_t pid, char state)
 {
     if (m_processMap.contains(pid)) {
         int row = m_processMap.value(pid);
-        ProcessEntry e = m_processList.at(row);
+        ProcessEntry e = m_processList[row];
         e.setState(state);
+        m_processList[row] = e;
+        Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
+    }
+}
+
+void ProcessTableModel::updateProcessPriority(pid_t pid, int priority)
+{
+    if (m_processMap.contains(pid)) {
+        int row = m_processMap.value(pid);
+        ProcessEntry e = m_processList[row];
+        e.setPriority(priority);
         m_processList[row] = e;
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }

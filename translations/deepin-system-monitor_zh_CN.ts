@@ -286,10 +286,6 @@ Are you sure you want to continue?</source>
         <translation>正在接收</translation>
     </message>
     <message>
-        <source>Total</source>
-        <translation>总计</translation>
-    </message>
-    <message>
         <source>Upload</source>
         <translation>正在发送</translation>
     </message>
@@ -308,6 +304,41 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>总计发送</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Priority</name>
+    <message>
+        <source>Very high</source>
+        <translation>非常高</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation>高</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>普通</translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation>低</translation>
+    </message>
+    <message>
+        <source>Very low</source>
+        <translation>非常低</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation>自定义</translation>
+    </message>
+    <message>
+        <source>Set process priority failed</source>
+        <translation>设置进程优先级失败</translation>
+    </message>
+    <message>
+        <source>Invalid</source>
+        <translation>无效</translation>
     </message>
 </context>
 <context>
@@ -373,6 +404,10 @@ Are you sure you want to continue?</source>
         <source>Kill process</source>
         <translation>强制结束进程</translation>
     </message>
+    <message>
+        <source>Change priority</source>
+        <translation>改变优先级</translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -411,6 +446,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>User</source>
         <translation>用户</translation>
+    </message>
+    <message>
+        <source>Nice</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Priority</source>
+        <translation>优先级</translation>
     </message>
 </context>
 <context>

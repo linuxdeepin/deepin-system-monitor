@@ -284,10 +284,6 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">Entrante</translation>
     </message>
     <message>
-        <source>Total</source>
-        <translation type="unfinished">Total</translation>
-    </message>
-    <message>
         <source>Upload</source>
         <translation type="unfinished">Saínte</translation>
     </message>
@@ -305,6 +301,41 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Total Sent</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Process.Priority</name>
+    <message>
+        <source>Very high</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set process priority failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -371,6 +402,10 @@ Are you sure you want to continue?</source>
         <source>Kill process</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Change priority</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
@@ -408,6 +443,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -31,6 +31,7 @@ public Q_SLOTS:
     void killProcess();
     void search(const QString &text);
     void switchDisplayMode(SystemMonitor::FilterType type);
+    void changeProcessPriority(int priority);
 
 protected:
     bool loadSettings();

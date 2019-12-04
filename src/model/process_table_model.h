@@ -6,6 +6,7 @@
 #include <QMap>
 
 #include "process/process_entry.h"
+#include "process/system_monitor.h"
 
 constexpr const char *kProcessName = QT_TRANSLATE_NOOP("Process.Table.Header", "Name");
 constexpr const char *kProcessCPU = QT_TRANSLATE_NOOP("Process.Table.Header", "CPU");
@@ -16,6 +17,8 @@ constexpr const char *kProcessDownload = QT_TRANSLATE_NOOP("Process.Table.Header
 constexpr const char *kProcessDiskRead = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk read");
 constexpr const char *kProcessDiskWrite = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk write");
 constexpr const char *kProcessPID = QT_TRANSLATE_NOOP("Process.Table.Header", "PID");
+constexpr const char *kProcessNice = QT_TRANSLATE_NOOP("Process.Table.Header", "Nice");
+constexpr const char *kProcessPriority = QT_TRANSLATE_NOOP("Process.Table.Header", "Priority");
 
 class ProcessTableModel : public QAbstractTableModel
 {
@@ -33,6 +36,8 @@ public:
         kProcessDiskReadColumn,
         kProcessDiskWriteColumn,
         kProcessPIDColumn,
+        kProcessNiceColumn,
+        kProcessPriorityColumn,
 
         kProcessColumnCount
     };
@@ -47,8 +52,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-public:
-    char getProcessState(pid_t pid);
+    char getProcessState(pid_t pid) const;
+    SystemMonitor::ProcessPriority getProcessPriorityStub(pid_t pid) const;
 
 Q_SIGNALS:
     void modelUpdated();
@@ -56,6 +61,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void removeProcessEntry(pid_t pid);
     void updateProcessState(pid_t pid, char state);
+    void updateProcessPriority(pid_t pid, int priority);
 
 private:
     QList<ProcessEntry> m_processList;

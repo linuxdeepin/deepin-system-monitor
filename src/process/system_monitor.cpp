@@ -1,6 +1,9 @@
-#include <proc/sysinfo.h>
+﻿#include <proc/sysinfo.h>
 #include <pwd.h>
+#include <sched.h>
 #include <signal.h>
+#include <sys/resource.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -8,6 +11,7 @@
 #include <QDebug>
 #include <QIcon>
 
+#include "common/error_context.h"
 #include "constant.h"
 #include "process/process_entry.h"
 #include "process_tree.h"
@@ -156,6 +160,7 @@ void SystemMonitor::updateStatus()
             appendItem = true;
         }
 
+        ProcessEntry item;
         if (appendItem) {
             if (title == "") {
                 if (isWineProcess) {
@@ -183,7 +188,6 @@ void SystemMonitor::updateStatus()
 
             long memory = getProcessMemory(cmdline, (&i.second)->resident, (&i.second)->share);
             QPixmap icon = getProcessIcon(pid, desktopFile, m_findWindowTitle, 24);
-            ProcessEntry item;
             item.setIcon(icon);
             item.setName(name);
             item.setDisplayName(displayName);
@@ -296,6 +300,9 @@ void SystemMonitor::updateStatus()
 
         item.setDiskStats(getProcessDiskStatus(item.getPID()));
     }
+
+    // update priority status
+    updateProcessPriority(procList);
 
     for (int childPid : childInfoMap.keys()) {
         // Update network status.
@@ -437,6 +444,49 @@ void SystemMonitor::killProcess(pid_t pid)
     }
 }
 
+ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
+{
+    sched_param param {};
+    ErrorContext ec {};
+
+    auto errfmt = [=](int err, ErrorContext &errorContext) -> ErrorContext & {
+        errorContext.setCode(ErrorContext::kErrorTypeSystem);
+        errorContext.setSubCode(err);
+        errorContext.setErrorName(
+            DApplication::translate("Process.Priority", "Set process priority failed"));
+        QString errmsg = QString("PID: %1, Error: [%2] %3").arg(pid).arg(err).arg(strerror(err));
+        errorContext.setErrorMessage(errmsg);
+        return errorContext;
+    };
+
+    errno = 0;
+    int rc = sched_getparam(pid, &param);
+    if (rc == -1) {
+        return errfmt(errno, ec);
+    }
+    if (param.sched_priority == 0) {
+        // dynamic priority
+        if (priority > kVeryLowPriorityMin)
+            priority = kVeryLowPriorityMin;
+        else if (priority < kVeryHighPriorityMax)
+            priority = kVeryHighPriorityMax;
+
+        errno = 0;
+        rc = setpriority(PRIO_PROCESS, id_t(pid), priority);
+        if (rc == -1 && errno != 0) {
+            return errfmt(errno, ec);
+        } else {
+            processPriorityChanged(pid, priority);
+            return ec;
+        }
+    } else {
+        // static priority
+        // TODO: do nothing at this moment, call sched_setparam to change static priority when
+        // needed
+    }
+    return ec;
+}
+
 SystemMonitor::SystemMonitor(QObject *parent)
     : QObject(parent)
     , m_findWindowTitle(new FindWindowTitle)
@@ -475,6 +525,38 @@ DiskStatus SystemMonitor::getProcessDiskStatus(int pid)
     m_processReadKbs[pid] = pidIO.rchar;
 
     return status;
+}
+
+void SystemMonitor::updateProcessPriority(QList<ProcessEntry> &list)
+{
+    for (ProcessEntry &item : list) {
+        // get process priority
+        sched_param param {};
+        errno = 0;
+        pid_t pid = item.getPID();
+        int rc = sched_getparam(pid, &param);
+        if (errno != 0 && rc < 0) {
+            qDebug() << "sched_getparam failed: [" << errno << "]:" << strerror(errno);
+            continue;
+        }
+        if (param.sched_priority == 0) {
+            // static priority == 0 means non-realtime process (SCHED_OTHER || SCHED_BATCH ||
+            // SCHED_IDLE)
+            errno = 0;
+            int prio = getpriority(PRIO_PROCESS, id_t(pid));
+            if (prio == -1 && errno != 0) {
+                qDebug() << "getpriority failed: [" << errno << "]:" << strerror(errno);
+                continue;
+            }
+            // dynamic priority = nice
+            item.setPriority(prio);
+        } else {
+            // static priority > 0 means realtime process (SCHED_FIFO || SCHED_RR ||
+            // SCHED_DEADLINE...), set as normal priority for the current moment, just as
+            // (gnome-system-monitor) did
+            item.setPriority(kNormalPriority);
+        }
+    }
 }
 
 void SystemMonitor::mergeItemInfo(ProcessEntry &item, double childCpu, qulonglong childMemory,

@@ -12,6 +12,7 @@ public:
     ProcessEntryData(const ProcessEntryData &other)
         : QSharedData(other)
         , m_pid {other.m_pid}
+        , m_priority {other.m_priority}
         , m_state {other.m_state}
         , m_cpu {other.m_cpu}
         , m_icon {other.m_icon}
@@ -28,6 +29,7 @@ public:
         Q_UNUSED(padding);
         if (this != &other) {
             m_pid = other.m_pid;
+            m_priority = other.m_priority;
             m_state = other.m_state;
             m_cpu = other.m_cpu;
             m_icon = other.m_icon;
@@ -47,9 +49,11 @@ public:
 private:
     // pid
     pid_t m_pid {0};
+    // pirority
+    int m_priority {0};
     // process status
     char m_state {};
-    char padding[7];
+    char padding[3];
     // cpu -> default(descending)
     qreal m_cpu {.0};
     // icon
@@ -95,6 +99,16 @@ pid_t ProcessEntry::getPID() const
 void ProcessEntry::setPID(pid_t pid)
 {
     data->m_pid = pid;
+}
+
+int ProcessEntry::getPriority() const
+{
+    return data->m_priority;
+}
+
+void ProcessEntry::setPriority(int priority)
+{
+    data->m_priority = priority;
 }
 
 char ProcessEntry::getState() const

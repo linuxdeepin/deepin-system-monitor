@@ -8,15 +8,18 @@
 #include <mutex>
 #include <thread>
 
+#include <DApplication>
 #include <QMap>
 #include <QPointF>
 #include <QTimer>
 
+#include "common/error_context.h"
 #include "find_window_title.h"
 #include "network_traffic_filter.h"
 #include "utils.h"
 
 using namespace Utils;
+DWIDGET_USE_NAMESPACE
 
 class ProcessEntry;
 
@@ -29,6 +32,24 @@ public:
     typedef std::map<int, proc_t> StoredProcType;
 
     enum FilterType { OnlyGUI, OnlyMe, AllProcess };
+
+    enum ProcessPriority {
+        kInvalidPriority = INT_MAX,
+        kVeryHighPriority = -20,  // default veryhigh priority
+        kHighPriority = -5,       // default high priority
+        kNormalPriority = 0,
+        kLowPriority = 5,       // default low priority
+        kVeryLowPriority = 19,  // default verylow priority
+        kCustomPriority
+    };
+    static const int kVeryHighPriorityMax = -20;
+    static const int kVeryHighPriorityMin = -11;
+    static const int kHighPriorityMax = -10;
+    static const int kHighPriorityMin = -1;
+    static const int kLowPriorityMax = 1;
+    static const int kLowPriorityMin = 10;
+    static const int kVeryLowPriorityMax = 11;
+    static const int kVeryLowPriorityMin = 19;
 
     struct ChildPidInfo {
         qreal cpu;
@@ -51,6 +72,42 @@ public:
         return sin;
     }
 
+    inline static QString getPriorityName(int prio)
+    {
+        const static QMap<ProcessPriority, QString> priorityMap = {
+            {kVeryHighPriority, DApplication::translate("Process.Priority", "Very high")},
+            {kHighPriority, DApplication::translate("Process.Priority", "High")},
+            {kNormalPriority, DApplication::translate("Process.Priority", "Normal")},
+            {kLowPriority, DApplication::translate("Process.Priority", "Low")},
+            {kVeryLowPriority, DApplication::translate("Process.Priority", "Very low")},
+            {kCustomPriority, DApplication::translate("Process.Priority", "Custom")},
+            {kInvalidPriority, DApplication::translate("Process.Priority", "Invalid")}};
+
+        ProcessPriority p = kInvalidPriority;
+        if (prio == kVeryHighPriority || prio == kHighPriority || prio == kNormalPriority ||
+            prio == kLowPriority || prio == kVeryLowPriority) {
+            p = ProcessPriority(prio);
+        } else if (prio >= kVeryHighPriorityMax && prio <= kVeryLowPriorityMin) {
+            p = kCustomPriority;
+        }
+
+        return priorityMap[p];
+    }
+
+    inline ProcessPriority getProcessPriorityStub(int prio) const
+    {
+        if (prio == 0) {
+            return kNormalPriority;
+        } else if (prio == kVeryHighPriority || prio == kHighPriority || prio == kLowPriority ||
+                   prio == kVeryLowPriority) {
+            return ProcessPriority(prio);
+        } else if (prio <= kVeryLowPriorityMin && prio >= kVeryHighPriorityMax) {
+            return kCustomPriority;
+        } else {
+            return kInvalidPriority;
+        }
+    }
+
 Q_SIGNALS:
     void cpuStatInfoUpdated(qreal cpuPercent, const QVector<qreal> &cpuPercents);
     void memStatInfoUpdated(qulonglong usedMemory, qulonglong totalMemory, qulonglong usedSwap,
@@ -64,6 +121,7 @@ Q_SIGNALS:
     void processPaused(pid_t pid, char state);
     void processResumed(pid_t pid, char state);
     void processKilled(pid_t pid);
+    void processPriorityChanged(pid_t pid, int priority);
 
 public Q_SLOTS:
     void updateStatus();
@@ -77,6 +135,7 @@ public Q_SLOTS:
         pid_t cur = getpid();
         return pid == cur;
     }
+    ErrorContext setProcessPriority(pid_t pid, int priority);
 
 private:
     SystemMonitor(QObject *parent = nullptr);
@@ -85,6 +144,7 @@ private:
     DiskStatus getProcessDiskStatus(int pid);
     void mergeItemInfo(ProcessEntry &item, qreal childCpu, qulonglong childMemory,
                        const DiskStatus &childDiskStatus, const NetworkStatus &childNetworkStatus);
+    void updateProcessPriority(QList<ProcessEntry> &list);
 
 private:
     FilterType filterType {OnlyGUI};
