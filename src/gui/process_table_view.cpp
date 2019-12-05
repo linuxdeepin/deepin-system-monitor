@@ -207,13 +207,8 @@ void ProcessTableView::changeProcessPriority(int priority)
             ErrorContext ec {};
             ec = sysmon->setProcessPriority(pid, priority);
             if (ec) {
-                if (ec.getSubCode() == EACCES || ec.getSubCode() == EPERM) {
-                    // auth check
-                    DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
-                } else {
-                    // show error dialog
-                    DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
-                }
+                // show error dialog
+                DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
             }
         }
     }
@@ -400,6 +395,8 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Custom"));
     setCustomPrioAction->setCheckable(true);
     setCustomPrioAction->setActionGroup(prioGroup);
+    // TODO: fix this when ui design ready
+    setCustomPrioAction->setVisible(false);
     connect(setCustomPrioAction, &QAction::triggered,
             [=]() { DMessageBox::warning(this, "TBD", "TBD"); });
 
@@ -614,6 +611,16 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(m_viewPropKP, &QShortcut::activated, this, &ProcessTableView::showProperties);
     m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
     connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
+
+    auto *sysmon = SystemMonitor::instance();
+    if (sysmon) {
+        connect(sysmon, &SystemMonitor::priorityPromoteResultReady, this,
+                [=](const ErrorContext &ec) {
+                    if (ec) {
+                        DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+                    }
+                });
+    }
 }
 
 void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)

@@ -81,7 +81,8 @@ HEADERS += src/utils.h \
     src/gui/monitor_compact_view.h \
     src/process/system_monitor.h \
     src/gui/kill_process_confirm_dialog.h \
-    src/gui/process_attribute_dialog.h
+    src/gui/process_attribute_dialog.h \
+    src/process/priority_controller.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -133,7 +134,8 @@ SOURCES += src/main.cpp \
     src/gui/monitor_compact_view.cpp \
     src/process/system_monitor.cpp \
     src/gui/kill_process_confirm_dialog.cpp \
-    src/gui/process_attribute_dialog.cpp
+    src/gui/process_attribute_dialog.cpp \
+    src/process/priority_controller.cpp
 
 QT += core
 QT += widgets

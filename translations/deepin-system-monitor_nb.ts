@@ -338,6 +338,10 @@ Are you sure you want to continue?</source>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>

@@ -84,8 +84,9 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
+    app.setAutoActivateWindows(true);
 
-    if (DGuiApplicationHelper::setSingleInstance(QString("system-monitor"),
+    if (DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor"),
                                                  DGuiApplicationHelper::UserScope)) {
         app.loadTranslator();
 

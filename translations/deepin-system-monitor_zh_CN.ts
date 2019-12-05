@@ -340,6 +340,10 @@ Are you sure you want to continue?</source>
         <source>Invalid</source>
         <translation>无效</translation>
     </message>
+    <message>
+        <source>PID: %1, Error: [%2] %3</source>
+        <translation>进程号: %1, 错误: [%2] %3</translation>
+    </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>

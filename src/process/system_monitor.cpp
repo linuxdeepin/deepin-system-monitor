@@ -1,4 +1,5 @@
-﻿#include <proc/sysinfo.h>
+#include <errno.h>
+#include <proc/sysinfo.h>
 #include <pwd.h>
 #include <sched.h>
 #include <signal.h>
@@ -13,6 +14,7 @@
 
 #include "common/error_context.h"
 #include "constant.h"
+#include "priority_controller.h"
 #include "process/process_entry.h"
 #include "process_tree.h"
 #include "system_monitor.h"
@@ -474,9 +476,34 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
         errno = 0;
         rc = setpriority(PRIO_PROCESS, id_t(pid), priority);
         if (rc == -1 && errno != 0) {
-            return errfmt(errno, ec);
+            if (errno == EACCES || errno == EPERM) {
+                // call pkexec to change priority
+                PriorityController *ctrl = new PriorityController(pid, priority, this);
+                connect(ctrl, &PriorityController::resultReady, this, [=](int code) {
+                    if (code == 0) {
+                        Q_EMIT processPriorityChanged(pid, priority);
+                    } else {
+                        ErrorContext ec {};
+                        ec.setCode(ErrorContext::kErrorTypeSystem);
+                        ec.setSubCode(code);
+                        ec.setErrorName(DApplication::translate("Process.Priority",
+                                                                "Set process priority failed"));
+                        ec.setErrorMessage(
+                            DApplication::translate("Process.Priority", "PID: %1, Error: [%2] %3")
+                                .arg(pid)
+                                .arg(code)
+                                .arg(strerror(code)));
+                        Q_EMIT priorityPromoteResultReady(ec);
+                    }
+                });
+                connect(ctrl, &PriorityController::finished, ctrl, &QObject::deleteLater);
+                ctrl->start();
+                return {};
+            } else {
+                return errfmt(errno, ec);
+            }
         } else {
-            processPriorityChanged(pid, priority);
+            Q_EMIT processPriorityChanged(pid, priority);
             return ec;
         }
     } else {
