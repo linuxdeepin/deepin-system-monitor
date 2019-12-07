@@ -78,8 +78,7 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(defaultMessageOutput);
 
-    DApplication::setAttribute(Qt::AA_DontShowShortcutsInContextMenus, false);
-    DApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    //    DApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     DApplication::loadDXcbPlugin();
 

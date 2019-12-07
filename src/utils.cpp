@@ -393,7 +393,7 @@ QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
     std::string temp;
     try {
         std::fstream fs;
-        fs.open("/proc/" + std::to_string((long)pid) + "/environ", std::fstream::in);
+        fs.open("/proc/" + std::to_string(long(pid)) + "/environ", std::fstream::in);
         std::getline(fs, temp);
         fs.close();
     } catch (std::ifstream::failure e) {
@@ -421,7 +421,7 @@ QString getProcessCmdline(pid_t pid)
     std::string temp;
     try {
         std::fstream fs;
-        fs.open("/proc/" + std::to_string((long)pid) + "/cmdline", std::fstream::in);
+        fs.open("/proc/" + std::to_string(long(pid)) + "/cmdline", std::fstream::in);
         std::getline(fs, temp);
         fs.close();
     } catch (std::ifstream::failure e) {
