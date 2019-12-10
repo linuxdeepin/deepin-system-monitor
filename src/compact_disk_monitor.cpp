@@ -178,10 +178,12 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     QString rstat = QString("%1").arg(formatBandwidth(totalReadKbs));
     QString wstat = QString("%1").arg(formatBandwidth(totalWriteKbs));
 
-    QRect rcol1(m_bulletSize * 2 + 2, 0, fm.width(rtag), fm.height());
-    QRect rcol2(rcol1.x() + rcol1.width() + 4, rcol1.y(), fmStat.width(rstat), fmStat.height());
-    QRect wcol1(rcol1.x(), rcol1.y() + rcol1.height(), fm.width(wtag), fm.height());
-    QRect wcol2(rcol2.x(), wcol1.y(), fmStat.width(wstat), fm.height());
+    QRect rcol1(m_bulletSize * 2 + 2, 0, fm.size(Qt::TextSingleLine, rtag).width(), fm.height());
+    QRect rcol2(rcol1.x() + rcol1.width() + 4, rcol1.y(),
+                fmStat.size(Qt::TextSingleLine, rstat).width(), fmStat.height());
+    QRect wcol1(rcol1.x(), rcol1.y() + rcol1.height(), fm.size(Qt::TextSingleLine, wtag).width(),
+                fm.height());
+    QRect wcol2(rcol2.x(), wcol1.y(), fmStat.size(Qt::TextSingleLine, wstat).width(), fm.height());
     QRect bulletRect1(0, rcol1.y() + qCeil((rcol1.height() - m_bulletSize) / 2.), m_bulletSize,
                       m_bulletSize);
     QRect bulletRect2(0, wcol1.y() + qCeil((wcol1.height() - m_bulletSize) / 2.), m_bulletSize,

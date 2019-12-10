@@ -240,7 +240,7 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, readRenderSize);
     painter.setPen(QPen(summaryColor));
     painter.drawText(QRect(rect().x() + readRenderPaddingX, rect().y() + readRenderPaddingY,
-                           fm.width(readTitle), rect().height()),
+                           fm.size(Qt::TextSingleLine, readTitle).width(), rect().height()),
                      Qt::AlignLeft | Qt::AlignTop, readTitle);
 
     painter.setPen(QPen(writeColor));
@@ -252,7 +252,7 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     setFontSize(painter, writeRenderSize);
     painter.setPen(QPen(summaryColor));
     painter.drawText(QRect(rect().x() + writeRenderPaddingX, rect().y() + writeRenderPaddingY,
-                           fm.width(writeTitle), rect().height()),
+                           fm.size(Qt::TextSingleLine, writeTitle).width(), rect().height()),
                      Qt::AlignLeft | Qt::AlignTop, writeTitle);
 
     painter.translate((rect().width() - pointsNumber * 5) / 2 - 7,

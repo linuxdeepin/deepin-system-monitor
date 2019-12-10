@@ -47,7 +47,7 @@ private:
     void changeFont(const QFont &font);
 
 private:
-    QList<QList<double>> cpuPercents;
+    QList<QList<qreal>> cpuPercents;
     QList<QPainterPath> cpuPaths;
     QList<QColor> cpuColors;
     int cpuRenderMaxHeight = 80;

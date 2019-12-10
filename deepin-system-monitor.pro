@@ -45,7 +45,6 @@ HEADERS += src/utils.h \
         src/interactive_kill.h \
         src/start_tooltip.h \
         src/process_tree.h \
-        src/process_switch_tab.h \
         src/constant.h \
         src/settings.h \
         src/dbus/systemd1_manager_interface.h \
@@ -101,7 +100,6 @@ SOURCES += src/main.cpp \
         src/interactive_kill.cpp \
         src/start_tooltip.cpp \
         src/process_tree.cpp \
-        src/process_switch_tab.cpp \
         src/settings.cpp \
         src/dbus/systemd1_manager_interface.cpp \
         src/dbus/systemd1_service_interface.cpp \
