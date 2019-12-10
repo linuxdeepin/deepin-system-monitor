@@ -185,9 +185,11 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);
-    int cw1 = std::max(fmContent.width(recvTitle), fmContent.width(sentTitle));
+    int cw1 = std::max(fmContent.size(Qt::TextSingleLine, recvTitle).width(),
+                       fmContent.size(Qt::TextSingleLine, sentTitle).width());
     int cw2 = qCeil(contentRect.width() / 2.) - cw1;
-    int cw3 = std::max(fmContent.width(recvTotalTitle), fmContent.width(recvTotalTitle));
+    int cw3 = std::max(fmContent.size(Qt::TextSingleLine, recvTotalTitle).width(),
+                       fmContent.size(Qt::TextSingleLine, recvTotalTitle).width());
     int cw4 = contentRect.width() - cw1 - cw2 - cw3;
     QRect crect11(contentRect.x(), contentRect.y(), cw1, fmContent.height());
     QRect crect12(crect11.x() + cw1 + 4, crect11.y(), cw2, crect11.height());

@@ -114,7 +114,9 @@ void ProcessTableHeaderView::paintSection(QPainter *painter, const QRect &rect,
 
     QBrush contentBrush(palette.color(cg, DPalette::Base));
     // horizontal spacing
-    QBrush hSpacingBrush(palette.color(cg, DPalette::FrameBorder));
+    //    QBrush hSpacingBrush(palette.color(cg, DPalette::FrameBorder));
+    QBrush hSpacingBrush(
+        DApplicationHelper::instance()->palette(this).color(DPalette::FrameBorder));
     // vertical spacing
     QBrush vSpacingBrush(palette.color(cg, DPalette::FrameBorder));
     QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin, m_spacing,

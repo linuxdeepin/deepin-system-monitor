@@ -100,7 +100,7 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
     totalCpuPercent = cpuPercent;
 
     for (int i = 0; i < cPercents.size(); i++) {
-        QList<double> cpuPercent = cpuPercents[i];
+        QList<qreal> cpuPercent = cpuPercents[i];
 
         cpuPercent.append(cPercents[i]);
 
@@ -155,6 +155,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     // init colors
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
+
     QColor cpuColor = palette.color(DPalette::Text);
     QColor statColor = palette.color(DPalette::TextTips);
     QColor sectionColor {"#0081FF"};

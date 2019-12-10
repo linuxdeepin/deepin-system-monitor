@@ -215,8 +215,10 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmMem(m_contentFont);
     QFontMetrics fmMemStat(m_subContentFont);
-    QRect memRect(sectionSize * 2 + 2, rect().y(), fmMem.width(memoryTitle), fmMem.height());
-    QRect memStatRect(memRect.x(), memRect.y() + memRect.height(), fmMemStat.width(memoryContent),
+    QRect memRect(sectionSize * 2 + 2, rect().y(),
+                  fmMem.size(Qt::TextSingleLine, memoryTitle).width(), fmMem.height());
+    QRect memStatRect(memRect.x(), memRect.y() + memRect.height(),
+                      fmMemStat.size(Qt::TextSingleLine, memoryContent).width(),
                       fmMemStat.height());
     QRectF memIndicatorRect(0, memRect.y() + qCeil((memRect.height() - sectionSize) / 2.),
                             sectionSize, sectionSize);
@@ -238,9 +240,10 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fmSwap(m_contentFont);
     QFontMetrics fmSwapStat(m_subContentFont);
     QRect swapRect(memRect.x(), memStatRect.y() + memStatRect.height() + spacing,
-                   fmSwap.width(swapTitle), fmSwap.height());
+                   fmSwap.size(Qt::TextSingleLine, swapTitle).width(), fmSwap.height());
     QRect swapStatRect(swapRect.x(), swapRect.y() + swapRect.height(),
-                       fmSwapStat.width(swapContent), fmSwapStat.height());
+                       fmSwapStat.size(Qt::TextSingleLine, swapContent).width(),
+                       fmSwapStat.height());
     QRectF swapIndicatorRect(memIndicatorRect.x(),
                              swapRect.y() + qCeil((swapRect.height() - sectionSize) / 2.),
                              sectionSize, sectionSize);

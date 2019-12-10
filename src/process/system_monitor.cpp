@@ -319,13 +319,13 @@ void SystemMonitor::updateStatus()
     // Update cpu status.
     QVector<CpuStruct> cpuTimes = getCpuTimes();
     if (prevWorkCpuTime != 0 && prevTotalCpuTime != 0) {
-        QVector<double> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
+        QVector<qreal> cpuPercentages = calculateCpuPercentages(cpuTimes, prevCpuTimes);
 
         cpuStatInfoUpdated(
             (workCpuTime - prevWorkCpuTime) * 100.0 / (totalCpuTime - prevTotalCpuTime),
             cpuPercentages);
     } else {
-        QVector<double> cpuPercentages;
+        QVector<qreal> cpuPercentages;
 
         long int numCPU = sysconf(_SC_NPROCESSORS_ONLN);
         for (long int i = 0; i < numCPU; i++) {

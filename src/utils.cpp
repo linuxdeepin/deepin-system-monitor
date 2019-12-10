@@ -787,7 +787,7 @@ QVector<CpuStruct> getCpuTimes()
 QVector<qreal> calculateCpuPercentages(const QVector<CpuStruct> &now,
                                        const QVector<CpuStruct> &prev)
 {
-    QVector<qreal> times {};
+    QVector<qreal> times(now.size(), {0});
 
     if (now.size() != prev.size()) {
         return times;
@@ -795,11 +795,13 @@ QVector<qreal> calculateCpuPercentages(const QVector<CpuStruct> &now,
 
     for (int i = 0; i < now.size(); i++) {
         CpuStruct n, p;
-        n = now.at(i);
-        p = prev.at(i);
+        n = now.value(i);
+        p = prev.value(i);
 
         qulonglong totald = ((n.idle + n.nonIdle) - (p.idle + p.nonIdle));
-        times.push_back((totald - (n.idle - p.idle)) / totald * 100.0);
+        //        times.push_back((totald - (n.idle - p.idle)) / totald * 100.0);
+        qreal v = (totald - (n.idle - p.idle)) * 100.0 / totald;
+        times[i] = v;
     }
 
     return times;

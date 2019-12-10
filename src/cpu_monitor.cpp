@@ -170,7 +170,8 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     QFontMetrics fm(m_cpuDisplayFont);
-    int titleWidth = fm.width(DApplication::translate("Process.Graph.View", "CPU"));
+    int titleWidth =
+        fm.size(Qt::TextSingleLine, DApplication::translate("Process.Graph.View", "CPU")).width();
 
     painter.setFont(m_cpuDisplayFont);
     painter.setPen(QPen(textColor));
