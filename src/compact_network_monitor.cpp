@@ -301,7 +301,12 @@ void CompactNetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeTy
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
+#ifndef THEME_FALLBACK_COLOR
+    textColor = palette.color(DPalette::TextTitle);
+#else
     textColor = palette.color(DPalette::Text);
+#endif
+
     summaryColor = palette.color(DPalette::TextTips);
     m_frameColor = palette.color(DPalette::FrameBorder);
 }

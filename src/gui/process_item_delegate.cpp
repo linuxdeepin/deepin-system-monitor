@@ -75,7 +75,11 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             background = palette.color(cg, DPalette::Highlight);
+//            forground.setColor(palette.color(cg, DPalette::TextLively));
+            // TODO: fix this when TextLively color fixed
             forground.setColor(palette.color(cg, DPalette::HighlightedText));
+
+
         }
     }
     painter->setPen(forground);

@@ -104,6 +104,12 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
+#ifndef THEME_FALLBACK_COLOR
+    ltextColor = palette.color(DPalette::TextTitle);
+#else
+    ltextColor = palette.color(DPalette::Text);
+#endif
+
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
     m_frameColor = palette.color(DPalette::FrameBorder);
@@ -244,7 +250,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QRectF r2Ind(3, crect21.y() + qCeil((crect21.height() - sectionSize) / 2.), sectionSize,
                  sectionSize);
 
-    painter.setPen(textColor);
+    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(crect11, Qt::AlignLeft | Qt::AlignVCenter, recvTitle);
     painter.drawText(crect21, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);

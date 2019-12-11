@@ -75,6 +75,7 @@ void SystemServiceItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             background = palette.color(cg, DPalette::Highlight);
+            // TODO: fix this when TextLively color fixed
             forground.setColor(palette.color(cg, DPalette::HighlightedText));
         }
     }

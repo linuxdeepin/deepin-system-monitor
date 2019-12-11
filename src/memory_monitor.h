@@ -66,6 +66,7 @@ protected:
     QColor swapColor {"#FEDF19"};
     QColor swapForegroundColor {"#FEDF19"};
     QColor textColor;
+    QColor ltextColor;
 
     QTimer *timer;
     QVBoxLayout *layout;

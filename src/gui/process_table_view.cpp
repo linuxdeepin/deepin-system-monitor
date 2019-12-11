@@ -52,7 +52,7 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
         if (m_notFoundLabel) {
-            auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
+            auto palette = DApplicationHelper::instance()->applicationPalette();
             QColor labelColor = palette.color(DPalette::PlaceholderText);
             palette.setColor(DPalette::Text, labelColor);
             m_notFoundLabel->setPalette(palette);

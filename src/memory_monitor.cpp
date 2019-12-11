@@ -104,8 +104,15 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-    textColor = palette.color(DPalette::Text);
+#ifndef THEME_FALLBACK_COLOR
+    numberColor = palette.color(DPalette::TextTitle);
+    ltextColor = palette.color(DPalette::TextTitle);
+#else
     numberColor = palette.color(DPalette::Text);
+    ltextColor = palette.color(DPalette::Text);
+#endif
+
+    textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
 }
 
@@ -246,7 +253,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     m_contentFont.setWeight(QFont::Medium);
     painter.setFont(m_contentFont);
-    painter.setPen(QPen(textColor));
+    painter.setPen(QPen(ltextColor));
     painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter, memoryTitle);
 
     painter.setFont(m_subContentFont);
@@ -270,7 +277,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.fillPath(section2, swapColor);
 
     painter.setFont(m_contentFont);
-    painter.setPen(QPen(textColor));
+    painter.setPen(QPen(ltextColor));
     painter.drawText(swapRect, swapTitle);
 
     painter.setFont(m_subContentFont);
