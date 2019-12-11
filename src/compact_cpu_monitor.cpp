@@ -110,32 +110,33 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
 
         cpuPercents[i] = cpuPercent;
 
-        QList<QPointF> readPoints;
+        //        QList<QPointF> readPoints;
 
-        double readMaxHeight = 0;
-        for (int i = 0; i < cpuPercent.size(); i++) {
-            if (cpuPercent.at(i) > readMaxHeight) {
-                readMaxHeight = cpuPercent.at(i);
-            }
-        }
+        //        double readMaxHeight = 0;
+        //        for (int i = 0; i < cpuPercent.size(); i++) {
+        //            if (cpuPercent.at(i) > readMaxHeight) {
+        //                readMaxHeight = cpuPercent.at(i);
+        //            }
+        //        }
 
-        int modCPURenderMaxHeight = cpuRenderMaxHeight - 20;
+        //        int modCPURenderMaxHeight = cpuRenderMaxHeight - 20;
 
-        for (int i = 0; i < cpuPercent.size(); i++) {
-            if (readMaxHeight < modCPURenderMaxHeight) {
-                readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
-            } else {
-                readPoints.append(
-                    QPointF(i * 5, cpuPercent.at(i) * modCPURenderMaxHeight / readMaxHeight));
-            }
-        }
+        //        for (int i = 0; i < cpuPercent.size(); i++) {
+        //            if (readMaxHeight < modCPURenderMaxHeight) {
+        //                readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
+        //            } else {
+        //                readPoints.append(
+        //                    QPointF(i * 5, cpuPercent.at(i) * modCPURenderMaxHeight /
+        //                    readMaxHeight));
+        //            }
+        //        }
 
-        QPainterPath cpuPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
-        if (cpuPaths.size() <= i) {
-            cpuPaths.append(cpuPath);
-        } else {
-            cpuPaths[i] = cpuPath;
-        }
+        //        QPainterPath cpuPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
+        //        if (cpuPaths.size() <= i) {
+        //            cpuPaths.append(cpuPath);
+        //        } else {
+        //            cpuPaths[i] = cpuPath;
+        //        }
     }
 
     update();
@@ -232,26 +233,54 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    painter.translate(gridFrame.x() + 2 * penSize,
-                      gridFrame.y() + gridFrame.height() - gridSize - penSize);
-    painter.scale(1, -1);
+    //    painter.translate(gridFrame.x() + 2 * penSize,
+    //                      gridFrame.y() + gridFrame.height() - gridSize - penSize);
+    painter.translate(gridFrame.x(), gridFrame.y());
+    //    painter.scale(1, -1);
 
-    qreal devicePixelRatio = qApp->devicePixelRatio();
-    qreal diskCurveWidth = 1.2;
-    if (devicePixelRatio > 1) {
-        diskCurveWidth = 2;
-    }
+    //    qreal devicePixelRatio = qApp->devicePixelRatio();
+    //    qreal diskCurveWidth = 1.2;
+    //    if (devicePixelRatio > 1) {
+    //        diskCurveWidth = 2;
+    //    }
 
-    for (int i = cpuPaths.size() - 1; i >= 0; i--) {
-        int colorIndex;
-        if (cpuPaths.size() > cpuColors.size()) {
-            colorIndex = i % cpuColors.size();
-        } else {
-            colorIndex = i;
+    //    for (int i = cpuPaths.size() - 1; i >= 0; i--) {
+    //        int colorIndex;
+    //        if (cpuPaths.size() > cpuColors.size()) {
+    //            colorIndex = i % cpuColors.size();
+    //        } else {
+    //            colorIndex = i;
+    //        }
+
+    //        painter.setPen(QPen(cpuColors[colorIndex], diskCurveWidth));
+    //        painter.drawPath(cpuPaths[i]);
+    //    }
+
+    //===========
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    qreal offsetX = gridFrame.width();
+    qreal sampleWidth = gridFrame.width() * 1.0 / pointsNumber;
+    qreal deltaX = (gridFrame.width() - penSize * 2) * 1.0 / (pointsNumber - 3);
+    // enum cpu
+    for (int i = cpuPercents.size() - 1; i >= 0; i--) {
+        // set stroke color
+        QColor c = cpuColors[i % cpuColors.size()];
+        painter.setPen(QPen(c, penSize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+        QPainterPath path;
+        // move to the first point
+        //        path.moveTo()
+
+        for (int j = 1; j < pointsNumber; j++) {
         }
-
-        painter.setPen(QPen(cpuColors[colorIndex], diskCurveWidth));
-        painter.drawPath(cpuPaths[i]);
+        painter.drawPath(path);
     }
 }
 

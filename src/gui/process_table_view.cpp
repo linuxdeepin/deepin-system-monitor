@@ -30,6 +30,7 @@
 #include "process_table_view.h"
 #include "settings.h"
 #include "toolbar.h"
+#include "ui_common.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -49,10 +50,14 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     initConnections(settingsLoaded);
 
     auto *dAppHelper = DApplicationHelper::instance();
-    //    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
-    //    &MemoryMonitor::changeTheme);
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
-            [=]() { m_notFoundLabel->update(); });
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+        if (m_notFoundLabel) {
+            auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
+            QColor labelColor = palette.color(DPalette::PlaceholderText);
+            palette.setColor(DPalette::Text, labelColor);
+            m_notFoundLabel->setPalette(palette);
+        }
+    });
 }
 
 ProcessTableView::~ProcessTableView()
@@ -244,7 +249,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
     m_notFoundLabel = new DLabel(DApplication::translate("Common.Search", "Not Found"), this);
     DFontSizeManager::instance()->bind(m_notFoundLabel, DFontSizeManager::T4);
     auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
-    QColor labelColor = palette.color(DPalette::ToolTipText);
+    QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_notFoundLabel->setPalette(palette);
     m_notFoundLabel->setVisible(false);
