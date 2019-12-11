@@ -33,6 +33,7 @@
 
 #include "constant.h"
 #include "cpu_monitor.h"
+#include "gui/ui_common.h"
 #include "process/system_monitor.h"
 #include "settings.h"
 #include "smooth_curve_generator.h"
@@ -99,7 +100,9 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
+    // TODO: TextTile color problem
     textColor = palette.color(DPalette::Text);
+    // TODO: no color component
     numberColor = palette.color(DPalette::Text);
 
     update();
@@ -144,7 +147,7 @@ void CpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal>)
 
     cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
 
-    if (cpuPercents->last() != cpuPercents->at(cpuPercents->size() - 2)) {
+    if (!qFuzzyCompare(cpuPercents->last(), cpuPercents->at(cpuPercents->size() - 2))) {
         animationIndex = 0;
         timer->start(30);
     }
@@ -194,14 +197,22 @@ void CpuMonitor::paintEvent(QPaintEvent *)
         QRect(rect().x() - paddingRight, rect().y() + percentRenderOffsetY, rect().width(), 30),
         Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
 
-    drawLoadingRing(painter, rect().x() + rect().width() / 2 - paddingRight,
-                    rect().y() + ringRenderOffsetY, ringRadius, ringWidth, 270, 135,
-                    ringForegroundColor, ringForegroundOpacity, ringBackgroundColor,
-                    ringBackgroundOpacity, percent / 100);
+    int centerX = rect().x() + rect().width() / 2 - paddingRight;
+    int centerY = rect().y() + ringRenderOffsetY;
+    drawLoadingRing(painter, centerX, centerY, ringRadius, ringWidth, 270, 135, ringForegroundColor,
+                    ringForegroundOpacity, ringBackgroundColor, ringBackgroundOpacity,
+                    percent / 100);
+
+    // clip internal area of the ring
+    QRect clipRect(centerX - ringRadius + ringWidth, centerY - ringRadius + ringWidth,
+                   (ringRadius - ringWidth) * 2, (ringRadius - ringWidth) * 2);
+    QPainterPath clip;
+    clipRect = clipRect.marginsRemoved({ringWidth, ringWidth, ringWidth, ringWidth});
+    clip.addRoundedRect(clipRect, clipRect.width(), clipRect.height());
+    painter.setClipPath(clip);
 
     painter.translate(waveformsRenderOffsetX, waveformsRenderOffsetY);
     painter.scale(1, -1);
-
     painter.setPen(QPen(QColor("#0081FF"), 1.5));
     painter.drawPath(cpuPath);
 }

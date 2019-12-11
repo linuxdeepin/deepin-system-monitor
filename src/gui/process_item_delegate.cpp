@@ -9,6 +9,7 @@
 #include <QStyleOptionViewItem>
 
 #include "process_item_delegate.h"
+#include "ui_common.h"
 
 DWIDGET_USE_NAMESPACE
 

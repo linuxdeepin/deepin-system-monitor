@@ -37,10 +37,19 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         new DLabel(DApplication::translate("Common.Search", "Not Found"), this);
     DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
     auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
-    QColor labelColor = palette.color(DPalette::ToolTipText);
+    QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+        if (m_noMatchingResultLabel) {
+            auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
+            QColor labelColor = palette.color(DPalette::PlaceholderText);
+            palette.setColor(DPalette::Text, labelColor);
+            m_noMatchingResultLabel->setPalette(palette);
+        }
+    });
 
     m_itemDelegate = new SystemServiceItemDelegate(this);
     setItemDelegate(m_itemDelegate);

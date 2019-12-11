@@ -271,6 +271,10 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    QPainterPath clip;
+    clip.addRect(gridFrame);
+    painter.setClipPath(clip);
+
     qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal networkCurveWidth = 1.2;
     if (devicePixelRatio > 1) {

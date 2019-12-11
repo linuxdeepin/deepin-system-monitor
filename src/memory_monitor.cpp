@@ -31,6 +31,7 @@
 #include <QtMath>
 
 #include "constant.h"
+#include "gui/ui_common.h"
 #include "memory_monitor.h"
 #include "process/system_monitor.h"
 #include "utils.h"

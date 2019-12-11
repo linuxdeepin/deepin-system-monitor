@@ -32,6 +32,7 @@
 #include <QtMath>
 
 #include "constant.h"
+#include "gui/ui_common.h"
 #include "network_monitor.h"
 #include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
@@ -309,6 +310,10 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     }
 
     painter.setRenderHint(QPainter::Antialiasing, true);
+
+    QPainterPath clip;
+    clip.addRect(gridFrame);
+    painter.setClipPath(clip);
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal networkCurveWidth = 1.2;
