@@ -109,34 +109,6 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
         }
 
         cpuPercents[i] = cpuPercent;
-
-        //        QList<QPointF> readPoints;
-
-        //        double readMaxHeight = 0;
-        //        for (int i = 0; i < cpuPercent.size(); i++) {
-        //            if (cpuPercent.at(i) > readMaxHeight) {
-        //                readMaxHeight = cpuPercent.at(i);
-        //            }
-        //        }
-
-        //        int modCPURenderMaxHeight = cpuRenderMaxHeight - 20;
-
-        //        for (int i = 0; i < cpuPercent.size(); i++) {
-        //            if (readMaxHeight < modCPURenderMaxHeight) {
-        //                readPoints.append(QPointF(i * 5, cpuPercent.at(i)));
-        //            } else {
-        //                readPoints.append(
-        //                    QPointF(i * 5, cpuPercent.at(i) * modCPURenderMaxHeight /
-        //                    readMaxHeight));
-        //            }
-        //        }
-
-        //        QPainterPath cpuPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
-        //        if (cpuPaths.size() <= i) {
-        //            cpuPaths.append(cpuPath);
-        //        } else {
-        //            cpuPaths[i] = cpuPath;
-        //        }
     }
 
     update();
@@ -233,52 +205,41 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    //    painter.translate(gridFrame.x() + 2 * penSize,
-    //                      gridFrame.y() + gridFrame.height() - gridSize - penSize);
+    // clip internal area of the region
+    QPainterPath clip;
+    clip.addRect(gridFrame);
+    painter.setClipPath(clip);
+
     painter.translate(gridFrame.x(), gridFrame.y());
-    //    painter.scale(1, -1);
 
-    //    qreal devicePixelRatio = qApp->devicePixelRatio();
-    //    qreal diskCurveWidth = 1.2;
-    //    if (devicePixelRatio > 1) {
-    //        diskCurveWidth = 2;
-    //    }
-
-    //    for (int i = cpuPaths.size() - 1; i >= 0; i--) {
-    //        int colorIndex;
-    //        if (cpuPaths.size() > cpuColors.size()) {
-    //            colorIndex = i % cpuColors.size();
-    //        } else {
-    //            colorIndex = i;
-    //        }
-
-    //        painter.setPen(QPen(cpuColors[colorIndex], diskCurveWidth));
-    //        painter.drawPath(cpuPaths[i]);
-    //    }
-
-    //===========
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    qreal offsetX = gridFrame.width();
-    qreal sampleWidth = gridFrame.width() * 1.0 / pointsNumber;
-    qreal deltaX = (gridFrame.width() - penSize * 2) * 1.0 / (pointsNumber - 3);
+    qreal strokeWidth = 1.2;                            // for now, set as 1.2 temporarily
+    int drawWidth = gridFrame.width() - penSize * 2;    // exclude left/right most border
+    int drawHeight = gridFrame.height() - penSize * 2;  // exclude top/bottom most border
+    qreal offsetX = drawWidth + penSize;
+    qreal deltaX = drawWidth * 1.0 / (pointsNumber - 3);
     // enum cpu
     for (int i = cpuPercents.size() - 1; i >= 0; i--) {
         // set stroke color
         QColor c = cpuColors[i % cpuColors.size()];
-        painter.setPen(QPen(c, penSize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter.setPen(QPen(c, strokeWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
         QPainterPath path;
-        // move to the first point
-        //        path.moveTo()
+        // move to the first point (from right to left)
+        qreal y = (1.0 - cpuPercents[i].at(pointsNumber - 1)) * drawHeight + penSize;
+        path.moveTo(offsetX, y);
 
-        for (int j = 1; j < pointsNumber; j++) {
+        for (int j = pointsNumber - 2; j >= 0; j--) {
+            // method#1: draw Bezier curve
+            path.cubicTo(offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
+                         (1.0 - cpuPercents[i][j + 1]) * drawHeight + penSize + 0.5,
+                         offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
+                         (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5,
+                         offsetX - ((pointsNumber - j - 1) * deltaX),
+                         (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
+
+            // method#2: draw line instead
+            // path.lineTo(offsetX - ((pointsNumber - j - 1) * deltaX),
+            //            (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
         }
         painter.drawPath(path);
     }

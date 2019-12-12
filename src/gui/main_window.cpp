@@ -242,13 +242,17 @@ void MainWindow::initConnections()
 {
     connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
+#ifdef ROLLBACK_BUG_4299
         m_modeMenu->setEnabled(true);
         m_killAction->setEnabled(true);
+#endif
     });
     connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
+#ifdef ROLLBACK_BUG_4299
         m_modeMenu->setEnabled(false);
         m_killAction->setEnabled(false);
+#endif
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
             [=]() { m_toolbar->clearSearchText(); });

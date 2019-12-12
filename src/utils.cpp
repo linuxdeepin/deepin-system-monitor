@@ -800,7 +800,7 @@ QVector<qreal> calculateCpuPercentages(const QVector<CpuStruct> &now,
 
         qulonglong totald = ((n.idle + n.nonIdle) - (p.idle + p.nonIdle));
         //        times.push_back((totald - (n.idle - p.idle)) / totald * 100.0);
-        qreal v = (totald - (n.idle - p.idle)) * 100.0 / totald;
+        qreal v = (totald - (n.idle - p.idle)) * 1.0 / totald;
         times[i] = v;
     }
 
