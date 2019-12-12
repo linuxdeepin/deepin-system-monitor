@@ -89,13 +89,13 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
             memoryBackgroundColor = "#000000";
             swapBackgroundColor = "#000000";
 
-            iconImage = QIcon(":/image/light/icon_memory_light.svg").pixmap(QSize(24, 24));
+            m_icon = QIcon(":/image/light/icon_memory_light.svg");
             break;
         case DApplicationHelper::DarkType:
             memoryBackgroundColor = "#FFFFFF";
             swapBackgroundColor = "#FFFFFF";
 
-            iconImage = QIcon(":/image/dark/icon_memory_light.svg").pixmap(QSize(24, 24));
+            m_icon = QIcon(":/image/dark/icon_memory_light.svg");
             break;
         default:
             break;
@@ -197,14 +197,17 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                       1.0 / totalSwap;
     }
 
+    int iconSize = 24;
+
     QString title = DApplication::translate("Process.Graph.View", "Memory");
     QFontMetrics fm(m_titleFont);
-    QRect titleRect(rect().x() + iconImage.width() + 4, rect().y(),
+    QRect titleRect(rect().x() + iconSize + 4, rect().y(),
                     fm.size(Qt::TextSingleLine, title).width(), fm.height());
 
     // Draw icon.
-    painter.drawPixmap(rect().x(), qCeil((titleRect.height() - iconImage.height()) / 2.) + 2,
-                       iconImage);
+    QRect iconRect(rect().x(), titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,
+                   iconSize, iconSize);
+    m_icon.paint(&painter, iconRect);
 
     // Draw title.
     painter.setPen(QPen(textColor));

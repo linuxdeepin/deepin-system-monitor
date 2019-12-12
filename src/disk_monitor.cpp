@@ -259,12 +259,8 @@ void DiskMonitor::paintEvent(QPaintEvent *)
                       readWaveformsRenderOffsetY + gridPaddingTop);
     painter.scale(1, -1);
 
-    // for now, termporaryly comment out draw width change
-    //    qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal diskCurveWidth = 1.2;
-    //    if (devicePixelRatio > 1) {
-    //        diskCurveWidth = 2;
-    //    }
+
     painter.setPen(QPen(readColor, diskCurveWidth));
     painter.setBrush(QBrush());
     painter.drawPath(readPath);

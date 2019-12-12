@@ -321,12 +321,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     clip.addRect(gridFrame);
     painter.setClipPath(clip);
 
-    // for now, termporaryly comment out draw width change
-    //    qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal networkCurveWidth = 1.2;
-    //    if (devicePixelRatio > 1) {
-    //        networkCurveWidth = 2;
-    //    }
 
     QLinearGradient lgRecv(gridX, 0, gridLineX, 0), lgSent(gridX, 0, gridLineX, 0);
     lgRecv.setColorAt(0, recvEndColor);

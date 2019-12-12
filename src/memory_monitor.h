@@ -25,6 +25,7 @@
 #define MemoryMONITOR_H
 
 #include <DApplicationHelper>
+#include <QIcon>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -55,7 +56,7 @@ protected:
     QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
 
-    QPixmap iconImage;
+    QIcon m_icon;
 
     QColor memoryBackgroundColor;
     QColor memoryColor {"#00C5C0"};
