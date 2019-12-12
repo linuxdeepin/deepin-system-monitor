@@ -25,6 +25,7 @@
 #define CpuMONITOR_H
 
 #include <DApplicationHelper>
+#include <QIcon>
 #include <QList>
 #include <QPointF>
 #include <QTimer>
@@ -55,7 +56,8 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QPixmap iconImage;
+    QIcon m_icon;
+
     QList<double> *cpuPercents;
     QPainterPath cpuPath;
     QColor numberColor;

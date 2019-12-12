@@ -87,11 +87,11 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     switch (m_themeType) {
         case DApplicationHelper::LightType:
             ringBackgroundColor = "#000000";
-            iconImage = QIcon(":/image/light/icon_cpu_light.svg").pixmap(QSize(24, 24));
+            m_icon = QIcon(":/image/light/icon_cpu_light.svg");
             break;
         case DApplicationHelper::DarkType:
             ringBackgroundColor = "#FFFFFF";
-            iconImage = QIcon(":/image/dark/icon_cpu_light.svg").pixmap(QSize(24, 24));
+            m_icon = QIcon(":/image/dark/icon_cpu_light.svg");
             break;
         default:
             break;
@@ -180,16 +180,19 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     int titleWidth =
         fm.size(Qt::TextSingleLine, DApplication::translate("Process.Graph.View", "CPU")).width();
 
+    int iconSize = 24;
+
     painter.setFont(m_cpuDisplayFont);
     painter.setPen(QPen(textColor));
     QRect cpuDisplayRect(((rect().x() + rect().width() - titleWidth) / 2) - paddingRight,
                          rect().y() + titleRenderOffsetY, titleWidth, fm.height());
     painter.drawText(cpuDisplayRect, Qt::AlignCenter,
                      DApplication::translate("Process.Graph.View", "CPU"));
-    QPoint iconPoint(
-        cpuDisplayRect.x() - margin - iconImage.width() + 6,
-        cpuDisplayRect.y() + qCeil((cpuDisplayRect.height() - iconImage.height()) / 2.) + 2);
-    painter.drawPixmap(iconPoint, iconImage);
+
+    QRect iconRect(cpuDisplayRect.x() - margin - iconSize + 6,
+                   cpuDisplayRect.y() + qCeil((cpuDisplayRect.height() - iconSize) / 2.) + 2,
+                   iconSize, iconSize);
+    m_icon.paint(&painter, iconRect);
 
     double percent = (cpuPercents->at(cpuPercents->size() - 2) +
                       easeInOut(animationIndex / animationFrames) *
