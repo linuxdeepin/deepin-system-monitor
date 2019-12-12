@@ -67,6 +67,7 @@ private:
     QColor m_sentIndicatorColor {"#004EEF"};
     QColor summaryColor;
     QColor textColor;
+    QColor ltextColor;
     QColor m_frameColor;
 
     QFont m_sectionFont;

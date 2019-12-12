@@ -129,7 +129,12 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
 
+#ifndef THEME_FALLBACK_COLOR
+    QColor cpuColor = palette.color(DPalette::TextTitle);
+#else
     QColor cpuColor = palette.color(DPalette::Text);
+#endif
+
     QColor statColor = palette.color(DPalette::TextTips);
     QColor sectionColor {"#0081FF"};
 

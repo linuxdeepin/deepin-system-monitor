@@ -129,11 +129,17 @@ void ProcessPageWidget::initUI()
     DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T7, QFont::Medium);
     m_procViewMode->adjustSize();
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+#ifndef THEME_FALLBACK_COLOR
+    auto pam = DApplicationHelper::instance()->palette(m_procViewMode);
+    palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
+    m_procViewMode->setPalette(palette);
+#else
+#endif
 
     m_procViewModeSummary = new DLabel(tw);
-    m_procViewMode->setFixedHeight(24);
+    m_procViewModeSummary->setFixedHeight(24);
     DFontSizeManager::instance()->bind(m_procViewModeSummary, DFontSizeManager::T7, QFont::Medium);
-    m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_procViewModeSummary->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     auto pa = DApplicationHelper::instance()->palette(m_procViewModeSummary);
     palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
     m_procViewModeSummary->setPalette(palette);
@@ -239,6 +245,21 @@ void ProcessPageWidget::initConnections()
         connect(sysmon, &SystemMonitor::processSummaryUpdated, this,
                 &ProcessPageWidget::updateProcessSummary);
     }
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+        if (m_procViewMode) {
+            auto palette = DApplicationHelper::instance()->applicationPalette();
+            palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
+            m_procViewMode->setPalette(palette);
+        }
+        if (m_procViewModeSummary) {
+            auto palette = DApplicationHelper::instance()->applicationPalette();
+            palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
+            m_procViewModeSummary->setPalette(palette);
+        }
+    });
+
 }
 
 void ProcessPageWidget::paintEvent(QPaintEvent *)

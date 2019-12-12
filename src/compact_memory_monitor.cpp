@@ -103,8 +103,14 @@ void CompactMemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
+#ifndef THEME_FALLBACK_COLOR
+    textColor = palette.color(DPalette::TextTitle);
+    numberColor = palette.color(DPalette::TextTitle);
+#else
     textColor = palette.color(DPalette::Text);
     numberColor = palette.color(DPalette::Text);
+#endif
+
     summaryColor = palette.color(DPalette::TextTips);
 }
 

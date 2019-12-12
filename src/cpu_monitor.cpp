@@ -103,7 +103,11 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     // TODO: TextTile color problem
     textColor = palette.color(DPalette::Text);
     // TODO: no color component
+#ifndef THEME_FALLBACK_COLOR
+    numberColor = palette.color(DPalette::TextTitle);
+#else
     numberColor = palette.color(DPalette::Text);
+#endif
 
     update();
 }

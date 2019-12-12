@@ -165,7 +165,12 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
+#ifndef THEME_FALLBACK_COLOR
+    QColor tagColor = palette.color(DPalette::TextTitle);
+#else
     QColor tagColor = palette.color(DPalette::Text);
+#endif
+
     QColor statColor = palette.color(DPalette::TextTips);
     QColor frameColor = palette.color(DPalette::FrameBorder);
 
