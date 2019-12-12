@@ -257,11 +257,12 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     clip.addRect(gridFrame);
     painter.setClipPath(clip);
 
-    qreal devicePixelRatio = qApp->devicePixelRatio();
+    // for now, termporaryly comment out draw width change
+    //    qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal diskCurveWidth = 1.2;
-    if (devicePixelRatio > 1) {
-        diskCurveWidth = 2;
-    }
+    //    if (devicePixelRatio > 1) {
+    //        diskCurveWidth = 2;
+    //    }
 
     painter.translate(gridFrame.x() + 2, gridFrame.y() + gridFrame.height() / 2 - 2);
     painter.scale(1, -1);

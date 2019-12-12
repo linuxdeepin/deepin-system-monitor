@@ -275,11 +275,12 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     clip.addRect(gridFrame);
     painter.setClipPath(clip);
 
-    qreal devicePixelRatio = qApp->devicePixelRatio();
+    // for now, termporaryly comment out draw width change
+    //    qreal devicePixelRatio = qApp->devicePixelRatio();
     qreal networkCurveWidth = 1.2;
-    if (devicePixelRatio > 1) {
-        networkCurveWidth = 2;
-    }
+    //    if (devicePixelRatio > 1) {
+    //        networkCurveWidth = 2;
+    //    }
 
     QBrush recvBrush(recvColor), sentBrush(sentColor);
 
