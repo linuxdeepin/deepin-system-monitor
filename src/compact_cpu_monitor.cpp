@@ -53,7 +53,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     setFixedWidth(statusBarMaxWidth - margin * 2);
     setFixedHeight(160);
 
-    pointsNumber = int(statusBarMaxWidth / 5.4);
+    pointsNumber = int(statusBarMaxWidth / 10);
 
     numCPU = int(sysconf(_SC_NPROCESSORS_ONLN));
 

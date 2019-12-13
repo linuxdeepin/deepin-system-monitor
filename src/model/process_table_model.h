@@ -54,6 +54,12 @@ public:
 
     char getProcessState(pid_t pid) const;
     SystemMonitor::ProcessPriority getProcessPriorityStub(pid_t pid) const;
+    inline int getProcessPriority(pid_t pid) const
+    {
+        int row = m_processMap.value(pid);
+        int prio = m_processList.at(row).getPriority();
+        return prio;
+    }
 
 Q_SIGNALS:
     void modelUpdated();

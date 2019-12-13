@@ -11,6 +11,7 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
 {
     setIcon(QIcon::fromTheme("deepin-system-monitor"));
 
+    addSpacing(10);
     m_nameLineEdit = new DLineEdit(this);
     Q_ASSERT(m_nameLineEdit);
     addContent(m_nameLineEdit);

@@ -81,7 +81,9 @@ HEADERS += src/utils.h \
     src/process/system_monitor.h \
     src/gui/kill_process_confirm_dialog.h \
     src/gui/process_attribute_dialog.h \
-    src/process/priority_controller.h
+    src/process/priority_controller.h \
+    src/gui/priority_tip.h \
+    src/gui/priority_slider.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -133,7 +135,9 @@ SOURCES += src/main.cpp \
     src/process/system_monitor.cpp \
     src/gui/kill_process_confirm_dialog.cpp \
     src/gui/process_attribute_dialog.cpp \
-    src/process/priority_controller.cpp
+    src/process/priority_controller.cpp \
+    src/gui/priority_tip.cpp \
+    src/gui/priority_slider.cpp
 
 QT += core
 QT += widgets
@@ -204,9 +208,11 @@ isEmpty(BINDIR):BINDIR=$${PREFIX}/bin
 isEmpty(ICONDIR):ICONDIR=$${PREFIX}/share/icons/hicolor/scalable/apps
 isEmpty(APPDIR):APPDIR=$${PREFIX}/share/applications
 isEmpty(DSRDIR):DSRDIR=$${PREFIX}/share/$${TARGET}
+isEmpty(POLICYDIR):POLICYDIR=$${PREFIX}/share/polkit-1/actions
 desktop.path = $$INSTROOT$$APPDIR
 icon.path = $$INSTROOT$$ICONDIR
 target.path = $$INSTROOT$$BINDIR
+policy.path = $$INSTROOT$$POLICYDIR
 
 # Automating generation .qm files from .ts files
 !system($$PWD/translations/translate_generation.sh): error("Failed to generate translation")
@@ -216,5 +222,6 @@ qm_files.files = translations/*.qm
 
 desktop.files = deepin-system-monitor.desktop
 icon.files = image/deepin-system-monitor.svg
+policy.files = com.deepin.pkexec.deepin-system-monitor.policy
 
-INSTALLS += desktop icon target qm_files
+INSTALLS += desktop icon target qm_files policy

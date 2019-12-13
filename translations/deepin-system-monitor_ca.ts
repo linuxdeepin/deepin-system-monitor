@@ -413,6 +413,21 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Table.Custom.Priority.Dialog</name>
+    <message>
+        <source>Customize priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel·la</translation>
+    </message>
+    <message>
+        <source>Change Priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
