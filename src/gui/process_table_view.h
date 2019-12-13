@@ -50,6 +50,7 @@ protected:
 
 private:
     void adjustInfoLabelVisibility();
+    void customizeProcessPriority();
 
 private:
     ProcessTableModel *m_model;

@@ -53,7 +53,7 @@ private:
     int cpuRenderMaxHeight = 80;
     int cpuWaveformsRenderOffsetY = 112;
     int gridSize = 10;
-    int pointsNumber = 60;
+    int pointsNumber = 25;
     int waveformRenderPadding = 20;
     int numCPU;
     double totalCpuPercent = 0;

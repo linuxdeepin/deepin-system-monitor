@@ -10,7 +10,10 @@
 #include <DLabel>
 #include <DMenu>
 #include <DPalette>
+#include <DSlider>
+#include <DTipLabel>
 #include <DTitlebar>
+#include <DToolTip>
 #include <DWidget>
 #include <QDebug>
 #include <QDir>
@@ -22,6 +25,8 @@
 #include "main_window.h"
 #include "model/process_sort_filter_proxy_model.h"
 #include "model/process_table_model.h"
+#include "priority_slider.h"
+#include "priority_tip.h"
 #include "process/process_entry.h"
 #include "process/system_monitor.h"
 #include "process_attribute_dialog.h"
@@ -353,8 +358,6 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
 
-    m_contextMenu->addSeparator();
-
     // change priority dialog
     auto *chgProcPrioMenu = m_contextMenu->addMenu(
         DApplication::translate("Process.Table.Context.Menu", "Change priority"));
@@ -400,12 +403,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Custom"));
     setCustomPrioAction->setCheckable(true);
     setCustomPrioAction->setActionGroup(prioGroup);
-    // TODO: fix this when ui design ready
-    setCustomPrioAction->setVisible(false);
-    connect(setCustomPrioAction, &QAction::triggered,
-            [=]() { DMessageBox::warning(this, "TBD", "TBD"); });
-
-    m_contextMenu->addSeparator();
+    connect(setCustomPrioAction, &QAction::triggered, [=]() { customizeProcessPriority(); });
 
     // show exec location
     auto *openExecDirAction = m_contextMenu->addAction(
@@ -722,4 +720,72 @@ void ProcessTableView::adjustInfoLabelVisibility()
     if (m_notFoundLabel->isVisible())
         m_notFoundLabel->move(rect().center() - m_notFoundLabel->rect().center());
     setUpdatesEnabled(true);
+}
+
+void ProcessTableView::customizeProcessPriority()
+{
+    DDialog *prioDialog = new DDialog(this);
+    prioDialog->setIcon(QIcon::fromTheme("dialog-warning"));
+    prioDialog->setAttribute(Qt::WA_DeleteOnClose);
+    prioDialog->setTitle(
+        DApplication::translate("Process.Table.Custom.Priority.Dialog", "Customize priority"));
+    prioDialog->addSpacing(20);
+    PrioritySlider *slider = new PrioritySlider(Qt::Horizontal, prioDialog);
+    slider->slider()->setInvertedAppearance(true);
+    slider->setMinimum(SystemMonitor::kVeryHighPriorityMax);
+    slider->setMaximum(SystemMonitor::kVeryLowPriorityMin);
+    slider->setPageStep(1);
+    slider->slider()->setTracking(true);
+    slider->setMouseWheelEnabled(true);
+    slider->setBelowTicks({QString("%1").arg(SystemMonitor::kVeryLowPriorityMin),
+                           QString("%1").arg(SystemMonitor::kVeryHighPriorityMax)});
+    PriorityTip *tip = new PriorityTip({"0"}, slider);
+    tip->setFixedWidth(40);
+    tip->setFixedHeight(20);
+    connect(slider, &DSlider::valueChanged, [=](int value) {
+        tip->setText(QString("%1").arg(value));
+        tip->move(std::min(std::max(0, slider->width() /
+                                               (SystemMonitor::kVeryLowPriorityMin -
+                                                SystemMonitor::kVeryHighPriorityMax) *
+                                               (SystemMonitor::kVeryLowPriorityMin - value) -
+                                           tip->width() / 2),
+                           slider->width() - tip->width()),
+                  slider->height() - tip->height());
+        tip->show();
+    });
+    connect(slider, &PrioritySlider::sizeChanged, this, [=](const QSize &size) {
+        tip->move(
+            std::min(std::max(0, size.width() /
+                                         (SystemMonitor::kVeryLowPriorityMin -
+                                          SystemMonitor::kVeryHighPriorityMax) *
+                                         (SystemMonitor::kVeryLowPriorityMin - slider->value()) -
+                                     tip->width() / 2),
+                     slider->width() - tip->width()),
+            slider->height() - tip->height());
+        tip->show();
+    });
+    QString prio {"0"};
+    if (m_selectedPID.isValid()) {
+        pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
+        slider->setValue(m_model->getProcessPriority(pid));
+        prio = QString("%1").arg(slider->value());
+        tip->setText(prio);
+    }
+    prioDialog->addContent(slider);
+    prioDialog->addSpacing(16);
+    prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Cancel"),
+                          false, DDialog::ButtonNormal);
+    prioDialog->addButton(
+        DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change Priority"), true,
+        DDialog::ButtonRecommend);
+    connect(prioDialog, &DDialog::buttonClicked, this, [=](int index, QString text) {
+        Q_UNUSED(text);
+        if (index == 1) {
+            changeProcessPriority(slider->value());
+            prioDialog->setResult(QMessageBox::Ok);
+        } else {
+            prioDialog->setResult(QMessageBox::Cancel);
+        }
+    });
+    prioDialog->exec();
 }

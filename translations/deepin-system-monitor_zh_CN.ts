@@ -414,6 +414,21 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Table.Custom.Priority.Dialog</name>
+    <message>
+        <source>Customize priority</source>
+        <translation>自定义优先级</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Change Priority</source>
+        <translation>更改优先级</translation>
+    </message>
+</context>
+<context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
