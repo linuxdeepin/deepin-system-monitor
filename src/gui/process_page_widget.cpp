@@ -99,8 +99,6 @@ void ProcessPageWidget::initUI()
     m_views->addWidget(m_compactView);
     m_views->addWidget(m_expandView);
     m_views->setFixedWidth(280);
-    // TODO: fix size problem
-    //    adjustStatusBarWidth();
 
     auto *settings = Settings::instance();
     if (settings) {
@@ -259,7 +257,6 @@ void ProcessPageWidget::initConnections()
             m_procViewModeSummary->setPalette(palette);
         }
     });
-
 }
 
 void ProcessPageWidget::paintEvent(QPaintEvent *)

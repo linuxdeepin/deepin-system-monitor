@@ -45,14 +45,16 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
 
     auto unitFilesResult = mgrIf.ListUnitFiles();
     ec = unitFilesResult.first;
-    if (ec)
-        return {ec, {}};
+    if (ec) {
+        qDebug() << "ListUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+    }
     UnitFileInfoList unitFiles = unitFilesResult.second;
 
     auto unitsResult = mgrIf.ListUnits();
     ec = unitsResult.first;
-    if (ec)
-        return {ec, {}};
+    if (ec) {
+        qDebug() << "ListUnits failed:" << ec.getErrorName() << ec.getErrorMessage();
+    }
     UnitInfoList units = unitsResult.second;
 
     foreach (const auto &unit, units) {
@@ -76,7 +78,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         if (ec) {
             qDebug() << "GetUnit failed:" << unit.getName() << ec.getErrorName()
                      << ec.getErrorMessage();
-            return {ec, {}};
+            continue;
         }
         QDBusObjectPath o = oResult.second;
         Systemd1UnitInterface unitIf(DBUS_SYSTEMD1_SERVICE, o.path(), QDBusConnection::systemBus());
@@ -84,21 +86,21 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         ec = bResult.first;
         if (ec) {
             qDebug() << "call canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
-            return {ec, {}};
+            continue;
         }
         entry.setCanStart(bResult.second);
         bResult = unitIf.canStop();
         ec = bResult.first;
         if (ec) {
             qDebug() << "call canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
-            return {ec, {}};
+            continue;
         }
         entry.setCanStop(bResult.second);
         bResult = unitIf.canReload();
         ec = bResult.first;
         if (ec) {
             qDebug() << "call canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
-            return {ec, {}};
+            continue;
         }
         entry.setCanReload(bResult.second);
         // mainPID
@@ -108,7 +110,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         ec = pidResult.first;
         if (ec) {
             qDebug() << "getMainPID failed" << ec.getErrorName() << ec.getErrorMessage();
-            return {ec, {}};
+            continue;
         }
         entry.setMainPID(pidResult.second);
 
@@ -118,7 +120,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         if (ec) {
             qDebug() << "getUnitFileState failed" << ec.getErrorName() << ec.getErrorMessage();
             if (ec.getCode() != QDBusError::NoMemory) {
-                return {ec, {}};
+                continue;
             }
         }
         entry.setState(stateResult.second);
@@ -149,7 +151,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         ec = oResult.first;
         if (ec && !(ec.getSubCode() == QDBusError::Other)) {
             qDebug() << "GetUnit failed:" << name << ec.getErrorName() << ec.getErrorMessage();
-            return {ec, {}};
+            continue;
         } else {
             ec.reset();
         }
@@ -164,7 +166,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             ec = descResult.first;
             if (ec) {
                 qDebug() << "getDescription failed:" << ec.getErrorName() << ec.getErrorMessage();
-                return {ec, {}};
+                continue;
             }
             entry.setDescription(descResult.second);
 
@@ -172,7 +174,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             ec = actStateResult.first;
             if (ec) {
                 qDebug() << "getActiveState failed:" << ec.getErrorName() << ec.getErrorMessage();
-                return {ec, {}};
+                continue;
             }
             entry.setActiveState(actStateResult.second);
 
@@ -180,7 +182,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             ec = loadStateResult.first;
             if (ec) {
                 qDebug() << "getLoadState failed:" << ec.getErrorName() << ec.getErrorMessage();
-                return {ec, {}};
+                continue;
             }
             entry.setLoadState(loadStateResult.second);
 
@@ -188,7 +190,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             ec = subStateResult.first;
             if (ec) {
                 qDebug() << "getSubState failed:" << ec.getErrorName() << ec.getErrorMessage();
-                return {ec, {}};
+                continue;
             }
             entry.setSubState(subStateResult.second);
 
@@ -196,7 +198,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             ec = mainPIDResult.first;
             if (ec) {
                 qDebug() << "getMainPID failed:" << ec.getErrorName() << ec.getErrorMessage();
-                return {ec, {}};
+                continue;
             }
             entry.setMainPID(mainPIDResult.second);
         } else {
@@ -224,7 +226,7 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         }
     }
 
-    return {ec, list};
+    return {{}, list};
 }
 
 QString ServiceManager::normalizeServiceId(const QString &id, const QString &param)

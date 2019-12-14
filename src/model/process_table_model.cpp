@@ -29,7 +29,9 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
         connect(sysmon, &SystemMonitor::processPriorityChanged, this,
                 &ProcessTableModel::updateProcessPriority);
 
+#if defined(__x86_64__) || defined(__amd64__) || defined(__i386__)
         sysmon->updateStatus();
+#endif
     }
 }
 
