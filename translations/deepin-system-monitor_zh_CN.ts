@@ -416,16 +416,16 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
-        <source>Customize priority</source>
-        <translation>自定义优先级</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <source>Change Priority</source>
-        <translation>更改优先级</translation>
+        <source>Custom</source>
+        <translation>自定义</translation>
+    </message>
+    <message>
+        <source>Change</source>
+        <translation>更改</translation>
     </message>
 </context>
 <context>

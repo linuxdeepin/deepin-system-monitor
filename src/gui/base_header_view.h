@@ -1,17 +1,17 @@
-#ifndef SYSTEM_SERVICE_TABLE_HEADER_VIEW_H
-#define SYSTEM_SERVICE_TABLE_HEADER_VIEW_H
+#ifndef BASE_HEADER_VIEW_H
+#define BASE_HEADER_VIEW_H
 
 #include <DHeaderView>
 #include <DStyle>
 
 DWIDGET_USE_NAMESPACE
 
-class SystemServiceTableHeaderView : public DHeaderView
+class BaseHeaderView : public DHeaderView
 {
     Q_OBJECT
 
 public:
-    explicit SystemServiceTableHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
+    explicit BaseHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
     int sectionSizeHint(int logicalIndex) const;
@@ -28,4 +28,4 @@ private:
     int m_spacing {1};
 };
 
-#endif  // SYSTEM_SERVICE_TABLE_HEADER_VIEW_H
+#endif  // BASE_HEADER_VIEW_H

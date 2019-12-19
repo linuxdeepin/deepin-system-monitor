@@ -6,22 +6,22 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#include "process_table_header_view.h"
+#include "base_header_view.h"
 
 static const int kSpacingMargin = 4;
 
-ProcessTableHeaderView::ProcessTableHeaderView(Qt::Orientation orientation, QWidget *parent)
+BaseHeaderView::BaseHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
 {
     viewport()->setAutoFillBackground(false);
 }
 
-QSize ProcessTableHeaderView::sizeHint() const
+QSize BaseHeaderView::sizeHint() const
 {
     return QSize(width(), 36 + m_spacing);
 }
 
-int ProcessTableHeaderView::sectionSizeHint(int logicalIndex) const
+int BaseHeaderView::sectionSizeHint(int logicalIndex) const
 {
     QStyleOptionHeader option;
     initStyleOption(&option);
@@ -31,13 +31,13 @@ int ProcessTableHeaderView::sectionSizeHint(int logicalIndex) const
     QFontMetrics fm(DApplication::font());
     QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
     if (sortIndicatorSection() == logicalIndex) {
-        return fm.width(buf) + margin * 3 + 8;
+        return fm.width(buf) + margin * 3 + 10;
     } else {
         return fm.width(buf) + margin * 2;
     }
 }
 
-void ProcessTableHeaderView::paintEvent(QPaintEvent *event)
+void BaseHeaderView::paintEvent(QPaintEvent *event)
 {
     QPainter painter(viewport());
     painter.save();
@@ -79,8 +79,7 @@ void ProcessTableHeaderView::paintEvent(QPaintEvent *event)
     DHeaderView::paintEvent(event);
 }
 
-void ProcessTableHeaderView::paintSection(QPainter *painter, const QRect &rect,
-                                          int logicalIndex) const
+void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
 {
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
@@ -135,8 +134,8 @@ void ProcessTableHeaderView::paintSection(QPainter *painter, const QRect &rect,
     forground.setColor(palette.color(cg, DPalette::Text));
     QRect textRect;
     if (sortIndicatorSection() == logicalIndex) {
-        textRect = {contentRect.x() + margin, contentRect.y(), contentRect.width() - margin * 3 - 8,
-                    contentRect.height()};
+        textRect = {contentRect.x() + margin, contentRect.y(),
+                    contentRect.width() - margin * 3 - 10, contentRect.height()};
     } else {
         textRect = {contentRect.x() + margin, contentRect.y(), contentRect.width() - margin,
                     contentRect.height()};
@@ -149,7 +148,7 @@ void ProcessTableHeaderView::paintSection(QPainter *painter, const QRect &rect,
     // sort indicator
     if (isSortIndicatorShown() && logicalIndex == sortIndicatorSection()) {
         QRect sortIndicator(textRect.x() + textRect.width() + margin,
-                            textRect.y() + (textRect.height() - 5) / 2, 8, 5);
+                            textRect.y() + (textRect.height() - 5) / 2, 10, 8);
         option.rect = sortIndicator;
         if (sortIndicatorOrder() == Qt::DescendingOrder) {
             style->drawPrimitive(DStyle::PE_IndicatorArrowDown, &option, painter, this);

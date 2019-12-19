@@ -1,5 +1,5 @@
-#ifndef PROCESS_ITEM_DELEGATE_H
-#define PROCESS_ITEM_DELEGATE_H
+#ifndef BASE_ITEM_DELEGATE_H
+#define BASE_ITEM_DELEGATE_H
 
 #include <QStyledItemDelegate>
 
@@ -7,12 +7,12 @@ class QModelIndex;
 class QPainter;
 class QStyleOptionViewItem;
 
-class ProcessItemDelegate : public QStyledItemDelegate
+class BaseItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit ProcessItemDelegate(QObject *parent = nullptr);
+    explicit BaseItemDelegate(QObject *parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
                const QModelIndex &index) const override;
@@ -24,4 +24,4 @@ protected:
     void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const override;
 };
 
-#endif  // PROCESS_ITEM_DELEGATE_H
+#endif  // BASE_ITEM_DELEGATE_H

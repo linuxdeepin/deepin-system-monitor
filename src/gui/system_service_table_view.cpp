@@ -18,8 +18,6 @@
 #include "service/system_service_entry.h"
 #include "service_name_sub_input_dialog.h"
 #include "settings.h"
-#include "system_service_item_delegate.h"
-#include "system_service_table_header_view.h"
 #include "system_service_table_view.h"
 #include "toolbar.h"
 
@@ -28,7 +26,7 @@ DWIDGET_USE_NAMESPACE
 static const char *kSettingsOption_ServiceTableHeaderState = "service_table_header_state";
 
 SystemServiceTableView::SystemServiceTableView(DWidget *parent)
-    : DTreeView(parent)
+    : BaseTableView(parent)
 {
     bool settingsLoaded = loadSettings();
 
@@ -51,29 +49,18 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         }
     });
 
-    m_itemDelegate = new SystemServiceItemDelegate(this);
-    setItemDelegate(m_itemDelegate);
-
-    m_headerDelegate = new SystemServiceTableHeaderView(Qt::Horizontal, this);
-    setHeader(m_headerDelegate);
-    m_headerDelegate->setSectionsMovable(true);
-    m_headerDelegate->setSectionsClickable(true);
-    m_headerDelegate->setSectionResizeMode(DHeaderView::Interactive);
-    m_headerDelegate->setStretchLastSection(true);
-    m_headerDelegate->setSortIndicatorShown(true);
-    m_headerDelegate->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_headerDelegate->setContextMenuPolicy(Qt::CustomContextMenu);
+    header()->setSectionsMovable(true);
+    header()->setSectionsClickable(true);
+    header()->setSectionResizeMode(DHeaderView::Interactive);
+    header()->setStretchLastSection(true);
+    header()->setSortIndicatorShown(true);
+    header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // table options
     setSortingEnabled(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-    setRootIsDecorated(false);
-    setItemsExpandable(false);
-    setFrameStyle(QFrame::NoFrame);
-    setAutoFillBackground(false);
-    setAlternatingRowColors(false);
-    viewport()->setAutoFillBackground(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     m_timer = new QTimer(this);
@@ -84,13 +71,10 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     connect(this, &SystemServiceTableView::customContextMenuRequested, this,
             &SystemServiceTableView::displayTableContextMenu);
     // table header events
-    connect(m_headerDelegate, &SystemServiceTableHeaderView::sectionResized, this,
-            [=]() { m_timer->start(2000); });
-    connect(m_headerDelegate, &SystemServiceTableHeaderView::sectionMoved, this,
-            [=]() { saveSettings(); });
-    connect(m_headerDelegate, &SystemServiceTableHeaderView::sortIndicatorChanged, this,
-            [=]() { saveSettings(); });
-    connect(m_headerDelegate, &SystemServiceTableHeaderView::customContextMenuRequested, this,
+    connect(header(), &QHeaderView::sectionResized, this, [=]() { m_timer->start(1000); });
+    connect(header(), &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
+    connect(header(), &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
+    connect(header(), &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
     MainWindow *mainWindow = MainWindow::instance();
@@ -236,46 +220,6 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
 SystemServiceTableView::~SystemServiceTableView()
 {
     saveSettings();
-}
-
-void SystemServiceTableView::paintEvent(QPaintEvent *event)
-{
-    QPainter painter(viewport());
-    painter.save();
-    painter.setRenderHints(QPainter::Antialiasing);
-    painter.setOpacity(1);
-    painter.setClipping(true);
-
-    QWidget *wnd = DApplication::activeWindow();
-    DPalette::ColorGroup cg;
-    if (!wnd) {
-        cg = DPalette::Inactive;
-    } else {
-        cg = DPalette::Active;
-    }
-
-    auto style = dynamic_cast<DStyle *>(DApplication::style());
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-
-    QBrush bgBrush(palette.color(cg, DPalette::Base));
-
-    QStyleOptionFrame option;
-    initStyleOption(&option);
-    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
-
-    QRect rect = viewport()->rect();
-    QRectF clipRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height() * 2);
-    QRectF subRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height());
-    QPainterPath clipPath, subPath;
-    clipPath.addRoundedRect(clipRect, radius, radius);
-    subPath.addRect(subRect);
-    clipPath = clipPath.subtracted(subPath);
-
-    painter.fillPath(clipPath, bgBrush);
-
-    painter.restore();
-    DTreeView::paintEvent(event);
 }
 
 void SystemServiceTableView::saveSettings()

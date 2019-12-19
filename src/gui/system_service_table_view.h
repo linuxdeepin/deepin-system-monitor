@@ -2,8 +2,9 @@
 #define SYSTEM_SERVICE_TABLE_VIEW_H
 
 #include <DLabel>
-#include <DTreeView>
 #include <QShortcut>
+
+#include "base_table_view.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -12,11 +13,9 @@ class SystemServiceTableModel;
 class SystemServiceEntry;
 class MainWindow;
 class ServiceManager;
-class SystemServiceItemDelegate;
 class ErrorContext;
-class SystemServiceTableHeaderView;
 
-class SystemServiceTableView : public DTreeView
+class SystemServiceTableView : public BaseTableView
 {
     Q_OBJECT
 
@@ -42,7 +41,6 @@ protected Q_SLOTS:
 protected:
     int sizeHintForColumn(int) const override;
     void resizeEvent(QResizeEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
 
 Q_SIGNALS:
     void sectionVisibilityChanged(int, bool);
@@ -61,8 +59,6 @@ private:
     DMenu *m_contextMenu;
     DMenu *m_headerContextMenu;
     DLabel *m_noMatchingResultLabel;
-    SystemServiceItemDelegate *m_itemDelegate;
-    SystemServiceTableHeaderView *m_headerDelegate;
     QTimer *m_timer;
 
     QShortcut *m_refreshKP;

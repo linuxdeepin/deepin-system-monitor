@@ -5,6 +5,7 @@
 #include <DTreeView>
 #include <QShortcut>
 
+#include "base_table_view.h"
 #include "process/system_monitor.h"
 
 DWIDGET_USE_NAMESPACE
@@ -14,7 +15,7 @@ class ProcessSortFilterProxyModel;
 class ProcessItemDelegate;
 class ProcessTableHeaderView;
 
-class ProcessTableView : public DTreeView
+class ProcessTableView : public BaseTableView
 {
     Q_OBJECT
 
@@ -42,7 +43,6 @@ protected:
     void displayProcessTableHeaderContextMenu(const QPoint &p);
 
     void resizeEvent(QResizeEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
 
     void selectionChanged(const QItemSelection &selected,
                           const QItemSelection &deselected) override;

@@ -8,18 +8,19 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 
-#include "process_item_delegate.h"
-#include "ui_common.h"
+#include "base_item_delegate.h"
+
+#define ICON_SIZE 24
 
 DWIDGET_USE_NAMESPACE
 
-ProcessItemDelegate::ProcessItemDelegate(QObject *parent)
+BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
 }
 
-void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                                const QModelIndex &index) const
+void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                             const QModelIndex &index) const
 {
     if (!index.isValid()) {
         QStyledItemDelegate::paint(painter, option, index);
@@ -62,27 +63,27 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
-    QBrush background;
     QPen forground;
+    QBrush background;
+
+    if (index.data(Qt::ForegroundRole).isValid()) {
+        forground.setColor(qvariant_cast<QBrush>(index.data(Qt::ForegroundRole)).color());
+    } else {
+        forground.setColor(palette.color(cg, DPalette::Text));
+    }
     if (opt.features & QStyleOptionViewItem::Alternate) {
         background = palette.color(cg, DPalette::AlternateBase);
     } else {
         background = palette.color(cg, DPalette::Base);
     }
-
-    forground.setColor(palette.color(cg, DPalette::Text));
-    forground.setColor(qvariant_cast<QBrush>(index.data(Qt::ForegroundRole)).color());
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
-            background = palette.color(cg, DPalette::Highlight);
-//            forground.setColor(palette.color(cg, DPalette::TextLively));
+            // forground.setColor(palette.color(cg, DPalette::TextLively));
             // TODO: fix this when TextLively color fixed
             forground.setColor(palette.color(cg, DPalette::HighlightedText));
-
-
+            background = palette.color(cg, DPalette::Highlight);
         }
     }
-    painter->setPen(forground);
 
     QRect rect = opt.rect;
     QFontMetrics fm(opt.font);
@@ -122,17 +123,26 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
         }
     }
 
+    painter->fillPath(path, background);
+
     QString text;
     QRect iconRect;
     if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
-        textRect = rect;
-        textRect.setX(textRect.x() + margin * 2 + 24);
-        textRect.setWidth(textRect.width() - margin);
-        text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+        if (opt.features & QStyleOptionViewItem::HasDecoration) {
+            textRect = rect;
+            textRect.setX(textRect.x() + margin * 2 + ICON_SIZE);
+            textRect.setWidth(textRect.width() - margin);
+            text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
 
-        iconRect = rect;
-        iconRect.setX(rect.x() + margin);
-        iconRect.setWidth(24);
+            iconRect = rect;
+            iconRect.setX(rect.x() + margin);
+            iconRect.setWidth(ICON_SIZE);
+        } else {
+            textRect = rect;
+            textRect.setX(textRect.x() + margin);
+            textRect.setWidth(textRect.width() - margin);
+            text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
+        }
     } else {
         textRect = rect;
         textRect.setX(textRect.x() + margin);
@@ -140,33 +150,30 @@ void ProcessItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
         text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
     }
 
-    painter->fillPath(path, background);
-    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
-        //        opt.icon.paint(painter, iconRect);
-        QIcon icon = opt.icon;
-        icon.paint(painter, iconRect);
+    if (opt.features & QStyleOptionViewItem::HasDecoration &&
+        opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
+        opt.icon.paint(painter, iconRect);
     }
+    painter->setPen(forground);
     painter->drawText(textRect, static_cast<int>(opt.displayAlignment), text);
 
     painter->restore();
 }
 
-QWidget *ProcessItemDelegate::createEditor(QWidget *, const QStyleOptionViewItem &,
-                                           const QModelIndex &) const
+QWidget *BaseItemDelegate::createEditor(QWidget *, const QStyleOptionViewItem &,
+                                        const QModelIndex &) const
 {
     return nullptr;
 }
 
-QSize ProcessItemDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                    const QModelIndex &index) const
+QSize BaseItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
     size.setHeight(std::max(36, size.height()));
     return size;
 }
 
-void ProcessItemDelegate::initStyleOption(QStyleOptionViewItem *option,
-                                          const QModelIndex &index) const
+void BaseItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
 {
     option->showDecorationSelected = true;
     bool ok = false;

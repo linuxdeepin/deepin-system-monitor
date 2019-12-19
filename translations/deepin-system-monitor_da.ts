@@ -415,15 +415,15 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
-        <source>Customize priority</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished">Annuller</translation>
     </message>
     <message>
-        <source>Change Priority</source>
+        <source>Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

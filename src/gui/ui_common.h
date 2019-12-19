@@ -2,6 +2,10 @@
 #define UI_COMMON_H
 
 #include <QColor>
+#include <QPainter>
+#include <QPixmap>
+#include <mutex>
+#include <thread>
 
 enum DisplayMode { kDisplayModeCompact = 0, kDisplayModeExpand };
 
@@ -23,5 +27,8 @@ inline QString formatColor(const QColor &color, int base = 10)
         return {};
     }
 }
+
+QImage compizDropShadow(QPainter &painter, const QPixmap &pixmap, const QRect &rect, int radius,
+                        int distance, const QColor &color);
 
 #endif  // UI_COMMON_H

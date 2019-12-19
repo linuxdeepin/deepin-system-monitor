@@ -1,5 +1,8 @@
+#include <QCollator>
+#include <QDebug>
 #include <QLocale>
 
+#include "common/collator.h"
 #include "common/han_latin.h"
 #include "process_sort_filter_proxy_model.h"
 #include "process_table_model.h"
@@ -72,11 +75,14 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
                        right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
                            .data(Qt::UserRole);
             } else {
-                return left.data() < right.data();
+                QString lname = left.data(Qt::DisplayRole).toString();
+                QString rname = right.data(Qt::DisplayRole).toString();
+                return Collator::instance()->compare(lname, rname) < 0;
             }
         }
         case ProcessTableModel::kProcessUserColumn: {
-            return left.data() < right.data();
+            return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
+                                                 right.data(Qt::DisplayRole).toString());
         }
         case ProcessTableModel::kProcessMemoryColumn: {
             QVariant lmem, rmem;

@@ -64,14 +64,10 @@ HEADERS += src/utils.h \
         src/dbus/environment_file.h \
         src/dbus/unit_file_info.h \
         src/dbus/unit_info.h \
-        src/gui/system_service_item_delegate.h \
         src/common/error_context.h \
         src/gui/service_name_sub_input_dialog.h \
         src/gui/ui_common.h \
-        src/gui/system_service_table_header_view.h \
         src/gui/process_table_view.h \
-        src/gui/process_table_header_view.h \
-        src/gui/process_item_delegate.h \
         src/model/process_table_model.h \
         src/model/process_sort_filter_proxy_model.h \
         src/process/process_entry.h \
@@ -83,7 +79,11 @@ HEADERS += src/utils.h \
     src/gui/process_attribute_dialog.h \
     src/process/priority_controller.h \
     src/gui/priority_tip.h \
-    src/gui/priority_slider.h
+    src/gui/priority_slider.h \
+    src/common/collator.h \
+    src/gui/base_table_view.h \
+    src/gui/base_item_delegate.h \
+    src/gui/base_header_view.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -119,13 +119,9 @@ SOURCES += src/main.cpp \
         src/dbus/environment_file.cpp \
         src/dbus/unit_file_info.cpp \
         src/dbus/unit_info.cpp \
-        src/gui/system_service_item_delegate.cpp \
         src/common/error_context.cpp \
         src/gui/service_name_sub_input_dialog.cpp \
-        src/gui/system_service_table_header_view.cpp \
         src/gui/process_table_view.cpp \
-        src/gui/process_table_header_view.cpp \
-        src/gui/process_item_delegate.cpp \
         src/model/process_table_model.cpp \
         src/model/process_sort_filter_proxy_model.cpp \
         src/process/process_entry.cpp \
@@ -137,7 +133,12 @@ SOURCES += src/main.cpp \
     src/gui/process_attribute_dialog.cpp \
     src/process/priority_controller.cpp \
     src/gui/priority_tip.cpp \
-    src/gui/priority_slider.cpp
+    src/gui/priority_slider.cpp \
+    src/gui/ui_common.cpp \
+    src/common/collator.cpp \
+    src/gui/base_table_view.cpp \
+    src/gui/base_item_delegate.cpp \
+    src/gui/base_header_view.cpp
 
 QT += core
 QT += widgets

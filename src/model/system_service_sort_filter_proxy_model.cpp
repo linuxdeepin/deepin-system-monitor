@@ -1,4 +1,5 @@
 #include "system_service_sort_filter_proxy_model.h"
+#include "common/collator.h"
 #include "system_service_table_model.h"
 
 SystemServiceSortFilterProxyModel::SystemServiceSortFilterProxyModel(QObject *parent)
@@ -40,9 +41,8 @@ bool SystemServiceSortFilterProxyModel::lessThan(const QModelIndex &left,
             return left.data().toUInt() < right.data().toUInt();
         case SystemServiceTableModel::kSystemServiceNameColumn:
         case SystemServiceTableModel::kSystemServiceDescriptionColumn: {
-            int rc = QString::compare(left.data().toString(), right.data().toString(),
-                                      Qt::CaseInsensitive);
-            return (rc < 0);
+            return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
+                                                 right.data(Qt::DisplayRole).toString()) < 0;
         }
         default:
             break;

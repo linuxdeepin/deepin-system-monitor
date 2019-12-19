@@ -30,8 +30,6 @@
 #include "process/process_entry.h"
 #include "process/system_monitor.h"
 #include "process_attribute_dialog.h"
-#include "process_item_delegate.h"
-#include "process_table_header_view.h"
 #include "process_table_view.h"
 #include "settings.h"
 #include "toolbar.h"
@@ -42,7 +40,7 @@ DWIDGET_USE_NAMESPACE
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
 
 ProcessTableView::ProcessTableView(DWidget *parent)
-    : DTreeView(parent)
+    : BaseTableView(parent)
 {
     bool settingsLoaded = loadSettings();
 
@@ -259,29 +257,19 @@ void ProcessTableView::initUI(bool settingsLoaded)
     m_notFoundLabel->setPalette(palette);
     m_notFoundLabel->setVisible(false);
 
-    m_itemDelegate = new ProcessItemDelegate(this);
-    setItemDelegate(m_itemDelegate);
-
     // header options
-    m_headerView = new ProcessTableHeaderView(Qt::Horizontal, this);
-    setHeader(m_headerView);
-    m_headerView->setSectionsMovable(true);
-    m_headerView->setSectionsClickable(true);
-    m_headerView->setSectionResizeMode(DHeaderView::Interactive);
-    m_headerView->setStretchLastSection(true);
-    m_headerView->setSortIndicatorShown(true);
-    m_headerView->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+    header()->setSectionsMovable(true);
+    header()->setSectionsClickable(true);
+    header()->setSectionResizeMode(DHeaderView::Interactive);
+    header()->setStretchLastSection(true);
+    header()->setSortIndicatorShown(true);
+    header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // table options
     setSortingEnabled(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-    setRootIsDecorated(false);
-    setItemsExpandable(false);
-    setFrameStyle(QFrame::NoFrame);
-    viewport()->setAutoFillBackground(false);
-    setAlternatingRowColors(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     m_contextMenu = new DMenu(this);
@@ -469,10 +457,10 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 
     // header
     auto *h = header();
-    connect(h, &ProcessTableHeaderView::sectionResized, this, [this]() { saveSettings(); });
-    connect(h, &ProcessTableHeaderView::sectionMoved, this, [&]() { saveSettings(); });
-    connect(h, &ProcessTableHeaderView::sortIndicatorChanged, this, [&]() { saveSettings(); });
-    connect(h, &ProcessTableHeaderView::customContextMenuRequested, this,
+    connect(h, &QHeaderView::sectionResized, this, [this]() { saveSettings(); });
+    connect(h, &QHeaderView::sectionMoved, this, [&]() { saveSettings(); });
+    connect(h, &QHeaderView::sortIndicatorChanged, this, [&]() { saveSettings(); });
+    connect(h, &QHeaderView::customContextMenuRequested, this,
             &ProcessTableView::displayProcessTableHeaderContextMenu);
 
     // header context menu
@@ -650,46 +638,6 @@ void ProcessTableView::resizeEvent(QResizeEvent *event)
     DTreeView::resizeEvent(event);
 }
 
-void ProcessTableView::paintEvent(QPaintEvent *event)
-{
-    QPainter painter(viewport());
-    painter.save();
-    painter.setRenderHints(QPainter::Antialiasing);
-    painter.setOpacity(1);
-    painter.setClipping(true);
-
-    QWidget *wnd = DApplication::activeWindow();
-    DPalette::ColorGroup cg;
-    if (!wnd) {
-        cg = DPalette::Inactive;
-    } else {
-        cg = DPalette::Active;
-    }
-
-    auto style = dynamic_cast<DStyle *>(DApplication::style());
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-
-    QBrush bgBrush(palette.color(cg, DPalette::Base));
-
-    QStyleOptionFrame option;
-    initStyleOption(&option);
-    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
-
-    QRect rect = viewport()->rect();
-    QRectF clipRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height() * 2);
-    QRectF subRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height());
-    QPainterPath clipPath, subPath;
-    clipPath.addRoundedRect(clipRect, radius, radius);
-    subPath.addRect(subRect);
-    clipPath = clipPath.subtracted(subPath);
-
-    painter.fillPath(clipPath, bgBrush);
-
-    painter.restore();
-    DTreeView::paintEvent(event);
-}
-
 void ProcessTableView::selectionChanged(const QItemSelection &selected,
                                         const QItemSelection &deselected)
 {
@@ -727,8 +675,7 @@ void ProcessTableView::customizeProcessPriority()
     DDialog *prioDialog = new DDialog(this);
     prioDialog->setIcon(QIcon::fromTheme("dialog-warning"));
     prioDialog->setAttribute(Qt::WA_DeleteOnClose);
-    prioDialog->setTitle(
-        DApplication::translate("Process.Table.Custom.Priority.Dialog", "Customize priority"));
+    prioDialog->setTitle(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Custom"));
     prioDialog->addSpacing(20);
     PrioritySlider *slider = new PrioritySlider(Qt::Horizontal, prioDialog);
     slider->slider()->setInvertedAppearance(true);
@@ -775,9 +722,8 @@ void ProcessTableView::customizeProcessPriority()
     prioDialog->addSpacing(16);
     prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Cancel"),
                           false, DDialog::ButtonNormal);
-    prioDialog->addButton(
-        DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change Priority"), true,
-        DDialog::ButtonRecommend);
+    prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change"),
+                          true, DDialog::ButtonRecommend);
     connect(prioDialog, &DDialog::buttonClicked, this, [=](int index, QString text) {
         Q_UNUSED(text);
         if (index == 1) {
