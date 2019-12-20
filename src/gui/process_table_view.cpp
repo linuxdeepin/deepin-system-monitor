@@ -42,12 +42,13 @@ static const char *kSettingsOption_ProcessTableHeaderState = "process_table_head
 ProcessTableView::ProcessTableView(DWidget *parent)
     : BaseTableView(parent)
 {
-    bool settingsLoaded = loadSettings();
-
     m_model = new ProcessTableModel(this);
     m_proxyModel = new ProcessSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
+    // setModel must be called before calling loadSettings();
     setModel(m_proxyModel);
+
+    bool settingsLoaded = loadSettings();
 
     initUI(settingsLoaded);
     initConnections(settingsLoaded);
@@ -457,9 +458,9 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 
     // header
     auto *h = header();
-    connect(h, &QHeaderView::sectionResized, this, [this]() { saveSettings(); });
-    connect(h, &QHeaderView::sectionMoved, this, [&]() { saveSettings(); });
-    connect(h, &QHeaderView::sortIndicatorChanged, this, [&]() { saveSettings(); });
+    connect(h, &QHeaderView::sectionResized, this, [=]() { saveSettings(); });
+    connect(h, &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
+    connect(h, &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
     connect(h, &QHeaderView::customContextMenuRequested, this,
             &ProcessTableView::displayProcessTableHeaderContextMenu);
 

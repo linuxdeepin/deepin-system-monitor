@@ -4,6 +4,7 @@
 #include <DButtonBox>
 #include <DMainWindow>
 #include <DSearchEdit>
+#include <DShadowLine>
 #include <DStackedWidget>
 #include <DWidget>
 #include <mutex>
@@ -76,6 +77,7 @@ private:
     DStackedWidget *m_pages;
     ProcessPageWidget *m_procPage;
     SystemServicePageWidget *m_svcPage;
+    DShadowLine *m_tbShadow;
 
     static std::atomic<MainWindow *> m_instance;
     static std::mutex m_mutex;

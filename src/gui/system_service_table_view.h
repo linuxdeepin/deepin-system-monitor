@@ -2,6 +2,7 @@
 #define SYSTEM_SERVICE_TABLE_VIEW_H
 
 #include <DLabel>
+#include <DSpinner>
 #include <QShortcut>
 
 #include "base_table_view.h"
@@ -59,12 +60,13 @@ private:
     DMenu *m_contextMenu;
     DMenu *m_headerContextMenu;
     DLabel *m_noMatchingResultLabel;
-    QTimer *m_timer;
 
     QShortcut *m_refreshKP;
     QShortcut *m_startKP;
     QShortcut *m_stopKP;
     QShortcut *m_restartKP;
+
+    DSpinner *m_spinner {nullptr};
 };
 
 #endif  // SYSTEM_SERVICE_TABLE_VIEW_H

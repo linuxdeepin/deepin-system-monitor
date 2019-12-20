@@ -5,6 +5,7 @@
 #include <DLabel>
 #include <DMenu>
 #include <DMessageBox>
+#include <DSpinner>
 #include <QDebug>
 #include <QFutureWatcher>
 #include <QScrollBar>
@@ -25,9 +26,18 @@ DWIDGET_USE_NAMESPACE
 
 static const char *kSettingsOption_ServiceTableHeaderState = "service_table_header_state";
 
+// not thread-safe
+static bool defer_initialized {false};
+
 SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     : BaseTableView(parent)
 {
+    // >>> table model
+    m_ProxyModel = new SystemServiceSortFilterProxyModel(this);
+    m_Model = new SystemServiceTableModel(this);
+    m_ProxyModel->setSourceModel(m_Model);
+    setModel(m_ProxyModel);
+
     bool settingsLoaded = loadSettings();
 
     // >>> "not found" display label
@@ -49,13 +59,14 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         }
     });
 
-    header()->setSectionsMovable(true);
-    header()->setSectionsClickable(true);
-    header()->setSectionResizeMode(DHeaderView::Interactive);
-    header()->setStretchLastSection(true);
-    header()->setSortIndicatorShown(true);
-    header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    QHeaderView *hdr = header();
+    hdr->setSectionsMovable(true);
+    hdr->setSectionsClickable(true);
+    hdr->setSectionResizeMode(DHeaderView::Interactive);
+    hdr->setStretchLastSection(true);
+    hdr->setSortIndicatorShown(true);
+    hdr->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    hdr->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // table options
     setSortingEnabled(true);
@@ -63,31 +74,18 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setContextMenuPolicy(Qt::CustomContextMenu);
 
-    m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
-    connect(m_timer, &QTimer::timeout, this, [=]() { saveSettings(); });
-
     // table events
     connect(this, &SystemServiceTableView::customContextMenuRequested, this,
             &SystemServiceTableView::displayTableContextMenu);
     // table header events
-    connect(header(), &QHeaderView::sectionResized, this, [=]() { m_timer->start(1000); });
-    connect(header(), &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
-    connect(header(), &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
-    connect(header(), &QHeaderView::customContextMenuRequested, this,
+    connect(hdr, &QHeaderView::sectionResized, this, [=]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
+    connect(hdr, &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
     MainWindow *mainWindow = MainWindow::instance();
     connect(mainWindow->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
-
-    // >>> table model
-    m_ProxyModel = new SystemServiceSortFilterProxyModel(this);
-    m_Model = new SystemServiceTableModel(this);
-    QList<SystemServiceEntry> empty;
-    m_Model->setServiceEntryList(empty);
-    m_ProxyModel->setSourceModel(m_Model);
-    setModel(m_ProxyModel);
-    asyncGetServiceEntryList();
 
     // >>> table default style
     if (!settingsLoaded) {
@@ -215,6 +213,18 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     connect(m_stopKP, &QShortcut::activated, this, &SystemServiceTableView::stopService);
     m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
+
+    // initialize service list
+    MainWindow *mwnd = MainWindow::instance();
+    if (mwnd) {
+        auto *tbar = mwnd->toolbar();
+        connect(tbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+            if (!defer_initialized) {
+                asyncGetServiceEntryList();
+                defer_initialized = true;
+            }
+        });
+    }
 }
 
 SystemServiceTableView::~SystemServiceTableView()
@@ -431,7 +441,8 @@ void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
 void SystemServiceTableView::adjustInfoLabelVisibility()
 {
     setUpdatesEnabled(false);
-    m_noMatchingResultLabel->setVisible(m_ProxyModel->rowCount() == 0);
+    m_noMatchingResultLabel->setVisible(m_ProxyModel->rowCount() == 0 && m_spinner &&
+                                        !m_spinner->isPlaying());
     if (m_noMatchingResultLabel->isVisible())
         m_noMatchingResultLabel->move(rect().center() - m_noMatchingResultLabel->rect().center());
     setUpdatesEnabled(true);
@@ -448,6 +459,9 @@ void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
 
+    //    if (m_spinner->isVisible()) {
+    m_spinner->move(rect().center() - m_spinner->rect().center());
+    //    }
     adjustInfoLabelVisibility();
 
     DTreeView::resizeEvent(event);
@@ -466,6 +480,7 @@ int SystemServiceTableView::sizeHintForColumn(int column) const
 
 void SystemServiceTableView::refresh()
 {
+    m_Model->removeAll();
     asyncGetServiceEntryList();
 }
 
@@ -474,8 +489,15 @@ SystemServiceTableModel *SystemServiceTableView::getSourceModel() const
     return m_Model;
 }
 
+// gui-thread
 void SystemServiceTableView::asyncGetServiceEntryList()
 {
+    if (!m_spinner) {
+        m_spinner = new DSpinner(this);
+    }
+    m_noMatchingResultLabel->hide();
+    m_spinner->show();
+    m_spinner->start();
     auto *watcher = new QFutureWatcher<QPair<ErrorContext, QList<SystemServiceEntry>>>;
     QFuture<QPair<ErrorContext, QList<SystemServiceEntry>>> future;
     QObject::connect(watcher, &QFutureWatcher<void>::finished, [=]() {
@@ -487,6 +509,7 @@ void SystemServiceTableView::asyncGetServiceEntryList()
     watcher->setFuture(future);
 }
 
+// thread-pool job!!
 QPair<ErrorContext, QList<SystemServiceEntry>>
 SystemServiceTableView::processAsyncGetServiceListTask()
 {
@@ -495,6 +518,7 @@ SystemServiceTableView::processAsyncGetServiceListTask()
     return mgr->getServiceEntryList();
 }
 
+// gui-thread
 void SystemServiceTableView::resetModel(const ErrorContext &ec,
                                         const QList<SystemServiceEntry> &list)
 {
@@ -503,8 +527,8 @@ void SystemServiceTableView::resetModel(const ErrorContext &ec,
         return;
     }
     m_Model->setServiceEntryList(list);
-    m_ProxyModel->setSourceModel(m_Model);
-    setModel(m_ProxyModel);
-    loadSettings();
+
+    m_spinner->stop();
+    m_spinner->hide();
     adjustInfoLabelVisibility();
 }

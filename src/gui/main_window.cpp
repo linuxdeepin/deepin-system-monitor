@@ -1,6 +1,7 @@
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
+#include <DShadowLine>
 #include <DStackedWidget>
 #include <DTitlebar>
 #include <QDebug>
@@ -235,6 +236,13 @@ void MainWindow::initUI()
     setContentsMargins(0, 0, 0, 0);
     setCentralWidget(m_pages);
 
+    m_tbShadow = new DShadowLine(m_pages);
+    m_tbShadow->setFixedWidth(m_pages->width());
+    m_tbShadow->setFixedHeight(10);
+    m_tbShadow->move(0, 0);
+    m_tbShadow->show();
+    m_tbShadow->raise();
+
     installEventFilter(this);
 }
 
@@ -262,6 +270,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
 
+    m_tbShadow->setFixedWidth(width());
     m_settings->setOption(kSettingKeyWindowWidth, width());
     m_settings->setOption(kSettingKeyWindowHeight, height());
 }

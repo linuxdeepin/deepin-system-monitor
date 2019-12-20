@@ -30,7 +30,8 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
                 &ProcessTableModel::updateProcessPriority);
 
 #if defined(__x86_64__) || defined(__amd64__) || defined(__i386__)
-        sysmon->updateStatus();
+        // loongson cpu(x86) made this call impossible to fullfill performance request
+//        sysmon->updateStatus();
 #endif
     }
 }
@@ -95,35 +96,33 @@ int ProcessTableModel::columnCount(const QModelIndex &parent) const
 QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role == Qt::DisplayRole) {
-        if (orientation == Qt::Horizontal) {
-            switch (section) {
-                case kProcessNameColumn: {
-                    return DApplication::translate("Process.Table.Header", kProcessName);
-                }
-                case kProcessCPUColumn: {
-                    return DApplication::translate("Process.Table.Header", kProcessCPU);
-                }
-                case kProcessUserColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessUser);
-                case kProcessMemoryColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessMemory);
-                case kProcessUploadColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessUpload);
-                case kProcessDownloadColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessDownload);
-                case kProcessDiskReadColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessDiskRead);
-                case kProcessDiskWriteColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
-                case kProcessPIDColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessPID);
-                case kProcessNiceColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessNice);
-                case kProcessPriorityColumn:
-                    return DApplication::translate("Process.Table.Header", kProcessPriority);
-                default:
-                    break;
+        switch (section) {
+            case kProcessNameColumn: {
+                return DApplication::translate("Process.Table.Header", kProcessName);
             }
+            case kProcessCPUColumn: {
+                return DApplication::translate("Process.Table.Header", kProcessCPU);
+            }
+            case kProcessUserColumn:
+                return DApplication::translate("Process.Table.Header", kProcessUser);
+            case kProcessMemoryColumn:
+                return DApplication::translate("Process.Table.Header", kProcessMemory);
+            case kProcessUploadColumn:
+                return DApplication::translate("Process.Table.Header", kProcessUpload);
+            case kProcessDownloadColumn:
+                return DApplication::translate("Process.Table.Header", kProcessDownload);
+            case kProcessDiskReadColumn:
+                return DApplication::translate("Process.Table.Header", kProcessDiskRead);
+            case kProcessDiskWriteColumn:
+                return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
+            case kProcessPIDColumn:
+                return DApplication::translate("Process.Table.Header", kProcessPID);
+            case kProcessNiceColumn:
+                return DApplication::translate("Process.Table.Header", kProcessNice);
+            case kProcessPriorityColumn:
+                return DApplication::translate("Process.Table.Header", kProcessPriority);
+            default:
+                break;
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);

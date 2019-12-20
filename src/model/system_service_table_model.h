@@ -41,9 +41,45 @@ public:
 
     inline void setServiceEntryList(const QList<SystemServiceEntry>& list)
     {
-        beginResetModel();
-        m_ServiceEntryList = list;
-        endResetModel();
+        QHash<QString, SystemServiceEntry> hash;
+        QList<int> rmlist;
+        QHash<QString, SystemServiceEntry> saved;
+
+        for (auto& entry : list) {
+            hash[entry.getId()] = entry;
+        }
+
+        // modify/remove entry
+        for (auto i = 0; i < m_ServiceEntryList.size(); i++) {
+            auto entry = m_ServiceEntryList[i];
+            if (hash.contains(entry.getId())) {
+                // modify
+                saved[entry.getId()] = entry;
+                m_ServiceEntryList.replace(i, hash[entry.getId()]);
+                Q_EMIT dataChanged(index(i, 0), index(i, columnCount() - 1));
+            } else {
+                // add
+                rmlist << i;
+            }
+        }
+
+        for (auto i = 0; i < rmlist.size(); i++) {
+            beginRemoveRows({}, i, i);
+            m_ServiceEntryList.removeAt(i);
+            endRemoveRows();
+        }
+
+        // add
+        for (auto& entry : list) {
+            if (saved.contains(entry.getId())) {
+                continue;
+            } else {
+                int row = m_ServiceEntryList.size();
+                beginInsertRows({}, row, row);
+                m_ServiceEntryList << entry;
+                endInsertRows();
+            }
+        }
     }
 
     inline SystemServiceEntry getSystemServiceEntry(const QModelIndex& index) const
@@ -73,6 +109,13 @@ public:
             m_ServiceEntryList.removeAt(entryIndex.row());
             endRemoveRows();
         }
+    }
+
+    inline void removeAll()
+    {
+        beginRemoveRows({}, 0, m_ServiceEntryList.size() - 1);
+        m_ServiceEntryList.clear();
+        endRemoveRows();
     }
 
     inline void updateServiceEntry(int row)

@@ -76,28 +76,24 @@ QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orient
                                              int role) const
 {
     if (role == Qt::DisplayRole) {
-        if (orientation == Qt::Horizontal) {
-            switch (section) {
-                case kSystemServiceNameColumn:
-                    return DApplication::translate("Service.Table.Header", kSystemServiceName);
-                case kSystemServiceLoadStateColumn:
-                    return DApplication::translate("Service.Table.Header", kSystemServiceLoadState);
-                case kSystemServiceActiveStateColumn:
-                    return DApplication::translate("Service.Table.Header",
-                                                   kSystemServiceActiveState);
-                case kSystemServiceSubStateColumn:
-                    return DApplication::translate("Service.Table.Header", kSystemServiceSubState);
-                case kSystemServiceStateColumn:
-                    return DApplication::translate("Service.Table.Header", kSystemServiceState);
-                case kSystemServicePIDColumn:
-                    return DApplication::translate("Service.Table.Header", kSystemServicePID);
-                    //                    return QString(kSystemServicePID);
-                case kSystemServiceDescriptionColumn:
-                    return DApplication::translate("Service.Table.Header",
-                                                   kSystemServiceDescription);
-                default:
-                    break;
-            }
+        switch (section) {
+            case kSystemServiceNameColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServiceName);
+            case kSystemServiceLoadStateColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServiceLoadState);
+            case kSystemServiceActiveStateColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServiceActiveState);
+            case kSystemServiceSubStateColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServiceSubState);
+            case kSystemServiceStateColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServiceState);
+            case kSystemServicePIDColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServicePID);
+                //                    return QString(kSystemServicePID);
+            case kSystemServiceDescriptionColumn:
+                return DApplication::translate("Service.Table.Header", kSystemServiceDescription);
+            default:
+                break;
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
