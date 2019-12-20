@@ -10,9 +10,9 @@
 
 #include "base_item_delegate.h"
 
-#define ICON_SIZE 24
-
 DWIDGET_USE_NAMESPACE
+
+static const QSize kIconSize {24, 24};
 
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -78,9 +78,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
-            // forground.setColor(palette.color(cg, DPalette::TextLively));
-            // TODO: fix this when TextLively color fixed
-            forground.setColor(palette.color(cg, DPalette::HighlightedText));
+            forground.setColor(palette.color(cg, DPalette::TextLively));
             background = palette.color(cg, DPalette::Highlight);
         }
     }
@@ -130,13 +128,13 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
         if (opt.features & QStyleOptionViewItem::HasDecoration) {
             textRect = rect;
-            textRect.setX(textRect.x() + margin * 2 + ICON_SIZE);
+            textRect.setX(textRect.x() + margin * 2 + kIconSize.width());
             textRect.setWidth(textRect.width() - margin);
             text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
 
             iconRect = rect;
             iconRect.setX(rect.x() + margin);
-            iconRect.setWidth(ICON_SIZE);
+            iconRect.setWidth(kIconSize.width());
         } else {
             textRect = rect;
             textRect.setX(textRect.x() + margin);

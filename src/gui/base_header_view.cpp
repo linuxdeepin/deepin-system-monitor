@@ -13,8 +13,8 @@
 
 static const int kSpacingMargin = 4;
 // recommend size
-// static const QSize kIconSize {10, 6};
-static const QSize kIconSize {11, 10};
+// static const QSize kDropDownSize {10, 6};
+static const QSize kDropDownSize {11, 10};
 
 BaseHeaderView::BaseHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
@@ -37,7 +37,7 @@ int BaseHeaderView::sectionSizeHint(int logicalIndex) const
     QFontMetrics fm(DApplication::font());
     QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
     if (sortIndicatorSection() == logicalIndex) {
-        return fm.width(buf) + margin * 3 + kIconSize.width();
+        return fm.width(buf) + margin * 3 + kDropDownSize.width();
     } else {
         return fm.width(buf) + margin * 2;
     }
@@ -141,7 +141,7 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     QRect textRect;
     if (sortIndicatorSection() == logicalIndex) {
         textRect = {contentRect.x() + margin, contentRect.y(),
-                    contentRect.width() - margin * 3 - kIconSize.width(), contentRect.height()};
+                    contentRect.width() - margin * 3 - kDropDownSize.width(), contentRect.height()};
     } else {
         textRect = {contentRect.x() + margin, contentRect.y(), contentRect.width() - margin,
                     contentRect.height()};
@@ -154,8 +154,8 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     // sort indicator
     if (isSortIndicatorShown() && logicalIndex == sortIndicatorSection()) {
         QRect sortIndicator(textRect.x() + textRect.width() + margin,
-                            textRect.y() + qCeil((textRect.height() - kIconSize.height()) / 2.),
-                            kIconSize.width(), kIconSize.height());
+                            textRect.y() + qCeil((textRect.height() - kDropDownSize.height()) / 2.),
+                            kDropDownSize.width(), kDropDownSize.height());
         option.rect = sortIndicator;
         if (sortIndicatorOrder() == Qt::DescendingOrder) {
             style->drawPrimitive(DStyle::PE_IndicatorArrowDown, &option, painter, this);
