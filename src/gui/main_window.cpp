@@ -240,8 +240,8 @@ void MainWindow::initUI()
     m_tbShadow->setFixedWidth(m_pages->width());
     m_tbShadow->setFixedHeight(10);
     m_tbShadow->move(0, 0);
-    m_tbShadow->show();
     m_tbShadow->raise();
+    m_tbShadow->show();
 
     installEventFilter(this);
 }
@@ -254,6 +254,8 @@ void MainWindow::initConnections()
         m_modeMenu->setEnabled(true);
         m_killAction->setEnabled(true);
 #endif
+        m_tbShadow->raise();
+        m_tbShadow->show();
     });
     connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
@@ -261,6 +263,8 @@ void MainWindow::initConnections()
         m_modeMenu->setEnabled(false);
         m_killAction->setEnabled(false);
 #endif
+        m_tbShadow->raise();
+        m_tbShadow->show();
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
             [=]() { m_toolbar->clearSearchText(); });
