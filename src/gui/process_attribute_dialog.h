@@ -1,7 +1,10 @@
 #ifndef PROCESS_ATTRIBUTE_DIALOG_H
 #define PROCESS_ATTRIBUTE_DIALOG_H
 
+#include <DFrame>
+#include <DLabel>
 #include <DMainWindow>
+#include <DShadowLine>
 #include <DWidget>
 
 DWIDGET_USE_NAMESPACE
@@ -28,6 +31,13 @@ protected:
 
 private:
     Settings *m_settings;
+
+    DWidget *m_frame {nullptr};
+    DShadowLine *m_tbShadow {nullptr};
+
+    DLabel *m_procNameText {nullptr};
+    DLabel *m_procCmdText {nullptr};
+    DLabel *m_procStartText {nullptr};
 
     pid_t m_pid;
 };

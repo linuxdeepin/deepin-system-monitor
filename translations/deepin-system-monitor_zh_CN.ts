@@ -420,12 +420,12 @@ Are you sure you want to continue?</source>
         <translation>取消</translation>
     </message>
     <message>
-        <source>Custom</source>
-        <translation>自定义</translation>
-    </message>
-    <message>
         <source>Change</source>
         <translation>更改</translation>
+    </message>
+    <message>
+        <source>Custom Priority</source>
+        <translation>自定义优先级</translation>
     </message>
 </context>
 <context>

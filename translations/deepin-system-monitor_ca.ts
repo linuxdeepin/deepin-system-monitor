@@ -419,11 +419,11 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">Cancel·la</translation>
     </message>
     <message>
-        <source>Custom</source>
+        <source>Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change</source>
+        <source>Custom Priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -23,13 +23,9 @@ void PriorityTip::paintEvent(QPaintEvent *event)
 
     QPainterPath path;
     path.addRoundedRect(rect(), m_radius, m_radius);
-    // TODO: WRONG KEY, FIX THIS WHEN DTK COLOR GETS FIXED
-    //    painter.fillPath(path, palette.color(DPalette::Active, DPalette::LightLively));
-    painter.fillPath(path, palette.color(DPalette::Active, DPalette::Highlight));
+    painter.fillPath(path, palette.color(DPalette::Active, DPalette::LightLively));
 
-    // TODO: WRONG KEY, FIX THIS WHEN DTK COLOR GETS FIXED
-    //    QPen pen(palette.color(DPalette::Active, DPalette::TextLively));
-    QPen pen(palette.color(DPalette::Active, DPalette::HighlightedText));
+    QPen pen(palette.color(DPalette::Active, DPalette::TextLively));
     painter.setPen(pen);
     painter.drawText(rect(), int(alignment()), text());
 }

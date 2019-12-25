@@ -123,6 +123,7 @@ Q_SIGNALS:
     void processKilled(pid_t pid);
     void processPriorityChanged(pid_t pid, int priority);
     void priorityPromoteResultReady(const ErrorContext &ec);
+    void initialSysInfoLoaded();
 
 public Q_SLOTS:
     void updateStatus();

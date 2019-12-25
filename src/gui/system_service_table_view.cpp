@@ -214,6 +214,9 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 
+    m_spinner = new DSpinner(this);
+    m_spinner->move(rect().center() - m_spinner->rect().center());
+
     // initialize service list
     MainWindow *mwnd = MainWindow::instance();
     if (mwnd) {
@@ -459,9 +462,9 @@ void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
 
-    //    if (m_spinner->isVisible()) {
-    m_spinner->move(rect().center() - m_spinner->rect().center());
-    //    }
+    if (m_spinner) {
+        m_spinner->move(rect().center() - m_spinner->rect().center());
+    }
     adjustInfoLabelVisibility();
 
     DTreeView::resizeEvent(event);
@@ -492,12 +495,9 @@ SystemServiceTableModel *SystemServiceTableView::getSourceModel() const
 // gui-thread
 void SystemServiceTableView::asyncGetServiceEntryList()
 {
-    if (!m_spinner) {
-        m_spinner = new DSpinner(this);
-    }
     m_noMatchingResultLabel->hide();
-    m_spinner->show();
     m_spinner->start();
+    m_spinner->show();
     auto *watcher = new QFutureWatcher<QPair<ErrorContext, QList<SystemServiceEntry>>>;
     QFuture<QPair<ErrorContext, QList<SystemServiceEntry>>> future;
     QObject::connect(watcher, &QFutureWatcher<void>::finished, [=]() {
@@ -528,7 +528,7 @@ void SystemServiceTableView::resetModel(const ErrorContext &ec,
     }
     m_Model->setServiceEntryList(list);
 
-    m_spinner->stop();
     m_spinner->hide();
+    m_spinner->stop();
     adjustInfoLabelVisibility();
 }

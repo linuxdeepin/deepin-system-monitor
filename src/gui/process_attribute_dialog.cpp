@@ -1,4 +1,4 @@
-#include <proc/readproc.h>
+﻿#include <proc/readproc.h>
 #include <proc/sysinfo.h>
 
 #include <DApplication>
@@ -54,6 +54,9 @@ void ProcessAttributeDialog::initUI()
         }
     }
 
+    m_frame = new DWidget(this);
+    m_frame->setAutoFillBackground(true);
+
     resize(width, height);
     setMinimumSize(600, 480);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -64,50 +67,68 @@ void ProcessAttributeDialog::initUI()
     setTitlebarShadowEnabled(false);
     titlebar()->setTitle({});
 
-    auto *frame = new DWidget(this);
-    frame->setAutoFillBackground(true);
+    m_tbShadow = new DShadowLine(m_frame);
+    m_tbShadow->setFixedWidth(m_frame->width());
+    m_tbShadow->setFixedHeight(10);
+    m_tbShadow->move(0, 0);
+    m_tbShadow->raise();
+    m_tbShadow->show();
 
-    auto *vlayout = new QVBoxLayout(frame);
-    vlayout->setSpacing(0);
-
-    auto *cw = new DWidget(this);
-    cw->setContentsMargins(0, 0, 0, 0);
-    auto *grid = new QGridLayout(cw);
-    grid->setContentsMargins(0, 0, 0, 0);
+    auto *grid = new QGridLayout(m_frame);
+    grid->setContentsMargins(margin, 0, margin, 0);
     grid->setVerticalSpacing(0);
     grid->setHorizontalSpacing(margin);
-    cw->setLayout(grid);
+
+    // spacing
+    grid->addItem(new QSpacerItem(10, 10), 0, 0, 1, 2);
+    grid->setRowStretch(0, 1);
 
     DLabel *appIcon = new DLabel(this);
+    grid->addWidget(appIcon, 1, 0, 1, 2, Qt::AlignVCenter | Qt::AlignHCenter);
 
-    vlayout->addStretch(1);
-    vlayout->addWidget(appIcon, 0, Qt::AlignVCenter | Qt::AlignHCenter);
-    vlayout->addSpacing(16);
+    // spacing
+    grid->addItem(new QSpacerItem(10, 20), 2, 0, 1, 2);
+    grid->setRowStretch(2, 0);
+
     auto *appNameLabel = new DLabel(this);
     DFontSizeManager::instance()->bind(appNameLabel, DFontSizeManager::T5, QFont::Bold);
-    vlayout->addWidget(appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    vlayout->addSpacing(24);
-    vlayout->addWidget(cw, 0, Qt::AlignVCenter | Qt::AlignHCenter);
-    vlayout->addStretch(1);
+    grid->addWidget(appNameLabel, 3, 0, 1, 2, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    // spacing
+    grid->addItem(new QSpacerItem(10, 40), 4, 0, 1, 2);
+    grid->setRowStretch(4, 0);
 
     QString buf;
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Process name"));
-    auto *procNameLabel = new DLabel(buf, this);
+    auto *procNameLabel = new DLabel(this);
+    procNameLabel->setText(buf);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Command line"));
-    auto *procCmdLabel = new DLabel(buf, this);
+    auto *procCmdLabel = new DLabel(this);
+    procCmdLabel->setText(buf);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Start time"));
-    auto *procStartLabel = new DLabel(buf, this);
-    auto *procNameText = new DLabel(this);
-    auto *procCmdText = new DLabel(this);
-    procCmdText->setWordWrap(true);
-    procCmdText->setScaledContents(true);
-    auto *procStartText = new DLabel(this);
-    grid->addWidget(procNameLabel, 0, 0, Qt::AlignTop | Qt::AlignRight);
-    grid->addWidget(procCmdLabel, 1, 0, Qt::AlignTop | Qt::AlignRight);
-    grid->addWidget(procStartLabel, 2, 0, Qt::AlignTop | Qt::AlignRight);
-    grid->addWidget(procNameText, 0, 1, Qt::AlignTop | Qt::AlignLeft);
-    grid->addWidget(procCmdText, 1, 1, Qt::AlignTop | Qt::AlignLeft);
-    grid->addWidget(procStartText, 2, 1, Qt::AlignTop | Qt::AlignLeft);
+    auto *procStartLabel = new DLabel(this);
+    procStartLabel->setText(buf);
+
+    m_procNameText = new DLabel(this);
+    m_procNameText->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_procCmdText = new DLabel(this);
+    m_procCmdText->setWordWrap(true);
+    m_procCmdText->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_procStartText = new DLabel(this);
+    m_procStartText->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+    grid->addWidget(procNameLabel, 5, 0, Qt::AlignTop | Qt::AlignRight);
+    grid->addWidget(m_procNameText, 5, 1, Qt::AlignTop | Qt::AlignLeft);
+
+    grid->addWidget(procCmdLabel, 6, 0, Qt::AlignTop | Qt::AlignRight);
+    grid->addWidget(m_procCmdText, 6, 1, Qt::AlignTop | Qt::AlignLeft);
+
+    grid->addWidget(procStartLabel, 7, 0, Qt::AlignTop | Qt::AlignRight);
+    grid->addWidget(m_procStartText, 7, 1, Qt::AlignTop | Qt::AlignLeft);
+
+    // spacing
+    grid->addItem(new QSpacerItem(10, 10), 8, 0, 1, 2);
+    grid->setRowStretch(8, 1);
 
     // Read the list of open processes information.
     PROCTAB *proc =
@@ -145,20 +166,17 @@ void ProcessAttributeDialog::initUI()
             appIcon->setPixmap(icon);
             appNameLabel->setText(displayName);
 
-            procNameText->setText(name);
-            procNameText->adjustSize();
-            procCmdText->setText(cmdline);
-            procCmdText->adjustSize();
-            procStartText->setText(QFileInfo(QString("/proc/%1").arg(processId))
-                                       .created()
-                                       .toString("yyyy-MM-dd hh:mm:ss"));
-            procStartText->adjustSize();
+            m_procNameText->setText(name);
+            m_procCmdText->setText(cmdline);
+            m_procStartText->setText(QFileInfo(QString("/proc/%1").arg(processId))
+                                         .created()
+                                         .toString("yyyy-MM-dd hh:mm:ss"));
             break;
         }
     }
 
-    frame->setLayout(vlayout);
-    setCentralWidget(frame);
+    m_frame->setLayout(grid);
+    setCentralWidget(m_frame);
 }
 
 void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
@@ -166,6 +184,15 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
     if (m_settings) {
         m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
         m_settings->setOption(kSettingKeyProcessAttributeDialogHeight, height());
+    }
+
+    if (m_frame) {
+        m_tbShadow->setFixedWidth(m_frame->size().width());
+        m_tbShadow->raise();
+        m_tbShadow->show();
+
+        // compare qfontmetrics vs maxwidth
+        m_procCmdText->setFixedWidth(m_frame->width() - 120);
     }
 
     DMainWindow::resizeEvent(event);

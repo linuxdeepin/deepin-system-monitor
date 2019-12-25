@@ -28,11 +28,6 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
                 &ProcessTableModel::removeProcessEntry);
         connect(sysmon, &SystemMonitor::processPriorityChanged, this,
                 &ProcessTableModel::updateProcessPriority);
-
-#if defined(__x86_64__) || defined(__amd64__) || defined(__i386__)
-        // loongson cpu(x86) made this call impossible to fullfill performance request
-//        sysmon->updateStatus();
-#endif
     }
 }
 

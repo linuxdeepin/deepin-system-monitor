@@ -1,14 +1,17 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include <mutex>
+#include <thread>
+
 #include <DButtonBox>
 #include <DMainWindow>
 #include <DSearchEdit>
 #include <DShadowLine>
+#include <DSpinner>
 #include <DStackedWidget>
 #include <DWidget>
-#include <mutex>
-#include <thread>
+#include <QTimer>
 
 #include "ui_common.h"
 
@@ -46,6 +49,7 @@ public:
 Q_SIGNALS:
     void killProcessPerformed();
     void displayModeChanged(DisplayMode mode);
+    void loadingStatusChanged(bool loading);
 
 public Q_SLOTS:
     inline void initDisplay()
@@ -63,6 +67,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *event);
     virtual void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
+    virtual void showEvent(QShowEvent *event);
 
 private:
     MainWindow(DWidget *parent = nullptr);
@@ -78,6 +83,10 @@ private:
     ProcessPageWidget *m_procPage;
     SystemServicePageWidget *m_svcPage;
     DShadowLine *m_tbShadow;
+    DSpinner *m_spinner;
+
+    QTimer *m_timer {nullptr};
+    bool m_loading {true};
 
     static std::atomic<MainWindow *> m_instance;
     static std::mutex m_mutex;

@@ -33,6 +33,7 @@
 #include <DSearchEdit>
 
 #include "constant.h"
+#include "main_window.h"
 #include "toolbar.h"
 #include "utils.h"
 
@@ -59,9 +60,11 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
         DApplication::translate("Title.Bar.Switch", "Process"), m_switchFuncTabBtnGrp);
     procBtn->setCheckable(true);
     procBtn->setChecked(true);
+    procBtn->setEnabled(false);
     DButtonBoxButton *svcBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Service"), m_switchFuncTabBtnGrp);
     svcBtn->setCheckable(true);
+    svcBtn->setEnabled(false);
     QList<DButtonBoxButton *> list;
     list << procBtn << svcBtn;
     m_switchFuncTabBtnGrp->setButtonList(list, true);
@@ -73,6 +76,7 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     searchEdit = new DSearchEdit();
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
+    searchEdit->setEnabled(false);
 
     layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
     layout->addStretch();
@@ -84,6 +88,21 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     connect(searchTimer, &QTimer::timeout, this, &Toolbar::handleSearch);
 
     connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged);
+
+    auto *mwnd = MainWindow::instance();
+    connect(mwnd, &MainWindow::loadingStatusChanged, this, [=](bool loading) {
+        if (loading) {
+            procBtn->setEnabled(false);
+            svcBtn->setEnabled(false);
+
+            searchEdit->setEnabled(false);
+        } else {
+            procBtn->setEnabled(true);
+            svcBtn->setEnabled(true);
+
+            searchEdit->setEnabled(true);
+        }
+    });
 }
 
 Toolbar::~Toolbar() {}

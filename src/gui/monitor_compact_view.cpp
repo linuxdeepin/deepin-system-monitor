@@ -30,13 +30,5 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     layout->addWidget(m_networkMonitor, 0, Qt::AlignHCenter);
     layout->addWidget(m_diskMonitor, 0, Qt::AlignHCenter);
 
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-
-    //    layout->setContentsMargins(margin, margin, margin, margin);
     setLayout(layout);
 }

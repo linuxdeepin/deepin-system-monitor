@@ -41,6 +41,7 @@ public:
 
     inline void setServiceEntryList(const QList<SystemServiceEntry>& list)
     {
+#ifdef ALT_METHOD
         QHash<QString, SystemServiceEntry> hash;
         QList<int> rmlist;
         QHash<QString, SystemServiceEntry> saved;
@@ -58,7 +59,7 @@ public:
                 m_ServiceEntryList.replace(i, hash[entry.getId()]);
                 Q_EMIT dataChanged(index(i, 0), index(i, columnCount() - 1));
             } else {
-                // add
+                // remove
                 rmlist << i;
             }
         }
@@ -80,6 +81,10 @@ public:
                 endInsertRows();
             }
         }
+#endif
+        beginResetModel();
+        m_ServiceEntryList = list;
+        endResetModel();
     }
 
     inline SystemServiceEntry getSystemServiceEntry(const QModelIndex& index) const

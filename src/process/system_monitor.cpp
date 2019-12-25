@@ -26,6 +26,8 @@ std::mutex SystemMonitor::m_mutex;
 DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
+static bool initial_loading = true;
+
 void SystemMonitor::updateStatus()
 {
     // Read the list of open processes information.
@@ -384,6 +386,11 @@ void SystemMonitor::updateStatus()
 
     // Keep processes we've read for cpu calculations next cycle.
     m_prevProcesses = processes;
+
+    if (initial_loading) {
+        initial_loading = false;
+        Q_EMIT initialSysInfoLoaded();
+    }
 }
 
 void SystemMonitor::setFilterType(SystemMonitor::FilterType type)

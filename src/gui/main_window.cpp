@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
@@ -13,6 +19,7 @@
 
 #include "constant.h"
 #include "main_window.h"
+#include "process/system_monitor.h"
 #include "process_page_widget.h"
 #include "settings.h"
 #include "system_service_page_widget.h"
@@ -153,6 +160,9 @@ void MainWindow::displayShortcutHelpDialog()
 
 void MainWindow::initUI()
 {
+    m_loading = true;
+    Q_EMIT loadingStatusChanged(m_loading);
+
     // Init window size.
     int width = Constant::WINDOW_MIN_WIDTH;
     int height = Constant::WINDOW_MIN_HEIGHT;
@@ -170,6 +180,7 @@ void MainWindow::initUI()
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
     m_toolbar = new Toolbar(this, this);
     titlebar()->setCustomWidget(m_toolbar);
+    titlebar()->setMenuDisabled(true);
 
     DMenu *menu = new DMenu();
     titlebar()->setMenu(menu);
@@ -227,21 +238,39 @@ void MainWindow::initUI()
             [=]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
 
     m_pages = new DStackedWidget(this);
-    m_procPage = new ProcessPageWidget(m_pages);
-    m_svcPage = new SystemServicePageWidget(m_pages);
-    m_pages->setContentsMargins(0, 0, 0, 0);
-    m_pages->addWidget(m_procPage);
-    m_pages->addWidget(m_svcPage);
-
-    setContentsMargins(0, 0, 0, 0);
     setCentralWidget(m_pages);
+    setContentsMargins(0, 0, 0, 0);
 
     m_tbShadow = new DShadowLine(m_pages);
     m_tbShadow->setFixedWidth(m_pages->width());
     m_tbShadow->setFixedHeight(10);
     m_tbShadow->move(0, 0);
-    m_tbShadow->raise();
     m_tbShadow->show();
+
+    m_spinner = new DSpinner(m_pages);
+    m_spinner->move(m_pages->rect().center() - m_spinner->rect().center());
+    //    m_spinner->setPalette(DApplicationHelper::instance()->applicationPalette());
+    m_spinner->start();
+    m_spinner->show();
+
+    auto *mon = SystemMonitor::instance();
+    connect(mon, &SystemMonitor::initialSysInfoLoaded, this, [=]() {
+        if (m_loading) {
+            m_spinner->hide();
+            m_spinner->stop();
+
+            m_procPage = new ProcessPageWidget(m_pages);
+            m_svcPage = new SystemServicePageWidget(m_pages);
+            m_pages->setContentsMargins(0, 0, 0, 0);
+            m_pages->addWidget(m_procPage);
+            m_pages->addWidget(m_svcPage);
+
+            m_tbShadow->raise();
+
+            m_loading = false;
+            Q_EMIT loadingStatusChanged(m_loading);
+        }
+    });
 
     installEventFilter(this);
 }
@@ -268,26 +297,36 @@ void MainWindow::initConnections()
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
             [=]() { m_toolbar->clearSearchText(); });
+
+    connect(this, &MainWindow::loadingStatusChanged, [=](bool loading) {
+        if (loading) {
+            titlebar()->setMenuDisabled(true);
+        } else {
+            titlebar()->setMenuDisabled(false);
+        }
+    });
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    Q_UNUSED(event)
+    DMainWindow::resizeEvent(event);
 
-    m_tbShadow->setFixedWidth(width());
-    m_settings->setOption(kSettingKeyWindowWidth, width());
-    m_settings->setOption(kSettingKeyWindowHeight, height());
+    if (m_tbShadow)
+        m_tbShadow->setFixedWidth(event->size().width());
+    if (m_spinner)
+        m_spinner->move(m_pages->rect().center() - m_spinner->rect().center());
+
+    m_settings->setOption(kSettingKeyWindowWidth, event->size().width());
+    m_settings->setOption(kSettingKeyWindowHeight, event->size().height());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    Q_UNUSED(event)
-
     m_settings->setOption(kSettingKeyWindowWidth, width());
     m_settings->setOption(kSettingKeyWindowHeight, height());
+    m_settings->flush();
 
-    if (m_settings)
-        m_settings->flush();
+    DMainWindow::closeEvent(event);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -321,5 +360,42 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         }
     } else {
         return DMainWindow::eventFilter(obj, event);
+    }
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    DMainWindow::showEvent(event);
+
+    auto getCpuModel = [=]() -> char * {
+        char *buf = nullptr;
+        size_t len = 0;
+        ssize_t nread = 0;
+        FILE *fp = fopen("/proc/cpuinfo", "r");
+        if (!fp)
+            return nullptr;
+
+        char vid[] = "vendor_id";
+        while ((nread = getline(&buf, &len, fp)) != -1) {
+            if (strncasecmp(buf, vid, strlen(vid)) == 0) {
+                return buf;
+            }
+        }
+        return nullptr;
+    };
+
+    if (m_loading) {
+        auto *mon = SystemMonitor::instance();
+        char *buf = getCpuModel();
+        QString cpu(buf);
+        if (cpu.contains("AMD") || cpu.contains("Intel")) {
+            mon->updateStatus();
+        } else {
+            m_timer = new QTimer(this);
+            m_timer->setSingleShot(true);
+            connect(m_timer, &QTimer::timeout, this, [=]() { mon->updateStatus(); });
+            m_timer->start(100);
+        }
+        free(buf);
     }
 }

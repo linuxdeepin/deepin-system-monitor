@@ -632,8 +632,6 @@ void ProcessTableView::displayProcessTableHeaderContextMenu(const QPoint &p)
 
 void ProcessTableView::resizeEvent(QResizeEvent *event)
 {
-    Q_UNUSED(event)
-
     adjustInfoLabelVisibility();
 
     DTreeView::resizeEvent(event);
@@ -676,7 +674,8 @@ void ProcessTableView::customizeProcessPriority()
     DDialog *prioDialog = new DDialog(this);
     prioDialog->setIcon(QIcon::fromTheme("dialog-warning"));
     prioDialog->setAttribute(Qt::WA_DeleteOnClose);
-    prioDialog->setTitle(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Custom"));
+    prioDialog->setTitle(
+        DApplication::translate("Process.Table.Custom.Priority.Dialog", "Custom Priority"));
     prioDialog->addSpacing(20);
     PrioritySlider *slider = new PrioritySlider(Qt::Horizontal, prioDialog);
     slider->slider()->setInvertedAppearance(true);
