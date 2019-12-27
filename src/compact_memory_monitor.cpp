@@ -202,7 +202,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                               .arg(QString::number(memoryPercent * 100, 'f', 1));
     QString memoryContent = QString("%1/%2")
                                 .arg(formatByteCount(qulonglong(usedMemory), false, 2))
-                                .arg(formatByteCount(qulonglong(totalMemory), true, 0));
+                                .arg(formatByteCount(qulonglong(totalMemory), true, 1));
     QString swapTitle = "";
     QString swapContent = "";
     if (totalSwap == 0) {
@@ -216,7 +216,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                         .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1/%2")
                           .arg(formatByteCount(qulonglong(usedSwap), false, 2))
-                          .arg(formatByteCount(qulonglong(totalSwap), true, 0));
+                          .arg(formatByteCount(qulonglong(totalSwap), true, 1));
     }
 
     QFontMetrics fmMem(m_contentFont);

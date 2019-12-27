@@ -67,6 +67,8 @@ private:
     QShortcut *m_restartKP;
 
     DSpinner *m_spinner {nullptr};
+
+    bool m_loading {false};
 };
 
 #endif  // SYSTEM_SERVICE_TABLE_VIEW_H

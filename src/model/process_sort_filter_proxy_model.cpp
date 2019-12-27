@@ -34,7 +34,7 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
         }
     }
 
-    setFilterRegExp(QRegExp(m_search, Qt::CaseInsensitive));
+    setFilterRegExp(QRegExp(search, Qt::CaseInsensitive));
 }
 
 bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
@@ -49,7 +49,7 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
         rc |= sourceModel()->data(name).toString().contains(filterRegExp());
         rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(filterRegExp());
         rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(m_hanwords);
-        rc |= sourceModel()->data(name).toString().contains(m_capwords);
+        //        rc |= sourceModel()->data(name).toString().contains(m_capwords);
     }
     if (pid.isValid())
         rc |= sourceModel()->data(pid).toString().contains(filterRegExp());

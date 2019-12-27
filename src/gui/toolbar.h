@@ -68,7 +68,7 @@ private:
     MainWindow *m_mainWindow;
 
     DButtonBox *m_switchFuncTabBtnGrp;
-    DSearchEdit *searchEdit;
+    DSearchEdit *searchEdit {nullptr};
 
     QTimer *searchTimer;
 

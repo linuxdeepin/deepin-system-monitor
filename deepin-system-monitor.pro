@@ -8,7 +8,7 @@ INCLUDEPATH += $$PWD/nethogs/src/
 
 CONFIG += link_pkgconfig
 CONFIG += c++11
-PKGCONFIG += xcb xcb-util dtkwidget dtkwm
+PKGCONFIG += xcb dtkwidget dtkwm
 RESOURCES = deepin-system-monitor.qrc
 
 !system(cd $$PWD/nethogs && make libnethogs){
@@ -72,18 +72,18 @@ HEADERS += src/utils.h \
         src/model/process_sort_filter_proxy_model.h \
         src/process/process_entry.h \
         src/common/han_latin.h \
-    src/gui/monitor_expand_view.h \
-    src/gui/monitor_compact_view.h \
-    src/process/system_monitor.h \
-    src/gui/kill_process_confirm_dialog.h \
-    src/gui/process_attribute_dialog.h \
-    src/process/priority_controller.h \
-    src/gui/priority_tip.h \
-    src/gui/priority_slider.h \
-    src/common/collator.h \
-    src/gui/base_table_view.h \
-    src/gui/base_item_delegate.h \
-    src/gui/base_header_view.h
+        src/gui/monitor_expand_view.h \
+        src/gui/monitor_compact_view.h \
+        src/process/system_monitor.h \
+        src/gui/kill_process_confirm_dialog.h \
+        src/gui/process_attribute_dialog.h \
+        src/process/priority_controller.h \
+        src/gui/priority_tip.h \
+        src/gui/priority_slider.h \
+        src/common/collator.h \
+        src/gui/base_table_view.h \
+        src/gui/base_item_delegate.h \
+        src/gui/base_header_view.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -126,75 +126,33 @@ SOURCES += src/main.cpp \
         src/model/process_sort_filter_proxy_model.cpp \
         src/process/process_entry.cpp \
         src/common/han_latin.cpp \
-    src/gui/monitor_expand_view.cpp \
-    src/gui/monitor_compact_view.cpp \
-    src/process/system_monitor.cpp \
-    src/gui/kill_process_confirm_dialog.cpp \
-    src/gui/process_attribute_dialog.cpp \
-    src/process/priority_controller.cpp \
-    src/gui/priority_tip.cpp \
-    src/gui/priority_slider.cpp \
-    src/gui/ui_common.cpp \
-    src/common/collator.cpp \
-    src/gui/base_table_view.cpp \
-    src/gui/base_item_delegate.cpp \
-    src/gui/base_header_view.cpp
+        src/gui/monitor_expand_view.cpp \
+        src/gui/monitor_compact_view.cpp \
+        src/process/system_monitor.cpp \
+        src/gui/kill_process_confirm_dialog.cpp \
+        src/gui/process_attribute_dialog.cpp \
+        src/process/priority_controller.cpp \
+        src/gui/priority_tip.cpp \
+        src/gui/priority_slider.cpp \
+        src/gui/ui_common.cpp \
+        src/common/collator.cpp \
+        src/gui/base_table_view.cpp \
+        src/gui/base_item_delegate.cpp \
+        src/gui/base_header_view.cpp
 
 QT += core
 QT += widgets
 QT += gui
-QT += network
 QT += x11extras
 QT += dbus
 QT += concurrent
+QT += dtkwidget
+QT += dtkgui
 
 # QMAKE_CXXFLAGS += -g
 LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
-LIBS += -lX11 -lXext -lXtst -ldtkwm -licui18n -licudata -licuuc
-
-TRANSLATIONS += \
-        translations/deepin-system-monitor_am_ET.ts \
-        translations/deepin-system-monitor_ar.ts \
-        translations/deepin-system-monitor_ast.ts \
-        translations/deepin-system-monitor_bg.ts \
-        translations/deepin-system-monitor_ca.ts \
-        translations/deepin-system-monitor_cs.ts \
-        translations/deepin-system-monitor_da.ts \
-        translations/deepin-system-monitor_de.ts \
-        translations/deepin-system-monitor_es_419.ts \
-        translations/deepin-system-monitor_es.ts \
-        translations/deepin-system-monitor_fi.ts \
-        translations/deepin-system-monitor_fr.ts \
-        translations/deepin-system-monitor_gl_ES.ts \
-        translations/deepin-system-monitor_he.ts \
-        translations/deepin-system-monitor_hr.ts \
-        translations/deepin-system-monitor_hu.ts \
-        translations/deepin-system-monitor_id.ts \
-        translations/deepin-system-monitor_it.ts \
-        translations/deepin-system-monitor_ja.ts \
-        translations/deepin-system-monitor_ko.ts \
-        translations/deepin-system-monitor_lt.ts \
-        translations/deepin-system-monitor_mn.ts \
-        translations/deepin-system-monitor_ms.ts \
-        translations/deepin-system-monitor_nb.ts \
-        translations/deepin-system-monitor_ne.ts \
-        translations/deepin-system-monitor_nl.ts \
-        translations/deepin-system-monitor_pa.ts \
-        translations/deepin-system-monitor_pl.ts \
-        translations/deepin-system-monitor_pt_BR.ts \
-        translations/deepin-system-monitor_pt.ts \
-        translations/deepin-system-monitor_ro.ts \
-        translations/deepin-system-monitor_ru.ts \
-        translations/deepin-system-monitor_sk.ts \
-        translations/deepin-system-monitor_sl.ts \
-        translations/deepin-system-monitor_sr.ts \
-        translations/deepin-system-monitor_sv.ts \
-        translations/deepin-system-monitor_tr.ts \
-        translations/deepin-system-monitor.ts \
-        translations/deepin-system-monitor_uk.ts \
-        translations/deepin-system-monitor_zh_CN.ts \
-        translations/deepin-system-monitor_zh_TW.ts
+LIBS += -lXext -ldtkwm -licui18n -licuuc
 
 load(dtk_qmake)
 host_sw_64: {
@@ -216,13 +174,34 @@ target.path = $$INSTROOT$$BINDIR
 policy.path = $$INSTROOT$$POLICYDIR
 
 # Automating generation .qm files from .ts files
-!system($$PWD/translations/translate_generation.sh): error("Failed to generate translation")
+CONFIG(release, debug|release) {
+    # ts to qm
+    TRANSLATIONS = $$files($$PWD/translations/*.ts)
+    for(tsfile, TRANSLATIONS) {
+        qmfile = $$replace(tsfile, .ts$, .qm)
+        system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
+    }
+    dtk_translations.path = /usr/share/$$TARGET/translations
+    dtk_translations.files = $$PWD/translations/*.qm
+    INSTALLS += dtk_translations
 
-qm_files.path = /usr/share/deepin-system-monitor/translations/
-qm_files.files = translations/*.qm
+    # convert desktop_{lang}.ts to .desktop
+    !system(deepin-desktop-ts-convert init $${TARGET}.desktop translations/desktop): error("Failed desktop to ts")
+    !system(deepin-desktop-ts-convert desktop2ts $${TARGET}.desktop translations/desktop): error("Failed desktop to ts")
+    system(deepin-desktop-ts-convert ts2desktop $${TARGET}.desktop translations/desktop $${TARGET}.desktop.tmp) {
+        system(mv $${TARGET}.desktop.tmp $${TARGET}.desktop)
+    }
 
-desktop.files = deepin-system-monitor.desktop
-icon.files = image/deepin-system-monitor.svg
-policy.files = com.deepin.pkexec.deepin-system-monitor.policy
+    # convert policy_{lang}.ts to .policy
+    !system(deepin-policy-ts-convert init com.deepin.pkexec.$${TARGET}.policy translations/policy): error("Failed policy to ts")
+    !system(deepin-policy-ts-convert policy2ts com.deepin.pkexec.$${TARGET}.policy translations/policy): error("Failed policy to ts")
+    system(deepin-policy-ts-convert ts2policy com.deepin.pkexec.$${TARGET}.policy translations/policy com.deepin.pkexec.$${TARGET}.policy.tmp) {
+        system(mv com.deepin.pkexec.$${TARGET}.policy.tmp com.deepin.pkexec.$${TARGET}.policy)
+    }
+}
 
-INSTALLS += desktop icon target qm_files policy
+desktop.files = $${TARGET}.desktop
+icon.files = image/$${TARGET}.svg
+policy.files = com.deepin.pkexec.$${TARGET}.policy
+
+INSTALLS += desktop icon target policy

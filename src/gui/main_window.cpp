@@ -248,8 +248,11 @@ void MainWindow::initUI()
     m_tbShadow->show();
 
     m_spinner = new DSpinner(m_pages);
+    auto pa = DApplicationHelper::instance()->applicationPalette();
+    QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
+    pa.setColor(DPalette::Highlight, hlBrush.color());
+    m_spinner->setPalette(pa);
     m_spinner->move(m_pages->rect().center() - m_spinner->rect().center());
-    //    m_spinner->setPalette(DApplicationHelper::instance()->applicationPalette());
     m_spinner->start();
     m_spinner->show();
 

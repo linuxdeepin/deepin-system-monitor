@@ -41,7 +41,7 @@ DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
 Toolbar::Toolbar(MainWindow *m, QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
     , m_mainWindow(m)
 {
     installEventFilter(this);  // add event filter
@@ -73,7 +73,7 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     connect(svcBtn, &DButtonBoxButton::clicked, this, [=]() { Q_EMIT serviceTabButtonClicked(); });
 
     // =========search=========
-    searchEdit = new DSearchEdit();
+    searchEdit = new DSearchEdit(this);
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
     searchEdit->setEnabled(false);

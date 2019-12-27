@@ -215,6 +215,10 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 
     m_spinner = new DSpinner(this);
+    auto pa = DApplicationHelper::instance()->applicationPalette();
+    QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
+    pa.setColor(DPalette::Highlight, hlBrush.color());
+    m_spinner->setPalette(pa);
     m_spinner->move(rect().center() - m_spinner->rect().center());
 
     // initialize service list
@@ -460,8 +464,6 @@ void SystemServiceTableView::search(const QString &pattern)
 
 void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 {
-    Q_UNUSED(event)
-
     if (m_spinner) {
         m_spinner->move(rect().center() - m_spinner->rect().center());
     }
@@ -483,6 +485,9 @@ int SystemServiceTableView::sizeHintForColumn(int column) const
 
 void SystemServiceTableView::refresh()
 {
+    if (m_loading)
+        return;
+
     m_Model->removeAll();
     asyncGetServiceEntryList();
 }
@@ -495,9 +500,14 @@ SystemServiceTableModel *SystemServiceTableView::getSourceModel() const
 // gui-thread
 void SystemServiceTableView::asyncGetServiceEntryList()
 {
+    m_loading = true;
+    auto *mwnd = MainWindow::instance();
+    Q_EMIT mwnd->loadingStatusChanged(m_loading);
+
     m_noMatchingResultLabel->hide();
     m_spinner->start();
     m_spinner->show();
+
     auto *watcher = new QFutureWatcher<QPair<ErrorContext, QList<SystemServiceEntry>>>;
     QFuture<QPair<ErrorContext, QList<SystemServiceEntry>>> future;
     QObject::connect(watcher, &QFutureWatcher<void>::finished, [=]() {
@@ -530,5 +540,10 @@ void SystemServiceTableView::resetModel(const ErrorContext &ec,
 
     m_spinner->hide();
     m_spinner->stop();
+
     adjustInfoLabelVisibility();
+
+    m_loading = false;
+    auto *mwnd = MainWindow::instance();
+    Q_EMIT mwnd->loadingStatusChanged(m_loading);
 }
