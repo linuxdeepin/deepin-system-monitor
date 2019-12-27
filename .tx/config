@@ -15,3 +15,8 @@ source_file = translations/desktop/desktop.ts
 source_lang = en
 type = QT
 
+[deepin-system-monitor.deepin-system-monitor-policy]
+file_filter = translations/policy/policy_<lang>.ts
+source_file = translations/policy/policy.ts
+source_lang = en
+type = QT
