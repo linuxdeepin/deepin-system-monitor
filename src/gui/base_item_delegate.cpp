@@ -89,43 +89,52 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QRect textRect = rect;
 
     switch (opt.viewItemPosition) {
-        case QStyleOptionViewItem::Beginning: {
-            rect.setX(rect.x() + margin);  // left margin
+    case QStyleOptionViewItem::Beginning: {
+        rect.setX(rect.x() + margin);  // left margin
 
-            QPainterPath rectPath, roundedPath;
-            roundedPath.addRoundedRect(rect.x(), rect.y(), rect.width() * 2, rect.height(), radius,
-                                       radius);
-            rectPath.addRect(rect.x() + rect.width(), rect.y(), rect.width(), rect.height());
-            clipPath = roundedPath.subtracted(rectPath);
-            painter->setClipPath(clipPath);
-            path.addRect(rect);
-        } break;
-        case QStyleOptionViewItem::Middle: {
-            path.addRect(rect);
-        } break;
-        case QStyleOptionViewItem::End: {
-            rect.setWidth(rect.width() - margin);  // right margin
+        QPainterPath rectPath, roundedPath;
+        roundedPath.addRoundedRect(rect.x(), rect.y(), rect.width() * 2, rect.height(), radius,
+                                   radius);
+        rectPath.addRect(rect.x() + rect.width(), rect.y(), rect.width(), rect.height());
+        clipPath = roundedPath.subtracted(rectPath);
+        painter->setClipPath(clipPath);
+        path.addRect(rect);
+    }
+    break;
+    case QStyleOptionViewItem::Middle: {
+        path.addRect(rect);
+    }
+    break;
+    case QStyleOptionViewItem::End: {
+        rect.setWidth(rect.width() - margin);  // right margin
 
-            QPainterPath rectPath, roundedPath;
-            roundedPath.addRoundedRect(rect.x() - rect.width(), rect.y(), rect.width() * 2,
-                                       rect.height(), radius, radius);
-            rectPath.addRect(rect.x() - rect.width(), rect.y(), rect.width(), rect.height());
-            clipPath = roundedPath.subtracted(rectPath);
-            painter->setClipPath(clipPath);
-            path.addRect(rect);
-        } break;
-        default: {
-            painter->restore();
-            QStyledItemDelegate::paint(painter, option, index);
-            return;
-        }
+        QPainterPath rectPath, roundedPath;
+        roundedPath.addRoundedRect(rect.x() - rect.width(), rect.y(), rect.width() * 2,
+                                   rect.height(), radius, radius);
+        rectPath.addRect(rect.x() - rect.width(), rect.y(), rect.width(), rect.height());
+        clipPath = roundedPath.subtracted(rectPath);
+        painter->setClipPath(clipPath);
+        path.addRect(rect);
+    }
+    break;
+    case QStyleOptionViewItem::OnlyOne: {
+        rect.setX(rect.x() + margin);
+        rect.setWidth(rect.width() - margin);
+        path.addRoundedRect(rect, radius, radius);
+    }
+    break;
+    default: {
+        painter->restore();
+        QStyledItemDelegate::paint(painter, option, index);
+        return;
+    }
     }
 
     painter->fillPath(path, background);
 
     QString text;
     QRect iconRect;
-    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
+    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning || opt.viewItemPosition == QStyleOptionViewItem::OnlyOne) {
         if (opt.features & QStyleOptionViewItem::HasDecoration) {
             textRect = rect;
             textRect.setX(textRect.x() + margin * 2 + kIconSize.width());
@@ -149,7 +158,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
 
     if (opt.features & QStyleOptionViewItem::HasDecoration &&
-        opt.viewItemPosition == QStyleOptionViewItem::Beginning) {
+            (opt.viewItemPosition == QStyleOptionViewItem::Beginning || opt.viewItemPosition == QStyleOptionViewItem::OnlyOne)) {
         opt.icon.paint(painter, iconRect);
     }
     painter->setPen(forground);
