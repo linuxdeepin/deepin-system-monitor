@@ -123,6 +123,7 @@ Q_SIGNALS:
     void processKilled(pid_t pid);
     void processPriorityChanged(pid_t pid, int priority);
     void priorityPromoteResultReady(const ErrorContext &ec);
+    void processControlResultReady(const ErrorContext &ec);
     void initialSysInfoLoaded();
 
 public Q_SLOTS:
@@ -138,6 +139,7 @@ public Q_SLOTS:
         return pid == cur;
     }
     ErrorContext setProcessPriority(pid_t pid, int priority);
+    void sendSignalToProcess(pid_t pid, int signal);
 
 private:
     SystemMonitor(QObject *parent = nullptr);

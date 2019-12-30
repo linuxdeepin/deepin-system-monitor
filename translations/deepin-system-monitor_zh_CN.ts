@@ -361,6 +361,33 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Signal</name>
+    <message>
+        <source>End process failed</source>
+        <translation>结束进程失败</translation>
+    </message>
+    <message>
+        <source>Pause process failed</source>
+        <translation>暂停进程失败</translation>
+    </message>
+    <message>
+        <source>Resume process failed</source>
+        <translation>恢复进程失败</translation>
+    </message>
+    <message>
+        <source>Kill process failed</source>
+        <translation>强制结束进程失败</translation>
+    </message>
+    <message>
+        <source>Unknow error</source>
+        <translation>未知错误</translation>
+    </message>
+    <message>
+        <source>Sending signal to process failed</source>
+        <translation>发送信号至进程失败</translation>
+    </message>
+</context>
+<context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>

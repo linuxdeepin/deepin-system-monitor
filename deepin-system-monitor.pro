@@ -83,7 +83,8 @@ HEADERS += src/utils.h \
         src/common/collator.h \
         src/gui/base_table_view.h \
         src/gui/base_item_delegate.h \
-        src/gui/base_header_view.h
+        src/gui/base_header_view.h \
+        src/process/process_controller.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -138,7 +139,8 @@ SOURCES += src/main.cpp \
         src/common/collator.cpp \
         src/gui/base_table_view.cpp \
         src/gui/base_item_delegate.cpp \
-        src/gui/base_header_view.cpp
+        src/gui/base_header_view.cpp \
+        src/process/process_controller.cpp
 
 QT += core
 QT += widgets

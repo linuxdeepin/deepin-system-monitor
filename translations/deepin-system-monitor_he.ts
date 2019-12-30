@@ -359,6 +359,33 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Signal</name>
+    <message>
+        <source>End process failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause process failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume process failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kill process failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknow error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sending signal to process failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>

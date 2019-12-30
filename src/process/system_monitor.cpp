@@ -1,4 +1,4 @@
-#include <errno.h>
+﻿#include <errno.h>
 #include <proc/sysinfo.h>
 #include <pwd.h>
 #include <sched.h>
@@ -16,6 +16,7 @@
 #include "constant.h"
 #include "priority_controller.h"
 #include "process/process_entry.h"
+#include "process_controller.h"
 #include "process_tree.h"
 #include "system_monitor.h"
 #include "utils.h"
@@ -403,54 +404,22 @@ void SystemMonitor::setFilterType(SystemMonitor::FilterType type)
 
 void SystemMonitor::endProcess(pid_t pid)
 {
-    kill(pid, SIGCONT);
-
-    if (kill(pid, SIGTERM) != 0) {
-        qDebug() << QString("End process %1 failed, ERRNO:[%2] %3")
-                        .arg(pid)
-                        .arg(errno)
-                        .arg(strerror(errno));
-    } else {
-        Q_EMIT processEnded(pid);
-    }
+    sendSignalToProcess(pid, SIGTERM);
 }
 
 void SystemMonitor::pauseProcess(pid_t pid)
 {
-    if (kill(pid, SIGSTOP) != 0) {
-        qDebug() << QString("Pause process %1 failed, ERRNO:[%2] %3")
-                        .arg(pid)
-                        .arg(errno)
-                        .arg(strerror(errno));
-    } else {
-        Q_EMIT processPaused(pid, 'T');
-    }
+    sendSignalToProcess(pid, SIGSTOP);
 }
 
 void SystemMonitor::resumeProcess(pid_t pid)
 {
-    if (kill(pid, SIGCONT) != 0) {
-        qDebug() << QString("Resume process %1 failed, ERRNO:[%2] %3")
-                        .arg(pid)
-                        .arg(errno)
-                        .arg(strerror(errno));
-    } else {
-        Q_EMIT processResumed(pid, 'R');
-    }
+    sendSignalToProcess(pid, SIGCONT);
 }
 
 void SystemMonitor::killProcess(pid_t pid)
 {
-    kill(pid, SIGCONT);
-
-    if (kill(pid, SIGKILL) != 0) {
-        qDebug() << QString("Kill process %1 failed, ERRNO:[%2] %3")
-                        .arg(pid)
-                        .arg(errno)
-                        .arg(strerror(errno));
-    } else {
-        Q_EMIT processKilled(pid);
-    }
+    sendSignalToProcess(pid, SIGKILL);
 }
 
 ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
@@ -519,6 +488,108 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
         // needed
     }
     return ec;
+}
+
+void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
+{
+    int rc = 0;
+    ErrorContext ec = {};
+    auto errfmt = [=](decltype(errno) err, const QString &title, int p, int sig,
+                      ErrorContext &ectx) -> ErrorContext & {
+        ectx.setCode(ErrorContext::kErrorTypeSystem);
+        ectx.setSubCode(err);
+        ectx.setErrorName(title);
+        QString errmsg = QString("PID: %1, Signal: [%2], Error: [%3] %4")
+                             .arg(p)
+                             .arg(sig)
+                             .arg(err)
+                             .arg(strerror(err));
+        ectx.setErrorMessage(errmsg);
+        return ectx;
+    };
+    auto emitSignal = [=](int signal) {
+        if (signal == SIGTERM) {
+            Q_EMIT processEnded(pid);
+        } else if (signal == SIGSTOP) {
+            Q_EMIT processPaused(pid, 'T');
+        } else if (signal == SIGCONT) {
+            Q_EMIT processResumed(pid, 'R');
+        } else if (signal == SIGKILL) {
+            Q_EMIT processKilled(pid);
+        } else {
+            qDebug() << "Unexpected signal in this case:" << signal;
+        }
+    };
+    auto fmsg = [=](int signal) -> QString {
+        if (signal == SIGTERM) {
+            return DApplication::translate("Process.Signal", "End process failed");
+        } else if (signal == SIGSTOP) {
+            return DApplication::translate("Process.Signal", "Pause process failed");
+        } else if (signal == SIGCONT) {
+            return DApplication::translate("Process.Signal", "Resume process failed");
+        } else if (signal == SIGKILL) {
+            return DApplication::translate("Process.Signal", "Kill process failed");
+        } else {
+            return DApplication::translate("Process.Signal", "Unknow error");
+        }
+    };
+    auto pctl = [=](pid_t pid, int signal) {
+        // call pkexec to promote
+        auto *ctrl = new ProcessController(pid, signal, this);
+        connect(ctrl, &ProcessController::resultReady, this,
+                [this, errfmt, emitSignal, pid, signal, fmsg](int code) {
+                    if (code != 0) {
+                        ErrorContext ec = {};
+                        ec = errfmt(code, fmsg(signal), pid, signal, ec);
+                        Q_EMIT processControlResultReady(ec);
+                    } else {
+                        emitSignal(signal);
+                    }
+                });
+        connect(ctrl, &PriorityController::finished, ctrl, &QObject::deleteLater);
+        ctrl->start();
+    };
+    auto pkill = [this, pctl, errfmt, emitSignal, fmsg](pid_t pid, int signal) {
+        int rc = 0;
+        errno = 0;
+        ErrorContext ec = {};
+        rc = kill(pid, signal);
+        if (rc == -1 && errno != 0) {
+            if (errno == EPERM) {
+                pctl(pid, signal);
+            } else {
+                ec = errfmt(errno, fmsg(signal), pid, signal, ec);
+                Q_EMIT processControlResultReady(ec);
+                return;
+            }
+        } else {
+            emitSignal(signal);
+        }
+    };
+
+    if (signal == SIGTERM || signal == SIGKILL) {
+        ec = {};
+        errno = 0;
+        // send SIGCONT first, otherwise signal will hang
+        rc = kill(pid, SIGCONT);
+        if (rc == -1 && errno != 0) {
+            // not authorized, use pkexec instead
+            if (errno == EPERM) {
+                pctl(pid, signal);
+            } else {
+                ec = errfmt(
+                    errno,
+                    DApplication::translate("Process.Signal", "Sending signal to process failed"),
+                    pid, SIGCONT, ec);
+                Q_EMIT processControlResultReady(ec);
+                return;
+            }
+        } else {
+            pkill(pid, signal);
+        }
+    } else {
+        pkill(pid, signal);
+    }
 }
 
 SystemMonitor::SystemMonitor(QObject *parent)

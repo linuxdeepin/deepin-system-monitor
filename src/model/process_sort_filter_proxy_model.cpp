@@ -82,7 +82,7 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         }
         case ProcessTableModel::kProcessUserColumn: {
             return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                                 right.data(Qt::DisplayRole).toString());
+                                                 right.data(Qt::DisplayRole).toString()) < 0;
         }
         case ProcessTableModel::kProcessMemoryColumn: {
             QVariant lmem, rmem;

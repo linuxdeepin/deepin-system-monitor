@@ -612,6 +612,12 @@ void ProcessTableView::initConnections(bool settingsLoaded)
                         DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
                     }
                 });
+        connect(sysmon, &SystemMonitor::processControlResultReady, this,
+                [=](const ErrorContext &ec) {
+                    if (ec) {
+                        DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+                    }
+                });
     }
 }
 
