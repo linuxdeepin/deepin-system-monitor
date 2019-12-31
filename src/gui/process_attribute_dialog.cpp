@@ -30,6 +30,24 @@ ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid, QWidget *parent)
     initUI();
 
     installEventFilter(this);
+    if (m_procNameLabel) {
+        m_procNameLabel->installEventFilter(this);
+    }
+    if (m_procNameText) {
+        m_procNameText->installEventFilter(this);
+    }
+    if (m_procCmdLabel) {
+        m_procCmdLabel->installEventFilter(this);
+    }
+    if (m_procCmdText) {
+        m_procCmdText->installEventFilter(this);
+    }
+    if (m_procStartLabel) {
+        m_procStartLabel->installEventFilter(this);
+    }
+    if (m_procStartText) {
+        m_procStartText->installEventFilter(this);
+    }
 }
 
 void ProcessAttributeDialog::initUI()
@@ -39,7 +57,7 @@ void ProcessAttributeDialog::initUI()
     DPalette palette = dAppHelper->applicationPalette();
     QStyleOption option;
     option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    m_margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     int width = 600, height = 480;
     if (m_settings) {
@@ -74,40 +92,40 @@ void ProcessAttributeDialog::initUI()
     m_tbShadow->raise();
     m_tbShadow->show();
 
-    auto *grid = new QGridLayout(m_frame);
-    grid->setContentsMargins(margin, 0, margin, 0);
-    grid->setVerticalSpacing(0);
-    grid->setHorizontalSpacing(margin);
+    auto *vlayout = new QVBoxLayout(m_frame);
+    vlayout->setContentsMargins(m_margin, 0, m_margin, 0);
+    vlayout->setSpacing(m_margin);
 
-    // spacing
-    grid->addItem(new QSpacerItem(10, 10), 0, 0, 1, 2);
-    grid->setRowStretch(0, 1);
+    vlayout->addStretch(1);
 
     DLabel *appIcon = new DLabel(this);
-    grid->addWidget(appIcon, 1, 0, 1, 2, Qt::AlignVCenter | Qt::AlignHCenter);
+    vlayout->addWidget(appIcon, 0, Qt::AlignVCenter | Qt::AlignHCenter);
 
     // spacing
-    grid->addItem(new QSpacerItem(10, 20), 2, 0, 1, 2);
-    grid->setRowStretch(2, 0);
+    vlayout->addSpacing(10);
 
     auto *appNameLabel = new DLabel(this);
     DFontSizeManager::instance()->bind(appNameLabel, DFontSizeManager::T5, QFont::Bold);
-    grid->addWidget(appNameLabel, 3, 0, 1, 2, Qt::AlignHCenter | Qt::AlignVCenter);
+    vlayout->addWidget(appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     // spacing
-    grid->addItem(new QSpacerItem(10, 40), 4, 0, 1, 2);
-    grid->setRowStretch(4, 0);
+    vlayout->addSpacing(16);
+
+    auto *wnd = new QWidget(m_frame);
+    wnd->setAutoFillBackground(false);
+    auto *grid = new QGridLayout(wnd);
+    grid->setHorizontalSpacing(m_margin);
 
     QString buf;
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Process name"));
-    auto *procNameLabel = new DLabel(this);
-    procNameLabel->setText(buf);
+    m_procNameLabel = new DLabel(this);
+    m_procNameLabel->setText(buf);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Command line"));
-    auto *procCmdLabel = new DLabel(this);
-    procCmdLabel->setText(buf);
+    m_procCmdLabel = new DLabel(this);
+    m_procCmdLabel->setText(buf);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Start time"));
-    auto *procStartLabel = new DLabel(this);
-    procStartLabel->setText(buf);
+    m_procStartLabel = new DLabel(this);
+    m_procStartLabel->setText(buf);
 
     m_procNameText = new DLabel(this);
     m_procNameText->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -117,18 +135,20 @@ void ProcessAttributeDialog::initUI()
     m_procStartText = new DLabel(this);
     m_procStartText->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
-    grid->addWidget(procNameLabel, 5, 0, Qt::AlignTop | Qt::AlignRight);
-    grid->addWidget(m_procNameText, 5, 1, Qt::AlignTop | Qt::AlignLeft);
+    grid->addWidget(m_procNameLabel, 0, 0, Qt::AlignTop | Qt::AlignRight);
+    grid->addWidget(m_procNameText, 0, 1, Qt::AlignTop | Qt::AlignLeft);
 
-    grid->addWidget(procCmdLabel, 6, 0, Qt::AlignTop | Qt::AlignRight);
-    grid->addWidget(m_procCmdText, 6, 1, Qt::AlignTop | Qt::AlignLeft);
+    grid->addWidget(m_procCmdLabel, 1, 0, Qt::AlignTop | Qt::AlignRight);
+    grid->addWidget(m_procCmdText, 1, 1, Qt::AlignTop | Qt::AlignLeft);
 
-    grid->addWidget(procStartLabel, 7, 0, Qt::AlignTop | Qt::AlignRight);
-    grid->addWidget(m_procStartText, 7, 1, Qt::AlignTop | Qt::AlignLeft);
+    grid->addWidget(m_procStartLabel, 2, 0, Qt::AlignTop | Qt::AlignRight);
+    grid->addWidget(m_procStartText, 2, 1, Qt::AlignTop | Qt::AlignLeft);
+
+    wnd->setLayout(grid);
+    vlayout->addWidget(wnd, 0, Qt::AlignCenter);
 
     // spacing
-    grid->addItem(new QSpacerItem(10, 10), 8, 0, 1, 2);
-    grid->setRowStretch(8, 1);
+    vlayout->addStretch(1);
 
     // Read the list of open processes information.
     PROCTAB *proc =
@@ -175,12 +195,14 @@ void ProcessAttributeDialog::initUI()
         }
     }
 
-    m_frame->setLayout(grid);
+    m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
 }
 
 void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
 {
+    DMainWindow::resizeEvent(event);
+
     if (m_settings) {
         m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
         m_settings->setOption(kSettingKeyProcessAttributeDialogHeight, height());
@@ -190,12 +212,7 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
         m_tbShadow->setFixedWidth(m_frame->size().width());
         m_tbShadow->raise();
         m_tbShadow->show();
-
-        // compare qfontmetrics vs maxwidth
-        m_procCmdText->setFixedWidth(m_frame->width() - 120);
     }
-
-    DMainWindow::resizeEvent(event);
 }
 
 void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
@@ -210,15 +227,39 @@ void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 
 bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::KeyPress) {
-        auto *kev = dynamic_cast<QKeyEvent *>(event);
-        if (kev->matches(QKeySequence::Cancel)) {
-            close();
-            return true;
-        } else {
-            return false;
+    if (event->type() == QEvent::Resize) {
+        auto *rev = dynamic_cast<QResizeEvent *>(event);
+        if (obj == m_procNameLabel || obj == m_procCmdLabel || obj == m_procStartLabel) {
+            if (rev->size().width() > m_maxLabelWidth) {
+                m_maxLabelWidth = rev->size().width();
+            }
+        } else if (obj == m_procNameText || obj == m_procCmdText || obj == m_procStartText) {
+            auto *ctl = dynamic_cast<DLabel *>(obj);
+            QFontMetrics fm(ctl->font());
+            int w = fm.size(Qt::TextSingleLine, ctl->text()).width();
+            if (w > m_maxTextWidth) {
+                m_maxTextWidth = w;
+            }
+        } else if (obj == this) {
+            int mw = std::min(m_frame->width() - m_maxLabelWidth - 3 * m_margin, m_maxTextWidth);
+            m_procCmdText->setFixedWidth(mw);
         }
-    } else {
-        return DMainWindow::eventFilter(obj, event);
+    } else if (event->type() == QEvent::Show) {
+        if (obj == this) {
+            int mw = std::min(m_frame->width() - m_maxLabelWidth - 3 * m_margin, m_maxTextWidth);
+            m_procCmdText->setFixedWidth(mw);
+        }
+    } else if (event->type() == QEvent::KeyPress) {
+        if (obj == this) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->matches(QKeySequence::Cancel)) {
+                close();
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
+
+    return DMainWindow::eventFilter(obj, event);
 }
