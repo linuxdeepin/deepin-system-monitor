@@ -14,12 +14,16 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QVBoxLayout>
+#include <QtMath>
 
 #include "process_attribute_dialog.h"
 #include "settings.h"
 #include "utils.h"
 
 using namespace Utils;
+
+static const int kPreferedLabelWidth = 80;
+static const int kPreferedTextWidth = 200;
 
 ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid, QWidget *parent)
     : DMainWindow(parent)
@@ -120,17 +124,21 @@ void ProcessAttributeDialog::initUI()
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Process name"));
     m_procNameLabel = new DLabel(this);
     m_procNameLabel->setText(buf);
+    m_procNameLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Command line"));
     m_procCmdLabel = new DLabel(this);
     m_procCmdLabel->setText(buf);
+    m_procCmdLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Start time"));
     m_procStartLabel = new DLabel(this);
     m_procStartLabel->setText(buf);
+    m_procStartLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     m_procNameText = new DLabel(this);
     m_procNameText->setTextInteractionFlags(Qt::TextSelectableByMouse);
     m_procCmdText = new DLabel(this);
     m_procCmdText->setWordWrap(true);
+    m_procCmdText->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     m_procCmdText->setTextInteractionFlags(Qt::TextSelectableByMouse);
     m_procStartText = new DLabel(this);
     m_procStartText->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -187,7 +195,7 @@ void ProcessAttributeDialog::initUI()
             appNameLabel->setText(displayName);
 
             m_procNameText->setText(name);
-            m_procCmdText->setText(cmdline);
+            m_procCmdText->setText(QUrl::fromPercentEncoding(cmdline.toUtf8()));
             m_procStartText->setText(QFileInfo(QString("/proc/%1").arg(processId))
                                          .created()
                                          .toString("yyyy-MM-dd hh:mm:ss"));
@@ -227,27 +235,43 @@ void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 
 bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::Resize) {
-        auto *rev = dynamic_cast<QResizeEvent *>(event);
+    if (event->type() == QEvent::Show) {
+        auto *ctl = dynamic_cast<DLabel *>(obj);
         if (obj == m_procNameLabel || obj == m_procCmdLabel || obj == m_procStartLabel) {
-            if (rev->size().width() > m_maxLabelWidth) {
-                m_maxLabelWidth = rev->size().width();
+            int max = 0;
+            if (ctl->width() < kPreferedLabelWidth) {
+                max = kPreferedLabelWidth;
+            } else {
+                max = ctl->width();
             }
+            ctl->setFixedWidth(max);
+            ctl->setFixedHeight(ctl->height());
         } else if (obj == m_procNameText || obj == m_procCmdText || obj == m_procStartText) {
-            auto *ctl = dynamic_cast<DLabel *>(obj);
             QFontMetrics fm(ctl->font());
             int w = fm.size(Qt::TextSingleLine, ctl->text()).width();
-            if (w > m_maxTextWidth) {
-                m_maxTextWidth = w;
+            int max = 0;
+            if (w > kPreferedTextWidth) {
+                QRect rect {0, 0, kPreferedTextWidth, 0};
+                rect = fm.boundingRect(rect, Qt::AlignTop | Qt::AlignLeft | Qt::TextWrapAnywhere,
+                                       ctl->text());
+                // round up to next integer line height
+                //                max = (qFloor(rect.height() * 1. / fm.height()) + 1) *
+                //                fm.height();
+                max = rect.height();
+            } else {
+                max = ctl->height();
             }
-        } else if (obj == this) {
-            int mw = std::min(m_frame->width() - m_maxLabelWidth - 3 * m_margin, m_maxTextWidth);
-            m_procCmdText->setFixedWidth(mw);
+            ctl->setFixedWidth(kPreferedTextWidth);
+            ctl->setFixedHeight(max);
         }
-    } else if (event->type() == QEvent::Show) {
-        if (obj == this) {
-            int mw = std::min(m_frame->width() - m_maxLabelWidth - 3 * m_margin, m_maxTextWidth);
-            m_procCmdText->setFixedWidth(mw);
+    } else if (event->type() == QEvent::Paint) {
+        if (obj == m_procCmdText) {
+            auto *ctl = dynamic_cast<DLabel *>(obj);
+            auto *pev = dynamic_cast<QPaintEvent *>(event);
+            QPainter painter(ctl);
+            painter.drawText(pev->rect(), Qt::AlignLeft | Qt::AlignTop | Qt::TextWrapAnywhere,
+                             ctl->text());
+            return true;
         }
     } else if (event->type() == QEvent::KeyPress) {
         if (obj == this) {

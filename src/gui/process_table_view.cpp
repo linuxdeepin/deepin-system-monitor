@@ -692,37 +692,41 @@ void ProcessTableView::customizeProcessPriority()
     slider->setMouseWheelEnabled(true);
     slider->setBelowTicks({QString("%1").arg(SystemMonitor::kVeryLowPriorityMin),
                            QString("%1").arg(SystemMonitor::kVeryHighPriorityMax)});
-    PriorityTip *tip = new PriorityTip({"0"}, slider);
-    tip->setFixedWidth(40);
-    tip->setFixedHeight(20);
+    //    PriorityTip *tip = new PriorityTip({"0"}, slider);
+    //    tip->setFixedWidth(40);
+    //    tip->setFixedHeight(20);
     connect(slider, &DSlider::valueChanged, [=](int value) {
-        tip->setText(QString("%1").arg(value));
-        tip->move(std::min(std::max(0, slider->width() /
-                                               (SystemMonitor::kVeryLowPriorityMin -
-                                                SystemMonitor::kVeryHighPriorityMax) *
-                                               (SystemMonitor::kVeryLowPriorityMin - value) -
-                                           tip->width() / 2),
-                           slider->width() - tip->width()),
-                  slider->height() - tip->height());
-        tip->show();
+        slider->setTipValue(QString("%1").arg(value));
+        //        tip->setText(QString("%1").arg(value));
+        //        tip->move(std::min(std::max(0, slider->width() /
+        //                                               (SystemMonitor::kVeryLowPriorityMin -
+        //                                                SystemMonitor::kVeryHighPriorityMax) *
+        //                                               (SystemMonitor::kVeryLowPriorityMin -
+        //                                               value) -
+        //                                           tip->width() / 2),
+        //                           slider->width() - tip->width()),
+        //                  slider->height() - tip->height());
+        //        tip->show();
     });
     connect(slider, &PrioritySlider::sizeChanged, this, [=](const QSize &size) {
-        tip->move(
-            std::min(std::max(0, size.width() /
-                                         (SystemMonitor::kVeryLowPriorityMin -
-                                          SystemMonitor::kVeryHighPriorityMax) *
-                                         (SystemMonitor::kVeryLowPriorityMin - slider->value()) -
-                                     tip->width() / 2),
-                     slider->width() - tip->width()),
-            slider->height() - tip->height());
-        tip->show();
+        //        tip->move(
+        //            std::min(std::max(0, size.width() /
+        //                                         (SystemMonitor::kVeryLowPriorityMin -
+        //                                          SystemMonitor::kVeryHighPriorityMax) *
+        //                                         (SystemMonitor::kVeryLowPriorityMin -
+        //                                         slider->value()) -
+        //                                     tip->width() / 2),
+        //                     slider->width() - tip->width()),
+        //            slider->height() - tip->height());
+        //        tip->show();
     });
     QString prio {"0"};
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
         slider->setValue(m_model->getProcessPriority(pid));
         prio = QString("%1").arg(slider->value());
-        tip->setText(prio);
+        //        tip->setText(prio);
+        //        slider->setTipValue("1");
     }
     prioDialog->addContent(slider);
     prioDialog->addSpacing(16);
