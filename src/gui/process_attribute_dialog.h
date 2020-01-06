@@ -5,6 +5,7 @@
 #include <DLabel>
 #include <DMainWindow>
 #include <DShadowLine>
+#include <DTextBrowser>
 #include <DWidget>
 
 DWIDGET_USE_NAMESPACE
@@ -36,11 +37,11 @@ private:
     DShadowLine *m_tbShadow {nullptr};
 
     DLabel *m_procNameLabel {nullptr};
-    DLabel *m_procNameText {nullptr};
+    DTextBrowser *m_procNameText {nullptr};
     DLabel *m_procCmdLabel {nullptr};
-    DLabel *m_procCmdText {nullptr};
+    DTextBrowser *m_procCmdText {nullptr};
     DLabel *m_procStartLabel {nullptr};
-    DLabel *m_procStartText {nullptr};
+    DTextBrowser *m_procStartText {nullptr};
 
     int m_maxLabelWidth {0};
     int m_maxTextWidth {0};

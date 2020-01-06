@@ -58,6 +58,7 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
     }
 #else
     cg = DPalette::Active;
+//    cg = DPalette::Current;
 #endif
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
@@ -101,10 +102,12 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     }
 #else
     cg = DPalette::Active;
+//    cg = DPalette::Current;
 #endif
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
+    //    DPalette palette = dAppHelper->palette(this);
 
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
 
@@ -119,9 +122,9 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
 
     QBrush contentBrush(palette.color(cg, DPalette::Base));
     // horizontal spacing
-    //    QBrush hSpacingBrush(palette.color(cg, DPalette::FrameBorder));
-    QBrush hSpacingBrush(
-        DApplicationHelper::instance()->palette(this).color(DPalette::FrameBorder));
+    QBrush hSpacingBrush(palette.color(cg, DPalette::FrameBorder));
+    //    QBrush hSpacingBrush(
+    //        DApplicationHelper::instance()->palette(this).color(DPalette::FrameBorder));
     // vertical spacing
     QBrush vSpacingBrush(palette.color(cg, DPalette::FrameBorder));
     QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin, m_spacing,

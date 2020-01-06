@@ -1,4 +1,4 @@
-﻿#include <proc/readproc.h>
+#include <proc/readproc.h>
 #include <proc/sysinfo.h>
 
 #include <DApplication>
@@ -6,13 +6,16 @@
 #include <DFontSizeManager>
 #include <DFrame>
 #include <DLabel>
+#include <DTextBrowser>
 #include <DTitlebar>
+#include <QAbstractTextDocumentLayout>
 #include <QDateTime>
 #include <QDebug>
 #include <QFileInfo>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QTextBlock>
 #include <QVBoxLayout>
 #include <QtMath>
 
@@ -122,26 +125,41 @@ void ProcessAttributeDialog::initUI()
 
     QString buf;
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Process name"));
-    m_procNameLabel = new DLabel(this);
+    m_procNameLabel = new DLabel(wnd);
     m_procNameLabel->setText(buf);
     m_procNameLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Command line"));
-    m_procCmdLabel = new DLabel(this);
+    m_procCmdLabel = new DLabel(wnd);
     m_procCmdLabel->setText(buf);
     m_procCmdLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Start time"));
-    m_procStartLabel = new DLabel(this);
+    m_procStartLabel = new DLabel(wnd);
     m_procStartLabel->setText(buf);
     m_procStartLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    m_procNameText = new DLabel(this);
-    m_procNameText->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    m_procCmdText = new DLabel(this);
-    m_procCmdText->setWordWrap(true);
-    m_procCmdText->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    m_procCmdText->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    m_procStartText = new DLabel(this);
-    m_procStartText->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_procNameText = new DTextBrowser(wnd);
+    m_procNameText->setFrameStyle(QFrame::NoFrame);
+    m_procNameText->setFocusPolicy(Qt::ClickFocus);
+    m_procNameText->setFixedWidth(kPreferedTextWidth);
+    m_procNameText->viewport()->setBackgroundRole(QPalette::Window);
+    m_procNameText->setWordWrapMode(QTextOption::WrapAnywhere);
+    m_procNameText->document()->setDocumentMargin(0);
+
+    m_procCmdText = new DTextBrowser(wnd);
+    m_procCmdText->setFrameStyle(QFrame::NoFrame);
+    m_procCmdText->setFocusPolicy(Qt::ClickFocus);
+    m_procCmdText->setFixedWidth(kPreferedTextWidth);
+    m_procCmdText->viewport()->setBackgroundRole(QPalette::Window);
+    m_procCmdText->setWordWrapMode(QTextOption::WrapAnywhere);
+    m_procCmdText->document()->setDocumentMargin(0);
+
+    m_procStartText = new DTextBrowser(wnd);
+    m_procStartText->setFrameStyle(QFrame::NoFrame);
+    m_procStartText->setFocusPolicy(Qt::ClickFocus);
+    m_procStartText->setFixedWidth(kPreferedTextWidth);
+    m_procStartText->viewport()->setBackgroundRole(QPalette::Window);
+    m_procStartText->setWordWrapMode(QTextOption::WrapAnywhere);
+    m_procStartText->document()->setDocumentMargin(0);
 
     grid->addWidget(m_procNameLabel, 0, 0, Qt::AlignTop | Qt::AlignRight);
     grid->addWidget(m_procNameText, 0, 1, Qt::AlignTop | Qt::AlignLeft);
@@ -236,8 +254,8 @@ void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::Show) {
-        auto *ctl = dynamic_cast<DLabel *>(obj);
         if (obj == m_procNameLabel || obj == m_procCmdLabel || obj == m_procStartLabel) {
+            auto *ctl = dynamic_cast<DLabel *>(obj);
             int max = 0;
             if (ctl->width() < kPreferedLabelWidth) {
                 max = kPreferedLabelWidth;
@@ -247,31 +265,53 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
             ctl->setFixedWidth(max);
             ctl->setFixedHeight(ctl->height());
         } else if (obj == m_procNameText || obj == m_procCmdText || obj == m_procStartText) {
+            auto *ctl = dynamic_cast<DTextBrowser *>(obj);
             QFontMetrics fm(ctl->font());
-            int w = fm.size(Qt::TextSingleLine, ctl->text()).width();
-            int max = 0;
-            if (w > kPreferedTextWidth) {
-                QRect rect {0, 0, kPreferedTextWidth, 0};
-                rect = fm.boundingRect(rect, Qt::AlignTop | Qt::AlignLeft | Qt::TextWrapAnywhere,
-                                       ctl->text());
-                // round up to next integer line height
-                //                max = (qFloor(rect.height() * 1. / fm.height()) + 1) *
-                //                fm.height();
-                max = rect.height();
-            } else {
-                max = ctl->height();
-            }
+            QRect rect {0, 0, kPreferedTextWidth, 0};
+            rect = fm.boundingRect(rect, Qt::AlignTop | Qt::AlignLeft | Qt::TextWrapAnywhere,
+                                   ctl->toPlainText());
             ctl->setFixedWidth(kPreferedTextWidth);
-            ctl->setFixedHeight(max);
+            // round up
+            ctl->setFixedHeight((rect.height() + rect.height() % fm.height()) / fm.height() *
+                                fm.height());
         }
-    } else if (event->type() == QEvent::Paint) {
-        if (obj == m_procCmdText) {
-            auto *ctl = dynamic_cast<DLabel *>(obj);
-            auto *pev = dynamic_cast<QPaintEvent *>(event);
-            QPainter painter(ctl);
-            painter.drawText(pev->rect(), Qt::AlignLeft | Qt::AlignTop | Qt::TextWrapAnywhere,
-                             ctl->text());
-            return true;
+    } else if (event->type() == QEvent::Leave) {
+        if (obj == m_procNameText) {
+            if (m_procNameText->textCursor().hasSelection()) {
+                m_procNameText->setFocus();
+
+                auto cur = m_procCmdText->textCursor();
+                cur.clearSelection();
+                m_procCmdText->setTextCursor(cur);
+
+                cur = m_procStartText->textCursor();
+                cur.clearSelection();
+                m_procStartText->setTextCursor(cur);
+            }
+        } else if (obj == m_procCmdText) {
+            if (m_procCmdText->textCursor().hasSelection()) {
+                m_procCmdText->setFocus();
+
+                auto cur = m_procNameText->textCursor();
+                cur.clearSelection();
+                m_procNameText->setTextCursor(cur);
+
+                cur = m_procStartText->textCursor();
+                cur.clearSelection();
+                m_procStartText->setTextCursor(cur);
+            }
+        } else if (obj == m_procStartText) {
+            if (m_procStartText->textCursor().hasSelection()) {
+                m_procStartText->setFocus();
+
+                auto cur = m_procCmdText->textCursor();
+                cur.clearSelection();
+                m_procCmdText->setTextCursor(cur);
+
+                cur = m_procNameText->textCursor();
+                cur.clearSelection();
+                m_procNameText->setTextCursor(cur);
+            }
         }
     } else if (event->type() == QEvent::KeyPress) {
         if (obj == this) {
@@ -282,6 +322,21 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
             } else {
                 return false;
             }
+        }
+    } else if (event->type() == QEvent::MouseButtonPress) {
+        auto *ev = dynamic_cast<QMouseEvent *>(event);
+        if (!(ev->button() & Qt::RightButton)) {
+            auto cur = m_procNameText->textCursor();
+            cur.clearSelection();
+            m_procNameText->setTextCursor(cur);
+
+            cur = m_procCmdText->textCursor();
+            cur.clearSelection();
+            m_procCmdText->setTextCursor(cur);
+
+            cur = m_procStartText->textCursor();
+            cur.clearSelection();
+            m_procStartText->setTextCursor(cur);
         }
     }
 

@@ -78,7 +78,6 @@ HEADERS += src/utils.h \
         src/gui/kill_process_confirm_dialog.h \
         src/gui/process_attribute_dialog.h \
         src/process/priority_controller.h \
-        src/gui/priority_tip.h \
         src/gui/priority_slider.h \
         src/common/collator.h \
         src/gui/base_table_view.h \
@@ -133,7 +132,6 @@ SOURCES += src/main.cpp \
         src/gui/kill_process_confirm_dialog.cpp \
         src/gui/process_attribute_dialog.cpp \
         src/process/priority_controller.cpp \
-        src/gui/priority_tip.cpp \
         src/gui/priority_slider.cpp \
         src/gui/ui_common.cpp \
         src/common/collator.cpp \

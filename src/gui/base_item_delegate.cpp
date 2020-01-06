@@ -53,6 +53,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
 #else
         cg = DPalette::Active;
+//        cg = DPalette::Current;
 #endif
     }
 
