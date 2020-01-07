@@ -197,7 +197,7 @@ void SystemMonitor::updateStatus()
             item.setName(name);
             item.setDisplayName(displayName);
             item.setCPU(cpu);
-            item.setMemory(static_cast<qulonglong>(memory));
+            item.setMemory(qulonglong(memory));
             item.setPID(pid);
             item.setUserName(user);
             item.setState((&i.second)->state);
@@ -271,8 +271,7 @@ void SystemMonitor::updateStatus()
             m_processRecvBytes[update.record.pid] = update.record.recv_bytes;
 
             NetworkStatus status = {update.record.sent_bytes, update.record.recv_bytes,
-                                    static_cast<qreal>(update.record.sent_kbs),
-                                    static_cast<qreal>(update.record.recv_kbs)};
+                                    qreal(update.record.sent_kbs), qreal(update.record.recv_kbs)};
 
             (networkStatusSnapshot)[update.record.pid] = status;
         }

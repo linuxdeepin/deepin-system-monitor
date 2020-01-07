@@ -115,7 +115,8 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     m_frameColor = palette.color(DPalette::FrameBorder);
 }
 
-void NetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs, float tSentKbs)
+void NetworkMonitor::updateStatus(qulonglong tRecvBytes, qulonglong tSentBytes, qreal tRecvKbs,
+                                  qreal tSentKbs)
 {
     totalRecvBytes = tRecvBytes;
     totalSentBytes = tSentBytes;

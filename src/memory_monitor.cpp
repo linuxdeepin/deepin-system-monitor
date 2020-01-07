@@ -160,15 +160,15 @@ void MemoryMonitor::changeFont(const QFont &font)
 
 QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
 {
-    int angle = 360 - (270 * percent);
+    int angle = int(360 - (270 * percent));
 
     double sinValue = qSin((angle / 360.0) * 2 * M_PI);
     double cosValue = qCos((angle / 360.0) * 2 * M_PI);
 
-    int pointerX = rect().x() + ringCenterPointerX + static_cast<int>(r * cosValue) +
-                   static_cast<int>(pointerRadius * sinValue);
-    int pointerY = rect().y() + ringCenterPointerY - static_cast<int>(r * sinValue) +
-                   static_cast<int>(pointerRadius * cosValue);
+    int pointerX =
+        rect().x() + ringCenterPointerX + int(r * cosValue) + int(pointerRadius * sinValue);
+    int pointerY =
+        rect().y() + ringCenterPointerY - int(r * sinValue) + int(pointerRadius * cosValue);
 
     // I don't why this need adjust 1 pixel, it's weird.
     if (angle > 270) {

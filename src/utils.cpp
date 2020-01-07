@@ -249,7 +249,7 @@ QPixmap getProcessIcon(int pid, std::string desktopFile,
     } else if (desktopFile.size() == 0) {
         qreal devicePixelRatio = qApp->devicePixelRatio();
         icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid),
-                                              static_cast<int>(iconSize * devicePixelRatio));
+                                              int(iconSize * devicePixelRatio));
         icon.setDevicePixelRatio(devicePixelRatio);
     } else {
         icon = getDesktopFileIcon(desktopFile, iconSize);
@@ -279,7 +279,7 @@ QSize getRenderSize(int fontSize, QString string)
     return QSize(width, height);
 }
 
-QString formatBandwidth(qulonglong v)
+QString formatBandwidth(QVariant v)
 {
     QStringList orders;
     orders << "KB/s"
@@ -290,7 +290,7 @@ QString formatBandwidth(qulonglong v)
     return formatUnitSize(v, orders);
 }
 
-QString formatByteCount(qulonglong v, bool showUnit, int prec)
+QString formatByteCount(QVariant v, bool showUnit, int prec)
 {
     QStringList orders;
     orders << "B"
@@ -302,16 +302,41 @@ QString formatByteCount(qulonglong v, bool showUnit, int prec)
     return formatUnitSize(v, orders, showUnit, prec);
 }
 
-QString formatUnitSize(qulonglong v, QStringList orders, bool showUnit, int prec)
+QString formatUnitSize(QVariant v, QStringList orders, bool showUnit, int prec)
 {
     int order = 0;
-    qreal value = v;
+    QVariant value = v;
     while (value >= 1024 && order + 1 < orders.size()) {
         order++;
-        value = value / 1024;
+        if (value.type() == QVariant::Int) {
+            value = value.toInt() / 1024;
+        } else if (value.type() == QVariant::UInt) {
+            value = value.toUInt() / 1024;
+        } else if (value.type() == QVariant::ULongLong) {
+            value = value.toULongLong() / 1024;
+        } else if (value.type() == QVariant::Double) {
+            value = value.toDouble() / 1024;
+        } else if (value.type() == QVariant::LongLong) {
+            value = value.toLongLong() / 1024;
+        } else {
+            break;
+        }
     }
 
-    QString size = QString::number(value, 'f', prec);
+    QString size {};
+    if (value.type() == QVariant::Int) {
+        size = QString::number(value.toInt(), 'f', prec);
+    } else if (value.type() == QVariant::UInt) {
+        size = QString::number(value.toUInt(), 'f', prec);
+    } else if (value.type() == QVariant::ULongLong) {
+        size = QString::number(value.toULongLong(), 'f', prec);
+    } else if (value.type() == QVariant::Double) {
+        size = QString::number(value.toDouble(), 'f', prec);
+    } else if (value.type() == QVariant::LongLong) {
+        size = QString::number(value.toLongLong(), 'f', prec);
+    } else {
+        size = value.toString();
+    }
 
     if (showUnit) {
         return QString("%1%2").arg(size).arg(orders[order]);
@@ -479,7 +504,8 @@ QString getProcessNameFromCmdLine(const pid_t pid)
     auto args = explode(cmdline, ' ');
     QString name = QFileInfo(QString::fromStdString(args[0])).fileName();
 
-    // Get first argument that start with '/' if first argument is script program, such as 'python'.
+    // Get first argument that start with '/' if first argument is script program, such as
+    // 'python'.
     auto pos = SCRIPT_PROGRAM_MAP.find(name);
     if (pos != SCRIPT_PROGRAM_MAP.end() && args.size() > 1) {
         for (unsigned int i = 1; i < args.size(); i++) {
@@ -512,8 +538,8 @@ std::string getProcessDesktopFile(int pid, QString name, QString cmdline,
         desktopFile =
             Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
 
-        // Find desktop file from process name if found environ variable 'GIO_LAUNCHED_DESKTOP_FILE'
-        // failed from tray process.
+        // Find desktop file from process name if found environ variable
+        // 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process.
         if (desktopFile.size() == 0) {
             desktopFile = getDesktopFileFromName(pid, name, cmdline);
         }
@@ -644,8 +670,8 @@ std::string getDesktopFileFromName(int pid, QString procName, QString cmdline)
             // Convert to lower characters.
             QString procname = procName.toLower();
 
-            // Replace "_" instead "-", avoid some applications desktop file can't found, such as,
-            // sublime text.
+            // Replace "_" instead "-", avoid some applications desktop file can't found, such
+            // as, sublime text.
             procname.replace("_", "-");
 
             // Concat desktop file.
@@ -705,7 +731,8 @@ qreal easeOutQuint(qreal x)
 }
 
 /**
- * @brief getTotalCpuTime Read the data from /proc/stat and get the total time the cpu has been busy
+ * @brief getTotalCpuTime Read the data from /proc/stat and get the total time the cpu has been
+ * busy
  * @return The total cpu time
  */
 qulonglong getTotalCpuTime(qulonglong &workTime)
@@ -751,8 +778,8 @@ QVector<CpuStruct> getCpuTimes()
     }
 
     char buffer[1024];
-    memset(buffer, 1, 1024);  // initialise the buffer with known data but not 0 (null) so that the
-                              // next while loop still works
+    memset(buffer, 1, 1024);  // initialise the buffer with known data but not 0 (null) so that
+                              // the next while loop still works
     // skip the first line
     while (buffer[0] != '\n') {
         buffer[0] = static_cast<char>(fgetc(file));

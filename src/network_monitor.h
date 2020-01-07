@@ -39,8 +39,8 @@ public:
     ~NetworkMonitor();
 
 public slots:
-    void updateStatus(long totalRecvBytes, long totalSentBytes, float totalRecvKbs,
-                      float totalSentKbs);
+    void updateStatus(qulonglong totalRecvBytes, qulonglong totalSentBytes, qreal totalRecvKbs,
+                      qreal totalSentKbs);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -94,10 +94,10 @@ private:
     int uploadWaveformsRenderOffsetY = -5;
     int waveformRenderPadding = 4;
 
-    float totalRecvKbs = 0;
-    float totalSentKbs = 0;
-    long totalRecvBytes = 0;
-    long totalSentBytes = 0;
+    qreal totalRecvKbs = 0;
+    qreal totalSentKbs = 0;
+    qulonglong totalRecvBytes = 0;
+    qulonglong totalSentBytes = 0;
 };
 
 #endif

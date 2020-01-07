@@ -152,7 +152,7 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     int align = model()->headerData(logicalIndex, orientation(), Qt::TextAlignmentRole).toInt();
     painter->setPen(forground);
-    painter->drawText(textRect, static_cast<int>(align), title);
+    painter->drawText(textRect, int(align), title);
 
     // sort indicator
     if (isSortIndicatorShown() && logicalIndex == sortIndicatorSection()) {

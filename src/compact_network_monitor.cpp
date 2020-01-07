@@ -88,8 +88,8 @@ CompactNetworkMonitor::~CompactNetworkMonitor()
     delete uploadSpeeds;
 }
 
-void CompactNetworkMonitor::updateStatus(long tRecvBytes, long tSentBytes, float tRecvKbs,
-                                         float tSentKbs)
+void CompactNetworkMonitor::updateStatus(qulonglong tRecvBytes, qulonglong tSentBytes,
+                                         qreal tRecvKbs, qreal tSentKbs)
 {
     totalRecvBytes = tRecvBytes;
     totalSentBytes = tSentBytes;

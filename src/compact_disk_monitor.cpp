@@ -55,12 +55,12 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
 
     pointsNumber = int(statusBarMaxWidth / 5.4);
 
-    readSpeeds = new QList<unsigned long>();
+    readSpeeds = new QList<qreal>();
     for (int i = 0; i < pointsNumber; i++) {
         readSpeeds->append(0);
     }
 
-    writeSpeeds = new QList<unsigned long>();
+    writeSpeeds = new QList<qreal>();
     for (int i = 0; i < pointsNumber; i++) {
         writeSpeeds->append(0);
     }
@@ -82,7 +82,7 @@ CompactDiskMonitor::~CompactDiskMonitor()
     delete writeSpeeds;
 }
 
-void CompactDiskMonitor::updateStatus(unsigned long tReadKbs, unsigned long tWriteKbs)
+void CompactDiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
 {
     totalReadKbs = tReadKbs;
     totalWriteKbs = tWriteKbs;

@@ -38,7 +38,7 @@ public:
     ~CompactDiskMonitor();
 
 public slots:
-    void updateStatus(unsigned long totalReadKbs, unsigned long totalWriteKbs);
+    void updateStatus(qreal totalReadKbs, qreal totalWriteKbs);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -47,12 +47,12 @@ private:
     void changeFont(const QFont &font);
 
 private:
-    QList<unsigned long> *readSpeeds;
-    QList<unsigned long> *writeSpeeds;
+    QList<qreal> *readSpeeds;
+    QList<qreal> *writeSpeeds;
     QPainterPath readPath;
     QPainterPath writePath;
-    unsigned long totalReadKbs = 0;
-    unsigned long totalWriteKbs = 0;
+    qreal totalReadKbs = 0;
+    qreal totalWriteKbs = 0;
 
     int m_bulletSize = 6;
 

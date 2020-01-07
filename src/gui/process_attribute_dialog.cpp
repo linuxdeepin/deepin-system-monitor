@@ -25,7 +25,6 @@
 
 using namespace Utils;
 
-static const int kPreferedLabelWidth = 80;
 static const int kPreferedTextWidth = 200;
 
 ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid, QWidget *parent)
@@ -122,6 +121,7 @@ void ProcessAttributeDialog::initUI()
     wnd->setAutoFillBackground(false);
     auto *grid = new QGridLayout(wnd);
     grid->setHorizontalSpacing(m_margin);
+    grid->setVerticalSpacing(0);
 
     QString buf;
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Process name"));
@@ -256,24 +256,19 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::Show) {
         if (obj == m_procNameLabel || obj == m_procCmdLabel || obj == m_procStartLabel) {
             auto *ctl = dynamic_cast<DLabel *>(obj);
-            int max = 0;
-            if (ctl->width() < kPreferedLabelWidth) {
-                max = kPreferedLabelWidth;
-            } else {
-                max = ctl->width();
-            }
+            QFontMetrics fm(ctl->font());
+            int max = fm.size(Qt::TextSingleLine, ctl->text()).width();
             ctl->setFixedWidth(max);
             ctl->setFixedHeight(ctl->height());
         } else if (obj == m_procNameText || obj == m_procCmdText || obj == m_procStartText) {
             auto *ctl = dynamic_cast<DTextBrowser *>(obj);
             QFontMetrics fm(ctl->font());
-            QRect rect {0, 0, kPreferedTextWidth, 0};
-            rect = fm.boundingRect(rect, Qt::AlignTop | Qt::AlignLeft | Qt::TextWrapAnywhere,
-                                   ctl->toPlainText());
-            ctl->setFixedWidth(kPreferedTextWidth);
-            // round up
-            ctl->setFixedHeight((rect.height() + rect.height() % fm.height()) / fm.height() *
-                                fm.height());
+            int max = fm.size(Qt::TextSingleLine, ctl->toPlainText()).width();
+            if (max > kPreferedTextWidth) {
+                max = kPreferedTextWidth;
+            }
+            ctl->setFixedWidth(max);
+            ctl->setFixedHeight(int(ctl->document()->size().height()));
         }
     } else if (event->type() == QEvent::Leave) {
         if (obj == m_procNameText) {

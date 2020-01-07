@@ -111,7 +111,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
         if (obj == this) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 searchEdit->clear();
                 searchEdit->lineEdit()->clearFocus();
@@ -119,7 +119,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
                 pressEsc();
             }
         } else if (obj == searchEdit) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Tab) {
                 pressTab();
             }

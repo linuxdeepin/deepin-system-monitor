@@ -383,7 +383,7 @@ void ProcessPageWidget::adjustStatusBarWidth()
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     if (rect.width() * 0.2 > statusBarMaxWidth) {
         if (windowState() == Qt::WindowMaximized) {
-            m_views->setFixedWidth(static_cast<int>(rect.width() * 0.2));
+            m_views->setFixedWidth(int(rect.width() * 0.2));
         } else {
             m_views->setFixedWidth(statusBarMaxWidth);
         }
