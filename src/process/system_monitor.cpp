@@ -1,4 +1,4 @@
-﻿#include <errno.h>
+#include <errno.h>
 #include <proc/sysinfo.h>
 #include <pwd.h>
 #include <sched.h>
@@ -117,8 +117,8 @@ void SystemMonitor::updateStatus()
     m_wineApplicationDesktopMaps.clear();
     m_wineServerDesktopMaps.clear();
 
-    unsigned long diskReadTotalKbs = 0;
-    unsigned long diskWriteTotalKbs = 0;
+    qreal diskReadTotalKbs = 0;
+    qreal diskWriteTotalKbs = 0;
 
     for (auto &i : processes) {
         int pid = (&i.second)->tid;
@@ -216,9 +216,13 @@ void SystemMonitor::updateStatus()
         }
 
         // Calculate disk IO kbs.
-        DiskStatus diskStatus = getProcessDiskStatus(pid);
-        diskReadTotalKbs += diskStatus.readKbs;
-        diskWriteTotalKbs += diskStatus.writeKbs;
+        DiskStatus ds {0, 0};
+        getProcessDiskStatus(pid, ds);
+        diskReadTotalKbs += ds.readKbs;
+        diskWriteTotalKbs += ds.writeKbs;
+
+        item.setReadKbs(ds.readKbs);
+        item.setWriteKbs(ds.writeKbs);
     }
 
     // Remove dead process from network status maps.
@@ -299,10 +303,11 @@ void SystemMonitor::updateStatus()
     for (auto &item : procList) {
         if (networkStatusSnapshot.contains(item.getPID())) {
             auto nstat = networkStatusSnapshot.value(item.getPID());
-            item.setNetworkStats(nstat);
+            item.setSentBytes(nstat.sentBytes);
+            item.setSentKbs(nstat.sentKbs);
+            item.setRecvBytes(nstat.recvBytes);
+            item.setRecvKbs(nstat.recvKbs);
         }
-
-        item.setDiskStats(getProcessDiskStatus(item.getPID()));
     }
 
     // update priority status
@@ -315,7 +320,7 @@ void SystemMonitor::updateStatus()
         }
 
         // Update disk status.
-        childInfoMap[childPid].diskStatus = getProcessDiskStatus(childPid);
+        getProcessDiskStatus(childPid, childInfoMap[childPid].diskStatus);
     }
 
     // Update cpu status.
@@ -382,7 +387,7 @@ void SystemMonitor::updateStatus()
     }
 
     // Update disk status.
-    diskStatInfoUpdated(diskReadTotalKbs / 1000.0, diskWriteTotalKbs / 1000.0);
+    diskStatInfoUpdated(diskReadTotalKbs, diskWriteTotalKbs);
 
     // Keep processes we've read for cpu calculations next cycle.
     m_prevProcesses = processes;
@@ -611,24 +616,21 @@ SystemMonitor::SystemMonitor(QObject *parent)
     m_updateStatusTimer->start(updateDuration);
 }
 
-DiskStatus SystemMonitor::getProcessDiskStatus(int pid)
+void SystemMonitor::getProcessDiskStatus(int pid, DiskStatus &ds)
 {
     ProcPidIO pidIO;
     getProcPidIO(pid, pidIO);
 
-    DiskStatus status = {0, 0};
-
-    if (m_processWriteKbs.contains(pid) && pidIO.wchar > 0) {
-        status.writeKbs = (pidIO.wchar - m_processWriteKbs.value(pid)) / updateSeconds;
+    if (m_procTotalWrite.contains(pid) && pidIO.write_bytes > 0) {
+        ds.writeKbs =
+            (pidIO.write_bytes - m_procTotalWrite.value(pid)) * 1.0 / 1024 / updateSeconds;
     }
-    m_processWriteKbs[pid] = pidIO.wchar;
+    m_procTotalWrite[pid] = pidIO.write_bytes;
 
-    if (m_processReadKbs.contains(pid) && pidIO.rchar > 0) {
-        status.readKbs = (pidIO.rchar - m_processReadKbs.value(pid)) / updateSeconds;
+    if (m_procTotalRead.contains(pid) && pidIO.read_bytes > 0) {
+        ds.readKbs = (pidIO.read_bytes - m_procTotalRead.value(pid)) * 1.0 / 1024 / updateSeconds;
     }
-    m_processReadKbs[pid] = pidIO.rchar;
-
-    return status;
+    m_procTotalRead[pid] = pidIO.read_bytes;
 }
 
 void SystemMonitor::updateProcessPriority(QList<ProcessEntry> &list)
@@ -669,8 +671,8 @@ void SystemMonitor::mergeItemInfo(ProcessEntry &item, double childCpu, qulonglon
 {
     item.setCPU(item.getCPU() + childCpu);
     item.setMemory(item.getMemory() + childMemory);
-    item.setDiskRead(item.getDiskRead() + childDiskStatus.readKbs);
-    item.setDiskWrite(item.getDiskWrite() + childDiskStatus.writeKbs);
+    item.setReadKbs(item.getReadKbs() + childDiskStatus.readKbs);
+    item.setWriteKbs(item.getWriteKbs() + childDiskStatus.writeKbs);
     item.setSentBytes(item.getSentBytes() + childNetworkStatus.sentBytes);
     item.setRecvBytes(item.getRecvBytes() + childNetworkStatus.recvBytes);
     item.setSentKbs(item.getSentKbs() + childNetworkStatus.sentKbs);

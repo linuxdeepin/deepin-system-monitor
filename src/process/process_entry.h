@@ -1,11 +1,7 @@
 #ifndef PROCESS_ENTRY_H
 #define PROCESS_ENTRY_H
 
-#include <QSharedDataPointer>
-
-#include "utils.h"
-
-using namespace Utils;
+#include <QExplicitlySharedDataPointer>
 
 class ProcessEntryData;
 class QIcon;
@@ -45,32 +41,28 @@ public:
     qulonglong getMemory() const;
     void setMemory(qulonglong memory);
 
-    qreal getDiskRead() const;
-    void setDiskRead(qreal diskRead);
+    qreal getReadKbs() const;
+    void setReadKbs(qreal rkbs);
 
-    qreal getDiskWrite() const;
-    void setDiskWrite(qreal diskWrite);
-
-    void setDiskStats(const DiskStatus &stats);
+    qreal getWriteKbs() const;
+    void setWriteKbs(qreal wkbs);
 
     qulonglong getSentBytes() const;
-    void setSentBytes(qulonglong sentBytes);
+    void setSentBytes(qulonglong sb);
 
     qulonglong getRecvBytes() const;
-    void setRecvBytes(qulonglong recvBytes);
+    void setRecvBytes(qulonglong rb);
 
     qreal getSentKbs() const;
-    void setSentKbs(qreal sentKbs);
+    void setSentKbs(qreal skbs);
 
     qreal getRecvKbs() const;
-    void setRecvKbs(qreal recvKbs);
-
-    void setNetworkStats(const NetworkStatus stats);
+    void setRecvKbs(qreal rkbs);
 
     bool operator<(const ProcessEntry &other) const;
 
 private:
-    QSharedDataPointer<ProcessEntryData> data;
+    QExplicitlySharedDataPointer<ProcessEntryData> data;
 };
 
 #endif  // PROCESS_ENTRY_H

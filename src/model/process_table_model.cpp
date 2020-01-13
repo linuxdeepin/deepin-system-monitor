@@ -161,15 +161,15 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             case kProcessMemoryColumn:
                 return formatByteCount(m_processList.at(index.row()).getMemory());
             case kProcessUploadColumn:
-                return formatBandwidth(qulonglong(m_processList.at(index.row()).getSentKbs()));
+                return formatBandwidth(m_processList.at(index.row()).getSentKbs());
             case kProcessDownloadColumn:
-                return formatBandwidth(qulonglong(m_processList.at(index.row()).getRecvKbs()));
+                return formatBandwidth(m_processList.at(index.row()).getRecvKbs());
             case kProcessDiskReadColumn:
-                return QString("%1/s").arg(
-                    formatByteCount(qulonglong(m_processList.at(index.row()).getDiskRead())));
+                return QString("%1").arg(
+                    formatBandwidth(m_processList.at(index.row()).getReadKbs()));
             case kProcessDiskWriteColumn:
-                return QString("%1/s").arg(
-                    formatByteCount(qulonglong(m_processList.at(index.row()).getDiskWrite())));
+                return QString("%1").arg(
+                    formatBandwidth(m_processList.at(index.row()).getWriteKbs()));
             case kProcessPIDColumn: {
                 return QString("%1").arg(m_processList.at(index.row()).getPID());
             }
@@ -204,9 +204,9 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             case kProcessPIDColumn:
                 return QVariant(m_processList.at(index.row()).getPID());
             case kProcessDiskReadColumn:
-                return QVariant(m_processList.at(index.row()).getDiskRead());
+                return QVariant(m_processList.at(index.row()).getReadKbs());
             case kProcessDiskWriteColumn:
-                return QVariant(m_processList.at(index.row()).getDiskWrite());
+                return QVariant(m_processList.at(index.row()).getWriteKbs());
             case kProcessNiceColumn:
                 return QVariant(m_processList.at(index.row()).getPriority());
             default:

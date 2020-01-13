@@ -6,7 +6,7 @@ GenericName=System Monitor
 Icon=deepin-system-monitor
 Name=Deepin System Monitor
 Type=Application
-X-Deepin-Vendor=user-custom
+X-Deepin-Vendor=deepin
 
 # Translations:
 # Do not manually modify!

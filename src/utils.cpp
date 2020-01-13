@@ -305,38 +305,13 @@ QString formatByteCount(QVariant v, bool showUnit, int prec)
 QString formatUnitSize(QVariant v, QStringList orders, bool showUnit, int prec)
 {
     int order = 0;
-    QVariant value = v;
+    qreal value = v.toReal();
     while (value >= 1024 && order + 1 < orders.size()) {
         order++;
-        if (value.type() == QVariant::Int) {
-            value = value.toInt() / 1024;
-        } else if (value.type() == QVariant::UInt) {
-            value = value.toUInt() / 1024;
-        } else if (value.type() == QVariant::ULongLong) {
-            value = value.toULongLong() / 1024;
-        } else if (value.type() == QVariant::Double) {
-            value = value.toDouble() / 1024;
-        } else if (value.type() == QVariant::LongLong) {
-            value = value.toLongLong() / 1024;
-        } else {
-            break;
-        }
+        value = value / 1024;
     }
 
-    QString size {};
-    if (value.type() == QVariant::Int) {
-        size = QString::number(value.toInt(), 'f', prec);
-    } else if (value.type() == QVariant::UInt) {
-        size = QString::number(value.toUInt(), 'f', prec);
-    } else if (value.type() == QVariant::ULongLong) {
-        size = QString::number(value.toULongLong(), 'f', prec);
-    } else if (value.type() == QVariant::Double) {
-        size = QString::number(value.toDouble(), 'f', prec);
-    } else if (value.type() == QVariant::LongLong) {
-        size = QString::number(value.toLongLong(), 'f', prec);
-    } else {
-        size = value.toString();
-    }
+    QString size = QString::number(value, 'f', prec);
 
     if (showUnit) {
         return QString("%1%2").arg(size).arg(orders[order]);

@@ -31,15 +31,15 @@ int BaseHeaderView::sectionSizeHint(int logicalIndex) const
 {
     QStyleOptionHeader option;
     initStyleOption(&option);
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *style = dynamic_cast<DStyle *>(DApplication::style());
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-    QFontMetrics fm(DApplication::font());
+    QFontMetrics fm(this->font());
     QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
     if (sortIndicatorSection() == logicalIndex) {
-        return fm.width(buf) + margin * 3 + kDropDownSize.width();
+        return fm.size(Qt::TextSingleLine, buf).width() + margin * 3 + kDropDownSize.width();
     } else {
-        return fm.width(buf) + margin * 2;
+        return fm.size(Qt::TextSingleLine, buf).width() + margin * 2;
     }
 }
 

@@ -20,8 +20,12 @@ public:
         , m_displayName {other.m_displayName}
         , m_userName {other.m_userName}
         , m_memory {other.m_memory}
-        , m_diskStats {other.m_diskStats}
-        , m_networkStats {other.m_networkStats}
+        , m_readKbs {other.m_readKbs}
+        , m_writeKbs {other.m_writeKbs}
+        , m_sentBytes {other.m_sentBytes}
+        , m_recvBytes {other.m_recvBytes}
+        , m_sentKbs {other.m_sentKbs}
+        , m_recvKbs {other.m_recvKbs}
     {
     }
     ProcessEntryData &operator=(const ProcessEntryData &other)
@@ -37,8 +41,12 @@ public:
             m_displayName = other.m_displayName;
             m_userName = other.m_userName;
             m_memory = other.m_memory;
-            m_diskStats = other.m_diskStats;
-            m_networkStats = other.m_networkStats;
+            m_readKbs = other.m_readKbs;
+            m_writeKbs = other.m_writeKbs;
+            m_sentBytes = other.m_sentBytes;
+            m_recvBytes = other.m_recvBytes;
+            m_sentKbs = other.m_sentKbs;
+            m_recvKbs = other.m_recvKbs;
         }
         return *this;
     }
@@ -67,9 +75,14 @@ private:
     // mem
     qulonglong m_memory {0};
     // disk read/write stats
-    DiskStatus m_diskStats {};
+    qreal m_readKbs {0};
+    qreal m_writeKbs {0};
+
     // network up/down stats
-    NetworkStatus m_networkStats {};
+    qulonglong m_sentBytes {0};
+    qulonglong m_recvBytes {0};
+    qreal m_sentKbs {0};
+    qreal m_recvKbs {0};
 };
 
 ProcessEntry::ProcessEntry()
@@ -181,74 +194,64 @@ void ProcessEntry::setMemory(qulonglong memory)
     data->m_memory = memory;
 }
 
-qreal ProcessEntry::getDiskRead() const
+qreal ProcessEntry::getReadKbs() const
 {
-    return data->m_diskStats.readKbs;
+    return data->m_readKbs;
 }
 
-void ProcessEntry::setDiskRead(qreal diskRead)
+void ProcessEntry::setReadKbs(qreal rkbs)
 {
-    data->m_diskStats.readKbs = diskRead;
+    data->m_readKbs = rkbs;
 }
 
-qreal ProcessEntry::getDiskWrite() const
+qreal ProcessEntry::getWriteKbs() const
 {
-    return data->m_diskStats.writeKbs;
+    return data->m_writeKbs;
 }
 
-void ProcessEntry::setDiskWrite(qreal diskWrite)
+void ProcessEntry::setWriteKbs(qreal wkbs)
 {
-    data->m_diskStats.writeKbs = diskWrite;
-}
-
-void ProcessEntry::setDiskStats(const DiskStatus &stats)
-{
-    data->m_diskStats = stats;
+    data->m_writeKbs = wkbs;
 }
 
 qulonglong ProcessEntry::getSentBytes() const
 {
-    return data->m_networkStats.sentBytes;
+    return data->m_sentBytes;
 }
 
-void ProcessEntry::setSentBytes(qulonglong sentBytes)
+void ProcessEntry::setSentBytes(qulonglong sb)
 {
-    data->m_networkStats.sentBytes = sentBytes;
+    data->m_sentBytes = sb;
 }
 
 qulonglong ProcessEntry::getRecvBytes() const
 {
-    return data->m_networkStats.recvBytes;
+    return data->m_recvBytes;
 }
 
-void ProcessEntry::setRecvBytes(qulonglong recvBytes)
+void ProcessEntry::setRecvBytes(qulonglong rb)
 {
-    data->m_networkStats.recvBytes = recvBytes;
+    data->m_recvBytes = rb;
 }
 
 qreal ProcessEntry::getSentKbs() const
 {
-    return data->m_networkStats.sentKbs;
+    return data->m_sentKbs;
 }
 
-void ProcessEntry::setSentKbs(qreal sentKbs)
+void ProcessEntry::setSentKbs(qreal skbs)
 {
-    data->m_networkStats.sentKbs = sentKbs;
+    data->m_sentKbs = skbs;
 }
 
 qreal ProcessEntry::getRecvKbs() const
 {
-    return data->m_networkStats.recvKbs;
+    return data->m_recvKbs;
 }
 
-void ProcessEntry::setRecvKbs(qreal recvKbs)
+void ProcessEntry::setRecvKbs(qreal rkbs)
 {
-    data->m_networkStats.recvKbs = recvKbs;
-}
-
-void ProcessEntry::setNetworkStats(const NetworkStatus stats)
-{
-    data->m_networkStats = stats;
+    data->m_recvKbs = rkbs;
 }
 
 bool ProcessEntry::operator<(const ProcessEntry &other) const

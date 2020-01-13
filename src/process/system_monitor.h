@@ -145,7 +145,7 @@ private:
     SystemMonitor(QObject *parent = nullptr);
     ~SystemMonitor() = default;
 
-    DiskStatus getProcessDiskStatus(int pid);
+    void getProcessDiskStatus(int pid, DiskStatus &ds);
     void mergeItemInfo(ProcessEntry &item, qreal childCpu, qulonglong childMemory,
                        const DiskStatus &childDiskStatus, const NetworkStatus &childNetworkStatus);
     void updateProcessPriority(QList<ProcessEntry> &list);
@@ -166,8 +166,8 @@ private:
     QMap<int, double> m_processCpuPercents {};
     QMap<int, long> m_processRecvBytes {};
     QMap<int, long> m_processSentBytes {};
-    QMap<int, unsigned long> m_processReadKbs {};
-    QMap<int, unsigned long> m_processWriteKbs {};
+    QMap<int, unsigned long> m_procTotalRead {};
+    QMap<int, unsigned long> m_procTotalWrite {};
     StoredProcType m_prevProcesses {};
     qulonglong prevTotalRecvBytes {};
     qulonglong prevTotalSentBytes {};

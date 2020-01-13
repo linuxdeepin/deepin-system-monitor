@@ -1,12 +1,16 @@
-#include <DApplication>
+﻿#include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
 #include <DStyleHelper>
+#include <QAbstractItemView>
 #include <QDebug>
+#include <QFontMetrics>
+#include <QHelpEvent>
 #include <QModelIndex>
 #include <QPainter>
 #include <QStyleOptionViewItem>
+#include <QToolTip>
 
 #include "base_item_delegate.h"
 
@@ -177,6 +181,59 @@ QSize BaseItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
     QSize size = QStyledItemDelegate::sizeHint(option, index);
     size.setHeight(std::max(36, size.height()));
     return size;
+}
+
+bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
+                                 const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    if (!e || !view)
+        return false;
+
+    if (e->type() == QEvent::ToolTip) {
+        QRect rect = view->visualRect(index);
+        QRect textRect = rect;
+
+        QStyleOptionViewItem opt = option;
+        initStyleOption(&opt, index);
+
+        int margin = 10;
+
+        // textRect
+        if (index.column() == 0) {
+            if (opt.features & QStyleOptionViewItem::HasDecoration) {
+                textRect.setX(textRect.x() + margin * 3 + kIconSize.width());
+            } else {
+                textRect.setX(textRect.x() + 2 * margin);
+            }
+        } else {
+            textRect.setX(textRect.x() + margin);
+        }
+
+        if (rect.x() + rect.width() >= view->width()) {
+            textRect.setWidth(textRect.width() - margin * 2);
+        } else {
+            textRect.setWidth(textRect.width() - margin);
+        }
+
+        // textWidth
+        QFontMetrics fm(opt.font);
+        int w = fm.size(Qt::TextSingleLine, opt.text).width();
+
+        if (textRect.width() < w) {
+            QVariant tooltip = index.data(Qt::DisplayRole);
+            if (tooltip.canConvert<QString>()) {
+                QToolTip::showText(e->globalPos(),
+                                   QString("<div>%1</div>").arg(tooltip.toString().toHtmlEscaped()),
+                                   view);
+                return true;
+            }
+        }
+        if (!QStyledItemDelegate::helpEvent(e, view, option, index))
+            QToolTip::hideText();
+        return true;
+    }
+
+    return QStyledItemDelegate::helpEvent(e, view, option, index);
 }
 
 void BaseItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
