@@ -306,4 +306,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                            insideRingRadius * 2),
                      Qt::AlignHCenter | Qt::AlignVCenter,
                      QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
+
+    setFixedHeight(swapStatRect.y() + swapStatRect.height() + 1);
 }

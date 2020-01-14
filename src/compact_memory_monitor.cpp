@@ -285,4 +285,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                            insideRingRadius * 2),
                      Qt::AlignHCenter | Qt::AlignVCenter,
                      QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
+
+    setFixedHeight(
+        std::max(swapStatRect.y() + swapStatRect.height(), rect().y() + ringCenterPointerY * 2));
 }

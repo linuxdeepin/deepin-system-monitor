@@ -268,6 +268,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     painter.scale(1, -1);
     painter.setPen(QPen(m_diskWriteColor, diskCurveWidth));
     painter.drawPath(writePath);
+
+    setFixedHeight(gridFrame.y() + gridFrame.height() + penSize);
 }
 
 void CompactDiskMonitor::changeFont(const QFont &font)

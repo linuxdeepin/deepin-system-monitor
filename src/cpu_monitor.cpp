@@ -100,9 +100,7 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-    // TODO: TextTile color problem
     textColor = palette.color(DPalette::Text);
-    // TODO: no color component
 #ifndef THEME_FALLBACK_COLOR
     numberColor = palette.color(DPalette::TextTitle);
 #else
@@ -222,4 +220,6 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.scale(1, -1);
     painter.setPen(QPen(QColor("#0081FF"), 1.5));
     painter.drawPath(cpuPath);
+
+    setFixedHeight(cpuDisplayRect.y() + cpuDisplayRect.height() + 1);
 }

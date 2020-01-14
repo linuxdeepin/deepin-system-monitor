@@ -45,12 +45,8 @@ using namespace Utils;
 NetworkMonitor::NetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     auto *dAppHelper = DApplicationHelper::instance();
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-    m_margin = margin;
+    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth - margin * 2);
@@ -195,9 +191,11 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    int sectionSize = 6;
-    int spacing = 10;
-    int padleft = sectionSize * 2 + 2;
+    int bulletSize = 6;
+    int padleft = bulletSize * 2 + 2;
+
+    auto spacing = DStyle::pixelMetric(style(), DStyle::PM_ContentsSpacing);
+    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
 
     QFontMetrics fmSection(m_sectionFont);
     QString sectionTitle = DApplication::translate("Process.Graph.View", "Network");
@@ -232,42 +230,41 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fmSubContent(m_subContentFont);
     QRect contentRect(padleft, titleRect.y() + titleRect.height() + spacing,
                       rect().x() + rect().width() - padleft, 1);
-    int cw1 = std::max(fmContent.size(Qt::TextSingleLine, recvTitle).width(),
-                       fmContent.size(Qt::TextSingleLine, sentTitle).width());
-    int cw2 = qCeil(contentRect.width() / 2.) - cw1;
-    int cw3 = std::max(fmContent.size(Qt::TextSingleLine, recvTotalTitle).width(),
-                       fmContent.size(Qt::TextSingleLine, recvTotalTitle).width());
-    int cw4 = contentRect.width() - cw1 - cw2 - cw3;
-    QRect crect11(contentRect.x(), contentRect.y(), cw1, fmContent.height());
-    QRect crect12(crect11.x() + cw1 + 4, crect11.y(), cw2, crect11.height());
-    QRect crect13(crect12.x() + cw2, crect11.y(), cw3, crect11.height());
-    QRect crect14(crect13.x() + cw3 + 4, crect11.y(), cw4, crect11.height());
-    QRect crect21(crect11.x(), crect11.y() + crect11.height(), cw1, crect11.height());
-    QRect crect22(crect12.x(), crect21.y(), cw2, crect21.height());
-    QRect crect23(crect13.x(), crect21.y(), cw3, crect21.height());
-    QRect crect24(crect14.x(), crect21.y(), cw4, crect21.height());
-    QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - sectionSize) / 2.), sectionSize,
-                 sectionSize);
-    QRectF r2Ind(3, crect21.y() + qCeil((crect21.height() - sectionSize) / 2.), sectionSize,
-                 sectionSize);
+    QRect crect11(contentRect.x(), contentRect.y(), qCeil((contentRect.width() - spacing) / 2),
+                  fmContent.height());
+    QRect crect12(qCeil((contentRect.width() - spacing) / 2) + spacing, crect11.y(),
+                  contentRect.width() - crect11.width() - spacing, crect11.height());
+    QRect crect21(contentRect.x(), crect11.y() + crect11.height(), crect11.width(),
+                  fmSubContent.height());
+    QRect crect22(crect12.x(), crect21.y(), crect12.width(), crect21.height());
+    QRect crect31(contentRect.x(), crect21.y() + crect21.height() + spacing, crect11.width(),
+                  crect11.height());
+    QRect crect32(crect12.x(), crect31.y(), crect12.width(), crect11.height());
+    QRect crect41(contentRect.x(), crect31.y() + crect31.height(), crect11.width(),
+                  crect21.height());
+    QRect crect42(crect12.x(), crect41.y(), crect12.width(), crect21.height());
+    QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
+                 bulletSize);
+    QRectF r2Ind(3, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
+                 bulletSize);
 
     painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(crect11, Qt::AlignLeft | Qt::AlignVCenter, recvTitle);
-    painter.drawText(crect21, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
-    painter.drawText(crect13, Qt::AlignLeft | Qt::AlignVCenter, recvTotalTitle);
-    painter.drawText(crect23, Qt::AlignLeft | Qt::AlignVCenter, sentTotalTitle);
+    painter.drawText(crect31, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
+    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter, recvTotalTitle);
+    painter.drawText(crect32, Qt::AlignLeft | Qt::AlignVCenter, sentTotalTitle);
 
     painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
-    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter,
-                     fmSubContent.elidedText(recvContent, Qt::ElideRight, crect12.width()));
+    painter.drawText(crect21, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(recvContent, Qt::ElideRight, crect21.width()));
+    painter.drawText(crect41, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(sentContent, Qt::ElideRight, crect41.width()));
     painter.drawText(crect22, Qt::AlignLeft | Qt::AlignVCenter,
-                     fmSubContent.elidedText(sentContent, Qt::ElideRight, crect22.width()));
-    painter.drawText(crect14, Qt::AlignLeft | Qt::AlignVCenter,
-                     fmSubContent.elidedText(recvTotalContent, Qt::ElideRight, crect14.width()));
-    painter.drawText(crect24, Qt::AlignLeft | Qt::AlignVCenter,
-                     fmSubContent.elidedText(sentTotalContent, Qt::ElideRight, crect14.width()));
+                     fmSubContent.elidedText(recvTotalContent, Qt::ElideRight, crect22.width()));
+    painter.drawText(crect42, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmSubContent.elidedText(sentTotalContent, Qt::ElideRight, crect42.width()));
 
     QPainterPath path1, path2;
     path1.addEllipse(r1Ind);
@@ -285,7 +282,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(framePen);
 
     int gridX = rect().x() + penSize + 3;
-    int gridY = rect().y() + crect22.y() + crect22.height() + m_margin;
+    int gridY = rect().y() + crect42.y() + crect42.height() + margin;
     int gridWidth =
         rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
     int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + 4 * penSize;
@@ -341,6 +338,8 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     painter.setPen(QPen(sentBrush, networkCurveWidth));
     painter.drawPath(uploadPath);
+
+    setFixedHeight(gridFrame.y() + gridFrame.height() + 1);
 }
 
 void NetworkMonitor::changeFont(const QFont &font)

@@ -66,8 +66,6 @@ private:
     QFont m_contentFont;
     QFont m_subContentFont;
 
-    int m_margin;
-
     int downloadRenderMaxHeight = 30;
     int downloadRenderPaddingX = 13;
     int downloadRenderPaddingY = 50;

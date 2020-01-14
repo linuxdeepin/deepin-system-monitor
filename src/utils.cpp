@@ -28,6 +28,7 @@
 #include <string>
 #include <unordered_set>
 
+#include <DDesktopEntry>
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>
@@ -50,6 +51,8 @@
 
 #include "hashqstring.h"
 #include "utils.h"
+
+DCORE_USE_NAMESPACE
 
 namespace Utils {
 static QMap<QString, QString> desktopfileMaps = getDesktopfileMap();
@@ -333,51 +336,38 @@ QString formatMillisecond(int millisecond)
 QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName)
 {
     QString procname = procName.toLower();
-    if (processDescriptions.contains(procname)) {
-        if (displayProcessName) {
-            return QString("%1    ( %2 )").arg(processDescriptions[procname], procName);
-        } else {
-            return processDescriptions[procname];
-        }
-    }
+    //    if (processDescriptions.contains(procname)) {
+    //        if (displayProcessName) {
+    //            return QString("%1    ( %2 )").arg(processDescriptions[procname], procName);
+    //        } else {
+    //            return processDescriptions[procname];
+    //        }
+    //    }
 
     if (desktopFile.size() == 0) {
         return procName;
     }
 
-    std::ifstream in;
-    in.open(desktopFile);
-    QString displayName = procName;
-    QString localName, name, genericName;
-    while (!in.eof()) {
-        std::string line;
-        std::getline(in, line);
+    DDesktopEntry entry(QString::fromStdString(desktopFile));
 
-        QString lineContent = QString::fromStdString(line);
+    if (entry.contains("X-Deepin-Vendor") && entry.stringValue("X-Deepin-Vendor") == "deepin")
+        if (!entry.genericName().isEmpty())
+            return entry.genericName();
 
-        QString localNameFlag = QString("Name[%1]=").arg(QLocale::system().name());
-        QString nameFlag = "Name=";
-        QString genericNameFlag = QString("GenericName[%1]=").arg(QLocale::system().name());
+    if (!entry.name().isEmpty()) {
+        return entry.name();
+    }
 
-        if (lineContent.startsWith(genericNameFlag)) {
-            genericName = lineContent.remove(0, genericNameFlag.size());
-        } else if (lineContent.startsWith(localNameFlag)) {
-            localName = lineContent.remove(0, localNameFlag.size());
-        } else if (lineContent.startsWith(nameFlag)) {
-            name = lineContent.remove(0, nameFlag.size());
+    if (entry.contains("X-Deepin-Vendor") && entry.stringValue("X-Deepin-Vendor") == "deepin")
+        if (!entry.stringValue("GenericName").isEmpty()) {
+            return entry.stringValue("GenericName");
         }
-    }
-    in.close();
 
-    if (!genericName.isEmpty())
-        displayName = genericName;
-    else if (!localName.isEmpty())
-        displayName = localName;
-    else if (!name.isEmpty()) {
-        displayName = name;
+    if (!entry.stringValue("Name").isEmpty()) {
+        return entry.stringValue("Name");
     }
 
-    return displayName;
+    return procName;
 }
 
 QString getImagePath(QString imageName)

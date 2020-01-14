@@ -70,18 +70,16 @@ private:
     double ringForegroundOpacity = 1;
     int animationIndex = 0;
     int cpuRenderMaxHeight = 45;
-    int iconPadding = 0;
-    int iconRenderOffsetY = 172;
     int paddingRight = 10;
-    int percentRenderOffsetY = 135;
+    int percentRenderOffsetY = 131;
     int pointsNumber = 28;
     int ringRadius = 90;
-    int ringRenderOffsetY = 90;
+    int ringRenderOffsetY = 86;
     int ringWidth = 8;
     int titleAreaPaddingX = 5;
-    int titleRenderOffsetY = 165;
+    int titleRenderOffsetY = 161;
     int waveformsRenderOffsetX;
-    int waveformsRenderOffsetY = 100;
+    int waveformsRenderOffsetY = 96;
 
     DApplicationHelper::ColorType m_themeType;
 

@@ -25,10 +25,16 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     m_diskMonitor = new CompactDiskMonitor(this);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setSpacing(10);
+    layout->addStretch(1);
     layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);
+    layout->addStretch(2);
     layout->addWidget(m_memoryMonitor, 0, Qt::AlignHCenter);
+    layout->addStretch(2);
     layout->addWidget(m_networkMonitor, 0, Qt::AlignHCenter);
+    layout->addStretch(2);
     layout->addWidget(m_diskMonitor, 0, Qt::AlignHCenter);
+    layout->addStretch(1);
 
     setLayout(layout);
 }

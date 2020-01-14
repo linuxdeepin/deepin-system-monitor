@@ -248,6 +248,8 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         }
         painter.drawPath(path);
     }
+
+    setFixedHeight(gridFrame.y() + gridFrame.height() + penSize);
 }
 
 void CompactCpuMonitor::changeFont(const QFont &font)
