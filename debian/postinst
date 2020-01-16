@@ -3,7 +3,6 @@ set -e
 
 if [ "$1" = configure ]; then
 	if command -v setcap > /dev/null; then
-        # using setcap to promote privilege will cause voice input of DSearchEdit malfunction, so remove all capabilities from this bin, use policykit instead
 		setcap cap_net_raw+ep /usr/bin/deepin-system-monitor
 	fi  
 fi
