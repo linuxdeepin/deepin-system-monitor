@@ -199,14 +199,20 @@ void ProcessPageWidget::initUI()
         case SystemMonitor::OnlyMe: {
             m_myProcButton->setChecked(true);
             m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
+            m_procViewMode->setText(
+                DApplication::translate("Process.Show.Mode", myProcText));  // default text
         } break;
         case SystemMonitor::AllProcess: {
             m_allProcButton->setChecked(true);
             m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
+            m_procViewMode->setText(
+                DApplication::translate("Process.Show.Mode", allProcText));  // default text
         } break;
         default: {
             m_appButton->setChecked(true);
             m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
+            m_procViewMode->setText(
+                DApplication::translate("Process.Show.Mode", appText));  // default text
         }
     }
 }
