@@ -9,5 +9,5 @@ Homepage: https://github.com/manateelazycat/deepin-system-monitor
 Package: deepin-system-monitor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin
-Description: System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.
- A system monitor tool.
+Description: A system monitor tool.
+ System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.
