@@ -196,7 +196,7 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
-        int margin = 10;
+        auto margin = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsMargins);
 
         // textRect
         if (index.column() == 0) {

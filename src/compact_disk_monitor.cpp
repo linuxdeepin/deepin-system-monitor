@@ -219,7 +219,7 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     framePen.setWidth(penSize);
     painter.setPen(framePen);
 
-    int gridX = rect().x() + penSize + 3;
+    int gridX = rect().x() + penSize;
     int gridY = rect().y() + wcol1.y() + wcol1.height() + margin;
     int gridWidth =
         rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;

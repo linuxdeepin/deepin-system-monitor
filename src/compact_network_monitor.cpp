@@ -197,9 +197,9 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     QRect crect41(contentRect.x(), crect31.y() + crect31.height(), crect11.width(),
                   crect21.height());
     QRect crect42(crect12.x(), crect41.y(), crect12.width(), crect21.height());
-    QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
+    QRectF r1Ind(0, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
-    QRectF r2Ind(3, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
+    QRectF r2Ind(0, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
 
     painter.setPen(textColor);
@@ -235,7 +235,7 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     framePen.setWidth(penSize);
     painter.setPen(framePen);
 
-    int gridX = rect().x() + penSize + 3;
+    int gridX = rect().x() + penSize;
     int gridY = rect().y() + crect42.y() + crect42.height() + margin;
     int gridWidth =
         rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
