@@ -27,6 +27,7 @@
 #include <QString>
 #include <string>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 namespace std {
     template<> struct hash<QString>
     {
@@ -36,5 +37,6 @@ namespace std {
             }
     };
 }
+#endif
 
 #endif // HASHQSTRING_H
