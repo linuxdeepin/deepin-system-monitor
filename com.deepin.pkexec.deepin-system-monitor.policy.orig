@@ -225,8 +225,8 @@
     <description xml:lang="as"></description>
     <description xml:lang="ar"></description>
     <description xml:lang="an"></description>
-    <message>Privileges is required to control other users' processes</message>
-    <message xml:lang="zh_CN">控制其他用户的进程需要权限</message>
+    <message>Authentication is required to control other users' processes</message>
+    <message xml:lang="zh_CN">控制其他用户的进程需要授权</message>
     <message xml:lang="zh_TW"></message>
     <message xml:lang="zh_HK"></message>
     <message xml:lang="vi"></message>

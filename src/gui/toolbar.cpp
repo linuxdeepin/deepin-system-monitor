@@ -57,20 +57,20 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     m_switchFuncTabBtnGrp = new DButtonBox(this);
     m_switchFuncTabBtnGrp->setFixedWidth(240);
     DButtonBoxButton *procBtn = new DButtonBoxButton(
-        DApplication::translate("Title.Bar.Switch", "Process"), m_switchFuncTabBtnGrp);
+        DApplication::translate("Title.Bar.Switch", "Processes"), m_switchFuncTabBtnGrp);
     procBtn->setCheckable(true);
     procBtn->setChecked(true);
     procBtn->setEnabled(false);
     DButtonBoxButton *svcBtn = new DButtonBoxButton(
-        DApplication::translate("Title.Bar.Switch", "Service"), m_switchFuncTabBtnGrp);
+        DApplication::translate("Title.Bar.Switch", "Services"), m_switchFuncTabBtnGrp);
     svcBtn->setCheckable(true);
     svcBtn->setEnabled(false);
     QList<DButtonBoxButton *> list;
     list << procBtn << svcBtn;
     m_switchFuncTabBtnGrp->setButtonList(list, true);
 
-    connect(procBtn, &DButtonBoxButton::clicked, this, [=]() { Q_EMIT procTabButtonClicked(); });
-    connect(svcBtn, &DButtonBoxButton::clicked, this, [=]() { Q_EMIT serviceTabButtonClicked(); });
+    connect(procBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT procTabButtonClicked(); });
+    connect(svcBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT serviceTabButtonClicked(); });
 
     // =========search=========
     searchEdit = new DSearchEdit(this);
@@ -90,7 +90,7 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged);
 
     auto *mwnd = MainWindow::instance();
-    connect(mwnd, &MainWindow::loadingStatusChanged, this, [=](bool loading) {
+    connect(mwnd, &MainWindow::loadingStatusChanged, this, [ = ](bool loading) {
         if (loading) {
             procBtn->setEnabled(false);
             svcBtn->setEnabled(false);

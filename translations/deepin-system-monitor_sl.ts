@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -331,15 +319,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -361,27 +349,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -503,208 +491,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Namizno okolje Deepin - Storitev za zagon procesov</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Namizno okolje Deepin - Namizje</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Namizno okolje Deepin - Poklit proxy</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Namizno okolje Deepin - Zaganjalnik</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Namizno okolje Deepin - Pristan</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Namizno okolje Deepin - Prikaz zaslona</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Namizno okolje Deepin - Izvajanje v ozadju</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Namizno okolje Deepin - Seja v ozadju</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Namizno okolje Deepin - Postopek za začetek seje</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Upravitelj datotek Deepin v ozadju</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Namizno okolje Deepin - Storitev zaklep zaslona</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Upravitelj oken Deepin menjalnik</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Deepin sporočilo</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Agent za Občano tiskanje Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Menijska storitev Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Trgovina Deepin v ozadju</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>Prilagajanje oken v ozadju</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>D-Bus storitev prilagajanja oken v ozadju</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>SSH agent</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>Uporabniški virtualni datotečni sistem v ozadju</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Varovalni strežnik uporabniškega virtualnega datotečnega sistem v ozadju</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Postopek pomoči klienta Trgovine Deepin</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>Upravitelj omrežij</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>PolicyKit D-Bus storitev</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>Deljenje datotek v ozadju</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>X storitev</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Fcitx vhodni postopek</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx vzhodni postopek D-Bus v ozadju</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>Sogou vhodni postopek v ozadju</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>ShadowSocks lokalni klient</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>Zvočna storitev</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>Tiskanje v ozadju</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>Upravitelj svetlosti</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>Upravitelj sistemske storitve</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>Upravitelj sistemske storitve - Upravljanje naprav v ozadju</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>Disk v ozadju</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>Račun v ozadju</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>D-Bus v ozadju</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>Premik miške v ozadju</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>DConf storitev</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>Gnome Keyring v ozadju</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>Bluetooth v ozadju</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>Napajanje v ozadju</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>Upravitelj modemov</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>Storitev sistemskega tiskanja</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Sandbox brskalnika Chrome</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Sledilna ploščica Synaptics v ozadju</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>Ni omogočeno</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>Sogou vhodni postopek</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -808,6 +600,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

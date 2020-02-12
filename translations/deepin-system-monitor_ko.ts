@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -332,15 +320,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -362,27 +350,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -504,208 +492,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin 데스크톱 환경 - 프로세스 시작 서비스</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin 데스크톱 환경 - 데스크톱</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin 데스크톱 환경 - Polkit 프록시</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin 데스크톱 환경 - 런처</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin 데스크톱 환경 - 독</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin 데스크톱 환경 - 화면 표시</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin 데스크톱 환경 - 데몬</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin 데스크톱 환경 - 세션 데몬</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin 데스크톱 환경 - 세션 초기화 프로세스</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Deepin 파일 관리자 데몬</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin 데스크톱 환경 - 잠금 화면 서비스</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Deepin 창 관리자 전환</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Deepin 알림</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Deepin 클라우드 프린트 에이전트</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Deepin 메뉴 서비스</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Deepin 스토어 데몬</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>윈도우 일치 데몬</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>윈도우 일치 데몬 DBus 서비스</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>SSH 에이전트</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>사용자 모드 가상 파일 시스템 데몬</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>사용자 모드 가상 파일 시스템 데몬 퓨즈 서버</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Deepin 스토어 클라이언트의 도우미 프로세스</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>네트워크 관리자</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus 서비스</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>파일 공유 서비스 데몬</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>X 서비스</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Fcitx 입력 방법</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx 입력 방법 DBus 데몬</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>Sogou 입력 방법 데몬</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>ShadowSocks 로컬 클라이언트</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>사운드 서비스</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>인쇄 데몬</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>밝은 화면 표시 관리자</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>시스템 서비스 관리자</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>시스템 서비스 관리자 - 장치 관리 데몬</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>디스크 데몬</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>계정 데몬</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>DBus 데몬</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>마우스 이벤트 데몬</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>DConf 서비스</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>그놈 키링 데몬</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>블루투스 데몬</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>전원 데몬</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>모뎀 장치 관리자</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>시스템 인쇄 트레이 서비스</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>크롬 브라우저 샌드박스</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>시냅틱 터치패드 장치 데몬</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>스왑</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>활성화되지 않음</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>Sogou 입력 방식</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -809,6 +601,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

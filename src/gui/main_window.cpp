@@ -51,27 +51,11 @@ void MainWindow::displayShortcutHelpDialog()
     sysObj.insert("groupName", DApplication::translate("Help.Shortcut.System", "System"));
     QJsonArray sysObjArr;
 
-    QJsonObject helpItem;
-    helpItem.insert("name", DApplication::translate("Help.Shortcut.System", "Help"));
-    helpItem.insert("value", "F1");
-    sysObjArr.append(helpItem);
-
-    QJsonObject closeItem;
-    closeItem.insert("name", DApplication::translate("Help.Shortcut.System", "Close application"));
-    closeItem.insert("value", "Alt+F4");
-    sysObjArr.append(closeItem);
-
     QJsonObject shortcutItem;
     shortcutItem.insert("name",
                         DApplication::translate("Help.Shortcut.System", "Show shortcut preview"));
-    shortcutItem.insert("value", "Ctrl+Shift+/");
+    shortcutItem.insert("value", "Ctrl+Shift+?");
     sysObjArr.append(shortcutItem);
-
-    QJsonObject jsonItem;
-    jsonItem.insert("name",
-                    DApplication::translate("Help.Shortcut.System", "Maximize / Restore window"));
-    jsonItem.insert("value", "Ctrl+Alt+F");
-    sysObjArr.append(jsonItem);
 
     QJsonObject searchItem;
     searchItem.insert("name", DApplication::translate("Title.Bar.Search", "Search"));
@@ -189,7 +173,7 @@ void MainWindow::initUI()
     m_killAction = new QAction(
         DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
-    connect(m_killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
+    connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
     m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
@@ -221,11 +205,11 @@ void MainWindow::initUI()
         }
     }
 
-    connect(expandModeAction, &QAction::triggered, this, [=]() {
+    connect(expandModeAction, &QAction::triggered, this, [ = ]() {
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
         Q_EMIT displayModeChanged(kDisplayModeExpand);
     });
-    connect(compactModeAction, &QAction::triggered, this, [=]() {
+    connect(compactModeAction, &QAction::triggered, this, [ = ]() {
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeCompact);
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
@@ -235,7 +219,7 @@ void MainWindow::initUI()
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
-            [=]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
+    [ = ]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
 
     m_pages = new DStackedWidget(this);
     setCentralWidget(m_pages);
@@ -257,7 +241,7 @@ void MainWindow::initUI()
     m_spinner->show();
 
     auto *mon = SystemMonitor::instance();
-    connect(mon, &SystemMonitor::initialSysInfoLoaded, this, [=]() {
+    connect(mon, &SystemMonitor::initialSysInfoLoaded, this, [ = ]() {
         if (m_loading) {
             m_spinner->hide();
             m_spinner->stop();
@@ -280,7 +264,7 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
-    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
 #ifdef ROLLBACK_BUG_4299
         m_modeMenu->setEnabled(true);
@@ -289,7 +273,7 @@ void MainWindow::initConnections()
         m_tbShadow->raise();
         m_tbShadow->show();
     });
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
         m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
 #ifdef ROLLBACK_BUG_4299
         m_modeMenu->setEnabled(false);
@@ -299,9 +283,9 @@ void MainWindow::initConnections()
         m_tbShadow->show();
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
-            [=]() { m_toolbar->clearSearchText(); });
+    [ = ]() { m_toolbar->clearSearchText(); });
 
-    connect(this, &MainWindow::loadingStatusChanged, [=](bool loading) {
+    connect(this, &MainWindow::loadingStatusChanged, [ = ](bool loading) {
         if (loading) {
             titlebar()->setMenuDisabled(true);
         } else {
@@ -343,14 +327,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             toolbar()->focusInput();
             return true;
         } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
-                   kev->key() == Qt::Key_F) {
-            if (windowState() & Qt::WindowMaximized) {
-                showNormal();
-            } else {
-                showMaximized();
-            }
-            return true;
-        } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
                    kev->key() == Qt::Key_K) {
             Q_EMIT killProcessPerformed();
             return true;
@@ -370,7 +346,7 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     DMainWindow::showEvent(event);
 
-    auto getCpuModel = [=]() -> char * {
+    auto getCpuModel = [ = ]() -> char* {
         char *buf = nullptr;
         size_t len = 0;
         ssize_t nread = 0;
@@ -379,7 +355,8 @@ void MainWindow::showEvent(QShowEvent *event)
             return nullptr;
 
         char vid[] = "vendor_id";
-        while ((nread = getline(&buf, &len, fp)) != -1) {
+        while ((nread = getline(&buf, &len, fp)) != -1)
+        {
             if (strncasecmp(buf, vid, strlen(vid)) == 0) {
                 return buf;
             }
@@ -396,7 +373,7 @@ void MainWindow::showEvent(QShowEvent *event)
         } else {
             m_timer = new QTimer(this);
             m_timer->setSingleShot(true);
-            connect(m_timer, &QTimer::timeout, this, [=]() { mon->updateStatus(); });
+            connect(m_timer, &QTimer::timeout, this, [ = ]() { mon->updateStatus(); });
             m_timer->start(100);
         }
         free(buf);

@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -332,15 +320,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -362,27 +350,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -504,208 +492,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin työpöytäympäristö - Prosessien aloituspalvelut</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin työpöytäympäristö - Työpöytä</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin työpöytäympäristö - Polkit-välityspalvelin</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin työpöytäympäristö - Käynnistäjä</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin työpöytäympäristö - Valikko</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin työpöytäympäristö - Näyttöruutu</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin työpöytäympäristön - Tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin työpöytäympäristö - Istunnon tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin työpöytäympäristö - Istunnon alustusprosessi</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Deepin tiedostohallinta tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin työpöytäympäristö - Lukituksen palvelu</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Deepin ikkunanhallinnan vaihtaja</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Deepin ilmoitukset</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Cloud Print pilvitulostus</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Deepin valikkopalvelu</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Deepin Store tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>Ikkunan vastaava tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>Ikkuna vastaa daemonia DBus-palvelu</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>SSH agentti</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>Käyttäjän tiedostojärjestelmän virtuaalinen tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Fuse palvelimen virtuaalisen tiedostojärjestelmän tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Deepin Store -asiakkaan avustava prosessi</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>Verkonhallinta</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus -palvelu</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>Tiedostonjakopalvelun tausta-ajo</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>X -palvelu</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Fcitx -syöttötapa</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx -syöttötapa DBus tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>Sogou -syöttötavan tausta-ajo</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>ShadowSocks paikallinen asiakas</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>Äänipalvelu</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>Tulostuksen tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>Kevyt näytönhallinta</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>Järjestelmäpalvelun hallinta</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>Järjestelmäpalvelun hallinta - Laitehallinnan tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>Levyn tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>Tilin tausta-ajo</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>DBus tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>Hiiren tapahtumat tausta-ajo</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>DConf palvelu</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>Gnome keyring tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>Bluetooth tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>Virran tausta-ajo</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>Modeemien laitehallinta</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>Järjestelmän tulostustuksen huolto</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Chrome selaimen hiekkalaatikko</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics kosketuslevyn tausta-ajo</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>Ei käytössä</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>Sogou-syöttötapa</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -809,6 +601,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

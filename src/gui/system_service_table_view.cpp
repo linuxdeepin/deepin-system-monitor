@@ -42,7 +42,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
 
     // >>> "not found" display label
     m_noMatchingResultLabel =
-        new DLabel(DApplication::translate("Common.Search", "Not Found"), this);
+        new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
     auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
     QColor labelColor = palette.color(DPalette::PlaceholderText);
@@ -50,7 +50,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
     auto *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
         if (m_noMatchingResultLabel) {
             auto palette = DApplicationHelper::instance()->applicationPalette();
             QColor labelColor = palette.color(DPalette::PlaceholderText);
@@ -78,9 +78,9 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     connect(this, &SystemServiceTableView::customContextMenuRequested, this,
             &SystemServiceTableView::displayTableContextMenu);
     // table header events
-    connect(hdr, &QHeaderView::sectionResized, this, [=]() { saveSettings(); });
-    connect(hdr, &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
-    connect(hdr, &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sectionResized, this, [ = ]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sectionMoved, this, [ = ]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sortIndicatorChanged, this, [ = ]() { saveSettings(); });
     connect(hdr, &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
@@ -134,7 +134,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     m_headerContextMenu = new DMenu(this);
     // load state column
     QAction *loadStateHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
+                                         DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
     loadStateHeaderAction->setCheckable(true);
     connect(loadStateHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn, !b);
@@ -142,7 +142,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     });
     // active state column
     QAction *activeStateHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Service.Table.Header", kSystemServiceActiveState));
+                                           DApplication::translate("Service.Table.Header", kSystemServiceActiveState));
     activeStateHeaderAction->setCheckable(true);
     connect(activeStateHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn, !b);
@@ -150,7 +150,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     });
     // sub state column
     QAction *subStateHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Service.Table.Header", kSystemServiceSubState));
+                                        DApplication::translate("Service.Table.Header", kSystemServiceSubState));
     subStateHeaderAction->setCheckable(true);
     connect(subStateHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, !b);
@@ -158,7 +158,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     });
     // state column
     QAction *stateHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Service.Table.Header", kSystemServiceState));
+                                     DApplication::translate("Service.Table.Header", kSystemServiceState));
     stateHeaderAction->setCheckable(true);
     connect(stateHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn, !b);
@@ -166,7 +166,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     });
     // description column
     QAction *descriptionHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Service.Table.Header", kSystemServiceDescription));
+                                           DApplication::translate("Service.Table.Header", kSystemServiceDescription));
     descriptionHeaderAction->setCheckable(true);
     connect(descriptionHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, !b);
@@ -174,7 +174,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     });
     // pid column
     QAction *pidHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Service.Table.Header", kSystemServicePID));
+                                   DApplication::translate("Service.Table.Header", kSystemServicePID));
     pidHeaderAction->setCheckable(true);
     connect(pidHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn, !b);
@@ -189,7 +189,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         descriptionHeaderAction->setChecked(true);
         pidHeaderAction->setChecked(false);
     }
-    connect(m_headerContextMenu, &QMenu::aboutToShow, this, [=]() {
+    connect(m_headerContextMenu, &QMenu::aboutToShow, this, [ = ]() {
         bool b;
         b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn);
         loadStateHeaderAction->setChecked(!b);
@@ -225,7 +225,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     MainWindow *mwnd = MainWindow::instance();
     if (mwnd) {
         auto *tbar = mwnd->toolbar();
-        connect(tbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+        connect(tbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
             if (!defer_initialized) {
                 asyncGetServiceEntryList();
                 defer_initialized = true;
@@ -320,7 +320,7 @@ void SystemServiceTableView::startService()
                 QItemSelectionModel *selection = selectionModel();
                 selection->select(m_ProxyModel->mapFromSource(idx),
                                   QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows |
-                                      QItemSelectionModel::Clear);
+                                  QItemSelectionModel::Clear);
                 setSelectionModel(selection);
                 row = getSelectedServiceEntry(entry);
             } else {  // otherwise, add a new entry
@@ -344,8 +344,8 @@ void SystemServiceTableView::startService()
             QModelIndex idx = getSourceModel()->insertServiceEntry(entry);
             QItemSelectionModel *selection = selectionModel();
             selection->select(m_ProxyModel->mapFromSource(idx), QItemSelectionModel::SelectCurrent |
-                                                                    QItemSelectionModel::Rows |
-                                                                    QItemSelectionModel::Clear);
+                              QItemSelectionModel::Rows |
+                              QItemSelectionModel::Clear);
             setSelectionModel(selection);
         } else {
             getSourceModel()->updateServiceEntry(row);
@@ -386,7 +386,7 @@ void SystemServiceTableView::stopService()
         }
         // serivce id syntax: xxx@yyy
     } else if (entry.getId().contains(QRegularExpression(
-                   "^[^@\\.]+@[^@\\.]+$", QRegularExpression::CaseInsensitiveOption))) {
+                                          "^[^@\\.]+@[^@\\.]+$", QRegularExpression::CaseInsensitiveOption))) {
         deleteItem = true;
         opt.setId(entry.getId());
         rowIndex = getSourceModel()->checkServiceEntryExists(entry.getId());
@@ -510,7 +510,7 @@ void SystemServiceTableView::asyncGetServiceEntryList()
 
     auto *watcher = new QFutureWatcher<QPair<ErrorContext, QList<SystemServiceEntry>>>;
     QFuture<QPair<ErrorContext, QList<SystemServiceEntry>>> future;
-    QObject::connect(watcher, &QFutureWatcher<void>::finished, [=]() {
+    QObject::connect(watcher, &QFutureWatcher<void>::finished, [ = ]() {
         auto fe = watcher->future();
         resetModel(fe.result().first, fe.result().second);
         watcher->deleteLater();
@@ -521,7 +521,7 @@ void SystemServiceTableView::asyncGetServiceEntryList()
 
 // thread-pool job!!
 QPair<ErrorContext, QList<SystemServiceEntry>>
-SystemServiceTableView::processAsyncGetServiceListTask()
+                                            SystemServiceTableView::processAsyncGetServiceListTask()
 {
     ServiceManager *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);

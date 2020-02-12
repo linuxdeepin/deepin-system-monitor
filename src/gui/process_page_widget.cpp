@@ -196,24 +196,24 @@ void ProcessPageWidget::initUI()
     if (vindex.isValid())
         index = vindex.toInt();
     switch (index) {
-        case SystemMonitor::OnlyMe: {
-            m_myProcButton->setChecked(true);
-            m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
-            m_procViewMode->setText(
-                DApplication::translate("Process.Show.Mode", myProcText));  // default text
-        } break;
-        case SystemMonitor::AllProcess: {
-            m_allProcButton->setChecked(true);
-            m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
-            m_procViewMode->setText(
-                DApplication::translate("Process.Show.Mode", allProcText));  // default text
-        } break;
-        default: {
-            m_appButton->setChecked(true);
-            m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
-            m_procViewMode->setText(
-                DApplication::translate("Process.Show.Mode", appText));  // default text
-        }
+    case SystemMonitor::OnlyMe: {
+        m_myProcButton->setChecked(true);
+        m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
+        m_procViewMode->setText(
+            DApplication::translate("Process.Show.Mode", myProcText));  // default text
+    } break;
+    case SystemMonitor::AllProcess: {
+        m_allProcButton->setChecked(true);
+        m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
+        m_procViewMode->setText(
+            DApplication::translate("Process.Show.Mode", allProcText));  // default text
+    } break;
+    default: {
+        m_appButton->setChecked(true);
+        m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
+        m_procViewMode->setText(
+            DApplication::translate("Process.Show.Mode", appText));  // default text
+    }
     }
 }
 
@@ -225,19 +225,19 @@ void ProcessPageWidget::initConnections()
     connect(mainWindow, &MainWindow::displayModeChanged, this,
             &ProcessPageWidget::switchDisplayMode);
 
-    connect(m_appButton, &DButtonBoxButton::clicked, this, [=]() {
+    connect(m_appButton, &DButtonBoxButton::clicked, this, [ = ]() {
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyGUI);
     });
-    connect(m_myProcButton, &DButtonBoxButton::clicked, this, [=]() {
+    connect(m_myProcButton, &DButtonBoxButton::clicked, this, [ = ]() {
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyMe);
     });
-    connect(m_allProcButton, &DButtonBoxButton::clicked, this, [=]() {
+    connect(m_allProcButton, &DButtonBoxButton::clicked, this, [ = ]() {
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
@@ -251,7 +251,7 @@ void ProcessPageWidget::initConnections()
     }
 
     auto *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
         if (m_procViewMode) {
             auto palette = DApplicationHelper::instance()->applicationPalette();
             palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
@@ -342,7 +342,7 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
                                                   "loss.\nAre you sure you want to continue?");
 
     KillProcessConfirmDialog dialog(this);
-    dialog.setTitle(title);
+//    dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true,
@@ -372,12 +372,12 @@ void ProcessPageWidget::showWindowKiller()
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
 {
     switch (mode) {
-        case kDisplayModeExpand: {
-            m_views->setCurrentIndex(1);
-        } break;
-        case kDisplayModeCompact: {
-            m_views->setCurrentIndex(0);
-        } break;
+    case kDisplayModeExpand: {
+        m_views->setCurrentIndex(1);
+    } break;
+    case kDisplayModeCompact: {
+        m_views->setCurrentIndex(0);
+    } break;
     }
 }
 

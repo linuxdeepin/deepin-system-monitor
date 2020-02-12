@@ -15,11 +15,10 @@
 		</defaults>
 		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/renice</annotate>
 		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
-		<message xml:lang="zh_CN">更改进程优先级需要授权</message>
 	</action>
 	<action id="com.deepin.pkexec.deepin-system-monitor.kill">
 		<description>Kill process</description>
-		<message>Privileges is required to control other users' processes</message>
+		<message>Authentication is required to control other users' processes</message>
 		<icon_name />
 		<defaults>
 			<allow_any>no</allow_any>
@@ -28,6 +27,6 @@
 		</defaults>
 		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/kill</annotate>
 		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
-		<message xml:lang="zh_CN">控制其他用户的进程需要权限</message>
+		<message xml:lang="zh_CN">控制其他用户的进程需要授权</message>
 	</action>
 </policyconfig>

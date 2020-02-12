@@ -36,9 +36,9 @@ public:
     enum ProcessPriority {
         kInvalidPriority = INT_MAX,
         kVeryHighPriority = -20,  // default veryhigh priority
-        kHighPriority = -5,       // default high priority
+        kHighPriority = -10,       // default high priority
         kNormalPriority = 0,
-        kLowPriority = 5,       // default low priority
+        kLowPriority = 10,       // default low priority
         kVeryLowPriority = 19,  // default verylow priority
         kCustomPriority
     };
@@ -81,11 +81,12 @@ public:
             {kLowPriority, DApplication::translate("Process.Priority", "Low")},
             {kVeryLowPriority, DApplication::translate("Process.Priority", "Very low")},
             {kCustomPriority, DApplication::translate("Process.Priority", "Custom")},
-            {kInvalidPriority, DApplication::translate("Process.Priority", "Invalid")}};
+            {kInvalidPriority, DApplication::translate("Process.Priority", "Invalid")}
+        };
 
         ProcessPriority p = kInvalidPriority;
         if (prio == kVeryHighPriority || prio == kHighPriority || prio == kNormalPriority ||
-            prio == kLowPriority || prio == kVeryLowPriority) {
+                prio == kLowPriority || prio == kVeryLowPriority) {
             p = ProcessPriority(prio);
         } else if (prio >= kVeryHighPriorityMax && prio <= kVeryLowPriorityMin) {
             p = kCustomPriority;

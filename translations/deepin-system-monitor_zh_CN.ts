@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
-        <translation>系统监视器是一款直观易用、功能强大的系统监视器。它可以对进程的CPU、内存、网络和磁盘等多种状态进行监视。</translation>
-    </message>
-    <message>
         <source>System Monitor</source>
         <translation>系统监视器</translation>
+    </message>
+    <message>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
+        <translation>系统监视器是一个对硬件负载、程序运行和系统服务，进行监测查看和管理操作的系统工具。</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation>无结果</translation>
     </message>
 </context>
@@ -186,20 +186,8 @@
         <translation>系统</translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation>帮助</translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation>关闭应用</translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
         <translation>显示快捷键预览</translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
-        <translation>窗口大小切换</translation>
     </message>
 </context>
 <context>
@@ -333,16 +321,16 @@ Are you sure you want to continue?</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation>设置进程优先级失败</translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation>无效</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
         <translation>进程号: %1, 错误: [%2] %3</translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
+        <translation>设置进程优先级失败</translation>
     </message>
 </context>
 <context>
@@ -363,27 +351,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation>结束进程失败</translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation>暂停进程失败</translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation>恢复进程失败</translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation>强制结束进程失败</translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation>发送信号至进程失败</translation>
     </message>
 </context>
@@ -505,208 +493,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>深度桌面环境-进程启动服务</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>深度桌面环境-桌面</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>深度桌面环境-Polkit代理</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>深度桌面环境-启动器</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>深度桌面环境-任务栏</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>深度桌面环境-屏幕显示</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>深度桌面环境-系统守护进程</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>深度桌面环境-会话守护进程</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>深度桌面环境-会话初始化进程</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>深度文件管理器守护进程</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>深度桌面环境-锁屏服务</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>深度窗口管理器切换器</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>深度系统通知</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>深度云打印代理</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>深度系统菜单服务</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>深度商店守护进程</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>窗口匹配守护进程</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>窗口匹配守护进程DBus服务</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>SSH代理</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>用户态虚拟文件系统守护进程</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>用户态虚拟文件系统守护进程Fuse服务器</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>深度商店客户端助手进程</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>网络管理器</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus 服务</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>文件共享服务守护进程</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>X服务</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>小企鹅输入法</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>小企鹅输入法 DBus 守护进程</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>搜狗输入法守护进程</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>ShadowSocks 本地客户端</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>声音服务</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>打印守护进程</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>简单显示管理</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>系统服务管理器</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>系统服务管理器-设备管理守护进程</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>磁盘守护进程</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>账户守护进程</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>DBus 守护进程</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>鼠标事件守护进程</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>DConf服务</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>Gnome 密钥环守护进程</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>蓝牙守护进程</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>电源守护进程</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>Modem设备管理器</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>系统打印托盘服</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Chrome浏览器沙盒</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics触摸板设备守护进</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>交换空间</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>未启用</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>搜狗输入法</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation>深度窗口管理器</translation>
     </message>
 </context>
 <context>
@@ -810,6 +602,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation>系统服务</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>程序进程</translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation>系统服务</translation>
     </message>
 </context>

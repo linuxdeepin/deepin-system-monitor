@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -332,15 +320,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -362,27 +350,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -504,208 +492,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin 桌面環境－程序啟動服務</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin 桌面環境－桌面</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin 桌面環境－Polkit 代理程式</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin 桌面環境－啟動器</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin 桌面環境－Dock</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin 桌面環境－螢幕顯示</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin 桌面環境－守護程序</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin 桌面環境－工作階段守護程序</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin 桌面環境－工作階段初始化程序</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Deepin 檔案管理器守護程序</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin 桌面環境－鎖定畫面服務</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Deepin 視窗管理器切換器</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Deepin 通知</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Deepin 雲端列印代理程式</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Deepin 系統選單服務</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Deepin 商店守護程序</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>視窗配對守護程序</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>視窗配對守護程序 DBus 服務</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>SSH 代理程式</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>使用者模式虛擬檔案系統守護程序</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>使用者模式虛擬檔案系統守護程序 Fuse 伺服器</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Deepin 商店用戶端協助程序</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>網路管理器</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>Polkit DBus 服務</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>檔案共用服務守護程序</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>X 服務</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Fcitx 輸入法</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx 輸入法 DBus 守護程序</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>搜狗輸入法守護程序</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>ShadowSocks 本機用戶端</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>聲音服務</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>列印守護程序</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>LightDM 顯示管理器</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>系統服務管理器</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>系統服務管理器－裝置管理守護程序</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>磁碟守護程序</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>帳號守護程序</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>DBus 守護程序</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>滑鼠事件守護程序</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>DConf 服務</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>GNOME 鑰匙圈守護程序</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>藍牙守護程序</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>電源守護程序</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>數據機裝置管理器</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>系統列印常駐服務</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Chrome 瀏覽器沙盒</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Synaptics 觸控板裝置守護程序</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>停用</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>搜狐輸入法模組</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -809,6 +601,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

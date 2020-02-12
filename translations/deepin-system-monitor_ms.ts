@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -332,15 +320,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -362,27 +350,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -504,208 +492,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Persekitaran Desktop Deepin - Proses perkhidmatan pengawalan</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Persekitaran Desktop Deepin - Desktop</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Persekitaran Desktop Deepin - Proksi polkit</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Persekitaran Desktop Deepin - Pelancar</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Persekitaran Desktop Deepin - Labuh</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Persekitaran Desktop Deepin - Paparan skrin</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Persekitaran Desktop Deepin - Daemon</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Persekitaran Desktop Deepin - Daemon sesi</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Persekitaran Desktop Deepin - Proses pengawalan sesi</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Daemon Pengurus Fail Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Persekitaran Desktop Deepin - Perkhidmatan skrin kunci</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Penukar Pengurus Tetingkap Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Pemberitahuan Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Ejen Cetak Awan Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Perkhidmatan menu Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Daemon Kedai Deepin</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>Daemon pandanan tetingkap</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>Perkhidmatan DBus daemon padanan tetingkap</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>Ejen SSH</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>Daemon sistem fail maya mod pengguna</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Pelayan fuse bagi daemon sistem fail maya mod pengguna</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Proses pembantu bagi klien Kedai Deepin</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>Pengurus rangkaian</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>Perkhidmatan DBus PolicyKit</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>Daemon perkhidmatan perkongsian fail</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>Perkhidmatan X</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Kaedah masukan Fcitx</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Daemon DBus kaedah masukan Fcitx</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>Daemon kaedah masukan Sogou</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>Klien setempat ShadowSocks</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>Perkhidmatan bunyi</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>Daemon Cetak</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>Pengurus paparan Light</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>Pengurus perkhidmatan sistem</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>Pengurus perkhidmatan sistem - Daemon pengurusan peranti</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>Daemon cakera</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>Daemon akaun</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>Daemon DBus</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>Daemon peristiwa tetikus</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>Perkhidmatan DConf</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>Daemon keyring Gnome</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>Daemon Bluetooth</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>Daemon Kuasa</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>Pengurus peranti modem</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>Perkhidmatan talam cetak sistem</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Kotak pasir pelayar Chrome</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Daemon peranti pad sentuh Synaptics</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>Silih</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>Tidak dibenarkan</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>Kaedah masukan Sogou</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -809,6 +601,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -331,15 +319,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -361,27 +349,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -503,208 +491,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment - Serviciul de inițializare a proceselor</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Desktop</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit proxy</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Lansator</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Dock</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment - Afișaj</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Daemon</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Daemon sesiune</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - Procesul de inițializare a sesiuni</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Daemon Manager de fișiere Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Serviciul ecranului de blocare</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Manager de schimbare ferestre Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Notificări Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Agentul de printare din could Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Serviciul meniului Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Deamon Magazin Deepin</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation> Daemon Potrivire ferestre</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>Daemon Serviciu DBus pentru potrivire ferestre</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>Agent SSH</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>Daemon Sistem fișiere virtual în modul de utilizator</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Daemon Server fuse al sistemului virtual de fișiere în modul de utilizator</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Proces ajutor al clientului Magazinului Deepin</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>Manager de rețea</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus service</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>Daemon partajare de fișiere</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>Serviciul X</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Metoda de intrare Fcitx</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Daemon Metoda de intrare Fcitx</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>Daemon Metoda de intrare Sogou</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>Client local ShadowSocks</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>Serviciul de sunet</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>Daemon Printare</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>Managerul de afișaj Light</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>Manager servicii de sistem</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>Daemon management dispozitive - Manager servicii de sistem</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>Deamon Disk</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>Daemon Cont</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>Daemon DBus</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>Daemon Mouse</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>Serviciu DConf</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>Deamon chei Gnome</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>Daemon Bluetooth</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>Daemon Putere</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>Deamon Modem</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>Serviciu Sistem de print din dock</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Sandbox Chrome</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Deamon touchpad Synaptics</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>Inactiv</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -808,6 +600,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

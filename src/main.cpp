@@ -51,26 +51,26 @@ void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, con
     QByteArray local = buf.toLocal8Bit();
     const char *ts = local.constData();
     switch (type) {
-        case QtDebugMsg:
-            fprintf(stderr, "%s [Debug]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                    context.line, context.function);
-            break;
-        case QtInfoMsg:
-            fprintf(stderr, "%s [Info]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                    context.line, context.function);
-            break;
-        case QtWarningMsg:
-            fprintf(stderr, "%s [Warning]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
-                    context.file, context.line, context.function);
-            break;
-        case QtCriticalMsg:
-            fprintf(stderr, "%s [Critical]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
-                    context.file, context.line, context.function);
-            break;
-        case QtFatalMsg:
-            fprintf(stderr, "%s [Fatal]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                    context.line, context.function);
-            break;
+    case QtDebugMsg:
+        fprintf(stderr, "%s [Debug]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
+                context.line, context.function);
+        break;
+    case QtInfoMsg:
+        fprintf(stderr, "%s [Info]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
+                context.line, context.function);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "%s [Warning]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
+                context.file, context.line, context.function);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "%s [Critical]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
+                context.file, context.line, context.function);
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "%s [Fatal]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
+                context.line, context.function);
+        break;
     }
 }
 
@@ -90,9 +90,9 @@ int main(int argc, char *argv[])
         app.loadTranslator();
 
         const QString descriptionText = DApplication::translate(
-            "App.About",
-            "System Monitor is an intuitive and powerful system monitor. It can monitor the "
-            "process CPU, memory, network, disk and other status.");
+                                            "App.About",
+                                            "System Monitor is a tool to monitor realtime system load, "
+                                            "view and control processes and services running on your system.");
 
         const QString acknowledgementLink =
             "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
         QObject::connect(&app, &DApplication::newInstanceStarted, window,
                          &MainWindow::activateWindow);
         QObject::connect(&app, &QCoreApplication::aboutToQuit, window,
-                         [=]() { window->deleteLater(); });
+        [ = ]() { window->deleteLater(); });
 
         window->setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         Dtk::Widget::moveToCenter(window);

@@ -4,18 +4,18 @@
 <context>
     <name>App.About</name>
     <message>
-        <source>System Monitor is an intuitive and powerful system monitor. It can monitor the process CPU, memory, network, disk and other status.</source>
+        <source>System Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System Monitor</source>
+        <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
-        <source>Not Found</source>
+        <source>No search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,19 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show shortcut preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maximize / Restore window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -332,15 +320,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set process priority failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to change process priority</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -362,27 +350,27 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>End process failed</source>
+        <source>Failed to end proces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause process failed</source>
+        <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resume process failed</source>
+        <source>Failed to resume process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Kill process failed</source>
+        <source>Failed to kill process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknow error</source>
+        <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sending signal to process failed</source>
+        <source>Failed sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -504,208 +492,12 @@ Are you sure you want to continue?</source>
 <context>
     <name>QObject</name>
     <message>
-        <source>Deepin Desktop Environment - Process initiation service</source>
-        <translation>Deepin Desktop Environment -  Обслужване инициализацията на процесите</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Desktop</source>
-        <translation>Deepin Desktop Environment - Работен плот</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Polkit proxy</source>
-        <translation>Deepin Desktop Environment - Polkit прокси</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Launcher</source>
-        <translation>Deepin Desktop Environment - Стартер</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Dock</source>
-        <translation>Deepin Desktop Environment - Док</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Screen display</source>
-        <translation>Deepin Desktop Environment</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Daemon</source>
-        <translation>Deepin Desktop Environment - Демон</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session daemon</source>
-        <translation>Deepin Desktop Environment - Демон на сесията</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Session initialization process</source>
-        <translation>Deepin Desktop Environment - Сесия на процеса за инициализация</translation>
-    </message>
-    <message>
-        <source>Deepin File Manager daemon</source>
-        <translation>Демон на Deepin File Manager</translation>
-    </message>
-    <message>
-        <source>Deepin Desktop Environment - Lock screen service</source>
-        <translation>Deepin Desktop Environment - Услуга за заключване на екрана</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager switcher</source>
-        <translation>Превключване на мениджъра на прозорци на Deepin</translation>
-    </message>
-    <message>
-        <source>Deepin notification</source>
-        <translation>Deepin Уведомления</translation>
-    </message>
-    <message>
-        <source>Deepin Cloud Print agent</source>
-        <translation>Deepin Агент за принтиране в облак</translation>
-    </message>
-    <message>
-        <source>Deepin menu service</source>
-        <translation>Deepin Меню на услугите</translation>
-    </message>
-    <message>
-        <source>Deepin Store daemon</source>
-        <translation>Демон на Deepin Store</translation>
-    </message>
-    <message>
-        <source>Window match daemon</source>
-        <translation>Демон за подредба на прозорец</translation>
-    </message>
-    <message>
-        <source>Window match daemon DBus service</source>
-        <translation>Демон за подредба на прозорец DBus услуга</translation>
-    </message>
-    <message>
-        <source>SSH agent</source>
-        <translation>SSH агент</translation>
-    </message>
-    <message>
-        <source>User mode virtual file system daemon</source>
-        <translation>Демон на виртуалната файлова система в потребителски режим</translation>
-    </message>
-    <message>
-        <source>Fuse server of user mode virtual file system daemon</source>
-        <translation>Fuse сървър на демона за виртуалната файлова система в потребителски режим</translation>
-    </message>
-    <message>
-        <source>Helper process of Deepin Store client</source>
-        <translation>Помощен прицес на клиента за Deepin магазин</translation>
-    </message>
-    <message>
-        <source>Network manager</source>
-        <translation>Network manager</translation>
-    </message>
-    <message>
-        <source>PolicyKit DBus service</source>
-        <translation>PolicyKit DBus служба</translation>
-    </message>
-    <message>
-        <source>File sharing service daemon</source>
-        <translation>Демон на услугата за споделяне на файлове</translation>
-    </message>
-    <message>
-        <source>X service</source>
-        <translation>X служба</translation>
-    </message>
-    <message>
-        <source>Fcitx input method</source>
-        <translation>Fcitx метод за въвеждане</translation>
-    </message>
-    <message>
-        <source>Fcitx input method DBus daemon</source>
-        <translation>Fcitx  метод за въвеждане DBus демон</translation>
-    </message>
-    <message>
-        <source>Sogou input method daemon</source>
-        <translation>Sogou демон за метод за въвеждане</translation>
-    </message>
-    <message>
-        <source>ShadowSocks local client</source>
-        <translation>ShadowSocks местен клиент</translation>
-    </message>
-    <message>
-        <source>Sound service</source>
-        <translation>Управление на звука</translation>
-    </message>
-    <message>
-        <source>Print daemon</source>
-        <translation>Демон за управление на печата</translation>
-    </message>
-    <message>
-        <source>Light display manager</source>
-        <translation>Light display manager</translation>
-    </message>
-    <message>
-        <source>System service manager</source>
-        <translation>Мениджър на системните услуги</translation>
-    </message>
-    <message>
-        <source>System service manager - Device management daemon</source>
-        <translation>Мениджър на системните услуги - Демон за управление на устройства</translation>
-    </message>
-    <message>
-        <source>Disk daemon</source>
-        <translation>Демон на диска</translation>
-    </message>
-    <message>
-        <source>Account daemon</source>
-        <translation>Демон на акаунта</translation>
-    </message>
-    <message>
-        <source>DBus daemon</source>
-        <translation>DBus демон</translation>
-    </message>
-    <message>
-        <source>Mouse event daemon</source>
-        <translation>Демон за събития, свързани с мишката</translation>
-    </message>
-    <message>
-        <source>DConf service</source>
-        <translation>DConf служба</translation>
-    </message>
-    <message>
-        <source>Gnome keyring daemon</source>
-        <translation>Демон на ключодържателя на Gnome</translation>
-    </message>
-    <message>
-        <source>Bluetooth daemon</source>
-        <translation>Демон на Bluetooth</translation>
-    </message>
-    <message>
-        <source>Power daemon</source>
-        <translation>Демон на захранването</translation>
-    </message>
-    <message>
-        <source>Modem device manager</source>
-        <translation>Мениджър за модемно устройство</translation>
-    </message>
-    <message>
-        <source>System print tray service</source>
-        <translation>System print tray service</translation>
-    </message>
-    <message>
-        <source>Chrome browser sandbox</source>
-        <translation>Chrome browser sandbox</translation>
-    </message>
-    <message>
-        <source>Synaptics touchpad device daemon</source>
-        <translation>Демон на Synaptics touchpad устройства</translation>
-    </message>
-    <message>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
         <translation>Не е разрешено</translation>
-    </message>
-    <message>
-        <source>Sogou input method</source>
-        <translation>Sogou метод за въвеждане</translation>
-    </message>
-    <message>
-        <source>Deepin Window Manager</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -809,6 +601,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Services</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

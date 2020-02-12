@@ -36,7 +36,7 @@ void SystemMonitor::updateStatus()
         openproc(PROC_FILLMEM |   // memory status: read information from /proc/#pid/statm
                  PROC_FILLSTAT |  // cpu status: read information from /proc/#pid/stat
                  PROC_FILLUSR     // user status: resolve user ids to names via /etc/passwd
-        );
+                );
     static proc_t proc_info;
     memset(&proc_info, 0, sizeof(proc_t));
 
@@ -59,7 +59,7 @@ void SystemMonitor::updateStatus()
                 if (newItr.first == prevItr.first) {
                     // PID matches, calculate the cpu
                     m_processCpuPercents[newItr.second.tid] = calculateCPUPercentage(
-                        &prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
+                                                                  &prevItr.second, &newItr.second, prevTotalCpuTime, totalCpuTime);
 
                     break;
                 }
@@ -180,8 +180,8 @@ void SystemMonitor::updateStatus()
             // Add tray prefix in title if process is tray process.
             if (trayProcessMap.contains(pid)) {
                 title = QString("%1: %2")
-                            .arg(DApplication::translate("Process.Table", "Tray"))
-                            .arg(title);
+                        .arg(DApplication::translate("Process.Table", "Tray"))
+                        .arg(title);
             }
 
             QString displayName;
@@ -275,7 +275,8 @@ void SystemMonitor::updateStatus()
             m_processRecvBytes[update.record.pid] = update.record.recv_bytes;
 
             NetworkStatus status = {update.record.sent_bytes, update.record.recv_bytes,
-                                    qreal(update.record.sent_kbs), qreal(update.record.recv_kbs)};
+                                    qreal(update.record.sent_kbs), qreal(update.record.recv_kbs)
+                                   };
 
             (networkStatusSnapshot)[update.record.pid] = status;
         }
@@ -356,7 +357,7 @@ void SystemMonitor::updateStatus()
                     mergeItemInfo(item, info.cpu, info.memory, info.diskStatus, info.networkStatus);
                 } else {
                     qDebug() << QString("IMPOSSIBLE: process %1 not exist in childInfoMap")
-                                    .arg(childPid);
+                             .arg(childPid);
                 }
             }
         }
@@ -431,11 +432,11 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
     sched_param param {};
     ErrorContext ec {};
 
-    auto errfmt = [=](int err, ErrorContext &errorContext) -> ErrorContext & {
+    auto errfmt = [ = ](int err, ErrorContext & errorContext) -> ErrorContext & {
         errorContext.setCode(ErrorContext::kErrorTypeSystem);
         errorContext.setSubCode(err);
         errorContext.setErrorName(
-            DApplication::translate("Process.Priority", "Set process priority failed"));
+            DApplication::translate("Process.Priority", "Failed to change process priority"));
         QString errmsg = QString("PID: %1, Error: [%2] %3").arg(pid).arg(err).arg(strerror(err));
         errorContext.setErrorMessage(errmsg);
         return errorContext;
@@ -459,7 +460,7 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
             if (errno == EACCES || errno == EPERM) {
                 // call pkexec to change priority
                 PriorityController *ctrl = new PriorityController(pid, priority, this);
-                connect(ctrl, &PriorityController::resultReady, this, [=](int code) {
+                connect(ctrl, &PriorityController::resultReady, this, [ = ](int code) {
                     if (code == 0) {
                         Q_EMIT processPriorityChanged(pid, priority);
                     } else {
@@ -467,12 +468,12 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
                         ec.setCode(ErrorContext::kErrorTypeSystem);
                         ec.setSubCode(code);
                         ec.setErrorName(DApplication::translate("Process.Priority",
-                                                                "Set process priority failed"));
+                                                                "Failed to change process priority"));
                         ec.setErrorMessage(
                             DApplication::translate("Process.Priority", "PID: %1, Error: [%2] %3")
-                                .arg(pid)
-                                .arg(code)
-                                .arg(strerror(code)));
+                            .arg(pid)
+                            .arg(code)
+                            .arg(strerror(code)));
                         Q_EMIT priorityPromoteResultReady(ec);
                     }
                 });
@@ -498,20 +499,20 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
 {
     int rc = 0;
     ErrorContext ec = {};
-    auto errfmt = [=](decltype(errno) err, const QString &title, int p, int sig,
-                      ErrorContext &ectx) -> ErrorContext & {
+    auto errfmt = [ = ](decltype(errno) err, const QString & title, int p, int sig,
+    ErrorContext & ectx) -> ErrorContext & {
         ectx.setCode(ErrorContext::kErrorTypeSystem);
         ectx.setSubCode(err);
         ectx.setErrorName(title);
         QString errmsg = QString("PID: %1, Signal: [%2], Error: [%3] %4")
-                             .arg(p)
-                             .arg(sig)
-                             .arg(err)
-                             .arg(strerror(err));
+        .arg(p)
+        .arg(sig)
+        .arg(err)
+        .arg(strerror(err));
         ectx.setErrorMessage(errmsg);
         return ectx;
     };
-    auto emitSignal = [=](int signal) {
+    auto emitSignal = [ = ](int signal) {
         if (signal == SIGTERM) {
             Q_EMIT processEnded(pid);
         } else if (signal == SIGSTOP) {
@@ -524,32 +525,37 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
             qDebug() << "Unexpected signal in this case:" << signal;
         }
     };
-    auto fmsg = [=](int signal) -> QString {
-        if (signal == SIGTERM) {
-            return DApplication::translate("Process.Signal", "End process failed");
-        } else if (signal == SIGSTOP) {
-            return DApplication::translate("Process.Signal", "Pause process failed");
-        } else if (signal == SIGCONT) {
-            return DApplication::translate("Process.Signal", "Resume process failed");
-        } else if (signal == SIGKILL) {
-            return DApplication::translate("Process.Signal", "Kill process failed");
-        } else {
-            return DApplication::translate("Process.Signal", "Unknow error");
+    auto fmsg = [ = ](int signal) -> QString {
+        if (signal == SIGTERM)
+        {
+            return DApplication::translate("Process.Signal", "Failed to end proces");
+        } else if (signal == SIGSTOP)
+        {
+            return DApplication::translate("Process.Signal", "Failed to pause process");
+        } else if (signal == SIGCONT)
+        {
+            return DApplication::translate("Process.Signal", "Failed to resume process");
+        } else if (signal == SIGKILL)
+        {
+            return DApplication::translate("Process.Signal", "Failed to kill process");
+        } else
+        {
+            return DApplication::translate("Process.Signal", "Unknown error");
         }
     };
-    auto pctl = [=](pid_t pid, int signal) {
+    auto pctl = [ = ](pid_t pid, int signal) {
         // call pkexec to promote
         auto *ctrl = new ProcessController(pid, signal, this);
         connect(ctrl, &ProcessController::resultReady, this,
-                [this, errfmt, emitSignal, pid, signal, fmsg](int code) {
-                    if (code != 0) {
-                        ErrorContext ec = {};
-                        ec = errfmt(code, fmsg(signal), pid, signal, ec);
-                        Q_EMIT processControlResultReady(ec);
-                    } else {
-                        emitSignal(signal);
-                    }
-                });
+        [this, errfmt, emitSignal, pid, signal, fmsg](int code) {
+            if (code != 0) {
+                ErrorContext ec = {};
+                ec = errfmt(code, fmsg(signal), pid, signal, ec);
+                Q_EMIT processControlResultReady(ec);
+            } else {
+                emitSignal(signal);
+            }
+        });
         connect(ctrl, &PriorityController::finished, ctrl, &QObject::deleteLater);
         ctrl->start();
     };
@@ -582,9 +588,9 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
                 pctl(pid, signal);
             } else {
                 ec = errfmt(
-                    errno,
-                    DApplication::translate("Process.Signal", "Sending signal to process failed"),
-                    pid, SIGCONT, ec);
+                         errno,
+                         DApplication::translate("Process.Signal", "Failed sending signal to process"),
+                         pid, SIGCONT, ec);
                 Q_EMIT processControlResultReady(ec);
                 return;
             }

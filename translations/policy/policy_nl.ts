@@ -15,7 +15,7 @@
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!message" line="0" />
-			<source>Privileges is required to control other users' processes</source>
+			<source>Authentication is required to control other users' processes</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
