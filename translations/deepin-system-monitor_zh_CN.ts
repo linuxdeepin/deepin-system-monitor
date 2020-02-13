@@ -371,8 +371,8 @@ Are you sure you want to continue?</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <source>Failed sending signal to process</source>
-        <translation>发送信号至进程失败</translation>
+        <source>Failed in sending signal to process</source>
+        <translation>发送信号到进程失败</translation>
     </message>
 </context>
 <context>

@@ -589,7 +589,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
             } else {
                 ec = errfmt(
                          errno,
-                         DApplication::translate("Process.Signal", "Failed sending signal to process"),
+                         DApplication::translate("Process.Signal", "Failed in sending signal to process"),
                          pid, SIGCONT, ec);
                 Q_EMIT processControlResultReady(ec);
                 return;

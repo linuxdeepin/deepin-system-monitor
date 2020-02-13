@@ -369,7 +369,7 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed sending signal to process</source>
+        <source>Failed in sending signal to process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
