@@ -53,7 +53,7 @@ void MainWindow::displayShortcutHelpDialog()
 
     QJsonObject shortcutItem;
     shortcutItem.insert("name",
-                        DApplication::translate("Help.Shortcut.System", "Show shortcut preview"));
+                        DApplication::translate("Help.Shortcut.System", "Display shortcuts"));
     shortcutItem.insert("value", "Ctrl+Shift+?");
     sysObjArr.append(shortcutItem);
 
@@ -66,7 +66,7 @@ void MainWindow::displayShortcutHelpDialog()
     jsonGroups.append(sysObj);
 
     QJsonObject procObj;
-    procObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Process"));
+    procObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Processes"));
     QJsonArray procObjArr;
 
     QJsonObject killAppItem;
@@ -104,7 +104,7 @@ void MainWindow::displayShortcutHelpDialog()
     jsonGroups.append(procObj);
 
     QJsonObject svcObj;
-    svcObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Service"));
+    svcObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Services"));
     QJsonArray svcObjArr;
 
     QJsonObject startSvcItem;

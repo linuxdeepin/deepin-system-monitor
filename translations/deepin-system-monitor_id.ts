@@ -186,7 +186,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show shortcut preview</source>
+        <source>Display shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -595,14 +595,6 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
-    <message>
-        <source>Process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Service</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Processes</source>
         <translation type="unfinished"></translation>

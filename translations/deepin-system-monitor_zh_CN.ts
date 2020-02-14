@@ -186,7 +186,7 @@
         <translation>系统</translation>
     </message>
     <message>
-        <source>Show shortcut preview</source>
+        <source>Display shortcuts</source>
         <translation>显示快捷键预览</translation>
     </message>
 </context>
@@ -596,14 +596,6 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
-    <message>
-        <source>Process</source>
-        <translation>程序进程</translation>
-    </message>
-    <message>
-        <source>Service</source>
-        <translation>系统服务</translation>
-    </message>
     <message>
         <source>Processes</source>
         <translation>程序进程</translation>
