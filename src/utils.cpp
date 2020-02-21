@@ -744,7 +744,7 @@ QVector<CpuStruct> getCpuTimes()
 
     char buffer[1024];
     memset(buffer, 1, 1024);  // initialise the buffer with known data but not 0 (null) so that
-                              // the next while loop still works
+    // the next while loop still works
     // skip the first line
     while (buffer[0] != '\n') {
         buffer[0] = static_cast<char>(fgetc(file));

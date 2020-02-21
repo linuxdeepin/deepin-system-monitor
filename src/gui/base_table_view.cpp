@@ -22,6 +22,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     m_headerView->setSortIndicatorShown(true);
     m_headerView->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_headerView->setFocusPolicy(Qt::TabFocus);
 
     setRootIsDecorated(false);
     setItemsExpandable(false);
@@ -29,6 +30,10 @@ BaseTableView::BaseTableView(DWidget *parent)
     viewport()->setAutoFillBackground(false);
     // if set to true, qt will draw item background for you, thats not what you want here!
     setAlternatingRowColors(false);
+    setAllColumnsShowFocus(false);
+    setFocusPolicy(Qt::TabFocus);
+
+    setTabOrder(m_headerView, this);
 }
 
 void BaseTableView::paintEvent(QPaintEvent *event)
@@ -71,66 +76,92 @@ void BaseTableView::paintEvent(QPaintEvent *event)
     DTreeView::paintEvent(event);
 }
 
-// **********************************************************************************************
-// draw with this method kinda buggy, when horizontal scrollbar appears, forground text will draw
-// outside of the rectangle
-// **********************************************************************************************
-// void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &options,
-//                            const QModelIndex &index) const
-//{
-//    painter->save();
-//    painter->setRenderHint(QPainter::Antialiasing);
+void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &options,
+                            const QModelIndex &index) const
+{
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
 
-//#ifdef ENABLE_INACTIVE_DISPLAY
-//    QWidget *wnd = DApplication::activeWindow();
-//#endif
-//    DPalette::ColorGroup cg;
-//    if (!(options.state & DStyle::State_Enabled)) {
-//        cg = DPalette::Disabled;
-//    } else {
-//#ifdef ENABLE_INACTIVE_DISPLAY
-//        if (!wnd) {
-//            cg = DPalette::Inactive;
-//        } else {
-//            if (wnd->isModal()) {
-//                cg = DPalette::Inactive;
-//            } else {
-//                cg = DPalette::Active;
-//            }
-//        }
-//#else
-//        cg = DPalette::Active;
-//#endif
-//    }
+#ifdef ENABLE_INACTIVE_DISPLAY
+    QWidget *wnd = DApplication::activeWindow();
+#endif
+    DPalette::ColorGroup cg;
+    if (!(options.state & DStyle::State_Enabled)) {
+        cg = DPalette::Disabled;
+    } else {
+#ifdef ENABLE_INACTIVE_DISPLAY
+        if (!wnd) {
+            cg = DPalette::Inactive;
+        } else {
+            if (wnd->isModal()) {
+                cg = DPalette::Inactive;
+            } else {
+                cg = DPalette::Active;
+            }
+        }
+#else
+        cg = DPalette::Active;
+#endif
+    }
 
-//    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
-//    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &options);
-//    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &options);
+    auto radius = style->pixelMetric(DStyle::PM_FrameRadius, &options);
+    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &options);
 
-//    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-//    DPalette palette = dAppHelper->applicationPalette();
-//    QBrush background;
-//    QPen forground;
-//    if (index.row() % 2 == 0) {
-//        background = palette.color(cg, DPalette::AlternateBase);
-//    } else {
-//        background = palette.color(cg, DPalette::Base);
-//    }
-//    if (options.state & DStyle::State_Enabled) {
-//        if (selectedIndexes().contains(index)) {
-//            background = palette.color(cg, DPalette::Highlight);
-//        }
-//    }
+    auto palette = options.palette;
+    QBrush background;
+    if (!(index.row() & 1)) {
+        background = palette.color(cg, DPalette::AlternateBase);
+    } else {
+        background = palette.color(cg, DPalette::Base);
+    }
+    if (options.state & DStyle::State_Enabled) {
+        if (selectionModel()->isSelected(index)) {
+            background = palette.color(cg, DPalette::Highlight);
+        }
+    }
 
-//    QPainterPath path;
-//    QRect rect = options.rect;
+    // draw row background
+    QPainterPath path;
+    QRect rowRect { options.rect.x() - header()->offset(),
+                    options.rect.y(),
+                    header()->length() - header()->sectionPosition(0),
+                    options.rect.height() };
+    rowRect.setX(rowRect.x() + margin);
+    rowRect.setWidth(rowRect.width() - margin);
 
-//    rect.setX(rect.x() + margin);
-//    rect.setWidth(rect.width() - margin);
-//    path.addRoundedRect(rect, radius, radius);
-//    painter->fillPath(path, background);
+    path.addRoundedRect(rowRect, radius, radius);
+    painter->fillPath(path, background);
 
-//    painter->restore();
-//    QTreeView::drawRow(painter, options, index);
-//}
+    QTreeView::drawRow(painter, options, index);
+
+    // draw focus
+    if (hasFocus() && currentIndex().row() == index.row()) {
+        QStyleOptionFocusRect o;
+        o.QStyleOption::operator=(options);
+        o.state |= QStyle::State_KeyboardFocusChange | QStyle::State_HasFocus;
+        o.rect = style->visualRect(layoutDirection(), viewport()->rect(), rowRect);
+        style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, painter);
+    }
+
+    painter->restore();
+}
+
+void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    DTreeView::currentChanged(current, previous);
+
+    if (previous.isValid()) {
+        QRect previousRect = visualRect(previous);
+        previousRect.setX(0);
+        previousRect.setWidth(viewport()->width());
+        viewport()->update(previousRect);
+    }
+    if (current.isValid()) {
+        QRect currentRect = visualRect(current);
+        currentRect.setX(0);
+        currentRect.setWidth(viewport()->width());
+        viewport()->update(currentRect);
+    }
+}

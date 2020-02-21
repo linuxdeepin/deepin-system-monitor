@@ -56,21 +56,26 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     // =========tab button=========
     m_switchFuncTabBtnGrp = new DButtonBox(this);
     m_switchFuncTabBtnGrp->setFixedWidth(240);
-    DButtonBoxButton *procBtn = new DButtonBoxButton(
+    m_procBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Processes"), m_switchFuncTabBtnGrp);
-    procBtn->setCheckable(true);
-    procBtn->setChecked(true);
-    procBtn->setEnabled(false);
-    DButtonBoxButton *svcBtn = new DButtonBoxButton(
+    m_procBtn->setCheckable(true);
+    m_procBtn->setChecked(true);
+    m_procBtn->setEnabled(false);
+    m_procBtn->setFocusPolicy(Qt::TabFocus);
+    m_svcBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Services"), m_switchFuncTabBtnGrp);
-    svcBtn->setCheckable(true);
-    svcBtn->setEnabled(false);
+    m_svcBtn->setCheckable(true);
+    m_svcBtn->setEnabled(false);
+    m_svcBtn->setFocusPolicy(Qt::TabFocus);
     QList<DButtonBoxButton *> list;
-    list << procBtn << svcBtn;
+    list << m_procBtn << m_svcBtn;
     m_switchFuncTabBtnGrp->setButtonList(list, true);
 
-    connect(procBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT procTabButtonClicked(); });
-    connect(svcBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT serviceTabButtonClicked(); });
+    m_procBtn->installEventFilter(this);
+    m_svcBtn->installEventFilter(this);
+
+    connect(m_procBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT procTabButtonClicked(); });
+    connect(m_svcBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT serviceTabButtonClicked(); });
 
     // =========search=========
     searchEdit = new DSearchEdit(this);
@@ -92,13 +97,13 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     auto *mwnd = MainWindow::instance();
     connect(mwnd, &MainWindow::loadingStatusChanged, this, [ = ](bool loading) {
         if (loading) {
-            procBtn->setEnabled(false);
-            svcBtn->setEnabled(false);
+            m_procBtn->setEnabled(false);
+            m_svcBtn->setEnabled(false);
 
             searchEdit->setEnabled(false);
         } else {
-            procBtn->setEnabled(true);
-            svcBtn->setEnabled(true);
+            m_procBtn->setEnabled(true);
+            m_svcBtn->setEnabled(true);
 
             searchEdit->setEnabled(true);
         }
@@ -122,6 +127,18 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
             QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Tab) {
                 pressTab();
+            }
+        } else if (obj == m_procBtn) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->key() == Qt::Key_Right) {
+                m_svcBtn->setFocus();
+                return true;
+            }
+        } else if (obj == m_svcBtn) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->key() == Qt::Key_Left) {
+                m_procBtn->setFocus();
+                return true;
             }
         }
     }

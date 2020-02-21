@@ -152,17 +152,21 @@ void ProcessPageWidget::initUI()
     m_appButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_appButton->setIconSize(QSize(26, 24));
     m_appButton->setCheckable(true);
-    m_appButton->setFocusPolicy(Qt::NoFocus);
+    m_appButton->setFocusPolicy(Qt::TabFocus);
 
     m_myProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_myProcButton->setIconSize(QSize(26, 24));
     m_myProcButton->setCheckable(true);
-    m_myProcButton->setFocusPolicy(Qt::NoFocus);
+    m_myProcButton->setFocusPolicy(Qt::TabFocus);
 
     m_allProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_allProcButton->setIconSize(QSize(26, 24));
     m_allProcButton->setCheckable(true);
-    m_allProcButton->setFocusPolicy(Qt::NoFocus);
+    m_allProcButton->setFocusPolicy(Qt::TabFocus);
+
+    m_appButton->installEventFilter(this);
+    m_myProcButton->installEventFilter(this);
+    m_allProcButton->installEventFilter(this);
 
     changeIconTheme(dAppHelper->themeType());
 
@@ -263,6 +267,36 @@ void ProcessPageWidget::initConnections()
             m_procViewModeSummary->setPalette(palette);
         }
     });
+}
+
+bool ProcessPageWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        if (obj == m_appButton) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->key() == Qt::Key_Right) {
+                m_myProcButton->setFocus();
+                return true;
+            }
+        } else if (obj == m_myProcButton) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->key() == Qt::Key_Right) {
+                m_allProcButton->setFocus();
+                return true;
+            } else if (kev->key() == Qt::Key_Left) {
+                m_appButton->setFocus();
+                return true;
+            }
+        } else if (obj == m_allProcButton) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->key() == Qt::Key_Left) {
+                m_myProcButton->setFocus();
+                return true;
+            }
+        }
+    }
+
+    return DFrame::eventFilter(obj, event);
 }
 
 void ProcessPageWidget::paintEvent(QPaintEvent *)

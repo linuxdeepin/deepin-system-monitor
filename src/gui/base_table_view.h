@@ -2,6 +2,7 @@
 #define BASE_TABLE_VIEW_H
 
 #include <DTreeView>
+#include <QHeaderView>
 
 #include "base_header_view.h"
 #include "base_item_delegate.h"
@@ -17,8 +18,9 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    //    void drawRow(QPainter *painter, const QStyleOptionViewItem &options,
-    //                 const QModelIndex &index) const override;
+    void drawRow(QPainter *painter, const QStyleOptionViewItem &options,
+                 const QModelIndex &index) const override;
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
 private:
     BaseItemDelegate *m_itemDelegate {nullptr};

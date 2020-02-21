@@ -23,6 +23,8 @@ public:
     explicit ProcessTableView(DWidget *parent = nullptr);
     ~ProcessTableView() override;
 
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 public Q_SLOTS:
     void endProcess();
     void pauseProcess();

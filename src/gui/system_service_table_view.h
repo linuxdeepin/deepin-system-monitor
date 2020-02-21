@@ -26,6 +26,8 @@ public:
 
     SystemServiceTableModel *getSourceModel() const;
 
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 public Q_SLOTS:
     void startService();
     void stopService();

@@ -35,6 +35,8 @@ public:
     void initUI();
     void initConnections();
 
+    bool eventFilter(QObject *obj, QEvent *event);
+
 public Q_SLOTS:
     void switchDisplayMode(DisplayMode mode);
 

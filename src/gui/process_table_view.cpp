@@ -41,6 +41,8 @@ static const char *kSettingsOption_ProcessTableHeaderState = "process_table_head
 ProcessTableView::ProcessTableView(DWidget *parent)
     : BaseTableView(parent)
 {
+    installEventFilter(this);
+
     m_model = new ProcessTableModel(this);
     m_proxyModel = new ProcessSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
@@ -66,6 +68,29 @@ ProcessTableView::ProcessTableView(DWidget *parent)
 ProcessTableView::~ProcessTableView()
 {
     saveSettings();
+}
+
+bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == this) {
+        if (event->type() == QEvent::KeyPress) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->modifiers() & Qt::CTRL && kev->key() == Qt::Key_M) {
+                if (this->hasFocus()) {
+                    if (selectedIndexes().size() > 0) {
+                        auto index = selectedIndexes()[0];
+                        auto rect = visualRect(index);
+                        displayProcessTableContextMenu({rect.x() + rect.width() / 2, rect.y() + rect.height() / 2});
+                        return true;
+                    }
+                } else if (header()->hasFocus()) {
+                    displayProcessTableHeaderContextMenu({header()->sectionSize(header()->logicalIndexAt(0)) / 2, header()->height() / 2});
+                    return true;
+                }
+            }
+        }
+    }
+    return BaseTableView::eventFilter(obj, event);
 }
 
 void ProcessTableView::endProcess()

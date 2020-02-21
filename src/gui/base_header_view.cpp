@@ -61,16 +61,15 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
 //    cg = DPalette::Current;
 #endif
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
+    auto palette = DApplicationHelper::instance()->applicationPalette();
 
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
     QBrush bgBrush(palette.color(cg, DPalette::Base));
 
     QStyleOptionHeader option;
     initStyleOption(&option);
-    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
+    auto radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
 
     QRect rect = viewport()->rect();
     QRectF clipRect(rect.x(), rect.y(), rect.width(), rect.height() * 2);
@@ -82,8 +81,17 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
 
     painter.fillPath(clipPath, bgBrush);
 
-    painter.restore();
     DHeaderView::paintEvent(event);
+    painter.restore();
+
+    // draw focus
+    if (hasFocus()) {
+        QStyleOptionFocusRect o;
+        o.QStyleOption::operator=(option);
+        QRect focusRect {rect.x() - offset(), rect.y(), length() - sectionPosition(0), rect.height()};
+        o.rect = style->visualRect(layoutDirection(), rect, focusRect);
+        style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, &painter);
+    }
 }
 
 void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
@@ -144,10 +152,12 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     QRect textRect;
     if (sortIndicatorSection() == logicalIndex) {
         textRect = {contentRect.x() + margin, contentRect.y(),
-                    contentRect.width() - margin * 3 - kDropDownSize.width(), contentRect.height()};
+                    contentRect.width() - margin * 3 - kDropDownSize.width(), contentRect.height()
+                   };
     } else {
         textRect = {contentRect.x() + margin, contentRect.y(), contentRect.width() - margin,
-                    contentRect.height()};
+                    contentRect.height()
+                   };
     }
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     int align = model()->headerData(logicalIndex, orientation(), Qt::TextAlignmentRole).toInt();

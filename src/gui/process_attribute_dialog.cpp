@@ -139,7 +139,6 @@ void ProcessAttributeDialog::initUI()
 
     m_procNameText = new DTextBrowser(wnd);
     m_procNameText->setFrameStyle(QFrame::NoFrame);
-    m_procNameText->setFocusPolicy(Qt::ClickFocus);
     m_procNameText->setFixedWidth(kPreferedTextWidth);
     m_procNameText->viewport()->setBackgroundRole(QPalette::Window);
     m_procNameText->setWordWrapMode(QTextOption::WrapAnywhere);
@@ -147,7 +146,6 @@ void ProcessAttributeDialog::initUI()
 
     m_procCmdText = new DTextBrowser(wnd);
     m_procCmdText->setFrameStyle(QFrame::NoFrame);
-    m_procCmdText->setFocusPolicy(Qt::ClickFocus);
     m_procCmdText->setFixedWidth(kPreferedTextWidth);
     m_procCmdText->viewport()->setBackgroundRole(QPalette::Window);
     m_procCmdText->setWordWrapMode(QTextOption::WrapAnywhere);
@@ -155,7 +153,6 @@ void ProcessAttributeDialog::initUI()
 
     m_procStartText = new DTextBrowser(wnd);
     m_procStartText->setFrameStyle(QFrame::NoFrame);
-    m_procStartText->setFocusPolicy(Qt::ClickFocus);
     m_procStartText->setFixedWidth(kPreferedTextWidth);
     m_procStartText->viewport()->setBackgroundRole(QPalette::Window);
     m_procStartText->setWordWrapMode(QTextOption::WrapAnywhere);
@@ -215,8 +212,8 @@ void ProcessAttributeDialog::initUI()
             m_procNameText->setText(name);
             m_procCmdText->setText(QUrl::fromPercentEncoding(cmdline.toUtf8()));
             m_procStartText->setText(QFileInfo(QString("/proc/%1").arg(processId))
-                                         .created()
-                                         .toString("yyyy-MM-dd hh:mm:ss"));
+                                     .created()
+                                     .toString("yyyy-MM-dd hh:mm:ss"));
             break;
         }
     }

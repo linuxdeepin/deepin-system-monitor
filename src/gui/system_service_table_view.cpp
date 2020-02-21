@@ -32,6 +32,8 @@ static bool defer_initialized {false};
 SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     : BaseTableView(parent)
 {
+    installEventFilter(this);
+
     // >>> table model
     m_ProxyModel = new SystemServiceSortFilterProxyModel(this);
     m_Model = new SystemServiceTableModel(this);
@@ -495,6 +497,29 @@ void SystemServiceTableView::refresh()
 SystemServiceTableModel *SystemServiceTableView::getSourceModel() const
 {
     return m_Model;
+}
+
+bool SystemServiceTableView::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == this) {
+        if (event->type() == QEvent::KeyPress) {
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->modifiers() & Qt::CTRL && kev->key() == Qt::Key_M) {
+                if (this->hasFocus()) {
+                    if (selectedIndexes().size() > 0) {
+                        auto index = selectedIndexes()[0];
+                        auto rect = visualRect(index);
+                        displayTableContextMenu({rect.x() + rect.width() / 2, rect.y() + rect.height() / 2});
+                        return true;
+                    }
+                } else if (header()->hasFocus()) {
+                    displayHeaderContextMenu({header()->sectionSize(header()->logicalIndexAt(0)) / 2, header()->height() / 2});
+                    return true;
+                }
+            }
+        }
+    }
+    return BaseTableView::eventFilter(obj, event);
 }
 
 // gui-thread

@@ -16,8 +16,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-static const QSize kIconSize {24, 24};
-
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
@@ -61,68 +59,43 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 #endif
     }
 
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
-    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    auto spacing = style->pixelMetric(DStyle::PM_ContentsSpacing, &option);
+    auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
+    auto palette = DApplicationHelper::instance()->applicationPalette();
+
     QPen forground;
-    QBrush background;
-
     if (index.data(Qt::ForegroundRole).isValid()) {
         forground.setColor(qvariant_cast<QBrush>(index.data(Qt::ForegroundRole)).color());
     } else {
         forground.setColor(palette.color(cg, DPalette::Text));
     }
-    if (opt.features & QStyleOptionViewItem::Alternate) {
-        background = palette.color(cg, DPalette::AlternateBase);
-    } else {
-        background = palette.color(cg, DPalette::Base);
-    }
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             forground.setColor(palette.color(cg, DPalette::TextLively));
-            background = palette.color(cg, DPalette::Highlight);
         }
     }
 
     QRect rect = opt.rect;
     QFontMetrics fm(opt.font);
-    QPainterPath path, clipPath;
     QRect textRect = rect;
 
     switch (opt.viewItemPosition) {
     case QStyleOptionViewItem::Beginning: {
         rect.setX(rect.x() + margin);  // left margin
-
-        QPainterPath rectPath, roundedPath;
-        roundedPath.addRoundedRect(rect.x(), rect.y(), rect.width() * 2, rect.height(), radius,
-                                   radius);
-        rectPath.addRect(rect.x() + rect.width(), rect.y(), rect.width(), rect.height());
-        clipPath = roundedPath.subtracted(rectPath);
-        painter->setClipPath(clipPath);
-        path.addRect(rect);
     } break;
     case QStyleOptionViewItem::Middle: {
-        path.addRect(rect);
+        // whole rect
     } break;
     case QStyleOptionViewItem::End: {
         rect.setWidth(rect.width() - margin);  // right margin
-
-        QPainterPath rectPath, roundedPath;
-        roundedPath.addRoundedRect(rect.x() - rect.width(), rect.y(), rect.width() * 2,
-                                   rect.height(), radius, radius);
-        rectPath.addRect(rect.x() - rect.width(), rect.y(), rect.width(), rect.height());
-        clipPath = roundedPath.subtracted(rectPath);
-        painter->setClipPath(clipPath);
-        path.addRect(rect);
     } break;
     case QStyleOptionViewItem::OnlyOne: {
         rect.setX(rect.x() + margin);
         rect.setWidth(rect.width() - margin);
-        path.addRoundedRect(rect, radius, radius);
     } break;
     default: {
         painter->restore();
@@ -131,28 +104,29 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
     }
 
-    painter->fillPath(path, background);
-
     QString text;
     QRect iconRect;
     if (opt.viewItemPosition == QStyleOptionViewItem::Beginning ||
             opt.viewItemPosition == QStyleOptionViewItem::OnlyOne) {
         if (opt.features & QStyleOptionViewItem::HasDecoration) {
             textRect = rect;
-            textRect.setX(textRect.x() + margin * 2 + kIconSize.width());
+            // | margin - icon - spacing - text - margin |
+            textRect.setX(textRect.x() + margin + spacing + iconSize);
             textRect.setWidth(textRect.width() - margin);
             text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
 
             iconRect = rect;
             iconRect.setX(rect.x() + margin);
-            iconRect.setWidth(kIconSize.width());
+            iconRect.setWidth(iconSize);
         } else {
+            // | margin - text - margin |
             textRect = rect;
             textRect.setX(textRect.x() + margin);
             textRect.setWidth(textRect.width() - margin);
             text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
         }
     } else {
+        // | margin - text - margin |
         textRect = rect;
         textRect.setX(textRect.x() + margin);
         textRect.setWidth(textRect.width() - margin);
@@ -197,11 +171,13 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
         initStyleOption(&opt, index);
 
         auto margin = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsMargins);
+        auto spacing = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsSpacing);
+        auto iconSize = view->style()->pixelMetric(DStyle::PM_ListViewIconSize);
 
         // textRect
         if (index.column() == 0) {
             if (opt.features & QStyleOptionViewItem::HasDecoration) {
-                textRect.setX(textRect.x() + margin * 3 + kIconSize.width());
+                textRect.setX(textRect.x() + margin * 2 + spacing + iconSize);
             } else {
                 textRect.setX(textRect.x() + 2 * margin);
             }
@@ -248,8 +224,6 @@ void BaseItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QMode
         option->displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
     option->textElideMode = Qt::ElideRight;
     option->features = QStyleOptionViewItem::HasDisplay;
-    if (index.row() % 2 == 0)
-        option->features |= QStyleOptionViewItem::Alternate;
     if (index.data(Qt::DisplayRole).isValid())
         option->text = index.data().toString();
 

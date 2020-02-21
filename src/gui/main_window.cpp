@@ -166,7 +166,7 @@ void MainWindow::initUI()
     titlebar()->setCustomWidget(m_toolbar);
     titlebar()->setMenuDisabled(true);
 
-    DMenu *menu = new DMenu();
+    DMenu *menu = new DMenu(this);
     titlebar()->setMenu(menu);
 
     // kill process
