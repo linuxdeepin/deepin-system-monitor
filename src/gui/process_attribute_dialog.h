@@ -36,6 +36,7 @@ private:
     DWidget *m_frame {nullptr};
     DShadowLine *m_tbShadow {nullptr};
 
+    DLabel *m_appNameLabel {nullptr};
     DLabel *m_procNameLabel {nullptr};
     DTextBrowser *m_procNameText {nullptr};
     DLabel *m_procCmdLabel {nullptr};
@@ -46,6 +47,7 @@ private:
     int m_maxLabelWidth {0};
     int m_maxTextWidth {0};
     int m_margin {0};
+    int m_cmdh {0};
 
     pid_t m_pid;
 };

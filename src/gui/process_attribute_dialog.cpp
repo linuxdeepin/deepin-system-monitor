@@ -26,6 +26,9 @@
 using namespace Utils;
 
 static const int kPreferedTextWidth = 200;
+static const int kAppIconSize = 80;
+static const int kIconToNameSpace = 10;
+static const int kNameToGridSpace = 16;
 
 ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid, QWidget *parent)
     : DMainWindow(parent)
@@ -108,14 +111,14 @@ void ProcessAttributeDialog::initUI()
     vlayout->addWidget(appIcon, 0, Qt::AlignVCenter | Qt::AlignHCenter);
 
     // spacing
-    vlayout->addSpacing(10);
+    vlayout->addSpacing(kIconToNameSpace);
 
-    auto *appNameLabel = new DLabel(this);
-    DFontSizeManager::instance()->bind(appNameLabel, DFontSizeManager::T5, QFont::Bold);
-    vlayout->addWidget(appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    m_appNameLabel = new DLabel(this);
+    DFontSizeManager::instance()->bind(m_appNameLabel, DFontSizeManager::T5, QFont::Bold);
+    vlayout->addWidget(m_appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     // spacing
-    vlayout->addSpacing(16);
+    vlayout->addSpacing(kNameToGridSpace);
 
     auto *wnd = new QWidget(m_frame);
     wnd->setAutoFillBackground(false);
@@ -166,7 +169,6 @@ void ProcessAttributeDialog::initUI()
 
     grid->addWidget(m_procStartLabel, 2, 0, Qt::AlignTop | Qt::AlignRight);
     grid->addWidget(m_procStartText, 2, 1, Qt::AlignTop | Qt::AlignLeft);
-
     wnd->setLayout(grid);
     vlayout->addWidget(wnd, 0, Qt::AlignCenter);
 
@@ -203,11 +205,11 @@ void ProcessAttributeDialog::initUI()
             QString cmdline = Utils::getProcessCmdline(processId);
             QString name = getProcessName(&i.second, cmdline);
             std::string desktopFile = getProcessDesktopFile(m_pid, name, cmdline, trayProcessMap);
-            QPixmap icon = getProcessIcon(m_pid, desktopFile, findWindowTitle, 80);
+            QPixmap icon = getProcessIcon(m_pid, desktopFile, findWindowTitle, kAppIconSize);
             QString displayName = getDisplayNameFromName(name, desktopFile, false);
 
             appIcon->setPixmap(icon);
-            appNameLabel->setText(displayName);
+            m_appNameLabel->setText(displayName);
 
             m_procNameText->setText(name);
             m_procCmdText->setText(QUrl::fromPercentEncoding(cmdline.toUtf8()));
@@ -217,15 +219,13 @@ void ProcessAttributeDialog::initUI()
             break;
         }
     }
-
     m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
 }
 
 void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
-{
+{   
     DMainWindow::resizeEvent(event);
-
     if (m_settings) {
         m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
         m_settings->setOption(kSettingKeyProcessAttributeDialogHeight, height());
@@ -235,6 +235,20 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
         m_tbShadow->setFixedWidth(m_frame->size().width());
         m_tbShadow->raise();
         m_tbShadow->show();
+    }
+
+    if (m_procCmdText) {
+        QFontMetrics fm(m_procCmdText->font());
+        m_cmdh = m_frame->height()
+                - (kAppIconSize + kIconToNameSpace + m_appNameLabel->height() + kNameToGridSpace + m_margin * 2)
+                - m_procNameText->height() - m_procStartText->height();
+        int singleline = fm.size(Qt::TextSingleLine, m_procCmdText->toPlainText()).height();
+        m_cmdh = (qFloor(m_cmdh * 1.0 / singleline) - 1) * singleline;
+
+        if (m_cmdh > m_procCmdText->document()->size().height()) {
+            m_cmdh = int(m_procCmdText->document()->size().height());
+        }
+        m_procCmdText->setFixedHeight(m_cmdh);
     }
 }
 
@@ -250,6 +264,7 @@ void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 
 bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
 {
+
     if (event->type() == QEvent::Show) {
         if (obj == m_procNameLabel || obj == m_procCmdLabel || obj == m_procStartLabel) {
             auto *ctl = dynamic_cast<DLabel *>(obj);
@@ -257,7 +272,7 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
             int max = fm.size(Qt::TextSingleLine, ctl->text()).width();
             ctl->setFixedWidth(max);
             ctl->setFixedHeight(ctl->height());
-        } else if (obj == m_procNameText || obj == m_procCmdText || obj == m_procStartText) {
+        } else if (obj == m_procNameText || obj == m_procStartText || obj == m_procCmdText) {
             auto *ctl = dynamic_cast<DTextBrowser *>(obj);
             QFontMetrics fm(ctl->font());
             int max = fm.size(Qt::TextSingleLine, ctl->toPlainText()).width();
@@ -265,7 +280,7 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
                 max = kPreferedTextWidth;
             }
             ctl->setFixedWidth(max);
-            ctl->setFixedHeight(int(ctl->document()->size().height()));
+            ctl->setMaximumHeight(int(ctl->document()->size().height()));
         }
     } else if (event->type() == QEvent::Leave) {
         if (obj == m_procNameText) {
