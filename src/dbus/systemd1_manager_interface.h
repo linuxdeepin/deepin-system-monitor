@@ -199,6 +199,80 @@ public Q_SLOTS:  // METHODS
         return {ec, state};
     }
 
+    // =========================================================================
+    // TODO: half baked!!
+    // call callWithArgumentList directly without calling CheckAuthorization
+    // (from org.freedesktop.PolicyKit1.Authority Interface) to auth the user
+    // will always end up failing with an "interactive authentication needed" error.
+    // considering sysv type services need a different way to enable/disable
+    // (e.g. run /lib/systemd/systemd-sysv-install script as root).
+    // for simplicity, we use pkexec+systemctl to do the job as now.
+    // =========================================================================
+    //
+    // params: asbb
+    // return: ba(sss)
+    inline QPair<ErrorContext, EnableUnitFilesResult> EnableUnitFiles(const QStringList &nlist,
+                                                                      bool runtime = false, bool force = true)
+    {
+        ErrorContext ec {};
+        EnableUnitFilesResult result {};
+        QList<QVariant> args;
+        args << nlist << runtime << force;
+
+        QDBusMessage reply = callWithArgumentList(QDBus::Block, "EnableUnitFiles", args);
+
+        if (reply.type() == QDBusMessage::ErrorMessage) {
+            ec.setCode(ErrorContext::kErrorTypeDBus);
+            ec.setSubCode(lastError().type());
+            ec.setErrorName(reply.errorName());
+            ec.setErrorMessage(reply.errorMessage());
+        } else {
+            Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            if (reply.signature() == "ba(sss)") {
+                // unfinished...
+            }
+        }
+
+        return {ec, result};
+    }
+
+    // =========================================================================
+    // TODO: half baked!!
+    // call callWithArgumentList directly without calling CheckAuthorization
+    // (from org.freedesktop.PolicyKit1.Authority Interface) to auth the user
+    // will always end up failing with an "interactive authentication needed" error.
+    // considering sysv type services need a different way to enable/disable
+    // (e.g. run /lib/systemd/systemd-sysv-install script as root).
+    // for simplicity, we use pkexec+systemctl to do the job as now.
+    // =========================================================================
+    //
+    // params: asb
+    // return: a(sss)
+    inline QPair<ErrorContext, DisableUnitFilesResult> DisableUnitFiles(const QStringList &nlist,
+                                                                        bool runtime = false)
+    {
+        ErrorContext ec;
+        DisableUnitFilesResult result {};
+        QList<QVariant> args;
+        args << nlist << runtime;
+
+        QDBusMessage reply = callWithArgumentList(QDBus::Block, "DisableUnitFiles", args);
+
+        if (reply.type() == QDBusMessage::ErrorMessage) {
+            ec.setCode(ErrorContext::kErrorTypeDBus);
+            ec.setSubCode(lastError().type());
+            ec.setErrorName(reply.errorName());
+            ec.setErrorMessage(reply.errorMessage());
+        } else {
+            Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            if (reply.signature() == "a(sss)") {
+                // unfinished...
+            }
+        }
+
+        return {ec, result};
+    }
+
 Q_SIGNALS:  // SIGNALS
 };
 

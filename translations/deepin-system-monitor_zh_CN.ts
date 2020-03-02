@@ -78,6 +78,21 @@
     </message>
 </context>
 <context>
+    <name>DBus.Unit.Startup.Mode</name>
+    <message>
+        <source>N/A</source>
+        <translation>不适用</translation>
+    </message>
+    <message>
+        <source>Auto</source>
+        <translation>自动</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手动</translation>
+    </message>
+</context>
+<context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
@@ -502,6 +517,17 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Service.Action.Set.Startup.Mode</name>
+    <message>
+        <source>Error: Failed to set service startup type due to sub process crashed.</source>
+        <translation>错误：因子进程崩溃而无法完成设置进程启动方式</translation>
+    </message>
+    <message>
+        <source>Failed to set service startup type</source>
+        <translation>设置进程启动方式失败</translation>
+    </message>
+</context>
+<context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
@@ -533,6 +559,18 @@ Are you sure you want to continue?</source>
     <message>
         <source>Restart</source>
         <translation>重新启动</translation>
+    </message>
+    <message>
+        <source>Set startup type</source>
+        <translation>设置启动方式</translation>
+    </message>
+    <message>
+        <source>Auto</source>
+        <translation>自动</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手动</translation>
     </message>
 </context>
 <context>
@@ -566,6 +604,11 @@ Are you sure you want to continue?</source>
     <message>
         <source>PID</source>
         <translation>进程号</translation>
+    </message>
+    <message>
+        <source>Startup type</source>
+        <extracomment>service startup mode</extracomment>
+        <translation>启动方式</translation>
     </message>
 </context>
 <context>

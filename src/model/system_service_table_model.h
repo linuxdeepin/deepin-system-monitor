@@ -6,18 +6,24 @@
 #include <QList>
 
 #include "service/system_service_entry.h"
+#include "dbus/dbus_common.h"
+#include "service/service_manager.h"
 
-constexpr const char* kSystemServiceName = QT_TRANSLATE_NOOP("Service.Table.Header", "Name");
-constexpr const char* kSystemServiceLoadState = QT_TRANSLATE_NOOP("Service.Table.Header", "Load");
-constexpr const char* kSystemServiceActiveState =
+using namespace DBus::Common;
+
+constexpr const char *kSystemServiceName = QT_TRANSLATE_NOOP("Service.Table.Header", "Name");
+constexpr const char *kSystemServiceLoadState = QT_TRANSLATE_NOOP("Service.Table.Header", "Load");
+constexpr const char *kSystemServiceActiveState =
     QT_TRANSLATE_NOOP("Service.Table.Header", "Active");
 //: sub state (running status)
-constexpr const char* kSystemServiceSubState = QT_TRANSLATE_NOOP("Service.Table.Header", "Sub");
+constexpr const char *kSystemServiceSubState = QT_TRANSLATE_NOOP("Service.Table.Header", "Sub");
 //: state
-constexpr const char* kSystemServiceState = QT_TRANSLATE_NOOP("Service.Table.Header", "State");
-constexpr const char* kSystemServiceDescription =
+constexpr const char *kSystemServiceState = QT_TRANSLATE_NOOP("Service.Table.Header", "State");
+//: service startup mode
+constexpr const char *kSystemServiceStartupMode = QT_TRANSLATE_NOOP("Service.Table.Header", "Startup type");
+constexpr const char *kSystemServiceDescription =
     QT_TRANSLATE_NOOP("Service.Table.Header", "Description");
-constexpr const char* kSystemServicePID = QT_TRANSLATE_NOOP("Service.Table.Header", "PID");
+constexpr const char *kSystemServicePID = QT_TRANSLATE_NOOP("Service.Table.Header", "PID");
 
 class SystemServiceTableModel : public QAbstractTableModel
 {
@@ -33,20 +39,21 @@ public:
         kSystemServiceStateColumn,
         kSystemServiceDescriptionColumn,
         kSystemServicePIDColumn,
+        kSystemServiceStartupModeColumn,
 
         kSystemServiceTableColumnCount
     };
 
-    explicit SystemServiceTableModel(QObject* parent = nullptr);
+    explicit SystemServiceTableModel(QObject *parent = nullptr);
 
-    inline void setServiceEntryList(const QList<SystemServiceEntry>& list)
+    inline void setServiceEntryList(const QList<SystemServiceEntry> &list)
     {
 #ifdef ALT_METHOD
         QHash<QString, SystemServiceEntry> hash;
         QList<int> rmlist;
         QHash<QString, SystemServiceEntry> saved;
 
-        for (auto& entry : list) {
+        for (auto &entry : list) {
             hash[entry.getId()] = entry;
         }
 
@@ -71,7 +78,7 @@ public:
         }
 
         // add
-        for (auto& entry : list) {
+        for (auto &entry : list) {
             if (saved.contains(entry.getId())) {
                 continue;
             } else {
@@ -87,7 +94,7 @@ public:
         endResetModel();
     }
 
-    inline SystemServiceEntry getSystemServiceEntry(const QModelIndex& index) const
+    inline SystemServiceEntry getSystemServiceEntry(const QModelIndex &index) const
     {
         if (index.isValid() && index.row() >= 0 && index.row() < m_ServiceEntryList.size())
             return m_ServiceEntryList.at(index.row());
@@ -96,7 +103,7 @@ public:
         }
     }
 
-    inline QModelIndex insertServiceEntry(const SystemServiceEntry& entry)
+    inline QModelIndex insertServiceEntry(const SystemServiceEntry &entry)
     {
         int row = m_ServiceEntryList.size();
 
@@ -107,7 +114,7 @@ public:
         return index(row, 0);
     }
 
-    inline void removeServiceEntry(const QModelIndex& entryIndex)
+    inline void removeServiceEntry(const QModelIndex &entryIndex)
     {
         if (entryIndex.row() >= 0 && entryIndex.row() < m_ServiceEntryList.size()) {
             beginRemoveRows({}, entryIndex.row(), entryIndex.row());
@@ -129,10 +136,10 @@ public:
             dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
 
-    inline QModelIndex checkServiceEntryExists(const QString& name)
+    inline QModelIndex checkServiceEntryExists(const QString &name)
     {
         int idx = 0;
-        foreach (const auto& entry, m_ServiceEntryList) {
+        foreach (const auto &entry, m_ServiceEntryList) {
             if (name == entry.getId())
                 return index(idx, 0);
             idx++;
@@ -140,12 +147,25 @@ public:
         return {};
     }
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    inline QString getUnitFileState(const QModelIndex &index)
+    {
+        return m_ServiceEntryList.at(index.row()).getState();
+    }
+
+    inline QString getUnitFileName(const QModelIndex &index)
+    {
+        return m_ServiceEntryList.at(index.row()).getId();
+    }
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const override;
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+private Q_SLOTS:
+    void updateServiceState(const QString &sname, const QString &state);
 
 private:
     QList<SystemServiceEntry> m_ServiceEntryList;

@@ -78,6 +78,21 @@
     </message>
 </context>
 <context>
+    <name>DBus.Unit.Startup.Mode</name>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
@@ -500,6 +515,17 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Service.Action.Set.Startup.Mode</name>
+    <message>
+        <source>Error: Failed to set service startup type due to sub process crashed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to set service startup type</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
@@ -530,6 +556,18 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set startup type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -564,6 +602,11 @@ Are you sure you want to continue?</source>
     <message>
         <source>PID</source>
         <translation type="unfinished">מזהה תהליך</translation>
+    </message>
+    <message>
+        <source>Startup type</source>
+        <extracomment>service startup mode</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -32,6 +32,7 @@ public Q_SLOTS:
     void startService();
     void stopService();
     void restartService();
+    void setServiceStartupMode(bool autoStart);
     void refresh();
 
 protected Q_SLOTS:

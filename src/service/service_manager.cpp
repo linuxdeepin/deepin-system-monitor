@@ -1,9 +1,14 @@
+﻿#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <QAbstractItemModel>
 #include <QHash>
 #include <QList>
 #include <QString>
 #include <QtDBus>
 
+#include <DApplication>
 #include <DLog>
 
 #include "dbus/dbus_common.h"
@@ -16,6 +21,9 @@
 #include "dbus/unit_info.h"
 #include "service/system_service_entry.h"
 #include "service_manager.h"
+
+#define BIN_PKEXEC_PATH "/usr/bin/pkexec"
+#define BIN_SYSTEMCTL_PATH "/usr/bin/systemctl"
 
 DCORE_USE_NAMESPACE
 using namespace DBus::Common;
@@ -213,10 +221,10 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
             while (!ins.atEnd()) {
                 QRegularExpressionMatch match;
                 if (line.contains(
-                        QRegularExpression("^\\s*(Description)\\s*\\=\\s*(.+)\\s*$",
-                                           QRegularExpression::CaseInsensitiveOption |
+                            QRegularExpression("^\\s*(Description)\\s*\\=\\s*(.+)\\s*$",
+                                               QRegularExpression::CaseInsensitiveOption |
                                                QRegularExpression::ExtendedPatternSyntaxOption),
-                        &match)) {
+                            &match)) {
                     if (match.hasMatch())
                         entry.setDescription(match.captured(2).trimmed());
                 }
@@ -236,9 +244,9 @@ QString ServiceManager::normalizeServiceId(const QString &id, const QString &par
         if (buf.lastIndexOf('@') > 0) {
             if (!param.isEmpty())
                 buf = QString("%1%2%3")
-                          .arg(buf.left(buf.lastIndexOf('@') + 1))
-                          .arg(param)
-                          .arg(UnitTypeServiceSuffix);
+                      .arg(buf.left(buf.lastIndexOf('@') + 1))
+                      .arg(param)
+                      .arg(UnitTypeServiceSuffix);
         }
     } else {
         if (buf.endsWith('@') && !param.isEmpty()) {
@@ -270,6 +278,9 @@ QPair<ErrorContext, bool> ServiceManager::startService(SystemServiceEntry &entry
     QDBusObjectPath o = oResult.second;
     qDebug() << "object path:" << o.path();
 
+    if (entry.getId().endsWith("@"))
+        return {ec, true};
+
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
     if (ec) {
@@ -277,10 +288,7 @@ QPair<ErrorContext, bool> ServiceManager::startService(SystemServiceEntry &entry
         return {ec, false};
     }
     o = oResult.second;
-    ec = updateServiceEntry(entry, o);
-    if (ec) {
-        return {ec, false};
-    }
+    updateServiceEntry(entry, o);
 
     return {ec, true};
 }
@@ -308,6 +316,9 @@ QPair<ErrorContext, bool> ServiceManager::stopService(SystemServiceEntry &entry)
         return {ec, true};
     }
 
+    if (entry.getId().endsWith("@"))
+        return {ec, true};
+
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
     if (ec) {
@@ -315,10 +326,7 @@ QPair<ErrorContext, bool> ServiceManager::stopService(SystemServiceEntry &entry)
         return {ec, false};
     }
     o = oResult.second;
-    ec = updateServiceEntry(entry, o);
-    if (ec) {
-        return {ec, false};
-    }
+    updateServiceEntry(entry, o);
 
     return {ec, true};
 }
@@ -342,6 +350,9 @@ QPair<ErrorContext, bool> ServiceManager::restartService(SystemServiceEntry &ent
     QDBusObjectPath o = oResult.second;
     qDebug() << "object path:" << o.path();
 
+    if (entry.getId().endsWith("@"))
+        return {};
+
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
     if (ec) {
@@ -349,15 +360,139 @@ QPair<ErrorContext, bool> ServiceManager::restartService(SystemServiceEntry &ent
         return {ec, false};
     }
     o = oResult.second;
-    ec = updateServiceEntry(entry, o);
-    if (ec) {
-        return {ec, false};
-    }
+    updateServiceEntry(entry, o);
 
     return {ec, true};
 }
 
-ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const QDBusObjectPath &o)
+void ServiceManager::setServiceStartupMode(const QString &service, bool autoStart)
+{
+    ErrorContext ec {};
+
+#ifdef USE_POLICYKIT1_AUTHORITy_API
+    // check sysv script
+
+    // enable/disable with EnableUnitFiles/DisableUnitFiles
+    Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE, kSystemDObjectPath.path(),
+                                   QDBusConnection::systemBus());
+    if (autoStart) {
+        auto re = mgrIf.EnableUnitFiles({entry.getId()});
+        ec = re.first;
+        if (ec) {
+            qDebug() << "call EnableUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+            return ec;
+        }
+        auto eResult = re.second;
+    } else {
+        auto re = mgrIf.DisableUnitFiles({entry.getId()});
+        ec = re.first;
+        if (ec) {
+            qDebug() << "call DisableUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+            return ec;
+        }
+        auto dResult = re.second;
+    }
+#else
+    auto errfmt = [ = ](ErrorContext & pe, decltype(errno) err, const QString & title, const QString &message = {}) -> ErrorContext & {
+        pe.setCode(ErrorContext::kErrorTypeSystem);
+        pe.setSubCode(err);
+        pe.setErrorName(title);
+        auto errmsg = (err != 0 ? QString("Error: [%1] %2").arg(err).arg(strerror(err)) : QString("Error: "));
+        if (!message.isEmpty())
+        {
+            errmsg = QString("%1 - %2").arg(errmsg).arg(message);
+        }
+        pe.setErrorMessage(errmsg);
+        return pe;
+    };
+    const QString title = QApplication::translate("Service.Action.Set.Startup.Mode", "Failed to set service startup type");
+    int rc {};
+    struct stat sbuf;
+
+    // check pkexec existence
+    errno = 0;
+    sbuf = {};
+    rc = stat(BIN_PKEXEC_PATH, &sbuf);
+    if (rc == -1) {
+        qDebug() << "check pkexec existence failed";
+        ec = errfmt(ec, errno, title, BIN_PKEXEC_PATH);
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+
+    // check systemctl existence
+    errno = 0;
+    sbuf = {};
+    rc = stat(BIN_SYSTEMCTL_PATH, &sbuf);
+    if (rc == -1) {
+        qDebug() << "check systemctl existence failed";
+        ec = errfmt(ec, errno, title, BIN_SYSTEMCTL_PATH);
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+
+    auto *proc = new QProcess();
+    proc->setProcessChannelMode(QProcess::MergedChannels);
+    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+    [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
+        ErrorContext le;
+        // exitStatus:
+        //      crashed
+        //
+        // exitCode:
+        //      127 (pkexec) - not auth/cant auth/error
+        //      126 (pkexec) - auth dialog dismissed
+        //      0 (systemctl) - ok
+        //      !0 (systemctl) - systemctl error, read stdout from child process
+        if (exitStatus == QProcess::CrashExit) {
+            errno = 0;
+            le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
+                                                                  "Error: Failed to set service startup type due to sub process crashed."));
+            Q_EMIT errorOccurred(le);
+        } else {
+            if (exitCode == 127 || exitCode == 126) {
+                errno = EPERM;
+                le = errfmt(le, errno, title);
+                Q_EMIT errorOccurred(le);
+            } else if (exitCode != 0) {
+                auto buf = proc->readAllStandardOutput();
+                errno = 0;
+                le = errfmt(le, errno, title, buf);
+                Q_EMIT errorOccurred(le);
+            } else {
+                // success - refresh service stat -send signal
+
+                // special case, do nothing there
+                if (service.endsWith("@"))
+                    return;
+
+                SystemServiceEntry entry {};
+                entry.setId(service);
+
+                Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE, kSystemDObjectPath.path(),
+                                               QDBusConnection::systemBus());
+                auto buf = normalizeServiceId(service, {});
+                auto re = mgrIf.GetUnit(buf);
+                le = re.first;
+                if (le) {
+                    Q_EMIT errorOccurred(le);
+                } else {
+                    updateServiceEntry(entry, re.second);
+                    Q_EMIT errorOccurred(le);
+                    Q_EMIT serviceStartupModeChanged(service, entry.getState());
+                }
+            }
+        }
+        proc->deleteLater();
+    });
+
+    // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
+    QString action = autoStart ? "enable" : "disable";
+    proc->start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, service});
+#endif
+}
+
+void ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const QDBusObjectPath &o)
 {
     ErrorContext ec;
     Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE, kSystemDObjectPath.path(),
@@ -369,7 +504,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = idResult.first;
     if (ec) {
         qDebug() << "getId failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     QString id = idResult.second;
     entry.setId(id.left(id.lastIndexOf(".service")));
@@ -378,7 +512,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = loadStateResult.first;
     if (ec) {
         qDebug() << "getLoadState failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setLoadState(loadStateResult.second);
 
@@ -386,7 +519,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = activeStateResult.first;
     if (ec) {
         qDebug() << "getActiveState failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setActiveState(activeStateResult.second);
 
@@ -394,7 +526,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = subStateResult.first;
     if (ec) {
         qDebug() << "getSubState failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setSubState(subStateResult.second);
 
@@ -403,7 +534,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     if (ec) {
         qDebug() << "getUnitFileState failed:" << entry.getId() << ec.getErrorName()
                  << ec.getErrorMessage();
-        return ec;
     }
     entry.setState(unitFileStateResult.second);
 
@@ -411,7 +541,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = descResult.first;
     if (ec) {
         qDebug() << "getDescription failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setDescription(descResult.second);
 
@@ -419,7 +548,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = mainPIDResult.first;
     if (ec) {
         qDebug() << "getMainPID failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setMainPID(mainPIDResult.second);
 
@@ -427,7 +555,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = canStartResult.first;
     if (ec) {
         qDebug() << "canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setCanStart(canStartResult.second);
 
@@ -435,7 +562,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = canStopResult.first;
     if (ec) {
         qDebug() << "canStop failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setCanStop(canStopResult.second);
 
@@ -443,9 +569,6 @@ ErrorContext ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const
     ec = canReloadResult.first;
     if (ec) {
         qDebug() << "canReload failed:" << ec.getErrorName() << ec.getErrorMessage();
-        return ec;
     }
     entry.setCanReload(canReloadResult.second);
-
-    return ec;
 }

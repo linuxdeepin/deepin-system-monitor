@@ -21,8 +21,9 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    virtual void paintSection(QPainter *painter, const QRect &rect,
-                              int logicalIndex) const override;
+    void paintSection(QPainter *painter, const QRect &rect,
+                      int logicalIndex) const override;
+    bool eventFilter(QObject *obj, QEvent *ev) override;
 
 private:
     int m_spacing {1};

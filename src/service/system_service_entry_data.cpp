@@ -21,13 +21,13 @@ SystemServiceEntryData::SystemServiceEntryData(const SystemServiceEntryData &rhs
 SystemServiceEntryData &SystemServiceEntryData::operator=(const SystemServiceEntryData &rhs)
 {
     if (this != &rhs) {
-        m_id.operator=(rhs.m_id);
-        m_loadState.operator=(rhs.m_loadState);
-        m_activeState.operator=(rhs.m_activeState);
-        m_subState.operator=(rhs.m_subState);
-        m_state.operator=(rhs.m_state);
+        m_id.operator = (rhs.m_id);
+        m_loadState.operator = (rhs.m_loadState);
+        m_activeState.operator = (rhs.m_activeState);
+        m_subState.operator = (rhs.m_subState);
+        m_state.operator = (rhs.m_state);
         m_unitObjectPath = rhs.m_unitObjectPath;
-        m_description.operator=(rhs.m_description);
+        m_description.operator = (rhs.m_description);
         m_mainPID = rhs.m_mainPID;
         m_canReload = rhs.m_canReload;
         m_canStart = rhs.m_canStart;

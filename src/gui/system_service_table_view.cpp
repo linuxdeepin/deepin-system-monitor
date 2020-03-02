@@ -101,6 +101,8 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         setColumnHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, false);
         setColumnWidth(SystemServiceTableModel::kSystemServiceStateColumn, 100);
         setColumnHidden(SystemServiceTableModel::kSystemServiceStateColumn, false);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceStartupModeColumn, 80);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, true);
         setColumnWidth(SystemServiceTableModel::kSystemServiceDescriptionColumn, 320);
         setColumnHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, false);
         setColumnWidth(SystemServiceTableModel::kSystemServicePIDColumn, 100);
@@ -126,11 +128,43 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
     connect(restartServiceAction, &QAction::triggered, this,
             &SystemServiceTableView::restartService);
+    // service startup mode
+    auto *setServiceStartupModeMenu =
+        m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Set startup type"));
+    auto *setAutoStartAction = setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Auto"));
+    auto *setManualStartAction = setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Manual"));
+    connect(setAutoStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(true); });
+    connect(setManualStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(false); });
     // refresh context menu item
     QAction *refreshAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
     refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
     connect(refreshAction, &QAction::triggered, this, &SystemServiceTableView::refresh);
+
+    connect(m_contextMenu, &QMenu::aboutToShow, this, [ = ]() {
+        if (selectionModel()->selectedRows().size() > 0) {
+            // proxy index
+            auto index = selectionModel()->selectedRows()[0];
+            if (index.isValid()) {
+                auto state = m_Model->getUnitFileState(m_ProxyModel->mapToSource(index));
+                auto uname = m_Model->getUnitFileName(m_ProxyModel->mapToSource(index));
+                if (isUnitNoOp(state) || uname.endsWith("@")) {
+                    setServiceStartupModeMenu->setEnabled(false);
+                } else {
+                    setServiceStartupModeMenu->setEnabled(true);
+                }
+
+                auto sname = m_Model->getUnitFileName(m_ProxyModel->mapToSource(index));
+                if (isServiceAutoStartup(sname, state)) {
+                    setAutoStartAction->setEnabled(false);
+                    setManualStartAction->setEnabled(true);
+                } else {
+                    setAutoStartAction->setEnabled(true);
+                    setManualStartAction->setEnabled(false);
+                }
+            }
+        }
+    });
 
     // >>> header context menu
     m_headerContextMenu = new DMenu(this);
@@ -182,6 +216,14 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         header()->setSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn, !b);
         saveSettings();
     });
+    // startup mode column
+    auto *startupModeHeaderAction = m_headerContextMenu->addAction(
+                                        DApplication::translate("Service.Table.Header", kSystemServiceStartupMode));
+    startupModeHeaderAction->setCheckable(true);
+    connect(startupModeHeaderAction, &QAction::triggered, this, [this](bool b) {
+        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, !b);
+        saveSettings();
+    });
 
     if (!settingsLoaded) {
         loadStateHeaderAction->setChecked(false);
@@ -201,6 +243,8 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
         subStateHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn);
         stateHeaderAction->setChecked(!b);
+        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn);
+        startupModeHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn);
         descriptionHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn);
@@ -234,6 +278,14 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
             }
         });
     }
+
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+    connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
+        if (ec) {
+            DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+        }
+    });
 }
 
 SystemServiceTableView::~SystemServiceTableView()
@@ -439,6 +491,20 @@ void SystemServiceTableView::restartService()
     } else {
         getSourceModel()->updateServiceEntry(row);
     }
+}
+
+void SystemServiceTableView::setServiceStartupMode(bool autoStart)
+{
+    ErrorContext ec;
+    SystemServiceEntry entry;
+    int row = getSelectedServiceEntry(entry);
+    if (row < 0)
+        return;
+
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+
+    mgr->setServiceStartupMode(entry.getId(), autoStart);
 }
 
 void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const

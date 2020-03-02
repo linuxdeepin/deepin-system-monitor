@@ -19,6 +19,8 @@ static const QSize kDropDownSize {11, 10};
 BaseHeaderView::BaseHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
 {
+    installEventFilter(this);
+
     viewport()->setAutoFillBackground(false);
 }
 
@@ -178,4 +180,17 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     }
 
     painter->restore();
+}
+
+bool BaseHeaderView::eventFilter(QObject *obj, QEvent *ev)
+{
+    if (ev->type() == QEvent::KeyPress) {
+        QKeyEvent *kev = dynamic_cast<QKeyEvent *>(ev);
+        if (kev->key() == Qt::Key_Space ||
+                kev->key() == Qt::Key_Up ||
+                kev->key() == Qt::Key_Down) {
+            return true;
+        }
+    }
+    return DHeaderView::eventFilter(obj, ev);
 }
