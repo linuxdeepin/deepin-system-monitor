@@ -293,7 +293,6 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
     // table options
     setSortingEnabled(true);
-    sortByColumn(1);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -345,6 +344,9 @@ void ProcessTableView::initUI(bool settingsLoaded)
         // priority
         setColumnWidth(ProcessTableModel::kProcessPriorityColumn, 100);
         setColumnHidden(ProcessTableModel::kProcessPriorityColumn, true);
+
+        //sort
+        sortByColumn(ProcessTableModel::kProcessCPUColumn,Qt::DescendingOrder);
     }
 }
 
