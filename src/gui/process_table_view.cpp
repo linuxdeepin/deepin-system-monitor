@@ -362,7 +362,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
     // pause process
     auto *pauseProcAction = m_contextMenu->addAction(
-                                DApplication::translate("Process.Table.Context.Menu", "Pause process"));
+                                DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
     pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
     connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
     // resume process

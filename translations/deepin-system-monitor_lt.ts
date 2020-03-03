@@ -426,10 +426,6 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">Užbaigti procesą</translation>
     </message>
     <message>
-        <source>Pause process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Resume process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -439,6 +435,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Change priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

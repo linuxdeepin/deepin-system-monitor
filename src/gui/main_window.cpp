@@ -82,7 +82,7 @@ void MainWindow::displayShortcutHelpDialog()
     procObjArr.append(endProcItem);
     QJsonObject pauseProcItem;
     pauseProcItem.insert("name",
-                         DApplication::translate("Process.Table.Context.Menu", "Pause process"));
+                         DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
     pauseProcItem.insert("value", "Alt+P");
     procObjArr.append(pauseProcItem);
     QJsonObject resumeProcItem;

@@ -427,10 +427,6 @@ Are you sure you want to continue?</source>
         <translation>结束进程</translation>
     </message>
     <message>
-        <source>Pause process</source>
-        <translation>暂停进程</translation>
-    </message>
-    <message>
         <source>Resume process</source>
         <translation>恢复进程</translation>
     </message>
@@ -441,6 +437,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Change priority</source>
         <translation>改变优先级</translation>
+    </message>
+    <message>
+        <source>Suspend process</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
