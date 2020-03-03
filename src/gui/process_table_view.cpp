@@ -293,6 +293,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
     // table options
     setSortingEnabled(true);
+    sortByColumn(1);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -306,12 +307,12 @@ void ProcessTableView::initUI(bool settingsLoaded)
         setColumnHidden(ProcessTableModel::kProcessNameColumn, false);
 
         // cpu
-        setColumnWidth(ProcessTableModel::kProcessCPUColumn, 70);
+        setColumnWidth(ProcessTableModel::kProcessCPUColumn, 100);
         setColumnHidden(ProcessTableModel::kProcessCPUColumn, false);
 
         // account
         setColumnWidth(ProcessTableModel::kProcessUserColumn, 80);
-        setColumnHidden(ProcessTableModel::kProcessUserColumn, false);
+        setColumnHidden(ProcessTableModel::kProcessUserColumn, true);
 
         // memory
         setColumnWidth(ProcessTableModel::kProcessMemoryColumn, 70);
@@ -339,11 +340,11 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
         // nice
         setColumnWidth(ProcessTableModel::kProcessNiceColumn, 100);
-        setColumnHidden(ProcessTableModel::kProcessNiceColumn, false);
+        setColumnHidden(ProcessTableModel::kProcessNiceColumn, true);
 
         // priority
         setColumnWidth(ProcessTableModel::kProcessPriorityColumn, 100);
-        setColumnHidden(ProcessTableModel::kProcessPriorityColumn, false);
+        setColumnHidden(ProcessTableModel::kProcessPriorityColumn, true);
     }
 }
 
