@@ -20,7 +20,7 @@ constexpr const char *kSystemServiceSubState = QT_TRANSLATE_NOOP("Service.Table.
 //: state
 constexpr const char *kSystemServiceState = QT_TRANSLATE_NOOP("Service.Table.Header", "State");
 //: service startup mode
-constexpr const char *kSystemServiceStartupMode = QT_TRANSLATE_NOOP("Service.Table.Header", "Startup type");
+constexpr const char *kSystemServiceStartupMode = QT_TRANSLATE_NOOP("Service.Table.Header", "Startup Type");
 constexpr const char *kSystemServiceDescription =
     QT_TRANSLATE_NOOP("Service.Table.Header", "Description");
 constexpr const char *kSystemServicePID = QT_TRANSLATE_NOOP("Service.Table.Header", "PID");

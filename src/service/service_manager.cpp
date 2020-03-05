@@ -447,7 +447,7 @@ void ServiceManager::setServiceStartupMode(const QString &service, bool autoStar
         if (exitStatus == QProcess::CrashExit) {
             errno = 0;
             le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
-                                                                  "Error: Failed to set service startup type due to sub process crashed."));
+                                                                  "Error: Failed to set service startup type due to the crashed sub process."));
             Q_EMIT errorOccurred(le);
         } else {
             if (exitCode == 127 || exitCode == 126) {

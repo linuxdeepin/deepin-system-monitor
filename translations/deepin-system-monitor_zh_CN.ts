@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -16,7 +14,7 @@
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation>无结果</translation>
+        <translation>无搜索结果</translation>
     </message>
 </context>
 <context>
@@ -81,7 +79,7 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>不适用</translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -131,67 +129,67 @@
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation type="unfinished"></translation>
+        <translation>dead</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"></translation>
+        <translation>预启动</translation>
     </message>
     <message>
         <source>start</source>
-        <translation type="unfinished"></translation>
+        <translation>启动中</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"></translation>
+        <translation>start-post</translation>
     </message>
     <message>
         <source>running</source>
-        <translation type="unfinished"></translation>
+        <translation>正在运行</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"></translation>
+        <translation>已退出</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation type="unfinished"></translation>
+        <translation>重载中</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation type="unfinished"></translation>
+        <translation>已停止</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"></translation>
+        <translation>stop-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>stop-sigterm</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>stop-sigkill</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"></translation>
+        <translation>stop-post</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>final-sigterm</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>final-sigkill</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation></translation>
+        <translation>已失败</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation type="unfinished"></translation>
+        <translation>自动重启</translation>
     </message>
 </context>
 <context>
@@ -202,7 +200,7 @@
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation>显示快捷键预览</translation>
+        <translation>显示快捷键</translation>
     </message>
 </context>
 <context>
@@ -341,11 +339,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>进程号: %1, 错误: [%2] %3</translation>
+        <translation>PID: %1, Error: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation>设置进程优先级失败</translation>
+        <translation>改变进程优先级失败</translation>
     </message>
 </context>
 <context>
@@ -387,14 +385,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation>发送信号到进程失败</translation>
+        <translation>发送信号到进程失败 </translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(正在运行%1个应用程序和%2个系统进程)</translation>
+        <translation>（正在运行%1个应用程序和%2个系统进程）</translation>
     </message>
 </context>
 <context>
@@ -428,7 +426,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>恢复进程</translation>
+        <translation>继续进程</translation>
     </message>
     <message>
         <source>Kill process</source>
@@ -440,7 +438,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"></translation>
+        <translation>暂停进程</translation>
     </message>
 </context>
 <context>
@@ -498,7 +496,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Nice</source>
-        <translation></translation>
+        <translation>Nice</translation>
     </message>
     <message>
         <source>Priority</source>
@@ -519,19 +517,19 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
-        <source>Error: Failed to set service startup type due to sub process crashed.</source>
-        <translation>错误：因子进程崩溃而无法完成设置进程启动方式</translation>
+        <source>Failed to set service startup type</source>
+        <translation>服务的启动方式设置失败</translation>
     </message>
     <message>
-        <source>Failed to set service startup type</source>
-        <translation>设置进程启动方式失败</translation>
+        <source>Error: Failed to set service startup type due to the crashed sub process.</source>
+        <translation>错误：由于子进程崩溃，服务的启动方式设置失败</translation>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
-        <translation>确认</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -561,16 +559,16 @@ Are you sure you want to continue?</source>
         <translation>重新启动</translation>
     </message>
     <message>
-        <source>Set startup type</source>
-        <translation>设置启动方式</translation>
-    </message>
-    <message>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
         <source>Manual</source>
         <translation>手动</translation>
+    </message>
+    <message>
+        <source>Startup type</source>
+        <translation>启动方式</translation>
     </message>
 </context>
 <context>
@@ -606,7 +604,7 @@ Are you sure you want to continue?</source>
         <translation>进程号</translation>
     </message>
     <message>
-        <source>Startup type</source>
+        <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
         <translation>启动方式</translation>
     </message>

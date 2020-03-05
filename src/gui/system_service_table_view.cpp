@@ -130,7 +130,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
             &SystemServiceTableView::restartService);
     // service startup mode
     auto *setServiceStartupModeMenu =
-        m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Set startup type"));
+        m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Startup type"));
     auto *setAutoStartAction = setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Auto"));
     auto *setManualStartAction = setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Manual"));
     connect(setAutoStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(true); });

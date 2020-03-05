@@ -518,11 +518,11 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
-        <source>Error: Failed to set service startup type due to sub process crashed.</source>
+        <source>Failed to set service startup type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to set service startup type</source>
+        <source>Error: Failed to set service startup type due to the crashed sub process.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -560,15 +560,15 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set startup type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Startup type</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -605,7 +605,7 @@ Are you sure you want to continue?</source>
         <translation type="unfinished">PID</translation>
     </message>
     <message>
-        <source>Startup type</source>
+        <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
         <translation type="unfinished"></translation>
     </message>
