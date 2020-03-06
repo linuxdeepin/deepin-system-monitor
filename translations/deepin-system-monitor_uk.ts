@@ -1,208 +1,206 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation>Нагляд за системою</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Монітор системи — інструмент для спостереження за навантаженням на систему у режимі реального часу, перегляду списку процесів та керування процесами та службами, які запущено у вашій системі.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Нічого не знайдено</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>активний</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation type="unfinished"></translation>
+        <translation>перезавантаження</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>неактивний</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>невдача</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation type="unfinished"></translation>
+        <translation>активація</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation type="unfinished"></translation>
+        <translation>деактивація</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation type="unfinished"></translation>
+        <translation>заглушка</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation type="unfinished"></translation>
+        <translation>не-знайдено</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation type="unfinished"></translation>
+        <translation>помилковий-параметр</translation>
     </message>
     <message>
         <source>error</source>
-        <translation type="unfinished"></translation>
+        <translation>помилка</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"></translation>
+        <translation>об’єднано</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>замасковано</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>завантажено</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>увімкнено</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>вимкнено</translation>
     </message>
     <message>
         <source>static</source>
-        <translation type="unfinished"></translation>
+        <translation>статика</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation type="unfinished"></translation>
+        <translation>проміжний</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation type="unfinished"></translation>
+        <translation>опосередкований</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"></translation>
+        <translation>увімкнено-робота</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>замасковано</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation type="unfinished"></translation>
+        <translation>створено</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation type="unfinished"></translation>
+        <translation>мрець</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"></translation>
+        <translation>приг-запуск</translation>
     </message>
     <message>
         <source>start</source>
-        <translation type="unfinished"></translation>
+        <translation>запуск</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"></translation>
+        <translation>після-запуску</translation>
     </message>
     <message>
         <source>running</source>
-        <translation type="unfinished"></translation>
+        <translation>виконується</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"></translation>
+        <translation>вийшов</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation type="unfinished"></translation>
+        <translation>перезавантажити</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation type="unfinished"></translation>
+        <translation>зупинити</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"></translation>
+        <translation>зупин-спостереження</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>зупинка-сиг-перервати</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>зупинка-сиг-вбити</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"></translation>
+        <translation>пост-зупинка</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>ост-сигн-переривання</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>ост-сиг-вбивство</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>помилка</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation type="unfinished"></translation>
+        <translation>авто-перезапуск</translation>
     </message>
 </context>
 <context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Система</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати скорочення</translation>
     </message>
 </context>
 <context>
@@ -210,298 +208,302 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished">Завершення цього процесу може призвести до втрати даних.
-Ви впевнені, що хочете продовжити?</translation>
+        <translation>Завершення роботи цього процесу може призвести до втрати даних. Ви справді хочете виконати цю дію?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Скасувати</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Завершити процес</translation>
+        <translation>Завершити процес</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Force end</source>
-        <translation type="unfinished"></translation>
+        <translation>Примусове завершення роботи цього процесу може призвести до втрати даних. Ви справді хочете виконати цю дію?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершити</translation>
+    </message>
+    <message>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Force End</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
-        <source>Process name</source>
-        <translation type="unfinished">Ім&apos;я процесу</translation>
-    </message>
-    <message>
         <source>Command line</source>
-        <translation type="unfinished">Командний рядок</translation>
+        <translation>Командний рядок</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished">Час початку</translation>
+        <translation>Час початку</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished">Натисніть програму, яку потрібно завершити</translation>
+        <translation>Натисніть пункт програми, роботу якої ви хочете завершити</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished">ЦП</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Читання диску</translation>
+        <translation>Читання з диска</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Запис диску</translation>
+        <translation>Запис на диск</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Пам&apos;ять</translation>
+        <translation>Пам&apos;ять</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Підкачка</translation>
+        <translation>Резервна пам&apos;ять</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Не ввімкнено</translation>
+        <translation>Не ввімкнено</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Завантаження</translation>
+        <translation>Отримання</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Вивантаження</translation>
+        <translation>Надсилання</translation>
     </message>
     <message>
         <source>Disk</source>
-        <translation type="unfinished">Диск</translation>
+        <translation>Диск</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation type="unfinished">Мережа</translation>
+        <translation>Мережа</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation type="unfinished"></translation>
+        <translation>Загалом отримано</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation type="unfinished"></translation>
+        <translation>Загалом надіслано</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation type="unfinished"></translation>
+        <translation>Дуже висока</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Висока</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Звичайна</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Низька</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation type="unfinished"></translation>
+        <translation>Дуже низька</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Нетипова</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоректна</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation type="unfinished"></translation>
+        <translation>PID: %1, помилка: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося змінити рівень пріоритетності процесу</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished">Програми</translation>
+        <translation>Програми</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished">Мої процеси</translation>
+        <translation>Мої процеси</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished">Всі процеси</translation>
+        <translation>Всі процеси</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося завершити роботу процесу</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося призупинити роботу процесу</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося відновити роботу процесу</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося примусово завершити роботу процесу</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома помилка</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося надіслати процесу сигнал</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation type="unfinished"></translation>
+        <translation>(запущено %1 програм і %2 процесів)</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation type="unfinished">Немає відповіді</translation>
+        <translation>Немає відповіді</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished">Призупинити</translation>
+        <translation>Призупинити</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished">Лоток</translation>
+        <translation>Лоток</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation type="unfinished"></translation>
+        <translation>Переглянути розташування програми</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation type="unfinished">Властивості</translation>
+        <translation>Властивості</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Завершити процес</translation>
+        <translation>Завершити процес</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Відновити роботу процесу</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Вбити процес</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити пріоритетність</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"></translation>
+        <translation>Призупинити процес</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Скасувати</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Нетипова пріоритетність</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Назва</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished">ЦП</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Пам&apos;ять</translation>
+        <translation>Пам&apos;ять</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Запис диску</translation>
+        <translation>Запис на диск</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Читання диску</translation>
+        <translation>Читання з диска</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Завантаження</translation>
+        <translation>Отримання</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Вивантаження</translation>
+        <translation>Надсилання</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"></translation>
+        <translation>Ніцца</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Пріоритетність</translation>
     </message>
 </context>
 <context>
@@ -519,132 +521,132 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Гаразд</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Скасувати</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва екземпляра служби</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Запустити</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинити</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезапустити</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Назва</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Активний</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Підпрограма</translation>
     </message>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Стан</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
+        <translation>Примусове завершення програми</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>Розгорнути</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Компактний</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Переглянути</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Пошук</translation>
+        <translation>Пошук</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Процеси</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Служби</translation>
     </message>
 </context>
 </TS>

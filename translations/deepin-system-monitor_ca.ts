@@ -1,208 +1,206 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitor del sistema</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation type="unfinished"></translation>
+        <translation>El Monitor del sistema és una eina per monitorar la càrrega del sistema en temps real, veure i controlar els processos i serveis que s&apos;executen al sistema.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Cap resultat de la cerca</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>actiu</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation type="unfinished"></translation>
+        <translation>es recarrega</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>inactiu</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>fallat</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation type="unfinished"></translation>
+        <translation>s&apos;activa</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation type="unfinished"></translation>
+        <translation>es desactiva</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation type="unfinished"></translation>
+        <translation>estub</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation type="unfinished"></translation>
+        <translation>no trobat</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation type="unfinished"></translation>
+        <translation>mala configuració</translation>
     </message>
     <message>
         <source>error</source>
-        <translation type="unfinished"></translation>
+        <translation>error</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"></translation>
+        <translation>fusionat</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>emmascarat</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>carregat</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automàtic</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>habilitat</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>inhabilitat</translation>
     </message>
     <message>
         <source>static</source>
-        <translation type="unfinished"></translation>
+        <translation>estàtic</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation type="unfinished"></translation>
+        <translation>transitori</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation type="unfinished"></translation>
+        <translation>indirecte</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"></translation>
+        <translation>entorn habilitat</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>emmascarat</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation type="unfinished"></translation>
+        <translation>generat</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation type="unfinished"></translation>
+        <translation>mort</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"></translation>
+        <translation>inici pre</translation>
     </message>
     <message>
         <source>start</source>
-        <translation type="unfinished"></translation>
+        <translation>inici</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"></translation>
+        <translation>inici post</translation>
     </message>
     <message>
         <source>running</source>
-        <translation type="unfinished"></translation>
+        <translation>funcionant</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"></translation>
+        <translation>ha sortit</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation type="unfinished"></translation>
+        <translation>es recarrega</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation type="unfinished"></translation>
+        <translation>atura</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"></translation>
+        <translation>aturada-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>aturada-sigterm</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>aturada-sigkill</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"></translation>
+        <translation>aturada post</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>final-sigterm</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>final-sigkill</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>fallat</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation type="unfinished"></translation>
+        <translation>autoreinici</translation>
     </message>
 </context>
 <context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistema</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra les dreceres</translation>
     </message>
 </context>
 <context>
@@ -210,298 +208,304 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished">Aturar aquest procés pot causar pèrdua de dades.
+        <translation>Acabar aquest procés pot causar pèrdua de dades.
 Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel·la</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Atura el procés</translation>
+        <translation>Acaba el procés</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Force end</source>
-        <translation type="unfinished"></translation>
+        <translation>Forçar l&apos;acabament d&apos;aquest procés pot causar pèrdua de dades.
+Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>Acaba</translation>
+    </message>
+    <message>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Force End</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
-        <source>Process name</source>
-        <translation type="unfinished">Nom del procés</translation>
-    </message>
-    <message>
         <source>Command line</source>
-        <translation type="unfinished">Línia d&apos;ordres</translation>
+        <translation>Línia d&apos;ordres</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished">Hora d&apos;inici</translation>
+        <translation>Hora d&apos;inici</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished">Cliqueu a l&apos;aplicació que vulgueu aturar.</translation>
+        <translation>Cliqueu a l&apos;aplicació que vulgueu acabar.</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Lectura de disc</translation>
+        <translation>Lectura de disc</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Escriptura de disc</translation>
+        <translation>Escriptura de disc</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Memòria</translation>
+        <translation>Memòria</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Intercanvi</translation>
+        <translation>Intercanvi</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">No habilitat</translation>
+        <translation>No habilitat</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Baixada</translation>
+        <translation>Baixa</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Càrrega</translation>
+        <translation>Carrega</translation>
     </message>
     <message>
         <source>Disk</source>
-        <translation type="unfinished">Disc</translation>
+        <translation>Disc</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation type="unfinished">Xarxa</translation>
+        <translation>Xarxa</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation type="unfinished"></translation>
+        <translation>Recepció total</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviament total</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation type="unfinished"></translation>
+        <translation>Molt alta</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Alta</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Baixa</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation type="unfinished"></translation>
+        <translation>Molt baixa</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalitzada</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>No vàlid</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation type="unfinished"></translation>
+        <translation>PID: %1, Error: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat canviar la prioritat del procés.</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished">Aplicacions</translation>
+        <translation>Aplicacions</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished">Els meus processos</translation>
+        <translation>Els processos</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished">Tots els processos</translation>
+        <translation>Tots els processos</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat acabar el procés.</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat interrompre el procés.</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat reprendre el procés.</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat matar el procés.</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error desconegut</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat enviar el senyal al procés.</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation type="unfinished"></translation>
+        <translation>(S&apos;executen %2 aplicacions i %3 processos.)</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation type="unfinished">Sense resposta</translation>
+        <translation>Sense resposta</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished">Suspèn</translation>
+        <translation>Suspèn</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished">Safata</translation>
+        <translation>Safata</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra la ubicació del procés</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation type="unfinished">Propietats</translation>
+        <translation>Propietats</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Atura el procés</translation>
+        <translation>Acaba el procés</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Reprèn el procés</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Mata el procés</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Canvia&apos;n la prioritat</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"></translation>
+        <translation>Suspèn el procés</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel·la</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Canvia</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Prioritat personalitzada</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Memòria</translation>
+        <translation>Memòria</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Escriptura de disc</translation>
+        <translation>Escriptura de disc</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Lectura de disc</translation>
+        <translation>Lectura de disc</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Baixada</translation>
+        <translation>Baixa</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Càrrega</translation>
+        <translation>Carrega</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuari</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"></translation>
+        <translation>Bé</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Prioritat</translation>
     </message>
 </context>
 <context>
@@ -519,132 +523,132 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat establir el tipus d&apos;inici del servei.</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: no s&apos;ha pogut establir el tipus d&apos;inici del servei a causa de la fallada del subprocés.</translation>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>D&apos;acord</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel·la</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de la instància de sistema</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Refresca-ho</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicia</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Atura</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Reinicia</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automàtic</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipus d&apos;inici</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Carrega</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Actiu</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Estat</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tipus d&apos;inici</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
+        <translation>Força l&apos;acabament de l&apos;aplicació</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>Expandeix</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Compacta</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualització</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Cerca</translation>
+        <translation>Cerca</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Processos</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveis</translation>
     </message>
 </context>
 </TS>

@@ -1,208 +1,206 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation>Järjestelmän valvonta</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Järjestelmän valvonta on työkalu, jolla voidaan seurata järjestelmän reaaliaikaista kuormitusta, tarkastella, hallita käynnissä olevia prosesseja ja palveluita.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Ei hakutuloksia</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>aktiivinen</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation type="unfinished"></translation>
+        <translation>lataa-uudelleen</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>passiivinen</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>epäonnistui</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation type="unfinished"></translation>
+        <translation>kytketään</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation type="unfinished"></translation>
+        <translation>katkaistaan</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation type="unfinished"></translation>
+        <translation>tynkä</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation type="unfinished"></translation>
+        <translation>ei-löydy</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation type="unfinished"></translation>
+        <translation>huono-asetus</translation>
     </message>
     <message>
         <source>error</source>
-        <translation type="unfinished"></translation>
+        <translation>virhe</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"></translation>
+        <translation>yhdistetty</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>peitetty</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>ladattu</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automaatti</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuaalinen</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>käytössä</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>estetty</translation>
     </message>
     <message>
         <source>static</source>
-        <translation type="unfinished"></translation>
+        <translation>staattinen</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohimenevä</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation type="unfinished"></translation>
+        <translation>epäsuora</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"></translation>
+        <translation>käytössä-runtime</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>peitetty</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation type="unfinished"></translation>
+        <translation>tuotettu</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation type="unfinished"></translation>
+        <translation>eloton</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"></translation>
+        <translation>käynnistä-pre</translation>
     </message>
     <message>
         <source>start</source>
-        <translation type="unfinished"></translation>
+        <translation>käynnistä</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"></translation>
+        <translation>käynnistä-posti</translation>
     </message>
     <message>
         <source>running</source>
-        <translation type="unfinished"></translation>
+        <translation>ajossa</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"></translation>
+        <translation>poistunut</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation type="unfinished"></translation>
+        <translation>lataa-uudestaan</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation type="unfinished"></translation>
+        <translation>pysäytä</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"></translation>
+        <translation>pysäytä-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>pysäytä-sigterm</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>pysäytä-sigkill</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"></translation>
+        <translation>pysäytä-posti</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>lopullinen-sigterm</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation>lopullinen-sigkill</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Epäonnistui</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation type="unfinished"></translation>
+        <translation>autom-käynnistys</translation>
     </message>
 </context>
 <context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Järjestelmä</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä pikakuvakkeet</translation>
     </message>
 </context>
 <context>
@@ -210,298 +208,304 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished">Tämän prosessin lopettaminen voi aiheuttaa tietojen häviämistä.
+        <translation>Tämän prosessin lopettaminen voi aiheuttaa tietojen häviämistä.
 Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Peruuta</translation>
+        <translation>Peru</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Lopeta prosessi</translation>
+        <translation>Lopeta prosessi</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Force end</source>
-        <translation type="unfinished"></translation>
+        <translation>Tämän prosessin lopettaminen pakottamalla voi aiheuttaa tietojen häviämistä.
+Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>Loppu</translation>
+    </message>
+    <message>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Force End</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
-        <source>Process name</source>
-        <translation type="unfinished">Prosessin nimi</translation>
-    </message>
-    <message>
         <source>Command line</source>
-        <translation type="unfinished">Komentorivi</translation>
+        <translation>Komentorivi</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished">Aloitusaika</translation>
+        <translation>Aloitusaika</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished">Napsauta sovellusta, jonka haluat lopettaa</translation>
+        <translation>Napsauta sovellusta, jonka haluat lopettaa</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Levyn luku</translation>
+        <translation>Levyn luku</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Levylle kirjoitus</translation>
+        <translation>Kirjoitus</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Muisti</translation>
+        <translation>Muisti </translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Swap</translation>
+        <translation>Swap </translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Ei käytössä</translation>
+        <translation>Ei käytössä</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Lataus</translation>
+        <translation>Lataus</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Lähetys</translation>
+        <translation>Lähetys</translation>
     </message>
     <message>
         <source>Disk</source>
-        <translation type="unfinished">Levy</translation>
+        <translation>Levy</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation type="unfinished">Verkko</translation>
+        <translation>Verkko</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation type="unfinished"></translation>
+        <translation>Saatu</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation type="unfinished"></translation>
+        <translation>Lähetetty</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation type="unfinished"></translation>
+        <translation>Erittäin korkea</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkea</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normaali</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Matala</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation type="unfinished"></translation>
+        <translation>Erittäin matala</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Mukautettu</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Viallinen</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation type="unfinished"></translation>
+        <translation>PID: %1, Virhe: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessin prioriteettia ei voitu muuttaa</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished">Sovellukset</translation>
+        <translation>Sovellukset</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished">Omat prosessit</translation>
+        <translation>Minun prosessini</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished">Kaikki prosessit</translation>
+        <translation>Kaikki prosessit</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessin lopettaminen epäonnistui</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessin pysäytys epäonnistui</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessin jatkaminen epäonnistui</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessin tappaminen epäonnistui</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuntematon virhe</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"></translation>
+        <translation>Viestin lähettäminen käsittelyyn epäonnistui</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation type="unfinished"></translation>
+        <translation>(%1 sovellusta ja %2 prosessia ovat käynnissä)</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation type="unfinished">Ei vastausta</translation>
+        <translation>Ei vastausta</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished">Keskeytä</translation>
+        <translation>Keskeytä</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished">Valikko</translation>
+        <translation>Valikko</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä komennon sijainti</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation type="unfinished">Ominaisuudet</translation>
+        <translation>Ominaisuudet</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Lopeta prosessi</translation>
+        <translation>Lopeta prosessi</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Jatka prosessia</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Tapa prosessi</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaihda prioriteetti</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"></translation>
+        <translation>Keskeytä prosessi</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Peruuta</translation>
+        <translation>Peru</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Muutos</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokattu prioriteetti</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nimi</translation>
+        <translation>Nimi</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Muisti</translation>
+        <translation>Muisti</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Levylle kirjoitus</translation>
+        <translation>Kirjoitus</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Levyn luku</translation>
+        <translation>Levyn luku</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Lataus</translation>
+        <translation>Lataus</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Lähetys</translation>
+        <translation>Lähetys</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjä</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"></translation>
+        <translation>Nice</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Prioriteetti</translation>
     </message>
 </context>
 <context>
@@ -519,132 +523,132 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Palvelun käynnistystyypin määrittäminen epäonnistui</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"></translation>
+        <translation>Virhe: Palvelun käynnistystyypin määrittäminen epäonnistui kaatuneen alaprosessin vuoksi.</translation>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Peruuta</translation>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation type="unfinished"></translation>
+        <translation>Palvelun esiintymän nimi</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Virkistä</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Aloita</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Pysäytä</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Uudelleen</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automaatti</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuaalinen</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Käynnistyksen tyyppi</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nimi</translation>
+        <translation>Nimi</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Lataus</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiivinen</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nyt</translation>
     </message>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tila</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuvaus</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Käynnistyksen tyyppi</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakota sovelluksen lopettaminen</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>Laajentaa</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiivis</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Katso</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Hae</translation>
+        <translation>Hae</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessit</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Palvelut</translation>
     </message>
 </context>
 </TS>

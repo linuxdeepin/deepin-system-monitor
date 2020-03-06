@@ -226,20 +226,21 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force end</source>
+        <source>End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>End</source>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force End</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="unfinished">Nome del procesu</translation>
-    </message>
     <message>
         <source>Command line</source>
         <translation type="unfinished">Llinia de comandos</translation>
@@ -247,6 +248,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Start time</source>
         <translation type="unfinished">Data del aniciu</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
     </message>
 </context>
 <context>

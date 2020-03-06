@@ -226,20 +226,22 @@ Are you sure you want to continue?</source>
 您确定要结束选中的进程吗？</translation>
     </message>
     <message>
-        <source>Force end</source>
-        <translation>强制结束</translation>
+        <source>End</source>
+        <translation>结束进程</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>结束</translation>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation>强制结束应用会有丢失数据的风险。
+您确定要结束选中的应用吗？</translation>
+    </message>
+    <message>
+        <source>Force End</source>
+        <translation>强制结束</translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
-    <message>
-        <source>Process name</source>
-        <translation>进程名</translation>
-    </message>
     <message>
         <source>Command line</source>
         <translation>命令行</translation>
@@ -247,6 +249,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Start time</source>
         <translation>启动时间</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>进程名</translation>
     </message>
 </context>
 <context>
@@ -568,7 +574,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup type</source>
-        <translation>启动方式</translation>
+        <translation>设置启动方式</translation>
     </message>
 </context>
 <context>

@@ -127,7 +127,7 @@ void ProcessAttributeDialog::initUI()
     grid->setVerticalSpacing(0);
 
     QString buf;
-    buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Process name"));
+    buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Name"));
     m_procNameLabel = new DLabel(wnd);
     m_procNameLabel->setText(buf);
     m_procNameLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);

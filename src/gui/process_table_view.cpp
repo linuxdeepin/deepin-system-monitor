@@ -199,7 +199,7 @@ void ProcessTableView::killProcess()
 //    dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force end"), true,
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {

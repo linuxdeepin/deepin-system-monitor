@@ -227,20 +227,21 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force end</source>
+        <source>End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>End</source>
+        <source>Force ending this application may cause data loss.
+Are you sure you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force End</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
-    <message>
-        <source>Process name</source>
-        <translation type="unfinished">Názov procesu</translation>
-    </message>
     <message>
         <source>Command line</source>
         <translation type="unfinished">Príkazový riadok</translation>
@@ -248,6 +249,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Start time</source>
         <translation type="unfinished">Doba spustenia</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Názov</translation>
     </message>
 </context>
 <context>
