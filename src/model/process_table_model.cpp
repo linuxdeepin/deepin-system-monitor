@@ -19,7 +19,8 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
         connect(sysmon, &SystemMonitor::processListUpdated, this,
                 &ProcessTableModel::updateProcessList);
 
-        connect(sysmon, &SystemMonitor::processEnded, this, &ProcessTableModel::removeProcessEntry);
+        connect(sysmon, &SystemMonitor::processEnded, this,
+                &ProcessTableModel::removeProcessEntry);
         connect(sysmon, &SystemMonitor::processPaused, this,
                 &ProcessTableModel::updateProcessState);
         connect(sysmon, &SystemMonitor::processResumed, this,
