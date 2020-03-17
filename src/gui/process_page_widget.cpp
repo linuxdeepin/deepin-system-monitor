@@ -31,6 +31,7 @@
 #include <DLabel>
 #include <DStackedWidget>
 #include <DTitlebar>
+#include <DToolTip>
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
@@ -153,16 +154,19 @@ void ProcessPageWidget::initUI()
     m_appButton->setIconSize(QSize(26, 24));
     m_appButton->setCheckable(true);
     m_appButton->setFocusPolicy(Qt::TabFocus);
+    m_appButton->setToolTip(DApplication::translate("Process.Show.Mode", appText));
 
     m_myProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_myProcButton->setIconSize(QSize(26, 24));
     m_myProcButton->setCheckable(true);
     m_myProcButton->setFocusPolicy(Qt::TabFocus);
+    m_myProcButton->setToolTip(DApplication::translate("Process.Show.Mode", myProcText));
 
     m_allProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_allProcButton->setIconSize(QSize(26, 24));
     m_allProcButton->setCheckable(true);
     m_allProcButton->setFocusPolicy(Qt::TabFocus);
+    m_allProcButton->setToolTip(DApplication::translate("Process.Show.Mode", allProcText));
 
     m_appButton->installEventFilter(this);
     m_myProcButton->installEventFilter(this);
