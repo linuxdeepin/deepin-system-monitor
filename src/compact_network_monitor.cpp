@@ -204,10 +204,14 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 
     painter.setPen(textColor);
     painter.setFont(m_contentFont);
-    painter.drawText(crect11, Qt::AlignLeft | Qt::AlignVCenter, recvTitle);
-    painter.drawText(crect31, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
-    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter, recvTotalTitle);
-    painter.drawText(crect32, Qt::AlignLeft | Qt::AlignVCenter, sentTotalTitle);
+    painter.drawText(crect11, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmContent.elidedText(recvTitle, Qt::ElideRight, crect11.width()));
+    painter.drawText(crect31, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmContent.elidedText(sentTitle, Qt::ElideRight, crect31.width()));
+    painter.drawText(crect12, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmContent.elidedText(recvTotalTitle, Qt::ElideRight, crect12.width()));
+    painter.drawText(crect32, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmContent.elidedText(sentTotalTitle, Qt::ElideRight, crect32.width()));
 
     painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);

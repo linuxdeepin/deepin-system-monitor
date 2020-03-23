@@ -236,11 +236,14 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     m_contentFont.setWeight(QFont::Medium);
     painter.setFont(m_contentFont);
     painter.setPen(QPen(textColor));
-    painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter, memoryTitle);
+    painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmMem.elidedText(memoryTitle, Qt::ElideRight,
+                                      rect().width() - memRect.x() - outsideRingRadius - 105));
 
     painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
-    painter.drawText(memStatRect, Qt::AlignLeft | Qt::AlignVCenter, memoryContent);
+    painter.drawText(memStatRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmMemStat.elidedText(memoryContent, Qt::ElideRight, memStatRect.width()));
 
     // Draw swap summary.
     QFontMetrics fmSwap(m_contentFont);

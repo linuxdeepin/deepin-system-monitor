@@ -212,7 +212,9 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     // Draw title.
     painter.setPen(QPen(textColor));
     painter.setFont(m_titleFont);
-    painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, title);
+    painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     fm.elidedText(title, Qt::ElideRight,
+                                   rect().width() - titleRect.x() - outsideRingRadius - 50));
 
     int spacing = 10;
     int sectionSize = 6;
@@ -257,7 +259,9 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     m_contentFont.setWeight(QFont::Medium);
     painter.setFont(m_contentFont);
     painter.setPen(QPen(ltextColor));
-    painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter, memoryTitle);
+    painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     fmMem.elidedText(memoryTitle, Qt::ElideRight,
+                                      ringCenterPointerX - memRect.x() - outsideRingRadius - 50));
 
     painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
