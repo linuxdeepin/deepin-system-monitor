@@ -172,3 +172,11 @@ void Toolbar::focusInput()
         searchEdit->lineEdit()->setFocus();
     }
 }
+
+bool Toolbar::isSearchContentEmpty()
+{
+    if (searchEdit->text().isEmpty()) {
+        return false;
+    }
+    return true;
+}

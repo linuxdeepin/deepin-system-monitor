@@ -696,7 +696,8 @@ int ProcessTableView::sizeHintForColumn(int column) const
 void ProcessTableView::adjustInfoLabelVisibility()
 {
     setUpdatesEnabled(false);
-    m_notFoundLabel->setVisible(m_proxyModel->rowCount() == 0);
+    m_notFoundLabel->setVisible(m_proxyModel->rowCount() == 0
+                                && MainWindow::instance()->toolbar()->isSearchContentEmpty());
     if (m_notFoundLabel->isVisible())
         m_notFoundLabel->move(rect().center() - m_notFoundLabel->rect().center());
     setUpdatesEnabled(true);

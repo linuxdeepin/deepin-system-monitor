@@ -45,6 +45,7 @@ public:
     ~Toolbar();
 
     bool eventFilter(QObject *, QEvent *event);
+    bool isSearchContentEmpty();
 
 public Q_SLOTS:
     void handleSearch();
