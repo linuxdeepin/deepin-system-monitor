@@ -184,7 +184,7 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     QString wstat = QString("%1").arg(formatBandwidth(totalWriteKbs));
 
     QRect rcol1(m_bulletSize * 2 + 2, 0, fm.size(Qt::TextSingleLine, rtag).width(), fm.height());
-    QRect rcol2(rcol1.x() + rcol1.width() + 4, rcol1.y(),
+    QRect rcol2(rcol1.x() + rcol1.width() + margin, rcol1.y(),
                 fmStat.size(Qt::TextSingleLine, rstat).width(), fmStat.height());
     QRect wcol1(rcol1.x(), rcol1.y() + rcol1.height(), fm.size(Qt::TextSingleLine, wtag).width(),
                 fm.height());
