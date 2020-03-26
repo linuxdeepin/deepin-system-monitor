@@ -54,7 +54,7 @@ public Q_SLOTS:
     inline void clearSearchText()
     {
         if (searchEdit)
-            searchEdit->clear();
+            searchEdit->clearEdit();
     }
 
 Q_SIGNALS:

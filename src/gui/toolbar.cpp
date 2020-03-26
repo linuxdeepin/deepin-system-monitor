@@ -119,7 +119,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
             QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 searchEdit->clear();
-                searchEdit->lineEdit()->clearFocus();
+                searchEdit->clearEdit();
 
                 pressEsc();
             }
