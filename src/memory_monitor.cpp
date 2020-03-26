@@ -224,7 +224,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                               .arg(DApplication::translate("Process.Graph.View", "Memory"))
                               .arg(QString::number(memoryPercent * 100, 'f', 1));
     QString memoryContent = QString("%1/%2")
-                                .arg(formatByteCount(qulonglong(usedMemory), false, 2))
+                                .arg(formatByteCount(qulonglong(usedMemory), true, 2))
                                 .arg(formatByteCount(qulonglong(totalMemory), true, 1));
     QString swapTitle = "";
     QString swapContent = "";
@@ -238,7 +238,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                         .arg(DApplication::translate("Process.Graph.View", "Swap"))
                         .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1/%2")
-                          .arg(formatByteCount(qulonglong(usedSwap), false, 2))
+                          .arg(formatByteCount(qulonglong(usedSwap), true, 2))
                           .arg(formatByteCount(qulonglong(totalSwap), true, 1));
     }
 
