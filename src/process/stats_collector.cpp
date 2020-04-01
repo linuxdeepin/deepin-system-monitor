@@ -202,8 +202,8 @@ void readProcStatsCallback(ProcStat &ps, void *context)
                         proc.setIcon(de->icon);
                     }
                 }
-            } else if (ctx->m_guiPIDList.contains(proc.getPID())) {
-                auto title = ctx->m_wm->getWindowTitle(proc.getPID());
+            } else if (ctx->m_guiPIDList.contains(ps->pid)) {
+                auto title = ctx->m_wm->getWindowTitle(ps->pid);
                 if (!title.isEmpty()) {
                     if (ps->cmdline.size() > 1) {
                         auto url = QUrl(ps->cmdline[ps->cmdline.size() - 1], QUrl::StrictMode);
@@ -220,14 +220,30 @@ void readProcStatsCallback(ProcStat &ps, void *context)
                     }
                 }
 
-                auto scale = qApp->devicePixelRatio();
-                auto icon = ctx->m_wm->getWindowIcon(
-                                ctx->m_wm->getWindow(proc.getPID()),
-                                int(24 * scale));
-                icon.setDevicePixelRatio(scale);
-                if (!icon.isNull()) {
-                    iconSet = true;
-                    proc.setIcon(QIcon(icon));
+                if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE") &&
+                        ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") &&
+                        ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) {
+                    auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
+                    if (ctx->m_desktopEntryCache.contains(proc.getName())) {
+                        de = ctx->m_desktopEntryCache[proc.getName()];
+                    } else {
+                        de = DesktopEntryStat::createDesktopEntry(desktopFile);
+                        ctx->m_desktopEntryCache[de->name] = de;
+                    }
+                    if (!de->icon.isNull()) {
+                        iconSet = true;
+                        proc.setIcon(de->icon);
+                    }
+                } else {
+                    auto scale = qApp->devicePixelRatio();
+                    auto icon = ctx->m_wm->getWindowIcon(
+                                    ctx->m_wm->getWindow(ps->pid),
+                                    int(24 * scale));
+                    icon.setDevicePixelRatio(scale);
+                    if (!icon.isNull()) {
+                        iconSet = true;
+                        proc.setIcon(QIcon(icon));
+                    }
                 }
             } else if (ctx->m_desktopEntryCache.contains(proc.getName())) {
                 de = ctx->m_desktopEntryCache[proc.getName()];
@@ -289,8 +305,8 @@ void readProcStatsCallback(ProcStat &ps, void *context)
                     // special case for google chrome that crap .desktop file & bin name
                     QString fname = QFileInfo(QString(ps->cmdline[0]).split(' ')[0]).fileName();
                     auto it = ctx->m_desktopEntryCache.constBegin();
-                    while (it != ctx->m_desktopEntryCache.end()) {
-                        if (it.key().contains(QString(fname))) {
+                    while (ctx->m_desktopEntryCache.size() > 0 && it != ctx->m_desktopEntryCache.end()) {
+                        if (it.key().contains(fname)) {
                             de = it.value();
                             if (!de->displayName.isEmpty()) {
                                 nameSet = true;
