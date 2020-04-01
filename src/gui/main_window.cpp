@@ -25,6 +25,7 @@
 #include "system_service_page_widget.h"
 #include "toolbar.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 std::atomic<MainWindow *> MainWindow::m_instance {nullptr};
 std::mutex MainWindow::m_mutex;
@@ -35,6 +36,14 @@ MainWindow::MainWindow(DWidget *parent)
     m_settings = Settings::instance();
     if (m_settings)
         m_settings->init();
+
+    connect(this, &MainWindow::loadingStatusChanged, [ = ](bool loading) {
+        if (loading) {
+            titlebar()->setMenuDisabled(true);
+        } else {
+            titlebar()->setMenuDisabled(false);
+        }
+    });
 }
 
 MainWindow::~MainWindow() {}
@@ -231,33 +240,20 @@ void MainWindow::initUI()
     m_tbShadow->move(0, 0);
     m_tbShadow->show();
 
-    m_spinner = new DSpinner(m_pages);
     auto pa = DApplicationHelper::instance()->applicationPalette();
     QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
     pa.setColor(DPalette::Highlight, hlBrush.color());
-    m_spinner->setPalette(pa);
-    m_spinner->move(m_pages->rect().center() - m_spinner->rect().center());
-    m_spinner->start();
-    m_spinner->show();
 
-    auto *mon = SystemMonitor::instance();
-    connect(mon, &SystemMonitor::initialSysInfoLoaded, this, [ = ]() {
-        if (m_loading) {
-            m_spinner->hide();
-            m_spinner->stop();
+    m_procPage = new ProcessPageWidget(m_pages);
+    m_svcPage = new SystemServicePageWidget(m_pages);
+    m_pages->setContentsMargins(0, 0, 0, 0);
+    m_pages->addWidget(m_procPage);
+    m_pages->addWidget(m_svcPage);
 
-            m_procPage = new ProcessPageWidget(m_pages);
-            m_svcPage = new SystemServicePageWidget(m_pages);
-            m_pages->setContentsMargins(0, 0, 0, 0);
-            m_pages->addWidget(m_procPage);
-            m_pages->addWidget(m_svcPage);
+    m_tbShadow->raise();
 
-            m_tbShadow->raise();
-
-            m_loading = false;
-            Q_EMIT loadingStatusChanged(m_loading);
-        }
-    });
+    m_loading = false;
+    Q_EMIT loadingStatusChanged(m_loading);
 
     installEventFilter(this);
 }
@@ -284,14 +280,6 @@ void MainWindow::initConnections()
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
     [ = ]() { m_toolbar->clearSearchText(); });
-
-    connect(this, &MainWindow::loadingStatusChanged, [ = ](bool loading) {
-        if (loading) {
-            titlebar()->setMenuDisabled(true);
-        } else {
-            titlebar()->setMenuDisabled(false);
-        }
-    });
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -300,8 +288,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
     if (m_tbShadow)
         m_tbShadow->setFixedWidth(event->size().width());
-    if (m_spinner)
-        m_spinner->move(m_pages->rect().center() - m_spinner->rect().center());
 
     m_settings->setOption(kSettingKeyWindowWidth, event->size().width());
     m_settings->setOption(kSettingKeyWindowHeight, event->size().height());
@@ -346,36 +332,7 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     DMainWindow::showEvent(event);
 
-    auto getCpuModel = [ = ]() -> char* {
-        char *buf = nullptr;
-        size_t len = 0;
-        ssize_t nread = 0;
-        FILE *fp = fopen("/proc/cpuinfo", "r");
-        if (!fp)
-            return nullptr;
-
-        char vid[] = "vendor_id";
-        while ((nread = getline(&buf, &len, fp)) != -1)
-        {
-            if (strncasecmp(buf, vid, strlen(vid)) == 0) {
-                return buf;
-            }
-        }
-        return nullptr;
-    };
-
-    if (m_loading) {
-        auto *mon = SystemMonitor::instance();
-        char *buf = getCpuModel();
-        QString cpu(buf);
-        if (cpu.contains("AMD") || cpu.contains("Intel")) {
-            mon->updateStatus();
-        } else {
-            m_timer = new QTimer(this);
-            m_timer->setSingleShot(true);
-            connect(m_timer, &QTimer::timeout, this, [ = ]() { mon->updateStatus(); });
-            m_timer->start(100);
-        }
-        free(buf);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    smo->startMonitorJob();
 }

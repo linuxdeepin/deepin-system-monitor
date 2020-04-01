@@ -83,10 +83,10 @@ private:
     ProcessPageWidget *m_procPage;
     SystemServicePageWidget *m_svcPage;
     DShadowLine *m_tbShadow;
-    DSpinner *m_spinner;
 
-    QTimer *m_timer {nullptr};
     bool m_loading {true};
+    char __unused__[7];     // ##padding##
+    QTimer *m_timer {nullptr};
 
     static std::atomic<MainWindow *> m_instance;
     static std::mutex m_mutex;

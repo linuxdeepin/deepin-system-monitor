@@ -36,6 +36,7 @@
 #include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -67,15 +68,16 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
             &CompactNetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::networkStatInfoUpdated, this,
-                &CompactNetworkMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::networkStatInfoUpdated,
+            this, &CompactNetworkMonitor::updateStatus);
 
     changeFont(DApplication::font());
-    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-            this, &CompactNetworkMonitor::changeFont);
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()),
+            &DApplication::fontChanged,
+            this,
+            &CompactNetworkMonitor::changeFont);
 }
 
 CompactNetworkMonitor::~CompactNetworkMonitor()
@@ -85,15 +87,15 @@ CompactNetworkMonitor::~CompactNetworkMonitor()
 }
 
 void CompactNetworkMonitor::updateStatus(qulonglong tRecvBytes, qulonglong tSentBytes,
-                                         qreal tRecvKbs, qreal tSentKbs)
+                                         qreal recvBps, qreal sentBps)
 {
-    totalRecvBytes = tRecvBytes;
-    totalSentBytes = tSentBytes;
-    totalRecvKbs = tRecvKbs;
-    totalSentKbs = tSentKbs;
+    m_totalRecvBytes = tRecvBytes;
+    m_totalSentBytes = tSentBytes;
+    m_recvBps = recvBps;
+    m_sentBps = sentBps;
 
     // Init download path.
-    downloadSpeeds->append(totalRecvKbs);
+    downloadSpeeds->append(m_recvBps);
 
     if (downloadSpeeds->size() > pointsNumber) {
         downloadSpeeds->pop_front();
@@ -107,7 +109,7 @@ void CompactNetworkMonitor::updateStatus(qulonglong tRecvBytes, qulonglong tSent
     }
 
     // Init upload path.
-    uploadSpeeds->append(totalSentKbs);
+    uploadSpeeds->append(m_sentBps);
 
     if (uploadSpeeds->size() > pointsNumber) {
         uploadSpeeds->pop_front();
@@ -173,14 +175,14 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 
     // Draw network summary.
     QString recvTitle = DApplication::translate("Process.Graph.View", "Download");
-    QString recvContent = formatBandwidth(totalRecvKbs);
+    QString recvContent = formatUnit(m_recvBps, B, 1, true);
     QString recvTotalTitle = DApplication::translate("Process.Graph.View", "Total Received");
-    QString recvTotalContent = formatByteCount(totalRecvBytes);
+    QString recvTotalContent = formatUnit(m_totalRecvBytes, B, 1);
 
     QString sentTitle = DApplication::translate("Process.Graph.View", "Upload");
-    QString sentContent = formatBandwidth(totalSentKbs);
+    QString sentContent = formatUnit(m_sentBps, B, 1, true);
     QString sentTotalTitle = DApplication::translate("Process.Graph.View", "Total Sent");
-    QString sentTotalContent = formatByteCount(totalSentBytes);
+    QString sentTotalContent = formatUnit(m_totalSentBytes, B, 1);
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);

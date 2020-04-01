@@ -53,8 +53,9 @@ public Q_SLOTS:
     void focusInput();
     inline void clearSearchText()
     {
-        if (searchEdit)
+        if (searchEdit) {
             searchEdit->clearEdit();
+        }
     }
 
 Q_SIGNALS:

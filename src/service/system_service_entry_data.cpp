@@ -9,6 +9,7 @@ SystemServiceEntryData::SystemServiceEntryData(const SystemServiceEntryData &rhs
     , m_activeState(rhs.m_activeState)
     , m_subState(rhs.m_subState)
     , m_state(rhs.m_state)
+    , m_startupType(rhs.m_startupType)
     , m_unitObjectPath(rhs.m_unitObjectPath)
     , m_description(rhs.m_description)
     , m_mainPID(rhs.m_mainPID)
@@ -26,6 +27,7 @@ SystemServiceEntryData &SystemServiceEntryData::operator=(const SystemServiceEnt
         m_activeState.operator = (rhs.m_activeState);
         m_subState.operator = (rhs.m_subState);
         m_state.operator = (rhs.m_state);
+        m_startupType.operator = (rhs.m_startupType);
         m_unitObjectPath = rhs.m_unitObjectPath;
         m_description.operator = (rhs.m_description);
         m_mainPID = rhs.m_mainPID;

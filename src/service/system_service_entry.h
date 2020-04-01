@@ -7,10 +7,18 @@ class SystemServiceEntry
 {
 public:
     SystemServiceEntry();
-    SystemServiceEntry(const QString &id, const QString &loadState, const QString &activeState,
-                       const QString &subState, const QString &state, const QString &unitObjectPath,
-                       const QString &description, quint32 mainPID, bool canReload, bool canStart,
-                       bool canStop);
+    SystemServiceEntry(const QString &id,
+                       const QString &loadState,
+                       const QString &activeState,
+                       const QString &subState,
+                       const QString &state,
+                       const QString &startupType,
+                       const QString &unitObjectPath,
+                       const QString &description,
+                       quint32  mainPID,
+                       bool     canReload,
+                       bool     canStart,
+                       bool     canStop);
     SystemServiceEntry(const SystemServiceEntry &);
     SystemServiceEntry &operator=(const SystemServiceEntry &);
     ~SystemServiceEntry();
@@ -22,6 +30,7 @@ public:
     inline QString getActiveState() const { return data->m_activeState; }
     inline QString getSubState() const { return data->m_subState; }
     inline QString getState() const { return data->m_state; }
+    inline QString getStartupType() const { return data->m_startupType; }
     inline QString getUnitObjectPath() const { return data->m_unitObjectPath; }
     inline QString getDescription() const { return data->m_description; }
     inline quint32 getMainPID() const { return data->m_mainPID; }
@@ -36,6 +45,7 @@ public:
     inline void setActiveState(const QString &activeState) { data->m_activeState = activeState; }
     inline void setSubState(const QString &subState) { data->m_subState = subState; }
     inline void setState(const QString &state) { data->m_state = state; }
+    inline void setStartupType(const QString &startupType) { data->m_startupType = startupType; }
     inline void setUnitObjectPath(const QString &unitObjectPath)
     {
         data->m_unitObjectPath = unitObjectPath;

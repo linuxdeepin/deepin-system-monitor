@@ -1,4 +1,4 @@
-#include <QIcon>
+﻿#include <QIcon>
 
 #include "process_entry.h"
 #include "utils.h"
@@ -12,6 +12,8 @@ public:
     ProcessEntryData(const ProcessEntryData &other)
         : QSharedData(other)
         , m_pid {other.m_pid}
+        , m_uid {other.m_uid}
+        , m_gid {other.m_gid}
         , m_priority {other.m_priority}
         , m_state {other.m_state}
         , m_cpu {other.m_cpu}
@@ -20,12 +22,12 @@ public:
         , m_displayName {other.m_displayName}
         , m_userName {other.m_userName}
         , m_memory {other.m_memory}
-        , m_readKbs {other.m_readKbs}
-        , m_writeKbs {other.m_writeKbs}
+        , m_readBps {other.m_readBps}
+        , m_writeBps {other.m_writeBps}
         , m_sentBytes {other.m_sentBytes}
         , m_recvBytes {other.m_recvBytes}
-        , m_sentKbs {other.m_sentKbs}
-        , m_recvKbs {other.m_recvKbs}
+        , m_sentBps {other.m_sentBps}
+        , m_recvBps {other.m_recvBps}
     {
     }
     ProcessEntryData &operator=(const ProcessEntryData &other)
@@ -33,6 +35,8 @@ public:
         Q_UNUSED(padding);
         if (this != &other) {
             m_pid = other.m_pid;
+            m_uid = other.m_uid;
+            m_gid = other.m_gid;
             m_priority = other.m_priority;
             m_state = other.m_state;
             m_cpu = other.m_cpu;
@@ -41,12 +45,12 @@ public:
             m_displayName = other.m_displayName;
             m_userName = other.m_userName;
             m_memory = other.m_memory;
-            m_readKbs = other.m_readKbs;
-            m_writeKbs = other.m_writeKbs;
+            m_readBps = other.m_readBps;
+            m_writeBps = other.m_writeBps;
             m_sentBytes = other.m_sentBytes;
             m_recvBytes = other.m_recvBytes;
-            m_sentKbs = other.m_sentKbs;
-            m_recvKbs = other.m_recvKbs;
+            m_sentBps = other.m_sentBps;
+            m_recvBps = other.m_recvBps;
         }
         return *this;
     }
@@ -57,13 +61,15 @@ public:
 private:
     // pid
     pid_t m_pid {0};
+    uid_t m_uid {0};
+    gid_t m_gid {0};    // primary group
     // pirority
     int m_priority {0};
     // process status
     char m_state {};
     char padding[3];
     // cpu -> default(descending)
-    qreal m_cpu {.0};
+    qreal m_cpu {0.};
     // icon
     QIcon m_icon {};
     // process name
@@ -75,14 +81,14 @@ private:
     // mem
     qulonglong m_memory {0};
     // disk read/write stats
-    qreal m_readKbs {0};
-    qreal m_writeKbs {0};
+    qreal m_readBps {0};
+    qreal m_writeBps {0};
 
     // network up/down stats
     qulonglong m_sentBytes {0};
     qulonglong m_recvBytes {0};
-    qreal m_sentKbs {0};
-    qreal m_recvKbs {0};
+    qreal m_sentBps {0};
+    qreal m_recvBps {0};
 };
 
 ProcessEntry::ProcessEntry()
@@ -98,7 +104,7 @@ ProcessEntry::ProcessEntry(const ProcessEntry &rhs)
 ProcessEntry &ProcessEntry::operator=(const ProcessEntry &rhs)
 {
     if (this != &rhs)
-        data.operator=(rhs.data);
+        data.operator = (rhs.data);
     return *this;
 }
 
@@ -112,6 +118,26 @@ pid_t ProcessEntry::getPID() const
 void ProcessEntry::setPID(pid_t pid)
 {
     data->m_pid = pid;
+}
+
+uid_t ProcessEntry::getUID() const
+{
+    return data->m_uid;
+}
+
+void ProcessEntry::setUID(uid_t uid)
+{
+    data->m_uid = uid;
+}
+
+gid_t ProcessEntry::getGID() const
+{
+    return data->m_gid;
+}
+
+void ProcessEntry::setGID(gid_t gid)
+{
+    data->m_gid = gid;
 }
 
 int ProcessEntry::getPriority() const
@@ -194,24 +220,24 @@ void ProcessEntry::setMemory(qulonglong memory)
     data->m_memory = memory;
 }
 
-qreal ProcessEntry::getReadKbs() const
+qreal ProcessEntry::getReadBps() const
 {
-    return data->m_readKbs;
+    return data->m_readBps;
 }
 
-void ProcessEntry::setReadKbs(qreal rkbs)
+void ProcessEntry::setReadBps(qreal readBps)
 {
-    data->m_readKbs = rkbs;
+    data->m_readBps = readBps;
 }
 
-qreal ProcessEntry::getWriteKbs() const
+qreal ProcessEntry::getWriteBps() const
 {
-    return data->m_writeKbs;
+    return data->m_writeBps;
 }
 
-void ProcessEntry::setWriteKbs(qreal wkbs)
+void ProcessEntry::setWriteBps(qreal writeBps)
 {
-    data->m_writeKbs = wkbs;
+    data->m_writeBps = writeBps;
 }
 
 qulonglong ProcessEntry::getSentBytes() const
@@ -234,24 +260,24 @@ void ProcessEntry::setRecvBytes(qulonglong rb)
     data->m_recvBytes = rb;
 }
 
-qreal ProcessEntry::getSentKbs() const
+qreal ProcessEntry::getSentBps() const
 {
-    return data->m_sentKbs;
+    return data->m_sentBps;
 }
 
-void ProcessEntry::setSentKbs(qreal skbs)
+void ProcessEntry::setSentBps(qreal sentBps)
 {
-    data->m_sentKbs = skbs;
+    data->m_sentBps = sentBps;
 }
 
-qreal ProcessEntry::getRecvKbs() const
+qreal ProcessEntry::getRecvBps() const
 {
-    return data->m_recvKbs;
+    return data->m_recvBps;
 }
 
-void ProcessEntry::setRecvKbs(qreal rkbs)
+void ProcessEntry::setRecvBps(qreal recvBps)
 {
-    data->m_recvKbs = rkbs;
+    data->m_recvBps = recvBps;
 }
 
 bool ProcessEntry::operator<(const ProcessEntry &other) const

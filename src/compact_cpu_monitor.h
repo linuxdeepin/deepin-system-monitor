@@ -38,7 +38,7 @@ public:
     ~CompactCpuMonitor();
 
 public slots:
-    void updateStatus(qreal totalCpuPercent, QVector<qreal> cPercents);
+    void updateStatus(qreal totalCpuPercent, const QList<qreal> cPercents);
 
 protected:
     void paintEvent(QPaintEvent *event);

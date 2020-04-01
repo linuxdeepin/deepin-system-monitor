@@ -44,7 +44,7 @@ public:
 
     explicit ProcessTableModel(QObject *parent = nullptr);
 
-    void updateProcessList(const QList<ProcessEntry> &list);
+    void updateProcessList(const QList<ProcessEntry> list);
 
     int rowCount(const QModelIndex &parent = {}) const override;
     int columnCount(const QModelIndex &parent = {}) const override;

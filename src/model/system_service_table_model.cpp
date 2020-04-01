@@ -29,7 +29,7 @@ QVariant SystemServiceTableModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= m_ServiceEntryList.size())
         return {};
 
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case kSystemServiceNameColumn:
             return m_ServiceEntryList.at(index.row()).getId();
@@ -48,18 +48,8 @@ QVariant SystemServiceTableModel::data(const QModelIndex &index, int role) const
             return DApplication::translate("DBus.Unit.State", buf.toUtf8());
         }
         case kSystemServiceStartupModeColumn: {
-            auto &entry = m_ServiceEntryList.at(index.row());
-            if (isUnitNoOp(entry.getState()) || entry.getId().endsWith("@")) {
-                buf = DApplication::translate("DBus.Unit.Startup.Mode", "N/A");
-            } else {
-                bool b = isServiceAutoStartup(entry.getId(), entry.getState());
-                if (b) {
-                    buf = DApplication::translate("DBus.Unit.Startup.Mode", "Auto");
-                } else {
-                    buf = DApplication::translate("DBus.Unit.Startup.Mode", "Manual");
-                }
-            }
-            return buf;
+            auto entry = m_ServiceEntryList.at(index.row());
+            return DApplication::translate("DBus.Unit.Startup.Mode", entry.getStartupType().toUtf8());
         }
         case kSystemServiceDescriptionColumn:
             return m_ServiceEntryList.at(index.row()).getDescription();
@@ -71,7 +61,8 @@ QVariant SystemServiceTableModel::data(const QModelIndex &index, int role) const
         }
         default:
             break;
-        } else if (role == Qt::TextAlignmentRole) {
+        }
+    } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     }
     return {};
@@ -135,6 +126,7 @@ void SystemServiceTableModel::updateServiceState(const QString &sname, const QSt
         auto &entry = m_ServiceEntryList[i];
         if (entry.getId() == sname) {
             entry.setState(state);
+            entry.setStartupType(ServiceManager::getServiceStartupType(entry.getId(), state));
             Q_EMIT dataChanged(index(i, kSystemServiceStateColumn), index(i, kSystemServiceStateColumn));
             Q_EMIT dataChanged(index(i, kSystemServiceStartupModeColumn), index(i, kSystemServiceStartupModeColumn));
             break;

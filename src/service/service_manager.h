@@ -36,6 +36,22 @@ public:
 
     QPair<ErrorContext, QList<SystemServiceEntry>> getServiceEntryList() const;
 
+    inline static QString getServiceStartupType(const QString &id, const QString &state)
+    {
+        QString startupType {};
+        if (isUnitNoOp(state) || id.endsWith("@")) {
+            startupType = kServiceNAStartup;
+        } else {
+            bool b = isServiceAutoStartup(id, state);
+            if (b) {
+                startupType = kServiceAutoStartup;
+            } else {
+                startupType = kServiceManualStartup;
+            }
+        }
+        return startupType;
+    }
+
 Q_SIGNALS:
     void errorOccurred(const ErrorContext &ec);
     void serviceStartupModeChanged(const QString &service, const QString &state);

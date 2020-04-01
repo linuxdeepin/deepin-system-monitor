@@ -37,15 +37,15 @@ bool SystemServiceSortFilterProxyModel::lessThan(const QModelIndex &left,
                                                  const QModelIndex &right) const
 {
     switch (sortColumn()) {
-        case SystemServiceTableModel::kSystemServicePIDColumn:
-            return left.data().toUInt() < right.data().toUInt();
-        case SystemServiceTableModel::kSystemServiceNameColumn:
-        case SystemServiceTableModel::kSystemServiceDescriptionColumn: {
-            return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                                 right.data(Qt::DisplayRole).toString()) < 0;
-        }
-        default:
-            break;
+    case SystemServiceTableModel::kSystemServicePIDColumn:
+        return left.data().toUInt() < right.data().toUInt();
+    case SystemServiceTableModel::kSystemServiceNameColumn:
+    case SystemServiceTableModel::kSystemServiceDescriptionColumn: {
+        return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
+                                             right.data(Qt::DisplayRole).toString()) < 0;
+    }
+    default:
+        break;
     }
 
     return QSortFilterProxyModel::lessThan(left, right);

@@ -133,6 +133,11 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         }
         entry.setState(stateResult.second);
 
+        // startupType
+        entry.setStartupType(ServiceManager::getServiceStartupType(
+                                 entry.getId(),
+                                 entry.getState()));
+
         hash[unit.getName()] = entry;
         list << entry;
     }
@@ -145,6 +150,9 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         QString name = u.getName().mid(u.getName().lastIndexOf('/') + 1);
         if (hash.contains(name)) {
             hash[name].setState(u.getStatus());
+            hash[name].setStartupType(ServiceManager::getServiceStartupType(
+                                          u.getName(),
+                                          u.getStatus()));
             continue;
         }
 
@@ -153,6 +161,9 @@ QPair<ErrorContext, QList<SystemServiceEntry>> ServiceManager::getServiceEntryLi
         entry.setId(name.left(name.lastIndexOf('.')));
         // SET state
         entry.setState(u.getStatus());
+        entry.setStartupType(ServiceManager::getServiceStartupType(
+                                 entry.getId(),
+                                 entry.getState()));
         list << entry;
 
         auto oResult = mgrIf.GetUnit(name);
@@ -478,7 +489,6 @@ void ServiceManager::setServiceStartupMode(const QString &service, bool autoStar
                     Q_EMIT errorOccurred(le);
                 } else {
                     updateServiceEntry(entry, re.second);
-                    Q_EMIT errorOccurred(le);
                     Q_EMIT serviceStartupModeChanged(service, entry.getState());
                 }
             }
@@ -536,6 +546,9 @@ void ServiceManager::updateServiceEntry(SystemServiceEntry &entry, const QDBusOb
                  << ec.getErrorMessage();
     }
     entry.setState(unitFileStateResult.second);
+    entry.setStartupType(ServiceManager::getServiceStartupType(
+                             entry.getId(),
+                             entry.getState()));
 
     auto descResult = unitIf.getDescription();
     ec = descResult.first;

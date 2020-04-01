@@ -26,8 +26,6 @@
 
 #include <DApplicationHelper>
 #include <QIcon>
-#include <QTimer>
-#include <QVBoxLayout>
 #include <QWidget>
 
 #include "dapplication.h"
@@ -35,28 +33,39 @@
 DWIDGET_USE_NAMESPACE
 
 class Settings;
+class QPropertyAnimation;
 
 class MemoryMonitor : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
     MemoryMonitor(QWidget *parent = nullptr);
     ~MemoryMonitor();
 
 public slots:
-    void render();
-    void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
+    void updateStatus(qulonglong uMemory, qulonglong tMemory,
+                      qulonglong uSwap, qulonglong tSwap);
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void changeFont(const QFont &font);
 
 protected:
-    QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
 
-    QIcon m_icon;
+    qreal progress() const
+    {
+        return m_progress;
+    }
+    void setProgress(qreal p)
+    {
+        m_progress = p;
+    }
+
+private:
+    QIcon m_icon {};
 
     QColor memoryBackgroundColor;
     QColor memoryColor {"#00C5C0"};
@@ -69,9 +78,6 @@ protected:
     QColor textColor;
     QColor ltextColor;
 
-    QTimer *timer;
-    QVBoxLayout *layout;
-    double animationFrames = 20;
     double memoryBackgroundOpacity = 0.1;
     double memoryForegroundOpacity = 1.0;
     double swapBackgroundOpacity = 0.1;
@@ -86,17 +92,20 @@ protected:
     int ringCenterPointerY = 70;
     int ringWidth = 6;
 
-    long prevUsedMemory = 0;
-    long prevUsedSwap = 0;
-    long totalMemory = 0;
-    long totalSwap = 0;
-    long usedMemory = 0;
-    long usedSwap = 0;
+    qulonglong m_prevUsedMemory = 0;
+    qulonglong m_prevUsedSwap = 0;
+    qulonglong m_totalMemory = 0;
+    qulonglong m_totalSwap = 0;
+    qulonglong m_usedMemory = 0;
+    qulonglong m_usedSwap = 0;
 
     QFont m_titleFont;
     QFont m_contentFont;
     QFont m_subContentFont;
     QFont m_memPercentFont;
+
+    qreal m_progress {};
+    QPropertyAnimation *m_animation {};
 
     Settings *m_settings;
     DApplicationHelper::ColorType m_themeType;

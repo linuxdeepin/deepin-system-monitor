@@ -18,6 +18,7 @@
 #include <QTextBlock>
 #include <QVBoxLayout>
 #include <QtMath>
+#include <QScrollBar>
 
 #include "process_attribute_dialog.h"
 #include "settings.h"
@@ -191,10 +192,10 @@ void ProcessAttributeDialog::initUI()
     findWindowTitle->updateWindowInfos();
 
     // Read tray icon process.
-    QList<int> trayProcessXids = Utils::getTrayWindows();
+    QList<xcb_window_t> trayProcessXids = Utils::getTrayWindows();
     QMap<int, int> trayProcessMap;
 
-    for (int xid : trayProcessXids) {
+    for (xcb_window_t xid : trayProcessXids) {
         trayProcessMap[findWindowTitle->getWindowPid(static_cast<xcb_window_t>(xid))] = xid;
     }
 
@@ -224,7 +225,7 @@ void ProcessAttributeDialog::initUI()
 }
 
 void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
-{   
+{
     DMainWindow::resizeEvent(event);
     if (m_settings) {
         m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
@@ -240,8 +241,8 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
     if (m_procCmdText) {
         QFontMetrics fm(m_procCmdText->font());
         m_cmdh = m_frame->height()
-                - (kAppIconSize + kIconToNameSpace + m_appNameLabel->height() + kNameToGridSpace + m_margin * 2)
-                - m_procNameText->height() - m_procStartText->height();
+                 - (kAppIconSize + kIconToNameSpace + m_appNameLabel->height() + kNameToGridSpace + m_margin * 2)
+                 - m_procNameText->height() - m_procStartText->height();
         int singleline = fm.size(Qt::TextSingleLine, m_procCmdText->toPlainText()).height();
         m_cmdh = (qFloor(m_cmdh * 1.0 / singleline) - 1) * singleline;
 
@@ -249,6 +250,7 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
             m_cmdh = int(m_procCmdText->document()->size().height());
         }
         m_procCmdText->setFixedHeight(m_cmdh);
+        m_procCmdText->verticalScrollBar()->setValue(0);
     }
 }
 
@@ -281,6 +283,10 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
             }
             ctl->setFixedWidth(max);
             ctl->setMaximumHeight(int(ctl->document()->size().height()));
+            // fix text cursor not at the first line issue
+            auto textCur = ctl->textCursor();
+            textCur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
+            ctl->setTextCursor(textCur);
         }
     } else if (event->type() == QEvent::Leave) {
         if (obj == m_procNameText) {

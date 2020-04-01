@@ -68,67 +68,7 @@ QMap<QString, QString> getDesktopfileMap()
     return map;
 }
 
-// static QMap<QString, QString> processDescriptions = getProcessDescriptions();
-
-// QMap<QString, QString> getProcessDescriptions()
-//{
-//    QMap<QString, QString> map;
-
-//    map["startdde"] = QObject::tr("Deepin Desktop Environment - Process initiation service");
-//    map["dde-desktop"] = QObject::tr("Deepin Desktop Environment - Desktop");
-//    map["dde-polkit-agent"] = QObject::tr("Deepin Desktop Environment - Polkit proxy");
-//    map["dde-launcher"] = QObject::tr("Deepin Desktop Environment - Launcher");
-//    map["dde-dock"] = QObject::tr("Deepin Desktop Environment - Dock");
-//    map["dde-osd"] = QObject::tr("Deepin Desktop Environment - Screen display");
-//    map["dde-system-daemon"] = QObject::tr("Deepin Desktop Environment - Daemon");
-//    map["dde-session-daemon"] = QObject::tr("Deepin Desktop Environment - Session daemon");
-//    map["dde-session-initializer"] =
-//        QObject::tr("Deepin Desktop Environment - Session initialization process");
-//    map["dde-file-manager-daemon"] = QObject::tr("Deepin File Manager daemon");
-//    map["dde-lockservice"] = QObject::tr("Deepin Desktop Environment - Lock screen service");
-//    map["deepin-wm"] = QObject::tr("Deepin Window Manager");
-//    map["deepin-wm-switcher"] = QObject::tr("Deepin Window Manager switcher");
-//    map["deepin-notifications"] = QObject::tr("Deepin notification");
-//    map["deepin-cloud-print-agent"] = QObject::tr("Deepin Cloud Print agent");
-//    map["deepin-menu"] = QObject::tr("Deepin menu service");
-//    map["lastore-daemon"] = QObject::tr("Deepin Store daemon");
-//    map["bamfdaemon"] = QObject::tr("Window match daemon");
-//    map["bamfdaemon-dbus-runner"] = QObject::tr("Window match daemon DBus service");
-//    map["ssh-agent"] = QObject::tr("SSH agent");
-//    map["gvfsd"] = QObject::tr("User mode virtual file system daemon");
-//    map["gvfsd-fuse"] = QObject::tr("Fuse server of user mode virtual file system daemon");
-//    map["lastore-session-helper"] = QObject::tr("Helper process of Deepin Store client");
-//    map["networkmanager"] = QObject::tr("Network manager");
-//    map["polkitd"] = QObject::tr("PolicyKit DBus service");
-//    map["smbd"] = QObject::tr("File sharing service daemon");
-//    map["xorg"] = QObject::tr("X service");
-//    map["fcitx"] = QObject::tr("Fcitx input method");
-//    map["fcitx-dbus-watcher"] = QObject::tr("Fcitx input method DBus daemon");
-//    map["sogou-qimpanel-watchdog"] = QObject::tr("Sogou input method daemon");
-//    map["sslocal"] = QObject::tr("ShadowSocks local client");
-//    map["pulseaudio"] = QObject::tr("Sound service");
-//    map["cupsd"] = QObject::tr("Print daemon");
-//    map["lightdm"] = QObject::tr("Light display manager");
-//    map["systemd"] = QObject::tr("System service manager");
-//    map["systemd-udevd"] = QObject::tr("System service manager - Device management daemon");
-//    map["udisksd"] = QObject::tr("Disk daemon");
-//    map["accounts-daemon"] = QObject::tr("Account daemon");
-//    map["dbus-daemon"] = QObject::tr("DBus daemon");
-//    map["mousearea"] = QObject::tr("Mouse event daemon");
-//    map["dconf-service"] = QObject::tr("DConf service");
-//    map["gnome-keyring-daemon"] = QObject::tr("Gnome keyring daemon");
-//    map["bluetoothd"] = QObject::tr("Bluetooth daemon");
-//    map["upowerd"] = QObject::tr("Power daemon");
-//    map["modemmanager"] = QObject::tr("Modem device manager");
-//    map["applet.py"] = QObject::tr("System print tray service");
-//    map["chrome-sandbox"] = QObject::tr("Chrome browser sandbox");
-//    map["syndaemon"] = QObject::tr("Synaptics touchpad device daemon");
-//    map["sogou-qimpanel"] = QObject::tr("Sogou input method");
-
-//    return map;
-//}
-
-QList<int> getTrayWindows()
+QList<xcb_window_t> getTrayWindows()
 {
     QDBusInterface busInterface("com.deepin.dde.TrayManager", "/com/deepin/dde/TrayManager",
                                 "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
@@ -137,9 +77,9 @@ QList<int> getTrayWindows()
     const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 
     argument.beginArray();
-    QList<int> xids;
+    QList<xcb_window_t> xids;
     while (!argument.atEnd()) {
-        int xid;
+        xcb_window_t xid;
 
         argument >> xid;
         xids << xid;
@@ -282,57 +222,6 @@ QSize getRenderSize(int fontSize, QString string)
     return QSize(width, height);
 }
 
-QString formatBandwidth(QVariant v)
-{
-    QStringList orders;
-    orders << "KB/s"
-           << "MB/s"
-           << "GB/s"
-           << "TB/s";
-
-    return formatUnitSize(v, orders);
-}
-
-QString formatByteCount(QVariant v, bool showUnit, int prec)
-{
-    QStringList orders;
-    orders << "B"
-           << "K"
-           << "M"
-           << "G"
-           << "T";
-
-    return formatUnitSize(v, orders, showUnit, prec);
-}
-
-QString formatUnitSize(QVariant v, QStringList orders, bool showUnit, int prec)
-{
-    int order = 0;
-    qreal value = v.toReal();
-    while (value >= 1024 && order + 1 < orders.size()) {
-        order++;
-        value = value / 1024;
-    }
-
-    QString size = QString::number(value, 'f', prec);
-
-    if (showUnit) {
-        return QString("%1%2").arg(size).arg(orders[order]);
-    } else {
-        return QString("%1").arg(size);
-    }
-}
-
-QString formatMillisecond(int millisecond)
-{
-    if (millisecond / 1000 < 3600) {
-        // At least need return 1 seconds.
-        return QDateTime::fromTime_t(std::max(1, millisecond / 1000)).toUTC().toString("mm:ss");
-    } else {
-        return QDateTime::fromTime_t(millisecond / 1000).toUTC().toString("hh:mm:ss");
-    }
-}
-
 QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName)
 {
     QString procname = procName.toLower();
@@ -368,14 +257,6 @@ QString getDisplayNameFromName(QString procName, std::string desktopFile, bool d
     }
 
     return procName;
-}
-
-QString getImagePath(QString imageName)
-{
-    QDir dir(qApp->applicationDirPath());
-    dir.cdUp();
-
-    return QDir(dir.filePath("image")).filePath(imageName);
 }
 
 QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
@@ -518,11 +399,6 @@ std::string getProcessDesktopFile(int pid, QString name, QString cmdline,
 QString getQrcPath(QString imageName)
 {
     return QString(":/image/%1").arg(imageName);
-}
-
-QString getQssPath(QString qssName)
-{
-    return QString(":/qss/%1").arg(qssName);
 }
 
 QDir getFlatpakAppPath(QString flatpakAppid)
@@ -670,153 +546,6 @@ double calculateCPUPercentage(const proc_t *before, const proc_t *after,
     return (processcpuTime / totalCpuTime) * 100.0;
 }
 
-qreal easeInOut(qreal x)
-{
-    return (1 - qCos(M_PI * x)) / 2;
-}
-
-qreal easeInQuad(qreal x)
-{
-    return qPow(x, 2);
-}
-
-qreal easeOutQuad(qreal x)
-{
-    return -1 * qPow(x - 1, 2) + 1;
-}
-
-qreal easeInQuint(qreal x)
-{
-    return qPow(x, 5);
-}
-
-qreal easeOutQuint(qreal x)
-{
-    return qPow(x - 1, 5) + 1;
-}
-
-/**
- * @brief getTotalCpuTime Read the data from /proc/stat and get the total time the cpu has been
- * busy
- * @return The total cpu time
- */
-qulonglong getTotalCpuTime(qulonglong &workTime)
-{
-    FILE *file = fopen("/proc/stat", "r");
-    if (file == NULL) {
-        perror("Could not open stat file");
-        return 0;
-    }
-
-    char buffer[1024];
-    unsigned long long user = 0, nice = 0, system = 0, idle = 0;
-    // added between Linux 2.5.41 and 2.6.33, see man proc(5)
-    unsigned long long iowait = 0, irq = 0, softirq = 0, steal = 0, guest = 0, guestnice = 0;
-
-    char *ret = fgets(buffer, sizeof(buffer) - 1, file);
-    if (ret == NULL) {
-        perror("Could not read stat file");
-        fclose(file);
-        return 0;
-    }
-    fclose(file);
-
-    sscanf(buffer, "cpu  %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu",
-           &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guestnice);
-
-    workTime = user + nice + system;
-
-    // sum everything up (except guest and guestnice since they are already included
-    // in user and nice, see http://unix.stackexchange.com/q/178045/20626)
-    return user + nice + system + idle + iowait + irq + softirq + steal;
-}
-
-QVector<CpuStruct> getCpuTimes()
-{
-    QVector<CpuStruct> times;
-
-    // adapted from https://github.com/scaidermern/top-processes/blob/master/top_proc.c#L54
-    FILE *file = fopen("/proc/stat", "r");
-    if (file == nullptr) {
-        perror("Could not open stat file");
-        return times;
-    }
-
-    char buffer[1024];
-    memset(buffer, 1, 1024);  // initialise the buffer with known data but not 0 (null) so that
-    // the next while loop still works
-    // skip the first line
-    while (buffer[0] != '\n') {
-        buffer[0] = static_cast<char>(fgetc(file));
-    }
-
-    while (buffer != NULL) {
-        qulonglong user = 0, nice = 0, system = 0, idle = 0;
-        // added between Linux 2.5.41 and 2.6.33, see man proc(5)
-        qulonglong iowait = 0, irq = 0, softirq = 0, steal = 0, guest = 0, guestnice = 0;
-
-        char *ret = fgets(buffer, sizeof(buffer) - 1, file);
-        if (ret == NULL) {
-            perror("Could not read stat file");
-            fclose(file);
-            return times;
-        } else if (strncmp(buffer, "cpu", 3)) {
-            break;  // we got all of the cpu lines
-        }
-
-        sscanf(buffer, "cpu  %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu",
-               &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guestnice);
-
-        // sum everything up (except guest and guestnice since they are already included
-        // in user and nice, see http://unix.stackexchange.com/q/178045/20626)
-
-        CpuStruct cpu = {idle + iowait, user + nice + system + irq + softirq + steal};
-        times.push_back(cpu);
-    }
-
-    fclose(file);
-    return times;
-}
-
-QVector<qreal> calculateCpuPercentages(const QVector<CpuStruct> &now,
-                                       const QVector<CpuStruct> &prev)
-{
-    QVector<qreal> times(now.size(), {0});
-
-    if (now.size() != prev.size()) {
-        return times;
-    }
-
-    for (int i = 0; i < now.size(); i++) {
-        CpuStruct n, p;
-        n = now.value(i);
-        p = prev.value(i);
-
-        qulonglong totald = ((n.idle + n.nonIdle) - (p.idle + p.nonIdle));
-        //        times.push_back((totald - (n.idle - p.idle)) / totald * 100.0);
-        qreal v = (totald - (n.idle - p.idle)) * 1.0 / totald;
-        times[i] = v;
-    }
-
-    return times;
-}
-
-void addLayoutWidget(QLayout *layout, QWidget *widget)
-{
-    layout->addWidget(widget);
-    widget->show();
-}
-
-void applyQss(QWidget *widget, QString qssName)
-{
-    QFile file(getQssPath(qssName));
-    file.open(QFile::ReadOnly);
-    QTextStream filetext(&file);
-    QString stylesheet = filetext.readAll();
-    widget->setStyleSheet(stylesheet);
-    file.close();
-}
-
 void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect)
 {
     QVector<uint32_t> data;
@@ -900,46 +629,6 @@ void drawTooltipText(QPainter &painter, QString text, QString textColor, int tex
     painter.drawText(rect, Qt::AlignCenter, text);
 }
 
-void getNetworkBandWidth(unsigned long long int &receiveBytes, unsigned long long int &sendBytes)
-{
-    char *buf;
-    static int bufsize;
-    FILE *devfd;
-
-    buf = (char *)calloc(255, 1);
-    bufsize = 255;
-    devfd = fopen("/proc/net/dev", "r");
-
-    // Ignore the first two lines of the file.
-    fgets(buf, bufsize, devfd);
-    fgets(buf, bufsize, devfd);
-
-    receiveBytes = 0;
-    sendBytes = 0;
-
-    while (fgets(buf, bufsize, devfd)) {
-        unsigned long long int rBytes, sBytes;
-        char *line = strdup(buf);
-
-        char *dev;
-        dev = strtok(line, ":");
-
-        // Filter lo (virtual network device).
-        if (QString::fromStdString(dev).trimmed() != "lo") {
-            sscanf(buf + strlen(dev) + 2, "%llu %*d %*d %*d %*d %*d %*d %*d %llu", &rBytes,
-                   &sBytes);
-
-            receiveBytes += rBytes;
-            sendBytes += sBytes;
-        }
-
-        free(line);
-    }
-
-    fclose(devfd);
-    free(buf);
-}
-
 void passInputEvent(int wid)
 {
     XRectangle *reponseArea = new XRectangle;
@@ -1003,14 +692,5 @@ const std::vector<std::string> explode(const std::string &s, const char &c)
     }
 
     return v;
-}
-
-double filterInvalidNumber(double number)
-{
-    if (qIsInf(number) || qIsNaN(number)) {
-        return 0;
-    } else {
-        return number;
-    }
 }
 }  // namespace Utils

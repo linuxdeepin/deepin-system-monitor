@@ -29,12 +29,14 @@
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
+#include <QPropertyAnimation>
 
 #include "constant.h"
 #include "gui/ui_common.h"
 #include "memory_monitor.h"
 #include "process/system_monitor.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -53,25 +55,30 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
     setFixedWidth(statusBarMaxWidth - margin * 2);
     ringCenterPointerX = rect().width() - outsideRingRadius - 4;
 
-    usedMemory = 0;
-    totalMemory = 0;
-    usedSwap = 0;
-    totalSwap = 0;
-
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-    timer->start();
+    m_usedMemory = 0;
+    m_totalMemory = 0;
+    m_usedSwap = 0;
+    m_totalSwap = 0;
 
     setFixedHeight(160);
 
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MemoryMonitor::changeTheme);
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged,
+            this, &MemoryMonitor::changeTheme);
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::memStatInfoUpdated, this, &MemoryMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::memStatInfoUpdated,
+            this, &MemoryMonitor::updateStatus);
+
+    m_animation = new QPropertyAnimation(this, "progress", this);
+    m_animation->setStartValue(0.0);
+    m_animation->setEndValue(1.0);
+    m_animation->setDuration(250);
+    connect(m_animation, &QPropertyAnimation::valueChanged, [ = ]() {
+        update();
+    });
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -85,20 +92,20 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     m_themeType = themeType;
 
     switch (m_themeType) {
-        case DApplicationHelper::LightType:
-            memoryBackgroundColor = "#000000";
-            swapBackgroundColor = "#000000";
+    case DApplicationHelper::LightType:
+        memoryBackgroundColor = "#000000";
+        swapBackgroundColor = "#000000";
 
-            m_icon = QIcon(":/image/light/icon_memory_light.svg");
-            break;
-        case DApplicationHelper::DarkType:
-            memoryBackgroundColor = "#FFFFFF";
-            swapBackgroundColor = "#FFFFFF";
+        m_icon = QIcon(":/image/light/icon_memory_light.svg");
+        break;
+    case DApplicationHelper::DarkType:
+        memoryBackgroundColor = "#FFFFFF";
+        swapBackgroundColor = "#FFFFFF";
 
-            m_icon = QIcon(":/image/dark/icon_memory_light.svg");
-            break;
-        default:
-            break;
+        m_icon = QIcon(":/image/dark/icon_memory_light.svg");
+        break;
+    default:
+        break;
     }
 
     // init colors
@@ -116,31 +123,20 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     summaryColor = palette.color(DPalette::TextTips);
 }
 
-void MemoryMonitor::render()
+void MemoryMonitor::updateStatus(qulonglong uMemory, qulonglong tMemory,
+                                 qulonglong uSwap, qulonglong tSwap)
 {
-    if (animationIndex < animationFrames) {
-        animationIndex++;
+    if ((uMemory != m_usedMemory) || (tMemory != m_totalMemory) || (uSwap != m_usedSwap) ||
+            (tSwap != m_totalSwap)) {
+        m_prevUsedMemory = m_usedMemory;
+        m_prevUsedSwap = m_usedSwap;
 
-        repaint();
-    } else {
-        timer->stop();
-    }
-}
+        m_usedMemory = uMemory;
+        m_totalMemory = tMemory;
+        m_usedSwap = uSwap;
+        m_totalSwap = tSwap;
 
-void MemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
-{
-    if ((uMemory != usedMemory) || (tMemory != totalMemory) || (uSwap != usedSwap) ||
-        (tSwap != totalSwap)) {
-        prevUsedMemory = usedMemory;
-        prevUsedSwap = usedSwap;
-
-        usedMemory = uMemory;
-        totalMemory = tMemory;
-        usedSwap = uSwap;
-        totalSwap = tSwap;
-
-        animationIndex = 0;
-        timer->start(30);
+        m_animation->start();
     }
 }
 
@@ -158,43 +154,21 @@ void MemoryMonitor::changeFont(const QFont &font)
     m_memPercentFont.setBold(true);
 }
 
-QPointF MemoryMonitor::getEndPointerCoordinate(double percent, int r)
-{
-    int angle = int(360 - (270 * percent));
-
-    double sinValue = qSin((angle / 360.0) * 2 * M_PI);
-    double cosValue = qCos((angle / 360.0) * 2 * M_PI);
-
-    int pointerX =
-        rect().x() + ringCenterPointerX + int(r * cosValue) + int(pointerRadius * sinValue);
-    int pointerY =
-        rect().y() + ringCenterPointerY - int(r * sinValue) + int(pointerRadius * cosValue);
-
-    // I don't why this need adjust 1 pixel, it's weird.
-    if (angle > 270) {
-        pointerY += 1;
-    }
-
-    return QPointF(pointerX, pointerY);
-}
-
 void MemoryMonitor::paintEvent(QPaintEvent *)
 {
     // Init.
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    double memoryPercent =
-        Utils::filterInvalidNumber((prevUsedMemory + easeInOut(animationIndex / animationFrames) *
-                                                         (usedMemory - prevUsedMemory)) *
-                                   1.0 / totalMemory);
-    double swapPercent;
-    if (totalSwap == 0) {
+    auto memdiff = qlonglong(m_usedMemory - m_prevUsedMemory);
+    auto memoryPercent = (m_prevUsedMemory + memdiff * m_progress) / m_totalMemory;
+
+    qreal swapPercent;
+    auto swpdiff = qlonglong(m_usedSwap - m_prevUsedSwap);
+    if (m_totalSwap == 0) {
         swapPercent = 0;
     } else {
-        swapPercent = (prevUsedSwap +
-                       easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) *
-                      1.0 / totalSwap;
+        swapPercent = (m_prevUsedSwap + swpdiff * m_progress) / m_totalSwap;
     }
 
     int iconSize = 24;
@@ -221,25 +195,25 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     // Draw memory summary.
     QString memoryTitle = QString("%1(%2%)")
-                              .arg(DApplication::translate("Process.Graph.View", "Memory"))
-                              .arg(QString::number(memoryPercent * 100, 'f', 1));
+                          .arg(DApplication::translate("Process.Graph.View", "Memory"))
+                          .arg(QString::number(memoryPercent * 100, 'f', 1));
     QString memoryContent = QString("%1/%2")
-                                .arg(formatByteCount(qulonglong(usedMemory), true, 2))
-                                .arg(formatByteCount(qulonglong(totalMemory), true, 1));
+                            .arg(formatUnit(m_usedMemory, KB, 2))
+                            .arg(formatUnit(m_totalMemory, KB, 1));
     QString swapTitle = "";
     QString swapContent = "";
-    if (totalSwap == 0) {
+    if (m_totalSwap == 0) {
         swapTitle = QString("%1(%2)")
-                        .arg(DApplication::translate("Process.Graph.View", "Swap"))
-                        .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
+                    .arg(DApplication::translate("Process.Graph.View", "Swap"))
+                    .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
         swapContent = "";
     } else {
         swapTitle = QString("%1(%2%)")
-                        .arg(DApplication::translate("Process.Graph.View", "Swap"))
-                        .arg(QString::number(swapPercent * 100, 'f', 1));
+                    .arg(DApplication::translate("Process.Graph.View", "Swap"))
+                    .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1/%2")
-                          .arg(formatByteCount(qulonglong(usedSwap), true, 2))
-                          .arg(formatByteCount(qulonglong(totalSwap), true, 1));
+                      .arg(formatUnit(m_usedSwap * 1024, B, 2))
+                      .arg(formatUnit(m_totalSwap, KB, 1));
     }
 
     QFontMetrics fmMem(m_contentFont);

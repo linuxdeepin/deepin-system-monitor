@@ -34,6 +34,8 @@ private:
     // STATE: (enabled | disabled | masked | static | generated | transient | indirect) =>
     // org.freedesktop.systemd1->/org/freedesktop/systemd1->org.freedesktop.systemd1.Manager->ListUnitFiles
     QString m_state {};
+    // Startup type
+    QString m_startupType {};
 
     // unit object path
     QString m_unitObjectPath {};

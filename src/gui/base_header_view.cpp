@@ -31,18 +31,19 @@ QSize BaseHeaderView::sizeHint() const
 
 int BaseHeaderView::sectionSizeHint(int logicalIndex) const
 {
-    QStyleOptionHeader option;
-    initStyleOption(&option);
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+//    QStyleOptionHeader option;
+//    initStyleOption(&option);
+//    auto *style = dynamic_cast<DStyle *>(DApplication::style());
+//    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-    QFontMetrics fm(this->font());
-    QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
-    if (sortIndicatorSection() == logicalIndex) {
-        return fm.size(Qt::TextSingleLine, buf).width() + margin * 3 + kDropDownSize.width();
-    } else {
-        return fm.size(Qt::TextSingleLine, buf).width() + margin * 2;
-    }
+//    QFontMetrics fm(this->font());
+//    QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
+//    if (sortIndicatorSection() == logicalIndex) {
+//        return fm.size(Qt::TextSingleLine, buf).width() + margin * 3 + kDropDownSize.width();
+//    } else {
+//        return fm.size(Qt::TextSingleLine, buf).width() + margin * 2;
+//    }
+    return DHeaderView::sectionSizeHint(logicalIndex);
 }
 
 void BaseHeaderView::paintEvent(QPaintEvent *event)

@@ -36,6 +36,7 @@
 #include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -65,11 +66,10 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
         writeSpeeds->append(0);
     }
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::diskStatInfoUpdated, this,
-                &CompactDiskMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
+            this, &CompactDiskMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -82,13 +82,13 @@ CompactDiskMonitor::~CompactDiskMonitor()
     delete writeSpeeds;
 }
 
-void CompactDiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
+void CompactDiskMonitor::updateStatus(qreal readBps, qreal writeBps)
 {
-    totalReadKbs = tReadKbs;
-    totalWriteKbs = tWriteKbs;
+    m_readBps = readBps;
+    m_writeBps = writeBps;
 
     // Init read path.
-    readSpeeds->append(totalReadKbs);
+    readSpeeds->append(m_readBps);
 
     if (readSpeeds->size() > pointsNumber) {
         readSpeeds->pop_front();
@@ -102,7 +102,7 @@ void CompactDiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
     }
 
     // Init write path.
-    writeSpeeds->append(totalWriteKbs);
+    writeSpeeds->append(m_writeBps);
 
     if (writeSpeeds->size() > pointsNumber) {
         writeSpeeds->pop_front();
@@ -180,8 +180,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 
     QString rtag = DApplication::translate("Process.Graph.View", "Disk read");
     QString wtag = DApplication::translate("Process.Graph.View", "Disk write");
-    QString rstat = QString("%1").arg(formatBandwidth(totalReadKbs));
-    QString wstat = QString("%1").arg(formatBandwidth(totalWriteKbs));
+    QString rstat = QString("%1").arg(formatUnit(m_readBps, B, 1, true));
+    QString wstat = QString("%1").arg(formatUnit(m_writeBps, B, 1, true));
 
     QRect rcol1(m_bulletSize * 2 + 2, 0, fm.size(Qt::TextSingleLine, rtag).width(), fm.height());
     QRect rcol2(rcol1.x() + rcol1.width() + margin, rcol1.y(),

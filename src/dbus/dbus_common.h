@@ -258,6 +258,10 @@ const QMap<QString, UnitState> unitStateMap = {
     {"generated", kUnitStateGenerated}
 };
 
+constexpr const char *kServiceAutoStartup = QT_TRANSLATE_NOOP("DBus.Unit.Startup.Mode", "Auto");
+constexpr const char *kServiceManualStartup = QT_TRANSLATE_NOOP("DBus.Unit.Startup.Mode", "Manual");
+constexpr const char *kServiceNAStartup = QT_TRANSLATE_NOOP("DBus.Unit.Startup.Mode", "N/A");
+
 // is-enabled (from systemctl.c#unit_is_enabled)
 inline bool isUnitStateEnabled(const QString &state)
 {
@@ -265,12 +269,18 @@ inline bool isUnitStateEnabled(const QString &state)
         return false;
 
     int s = unitStateMap[state];
-    return (s == kUnitStateEnabled) || (s == kUnitStateEnabledRuntime) || (s == kUnitStateStatic);
+    return (s == kUnitStateEnabled)
+           || (s == kUnitStateEnabledRuntime)
+           || (s == kUnitStateStatic);
 }
 inline bool isUnitNoOp(const QString &state)
 {
     int s = unitStateMap[state];
-    return (s == kUnitStateEnabledRuntime) || (s == kUnitStateStatic) || (s == kUnitStateTransient) || (s == kUnitStateMasked) || state.isEmpty();
+    return (s == kUnitStateEnabledRuntime)
+           || (s == kUnitStateStatic)
+           || (s == kUnitStateTransient)
+           || (s == kUnitStateMasked)
+           || state.isEmpty();
 }
 #define EXEC_SYSV_CHECK "/lib/systemd/systemd-sysv-install"
 inline bool isSysVInitEnabled(const QString &sname)

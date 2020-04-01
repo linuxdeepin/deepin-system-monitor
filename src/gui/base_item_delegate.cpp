@@ -136,7 +136,8 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (opt.features & QStyleOptionViewItem::HasDecoration &&
             (opt.viewItemPosition == QStyleOptionViewItem::Beginning ||
              opt.viewItemPosition == QStyleOptionViewItem::OnlyOne)) {
-        opt.icon.paint(painter, iconRect);
+        auto diff = (iconRect.height() - iconSize) / 2;
+        opt.icon.paint(painter, iconRect.adjusted(0, diff, 0, -diff));
     }
     painter->setPen(forground);
     painter->drawText(textRect, static_cast<int>(opt.displayAlignment), text);

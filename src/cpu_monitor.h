@@ -31,6 +31,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QPropertyAnimation>
 
 DWIDGET_USE_NAMESPACE
 
@@ -39,6 +40,7 @@ class Settings;
 class CpuMonitor : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
     CpuMonitor(QWidget *parent = nullptr);
@@ -46,14 +48,22 @@ public:
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
-    void render();
-    void updateStatus(qreal cpuPercent, QVector<qreal> cPercents);
+    void updateStatus(qreal cpuPercent, const QList<qreal> cPercents);
 
 private:
     void changeFont(const QFont &font);
 
 protected:
     void paintEvent(QPaintEvent *event);
+
+    qreal progress() const
+    {
+        return m_progress;
+    }
+    void setProgress(qreal p)
+    {
+        m_progress = p;
+    }
 
 private:
     QIcon m_icon;
@@ -64,8 +74,6 @@ private:
     QColor ringBackgroundColor;
     QColor ringForegroundColor {"#0081FF"};
     QColor textColor;
-    QTimer *timer;
-    double animationFrames = 20;
     double ringBackgroundOpacity = 0.1;
     double ringForegroundOpacity = 1;
     int animationIndex = 0;
@@ -87,6 +95,9 @@ private:
 
     QFont m_cpuUsageFont;
     QFont m_cpuDisplayFont;
+
+    qreal m_progress {};
+    QPropertyAnimation *m_animation {};
 };
 
 #endif

@@ -4,11 +4,18 @@ SystemServiceEntry::SystemServiceEntry()
     : data(new SystemServiceEntryData)
 {
 }
-SystemServiceEntry::SystemServiceEntry(const QString &id, const QString &loadState,
-                                       const QString &activeState, const QString &subState,
-                                       const QString &state, const QString &unitObjectPath,
-                                       const QString &description, quint32 mainPID, bool canReload,
-                                       bool canStart, bool canStop)
+SystemServiceEntry::SystemServiceEntry(const QString &id,
+                                       const QString &loadState,
+                                       const QString &activeState,
+                                       const QString &subState,
+                                       const QString &state,
+                                       const QString &startupType,
+                                       const QString &unitObjectPath,
+                                       const QString &description,
+                                       quint32 mainPID,
+                                       bool canReload,
+                                       bool canStart,
+                                       bool canStop)
 {
     data = new SystemServiceEntryData;
 
@@ -17,6 +24,7 @@ SystemServiceEntry::SystemServiceEntry(const QString &id, const QString &loadSta
     setActiveState(activeState);
     setSubState(subState);
     setState(state);
+    setStartupType(startupType);
     setUnitObjectPath(unitObjectPath);
     setDescription(description);
     setMainPID(mainPID);
@@ -33,7 +41,7 @@ SystemServiceEntry::SystemServiceEntry(const SystemServiceEntry &rhs)
 SystemServiceEntry &SystemServiceEntry::operator=(const SystemServiceEntry &rhs)
 {
     if (this != &rhs)
-        data.operator=(rhs.data);
+        data.operator = (rhs.data);
     return *this;
 }
 

@@ -36,6 +36,7 @@
 #include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -83,10 +84,10 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
               << "#2CA7F8"
               << "#A005CE";
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::cpuStatInfoUpdated, this, &CompactCpuMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
+            this, &CompactCpuMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -95,7 +96,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
 
-void CompactCpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal> cPercents)
+void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPercents)
 {
     totalCpuPercent = cpuPercent;
 

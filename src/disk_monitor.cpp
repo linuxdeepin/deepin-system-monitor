@@ -34,6 +34,7 @@
 #include "process/system_monitor.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,10 +65,10 @@ DiskMonitor::DiskMonitor(QWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskMonitor::changeTheme);
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::diskStatInfoUpdated, this, &DiskMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
+            this, &DiskMonitor::updateStatus);
 }
 
 DiskMonitor::~DiskMonitor()
@@ -79,14 +80,14 @@ DiskMonitor::~DiskMonitor()
 void DiskMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
-        case DApplicationHelper::LightType:
-            iconImage = iconLightImage;
-            break;
-        case DApplicationHelper::DarkType:
-            iconImage = iconDarkImage;
-            break;
-        default:
-            break;
+    case DApplicationHelper::LightType:
+        iconImage = iconLightImage;
+        break;
+    case DApplicationHelper::DarkType:
+        iconImage = iconDarkImage;
+        break;
+    default:
+        break;
     }
 }
 
@@ -224,11 +225,11 @@ void DiskMonitor::paintEvent(QPaintEvent *)
     QFontMetrics fm = painter.fontMetrics();
 
     QString readTitle = QString("%1 %2")
-                            .arg(DApplication::translate("Process.Graph.View", "Disk read"))
-                            .arg(formatBandwidth(totalReadKbs));
+                        .arg(DApplication::translate("Process.Graph.View", "Disk read"))
+                        .arg(formatBandwidth(totalReadKbs));
     QString writeTitle = QString("%1 %2")
-                             .arg(DApplication::translate("Process.Graph.View", "Disk write"))
-                             .arg(formatBandwidth(totalWriteKbs));
+                         .arg(DApplication::translate("Process.Graph.View", "Disk write"))
+                         .arg(formatBandwidth(totalWriteKbs));
 
     painter.setOpacity(1);
     painter.setPen(QPen(readColor));

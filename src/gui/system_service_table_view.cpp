@@ -35,8 +35,8 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     installEventFilter(this);
 
     // >>> table model
-    m_ProxyModel = new SystemServiceSortFilterProxyModel(this);
     m_Model = new SystemServiceTableModel(this);
+    m_ProxyModel = new SystemServiceSortFilterProxyModel(this);
     m_ProxyModel->setSourceModel(m_Model);
     setModel(m_ProxyModel);
 

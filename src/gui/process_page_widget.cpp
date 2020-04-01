@@ -52,6 +52,7 @@
 #include "settings.h"
 #include "ui_common.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 using namespace std;
 
@@ -252,11 +253,10 @@ void ProcessPageWidget::initConnections()
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::AllProcess);
     });
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::processSummaryUpdated, this,
-                &ProcessPageWidget::updateProcessSummary);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::processSummaryUpdated,
+            this, &ProcessPageWidget::updateProcessSummary);
 
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {

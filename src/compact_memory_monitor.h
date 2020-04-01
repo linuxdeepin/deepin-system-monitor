@@ -25,9 +25,8 @@
 #define COMPACTMEMORYMONITOR_H
 
 #include <DApplicationHelper>
-#include <QTimer>
-#include <QVBoxLayout>
 #include <QWidget>
+#include <QPropertyAnimation>
 
 #include "dapplication.h"
 
@@ -38,18 +37,27 @@ class Settings;
 class CompactMemoryMonitor : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
     CompactMemoryMonitor(QWidget *parent = nullptr);
     ~CompactMemoryMonitor();
 
 public slots:
-    void render();
-    void updateStatus(long uMemory, long tMemory, long uSwap, long tSwap);
+    void updateStatus(qulonglong uMemory, qulonglong tMemory,
+                      qulonglong uSwap, qulonglong tSwap);
 
 protected:
-    QPointF getEndPointerCoordinate(double percent, int r);
     void paintEvent(QPaintEvent *event);
+
+    qreal progress() const
+    {
+        return m_progress;
+    }
+    void setProgress(qreal p)
+    {
+        m_progress = p;
+    }
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
@@ -66,14 +74,10 @@ private:
     QColor swapForegroundColor {"#FEDF19"};
     QColor textColor;
 
-    QTimer *timer;
-    QVBoxLayout *layout;
-    double animationFrames = 20;
     double memoryBackgroundOpacity = 0.1;
     double memoryForegroundOpacity = 1.0;
     double swapBackgroundOpacity = 0.1;
     double swapForegroundOpacity = 1.0;
-    int animationIndex = 0;
     int insideRingRadius = 41;
     int memoryRenderSize = 9;
     int outsideRingRadius = 48;
@@ -82,12 +86,15 @@ private:
     int ringCenterPointerY = 45;
     int ringWidth = 6;
 
-    long prevUsedMemory;
-    long prevUsedSwap;
-    long totalMemory;
-    long totalSwap;
-    long usedMemory;
-    long usedSwap;
+    qulonglong m_prevUsedMemory {};
+    qulonglong m_prevUsedSwap {};
+    qulonglong m_totalMemory {};
+    qulonglong m_totalSwap {};
+    qulonglong m_usedMemory {};
+    qulonglong m_usedSwap {};
+
+    qreal m_progress {};
+    QPropertyAnimation *m_animation {};
 
     QFont m_contentFont;
     QFont m_subContentFont;

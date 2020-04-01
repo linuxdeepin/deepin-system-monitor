@@ -44,7 +44,6 @@ HEADERS += src/utils.h \
         src/smooth_curve_generator.h \
         src/interactive_kill.h \
         src/start_tooltip.h \
-        src/process_tree.h \
         src/constant.h \
         src/settings.h \
         src/dbus/systemd1_manager_interface.h \
@@ -83,7 +82,11 @@ HEADERS += src/utils.h \
         src/gui/base_table_view.h \
         src/gui/base_item_delegate.h \
         src/gui/base_header_view.h \
-        src/process/process_controller.h
+        src/process/process_controller.h \
+    src/process/process_stat.h \
+    src/process/system_stat.h \
+    src/process/stats_collector.h \
+    src/process/desktop_entry_stat.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -101,7 +104,6 @@ SOURCES += src/main.cpp \
         src/smooth_curve_generator.cpp \
         src/interactive_kill.cpp \
         src/start_tooltip.cpp \
-        src/process_tree.cpp \
         src/settings.cpp \
         src/dbus/systemd1_manager_interface.cpp \
         src/dbus/systemd1_service_interface.cpp \
@@ -138,7 +140,11 @@ SOURCES += src/main.cpp \
         src/gui/base_table_view.cpp \
         src/gui/base_item_delegate.cpp \
         src/gui/base_header_view.cpp \
-        src/process/process_controller.cpp
+        src/process/process_controller.cpp \
+    src/process/process_stat.cpp \
+    src/process/system_stat.cpp \
+    src/process/stats_collector.cpp \
+    src/process/desktop_entry_stat.cpp
 
 QT += core
 QT += widgets

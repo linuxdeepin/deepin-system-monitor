@@ -38,7 +38,7 @@ public:
     ~CompactDiskMonitor();
 
 public slots:
-    void updateStatus(qreal totalReadKbs, qreal totalWriteKbs);
+    void updateStatus(qreal readBps, qreal writeBps);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -49,15 +49,16 @@ private:
 private:
     QList<qreal> *readSpeeds;
     QList<qreal> *writeSpeeds;
-    QPainterPath readPath;
-    QPainterPath writePath;
-    qreal totalReadKbs = 0;
-    qreal totalWriteKbs = 0;
+    qreal m_readBps {};
+    qreal m_writeBps {};
 
     int m_bulletSize = 6;
 
     QColor m_diskReadColor {"#8F88FF"};
     QColor m_diskWriteColor {"#6AD787"};
+
+    QPainterPath readPath;
+    QPainterPath writePath;
 
     int gridSize = 10;
     int pointsNumber = 60;

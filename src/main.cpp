@@ -42,6 +42,8 @@
 #include "settings.h"
 #include "utils.h"
 
+Q_DECLARE_METATYPE(QList<qreal>)
+
 DWIDGET_USE_NAMESPACE
 
 void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -76,9 +78,10 @@ void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, con
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<QList<qreal>>();
+
     qInstallMessageHandler(defaultMessageOutput);
 
-    //    DApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     DApplication::loadDXcbPlugin();
 

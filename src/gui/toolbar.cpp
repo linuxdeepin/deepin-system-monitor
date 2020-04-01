@@ -118,9 +118,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
         if (obj == this) {
             QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
             if (keyEvent->key() == Qt::Key_Escape) {
-                searchEdit->clear();
                 searchEdit->clearEdit();
-
                 pressEsc();
             }
         } else if (obj == searchEdit) {

@@ -8,31 +8,29 @@
 #include "process/system_monitor.h"
 #include "process_table_model.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
 ProcessTableModel::ProcessTableModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::processListUpdated, this,
-                &ProcessTableModel::updateProcessList);
-
-        connect(sysmon, &SystemMonitor::processEnded, this,
-                &ProcessTableModel::removeProcessEntry);
-        connect(sysmon, &SystemMonitor::processPaused, this,
-                &ProcessTableModel::updateProcessState);
-        connect(sysmon, &SystemMonitor::processResumed, this,
-                &ProcessTableModel::updateProcessState);
-        connect(sysmon, &SystemMonitor::processKilled, this,
-                &ProcessTableModel::removeProcessEntry);
-        connect(sysmon, &SystemMonitor::processPriorityChanged, this,
-                &ProcessTableModel::updateProcessPriority);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::processListUpdated,
+            this, &ProcessTableModel::updateProcessList);
+    connect(smo, &SystemMonitor::processEnded, this, &ProcessTableModel::removeProcessEntry);
+    connect(smo, &SystemMonitor::processPaused, this,
+            &ProcessTableModel::updateProcessState);
+    connect(smo, &SystemMonitor::processResumed, this,
+            &ProcessTableModel::updateProcessState);
+    connect(smo, &SystemMonitor::processKilled, this,
+            &ProcessTableModel::removeProcessEntry);
+    connect(smo, &SystemMonitor::processPriorityChanged, this,
+            &ProcessTableModel::updateProcessPriority);
 }
 
-void ProcessTableModel::updateProcessList(const QList<ProcessEntry> &list)
+void ProcessTableModel::updateProcessList(const QList<ProcessEntry> list)
 {
     QHash<pid_t, ProcessEntry> hash;
     int row;
@@ -160,17 +158,17 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         case kProcessUserColumn:
             return m_processList.at(index.row()).getUserName();
         case kProcessMemoryColumn:
-            return formatByteCount(m_processList.at(index.row()).getMemory());
+            return formatUnit(m_processList.at(index.row()).getMemory(), KB);
         case kProcessUploadColumn:
-            return formatBandwidth(m_processList.at(index.row()).getSentKbs());
+            return formatUnit(m_processList.at(index.row()).getSentBps(), B, 1, true);
         case kProcessDownloadColumn:
-            return formatBandwidth(m_processList.at(index.row()).getRecvKbs());
+            return formatUnit(m_processList.at(index.row()).getRecvBps(), B, 1, true);
         case kProcessDiskReadColumn:
             return QString("%1").arg(
-                       formatBandwidth(m_processList.at(index.row()).getReadKbs()));
+                       formatUnit(m_processList.at(index.row()).getReadBps(), B, 1, true));
         case kProcessDiskWriteColumn:
             return QString("%1").arg(
-                       formatBandwidth(m_processList.at(index.row()).getWriteKbs()));
+                       formatUnit(m_processList.at(index.row()).getWriteBps(), B, 1, true));
         case kProcessPIDColumn: {
             return QString("%1").arg(m_processList.at(index.row()).getPID());
         }
@@ -199,15 +197,15 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         case kProcessCPUColumn:
             return QVariant(m_processList.at(index.row()).getCPU());
         case kProcessUploadColumn:
-            return QVariant(m_processList.at(index.row()).getSentKbs());
+            return QVariant(m_processList.at(index.row()).getSentBps());
         case kProcessDownloadColumn:
-            return QVariant(m_processList.at(index.row()).getRecvKbs());
+            return QVariant(m_processList.at(index.row()).getRecvBps());
         case kProcessPIDColumn:
             return QVariant(m_processList.at(index.row()).getPID());
         case kProcessDiskReadColumn:
-            return QVariant(m_processList.at(index.row()).getReadKbs());
+            return QVariant(m_processList.at(index.row()).getReadBps());
         case kProcessDiskWriteColumn:
-            return QVariant(m_processList.at(index.row()).getWriteKbs());
+            return QVariant(m_processList.at(index.row()).getWriteBps());
         case kProcessNiceColumn:
             return QVariant(m_processList.at(index.row()).getPriority());
         default:

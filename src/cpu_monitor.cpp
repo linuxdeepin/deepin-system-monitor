@@ -38,6 +38,7 @@
 #include "settings.h"
 #include "smooth_curve_generator.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -55,29 +56,33 @@ CpuMonitor::CpuMonitor(QWidget *parent)
         cpuPercents->append(0);
     }
 
-    timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-    timer->start(30);
-
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::cpuStatInfoUpdated, this, &CpuMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
+            this, &CpuMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &CpuMonitor::changeFont);
+
+    m_animation = new QPropertyAnimation(this, "progress", this);
+    m_animation->setDuration(250);
+    m_animation->setStartValue(0.0);
+    m_animation->setEndValue(1.0);
+    m_animation->setEasingCurve(QEasingCurve::OutQuad);
+    connect(m_animation, &QVariantAnimation::valueChanged, [ = ]() {
+        update();
+    });
 }
 
 CpuMonitor::~CpuMonitor()
 {
     delete cpuPercents;
-    delete timer;
 }
 
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
@@ -85,16 +90,16 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     m_themeType = themeType;
 
     switch (m_themeType) {
-        case DApplicationHelper::LightType:
-            ringBackgroundColor = "#000000";
-            m_icon = QIcon(":/image/light/icon_cpu_light.svg");
-            break;
-        case DApplicationHelper::DarkType:
-            ringBackgroundColor = "#FFFFFF";
-            m_icon = QIcon(":/image/dark/icon_cpu_light.svg");
-            break;
-        default:
-            break;
+    case DApplicationHelper::LightType:
+        ringBackgroundColor = "#000000";
+        m_icon = QIcon(":/image/light/icon_cpu_light.svg");
+        break;
+    case DApplicationHelper::DarkType:
+        ringBackgroundColor = "#FFFFFF";
+        m_icon = QIcon(":/image/dark/icon_cpu_light.svg");
+        break;
+    default:
+        break;
     }
 
     // init colors
@@ -110,18 +115,7 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     update();
 }
 
-void CpuMonitor::render()
-{
-    if (animationIndex < animationFrames) {
-        animationIndex++;
-
-        repaint();
-    } else {
-        timer->stop();
-    }
-}
-
-void CpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal>)
+void CpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal>)
 {
     cpuPercents->append(cpuPercent);
 
@@ -149,10 +143,7 @@ void CpuMonitor::updateStatus(qreal cpuPercent, QVector<qreal>)
 
     cpuPath = SmoothCurveGenerator::generateSmoothCurve(points);
 
-    if (!qFuzzyCompare(cpuPercents->last(), cpuPercents->at(cpuPercents->size() - 2))) {
-        animationIndex = 0;
-        timer->start(30);
-    }
+    m_animation->start();
 }
 
 void CpuMonitor::changeFont(const QFont &font)
@@ -192,9 +183,8 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                    iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
-    double percent = (cpuPercents->at(cpuPercents->size() - 2) +
-                      easeInOut(animationIndex / animationFrames) *
-                          (cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2)));
+    auto cdiff = cpuPercents->last() - cpuPercents->at(cpuPercents->size() - 2);
+    double percent = (cpuPercents->at(cpuPercents->size() - 2) + m_progress * cdiff);
 
     painter.setFont(m_cpuUsageFont);
     painter.setPen(QPen(numberColor));

@@ -2,6 +2,7 @@
 #define PROCESS_ENTRY_H
 
 #include <QExplicitlySharedDataPointer>
+#include <QMetaType>
 
 class ProcessEntryData;
 class QIcon;
@@ -16,6 +17,12 @@ public:
 
     pid_t getPID() const;
     void setPID(pid_t pid);
+
+    uid_t getUID() const;
+    void setUID(uid_t uid);
+
+    gid_t getGID() const;
+    void setGID(gid_t gid);
 
     int getPriority() const;
     void setPriority(int priority);
@@ -41,11 +48,11 @@ public:
     qulonglong getMemory() const;
     void setMemory(qulonglong memory);
 
-    qreal getReadKbs() const;
-    void setReadKbs(qreal rkbs);
+    qreal getReadBps() const;
+    void setReadBps(qreal readBps);
 
-    qreal getWriteKbs() const;
-    void setWriteKbs(qreal wkbs);
+    qreal getWriteBps() const;
+    void setWriteBps(qreal writeBps);
 
     qulonglong getSentBytes() const;
     void setSentBytes(qulonglong sb);
@@ -53,16 +60,18 @@ public:
     qulonglong getRecvBytes() const;
     void setRecvBytes(qulonglong rb);
 
-    qreal getSentKbs() const;
-    void setSentKbs(qreal skbs);
+    qreal getSentBps() const;
+    void setSentBps(qreal sentBps);
 
-    qreal getRecvKbs() const;
-    void setRecvKbs(qreal rkbs);
+    qreal getRecvBps() const;
+    void setRecvBps(qreal recvBps);
 
     bool operator<(const ProcessEntry &other) const;
 
 private:
     QExplicitlySharedDataPointer<ProcessEntryData> data;
 };
+
+Q_DECLARE_METATYPE(ProcessEntry)
 
 #endif  // PROCESS_ENTRY_H

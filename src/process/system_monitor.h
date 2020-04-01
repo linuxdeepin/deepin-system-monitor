@@ -6,32 +6,27 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <mutex>
-#include <thread>
 
 #include <DApplication>
 #include <QMap>
-#include <QPointF>
-#include <QTimer>
+#include <QThread>
 
 #include "common/error_context.h"
-#include "find_window_title.h"
-#include "network_traffic_filter.h"
 #include "utils.h"
 
 using namespace Utils;
 DWIDGET_USE_NAMESPACE
 
 class ProcessEntry;
-
+class StatsCollector;
 class SystemMonitor : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(SystemMonitor)
 
 public:
-    typedef std::map<int, proc_t> StoredProcType;
-
     enum FilterType { OnlyGUI, OnlyMe, AllProcess };
+    Q_ENUM(FilterType)
 
     enum ProcessPriority {
         kInvalidPriority = INT_MAX,
@@ -50,13 +45,6 @@ public:
     static const int kLowPriorityMin = 10;
     static const int kVeryLowPriorityMax = 11;
     static const int kVeryLowPriorityMin = 19;
-
-    struct ChildPidInfo {
-        qreal cpu;
-        qulonglong memory;
-        DiskStatus diskStatus;
-        NetworkStatus networkStatus;
-    };
 
     inline static SystemMonitor *instance()
     {
@@ -109,15 +97,13 @@ public:
         }
     }
 
+    void startMonitorJob();
+    inline const StatsCollector *jobInstance() const
+    {
+        return m_statsCollector;
+    }
+
 Q_SIGNALS:
-    void cpuStatInfoUpdated(qreal cpuPercent, const QVector<qreal> &cpuPercents);
-    void memStatInfoUpdated(qulonglong usedMemory, qulonglong totalMemory, qulonglong usedSwap,
-                            qulonglong totalSwap);
-    void diskStatInfoUpdated(qreal totalReadKbs, qreal totalWriteKbs);
-    void networkStatInfoUpdated(qulonglong totalRecvBytes, qulonglong totalSentBytes,
-                                qreal totalRecvKbs, qreal totalSentKbs);
-    void processSummaryUpdated(int napps, int nprocs);
-    void processListUpdated(const QList<ProcessEntry> &procList);
     void processEnded(pid_t pid);
     void processPaused(pid_t pid, char state);
     void processResumed(pid_t pid, char state);
@@ -125,11 +111,11 @@ Q_SIGNALS:
     void processPriorityChanged(pid_t pid, int priority);
     void priorityPromoteResultReady(const ErrorContext &ec);
     void processControlResultReady(const ErrorContext &ec);
-    void initialSysInfoLoaded();
+    void monitorJobStarted(const StatsCollector *job);
+    void filterTypeChanged(SystemMonitor::FilterType type);
 
 public Q_SLOTS:
-    void updateStatus();
-    void setFilterType(FilterType type);
+    void setFilterType(SystemMonitor::FilterType type);
     void endProcess(pid_t pid);
     void pauseProcess(pid_t pid);
     void resumeProcess(pid_t pid);
@@ -144,42 +130,11 @@ public Q_SLOTS:
 
 private:
     SystemMonitor(QObject *parent = nullptr);
-    ~SystemMonitor() = default;
-
-    void getProcessDiskStatus(int pid, DiskStatus &ds);
-    void mergeItemInfo(ProcessEntry &item, qreal childCpu, qulonglong childMemory,
-                       const DiskStatus &childDiskStatus, const NetworkStatus &childNetworkStatus);
-    void updateProcessPriority(QList<ProcessEntry> &list);
+    ~SystemMonitor();
 
 private:
-    FilterType filterType {OnlyGUI};
-
-    int updateDuration {2000};
-    qreal updateSeconds {0.0};
-    QTimer *m_updateStatusTimer;
-
-    QString m_euname;  // effective user name
-
-    QScopedPointer<FindWindowTitle> m_findWindowTitle;
-
-    QMap<QString, int> m_wineApplicationDesktopMaps {};
-    QMap<int, QString> m_wineServerDesktopMaps {};
-    QMap<int, double> m_processCpuPercents {};
-    QMap<int, long> m_processRecvBytes {};
-    QMap<int, long> m_processSentBytes {};
-    QMap<int, unsigned long> m_procTotalRead {};
-    QMap<int, unsigned long> m_procTotalWrite {};
-    StoredProcType m_prevProcesses {};
-    qulonglong prevTotalRecvBytes {};
-    qulonglong prevTotalSentBytes {};
-    qulonglong totalRecvBytes {};
-    qulonglong totalSentBytes {};
-    qulonglong prevTotalCpuTime {};
-    qulonglong prevWorkCpuTime {};
-    qulonglong totalCpuTime {};
-    qulonglong workCpuTime {};
-
-    QVector<CpuStruct> prevCpuTimes {};
+    QThread m_workerThread;
+    StatsCollector *m_statsCollector {nullptr};
 
     static std::atomic<SystemMonitor *> m_instance;
     static std::mutex m_mutex;

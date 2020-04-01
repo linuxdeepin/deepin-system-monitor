@@ -1,4 +1,4 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
+﻿/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
  * -*- coding: utf-8 -*-
  *
  * Copyright (C) 2011 ~ 2018 Deepin, Inc.
@@ -34,6 +34,7 @@
 #include "constant.h"
 #include "process/system_monitor.h"
 #include "utils.h"
+#include "process/stats_collector.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -52,15 +53,6 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     setFixedWidth(statusBarMaxWidth - margin * 2);
     ringCenterPointerX = rect().width() - outsideRingRadius - 4;
 
-    usedMemory = 0;
-    totalMemory = 0;
-    usedSwap = 0;
-    totalSwap = 0;
-
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(render()));
-    timer->start();
-
     setFixedHeight(150);
 
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
@@ -68,11 +60,19 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::memStatInfoUpdated, this,
-                &CompactMemoryMonitor::updateStatus);
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo->jobInstance(), &StatsCollector::memStatInfoUpdated,
+            this, &CompactMemoryMonitor::updateStatus);
+
+    m_animation = new QPropertyAnimation(this, "progress", this);
+    m_animation->setDuration(250);
+    m_animation->setStartValue(0.0);
+    m_animation->setEndValue(1.0);
+    m_animation->setEasingCurve(QEasingCurve::OutQuad);
+    connect(m_animation, &QVariantAnimation::valueChanged, [ = ]() {
+        update();
+    });
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -86,18 +86,18 @@ void CompactMemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     m_themeType = themeType;
 
     switch (m_themeType) {
-        case DApplicationHelper::LightType:
-            memoryBackgroundColor = "#000000";
-            swapBackgroundColor = "#000000";
+    case DApplicationHelper::LightType:
+        memoryBackgroundColor = "#000000";
+        swapBackgroundColor = "#000000";
 
-            break;
-        case DApplicationHelper::DarkType:
-            memoryBackgroundColor = "#FFFFFF";
-            swapBackgroundColor = "#FFFFFF";
+        break;
+    case DApplicationHelper::DarkType:
+        memoryBackgroundColor = "#FFFFFF";
+        swapBackgroundColor = "#FFFFFF";
 
-            break;
-        default:
-            break;
+        break;
+    default:
+        break;
     }
 
     // init colors
@@ -126,52 +126,21 @@ void CompactMemoryMonitor::changeFont(const QFont &font)
     m_memPercentFont.setBold(true);
 }
 
-void CompactMemoryMonitor::render()
+void CompactMemoryMonitor::updateStatus(qulonglong uMemory, qulonglong tMemory,
+                                        qulonglong uSwap, qulonglong tSwap)
 {
-    if (animationIndex < animationFrames) {
-        animationIndex++;
+    if ((uMemory != m_usedMemory) || (tMemory != m_totalMemory)
+            || (uSwap != m_usedSwap) || (tSwap != m_totalSwap)) {
+        m_prevUsedMemory = m_usedMemory;
+        m_prevUsedSwap = m_usedSwap;
 
-        repaint();
-    } else {
-        timer->stop();
+        m_usedMemory = uMemory;
+        m_totalMemory = tMemory;
+        m_usedSwap = uSwap;
+        m_totalSwap = tSwap;
+
+        m_animation->start();
     }
-}
-
-void CompactMemoryMonitor::updateStatus(long uMemory, long tMemory, long uSwap, long tSwap)
-{
-    if ((uMemory != usedMemory) || (tMemory != totalMemory) || (uSwap != usedSwap) ||
-        (tSwap != totalSwap)) {
-        prevUsedMemory = usedMemory;
-        prevUsedSwap = usedSwap;
-
-        usedMemory = uMemory;
-        totalMemory = tMemory;
-        usedSwap = uSwap;
-        totalSwap = tSwap;
-
-        animationIndex = 0;
-        timer->start(30);
-    }
-}
-
-QPointF CompactMemoryMonitor::getEndPointerCoordinate(double percent, int r)
-{
-    int angle = int(360 - (270 * percent));
-
-    double sinValue = qSin((angle / 360.0) * 2 * M_PI);
-    double cosValue = qCos((angle / 360.0) * 2 * M_PI);
-
-    int pointerX =
-        rect().x() + ringCenterPointerX + int(r * cosValue) + int(pointerRadius * sinValue);
-    int pointerY =
-        rect().y() + ringCenterPointerY - int(r * sinValue) + int(pointerRadius * cosValue);
-
-    // I don't why this need adjust 1 pixel, it's weird.
-    if (angle > 270) {
-        pointerY += 1;
-    }
-
-    return QPointF(pointerX, pointerY);
 }
 
 void CompactMemoryMonitor::paintEvent(QPaintEvent *)
@@ -180,17 +149,15 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    double memoryPercent =
-        Utils::filterInvalidNumber((prevUsedMemory + easeInOut(animationIndex / animationFrames) *
-                                                         (usedMemory - prevUsedMemory)) *
-                                   1.0 / totalMemory);
-    double swapPercent;
-    if (totalSwap == 0) {
+    auto memdiff = qlonglong(m_usedMemory - m_prevUsedMemory);
+    auto memPercent = (m_prevUsedMemory + m_progress * memdiff) / m_totalMemory;
+
+    auto swpdiff = qulonglong(m_usedSwap - m_prevUsedSwap);
+    qreal swapPercent;
+    if (m_totalSwap == 0) {
         swapPercent = 0;
     } else {
-        swapPercent = (prevUsedSwap +
-                       easeInOut(animationIndex / animationFrames) * (usedSwap - prevUsedSwap)) *
-                      1.0 / totalSwap;
+        swapPercent = (m_prevUsedSwap + m_progress * swpdiff) / m_totalSwap;
     }
 
     int spacing = 10;
@@ -198,25 +165,25 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
 
     // Draw memory summary.
     QString memoryTitle = QString("%1(%2%)")
-                              .arg(DApplication::translate("Process.Graph.View", "Memory"))
-                              .arg(QString::number(memoryPercent * 100, 'f', 1));
+                          .arg(DApplication::translate("Process.Graph.View", "Memory"))
+                          .arg(QString::number(memPercent * 100, 'f', 1));
     QString memoryContent = QString("%1/%2")
-                                .arg(formatByteCount(qulonglong(usedMemory), true, 2))
-                                .arg(formatByteCount(qulonglong(totalMemory), true, 1));
+                            .arg(formatUnit(m_usedMemory, KB, 2))
+                            .arg(formatUnit(m_totalMemory, KB, 1));
     QString swapTitle = "";
     QString swapContent = "";
-    if (totalSwap == 0) {
+    if (m_totalSwap == 0) {
         swapTitle = QString("%1(%2)")
-                        .arg(DApplication::translate("Process.Graph.View", "Swap"))
-                        .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
+                    .arg(DApplication::translate("Process.Graph.View", "Swap"))
+                    .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
         swapContent = "";
     } else {
         swapTitle = QString("%1(%2%)")
-                        .arg(DApplication::translate("Process.Graph.View", "Swap"))
-                        .arg(QString::number(swapPercent * 100, 'f', 1));
+                    .arg(DApplication::translate("Process.Graph.View", "Swap"))
+                    .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1/%2")
-                          .arg(formatByteCount(qulonglong(usedSwap), true, 2))
-                          .arg(formatByteCount(qulonglong(totalSwap), true, 1));
+                      .arg(formatUnit(m_usedSwap * 1024, B, 2))
+                      .arg(formatUnit(m_totalSwap, KB, 1));
     }
 
     QFontMetrics fmMem(m_contentFont);
@@ -273,7 +240,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
                     outsideRingRadius, ringWidth, 270, 270, memoryForegroundColor,
                     memoryForegroundOpacity, memoryBackgroundColor, memoryBackgroundOpacity,
-                    memoryPercent);
+                    memPercent);
 
     // Draw swap ring.
     drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
@@ -287,7 +254,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                            rect().y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
                            insideRingRadius * 2),
                      Qt::AlignHCenter | Qt::AlignVCenter,
-                     QString("%1%").arg(QString::number(memoryPercent * 100, 'f', 1)));
+                     QString("%1%").arg(QString::number(memPercent * 100, 'f', 1)));
 
     setFixedHeight(
         std::max(swapStatRect.y() + swapStatRect.height(), rect().y() + ringCenterPointerY * 2));
