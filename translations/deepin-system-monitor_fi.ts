@@ -232,11 +232,12 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Sovelluksen lopettaminen voi aiheuttaa tietojen häviämisen.
+Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Pakota lopetus</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nimi</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Napsauta sovellusta, jonka haluat lopettaa</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Muisti </translation>
     </message>
 </context>
 <context>

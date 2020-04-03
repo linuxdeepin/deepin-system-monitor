@@ -232,11 +232,12 @@ Continuar?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Forçar o encerramento deste aplicativo, poderá causar a perda de dados.
+Continuar?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Forçar Encerramento</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nome</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Clique no aplicativo que deseja encerrar</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>RAM</translation>
     </message>
 </context>
 <context>
@@ -285,7 +293,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Não ativada</translation>
+        <translation>não ativada</translation>
     </message>
     <message>
         <source>Download</source>
@@ -516,7 +524,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Não ativada</translation>
+        <translation>não ativada</translation>
     </message>
 </context>
 <context>
@@ -622,7 +630,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Expandir</translation>
+        <translation>Expandido</translation>
     </message>
     <message>
         <source>Compact</source>
@@ -630,7 +638,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>View</source>
-        <translation>Visualizar</translation>
+        <translation>Visualização</translation>
     </message>
 </context>
 <context>

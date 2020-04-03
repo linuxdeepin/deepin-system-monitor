@@ -232,11 +232,12 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Принудно окончање овог програма може изазвати губитак података.
+Заиста желите да наставите?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Принудно окончај</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Име</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Кликните на програм који желите да окончате</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Меморија</translation>
     </message>
 </context>
 <context>
@@ -523,11 +531,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation>Неуспешна поставка типа покретања услуге</translation>
+        <translation>Неуспешна поставка врсте покретања услуге</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Грешка: Неуспешна поставка типа покретања услуге због отказа под-процеса</translation>
+        <translation>Грешка: Неуспешна поставка врсте покретања услуге због отказа под-процеса</translation>
     </message>
 </context>
 <context>

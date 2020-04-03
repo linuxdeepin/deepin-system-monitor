@@ -189,7 +189,7 @@
     </message>
     <message>
         <source>auto-restart</source>
-        <translation>reiniciar-automáticamente</translation>
+        <translation>reiniciar-automaticamente</translation>
     </message>
 </context>
 <context>
@@ -232,11 +232,12 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Forçar o término desta aplicação pode causar perda de dados.
+Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Forçar o terminar</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nome</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Clicar na aplicação que deseja terminar</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>RAM</translation>
     </message>
 </context>
 <context>
@@ -305,11 +313,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Total Received</source>
-        <translation>Total Transferido</translation>
+        <translation>Total transferido</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Total Enviado</translation>
+        <translation>Total enviado</translation>
     </message>
 </context>
 <context>
@@ -370,7 +378,7 @@ Are you sure you want to continue?</source>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation>Falha ao terminar o processo</translation>
+        <translation>Falha ao terminar processo</translation>
     </message>
     <message>
         <source>Failed to pause process</source>

@@ -79,15 +79,15 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Авто</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Ручний </translation>
     </message>
 </context>
 <context>
@@ -230,11 +230,12 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Примусове припинення роботи цієї програми може призвести до втрати даних.
+Ви впевнені, що хочете продовжити?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Примусове завершення</translation>
     </message>
 </context>
 <context>
@@ -249,7 +250,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Назва</translation>
     </message>
 </context>
 <context>
@@ -257,6 +258,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Натисніть пункт програми, роботу якої ви хочете завершити</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Пам&apos;ять</translation>
     </message>
 </context>
 <context>
@@ -521,11 +529,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалося встановити тип запуску служби</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"/>
+        <translation>Помилка: Не вдалося встановити тип запуску служби через збій підпроцесу.</translation>
     </message>
 </context>
 <context>
@@ -563,15 +571,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Авто</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Ручний </translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"/>
+        <translation>Тип запуску</translation>
     </message>
 </context>
 <context>
@@ -609,7 +617,7 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тип запуску</translation>
     </message>
 </context>
 <context>

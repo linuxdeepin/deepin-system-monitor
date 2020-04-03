@@ -79,7 +79,7 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -236,7 +236,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Принудительное закрытие</translation>
     </message>
 </context>
 <context>
@@ -259,6 +259,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Нажмите на приложение, которое хотите завершить</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Память</translation>
     </message>
 </context>
 <context>

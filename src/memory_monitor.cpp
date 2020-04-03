@@ -173,7 +173,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     int iconSize = 24;
 
-    QString title = DApplication::translate("Process.Graph.View", "Memory");
+    QString title = DApplication::translate("Process.Graph.Title", "Memory");
     QFontMetrics fm(m_titleFont);
     QRect titleRect(rect().x() + iconSize + 4, rect().y(),
                     fm.size(Qt::TextSingleLine, title).width(), fm.height());

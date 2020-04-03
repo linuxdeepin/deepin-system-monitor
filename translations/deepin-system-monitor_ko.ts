@@ -79,15 +79,15 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>해당 없음</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>자동</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>수동</translation>
     </message>
 </context>
 <context>
@@ -232,11 +232,12 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>이 응용프로그램을 강제로 종료하면 데이터가 손실될 수 있습니다.
+계속하시겠습니까?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>강제 종료</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>이름</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>종료하려는 응용프로그램을 클릭하십시오</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>메모리</translation>
     </message>
 </context>
 <context>
@@ -523,11 +531,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"/>
+        <translation>서비스 시작 유형을 설정하지 못했습니다</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"/>
+        <translation>오류: 충돌된 하위 프로세스로 인해 서비스 시작 프로그램 유형을 설정하지 못했습니다.</translation>
     </message>
 </context>
 <context>
@@ -565,15 +573,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>자동</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>수동</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"/>
+        <translation>시작 프로그램 유형</translation>
     </message>
 </context>
 <context>
@@ -611,7 +619,7 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"/>
+        <translation>시작 프로그램 유형</translation>
     </message>
 </context>
 <context>

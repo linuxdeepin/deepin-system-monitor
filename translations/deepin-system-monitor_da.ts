@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation type="unfinished"/>
+        <translation>Systemovervågning er et værktøj til at overvåge systembelastning i realtid, vise og styre processer og tjenester som kører på dit system.</translation>
     </message>
 </context>
 <context>
@@ -79,15 +79,15 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>-</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Automatisk</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Manuel</translation>
     </message>
 </context>
 <context>
@@ -200,7 +200,7 @@
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Vis genveje</translation>
     </message>
 </context>
 <context>
@@ -232,11 +232,12 @@ Er du sikker på, at du vil fortsætte?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Hvis programmet tvinges til afslutte kan det forårsage tab af data.
+Er du sikker på, at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Tving afslutning</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Navn</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Klik på det program, du vil afslutte</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Hukommelse</translation>
     </message>
 </context>
 <context>
@@ -348,7 +356,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke skifte procesprioritet</translation>
     </message>
 </context>
 <context>
@@ -370,19 +378,19 @@ Are you sure you want to continue?</source>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke afslutte proces</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke sætte proces på pause</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke genoptage proces</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke dræbe proces</translation>
     </message>
     <message>
         <source>Unknown error</source>
@@ -390,7 +398,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke sende signal til proces</translation>
     </message>
 </context>
 <context>
@@ -443,7 +451,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"/>
+        <translation>Suspender proces</translation>
     </message>
 </context>
 <context>
@@ -523,11 +531,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke indstille tjenestens opstartstype</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"/>
+        <translation>Fejl: Kunne ikke indstille tjenestens opstartstype pga. underprocessen som holdt op med at virke.</translation>
     </message>
 </context>
 <context>
@@ -565,15 +573,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Automatisk</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Manuelt</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"/>
+        <translation>Opstartstype</translation>
     </message>
 </context>
 <context>
@@ -611,7 +619,7 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"/>
+        <translation>Opstartstype</translation>
     </message>
 </context>
 <context>
@@ -644,11 +652,11 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation type="unfinished"/>
+        <translation>Processer</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>Tjenester</translation>
     </message>
 </context>
 </TS>

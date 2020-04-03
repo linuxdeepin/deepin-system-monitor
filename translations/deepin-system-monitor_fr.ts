@@ -79,15 +79,15 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"/>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Automatique</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Manuel</translation>
     </message>
 </context>
 <context>
@@ -149,7 +149,7 @@
     </message>
     <message>
         <source>exited</source>
-        <translation>sorti</translation>
+        <translation>quittée</translation>
     </message>
     <message>
         <source>reload</source>
@@ -208,7 +208,8 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>La fin de ce processus peut entraîner une perte de données. Es-tu sur de vouloir continuer ?</translation>
+        <translation>La fin de ce processus peut entraîner une perte de données. 
+Êtes-vous sur de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -216,12 +217,13 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>End process</source>
-        <translation>Fin du processus</translation>
+        <translation>Terminer le processus</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>La fin de ce processus peut entraîner une perte de données. Es-tu sur de vouloir continuer ?</translation>
+        <translation>La fin de ce processus peut entraîner une perte de données.
+Êtes-vous sur de vouloir continuer ?</translation>
     </message>
     <message>
         <source>End</source>
@@ -230,11 +232,12 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Forcer la fermeture de cette application peut entraîner une perte de données.
+Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Forcer à quitter</translation>
     </message>
 </context>
 <context>
@@ -249,14 +252,21 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nom</translation>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Cliquer sur l&apos;application que vous souhaitez mettre fin</translation>
+        <translation>Cliquer sur l&apos;application que vous souhaitez fermer</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Mémoire</translation>
     </message>
 </context>
 <context>
@@ -271,7 +281,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Écriture sur disque</translation>
+        <translation>Écriture du disque</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -291,7 +301,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Importer</translation>
+        <translation>Téléversé</translation>
     </message>
     <message>
         <source>Disk</source>
@@ -368,7 +378,7 @@ Are you sure you want to continue?</source>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation>Échec de la fin du processus</translation>
+        <translation>Échec de la fermeture du processus</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
@@ -425,7 +435,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>End process</source>
-        <translation>Fin du processus</translation>
+        <translation>Terminer le processus</translation>
     </message>
     <message>
         <source>Resume process</source>
@@ -475,7 +485,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Écriture sur disque</translation>
+        <translation>Écriture du disque</translation>
     </message>
     <message>
         <source>Disk read</source>
@@ -487,7 +497,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Importer</translation>
+        <translation>Téléversement</translation>
     </message>
     <message>
         <source>PID</source>
@@ -521,11 +531,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"/>
+        <translation>Impossible de définir le mode démarrage du service</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"/>
+        <translation>Erreur : impossible de définir le type de démarrage du service en raison du sous-processus en panne.</translation>
     </message>
 </context>
 <context>
@@ -563,15 +573,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Automatique</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Manuel</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"/>
+        <translation>Type de démarrage</translation>
     </message>
 </context>
 <context>
@@ -609,14 +619,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"/>
+        <translation>Type de démarrage</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Forcer la fin de l&apos;application</translation>
+        <translation>Forcer à quitter l&apos;application</translation>
     </message>
     <message>
         <source>Expand</source>

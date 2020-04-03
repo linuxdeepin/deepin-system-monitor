@@ -232,11 +232,12 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Das erzwungene Beenden dieser Anwendung kann zu Datenverlust führen.
+Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Beende erzwingen</translation>
     </message>
 </context>
 <context>
@@ -251,7 +252,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Name</translation>
     </message>
 </context>
 <context>
@@ -259,6 +260,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Click the application you want to end</source>
         <translation>Klicken Sie auf das Programm, das Sie beenden möchten</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Arbeitsspeicher</translation>
     </message>
 </context>
 <context>

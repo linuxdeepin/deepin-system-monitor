@@ -232,11 +232,12 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Forzar el cierre de la aplicación puede causar perdida de datos.
+¿Está seguro que quiere continuar?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>Forzar cierre</translation>
     </message>
 </context>
 <context>
@@ -251,14 +252,21 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nombre</translation>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Clic en la aplicación que quiere finalizar</translation>
+        <translation>Clic en la aplicación que quiere cerrar</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Memoria</translation>
     </message>
 </context>
 <context>
@@ -618,7 +626,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Forzar cierre de la aplicación</translation>
+        <translation>Forzar cierre de una aplicación</translation>
     </message>
     <message>
         <source>Expand</source>

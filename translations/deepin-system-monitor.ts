@@ -263,6 +263,13 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Graph.Title</name>
+    <message>
+        <source>Memory</source>
+        <translation>Memory</translation>
+    </message>
+</context>
+<context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
