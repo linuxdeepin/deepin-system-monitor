@@ -37,6 +37,7 @@
 #include "network_traffic_filter.h"
 
 void readProcStatsCallback(ProcStat &ps, void *context);
+void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps);
 
 struct net_io {
     qulonglong  sentBytes;
@@ -141,8 +142,11 @@ private:
     QThread                 m_cacheThread           {};
     DesktopEntryStat       *m_desktopEntryStat      {};
     QList<QString>          m_shellList             {};
+    QList<QString>          m_scriptingList         {};
+    QList<QByteArray>       m_envPathList           {};
 
     friend void readProcStatsCallback(ProcStat &ps, void *context);
+    friend void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps);
     friend class SystemMonitor;
 };
 

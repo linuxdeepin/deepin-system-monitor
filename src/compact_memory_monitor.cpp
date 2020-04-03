@@ -152,7 +152,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     auto memdiff = qlonglong(m_usedMemory - m_prevUsedMemory);
     auto memPercent = (m_prevUsedMemory + m_progress * memdiff) / m_totalMemory;
 
-    auto swpdiff = qulonglong(m_usedSwap - m_prevUsedSwap);
+    auto swpdiff = qlonglong(m_usedSwap - m_prevUsedSwap);
     qreal swapPercent;
     if (m_totalSwap == 0) {
         swapPercent = 0;
