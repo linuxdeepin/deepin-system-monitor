@@ -182,7 +182,15 @@ void ProcessTableView::openExecDirWithFM()
 void ProcessTableView::showProperties()
 {
     if (m_selectedPID.isValid()) {
-        auto *attr = new ProcessAttributeDialog(qvariant_cast<pid_t>(m_selectedPID), this);
+        pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
+        auto entry = m_model->getProcessEntry(pid);
+        auto *attr = new ProcessAttributeDialog(pid,
+                                                entry.getName(),
+                                                entry.getDisplayName(),
+                                                entry.getCmdline(),
+                                                entry.getIcon(),
+                                                entry.getStartTime(),
+                                                this);
         attr->show();
     }
 }
@@ -346,7 +354,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
         setColumnHidden(ProcessTableModel::kProcessPriorityColumn, true);
 
         //sort
-        sortByColumn(ProcessTableModel::kProcessCPUColumn,Qt::DescendingOrder);
+        sortByColumn(ProcessTableModel::kProcessCPUColumn, Qt::DescendingOrder);
     }
 }
 

@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <DDesktopEntry>
 #include <QPixmap>
+#include <QDateTime>
 
 #include "stats_collector.h"
 #include "process_entry.h"
@@ -195,6 +196,9 @@ void readProcStatsCallback(ProcStat &ps, void *context)
         // set displayName & icon
         setProcDisplayNameAndIcon(*ctx, proc, ps);
 
+        proc.setCmdline(QString::fromLocal8Bit(ps->cmdline.join(' ')));
+        proc.setStartTime(ctx->m_btime + time_t(ps->start_time / ctx->m_statCtx.hz));
+
         if (ctx->m_uidCache.contains(ps->euid)) {
             proc.setUserName(ctx->m_uidCache[ps->euid]);
         } else {
@@ -237,6 +241,10 @@ void StatsCollector::updateStatus()
     m_napps = m_nprocs = 0;
 
     ProcessStat::getStatContext(m_statCtx);
+
+    if (!m_btime) {
+        b = SystemStat::readBootTime(m_btime);
+    }
 
     b = SystemStat::readUpTime(uptime);
     if (b) {
@@ -651,29 +659,45 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 }
             }
 
-            if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE") &&
-                    ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") &&
-                    ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) {
-                auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
-                if (ctx.m_desktopEntryCache.contains(proc.getName())) {
-                    de = ctx.m_desktopEntryCache[proc.getName()];
-                } else {
-                    de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                    ctx.m_desktopEntryCache[de->name] = de;
-                }
-                if (!de->icon.isNull()) {
+            if (ctx.m_desktopEntryCache.contains(proc.getName())) {
+                de = ctx.m_desktopEntryCache[proc.getName()];
+                if (!iconSet) {
                     iconSet = true;
                     proc.setIcon(de->icon);
                 }
             } else {
-                auto scale = qApp->devicePixelRatio();
-                auto icon = ctx.m_wm->getWindowIcon(
-                                ctx.m_wm->getWindow(ps->pid),
-                                int(24 * scale));
-                icon.setDevicePixelRatio(scale);
-                if (!icon.isNull()) {
-                    iconSet = true;
-                    proc.setIcon(QIcon(icon));
+                if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE") &&
+                        ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") &&
+                        ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) {
+                    auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
+                    if (ctx.m_desktopEntryCache.contains(proc.getName())) {
+                        de = ctx.m_desktopEntryCache[proc.getName()];
+                    } else {
+                        de = DesktopEntryStat::createDesktopEntry(desktopFile);
+                        ctx.m_desktopEntryCache[de->name] = de;
+                    }
+                    if (!de->icon.isNull()) {
+                        iconSet = true;
+                        proc.setIcon(de->icon);
+                    }
+                } else {
+                    QIcon icon;
+                    auto scale = qApp->devicePixelRatio();
+                    auto p24 = ctx.m_wm->getWindowIcon(
+                                   ctx.m_wm->getWindow(ps->pid),
+                                   int(24 * scale));
+                    p24.setDevicePixelRatio(scale);
+                    // 80p pixmaps are used in process attribute dialog
+                    auto p80 = ctx.m_wm->getWindowIcon(
+                                   ctx.m_wm->getWindow(ps->pid),
+                                   int(80 * scale));
+                    p80.setDevicePixelRatio(scale);
+                    icon.addPixmap(p24);
+                    icon.addPixmap(p80);
+                    if (!p24.isNull()) {
+                        iconSet = true;
+                        proc.setIcon(icon);
+                    }
                 }
             }
         } else if (ctx.m_desktopEntryCache.contains(proc.getName())) {

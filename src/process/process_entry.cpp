@@ -20,6 +20,8 @@ public:
         , m_icon {other.m_icon}
         , m_name {other.m_name}
         , m_displayName {other.m_displayName}
+        , m_cmdline {other.m_cmdline}
+        , m_startTime {other.m_startTime}
         , m_userName {other.m_userName}
         , m_memory {other.m_memory}
         , m_readBps {other.m_readBps}
@@ -43,6 +45,8 @@ public:
             m_icon = other.m_icon;
             m_name = other.m_name;
             m_displayName = other.m_displayName;
+            m_cmdline = other.m_cmdline;
+            m_startTime = other.m_startTime;
             m_userName = other.m_userName;
             m_memory = other.m_memory;
             m_readBps = other.m_readBps;
@@ -76,10 +80,15 @@ private:
     QString m_name {};
     // displayName
     QString m_displayName {};
+    // cmdline
+    QString m_cmdline {};
+    // process start time in seconds since epoch
+    time_t m_startTime {};
     // uid
     QString m_userName {};
     // mem
     qulonglong m_memory {0};
+
     // disk read/write stats
     qreal m_readBps {0};
     qreal m_writeBps {0};
@@ -198,6 +207,26 @@ QString ProcessEntry::getDisplayName() const
 void ProcessEntry::setDisplayName(const QString &displayName)
 {
     data->m_displayName = displayName;
+}
+
+QString ProcessEntry::getCmdline() const
+{
+    return data->m_cmdline;
+}
+
+void ProcessEntry::setCmdline(const QString &cmdline)
+{
+    data->m_cmdline = cmdline;
+}
+
+time_t ProcessEntry::getStartTime() const
+{
+    return data->m_startTime;
+}
+
+void ProcessEntry::setStartTime(time_t startTime)
+{
+    data->m_startTime = startTime;
 }
 
 QString ProcessEntry::getUserName() const

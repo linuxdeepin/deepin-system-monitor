@@ -33,7 +33,8 @@
 #include "system_stat.h"
 
 #define PROC_PATH_UPTIME    "/proc/uptime"
-#define PROC_PATH_CPU       "/proc/stat"
+#define PROC_PATH_STAT      "/proc/stat"
+#define PROC_PATH_CPU       PROC_PATH_STAT
 #define PROC_PATH_MEM       "/proc/meminfo"
 #define PROC_PATH_DISK      "/proc/diskstats"
 #define PROC_PATH_NET       "/proc/net/dev"
@@ -71,6 +72,34 @@ bool SystemStat::readUpTime(qulonglong &uptime)
     if (!b) {
         print_err(errno, QString("read %1 failed").arg(PROC_PATH_UPTIME));
     }
+
+    return b;
+}
+
+bool SystemStat::readBootTime(time_t &btime)
+{
+    bool b = false;
+    FILE *fp;
+    char buf[128];
+
+    btime = 0;
+
+    errno = 0;
+    if (!(fp = fopen(PROC_PATH_STAT, "r"))) {
+        print_err(errno, QString("open %1 failed").arg(PROC_PATH_STAT));
+        return b;
+    }
+
+    while (fgets(buf, 128, fp)) {
+        if (sscanf(buf, "btime %lu", &btime) == 1) {
+            b = true;
+            break;
+        }
+    }
+    if (ferror(fp)) {
+        print_err(errno, QString("read %1 failed").arg(PROC_PATH_STAT));
+    }
+    fclose(fp);
 
     return b;
 }

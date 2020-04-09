@@ -23,6 +23,7 @@
 
 #include <sys/types.h>
 #include <net/if.h>
+#include <time.h>
 
 #include <QSharedPointer>
 
@@ -96,6 +97,7 @@ class SystemStat
 {
 public:
     static bool readUpTime(qulonglong &uptime);
+    static bool readBootTime(time_t &btime);
     static bool readCPUStats(CPUStat &statSum, CPUStatMap &statSMPMap);
     static bool readMemStats(MemStat &stat);
     static bool readDiskIOStats(DiskIOStat &statSum, DiskIOStatMap &statIOMap);

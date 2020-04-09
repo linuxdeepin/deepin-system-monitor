@@ -20,7 +20,13 @@ class ProcessAttributeDialog : public DMainWindow
     Q_OBJECT
 
 public:
-    explicit ProcessAttributeDialog(pid_t pid, QWidget *parent = nullptr);
+    explicit ProcessAttributeDialog(pid_t pid,
+                                    const QString procName,
+                                    const QString displayName,
+                                    const QString cmdline,
+                                    const QIcon icon,
+                                    qulonglong startTime,
+                                    QWidget *parent = nullptr);
 
 private:
     void initUI();
@@ -32,6 +38,12 @@ protected:
 
 private:
     Settings *m_settings;
+
+    QString     m_procName      {};
+    QString     m_displayName   {};
+    QString     m_cmdline       {};
+    qulonglong  m_startTime     {};
+    QIcon       m_icon          {};
 
     DWidget *m_frame {nullptr};
     DShadowLine *m_tbShadow {nullptr};

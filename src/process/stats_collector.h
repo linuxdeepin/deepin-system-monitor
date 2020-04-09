@@ -107,6 +107,8 @@ private:
 
     struct stat_context m_statCtx {};
 
+    time_t m_btime {};
+
     // helper utility to help find all gui apps
     QScopedPointer<FindWindowTitle> m_wm            {};
     QMap<pid_t, xcb_window_t>   m_trayPIDToWndMap   {};

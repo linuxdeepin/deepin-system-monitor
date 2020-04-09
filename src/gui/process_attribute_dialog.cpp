@@ -1,6 +1,3 @@
-#include <proc/readproc.h>
-#include <proc/sysinfo.h>
-
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
@@ -24,15 +21,24 @@
 #include "settings.h"
 #include "utils.h"
 
-using namespace Utils;
-
 static const int kPreferedTextWidth = 200;
 static const int kAppIconSize = 80;
 static const int kIconToNameSpace = 10;
 static const int kNameToGridSpace = 16;
 
-ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid, QWidget *parent)
+ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid,
+                                               const QString procName,
+                                               const QString displayName,
+                                               const QString cmdline,
+                                               const QIcon icon,
+                                               qulonglong startTime,
+                                               QWidget *parent)
     : DMainWindow(parent)
+    , m_procName(procName)
+    , m_displayName(displayName)
+    , m_cmdline(cmdline)
+    , m_startTime(startTime)
+    , m_icon(icon)
     , m_pid(pid)
 {
     m_settings = Settings::instance();
@@ -116,6 +122,8 @@ void ProcessAttributeDialog::initUI()
 
     m_appNameLabel = new DLabel(this);
     DFontSizeManager::instance()->bind(m_appNameLabel, DFontSizeManager::T5, QFont::Bold);
+    m_appNameLabel->setElideMode(Qt::ElideMiddle);
+    m_appNameLabel->setAlignment(Qt::AlignCenter);
     vlayout->addWidget(m_appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     // spacing
@@ -176,50 +184,13 @@ void ProcessAttributeDialog::initUI()
     // spacing
     vlayout->addStretch(1);
 
-    // Read the list of open processes information.
-    PROCTAB *proc =
-        openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
-    static proc_t proc_info;
-    memset(&proc_info, 0, sizeof(proc_t));
+    appIcon->setPixmap(m_icon.pixmap(kAppIconSize, kAppIconSize));
+    m_appNameLabel->setText(m_displayName);
+    m_appNameLabel->setToolTip(m_displayName);
+    m_procNameText->setText(m_procName);
+    m_procCmdText->setText(m_cmdline);
+    m_procStartText->setText(QDateTime::fromSecsSinceEpoch(qint64(m_startTime)).toString("yyyy-MM-dd hh:mm:ss"));
 
-    std::map<int, proc_t> processes;
-    while (readproc(proc, &proc_info) != nullptr) {
-        processes[proc_info.tid] = proc_info;
-    }
-    closeproc(proc);
-
-    QScopedPointer<FindWindowTitle> findWindowTitle(new FindWindowTitle());
-    findWindowTitle->updateWindowInfos();
-
-    // Read tray icon process.
-    QList<xcb_window_t> trayProcessXids = Utils::getTrayWindows();
-    QMap<int, int> trayProcessMap;
-
-    for (xcb_window_t xid : trayProcessXids) {
-        trayProcessMap[findWindowTitle->getWindowPid(static_cast<xcb_window_t>(xid))] = xid;
-    }
-
-    for (auto &i : processes) {
-        int processId = (&i.second)->tid;
-
-        if (m_pid == processId) {
-            QString cmdline = Utils::getProcessCmdline(processId);
-            QString name = getProcessName(&i.second, cmdline);
-            std::string desktopFile = getProcessDesktopFile(m_pid, name, cmdline, trayProcessMap);
-            QPixmap icon = getProcessIcon(m_pid, desktopFile, findWindowTitle, kAppIconSize);
-            QString displayName = getDisplayNameFromName(name, desktopFile, false);
-
-            appIcon->setPixmap(icon);
-            m_appNameLabel->setText(displayName);
-
-            m_procNameText->setText(name);
-            m_procCmdText->setText(QUrl::fromPercentEncoding(cmdline.toUtf8()));
-            m_procStartText->setText(QFileInfo(QString("/proc/%1").arg(processId))
-                                     .created()
-                                     .toString("yyyy-MM-dd hh:mm:ss"));
-            break;
-        }
-    }
     m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
 }

@@ -60,6 +60,16 @@ public:
         int prio = m_processList.at(row).getPriority();
         return prio;
     }
+    inline ProcessEntry getProcessEntry(pid_t pid) const
+    {
+        if (m_processMap.contains(pid)) {
+            auto idx = m_processMap[pid];
+            if (idx >= 0 && idx < m_processList.size()) {
+                return m_processList[idx];
+            }
+        }
+        return {};
+    }
 
 Q_SIGNALS:
     void modelUpdated();

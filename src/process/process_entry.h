@@ -42,6 +42,12 @@ public:
     QString getDisplayName() const;
     void setDisplayName(const QString &displayName);
 
+    QString getCmdline() const;
+    void setCmdline(const QString &cmdline);
+
+    time_t getStartTime() const;
+    void setStartTime(time_t startTime);
+
     QString getUserName() const;
     void setUserName(const QString &userName);
 
