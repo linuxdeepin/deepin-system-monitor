@@ -196,7 +196,7 @@ void readProcStatsCallback(ProcStat &ps, void *context)
         // set displayName & icon
         setProcDisplayNameAndIcon(*ctx, proc, ps);
 
-        proc.setCmdline(QString::fromLocal8Bit(ps->cmdline.join(' ')));
+        proc.setCmdline(QUrl::fromPercentEncoding(ps->cmdline.join(' ')));
         proc.setStartTime(ctx->m_btime + time_t(ps->start_time / ctx->m_statCtx.hz));
 
         if (ctx->m_uidCache.contains(ps->euid)) {
@@ -643,14 +643,18 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             auto title = ctx.m_wm->getWindowTitle(ps->pid);
             if (!title.isEmpty()) {
                 if (ps->cmdline.size() > 1) {
-                    auto url = QUrl(ps->cmdline[ps->cmdline.size() - 1], QUrl::StrictMode);
+                    auto url = QUrl(ps->cmdline[ps->cmdline.size() - 1]);
+                    auto finfo = QFileInfo(url.fileName());
+                    auto rname = url.fileName();
+                    rname.chop(finfo.completeSuffix().length() + 1);
                     if (url.isValid()
                             && (url.isLocalFile() || !url.host().isEmpty())
-                            && !title.contains(url.fileName())) {
+                            && !title.contains(rname)) {
                         nameSet = true;
-                        proc.setDisplayName(QString("%1 - %2")
-                                            .arg(url.fileName())
-                                            .arg(title));
+                        proc.setDisplayName(QString("%1 - %2").arg(rname).arg(title));
+                    } else {
+                        nameSet = true;
+                        proc.setDisplayName(title);
                     }
                 }
                 if (!nameSet) {
