@@ -27,11 +27,11 @@ static const int kIconToNameSpace = 10;
 static const int kNameToGridSpace = 16;
 
 ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid,
-                                               const QString procName,
-                                               const QString displayName,
-                                               const QString cmdline,
-                                               const QIcon icon,
-                                               qulonglong startTime,
+                                               const QString &procName,
+                                               const QString &displayName,
+                                               const QString &cmdline,
+                                               const QIcon &icon,
+                                               time_t startTime,
                                                QWidget *parent)
     : DMainWindow(parent)
     , m_procName(procName)

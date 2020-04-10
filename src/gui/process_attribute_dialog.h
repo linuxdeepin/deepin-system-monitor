@@ -21,11 +21,11 @@ class ProcessAttributeDialog : public DMainWindow
 
 public:
     explicit ProcessAttributeDialog(pid_t pid,
-                                    const QString procName,
-                                    const QString displayName,
-                                    const QString cmdline,
-                                    const QIcon icon,
-                                    qulonglong startTime,
+                                    const QString &procName,
+                                    const QString &displayName,
+                                    const QString &cmdline,
+                                    const QIcon &icon,
+                                    time_t startTime,
                                     QWidget *parent = nullptr);
 
 private:
@@ -42,7 +42,7 @@ private:
     QString     m_procName      {};
     QString     m_displayName   {};
     QString     m_cmdline       {};
-    qulonglong  m_startTime     {};
+    time_t      m_startTime     {};
     QIcon       m_icon          {};
 
     DWidget *m_frame {nullptr};

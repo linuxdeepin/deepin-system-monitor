@@ -158,8 +158,9 @@ inline QString normalizeProcName(const QString &proc_name, const QByteArrayList 
     }
 
     for (auto cmd : cmdline) {
-        if (cmd[0] == '/' && cmd.contains(proc_name.toLocal8Bit())) {
-            return QFileInfo(cmd).fileName();
+        QString name = {basename(cmd)};
+        if (name.startsWith(proc_name.toLocal8Bit())) {
+            return name;
         }
     }
     return proc_name;
