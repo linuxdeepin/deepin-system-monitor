@@ -7,3 +7,4 @@ build/
 *.user
 *.user.*
 .vscode/*
+.directory
