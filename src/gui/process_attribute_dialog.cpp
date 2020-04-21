@@ -186,7 +186,7 @@ void ProcessAttributeDialog::initUI()
 
     appIcon->setPixmap(m_icon.pixmap(kAppIconSize, kAppIconSize));
     m_appNameLabel->setText(m_displayName);
-    m_appNameLabel->setToolTip(m_displayName);
+    m_appNameLabel->setToolTip(QString("<div>%1</div>").arg(m_displayName));
     m_procNameText->setText(m_procName);
     m_procCmdText->setText(m_cmdline);
     m_procStartText->setText(QDateTime::fromSecsSinceEpoch(qint64(m_startTime)).toString("yyyy-MM-dd hh:mm:ss"));

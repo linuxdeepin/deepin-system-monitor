@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 #include <QHash>
 #include <QList>
+#include <QHash>
 
 #include "service/system_service_entry.h"
 #include "dbus/dbus_common.h"
@@ -28,7 +29,6 @@ constexpr const char *kSystemServicePID = QT_TRANSLATE_NOOP("Service.Table.Heade
 class SystemServiceTableModel : public QAbstractTableModel
 {
     Q_OBJECT
-    Q_DISABLE_COPY(SystemServiceTableModel)
 
 public:
     enum SystemServiceTableColumn {
@@ -46,129 +46,55 @@ public:
 
     explicit SystemServiceTableModel(QObject *parent = nullptr);
 
-    inline void setServiceEntryList(const QList<SystemServiceEntry> &list)
+    inline void reset()
     {
-#ifdef ALT_METHOD
-        QHash<QString, SystemServiceEntry> hash;
-        QList<int> rmlist;
-        QHash<QString, SystemServiceEntry> saved;
-
-        for (auto &entry : list) {
-            hash[entry.getId()] = entry;
-        }
-
-        // modify/remove entry
-        for (auto i = 0; i < m_ServiceEntryList.size(); i++) {
-            auto entry = m_ServiceEntryList[i];
-            if (hash.contains(entry.getId())) {
-                // modify
-                saved[entry.getId()] = entry;
-                m_ServiceEntryList.replace(i, hash[entry.getId()]);
-                Q_EMIT dataChanged(index(i, 0), index(i, columnCount() - 1));
-            } else {
-                // remove
-                rmlist << i;
-            }
-        }
-
-        for (auto i = 0; i < rmlist.size(); i++) {
-            beginRemoveRows({}, i, i);
-            m_ServiceEntryList.removeAt(i);
-            endRemoveRows();
-        }
-
-        // add
-        for (auto &entry : list) {
-            if (saved.contains(entry.getId())) {
-                continue;
-            } else {
-                int row = m_ServiceEntryList.size();
-                beginInsertRows({}, row, row);
-                m_ServiceEntryList << entry;
-                endInsertRows();
-            }
-        }
-#endif
-        beginResetModel();
-        m_ServiceEntryList = list;
-        endResetModel();
-    }
-
-    inline SystemServiceEntry getSystemServiceEntry(const QModelIndex &index) const
-    {
-        if (index.isValid() && index.row() >= 0 && index.row() < m_ServiceEntryList.size())
-            return m_ServiceEntryList.at(index.row());
-        else {
-            return {};
-        }
-    }
-
-    inline QModelIndex insertServiceEntry(const SystemServiceEntry &entry)
-    {
-        int row = m_ServiceEntryList.size();
-
-        beginInsertRows({}, row, row);
-        m_ServiceEntryList << entry;
-        endInsertRows();
-
-        return index(row, 0);
-    }
-
-    inline void removeServiceEntry(const QModelIndex &entryIndex)
-    {
-        if (entryIndex.row() >= 0 && entryIndex.row() < m_ServiceEntryList.size()) {
-            beginRemoveRows({}, entryIndex.row(), entryIndex.row());
-            m_ServiceEntryList.removeAt(entryIndex.row());
-            endRemoveRows();
-        }
-    }
-
-    inline void removeAll()
-    {
-        beginRemoveRows({}, 0, m_ServiceEntryList.size() - 1);
-        m_ServiceEntryList.clear();
+        beginRemoveRows({}, 0, m_svcList.size() - 1);
+        m_svcList.clear();
+        m_svcMap.clear();
         endRemoveRows();
     }
 
-    inline void updateServiceEntry(int row)
-    {
-        if (row >= 0)
-            dataChanged(index(row, 0), index(row, columnCount() - 1));
-    }
-
-    inline QModelIndex checkServiceEntryExists(const QString &name)
-    {
-        int idx = 0;
-        foreach (const auto &entry, m_ServiceEntryList) {
-            if (name == entry.getId())
-                return index(idx, 0);
-            idx++;
-        }
-        return {};
-    }
+    void updateServiceEntry(const SystemServiceEntry &entry);
 
     inline QString getUnitFileState(const QModelIndex &index)
     {
-        return m_ServiceEntryList.at(index.row()).getState();
+        if (!index.isValid())
+            return {};
+
+        return m_svcMap[m_svcList[index.row()]].getState();
     }
 
     inline QString getUnitFileName(const QModelIndex &index)
     {
-        return m_ServiceEntryList.at(index.row()).getId();
+        if (!index.isValid())
+            return {};
+
+        return m_svcMap[m_svcList[index.row()]].getId();
     }
 
     QVariant data(const QModelIndex &index, int role) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
+    void fetchMore(const QModelIndex &parent) override;
+    bool canFetchMore(const QModelIndex &parent) const override;
+
+Q_SIGNALS:
+    void currentRowChanged(int row);
 
 private Q_SLOTS:
-    void updateServiceState(const QString &sname, const QString &state);
+    void updateServiceList(const QList<SystemServiceEntry> &list);
 
 private:
-    QList<SystemServiceEntry> m_ServiceEntryList;
+    // service name
+    QList<QString>                      m_svcList   {};
+    // name - entry
+    QHash<QString, SystemServiceEntry>  m_svcMap    {};
+    // current loaded items (into the model)
+    int m_nr {};
 };
 
 #endif  // SYSTEM_SERVICE_TABLE_MODEL_H

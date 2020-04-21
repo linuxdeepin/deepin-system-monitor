@@ -121,6 +121,7 @@ StatsCollector::StatsCollector(QObject *parent) :
 
 void StatsCollector::start()
 {
+    (void)QApplication::instance();
     // Start timer.
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateStatus()));

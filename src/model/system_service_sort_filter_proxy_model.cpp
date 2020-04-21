@@ -7,6 +7,24 @@ SystemServiceSortFilterProxyModel::SystemServiceSortFilterProxyModel(QObject *pa
 {
 }
 
+bool SystemServiceSortFilterProxyModel::canFetchMore(const QModelIndex &parent) const
+{
+    return QSortFilterProxyModel::canFetchMore(parent);
+}
+
+void SystemServiceSortFilterProxyModel::fetchMore(const QModelIndex &parent)
+{
+    if (!filterRegExp().pattern().isEmpty()) {
+        // when search content is non-empty, to avoid model refresh malfunction,
+        // we need load all contents in batch.
+        while (canFetchMore(parent)) {
+            QSortFilterProxyModel::fetchMore(parent);
+        }
+    } else {
+        QSortFilterProxyModel::fetchMore(parent);
+    }
+}
+
 bool SystemServiceSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
     QModelIndex index0 =

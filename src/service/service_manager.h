@@ -10,9 +10,29 @@
 #include "dbus/systemd1_service_interface.h"
 #include "dbus/unit_info.h"
 #include "service/system_service_entry_data.h"
+#include "service/service_manager_worker.h"
 
 class QDBusObjectPath;
 class ErrorContext;
+
+class ServiceManager;
+// temporary solution to fix status column not shown final state after service start/stop/restart
+class CustomTimer : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit CustomTimer(ServiceManager *mgr, QObject *parent = nullptr);
+
+public:
+    void start(const QString &path);
+
+private:
+    char __padding__[4];
+    int m_cnt {0};
+    QTimer *m_timer {};
+    ServiceManager *m_mgr {};
+};
 
 class ServiceManager : public QObject
 {
@@ -34,7 +54,7 @@ public:
         return sin;
     }
 
-    QPair<ErrorContext, QList<SystemServiceEntry>> getServiceEntryList() const;
+    void updateServiceList();
 
     inline static QString getServiceStartupType(const QString &id, const QString &state)
     {
@@ -54,20 +74,27 @@ public:
 
 Q_SIGNALS:
     void errorOccurred(const ErrorContext &ec);
-    void serviceStartupModeChanged(const QString &service, const QString &state);
+    void beginUpdateList();
+    void serviceListUpdated(const QList<SystemServiceEntry> &list);
+    void serviceStatusUpdated(const SystemServiceEntry &entry);
+
+public:
+    SystemServiceEntry updateServiceEntry(const QString &opath);
 
 public Q_SLOTS:
-    QPair<ErrorContext, bool> startService(SystemServiceEntry &entry, const QString &param = {});
-    QPair<ErrorContext, bool> stopService(SystemServiceEntry &entry);
-    QPair<ErrorContext, bool> restartService(SystemServiceEntry &entry, const QString &param = {});
-    void setServiceStartupMode(const QString &service, bool autoStart);
+    void startService(const QString &id, const QString &param = {});
+    void stopService(const QString &id);
+    void restartService(const QString &id, const QString &param = {});
+    void setServiceStartupMode(const QString &id, bool autoStart);
 
 private:
     ServiceManager(QObject *parent = nullptr);
-    ~ServiceManager() = default;
+    ~ServiceManager();
 
     QString normalizeServiceId(const QString &id, const QString &param = {});
-    void updateServiceEntry(SystemServiceEntry &entry, const QDBusObjectPath &o);
+
+    QThread m_workerThread;
+    ServiceManagerWorker *m_worker {};
 
     static std::atomic<ServiceManager *> m_instance;
     static std::mutex m_mutex;

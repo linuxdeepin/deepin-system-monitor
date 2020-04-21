@@ -12,6 +12,8 @@
 
 #include "dbus_properties_interface.h"
 
+#define SYSTEMD_UNIT_PATH "/org/freedesktop/systemd1/unit/"
+
 /*
  * Proxy class for interface org.freedesktop.systemd1.Unit
  */
@@ -20,6 +22,20 @@ class Systemd1UnitInterface : public QDBusAbstractInterface
     Q_OBJECT
 public:
     static inline const char *staticInterfaceName() { return "org.freedesktop.systemd1.Unit"; }
+
+    static inline QDBusObjectPath normalizeUnitPath(const QString &id)
+    {
+        QString buf {};
+        for (auto u : id) {
+            if (u.isLetterOrNumber()) {
+                buf.append(u);
+            } else {
+                // special character, needs encode
+                buf.append("_").append(QString("%1").arg(uint(u.toLatin1()), 0, 16));
+            }
+        }
+        return QDBusObjectPath {QString("%1%2").arg(SYSTEMD_UNIT_PATH).arg(buf)};
+    }
 
 public:
     Systemd1UnitInterface(const QString &service, const QString &path,

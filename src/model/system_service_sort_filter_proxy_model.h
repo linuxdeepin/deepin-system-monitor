@@ -9,6 +9,8 @@ class SystemServiceSortFilterProxyModel : public QSortFilterProxyModel
 
 public:
     SystemServiceSortFilterProxyModel(QObject *parent = nullptr);
+    bool canFetchMore(const QModelIndex &parent) const override;
+    void fetchMore(const QModelIndex &parent) override;
 
 protected:
     bool filterAcceptsRow(int row, const QModelIndex &parent) const override;

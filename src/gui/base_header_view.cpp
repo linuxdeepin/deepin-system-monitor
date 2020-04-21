@@ -104,17 +104,26 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     painter->setOpacity(1);
 
     DPalette::ColorGroup cg;
-#ifdef ENABLE_INACTIVE_DISPLAY
-    QWidget *wnd = DApplication::activeWindow();
-    if (!wnd) {
-        cg = DPalette::Inactive;
+    QStyleOption opt;
+    opt.initFrom(this);
+    if (!(opt.state & DStyle::State_Enabled)) {
+        cg = DPalette::Disabled;
     } else {
-        cg = DPalette::Active;
-    }
+#ifdef ENABLE_INACTIVE_DISPLAY
+        if (!wnd) {
+            cg = DPalette::Inactive;
+        } else {
+            if (wnd->isModal()) {
+                cg = DPalette::Inactive;
+            } else {
+                cg = DPalette::Active;
+            }
+        }
 #else
-    cg = DPalette::Active;
-//    cg = DPalette::Current;
+        cg = DPalette::Active;
+//        cg = DPalette::Current;
 #endif
+    }
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();

@@ -9,7 +9,7 @@
 ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     : DDialog(parent)
 {
-    setIcon(QIcon::fromTheme("deepin-system-monitor"));
+    setIcon(QIcon::fromTheme("dialog-question"));
 
     addSpacing(10);
     m_nameLineEdit = new DLineEdit(this);

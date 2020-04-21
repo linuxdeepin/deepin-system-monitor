@@ -5,6 +5,7 @@ SystemServiceEntry::SystemServiceEntry()
 {
 }
 SystemServiceEntry::SystemServiceEntry(const QString &id,
+                                       const QString &sname,
                                        const QString &loadState,
                                        const QString &activeState,
                                        const QString &subState,
@@ -20,6 +21,7 @@ SystemServiceEntry::SystemServiceEntry(const QString &id,
     data = new SystemServiceEntryData;
 
     setId(id);
+    setSName(sname);
     setLoadState(loadState);
     setActiveState(activeState);
     setSubState(subState);

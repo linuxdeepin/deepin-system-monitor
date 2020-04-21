@@ -1,4 +1,4 @@
-#include <DApplication>
+﻿#include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
 #include <DHeaderView>
@@ -35,257 +35,15 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     installEventFilter(this);
 
     // >>> table model
-    m_Model = new SystemServiceTableModel(this);
-    m_ProxyModel = new SystemServiceSortFilterProxyModel(this);
-    m_ProxyModel->setSourceModel(m_Model);
-    setModel(m_ProxyModel);
+    m_model = new SystemServiceTableModel(this);
+    m_proxyModel = new SystemServiceSortFilterProxyModel(this);
+    m_proxyModel->setSourceModel(m_model);
+    setModel(m_proxyModel);
 
     bool settingsLoaded = loadSettings();
 
-    // >>> "not found" display label
-    m_noMatchingResultLabel =
-        new DLabel(DApplication::translate("Common.Search", "No search results"), this);
-    DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
-    auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
-    QColor labelColor = palette.color(DPalette::PlaceholderText);
-    palette.setColor(DPalette::Text, labelColor);
-    m_noMatchingResultLabel->setPalette(palette);
-    m_noMatchingResultLabel->setVisible(false);
-    auto *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
-        if (m_noMatchingResultLabel) {
-            auto palette = DApplicationHelper::instance()->applicationPalette();
-            QColor labelColor = palette.color(DPalette::PlaceholderText);
-            palette.setColor(DPalette::Text, labelColor);
-            m_noMatchingResultLabel->setPalette(palette);
-        }
-    });
-
-    QHeaderView *hdr = header();
-    hdr->setSectionsMovable(true);
-    hdr->setSectionsClickable(true);
-    hdr->setSectionResizeMode(DHeaderView::Interactive);
-    hdr->setStretchLastSection(true);
-    hdr->setSortIndicatorShown(true);
-    hdr->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    hdr->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    // table options
-    setSortingEnabled(true);
-    setSelectionMode(QAbstractItemView::SingleSelection);
-    setSelectionBehavior(QAbstractItemView::SelectRows);
-    setContextMenuPolicy(Qt::CustomContextMenu);
-
-    // table events
-    connect(this, &SystemServiceTableView::customContextMenuRequested, this,
-            &SystemServiceTableView::displayTableContextMenu);
-    // table header events
-    connect(hdr, &QHeaderView::sectionResized, this, [ = ]() { saveSettings(); });
-    connect(hdr, &QHeaderView::sectionMoved, this, [ = ]() { saveSettings(); });
-    connect(hdr, &QHeaderView::sortIndicatorChanged, this, [ = ]() { saveSettings(); });
-    connect(hdr, &QHeaderView::customContextMenuRequested, this,
-            &SystemServiceTableView::displayHeaderContextMenu);
-
-    MainWindow *mainWindow = MainWindow::instance();
-    connect(mainWindow->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
-
-    // >>> table default style
-    if (!settingsLoaded) {
-        setColumnWidth(SystemServiceTableModel::kSystemServiceNameColumn, 200);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceNameColumn, false);
-        setColumnWidth(SystemServiceTableModel::kSystemServiceLoadStateColumn, 100);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn, true);
-        setColumnWidth(SystemServiceTableModel::kSystemServiceActiveStateColumn, 100);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn, false);
-        setColumnWidth(SystemServiceTableModel::kSystemServiceSubStateColumn, 100);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, false);
-        setColumnWidth(SystemServiceTableModel::kSystemServiceStateColumn, 100);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceStateColumn, false);
-        setColumnWidth(SystemServiceTableModel::kSystemServiceStartupModeColumn, 80);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, true);
-        setColumnWidth(SystemServiceTableModel::kSystemServiceDescriptionColumn, 320);
-        setColumnHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, false);
-        setColumnWidth(SystemServiceTableModel::kSystemServicePIDColumn, 100);
-        setColumnHidden(SystemServiceTableModel::kSystemServicePIDColumn, true);
-        sortByColumn(SystemServiceTableModel::kSystemServiceNameColumn, Qt::AscendingOrder);
-    }
-
-    // >>> service tableview context menu
-    m_contextMenu = new DMenu(this);
-    // start service
-    QAction *startServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
-    startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
-    connect(startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
-    // stop service
-    QAction *stopServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
-    stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
-    connect(stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
-    // restart service
-    QAction *restartServiceAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
-    restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
-    connect(restartServiceAction, &QAction::triggered, this,
-            &SystemServiceTableView::restartService);
-    // service startup mode
-    auto *setServiceStartupModeMenu =
-        m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Startup type"));
-    auto *setAutoStartAction = setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Auto"));
-    auto *setManualStartAction = setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Manual"));
-    connect(setAutoStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(true); });
-    connect(setManualStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(false); });
-    // refresh context menu item
-    QAction *refreshAction =
-        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
-    refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
-    connect(refreshAction, &QAction::triggered, this, &SystemServiceTableView::refresh);
-
-    connect(m_contextMenu, &QMenu::aboutToShow, this, [ = ]() {
-        if (selectionModel()->selectedRows().size() > 0) {
-            // proxy index
-            auto index = selectionModel()->selectedRows()[0];
-            if (index.isValid()) {
-                auto state = m_Model->getUnitFileState(m_ProxyModel->mapToSource(index));
-                auto uname = m_Model->getUnitFileName(m_ProxyModel->mapToSource(index));
-                if (isUnitNoOp(state) || uname.endsWith("@")) {
-                    setServiceStartupModeMenu->setEnabled(false);
-                } else {
-                    setServiceStartupModeMenu->setEnabled(true);
-                }
-
-                auto sname = m_Model->getUnitFileName(m_ProxyModel->mapToSource(index));
-                if (isServiceAutoStartup(sname, state)) {
-                    setAutoStartAction->setEnabled(false);
-                    setManualStartAction->setEnabled(true);
-                } else {
-                    setAutoStartAction->setEnabled(true);
-                    setManualStartAction->setEnabled(false);
-                }
-            }
-        }
-    });
-
-    // >>> header context menu
-    m_headerContextMenu = new DMenu(this);
-    // load state column
-    QAction *loadStateHeaderAction = m_headerContextMenu->addAction(
-                                         DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
-    loadStateHeaderAction->setCheckable(true);
-    connect(loadStateHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn, !b);
-        saveSettings();
-    });
-    // active state column
-    QAction *activeStateHeaderAction = m_headerContextMenu->addAction(
-                                           DApplication::translate("Service.Table.Header", kSystemServiceActiveState));
-    activeStateHeaderAction->setCheckable(true);
-    connect(activeStateHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn, !b);
-        saveSettings();
-    });
-    // sub state column
-    QAction *subStateHeaderAction = m_headerContextMenu->addAction(
-                                        DApplication::translate("Service.Table.Header", kSystemServiceSubState));
-    subStateHeaderAction->setCheckable(true);
-    connect(subStateHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, !b);
-        saveSettings();
-    });
-    // state column
-    QAction *stateHeaderAction = m_headerContextMenu->addAction(
-                                     DApplication::translate("Service.Table.Header", kSystemServiceState));
-    stateHeaderAction->setCheckable(true);
-    connect(stateHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn, !b);
-        saveSettings();
-    });
-    // description column
-    QAction *descriptionHeaderAction = m_headerContextMenu->addAction(
-                                           DApplication::translate("Service.Table.Header", kSystemServiceDescription));
-    descriptionHeaderAction->setCheckable(true);
-    connect(descriptionHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, !b);
-        saveSettings();
-    });
-    // pid column
-    QAction *pidHeaderAction = m_headerContextMenu->addAction(
-                                   DApplication::translate("Service.Table.Header", kSystemServicePID));
-    pidHeaderAction->setCheckable(true);
-    connect(pidHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn, !b);
-        saveSettings();
-    });
-    // startup mode column
-    auto *startupModeHeaderAction = m_headerContextMenu->addAction(
-                                        DApplication::translate("Service.Table.Header", kSystemServiceStartupMode));
-    startupModeHeaderAction->setCheckable(true);
-    connect(startupModeHeaderAction, &QAction::triggered, this, [this](bool b) {
-        header()->setSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, !b);
-        saveSettings();
-    });
-
-    if (!settingsLoaded) {
-        loadStateHeaderAction->setChecked(false);
-        activeStateHeaderAction->setChecked(true);
-        subStateHeaderAction->setChecked(true);
-        stateHeaderAction->setChecked(true);
-        descriptionHeaderAction->setChecked(true);
-        pidHeaderAction->setChecked(false);
-    }
-    connect(m_headerContextMenu, &QMenu::aboutToShow, this, [ = ]() {
-        bool b;
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn);
-        loadStateHeaderAction->setChecked(!b);
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn);
-        activeStateHeaderAction->setChecked(!b);
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn);
-        subStateHeaderAction->setChecked(!b);
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn);
-        stateHeaderAction->setChecked(!b);
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn);
-        startupModeHeaderAction->setChecked(!b);
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn);
-        descriptionHeaderAction->setChecked(!b);
-        b = header()->isSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn);
-        pidHeaderAction->setChecked(!b);
-    });
-
-    m_refreshKP = new QShortcut(QKeySequence(QKeySequence::Refresh), this);
-    connect(m_refreshKP, &QShortcut::activated, this, &SystemServiceTableView::refresh);
-    m_startKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this);
-    connect(m_startKP, &QShortcut::activated, this, &SystemServiceTableView::startService);
-    m_stopKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_T), this);
-    connect(m_stopKP, &QShortcut::activated, this, &SystemServiceTableView::stopService);
-    m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
-    connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
-
-    m_spinner = new DSpinner(this);
-    auto pa = DApplicationHelper::instance()->applicationPalette();
-    QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
-    pa.setColor(DPalette::Highlight, hlBrush.color());
-    m_spinner->setPalette(pa);
-    m_spinner->move(rect().center() - m_spinner->rect().center());
-
-    // initialize service list
-    MainWindow *mwnd = MainWindow::instance();
-    if (mwnd) {
-        auto *tbar = mwnd->toolbar();
-        connect(tbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
-            if (!defer_initialized) {
-                asyncGetServiceEntryList();
-                defer_initialized = true;
-            }
-        });
-    }
-
-    auto *mgr = ServiceManager::instance();
-    Q_ASSERT(mgr != nullptr);
-    connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
-        if (ec) {
-            DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
-        }
-    });
+    initUI(settingsLoaded);
+    initConnections();
 }
 
 SystemServiceTableView::~SystemServiceTableView()
@@ -333,178 +91,109 @@ void SystemServiceTableView::displayTableContextMenu(const QPoint &p)
     m_contextMenu->popup(point);
 }
 
-int SystemServiceTableView::getSelectedServiceEntry(SystemServiceEntry &entry) const
-{
-    QModelIndexList list = selectedIndexes();
-    if (list.size() > 0) {
-        QModelIndex index = m_ProxyModel->mapToSource(list.at(0));
-        SystemServiceEntry e = getSourceModel()->getSystemServiceEntry(index);
-        if (!e.getId().isEmpty()) {
-            entry = e;
-            return list.at(0).row();
-        }
-    }
-
-    return -1;
-}
-
 void SystemServiceTableView::startService()
 {
-    ErrorContext ec;
-    SystemServiceEntry entry;
-    int row = getSelectedServiceEntry(entry);
-    if (row < 0)
+    if (!m_selectedSName.isValid())
         return;
 
-    bool newRow = false;
+    auto sname = m_selectedSName.toString();
 
     // dialog
-    if (entry.getId().endsWith('@')) {
+    if (sname.endsWith('@')) {
         ServiceNameSubInputDialog dialog(this);
         dialog.setTitle(
             DApplication::translate("Service.Instance.Name.Dialog", "Service instance name"));
-        dialog.setMessage(entry.getDescription());
+        auto desc = selectedIndexes()
+                    .value(SystemServiceTableModel::kSystemServiceDescriptionColumn)
+                    .data()
+                    .toString();
+        dialog.setMessage(desc);
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
-            QString name = entry.getId().append(dialog.getServiceSubName());
-
-            // already in the list
-            QModelIndex idx = getSourceModel()->checkServiceEntryExists(name);
-            if (idx.isValid()) {
-                QItemSelectionModel *selection = selectionModel();
-                selection->select(m_ProxyModel->mapFromSource(idx),
-                                  QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows |
-                                  QItemSelectionModel::Clear);
-                setSelectionModel(selection);
-                row = getSelectedServiceEntry(entry);
-            } else {  // otherwise, add a new entry
-                entry = {};
-                entry.setId(name);
-                newRow = true;
-            }
+            sname = sname.append(dialog.getServiceSubName());
         } else {  // cancel clicked
             return;
         }
     }
 
-    ServiceManager *mgr = ServiceManager::instance();
-
-    auto result = mgr->startService(entry);
-    ec = result.first;
-    if (ec) {
-        handleTaskError(ec);
-    } else {
-        if (newRow) {
-            QModelIndex idx = getSourceModel()->insertServiceEntry(entry);
-            QItemSelectionModel *selection = selectionModel();
-            selection->select(m_ProxyModel->mapFromSource(idx), QItemSelectionModel::SelectCurrent |
-                              QItemSelectionModel::Rows |
-                              QItemSelectionModel::Clear);
-            setSelectionModel(selection);
-        } else {
-            getSourceModel()->updateServiceEntry(row);
-        }
-    }
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+    mgr->startService(sname);
 }
 
 void SystemServiceTableView::stopService()
 {
-    ErrorContext ec;
-    SystemServiceEntry entry;
-    bool deleteItem = false;
-    SystemServiceEntry opt {};
-    QModelIndex rowIndex;
-
-    int row = getSelectedServiceEntry(entry);
-    if (row < 0)
+    if (!m_selectedSName.isValid()) {
         return;
+    }
+
+    auto sname = m_selectedSName.toString();
 
     // service id syntax: xxx@
-    if (entry.getId().endsWith('@')) {
+    if (sname.endsWith('@')) {
         ServiceNameSubInputDialog dialog(this);
         dialog.setTitle(
             DApplication::translate("Service.Instance.Name.Dialog", "Service instance name"));
-        dialog.setMessage(entry.getDescription());
+        auto desc = selectedIndexes()
+                    .value(SystemServiceTableModel::kSystemServiceDescriptionColumn)
+                    .data()
+                    .toString();
+        dialog.setMessage(desc);
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
-            QString name = entry.getId();
-
-            opt.setId(name.append(dialog.getServiceSubName()));
-
-            rowIndex = getSourceModel()->checkServiceEntryExists(name);
-            if (rowIndex.isValid()) {
-                deleteItem = true;
-            }
+            sname = sname.append(dialog.getServiceSubName());
         } else {
             return;
         }
-        // serivce id syntax: xxx@yyy
-    } else if (entry.getId().contains(QRegularExpression(
-                                          "^[^@\\.]+@[^@\\.]+$", QRegularExpression::CaseInsensitiveOption))) {
-        deleteItem = true;
-        opt.setId(entry.getId());
-        rowIndex = getSourceModel()->checkServiceEntryExists(entry.getId());
-    } else {
-        opt.setId(entry.getId());
     }
 
-    ServiceManager *mgr = ServiceManager::instance();
-
-    auto result = mgr->stopService(opt);
-    ec = result.first;
-    if (ec) {
-        handleTaskError(ec);
-    } else {
-        if (deleteItem) {
-            getSourceModel()->removeServiceEntry(rowIndex);
-        } else {
-            entry.setId(opt.getId());
-            entry.setLoadState(opt.getLoadState());
-            entry.setActiveState(opt.getActiveState());
-            entry.setSubState(opt.getSubState());
-            entry.setState(opt.getState());
-            entry.setUnitObjectPath(opt.getUnitObjectPath());
-            entry.setDescription(opt.getDescription());
-            entry.setMainPID(opt.getMainPID());
-            entry.setCanReload(opt.getCanReload());
-            entry.setCanStop(opt.getCanStop());
-            entry.setCanStart(opt.getCanStart());
-            getSourceModel()->updateServiceEntry(row);
-        }
-    }
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+    mgr->stopService(sname);
 }
 
 void SystemServiceTableView::restartService()
 {
-    ErrorContext ec;
-    SystemServiceEntry entry;
-    int row = getSelectedServiceEntry(entry);
-    if (row < 0)
+    if (!m_selectedSName.isValid()) {
         return;
-
-    ServiceManager *mgr = ServiceManager::instance();
-
-    auto result = mgr->restartService(entry);
-    ec = result.first;
-    if (ec) {
-        handleTaskError(ec);
-    } else {
-        getSourceModel()->updateServiceEntry(row);
     }
+
+    auto sname = m_selectedSName.toString();
+
+    // service id syntax: xxx@
+    if (sname.endsWith('@')) {
+        ServiceNameSubInputDialog dialog(this);
+        dialog.setTitle(
+            DApplication::translate("Service.Instance.Name.Dialog", "Service instance name"));
+        auto desc = selectedIndexes()
+                    .value(SystemServiceTableModel::kSystemServiceDescriptionColumn)
+                    .data()
+                    .toString();
+        dialog.setMessage(desc);
+        dialog.exec();
+        if (dialog.result() == QMessageBox::Ok) {
+            sname = sname.append(dialog.getServiceSubName());
+        } else {
+            return;
+        }
+    }
+
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+    mgr->restartService(sname);
 }
 
 void SystemServiceTableView::setServiceStartupMode(bool autoStart)
 {
-    ErrorContext ec;
-    SystemServiceEntry entry;
-    int row = getSelectedServiceEntry(entry);
-    if (row < 0)
+    if (!m_selectedSName.isValid()) {
         return;
+    }
+
+    auto sname = m_selectedSName.toString();
 
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
-
-    mgr->setServiceStartupMode(entry.getId(), autoStart);
+    mgr->setServiceStartupMode(sname, autoStart);
 }
 
 void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
@@ -516,16 +205,18 @@ void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
 void SystemServiceTableView::adjustInfoLabelVisibility()
 {
     setUpdatesEnabled(false);
-    m_noMatchingResultLabel->setVisible(m_ProxyModel->rowCount() == 0 && m_spinner &&
+    m_noMatchingResultLabel->setVisible(!m_proxyModel->rowCount() &&
+                                        m_spinner &&
                                         !m_spinner->isPlaying());
     if (m_noMatchingResultLabel->isVisible())
-        m_noMatchingResultLabel->move(rect().center() - m_noMatchingResultLabel->rect().center());
+        m_noMatchingResultLabel->move(
+            rect().center() - m_noMatchingResultLabel->rect().center());
     setUpdatesEnabled(true);
 }
 
 void SystemServiceTableView::search(const QString &pattern)
 {
-    m_ProxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
+    m_proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
 
     adjustInfoLabelVisibility();
 }
@@ -537,7 +228,319 @@ void SystemServiceTableView::resizeEvent(QResizeEvent *event)
     }
     adjustInfoLabelVisibility();
 
-    DTreeView::resizeEvent(event);
+    BaseTableView::resizeEvent(event);
+}
+
+void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
+                                              const QItemSelection &deselected)
+{
+    if (selected.size() <= 0) {
+        return;
+    }
+
+    m_selectedSName = selected.indexes()
+                      .value(SystemServiceTableModel::kSystemServiceNameColumn)
+                      .data();
+
+    BaseTableView::selectionChanged(selected, deselected);
+}
+
+void SystemServiceTableView::initUI(bool settingsLoaded)
+{
+    // >>> "not found" display label
+    m_noMatchingResultLabel =
+        new DLabel(DApplication::translate("Common.Search", "No search results"), this);
+    DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
+    auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
+    QColor labelColor = palette.color(DPalette::PlaceholderText);
+    palette.setColor(DPalette::Text, labelColor);
+    m_noMatchingResultLabel->setPalette(palette);
+    m_noMatchingResultLabel->setVisible(false);
+
+    auto *hdr = header();
+    hdr->setSectionsMovable(true);
+    hdr->setSectionsClickable(true);
+    hdr->setSectionResizeMode(DHeaderView::Interactive);
+    hdr->setStretchLastSection(true);
+    hdr->setSortIndicatorShown(true);
+    hdr->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    hdr->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // table options
+    setSortingEnabled(true);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // >>> table default style
+    if (!settingsLoaded) {
+        setColumnWidth(SystemServiceTableModel::kSystemServiceNameColumn, 200);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceNameColumn, false);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceLoadStateColumn, 100);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn, true);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceActiveStateColumn, 100);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn, false);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceSubStateColumn, 100);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, false);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceStateColumn, 100);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceStateColumn, false);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceStartupModeColumn, 80);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, true);
+        setColumnWidth(SystemServiceTableModel::kSystemServiceDescriptionColumn, 320);
+        setColumnHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, false);
+        setColumnWidth(SystemServiceTableModel::kSystemServicePIDColumn, 100);
+        setColumnHidden(SystemServiceTableModel::kSystemServicePIDColumn, true);
+        sortByColumn(SystemServiceTableModel::kSystemServiceNameColumn, Qt::AscendingOrder);
+    }
+
+    // >>> service tableview context menu
+    m_contextMenu = new DMenu(this);
+    // start service
+    m_startServiceAction =
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
+    m_startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
+    // stop service
+    m_stopServiceAction =
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
+    m_stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
+    // restart service
+    m_restartServiceAction =
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
+    m_restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
+    // service startup mode
+    m_setServiceStartupModeMenu =
+        m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Startup type"));
+    m_setAutoStartAction = m_setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Auto"));
+    m_setManualStartAction = m_setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Manual"));
+    // refresh context menu item
+    m_refreshAction =
+        m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
+    m_refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
+
+    // >>> header context menu
+    m_headerContextMenu = new DMenu(this);
+    // load state column
+    m_loadStateHeaderAction = m_headerContextMenu->addAction(
+                                  DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
+    m_loadStateHeaderAction->setCheckable(true);
+    // active state column
+    m_activeStateHeaderAction = m_headerContextMenu->addAction(
+                                    DApplication::translate("Service.Table.Header", kSystemServiceActiveState));
+    m_activeStateHeaderAction->setCheckable(true);
+    // sub state column
+    m_subStateHeaderAction = m_headerContextMenu->addAction(
+                                 DApplication::translate("Service.Table.Header", kSystemServiceSubState));
+    m_subStateHeaderAction->setCheckable(true);
+    // state column
+    m_stateHeaderAction = m_headerContextMenu->addAction(
+                              DApplication::translate("Service.Table.Header", kSystemServiceState));
+    m_stateHeaderAction->setCheckable(true);
+    // description column
+    m_descriptionHeaderAction = m_headerContextMenu->addAction(
+                                    DApplication::translate("Service.Table.Header", kSystemServiceDescription));
+    m_descriptionHeaderAction->setCheckable(true);
+    // pid column
+    m_pidHeaderAction = m_headerContextMenu->addAction(
+                            DApplication::translate("Service.Table.Header", kSystemServicePID));
+    m_pidHeaderAction->setCheckable(true);
+    // startup mode column
+    m_startupModeHeaderAction = m_headerContextMenu->addAction(
+                                    DApplication::translate("Service.Table.Header", kSystemServiceStartupMode));
+    m_startupModeHeaderAction->setCheckable(true);
+
+    if (!settingsLoaded) {
+        m_loadStateHeaderAction->setChecked(false);
+        m_activeStateHeaderAction->setChecked(true);
+        m_subStateHeaderAction->setChecked(true);
+        m_stateHeaderAction->setChecked(true);
+        m_descriptionHeaderAction->setChecked(true);
+        m_pidHeaderAction->setChecked(false);
+    }
+
+    m_refreshKP = new QShortcut(QKeySequence(QKeySequence::Refresh), this);
+    m_startKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this);
+    m_stopKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_T), this);
+    m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
+
+    m_spinner = new DSpinner(this);
+    auto pa = DApplicationHelper::instance()->applicationPalette();
+    QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
+    pa.setColor(DPalette::Highlight, hlBrush.color());
+    m_spinner->setPalette(pa);
+    m_spinner->move(rect().center() - m_spinner->rect().center());
+}
+
+void SystemServiceTableView::initConnections()
+{
+    auto *dAppHelper = DApplicationHelper::instance();
+    Q_ASSERT(dAppHelper != nullptr);
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
+        if (m_noMatchingResultLabel) {
+            auto palette = DApplicationHelper::instance()->applicationPalette();
+            QColor labelColor = palette.color(DPalette::PlaceholderText);
+            palette.setColor(DPalette::Text, labelColor);
+            m_noMatchingResultLabel->setPalette(palette);
+        }
+    });
+
+    // table events
+    connect(this, &SystemServiceTableView::customContextMenuRequested, this,
+            &SystemServiceTableView::displayTableContextMenu);
+
+    // table header events
+    auto *hdr = header();
+    connect(hdr, &QHeaderView::sectionResized, this, [ = ]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sectionMoved, this, [ = ]() { saveSettings(); });
+    connect(hdr, &QHeaderView::sortIndicatorChanged, this, [ = ]() { saveSettings(); });
+    connect(hdr, &QHeaderView::customContextMenuRequested, this,
+            &SystemServiceTableView::displayHeaderContextMenu);
+
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
+    connect(mwnd->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
+
+    connect(m_startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
+    connect(m_stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
+    connect(m_restartServiceAction, &QAction::triggered, this, &SystemServiceTableView::restartService);
+    connect(m_setAutoStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(true); });
+    connect(m_setManualStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(false); });
+    connect(m_refreshAction, &QAction::triggered, this, &SystemServiceTableView::refresh);
+
+    connect(m_contextMenu, &QMenu::aboutToShow, this, [ = ]() {
+        if (selectionModel()->selectedRows().size() > 0) {
+            // proxy index
+            auto index = selectionModel()->selectedRows()[0];
+            if (index.isValid()) {
+                auto state = m_model->getUnitFileState(m_proxyModel->mapToSource(index));
+                auto uname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
+                if (isUnitNoOp(state) || uname.endsWith("@")) {
+                    m_setServiceStartupModeMenu->setEnabled(false);
+                } else {
+                    m_setServiceStartupModeMenu->setEnabled(true);
+                }
+
+                auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
+                if (isServiceAutoStartup(sname, state)) {
+                    m_setAutoStartAction->setEnabled(false);
+                    m_setManualStartAction->setEnabled(true);
+                } else {
+                    m_setAutoStartAction->setEnabled(true);
+                    m_setManualStartAction->setEnabled(false);
+                }
+            }
+        }
+    });
+
+    connect(m_loadStateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn, !b);
+        saveSettings();
+    });
+    connect(m_activeStateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn, !b);
+        saveSettings();
+    });
+    connect(m_subStateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, !b);
+        saveSettings();
+    });
+    connect(m_stateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn, !b);
+        saveSettings();
+    });
+    connect(m_descriptionHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, !b);
+        saveSettings();
+    });
+    connect(m_pidHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn, !b);
+        saveSettings();
+    });
+    connect(m_startupModeHeaderAction, &QAction::triggered, this, [ = ](bool b) {
+        hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, !b);
+        saveSettings();
+    });
+
+    connect(m_headerContextMenu, &QMenu::aboutToShow, this, [ = ]() {
+        bool b;
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn);
+        m_loadStateHeaderAction->setChecked(!b);
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn);
+        m_activeStateHeaderAction->setChecked(!b);
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn);
+        m_subStateHeaderAction->setChecked(!b);
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn);
+        m_stateHeaderAction->setChecked(!b);
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn);
+        m_startupModeHeaderAction->setChecked(!b);
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn);
+        m_descriptionHeaderAction->setChecked(!b);
+        b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn);
+        m_pidHeaderAction->setChecked(!b);
+    });
+
+    connect(m_refreshKP, &QShortcut::activated, this, &SystemServiceTableView::refresh);
+    connect(m_startKP, &QShortcut::activated, this, &SystemServiceTableView::startService);
+    connect(m_stopKP, &QShortcut::activated, this, &SystemServiceTableView::stopService);
+    connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
+
+    // initialize service list
+    auto *tbar = mwnd->toolbar();
+    connect(tbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
+        if (!defer_initialized) {
+            auto *mgr = ServiceManager::instance();
+            mgr->updateServiceList();
+            defer_initialized = true;
+        }
+    });
+
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+    connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
+        if (ec) {
+            DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+        }
+    });
+    connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
+        m_loading = true;
+        auto *mwnd = MainWindow::instance();
+        Q_EMIT mwnd->loadingStatusChanged(m_loading);
+
+        setEnabled(false);
+
+        m_noMatchingResultLabel->hide();
+        m_spinner->start();
+        m_spinner->show();
+    });
+    connect(m_model, &SystemServiceTableModel::modelReset, this, [ = ]() {
+        setEnabled(true);
+
+        m_noMatchingResultLabel->hide();
+        m_spinner->hide();
+        m_spinner->stop();
+
+        m_loading = false;
+        auto *mwnd = MainWindow::instance();
+        Q_EMIT mwnd->loadingStatusChanged(m_loading);
+    });
+
+    connect(m_model, &SystemServiceTableModel::currentRowChanged, this,
+    [ = ](int row) {
+        m_proxyModel->fetchMore({});
+        auto *selmo = selectionModel();
+        selmo->select(m_proxyModel->mapFromSource(m_model->index(row, 0)),
+                      QItemSelectionModel::SelectCurrent |
+                      QItemSelectionModel::Rows |
+                      QItemSelectionModel::Clear);
+    });
+
+    connect(m_proxyModel, &SystemServiceTableModel::rowsInserted, this,
+    [ = ]() {
+        adjustInfoLabelVisibility();
+    });
+    connect(m_proxyModel, &SystemServiceTableModel::rowsRemoved, this,
+    [ = ]() {
+        adjustInfoLabelVisibility();
+    });
 }
 
 int SystemServiceTableView::sizeHintForColumn(int column) const
@@ -548,7 +551,7 @@ int SystemServiceTableView::sizeHintForColumn(int column) const
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     return std::max(header()->sizeHintForColumn(column) + margin * 2,
-                    DTreeView::sizeHintForColumn(column) + margin * 2);
+                    BaseTableView::sizeHintForColumn(column) + margin * 2);
 }
 
 void SystemServiceTableView::refresh()
@@ -556,13 +559,11 @@ void SystemServiceTableView::refresh()
     if (m_loading)
         return;
 
-    m_Model->removeAll();
-    asyncGetServiceEntryList();
-}
+    m_model->reset();
 
-SystemServiceTableModel *SystemServiceTableView::getSourceModel() const
-{
-    return m_Model;
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+    mgr->updateServiceList();
 }
 
 bool SystemServiceTableView::eventFilter(QObject *obj, QEvent *event)
@@ -575,66 +576,18 @@ bool SystemServiceTableView::eventFilter(QObject *obj, QEvent *event)
                     if (selectedIndexes().size() > 0) {
                         auto index = selectedIndexes()[0];
                         auto rect = visualRect(index);
-                        displayTableContextMenu({rect.x() + rect.width() / 2, rect.y() + rect.height() / 2});
+                        displayTableContextMenu({rect.x() + rect.width() / 2,
+                                                 rect.y() + rect.height() / 2});
                         return true;
                     }
                 } else if (header()->hasFocus()) {
-                    displayHeaderContextMenu({header()->sectionSize(header()->logicalIndexAt(0)) / 2, header()->height() / 2});
+                    displayHeaderContextMenu({
+                        header()->sectionSize(header()->logicalIndexAt(0)) / 2,
+                        header()->height() / 2});
                     return true;
                 }
             }
         }
     }
     return BaseTableView::eventFilter(obj, event);
-}
-
-// gui-thread
-void SystemServiceTableView::asyncGetServiceEntryList()
-{
-    m_loading = true;
-    auto *mwnd = MainWindow::instance();
-    Q_EMIT mwnd->loadingStatusChanged(m_loading);
-
-    m_noMatchingResultLabel->hide();
-    m_spinner->start();
-    m_spinner->show();
-
-    auto *watcher = new QFutureWatcher<QPair<ErrorContext, QList<SystemServiceEntry>>>;
-    QFuture<QPair<ErrorContext, QList<SystemServiceEntry>>> future;
-    QObject::connect(watcher, &QFutureWatcher<void>::finished, [ = ]() {
-        auto fe = watcher->future();
-        resetModel(fe.result().first, fe.result().second);
-        watcher->deleteLater();
-    });
-    future = QtConcurrent::run(this, &SystemServiceTableView::processAsyncGetServiceListTask);
-    watcher->setFuture(future);
-}
-
-// thread-pool job!!
-QPair<ErrorContext, QList<SystemServiceEntry>>
-                                            SystemServiceTableView::processAsyncGetServiceListTask()
-{
-    ServiceManager *mgr = ServiceManager::instance();
-    Q_ASSERT(mgr != nullptr);
-    return mgr->getServiceEntryList();
-}
-
-// gui-thread
-void SystemServiceTableView::resetModel(const ErrorContext &ec,
-                                        const QList<SystemServiceEntry> &list)
-{
-    if (ec) {
-        handleTaskError(ec);
-        return;
-    }
-    m_Model->setServiceEntryList(list);
-
-    m_spinner->hide();
-    m_spinner->stop();
-
-    adjustInfoLabelVisibility();
-
-    m_loading = false;
-    auto *mwnd = MainWindow::instance();
-    Q_EMIT mwnd->loadingStatusChanged(m_loading);
 }

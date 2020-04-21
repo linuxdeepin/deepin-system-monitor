@@ -16,48 +16,68 @@ SystemServiceTableModel::SystemServiceTableModel(QObject *parent)
 {
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr);
-    connect(mgr, &ServiceManager::serviceStartupModeChanged, this, &SystemServiceTableModel::updateServiceState);
+    connect(mgr, &ServiceManager::serviceListUpdated, this, &SystemServiceTableModel::updateServiceList);
+    connect(mgr, &ServiceManager::serviceStatusUpdated, this, &SystemServiceTableModel::updateServiceEntry);
+}
+
+void SystemServiceTableModel::updateServiceEntry(const SystemServiceEntry &entry)
+{
+    auto sname = entry.getSName();
+    if (m_svcMap.contains(sname)) {
+        for (auto row = 0; row < m_svcList.size(); row++) {
+            if (m_svcList[row] == sname) {
+                m_svcMap[sname] = entry;
+                Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
+                break;
+            }
+        }
+    } else {
+        auto row = m_svcList.size();
+        beginInsertRows({}, row, row);
+        m_svcList << sname;
+        m_svcMap[sname] = entry;
+        endInsertRows();
+        Q_EMIT currentRowChanged(row);
+    }
 }
 
 QVariant SystemServiceTableModel::data(const QModelIndex &index, int role) const
 {
-    QString buf;
+    QString buf {};
+    auto row = index.row();
 
-    if (!index.isValid())
+    if (!index.isValid() || !(row >= 0 && row < m_svcList.size())) {
         return {};
-
-    if (index.row() < 0 || index.row() >= m_ServiceEntryList.size())
-        return {};
+    }
 
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case kSystemServiceNameColumn:
-            return m_ServiceEntryList.at(index.row()).getId();
+            return m_svcMap[m_svcList[row]].getSName();
         case kSystemServiceLoadStateColumn: {
-            buf = m_ServiceEntryList.at(index.row()).getLoadState();
+            buf = m_svcMap[m_svcList[row]].getLoadState();
             return DApplication::translate("DBus.Unit.Load.State", buf.toUtf8());
         }
         case kSystemServiceActiveStateColumn: {
-            buf = m_ServiceEntryList.at(index.row()).getActiveState();
+            buf = m_svcMap[m_svcList[row]].getActiveState();
             return DApplication::translate("DBus.Unit.Active.State", buf.toUtf8());
         }
         case kSystemServiceSubStateColumn:
-            return m_ServiceEntryList.at(index.row()).getSubState();
+            return m_svcMap[m_svcList[row]].getSubState();
         case kSystemServiceStateColumn: {
-            buf = m_ServiceEntryList.at(index.row()).getState();
+            buf = m_svcMap[m_svcList[row]].getState();
             return DApplication::translate("DBus.Unit.State", buf.toUtf8());
         }
         case kSystemServiceStartupModeColumn: {
-            auto entry = m_ServiceEntryList.at(index.row());
-            return DApplication::translate("DBus.Unit.Startup.Mode", entry.getStartupType().toUtf8());
+            auto stype = m_svcMap[m_svcList[row]].getStartupType();
+            return DApplication::translate("DBus.Unit.Startup.Mode", stype.toUtf8());
         }
         case kSystemServiceDescriptionColumn:
-            return m_ServiceEntryList.at(index.row()).getDescription();
+            return m_svcMap[m_svcList[row]].getDescription();
         case kSystemServicePIDColumn: {
-            quint32 pid = m_ServiceEntryList.at(index.row()).getMainPID();
-
-            QVariant v = (pid == 0) ? QVariant() : QVariant(pid);
-            return v;
+            auto pid = m_svcMap[m_svcList[row]].getMainPID();
+            auto va = (pid == 0) ? QVariant() : QVariant(pid);
+            return va;
         }
         default:
             break;
@@ -70,13 +90,15 @@ QVariant SystemServiceTableModel::data(const QModelIndex &index, int role) const
 
 int SystemServiceTableModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    if (parent.isValid())
+        return 0;
 
-    return m_ServiceEntryList.size();
+    return m_nr;
 }
 int SystemServiceTableModel::columnCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    if (parent.isValid())
+        return 0;
 
     return kSystemServiceTableColumnCount;
 }
@@ -120,16 +142,39 @@ Qt::ItemFlags SystemServiceTableModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void SystemServiceTableModel::updateServiceState(const QString &sname, const QString &state)
+void SystemServiceTableModel::fetchMore(const QModelIndex &parent)
 {
-    for (int i = 0; i < m_ServiceEntryList.size(); i++) {
-        auto &entry = m_ServiceEntryList[i];
-        if (entry.getId() == sname) {
-            entry.setState(state);
-            entry.setStartupType(ServiceManager::getServiceStartupType(entry.getId(), state));
-            Q_EMIT dataChanged(index(i, kSystemServiceStateColumn), index(i, kSystemServiceStateColumn));
-            Q_EMIT dataChanged(index(i, kSystemServiceStartupModeColumn), index(i, kSystemServiceStartupModeColumn));
-            break;
-        }
+    if (parent.isValid())
+        return;
+
+    int left = m_svcList.size() - m_nr;
+    int more = qMin(100, left);
+
+    if (more <= 0)
+        return;
+
+    beginInsertRows(QModelIndex(), m_nr, m_nr + more - 1);
+    m_nr += more;
+    endInsertRows();
+}
+
+bool SystemServiceTableModel::canFetchMore(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+        return false;
+
+    return (m_nr < m_svcList.size());
+}
+
+void SystemServiceTableModel::updateServiceList(const QList<SystemServiceEntry> &list)
+{
+    beginResetModel();
+    m_svcList.clear();
+    m_svcMap.clear();
+    m_nr = 0;
+    for (auto &ent : list) {
+        m_svcList << ent.getSName();
+        m_svcMap[ent.getSName()] = ent;
     }
+    endResetModel();
 }

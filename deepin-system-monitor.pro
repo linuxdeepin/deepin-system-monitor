@@ -15,11 +15,11 @@ RESOURCES = deepin-system-monitor.qrc
 	error("Build nethogs static library failed.")
 }
 
-CONFIG(debug, debug|release) {
-        # Enable memory address sanitizer in debug mode.
-        QMAKE_CXXFLAGS += -fsanitize=address
-        LIBS += -lasan
-}
+#CONFIG(debug, debug|release) {
+#        # Enable memory address sanitizer in debug mode.
+#        QMAKE_CXXFLAGS += -fsanitize=address
+#        LIBS += -lasan
+#}
 
 CONFIG(release, debug|release) {
         DEFINES += QT_NO_DEBUG_OUTPUT
@@ -86,7 +86,8 @@ HEADERS += src/utils.h \
     src/process/process_stat.h \
     src/process/system_stat.h \
     src/process/stats_collector.h \
-    src/process/desktop_entry_stat.h
+    src/process/desktop_entry_stat.h \
+    src/service/service_manager_worker.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -144,7 +145,8 @@ SOURCES += src/main.cpp \
     src/process/process_stat.cpp \
     src/process/system_stat.cpp \
     src/process/stats_collector.cpp \
-    src/process/desktop_entry_stat.cpp
+    src/process/desktop_entry_stat.cpp \
+    src/service/service_manager_worker.cpp
 
 QT += core
 QT += widgets

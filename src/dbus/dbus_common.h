@@ -1,6 +1,8 @@
 #ifndef DBUS_COMMON_H
 #define DBUS_COMMON_H
 
+#include <string.h>
+
 #include <QMap>
 #include <QVariant>
 #include <QtDBus>
@@ -8,6 +10,9 @@
 
 namespace DBus {
 namespace Common {
+
+#define DBUS_SYSTEMD1_SERVICE "org.freedesktop.systemd1"
+const QDBusObjectPath kSystemDObjectPath {"/org/freedesktop/systemd1"};
 
 constexpr const char *UnitTypeServiceSuffix = ".service";
 
@@ -159,6 +164,16 @@ constexpr const char *kUnitActivatingStateText =
     QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "activating");
 constexpr const char *kUnitDeactivatingStateText =
     QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "deactivating");
+
+inline bool isFinalState(const char *state)
+{
+    bool b = false;
+    b |= !strcmp(state, kUnitActiveStateText);
+    b |= !strcmp(state, kUnitInactiveStateText);
+    b |= !strcmp(state, kUnitFailedStateText);
+
+    return b;
+}
 
 // service unit substates
 enum ServiceUnitSubState {

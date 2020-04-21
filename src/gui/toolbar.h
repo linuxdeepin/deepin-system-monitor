@@ -46,6 +46,13 @@ public:
 
     bool eventFilter(QObject *, QEvent *event);
     bool isSearchContentEmpty();
+    inline QString searchContent()
+    {
+        if (searchEdit) {
+            return searchEdit->text();
+        }
+        return {};
+    }
 
 public Q_SLOTS:
     void handleSearch();

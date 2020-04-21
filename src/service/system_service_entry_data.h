@@ -19,7 +19,10 @@ public:
 private:
     // name =>
     // org.freedesktop.systemd1->/org/freedesktop/systemd1->org.freedesktop.systemd1.Manager->ListUnitFiles
+    // with .service suffix
     QString m_id {};
+    // service name: some entries may contain aliases, which will produce duplicate items with same pid, thats not we want!
+    QString m_sname {};
     // LOAD: (loaded | not-found | stub | bad-setting | error | merged | masked) =>
     // org.freedesktop.systemd1->%objpath%->org.freedesktop.systemd1.Unit->LoadState
     QString m_loadState {};

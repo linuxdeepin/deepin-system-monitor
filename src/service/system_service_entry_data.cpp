@@ -5,6 +5,7 @@ SystemServiceEntryData::SystemServiceEntryData() {}
 SystemServiceEntryData::SystemServiceEntryData(const SystemServiceEntryData &rhs)
     : QSharedData(rhs)
     , m_id(rhs.m_id)
+    , m_sname(rhs.m_sname)
     , m_loadState(rhs.m_loadState)
     , m_activeState(rhs.m_activeState)
     , m_subState(rhs.m_subState)
@@ -23,6 +24,7 @@ SystemServiceEntryData &SystemServiceEntryData::operator=(const SystemServiceEnt
 {
     if (this != &rhs) {
         m_id.operator = (rhs.m_id);
+        m_sname.operator = (rhs.m_sname);
         m_loadState.operator = (rhs.m_loadState);
         m_activeState.operator = (rhs.m_activeState);
         m_subState.operator = (rhs.m_subState);

@@ -1,6 +1,8 @@
 #ifndef SYSTEM_SERVICE_ENTRY_H
 #define SYSTEM_SERVICE_ENTRY_H
 
+#include <QMetaType>
+
 #include "system_service_entry_data.h"
 
 class SystemServiceEntry
@@ -8,6 +10,7 @@ class SystemServiceEntry
 public:
     SystemServiceEntry();
     SystemServiceEntry(const QString &id,
+                       const QString &sname,
                        const QString &loadState,
                        const QString &activeState,
                        const QString &subState,
@@ -26,6 +29,7 @@ public:
     //////////////////////////////////// GET ///////////////////////////////////
 
     inline QString getId() const { return data->m_id; }
+    inline QString getSName() const { return data->m_sname; }
     inline QString getLoadState() const { return data->m_loadState; }
     inline QString getActiveState() const { return data->m_activeState; }
     inline QString getSubState() const { return data->m_subState; }
@@ -41,6 +45,7 @@ public:
     //////////////////////////////////// SET ///////////////////////////////////
 
     inline void setId(const QString &id) { data->m_id = id; }
+    inline void setSName(const QString &sname) { data->m_sname = sname; }
     inline void setLoadState(const QString &loadState) { data->m_loadState = loadState; }
     inline void setActiveState(const QString &activeState) { data->m_activeState = activeState; }
     inline void setSubState(const QString &subState) { data->m_subState = subState; }
@@ -59,5 +64,7 @@ public:
 private:
     QExplicitlySharedDataPointer<SystemServiceEntryData> data;
 };
+
+Q_DECLARE_METATYPE(SystemServiceEntry)
 
 #endif  // SYSTEM_SERVICE_ENTRY_H
