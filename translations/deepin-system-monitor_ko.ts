@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ko">
 <context>
     <name>App.About</name>
     <message>
@@ -377,10 +379,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>프로세스를 종료하지 못했습니다</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>프로세스를 일시 중지하지 못했습니다</translation>
     </message>
@@ -399,6 +397,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>처리시 신호를 보내는 데 실패했습니다</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">프로세스를 종료하지 못함</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -657,6 +663,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>서비스</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">확인</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">세부정보 표시</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">세부정보 숨김</translation>
     </message>
 </context>
 </TS>

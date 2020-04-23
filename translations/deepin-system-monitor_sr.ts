@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sr">
 <context>
     <name>App.About</name>
     <message>
@@ -313,11 +315,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Total Received</source>
-        <translation>Укупно преузето</translation>
+        <translation>Преузето</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Укупно отпремњено</translation>
+        <translation>Отпремњено</translation>
     </message>
 </context>
 <context>
@@ -377,10 +379,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Окончавање процеса није успело</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Неуспешно паузирање процеса</translation>
     </message>
@@ -399,6 +397,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Неуспешно слање сигнала ка процесу</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Окончавање процеса није успело</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -531,11 +537,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation>Неуспешна поставка врсте покретања услуге</translation>
+        <translation>Неуспешна поставка режима покретања услуге</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Грешка: Неуспешна поставка врсте покретања услуге због отказа под-процеса</translation>
+        <translation>Грешка: Неуспешна поставка режима покретања услуге због отказа под-процеса</translation>
     </message>
 </context>
 <context>
@@ -657,6 +663,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Услуге</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">У реду</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Прикажи детаље</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Сакриј детаље</translation>
     </message>
 </context>
 </TS>

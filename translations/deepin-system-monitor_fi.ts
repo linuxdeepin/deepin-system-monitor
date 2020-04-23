@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fi">
 <context>
     <name>App.About</name>
     <message>
@@ -273,11 +275,11 @@ Haluatko varmasti jatkaa?</translation>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Prosessori</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Levyn luku</translation>
+        <translation>Luku</translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -377,10 +379,6 @@ Haluatko varmasti jatkaa?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Prosessin lopettaminen epäonnistui</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Prosessin pysäytys epäonnistui</translation>
     </message>
@@ -400,12 +398,20 @@ Haluatko varmasti jatkaa?</translation>
         <source>Failed in sending signal to process</source>
         <translation>Viestin lähettäminen käsittelyyn epäonnistui</translation>
     </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Prosessin lopetus epäonnistui</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(%1 sovellusta ja %2 prosessia ovat käynnissä)</translation>
+        <translation>(%1 sovellusta ja %2 prosessia on käynnissä)</translation>
     </message>
 </context>
 <context>
@@ -477,7 +483,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>Prosessori</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -489,7 +495,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Levyn luku</translation>
+        <translation>Luku</translation>
     </message>
     <message>
         <source>Download</source>
@@ -657,6 +663,21 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Services</source>
         <translation>Palvelut</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">OK</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Näytä tiedot</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Piilota tiedot</translation>
     </message>
 </context>
 </TS>

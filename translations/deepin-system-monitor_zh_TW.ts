@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_TW">
 <context>
     <name>App.About</name>
     <message>
@@ -232,11 +234,12 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>強制結束此應用程式可能導致資料遺失。
+確定繼續？</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"/>
+        <translation>強制結束</translation>
     </message>
 </context>
 <context>
@@ -376,10 +379,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>結束程序失敗</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>暫停程序失敗</translation>
     </message>
@@ -398,6 +397,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>發送訊號到程序失敗</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -656,6 +659,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>系統服務</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">確定</translation>
     </message>
 </context>
 </TS>

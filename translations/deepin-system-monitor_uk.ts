@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="uk">
 <context>
     <name>App.About</name>
     <message>
@@ -375,10 +377,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Не вдалося завершити роботу процесу</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Не вдалося призупинити роботу процесу</translation>
     </message>
@@ -397,6 +395,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Не вдалося надіслати процесу сигнал</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Не вдалося завершити процес</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -655,6 +661,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Служби</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">Гаразд</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Показати подробиці</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Приховати подробиці</translation>
     </message>
 </context>
 </TS>

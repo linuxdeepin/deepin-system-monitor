@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>App.About</name>
     <message>
@@ -377,10 +379,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>结束进程失败</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>暂停进程失败</translation>
     </message>
@@ -399,6 +397,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>发送信号到进程失败 </translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">结束进程失败</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -657,6 +663,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>系统服务</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">确定</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">显示详情</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">隐藏详情</translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pt">
 <context>
     <name>App.About</name>
     <message>
@@ -377,10 +379,6 @@ Tem a certeza de que deseja continuar?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Falha ao terminar processo</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Falha ao colocar processo em pausa</translation>
     </message>
@@ -399,6 +397,14 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Falha ao enviar sinal para processar</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Falha ao terminar processo</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -657,6 +663,21 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Services</source>
         <translation>Serviços</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">Aceitar</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Mostrar detalhes</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Ocultar detalhes</translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>App.About</name>
     <message>
@@ -79,15 +81,15 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>Н / Д</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Авто</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Ручной</translation>
     </message>
 </context>
 <context>
@@ -232,7 +234,7 @@ Are you sure you want to continue?</source>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Принудительное завершение работы этого приложения может привести к потере данных. Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <source>Force End</source>
@@ -251,7 +253,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Имя</translation>
     </message>
 </context>
 <context>
@@ -376,10 +378,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Не удалось завершить процесс</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Не удалось приостановить процесс</translation>
     </message>
@@ -398,6 +396,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Ошибка при отправке сигнала в процессе</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Не удалось завершить процесс</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -530,11 +536,11 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"/>
+        <translation>Не удалось установить тип запуска службы</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"/>
+        <translation>Ошибка: Не удалось установить тип запуска службы из-за сбоя подпроцесса.</translation>
     </message>
 </context>
 <context>
@@ -572,15 +578,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Авто</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Ручной</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"/>
+        <translation>Тип запуска</translation>
     </message>
 </context>
 <context>
@@ -618,7 +624,7 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тип запуска</translation>
     </message>
 </context>
 <context>
@@ -656,6 +662,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Услуги</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">Принимать</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Подробности</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Скрыть подробности</translation>
     </message>
 </context>
 </TS>

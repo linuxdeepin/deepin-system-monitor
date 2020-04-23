@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="da" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="da">
 <context>
     <name>App.About</name>
     <message>
@@ -377,10 +379,6 @@ Er du sikker på, at du vil fortsætte?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Kunne ikke afslutte proces</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Kunne ikke sætte proces på pause</translation>
     </message>
@@ -399,6 +397,14 @@ Er du sikker på, at du vil fortsætte?</translation>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Kunne ikke sende signal til proces</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Kunne ikke afslutte proces</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -657,6 +663,21 @@ Er du sikker på, at du vil fortsætte?</translation>
     <message>
         <source>Services</source>
         <translation>Tjenester</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">OK</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Vis detaljer</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Skjul detaljer</translation>
     </message>
 </context>
 </TS>

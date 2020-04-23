@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="es">
 <context>
     <name>App.About</name>
     <message>
@@ -377,10 +379,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>No se pudo terminar el proceso</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>No se ha podido detener el proceso</translation>
     </message>
@@ -399,6 +397,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Falló en el envío de la señal para procesar</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">No se pudo terminar el proceso</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -509,7 +515,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Nice</source>
-        <translation>Lindo</translation>
+        <translation>NI</translation>
     </message>
     <message>
         <source>Priority</source>
@@ -657,6 +663,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Servicios</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">Aceptar</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Mostrar detalles</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Ocultar detalles</translation>
     </message>
 </context>
 </TS>

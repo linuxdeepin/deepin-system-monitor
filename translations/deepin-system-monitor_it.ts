@@ -1,13 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>System Monitor</translation>
+        <translation>Gestore Attività</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>System Monitor è uno strumento per monitorare lo stato del sistema in tempo reale, visualizzare e controllare processi e servizi in esecuzione sul sistema.
+        <translation>Il Gestore Attività è uno strumento per monitorare lo stato del sistema in tempo reale, visualizzare e controllare processi e servizi in esecuzione sul sistema.
 Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
@@ -378,10 +380,6 @@ Sicuro di voler terminarla?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation>Interruzione processo fallita</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Pausa del processo fallita</translation>
     </message>
@@ -400,6 +398,14 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Invio segnale al processo fallito</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Terminazione processo fallita</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -658,6 +664,21 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Services</source>
         <translation>Servizi</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">OK</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Mostra dettagli</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Nascondi dettagli</translation>
     </message>
 </context>
 </TS>

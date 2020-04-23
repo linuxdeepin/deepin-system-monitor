@@ -1,39 +1,41 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>Sledovač systému</translation>
+        <translation>Systémové prostředky</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation type="unfinished"/>
+        <translation>Systémové prostředky je nástroj pro sledování vytížení systému v reálném čase, zobrazování a řízení procesů a služeb spuštěných ve vašem systému.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation>Žádný výsledek hledání</translation>
+        <translation>Nic nenalezeno</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation>činný</translation>
+        <translation>aktivní</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation>znovunahrání</translation>
+        <translation>znovunačítání</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation>nečinný</translation>
+        <translation>neaktivní</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>selhalo</translation>
+        <translation>nezdařilo se</translation>
     </message>
     <message>
         <source>activating</source>
@@ -56,7 +58,7 @@
     </message>
     <message>
         <source>bad-setting</source>
-        <translation>bad-setting</translation>
+        <translation>chybné nastavení</translation>
     </message>
     <message>
         <source>error</source>
@@ -72,7 +74,7 @@
     </message>
     <message>
         <source>loaded</source>
-        <translation>nahráno</translation>
+        <translation>načteno</translation>
     </message>
 </context>
 <context>
@@ -87,7 +89,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ruční</translation>
+        <translation>Ručně</translation>
     </message>
 </context>
 <context>
@@ -106,7 +108,7 @@
     </message>
     <message>
         <source>transient</source>
-        <translation>transient</translation>
+        <translation>přechodné</translation>
     </message>
     <message>
         <source>indirect</source>
@@ -118,18 +120,18 @@
     </message>
     <message>
         <source>masked</source>
-        <translation>masked</translation>
+        <translation>maskováno</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation>generated</translation>
+        <translation>vytvořeno</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation>dead</translation>
+        <translation>neaktivní</translation>
     </message>
     <message>
         <source>start-pre</source>
@@ -137,27 +139,27 @@
     </message>
     <message>
         <source>start</source>
-        <translation>start</translation>
+        <translation>spustit</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation>start-post</translation>
+        <translation>spustit-po</translation>
     </message>
     <message>
         <source>running</source>
-        <translation>running</translation>
+        <translation>spuštěné</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation>exited</translation>
+        <translation>ukončeno</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation>reload</translation>
+        <translation>načíst znovu</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation>stop</translation>
+        <translation>zastavit</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
@@ -185,11 +187,11 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>selhalo</translation>
+        <translation>nezdařilo se</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation>auto-restart</translation>
+        <translation>automatický restart</translation>
     </message>
 </context>
 <context>
@@ -209,11 +211,11 @@
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Ukončení tohoto procesu může vést ke ztrátě dat.
-Jste si jistý, že chcete pokračovat?</translation>
+Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>End process</source>
@@ -223,7 +225,7 @@ Jste si jistý, že chcete pokračovat?</translation>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Vynucení ukončení tohoto procesu může vést ke ztrátě dat.
-Jste si jistý, že chcete pokračovat?</translation>
+Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>End</source>
@@ -233,7 +235,7 @@ Jste si jistý, že chcete pokračovat?</translation>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Vynucení ukončení tohoto programu může vést ke ztrátě dat.
-Jste si jistý, že chcete pokračovat?</translation>
+Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Force End</source>
@@ -248,7 +250,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Začáteční čas</translation>
+        <translation>Okamžik spuštění</translation>
     </message>
     <message>
         <source>Name</source>
@@ -259,7 +261,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klepněte na program, který chcete ukončit</translation>
+        <translation>Klikněte na program, který chcete ukončit</translation>
     </message>
 </context>
 <context>
@@ -289,7 +291,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Odkládací prostor (swap)</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -317,14 +319,14 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Celkem posláno</translation>
+        <translation>Celkem odesláno</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Velice vysoký</translation>
+        <translation>Velmi vysoký</translation>
     </message>
     <message>
         <source>High</source>
@@ -340,7 +342,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation>Velice nízký</translation>
+        <translation>Velmi nízký</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -356,14 +358,14 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se změnit prioritu procesu</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation>Programy</translation>
+        <translation>Aplikace</translation>
     </message>
     <message>
         <source>My processes</source>
@@ -377,20 +379,16 @@ Jste si jistý, že chcete pokračovat?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Failed to pause process</source>
-        <translation type="unfinished"/>
+        <translation>Proces se nepodařilo pozastavit</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se obnovit běh procesu</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se vynutit ukončení procesu</translation>
     </message>
     <message>
         <source>Unknown error</source>
@@ -398,14 +396,22 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se poslat procesu signál</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="vanished">Proces se nepodařilo ukončit</translation>
+    </message>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(Běží %1 programy a %2 procesy)</translation>
+        <translation>(je spuštěno %1 aplikací a %2 procesy)</translation>
     </message>
 </context>
 <context>
@@ -416,7 +422,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Přerušit</translation>
+        <translation>Uspat</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -443,11 +449,11 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>Zabít proces</translation>
+        <translation>Vynutit ukončení procesu</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation>Změnit přednost</translation>
+        <translation>Změnit prioritu</translation>
     </message>
     <message>
         <source>Suspend process</source>
@@ -458,7 +464,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Change</source>
@@ -466,7 +472,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation>Vlastní přednost</translation>
+        <translation>Uživatelsky určená priorita</translation>
     </message>
 </context>
 <context>
@@ -501,7 +507,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>Identif. procesu</translation>
     </message>
     <message>
         <source>User</source>
@@ -509,18 +515,18 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"/>
+        <translation>Priorita (nice)</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Přednost</translation>
+        <translation>Priorita</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Odkládací prostor (swap)</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -531,11 +537,11 @@ Jste si jistý, že chcete pokračovat?</translation>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"/>
+        <translation>Nepodařilo se nastavit typ spouštění služby</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"/>
+        <translation>Chyba: Nepodařilo se nastavit typ spouštění služby kvůli zhavarovanému podprocesu.</translation>
     </message>
 </context>
 <context>
@@ -546,7 +552,7 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Service instance name</source>
@@ -577,11 +583,11 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ruční</translation>
+        <translation>Ručně</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"/>
+        <translation>Typ spouštění</translation>
     </message>
 </context>
 <context>
@@ -592,16 +598,16 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Nahrát</translation>
+        <translation>Načíst</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Činný</translation>
+        <translation>Aktivní</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pod</translation>
     </message>
     <message>
         <source>State</source>
@@ -614,12 +620,12 @@ Jste si jistý, že chcete pokračovat?</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>Identif. procesu</translation>
     </message>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"/>
+        <translation>Typ spouštění</translation>
     </message>
 </context>
 <context>
@@ -657,6 +663,21 @@ Jste si jistý, že chcete pokračovat?</translation>
     <message>
         <source>Services</source>
         <translation>Služby</translation>
+    </message>
+</context>
+<context>
+    <name>error.dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">OK</translation>
+    </message>
+    <message>
+        <source>Show Details</source>
+        <translation type="vanished">Zobrazit podrobnosti</translation>
+    </message>
+    <message>
+        <source>Hide Details</source>
+        <translation type="vanished">Skrýt podrobnosti</translation>
     </message>
 </context>
 </TS>
