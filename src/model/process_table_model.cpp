@@ -92,32 +92,34 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
 {
     if (role == Qt::DisplayRole) {
         switch (section) {
-            case kProcessNameColumn: {
-                return DApplication::translate("Process.Table.Header", kProcessName);
-            }
-            case kProcessCPUColumn: {
-                return DApplication::translate("Process.Table.Header", kProcessCPU);
-            }
-            case kProcessUserColumn:
-                return DApplication::translate("Process.Table.Header", kProcessUser);
-            case kProcessMemoryColumn:
-                return DApplication::translate("Process.Table.Header", kProcessMemory);
-            case kProcessUploadColumn:
-                return DApplication::translate("Process.Table.Header", kProcessUpload);
-            case kProcessDownloadColumn:
-                return DApplication::translate("Process.Table.Header", kProcessDownload);
-            case kProcessDiskReadColumn:
-                return DApplication::translate("Process.Table.Header", kProcessDiskRead);
-            case kProcessDiskWriteColumn:
-                return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
-            case kProcessPIDColumn:
-                return DApplication::translate("Process.Table.Header", kProcessPID);
-            case kProcessNiceColumn:
-                return DApplication::translate("Process.Table.Header", kProcessNice);
-            case kProcessPriorityColumn:
-                return DApplication::translate("Process.Table.Header", kProcessPriority);
-            default:
-                break;
+        case kProcessNameColumn: {
+            return DApplication::translate("Process.Table.Header", kProcessName);
+        }
+        case kProcessCPUColumn: {
+            return DApplication::translate("Process.Table.Header", kProcessCPU);
+        }
+        case kProcessUserColumn:
+            return DApplication::translate("Process.Table.Header", kProcessUser);
+        case kProcessMemoryColumn:
+            return DApplication::translate("Process.Table.Header", kProcessMemory);
+        case kProcessSharedMemoryColumn:
+            return DApplication::translate("Process.Table.Header", kProcessSharedMemory);
+        case kProcessUploadColumn:
+            return DApplication::translate("Process.Table.Header", kProcessUpload);
+        case kProcessDownloadColumn:
+            return DApplication::translate("Process.Table.Header", kProcessDownload);
+        case kProcessDiskReadColumn:
+            return DApplication::translate("Process.Table.Header", kProcessDiskRead);
+        case kProcessDiskWriteColumn:
+            return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
+        case kProcessPIDColumn:
+            return DApplication::translate("Process.Table.Header", kProcessPID);
+        case kProcessNiceColumn:
+            return DApplication::translate("Process.Table.Header", kProcessNice);
+        case kProcessPriorityColumn:
+            return DApplication::translate("Process.Table.Header", kProcessPriority);
+        default:
+            break;
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
@@ -138,88 +140,92 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         QString name;
         switch (index.column()) {
-            case kProcessNameColumn: {
-                name = m_processList.at(index.row()).getDisplayName();
-                switch (m_processList.at(index.row()).getState()) {
-                    case 'Z':
-                        name = QString("(%1) %2")
-                                   .arg(DApplication::translate("Process.Table", "No response"))
-                                   .arg(name);
-                        break;
-                    case 'T':
-                        name = QString("(%1) %2")
-                                   .arg(DApplication::translate("Process.Table", "Suspend"))
-                                   .arg(name);
-                        break;
-                }
-                return name;
-            }
-            case kProcessCPUColumn:
-                return QString("%1%").arg(m_processList.at(index.row()).getCPU(), 0, 'f', 1);
-            case kProcessUserColumn:
-                return m_processList.at(index.row()).getUserName();
-            case kProcessMemoryColumn:
-                return formatByteCount(m_processList.at(index.row()).getMemory());
-            case kProcessUploadColumn:
-                return formatBandwidth(qulonglong(m_processList.at(index.row()).getSentKbs()));
-            case kProcessDownloadColumn:
-                return formatBandwidth(qulonglong(m_processList.at(index.row()).getRecvKbs()));
-            case kProcessDiskReadColumn:
-                return QString("%1/s").arg(
-                    formatByteCount(qulonglong(m_processList.at(index.row()).getDiskRead())));
-            case kProcessDiskWriteColumn:
-                return QString("%1/s").arg(
-                    formatByteCount(qulonglong(m_processList.at(index.row()).getDiskWrite())));
-            case kProcessPIDColumn: {
-                return QString("%1").arg(m_processList.at(index.row()).getPID());
-            }
-            case kProcessNiceColumn: {
-                return QString("%1").arg(m_processList.at(index.row()).getPriority());
-            }
-            case kProcessPriorityColumn: {
-                return SystemMonitor::getPriorityName(m_processList.at(index.row()).getPriority());
-            }
-            default:
+        case kProcessNameColumn: {
+            name = m_processList.at(index.row()).getDisplayName();
+            switch (m_processList.at(index.row()).getState()) {
+            case 'Z':
+                name = QString("(%1) %2")
+                       .arg(DApplication::translate("Process.Table", "No response"))
+                       .arg(name);
                 break;
+            case 'T':
+                name = QString("(%1) %2")
+                       .arg(DApplication::translate("Process.Table", "Suspend"))
+                       .arg(name);
+                break;
+            }
+            return name;
+        }
+        case kProcessCPUColumn:
+            return QString("%1%").arg(m_processList.at(index.row()).getCPU(), 0, 'f', 1);
+        case kProcessUserColumn:
+            return m_processList.at(index.row()).getUserName();
+        case kProcessMemoryColumn:
+            return formatByteCount(m_processList.at(index.row()).getMemory());
+        case kProcessSharedMemoryColumn:
+            return formatByteCount(m_processList.at(index.row()).getSharedMemory());
+        case kProcessUploadColumn:
+            return formatBandwidth(qulonglong(m_processList.at(index.row()).getSentKbs()));
+        case kProcessDownloadColumn:
+            return formatBandwidth(qulonglong(m_processList.at(index.row()).getRecvKbs()));
+        case kProcessDiskReadColumn:
+            return QString("%1/s").arg(
+                       formatByteCount(qulonglong(m_processList.at(index.row()).getDiskRead())));
+        case kProcessDiskWriteColumn:
+            return QString("%1/s").arg(
+                       formatByteCount(qulonglong(m_processList.at(index.row()).getDiskWrite())));
+        case kProcessPIDColumn: {
+            return QString("%1").arg(m_processList.at(index.row()).getPID());
+        }
+        case kProcessNiceColumn: {
+            return QString("%1").arg(m_processList.at(index.row()).getPriority());
+        }
+        case kProcessPriorityColumn: {
+            return SystemMonitor::getPriorityName(m_processList.at(index.row()).getPriority());
+        }
+        default:
+            break;
         }
     } else if (role == Qt::DecorationRole) {
         switch (index.column()) {
-            case kProcessNameColumn:
-                return QVariant(m_processList.at(index.row()).getIcon());
-            default:
-                return {};
+        case kProcessNameColumn:
+            return QVariant(m_processList.at(index.row()).getIcon());
+        default:
+            return {};
         }
     } else if (role == Qt::UserRole) {
         switch (index.column()) {
-            case kProcessNameColumn:
-                return QVariant(m_processList.at(index.row()).getName());
-            case kProcessMemoryColumn:
-                return QVariant(m_processList.at(index.row()).getMemory());
-            case kProcessCPUColumn:
-                return QVariant(m_processList.at(index.row()).getCPU());
-            case kProcessUploadColumn:
-                return QVariant(m_processList.at(index.row()).getSentKbs());
-            case kProcessDownloadColumn:
-                return QVariant(m_processList.at(index.row()).getRecvKbs());
-            case kProcessPIDColumn:
-                return QVariant(m_processList.at(index.row()).getPID());
-            case kProcessDiskReadColumn:
-                return QVariant(m_processList.at(index.row()).getDiskRead());
-            case kProcessDiskWriteColumn:
-                return QVariant(m_processList.at(index.row()).getDiskWrite());
-            case kProcessNiceColumn:
-                return QVariant(m_processList.at(index.row()).getPriority());
-            default:
-                return {};
+        case kProcessNameColumn:
+            return QVariant(m_processList.at(index.row()).getName());
+        case kProcessMemoryColumn:
+            return QVariant(m_processList.at(index.row()).getMemory());
+        case kProcessSharedMemoryColumn:
+            return QVariant(m_processList.at(index.row()).getSharedMemory());
+        case kProcessCPUColumn:
+            return QVariant(m_processList.at(index.row()).getCPU());
+        case kProcessUploadColumn:
+            return QVariant(m_processList.at(index.row()).getSentKbs());
+        case kProcessDownloadColumn:
+            return QVariant(m_processList.at(index.row()).getRecvKbs());
+        case kProcessPIDColumn:
+            return QVariant(m_processList.at(index.row()).getPID());
+        case kProcessDiskReadColumn:
+            return QVariant(m_processList.at(index.row()).getDiskRead());
+        case kProcessDiskWriteColumn:
+            return QVariant(m_processList.at(index.row()).getDiskWrite());
+        case kProcessNiceColumn:
+            return QVariant(m_processList.at(index.row()).getPriority());
+        default:
+            return {};
         }
     } else if (role == (Qt::UserRole + 1)) {
         switch (index.column()) {
-            case kProcessUploadColumn:
-                return QVariant(m_processList.at(index.row()).getSentBytes());
-            case kProcessDownloadColumn:
-                return QVariant(m_processList.at(index.row()).getRecvBytes());
-            default:
-                return {};
+        case kProcessUploadColumn:
+            return QVariant(m_processList.at(index.row()).getSentBytes());
+        case kProcessDownloadColumn:
+            return QVariant(m_processList.at(index.row()).getRecvBytes());
+        default:
+            return {};
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);

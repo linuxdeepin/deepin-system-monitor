@@ -20,6 +20,7 @@ public:
         , m_displayName {other.m_displayName}
         , m_userName {other.m_userName}
         , m_memory {other.m_memory}
+        , m_shm {other.m_shm}
         , m_diskStats {other.m_diskStats}
         , m_networkStats {other.m_networkStats}
     {
@@ -37,6 +38,7 @@ public:
             m_displayName = other.m_displayName;
             m_userName = other.m_userName;
             m_memory = other.m_memory;
+            m_shm = other.m_shm;
             m_diskStats = other.m_diskStats;
             m_networkStats = other.m_networkStats;
         }
@@ -66,6 +68,8 @@ private:
     QString m_userName {};
     // mem
     qulonglong m_memory {0};
+    // shared memory
+    qulonglong m_shm {0};
     // disk read/write stats
     DiskStatus m_diskStats {};
     // network up/down stats
@@ -85,7 +89,7 @@ ProcessEntry::ProcessEntry(const ProcessEntry &rhs)
 ProcessEntry &ProcessEntry::operator=(const ProcessEntry &rhs)
 {
     if (this != &rhs)
-        data.operator=(rhs.data);
+        data.operator = (rhs.data);
     return *this;
 }
 
@@ -179,6 +183,16 @@ qulonglong ProcessEntry::getMemory() const
 void ProcessEntry::setMemory(qulonglong memory)
 {
     data->m_memory = memory;
+}
+
+qulonglong ProcessEntry::getSharedMemory() const
+{
+    return data->m_shm;
+}
+
+void ProcessEntry::setSharedMemory(qulonglong shm)
+{
+    data->m_shm = shm;
 }
 
 qreal ProcessEntry::getDiskRead() const

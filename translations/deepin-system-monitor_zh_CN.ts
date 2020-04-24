@@ -501,6 +501,10 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>优先级</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>共享内存</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>

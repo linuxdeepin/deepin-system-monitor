@@ -12,6 +12,7 @@ constexpr const char *kProcessName = QT_TRANSLATE_NOOP("Process.Table.Header", "
 constexpr const char *kProcessCPU = QT_TRANSLATE_NOOP("Process.Table.Header", "CPU");
 constexpr const char *kProcessUser = QT_TRANSLATE_NOOP("Process.Table.Header", "User");
 constexpr const char *kProcessMemory = QT_TRANSLATE_NOOP("Process.Table.Header", "Memory");
+constexpr const char *kProcessSharedMemory = QT_TRANSLATE_NOOP("Process.Table.Header", "Shared memory");
 constexpr const char *kProcessUpload = QT_TRANSLATE_NOOP("Process.Table.Header", "Upload");
 constexpr const char *kProcessDownload = QT_TRANSLATE_NOOP("Process.Table.Header", "Download");
 constexpr const char *kProcessDiskRead = QT_TRANSLATE_NOOP("Process.Table.Header", "Disk read");
@@ -31,6 +32,7 @@ public:
         kProcessCPUColumn,
         kProcessUserColumn,
         kProcessMemoryColumn,
+        kProcessSharedMemoryColumn,
         kProcessUploadColumn,
         kProcessDownloadColumn,
         kProcessDiskReadColumn,

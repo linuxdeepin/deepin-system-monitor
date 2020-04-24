@@ -43,7 +43,10 @@ public:
     void setUserName(const QString &userName);
 
     qulonglong getMemory() const;
-    void setMemory(qulonglong memory);
+    void setMemory(qulonglong shm);
+
+    qulonglong getSharedMemory() const;
+    void setSharedMemory(qulonglong shm);
 
     qreal getDiskRead() const;
     void setDiskRead(qreal diskRead);

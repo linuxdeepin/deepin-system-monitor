@@ -53,7 +53,7 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     initConnections(settingsLoaded);
 
     auto *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
         if (m_notFoundLabel) {
             auto palette = DApplicationHelper::instance()->applicationPalette();
             QColor labelColor = palette.color(DPalette::PlaceholderText);
@@ -292,6 +292,10 @@ void ProcessTableView::initUI(bool settingsLoaded)
         setColumnWidth(ProcessTableModel::kProcessMemoryColumn, 70);
         setColumnHidden(ProcessTableModel::kProcessMemoryColumn, false);
 
+        // shared memory
+        setColumnWidth(ProcessTableModel::kProcessSharedMemoryColumn, 140);
+        setColumnHidden(ProcessTableModel::kProcessSharedMemoryColumn, true);
+
         // download
         setColumnWidth(ProcessTableModel::kProcessDownloadColumn, 70);
         setColumnHidden(ProcessTableModel::kProcessDownloadColumn, false);
@@ -332,23 +336,23 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             &ProcessTableView::displayProcessTableContextMenu);
     // end process
     auto *endProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "End process"));
+                              DApplication::translate("Process.Table.Context.Menu", "End process"));
     endProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_E));
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
     // pause process
     auto *pauseProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Pause process"));
+                                DApplication::translate("Process.Table.Context.Menu", "Pause process"));
     pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
     connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
     // resume process
     auto *resumeProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Resume process"));
+                                 DApplication::translate("Process.Table.Context.Menu", "Resume process"));
     resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
 
     // change priority dialog
     auto *chgProcPrioMenu = m_contextMenu->addMenu(
-        DApplication::translate("Process.Table.Context.Menu", "Change priority"));
+                                DApplication::translate("Process.Table.Context.Menu", "Change priority"));
     QActionGroup *prioGroup = new QActionGroup(chgProcPrioMenu);
     prioGroup->setExclusive(true);
 
@@ -357,59 +361,59 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setVeryHighPrioAction->setCheckable(true);
     setVeryHighPrioAction->setActionGroup(prioGroup);
     connect(setVeryHighPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(SystemMonitor::kVeryHighPriority); });
+    [ = ]() { changeProcessPriority(SystemMonitor::kVeryHighPriority); });
 
     auto *setHighPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "High"));
     setHighPrioAction->setCheckable(true);
     setHighPrioAction->setActionGroup(prioGroup);
     connect(setHighPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(SystemMonitor::kHighPriority); });
+    [ = ]() { changeProcessPriority(SystemMonitor::kHighPriority); });
 
     auto *setNormalPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Normal"));
     setNormalPrioAction->setCheckable(true);
     setNormalPrioAction->setActionGroup(prioGroup);
     connect(setNormalPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(SystemMonitor::kNormalPriority); });
+    [ = ]() { changeProcessPriority(SystemMonitor::kNormalPriority); });
 
     auto *setLowPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Low"));
     setLowPrioAction->setCheckable(true);
     setLowPrioAction->setActionGroup(prioGroup);
     connect(setLowPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(SystemMonitor::kLowPriority); });
+    [ = ]() { changeProcessPriority(SystemMonitor::kLowPriority); });
 
     auto *setVeryLowPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Very low"));
     setVeryLowPrioAction->setCheckable(true);
     setVeryLowPrioAction->setActionGroup(prioGroup);
     connect(setVeryLowPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(SystemMonitor::kVeryLowPriority); });
+    [ = ]() { changeProcessPriority(SystemMonitor::kVeryLowPriority); });
 
     auto *setCustomPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Custom"));
     setCustomPrioAction->setCheckable(true);
     setCustomPrioAction->setActionGroup(prioGroup);
-    connect(setCustomPrioAction, &QAction::triggered, [=]() { customizeProcessPriority(); });
+    connect(setCustomPrioAction, &QAction::triggered, [ = ]() { customizeProcessPriority(); });
 
     // show exec location
     auto *openExecDirAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "View command location"));
+                                  DApplication::translate("Process.Table.Context.Menu", "View command location"));
     connect(openExecDirAction, &QAction::triggered, this, &ProcessTableView::openExecDirWithFM);
     // show property
     auto *showAttrAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Properties"));
+                               DApplication::translate("Process.Table.Context.Menu", "Properties"));
     showAttrAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Enter));
     connect(showAttrAction, &QAction::triggered, this, &ProcessTableView::showProperties);
     m_contextMenu->addSeparator();
     // kill process
     auto *killProcAction = m_contextMenu->addAction(
-        DApplication::translate("Process.Table.Context.Menu", "Kill process"));
+                               DApplication::translate("Process.Table.Context.Menu", "Kill process"));
     killProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_K));
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
-    connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
+    connect(m_contextMenu, &DMenu::aboutToShow, this, [ = ]() {
         bool b = true;
         auto *sysmon = SystemMonitor::instance();
         if (m_selectedPID.isValid()) {
@@ -430,43 +434,43 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             // initialize priority menu item checkable state
             SystemMonitor::ProcessPriority prio = m_model->getProcessPriorityStub(pid);
             switch (prio) {
-                case SystemMonitor::kVeryHighPriority: {
-                    setVeryHighPrioAction->setChecked(true);
-                } break;
-                case SystemMonitor::kHighPriority: {
-                    setHighPrioAction->setChecked(true);
-                } break;
-                case SystemMonitor::kNormalPriority: {
-                    setNormalPrioAction->setChecked(true);
-                } break;
-                case SystemMonitor::kLowPriority: {
-                    setLowPrioAction->setChecked(true);
-                } break;
-                case SystemMonitor::kVeryLowPriority: {
-                    setVeryLowPrioAction->setChecked(true);
-                } break;
-                case SystemMonitor::kCustomPriority: {
-                    setCustomPrioAction->setChecked(true);
-                } break;
-                default: {
-                    // unexpected, do nothing
-                }
+            case SystemMonitor::kVeryHighPriority: {
+                setVeryHighPrioAction->setChecked(true);
+            } break;
+            case SystemMonitor::kHighPriority: {
+                setHighPrioAction->setChecked(true);
+            } break;
+            case SystemMonitor::kNormalPriority: {
+                setNormalPrioAction->setChecked(true);
+            } break;
+            case SystemMonitor::kLowPriority: {
+                setLowPrioAction->setChecked(true);
+            } break;
+            case SystemMonitor::kVeryLowPriority: {
+                setVeryLowPrioAction->setChecked(true);
+            } break;
+            case SystemMonitor::kCustomPriority: {
+                setCustomPrioAction->setChecked(true);
+            } break;
+            default: {
+                // unexpected, do nothing
+            }
             }
         }
     });
 
     // header
     auto *h = header();
-    connect(h, &QHeaderView::sectionResized, this, [=]() { saveSettings(); });
-    connect(h, &QHeaderView::sectionMoved, this, [=]() { saveSettings(); });
-    connect(h, &QHeaderView::sortIndicatorChanged, this, [=]() { saveSettings(); });
+    connect(h, &QHeaderView::sectionResized, this, [ = ]() { saveSettings(); });
+    connect(h, &QHeaderView::sectionMoved, this, [ = ]() { saveSettings(); });
+    connect(h, &QHeaderView::sortIndicatorChanged, this, [ = ]() { saveSettings(); });
     connect(h, &QHeaderView::customContextMenuRequested, this,
             &ProcessTableView::displayProcessTableHeaderContextMenu);
 
     // header context menu
     // cpu
     auto *cpuHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessCPU));
+                                DApplication::translate("Process.Table.Header", kProcessCPU));
     cpuHeaderAction->setCheckable(true);
     connect(cpuHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessCPUColumn, !b);
@@ -474,7 +478,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // user
     auto *userHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessUser));
+                                 DApplication::translate("Process.Table.Header", kProcessUser));
     userHeaderAction->setCheckable(true);
     connect(userHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessUserColumn, !b);
@@ -482,15 +486,23 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // memory
     auto *memHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessMemory));
+                                DApplication::translate("Process.Table.Header", kProcessMemory));
     memHeaderAction->setCheckable(true);
     connect(memHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessMemoryColumn, !b);
         saveSettings();
     });
+    // shared memory
+    auto *shmHeaderAction = m_headerContextMenu->addAction(
+                                DApplication::translate("Process.Table.Header", kProcessSharedMemory));
+    shmHeaderAction->setCheckable(true);
+    connect(shmHeaderAction, &QAction::triggered, this, [this](bool b) {
+        header()->setSectionHidden(ProcessTableModel::kProcessSharedMemoryColumn, !b);
+        saveSettings();
+    });
     // upload
     auto *uploadHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessUpload));
+                                   DApplication::translate("Process.Table.Header", kProcessUpload));
     uploadHeaderAction->setCheckable(true);
     connect(uploadHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessUploadColumn, !b);
@@ -498,7 +510,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // download
     auto *downloadHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessDownload));
+                                     DApplication::translate("Process.Table.Header", kProcessDownload));
     downloadHeaderAction->setCheckable(true);
     connect(downloadHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessDownloadColumn, !b);
@@ -506,7 +518,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // disk read
     auto *dreadHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessDiskRead));
+                                  DApplication::translate("Process.Table.Header", kProcessDiskRead));
     dreadHeaderAction->setCheckable(true);
     connect(dreadHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessDiskReadColumn, !b);
@@ -514,7 +526,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // disk write
     auto *dwriteHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessDiskWrite));
+                                   DApplication::translate("Process.Table.Header", kProcessDiskWrite));
     dwriteHeaderAction->setCheckable(true);
     connect(dwriteHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessDiskWriteColumn, !b);
@@ -522,7 +534,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // pid
     auto *pidHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessPID));
+                                DApplication::translate("Process.Table.Header", kProcessPID));
     pidHeaderAction->setCheckable(true);
     connect(pidHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessPIDColumn, !b);
@@ -530,7 +542,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // nice
     auto *niceHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessNice));
+                                 DApplication::translate("Process.Table.Header", kProcessNice));
     niceHeaderAction->setCheckable(true);
     connect(niceHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessNiceColumn, !b);
@@ -538,7 +550,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
     // priority
     auto *priorityHeaderAction = m_headerContextMenu->addAction(
-        DApplication::translate("Process.Table.Header", kProcessPriority));
+                                     DApplication::translate("Process.Table.Header", kProcessPriority));
     priorityHeaderAction->setCheckable(true);
     connect(priorityHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessPriorityColumn, !b);
@@ -548,6 +560,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     if (!settingsLoaded) {
         cpuHeaderAction->setChecked(true);
         memHeaderAction->setChecked(true);
+        memHeaderAction->setChecked(false);
         uploadHeaderAction->setChecked(true);
         downloadHeaderAction->setChecked(true);
         dreadHeaderAction->setChecked(false);
@@ -556,12 +569,14 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         niceHeaderAction->setChecked(true);
         priorityHeaderAction->setChecked(true);
     }
-    connect(m_headerContextMenu, &QMenu::aboutToShow, this, [=]() {
+    connect(m_headerContextMenu, &QMenu::aboutToShow, this, [ = ]() {
         bool b;
         b = header()->isSectionHidden(ProcessTableModel::kProcessCPUColumn);
         cpuHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(ProcessTableModel::kProcessMemoryColumn);
         memHeaderAction->setChecked(!b);
+        b = header()->isSectionHidden(ProcessTableModel::kProcessSharedMemoryColumn);
+        shmHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(ProcessTableModel::kProcessUploadColumn);
         uploadHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(ProcessTableModel::kProcessDownloadColumn);
@@ -606,17 +621,17 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     auto *sysmon = SystemMonitor::instance();
     if (sysmon) {
         connect(sysmon, &SystemMonitor::priorityPromoteResultReady, this,
-                [=](const ErrorContext &ec) {
-                    if (ec) {
-                        DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
-                    }
-                });
+        [ = ](const ErrorContext & ec) {
+            if (ec) {
+                DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+            }
+        });
         connect(sysmon, &SystemMonitor::processControlResultReady, this,
-                [=](const ErrorContext &ec) {
-                    if (ec) {
-                        DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
-                    }
-                });
+        [ = ](const ErrorContext & ec) {
+            if (ec) {
+                DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+            }
+        });
     }
 }
 
@@ -692,7 +707,7 @@ void ProcessTableView::customizeProcessPriority()
     slider->setBelowTicks({QString("%1").arg(SystemMonitor::kVeryLowPriorityMin),
                            QString("%1").arg(SystemMonitor::kVeryHighPriorityMax)});
     connect(slider, &DSlider::valueChanged,
-            [=](int value) { slider->setTipValue(QString("%1").arg(value)); });
+    [ = ](int value) { slider->setTipValue(QString("%1").arg(value)); });
     QString prio {"0"};
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
@@ -706,7 +721,7 @@ void ProcessTableView::customizeProcessPriority()
                           false, DDialog::ButtonNormal);
     prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change"),
                           true, DDialog::ButtonRecommend);
-    connect(prioDialog, &DDialog::buttonClicked, this, [=](int index, QString text) {
+    connect(prioDialog, &DDialog::buttonClicked, this, [ = ](int index, QString text) {
         Q_UNUSED(text);
         if (index == 1) {
             changeProcessPriority(slider->value());

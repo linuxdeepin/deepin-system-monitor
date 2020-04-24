@@ -54,6 +54,7 @@ public:
     struct ChildPidInfo {
         qreal cpu;
         qulonglong memory;
+        qulonglong shm;
         DiskStatus diskStatus;
         NetworkStatus networkStatus;
     };
@@ -81,11 +82,12 @@ public:
             {kLowPriority, DApplication::translate("Process.Priority", "Low")},
             {kVeryLowPriority, DApplication::translate("Process.Priority", "Very low")},
             {kCustomPriority, DApplication::translate("Process.Priority", "Custom")},
-            {kInvalidPriority, DApplication::translate("Process.Priority", "Invalid")}};
+            {kInvalidPriority, DApplication::translate("Process.Priority", "Invalid")}
+        };
 
         ProcessPriority p = kInvalidPriority;
         if (prio == kVeryHighPriority || prio == kHighPriority || prio == kNormalPriority ||
-            prio == kLowPriority || prio == kVeryLowPriority) {
+                prio == kLowPriority || prio == kVeryLowPriority) {
             p = ProcessPriority(prio);
         } else if (prio >= kVeryHighPriorityMax && prio <= kVeryLowPriorityMin) {
             p = kCustomPriority;
@@ -146,7 +148,7 @@ private:
     ~SystemMonitor() = default;
 
     DiskStatus getProcessDiskStatus(int pid);
-    void mergeItemInfo(ProcessEntry &item, qreal childCpu, qulonglong childMemory,
+    void mergeItemInfo(ProcessEntry &item, qreal childCpu, qulonglong childMemory, qulonglong childShm,
                        const DiskStatus &childDiskStatus, const NetworkStatus &childNetworkStatus);
     void updateProcessPriority(QList<ProcessEntry> &list);
 
