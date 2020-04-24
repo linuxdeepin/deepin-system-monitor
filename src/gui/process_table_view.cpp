@@ -294,7 +294,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
         // shared memory
         setColumnWidth(ProcessTableModel::kProcessSharedMemoryColumn, 140);
-        setColumnHidden(ProcessTableModel::kProcessSharedMemoryColumn, true);
+        setColumnHidden(ProcessTableModel::kProcessSharedMemoryColumn, false);
 
         // download
         setColumnWidth(ProcessTableModel::kProcessDownloadColumn, 70);
@@ -560,7 +560,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     if (!settingsLoaded) {
         cpuHeaderAction->setChecked(true);
         memHeaderAction->setChecked(true);
-        memHeaderAction->setChecked(false);
+        shmHeaderAction->setChecked(true);
         uploadHeaderAction->setChecked(true);
         downloadHeaderAction->setChecked(true);
         dreadHeaderAction->setChecked(false);
