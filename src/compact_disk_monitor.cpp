@@ -50,7 +50,8 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
     option.initFrom(this);
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    // TODO: use more elegent way to set width
+    int statusBarMaxWidth = 300;
     setFixedWidth(statusBarMaxWidth - margin * 2);
     setFixedHeight(160);
 
@@ -183,12 +184,15 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     QString rstat = QString("%1").arg(formatUnit(m_readBps, B, 1, true));
     QString wstat = QString("%1").arg(formatUnit(m_writeBps, B, 1, true));
 
-    QRect rcol1(m_bulletSize * 2 + 2, 0, fm.size(Qt::TextSingleLine, rtag).width(), fm.height());
+    auto rtagWidth = fm.size(Qt::TextSingleLine, rtag).width();
+    auto wtagWidth = fm.size(Qt::TextSingleLine, wtag).width();
+    auto maxTagWidth = std::max(rtagWidth, wtagWidth);
+    maxTagWidth = std::min(maxTagWidth, int(width() * 0.75));
+    QRect rcol1(m_bulletSize * 2 + 2, 0, maxTagWidth, fm.height());
     QRect rcol2(rcol1.x() + rcol1.width() + margin, rcol1.y(),
                 fmStat.size(Qt::TextSingleLine, rstat).width(), fmStat.height());
-    QRect wcol1(rcol1.x(), rcol1.y() + rcol1.height(), fm.size(Qt::TextSingleLine, wtag).width(),
-                fm.height());
-    QRect wcol2(rcol2.x(), wcol1.y(), fmStat.size(Qt::TextSingleLine, wstat).width(), fm.height());
+    QRect wcol1(rcol1.x(), rcol1.y() + rcol1.height(), maxTagWidth, fm.height());
+    QRect wcol2(rcol2.x(), wcol1.y(), fmStat.size(Qt::TextSingleLine, wstat).width(), fmStat.height());
     QRect bulletRect1(0, rcol1.y() + qCeil((rcol1.height() - m_bulletSize) / 2.), m_bulletSize,
                       m_bulletSize);
     QRect bulletRect2(0, wcol1.y() + qCeil((wcol1.height() - m_bulletSize) / 2.), m_bulletSize,
@@ -202,8 +206,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 
     painter.setPen(QPen(tagColor));
     painter.setFont(m_tagFont);
-    painter.drawText(rcol1, Qt::AlignLeft | Qt::AlignVCenter, rtag);
-    painter.drawText(wcol1, Qt::AlignLeft | Qt::AlignVCenter, wtag);
+    painter.drawText(rcol1, Qt::AlignLeft | Qt::AlignVCenter, fm.elidedText(rtag, Qt::ElideRight, maxTagWidth));
+    painter.drawText(wcol1, Qt::AlignLeft | Qt::AlignVCenter, fm.elidedText(wtag, Qt::ElideRight, maxTagWidth));
 
     painter.setPen(QPen(statColor));
     painter.setFont(m_statFont);

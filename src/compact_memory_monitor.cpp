@@ -205,7 +205,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(textColor));
     painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter,
                      fmMem.elidedText(memoryTitle, Qt::ElideRight,
-                                      rect().width() - memRect.x() - outsideRingRadius - 105));
+                                      rect().width() - memRect.x() - outsideRingRadius));
 
     painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));

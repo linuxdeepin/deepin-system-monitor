@@ -100,7 +100,7 @@ void ProcessPageWidget::initUI()
     m_expandView = new MonitorExpandView(m_views);
     m_views->addWidget(m_compactView);
     m_views->addWidget(m_expandView);
-    m_views->setFixedWidth(280);
+    m_views->setFixedWidth(300);
 
     auto *settings = Settings::instance();
     if (settings) {
@@ -421,15 +421,16 @@ void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
 
 void ProcessPageWidget::adjustStatusBarWidth()
 {
-    QRect rect = QApplication::desktop()->screenGeometry();
+//    QRect rect = QApplication::desktop()->screenGeometry();
 
-    // Just change status monitor width when screen width is more than 1024.
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    if (rect.width() * 0.2 > statusBarMaxWidth) {
-        if (windowState() == Qt::WindowMaximized) {
-            m_views->setFixedWidth(int(rect.width() * 0.2));
-        } else {
-            m_views->setFixedWidth(statusBarMaxWidth);
-        }
-    }
+//    // Just change status monitor width when screen width is more than 1024.
+//    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+//    if (rect.width() * 0.2 > statusBarMaxWidth) {
+//        if (windowState() == Qt::WindowMaximized) {
+//            m_views->setFixedWidth(int(rect.width() * 0.2));
+//        } else {
+//            m_views->setFixedWidth(statusBarMaxWidth);
+//        }
+//    }
+    m_views->setFixedWidth(300);
 }

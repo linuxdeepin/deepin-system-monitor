@@ -91,10 +91,8 @@ QList<xcb_window_t> getTrayWindows()
 
 int getStatusBarMaxWidth()
 {
-    int offset = 171;
-    QString swapTitle = QString("%1 (%2)").arg(QObject::tr("Swap")).arg(QObject::tr("Not enabled"));
-
-    return std::max(280, getRenderSize(9, swapTitle).width() + offset);
+    // TODO: use more elegent way to calc bar width
+    return 300;
 }
 
 int getWindowPid(DWindowManager *windowManager, xcb_window_t window)

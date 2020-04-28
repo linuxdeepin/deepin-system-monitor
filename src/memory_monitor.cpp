@@ -235,7 +235,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(ltextColor));
     painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter,
                      fmMem.elidedText(memoryTitle, Qt::ElideRight,
-                                      ringCenterPointerX - memRect.x() - outsideRingRadius - 50));
+                                      ringCenterPointerX - memRect.x() - outsideRingRadius));
 
     painter.setFont(m_subContentFont);
     painter.setPen(QPen(summaryColor));
@@ -288,6 +288,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     int memoryFixedHeight = swapStatRect.y() + swapStatRect.height();
     if (ringCenterPointerY + outsideRingRadius > swapStatRect.y() + swapStatRect.height()) {
         memoryFixedHeight = ringCenterPointerY + outsideRingRadius;
-        }
+    }
     setFixedHeight(memoryFixedHeight + 1);
 }
