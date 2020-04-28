@@ -47,7 +47,8 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     installEventFilter(this);  // add event filter
     setMouseTracking(true);    // make MouseMove can response
 
-    setFixedHeight(36);
+    // fixed height will cause geometry of child widgets not scaling with font size change
+    // setFixedHeight(36);
 
     // =========layout=========
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -70,6 +71,8 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
     QList<DButtonBoxButton *> list;
     list << m_procBtn << m_svcBtn;
     m_switchFuncTabBtnGrp->setButtonList(list, true);
+
+    setFocusProxy(m_procBtn);
 
     m_procBtn->installEventFilter(this);
     m_svcBtn->installEventFilter(this);

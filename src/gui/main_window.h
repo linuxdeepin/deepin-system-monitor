@@ -75,14 +75,14 @@ private:
 
     Settings *m_settings;
 
-    QAction *m_killAction;
-    DMenu *m_modeMenu;
+    QAction *m_killAction                       {};
+    DMenu   *m_modeMenu                         {};
 
-    Toolbar *m_toolbar;
-    DStackedWidget *m_pages;
-    ProcessPageWidget *m_procPage;
-    SystemServicePageWidget *m_svcPage;
-    DShadowLine *m_tbShadow;
+    Toolbar                 *m_toolbar          {};
+    DStackedWidget          *m_pages            {};
+    ProcessPageWidget       *m_procPage         {};
+    SystemServicePageWidget *m_svcPage          {};
+    DShadowLine             *m_tbShadow         {};
 
     bool m_loading {true};
     char __unused__[7];     // ##padding##

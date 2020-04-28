@@ -172,11 +172,14 @@ void MainWindow::initUI()
 
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
     m_toolbar = new Toolbar(this, this);
+    m_toolbar->setFocusPolicy(Qt::TabFocus);
     titlebar()->setCustomWidget(m_toolbar);
     titlebar()->setMenuDisabled(true);
 
     DMenu *menu = new DMenu(this);
     titlebar()->setMenu(menu);
+
+    setTabOrder(titlebar(), m_toolbar);
 
     // kill process
     m_killAction = new QAction(
@@ -224,6 +227,7 @@ void MainWindow::initUI()
     });
 
     menu->addAction(m_killAction);
+    menu->addSeparator();
     menu->addMenu(m_modeMenu);
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
