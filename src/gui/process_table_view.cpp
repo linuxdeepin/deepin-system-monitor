@@ -20,6 +20,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QTimer>
+#include <QKeyEvent>
 
 #include "kill_process_confirm_dialog.h"
 #include "main_window.h"

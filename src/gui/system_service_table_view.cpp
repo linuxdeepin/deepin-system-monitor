@@ -10,6 +10,7 @@
 #include <QFutureWatcher>
 #include <QScrollBar>
 #include <QtConcurrent>
+#include <QKeyEvent>
 
 #include "common/error_context.h"
 #include "main_window.h"

@@ -49,7 +49,6 @@
 
 #include <X11/extensions/shape.h>
 
-#include "hashqstring.h"
 #include "utils.h"
 
 DCORE_USE_NAMESPACE

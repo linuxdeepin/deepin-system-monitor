@@ -39,7 +39,6 @@ HEADERS += src/utils.h \
         src/compact_network_monitor.h \
         src/compact_disk_monitor.h \
         src/network_traffic_filter.h \
-        src/hashqstring.h \
         src/find_window_title.h \
         src/smooth_curve_generator.h \
         src/interactive_kill.h \

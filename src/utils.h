@@ -32,7 +32,6 @@
 #include <QString>
 #include <unordered_set>
 #include "find_window_title.h"
-#include "hashqstring.h"
 #include <QDebug>
 
 #include <QVariant>
