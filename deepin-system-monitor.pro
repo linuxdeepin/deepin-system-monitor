@@ -15,11 +15,11 @@ RESOURCES = deepin-system-monitor.qrc
 	error("Build nethogs static library failed.")
 }
 
-#CONFIG(debug, debug|release) {
-#        # Enable memory address sanitizer in debug mode.
-#        QMAKE_CXXFLAGS += -fsanitize=address
-#        LIBS += -lasan
-#}
+CONFIG(debug, debug|release) {
+        # Enable memory address sanitizer in debug mode.
+        QMAKE_CXXFLAGS += -fsanitize=address
+        LIBS += -lasan
+}
 
 CONFIG(release, debug|release) {
         DEFINES += QT_NO_DEBUG_OUTPUT
@@ -83,11 +83,18 @@ HEADERS += src/utils.h \
         src/gui/base_item_delegate.h \
         src/gui/base_header_view.h \
         src/process/process_controller.h \
-    src/process/process_stat.h \
-    src/process/system_stat.h \
-    src/process/stats_collector.h \
-    src/process/desktop_entry_stat.h \
-    src/service/service_manager_worker.h
+        src/process/process_stat.h \
+        src/process/system_stat.h \
+        src/process/stats_collector.h \
+        src/process/desktop_entry_stat.h \
+        src/service/service_manager_worker.h \
+        src/gui/dialog/sys_info_dialog.h \
+        src/gui/dialog/sys_info_view.h \
+        src/gui/dialog/hw_info_view.h \
+        src/gui/dialog/sys_config_view.h \
+        src/gui/control/property_label.h \
+    src/model/system_info_model.h \
+    src/system/system_ctl.h
 
 SOURCES += src/main.cpp \
         src/utils.cpp \
@@ -142,11 +149,18 @@ SOURCES += src/main.cpp \
         src/gui/base_item_delegate.cpp \
         src/gui/base_header_view.cpp \
         src/process/process_controller.cpp \
-    src/process/process_stat.cpp \
-    src/process/system_stat.cpp \
-    src/process/stats_collector.cpp \
-    src/process/desktop_entry_stat.cpp \
-    src/service/service_manager_worker.cpp
+        src/process/process_stat.cpp \
+        src/process/system_stat.cpp \
+        src/process/stats_collector.cpp \
+        src/process/desktop_entry_stat.cpp \
+        src/service/service_manager_worker.cpp \
+        src/gui/dialog/sys_info_dialog.cpp \
+        src/gui/dialog/sys_info_view.cpp \
+        src/gui/dialog/hw_info_view.cpp \
+        src/gui/dialog/sys_config_view.cpp \
+        src/gui/control/property_label.cpp \
+    src/model/system_info_model.cpp \
+    src/system/system_ctl.cpp
 
 QT += core
 QT += widgets
