@@ -48,7 +48,9 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
     if (name.isValid()) {
         rc |= sourceModel()->data(name).toString().contains(filterRegExp());
         rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(filterRegExp());
-        rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(m_hanwords);
+        if (QLocale::system().language() == QLocale::Chinese) {
+            rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(m_hanwords);
+        }
         //        rc |= sourceModel()->data(name).toString().contains(m_capwords);
     }
     if (pid.isValid())
