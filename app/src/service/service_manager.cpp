@@ -1,0 +1,480 @@
+﻿#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include <QAbstractItemModel>
+#include <QHash>
+#include <QList>
+#include <QString>
+#include <QtDBus>
+#include <QTimer>
+
+#include <DApplication>
+#include <DLog>
+
+#include "dbus/dbus_common.h"
+#include "dbus/dbus_properties_interface.h"
+#include "dbus/environment_file.h"
+#include "dbus/systemd1_manager_interface.h"
+#include "dbus/systemd1_service_interface.h"
+#include "dbus/systemd1_unit_interface.h"
+#include "dbus/unit_file_info.h"
+#include "dbus/unit_info.h"
+#include "service/system_service_entry.h"
+#include "service_manager.h"
+
+#define BIN_PKEXEC_PATH "/usr/bin/pkexec"
+#define BIN_SYSTEMCTL_PATH "/usr/bin/systemctl"
+
+DCORE_USE_NAMESPACE
+using namespace DBus::Common;
+
+std::atomic<ServiceManager *> ServiceManager::m_instance;
+std::mutex ServiceManager::m_mutex;
+
+CustomTimer::CustomTimer(ServiceManager *mgr, QObject *parent)
+    : QObject(parent), m_mgr(mgr)
+{
+    m_timer = new QTimer(parent);
+}
+
+void CustomTimer::start(const QString &path)
+{
+    connect(m_timer, &QTimer::timeout, this, [ = ]() {
+        SystemServiceEntry e = m_mgr->updateServiceEntry(path);
+        if (m_cnt >= 6 || isFinalState(e.getActiveState().toLocal8Bit())) {
+            m_timer->stop();
+            this->deleteLater();
+        } else {
+            ++m_cnt;
+            m_timer->stop();
+            m_timer->start(m_cnt * m_cnt * 200);
+        }
+    });
+    m_timer->start(200);
+}
+
+ServiceManager::ServiceManager(QObject *parent)
+    : QObject(parent)
+{
+    UnitInfo::registerMetaType();
+    UnitFileInfo::registerMetaType();
+    EnvironmentFile::registerMetaType();
+
+    qRegisterMetaType<QList<SystemServiceEntry>>("ServiceEntryList");
+
+    m_worker = new ServiceManagerWorker();
+    m_worker->moveToThread(&m_workerThread);
+    connect(this, &ServiceManager::beginUpdateList, m_worker, &ServiceManagerWorker::startJob);
+    connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
+    connect(m_worker, &ServiceManagerWorker::resultReady, this, &ServiceManager::serviceListUpdated);
+    m_workerThread.start();
+}
+
+ServiceManager::~ServiceManager()
+{
+    m_workerThread.quit();
+    m_workerThread.wait();
+}
+
+void ServiceManager::updateServiceList()
+{
+    Q_EMIT beginUpdateList();
+}
+
+QString ServiceManager::normalizeServiceId(const QString &id, const QString &param)
+{
+    QString buf = id;
+    if (buf.endsWith(UnitTypeServiceSuffix)) {
+        if (buf.lastIndexOf('@') > 0) {
+            if (!param.isEmpty())
+                buf = QString("%1%2%3")
+                      .arg(buf.left(buf.lastIndexOf('@') + 1))
+                      .arg(param)
+                      .arg(UnitTypeServiceSuffix);
+        }
+    } else {
+        if (buf.endsWith('@') && !param.isEmpty()) {
+            buf = QString("%1%2%3").arg(buf).arg(param).arg(UnitTypeServiceSuffix);
+        } else {
+            buf = buf.append(UnitTypeServiceSuffix);
+        }
+    }
+
+    return buf;
+}
+
+void ServiceManager::startService(const QString &id,
+                                  const QString &param)
+{
+    ErrorContext ec {};
+    Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
+                                   kSystemDObjectPath.path(),
+                                   QDBusConnection::systemBus());
+
+    auto buf = normalizeServiceId(id, param);
+    auto mode = UnitControlJobModeMap.value(kJobModeReplace);
+
+    auto oResult = iface.StartUnit(buf, mode);
+    ec = oResult.first;
+    if (ec) {
+        qDebug() << "StartUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+    QDBusObjectPath o = oResult.second;
+
+    if (id.endsWith("@"))
+        return;
+
+    oResult = iface.GetUnit(buf);
+    ec = oResult.first;
+    SystemServiceEntry entry;
+    if (ec) {
+        if (ec.getCode() == 3) {
+            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o.path());
+        } else {
+            qDebug() << "GetUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+            Q_EMIT errorOccurred(ec);
+            return;
+        }
+    } else {
+        o = oResult.second;
+        entry = updateServiceEntry(o.path());
+    }
+
+    if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        auto *timer = new CustomTimer {this};
+        timer->start(o.path());
+    }
+}
+
+void ServiceManager::stopService(const QString &id)
+{
+    ErrorContext ec {};
+    Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
+                                   kSystemDObjectPath.path(),
+                                   QDBusConnection::systemBus());
+
+    auto buf = normalizeServiceId(id);
+    auto mode = UnitControlJobModeMap.value(kJobModeReplace);
+
+    auto oResult = iface.StopUnit(buf, mode);
+    ec = oResult.first;
+    if (ec) {
+        qDebug() << "Stop Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+    QDBusObjectPath o = oResult.second;
+
+    if (id.endsWith("@"))
+        return;
+
+    oResult = iface.GetUnit(buf);
+    ec = oResult.first;
+    SystemServiceEntry entry;
+    if (ec) {
+        if (ec.getCode() == 3) {
+            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o.path());
+        } else {
+            qDebug() << "Get Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
+            Q_EMIT errorOccurred(ec);
+            return;
+        }
+    } else {
+        o = oResult.second;
+        entry = updateServiceEntry(o.path());
+    }
+
+    if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        auto *timer = new CustomTimer {this};
+        timer->start(o.path());
+    }
+}
+
+void ServiceManager::restartService(const QString &id, const QString &param)
+{
+    ErrorContext ec {};
+    Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
+                                   kSystemDObjectPath.path(),
+                                   QDBusConnection::systemBus());
+
+    auto buf = normalizeServiceId(id, param);
+    auto mode = UnitControlJobModeMap.value(kJobModeReplace);
+
+    auto oResult = iface.RestartUnit(buf, mode);
+    ec = oResult.first;
+    if (ec) {
+        qDebug() << "Restart Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+    QDBusObjectPath o = oResult.second;
+
+    if (id.endsWith("@"))
+        return;
+
+    oResult = iface.GetUnit(buf);
+    ec = oResult.first;
+    SystemServiceEntry entry;
+    if (ec) {
+        if (ec.getCode() == 3) {
+            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o.path());
+        } else {
+            qDebug() << "Get Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+            Q_EMIT errorOccurred(ec);
+            return;
+        }
+    } else {
+        o = oResult.second;
+        entry = updateServiceEntry(o.path());
+    }
+
+    if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        auto *timer = new CustomTimer {this};
+        timer->start(o.path());
+    }
+}
+
+void ServiceManager::setServiceStartupMode(const QString &id, bool autoStart)
+{
+    ErrorContext ec {};
+
+#ifdef USE_POLICYKIT1_AUTHORITy_API
+    // check sysv script
+
+    // enable/disable with EnableUnitFiles/DisableUnitFiles
+    Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE, kSystemDObjectPath.path(),
+                                   QDBusConnection::systemBus());
+    if (autoStart) {
+        auto re = mgrIf.EnableUnitFiles({entry.getId()});
+        ec = re.first;
+        if (ec) {
+            qDebug() << "call EnableUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+            return ec;
+        }
+        auto eResult = re.second;
+    } else {
+        auto re = mgrIf.DisableUnitFiles({entry.getId()});
+        ec = re.first;
+        if (ec) {
+            qDebug() << "call DisableUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+            return ec;
+        }
+        auto dResult = re.second;
+    }
+#else
+    auto errfmt = [ = ](ErrorContext & pe, decltype(errno) err, const QString & title, const QString &message = {}) -> ErrorContext & {
+        pe.setCode(ErrorContext::kErrorTypeSystem);
+        pe.setSubCode(err);
+        pe.setErrorName(title);
+        auto errmsg = (err != 0 ? QString("Error: [%1] %2").arg(err).arg(strerror(err)) : QString("Error: "));
+        if (!message.isEmpty())
+        {
+            errmsg = QString("%1 - %2").arg(errmsg).arg(message);
+        }
+        pe.setErrorMessage(errmsg);
+        return pe;
+    };
+    const QString title = QApplication::translate("Service.Action.Set.Startup.Mode",
+                                                  "Failed to set service startup type");
+    int rc {};
+    struct stat sbuf;
+
+    // check pkexec existence
+    errno = 0;
+    sbuf = {};
+    rc = stat(BIN_PKEXEC_PATH, &sbuf);
+    if (rc == -1) {
+        qDebug() << "check pkexec existence failed";
+        ec = errfmt(ec, errno, title, BIN_PKEXEC_PATH);
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+
+    // check systemctl existence
+    errno = 0;
+    sbuf = {};
+    rc = stat(BIN_SYSTEMCTL_PATH, &sbuf);
+    if (rc == -1) {
+        qDebug() << "check systemctl existence failed";
+        ec = errfmt(ec, errno, title, BIN_SYSTEMCTL_PATH);
+        Q_EMIT errorOccurred(ec);
+        return;
+    }
+
+    auto *proc = new QProcess();
+    proc->setProcessChannelMode(QProcess::MergedChannels);
+    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+    [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
+        ErrorContext le;
+        // exitStatus:
+        //      crashed
+        //
+        // exitCode:
+        //      127 (pkexec) - not auth/cant auth/error
+        //      126 (pkexec) - auth dialog dismissed
+        //      0 (systemctl) - ok
+        //      !0 (systemctl) - systemctl error, read stdout from child process
+        if (exitStatus == QProcess::CrashExit) {
+            errno = 0;
+            le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
+                                                                  "Error: Failed to set service startup type due to the crashed sub process."));
+            Q_EMIT errorOccurred(le);
+        } else {
+            if (exitCode == 127 || exitCode == 126) {
+                errno = EPERM;
+                le = errfmt(le, errno, title);
+                Q_EMIT errorOccurred(le);
+            } else if (exitCode != 0) {
+                auto buf = proc->readAllStandardOutput();
+                errno = 0;
+                le = errfmt(le, errno, title, buf);
+                Q_EMIT errorOccurred(le);
+            } else {
+                // success - refresh service stat -send signal
+
+                // special case, do nothing there
+                if (id.endsWith("@"))
+                    return;
+
+                Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
+                                               kSystemDObjectPath.path(),
+                                               QDBusConnection::systemBus());
+                auto buf = normalizeServiceId(id, {});
+                auto re = mgrIf.GetUnit(buf);
+                le = re.first;
+                if (le) {
+                    if (le.getCode() == 3) {
+                        auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+                        updateServiceEntry(o.path());
+                    } else {
+                        Q_EMIT errorOccurred(le);
+                    }
+                } else {
+                    updateServiceEntry(re.second.path());
+                }
+            }
+        }
+        proc->deleteLater();
+    });
+
+    // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
+    QString action = autoStart ? "enable" : "disable";
+    proc->start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, id});
+#endif
+}
+
+SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
+{
+    ErrorContext ec;
+    SystemServiceEntry entry {};
+
+    Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
+                                   kSystemDObjectPath.path(),
+                                   QDBusConnection::systemBus());
+    Systemd1UnitInterface unitIf(DBUS_SYSTEMD1_SERVICE,
+                                 opath,
+                                 QDBusConnection::systemBus());
+    Systemd1ServiceInterface svcIf(DBUS_SYSTEMD1_SERVICE,
+                                   opath,
+                                   QDBusConnection::systemBus());
+
+    auto idResult = unitIf.getId();
+    ec = idResult.first;
+    QString id = idResult.second;
+    auto sname = id;
+    if (ec) {
+        qDebug() << "getId failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        if (sname.endsWith(UnitTypeServiceSuffix)) {
+            sname.chop(strlen(UnitTypeServiceSuffix));
+        }
+        entry.setId(id);
+        entry.setSName(sname);
+    }
+
+    auto loadStateResult = unitIf.getLoadState();
+    ec = loadStateResult.first;
+    if (ec) {
+        qDebug() << "getLoadState failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setLoadState(loadStateResult.second);
+    }
+
+    auto activeStateResult = unitIf.getActiveState();
+    ec = activeStateResult.first;
+    if (ec) {
+        qDebug() << "getActiveState failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setActiveState(activeStateResult.second);
+    }
+
+    auto subStateResult = unitIf.getSubState();
+    ec = subStateResult.first;
+    if (ec) {
+        qDebug() << "getSubState failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setSubState(subStateResult.second);
+    }
+
+    auto unitFileStateResult = mgrIf.GetUnitFileState(id);
+    ec = unitFileStateResult.first;
+    if (ec) {
+        qDebug() << "getUnitFileState failed:" << entry.getId() << ec.getErrorName()
+                 << ec.getErrorMessage();
+    } else {
+        entry.setState(unitFileStateResult.second);
+        entry.setStartupType(ServiceManager::getServiceStartupType(
+                                 entry.getSName(),
+                                 entry.getState()));
+    }
+
+    auto descResult = unitIf.getDescription();
+    ec = descResult.first;
+    if (ec) {
+        qDebug() << "getDescription failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setDescription(descResult.second);
+    }
+
+    auto mainPIDResult = svcIf.getMainPID();
+    ec = mainPIDResult.first;
+    if (ec) {
+        qDebug() << "getMainPID failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setMainPID(mainPIDResult.second);
+    }
+
+    auto canStartResult = unitIf.canStart();
+    ec = canStartResult.first;
+    if (ec) {
+        qDebug() << "canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setCanStart(canStartResult.second);
+    }
+
+    auto canStopResult = unitIf.canStop();
+    ec = canStopResult.first;
+    if (ec) {
+        qDebug() << "canStop failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setCanStop(canStopResult.second);
+    }
+
+    auto canReloadResult = unitIf.canReload();
+    ec = canReloadResult.first;
+    if (ec) {
+        qDebug() << "canReload failed:" << ec.getErrorName() << ec.getErrorMessage();
+    } else {
+        entry.setCanReload(canReloadResult.second);
+    }
+
+    Q_EMIT serviceStatusUpdated(entry);
+
+    return entry;
+}
