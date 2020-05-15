@@ -21,6 +21,7 @@
 #include "settings.h"
 #include "system_service_table_view.h"
 #include "toolbar.h"
+#include "dialog/error_dialog.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -199,7 +200,7 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
 void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
 {
     MainWindow *mainWindow = MainWindow::instance();
-    DMessageBox::critical(mainWindow, ec.getErrorName(), ec.getErrorMessage());
+    ErrorDialog::show(mainWindow, ec.getErrorName(), ec.getErrorMessage());
 }
 
 void SystemServiceTableView::adjustInfoLabelVisibility()
@@ -497,7 +498,7 @@ void SystemServiceTableView::initConnections()
     Q_ASSERT(mgr != nullptr);
     connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
         if (ec) {
-            DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {

@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">Гаразд</translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -524,11 +531,11 @@ Are you sure you want to continue?</source>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Підкачка</translation>
+        <translation type="vanished">Підкачка</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Не ввімкнено</translation>
+        <translation type="vanished">Не ввімкнено</translation>
     </message>
 </context>
 <context>

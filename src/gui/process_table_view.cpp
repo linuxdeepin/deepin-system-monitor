@@ -33,6 +33,7 @@
 #include "settings.h"
 #include "toolbar.h"
 #include "ui_common.h"
+#include "dialog/error_dialog.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -249,7 +250,7 @@ void ProcessTableView::changeProcessPriority(int priority)
             ec = sysmon->setProcessPriority(pid, priority);
             if (ec) {
                 // show error dialog
-                DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
             }
         }
     }
@@ -644,13 +645,13 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         connect(sysmon, &SystemMonitor::priorityPromoteResultReady, this,
         [ = ](const ErrorContext & ec) {
             if (ec) {
-                DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
             }
         });
         connect(sysmon, &SystemMonitor::processControlResultReady, this,
         [ = ](const ErrorContext & ec) {
             if (ec) {
-                DMessageBox::critical(this, ec.getErrorName(), ec.getErrorMessage());
+                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
             }
         });
     }

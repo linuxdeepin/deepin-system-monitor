@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -519,11 +526,11 @@ Are you sure you want to continue?</source>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Cserehely</translation>
+        <translation type="vanished">Cserehely</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nem lehetséges</translation>
+        <translation type="vanished">Nem lehetséges</translation>
     </message>
 </context>
 <context>

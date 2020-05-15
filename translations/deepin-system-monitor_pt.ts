@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -526,11 +533,11 @@ Tem a certeza de que deseja continuar?</translation>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation type="vanished">Swap</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Não ativado</translation>
+        <translation type="vanished">Não ativado</translation>
     </message>
 </context>
 <context>

@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">У реду</translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -526,11 +533,11 @@ Are you sure you want to continue?</source>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Помоћна</translation>
+        <translation type="vanished">Помоћна</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Није омогућено</translation>
+        <translation type="vanished">Није омогућено</translation>
     </message>
 </context>
 <context>

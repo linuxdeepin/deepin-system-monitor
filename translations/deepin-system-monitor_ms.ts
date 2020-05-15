@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -526,11 +533,11 @@ Anda pasti mahu teruskannya?</translation>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Silih</translation>
+        <translation type="vanished">Silih</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Tidak dibenarkan</translation>
+        <translation type="vanished">Tidak dibenarkan</translation>
     </message>
 </context>
 <context>

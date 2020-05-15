@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -526,11 +533,11 @@ Opravdu chcete pokračovat?</translation>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Odkládací prostor (swap)</translation>
+        <translation type="vanished">Odkládací prostor (swap)</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Nepovoleno</translation>
+        <translation type="vanished">Nepovoleno</translation>
     </message>
 </context>
 <context>

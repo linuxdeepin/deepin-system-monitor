@@ -195,6 +195,13 @@
     </message>
 </context>
 <context>
+    <name>Error.Dialog</name>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">Oké</translation>
+    </message>
+</context>
+<context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
@@ -526,11 +533,11 @@ Weet je zeker dat je door wilt gaan?</translation>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation>Wisselgeheugen</translation>
+        <translation type="vanished">Wisselgeheugen</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Niet ingeschakeld</translation>
+        <translation type="vanished">Niet ingeschakeld</translation>
     </message>
 </context>
 <context>
