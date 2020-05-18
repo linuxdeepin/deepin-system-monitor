@@ -407,11 +407,7 @@ Er du sikker på, at du vil fortsætte?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Kunne ikke afslutte proces</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke afslutte proces</translation>
     </message>
 </context>
 <context>

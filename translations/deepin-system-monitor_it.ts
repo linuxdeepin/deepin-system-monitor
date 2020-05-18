@@ -408,11 +408,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Terminazione processo fallita</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminazione processo fallita</translation>
     </message>
 </context>
 <context>

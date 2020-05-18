@@ -407,11 +407,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Het proces kan niet worden beëindigd</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Het proces kan niet worden beëindigd</translation>
     </message>
 </context>
 <context>

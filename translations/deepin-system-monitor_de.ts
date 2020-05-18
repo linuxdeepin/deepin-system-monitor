@@ -406,7 +406,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
         <translation>Senden eines Signals an den Prozess fehlgeschlagen</translation>
     </message>
     <message>
-        <source>Failed to end proces</source>
+        <source>Failed to end process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

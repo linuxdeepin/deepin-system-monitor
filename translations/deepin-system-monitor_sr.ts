@@ -407,11 +407,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Окончавање процеса није успело</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Окончавање процеса није успело</translation>
     </message>
 </context>
 <context>

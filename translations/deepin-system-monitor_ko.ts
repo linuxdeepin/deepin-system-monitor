@@ -407,11 +407,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">프로세스를 종료하지 못함</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>프로세스를 종료하지 못함</translation>
     </message>
 </context>
 <context>

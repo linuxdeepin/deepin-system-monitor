@@ -21,22 +21,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "interactive_kill.h"
 #include <dscreenwindowsutil.h>
-#include <DHiDPIHelper>
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QScreen>
+#include <QIcon>
+
 #include "utils.h"
+#include "interactive_kill.h"
 
 DWM_USE_NAMESPACE
-DWIDGET_USE_NAMESPACE
 
 InteractiveKill::InteractiveKill(QWidget *parent)
     : QWidget(parent)
 {
-    cursorImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill_cursor.svg"));
+    m_cursorImage = QIcon(":/image/kill_cursor.svg").pixmap({48, 48});
     cursorX = -1;
     cursorY = -1;
     killWindowIndex = -1;
@@ -58,10 +58,13 @@ InteractiveKill::InteractiveKill(QWidget *parent)
     windows = windowManager->getWindows();
 
     for (int i = 0; i < windows.length(); i++) {
-        if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder") {
+        if (windowManager->getWindowClass(windows[i]) == "Desktop") {
+            m_desktopRect = windowManager->getWindowRect(windows[i]);
+        }
+        if (windowManager->getWindowClass(windows[i]) != "deepin-screen-recorder" &&
+                windowManager->getWindowClass(windows[i]) != "Desktop") {
             windowRects.append(
                 windowManager->adjustRectInScreenArea(windowManager->getWindowRect(windows[i])));
-
             windowPids.append(Utils::getWindowPid(windowManager, windows[i]));
         }
     }
@@ -102,23 +105,17 @@ void InteractiveKill::keyPressEvent(QKeyEvent *keyEvent)
 
 void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    setCursor(QCursor(cursorImage));
 
     cursorX = mouseEvent->x();
     cursorY = mouseEvent->y();
 
-    bool needRepaint = false;
-
     for (int i = 0; i < windowRects.length(); i++) {
         WindowRect rect = windowRects[i];
 
-        if (cursorX + screenRect.x() >= rect.x && cursorX + screenRect.x() <= rect.x + rect.width &&
-            cursorY + screenRect.y() >= rect.y &&
-            cursorY + screenRect.y() <= rect.y + rect.height) {
-            if (killWindowIndex != i) {
-                needRepaint = true;
-            }
-
+        if (cursorX + screenRect.x() >= rect.x &&
+                cursorX + screenRect.x() <= rect.x + rect.width &&
+                cursorY + screenRect.y() >= rect.y &&
+                cursorY + screenRect.y() <= rect.y + rect.height) {
             rect.x = rect.x - screenRect.x();
             rect.y = rect.y - screenRect.y();
 
@@ -129,30 +126,37 @@ void InteractiveKill::mouseMoveEvent(QMouseEvent *mouseEvent)
         }
     }
 
-    if (needRepaint) {
-        update();
+    if (mouseHoverWindow({cursorX, cursorY})) {
+        setCursor(QCursor(m_cursorImage));
+    } else {
+        setCursor(QCursor(Qt::ForbiddenCursor));
     }
+
+    update();
 }
 
 void InteractiveKill::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    if (startTooltip != nullptr) {
-        delete startTooltip;
-        startTooltip = nullptr;
-    }
-
-    for (int i = 0; i < windowRects.length(); i++) {
-        WindowRect rect = windowRects[i];
-
-        if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
-            mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
-            killWindow(windowPids[i]);
-
-            break;
+    if (!mouseHoverWindow(mouseEvent->pos())) {
+        QWidget::mousePressEvent(mouseEvent);
+    } else {
+        if (startTooltip != nullptr) {
+            delete startTooltip;
+            startTooltip = nullptr;
         }
-    }
 
-    close();
+        for (int i = 0; i < windowRects.length(); i++) {
+            WindowRect rect = windowRects[i];
+
+            if (mouseEvent->x() >= rect.x && mouseEvent->x() <= rect.x + rect.width &&
+                    mouseEvent->y() >= rect.y && mouseEvent->y() <= rect.y + rect.height) {
+                killWindow(windowPids[i]);
+
+                break;
+            }
+        }
+        close();
+    }
 }
 
 void InteractiveKill::paintEvent(QPaintEvent *)
@@ -160,24 +164,24 @@ void InteractiveKill::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.drawPixmap(QPoint(0, 0), screenPixmap);
 
-    if (cursorX >= 0 && cursorY >= 0) {
+    if (cursorX >= 0 && cursorY >= 0 && mouseHoverWindow({cursorX, cursorY})) {
         // Just render kill window with window index.
         QRegion windowRegion = QRegion(
-            QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
+                                   QRect(killWindowRect.x, killWindowRect.y, killWindowRect.width, killWindowRect.height));
 
         for (int i = 0; i < killWindowIndex; i++) {
             WindowRect rect = windowRects[i];
 
             if (rect.x > killWindowRect.x ||
-                rect.x + rect.width < killWindowRect.x + killWindowRect.width ||
-                rect.y > killWindowRect.y ||
-                rect.y + rect.height < killWindowRect.y + killWindowRect.height) {
+                    rect.x + rect.width < killWindowRect.x + killWindowRect.width ||
+                    rect.y > killWindowRect.y ||
+                    rect.y + rect.height < killWindowRect.y + killWindowRect.height) {
                 windowRegion =
                     windowRegion.subtracted(QRegion(rect.x, rect.y, rect.width, rect.height));
             }
         }
 
-        painter.setBrush(QBrush("#ff0000"));
+        painter.setBrush(Qt::red);
         painter.setOpacity(0.2);
 
         painter.setClipping(true);

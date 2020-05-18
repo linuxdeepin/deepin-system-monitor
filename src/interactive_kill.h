@@ -45,11 +45,26 @@ public:
     void mousePressEvent(QMouseEvent *mouseEvent);
     void paintEvent(QPaintEvent *);
 
+private:
+    inline bool mouseHoverWindow(const QPoint &pos)
+    {
+        bool hover = false;
+        for (auto &w : windowRects) {
+            QRect crect(w.x, w.y, w.width, w.height);
+            if (crect.contains(pos)) {
+                hover = true;
+                break;
+            }
+        }
+        return hover;
+    }
+
+
 signals:
     void killWindow(int pid);
 
 private:
-    QPixmap cursorImage;
+    QPixmap m_cursorImage;
     QRect screenRect;
     QList<xcb_window_t> windows;
     QList<WindowRect> windowRects;
@@ -61,6 +76,8 @@ private:
     int cursorX;
     int cursorY;
     int killWindowIndex;
+
+    WindowRect m_desktopRect {};
 };
 
 #endif

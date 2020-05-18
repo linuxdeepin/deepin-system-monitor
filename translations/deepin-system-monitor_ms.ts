@@ -407,11 +407,7 @@ Anda pasti mahu teruskannya?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Gagal menamatkan proses</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal menamatkan proses</translation>
     </message>
 </context>
 <context>

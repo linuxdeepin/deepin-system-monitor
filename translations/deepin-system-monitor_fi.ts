@@ -407,11 +407,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Prosessin lopetus epäonnistui</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessin lopetus epäonnistui</translation>
     </message>
 </context>
 <context>

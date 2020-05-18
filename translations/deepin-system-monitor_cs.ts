@@ -407,11 +407,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Proces se nepodařilo ukončit</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Proces se nepodařilo ukončit</translation>
     </message>
 </context>
 <context>

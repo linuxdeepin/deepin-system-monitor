@@ -159,7 +159,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
     auto fmsg = [ = ](int signal) -> QString {
         if (signal == SIGTERM)
         {
-            return DApplication::translate("Process.Signal", "Failed to end proces");
+            return DApplication::translate("Process.Signal", "Failed to end process");
         } else if (signal == SIGSTOP)
         {
             return DApplication::translate("Process.Signal", "Failed to pause process");

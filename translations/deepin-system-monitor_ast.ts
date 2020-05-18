@@ -383,10 +383,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -404,6 +400,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

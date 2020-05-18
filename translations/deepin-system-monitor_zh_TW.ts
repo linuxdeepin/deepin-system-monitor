@@ -406,7 +406,7 @@ Are you sure you want to continue?</source>
         <translation>發送訊號到程序失敗</translation>
     </message>
     <message>
-        <source>Failed to end proces</source>
+        <source>Failed to end process</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -407,11 +407,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">İşlem sona erdirilemedi</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>İşlem sona erdirilemedi</translation>
     </message>
 </context>
 <context>

@@ -407,11 +407,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Falha ao finalizar o processo</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao finalizar o processo</translation>
     </message>
 </context>
 <context>

@@ -128,6 +128,8 @@ void StatsCollector::start()
 
     m_euid = geteuid();
 
+    m_defaultIcon = QIcon::fromTheme("application-x-executable");
+
     // prepare cache
     m_desktopEntryStat = new DesktopEntryStat();
     m_desktopEntryStat->moveToThread(&m_cacheThread);
@@ -790,7 +792,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
         proc.setDisplayName(proc.getName());
     }
     if (!iconSet) {
-        proc.setIcon(QIcon::fromTheme("application-x-executable"));
+        proc.setIcon(ctx.m_defaultIcon);
     }
 }
 

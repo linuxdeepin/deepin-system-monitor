@@ -147,6 +147,8 @@ private:
     QList<QString>          m_scriptingList         {};
     QList<QByteArray>       m_envPathList           {};
 
+    QIcon m_defaultIcon {};
+
     friend void readProcStatsCallback(ProcStat &ps, void *context);
     friend void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps);
     friend class SystemMonitor;

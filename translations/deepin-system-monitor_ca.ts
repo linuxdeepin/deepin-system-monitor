@@ -407,11 +407,7 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Ha fallat acabar el procés.</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat acabar el procés.</translation>
     </message>
 </context>
 <context>

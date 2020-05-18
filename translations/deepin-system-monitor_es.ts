@@ -407,11 +407,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">No se pudo terminar el proceso</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudo terminar el proceso</translation>
     </message>
 </context>
 <context>
