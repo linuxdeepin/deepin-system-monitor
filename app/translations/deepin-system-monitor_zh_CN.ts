@@ -400,11 +400,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">结束进程失败</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>结束进程失败</translation>
     </message>
 </context>
 <context>
@@ -771,6 +767,10 @@ Are you sure you want to continue?</source>
 can only contain alpha, numeric, &apos;.&apos; or &apos;-&apos;, and 
 must starts and ends with alpha or numeric</source>
         <translation>计算机名仅可包含2至63个字符，仅可包含字母 数字 &apos;.&apos;及&apos;-&apos;, 且首尾必须是字母或数字</translation>
+    </message>
+    <message>
+        <source>%1 (%2 available)</source>
+        <translation>%1 (%2 可用)</translation>
     </message>
 </context>
 <context>

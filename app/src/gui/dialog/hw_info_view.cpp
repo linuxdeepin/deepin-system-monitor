@@ -40,7 +40,7 @@ void HWInfoView::initUI()
                                                     "Use Device Manager to view the information of "
                                                     "all hardware devices installed on this computer."));
     m_tipLabel->setWordWrap(true);
-    DFontSizeManager::instance()->bind(m_tipLabel, DFontSizeManager::T6, QFont::Medium);
+    DFontSizeManager::instance()->bind(m_tipLabel, DFontSizeManager::T7, QFont::Medium);
     auto pa = DApplicationHelper::instance()->palette(m_tipLabel);
     pa.setColor(DPalette::Text, pa.color(DPalette::TextTips));
     m_tipLabel->setPalette(pa);

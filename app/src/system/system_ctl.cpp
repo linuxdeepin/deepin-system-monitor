@@ -59,9 +59,8 @@ void SystemCtl::getSystemInfo()
     model->setCPUModel(QString("%1 x %2")
                        .arg(DSysInfo::cpuModelName())
                        .arg(sysconf(_SC_NPROCESSORS_ONLN)));
-    model->setMemory(QString("%1 (%2 available)") //TODO: translate
-                     .arg(Utils::formatUnit(DSysInfo::memoryInstalledSize()))
-                     .arg(Utils::formatUnit(DSysInfo::memoryTotalSize())));
+    model->setInstalledMemory(Utils::formatUnit(DSysInfo::memoryInstalledSize()));
+    model->setAvailMemory(Utils::formatUnit(DSysInfo::memoryTotalSize()));
     model->setDiskSize(Utils::formatUnit(DSysInfo::systemDiskSize()));
 
     // log level

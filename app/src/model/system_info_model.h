@@ -91,14 +91,25 @@ public:
         }
     }
 
-    inline QString getMemory() const
+    inline QString getInstalledMemory() const
     {
-        return m_memory;
+        return m_installedMemory;
     }
-    inline void setMemory(const QString &memory)
+    inline void setInstalledMemory(const QString &memory)
     {
-        if (memory != m_memory) {
-            m_memory = memory;
+        if (memory != m_installedMemory) {
+            m_installedMemory = memory;
+        }
+    }
+
+    inline QString getAvailMemory() const
+    {
+        return m_availMemory;
+    }
+    inline void setAvailMemory(const QString &memory)
+    {
+        if (memory != m_availMemory) {
+            m_availMemory = memory;
         }
     }
 
@@ -185,7 +196,8 @@ private:
     QString m_osType            {};
     QString m_kernelVersion     {};
     QString m_cpuModel          {};
-    QString m_memory            {};
+    QString m_installedMemory   {};
+    QString m_availMemory       {};
     QString m_diskSize          {};
 
     KernelLogLevel  m_logLevel          {kLogLevelWarning};

@@ -400,11 +400,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Falha ao finalizar o processo</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao finalizar o processo</translation>
     </message>
 </context>
 <context>
@@ -766,6 +762,10 @@ Continuar?</translation>
         <source>Host name can only contain 2 ~ 63 characters, 
 can only contain alpha, numeric, &apos;.&apos; or &apos;-&apos;, and 
 must starts and ends with alpha or numeric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2 available)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

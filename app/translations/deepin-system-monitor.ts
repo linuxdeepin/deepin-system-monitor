@@ -380,7 +380,7 @@ Are you sure you want to continue?</translation>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation>Failed to end proces</translation>
+        <translation type="vanished">Failed to end proces</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
@@ -401,6 +401,10 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Failed in sending signal to process</source>
         <translation>Failed in sending signal to process</translation>
+    </message>
+    <message>
+        <source>Failed to end process</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -762,6 +766,10 @@ Are you sure you want to continue?</translation>
         <source>Host name can only contain 2 ~ 63 characters, 
 can only contain alpha, numeric, &apos;.&apos; or &apos;-&apos;, and 
 must starts and ends with alpha or numeric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2 available)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

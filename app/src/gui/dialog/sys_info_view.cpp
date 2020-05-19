@@ -123,7 +123,9 @@ void SysInfoView::reset()
         m_typeValue->setText(m_model->getOSType());
         m_kernelValue->setText(m_model->getKernelVersion());
         m_proccessorValue->setText(m_model->getCPUModel());
-        m_memoryValue->setText(m_model->getMemory());
+        m_memoryValue->setText(DApplication::translate("System.Info.Dialog", "%1 (%2 available)")
+                               .arg(m_model->getInstalledMemory())
+                               .arg(m_model->getAvailMemory()));
         m_diskValue->setText(m_model->getDiskSize());
 
         connect(m_model.data(), &SystemInfoModel::hostNameChanged, this, [ = ](const QString & hostName) {

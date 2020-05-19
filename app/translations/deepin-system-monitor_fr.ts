@@ -400,11 +400,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="vanished">Échec de la fin du processus</translation>
-    </message>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la fin du processus</translation>
     </message>
 </context>
 <context>
@@ -766,6 +762,10 @@ Es-tu sûr de vouloir continuer ?</translation>
         <source>Host name can only contain 2 ~ 63 characters, 
 can only contain alpha, numeric, &apos;.&apos; or &apos;-&apos;, and 
 must starts and ends with alpha or numeric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2 available)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
