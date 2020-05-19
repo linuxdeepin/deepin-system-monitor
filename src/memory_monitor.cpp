@@ -162,6 +162,9 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     auto memdiff = qlonglong(m_usedMemory - m_prevUsedMemory);
     auto memoryPercent = (m_prevUsedMemory + memdiff * m_progress) / m_totalMemory;
+    if (memoryPercent > 100.) {
+        memoryPercent = 100.;
+    }
 
     qreal swapPercent;
     auto swpdiff = qlonglong(m_usedSwap - m_prevUsedSwap);
@@ -169,6 +172,9 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
         swapPercent = 0;
     } else {
         swapPercent = (m_prevUsedSwap + swpdiff * m_progress) / m_totalSwap;
+        if (swapPercent > 100.) {
+            swapPercent = 100.;
+        }
     }
 
     int iconSize = 24;
