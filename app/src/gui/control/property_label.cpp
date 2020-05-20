@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include <DApplicationHelper>
 #include <DFontSizeManager>
 
@@ -17,13 +19,12 @@ PropertyLabel::PropertyLabel(QWidget *parent, int margin, int spacing)
     m_layout = new QHBoxLayout(this);
     m_layout->setMargin(margin);
     m_layout->setSpacing(spacing);
-    m_layout->addWidget(m_name, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    m_layout->addWidget(m_name, 0, Qt::AlignLeft);
 
     DFontSizeManager::instance()->bind(m_name, DFontSizeManager::T6, QFont::Medium);
     auto pa = DApplicationHelper::instance()->palette(m_name);
     pa.setColor(DPalette::Text, pa.color(DPalette::TextTitle));
     m_name->setPalette(pa);
-    m_name->adjustSize();
 }
 
 void PropertyLabel::addPropertyValueWidget(QWidget *widget, DPalette::ColorType ct)
@@ -46,7 +47,7 @@ void PropertyLabel::addPropertyValueWidget(QWidget *widget, QPalette::ColorRole 
         return;
 
     m_value = widget;
-    m_layout->addWidget(m_value, 1, Qt::AlignRight | Qt::AlignVCenter);
+    m_layout->addWidget(m_value, 1, Qt::AlignRight);
 
     DFontSizeManager::instance()->bind(m_value, DFontSizeManager::T6, QFont::Medium);
     auto pa = DApplicationHelper::instance()->palette(m_value);
@@ -54,17 +55,7 @@ void PropertyLabel::addPropertyValueWidget(QWidget *widget, QPalette::ColorRole 
     m_value->setPalette(pa);
 }
 
-void PropertyLabel::adjustWidth(int width)
-{
-
-}
-
 QSize PropertyLabel::minimumSizeHint() const
-{
-    return {517, 36};
-}
-
-QSize PropertyLabel::sizeHint() const
 {
     return {517, 36};
 }

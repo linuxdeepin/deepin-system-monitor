@@ -57,6 +57,7 @@ void SysInfoView::initUI()
     // host name
     m_hostName = new PropertyLabel();
     m_hostName->setPropertyName(DApplication::translate("System.Info.Dialog", "Computer name"));
+    m_hostName->setMinimumHeight(36);
     m_hostValue = new DLabel();
     m_hostValue->setElideMode(Qt::ElideMiddle);
     m_hostName->addPropertyValueWidget(m_hostValue, DPalette::TextTips);

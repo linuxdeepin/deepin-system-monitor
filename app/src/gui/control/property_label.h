@@ -25,10 +25,8 @@ public:
 
     void addPropertyValueWidget(QWidget *widget, DPalette::ColorType ct = DPalette::TextTips);
     void addPropertyValueWidget(QWidget *widget, DPalette::ColorRole cr = DPalette::Text);
-    void adjustWidth(int width);
 
     virtual QSize minimumSizeHint() const;
-    virtual QSize sizeHint() const;
 
 private:
     QHBoxLayout *m_layout       {};
