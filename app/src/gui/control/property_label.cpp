@@ -25,6 +25,8 @@ PropertyLabel::PropertyLabel(QWidget *parent, int margin, int spacing)
     auto pa = DApplicationHelper::instance()->palette(m_name);
     pa.setColor(DPalette::Text, pa.color(DPalette::TextTitle));
     m_name->setPalette(pa);
+    m_name->adjustSize();
+    m_name->setMinimumWidth(m_name->width());
 }
 
 void PropertyLabel::addPropertyValueWidget(QWidget *widget, DPalette::ColorType ct)
