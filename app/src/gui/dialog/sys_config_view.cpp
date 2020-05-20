@@ -129,6 +129,11 @@ void SysConfigView::initUI()
     m_cancel->setEnabled(false);
     m_commit = new DPushButton(DApplication::translate("System.Info.Dialog", "Save"));
     m_commit->setEnabled(false);
+    auto pa = DApplicationHelper::instance()->palette(m_commit);
+    pa.setBrush(DPalette::Normal, DPalette::Light, pa.color(DPalette::Normal, DPalette::LightLively));
+    pa.setBrush(DPalette::Normal, DPalette::Dark, pa.color(DPalette::Normal, DPalette::DarkLively));
+    pa.setBrush(DPalette::Normal, DPalette::ButtonText, pa.color(DPalette::Normal, DPalette::TextLively));
+    m_commit->setPalette(pa);
     btnLayout->addWidget(m_cancel);
     btnLayout->addWidget(m_commit);
     contentLayout->addLayout(btnLayout, 0);
