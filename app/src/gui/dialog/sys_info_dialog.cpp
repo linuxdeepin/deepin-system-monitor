@@ -146,6 +146,11 @@ void SysInfoDialog::initConnections()
             m_spinner->raise();
         }
     });
+    connect(m_views, &QStackedWidget::currentChanged, this, [ = ](int index) {
+        if (index == m_views->indexOf(m_hwInfoView)) {
+            m_hwInfoView->clearFocus();
+        }
+    });
 }
 
 void SysInfoDialog::resizeEvent(QResizeEvent *event)

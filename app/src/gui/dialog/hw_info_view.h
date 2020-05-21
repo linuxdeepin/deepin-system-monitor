@@ -16,6 +16,9 @@ public:
 
     bool eventFilter(QObject *obj, QEvent *event);
 
+public Q_SLOTS:
+    void clearFocus();
+
 protected:
     void initUI();
     void initConnections();

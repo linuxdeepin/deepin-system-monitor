@@ -23,6 +23,13 @@ bool HWInfoView::eventFilter(QObject *obj, QEvent *event)
     return DFrame::eventFilter(obj, event);
 }
 
+void HWInfoView::clearFocus()
+{
+    if (m_hwButton) {
+        m_hwButton->clearFocus();
+    }
+}
+
 void HWInfoView::initUI()
 {
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
