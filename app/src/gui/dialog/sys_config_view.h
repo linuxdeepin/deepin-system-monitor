@@ -9,6 +9,7 @@
 #include <DLineEdit>
 #include <DSwitchButton>
 #include <DPushButton>
+#include <DSuggestButton>
 #include <QStandardItem>
 #include <DSpinner>
 
@@ -74,7 +75,7 @@ private:
     DSwitchButton   *m_enableCoreDumpSwch       {};
 
     DPushButton     *m_cancel                   {};
-    DPushButton     *m_commit                   {};
+    DSuggestButton  *m_commit                   {};
 
     bool            m_onProgress                {false};
 };
