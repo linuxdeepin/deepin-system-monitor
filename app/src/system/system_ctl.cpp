@@ -23,6 +23,10 @@
 #define DBUS_O_HOST_NAME        "/org/freedesktop/hostname1"
 #define DBUS_IF_HOST_NAME       "org.freedesktop.hostname1"
 
+#define DBUS_S_SYSINFO          "com.deepin.system.SystemInfo"
+#define DBUS_O_SYSINFO          "/com/deepin/system/SystemInfo"
+#define DBUS_IF_SYSINFO         "com.deepin.system.SystemInfo"
+
 DCORE_USE_NAMESPACE
 
 std::atomic<SystemCtl *> SystemCtl::m_instance;
@@ -59,7 +63,17 @@ void SystemCtl::getSystemInfo()
     model->setCPUModel(QString("%1 x %2")
                        .arg(DSysInfo::cpuModelName())
                        .arg(sysconf(_SC_NPROCESSORS_ONLN)));
-    model->setInstalledMemory(Utils::formatUnit(DSysInfo::memoryInstalledSize()));
+
+    QDBusInterface sysIf(DBUS_S_SYSINFO,
+                         DBUS_O_SYSINFO,
+                         DBUS_IF_SYSINFO,
+                         QDBusConnection::systemBus());
+    if (sysIf.isValid()) {
+        model->setInstalledMemory(Utils::formatUnit(sysIf.property("MemorySize").toULongLong()));
+    } else {
+        model->setInstalledMemory(Utils::formatUnit(DSysInfo::memoryInstalledSize()));
+    }
+
     model->setAvailMemory(Utils::formatUnit(DSysInfo::memoryTotalSize()));
     model->setDiskSize(Utils::formatUnit(DSysInfo::systemDiskSize()));
 
