@@ -23,6 +23,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <unordered_set>
 #include <dwindowmanager.h>
 #include <proc/readproc.h>
 #include <QFileInfoList>
@@ -30,12 +31,12 @@
 #include <QObject>
 #include <QPainter>
 #include <QString>
-#include <unordered_set>
+#include <QDebug>
+#include <QVariant>
+#include <QtMath>
+
 #include "find_window_title.h"
 #include "hashqstring.h"
-#include <QDebug>
-
-#include <QVariant>
 
 DWM_USE_NAMESPACE
 
@@ -139,7 +140,12 @@ inline QString formatUnit(QVariant size, SizeUnit base = B, int prec = 1, bool i
     if (isSpeed) {
         return QString("%1%2%3").arg(v, 0, 'f', prec).arg(UnitSuffixExt[u]).arg("/s");
     } else {
-        return QString("%1%2").arg(v, 0, 'f', prec).arg(UnitSuffix[u]);
+        if (prec == 0) {
+            v = qCeil(v);
+            return QString("%1%2").arg(v).arg(UnitSuffix[u]);
+        } else {
+            return QString("%1%2").arg(v, 0, 'f', prec).arg(UnitSuffix[u]);
+        }
     }
 }
 

@@ -69,9 +69,9 @@ void SystemCtl::getSystemInfo()
                          DBUS_IF_SYSINFO,
                          QDBusConnection::systemBus());
     if (sysIf.isValid()) {
-        model->setInstalledMemory(Utils::formatUnit(sysIf.property("MemorySize").toULongLong()));
+        model->setInstalledMemory(Utils::formatUnit(sysIf.property("MemorySize").toULongLong(), Utils::B, 0));
     } else {
-        model->setInstalledMemory(Utils::formatUnit(DSysInfo::memoryInstalledSize()));
+        model->setInstalledMemory(Utils::formatUnit(DSysInfo::memoryInstalledSize(), Utils::B, 0));
     }
 
     model->setAvailMemory(Utils::formatUnit(DSysInfo::memoryTotalSize()));
