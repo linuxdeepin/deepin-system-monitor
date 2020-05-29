@@ -30,13 +30,14 @@
 
 #include "utils.h"
 #include "interactive_kill.h"
+#include "gui/ui_common.h"
 
 DWM_USE_NAMESPACE
 
 InteractiveKill::InteractiveKill(QWidget *parent)
     : QWidget(parent)
 {
-    m_cursorImage = QIcon(":/image/kill_cursor.svg").pixmap({48, 48});
+    m_cursorImage = QIcon(iconPathFromQrc("kill_cursor.svg")).pixmap({48, 48});
     cursorX = -1;
     cursorY = -1;
     killWindowIndex = -1;

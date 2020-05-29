@@ -28,4 +28,9 @@ inline QString formatColor(const QColor &color, int base = 10)
     }
 }
 
+inline QString iconPathFromQrc(const QString &icon)
+{
+    return QString(":/icons/deepin/builtin/%1").arg(icon);
+}
+
 #endif  // UI_COMMON_H

@@ -92,11 +92,11 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     switch (m_themeType) {
     case DApplicationHelper::LightType:
         ringBackgroundColor = "#000000";
-        m_icon = QIcon(":/image/light/icon_cpu_light.svg");
+        m_icon = QIcon(iconPathFromQrc("light/icon_cpu_light.svg"));
         break;
     case DApplicationHelper::DarkType:
         ringBackgroundColor = "#FFFFFF";
-        m_icon = QIcon(":/image/dark/icon_cpu_light.svg");
+        m_icon = QIcon(iconPathFromQrc("dark/icon_cpu_light.svg"));
         break;
     default:
         break;

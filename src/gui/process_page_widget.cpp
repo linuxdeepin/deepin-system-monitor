@@ -339,23 +339,23 @@ void ProcessPageWidget::changeIconTheme(DGuiApplicationHelper::ColorType themeTy
     QIcon allProcIcon;
 
     if (themeType == DApplicationHelper::LightType) {
-        appIcon.addFile(":/image/light/app_normal.svg", {}, QIcon::Normal, QIcon::Off);
-        appIcon.addFile(":/image/light/app_highlight.svg", {}, QIcon::Normal, QIcon::On);
+        appIcon.addFile(iconPathFromQrc("light/app_normal.svg"), {}, QIcon::Normal, QIcon::Off);
+        appIcon.addFile(iconPathFromQrc("light/app_highlight.svg"), {}, QIcon::Normal, QIcon::On);
 
-        myProcIcon.addFile(":/image/light/me_normal.svg", {}, QIcon::Normal, QIcon::Off);
-        myProcIcon.addFile(":/image/light/me_highlight.svg", {}, QIcon::Normal, QIcon::On);
+        myProcIcon.addFile(iconPathFromQrc("light/me_normal.svg"), {}, QIcon::Normal, QIcon::Off);
+        myProcIcon.addFile(iconPathFromQrc("light/me_highlight.svg"), {}, QIcon::Normal, QIcon::On);
 
-        allProcIcon.addFile(":/image/light/all_normal.svg", {}, QIcon::Normal, QIcon::Off);
-        allProcIcon.addFile(":/image/light/all_highlight.svg", {}, QIcon::Normal, QIcon::On);
+        allProcIcon.addFile(iconPathFromQrc("light/all_normal.svg"), {}, QIcon::Normal, QIcon::Off);
+        allProcIcon.addFile(iconPathFromQrc("light/all_highlight.svg"), {}, QIcon::Normal, QIcon::On);
     } else if (themeType == DApplicationHelper::DarkType) {
-        appIcon.addFile(":/image/dark/app_normal_dark.svg", {}, QIcon::Normal, QIcon::Off);
-        appIcon.addFile(":/image/dark/app_highlight.svg", {}, QIcon::Normal, QIcon::On);
+        appIcon.addFile(iconPathFromQrc("dark/app_normal_dark.svg"), {}, QIcon::Normal, QIcon::Off);
+        appIcon.addFile(iconPathFromQrc("dark/app_highlight.svg"), {}, QIcon::Normal, QIcon::On);
 
-        myProcIcon.addFile(":/image/dark/me_normal_dark.svg", {}, QIcon::Normal, QIcon::Off);
-        myProcIcon.addFile(":/image/dark/me_highlight.svg", {}, QIcon::Normal, QIcon::On);
+        myProcIcon.addFile(iconPathFromQrc("dark/me_normal_dark.svg"), {}, QIcon::Normal, QIcon::Off);
+        myProcIcon.addFile(iconPathFromQrc("dark/me_highlight.svg"), {}, QIcon::Normal, QIcon::On);
 
-        allProcIcon.addFile(":/image/dark/all_normal_dark.svg", {}, QIcon::Normal, QIcon::Off);
-        allProcIcon.addFile(":/image/dark/all_highlight.svg", {}, QIcon::Normal, QIcon::On);
+        allProcIcon.addFile(iconPathFromQrc("dark/all_normal_dark.svg"), {}, QIcon::Normal, QIcon::Off);
+        allProcIcon.addFile(iconPathFromQrc("dark/all_highlight.svg"), {}, QIcon::Normal, QIcon::On);
     }
 
     m_appButton->setIcon(appIcon);

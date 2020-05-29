@@ -4,14 +4,14 @@
 
 TEMPLATE = app
 TARGET = deepin-system-monitor
-INCLUDEPATH += $$PWD/nethogs/src/
+INCLUDEPATH += $$PWD/3rdparty/nethogs/src/
 
 CONFIG += link_pkgconfig
 CONFIG += c++11
 PKGCONFIG += xcb dtkwidget dtkwm
-RESOURCES = deepin-system-monitor.qrc
+RESOURCES = assets/deepin-system-monitor.qrc
 
-!system(cd $$PWD/nethogs && make libnethogs){
+!system(cd $$PWD/3rdparty/nethogs && make libnethogs){
 	error("Build nethogs static library failed.")
 }
 
@@ -89,7 +89,11 @@ HEADERS += \
     src/process/stats_collector.h \
     src/process/desktop_entry_stat.h \
     src/service/service_manager_worker.h \
-    src/gui/dialog/error_dialog.h
+    src/gui/dialog/error_dialog.h \
+    src/process/netif_monitor_manager.h \
+    src/process/netif_monitor.h \
+    src/process/netif_monitor_job.h \
+    src/process/netif_monitor_job.h
 
 SOURCES += \
     src/main.cpp \
@@ -150,7 +154,9 @@ SOURCES += \
     src/process/stats_collector.cpp \
     src/process/desktop_entry_stat.cpp \
     src/service/service_manager_worker.cpp \
-    src/gui/dialog/error_dialog.cpp
+    src/gui/dialog/error_dialog.cpp \
+    src/process/netif_monitor.cpp \
+    src/process/netif_monitor_job.cpp
 
 QT += core
 QT += widgets
@@ -162,7 +168,7 @@ QT += dtkwidget
 QT += dtkgui
 
 # QMAKE_CXXFLAGS += -g
-LIBS += -L$$PWD/nethogs/src -lnethogs -lpcap
+LIBS += -L$$PWD/3rdparty/nethogs/src -lnethogs -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lXext -ldtkwm -licui18n -licuuc
 

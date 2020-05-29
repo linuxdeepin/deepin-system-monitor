@@ -3,7 +3,7 @@ moc_*.o
 moc_*.cpp
 build/
 *.qm
-!nethogs/Makefile
+!3rdparty/nethogs/Makefile
 *.user
 *.user.*
 .vscode/*

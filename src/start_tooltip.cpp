@@ -35,6 +35,7 @@
 
 #include "start_tooltip.h"
 #include "utils.h"
+#include "gui/ui_common.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,7 +45,7 @@ StartTooltip::StartTooltip(QWidget *parent)
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | Qt::BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    iconImg = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill.svg"));
+    iconImg = DHiDPIHelper::loadNxPixmap(iconPathFromQrc("kill.svg"));
 
     installEventFilter(this);
 
@@ -66,8 +67,8 @@ void StartTooltip::setWindowManager(DWindowManager *wm)
 
     WindowRect rootWindowRect = windowManager->getRootWindowRect();
     setGeometry(QStyle::alignedRect(
-        Qt::LeftToRight, Qt::AlignCenter, this->size(),
-        QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)));
+                    Qt::LeftToRight, Qt::AlignCenter, this->size(),
+                    QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)));
 }
 
 bool StartTooltip::eventFilter(QObject *, QEvent *event)

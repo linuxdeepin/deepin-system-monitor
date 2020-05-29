@@ -35,6 +35,7 @@
 #include "smooth_curve_generator.h"
 #include "utils.h"
 #include "process/stats_collector.h"
+#include "gui/ui_common.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -43,8 +44,8 @@ using namespace Utils;
 DiskMonitor::DiskMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    iconDarkImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_disk_dark.svg"));
-    iconLightImage = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("icon_disk_light.svg"));
+    iconDarkImage = iconPathFromQrc("dark/icon_disk_dark.svg");
+    iconLightImage = iconPathFromQrc("light/icon_disk_light.svg");
 
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);

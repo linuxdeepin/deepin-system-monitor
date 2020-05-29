@@ -88,10 +88,10 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
     case DApplicationHelper::LightType:
-        m_icon = QIcon(":/image/light/icon_network_light.svg");
+        m_icon = QIcon(iconPathFromQrc("light/icon_network_light.svg"));
         break;
     case DApplicationHelper::DarkType:
-        m_icon = QIcon(":/image/dark/icon_network_light.svg");
+        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
         break;
     default:
         break;

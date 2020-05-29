@@ -96,13 +96,13 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
         memoryBackgroundColor = "#000000";
         swapBackgroundColor = "#000000";
 
-        m_icon = QIcon(":/image/light/icon_memory_light.svg");
+        m_icon = QIcon(iconPathFromQrc("light/icon_memory_light.svg"));
         break;
     case DApplicationHelper::DarkType:
         memoryBackgroundColor = "#FFFFFF";
         swapBackgroundColor = "#FFFFFF";
 
-        m_icon = QIcon(":/image/dark/icon_memory_light.svg");
+        m_icon = QIcon(iconPathFromQrc("dark/icon_memory_light.svg"));
         break;
     default:
         break;
