@@ -31,7 +31,8 @@
 #define PROC_CORE_PATTERN       "/proc/sys/kernel/core_pattern"
 #define PROC_CORE_USES_PID      "/proc/sys/kernel/core_uses_pid"
 
-#define PATH_GRUB_CFG           "/etc/default/grub.d/10_deepin.cfg"
+#define PATH_GRUB_CFG_CONF      "/etc/default/grub.d/10_deepin.cfg"
+#define PATH_GRUB_CFG           "/boot/grub/grub.cfg"
 
 #define DBUS_S_HOST_NAME        "org.freedesktop.hostname1"
 #define DBUS_O_HOST_NAME        "/org/freedesktop/hostname1"
@@ -254,31 +255,88 @@ bool setSplashModeEnabled(bool enabled)
 {
     bool ok {true};
 
-    QFile file(PATH_GRUB_CFG);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << QString("open %1 failed").arg(PATH_GRUB_CFG);
-        return !ok;
-    }
+    // check grub-mkconfig existence
+    if (QFileInfo::exists("/usr/sbin/grub-mkconfig")) {
+        QFile file(PATH_GRUB_CFG_CONF);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qDebug() << QString("open %1 failed").arg(PATH_GRUB_CFG_CONF);
+            return !ok;
+        }
 
-    QTextStream s(&file);
-    QString buffer {};
-    if (enabled) {
-        buffer.append("GRUB_CMDLINE_LINUX_DEFAULT=\"$GRUB_CMDLINE_LINUX_DEFAULT DEEPIN_GFXMODE=\\$DEEPIN_GFXMODE splash\"");
+        QTextStream s(&file);
+        QString buffer {};
+        if (enabled) {
+            buffer.append("GRUB_CMDLINE_LINUX_DEFAULT=\"$GRUB_CMDLINE_LINUX_DEFAULT DEEPIN_GFXMODE=\\$DEEPIN_GFXMODE splash\"");
+        } else {
+            buffer.append("GRUB_CMDLINE_LINUX_DEFAULT=\"nosplash\"");
+        }
+        s << buffer;
+        s.flush();
+        if (s.status() != QTextStream::Ok) {
+            qDebug() << QString("write %1 failed").arg(PATH_GRUB_CFG_CONF);
+            ok = !ok;
+        }
+        file.close();
+
+        if (ok) {
+            // update grub
+            auto rc = QProcess::execute("/usr/bin/sh", {"/usr/sbin/update-grub"});
+            ok = ok && !rc;
+        }
     } else {
-        buffer.append("GRUB_CMDLINE_LINUX_DEFAULT=\"nosplash\"");
-    }
-    s << buffer;
-    s.flush();
-    if (s.status() != QTextStream::Ok) {
-        qDebug() << QString("write %1 failed").arg(PATH_GRUB_CFG);
-        ok = !ok;
-    }
-    file.close();
+        // need manual edit grub.cfg file
+        QTemporaryFile tmp("/boot/grub/grub.cfg.XXXXXX");
+        if (tmp.open()) {
+            QTextStream stmp(&tmp);
+            QFile cfg(PATH_GRUB_CFG);
+            if (cfg.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                QTextStream scfg(&cfg);
 
-    if (ok) {
-        // update grub
-        auto rc = QProcess::execute("/usr/bin/sh", {"/usr/sbin/update-grub"});
-        ok = ok && !rc;
+                QString buffer {};
+                bool menuentry_block {false};
+                while (!scfg.atEnd()) {
+                    buffer = scfg.readLine().trimmed();
+
+                    if (buffer.startsWith("menuentry") && buffer.contains("gnu-linux")) {
+                        menuentry_block = true;
+                    }
+
+                    if (menuentry_block && buffer.contains("vmlinuz") && buffer.contains("root=UUID=")) {
+                        // replace splash/nosplash
+
+                        if (enabled) {
+                            buffer = buffer.replace("nosplash", "splash");
+                        } else {
+                            buffer = buffer.replace("splash", "nosplash");
+                        }
+                    }
+
+                    stmp << buffer;
+                }
+                cfg.close();
+
+                stmp.flush();
+                stmp.seek(0);
+
+                cfg.open(QIODevice::WriteOnly | QIODevice::Text);
+                scfg.setDevice(&cfg);
+                scfg.seek(0);
+
+                // write modified contents back to the original cfg file
+                while (!stmp.atEnd()) {
+                    buffer = stmp.readLine();
+                    scfg << buffer;
+                }
+
+                scfg.flush();
+                cfg.close();
+
+            } else {
+                ok = !ok;
+            }
+        } else {
+            ok = !ok;
+        }
     }
 
     return ok;

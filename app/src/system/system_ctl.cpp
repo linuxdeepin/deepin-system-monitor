@@ -160,7 +160,7 @@ SystemInfoModel::ClearCacheDepth SystemCtl::readSysDropCache()
     return cc;
 }
 
-// /proc/sys/vm/laptop_mode
+// splash mode
 bool SystemCtl::getSplashModeEnabledStatus()
 {
     bool enabled {false};
@@ -172,30 +172,22 @@ bool SystemCtl::getSplashModeEnabledStatus()
     }
     QTextStream s(&file);
 
-    auto splash_matched = [&s](const QString & name) -> bool {
+    auto splash_matched = [&s](void) -> bool {
         s.seek(0);
 
-        bool block_entered = false;
         bool menuentry_block  = false;
         while (!s.atEnd())
         {
             auto line = s.readLine();
-            //
-            if (line.contains(name) && line.contains("BEGIN")) {
-                block_entered = true;
-                continue;
-            }
-            if (line.contains(name) && line.contains("END")) {
-                block_entered = false;
-                continue;
-            }
-            if (block_entered && line.startsWith("menuentry")) {
+            line = line.trimmed();
+            // format: menuentry '...' --class ... --class gnu-linux --class ...
+            if (line.startsWith("menuentry") && line.contains("gnu-linux")) {
                 menuentry_block = true;
                 continue;
             }
 
             // format: linux /vmlinuz-xxx-xxx-xxx root=xxx ... splash | nosplash ...
-            if (menuentry_block && line.contains("vmlinuz")) {
+            if (menuentry_block && line.contains("vmlinuz") && line.contains("root=UUID=")) {
                 auto list = line.split(QRegularExpression("\\s+"));
                 if (list.contains("splash")) {
                     return true;
@@ -211,18 +203,8 @@ bool SystemCtl::getSplashModeEnabledStatus()
         return false;
     };
 
-    // find default boot entries
-    QDir dir(PATH_GRUB_D);
-    auto dirList = dir.entryList({"10_*"}, QDir::Files);
-    if (dirList.contains("10_linux")) {
-        enabled = splash_matched("10_linux");
-    } else {
-        for (auto &name : dirList) {
-            enabled = splash_matched(name);
-            if (enabled)
-                break;
-        }
-    }
+    enabled = splash_matched();
+
     file.close();
 
     return enabled;
