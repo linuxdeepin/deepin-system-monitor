@@ -1,4 +1,4 @@
-#include <unistd.h>
+﻿#include <unistd.h>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -301,17 +301,28 @@ bool setSplashModeEnabled(bool enabled)
                         menuentry_block = true;
                     }
 
+                    if (menuentry_block && buffer.startsWith("}")) {
+                        menuentry_block = false;
+                    }
+
                     if (menuentry_block && buffer.contains("vmlinuz") && buffer.contains("root=UUID=")) {
                         // replace splash/nosplash
-
                         if (enabled) {
-                            buffer = buffer.replace("nosplash", "splash");
+                            if (buffer.contains("nosplash")) {
+                                buffer = buffer.replace("nosplash", "splash");
+                            } else {
+                                buffer = buffer.append(" splash");
+                            }
                         } else {
-                            buffer = buffer.replace("splash", "nosplash");
+                            if (buffer.contains("splash")) {
+                                buffer = buffer.replace("splash", "nosplash");
+                            } else {
+                                buffer = buffer.append(" nosplash");
+                            }
                         }
                     }
 
-                    stmp << buffer;
+                    stmp << buffer << endl;
                 }
                 cfg.close();
 
@@ -325,7 +336,7 @@ bool setSplashModeEnabled(bool enabled)
                 // write modified contents back to the original cfg file
                 while (!stmp.atEnd()) {
                     buffer = stmp.readLine();
-                    scfg << buffer;
+                    scfg << buffer << endl;
                 }
 
                 scfg.flush();
