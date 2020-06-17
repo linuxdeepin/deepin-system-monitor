@@ -96,6 +96,10 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 
 void ProcessTableView::endProcess()
 {
+    if (m_selectedPID.isNull()) {
+        return;
+    }
+
     // dialog
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
@@ -121,6 +125,10 @@ void ProcessTableView::endProcess()
 
 void ProcessTableView::pauseProcess()
 {
+    if (m_selectedPID.isNull()) {
+        return;
+    }
+
     auto *sysmon = SystemMonitor::instance();
     if (sysmon) {
         sysmon->pauseProcess(qvariant_cast<pid_t>(m_selectedPID));
@@ -129,6 +137,10 @@ void ProcessTableView::pauseProcess()
 
 void ProcessTableView::resumeProcess()
 {
+    if (m_selectedPID.isNull()) {
+        return;
+    }
+
     auto *sysmon = SystemMonitor::instance();
     if (sysmon) {
         sysmon->resumeProcess(qvariant_cast<pid_t>(m_selectedPID));
