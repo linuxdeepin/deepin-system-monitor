@@ -124,9 +124,9 @@ void ProcessPageWidget::initUI()
     toolsLayout->setContentsMargins(0, 0, 0, 0);
 
     m_procViewMode = new DLabel(tw);
-    m_procViewMode->setFixedHeight(24);
     m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));  // default text
     DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T7, QFont::Medium);
+    QFontMetrics fmProcView(m_procViewMode->font());
     m_procViewMode->adjustSize();
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 #ifndef THEME_FALLBACK_COLOR
@@ -137,9 +137,9 @@ void ProcessPageWidget::initUI()
 #endif
 
     m_procViewModeSummary = new DLabel(tw);
-    m_procViewModeSummary->setFixedHeight(24);
     DFontSizeManager::instance()->bind(m_procViewModeSummary, DFontSizeManager::T7, QFont::Medium);
     m_procViewModeSummary->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_procViewModeSummary->setElideMode(Qt::ElideRight);
     auto pa = DApplicationHelper::instance()->palette(m_procViewModeSummary);
     palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
     m_procViewModeSummary->setPalette(palette);
