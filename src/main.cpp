@@ -23,17 +23,20 @@
 
 #include <sys/types.h>
 #include <unistd.h>
+#include <iostream>
+#include <thread>
+
+#include <QApplication>
+#include <QDateTime>
+#include <QDesktopWidget>
+
 #include <DApplication>
 #include <DApplicationSettings>
 #include <DGuiApplicationHelper>
 #include <DHiDPIHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
-#include <QApplication>
-#include <QDateTime>
-#include <QDesktopWidget>
-#include <iostream>
-#include <thread>
+#include <DLog>
 
 #include "constant.h"
 #include "gui/main_window.h"
@@ -45,7 +48,9 @@
 Q_DECLARE_METATYPE(QList<qreal>)
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
+#if 0
 void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QByteArray localMsg = msg.toLocal8Bit();
@@ -75,12 +80,15 @@ void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, con
         break;
     }
 }
+#endif
 
 int main(int argc, char *argv[])
 {
     qRegisterMetaType<QList<qreal>>();
 
+#if 0
     qInstallMessageHandler(defaultMessageOutput);
+#endif
 
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     DApplication::loadDXcbPlugin();
@@ -113,6 +121,9 @@ int main(int argc, char *argv[])
         app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor"));
 
         DApplicationSettings appSettings;
+
+        DLogManager::registerConsoleAppender();
+        DLogManager::registerFileAppender();
 
         std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
         nethogs_monitor_thread.detach();
