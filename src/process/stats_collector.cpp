@@ -666,6 +666,9 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
 
             if (ctx.m_desktopEntryCache.contains(proc.getName())) {
                 de = ctx.m_desktopEntryCache[proc.getName()];
+                if (de->icon.isNull()) {
+                    de->icon = ctx.m_defaultIcon;
+                }
                 if (!iconSet) {
                     iconSet = true;
                     proc.setIcon(de->icon);
@@ -679,7 +682,11 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                         de = ctx.m_desktopEntryCache[proc.getName()];
                     } else {
                         de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                        ctx.m_desktopEntryCache[de->name] = de;
+                        // rare case, if .desktopFile contains no icon, we need use default icon,
+                        // otherwise cached desktop entry's icon will be null
+                        if (!de->icon.isNull()) {
+                            ctx.m_desktopEntryCache[de->name] = de;
+                        }
                     }
                     if (!de->icon.isNull()) {
                         iconSet = true;
@@ -751,7 +758,9 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     de = ctx.m_desktopEntryCache[proc.getName()];
                 } else {
                     de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                    ctx.m_desktopEntryCache[de->name] = de;
+                    if (!de->icon.isNull()) {
+                        ctx.m_desktopEntryCache[de->name] = de;
+                    }
                 }
                 if (!de->displayName.isEmpty()) {
                     nameSet = true;
