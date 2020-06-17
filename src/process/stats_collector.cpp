@@ -406,56 +406,54 @@ void StatsCollector::updateStatus()
         }
         return b;
     };
-    if (m_filterType == SystemMonitor::OnlyGUI) {
-        for (auto app : m_appList) {
-            if (m_guiPIDList.contains(app))
-                continue;
+    for (auto app : m_appList) {
+        if (m_guiPIDList.contains(app))
+            continue;
 
-            auto isCmdInList = [ = ](QByteArray cmd) {
-                bool b = false;
-
-                auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
-                for (auto s : m_shellList) {
-                    if (subCmd.startsWith(s.toLocal8Bit())) {
-                        b = true;
-                        return b;
-                    }
-                }
-                for (auto s : m_scriptingList) {
-                    if (cmd.startsWith(s.toLocal8Bit())) {
-                        b = true;
-                        return b;
-                    }
-                }
-                return b;
-            };
-            auto cmd = m_procMap[kCurrentStat][app]->cmdline[0];
+        auto isCmdInList = [ = ](QByteArray cmd) {
             bool b = false;
-            if (cmd[0] == '/') {
-                // cmd starts with full path
-                b = isCmdInList(cmd);
-            } else {
-                // cmd starts with raw name
-                for (auto p : m_envPathList) {
-                    p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
 
-                    b = isCmdInList(p);
-                    if (b) {
-                        break;
-                    }
+            auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
+            for (auto s : m_shellList) {
+                if (subCmd.startsWith(s.toLocal8Bit())) {
+                    b = true;
+                    return b;
                 }
             }
-            if (b) {
-                continue;
+            for (auto s : m_scriptingList) {
+                if (cmd.startsWith(s.toLocal8Bit())) {
+                    b = true;
+                    return b;
+                }
             }
+            return b;
+        };
+        auto cmd = m_procMap[kCurrentStat][app]->cmdline[0];
+        bool b = false;
+        if (cmd[0] == '/') {
+            // cmd starts with full path
+            b = isCmdInList(cmd);
+        } else {
+            // cmd starts with raw name
+            for (auto p : m_envPathList) {
+                p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
 
-            if (m_pidCtoPMapping.contains(app) &&
-                    anyRootIsGuiProc(m_pidCtoPMapping[app])) {
-                continue;
+                b = isCmdInList(p);
+                if (b) {
+                    break;
+                }
             }
-
-            filteredAppList << app;
         }
+        if (b) {
+            continue;
+        }
+
+        if (m_pidCtoPMapping.contains(app) &&
+                anyRootIsGuiProc(m_pidCtoPMapping[app])) {
+            continue;
+        }
+
+        filteredAppList << app;
     }
 
     // check filterType
