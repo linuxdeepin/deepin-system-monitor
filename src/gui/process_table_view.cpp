@@ -210,6 +210,10 @@ void ProcessTableView::showProperties()
 
 void ProcessTableView::killProcess()
 {
+    if (m_selectedPID.isNull()) {
+        return;
+    }
+
     // dialog
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
