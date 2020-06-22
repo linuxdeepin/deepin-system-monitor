@@ -404,7 +404,7 @@ void ProcessPageWidget::showWindowKiller()
     MainWindow *mainWindow = MainWindow::instance();
     mainWindow->showMinimized();
 
-    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
+    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
