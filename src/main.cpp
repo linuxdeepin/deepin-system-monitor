@@ -30,6 +30,7 @@
 #include <QDesktopWidget>
 
 #include <DApplication>
+#include <DApplicationSettings>
 #include <DGuiApplicationHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
