@@ -22,7 +22,10 @@
  * details.
  */
 
-#include <sys/random.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+
+#include <QDebug>
 
 #include "hash.h"
 
@@ -321,10 +324,14 @@ void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
 
 void init_seed()
 {
-    ssize_t nb {};
+//    ssize_t nb {};
+#if 0 // getrandom not exists in sw platform (glibc version staled)
     do {
         nb = getrandom(&global_seed, sizeof(uint32_t), GRND_NONBLOCK);
     } while (nb <= 0 || size_t(nb) < sizeof(uint32_t));
+#endif
+
+    syscall(SYS_getrandom, &global_seed, sizeof(uint32_t), 0);
 }
 
 } // !namespace

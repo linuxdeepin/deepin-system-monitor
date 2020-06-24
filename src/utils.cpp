@@ -106,7 +106,7 @@ int getWindowPid(DWindowManager *windowManager, xcb_window_t window)
         memset(&proc_info, 0, sizeof(proc_t));
 
         std::map<int, proc_t> processes;
-        while (readproc(proc, &proc_info) != NULL) {
+        while (readproc(proc, &proc_info) != nullptr) {
             processes[proc_info.tid] = proc_info;
         }
         closeproc(proc);
