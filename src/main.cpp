@@ -24,71 +24,34 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
-#include <thread>
 
 #include <QApplication>
 #include <QDateTime>
 #include <QDesktopWidget>
 
 #include <DApplication>
-#include <DApplicationSettings>
 #include <DGuiApplicationHelper>
-#include <DHiDPIHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
 #include <DLog>
 
 #include "constant.h"
 #include "gui/main_window.h"
-#include "network_traffic_filter.h"
 #include "service/service_manager.h"
 #include "settings.h"
 #include "utils.h"
+#include "common/hash.h"
 
 Q_DECLARE_METATYPE(QList<qreal>)
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
-#if 0
-void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
-    QByteArray localMsg = msg.toLocal8Bit();
-    QString buf = QDateTime::currentDateTime().toString(Qt::ISODateWithMs);
-    QByteArray local = buf.toLocal8Bit();
-    const char *ts = local.constData();
-    switch (type) {
-    case QtDebugMsg:
-        fprintf(stderr, "%s [Debug]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                context.line, context.function);
-        break;
-    case QtInfoMsg:
-        fprintf(stderr, "%s [Info]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                context.line, context.function);
-        break;
-    case QtWarningMsg:
-        fprintf(stderr, "%s [Warning]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
-                context.file, context.line, context.function);
-        break;
-    case QtCriticalMsg:
-        fprintf(stderr, "%s [Critical]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
-                context.file, context.line, context.function);
-        break;
-    case QtFatalMsg:
-        fprintf(stderr, "%s [Fatal]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                context.line, context.function);
-        break;
-    }
-}
-#endif
-
 int main(int argc, char *argv[])
 {
-    qRegisterMetaType<QList<qreal>>();
+    utils::init_seed();
 
-#if 0
-    qInstallMessageHandler(defaultMessageOutput);
-#endif
+    qRegisterMetaType<QList<qreal>>();
 
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     DApplication::loadDXcbPlugin();
@@ -124,9 +87,6 @@ int main(int argc, char *argv[])
 
         DLogManager::registerConsoleAppender();
         DLogManager::registerFileAppender();
-
-        std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
-        nethogs_monitor_thread.detach();
 
         MainWindow *window = MainWindow::instance();
         window->initDisplay();

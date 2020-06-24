@@ -4,22 +4,11 @@
 
 TEMPLATE = app
 TARGET = deepin-system-monitor
-INCLUDEPATH += $$PWD/3rdparty/nethogs/src/
 
 CONFIG += link_pkgconfig
 CONFIG += c++11
 PKGCONFIG += xcb dtkwidget dtkwm
 RESOURCES = assets/deepin-system-monitor.qrc
-
-!system(cd $$PWD/3rdparty/nethogs && make libnethogs){
-	error("Build nethogs static library failed.")
-}
-
-#CONFIG(debug, debug|release) {
-#        # Enable memory address sanitizer in debug mode.
-#        QMAKE_CXXFLAGS += -fsanitize=address
-#        LIBS += -lasan
-#}
 
 CONFIG(release, debug|release) {
         DEFINES += QT_NO_DEBUG_OUTPUT
@@ -39,8 +28,6 @@ HEADERS += \
     src/compact_memory_monitor.h \
     src/compact_network_monitor.h \
     src/compact_disk_monitor.h \
-    src/network_traffic_filter.h \
-    src/hashqstring.h \
     src/find_window_title.h \
     src/smooth_curve_generator.h \
     src/interactive_kill.h \
@@ -90,10 +77,10 @@ HEADERS += \
     src/process/desktop_entry_stat.h \
     src/service/service_manager_worker.h \
     src/gui/dialog/error_dialog.h \
-    src/process/netif_monitor_manager.h \
     src/process/netif_monitor.h \
     src/process/netif_monitor_job.h \
-    src/process/netif_monitor_job.h
+    src/process/netif_packet_parser.h \
+    src/common/hash.h
 
 SOURCES += \
     src/main.cpp \
@@ -107,7 +94,6 @@ SOURCES += \
     src/compact_memory_monitor.cpp \
     src/compact_network_monitor.cpp \
     src/compact_disk_monitor.cpp \
-    src/network_traffic_filter.cpp \
     src/find_window_title.cpp \
     src/smooth_curve_generator.cpp \
     src/interactive_kill.cpp \
@@ -156,7 +142,9 @@ SOURCES += \
     src/service/service_manager_worker.cpp \
     src/gui/dialog/error_dialog.cpp \
     src/process/netif_monitor.cpp \
-    src/process/netif_monitor_job.cpp
+    src/process/netif_monitor_job.cpp \
+    src/process/netif_packet_parser.cpp \
+    src/common/hash.cpp
 
 QT += core
 QT += widgets
@@ -168,7 +156,7 @@ QT += dtkwidget
 QT += dtkgui
 
 # QMAKE_CXXFLAGS += -g
-LIBS += -L$$PWD/3rdparty/nethogs/src -lnethogs -lpcap
+LIBS += -lpcap
 LIBS += -L"libprocps" -lprocps
 LIBS += -lXext -ldtkwm -licui18n -licuuc
 

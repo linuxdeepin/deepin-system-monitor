@@ -119,6 +119,13 @@ StatsCollector::StatsCollector(QObject *parent) :
     }
 }
 
+StatsCollector::~StatsCollector()
+{
+    m_netifMonitor->requestQuit();
+    m_netifMonitor->quit();
+    m_netifMonitor->wait();
+}
+
 void StatsCollector::start()
 {
     (void)QApplication::instance();
@@ -143,6 +150,10 @@ void StatsCollector::start()
         }
     });
     m_cacheThread.start();
+
+    m_netifMonitor = new NetifMonitor(this);
+    connect(m_netifMonitor, &QThread::finished, m_netifMonitor, &QObject::deleteLater);
+    m_netifMonitor->start();
 }
 
 void readProcStatsCallback(ProcStat &ps, void *context)
@@ -217,13 +228,38 @@ void readProcStatsCallback(ProcStat &ps, void *context)
         proc.setReadBps(rwbps.first);
         proc.setWriteBps(rwbps.second);
 
-        if (ctx->m_procNetIO.contains(ps->pid)) {
-            auto pidIO = ctx->m_procNetIO[ps->pid];
-            proc.setSentBytes(pidIO->sentBytes);
-            proc.setRecvBytes(pidIO->recvBytes);
-            proc.setSentBps(pidIO->sentBps);
-            proc.setRecvBps(pidIO->recvBps);
+        // process net io stat
+        // backup last stat
+        if (ctx->m_procNetIOAgg.contains(ps->pid)) {
+            ctx->m_procNetIOAgg[ps->pid].first = ctx->m_procNetIOAgg[ps->pid].second;
+        } else {
+            auto stub = QSharedPointer<struct proc_net_io_agg_t>::create();
+            ctx->m_procNetIOAgg[ps->pid].first = stub;
+            ctx->m_procNetIOAgg[ps->pid].second = stub;
         }
+
+        // deep copy
+        auto curSockIOAgg = QSharedPointer<struct proc_net_io_agg_t>::create();
+        curSockIOAgg->recvBytes = ctx->m_procNetIOAgg[ps->pid].second->recvBytes;
+        curSockIOAgg->sentBytes = ctx->m_procNetIOAgg[ps->pid].second->sentBytes;
+        for (auto ino : ps->sockInodes) {
+            SockIOStat sockIOStat;
+            bool ok = ctx->m_netifMonitor->getSockIOStatByInode(ino, sockIOStat);
+            if (ok) {
+                curSockIOAgg->recvBytes += sockIOStat->rx_bytes;
+                curSockIOAgg->sentBytes += sockIOStat->tx_bytes;
+            }
+        }
+        ctx->m_procNetIOAgg[ps->pid].second = curSockIOAgg;
+
+        auto procNetIOStat = ctx->calcProcNetIOStats(ctx->m_procNetIOAgg[ps->pid].first,
+                                                     ctx->m_procNetIOAgg[ps->pid].second,
+                                                     interval);
+        ctx->m_procNetIOStat[ps->pid] = procNetIOStat;
+        proc.setSentBytes(procNetIOStat->sentBytes);
+        proc.setRecvBytes(procNetIOStat->recvBytes);
+        proc.setSentBps(procNetIOStat->sentBps);
+        proc.setRecvBps(procNetIOStat->recvBps);
 
         ctx->m_procEntryMap[ps->pid] = proc;
     }
@@ -366,6 +402,8 @@ void StatsCollector::updateStatus()
     m_guiPIDList.clear();
     m_appList.clear();
 
+    m_procNetIOStat.clear();
+
     m_wm->updateWindowInfos();
     m_guiPIDList = m_wm->getWindowPids();
 
@@ -373,22 +411,6 @@ void StatsCollector::updateStatus()
     for (auto xid : trayProcessXids) {
         auto pid = m_wm->getWindowPid(xid);
         m_trayPIDToWndMap[pid] = xid;
-    }
-
-    // Update process's network status.
-    NetworkTrafficFilter::Update update {};
-    m_procNetIO.clear();
-
-    while (NetworkTrafficFilter::getRowUpdate(update)) {
-        if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-            auto pidIO = NetIO(new net_io{});
-            pidIO->recvBps = qreal(update.record.recv_kbs) * 1024;
-            pidIO->sentBps = qreal(update.record.sent_kbs) * 1024;
-            pidIO->recvBytes = update.record.recv_bytes;
-            pidIO->sentBytes = update.record.sent_bytes;
-
-            m_procNetIO[update.record.pid] = pidIO;
-        }
     }
 
     b = ProcessStat::readProcStats(readProcStatsCallback, this);
@@ -498,7 +520,7 @@ void StatsCollector::updateStatus()
                 }
             } else {
                 // traffic from children
-                NetIO sumIO = NetIO(new net_io{});
+                ProcNetIOStat sumIO = QSharedPointer<struct proc_net_io_stat_t>::create();
 
                 mergeSubProcNetIO(pid, sumIO);
 
@@ -533,10 +555,10 @@ void StatsCollector::setFilterType(SystemMonitor::FilterType type)
     }
 }
 
-qreal StatsCollector::calcProcCPUStats(ProcStat &prev,
-                                       ProcStat &cur,
-                                       CPUStat &prevCPU,
-                                       CPUStat &curCPU,
+qreal StatsCollector::calcProcCPUStats(const ProcStat &prev,
+                                       const ProcStat &cur,
+                                       const CPUStat &prevCPU,
+                                       const CPUStat &curCPU,
                                        qulonglong interval,
                                        unsigned long hz)
 {
@@ -580,8 +602,8 @@ qreal StatsCollector::calcProcCPUStats(ProcStat &prev,
 #endif
 }
 
-QPair<qreal, qreal> StatsCollector::calcProcDiskIOStats(ProcStat &prev,
-                                                        ProcStat &cur,
+QPair<qreal, qreal> StatsCollector::calcProcDiskIOStats(const ProcStat &prev,
+                                                        const ProcStat &cur,
                                                         qulonglong interval)
 {
     qreal rdio {}, wrio {};
@@ -803,7 +825,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
     }
 }
 
-void StatsCollector::mergeSubProcNetIO(pid_t ppid, NetIO &sum)
+void StatsCollector::mergeSubProcNetIO(pid_t ppid, ProcNetIOStat &sum)
 {
     auto ppe = m_procEntryMap[ppid];
     auto it = m_pidPtoCMapping.find(ppid);
@@ -817,9 +839,16 @@ void StatsCollector::mergeSubProcNetIO(pid_t ppid, NetIO &sum)
     sum->sentBytes += ppe.getSentBytes();
 }
 
-#if 0
-QPair<qreal, qreal> StatsCollector::calcProcNetIOStats(ProcStat &prev, ProcStat &cur, qulonglong interval)
+ProcNetIOStat StatsCollector::calcProcNetIOStats(const ProcNetIOAgg &prev,
+                                                 const ProcNetIOAgg &cur,
+                                                 qulonglong interval)
 {
-    return {};
+    auto stat = QSharedPointer<struct proc_net_io_stat_t>::create();
+
+    stat->sentBytes = cur->sentBytes - prev->sentBytes;
+    stat->recvBytes = cur->recvBytes - prev->recvBytes;
+    stat->sentBps = stat->sentBytes / interval * 100;
+    stat->recvBps = stat->recvBytes / interval * 100;
+
+    return stat;
 }
-#endif

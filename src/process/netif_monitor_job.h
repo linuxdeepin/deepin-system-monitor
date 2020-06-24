@@ -7,6 +7,11 @@
 #include <QThread>
 #include <QTimer>
 
+#include "netif_packet_parser.h"
+#include "system_stat.h"
+
+class NetifMonitor;
+
 void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
 class NetifMonitorJob : public QObject
@@ -14,27 +19,31 @@ class NetifMonitorJob : public QObject
     Q_OBJECT
 
 public:
-    explicit NetifMonitorJob(QObject *parent = nullptr);
+    explicit NetifMonitorJob(NetifMonitor *, QObject *parent = nullptr);
 
-    inline void request()
+    inline void requestQuit()
     {
-        m_requested.store(true);
+        m_quitRequested.store(true);
     }
 
 public Q_SLOTS:
     void startMonitorJob();
 
-Q_SIGNALS:
-
-private Q_SLOTS:
+private:
     void dispatchPackets();
+    void refreshIfAddrsHashCache();
 
 private:
+    SockStatMap     m_sockStats {};
+    QMap<uint64_t, int> m_ifaddrsHashCache; // key: hash code generated from ifaddr; value: not used
+
     QTimer *m_timer {};
 
-    pcap_t *m_handle {};
+    NetifMonitor       *m_netifMonitor         {};
+    pcap_t             *m_handle               {};
+    PacketPayloadQueue  m_localPendingPackets  {};
 
-    std::atomic_bool m_requested {false};
+    std::atomic_bool m_quitRequested {false};
 
     friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 };

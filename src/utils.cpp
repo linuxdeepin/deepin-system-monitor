@@ -49,7 +49,6 @@
 
 #include <X11/extensions/shape.h>
 
-#include "hashqstring.h"
 #include "utils.h"
 
 DCORE_USE_NAMESPACE
@@ -220,43 +219,6 @@ QSize getRenderSize(int fontSize, QString string)
     return QSize(width, height);
 }
 
-QString getDisplayNameFromName(QString procName, std::string desktopFile, bool displayProcessName)
-{
-    QString procname = procName.toLower();
-    //    if (processDescriptions.contains(procname)) {
-    //        if (displayProcessName) {
-    //            return QString("%1    ( %2 )").arg(processDescriptions[procname], procName);
-    //        } else {
-    //            return processDescriptions[procname];
-    //        }
-    //    }
-
-    if (desktopFile.size() == 0) {
-        return procName;
-    }
-
-    DDesktopEntry entry(QString::fromStdString(desktopFile));
-
-    if (entry.contains("X-Deepin-Vendor") && entry.stringValue("X-Deepin-Vendor") == "deepin")
-        if (!entry.genericName().isEmpty())
-            return entry.genericName();
-
-    if (!entry.name().isEmpty()) {
-        return entry.name();
-    }
-
-    if (entry.contains("X-Deepin-Vendor") && entry.stringValue("X-Deepin-Vendor") == "deepin")
-        if (!entry.stringValue("GenericName").isEmpty()) {
-            return entry.stringValue("GenericName");
-        }
-
-    if (!entry.stringValue("Name").isEmpty()) {
-        return entry.stringValue("Name");
-    }
-
-    return procName;
-}
-
 QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
 {
     std::string temp;
@@ -307,91 +269,6 @@ QString getProcessCmdline(pid_t pid)
     }
 
     return QString::fromStdString(temp).trimmed();
-}
-
-/**
- * @brief getProcessName Get the name of the process from a proc_t
- * @param p The proc_t structure to use for getting the name of the process
- * @return
- */
-QString getProcessName(proc_t *p, QString cmdline)
-{
-    if (cmdline.startsWith("c:\\")) {
-        // Return exe name if process is wine program.
-        QStringList cmdlinePaths = cmdline.split("\\");
-        return cmdlinePaths[cmdlinePaths.length() - 1];
-    } else {
-        QString processName = "ERROR";
-        processName = getProcessNameFromCmdLine(p->tid);
-        if (processName == "") {
-            // fallback on /proc/*//*stat program name value
-            // bad because it is limited to 16 chars
-            processName = p->cmd;
-        }
-
-        return processName;
-    }
-}
-
-QString getProcessNameFromCmdLine(const pid_t pid)
-{
-    std::string cmdline = getProcessCmdline(pid).toStdString();
-
-    if (cmdline.size() < 1) {
-        return "";
-    }
-
-    // Maintain linux paths.
-    std::replace(cmdline.begin(), cmdline.end(), '\\', '/');
-
-    // Get cmdline arguments and first argument name.
-    auto args = explode(cmdline, ' ');
-    QString name = QFileInfo(QString::fromStdString(args[0])).fileName();
-
-    // Get first argument that start with '/' if first argument is script program, such as
-    // 'python'.
-    auto pos = SCRIPT_PROGRAM_MAP.find(name);
-    if (pos != SCRIPT_PROGRAM_MAP.end() && args.size() > 1) {
-        for (unsigned int i = 1; i < args.size(); i++) {
-            QString argument = QString::fromStdString(args[i]);
-
-            // Return first argument that start with '/'.
-            if (argument.startsWith("/")) {
-                return QFileInfo(argument).fileName();
-            }
-        }
-
-        for (unsigned int j = 1; j < args.size(); j++) {
-            QString argument = QString::fromStdString(args[j]);
-
-            // Return first argument that not start with '-'.
-            if (!argument.startsWith("-")) {
-                return QFileInfo(argument).fileName();
-            }
-        }
-    }
-
-    return name;
-}
-
-std::string getProcessDesktopFile(int pid, QString name, QString cmdline,
-                                  QMap<int, int> trayProcessMap)
-{
-    std::string desktopFile;
-    if (trayProcessMap.contains(pid)) {
-        desktopFile =
-            Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE").toStdString();
-
-        // Find desktop file from process name if found environ variable
-        // 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process.
-        if (desktopFile.size() == 0) {
-            desktopFile = getDesktopFileFromName(pid, name, cmdline);
-        }
-    } else {
-        desktopFile = getDesktopFileFromName(pid, name, cmdline);
-    }
-
-    return desktopFile;
 }
 
 QString getQrcPath(QString imageName)
@@ -452,96 +329,6 @@ bool fileExists(QString path)
 
     // check if file exists and if yes: Is it really a file and no directory?
     return check_file.exists() && check_file.isFile();
-}
-
-bool getProcPidIO(int pid, ProcPidIO &io)
-{
-    std::stringstream ss;
-    ss << "/proc/" << pid << "/io";
-    std::ifstream ifs(ss.str().c_str());
-    if (ifs.good()) {
-        while (ifs.good() && !ifs.eof()) {
-            std::string s;
-            getline(ifs, s);
-            unsigned long t;
-            if (sscanf(s.c_str(), "rchar: %lu", &t) == 1)
-                io.rchar = t;
-            else if (sscanf(s.c_str(), "wchar: %lu", &t) == 1)
-                io.wchar = t;
-            else if (sscanf(s.c_str(), "syscr: %lu", &t) == 1)
-                io.syscr = t;
-            else if (sscanf(s.c_str(), "syscw: %lu", &t) == 1)
-                io.syscw = t;
-            else if (sscanf(s.c_str(), "read_bytes: %lu", &t) == 1)
-                io.read_bytes = t;
-            else if (sscanf(s.c_str(), "write_bytes: %lu", &t) == 1)
-                io.write_bytes = t;
-            else if (sscanf(s.c_str(), "cancelled_write_bytes: %lu", &t) == 1)
-                io.cancelled_write_bytes = t;
-        }
-    } else {
-        io.rchar = 0;
-        io.wchar = 0;
-        io.read_bytes = 0;
-        io.write_bytes = 0;
-
-        return false;
-    }
-
-    return true;
-}
-
-std::string getDesktopFileFromName(int pid, QString procName, QString cmdline)
-{
-    if (desktopfileMaps.contains(cmdline)) {
-        return desktopfileMaps[cmdline].toStdString();
-    } else {
-        // Need found desktop file from process environment, if process is wine program.
-        if (cmdline.startsWith("c:\\")) {
-            QString gioDesktopFile =
-                Utils::getProcessEnvironmentVariable(pid, "GIO_LAUNCHED_DESKTOP_FILE");
-
-            return gioDesktopFile.toStdString();
-        } else {
-            QDirIterator dir("/usr/share/applications", QDirIterator::Subdirectories);
-            std::string desktopFile;
-
-            // Convert to lower characters.
-            QString procname = procName.toLower();
-
-            // Replace "_" instead "-", avoid some applications desktop file can't found, such
-            // as, sublime text.
-            procname.replace("_", "-");
-
-            // Concat desktop file.
-            QString processFilename = procname + ".desktop";
-
-            if (GUI_BLACKLIST_MAP.find(procname) == GUI_BLACKLIST_MAP.end()) {
-                while (dir.hasNext()) {
-                    if (dir.fileInfo().suffix() == "desktop") {
-                        if (dir.fileName().toLower().contains(processFilename)) {
-                            desktopFile = dir.filePath().toStdString();
-                            break;
-                        }
-                    }
-                    dir.next();
-                }
-            }
-
-            return desktopFile;
-        }
-    }
-}
-
-double calculateCPUPercentage(const proc_t *before, const proc_t *after,
-                              const unsigned long long &prevCpuTime,
-                              const unsigned long long &cpuTime)
-{
-    double totalCpuTime = cpuTime - prevCpuTime;
-    unsigned long long processcpuTime =
-        ((after->utime + after->stime) - (before->utime + before->stime));
-
-    return (processcpuTime / totalCpuTime) * 100.0;
 }
 
 void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect)
