@@ -157,9 +157,9 @@ QString getQrcPath(QString imageName);
 QString getFlatpakAppIcon(QString flatpakAppid);
 QDir getFlatpakAppPath(QString flatpakAppid);
 bool fileExists(QString path);
-void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect);
-void blurRects(DWindowManager *windowManager, int widgetId, QList<QRectF> rects);
-void clearBlur(DWindowManager *windowManager, int widgetId);
+void blurRect(DWindowManager *windowManager, WId widgetId, QRect rect);
+void blurRects(DWindowManager *windowManager, WId widgetId, QList<QRect> rects);
+void clearBlur(DWindowManager *windowManager, WId widgetId);
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
                      int loadingAngle, int rotationAngle, QColor foregroundColor,
                      double foregroundOpacity, QColor backgroundColor, double backgroundOpacity,
@@ -168,7 +168,7 @@ void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWi
               int loadingAngle, int rotationAngle, QColor color, double opacity);
 void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
 void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
-void passInputEvent(int wid);
+void passInputEvent(WId wid);
 void setFontSize(QPainter &painter, int textSize);
 const std::vector<std::string> explode(const std::string &s, const char &c);
 }  // namespace Utils

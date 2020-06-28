@@ -331,32 +331,32 @@ bool fileExists(QString path)
     return check_file.exists() && check_file.isFile();
 }
 
-void blurRect(DWindowManager *windowManager, int widgetId, QRectF rect)
+void blurRect(DWindowManager *windowManager, WId widgetId, QRect rect)
 {
     QVector<uint32_t> data;
 
     qreal devicePixelRatio = qApp->devicePixelRatio();
-    data << rect.x() << rect.y() << rect.width() * devicePixelRatio
-         << rect.height() * devicePixelRatio << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
-    windowManager->setWindowBlur(widgetId, data);
+    data << uint32_t(rect.x()) << uint32_t(rect.y()) << uint32_t(rect.width() * devicePixelRatio)
+         << uint32_t(rect.height() * devicePixelRatio) << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
+    windowManager->setWindowBlur(int(widgetId), data);
 }
 
-void blurRects(DWindowManager *windowManager, int widgetId, QList<QRectF> rects)
+void blurRects(DWindowManager *windowManager, WId widgetId, QList<QRect> rects)
 {
     QVector<uint32_t> data;
     qreal devicePixelRatio = qApp->devicePixelRatio();
     foreach (auto rect, rects) {
-        data << rect.x() << rect.y() << rect.width() * devicePixelRatio
-             << rect.height() * devicePixelRatio << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
+        data << uint32_t(rect.x()) << uint32_t(rect.y()) << uint32_t(rect.width() * devicePixelRatio)
+             << uint32_t(rect.height() * devicePixelRatio) << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
     }
-    windowManager->setWindowBlur(widgetId, data);
+    windowManager->setWindowBlur(int(widgetId), data);
 }
 
-void clearBlur(DWindowManager *windowManager, int widgetId)
+void clearBlur(DWindowManager *windowManager, WId widgetId)
 {
     QVector<uint32_t> data;
     data << 0 << 0 << 0 << 0 << 0 << 0;
-    windowManager->setWindowBlur(widgetId, data);
+    windowManager->setWindowBlur(int(widgetId), data);
 }
 
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
@@ -366,7 +366,7 @@ void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, in
 {
     drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle, rotationAngle,
              backgroundColor, backgroundOpacity);
-    drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle * percent, rotationAngle,
+    drawRing(painter, centerX, centerY, radius, penWidth, int(loadingAngle * percent), rotationAngle,
              foregroundColor, foregroundOpacity);
 }
 
@@ -414,7 +414,7 @@ void drawTooltipText(QPainter &painter, QString text, QString textColor, int tex
     painter.drawText(rect, Qt::AlignCenter, text);
 }
 
-void passInputEvent(int wid)
+void passInputEvent(WId wid)
 {
     XRectangle *reponseArea = new XRectangle;
     reponseArea->x = 0;
@@ -436,11 +436,11 @@ void removeChildren(QWidget *widget)
 void removeLayoutChild(QLayout *layout, int index)
 {
     QLayoutItem *item = layout->itemAt(index);
-    if (item != 0) {
+    if (item != nullptr) {
         QWidget *widget = item->widget();
-        if (widget != NULL) {
+        if (widget != nullptr) {
             widget->hide();
-            widget->setParent(NULL);
+            widget->setParent(nullptr);
             layout->removeWidget(widget);
         }
     }

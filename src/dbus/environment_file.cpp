@@ -6,6 +6,21 @@ EnvironmentFile::EnvironmentFile()
 {
 }
 
+EnvironmentFile::EnvironmentFile(const EnvironmentFile &rhs) :
+    envFile(rhs.envFile),
+    flag(rhs.flag)
+{
+}
+
+EnvironmentFile &EnvironmentFile::operator=(const EnvironmentFile &rhs)
+{
+    if (this != &rhs) {
+        envFile = rhs.envFile;
+        flag = rhs.flag;
+    }
+    return *this;
+}
+
 EnvironmentFile::~EnvironmentFile() {}
 
 // static
@@ -17,13 +32,13 @@ void EnvironmentFile::registerMetaType()
     qDBusRegisterMetaType<EnvironmentFileList>();
 }
 
-QDebug& operator<<(QDebug& debug, const EnvironmentFile& file)
+QDebug &operator<<(QDebug &debug, const EnvironmentFile &file)
 {
     debug << file.envFile << " flag: " << file.flag;
     return debug;
 }
 
-QDBusArgument& operator<<(QDBusArgument& argument, const EnvironmentFile& file)
+QDBusArgument &operator<<(QDBusArgument &argument, const EnvironmentFile &file)
 {
     argument.beginStructure();
     argument << file.envFile << file.flag;
@@ -31,13 +46,13 @@ QDBusArgument& operator<<(QDBusArgument& argument, const EnvironmentFile& file)
     return argument;
 }
 
-QDataStream& operator<<(QDataStream& stream, const EnvironmentFile& file)
+QDataStream &operator<<(QDataStream &stream, const EnvironmentFile &file)
 {
     stream << file.envFile << file.flag;
     return stream;
 }
 
-const QDBusArgument& operator>>(const QDBusArgument& argument, EnvironmentFile& file)
+const QDBusArgument &operator>>(const QDBusArgument &argument, EnvironmentFile &file)
 {
     argument.beginStructure();
     argument >> file.envFile >> file.flag;
@@ -45,7 +60,7 @@ const QDBusArgument& operator>>(const QDBusArgument& argument, EnvironmentFile& 
     return argument;
 }
 
-const QDataStream& operator>>(QDataStream& stream, EnvironmentFile& file)
+const QDataStream &operator>>(QDataStream &stream, EnvironmentFile &file)
 {
     stream >> file.envFile >> file.flag;
     return stream;

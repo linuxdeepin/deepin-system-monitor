@@ -91,8 +91,8 @@ void StartTooltip::paintEvent(QPaintEvent *)
 
     painter.setOpacity(1);
     qreal devicePixelRatio = qApp->devicePixelRatio();
-    painter.drawPixmap(QPoint((rect().width() - iconImg.width() / devicePixelRatio) / 2,
-                              RECTANGLE_PADDING * devicePixelRatio),
+    painter.drawPixmap(QPoint(int((rect().width() - iconImg.width() / devicePixelRatio) / 2),
+                              int(RECTANGLE_PADDING * devicePixelRatio)),
                        iconImg);
 
     auto *dAppHelper = DApplicationHelper::instance();

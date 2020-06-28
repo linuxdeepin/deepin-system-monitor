@@ -9,23 +9,25 @@ class EnvironmentFile
 {
 public:
     EnvironmentFile();
+    EnvironmentFile(const EnvironmentFile &);
+    EnvironmentFile &operator=(const EnvironmentFile &);
     ~EnvironmentFile();
 
     static void registerMetaType();
 
-    inline bool operator==(const EnvironmentFile& other) const
+    inline bool operator==(const EnvironmentFile &other) const
     {
         return envFile == other.envFile && flag == other.flag;
     }
 
-    friend QDebug& operator<<(QDebug& debug, const EnvironmentFile& file);
-    friend QDBusArgument& operator<<(QDBusArgument& argument, const EnvironmentFile& file);
-    friend QDataStream& operator<<(QDataStream& stream, const EnvironmentFile& file);
-    friend const QDBusArgument& operator>>(const QDBusArgument& argument, EnvironmentFile& file);
-    friend const QDataStream& operator>>(QDataStream& stream, EnvironmentFile& file);
+    friend QDebug &operator<<(QDebug &debug, const EnvironmentFile &file);
+    friend QDBusArgument &operator<<(QDBusArgument &argument, const EnvironmentFile &file);
+    friend QDataStream &operator<<(QDataStream &stream, const EnvironmentFile &file);
+    friend const QDBusArgument &operator>>(const QDBusArgument &argument, EnvironmentFile &file);
+    friend const QDataStream &operator>>(QDataStream &stream, EnvironmentFile &file);
 
-    QString envFile;
-    bool flag;
+    QString envFile {};
+    bool flag {};
 };
 
 typedef QList<EnvironmentFile> EnvironmentFileList;
