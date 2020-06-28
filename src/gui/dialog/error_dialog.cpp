@@ -24,6 +24,8 @@ void ErrorDialog::initUI()
     auto color = pa.color(DPalette::TextTips);
     pa.setColor(DPalette::Foreground, color);
     m_detailLabel->setPalette(pa);
+    m_detailLabel->setMaximumWidth(400);
+    m_detailLabel->setWordWrap(true);
     DFontSizeManager::instance()->bind(m_detailLabel, DFontSizeManager::T6, QFont::Medium);
 
     setMessage(m_errMsg);
