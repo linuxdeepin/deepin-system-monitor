@@ -23,6 +23,7 @@
 #include <DDesktopEntry>
 #include <QPixmap>
 #include <QDateTime>
+#include <QUrl>
 
 #include "stats_collector.h"
 #include "process_entry.h"

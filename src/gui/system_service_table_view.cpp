@@ -1,4 +1,9 @@
-﻿#include <DApplication>
+﻿#include <QScrollBar>
+#include <QtConcurrent>
+#include <QKeyEvent>
+#include <QDebug>
+
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
 #include <DHeaderView>
@@ -6,10 +11,6 @@
 #include <DMenu>
 #include <DMessageBox>
 #include <DSpinner>
-#include <QDebug>
-#include <QFutureWatcher>
-#include <QScrollBar>
-#include <QtConcurrent>
 
 #include "common/error_context.h"
 #include "main_window.h"

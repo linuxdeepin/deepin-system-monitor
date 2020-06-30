@@ -42,6 +42,7 @@
 #include "settings.h"
 #include "utils.h"
 #include "common/hash.h"
+#include "environments.h"
 
 Q_DECLARE_METATYPE(QList<qreal>)
 
@@ -75,7 +76,7 @@ int main(int argc, char *argv[])
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");
         app.setApplicationDisplayName(DApplication::translate("App.About", "System Monitor"));
-        app.setApplicationVersion(DApplication::buildVersion("1.0"));
+        app.setApplicationVersion(VERSION);
 
         app.setProductIcon(QIcon::fromTheme("deepin-system-monitor"));
         app.setProductName(DApplication::translate("App.About", "System Monitor"));

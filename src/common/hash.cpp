@@ -22,8 +22,16 @@
  * details.
  */
 
+#include "config.h"
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#if defined HAVE_SYS_RANDOM_H
+#include <sys/random.h>
+#elif defined HAVE_SYS_CALL &&  defined HAVE_SYS_GETRANDOM
 #include <sys/syscall.h>
+#endif
 
 #include <QDebug>
 
@@ -324,14 +332,39 @@ void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
 
 void init_seed()
 {
-//    ssize_t nb {};
-#if 0 // getrandom not exists in sw platform (glibc version staled)
+    bool ok {false};
+    int cnt {};
+
+#define MAX_RETRY 6
+#if defined HAVE_SYS_RANDOM_H
+    ssize_t nb {};
     do {
         nb = getrandom(&global_seed, sizeof(uint32_t), GRND_NONBLOCK);
-    } while (nb <= 0 || size_t(nb) < sizeof(uint32_t));
+        if (nb == sizeof(uint32_t)) {
+            ok = true;
+            break;
+        }
+    } while (cnt++ < MAX_RETRY && (nb <= 0 || size_t(nb) < sizeof(uint32_t)));
+#elif defined HAVE_SYS_CALL && defined HAVE_SYS_GETRANDOM
+    errno = 0;
+    int rc = syscall(SYS_getrandom, &global_seed, sizeof(uint32_t), 0);
+    if (rc != -1) {
+        ok = true;
+    }
 #endif
 
-    syscall(SYS_getrandom, &global_seed, sizeof(uint32_t), 0);
+    if (!ok) {
+        int fd = open("/dev/urandom", O_RDONLY);
+        if (fd == -1) {
+            qCritical() << "init seed from /dev/urandom failed";
+            abort();
+        }
+        auto nr = read(fd, &global_seed, sizeof(uint32_t));
+        if (nr <= 0 || ulong(nr) < sizeof(uint32_t)) {
+            qCritical() << "init seed from /dev/urandom failed";
+            abort();
+        }
+    }
 }
 
 } // !namespace

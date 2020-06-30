@@ -1,5 +1,12 @@
 #include "errno.h"
 
+#include <QDebug>
+#include <QDir>
+#include <QMessageBox>
+#include <QProcess>
+#include <QTimer>
+#include <QKeyEvent>
+
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DDesktopServices>
@@ -15,11 +22,6 @@
 #include <DTitlebar>
 #include <DToolTip>
 #include <DWidget>
-#include <QDebug>
-#include <QDir>
-#include <QMessageBox>
-#include <QProcess>
-#include <QTimer>
 
 #include "kill_process_confirm_dialog.h"
 #include "main_window.h"
