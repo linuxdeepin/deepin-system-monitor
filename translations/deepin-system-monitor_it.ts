@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -199,7 +197,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -386,6 +384,10 @@ Sicuro di voler terminarla?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Interruzione processo fallita</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Pausa del processo fallita</translation>
@@ -667,21 +669,6 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Services</source>
         <translation>Servizi</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Mostra dettagli</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Nascondi dettagli</translation>
     </message>
 </context>
 </TS>

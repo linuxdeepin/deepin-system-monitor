@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Oké</translation>
+        <translation>Oké</translation>
     </message>
 </context>
 <context>
@@ -385,6 +383,10 @@ Weet je zeker dat je door wilt gaan?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Het proces kan niet worden beëindigd</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Het proces kan niet worden gepauzeerd</translation>
@@ -666,21 +668,6 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Services</source>
         <translation>Diensten</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">Oké</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Informatie tonen</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Informatie verbergen</translation>
     </message>
 </context>
 </TS>

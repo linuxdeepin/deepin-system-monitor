@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>Systémové prostředky</translation>
+        <translation>Monitor systémových prostředků</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Systémové prostředky je nástroj pro sledování vytížení systému v reálném čase, zobrazování a řízení procesů a služeb spuštěných ve vašem systému.</translation>
+        <translation>Monitor systémových prostředků je nástroj pro sledování vytížení systému v reálném čase, zobrazování a řízení procesů a služeb spuštěných ve vašem systému.</translation>
     </message>
 </context>
 <context>
@@ -27,7 +25,7 @@
     </message>
     <message>
         <source>reloading</source>
-        <translation>znovunačítání</translation>
+        <translation>znovu se načítá</translation>
     </message>
     <message>
         <source>inactive</source>
@@ -35,7 +33,7 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>nezdařilo se</translation>
+        <translation>selhalo</translation>
     </message>
     <message>
         <source>activating</source>
@@ -104,7 +102,7 @@
     </message>
     <message>
         <source>static</source>
-        <translation>statický</translation>
+        <translation>statické</translation>
     </message>
     <message>
         <source>transient</source>
@@ -112,7 +110,7 @@
     </message>
     <message>
         <source>indirect</source>
-        <translation>nepřímý</translation>
+        <translation>nepřímé</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
@@ -135,7 +133,7 @@
     </message>
     <message>
         <source>start-pre</source>
-        <translation>start-pre</translation>
+        <translation>spustit-před</translation>
     </message>
     <message>
         <source>start</source>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -236,17 +234,17 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>Konec</translation>
+        <translation>Ukončit</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Vynucení ukončení tohoto programu může vést ke ztrátě dat.
+        <translation>Vynucení ukončení této aplikace může vést ke ztrátě dat.
 Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation>Vynutit konec</translation>
+        <translation>Vynutit ukončení</translation>
     </message>
 </context>
 <context>
@@ -268,14 +266,14 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klikněte na program, který chcete ukončit</translation>
+        <translation>Klikněte na aplikaci, kterou chcete ukončit</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.Title</name>
     <message>
         <source>Memory</source>
-        <translation>Paměť</translation>
+        <translation>Operační paměť </translation>
     </message>
 </context>
 <context>
@@ -286,19 +284,19 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Čtení z disku</translation>
+        <translation>Čtení z úložiště</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zápis na disk</translation>
+        <translation>Zápis na úložiště</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Paměť</translation>
+        <translation>Operační paměť </translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Odkládací prostor (swap)</translation>
+        <translation>Odkládací prostor (swap) </translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -306,15 +304,15 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Stahování</translation>
+        <translation>Příjem</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nahrávání</translation>
+        <translation>Odesílání</translation>
     </message>
     <message>
         <source>Disk</source>
-        <translation>Disk</translation>
+        <translation>Úložiště</translation>
     </message>
     <message>
         <source>Network</source>
@@ -326,18 +324,18 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Celkem odesláno</translation>
+        <translation>Celkem odesl.</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Velmi vysoký</translation>
+        <translation>Velmi vysoká</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Vysoký</translation>
+        <translation>Vysoká</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -345,11 +343,11 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Nízký</translation>
+        <translation>Nízká</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation>Velmi nízký</translation>
+        <translation>Velmi nízká</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -357,7 +355,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>Neplatný</translation>
+        <translation>Neplatná</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
@@ -385,6 +383,10 @@ Opravdu chcete pokračovat?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Proces se nepodařilo ukončit</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Proces se nepodařilo pozastavit</translation>
@@ -414,7 +416,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(je spuštěno %1 aplikací a %2 procesy)</translation>
+        <translation>(jsou spuštěné %1 aplikace a %2 procesů)</translation>
     </message>
 </context>
 <context>
@@ -425,7 +427,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uspat</translation>
+        <translation>Uspáno</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -494,19 +496,19 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zápis na disk</translation>
+        <translation>Zápis na úložiště</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Čtení z disku</translation>
+        <translation>Čtení z úložiště</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Stahování</translation>
+        <translation>Příjem</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Nahrávání</translation>
+        <translation>Odesílání</translation>
     </message>
     <message>
         <source>PID</source>
@@ -566,7 +568,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation>Obnovit</translation>
+        <translation>Načíst znovu</translation>
     </message>
     <message>
         <source>Start</source>
@@ -601,21 +603,21 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Načíst</translation>
+        <translation>Načtení</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktivní</translation>
+        <translation>Aktivita</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation>Pod</translation>
+        <translation>Stav chodu</translation>
     </message>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation>Stav</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <source>Description</source>
@@ -635,11 +637,11 @@ Opravdu chcete pokračovat?</translation>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Vynutit ukončení programu</translation>
+        <translation>Vynutit ukončení aplikace</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Rozšířit</translation>
+        <translation>Rozšířené</translation>
     </message>
     <message>
         <source>Compact</source>
@@ -647,7 +649,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Pohled</translation>
+        <translation>Zobrazení</translation>
     </message>
 </context>
 <context>
@@ -666,21 +668,6 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Services</source>
         <translation>Služby</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Zobrazit podrobnosti</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Skrýt podrobnosti</translation>
     </message>
 </context>
 </TS>

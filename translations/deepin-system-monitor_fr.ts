@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -385,6 +383,10 @@ Es-tu sûr de vouloir continuer ?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Échec de la fermeture du processus</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Impossible de suspendre le processus</translation>
@@ -666,21 +668,6 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>Services</source>
         <translation>Services</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Afficher les détails</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Masquer les détails</translation>
     </message>
 </context>
 </TS>

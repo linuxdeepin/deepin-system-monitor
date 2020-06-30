@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -81,7 +79,7 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>Н / Д</translation>
+        <translation>Н/Д</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Принимать</translation>
     </message>
 </context>
 <context>
@@ -245,7 +243,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Force End</source>
-        <translation>Принудительное закрытие</translation>
+        <translation>Заставить закрытие</translation>
     </message>
 </context>
 <context>
@@ -356,7 +354,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>недействительный</translation>
+        <translation>Недействительный</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
@@ -384,6 +382,10 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Не удалось завершить процесс</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Не удалось приостановить процесс</translation>
@@ -543,7 +545,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Ошибка: Не удалось установить тип запуска службы из-за сбоя подпроцесса.</translation>
+        <translation>Ошибка: не удалось установить тип запуска службы из-за сбоя подпроцесса.</translation>
     </message>
 </context>
 <context>
@@ -627,7 +629,7 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation>Тип запуска</translation>
+        <translation>Тип Запуска</translation>
     </message>
 </context>
 <context>
@@ -665,21 +667,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Услуги</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">Принимать</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Подробности</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Скрыть подробности</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -386,6 +384,10 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Prozess beenden ist fehlgeschlagen</translation>
+    </message>
+    <message>
         <source>Failed to pause process</source>
         <translation>Prozess pausieren ist fehlgeschlagen</translation>
     </message>
@@ -407,7 +409,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozess nicht beendet</translation>
     </message>
 </context>
 <context>
@@ -666,13 +668,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Services</source>
         <translation>Dienste</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
     </message>
 </context>
 </TS>

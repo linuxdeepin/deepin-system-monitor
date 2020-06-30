@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -131,7 +129,7 @@
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation>dead</translation>
+        <translation>мртво</translation>
     </message>
     <message>
         <source>start-pre</source>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">У реду</translation>
+        <translation>У реду</translation>
     </message>
 </context>
 <context>
@@ -385,6 +383,10 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Окончавање процеса није успело</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Неуспешно паузирање процеса</translation>
@@ -666,21 +668,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Услуге</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">У реду</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Прикажи детаље</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Сакриј детаље</translation>
     </message>
 </context>
 </TS>

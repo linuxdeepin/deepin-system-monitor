@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Tamam</translation>
+        <translation>Tamam</translation>
     </message>
 </context>
 <context>
@@ -385,6 +383,10 @@ Devam etmek istediğine emin misin?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">İşlem sona erdirilemedi</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>İşlem duraklatılamadı</translation>
@@ -666,21 +668,6 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Services</source>
         <translation>Hizmetler</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">Tamam</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Ayrıntıları Göster</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Ayrıntıları Gizle</translation>
     </message>
 </context>
 </TS>
