@@ -24,14 +24,16 @@ void ErrorDialog::initUI()
     auto color = pa.color(DPalette::TextTips);
     pa.setColor(DPalette::Foreground, color);
     m_detailLabel->setPalette(pa);
-    m_detailLabel->setMaximumWidth(400);
-    m_detailLabel->setWordWrap(true);
     DFontSizeManager::instance()->bind(m_detailLabel, DFontSizeManager::T6, QFont::Medium);
+    m_detailLabel->setMaximumWidth(360);
+    m_detailLabel->setMinimumHeight(m_detailLabel->height() + 6);
+    m_detailLabel->setWordWrap(true);
 
     setMessage(m_errMsg);
     m_detailLabel->setText(m_detail);
 
     addSpacing(5);
+
     addContent(m_detailLabel, Qt::AlignHCenter);
     addButton(QApplication::translate("Error.Dialog", "OK"), true);
 }

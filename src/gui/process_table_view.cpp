@@ -127,26 +127,30 @@ void ProcessTableView::endProcess()
 
 void ProcessTableView::pauseProcess()
 {
-    if (m_selectedPID.isNull()) {
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+
+    auto pid = qvariant_cast<pid_t>(m_selectedPID);
+
+    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
         return;
     }
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        sysmon->pauseProcess(qvariant_cast<pid_t>(m_selectedPID));
-    }
+    smo->pauseProcess(pid);
 }
 
 void ProcessTableView::resumeProcess()
 {
-    if (m_selectedPID.isNull()) {
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+
+    auto pid = qvariant_cast<pid_t>(m_selectedPID);
+
+    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
         return;
     }
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        sysmon->resumeProcess(qvariant_cast<pid_t>(m_selectedPID));
-    }
+    smo->resumeProcess(pid);
 }
 
 void ProcessTableView::openExecDirWithFM()

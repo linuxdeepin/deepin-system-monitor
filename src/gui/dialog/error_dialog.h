@@ -18,9 +18,9 @@ private:
     void initUI();
 
 private:
-    QString m_errMsg        {};
-    QString m_detail        {};
-    DLabel *m_detailLabel   {};
+    QString  m_errMsg       {};
+    QString  m_detail       {};
+    DLabel  *m_detailLabel  {};
 };
 
 #endif // ERROR_DIALOG_H
