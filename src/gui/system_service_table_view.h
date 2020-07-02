@@ -59,6 +59,7 @@ private:
     void initConnections();
     void handleTaskError(const ErrorContext &ec) const;
     void adjustInfoLabelVisibility();
+    inline void refreshServiceStatus(const QString sname);
 
 private:
     SystemServiceTableModel *m_model                {};

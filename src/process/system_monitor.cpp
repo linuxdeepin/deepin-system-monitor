@@ -130,7 +130,6 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
 {
     int rc = 0;
     ErrorContext ec = {};
-    int __padding__; Q_UNUSED(__padding__)
     auto errfmt = [ = ](decltype(errno) err, const QString & title, int p, int sig,
     ErrorContext & ectx) -> ErrorContext & {
         ectx.setCode(ErrorContext::kErrorTypeSystem);

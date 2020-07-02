@@ -112,9 +112,9 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     auto palette = options.palette;
     QBrush background;
     if (!(index.row() & 1)) {
-        background = palette.color(cg, DPalette::AlternateBase);
+        background = palette.color(DPalette::Active, DPalette::AlternateBase);
     } else {
-        background = palette.color(cg, DPalette::Base);
+        background = palette.color(DPalette::Active, DPalette::Base);
     }
     if (options.state & DStyle::State_Enabled) {
         if (selectionModel()->isSelected(index)) {

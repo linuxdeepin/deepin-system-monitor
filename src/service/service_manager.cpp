@@ -104,8 +104,8 @@ QString ServiceManager::normalizeServiceId(const QString &id, const QString &par
     return buf;
 }
 
-void ServiceManager::startService(const QString &id,
-                                  const QString &param)
+ErrorContext ServiceManager::startService(const QString &id,
+                                          const QString &param)
 {
     ErrorContext ec {};
     Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
@@ -119,13 +119,12 @@ void ServiceManager::startService(const QString &id,
     ec = oResult.first;
     if (ec) {
         qDebug() << "StartUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
-        Q_EMIT errorOccurred(ec);
-        return;
+        return ec;
     }
     QDBusObjectPath o = oResult.second;
 
     if (id.endsWith("@"))
-        return;
+        return {};
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
@@ -136,8 +135,7 @@ void ServiceManager::startService(const QString &id,
             entry = updateServiceEntry(o.path());
         } else {
             qDebug() << "GetUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
-            Q_EMIT errorOccurred(ec);
-            return;
+            return ec;
         }
     } else {
         o = oResult.second;
@@ -148,9 +146,11 @@ void ServiceManager::startService(const QString &id,
         auto *timer = new CustomTimer {this};
         timer->start(o.path());
     }
+
+    return {};
 }
 
-void ServiceManager::stopService(const QString &id)
+ErrorContext ServiceManager::stopService(const QString &id)
 {
     ErrorContext ec {};
     Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
@@ -164,13 +164,12 @@ void ServiceManager::stopService(const QString &id)
     ec = oResult.first;
     if (ec) {
         qDebug() << "Stop Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
-        Q_EMIT errorOccurred(ec);
-        return;
+        return ec;
     }
     QDBusObjectPath o = oResult.second;
 
     if (id.endsWith("@"))
-        return;
+        return {};
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
@@ -181,8 +180,7 @@ void ServiceManager::stopService(const QString &id)
             entry = updateServiceEntry(o.path());
         } else {
             qDebug() << "Get Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
-            Q_EMIT errorOccurred(ec);
-            return;
+            return ec;
         }
     } else {
         o = oResult.second;
@@ -193,9 +191,11 @@ void ServiceManager::stopService(const QString &id)
         auto *timer = new CustomTimer {this};
         timer->start(o.path());
     }
+
+    return {};
 }
 
-void ServiceManager::restartService(const QString &id, const QString &param)
+ErrorContext ServiceManager::restartService(const QString &id, const QString &param)
 {
     ErrorContext ec {};
     Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
@@ -209,13 +209,12 @@ void ServiceManager::restartService(const QString &id, const QString &param)
     ec = oResult.first;
     if (ec) {
         qDebug() << "Restart Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
-        Q_EMIT errorOccurred(ec);
-        return;
+        return ec;
     }
     QDBusObjectPath o = oResult.second;
 
     if (id.endsWith("@"))
-        return;
+        return {};
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
@@ -226,8 +225,7 @@ void ServiceManager::restartService(const QString &id, const QString &param)
             entry = updateServiceEntry(o.path());
         } else {
             qDebug() << "Get Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
-            Q_EMIT errorOccurred(ec);
-            return;
+            return ec;
         }
     } else {
         o = oResult.second;
@@ -238,9 +236,11 @@ void ServiceManager::restartService(const QString &id, const QString &param)
         auto *timer = new CustomTimer {this};
         timer->start(o.path());
     }
+
+    return {};
 }
 
-void ServiceManager::setServiceStartupMode(const QString &id, bool autoStart)
+ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoStart)
 {
     ErrorContext ec {};
 
@@ -292,8 +292,7 @@ void ServiceManager::setServiceStartupMode(const QString &id, bool autoStart)
     if (rc == -1) {
         qDebug() << "check pkexec existence failed";
         ec = errfmt(ec, errno, title, BIN_PKEXEC_PATH);
-        Q_EMIT errorOccurred(ec);
-        return;
+        return ec;
     }
 
     // check systemctl existence
@@ -303,70 +302,68 @@ void ServiceManager::setServiceStartupMode(const QString &id, bool autoStart)
     if (rc == -1) {
         qDebug() << "check systemctl existence failed";
         ec = errfmt(ec, errno, title, BIN_SYSTEMCTL_PATH);
-        Q_EMIT errorOccurred(ec);
-        return;
+        return ec;
     }
 
-    auto *proc = new QProcess();
-    proc->setProcessChannelMode(QProcess::MergedChannels);
-    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-    [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
-        ErrorContext le;
-        // exitStatus:
-        //      crashed
-        //
-        // exitCode:
-        //      127 (pkexec) - not auth/cant auth/error
-        //      126 (pkexec) - auth dialog dismissed
-        //      0 (systemctl) - ok
-        //      !0 (systemctl) - systemctl error, read stdout from child process
-        if (exitStatus == QProcess::CrashExit) {
-            errno = 0;
-            le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
-                                                                  "Error: Failed to set service startup type due to the crashed sub process."));
-            Q_EMIT errorOccurred(le);
-        } else {
-            if (exitCode == 127 || exitCode == 126) {
-                errno = EPERM;
-                le = errfmt(le, errno, title);
-                Q_EMIT errorOccurred(le);
-            } else if (exitCode != 0) {
-                auto buf = proc->readAllStandardOutput();
-                errno = 0;
-                le = errfmt(le, errno, title, buf);
-                Q_EMIT errorOccurred(le);
-            } else {
-                // success - refresh service stat -send signal
-
-                // special case, do nothing there
-                if (id.endsWith("@"))
-                    return;
-
-                Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
-                                               kSystemDObjectPath.path(),
-                                               QDBusConnection::systemBus());
-                auto buf = normalizeServiceId(id, {});
-                auto re = mgrIf.GetUnit(buf);
-                le = re.first;
-                if (le) {
-                    if (le.getCode() == 3) {
-                        auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-                        updateServiceEntry(o.path());
-                    } else {
-                        Q_EMIT errorOccurred(le);
-                    }
-                } else {
-                    updateServiceEntry(re.second.path());
-                }
-            }
-        }
-        proc->deleteLater();
-    });
-
+    QProcess proc;
+    proc.setProcessChannelMode(QProcess::MergedChannels);
     // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
     QString action = autoStart ? "enable" : "disable";
-    proc->start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, id});
+    proc.start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, id});
+    proc.waitForFinished(-1);
+    auto exitStatus = proc.exitStatus();
+    ErrorContext le {};
+    // exitStatus:
+    //      crashed
+    //
+    // exitCode:
+    //      127 (pkexec) - not auth/cant auth/error
+    //      126 (pkexec) - auth dialog dismissed
+    //      0 (systemctl) - ok
+    //      !0 (systemctl) - systemctl error, read stdout from child process
+    if (exitStatus == QProcess::CrashExit) {
+        errno = 0;
+        le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
+                                                              "Error: Failed to set service startup type due to the crashed sub process."));
+        return le;
+    } else {
+        auto exitCode = proc.exitCode();
+        if (exitCode == 127 || exitCode == 126) {
+            errno = EPERM;
+            le = errfmt(le, errno, title);
+            return le;
+        } else if (exitCode != 0) {
+            auto buf = proc.readAllStandardOutput();
+            errno = 0;
+            le = errfmt(le, errno, title, buf);
+            return le;
+        } else {
+            // success - refresh service stat -send signal
+
+            // special case, do nothing there
+            if (id.endsWith("@"))
+                return {};
+
+            Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
+                                           kSystemDObjectPath.path(),
+                                           QDBusConnection::systemBus());
+            auto buf = normalizeServiceId(id, {});
+            auto re = mgrIf.GetUnit(buf);
+            le = re.first;
+            if (le) {
+                if (le.getCode() == 3) {
+                    auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+                    updateServiceEntry(o.path());
+                } else {
+                    return le;
+                }
+            } else {
+                updateServiceEntry(re.second.path());
+            }
+        }
+    }
 #endif
+    return {};
 }
 
 SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)

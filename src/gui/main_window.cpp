@@ -284,6 +284,13 @@ void MainWindow::initConnections()
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
     [ = ]() { m_toolbar->clearSearchText(); });
+
+    connect(this, &MainWindow::authProgressStarted, this, [ = ]() {
+        setEnabled(false);
+    });
+    connect(this, &MainWindow::authProgressEnded, this, [ = ]() {
+        setEnabled(true);
+    });
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

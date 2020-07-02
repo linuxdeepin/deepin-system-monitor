@@ -50,6 +50,8 @@ Q_SIGNALS:
     void killProcessPerformed();
     void displayModeChanged(DisplayMode mode);
     void loadingStatusChanged(bool loading);
+    void authProgressStarted();
+    void authProgressEnded();
 
 public Q_SLOTS:
     inline void initDisplay()

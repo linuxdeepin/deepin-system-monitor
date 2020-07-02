@@ -80,18 +80,17 @@ Q_SIGNALS:
 
 public:
     SystemServiceEntry updateServiceEntry(const QString &opath);
+    QString normalizeServiceId(const QString &id, const QString &param = {});
 
 public Q_SLOTS:
-    void startService(const QString &id, const QString &param = {});
-    void stopService(const QString &id);
-    void restartService(const QString &id, const QString &param = {});
-    void setServiceStartupMode(const QString &id, bool autoStart);
+    ErrorContext startService(const QString &id, const QString &param = {});
+    ErrorContext stopService(const QString &id);
+    ErrorContext restartService(const QString &id, const QString &param = {});
+    ErrorContext setServiceStartupMode(const QString &id, bool autoStart);
 
 private:
     ServiceManager(QObject *parent = nullptr);
     ~ServiceManager();
-
-    QString normalizeServiceId(const QString &id, const QString &param = {});
 
     QThread m_workerThread;
     ServiceManagerWorker *m_worker {};
