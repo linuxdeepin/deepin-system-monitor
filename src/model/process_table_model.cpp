@@ -222,17 +222,14 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
-    } else if (role == Qt::ForegroundRole) {
-        DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-        DPalette palette = dAppHelper->applicationPalette();
-        DPalette::ColorGroup cg = DPalette::Active;
+    } else if (role == Qt::UserRole + 2) {
         if (index.column() == kProcessNameColumn) {
             char state = m_processList.at(index.row()).getState();
             if (state == 'Z' || state == 'T') {
-                return QVariant(QBrush(palette.color(cg, DPalette::TextWarning)));
+                return QVariant(int(DPalette::TextWarning));
             }
         }
-        return QVariant(QBrush(palette.color(cg, DPalette::Text)));
+        return {};
     }
     return {};
 }

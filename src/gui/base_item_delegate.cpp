@@ -68,11 +68,11 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     auto palette = DApplicationHelper::instance()->applicationPalette();
 
     QPen forground;
-//    if (index.data(Qt::ForegroundRole).isValid()) {
-//        forground.setColor(qvariant_cast<QBrush>(index.data(Qt::ForegroundRole)).color());
-//    } else {
-    forground.setColor(palette.color(cg, DPalette::Text));
-//    }
+    if (index.data(Qt::UserRole + 2).isValid()) {
+        forground.setColor(palette.color(cg, static_cast<DPalette::ColorType>(index.data(Qt::UserRole + 2).toInt())));
+    } else {
+        forground.setColor(palette.color(cg, DPalette::Text));
+    }
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             forground.setColor(palette.color(cg, DPalette::TextLively));

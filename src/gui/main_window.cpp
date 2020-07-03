@@ -16,6 +16,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
+#include <DPalette>
 
 #include "constant.h"
 #include "main_window.h"
@@ -29,6 +30,8 @@
 
 std::atomic<MainWindow *> MainWindow::m_instance {nullptr};
 std::mutex MainWindow::m_mutex;
+
+DGUI_USE_NAMESPACE
 
 MainWindow::MainWindow(DWidget *parent)
     : DMainWindow(parent)
