@@ -501,14 +501,13 @@ void SystemServiceTableView::initConnections()
             auto index = selectionModel()->selectedRows()[0];
             if (index.isValid()) {
                 auto state = m_model->getUnitFileState(m_proxyModel->mapToSource(index));
-                auto uname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
-                if (isUnitNoOp(state) || uname.endsWith("@")) {
+                auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
+                if (sname.endsWith("@") || isUnitNoOp(state)) {
                     m_setServiceStartupModeMenu->setEnabled(false);
                 } else {
                     m_setServiceStartupModeMenu->setEnabled(true);
                 }
 
-                auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
                 if (isServiceAutoStartup(sname, state)) {
                     m_setAutoStartAction->setEnabled(false);
                     m_setManualStartAction->setEnabled(true);

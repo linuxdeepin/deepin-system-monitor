@@ -293,6 +293,7 @@ inline bool isUnitNoOp(const QString &state)
     int s = unitStateMap[state];
     return (s == kUnitStateEnabledRuntime)
            || (s == kUnitStateStatic)
+           || (s == kUnitStateIndirect)
            || (s == kUnitStateTransient)
            || (s == kUnitStateMasked)
            || state.isEmpty();

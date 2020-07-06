@@ -69,7 +69,7 @@ public:
         if (!index.isValid())
             return {};
 
-        return m_svcMap[m_svcList[index.row()]].getId();
+        return m_svcMap[m_svcList[index.row()]].getSName();
     }
 
     QVariant data(const QModelIndex &index, int role) const override;
