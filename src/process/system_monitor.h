@@ -1,24 +1,38 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef SYSTEM_MONITOR_H
 #define SYSTEM_MONITOR_H
-
-#include <proc/readproc.h>
-#include <proc/sysinfo.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <mutex>
-
-#include <DApplication>
-#include <QMap>
-#include <QThread>
 
 #include "common/error_context.h"
 #include "utils.h"
 
-using namespace Utils;
-DWIDGET_USE_NAMESPACE
+#include <QMap>
+#include <QApplication>
+#include <QThread>
+
+#include <mutex>
+
+#include <unistd.h>
 
 class ProcessEntry;
 class StatsCollector;
+class QThread;
 class SystemMonitor : public QObject
 {
     Q_OBJECT
@@ -63,13 +77,13 @@ public:
     inline static QString getPriorityName(int prio)
     {
         const static QMap<ProcessPriority, QString> priorityMap = {
-            {kVeryHighPriority, DApplication::translate("Process.Priority", "Very high")},
-            {kHighPriority, DApplication::translate("Process.Priority", "High")},
-            {kNormalPriority, DApplication::translate("Process.Priority", "Normal")},
-            {kLowPriority, DApplication::translate("Process.Priority", "Low")},
-            {kVeryLowPriority, DApplication::translate("Process.Priority", "Very low")},
-            {kCustomPriority, DApplication::translate("Process.Priority", "Custom")},
-            {kInvalidPriority, DApplication::translate("Process.Priority", "Invalid")}
+            {kVeryHighPriority, QApplication::translate("Process.Priority", "Very high")},
+            {kHighPriority, QApplication::translate("Process.Priority", "High")},
+            {kNormalPriority, QApplication::translate("Process.Priority", "Normal")},
+            {kLowPriority, QApplication::translate("Process.Priority", "Low")},
+            {kVeryLowPriority, QApplication::translate("Process.Priority", "Very low")},
+            {kCustomPriority, QApplication::translate("Process.Priority", "Custom")},
+            {kInvalidPriority, QApplication::translate("Process.Priority", "Invalid")}
         };
 
         ProcessPriority p = kInvalidPriority;

@@ -1,11 +1,37 @@
-#include "errno.h"
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#include <QDebug>
-#include <QDir>
-#include <QMessageBox>
-#include <QProcess>
-#include <QTimer>
-#include <QKeyEvent>
+#include "process_table_view.h"
+
+#include "main_window.h"
+#include "kill_process_confirm_dialog.h"
+#include "priority_slider.h"
+#include "process_attribute_dialog.h"
+#include "dialog/error_dialog.h"
+#include "settings.h"
+#include "toolbar.h"
+#include "ui_common.h"
+
+#include "model/process_sort_filter_proxy_model.h"
+#include "model/process_table_model.h"
+
+#include "process/process_entry.h"
+#include "process/system_monitor.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -22,22 +48,15 @@
 #include <DTitlebar>
 #include <DToolTip>
 #include <DWidget>
+#include <DHeaderView>
 
-#include "kill_process_confirm_dialog.h"
-#include "main_window.h"
-#include "model/process_sort_filter_proxy_model.h"
-#include "model/process_table_model.h"
-#include "priority_slider.h"
-#include "process/process_entry.h"
-#include "process/system_monitor.h"
-#include "process_attribute_dialog.h"
-#include "process_table_view.h"
-#include "settings.h"
-#include "toolbar.h"
-#include "ui_common.h"
-#include "dialog/error_dialog.h"
-
-DWIDGET_USE_NAMESPACE
+#include <QDebug>
+#include <QDir>
+#include <QMessageBox>
+#include <QProcess>
+#include <QTimer>
+#include <QKeyEvent>
+#include <QShortcut>
 
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
 

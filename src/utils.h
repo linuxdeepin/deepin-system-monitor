@@ -1,46 +1,40 @@
-﻿/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+﻿/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <dwindowmanager.h>
-#include <proc/readproc.h>
-#include <QFileInfoList>
-#include <QLayout>
-#include <QObject>
-#include <QPainter>
-#include <QString>
-#include <unordered_set>
 #include "find_window_title.h"
-#include <QDebug>
 
+#include <dwindowmanager.h>
+
+#include <QFileInfo>
+#include <QString>
 #include <QVariant>
+#include <QWidget>
 
 DWM_USE_NAMESPACE
 
 const int RECTANGLE_PADDING = 24;
 const int RECTANGLE_RADIUS = 8;
 const int RECTANGLE_FONT_SIZE = 11;
+
+class QPainter;
 
 namespace Utils {
 
@@ -108,47 +102,6 @@ QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
 QPixmap getProcessIcon(int pid, std::string desktopFile,
                        QScopedPointer<FindWindowTitle> &findWindowTitle, int iconSize);
 QSize getRenderSize(int fontSize, QString string);
-
-inline QString formatUnitSize(QVariant v, QStringList orders, bool showUnit = true, int prec = 1)
-{
-    int order = 0;
-    qreal value = v.toReal();
-    while (value >= 1024 && order + 1 < orders.size()) {
-        order++;
-        value = value / 1024;
-    }
-
-    QString size = QString::number(value, 'f', prec);
-
-    if (showUnit) {
-        return QString("%1%2").arg(size).arg(orders[order]);
-    } else {
-        return QString("%1").arg(size);
-    }
-}
-
-inline QString formatBandwidth(QVariant v)
-{
-    QStringList orders;
-    orders << "KB/s"
-           << "MB/s"
-           << "GB/s"
-           << "TB/s";
-
-    return formatUnitSize(v, orders);
-}
-
-inline QString formatByteCount(QVariant v, bool showUnit = true, int prec = 1)
-{
-    QStringList orders;
-    orders << "B"
-           << "K"
-           << "M"
-           << "G"
-           << "T";
-
-    return formatUnitSize(v, orders, showUnit, prec);
-}
 
 QString getProcessCmdline(pid_t pid);
 QString getProcessEnvironmentVariable(pid_t pid, QString environmentName);

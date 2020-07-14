@@ -1,44 +1,40 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "disk_monitor.h"
+
+#include "process/system_monitor.h"
+#include "process/stats_collector.h"
+#include "smooth_curve_generator.h"
+#include "gui/ui_common.h"
+#include "constant.h"
+#include "utils.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
+
 #include <QApplication>
 #include <QDebug>
 #include <QPainter>
 
-#include "constant.h"
-#include "disk_monitor.h"
-#include "process/system_monitor.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
-#include "process/stats_collector.h"
-#include "gui/ui_common.h"
-
 DWIDGET_USE_NAMESPACE
-
 using namespace Utils;
 
 DiskMonitor::DiskMonitor(QWidget *parent)
@@ -94,11 +90,11 @@ void DiskMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 
 void DiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
 {
-    totalReadKbs = tReadKbs;
-    totalWriteKbs = tWriteKbs;
+    totalReadBps = tReadKbs;
+    totalWriteBps = tWriteKbs;
 
     // Init read path.
-    readSpeeds->append(totalReadKbs);
+    readSpeeds->append(totalReadBps);
 
     if (readSpeeds->size() > pointsNumber) {
         readSpeeds->pop_front();
@@ -125,7 +121,7 @@ void DiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
     readPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
 
     // Init write path.
-    writeSpeeds->append(totalWriteKbs);
+    writeSpeeds->append(totalWriteBps);
 
     if (writeSpeeds->size() > pointsNumber) {
         writeSpeeds->pop_front();
@@ -227,10 +223,10 @@ void DiskMonitor::paintEvent(QPaintEvent *)
 
     QString readTitle = QString("%1 %2")
                         .arg(DApplication::translate("Process.Graph.View", "Disk read"))
-                        .arg(formatBandwidth(totalReadKbs));
+                        .arg(formatUnit(totalReadBps, B, 1, true));
     QString writeTitle = QString("%1 %2")
                          .arg(DApplication::translate("Process.Graph.View", "Disk write"))
-                         .arg(formatBandwidth(totalWriteKbs));
+                         .arg(formatUnit(totalWriteBps, B, 1, true));
 
     painter.setOpacity(1);
     painter.setPen(QPen(readColor));

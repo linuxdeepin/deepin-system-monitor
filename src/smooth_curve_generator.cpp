@@ -1,78 +1,76 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  Wang Yong <wangyong@deepin.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "smooth_curve_generator.h"
 
-QPainterPath SmoothCurveGenerator::generateSmoothCurve(const QList<QPointF> &points) 
+#include <QPainterPath>
+#include <QPointF>
+
+QPainterPath SmoothCurveGenerator::generateSmoothCurve(const QList<QPointF> &points)
 {
     QPainterPath path;
     int len = points.size();
     if (len < 2) {
         return path;
     }
-    
+
     QList<QPointF> firstControlPoints;
     QList<QPointF> secondControlPoints;
-    
+
     calculateControlPoints(points, &firstControlPoints, &secondControlPoints);
     path.moveTo(points[0].x(), points[0].y());
-    
+
     // Using bezier curve to generate a smooth curve.
     for (int i = 0; i < len - 1; ++i) {
-        path.cubicTo(firstControlPoints[i], secondControlPoints[i], points[i+1]);
+        path.cubicTo(firstControlPoints[i], secondControlPoints[i], points[i + 1]);
     }
-    
+
     return path;
 }
 
-void SmoothCurveGenerator::calculateFirstControlPoints(double *&result, const double *rhs, int n) 
+void SmoothCurveGenerator::calculateFirstControlPoints(double *&result, const double *rhs, int n)
 {
     double *tmp = new double[n];
     double b = 2.0;
     result[0] = rhs[0] / b;
-    
+
     // Decomposition and forward substitution.
     for (int i = 1; i < n; i++) {
         tmp[i] = 1 / b;
         b = (i < n - 1 ? 4.0 : 3.5) - tmp[i];
         result[i] = (rhs[i] - result[i - 1]) / b;
     }
-    
+
     for (int i = 1; i < n; i++) {
         result[n - i - 1] -= tmp[n - i] * result[n - i]; // Backsubstitution.
     }
-    
+
     delete[] tmp;
 }
 
-void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, QList<QPointF> *firstControlPoints, QList<QPointF> *secondControlPoints) 
+void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, QList<QPointF> *firstControlPoints, QList<QPointF> *secondControlPoints)
 {
     int n = knots.size() - 1;
     for (int i = 0; i < n; ++i) {
         firstControlPoints->append(QPointF());
         secondControlPoints->append(QPointF());
     }
-    
+
     if (n == 1) {
         // Special case: Bezier curve should be a straight line.
         // P1 = (2P0 + P3) / 3
@@ -83,13 +81,13 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
         (*secondControlPoints)[0].ry() = 2 * (*firstControlPoints)[0].y() - knots[0].y();
         return;
     }
-    
+
     // Calculate first Bezier control points
     double *xs = new double[n];
     double *ys = new double[n];
     double *rhsx = new double[n]; // Right hand side vector
     double *rhsy = new double[n]; // Right hand side vector
-    
+
     // Set right hand side values
     for (int i = 1; i < n - 1; ++i) {
         rhsx[i] = 4 * knots[i].x() + 2 * knots[i + 1].x();
@@ -99,11 +97,11 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
     rhsx[n - 1] = (8 * knots[n - 1].x() + knots[n].x()) / 2.0;
     rhsy[0] = knots[0].y() + 2 * knots[1].y();
     rhsy[n - 1] = (8 * knots[n - 1].y() + knots[n].y()) / 2.0;
-    
+
     // Calculate first control points coordinates
     calculateFirstControlPoints(xs, rhsx, n);
     calculateFirstControlPoints(ys, rhsy, n);
-    
+
     // Fill output control points.
     for (int i = 0; i < n; ++i) {
         (*firstControlPoints)[i].rx() = xs[i];
@@ -116,7 +114,7 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
             (*secondControlPoints)[i].ry() = (knots[n].y() + ys[n - 1]) / 2;
         }
     }
-    
+
     delete[] xs;
     delete[] ys;
     delete[] rhsx;

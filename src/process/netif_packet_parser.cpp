@@ -16,6 +16,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "netif_packet_parser.h"
+
+#include <QDebug>
+
 #include <netinet/in.h>
 #include <net/ethernet.h>
 #include <netinet/if_ether.h>
@@ -23,10 +27,6 @@
 #include <netinet/ip6.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
-
-#include <QDebug>
-
-#include "netif_packet_parser.h"
 
 #define IP6_NEXT_HEADER_HBH         0
 #define IP6_NEXT_HEADER_TCP         6

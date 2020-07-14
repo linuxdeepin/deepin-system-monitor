@@ -23,6 +23,11 @@
  */
 
 #include "config.h"
+
+#include "hash.h"
+
+#include <QDebug>
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -32,10 +37,7 @@
 #elif defined HAVE_SYS_CALL &&  defined HAVE_SYS_GETRANDOM
 #include <sys/syscall.h>
 #endif
-
-#include <QDebug>
-
-#include "hash.h"
+#include <endian.h>
 
 namespace utils {
 

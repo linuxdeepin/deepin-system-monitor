@@ -1,38 +1,40 @@
 ﻿/*
- * Copyright (C) 2019 ~ 2019 Union Technology Co., Ltd.
- *
- * Author:     zccrs <zccrs@uniontech.com>
- *
- * Maintainer: zccrs <zhangjide@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#include <QDebug>
-#include <DDesktopEntry>
-#include <QPixmap>
-#include <QDateTime>
-#include <QUrl>
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "stats_collector.h"
+
+#include "find_window_title.h"
+#include "netif_monitor.h"
 #include "process_entry.h"
 #include "utils.h"
 
+#include <DDesktopEntry>
+
+#include <QDebug>
+#include <QPixmap>
+#include <QDateTime>
+#include <QUrl>
+#include <QTimer>
+#include <QThread>
+#include <QApplication>
+
 #define SECTOR_SHIFT 9
 #define SECTOR_SIZE (1 << SECTOR_SHIFT)
-
-DCORE_USE_NAMESPACE
 
 // unit in milliseconds
 static const int kUpdateInterval = 2000;
@@ -646,7 +648,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             if (!title.isEmpty()) {
                 nameSet = true;
                 proc.setDisplayName(QString("%1: %2")
-                                    .arg(DApplication::translate("Process.Table", "Tray"))
+                                    .arg(QApplication::translate("Process.Table", "Tray"))
                                     .arg(title));
             } else if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
                 // can't grab window title, try use desktop file instead
@@ -655,7 +657,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 if (!de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(QString("%1: %2")
-                                        .arg(DApplication::translate("Process.Table", "Tray"))
+                                        .arg(QApplication::translate("Process.Table", "Tray"))
                                         .arg(de->displayName));
                 }
                 if (!de->icon.isNull()) {

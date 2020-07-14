@@ -19,13 +19,14 @@
 #ifndef NETIF_PACKET_PARSER_H
 #define NETIF_PACKET_PARSER_H
 
-#include <time.h>
-#include <netinet/in.h>
-#include <pcap.h>
-
 #include <QQueue>
 #include <QSharedPointer>
 #include <QList>
+
+#include <pcap.h>
+
+#include <time.h>
+#include <netinet/in.h>
 
 enum packet_direction {
     kInboundPacket,

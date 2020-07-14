@@ -1,40 +1,39 @@
 /*
- * Copyright (C) 2019 ~ 2019 Union Technology Co., Ltd.
- *
- * Author:     zccrs <zccrs@uniontech.com>
- *
- * Maintainer: zccrs <zhangjide@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef STATS_COLLECTOR_H
 #define STATS_COLLECTOR_H
+
+#include "system_stat.h"
+#include "process_stat.h"
+#include "desktop_entry_stat.h"
+#include "system_monitor.h"
+#include "process_entry.h"
 
 #include <QList>
 #include <QMap>
 #include <QIcon>
-#include <QTimer>
 #include <QHash>
-#include <QThread>
 
-#include "system_stat.h"
-#include "process_stat.h"
-#include "process_entry.h"
-#include "desktop_entry_stat.h"
-#include "system_monitor.h"
-#include "find_window_title.h"
-#include "netif_monitor.h"
+class NetifMonitor;
+class FindWindowTitle;
+class QTimer;
+class QThread;
 
 void readProcStatsCallback(ProcStat &ps, void *context);
 void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps);
