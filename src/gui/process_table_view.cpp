@@ -1,4 +1,37 @@
-#include "errno.h"
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "process_table_view.h"
+
+#include "main_window.h"
+#include "kill_process_confirm_dialog.h"
+#include "priority_slider.h"
+#include "process_attribute_dialog.h"
+#include "dialog/error_dialog.h"
+#include "settings.h"
+#include "toolbar.h"
+#include "ui_common.h"
+
+#include "model/process_sort_filter_proxy_model.h"
+#include "model/process_table_model.h"
+
+#include "process/process_entry.h"
+#include "process/system_monitor.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -15,27 +48,15 @@
 #include <DTitlebar>
 #include <DToolTip>
 #include <DWidget>
+#include <DHeaderView>
+
 #include <QDebug>
 #include <QDir>
 #include <QMessageBox>
 #include <QProcess>
 #include <QTimer>
-
-#include "kill_process_confirm_dialog.h"
-#include "main_window.h"
-#include "model/process_sort_filter_proxy_model.h"
-#include "model/process_table_model.h"
-#include "priority_slider.h"
-#include "process/process_entry.h"
-#include "process/system_monitor.h"
-#include "process_attribute_dialog.h"
-#include "process_table_view.h"
-#include "settings.h"
-#include "toolbar.h"
-#include "ui_common.h"
-#include "dialog/error_dialog.h"
-
-DWIDGET_USE_NAMESPACE
+#include <QKeyEvent>
+#include <QShortcut>
 
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
 
@@ -96,6 +117,10 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 
 void ProcessTableView::endProcess()
 {
+    if (m_selectedPID.isNull()) {
+        return;
+    }
+
     // dialog
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
@@ -112,6 +137,9 @@ void ProcessTableView::endProcess()
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();
         if (sysmon) {
+            auto *mwnd = MainWindow::instance();
+            Q_ASSERT(mwnd != nullptr);
+            Q_EMIT mwnd->authProgressStarted();
             sysmon->endProcess(qvariant_cast<pid_t>(m_selectedPID));
         }
     } else {
@@ -121,18 +149,36 @@ void ProcessTableView::endProcess()
 
 void ProcessTableView::pauseProcess()
 {
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        sysmon->pauseProcess(qvariant_cast<pid_t>(m_selectedPID));
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+
+    auto pid = qvariant_cast<pid_t>(m_selectedPID);
+
+    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
+        return;
     }
+
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
+    Q_EMIT mwnd->authProgressStarted();
+    smo->pauseProcess(pid);
 }
 
 void ProcessTableView::resumeProcess()
 {
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        sysmon->resumeProcess(qvariant_cast<pid_t>(m_selectedPID));
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+
+    auto pid = qvariant_cast<pid_t>(m_selectedPID);
+
+    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
+        return;
     }
+
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
+    Q_EMIT mwnd->authProgressStarted();
+    smo->resumeProcess(pid);
 }
 
 void ProcessTableView::openExecDirWithFM()
@@ -198,6 +244,10 @@ void ProcessTableView::showProperties()
 
 void ProcessTableView::killProcess()
 {
+    if (m_selectedPID.isNull()) {
+        return;
+    }
+
     // dialog
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
@@ -214,6 +264,9 @@ void ProcessTableView::killProcess()
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();
         if (sysmon) {
+            auto *mwnd = MainWindow::instance();
+            Q_ASSERT(mwnd != nullptr);
+            Q_EMIT mwnd->authProgressStarted();
             sysmon->killProcess(qvariant_cast<pid_t>(m_selectedPID));
         }
     } else {
@@ -237,6 +290,9 @@ void ProcessTableView::switchDisplayMode(SystemMonitor::FilterType type)
 
 void ProcessTableView::changeProcessPriority(int priority)
 {
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
+
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
 
@@ -247,10 +303,12 @@ void ProcessTableView::changeProcessPriority(int priority)
                 return;
 
             ErrorContext ec {};
+            Q_EMIT mwnd->authProgressStarted();
             ec = sysmon->setProcessPriority(pid, priority);
             if (ec) {
                 // show error dialog
                 ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+                Q_EMIT mwnd->authProgressEnded();
             }
         }
     }
@@ -640,21 +698,37 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
     connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
 
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        connect(sysmon, &SystemMonitor::priorityPromoteResultReady, this,
-        [ = ](const ErrorContext & ec) {
-            if (ec) {
-                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-            }
-        });
-        connect(sysmon, &SystemMonitor::processControlResultReady, this,
-        [ = ](const ErrorContext & ec) {
-            if (ec) {
-                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-            }
-        });
-    }
+    auto *smo = SystemMonitor::instance();
+    Q_ASSERT(smo != nullptr);
+    connect(smo, &SystemMonitor::priorityPromoteResultReady, this,
+    [ = ](const ErrorContext & ec) {
+        if (ec) {
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+        }
+        Q_EMIT mainWindow->authProgressEnded();
+    });
+    connect(smo, &SystemMonitor::processControlResultReady, this,
+    [ = ](const ErrorContext & ec) {
+        if (ec) {
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+        }
+        Q_EMIT mainWindow->authProgressEnded();
+    });
+    connect(smo, &SystemMonitor::processEnded, this, [ = ]() {
+        Q_EMIT mainWindow->authProgressEnded();
+    });
+    connect(smo, &SystemMonitor::processPaused, this, [ = ]() {
+        Q_EMIT mainWindow->authProgressEnded();
+    });
+    connect(smo, &SystemMonitor::processResumed, this, [ = ]() {
+        Q_EMIT mainWindow->authProgressEnded();
+    });
+    connect(smo, &SystemMonitor::processKilled, this, [ = ]() {
+        Q_EMIT mainWindow->authProgressEnded();
+    });
+    connect(smo, &SystemMonitor::processPriorityChanged, this, [ = ]() {
+        Q_EMIT mainWindow->authProgressEnded();
+    });
 }
 
 void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)

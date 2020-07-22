@@ -1,43 +1,37 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#include <QAction>
+#include "toolbar.h"
+
+#include "main_window.h"
+#include "constant.h"
+#include "utils.h"
+
+#include <DApplication>
+#include <DButtonBox>
+#include <DSearchEdit>
+
 #include <QDebug>
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QTimer>
 
-#include <DApplication>
-#include <DButtonBox>
-#include <DSearchEdit>
-
-#include "constant.h"
-#include "main_window.h"
-#include "toolbar.h"
-#include "utils.h"
-
-DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
 Toolbar::Toolbar(MainWindow *m, QWidget *parent)
@@ -46,9 +40,6 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
 {
     installEventFilter(this);  // add event filter
     setMouseTracking(true);    // make MouseMove can response
-
-    // fixed height will cause geometry of child widgets not scaling with font size change
-    // setFixedHeight(36);
 
     // =========layout=========
     QHBoxLayout *layout = new QHBoxLayout(this);

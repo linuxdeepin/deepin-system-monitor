@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -385,6 +383,10 @@ Haluatko varmasti jatkaa?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Prosessin lopettaminen epäonnistui</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Prosessin pysäytys epäonnistui</translation>
@@ -639,7 +641,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Laajentaa</translation>
+        <translation>Laajenna</translation>
     </message>
     <message>
         <source>Compact</source>
@@ -666,21 +668,6 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Services</source>
         <translation>Palvelut</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Näytä tiedot</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Piilota tiedot</translation>
     </message>
 </context>
 </TS>

@@ -1,47 +1,43 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "cpu_monitor.h"
+
+#include "process/system_monitor.h"
+#include "process/stats_collector.h"
+#include "smooth_curve_generator.h"
+#include "gui/ui_common.h"
+#include "constant.h"
+#include "settings.h"
+#include "utils.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
-#include <DHiDPIHelper>
 #include <DPalette>
 #include <DStyle>
+
 #include <QDebug>
 #include <QIcon>
 #include <QPainter>
 #include <QtMath>
-
-#include "constant.h"
-#include "cpu_monitor.h"
-#include "gui/ui_common.h"
-#include "process/system_monitor.h"
-#include "settings.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
-#include "process/stats_collector.h"
+#include <QPropertyAnimation>
 
 DWIDGET_USE_NAMESPACE
-
 using namespace Utils;
 
 CpuMonitor::CpuMonitor(QWidget *parent)
@@ -92,11 +88,11 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     switch (m_themeType) {
     case DApplicationHelper::LightType:
         ringBackgroundColor = "#000000";
-        m_icon = QIcon(":/image/light/icon_cpu_light.svg");
+        m_icon = QIcon(iconPathFromQrc("light/icon_cpu_light.svg"));
         break;
     case DApplicationHelper::DarkType:
         ringBackgroundColor = "#FFFFFF";
-        m_icon = QIcon(":/image/dark/icon_cpu_light.svg");
+        m_icon = QIcon(iconPathFromQrc("dark/icon_cpu_light.svg"));
         break;
     default:
         break;

@@ -1,10 +1,30 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "unit_info.h"
+
+#include <QDebug>
 
 class UnitInfoData : public QSharedData
 {
 public:
     UnitInfoData() {}
-    UnitInfoData(const UnitInfoData& rhs)
+    UnitInfoData(const UnitInfoData &rhs)
         : QSharedData(rhs)
         , m_jobId(rhs.m_jobId)
         , m_name(rhs.m_name)
@@ -18,7 +38,7 @@ public:
         , m_jobObjectPath(rhs.m_jobObjectPath)
     {
     }
-    UnitInfoData& operator=(const UnitInfoData& rhs)
+    UnitInfoData &operator=(const UnitInfoData &rhs)
     {
         if (this != &rhs) {
             m_jobId = rhs.m_jobId;
@@ -56,10 +76,10 @@ UnitInfo::UnitInfo()
 {
 }
 
-UnitInfo::UnitInfo(const QString& name, const QString& description, const QString& loadState,
-                   const QString& activeState, const QString& subState, const QString& followedBy,
-                   const QString& unitObjectPath, quint32 jobId, const QString& jobType,
-                   const QString& jobObjectPath)
+UnitInfo::UnitInfo(const QString &name, const QString &description, const QString &loadState,
+                   const QString &activeState, const QString &subState, const QString &followedBy,
+                   const QString &unitObjectPath, quint32 jobId, const QString &jobType,
+                   const QString &jobObjectPath)
 {
     data = new UnitInfoData();
     data->m_name = name;
@@ -74,36 +94,36 @@ UnitInfo::UnitInfo(const QString& name, const QString& description, const QStrin
     data->m_jobObjectPath = jobObjectPath;
 }
 
-UnitInfo::UnitInfo(const UnitInfo& rhs)
+UnitInfo::UnitInfo(const UnitInfo &rhs)
     : data(rhs.data)
 {
 }
 
-UnitInfo& UnitInfo::operator=(const UnitInfo& rhs)
+UnitInfo &UnitInfo::operator=(const UnitInfo &rhs)
 {
     if (this != &rhs)
-        data.operator=(rhs.data);
+        data.operator = (rhs.data);
     return *this;
 }
 
 UnitInfo::~UnitInfo() {}
 
-bool UnitInfo::operator==(const UnitInfo& other) const
+bool UnitInfo::operator==(const UnitInfo &other) const
 {
     return (
-        data->m_name == other.getName() && data->m_description == other.getDescription() &&
-        data->m_loadState == other.getLoadState() &&
-        data->m_activeState == other.getActiveState() && data->m_subState == other.getSubState() &&
-        data->m_followedBy == other.getFollowedBy() &&
-        data->m_unitObjectPath == other.getUnitObjectPath() && data->m_jobId == other.getJobId() &&
-        data->m_jobType == other.getJobType() && data->m_jobObjectPath == other.getJobObjectPath());
+               data->m_name == other.getName() && data->m_description == other.getDescription() &&
+               data->m_loadState == other.getLoadState() &&
+               data->m_activeState == other.getActiveState() && data->m_subState == other.getSubState() &&
+               data->m_followedBy == other.getFollowedBy() &&
+               data->m_unitObjectPath == other.getUnitObjectPath() && data->m_jobId == other.getJobId() &&
+               data->m_jobType == other.getJobType() && data->m_jobObjectPath == other.getJobObjectPath());
 }
 
 QString UnitInfo::getName() const
 {
     return data->m_name;
 }
-void UnitInfo::setName(const QString& name)
+void UnitInfo::setName(const QString &name)
 {
     data->m_name = name;
 }
@@ -112,7 +132,7 @@ QString UnitInfo::getDescription() const
 {
     return data->m_description;
 }
-void UnitInfo::setDescription(const QString& description)
+void UnitInfo::setDescription(const QString &description)
 {
     data->m_description = description;
 }
@@ -121,7 +141,7 @@ QString UnitInfo::getLoadState() const
 {
     return data->m_loadState;
 }
-void UnitInfo::setLoadState(const QString& loadState)
+void UnitInfo::setLoadState(const QString &loadState)
 {
     data->m_loadState = loadState;
 }
@@ -130,7 +150,7 @@ QString UnitInfo::getActiveState() const
 {
     return data->m_activeState;
 }
-void UnitInfo::setActiveState(const QString& activeState)
+void UnitInfo::setActiveState(const QString &activeState)
 {
     data->m_activeState = activeState;
 }
@@ -139,7 +159,7 @@ QString UnitInfo::getSubState() const
 {
     return data->m_subState;
 }
-void UnitInfo::setSubState(const QString& subState)
+void UnitInfo::setSubState(const QString &subState)
 {
     data->m_subState = subState;
 }
@@ -148,7 +168,7 @@ QString UnitInfo::getFollowedBy() const
 {
     return data->m_followedBy;
 }
-void UnitInfo::setFollowedBy(const QString& followedBy)
+void UnitInfo::setFollowedBy(const QString &followedBy)
 {
     data->m_followedBy = followedBy;
 }
@@ -157,7 +177,7 @@ QString UnitInfo::getUnitObjectPath() const
 {
     return data->m_unitObjectPath;
 }
-void UnitInfo::setUnitObjectPath(const QString& unitObjectPath)
+void UnitInfo::setUnitObjectPath(const QString &unitObjectPath)
 {
     data->m_unitObjectPath = unitObjectPath;
 }
@@ -175,7 +195,7 @@ QString UnitInfo::getJobType() const
 {
     return data->m_jobType;
 }
-void UnitInfo::setJobType(const QString& jobType)
+void UnitInfo::setJobType(const QString &jobType)
 {
     data->m_jobType = jobType;
 }
@@ -184,7 +204,7 @@ QString UnitInfo::getJobObjectPath() const
 {
     return data->m_jobObjectPath;
 }
-void UnitInfo::setJobObjectPath(const QString& jobObjectPath)
+void UnitInfo::setJobObjectPath(const QString &jobObjectPath)
 {
     data->m_jobObjectPath = jobObjectPath;
 }
@@ -197,7 +217,7 @@ void UnitInfo::registerMetaType()
     qDBusRegisterMetaType<UnitInfoList>();
 }
 
-QDebug& operator<<(QDebug& debug, const UnitInfo& unit)
+QDebug &operator<<(QDebug &debug, const UnitInfo &unit)
 {
     debug << unit.getName() << unit.getDescription() << unit.getLoadState() << unit.getActiveState()
           << unit.getSubState() << unit.getFollowedBy() << unit.getUnitObjectPath()
@@ -205,7 +225,7 @@ QDebug& operator<<(QDebug& debug, const UnitInfo& unit)
     return debug;
 }
 
-QDBusArgument& operator<<(QDBusArgument& argument, const UnitInfo& unit)
+QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfo &unit)
 {
     argument.beginStructure();
     argument << unit.getName() << unit.getDescription() << unit.getLoadState()
@@ -216,7 +236,7 @@ QDBusArgument& operator<<(QDBusArgument& argument, const UnitInfo& unit)
     return argument;
 }
 
-QDataStream& operator<<(QDataStream& stream, const UnitInfo& unit)
+QDataStream &operator<<(QDataStream &stream, const UnitInfo &unit)
 {
     stream << unit.getName() << unit.getDescription() << unit.getLoadState()
            << unit.getActiveState() << unit.getSubState() << unit.getFollowedBy()
@@ -225,14 +245,14 @@ QDataStream& operator<<(QDataStream& stream, const UnitInfo& unit)
     return stream;
 }
 
-const QDBusArgument& operator>>(const QDBusArgument& argument, UnitInfo& unit)
+const QDBusArgument &operator>>(const QDBusArgument &argument, UnitInfo &unit)
 {
     QString name, description, loadState, activeState, subState, followedBy, unitObjectPath,
-        jobType, jobObjectPath;
+            jobType, jobObjectPath;
     quint32 jobId;
     argument.beginStructure();
     argument >> name >> description >> loadState >> activeState >> subState >> followedBy >>
-        unitObjectPath >> jobId >> jobType >> jobObjectPath;
+             unitObjectPath >> jobId >> jobType >> jobObjectPath;
     unit.setName(name);
     unit.setDescription(description);
     unit.setLoadState(loadState);
@@ -247,13 +267,13 @@ const QDBusArgument& operator>>(const QDBusArgument& argument, UnitInfo& unit)
     return argument;
 }
 
-const QDataStream& operator>>(QDataStream& stream, UnitInfo& unit)
+const QDataStream &operator>>(QDataStream &stream, UnitInfo &unit)
 {
     QString name, description, loadState, activeState, subState, followedBy, unitObjectPath,
-        jobType, jobObjectPath;
+            jobType, jobObjectPath;
     quint32 jobId;
     stream >> name >> description >> loadState >> activeState >> subState >> followedBy >>
-        unitObjectPath >> jobId >> jobType >> jobObjectPath;
+           unitObjectPath >> jobId >> jobType >> jobObjectPath;
     unit.setName(name);
     unit.setDescription(description);
     unit.setLoadState(loadState);
@@ -267,17 +287,17 @@ const QDataStream& operator>>(QDataStream& stream, UnitInfo& unit)
     return stream;
 }
 
-QDBusArgument& operator<<(QDBusArgument& argument, const UnitInfoList& list)
+QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfoList &list)
 {
     argument.beginArray(qMetaTypeId<UnitInfo>());
-    foreach (const UnitInfo& unit, list) {
+    foreach (const UnitInfo &unit, list) {
         argument << unit;
     }
     argument.endArray();
     return argument;
 }
 
-const QDBusArgument& operator>>(const QDBusArgument& argument, UnitInfoList& list)
+const QDBusArgument &operator>>(const QDBusArgument &argument, UnitInfoList &list)
 {
     argument.beginArray();
     while (!argument.atEnd()) {

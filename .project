@@ -1,6 +1,0 @@
-{
-	"type": "homebrew",
-	"3rdparty": ["nethogs"],
-	"ignore": ["image", "translations", "debian", "*.qrc", "*.orig", "*.desktop", "*.policy", "*.md", "COPYING", "LICENSE", ".gitignore", ".clog.toml", ".tx", "3rdparty", "tests", "docs", "tests", "assets"],
-	"license": ["GPLv3"]
-}

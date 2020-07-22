@@ -1,51 +1,55 @@
 /*
- * Copyright (C) 2019 ~ 2019 Union Technology Co., Ltd.
- *
- * Author:     zccrs <zccrs@uniontech.com>
- *
- * Maintainer: zccrs <zhangjide@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef STATS_COLLECTOR_H
 #define STATS_COLLECTOR_H
+
+#include "system_stat.h"
+#include "process_stat.h"
+#include "desktop_entry_stat.h"
+#include "system_monitor.h"
+#include "process_entry.h"
 
 #include <QList>
 #include <QMap>
 #include <QIcon>
-#include <QTimer>
 #include <QHash>
-#include <QThread>
 
-#include "system_stat.h"
-#include "process_stat.h"
-#include "process_entry.h"
-#include "desktop_entry_stat.h"
-#include "system_monitor.h"
-#include "find_window_title.h"
-#include "network_traffic_filter.h"
+class NetifMonitor;
+class FindWindowTitle;
+class QTimer;
+class QThread;
 
 void readProcStatsCallback(ProcStat &ps, void *context);
 void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps);
 
-struct net_io {
-    qulonglong  sentBytes;
-    qulonglong  recvBytes;
+struct proc_net_io_stat_t {
+    qulonglong  sentBytes;  // total sent bytes between interval
+    qulonglong  recvBytes;  // total recv bytes between interval
     qreal       sentBps;
     qreal       recvBps;
 };
-using NetIO = QSharedPointer<struct net_io>;
+struct proc_net_io_agg_t {
+    qulonglong  sentBytes; // total sent
+    qulonglong  recvBytes; // total recv
+};
+using ProcNetIOStat = QSharedPointer<struct proc_net_io_stat_t>;
+using ProcNetIOAgg  = QSharedPointer<struct proc_net_io_agg_t>;
 
 class StatsCollector : public QObject
 {
@@ -53,6 +57,7 @@ class StatsCollector : public QObject
 
 public:
     explicit StatsCollector(QObject *parent = nullptr);
+    ~StatsCollector();
 
 Q_SIGNALS:
     void cpuStatInfoUpdated(qreal cpuPercent, const QList<qreal> cpuPercents);
@@ -77,21 +82,19 @@ public Q_SLOTS:
     void setFilterType(SystemMonitor::FilterType type);
 
 private:
-    qreal calcProcCPUStats(ProcStat &prev,
-                           ProcStat &cur,
-                           CPUStat &prevCPU,        // prev total cpu stat
-                           CPUStat &curCPU,         // cur total cpu stat
-                           qulonglong interval,     // interval of time in 1/100th of a second
-                           unsigned long hz);
-    QPair<qreal, qreal> calcProcDiskIOStats(ProcStat &prev,
-                                            ProcStat &cur,
+    inline qreal calcProcCPUStats(const ProcStat &prev,
+                                  const ProcStat &cur,
+                                  const CPUStat &prevCPU,        // prev total cpu stat
+                                  const CPUStat &curCPU,         // cur total cpu stat
+                                  qulonglong interval,     // interval of time in 1/100th of a second
+                                  unsigned long hz);
+    inline QPair<qreal, qreal> calcProcDiskIOStats(const ProcStat &prev,
+                                                   const ProcStat &cur,
+                                                   qulonglong interval);
+    inline ProcNetIOStat calcProcNetIOStats(const ProcNetIOAgg &prev,
+                                            const ProcNetIOAgg &cur,
                                             qulonglong interval);
-#if 0
-    QPair<qreal, qreal> calcProcNetIOStats(ProcStat &prev,
-                                           ProcStat &cur,
-                                           qulonglong interval);
-#endif
-    void mergeSubProcNetIO(pid_t ppid, NetIO &sum);
+    inline void mergeSubProcNetIO(pid_t ppid, ProcNetIOStat &sum);
 
 private:
     enum StatIndex { kLastStat = 0, kCurrentStat = 1, kStatCount = kCurrentStat + 1 };
@@ -102,8 +105,10 @@ private:
     int m_napps {};     // current running gui apps)
     int m_nprocs {};    // current running total procs
 
-    qreal       m_interval {2.};
-    QTimer     *m_timer {nullptr};
+    qreal   m_interval {2.};
+    QTimer *m_timer {nullptr};
+
+    NetifMonitor *m_netifMonitor {};
 
     struct stat_context m_statCtx {};
 
@@ -115,7 +120,9 @@ private:
     QList<pid_t>                m_guiPIDList        {};
     QList<pid_t>                m_appList           {};
 
-    QMap<pid_t, NetIO>          m_procNetIO         {};
+    QMap<pid_t, ProcNetIOStat>  m_procNetIOStat {}; // help merge child proc's stat
+    using ProcNetIOAggHist = QPair<ProcNetIOAgg, ProcNetIOAgg>;
+    QMap<pid_t, ProcNetIOAggHist> m_procNetIOAgg  {};
 
     qulonglong  m_uptime[kStatCount]         {{}, {}};
     CPUStat     m_cpuStat[kStatCount]        {{}, {}};

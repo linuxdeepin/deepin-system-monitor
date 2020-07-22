@@ -1,8 +1,31 @@
-﻿#include <stdio.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <sys/types.h>
-#include <unistd.h>
+﻿/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "main_window.h"
+
+#include "process/system_monitor.h"
+#include "process_page_widget.h"
+#include "system_service_page_widget.h"
+#include "process/stats_collector.h"
+#include "toolbar.h"
+#include "utils.h"
+#include "settings.h"
+#include "constant.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -10,25 +33,21 @@
 #include <DShadowLine>
 #include <DStackedWidget>
 #include <DTitlebar>
-#include <QDebug>
+#include <DPalette>
+
 #include <QHBoxLayout>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
-
-#include "constant.h"
-#include "main_window.h"
-#include "process/system_monitor.h"
-#include "process_page_widget.h"
-#include "settings.h"
-#include "system_service_page_widget.h"
-#include "toolbar.h"
-#include "utils.h"
-#include "process/stats_collector.h"
+#include <QDebug>
+#include <QTimer>
+#include <QResizeEvent>
 
 std::atomic<MainWindow *> MainWindow::m_instance {nullptr};
 std::mutex MainWindow::m_mutex;
+
+DGUI_USE_NAMESPACE
 
 MainWindow::MainWindow(DWidget *parent)
     : DMainWindow(parent)
@@ -284,6 +303,13 @@ void MainWindow::initConnections()
     });
     connect(m_pages, &DStackedWidget::currentChanged, this,
     [ = ]() { m_toolbar->clearSearchText(); });
+
+    connect(this, &MainWindow::authProgressStarted, this, [ = ]() {
+        setEnabled(false);
+    });
+    connect(this, &MainWindow::authProgressEnded, this, [ = ]() {
+        setEnabled(true);
+    });
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

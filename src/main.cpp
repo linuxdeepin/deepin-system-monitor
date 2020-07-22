@@ -1,86 +1,48 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#include <sys/types.h>
-#include <unistd.h>
+#include "gui/main_window.h"
+#include "constant.h"
+#include "settings.h"
+#include "utils.h"
+#include "common/hash.h"
+#include "environments.h"
+
 #include <DApplication>
 #include <DApplicationSettings>
 #include <DGuiApplicationHelper>
-#include <DHiDPIHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
+#include <DLog>
+
 #include <QApplication>
 #include <QDateTime>
-#include <QDesktopWidget>
-#include <iostream>
-#include <thread>
-
-#include "constant.h"
-#include "gui/main_window.h"
-#include "network_traffic_filter.h"
-#include "service/service_manager.h"
-#include "settings.h"
-#include "utils.h"
 
 Q_DECLARE_METATYPE(QList<qreal>)
 
 DWIDGET_USE_NAMESPACE
-
-void defaultMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
-    QByteArray localMsg = msg.toLocal8Bit();
-    QString buf = QDateTime::currentDateTime().toString(Qt::ISODateWithMs);
-    QByteArray local = buf.toLocal8Bit();
-    const char *ts = local.constData();
-    switch (type) {
-    case QtDebugMsg:
-        fprintf(stderr, "%s [Debug]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                context.line, context.function);
-        break;
-    case QtInfoMsg:
-        fprintf(stderr, "%s [Info]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                context.line, context.function);
-        break;
-    case QtWarningMsg:
-        fprintf(stderr, "%s [Warning]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
-                context.file, context.line, context.function);
-        break;
-    case QtCriticalMsg:
-        fprintf(stderr, "%s [Critical]: %s (%s:%u, %s)\n", ts, localMsg.constData(),
-                context.file, context.line, context.function);
-        break;
-    case QtFatalMsg:
-        fprintf(stderr, "%s [Fatal]: %s (%s:%u, %s)\n", ts, localMsg.constData(), context.file,
-                context.line, context.function);
-        break;
-    }
-}
+DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    qRegisterMetaType<QList<qreal>>();
+    utils::init_seed();
 
-    qInstallMessageHandler(defaultMessageOutput);
+    qRegisterMetaType<QList<qreal>>();
 
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     DApplication::loadDXcbPlugin();
@@ -103,7 +65,7 @@ int main(int argc, char *argv[])
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");
         app.setApplicationDisplayName(DApplication::translate("App.About", "System Monitor"));
-        app.setApplicationVersion(DApplication::buildVersion("1.0"));
+        app.setApplicationVersion(VERSION);
 
         app.setProductIcon(QIcon::fromTheme("deepin-system-monitor"));
         app.setProductName(DApplication::translate("App.About", "System Monitor"));
@@ -114,8 +76,8 @@ int main(int argc, char *argv[])
 
         DApplicationSettings appSettings;
 
-        std::thread nethogs_monitor_thread(&NetworkTrafficFilter::nethogsMonitorThreadProc);
-        nethogs_monitor_thread.detach();
+        DLogManager::registerConsoleAppender();
+        DLogManager::registerFileAppender();
 
         MainWindow *window = MainWindow::instance();
         window->initDisplay();

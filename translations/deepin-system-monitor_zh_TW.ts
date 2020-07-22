@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_TW">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">確定</translation>
+        <translation>確定</translation>
     </message>
 </context>
 <context>
@@ -386,6 +384,10 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">結束程序失敗</translation>
+    </message>
+    <message>
         <source>Failed to pause process</source>
         <translation>暫停程序失敗</translation>
     </message>
@@ -407,7 +409,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="unfinished"></translation>
+        <translation>結束進程失敗</translation>
     </message>
 </context>
 <context>
@@ -666,13 +668,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>系統服務</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">確定</translation>
     </message>
 </context>
 </TS>

@@ -1,37 +1,40 @@
 ﻿/*
- * Copyright (C) 2019 ~ 2019 Union Technology Co., Ltd.
- *
- * Author:     zccrs <zccrs@uniontech.com>
- *
- * Maintainer: zccrs <zhangjide@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#include <QDebug>
-#include <DDesktopEntry>
-#include <QPixmap>
-#include <QDateTime>
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "stats_collector.h"
+
+#include "find_window_title.h"
+#include "netif_monitor.h"
 #include "process_entry.h"
 #include "utils.h"
 
+#include <DDesktopEntry>
+
+#include <QDebug>
+#include <QPixmap>
+#include <QDateTime>
+#include <QUrl>
+#include <QTimer>
+#include <QThread>
+#include <QApplication>
+
 #define SECTOR_SHIFT 9
 #define SECTOR_SIZE (1 << SECTOR_SHIFT)
-
-DCORE_USE_NAMESPACE
 
 // unit in milliseconds
 static const int kUpdateInterval = 2000;
@@ -119,6 +122,13 @@ StatsCollector::StatsCollector(QObject *parent) :
     }
 }
 
+StatsCollector::~StatsCollector()
+{
+    m_netifMonitor->requestQuit();
+    m_netifMonitor->quit();
+    m_netifMonitor->wait();
+}
+
 void StatsCollector::start()
 {
     (void)QApplication::instance();
@@ -143,6 +153,10 @@ void StatsCollector::start()
         }
     });
     m_cacheThread.start();
+
+    m_netifMonitor = new NetifMonitor(this);
+    connect(m_netifMonitor, &QThread::finished, m_netifMonitor, &QObject::deleteLater);
+    m_netifMonitor->start();
 }
 
 void readProcStatsCallback(ProcStat &ps, void *context)
@@ -217,13 +231,38 @@ void readProcStatsCallback(ProcStat &ps, void *context)
         proc.setReadBps(rwbps.first);
         proc.setWriteBps(rwbps.second);
 
-        if (ctx->m_procNetIO.contains(ps->pid)) {
-            auto pidIO = ctx->m_procNetIO[ps->pid];
-            proc.setSentBytes(pidIO->sentBytes);
-            proc.setRecvBytes(pidIO->recvBytes);
-            proc.setSentBps(pidIO->sentBps);
-            proc.setRecvBps(pidIO->recvBps);
+        // process net io stat
+        // backup last stat
+        if (ctx->m_procNetIOAgg.contains(ps->pid)) {
+            ctx->m_procNetIOAgg[ps->pid].first = ctx->m_procNetIOAgg[ps->pid].second;
+        } else {
+            auto stub = QSharedPointer<struct proc_net_io_agg_t>::create();
+            ctx->m_procNetIOAgg[ps->pid].first = stub;
+            ctx->m_procNetIOAgg[ps->pid].second = stub;
         }
+
+        // deep copy
+        auto curSockIOAgg = QSharedPointer<struct proc_net_io_agg_t>::create();
+        curSockIOAgg->recvBytes = ctx->m_procNetIOAgg[ps->pid].second->recvBytes;
+        curSockIOAgg->sentBytes = ctx->m_procNetIOAgg[ps->pid].second->sentBytes;
+        for (auto ino : ps->sockInodes) {
+            SockIOStat sockIOStat;
+            bool ok = ctx->m_netifMonitor->getSockIOStatByInode(ino, sockIOStat);
+            if (ok) {
+                curSockIOAgg->recvBytes += sockIOStat->rx_bytes;
+                curSockIOAgg->sentBytes += sockIOStat->tx_bytes;
+            }
+        }
+        ctx->m_procNetIOAgg[ps->pid].second = curSockIOAgg;
+
+        auto procNetIOStat = ctx->calcProcNetIOStats(ctx->m_procNetIOAgg[ps->pid].first,
+                                                     ctx->m_procNetIOAgg[ps->pid].second,
+                                                     interval);
+        ctx->m_procNetIOStat[ps->pid] = procNetIOStat;
+        proc.setSentBytes(procNetIOStat->sentBytes);
+        proc.setRecvBytes(procNetIOStat->recvBytes);
+        proc.setSentBps(procNetIOStat->sentBps);
+        proc.setRecvBps(procNetIOStat->recvBps);
 
         ctx->m_procEntryMap[ps->pid] = proc;
     }
@@ -366,6 +405,8 @@ void StatsCollector::updateStatus()
     m_guiPIDList.clear();
     m_appList.clear();
 
+    m_procNetIOStat.clear();
+
     m_wm->updateWindowInfos();
     m_guiPIDList = m_wm->getWindowPids();
 
@@ -373,22 +414,6 @@ void StatsCollector::updateStatus()
     for (auto xid : trayProcessXids) {
         auto pid = m_wm->getWindowPid(xid);
         m_trayPIDToWndMap[pid] = xid;
-    }
-
-    // Update process's network status.
-    NetworkTrafficFilter::Update update {};
-    m_procNetIO.clear();
-
-    while (NetworkTrafficFilter::getRowUpdate(update)) {
-        if (update.action != NETHOGS_APP_ACTION_REMOVE) {
-            auto pidIO = NetIO(new net_io{});
-            pidIO->recvBps = qreal(update.record.recv_kbs) * 1024;
-            pidIO->sentBps = qreal(update.record.sent_kbs) * 1024;
-            pidIO->recvBytes = update.record.recv_bytes;
-            pidIO->sentBytes = update.record.sent_bytes;
-
-            m_procNetIO[update.record.pid] = pidIO;
-        }
     }
 
     b = ProcessStat::readProcStats(readProcStatsCallback, this);
@@ -406,56 +431,54 @@ void StatsCollector::updateStatus()
         }
         return b;
     };
-    if (m_filterType == SystemMonitor::OnlyGUI) {
-        for (auto app : m_appList) {
-            if (m_guiPIDList.contains(app))
-                continue;
+    for (auto app : m_appList) {
+        if (m_guiPIDList.contains(app))
+            continue;
 
-            auto isCmdInList = [ = ](QByteArray cmd) {
-                bool b = false;
-
-                auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
-                for (auto s : m_shellList) {
-                    if (subCmd.startsWith(s.toLocal8Bit())) {
-                        b = true;
-                        return b;
-                    }
-                }
-                for (auto s : m_scriptingList) {
-                    if (cmd.startsWith(s.toLocal8Bit())) {
-                        b = true;
-                        return b;
-                    }
-                }
-                return b;
-            };
-            auto cmd = m_procMap[kCurrentStat][app]->cmdline[0];
+        auto isCmdInList = [ = ](QByteArray cmd) {
             bool b = false;
-            if (cmd[0] == '/') {
-                // cmd starts with full path
-                b = isCmdInList(cmd);
-            } else {
-                // cmd starts with raw name
-                for (auto p : m_envPathList) {
-                    p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
 
-                    b = isCmdInList(p);
-                    if (b) {
-                        break;
-                    }
+            auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
+            for (auto s : m_shellList) {
+                if (subCmd.startsWith(s.toLocal8Bit())) {
+                    b = true;
+                    return b;
                 }
             }
-            if (b) {
-                continue;
+            for (auto s : m_scriptingList) {
+                if (cmd.startsWith(s.toLocal8Bit())) {
+                    b = true;
+                    return b;
+                }
             }
+            return b;
+        };
+        auto cmd = m_procMap[kCurrentStat][app]->cmdline[0];
+        bool b = false;
+        if (cmd[0] == '/') {
+            // cmd starts with full path
+            b = isCmdInList(cmd);
+        } else {
+            // cmd starts with raw name
+            for (auto p : m_envPathList) {
+                p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
 
-            if (m_pidCtoPMapping.contains(app) &&
-                    anyRootIsGuiProc(m_pidCtoPMapping[app])) {
-                continue;
+                b = isCmdInList(p);
+                if (b) {
+                    break;
+                }
             }
-
-            filteredAppList << app;
         }
+        if (b) {
+            continue;
+        }
+
+        if (m_pidCtoPMapping.contains(app) &&
+                anyRootIsGuiProc(m_pidCtoPMapping[app])) {
+            continue;
+        }
+
+        filteredAppList << app;
     }
 
     // check filterType
@@ -500,7 +523,7 @@ void StatsCollector::updateStatus()
                 }
             } else {
                 // traffic from children
-                NetIO sumIO = NetIO(new net_io{});
+                ProcNetIOStat sumIO = QSharedPointer<struct proc_net_io_stat_t>::create();
 
                 mergeSubProcNetIO(pid, sumIO);
 
@@ -535,10 +558,10 @@ void StatsCollector::setFilterType(SystemMonitor::FilterType type)
     }
 }
 
-qreal StatsCollector::calcProcCPUStats(ProcStat &prev,
-                                       ProcStat &cur,
-                                       CPUStat &prevCPU,
-                                       CPUStat &curCPU,
+qreal StatsCollector::calcProcCPUStats(const ProcStat &prev,
+                                       const ProcStat &cur,
+                                       const CPUStat &prevCPU,
+                                       const CPUStat &curCPU,
                                        qulonglong interval,
                                        unsigned long hz)
 {
@@ -582,8 +605,8 @@ qreal StatsCollector::calcProcCPUStats(ProcStat &prev,
 #endif
 }
 
-QPair<qreal, qreal> StatsCollector::calcProcDiskIOStats(ProcStat &prev,
-                                                        ProcStat &cur,
+QPair<qreal, qreal> StatsCollector::calcProcDiskIOStats(const ProcStat &prev,
+                                                        const ProcStat &cur,
                                                         qulonglong interval)
 {
     qreal rdio {}, wrio {};
@@ -625,7 +648,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             if (!title.isEmpty()) {
                 nameSet = true;
                 proc.setDisplayName(QString("%1: %2")
-                                    .arg(DApplication::translate("Process.Table", "Tray"))
+                                    .arg(QApplication::translate("Process.Table", "Tray"))
                                     .arg(title));
             } else if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
                 // can't grab window title, try use desktop file instead
@@ -634,7 +657,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 if (!de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(QString("%1: %2")
-                                        .arg(DApplication::translate("Process.Table", "Tray"))
+                                        .arg(QApplication::translate("Process.Table", "Tray"))
                                         .arg(de->displayName));
                 }
                 if (!de->icon.isNull()) {
@@ -668,6 +691,9 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
 
             if (ctx.m_desktopEntryCache.contains(proc.getName())) {
                 de = ctx.m_desktopEntryCache[proc.getName()];
+                if (de->icon.isNull()) {
+                    de->icon = ctx.m_defaultIcon;
+                }
                 if (!iconSet) {
                     iconSet = true;
                     proc.setIcon(de->icon);
@@ -681,7 +707,11 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                         de = ctx.m_desktopEntryCache[proc.getName()];
                     } else {
                         de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                        ctx.m_desktopEntryCache[de->name] = de;
+                        // rare case, if .desktopFile contains no icon, we need use default icon,
+                        // otherwise cached desktop entry's icon will be null
+                        if (!de->icon.isNull()) {
+                            ctx.m_desktopEntryCache[de->name] = de;
+                        }
                     }
                     if (!de->icon.isNull()) {
                         iconSet = true;
@@ -753,7 +783,9 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     de = ctx.m_desktopEntryCache[proc.getName()];
                 } else {
                     de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                    ctx.m_desktopEntryCache[de->name] = de;
+                    if (!de->icon.isNull()) {
+                        ctx.m_desktopEntryCache[de->name] = de;
+                    }
                 }
                 if (!de->displayName.isEmpty()) {
                     nameSet = true;
@@ -796,7 +828,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
     }
 }
 
-void StatsCollector::mergeSubProcNetIO(pid_t ppid, NetIO &sum)
+void StatsCollector::mergeSubProcNetIO(pid_t ppid, ProcNetIOStat &sum)
 {
     auto ppe = m_procEntryMap[ppid];
     auto it = m_pidPtoCMapping.find(ppid);
@@ -810,9 +842,16 @@ void StatsCollector::mergeSubProcNetIO(pid_t ppid, NetIO &sum)
     sum->sentBytes += ppe.getSentBytes();
 }
 
-#if 0
-QPair<qreal, qreal> StatsCollector::calcProcNetIOStats(ProcStat &prev, ProcStat &cur, qulonglong interval)
+ProcNetIOStat StatsCollector::calcProcNetIOStats(const ProcNetIOAgg &prev,
+                                                 const ProcNetIOAgg &cur,
+                                                 qulonglong interval)
 {
-    return {};
+    auto stat = QSharedPointer<struct proc_net_io_stat_t>::create();
+
+    stat->sentBytes = cur->sentBytes - prev->sentBytes;
+    stat->recvBytes = cur->recvBytes - prev->recvBytes;
+    stat->sentBps = stat->sentBytes / interval * 100;
+    stat->recvBps = stat->recvBytes / interval * 100;
+
+    return stat;
 }
-#endif

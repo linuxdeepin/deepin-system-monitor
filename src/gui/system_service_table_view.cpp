@@ -1,4 +1,39 @@
-﻿#include <DApplication>
+﻿/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "system_service_table_view.h"
+
+#include "main_window.h"
+#include "dialog/error_dialog.h"
+#include "service_name_sub_input_dialog.h"
+#include "common/error_context.h"
+#include "settings.h"
+#include "toolbar.h"
+
+#include "model/system_service_sort_filter_proxy_model.h"
+#include "model/system_service_table_model.h"
+
+#include "dbus/systemd1_unit_interface.h"
+
+#include "service/service_manager.h"
+#include "service/system_service_entry.h"
+
+#include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
 #include <DHeaderView>
@@ -6,22 +41,12 @@
 #include <DMenu>
 #include <DMessageBox>
 #include <DSpinner>
-#include <QDebug>
-#include <QFutureWatcher>
+
 #include <QScrollBar>
 #include <QtConcurrent>
-
-#include "common/error_context.h"
-#include "main_window.h"
-#include "model/system_service_sort_filter_proxy_model.h"
-#include "model/system_service_table_model.h"
-#include "service/service_manager.h"
-#include "service/system_service_entry.h"
-#include "service_name_sub_input_dialog.h"
-#include "settings.h"
-#include "system_service_table_view.h"
-#include "toolbar.h"
-#include "dialog/error_dialog.h"
+#include <QKeyEvent>
+#include <QShortcut>
+#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
 
@@ -117,9 +142,26 @@ void SystemServiceTableView::startService()
         }
     }
 
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
-    mgr->startService(sname);
+
+    Q_EMIT mwnd->authProgressStarted();
+    auto *watcher  = new QFutureWatcher<ErrorContext>();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
+        Q_EMIT mwnd->authProgressEnded();
+        refreshServiceStatus(sname);
+        if (watcher->result()) {
+            Q_EMIT mgr->errorOccurred(watcher->result());
+        }
+        watcher->deleteLater();
+    });
+    QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname]() {
+        auto ec = mgr->startService(sname);
+        return ec;
+    });
+    watcher->setFuture(fu);
 }
 
 void SystemServiceTableView::stopService()
@@ -148,9 +190,26 @@ void SystemServiceTableView::stopService()
         }
     }
 
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
-    mgr->stopService(sname);
+
+    Q_EMIT mwnd->authProgressStarted();
+    auto *watcher  = new QFutureWatcher<ErrorContext>();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
+        Q_EMIT mwnd->authProgressEnded();
+        refreshServiceStatus(sname);
+        if (watcher->result()) {
+            Q_EMIT mgr->errorOccurred(watcher->result());
+        }
+        watcher->deleteLater();
+    });
+    QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname]() {
+        auto ec = mgr->stopService(sname);
+        return ec;
+    });
+    watcher->setFuture(fu);
 }
 
 void SystemServiceTableView::restartService()
@@ -179,9 +238,26 @@ void SystemServiceTableView::restartService()
         }
     }
 
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
-    mgr->restartService(sname);
+
+    Q_EMIT mwnd->authProgressStarted();
+    auto *watcher  = new QFutureWatcher<ErrorContext>();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
+        Q_EMIT mwnd->authProgressEnded();
+        refreshServiceStatus(sname);
+        if (watcher->result()) {
+            Q_EMIT mgr->errorOccurred(watcher->result());
+        }
+        watcher->deleteLater();
+    });
+    QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname]() {
+        auto ec = mgr->restartService(sname);
+        return ec;
+    });
+    watcher->setFuture(fu);
 }
 
 void SystemServiceTableView::setServiceStartupMode(bool autoStart)
@@ -192,9 +268,26 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
 
     auto sname = m_selectedSName.toString();
 
+    auto *mwnd = MainWindow::instance();
+    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
-    mgr->setServiceStartupMode(sname, autoStart);
+
+    Q_EMIT mwnd->authProgressStarted();
+    auto *watcher  = new QFutureWatcher<ErrorContext>();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
+        Q_EMIT mwnd->authProgressEnded();
+        refreshServiceStatus(sname);
+        if (watcher->result()) {
+            Q_EMIT mgr->errorOccurred(watcher->result());
+        }
+        watcher->deleteLater();
+    });
+    QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname, autoStart]() {
+        auto ec = mgr->setServiceStartupMode(sname, autoStart);
+        return ec;
+    });
+    watcher->setFuture(fu);
 }
 
 void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
@@ -213,6 +306,21 @@ void SystemServiceTableView::adjustInfoLabelVisibility()
         m_noMatchingResultLabel->move(
             rect().center() - m_noMatchingResultLabel->rect().center());
     setUpdatesEnabled(true);
+}
+
+void SystemServiceTableView::refreshServiceStatus(const QString sname)
+{
+    auto *mgr = ServiceManager::instance();
+    Q_ASSERT(mgr != nullptr);
+
+    auto sn = mgr->normalizeServiceId(sname);
+    auto o = Systemd1UnitInterface::normalizeUnitPath(sn);
+    auto entry = mgr->updateServiceEntry(o.path());
+
+    if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        auto *timer = new CustomTimer(mgr, this);
+        timer->start(o.path());
+    }
 }
 
 void SystemServiceTableView::search(const QString &pattern)
@@ -413,14 +521,13 @@ void SystemServiceTableView::initConnections()
             auto index = selectionModel()->selectedRows()[0];
             if (index.isValid()) {
                 auto state = m_model->getUnitFileState(m_proxyModel->mapToSource(index));
-                auto uname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
-                if (isUnitNoOp(state) || uname.endsWith("@")) {
+                auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
+                if (sname.endsWith("@") || isUnitNoOp(state)) {
                     m_setServiceStartupModeMenu->setEnabled(false);
                 } else {
                     m_setServiceStartupModeMenu->setEnabled(true);
                 }
 
-                auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
                 if (isServiceAutoStartup(sname, state)) {
                     m_setAutoStartAction->setEnabled(false);
                     m_setManualStartAction->setEnabled(true);

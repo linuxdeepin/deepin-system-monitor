@@ -4,7 +4,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.renice!message" line="0"/>
 			<source>Authentication is required to change process priority</source>
-			<translation>Аутентификација је неопходна за промену приоритета процеса</translation>
+			<translation>Идентификација је неопходна за промену приоритета процеса</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.renice!description" line="0"/>
@@ -14,7 +14,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!message" line="0"/>
 			<source>Authentication is required to control other users&apos; processes</source>
-			<translation>Аутентификација је неопходна за управљање процесима других корисника</translation>
+			<translation>Идентификација је неопходна за управљање процесима других корисника</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!description" line="0"/>
@@ -24,7 +24,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.systemctl!message" line="0"/>
 			<source>Authentication is required to set service startup type</source>
-			<translation>Аутентификација је неопходна за поставку режима покретања услуга</translation>
+			<translation>Идентификација је неопходна за поставку режима покретања услуга</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.systemctl!description" line="0"/>

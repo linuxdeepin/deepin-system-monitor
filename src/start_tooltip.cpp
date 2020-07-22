@@ -1,30 +1,31 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      Wang Yong <wangyong@deepin.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "start_tooltip.h"
+
+#include "utils.h"
+#include "gui/ui_common.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DPalette>
+
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
@@ -32,9 +33,6 @@
 #include <QPainter>
 #include <QStyle>
 #include <QWidget>
-
-#include "start_tooltip.h"
-#include "utils.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,7 +42,7 @@ StartTooltip::StartTooltip(QWidget *parent)
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | Qt::BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
 
-    iconImg = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("kill.svg"));
+    iconImg = DHiDPIHelper::loadNxPixmap(iconPathFromQrc("kill.svg"));
 
     installEventFilter(this);
 
@@ -66,8 +64,8 @@ void StartTooltip::setWindowManager(DWindowManager *wm)
 
     WindowRect rootWindowRect = windowManager->getRootWindowRect();
     setGeometry(QStyle::alignedRect(
-        Qt::LeftToRight, Qt::AlignCenter, this->size(),
-        QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)));
+                    Qt::LeftToRight, Qt::AlignCenter, this->size(),
+                    QRect(rootWindowRect.x, rootWindowRect.y, rootWindowRect.width, rootWindowRect.height)));
 }
 
 bool StartTooltip::eventFilter(QObject *, QEvent *event)
@@ -90,8 +88,8 @@ void StartTooltip::paintEvent(QPaintEvent *)
 
     painter.setOpacity(1);
     qreal devicePixelRatio = qApp->devicePixelRatio();
-    painter.drawPixmap(QPoint((rect().width() - iconImg.width() / devicePixelRatio) / 2,
-                              RECTANGLE_PADDING * devicePixelRatio),
+    painter.drawPixmap(QPoint(int((rect().width() - iconImg.width() / devicePixelRatio) / 2),
+                              int(RECTANGLE_PADDING * devicePixelRatio)),
                        iconImg);
 
     auto *dAppHelper = DApplicationHelper::instance();

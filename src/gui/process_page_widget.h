@@ -1,26 +1,40 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef PROCESS_PAGE_WIDGET_H
 #define PROCESS_PAGE_WIDGET_H
 
 #include <DApplicationHelper>
 #include <DButtonBox>
-#include <DDialog>
 #include <DFrame>
 #include <DStackedWidget>
-#include <QAction>
-#include <QHBoxLayout>
-#include <QMenu>
+#include <DLabel>
 
-#include "interactive_kill.h"
-#include "monitor_compact_view.h"
-#include "monitor_expand_view.h"
-#include "process_table_view.h"
-#include "settings.h"
-#include "toolbar.h"
 #include "ui_common.h"
 
 DWIDGET_USE_NAMESPACE
 
 class MainWindow;
+class InteractiveKill;
+class MonitorCompactView;
+class MonitorExpandView;
+class ProcessTableView;
+class Settings;
 
 class ProcessPageWidget : public DFrame
 {

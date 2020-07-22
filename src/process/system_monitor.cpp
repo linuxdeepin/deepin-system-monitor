@@ -1,31 +1,40 @@
-﻿#include <errno.h>
-#include <proc/sysinfo.h>
-#include <pwd.h>
-#include <sched.h>
-#include <signal.h>
-#include <sys/resource.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
+﻿/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#include <DApplication>
-#include <QDebug>
-#include <QIcon>
+#include "system_monitor.h"
 
-#include "common/error_context.h"
-#include "constant.h"
+#include "stats_collector.h"
 #include "priority_controller.h"
 #include "process/process_entry.h"
 #include "process_controller.h"
-#include "system_monitor.h"
+#include "common/error_context.h"
 #include "utils.h"
-#include "stats_collector.h"
+
+#include <QApplication>
+#include <QDebug>
+#include <QIcon>
+
+#include <errno.h>
+#include <sys/resource.h>
+#include <signal.h>
 
 std::atomic<SystemMonitor *> SystemMonitor::m_instance;
 std::mutex SystemMonitor::m_mutex;
-
-DWIDGET_USE_NAMESPACE
-using namespace Utils;
 
 void SystemMonitor::startMonitorJob()
 {
@@ -67,7 +76,7 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
         errorContext.setCode(ErrorContext::kErrorTypeSystem);
         errorContext.setSubCode(err);
         errorContext.setErrorName(
-            DApplication::translate("Process.Priority", "Failed to change process priority"));
+            QApplication::translate("Process.Priority", "Failed to change process priority"));
         QString errmsg = QString("PID: %1, Error: [%2] %3").arg(pid).arg(err).arg(strerror(err));
         errorContext.setErrorMessage(errmsg);
         return errorContext;
@@ -98,10 +107,10 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
                         ErrorContext ec {};
                         ec.setCode(ErrorContext::kErrorTypeSystem);
                         ec.setSubCode(code);
-                        ec.setErrorName(DApplication::translate("Process.Priority",
+                        ec.setErrorName(QApplication::translate("Process.Priority",
                                                                 "Failed to change process priority"));
                         ec.setErrorMessage(
-                            DApplication::translate("Process.Priority", "PID: %1, Error: [%2] %3")
+                            QApplication::translate("Process.Priority", "PID: %1, Error: [%2] %3")
                             .arg(pid)
                             .arg(code)
                             .arg(strerror(code)));
@@ -159,19 +168,19 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
     auto fmsg = [ = ](int signal) -> QString {
         if (signal == SIGTERM)
         {
-            return DApplication::translate("Process.Signal", "Failed to end process");
+            return QApplication::translate("Process.Signal", "Failed to end process");
         } else if (signal == SIGSTOP)
         {
-            return DApplication::translate("Process.Signal", "Failed to pause process");
+            return QApplication::translate("Process.Signal", "Failed to pause process");
         } else if (signal == SIGCONT)
         {
-            return DApplication::translate("Process.Signal", "Failed to resume process");
+            return QApplication::translate("Process.Signal", "Failed to resume process");
         } else if (signal == SIGKILL)
         {
-            return DApplication::translate("Process.Signal", "Failed to kill process");
+            return QApplication::translate("Process.Signal", "Failed to kill process");
         } else
         {
-            return DApplication::translate("Process.Signal", "Unknown error");
+            return QApplication::translate("Process.Signal", "Unknown error");
         }
     };
     auto pctl = [ = ](pid_t pid, int signal) {
@@ -220,7 +229,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
             } else {
                 ec = errfmt(
                          errno,
-                         DApplication::translate("Process.Signal", "Failed in sending signal to process"),
+                         QApplication::translate("Process.Signal", "Failed in sending signal to process"),
                          pid, SIGCONT, ec);
                 Q_EMIT processControlResultReady(ec);
                 return;

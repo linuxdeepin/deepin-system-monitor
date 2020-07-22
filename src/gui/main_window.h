@@ -1,19 +1,33 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#include <mutex>
-#include <thread>
+#include "ui_common.h"
 
-#include <DButtonBox>
 #include <DMainWindow>
-#include <DSearchEdit>
 #include <DShadowLine>
 #include <DSpinner>
 #include <DStackedWidget>
-#include <DWidget>
-#include <QTimer>
 
-#include "ui_common.h"
+#include <mutex>
+#include <thread>
 
 DWIDGET_USE_NAMESPACE
 
@@ -21,6 +35,7 @@ class Toolbar;
 class SystemServicePageWidget;
 class ProcessPageWidget;
 class Settings;
+class QTimer;
 
 class MainWindow : public DMainWindow
 {
@@ -50,6 +65,8 @@ Q_SIGNALS:
     void killProcessPerformed();
     void displayModeChanged(DisplayMode mode);
     void loadingStatusChanged(bool loading);
+    void authProgressStarted();
+    void authProgressEnded();
 
 public Q_SLOTS:
     inline void initDisplay()

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -198,7 +196,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Aceptar</translation>
+        <translation>Aceptar</translation>
     </message>
 </context>
 <context>
@@ -385,6 +383,10 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Process.Signal</name>
+    <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">No se pudo terminar el proceso</translation>
+    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>No se ha podido detener el proceso</translation>
@@ -639,15 +641,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Expandir</translation>
+        <translation>Expandida</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Compactar</translation>
+        <translation>Compacta</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Ver</translation>
+        <translation>Vista</translation>
     </message>
 </context>
 <context>
@@ -666,21 +668,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Servicios</translation>
-    </message>
-</context>
-<context>
-    <name>error.dialog</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">Aceptar</translation>
-    </message>
-    <message>
-        <source>Show Details</source>
-        <translation type="vanished">Mostrar detalles</translation>
-    </message>
-    <message>
-        <source>Hide Details</source>
-        <translation type="vanished">Ocultar detalles</translation>
     </message>
 </context>
 </TS>

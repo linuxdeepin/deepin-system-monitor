@@ -1,23 +1,28 @@
 ﻿/*
- * Copyright (C) 2019 ~ 2019 Union Technology Co., Ltd.
- *
- * Author:     zccrs <zccrs@uniontech.com>
- *
- * Maintainer: zccrs <zhangjide@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:      maojj <maojunjie@uniontech.com>
+* Maintainer:  maojj <maojunjie@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "system_stat.h"
+
+#include "common/hash.h"
+
+#include <QMap>
+#include <QScopedArrayPointer>
+#include <QDebug>
 
 #include <sys/types.h>
 #include <stdio.h>
@@ -25,12 +30,8 @@
 #include <unistd.h>
 #include <linux/limits.h>
 #include <pwd.h>
-
-#include <QMap>
-#include <QScopedArrayPointer>
-#include <QDebug>
-
-#include "system_stat.h"
+#include <arpa/inet.h>
+#include <ifaddrs.h>
 
 #define PROC_PATH_UPTIME    "/proc/uptime"
 #define PROC_PATH_STAT      "/proc/stat"
@@ -39,6 +40,11 @@
 #define PROC_PATH_DISK      "/proc/diskstats"
 #define PROC_PATH_NET       "/proc/net/dev"
 #define SYSFS_PATH_BLOCK    "/sys/block"
+
+#define PROC_PATH_SOCK_TCP  "/proc/net/tcp"
+#define PROC_PATH_SOCK_TCP6 "/proc/net/tcp6"
+#define PROC_PATH_SOCK_UDP  "/proc/net/udp"
+#define PROC_PATH_SOCK_UDP6 "/proc/net/udp6"
 
 #define MAX_NAME_LEN 128
 
@@ -383,6 +389,174 @@ bool SystemStat::readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap)
     }
 
     return b;
+}
+
+bool SystemStat::readSockStat(SockStatMap &statMap)
+{
+    bool ok {true};
+
+    auto parseSocks = [](int family, int proto, const char *proc, SockStatMap & statMap) -> bool {
+        bool ok {true};
+        FILE *fp {};
+        const size_t BLEN = 4096;
+        QByteArray buffer {BLEN, 0};
+        int nr {};
+        ino_t ino {};
+        char s_addr[128] {}, d_addr[128] {};
+        uint64_t hash {};
+        QByteArray fmtbuf {};
+        uint64_t cchash[2] {};
+        QString patternA {}, patternB {};
+
+        errno = 0;
+        if (!(fp = fopen(proc, "r")))
+        {
+            print_err(errno, QString("open %1 failed").arg(PROC_PATH_SOCK_TCP));
+            return !ok;
+        }
+
+        while (fgets(buffer.data(), BLEN, fp))
+        {
+            auto stat = QSharedPointer<struct sock_stat_t>::create();
+
+            //*****************************************************************
+            nr = sscanf(buffer.data(), "%*s %64[0-9A-Fa-f]:%x %64[0-9A-Fa-f]:%x %*x %*s %*s %*s %u %*u %ld",
+                        s_addr,
+                        &stat->s_port,
+                        d_addr,
+                        &stat->d_port,
+                        &stat->uid,
+                        &ino);
+
+            // ignore first line
+            if (nr == 0)
+                continue;
+
+            // socket still in waiting state
+            if (ino == 0) {
+                continue;
+            }
+
+            stat->ino = ino;
+            stat->sa_family = family;
+            stat->proto = proto;
+
+            // saddr & daddr
+            if (family == AF_INET6) {
+                sscanf(s_addr, "%08x%08x%08x%08x",
+                       &stat->s_addr.in6.s6_addr32[0],
+                       &stat->s_addr.in6.s6_addr32[1],
+                       &stat->s_addr.in6.s6_addr32[2],
+                       &stat->s_addr.in6.s6_addr32[3]);
+                sscanf(d_addr, "%08x%08x%08x%08x",
+                       &stat->d_addr.in6.s6_addr32[0],
+                       &stat->d_addr.in6.s6_addr32[1],
+                       &stat->d_addr.in6.s6_addr32[2],
+                       &stat->d_addr.in6.s6_addr32[3]);
+                // convert ipv4 mapped ipv6 address to ipv4
+                if (stat->s_addr.in6.s6_addr32[0] == 0x0 &&
+                        stat->s_addr.in6.s6_addr32[1] == 0x0 &&
+                        stat->s_addr.in6.s6_addr32[2] == 0xffff0000) {
+                    stat->sa_family = AF_INET;
+                    stat->s_addr.in4.s_addr = stat->s_addr.in6.s6_addr32[3];
+                    stat->d_addr.in4.s_addr = stat->d_addr.in6.s6_addr32[3];
+                }
+            } else {
+                sscanf(s_addr, "%x", &stat->s_addr.in4.s_addr);
+                sscanf(d_addr, "%x", &stat->d_addr.in4.s_addr);
+            }
+
+            if (stat->sa_family == AF_INET) {
+                char saddr_str[INET_ADDRSTRLEN + 1] {}, daddr_str[INET_ADDRSTRLEN + 1] {};
+                inet_ntop(AF_INET, &stat->s_addr.in4, saddr_str, INET_ADDRSTRLEN);
+                inet_ntop(AF_INET, &stat->d_addr.in4, daddr_str, INET_ADDRSTRLEN);
+
+                patternA = QString("%1:%2-%3:%4").arg(saddr_str).arg(stat->s_port).arg(daddr_str).arg(stat->d_port);
+                if (proto == IPPROTO_TCP) {
+                    patternB = QString("%1:%2-%3:%4").arg(daddr_str).arg(stat->d_port).arg(saddr_str).arg(stat->s_port);
+                }
+
+            } else if (stat->sa_family == AF_INET6) {
+                char saddr6_str[INET6_ADDRSTRLEN + 1] {}, daddr6_str[INET6_ADDRSTRLEN + 1] {};
+                inet_ntop(AF_INET6, &stat->s_addr.in6, saddr6_str, INET6_ADDRSTRLEN);
+                inet_ntop(AF_INET6, &stat->d_addr.in6, daddr6_str, INET6_ADDRSTRLEN);
+
+                patternA = QString("%1:%2-%3:%4").arg(saddr6_str).arg(stat->s_port).arg(daddr6_str).arg(stat->d_port);
+                if (proto == IPPROTO_TCP) {
+                    patternB = QString("%1:%2-%3:%4").arg(daddr6_str).arg(stat->d_port).arg(saddr6_str).arg(stat->s_port);
+                }
+
+            } else {
+                // unexpected here
+            }
+
+            fmtbuf = patternA.toLocal8Bit();
+            utils::hash(fmtbuf.constData(), fmtbuf.length(), utils::global_seed, cchash);
+            hash = cchash[0];
+            statMap.insert(hash, stat);
+
+            // if it's TCP, we need add reverse mapping due to its bidirectional piping feature,
+            // otherwise we wont be able to get the inode
+            if (proto == IPPROTO_TCP) {
+                fmtbuf = patternB.toLocal8Bit();
+                utils::hash(fmtbuf.constData(), fmtbuf.length(), utils::global_seed, cchash);
+                hash = cchash[0];
+                statMap.insert(hash, stat);
+            }
+        }
+        if (ferror(fp))
+        {
+            ok = !ok;
+            print_err(errno, QString("read %1 failed").arg(proc));
+        }
+        fclose(fp);
+
+        return ok;
+    };
+
+    statMap.clear();
+
+    ok = parseSocks(AF_INET, IPPROTO_TCP, PROC_PATH_SOCK_TCP, statMap);
+    ok = parseSocks(AF_INET, IPPROTO_UDP, PROC_PATH_SOCK_UDP, statMap) && ok;
+    ok = parseSocks(AF_INET6, IPPROTO_TCP, PROC_PATH_SOCK_TCP6, statMap) && ok;
+    ok = parseSocks(AF_INET6, IPPROTO_UDP, PROC_PATH_SOCK_UDP6, statMap) && ok;
+
+    return ok;
+}
+
+bool SystemStat::readNetIfAddrs(NetIFAddrsMap &addrsMap)
+{
+    struct ifaddrs *addr_hdr, *addr_p;
+
+    errno = 0;
+    if (getifaddrs(&addr_hdr) == -1) {
+        qWarning() << QString("getifaddrs failed: [%1] %2").arg(errno).arg(strerror(errno));
+        return false;
+    }
+
+    for (addr_p = addr_hdr; addr_p != nullptr; addr_p = addr_p->ifa_next) {
+        if (!addr_p->ifa_addr)
+            continue;
+
+        auto netifAddr = QSharedPointer<struct net_ifaddr_t>::create();
+        netifAddr->family = addr_p->ifa_addr->sa_family;
+        if (netifAddr->family == AF_INET) {
+            netifAddr->addr.in4 = reinterpret_cast<struct sockaddr_in *>(addr_p->ifa_addr)->sin_addr;
+        } else if (netifAddr->family == AF_INET6) {
+            netifAddr->addr.in6 = reinterpret_cast<struct sockaddr_in6 *>(addr_p->ifa_addr)->sin6_addr;
+        } else {
+            continue;
+        }
+
+        strncpy(netifAddr->iface, addr_p->ifa_name, strlen(addr_p->ifa_name) + 1);
+        addrsMap.insert(netifAddr->iface, netifAddr);
+    }
+    freeifaddrs(addr_hdr);
+
+    if (addrsMap.size() > 0)
+        return true;
+    else
+        return false;
 }
 
 QString SystemStat::getCurrentRealUserName()
