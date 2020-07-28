@@ -116,15 +116,10 @@ void ProcessPageWidget::initUI()
     m_procViewMode = new DLabel(tw);
     m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));  // default text
     DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T7, QFont::Medium);
-    QFontMetrics fmProcView(m_procViewMode->font());
-    m_procViewMode->adjustSize();
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-#ifndef THEME_FALLBACK_COLOR
     auto pam = DApplicationHelper::instance()->palette(m_procViewMode);
     palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
     m_procViewMode->setPalette(palette);
-#else
-#endif
 
     m_procViewModeSummary = new DLabel(tw);
     DFontSizeManager::instance()->bind(m_procViewModeSummary, DFontSizeManager::T7, QFont::Medium);
@@ -169,8 +164,8 @@ void ProcessPageWidget::initUI()
     list << m_appButton << m_myProcButton << m_allProcButton;
     modeButtonGroup->setButtonList(list, true);
 
-    toolsLayout->addWidget(m_procViewMode, 0, Qt::AlignLeft);
-    toolsLayout->addWidget(m_procViewModeSummary, 0, Qt::AlignLeft);
+    toolsLayout->addWidget(m_procViewMode, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    toolsLayout->addWidget(m_procViewModeSummary, 0, Qt::AlignLeft | Qt::AlignVCenter);
     toolsLayout->addStretch();
     toolsLayout->addWidget(modeButtonGroup, 0, Qt::AlignRight);
 
