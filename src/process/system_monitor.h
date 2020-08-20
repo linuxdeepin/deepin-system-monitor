@@ -116,6 +116,10 @@ public:
     {
         return m_statsCollector;
     }
+    static inline pid_t getCurrentPID()
+    {
+        return getpid();
+    }
 
 Q_SIGNALS:
     void processEnded(pid_t pid);

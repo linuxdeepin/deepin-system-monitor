@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
     qRegisterMetaType<QList<qreal>>();
 
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-    DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
     app.setAutoActivateWindows(true);

@@ -28,6 +28,7 @@ find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_PROCPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
+find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 set(APP_HEADERS
@@ -73,6 +74,9 @@ set(APP_HEADERS
     gui/kill_process_confirm_dialog.h
     gui/process_attribute_dialog.h
     gui/dialog/error_dialog.h
+    gui/xwin_kill_preview_widget.h
+    gui/xwin_kill_preview_tooltip_widget.h
+    gui/xwin_kill_preview_mask_widget.h
     dbus/systemd1_manager_interface.h
     dbus/systemd1_service_interface.h
     dbus/systemd1_unit_interface.h
@@ -96,6 +100,7 @@ set(APP_HEADERS
     service/service_manager.h
     service/system_service_entry_data.h
     service/system_service_entry.h
+    wm/wm_info.h
 )
     
 set(APP_SOURCES
@@ -139,6 +144,9 @@ set(APP_SOURCES
     gui/process_attribute_dialog.cpp
     gui/priority_slider.cpp
     gui/ui_common.cpp
+    gui/xwin_kill_preview_widget.cpp
+    gui/xwin_kill_preview_tooltip_widget.cpp
+    gui/xwin_kill_preview_mask_widget.cpp
     dbus/environment_file.cpp
     dbus/unit_file_info.cpp
     dbus/unit_info.cpp
@@ -161,6 +169,7 @@ set(APP_SOURCES
     service/service_manager.cpp
     service/system_service_entry_data.cpp
     service/system_service_entry.cpp
+    wm/wm_info.cpp
 )
 
 add_executable(${APP_NAME}
@@ -186,6 +195,7 @@ target_link_libraries(${APP_NAME}
     ICU::uc
     ${LIB_XCB}
     ${LIB_XEXT}
+    ${LIB_ICCCM}
 )
 
 install(TARGETS ${APP_NAME} DESTINATION bin)

@@ -30,11 +30,11 @@
 DWIDGET_USE_NAMESPACE
 
 class MainWindow;
-class InteractiveKill;
 class MonitorCompactView;
 class MonitorExpandView;
 class ProcessTableView;
 class Settings;
+class XWinKillPreviewWidget;
 
 class ProcessPageWidget : public DFrame
 {
@@ -79,7 +79,7 @@ private:
 
     ProcessTableView *m_procTable {nullptr};
 
-    InteractiveKill *m_wndKiller {nullptr};
+    XWinKillPreviewWidget *m_xwkillPreview {nullptr};
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

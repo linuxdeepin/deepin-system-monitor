@@ -20,6 +20,7 @@
 
 #include "main_window.h"
 #include "kill_process_confirm_dialog.h"
+#include "xwin_kill_preview_widget.h"
 #include "monitor_compact_view.h"
 #include "monitor_expand_view.h"
 #include "process/system_monitor.h"
@@ -305,9 +306,10 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
 
 void ProcessPageWidget::createWindowKiller()
 {
-    m_wndKiller = new InteractiveKill(this);
-    m_wndKiller->setFocus();
-    connect(m_wndKiller, &InteractiveKill::killWindow, this,
+    m_xwkillPreview = new XWinKillPreviewWidget(this);
+    connect(m_xwkillPreview,
+            &XWinKillPreviewWidget::windowClicked,
+            this,
             &ProcessPageWidget::popupKillConfirmDialog);
 }
 
@@ -355,17 +357,12 @@ void ProcessPageWidget::changeIconTheme(DGuiApplicationHelper::ColorType themeTy
 
 void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 {
-    if (m_wndKiller) {
-        m_wndKiller->close();
-    }
-
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
                                                   "Force ending this application may cause data "
                                                   "loss.\nAre you sure you want to continue?");
 
     KillProcessConfirmDialog dialog(this);
-//    dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
@@ -376,20 +373,16 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
         if (sysmon) {
             sysmon->killProcess(qvariant_cast<pid_t>(pid));
         }
-    } else {
-        // restore window
-        MainWindow *mainWindow = MainWindow::instance();
-        mainWindow->showNormal();
     }
 }
 
 void ProcessPageWidget::showWindowKiller()
 {
     // Minimize window before show killer window.
-    MainWindow *mainWindow = MainWindow::instance();
-    mainWindow->showMinimized();
+    auto *mw = MainWindow::instance();
+    mw->setWindowState(mw->windowState() | Qt::WindowMinimized);
 
-    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
+    QTimer::singleShot(50, this, SLOT(createWindowKiller()));
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)

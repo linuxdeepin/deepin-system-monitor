@@ -123,7 +123,6 @@ void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
 void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
 void passInputEvent(WId wid);
 void setFontSize(QPainter &painter, int textSize);
-const std::vector<std::string> explode(const std::string &s, const char &c);
 }  // namespace Utils
 
 #endif

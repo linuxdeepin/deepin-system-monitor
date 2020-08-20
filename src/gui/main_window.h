@@ -81,14 +81,15 @@ protected:
     void initUI();
     void initConnections();
 
-    virtual void resizeEvent(QResizeEvent *event);
-    virtual void closeEvent(QCloseEvent *event);
-    bool eventFilter(QObject *obj, QEvent *event);
-    virtual void showEvent(QShowEvent *event);
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void closeEvent(QCloseEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    virtual void showEvent(QShowEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     MainWindow(DWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
     Settings *m_settings;
 
