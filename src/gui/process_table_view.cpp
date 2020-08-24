@@ -97,7 +97,7 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
     if (obj == this) {
         if (event->type() == QEvent::KeyPress) {
             auto *kev = dynamic_cast<QKeyEvent *>(event);
-            if (kev->modifiers() & Qt::CTRL && kev->key() == Qt::Key_M) {
+            if (kev->modifiers() & Qt::ALT && kev->key() == Qt::Key_M) {
                 if (this->hasFocus()) {
                     if (selectedIndexes().size() > 0) {
                         auto index = selectedIndexes()[0];
