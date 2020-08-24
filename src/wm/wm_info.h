@@ -92,6 +92,8 @@ public:
 
     // top level window (including wm frame) in top to bottom order that contains cursor
     std::list<WMWindowArea> selectWindow(const QPoint &pos);
+    WMWId getRootWindow() const;
+    std::list<WMWindowArea> hoveredBy(WMWId wid, QRect &area);
 
 private:
     std::map<pid_t, WMWindow> updateWindowStackCache();

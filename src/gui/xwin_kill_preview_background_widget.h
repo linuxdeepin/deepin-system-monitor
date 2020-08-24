@@ -17,47 +17,51 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef XWIN_KILL_PREVIEW_WIDGET_H
-#define XWIN_KILL_PREVIEW_WIDGET_H
+#ifndef XWIN_KILL_PREVIEW_BACKGROUND_WIDGET_H
+#define XWIN_KILL_PREVIEW_BACKGROUND_WIDGET_H
 
 #include <QWidget>
+#include <QPixmap>
 
-namespace util {
-namespace wm {
-class WMInfo;
-}
-}
-class XWinKillPreviewBackgroundWidget;
+#include "wm/wm_info.h"
 
-class XWinKillPreviewWidget : public QWidget
+using namespace util::wm;
+
+class QScreen;
+class QPaintEvent;
+class QResizeEvent;
+class QRegion;
+class hideEvent;
+class XWinKillPreviewTooltipWidget;
+class XWinKillPreviewBackgroundWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit XWinKillPreviewWidget(QWidget *parent = nullptr);
-    ~XWinKillPreviewWidget() override;
+    explicit XWinKillPreviewBackgroundWidget(QPixmap &background, QWidget *parent = nullptr);
 
 signals:
-    void windowClicked(pid_t pid);
-    void cursorUpdated(const QCursor &cursor);
 
 public slots:
+    void updateSelection(const QRegion &);
+    inline void clearSelection()
+    {
+        m_selRegion = {};
+        update();
+    }
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private:
     void initUI();
-    void initConnections();
+    void initConnection();
 
 private:
-    util::wm::WMInfo *m_wminfo;
-    QList<XWinKillPreviewBackgroundWidget *> m_backgroundList;
-    QList<QScreen *> m_screens;
-
-    QCursor m_killCursor;
-    QCursor m_defaultCursor;
+    QPixmap m_background;
+    XWinKillPreviewTooltipWidget *m_tooltip;
+    QRegion m_selRegion {};
 };
 
-#endif // XWIN_KILL_PREVIEW_WIDGET_H
+#endif // XWIN_KILL_PREVIEW_BACKGROUND_WIDGET_H

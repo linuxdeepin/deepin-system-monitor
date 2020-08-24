@@ -366,9 +366,3 @@ void MainWindow::showEvent(QShowEvent *event)
     Q_ASSERT(smo != nullptr);
     smo->startMonitorJob();
 }
-
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    DMainWindow::mouseMoveEvent(event);
-}

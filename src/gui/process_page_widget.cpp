@@ -306,7 +306,7 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
 
 void ProcessPageWidget::createWindowKiller()
 {
-    m_xwkillPreview = new XWinKillPreviewWidget(this);
+    m_xwkillPreview = new XWinKillPreviewWidget();
     connect(m_xwkillPreview,
             &XWinKillPreviewWidget::windowClicked,
             this,
@@ -382,7 +382,7 @@ void ProcessPageWidget::showWindowKiller()
     auto *mw = MainWindow::instance();
     mw->setWindowState(mw->windowState() | Qt::WindowMinimized);
 
-    QTimer::singleShot(50, this, SLOT(createWindowKiller()));
+    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)

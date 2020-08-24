@@ -85,7 +85,6 @@ protected:
     virtual void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
     virtual void showEvent(QShowEvent *event) override;
-    virtual void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     MainWindow(DWidget *parent = nullptr);

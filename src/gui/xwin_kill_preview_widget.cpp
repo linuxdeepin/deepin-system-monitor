@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
 * Author:      maojj <maojunjie@uniontech.com>
@@ -19,8 +19,7 @@
 */
 #include "xwin_kill_preview_widget.h"
 
-#include "xwin_kill_preview_tooltip_widget.h"
-#include "xwin_kill_preview_mask_widget.h"
+#include "xwin_kill_preview_background_widget.h"
 #include "wm/wm_info.h"
 #include "main_window.h"
 #include "process/system_monitor.h"
@@ -34,19 +33,19 @@
 #include <QRect>
 #include <QApplication>
 #include <QCursor>
-
-#include <memory>
-#include <list>
+#include <QRegion>
 
 using namespace std;
 using namespace util::wm;
 
 XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 {
+    m_wminfo = new WMInfo();
+
     initUI();
     initConnections();
 
-    m_wminfo = new WMInfo();
+    show();
 }
 
 XWinKillPreviewWidget::~XWinKillPreviewWidget()
@@ -73,20 +72,18 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
             continue;
 
         if (select->rect.contains(pos)) {
-            m_mask->hide();
-            for (auto &tooltip : m_tooltips) {
-                tooltip->hide();
+            hide();
+            for (auto &background : m_backgroundList) {
+                background->hide();
             }
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
             setMouseTracking(false);
             releaseMouse();
             releaseKeyboard();
             emit windowClicked(select->pid);
+            close();
             break;
         }
     }
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    close();
 }
 
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
@@ -101,33 +98,39 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 
         if (select->rect.contains(pos)) {
             found = true;
-            QApplication::setOverrideCursor(m_acceptCursor);
-            m_mask->resize(select->rect.size());
-            m_mask->move(select->rect.topLeft());
-            m_mask->show();
+
+            // find all windows hovered above, if any clip out the intersected region
+            auto hoveredBy = m_wminfo->hoveredBy(select->wid, select->rect);
+            QRegion region {select->rect};
+            for (auto &hover : hoveredBy)
+                region = region.subtracted(hover->rect);
+
+            for (auto &bg : m_backgroundList) {
+                if (bg->geometry().intersects(select->rect)) {
+                    auto area = region.intersected(bg->geometry());
+                    bg->updateSelection(area);
+                    emit cursorUpdated(m_killCursor);
+                } else {
+                    bg->clearSelection();
+                }
+            }
             break;
         }
     }
     if (!found) {
-        m_mask->hide();
-        QApplication::setOverrideCursor(m_rejectCursor);
+        for (auto &bg : m_backgroundList)
+            bg->clearSelection();
+        emit cursorUpdated(m_defaultCursor);
     }
 }
 
 void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
 {
-    QWidget::keyPressEvent(event);
-
     if (event->key() == Qt::Key_Escape) {
-        setMouseTracking(false);
-        releaseMouse();
-        releaseKeyboard();
-
         // restore main window
         auto *mw = MainWindow::instance();
         mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
 
-        QApplication::setOverrideCursor(Qt::ArrowCursor);
         close();
     }
 }
@@ -135,29 +138,34 @@ void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
 void XWinKillPreviewWidget::initUI()
 {
     Qt::WindowFlags flags {};
-    flags |= Qt::Window;
     flags |= Qt::FramelessWindowHint;
+    flags |= Qt::Window;
     flags |= Qt::WindowStaysOnTopHint;
-    flags |= Qt::CustomizeWindowHint;
-    flags |= Qt::BypassWindowManagerHint;
     setWindowFlags(flags);
+    setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_DeleteOnClose, true);
     grabKeyboard();
     setMouseTracking(true);
     grabMouse();
 
-    // show tooltip window in all screens
-    for (auto screen : QApplication::screens()) {
-        auto *tooltip = new XWinKillPreviewTooltipWidget(this);
-        tooltip->move(screen->availableGeometry().center() - tooltip->rect().center());
-        tooltip->show();
-        m_tooltips << tooltip;
-    }
+    m_killCursor = QCursor(iconPathFromQrc("kill_cursor.svg"));
+    m_defaultCursor = QCursor(Qt::ForbiddenCursor);
 
-    m_mask = new XWinKillPreviewMaskWidget(this);
-    m_cursorIcon = QIcon(iconPathFromQrc("kill_cursor.svg"));
-    m_acceptCursor = QCursor(m_cursorIcon.pixmap({48, 48}));
-    m_rejectCursor = QCursor(Qt::ForbiddenCursor);
+    // show background window in all screens
+    for (auto screen : QApplication::screens()) {
+        auto geom = screen->geometry();
+        auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(), geom.x(), geom.y(), geom.width(), geom.height());
+
+        auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
+        connect(this, &XWinKillPreviewWidget::cursorUpdated, background, &XWinKillPreviewBackgroundWidget::setCursor);
+        background->resize(geom.size());
+        background->move(geom.x(), geom.y());
+
+        m_backgroundList << background;
+        m_screens << screen;
+
+        background->show();
+    }
 }
 
 void XWinKillPreviewWidget::initConnections()

@@ -210,8 +210,86 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos)
     return walist;
 }
 
+WMWId WMInfo::getRootWindow() const
+{
+    if (m_tree && m_tree->root) {
+        return m_tree->root->windowId;
+    }
+    return 0;
+}
+
+std::list<WMWindowArea> WMInfo::hoveredBy(WMWId wid, QRect &area)
+{
+    std::list<WMWindowArea> list {};
+    bool done {false};
+
+    std::function<void(const struct wm_window_ext_t *, const QRect &)> scan_tree;
+    scan_tree = [&](const struct wm_window_ext_t *parent, const QRect & area) {
+        for (auto &childWindowId : parent->children) {
+            if (childWindowId == wid) {
+                done = true;
+            }
+
+            if (done) {
+                return;
+            }
+
+            auto &child = m_tree->cache[childWindowId];
+
+            // check child first (top => bottom)
+            if (child->children.length() > 0)
+                scan_tree(child.get(), area);
+
+            // map state
+            if (child->map_state != kViewableState)
+                continue;
+
+            // window class
+            if (child->wclass != kInputOutputClass)
+                continue;
+
+            if (child->pid == -1)
+                continue;
+
+            // window type
+            if (child->types.startsWith(kDockWindowType)
+                    || child->types.startsWith(kDesktopWindowType))
+                continue;
+
+            // window state
+            if (child->states.contains(kHiddenState))
+                continue;
+
+            // adjust child rect with frame extents
+            auto adjusted = child->rect;
+            adjusted = adjusted.marginsAdded(QMargins{
+                int(child->extents.left),
+                int(child->extents.top),
+                int(child->extents.right),
+                int(child->extents.bottom)});
+
+            // translate child geom
+            if (!adjusted.intersects(area))
+                continue;
+
+            WMWindowArea warea(new struct wm_window_area_t());
+            warea->rect = adjusted;
+            warea->pid = child->pid;
+            warea->wid = child->windowId;
+
+            list.push_back(std::move(warea));
+        }
+    };
+
+    Q_ASSERT(m_tree->root != nullptr);
+    scan_tree(m_tree->root, area);
+
+    return list;
+}
+
 std::map<pid_t, WMWindow> WMInfo::updateWindowStackCache()
 {
+    // TODO: redo new fetch window title jobs
     return {};
 }
 
