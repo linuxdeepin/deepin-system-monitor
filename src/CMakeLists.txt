@@ -75,7 +75,6 @@ set(APP_HEADERS
     gui/process_attribute_dialog.h
     gui/dialog/error_dialog.h
     gui/xwin_kill_preview_widget.h
-    gui/xwin_kill_preview_tooltip_widget.h
     gui/xwin_kill_preview_background_widget.h
     dbus/systemd1_manager_interface.h
     dbus/systemd1_service_interface.h
@@ -145,7 +144,6 @@ set(APP_SOURCES
     gui/priority_slider.cpp
     gui/ui_common.cpp
     gui/xwin_kill_preview_widget.cpp
-    gui/xwin_kill_preview_tooltip_widget.cpp
     gui/xwin_kill_preview_background_widget.cpp
     dbus/environment_file.cpp
     dbus/unit_file_info.cpp

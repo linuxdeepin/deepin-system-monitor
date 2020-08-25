@@ -19,7 +19,13 @@
 */
 #include "xwin_kill_preview_background_widget.h"
 
-#include "xwin_kill_preview_tooltip_widget.h"
+#include "ui_common.h"
+
+#include <DFontSizeManager>
+#include <DApplicationHelper>
+#include <DPalette>
+#include <DApplication>
+#include <DStyle>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -30,6 +36,10 @@
 #include <QResizeEvent>
 #include <QHideEvent>
 #include <QRegion>
+
+DWIDGET_USE_NAMESPACE
+
+static const QSize kDefaultIconSize {50, 50};
 
 XWinKillPreviewBackgroundWidget::XWinKillPreviewBackgroundWidget(QPixmap &background, QWidget *parent)
     : QWidget(parent)
@@ -57,17 +67,46 @@ void XWinKillPreviewBackgroundWidget::paintEvent(QPaintEvent *)
     painter.setOpacity(0.25);
     path.addRegion(m_selRegion);
     painter.fillPath(path, Qt::red);
-}
 
-void XWinKillPreviewBackgroundWidget::resizeEvent(QResizeEvent *)
-{
-    m_tooltip->move(geometry().center() - m_tooltip->rect().center());
-}
+    auto palette = DApplicationHelper::instance()->applicationPalette();
+    auto *style = dynamic_cast<DStyle *>(this->style());
+    auto radius = style->pixelMetric(DStyle::PM_FrameRadius);
+    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins);
+    auto background = palette.color(DPalette::Current, DPalette::Background);
+    auto foreground = palette.color(DPalette::Current, DPalette::Text);
 
-void XWinKillPreviewBackgroundWidget::hideEvent(QHideEvent *)
-{
-    if (m_tooltip)
-        m_tooltip->hide();
+    QSize minSize(std::max(m_textSize.width(), kDefaultIconSize.width()) + margin * 4,
+                  margin * 6 + m_textSize.height() + kDefaultIconSize.height());
+    QRect tooltipRect {(rect().width() - minSize.width()) / 2,
+                       (rect().height() - minSize.height()) / 2,
+                       minSize.width(),
+                       minSize.height()};
+
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setOpacity(.8);
+    QPainterPath bgpath;
+    bgpath.addRoundedRect(tooltipRect, radius, radius);
+    painter.fillPath(bgpath, background);
+
+    painter.setOpacity(1);
+
+    // draw icon
+    QRect iconRect(tooltipRect.x() + (tooltipRect.width() - kDefaultIconSize.width()) / 2,
+                   tooltipRect.y() + margin * 2,
+                   kDefaultIconSize.width(),
+                   kDefaultIconSize.height());
+    m_icon.paint(&painter, iconRect, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    // draw tooltip text
+    QPen pen(foreground);
+    painter.setPen(pen);
+    painter.setFont(m_font);
+    painter.setOpacity(.8);
+    QRect textRect(tooltipRect.x() + (tooltipRect.width() - m_textSize.width()) / 2,
+                   tooltipRect.y() + (tooltipRect.height() - m_textSize.height()) - margin * 2,
+                   m_textSize.width(),
+                   m_textSize.height());
+    painter.drawText(textRect, Qt::AlignHCenter | Qt::AlignVCenter, m_text);
 }
 
 void XWinKillPreviewBackgroundWidget::initUI()
@@ -81,12 +120,15 @@ void XWinKillPreviewBackgroundWidget::initUI()
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    m_tooltip = new XWinKillPreviewTooltipWidget(this);
-    m_tooltip->installEventFilter(this);
-    m_tooltip->move(geometry().center() - m_tooltip->rect().center());
-    m_tooltip->show();
+    m_icon = QIcon::fromTheme(iconPathFromQrc("kill.svg"));
+    m_text = QApplication::translate("Process.Choose.Window.Dialog",
+                                     "Click the application you want to end");
 
-    installEventFilter(this);
+    // calc preferred size for this widget
+    m_font = this->font();
+    m_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6));
+    QFontMetrics fm(m_font);
+    m_textSize = fm.size(Qt::TextSingleLine, m_text);
 }
 
 void XWinKillPreviewBackgroundWidget::initConnection()

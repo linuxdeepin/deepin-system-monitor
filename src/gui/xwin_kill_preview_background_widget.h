@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QIcon>
 
 #include "wm/wm_info.h"
 
@@ -32,7 +33,8 @@ class QPaintEvent;
 class QResizeEvent;
 class QRegion;
 class hideEvent;
-class XWinKillPreviewTooltipWidget;
+class QFont;
+class QSize;
 class XWinKillPreviewBackgroundWidget : public QWidget
 {
     Q_OBJECT
@@ -51,8 +53,6 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *) override;
-    void resizeEvent(QResizeEvent *event) override;
-    void hideEvent(QHideEvent *event) override;
 
 private:
     void initUI();
@@ -60,8 +60,12 @@ private:
 
 private:
     QPixmap m_background;
-    XWinKillPreviewTooltipWidget *m_tooltip;
     QRegion m_selRegion {};
+
+    QIcon   m_icon {};
+    QString m_text {};
+    QSize   m_textSize{};
+    QFont   m_font;
 };
 
 #endif // XWIN_KILL_PREVIEW_BACKGROUND_WIDGET_H
