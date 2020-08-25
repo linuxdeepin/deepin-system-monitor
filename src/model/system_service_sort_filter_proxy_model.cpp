@@ -39,9 +39,13 @@ void SystemServiceSortFilterProxyModel::fetchMore(const QModelIndex &parent)
         while (canFetchMore(parent)) {
             QSortFilterProxyModel::fetchMore(parent);
         }
-    } else {
-        QSortFilterProxyModel::fetchMore(parent);
     }
+
+    if (canFetchMore(parent))
+        QSortFilterProxyModel::fetchMore(parent);
+    // we fetch one more time to fix page down scrolling malfuntion issue
+    if (canFetchMore(parent))
+        QSortFilterProxyModel::fetchMore(parent);
 }
 
 bool SystemServiceSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
