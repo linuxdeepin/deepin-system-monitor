@@ -95,6 +95,19 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             forground.setColor(palette.color(cg, DPalette::TextLively));
+            if (opt.state & DStyle::State_Sunken) {
+                auto hlColor = opt.palette.highlight().color();
+                hlColor.setAlphaF(.1);
+                auto newColor = style->adjustColor(forground.color(), 0, 0, 0, 0, 0, 0, -40);
+                forground = style->blendColor(newColor, hlColor);
+            } else if (opt.state & DStyle::State_MouseOver) {
+                forground = style->adjustColor(forground.color(), 0, 0, 20);
+            }
+        } else {
+            if (opt.state & DStyle::State_MouseOver) {
+                auto type = DApplicationHelper::instance()->themeType();
+                forground = style->adjustColor(forground.color(), 0, 0, type == DApplicationHelper::DarkType ? 20 : -50);
+            }
         }
     }
 

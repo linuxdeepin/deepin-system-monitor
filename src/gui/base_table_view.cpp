@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QHeaderView>
+#include <QHoverEvent>
 
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -135,14 +136,33 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 
     auto palette = options.palette;
     QBrush background;
+    auto baseColor = palette.color(DPalette::Active, DPalette::Base);
     if (!(index.row() & 1)) {
         background = palette.color(DPalette::Active, DPalette::AlternateBase);
     } else {
-        background = palette.color(DPalette::Active, DPalette::Base);
+        background = baseColor;
     }
+    QStyleOptionViewItem opt(options);
     if (options.state & DStyle::State_Enabled) {
         if (selectionModel()->isSelected(index)) {
             background = palette.color(cg, DPalette::Highlight);
+            // #ref: DStyle::generatedBrush
+            if (m_pressed.isValid() && m_pressed.row() == index.row()) {
+                // pressed
+                background = style->adjustColor(background.color(), 0, 0, -10);
+                opt.state = options.state | QStyle::State_Sunken;
+            } else if (m_hover.isValid() && m_hover.row() == index.row()) {
+                // hovered
+                background = style->adjustColor(background.color(), 0, 0, 20);
+            }
+        } else {
+            if (m_pressed.isValid() && m_pressed.row() == index.row()) {
+                // pressed
+                background = style->adjustColor(baseColor, 0, 0, -20, 0, 0, 20, 0);
+            } else if (m_hover.isValid() && m_hover.row() == index.row()) {
+                // hovered
+                background = style->adjustColor(baseColor, 0, 0, -10);
+            }
         }
     }
 
@@ -158,7 +178,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     path.addRoundedRect(rowRect, radius, radius);
     painter->fillPath(path, background);
 
-    QTreeView::drawRow(painter, options, index);
+    QTreeView::drawRow(painter, opt, index);
 
     // draw focus
     if (hasFocus() && currentIndex().row() == index.row()) {
@@ -188,4 +208,48 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         currentRect.setWidth(viewport()->width());
         viewport()->update(currentRect);
     }
+}
+
+bool BaseTableView::viewportEvent(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::HoverEnter:
+    case QEvent::HoverLeave:
+    case QEvent::HoverMove: {
+        auto *hev = dynamic_cast<QHoverEvent *>(event);
+        m_hover = indexAt(hev->pos());
+        auto rect = visualRect(m_hover);
+        rect.setX(0);
+        rect.setWidth(viewport()->width());
+        viewport()->update(rect);
+        break;
+    }
+    case QEvent::MouseMove:
+    case QEvent::MouseButtonRelease:
+    case QEvent::MouseButtonDblClick:
+    case QEvent::MouseButtonPress: {
+        auto *mev = dynamic_cast<QMouseEvent *>(event);
+        auto newIndex = indexAt(mev->pos());
+        QRegion region;
+        QRect rect;
+        if (m_pressed.isValid()) {
+            rect = visualRect(m_pressed);
+            rect.setX(0);
+            rect.setWidth(viewport()->width());
+            region += rect;
+        }
+        if (newIndex.isValid() && newIndex.row() != m_pressed.row()) {
+            rect = visualRect(newIndex);
+            rect.setX(0);
+            rect.setWidth(viewport()->width());
+            region += rect;
+        }
+        m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? newIndex : QModelIndex();
+        viewport()->update(region);
+        break;
+    }
+    default:
+        break;
+    }
+    return DTreeView::viewportEvent(event);
 }

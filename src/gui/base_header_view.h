@@ -23,6 +23,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class QModelIndex;
 class BaseHeaderView : public DHeaderView
 {
     Q_OBJECT
@@ -41,9 +42,13 @@ protected:
     void paintSection(QPainter *painter, const QRect &rect,
                       int logicalIndex) const override;
     bool eventFilter(QObject *obj, QEvent *ev) override;
+    bool viewportEvent(QEvent *e) override;
 
 private:
     int m_spacing {1};
+
+    int m_hover {-1};
+    int m_pressed {-1};
 };
 
 #endif  // BASE_HEADER_VIEW_H

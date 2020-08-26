@@ -25,6 +25,7 @@ DWIDGET_USE_NAMESPACE
 
 class BaseItemDelegate;
 class BaseHeaderView;
+class QModelIndex;
 
 class BaseTableView : public DTreeView
 {
@@ -38,10 +39,14 @@ protected:
     void drawRow(QPainter *painter, const QStyleOptionViewItem &options,
                  const QModelIndex &index) const override;
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+    bool viewportEvent(QEvent *event) override;
 
 private:
     BaseItemDelegate *m_itemDelegate {nullptr};
     BaseHeaderView *m_headerView {nullptr};
+
+    QModelIndex m_hover;
+    QModelIndex m_pressed;
 };
 
 #endif  // BASE_TABLE_VIEW_H
