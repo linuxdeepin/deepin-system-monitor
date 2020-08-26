@@ -131,8 +131,8 @@ private:
     DiskIOStat  m_ioStat[kStatCount]         {{}, {}};
 
     QMap<pid_t, ProcStat>       m_procMap[kStatCount]   {};
-    QMap<ino_t, pid_t>          m_inodeToPID            {};
     QMap<pid_t, ProcessEntry>   m_procEntryMap          {};
+    QList<pid_t> m_pidList {};
 
     QMap<pid_t, pid_t>      m_pidCtoPMapping {};
     QMultiMap<pid_t, pid_t> m_pidPtoCMapping {};

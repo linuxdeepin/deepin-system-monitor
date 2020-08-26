@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
 * Author:      maojj <maojunjie@uniontech.com>
@@ -32,6 +32,7 @@
 #include <QTimer>
 #include <QThread>
 #include <QApplication>
+#include <QMutableMapIterator>
 
 #define SECTOR_SHIFT 9
 #define SECTOR_SIZE (1 << SECTOR_SHIFT)
@@ -169,6 +170,7 @@ void readProcStatsCallback(ProcStat &ps, void *context)
         return;
 
     if (ps) {
+        ctx->m_pidList << ps->pid;
         ctx->m_procMap[StatsCollector::kCurrentStat][ps->pid] = ps;
 
         ctx->m_pidCtoPMapping.insert(ps->pid, ps->ppid);
@@ -393,6 +395,7 @@ void StatsCollector::updateStatus()
 
     m_procMap[kLastStat] = m_procMap[kCurrentStat];
     m_procEntryMap.clear();
+    m_pidList.clear();
 
     m_pidCtoPMapping.clear();
     m_pidPtoCMapping.clear();
@@ -417,6 +420,33 @@ void StatsCollector::updateStatus()
     }
 
     b = ProcessStat::readProcStats(readProcStatsCallback, this);
+
+    // clean process maps
+
+    // remove no more exists process
+    QMutableMapIterator<pid_t, ProcStat> procIter(m_procMap[kCurrentStat]);
+    while (procIter.hasNext()) {
+        procIter.next();
+        if (!m_pidList.contains(procIter.key())) {
+            procIter.remove();
+        }
+    }
+
+    // and their traffic
+    QMutableMapIterator<pid_t, ProcNetIOStat> netIOStatIter(m_procNetIOStat);
+    while (netIOStatIter.hasNext()) {
+        netIOStatIter.next();
+        if (!m_pidList.contains(netIOStatIter.key())) {
+            netIOStatIter.remove();
+        }
+    }
+    QMutableMapIterator<pid_t, ProcNetIOAggHist> netIOAggIter(m_procNetIOAgg);
+    while (netIOAggIter.hasNext()) {
+        netIOAggIter.next();
+        if (!m_pidList.contains(netIOAggIter.key())) {
+            netIOAggIter.remove();
+        }
+    }
 
     // filter duplicate processes with same name (eg: dman, uos browser like apps with chrome engine biltin)
     // within appList if current display mode is onlyGUI
