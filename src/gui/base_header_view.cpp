@@ -101,7 +101,7 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
     if ((opt.state & DStyle::State_Enabled) && m_hover != -1) {
         auto baseColor = bgBrush.color();
         if (m_pressed >= 0) {
-            auto actColor = opt.palette.highlight().color();
+            auto actColor = palette.color(cg, DPalette::Highlight);
             actColor.setAlphaF(0.1);
             auto newColor = style->adjustColor(baseColor, 0, 0, -20, 0, 0, 20, 0);
             hlBrush = style->blendColor(newColor, actColor);

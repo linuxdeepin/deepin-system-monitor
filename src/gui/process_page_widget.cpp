@@ -378,11 +378,11 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 
 void ProcessPageWidget::showWindowKiller()
 {
-    // Minimize window before show killer window.
     auto *mw = MainWindow::instance();
-    mw->setWindowState(mw->windowState() | Qt::WindowMinimized);
+    if (mw)
+        mw->showMinimized();
 
-    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
+    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)

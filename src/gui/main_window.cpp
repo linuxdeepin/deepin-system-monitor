@@ -342,12 +342,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         } else if (kev->matches(QKeySequence::Find)) {
             toolbar()->focusInput();
             return true;
-        } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
-                   kev->key() == Qt::Key_K) {
+        } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) && kev->key() == Qt::Key_K) {
             Q_EMIT killProcessPerformed();
             return true;
-        } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) &&
-                   kev->key() == Qt::Key_Question) {
+        } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) && kev->key() == Qt::Key_Question) {
             displayShortcutHelpDialog();
             return true;
         } else {

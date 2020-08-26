@@ -97,7 +97,7 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
     if (obj == this) {
         if (event->type() == QEvent::KeyPress) {
             auto *kev = dynamic_cast<QKeyEvent *>(event);
-            if (kev->modifiers() & Qt::ALT && kev->key() == Qt::Key_M) {
+            if (kev->modifiers() == Qt::ALT && kev->key() == Qt::Key_M) {
                 if (this->hasFocus()) {
                     if (selectedIndexes().size() > 0) {
                         auto index = selectedIndexes()[0];
@@ -818,6 +818,7 @@ void ProcessTableView::customizeProcessPriority()
                           false, DDialog::ButtonNormal);
     prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change"),
                           true, DDialog::ButtonRecommend);
+    prioDialog->clearFocus();
     connect(prioDialog, &DDialog::buttonClicked, this, [ = ](int index, QString text) {
         Q_UNUSED(text);
         if (index == 1) {
