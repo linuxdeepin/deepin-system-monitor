@@ -197,6 +197,7 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
         return false;
 
     if (e->type() == QEvent::ToolTip) {
+        QToolTip::hideText();
         QRect rect = view->visualRect(index);
         QRect textRect = rect;
 
@@ -237,12 +238,12 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
                 return true;
             }
         }
-        if (!QStyledItemDelegate::helpEvent(e, view, option, index))
-            QToolTip::hideText();
-        return true;
     }
+    if (!QStyledItemDelegate::helpEvent(e, view, option, index))
+        QToolTip::hideText();
 
-    return QStyledItemDelegate::helpEvent(e, view, option, index);
+    //    return QStyledItemDelegate::helpEvent(e, view, option, index);
+    return false;
 }
 
 void BaseItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const

@@ -31,6 +31,7 @@
 #include <QPainterPath>
 #include <QHeaderView>
 #include <QHoverEvent>
+#include <QMouseEvent>
 
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -213,8 +214,15 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
 bool BaseTableView::viewportEvent(QEvent *event)
 {
     switch (event->type()) {
+    case QEvent::HoverLeave: {
+        auto rect = visualRect(m_hover);
+        rect.setX(0);
+        rect.setWidth(viewport()->width());
+        m_hover = QModelIndex();
+        viewport()->update(rect);
+        break;
+    }
     case QEvent::HoverEnter:
-    case QEvent::HoverLeave:
     case QEvent::HoverMove: {
         auto *hev = dynamic_cast<QHoverEvent *>(event);
         m_hover = indexAt(hev->pos());

@@ -111,7 +111,7 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
         auto spos = sectionPosition(m_hover);
         auto sw = sectionSize(m_hover);
         hlRect = {
-            m_hover > 0 ? spos + 1 : spos,
+            m_hover > 0 ? spos + 1 - offset() : spos - offset(),
             0,
             m_hover > 0 ? sw - 1 : sw,
             height()};
