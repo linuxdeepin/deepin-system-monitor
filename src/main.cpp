@@ -51,6 +51,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     utils::init_seed();
 
     qRegisterMetaType<QList<qreal>>();
