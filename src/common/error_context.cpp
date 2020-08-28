@@ -73,6 +73,7 @@ ErrorContext::ErrorContext(const ErrorContext &rhs)
 {
 }
 
+//重载=
 ErrorContext &ErrorContext::operator=(const ErrorContext &rhs)
 {
     if (this != &rhs) {
@@ -82,6 +83,7 @@ ErrorContext &ErrorContext::operator=(const ErrorContext &rhs)
 }
 ErrorContext::~ErrorContext() {}
 
+//重载==
 bool ErrorContext::operator==(const ErrorContext &other) const
 {
     return (data->m_code == other.getCode() && data->m_subCode == other.getSubCode() &&
@@ -106,19 +108,25 @@ void ErrorContext::setSubCode(int subCode)
     data->m_subCode = subCode;
 }
 
+//获取错误名
 QString ErrorContext::getErrorName() const
 {
     return data->m_errName;
 }
+
+//设置错误名
 void ErrorContext::setErrorName(const QString &errName)
 {
     data->m_errName = errName;
 }
 
+//获取错误信息
 QString ErrorContext::getErrorMessage() const
 {
     return data->m_errMessage;
 }
+
+//设置错误信息
 void ErrorContext::setErrorMessage(const QString &errMessage)
 {
     data->m_errMessage = errMessage;
@@ -129,6 +137,7 @@ bool operator!(const ErrorContext &ec) noexcept
     return !ec.operator bool();
 }
 
+//判断是否有效
 bool ErrorContext::isValid() const
 {
     return operator bool();
@@ -139,6 +148,7 @@ ErrorContext::operator bool() const
     return (data->m_code != 0 || data->m_subCode != 0);
 }
 
+//重置参数
 void ErrorContext::reset()
 {
     data->m_code = 0;

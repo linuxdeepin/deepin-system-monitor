@@ -99,12 +99,15 @@ bool ProcessStat::readProcStats(ProcIterateCallback pfnCallback, void *context)
             auto pid = pid_t(atoi(dir->d_name));
             ps->pid = pid;
 
+            //读取cpu
             b = readStat(ps);
             b = b && readCmdline(ps);
             readEnviron(ps);
             b = b && readSchedStat(ps, ctx);
             b = b && readStatus(ps);
+            //读取内存
             b = b && readStatm(ps, ctx);
+            //读取磁盘
             readIO(ps);
             readSockInodes(ps);
 

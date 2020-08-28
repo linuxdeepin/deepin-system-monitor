@@ -200,6 +200,7 @@ void readProcStatsCallback(ProcStat &ps, void *context)
         auto lastUptm = ctx->m_uptime[StatsCollector::kLastStat];
         qulonglong interval = (curUptm > lastUptm) ? (curUptm - lastUptm) : 1;
 
+        //设置进程的cpu
         proc.setCPU(ctx->calcProcCPUStats(
                         ctx->m_procMap[StatsCollector::kLastStat][ps->pid],
                         ctx->m_procMap[StatsCollector::kCurrentStat][ps->pid],
@@ -207,6 +208,7 @@ void readProcStatsCallback(ProcStat &ps, void *context)
                         ctx->m_cpuStat[StatsCollector::kCurrentStat],
                         interval,
                         ctx->m_statCtx.hz));
+        //设置内存
         proc.setMemory(ps->rss - ps->shm);
 
         // process name
@@ -273,6 +275,7 @@ void readProcStatsCallback(ProcStat &ps, void *context)
 void StatsCollector::updateStatus()
 {
     bool b;
+    //启动时间
     qulonglong uptime {};
     CPUStat cpuStat {};
     CPUStatMap cpuStatMap {};
@@ -300,6 +303,7 @@ void StatsCollector::updateStatus()
         }
     }
 
+    //获取处理器状态
     b = SystemStat::readCPUStats(cpuStat, cpuStatMap);
     if (b) {
         m_cpuStat[kLastStat] = m_cpuStat[kCurrentStat];
@@ -320,6 +324,7 @@ void StatsCollector::updateStatus()
         Q_EMIT cpuStatInfoUpdated(cpuPecent * 100., cpuPecents);
     }
 
+    //获取使用内存/交换空间   总内存/总交换空间
     b = SystemStat::readMemStats(memStat);
     if (b) {
         if (memStat->swap_total_kb > 0) {
@@ -337,6 +342,7 @@ void StatsCollector::updateStatus()
         }
     }
 
+    //获取硬盘读取及写入(紧凑状态)
     b = SystemStat::readDiskIOStats(iostat, iostatMap);
     if (b) {
         m_ioStat[kLastStat] = m_ioStat[kCurrentStat];
@@ -364,6 +370,7 @@ void StatsCollector::updateStatus()
         Q_EMIT diskStatInfoUpdated(rsize / m_interval, wsize / m_interval);
     }
 
+    //获取网络数据(正在接收/正在发送/总计接收/总计发送)
     b = SystemStat::readNetIfStats(ifstat, ifstatMap);
     if (b) {
         m_ifStat[kLastStat] = m_ifStat[kCurrentStat];
@@ -419,6 +426,7 @@ void StatsCollector::updateStatus()
         m_trayPIDToWndMap[pid] = xid;
     }
 
+    //回调获得右侧进程的数据
     b = ProcessStat::readProcStats(readProcStatsCallback, this);
 
     // clean process maps
@@ -570,10 +578,12 @@ void StatsCollector::updateStatus()
     }
 
     if (b && filteredList.size() > 0) {
+        //更新右侧进程列表中的数据
         Q_EMIT processListUpdated(filteredList);
     }
     if (m_procEntryMap.size() > 0) {
         m_napps = m_guiPIDList.size() + filteredAppList.size() + m_trayPIDToWndMap.size();
+        //更新当前应用程序以及系统总共进程数量
         Q_EMIT processSummaryUpdated(m_napps, m_nprocs - m_napps);
     }
 }

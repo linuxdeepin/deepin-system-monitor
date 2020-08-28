@@ -99,6 +99,7 @@ UnitInfo::UnitInfo(const UnitInfo &rhs)
 {
 }
 
+//重载=
 UnitInfo &UnitInfo::operator=(const UnitInfo &rhs)
 {
     if (this != &rhs)
@@ -108,6 +109,7 @@ UnitInfo &UnitInfo::operator=(const UnitInfo &rhs)
 
 UnitInfo::~UnitInfo() {}
 
+//重载==
 bool UnitInfo::operator==(const UnitInfo &other) const
 {
     return (
@@ -119,37 +121,48 @@ bool UnitInfo::operator==(const UnitInfo &other) const
                data->m_jobType == other.getJobType() && data->m_jobObjectPath == other.getJobObjectPath());
 }
 
+//获取名称
 QString UnitInfo::getName() const
 {
     return data->m_name;
 }
+
+//设置名称
 void UnitInfo::setName(const QString &name)
 {
     data->m_name = name;
 }
 
+//获取描述
 QString UnitInfo::getDescription() const
 {
     return data->m_description;
 }
+
+//设置描述
 void UnitInfo::setDescription(const QString &description)
 {
     data->m_description = description;
 }
 
+//获取负载状态
 QString UnitInfo::getLoadState() const
 {
     return data->m_loadState;
 }
+//设置负载状态
 void UnitInfo::setLoadState(const QString &loadState)
 {
     data->m_loadState = loadState;
 }
 
+//获取激活状态
 QString UnitInfo::getActiveState() const
 {
     return data->m_activeState;
 }
+
+//设置激活状态
 void UnitInfo::setActiveState(const QString &activeState)
 {
     data->m_activeState = activeState;
@@ -173,10 +186,12 @@ void UnitInfo::setFollowedBy(const QString &followedBy)
     data->m_followedBy = followedBy;
 }
 
+//获取路径
 QString UnitInfo::getUnitObjectPath() const
 {
     return data->m_unitObjectPath;
 }
+//设置路径
 void UnitInfo::setUnitObjectPath(const QString &unitObjectPath)
 {
     data->m_unitObjectPath = unitObjectPath;
@@ -209,6 +224,7 @@ void UnitInfo::setJobObjectPath(const QString &jobObjectPath)
     data->m_jobObjectPath = jobObjectPath;
 }
 
+//注册自定义类型
 void UnitInfo::registerMetaType()
 {
     qRegisterMetaType<UnitInfo>("UnitInfo");
@@ -217,6 +233,7 @@ void UnitInfo::registerMetaType()
     qDBusRegisterMetaType<UnitInfoList>();
 }
 
+//重载<<
 QDebug &operator<<(QDebug &debug, const UnitInfo &unit)
 {
     debug << unit.getName() << unit.getDescription() << unit.getLoadState() << unit.getActiveState()

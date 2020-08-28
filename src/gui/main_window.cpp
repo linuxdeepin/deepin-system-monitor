@@ -216,7 +216,9 @@ void MainWindow::initUI()
     auto *compactModeAction =
         new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
     compactModeAction->setCheckable(true);
+    //视图-->舒展
     m_modeMenu->addAction(expandModeAction);
+    //视图-->紧凑
     m_modeMenu->addAction(compactModeAction);
 
     QVariant vmode = m_settings->getOption(kSettingKeyDisplayMode);
@@ -236,6 +238,7 @@ void MainWindow::initUI()
         }
     }
 
+    //绑定紧凑/舒展视图的triggered信号
     connect(expandModeAction, &QAction::triggered, this, [ = ]() {
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
         Q_EMIT displayModeChanged(kDisplayModeExpand);
@@ -257,6 +260,7 @@ void MainWindow::initUI()
     setCentralWidget(m_pages);
     setContentsMargins(0, 0, 0, 0);
 
+    //阴影栏
     m_tbShadow = new DShadowLine(m_pages);
     m_tbShadow->setFixedWidth(m_pages->width());
     m_tbShadow->setFixedHeight(10);
@@ -267,7 +271,9 @@ void MainWindow::initUI()
     QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
     pa.setColor(DPalette::Highlight, hlBrush.color());
 
+    //程序进程页面
     m_procPage = new ProcessPageWidget(m_pages);
+    //系统服务页面
     m_svcPage = new SystemServicePageWidget(m_pages);
     m_pages->setContentsMargins(0, 0, 0, 0);
     m_pages->addWidget(m_procPage);
@@ -283,13 +289,13 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
-    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
         m_toolbar->clearSearchText();
         m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
         m_tbShadow->raise();
         m_tbShadow->show();
     });
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
         m_toolbar->clearSearchText();
         m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
         m_tbShadow->raise();
@@ -326,6 +332,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
+//事件过滤
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
@@ -354,6 +361,7 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     DMainWindow::showEvent(event);
 
+    //进程的网络获取
     auto *smo = SystemMonitor::instance();
     Q_ASSERT(smo != nullptr);
     smo->startMonitorJob();

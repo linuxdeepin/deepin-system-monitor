@@ -92,12 +92,15 @@ private:
 
     Settings *m_settings;
 
+    //kill process
     QAction *m_killAction                       {};
     DMenu   *m_modeMenu                         {};
 
     Toolbar                 *m_toolbar          {};
     DStackedWidget          *m_pages            {};
+    //程序进程
     ProcessPageWidget       *m_procPage         {};
+    //系统服务
     SystemServicePageWidget *m_svcPage          {};
     DShadowLine             *m_tbShadow         {};
 

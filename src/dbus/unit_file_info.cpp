@@ -31,6 +31,7 @@ public:
         , m_status(rhs.m_status)
     {
     }
+    //重载赋值运算符
     UnitFileInfoData &operator=(const UnitFileInfoData &rhs)
     {
         Q_UNUSED(__alignment);
@@ -82,11 +83,13 @@ bool UnitFileInfo::operator==(const UnitFileInfo &other) const
     return data->m_name == other.getName() && data->m_status == other.getStatus();
 }
 
+//获取名称
 QString UnitFileInfo::getName() const
 {
     return data->m_name;
 }
 
+//设置名称
 void UnitFileInfo::setName(const QString &name)
 {
     data->m_name = name;
@@ -102,6 +105,7 @@ void UnitFileInfo::setStatus(const QString &status)
     data->m_status = status;
 }
 
+//注册自定义类型
 void UnitFileInfo::registerMetaType()
 {
     qRegisterMetaType<UnitFileInfo>("UnitFileInfo");
@@ -110,6 +114,7 @@ void UnitFileInfo::registerMetaType()
     qDBusRegisterMetaType<UnitFileInfoList>();
 }
 
+//重载
 QDebug &operator<<(QDebug &debug, const UnitFileInfo &unit)
 {
     debug << unit.getName() << unit.getStatus();

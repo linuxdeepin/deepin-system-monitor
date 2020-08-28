@@ -38,13 +38,19 @@ public:
     bool operator==(const UnitFileInfo &other) const;
 
     QString getName() const;
+    /**
+    * @brief setName
+    * name 名称
+    */
     void setName(const QString &name);
 
     QString getStatus() const;
     void setStatus(const QString &status);
 
+    //注册自定义类型
     static void registerMetaType();
 
+    //重载
     friend QDebug &operator<<(QDebug debug, const UnitFileInfo &unit);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfo &unit);
     friend QDataStream &operator<<(QDataStream &stream, const UnitFileInfo &unit);
@@ -57,9 +63,11 @@ private:
 
 typedef QList<UnitFileInfo> UnitFileInfoList;
 
+//声明
 Q_DECLARE_METATYPE(UnitFileInfo)
 Q_DECLARE_METATYPE(UnitFileInfoList)
 
+//重载
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfoList &list);
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitFileInfoList &list);
 

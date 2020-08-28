@@ -41,15 +41,27 @@ public:
     bool operator==(const UnitInfo &other) const;
 
     QString getName() const;
+    /**
+    * @brief setName
+    * name 名称
+    */
     void setName(const QString &name);
 
     QString getDescription() const;
     void setDescription(const QString &description);
 
     QString getLoadState() const;
+    /**
+    * @brief setLoadState
+    * loadState 负载状态
+    */
     void setLoadState(const QString &loadState);
 
     QString getActiveState() const;
+    /**
+    * @brief setActiveState
+    * activeState 激活状态
+    */
     void setActiveState(const QString &activeState);
 
     QString getSubState() const;
@@ -70,8 +82,10 @@ public:
     QString getJobObjectPath() const;
     void setJobObjectPath(const QString &jobObjectPath);
 
+    //注册自定义类型
     static void registerMetaType();
 
+    //重载
     friend QDebug &operator<<(QDebug &debug, const UnitInfo &unit);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfo &unit);
     friend QDataStream &operator<<(QDataStream &stream, const UnitInfo &unit);
@@ -84,9 +98,11 @@ private:
 
 typedef QList<UnitInfo> UnitInfoList;
 
+//声明
 Q_DECLARE_METATYPE(UnitInfo)
 Q_DECLARE_METATYPE(UnitInfoList)
 
+//重载
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfoList &list);
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitInfoList &list);
 

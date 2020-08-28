@@ -43,15 +43,26 @@ public:
     int getSubCode() const;
     void setSubCode(int subCode);
 
+    //获取错误名
     QString getErrorName() const;
+    /**
+    * @brief setErrorName
+    * errName 错误名
+    */
     void setErrorName(const QString &errName);
 
+    //获取错误消息
     QString getErrorMessage() const;
+    /**
+    * @brief setErrorMessage
+    * errMessage 错误消息
+    */
     void setErrorMessage(const QString &errMessage);
 
     bool isValid() const;
     explicit operator bool() const;
 
+    //重置参数
     void reset();
 
 private:
