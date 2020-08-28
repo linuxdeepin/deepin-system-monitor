@@ -251,9 +251,8 @@ std::list<WMWindowArea> WMInfo::hoveredBy(WMWId wid, QRect &area)
             if (child->pid == -1)
                 continue;
 
-            // window type
-            if (child->types.startsWith(kDockWindowType)
-                    || child->types.startsWith(kDesktopWindowType))
+            // window type (dock type should exclude from this)
+            if (child->types.startsWith(kDesktopWindowType))
                 continue;
 
             // window state

@@ -382,7 +382,7 @@ void ProcessPageWidget::showWindowKiller()
     if (mw)
         mw->showMinimized();
 
-    QTimer::singleShot(200, this, SLOT(createWindowKiller()));
+    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)

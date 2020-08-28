@@ -283,26 +283,20 @@ void MainWindow::initUI()
 
 void MainWindow::initConnections()
 {
-    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
+    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
+        m_toolbar->clearSearchText();
         m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
-#ifdef ROLLBACK_BUG_4299
-        m_modeMenu->setEnabled(true);
-        m_killAction->setEnabled(true);
-#endif
         m_tbShadow->raise();
         m_tbShadow->show();
     });
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+        m_toolbar->clearSearchText();
         m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
-#ifdef ROLLBACK_BUG_4299
-        m_modeMenu->setEnabled(false);
-        m_killAction->setEnabled(false);
-#endif
         m_tbShadow->raise();
         m_tbShadow->show();
     });
-    connect(m_pages, &DStackedWidget::currentChanged, this,
-    [ = ]() { m_toolbar->clearSearchText(); });
+    //    connect(m_pages, &DStackedWidget::currentChanged, this,
+    //    [ = ]() { m_toolbar->clearSearchText(); });
 
     connect(this, &MainWindow::authProgressStarted, this, [ = ]() {
         setEnabled(false);
