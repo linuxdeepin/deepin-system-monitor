@@ -171,6 +171,7 @@ void ProcessAttributeDialog::initUI()
 
     m_procNameText = new DTextBrowser(wnd);
     m_procNameText->setFrameStyle(QFrame::NoFrame);
+    m_procNameText->setFocusPolicy(Qt::NoFocus);
     m_procNameText->setFixedWidth(kPreferedTextWidth);
     m_procNameText->viewport()->setBackgroundRole(QPalette::Window);
     m_procNameText->setWordWrapMode(QTextOption::WrapAnywhere);
@@ -178,6 +179,7 @@ void ProcessAttributeDialog::initUI()
 
     m_procCmdText = new DTextBrowser(wnd);
     m_procCmdText->setFrameStyle(QFrame::NoFrame);
+    m_procCmdText->setFocusPolicy(Qt::NoFocus);
     m_procCmdText->setFixedWidth(kPreferedTextWidth);
     m_procCmdText->viewport()->setBackgroundRole(QPalette::Window);
     m_procCmdText->setWordWrapMode(QTextOption::WrapAnywhere);
@@ -185,6 +187,7 @@ void ProcessAttributeDialog::initUI()
 
     m_procStartText = new DTextBrowser(wnd);
     m_procStartText->setFrameStyle(QFrame::NoFrame);
+    m_procStartText->setFocusPolicy(Qt::NoFocus);
     m_procStartText->setFixedWidth(kPreferedTextWidth);
     m_procStartText->viewport()->setBackgroundRole(QPalette::Window);
     m_procStartText->setWordWrapMode(QTextOption::WrapAnywhere);
