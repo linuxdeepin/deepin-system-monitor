@@ -219,21 +219,25 @@ bool BaseTableView::viewportEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::HoverLeave: {
-        auto rect = visualRect(m_hover);
-        rect.setX(0);
-        rect.setWidth(viewport()->width());
-        m_hover = QModelIndex();
-        viewport()->update(rect);
+        if (m_hover.isValid()) {
+            auto rect = visualRect(m_hover);
+            rect.setX(0);
+            rect.setWidth(viewport()->width());
+            m_hover = QModelIndex();
+            viewport()->update(rect);
+        }
         break;
     }
     case QEvent::HoverEnter:
     case QEvent::HoverMove: {
         auto *hev = dynamic_cast<QHoverEvent *>(event);
         m_hover = indexAt(hev->pos());
-        auto rect = visualRect(m_hover);
-        rect.setX(0);
-        rect.setWidth(viewport()->width());
-        viewport()->update(rect);
+        if (m_hover.isValid()) {
+            auto rect = visualRect(m_hover);
+            rect.setX(0);
+            rect.setWidth(viewport()->width());
+            viewport()->update(rect);
+        }
         break;
     }
     case QEvent::MouseMove:

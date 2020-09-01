@@ -136,7 +136,10 @@ void SystemServiceTableView::startService()
         dialog.setMessage(desc);
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
-            sname = sname.append(dialog.getServiceSubName());
+            auto subName = dialog.getServiceSubName();
+            if (subName.isEmpty())
+                return;
+            sname = sname.append(subName);
         } else {  // cancel clicked
             return;
         }
@@ -184,7 +187,10 @@ void SystemServiceTableView::stopService()
         dialog.setMessage(desc);
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
-            sname = sname.append(dialog.getServiceSubName());
+            auto subName = dialog.getServiceSubName();
+            if (subName.isEmpty())
+                return;
+            sname = sname.append(subName);
         } else {
             return;
         }
@@ -232,7 +238,10 @@ void SystemServiceTableView::restartService()
         dialog.setMessage(desc);
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
-            sname = sname.append(dialog.getServiceSubName());
+            auto subName = dialog.getServiceSubName();
+            if (subName.isEmpty())
+                return;
+            sname = sname.append(subName);
         } else {
             return;
         }
@@ -668,6 +677,7 @@ void SystemServiceTableView::refresh()
         return;
 
     m_model->reset();
+    m_selectedSName.clear();
 
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
