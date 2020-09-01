@@ -43,6 +43,7 @@
 #include "utils.h"
 #include "common/hash.h"
 #include "environments.h"
+#include <QSurfaceFormat>
 
 Q_DECLARE_METATYPE(QList<qreal>)
 
@@ -51,7 +52,13 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    qputenv("_d_disableDBusFileDialog", "true");
+    setenv("PULSE_PROP_media.role", "video", 1);
+    QSurfaceFormat format;
+    format.setRenderableType(QSurfaceFormat::OpenGLES);
+    format.setDefaultFormat(format);
+
     utils::init_seed();
 
     qRegisterMetaType<QList<qreal>>();
