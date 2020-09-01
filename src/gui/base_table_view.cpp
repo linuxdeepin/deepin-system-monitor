@@ -32,6 +32,7 @@
 #include <QHeaderView>
 #include <QHoverEvent>
 #include <QMouseEvent>
+#include <QScroller>
 
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -60,6 +61,9 @@ BaseTableView::BaseTableView(DWidget *parent)
     setFocusPolicy(Qt::TabFocus);
 
     setTabOrder(m_headerView, this);
+
+    // add treeview touch scroll support
+    QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
 void BaseTableView::paintEvent(QPaintEvent *event)
