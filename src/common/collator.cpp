@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -36,15 +38,22 @@ int Collator::compare(const QString &left, const QString &right, bool caseIgnore
     if (m_collator == nullptr)
         return QString::compare(left, right);
 
+    // convert to icu unicode string
     icu::UnicodeString lbuf = icu::UnicodeString().setTo(left.utf16());
     icu::UnicodeString rbuf = icu::UnicodeString().setTo(right.utf16());
+    // icu unicode string compare strength
     icu::Collator::ECollationStrength cs = m_collator->getStrength();
     if (caseIgnoreCompare)
+        // case ignore compare
         m_collator->setStrength(icu::Collator::SECONDARY);
     else
+        // compare with case
         m_collator->setStrength(icu::Collator::TERTIARY);
+    // compare
     result = m_collator->compare(lbuf, rbuf);
+    // set old strength back
     m_collator->setStrength(cs);
+    // check compare result
     if (result == icu::Collator::LESS) {
         return -1;
     } else if (result == icu::Collator::GREATER) {
@@ -57,6 +66,7 @@ int Collator::compare(const QString &left, const QString &right, bool caseIgnore
 Collator::Collator()
 {
     UErrorCode ec = U_ZERO_ERROR;
+    // new icu collator instance
     m_collator = icu::Collator::createInstance(ec);
     if (U_FAILURE(ec)) {
 #undef u_errorName
