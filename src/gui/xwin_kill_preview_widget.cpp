@@ -45,6 +45,7 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
     initUI();
     initConnections();
 
+    resize(0, 0);
     show();
 }
 
