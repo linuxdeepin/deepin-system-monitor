@@ -30,11 +30,14 @@
 #include <mutex>
 #include <thread>
 
+namespace util {
+namespace common {
+
 class Collator
 {
 public:
     /**
-    * @brief Collator::instance Singleton instance
+    * @brief instance Singleton instance
     */
     inline static Collator *instance()
     {
@@ -51,7 +54,7 @@ public:
     }
 
     /**
-    * @brief Collator::compare Compare unicode strings with ICU API
+    * @brief compare Compare unicode strings with ICU API
     * @param left Unicode string to be compared
     * @param right Unicode string to be compared
     * @param caseIgnoreCompare Compare string with case or with case ignored
@@ -69,6 +72,9 @@ private:
     // multi thread safe
     static std::atomic<Collator *> m_instance;
     static std::mutex m_mutex;
-};
+}; // !Collator
+
+} // namespace common
+} // namespace util
 
 #endif  // COLLATOR_H

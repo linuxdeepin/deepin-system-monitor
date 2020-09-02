@@ -491,7 +491,7 @@ bool SystemStat::readSockStat(SockStatMap &statMap)
             }
 
             fmtbuf = patternA.toLocal8Bit();
-            utils::hash(fmtbuf.constData(), fmtbuf.length(), utils::global_seed, cchash);
+            util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
             hash = cchash[0];
             statMap.insert(hash, stat);
 
@@ -499,7 +499,7 @@ bool SystemStat::readSockStat(SockStatMap &statMap)
             // otherwise we wont be able to get the inode
             if (proto == IPPROTO_TCP) {
                 fmtbuf = patternB.toLocal8Bit();
-                utils::hash(fmtbuf.constData(), fmtbuf.length(), utils::global_seed, cchash);
+                util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
                 hash = cchash[0];
                 statMap.insert(hash, stat);
             }

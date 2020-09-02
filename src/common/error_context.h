@@ -42,10 +42,20 @@ public:
     * @brief Constructor with params
     */
     ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage);
+    /**
+    * @brief Copy constructor
+    */
     ErrorContext(const ErrorContext &);
+    /**
+    * @brief Copy assignment
+    */
     ErrorContext &operator=(const ErrorContext &);
     ~ErrorContext();
 
+    /**
+    * @brief operator== Compare with other error context
+    * @return true: equal; false: not equal
+    */
     bool operator==(const ErrorContext &other) const;
     /**
     * @brief getCode Get error code

@@ -82,8 +82,9 @@ bool SystemServiceSortFilterProxyModel::lessThan(const QModelIndex &left,
         return left.data().toUInt() < right.data().toUInt();
     case SystemServiceTableModel::kSystemServiceNameColumn:
     case SystemServiceTableModel::kSystemServiceDescriptionColumn: {
-        return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                             right.data(Qt::DisplayRole).toString()) < 0;
+        return util::common::Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
+                                                           right.data(Qt::DisplayRole).toString())
+               < 0;
     }
     default:
         break;

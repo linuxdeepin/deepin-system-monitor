@@ -25,7 +25,9 @@
 class ErrorContextData : public QSharedData
 {
 public:
+    // default constructor
     ErrorContextData() {}
+    // copy constructor
     ErrorContextData(const ErrorContextData &rhs)
         : QSharedData(rhs)
         , m_code(rhs.m_code)
@@ -34,6 +36,7 @@ public:
         , m_errMessage(rhs.m_errMessage)
     {
     }
+    // copy assignment
     ErrorContextData &operator=(const ErrorContextData &rhs)
     {
         Q_UNUSED(padding);
@@ -61,11 +64,13 @@ private:
     QString m_errMessage {};
 };
 
+// default constructor
 ErrorContext::ErrorContext()
     : data(new ErrorContextData())
 {
 }
 
+// overloaded constructor
 ErrorContext::ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage)
 {
     data = new ErrorContextData();
@@ -74,12 +79,12 @@ ErrorContext::ErrorContext(int code, int subCode, const QString &errName, const 
     data->m_errName = errName;
     data->m_errMessage = errMessage;
 }
+// copy constructor
 ErrorContext::ErrorContext(const ErrorContext &rhs)
     : data(rhs.data)
 {
 }
-
-//重载=
+// assignment operator
 ErrorContext &ErrorContext::operator=(const ErrorContext &rhs)
 {
     if (this != &rhs) {
@@ -89,72 +94,78 @@ ErrorContext &ErrorContext::operator=(const ErrorContext &rhs)
 }
 ErrorContext::~ErrorContext() {}
 
-//重载==
+// overloaded compare operator
 bool ErrorContext::operator==(const ErrorContext &other) const
 {
     return (data->m_code == other.getCode() && data->m_subCode == other.getSubCode() &&
             data->m_errName == other.getSubCode() && data->m_errMessage == getErrorMessage());
 }
 
+// get error code
 int ErrorContext::getCode() const
 {
     return data->m_code;
 }
+// set error code
 void ErrorContext::setCode(int code)
 {
     data->m_code = code;
 }
 
+// get sub error code
 int ErrorContext::getSubCode() const
 {
     return data->m_subCode;
 }
+// set sub error code
 void ErrorContext::setSubCode(int subCode)
 {
     data->m_subCode = subCode;
 }
 
-//获取错误名
+// get error name
 QString ErrorContext::getErrorName() const
 {
     return data->m_errName;
 }
 
-//设置错误名
+// set error name
 void ErrorContext::setErrorName(const QString &errName)
 {
     data->m_errName = errName;
 }
 
-//获取错误信息
+// get error message
 QString ErrorContext::getErrorMessage() const
 {
     return data->m_errMessage;
 }
 
-//设置错误信息
+// set error message
 void ErrorContext::setErrorMessage(const QString &errMessage)
 {
     data->m_errMessage = errMessage;
 }
 
+// convenient ! operator
 bool operator!(const ErrorContext &ec) noexcept
 {
     return !ec.operator bool();
 }
 
-//判断是否有效
+// check if it's a valid error context
 bool ErrorContext::isValid() const
 {
     return operator bool();
 }
 
+// bool operator
 ErrorContext::operator bool() const
 {
     return (data->m_code != 0 || data->m_subCode != 0);
 }
 
-//重置参数
+// reset error context
 void ErrorContext::reset()
 {
     data->m_code = 0;

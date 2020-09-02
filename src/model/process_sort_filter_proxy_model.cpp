@@ -39,7 +39,7 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
     QRegExp expr = filterRegExp();
 
     if (QLocale::system().language() == QLocale::Chinese) {
-        m_hanwords = uconv::convHanToLatin(search);
+        m_hanwords = util::common::convHanToLatin(search);
         if (m_hanwords.isEmpty()) {
             m_capwords = QString {};
         } else {
@@ -108,13 +108,14 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
                     a.at(0) != b.at(0)) {
                 return a < b;
             } else {
-                return Collator::instance()->compare(a, b) < 0;
+                return util::common::Collator::instance()->compare(a, b) < 0;
             }
         }
     }
     case ProcessTableModel::kProcessUserColumn: {
-        return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                             right.data(Qt::DisplayRole).toString()) < 0;
+        return util::common::Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
+                                                           right.data(Qt::DisplayRole).toString())
+               < 0;
     }
     case ProcessTableModel::kProcessMemoryColumn: {
         QVariant lmem, rmem;

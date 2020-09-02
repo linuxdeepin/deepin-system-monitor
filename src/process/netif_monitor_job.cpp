@@ -136,8 +136,8 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         pattern = QString("%1:%2-%3:%4").arg(saddr_str).arg(payload->s_port).arg(daddr_str).arg(payload->d_port);
 
         uint64_t saddr_hpair[2] {}, daddr_hpair[2] {};
-        utils::hash(saddr_str, int(strlen(saddr_str)), utils::global_seed, saddr_hpair);
-        utils::hash(daddr_str, int(strlen(daddr_str)), utils::global_seed, daddr_hpair);
+        util::common::hash(saddr_str, int(strlen(saddr_str)), util::common::global_seed, saddr_hpair);
+        util::common::hash(daddr_str, int(strlen(daddr_str)), util::common::global_seed, daddr_hpair);
         if (netifMonitorJob->m_ifaddrsHashCache.contains(saddr_hpair[0])) {
             payload->direction = kOutboundPacket;
         } else if (netifMonitorJob->m_ifaddrsHashCache.contains(daddr_hpair[0])) {
@@ -154,8 +154,8 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         pattern = QString("%1:%2-%3:%4").arg(saddr6_str).arg(payload->s_port).arg(daddr6_str).arg(payload->d_port);
 
         uint64_t saddr6_hpair[2] {}, daddr6_hpair[2] {};
-        utils::hash(saddr6_str, int(strlen(saddr6_str)), utils::global_seed, saddr6_hpair);
-        utils::hash(daddr6_str, int(strlen(daddr6_str)), utils::global_seed, daddr6_hpair);
+        util::common::hash(saddr6_str, int(strlen(saddr6_str)), util::common::global_seed, saddr6_hpair);
+        util::common::hash(daddr6_str, int(strlen(daddr6_str)), util::common::global_seed, daddr6_hpair);
         if (netifMonitorJob->m_ifaddrsHashCache.contains(saddr6_hpair[0])) {
             payload->direction = kOutboundPacket;
         } else if (netifMonitorJob->m_ifaddrsHashCache.contains(daddr6_hpair[0])) {
@@ -169,7 +169,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
     }
 
     fmtbuf = pattern.toLocal8Bit();
-    utils::hash(fmtbuf.constData(), fmtbuf.length(), utils::global_seed, cchash);
+    util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
     hash = cchash[0];
 
     // get ino from map
@@ -298,14 +298,14 @@ void NetifMonitorJob::refreshIfAddrsHashCache()
                 char addr_str[INET_ADDRSTRLEN + 1] {};
                 inet_ntop(AF_INET, &ifaddr->addr.in4, addr_str, INET_ADDRSTRLEN);
 
-                utils::hash(addr_str, int(strlen(addr_str)), utils::global_seed, ifaddr_hash);
+                util::common::hash(addr_str, int(strlen(addr_str)), util::common::global_seed, ifaddr_hash);
                 m_ifaddrsHashCache[ifaddr_hash[0]] = 0;
 
             } else if (ifaddr->family == AF_INET6) {
                 char addr6_str[INET6_ADDRSTRLEN + 1] {};
                 inet_ntop(AF_INET6, &ifaddr->addr.in6, addr6_str, INET6_ADDRSTRLEN);
 
-                utils::hash(addr6_str, int(strlen(addr6_str)), utils::global_seed, ifaddr_hash);
+                util::common::hash(addr6_str, int(strlen(addr6_str)), util::common::global_seed, ifaddr_hash);
                 m_ifaddrsHashCache[ifaddr_hash[0]] = 0;
             }
 

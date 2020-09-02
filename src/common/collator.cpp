@@ -26,10 +26,12 @@
 #include <unicode/locid.h>
 #include <unicode/unistr.h>
 
-std::atomic<Collator *> Collator::m_instance;
-std::mutex Collator::m_mutex;
+using namespace util::common;
 
-int Collator::compare(const QString &left, const QString &right, bool caseIgnoreCompare) const
+std::atomic<util::common::Collator *> util::common::Collator::m_instance;
+std::mutex util::common::Collator::m_mutex;
+
+int util::common::Collator::compare(const QString &left, const QString &right, bool caseIgnoreCompare) const
 {
     icu::Collator::EComparisonResult result = icu::Collator::EQUAL;
 
@@ -63,7 +65,7 @@ int Collator::compare(const QString &left, const QString &right, bool caseIgnore
     }
 }
 
-Collator::Collator()
+util::common::Collator::Collator()
 {
     UErrorCode ec = U_ZERO_ERROR;
     // new icu collator instance
@@ -76,7 +78,7 @@ Collator::Collator()
     }
 }
 
-Collator::~Collator()
+util::common::Collator::~Collator()
 {
     delete m_collator;
 }

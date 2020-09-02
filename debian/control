@@ -10,4 +10,4 @@ Package: deepin-system-monitor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin, libdtkwm2, libxcb-icccm4
 Description: A system monitor tool.
- System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.
+ System Monitor is a system tool monitoring and managing hardware load, program running and system services. It's capable to real-time monitor CPU status, memory footprint, and upload/download speed, manage system and application processes, search and force end processes as well.

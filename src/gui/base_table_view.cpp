@@ -33,6 +33,7 @@
 #include <QHoverEvent>
 #include <QMouseEvent>
 #include <QScroller>
+#include <QScrollerProperties>
 
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -62,7 +63,13 @@ BaseTableView::BaseTableView(DWidget *parent)
 
     setTabOrder(m_headerView, this);
 
-    // add treeview touch scroll support
+    // treeview touch scroll support
+    auto *scroller = QScroller::scroller(viewport());
+    auto prop = scroller->scrollerProperties();
+    // turn off overshoot to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    scroller->setScrollerProperties(prop);
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 

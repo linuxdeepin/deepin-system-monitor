@@ -40,7 +40,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    utils::init_seed();
+    util::common::init_seed();
 
     qRegisterMetaType<QList<qreal>>();
 
