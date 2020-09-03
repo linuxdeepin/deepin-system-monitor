@@ -144,17 +144,18 @@ using XConnection = std::unique_ptr<xcb_connection_t, XDisconnector>;
 WMInfo::WMInfo()
 {
     buildWindowTreeSchema();
+    findDockWindows();
 }
 
 WMInfo::~WMInfo()
 {
 }
 
-std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos)
+std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 {
     std::list<WMWindowArea> walist;
 
-    std::function<void(const struct wm_window_ext_t *parent)> scan_tree;
+    std::function<void(const struct wm_window_ext_t *)> scan_tree;
     scan_tree = [&](const struct wm_window_ext_t *parent) {
         for (auto &childWindowId : parent->children) {
             auto &child = m_tree->cache[childWindowId];
@@ -171,10 +172,10 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos)
             if (child->wclass != kInputOutputClass)
                 continue;
 
-            // window type
             if (child->pid == -1)
                 continue;
 
+            // window type
             if (child->types.startsWith(kDockWindowType)
                     || child->types.startsWith(kDesktopWindowType))
                 continue;
@@ -218,7 +219,18 @@ WMWId WMInfo::getRootWindow() const
     return 0;
 }
 
-std::list<WMWindowArea> WMInfo::hoveredBy(WMWId wid, QRect &area)
+bool WMInfo::isCursorHoveringDocks(const QPoint &pos) const
+{
+    for (auto &dock : m_dockWindowList) {
+        if (dock->rect.contains(pos)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) const
 {
     std::list<WMWindowArea> list {};
     bool done {false};
@@ -342,6 +354,51 @@ void WMInfo::buildWindowTreeSchema()
     };
 
     build_tree(root);
+}
+
+void WMInfo::findDockWindows()
+{
+    m_dockWindowList.clear();
+
+    std::function<void(const struct wm_window_ext_t *)> scan_tree;
+    scan_tree = [&](const struct wm_window_ext_t *parent) {
+        for (auto &childWindowId : parent->children) {
+            auto &child = m_tree->cache[childWindowId];
+
+            // check child first (top => bottom)
+            if (child->children.length() > 0)
+                scan_tree(child.get());
+
+            // map state
+            if (child->map_state != kViewableState)
+                continue;
+
+            // window class
+            if (child->wclass != kInputOutputClass)
+                continue;
+
+            if (child->pid == -1)
+                continue;
+
+            // window state
+            if (child->states.contains(kHiddenState))
+                continue;
+
+            // window type (dock type should exclude from this)
+            if (!child->types.startsWith(kDockWindowType))
+                continue;
+
+            WMWindowArea warea(new struct wm_window_area_t());
+            warea->rect = child->rect;
+            warea->pid = child->pid;
+            warea->wid = child->windowId;
+
+            m_dockWindowList.push_back(std::move(warea));
+        }
+    };
+
+    Q_ASSERT(m_tree->root != nullptr);
+    scan_tree(m_tree->root);
 }
 
 void WMInfo::initAtomCache(xcb_connection_t *conn)

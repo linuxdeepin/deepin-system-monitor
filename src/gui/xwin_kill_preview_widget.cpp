@@ -67,8 +67,13 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     }
 
     auto pos = QCursor::pos();
-
     auto list = m_wminfo->selectWindow(pos);
+
+    // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
+    if (m_wminfo->isCursorHoveringDocks(pos)) {
+        return;
+    }
+
     for (auto &select : list) {
         if (SystemMonitor::getCurrentPID() == select->pid)
             continue;
@@ -94,6 +99,15 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 
     auto list = m_wminfo->selectWindow(pos);
     bool found {false};
+
+    // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
+    if (m_wminfo->isCursorHoveringDocks(pos)) {
+        for (auto &bg : m_backgroundList)
+            bg->clearSelection();
+        emit cursorUpdated(m_defaultCursor);
+        return;
+    }
+
     for (auto &select : list) {
         if (SystemMonitor::getCurrentPID() == select->pid)
             continue;
@@ -102,7 +116,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
             found = true;
 
             // find all windows hovered above, if any clip out the intersected region
-            auto hoveredBy = m_wminfo->hoveredBy(select->wid, select->rect);
+            auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, select->rect);
             QRegion region {select->rect};
             for (auto &hover : hoveredBy)
                 region = region.subtracted(hover->rect);

@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -20,10 +22,20 @@
 
 #include <QDebug>
 
+/**
+ * @brief The UnitInfoData class
+ */
 class UnitInfoData : public QSharedData
 {
 public:
+    /**
+     * @brief UnitInfoData constructor
+     */
     UnitInfoData() {}
+    /**
+     * @brief Copy constructor
+     * @param rhs Other UnitInfoData object
+     */
     UnitInfoData(const UnitInfoData &rhs)
         : QSharedData(rhs)
         , m_jobId(rhs.m_jobId)
@@ -38,6 +50,11 @@ public:
         , m_jobObjectPath(rhs.m_jobObjectPath)
     {
     }
+    /**
+     * @brief Copy assignment
+     * @param rhs Other UnitInfoData object
+     * @return Copied version
+     */
     UnitInfoData &operator=(const UnitInfoData &rhs)
     {
         if (this != &rhs) {
@@ -59,26 +76,44 @@ public:
     friend class UnitInfo;
 
 private:
+    // unit job Id
     quint32 m_jobId {0};
+    // unit name
     QString m_name {};
+    // unit description
     QString m_description {};
+    // unit load state
     QString m_loadState {};
+    // unit active state
     QString m_activeState {};
+    // unit sub state
     QString m_subState {};
+    // unit followedBy
     QString m_followedBy {};
+    // unit object path
     QString m_unitObjectPath {};
+    // unit job type
     QString m_jobType {};
+    // job object path
     QString m_jobObjectPath {};
 };
 
+// Default constructor
 UnitInfo::UnitInfo()
     : data(new UnitInfoData)
 {
 }
 
-UnitInfo::UnitInfo(const QString &name, const QString &description, const QString &loadState,
-                   const QString &activeState, const QString &subState, const QString &followedBy,
-                   const QString &unitObjectPath, quint32 jobId, const QString &jobType,
+// Constructor with params
+UnitInfo::UnitInfo(const QString &name,
+                   const QString &description,
+                   const QString &loadState,
+                   const QString &activeState,
+                   const QString &subState,
+                   const QString &followedBy,
+                   const QString &unitObjectPath,
+                   quint32 jobId,
+                   const QString &jobType,
                    const QString &jobObjectPath)
 {
     data = new UnitInfoData();
@@ -94,12 +129,13 @@ UnitInfo::UnitInfo(const QString &name, const QString &description, const QStrin
     data->m_jobObjectPath = jobObjectPath;
 }
 
+// Copy constructor
 UnitInfo::UnitInfo(const UnitInfo &rhs)
     : data(rhs.data)
 {
 }
 
-//重载=
+// Copy assignment
 UnitInfo &UnitInfo::operator=(const UnitInfo &rhs)
 {
     if (this != &rhs)
@@ -109,7 +145,7 @@ UnitInfo &UnitInfo::operator=(const UnitInfo &rhs)
 
 UnitInfo::~UnitInfo() {}
 
-//重载==
+// Compare this UnitInfo object with others
 bool UnitInfo::operator==(const UnitInfo &other) const
 {
     return (
@@ -121,110 +157,119 @@ bool UnitInfo::operator==(const UnitInfo &other) const
                data->m_jobType == other.getJobType() && data->m_jobObjectPath == other.getJobObjectPath());
 }
 
-//获取名称
+// Get unit name
 QString UnitInfo::getName() const
 {
     return data->m_name;
 }
 
-//设置名称
+// Set unit name
 void UnitInfo::setName(const QString &name)
 {
     data->m_name = name;
 }
 
-//获取描述
+// Get unit description
 QString UnitInfo::getDescription() const
 {
     return data->m_description;
 }
 
-//设置描述
+// Set unit description
 void UnitInfo::setDescription(const QString &description)
 {
     data->m_description = description;
 }
 
-//获取负载状态
+// Get unit load state
 QString UnitInfo::getLoadState() const
 {
     return data->m_loadState;
 }
-//设置负载状态
+// Set unit load state
 void UnitInfo::setLoadState(const QString &loadState)
 {
     data->m_loadState = loadState;
 }
 
-//获取激活状态
+// Get unit active state
 QString UnitInfo::getActiveState() const
 {
     return data->m_activeState;
 }
-
-//设置激活状态
+// Set unit active state
 void UnitInfo::setActiveState(const QString &activeState)
 {
     data->m_activeState = activeState;
 }
 
+// Get unit sub state
 QString UnitInfo::getSubState() const
 {
     return data->m_subState;
 }
+// Set unit sub state
 void UnitInfo::setSubState(const QString &subState)
 {
     data->m_subState = subState;
 }
 
+// Get unit followedBy
 QString UnitInfo::getFollowedBy() const
 {
     return data->m_followedBy;
 }
+// Set unit followedBy
 void UnitInfo::setFollowedBy(const QString &followedBy)
 {
     data->m_followedBy = followedBy;
 }
 
-//获取路径
+// Get unit object path
 QString UnitInfo::getUnitObjectPath() const
 {
     return data->m_unitObjectPath;
 }
-//设置路径
+// Set unit object path
 void UnitInfo::setUnitObjectPath(const QString &unitObjectPath)
 {
     data->m_unitObjectPath = unitObjectPath;
 }
 
+// Get job Id
 quint32 UnitInfo::getJobId() const
 {
     return data->m_jobId;
 }
+// Set job Id
 void UnitInfo::setJobId(quint32 jobId)
 {
     data->m_jobId = jobId;
 }
 
+// Get job type
 QString UnitInfo::getJobType() const
 {
     return data->m_jobType;
 }
+// Set job type
 void UnitInfo::setJobType(const QString &jobType)
 {
     data->m_jobType = jobType;
 }
 
+// Get job object path
 QString UnitInfo::getJobObjectPath() const
 {
     return data->m_jobObjectPath;
 }
+// Set job object path
 void UnitInfo::setJobObjectPath(const QString &jobObjectPath)
 {
     data->m_jobObjectPath = jobObjectPath;
 }
 
-//注册自定义类型
+// Register UnitInfo meta type
 void UnitInfo::registerMetaType()
 {
     qRegisterMetaType<UnitInfo>("UnitInfo");
@@ -233,7 +278,7 @@ void UnitInfo::registerMetaType()
     qDBusRegisterMetaType<UnitInfoList>();
 }
 
-//重载<<
+// Print UnitInfo object to debug stream
 QDebug &operator<<(QDebug &debug, const UnitInfo &unit)
 {
     debug << unit.getName() << unit.getDescription() << unit.getLoadState() << unit.getActiveState()
@@ -242,6 +287,7 @@ QDebug &operator<<(QDebug &debug, const UnitInfo &unit)
     return debug;
 }
 
+// Output UnitInfo object to DBus argument
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfo &unit)
 {
     argument.beginStructure();
@@ -253,6 +299,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfo &unit)
     return argument;
 }
 
+// Output UnitInfo object to data stream
 QDataStream &operator<<(QDataStream &stream, const UnitInfo &unit)
 {
     stream << unit.getName() << unit.getDescription() << unit.getLoadState()
@@ -262,6 +309,7 @@ QDataStream &operator<<(QDataStream &stream, const UnitInfo &unit)
     return stream;
 }
 
+// Read UnitInfo object from DBus argument
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitInfo &unit)
 {
     QString name, description, loadState, activeState, subState, followedBy, unitObjectPath,
@@ -284,6 +332,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, UnitInfo &unit)
     return argument;
 }
 
+// Read UnitInfo object from data stream
 const QDataStream &operator>>(QDataStream &stream, UnitInfo &unit)
 {
     QString name, description, loadState, activeState, subState, followedBy, unitObjectPath,
@@ -304,6 +353,7 @@ const QDataStream &operator>>(QDataStream &stream, UnitInfo &unit)
     return stream;
 }
 
+// Output list of UnitInfo objects to DBus argument
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfoList &list)
 {
     argument.beginArray(qMetaTypeId<UnitInfo>());
@@ -314,6 +364,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const UnitInfoList &list)
     return argument;
 }
 
+// Read list of UnitInfo objects from DBus argument
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitInfoList &list)
 {
     argument.beginArray();

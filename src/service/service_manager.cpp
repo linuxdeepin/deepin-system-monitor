@@ -47,7 +47,7 @@
 #define BIN_SYSTEMCTL_PATH "/usr/bin/systemctl"
 
 DCORE_USE_NAMESPACE
-using namespace DBus::Common;
+using namespace dbus::common;
 
 std::atomic<ServiceManager *> ServiceManager::m_instance;
 std::mutex ServiceManager::m_mutex;

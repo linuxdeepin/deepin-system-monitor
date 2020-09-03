@@ -91,13 +91,15 @@ public:
     ~WMInfo();
 
     // top level window (including wm frame) in top to bottom order that contains cursor
-    std::list<WMWindowArea> selectWindow(const QPoint &pos);
+    std::list<WMWindowArea> selectWindow(const QPoint &pos) const;
     WMWId getRootWindow() const;
-    std::list<WMWindowArea> hoveredBy(WMWId wid, QRect &area);
+    std::list<WMWindowArea> getHoveredByWindowList(WMWId wid, QRect &area) const;
+    bool isCursorHoveringDocks(const QPoint &pos) const;
 
 private:
     std::map<pid_t, WMWindow> updateWindowStackCache();
     void buildWindowTreeSchema();
+    void findDockWindows();
 
     void initAtomCache(xcb_connection_t *conn);
     inline xcb_atom_t getAtom(xcb_connection_t *conn, xcb_intern_atom_cookie_t &cookie);
@@ -110,6 +112,7 @@ private:
 
     std::map<intern_atom_type, xcb_atom_t>  m_internAtomCache;
     std::map<xcb_atom_t, AtomMeta>          m_atomCache;
+    std::list<WMWindowArea> m_dockWindowList;
 };
 
 } // !wm

@@ -30,7 +30,7 @@ class ServiceManager;
 class SystemServiceEntry;
 class ServiceManagerWorker;
 
-using namespace DBus::Common;
+using namespace dbus::common;
 
 // temporary solution to fix status column not shown final state after service start/stop/restart
 class CustomTimer : public QObject

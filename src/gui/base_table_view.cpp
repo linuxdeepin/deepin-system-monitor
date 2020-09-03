@@ -69,6 +69,9 @@ BaseTableView::BaseTableView(DWidget *parent)
     // turn off overshoot to fix performance issue
     prop.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
     prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 1);
+    prop.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1);
     scroller->setScrollerProperties(prop);
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }

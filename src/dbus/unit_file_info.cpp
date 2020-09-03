@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -21,17 +23,22 @@
 #include <QString>
 #include <QDebug>
 
+/**
+ * @brief The UnitFileInfoData class
+ */
 class UnitFileInfoData : public QSharedData
 {
 public:
+    // Constructor
     UnitFileInfoData() {}
+    // Copy constructor
     UnitFileInfoData(const UnitFileInfoData &rhs)
         : QSharedData(rhs)
         , m_name(rhs.m_name)
         , m_status(rhs.m_status)
     {
     }
-    //重载赋值运算符
+    // Copy assignment
     UnitFileInfoData &operator=(const UnitFileInfoData &rhs)
     {
         Q_UNUSED(__alignment);
@@ -48,15 +55,19 @@ public:
 
 private:
     int __alignment;  // simply used for suppressing compiler warnings
+    // unit file name
     QString m_name {};
+    // unit file status
     QString m_status {};
 };
 
+// Constructor
 UnitFileInfo::UnitFileInfo()
     : data(new UnitFileInfoData)
 {
 }
 
+// Overloaded constructor
 UnitFileInfo::UnitFileInfo(const QString &name, const QString &status)
 {
     data = new UnitFileInfoData();
@@ -64,11 +75,13 @@ UnitFileInfo::UnitFileInfo(const QString &name, const QString &status)
     data->m_status = status;
 }
 
+// Copy constructor
 UnitFileInfo::UnitFileInfo(const UnitFileInfo &rhs)
     : data(rhs.data)
 {
 }
 
+// Copy assignment
 UnitFileInfo &UnitFileInfo::operator=(const UnitFileInfo &rhs)
 {
     if (this != &rhs)
@@ -78,34 +91,37 @@ UnitFileInfo &UnitFileInfo::operator=(const UnitFileInfo &rhs)
 
 UnitFileInfo::~UnitFileInfo() {}
 
+// Compare this UnitFileInfo object with others
 bool UnitFileInfo::operator==(const UnitFileInfo &other) const
 {
     return data->m_name == other.getName() && data->m_status == other.getStatus();
 }
 
-//获取名称
+// Get unit file name
 QString UnitFileInfo::getName() const
 {
     return data->m_name;
 }
 
-//设置名称
+// Set unit file name
 void UnitFileInfo::setName(const QString &name)
 {
     data->m_name = name;
 }
 
+// Get unit file status
 QString UnitFileInfo::getStatus() const
 {
     return data->m_status;
 }
 
+// Set unit file status
 void UnitFileInfo::setStatus(const QString &status)
 {
     data->m_status = status;
 }
 
-//注册自定义类型
+// Register UnitFileInfo meta type
 void UnitFileInfo::registerMetaType()
 {
     qRegisterMetaType<UnitFileInfo>("UnitFileInfo");
@@ -114,13 +130,14 @@ void UnitFileInfo::registerMetaType()
     qDBusRegisterMetaType<UnitFileInfoList>();
 }
 
-//重载
+// Print UnitFileInfo object to debug stream
 QDebug &operator<<(QDebug &debug, const UnitFileInfo &unit)
 {
     debug << unit.getName() << unit.getStatus();
     return debug;
 }
 
+// Output UnitFileInfo object to DBus argument
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfo &unit)
 {
     argument.beginStructure();
@@ -129,12 +146,14 @@ QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfo &unit)
     return argument;
 }
 
+// Output UnitFileInfo object to data stream
 QDataStream &operator<<(QDataStream &stream, const UnitFileInfo &unit)
 {
     stream << unit.getName() << unit.getStatus();
     return stream;
 }
 
+// Read UnitFileInfo info from DBus argument
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitFileInfo &unit)
 {
     QString name, status;
@@ -146,6 +165,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, UnitFileInfo &uni
     return argument;
 }
 
+// Read UnitFileInfo object from data stream
 const QDataStream &operator>>(QDataStream &stream, UnitFileInfo &unit)
 {
     QString name, status;
@@ -155,6 +175,7 @@ const QDataStream &operator>>(QDataStream &stream, UnitFileInfo &unit)
     return stream;
 }
 
+// Output list of UnitFileInfo objects to DBus argument
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfoList &list)
 {
     argument.beginArray(qMetaTypeId<UnitFileInfoList>());
@@ -165,6 +186,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfoList &list)
     return argument;
 }
 
+// Read list of UnitFileInfo objects from DBus argument
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitFileInfoList &list)
 {
     argument.beginArray();
