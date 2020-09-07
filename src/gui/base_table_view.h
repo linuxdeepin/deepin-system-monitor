@@ -40,6 +40,7 @@ protected:
                  const QModelIndex &index) const override;
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
     bool viewportEvent(QEvent *event) override;
+    void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
 
 private:
     BaseItemDelegate *m_itemDelegate {nullptr};

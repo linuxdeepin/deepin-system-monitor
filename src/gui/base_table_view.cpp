@@ -34,6 +34,7 @@
 #include <QMouseEvent>
 #include <QScroller>
 #include <QScrollerProperties>
+#include <QScrollBar>
 
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -241,7 +242,16 @@ bool BaseTableView::viewportEvent(QEvent *event)
     case QEvent::HoverEnter:
     case QEvent::HoverMove: {
         auto *hev = dynamic_cast<QHoverEvent *>(event);
+        auto oldHover = m_hover;
         m_hover = indexAt(hev->pos());
+        if (m_hover != oldHover) {
+            if (oldHover.isValid()) {
+                auto rect = visualRect(oldHover);
+                rect.setX(0);
+                rect.setWidth(viewport()->width());
+                viewport()->update(rect);
+            }
+        }
         if (m_hover.isValid()) {
             auto rect = visualRect(m_hover);
             rect.setX(0);
@@ -278,4 +288,40 @@ bool BaseTableView::viewportEvent(QEvent *event)
         break;
     }
     return DTreeView::viewportEvent(event);
+}
+
+void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint hint)
+{
+    if (!(index.isValid() && index.row() >= 0 && index.column() >= 0 && index.model() == model())) {
+        return;
+    }
+
+    auto area = viewport()->rect();
+    QRect rect(columnViewportPosition(index.column()),
+               indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
+               columnWidth(index.column()),
+               indexRowSizeHint(index));
+
+    if (rect.isEmpty()) {
+        // nothing to do
+    } else if (hint == EnsureVisible && area.contains(rect)) {
+        viewport()->update(rect);
+        // nothing to do
+    } else {
+        bool above = (hint == EnsureVisible
+                      && (rect.top() < area.top()
+                          || area.height() < rect.height()));
+        bool below = (hint == EnsureVisible
+                      && rect.bottom() > area.bottom()
+                      && rect.height() < area.height());
+
+        int verticalValue = verticalScrollBar()->value();
+        if (hint == PositionAtTop || above)
+            verticalValue += rect.top();
+        else if (hint == PositionAtBottom || below)
+            verticalValue += rect.bottom() - area.height();
+        else if (hint == PositionAtCenter)
+            verticalValue += rect.top() - ((area.height() - rect.height()) / 2);
+        verticalScrollBar()->setValue(verticalValue);
+    }
 }
