@@ -224,8 +224,6 @@ void ProcessPageWidget::initUI()
 void ProcessPageWidget::initConnections()
 {
     MainWindow *mainWindow = MainWindow::instance();
-    connect(mainWindow, &MainWindow::killProcessPerformed, this,
-            &ProcessPageWidget::showWindowKiller);
     connect(mainWindow, &MainWindow::displayModeChanged, this,
             &ProcessPageWidget::switchDisplayMode);
 
@@ -313,14 +311,6 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
     painter.fillPath(path, bgColor);
 }
 
-void ProcessPageWidget::createWindowKiller()
-{
-    m_wndKiller = new InteractiveKill(this);
-    m_wndKiller->setFocus();
-    connect(m_wndKiller, &InteractiveKill::killWindow, this,
-            &ProcessPageWidget::popupKillConfirmDialog);
-}
-
 void ProcessPageWidget::updateProcessSummary(int napps, int nprocs)
 {
     QString buf = DApplication::translate("Process.Summary", kProcSummaryTemplateText);
@@ -361,45 +351,6 @@ void ProcessPageWidget::changeIconTheme(DGuiApplicationHelper::ColorType themeTy
 
     m_allProcButton->setIcon(allProcIcon);
     m_allProcButton->setIconSize(QSize(26, 24));
-}
-
-void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
-{
-    if (m_wndKiller) {
-        m_wndKiller->close();
-    }
-
-    QString title = DApplication::translate("Kill.Process.Dialog", "End process");
-    QString description = DApplication::translate("Kill.Process.Dialog",
-                                                  "Force ending this application may cause data "
-                                                  "loss.\nAre you sure you want to continue?");
-
-    KillProcessConfirmDialog dialog(this);
-//    dialog.setTitle(title);
-    dialog.setMessage(description);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
-                     DDialog::ButtonWarning);
-    dialog.exec();
-    if (dialog.result() == QMessageBox::Ok) {
-        auto *sysmon = SystemMonitor::instance();
-        if (sysmon) {
-            sysmon->killProcess(qvariant_cast<pid_t>(pid));
-        }
-    } else {
-        // restore window
-        MainWindow *mainWindow = MainWindow::instance();
-        mainWindow->showNormal();
-    }
-}
-
-void ProcessPageWidget::showWindowKiller()
-{
-    // Minimize window before show killer window.
-    MainWindow *mainWindow = MainWindow::instance();
-    mainWindow->showMinimized();
-
-    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)

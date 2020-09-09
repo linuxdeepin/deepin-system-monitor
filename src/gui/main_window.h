@@ -47,7 +47,6 @@ public:
     inline SystemServicePageWidget *systemServicePage() const { return m_svcPage; }
 
 Q_SIGNALS:
-    void killProcessPerformed();
     void displayModeChanged(DisplayMode mode);
     void loadingStatusChanged(bool loading);
     void authProgressStarted();

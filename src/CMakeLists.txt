@@ -23,11 +23,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DI
 find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
-find_package(DtkWm REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_PROCPS NAMES procps REQUIRED)
-find_library(LIB_XCB NAMES xcb REQUIRED)
-find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 set(APP_HEADERS
@@ -46,10 +43,7 @@ set(APP_HEADERS
     compact_memory_monitor.h
     compact_network_monitor.h
     compact_disk_monitor.h
-    find_window_title.h
     smooth_curve_generator.h
-    interactive_kill.h
-    start_tooltip.h
     constant.h
     settings.h
     model/process_table_model.h
@@ -88,7 +82,7 @@ set(APP_HEADERS
     process/process_stat.h
     process/system_stat.h
     process/stats_collector.h
-    process/desktop_entry_stat.h
+    process/desktop_entry_cache.h
     process/netif_monitor.h
     process/netif_monitor_job.h
     process/netif_packet_parser.h
@@ -113,10 +107,7 @@ set(APP_SOURCES
     compact_memory_monitor.cpp
     compact_network_monitor.cpp
     compact_disk_monitor.cpp
-    find_window_title.cpp
     smooth_curve_generator.cpp
-    interactive_kill.cpp
-    start_tooltip.cpp
     settings.cpp
     model/system_service_table_model.cpp
     model/system_service_sort_filter_proxy_model.cpp
@@ -156,7 +147,7 @@ set(APP_SOURCES
     process/process_stat.cpp
     process/system_stat.cpp
     process/stats_collector.cpp
-    process/desktop_entry_stat.cpp
+    process/desktop_entry_cache.cpp
     service/service_manager_worker.cpp
     service/service_manager.cpp
     service/system_service_entry_data.cpp
@@ -179,13 +170,10 @@ target_link_libraries(${APP_NAME}
     dtkcore
     dtkwidget
     dtkgui
-    dtkwm
     ${LIB_PCAP}
     ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
-    ${LIB_XCB}
-    ${LIB_XEXT}
 )
 
 install(TARGETS ${APP_NAME} DESTINATION bin)

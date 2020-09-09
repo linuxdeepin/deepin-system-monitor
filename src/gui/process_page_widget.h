@@ -10,7 +10,6 @@
 #include <QHBoxLayout>
 #include <QMenu>
 
-#include "interactive_kill.h"
 #include "monitor_compact_view.h"
 #include "monitor_expand_view.h"
 #include "process_table_view.h"
@@ -44,9 +43,6 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private Q_SLOTS:
-    void popupKillConfirmDialog(int pid);
-    void showWindowKiller();
-    void createWindowKiller();
     void updateProcessSummary(int napps, int nprocs);
     void changeIconTheme(DApplicationHelper::ColorType themeType);
 
@@ -64,8 +60,6 @@ private:
     DButtonBoxButton *m_allProcButton {nullptr};
 
     ProcessTableView *m_procTable {nullptr};
-
-    InteractiveKill *m_wndKiller {nullptr};
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

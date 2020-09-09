@@ -192,16 +192,6 @@ void ProcessTableView::openExecDirWithFM()
                     QString processPath = output.split("\n")[0];
                     DDesktopServices::showFileItem(processPath);
                 }
-                // Find flatpak application location.
-                else {
-                    QDir flatpakRootDir = Utils::getFlatpakAppPath(flatpakAppidEnv);
-                    flatpakRootDir.cd("files");
-                    flatpakRootDir.cd("bin");
-
-                    // Need split full path to get last filename.
-                    DDesktopServices::showFileItem(
-                        flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
-                }
             }
         }
     }

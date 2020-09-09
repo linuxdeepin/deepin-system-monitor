@@ -23,7 +23,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <dwindowmanager.h>
 #include <proc/readproc.h>
 #include <QFileInfoList>
 #include <QLayout>
@@ -31,12 +30,9 @@
 #include <QPainter>
 #include <QString>
 #include <unordered_set>
-#include "find_window_title.h"
 #include <QDebug>
 
 #include <QVariant>
-
-DWM_USE_NAMESPACE
 
 const int RECTANGLE_PADDING = 24;
 const int RECTANGLE_RADIUS = 8;
@@ -99,15 +95,6 @@ inline QString normalizeProcName(const QString &proc_name, const QByteArrayList 
 }
 
 int getStatusBarMaxWidth();
-int getWindowPid(DWindowManager *windowManager, xcb_window_t window);
-long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory);
-QList<xcb_window_t> getTrayWindows();
-QMap<QString, QString> getProcessDescriptions();
-QMap<QString, QString> getDesktopfileMap();
-QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize = 24);
-QPixmap getProcessIcon(int pid, std::string desktopFile,
-                       QScopedPointer<FindWindowTitle> &findWindowTitle, int iconSize);
-QSize getRenderSize(int fontSize, QString string);
 
 inline QString formatUnitSize(QVariant v, QStringList orders, bool showUnit = true, int prec = 1)
 {
@@ -152,25 +139,13 @@ inline QString formatByteCount(QVariant v, bool showUnit = true, int prec = 1)
 
 QString getProcessCmdline(pid_t pid);
 QString getProcessEnvironmentVariable(pid_t pid, QString environmentName);
-QString getProcessNameFromCmdLine(const pid_t pid);
-QString getQrcPath(QString imageName);
-QString getFlatpakAppIcon(QString flatpakAppid);
-QDir getFlatpakAppPath(QString flatpakAppid);
-bool fileExists(QString path);
-void blurRect(DWindowManager *windowManager, WId widgetId, QRect rect);
-void blurRects(DWindowManager *windowManager, WId widgetId, QList<QRect> rects);
-void clearBlur(DWindowManager *windowManager, WId widgetId);
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
                      int loadingAngle, int rotationAngle, QColor foregroundColor,
                      double foregroundOpacity, QColor backgroundColor, double backgroundOpacity,
                      double percent);
 void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
               int loadingAngle, int rotationAngle, QColor color, double opacity);
-void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
-void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
-void passInputEvent(WId wid);
 void setFontSize(QPainter &painter, int textSize);
-const std::vector<std::string> explode(const std::string &s, const char &c);
 }  // namespace Utils
 
 #endif

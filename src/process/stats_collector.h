@@ -31,10 +31,9 @@
 #include "system_stat.h"
 #include "process_stat.h"
 #include "process_entry.h"
-#include "desktop_entry_stat.h"
 #include "system_monitor.h"
-#include "find_window_title.h"
 #include "netif_monitor.h"
+#include "desktop_entry_cache.h"
 
 void readProcStatsCallback(ProcStat &ps, void *context);
 void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps);
@@ -115,11 +114,7 @@ private:
 
     time_t m_btime {};
 
-    // helper utility to help find all gui apps
-    QScopedPointer<FindWindowTitle> m_wm            {};
-    QMap<pid_t, xcb_window_t>   m_trayPIDToWndMap   {};
-    QList<pid_t>                m_guiPIDList        {};
-    QList<pid_t>                m_appList           {};
+    QList<pid_t> m_appList {};
 
     QMap<pid_t, ProcNetIOStat>  m_procNetIOStat {}; // help merge child proc's stat
     using ProcNetIOAggHist = QPair<ProcNetIOAgg, ProcNetIOAgg>;
@@ -148,9 +143,8 @@ private:
     QMap<uid_t, QString>    m_uidCache              {};
     QMap<gid_t, QString>    m_gidCache              {};
 
-    DesktopEntryCache       m_desktopEntryCache     {};
-    QThread                 m_cacheThread           {};
-    DesktopEntryStat       *m_desktopEntryStat      {};
+    DesktopEntryCache *m_desktopEntryCache {};
+
     QList<QString>          m_shellList             {};
     QList<QString>          m_scriptingList         {};
     QList<QByteArray>       m_envPathList           {};

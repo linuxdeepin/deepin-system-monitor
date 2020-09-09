@@ -26,7 +26,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <unordered_set>
 
 #include <DDesktopEntry>
 #include <QApplication>
@@ -45,178 +44,17 @@
 #include <QWidget>
 #include <QtDBus>
 #include <QtMath>
-#include <QtX11Extras/QX11Info>
-
-#include <X11/extensions/shape.h>
 
 #include "utils.h"
 
 DCORE_USE_NAMESPACE
 
 namespace Utils {
-static QMap<QString, QString> desktopfileMaps = getDesktopfileMap();
-
-QMap<QString, QString> getDesktopfileMap()
-{
-    QMap<QString, QString> map;
-
-    map["/opt/kingsoft/wps-office/office6/wps"] = "/usr/share/applications/wps-office-wps.desktop";
-    map["/opt/kingsoft/wps-office/office6/wpp"] = "/usr/share/applications/wps-office-wpp.desktop";
-    map["/opt/kingsoft/wps-office/office6/et"] = "/usr/share/applications/wps-office-et.desktop";
-
-    return map;
-}
-
-QList<xcb_window_t> getTrayWindows()
-{
-    QDBusInterface busInterface("com.deepin.dde.TrayManager", "/com/deepin/dde/TrayManager",
-                                "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-    QDBusMessage reply = busInterface.call("Get", "com.deepin.dde.TrayManager", "TrayIcons");
-    QVariant v = reply.arguments().first();
-    const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
-
-    argument.beginArray();
-    QList<xcb_window_t> xids;
-    while (!argument.atEnd()) {
-        xcb_window_t xid;
-
-        argument >> xid;
-        xids << xid;
-    }
-    argument.endArray();
-
-    return xids;
-}
 
 int getStatusBarMaxWidth()
 {
     // TODO: use more elegent way to calc bar width
     return 300;
-}
-
-int getWindowPid(DWindowManager *windowManager, xcb_window_t window)
-{
-    int windowPid = -1;
-
-    QString flatpakAppid = windowManager->getWindowFlatpakAppid(window);
-    if (flatpakAppid != "") {
-        PROCTAB *proc =
-            openproc(PROC_FILLMEM | PROC_FILLSTAT | PROC_FILLSTATUS | PROC_FILLUSR | PROC_FILLCOM);
-        static proc_t proc_info;
-        memset(&proc_info, 0, sizeof(proc_t));
-
-        std::map<int, proc_t> processes;
-        while (readproc(proc, &proc_info) != nullptr) {
-            processes[proc_info.tid] = proc_info;
-        }
-        closeproc(proc);
-
-        for (auto &p : processes) {
-            int pid = (&p.second)->tid;
-
-            QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
-            if (flatpakAppidEnv == flatpakAppid) {
-                QString tempName = windowManager->getWindowName(window);
-
-                if (windowPid < pid) {
-                    windowPid = pid;
-                }
-            }
-        }
-    } else {
-        windowPid = windowManager->getWindowPid(window);
-    }
-
-    return windowPid;
-}
-
-long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory)
-{
-    if (cmdline.startsWith("/usr/lib/virtualbox/VirtualBox") && cmdline.contains("--startvm")) {
-        return residentMemroy * sysconf(_SC_PAGESIZE);
-    } else {
-        return (residentMemroy - shareMemory) * sysconf(_SC_PAGESIZE);
-    }
-}
-
-QPixmap getDesktopFileIcon(std::string desktopFile, int iconSize)
-{
-    std::ifstream in;
-    in.open(desktopFile);
-    QIcon defaultExecutableIcon = QIcon::fromTheme("application-x-executable");
-    QIcon icon;
-    QString iconName;
-    bool foundIconLine = false;
-
-    while (!in.eof()) {
-        std::string line;
-        std::getline(in, line);
-        iconName = QString::fromStdString(line);
-
-        if (iconName.startsWith("Icon")) {
-            iconName = iconName.split("=").last().simplified();
-            foundIconLine = true;
-        } else {
-            continue;
-        }
-
-        if (iconName.contains("/")) {
-            // this is probably a path to the file, use that instead of the theme icon name
-            icon = QIcon(iconName);
-        } else {
-            icon = QIcon::fromTheme(iconName, defaultExecutableIcon);
-            break;
-        }
-    }
-    in.close();
-
-    // Use default icon instead, if not found "Icon=" line in desktop file.
-    if (!foundIconLine) {
-        icon = defaultExecutableIcon;
-    }
-
-    return icon.pixmap(iconSize, iconSize);
-}
-
-QPixmap getProcessIcon(int pid, std::string desktopFile,
-                       QScopedPointer<FindWindowTitle> &findWindowTitle, int iconSize)
-{
-    QPixmap icon;
-    QString flatpakAppidEnv = Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
-    if (flatpakAppidEnv != "") {
-        QIcon flatpakAppIcon = QIcon(getFlatpakAppIcon(flatpakAppidEnv));
-        icon = flatpakAppIcon.pixmap(iconSize, iconSize);
-    } else if (desktopFile.size() == 0) {
-        qreal devicePixelRatio = qApp->devicePixelRatio();
-        icon = findWindowTitle->getWindowIcon(findWindowTitle->getWindow(pid),
-                                              int(iconSize * devicePixelRatio));
-        icon.setDevicePixelRatio(devicePixelRatio);
-    } else {
-        icon = getDesktopFileIcon(desktopFile, iconSize);
-    }
-
-    return icon;
-}
-
-QSize getRenderSize(int fontSize, QString string)
-{
-    QFont font;
-    font.setPointSize(fontSize);
-    QFontMetrics fm(font);
-
-    int width = 0;
-    int height = 0;
-    foreach (auto line, string.split("\n")) {
-        int lineWidth = fm.width(line);
-        int lineHeight = fm.height();
-
-        if (lineWidth > width) {
-            width = lineWidth;
-        }
-        height += lineHeight;
-    }
-
-    return QSize(width, height);
 }
 
 QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
@@ -271,94 +109,6 @@ QString getProcessCmdline(pid_t pid)
     return QString::fromStdString(temp).trimmed();
 }
 
-QString getQrcPath(QString imageName)
-{
-    return QString(":/image/%1").arg(imageName);
-}
-
-QDir getFlatpakAppPath(QString flatpakAppid)
-{
-    QProcess whichProcess;
-    QString exec = "flatpak";
-    QStringList params;
-    params << "info";
-    params << flatpakAppid;
-    whichProcess.start(exec, params);
-    whichProcess.waitForFinished();
-    QString output(whichProcess.readAllStandardOutput());
-
-    return QDir(output.split("Location:")[1].split("\n")[0].simplified());
-}
-
-QString getFlatpakAppIcon(QString flatpakAppid)
-{
-    QString exec = "flatpak";
-
-    QStringList params;
-    params << "info";
-    params << flatpakAppid;
-
-    // set the LANGUAGE env so that the output is fixed to be English,
-    // or below code may break in other locales like pt_BR.
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("LANGUAGE", "en_US");
-
-    QProcess whichProcess;
-    whichProcess.setProcessEnvironment(env);
-    whichProcess.start(exec, params);
-    whichProcess.waitForFinished();
-    QString output(whichProcess.readAllStandardOutput());
-
-    const QString dirPath = output.split("Location:")[1].split("\n")[0].simplified();
-
-    QDir flatpakDir = QDir(dirPath);
-    flatpakDir.cd("export");
-    flatpakDir.cd("share");
-    flatpakDir.cd("icons");
-    flatpakDir.cd("hicolor");
-    flatpakDir.cd("scalable");
-    flatpakDir.cd("apps");
-
-    const QString appID = flatpakAppid.split("app/")[1].split("/")[0];
-    return flatpakDir.filePath(QString("%1.svg").arg(appID));
-}
-
-bool fileExists(QString path)
-{
-    QFileInfo check_file(path);
-
-    // check if file exists and if yes: Is it really a file and no directory?
-    return check_file.exists() && check_file.isFile();
-}
-
-void blurRect(DWindowManager *windowManager, WId widgetId, QRect rect)
-{
-    QVector<uint32_t> data;
-
-    qreal devicePixelRatio = qApp->devicePixelRatio();
-    data << uint32_t(rect.x()) << uint32_t(rect.y()) << uint32_t(rect.width() * devicePixelRatio)
-         << uint32_t(rect.height() * devicePixelRatio) << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
-    windowManager->setWindowBlur(int(widgetId), data);
-}
-
-void blurRects(DWindowManager *windowManager, WId widgetId, QList<QRect> rects)
-{
-    QVector<uint32_t> data;
-    qreal devicePixelRatio = qApp->devicePixelRatio();
-    foreach (auto rect, rects) {
-        data << uint32_t(rect.x()) << uint32_t(rect.y()) << uint32_t(rect.width() * devicePixelRatio)
-             << uint32_t(rect.height() * devicePixelRatio) << RECTANGLE_RADIUS << RECTANGLE_RADIUS;
-    }
-    windowManager->setWindowBlur(int(widgetId), data);
-}
-
-void clearBlur(DWindowManager *windowManager, WId widgetId)
-{
-    QVector<uint32_t> data;
-    data << 0 << 0 << 0 << 0 << 0 << 0;
-    windowManager->setWindowBlur(int(widgetId), data);
-}
-
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
                      int loadingAngle, int rotationAngle, QColor foregroundColor,
                      double foregroundOpacity, QColor backgroundColor, double backgroundOpacity,
@@ -392,90 +142,10 @@ void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWi
                     -loadingAngle * 16);
 }
 
-void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity)
-{
-    painter.setOpacity(opacity);
-    QPainterPath path;
-    path.addRoundedRect(QRectF(rect), RECTANGLE_RADIUS, RECTANGLE_RADIUS);
-    painter.fillPath(path, QColor("#F5F5F5"));
-
-    QPen pen(QColor("#000000"));
-    painter.setOpacity(0.04);
-    pen.setWidth(1);
-    painter.setPen(pen);
-    painter.drawPath(path);
-}
-
-void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect)
-{
-    setFontSize(painter, textSize);
-    painter.setOpacity(1);
-    painter.setPen(QPen(QColor(textColor)));
-    painter.drawText(rect, Qt::AlignCenter, text);
-}
-
-void passInputEvent(WId wid)
-{
-    XRectangle *reponseArea = new XRectangle;
-    reponseArea->x = 0;
-    reponseArea->y = 0;
-    reponseArea->width = 0;
-    reponseArea->height = 0;
-
-    XShapeCombineRectangles(QX11Info::display(), wid, ShapeInput, 0, 0, reponseArea, 1, ShapeSet,
-                            YXBanded);
-
-    delete reponseArea;
-}
-
-void removeChildren(QWidget *widget)
-{
-    qDeleteAll(widget->children());
-}
-
-void removeLayoutChild(QLayout *layout, int index)
-{
-    QLayoutItem *item = layout->itemAt(index);
-    if (item != nullptr) {
-        QWidget *widget = item->widget();
-        if (widget != nullptr) {
-            widget->hide();
-            widget->setParent(nullptr);
-            layout->removeWidget(widget);
-        }
-    }
-}
-
 void setFontSize(QPainter &painter, int textSize)
 {
     QFont font = painter.font();
     font.setPointSize(textSize);
     painter.setFont(font);
-}
-
-/**
- * @brief explode Explode a string based on
- * @param s The string to explode
- * @param c The seperator to use
- * @return A vector of the exploded string
- */
-const std::vector<std::string> explode(const std::string &s, const char &c)
-{
-    std::string buff {""};
-    std::vector<std::string> v;
-
-    for (auto n : s) {
-        if (n != c) {
-            buff += n;
-        } else if (n == c && buff != "") {
-            v.push_back(buff);
-            buff = "";
-        }
-    }
-    if (buff != "") {
-        v.push_back(buff);
-    }
-
-    return v;
 }
 }  // namespace Utils

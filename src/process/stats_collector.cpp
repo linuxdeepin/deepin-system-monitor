@@ -72,9 +72,8 @@ auto calcCPUUsage = [](const CPUStat &prev, const CPUStat &cur) -> qreal
     return cpuPecent;
 };
 
-StatsCollector::StatsCollector(QObject *parent) :
-    QObject(parent),
-    m_wm(new FindWindowTitle{})
+StatsCollector::StatsCollector(QObject *parent)
+    : QObject(parent)
 {
     qRegisterMetaType<QList<ProcessEntry>>("ProcessEntryList");
     qRegisterMetaType<QHash<QString, DesktopEntry>>("DesktopEntryCache");
@@ -129,32 +128,20 @@ StatsCollector::~StatsCollector()
 
 void StatsCollector::start()
 {
-    (void)QApplication::instance();
-    // Start timer.
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateStatus()));
-
     m_euid = geteuid();
-
     m_defaultIcon = QIcon::fromTheme("application-x-executable");
-
-    // prepare cache
-    m_desktopEntryStat = new DesktopEntryStat();
-    m_desktopEntryStat->moveToThread(&m_cacheThread);
-    connect(&m_cacheThread, &QThread::started, m_desktopEntryStat, &DesktopEntryStat::start);
-    connect(&m_cacheThread, &QThread::finished, m_desktopEntryStat, &QObject::deleteLater);
-    connect(m_desktopEntryStat, &DesktopEntryStat::cacheUpdated, this, [ = ](DesktopEntryCache cache) {
-        m_desktopEntryCache = cache;
-        if (!m_timer->isActive()) {
-            updateStatus();
-            m_timer->start(kUpdateInterval);
-        }
-    });
-    m_cacheThread.start();
+    m_desktopEntryCache = new DesktopEntryCache(this);
 
     m_netifMonitor = new NetifMonitor(this);
     connect(m_netifMonitor, &QThread::finished, m_netifMonitor, &QObject::deleteLater);
     m_netifMonitor->start();
+
+    // Start timer.
+    m_timer = new QTimer(this);
+    m_timer->setInterval(kUpdateInterval);
+    connect(m_timer, &QTimer::timeout, this, &StatsCollector::updateStatus);
+    m_timer->start();
+    updateStatus();
 }
 
 void readProcStatsCallback(ProcStat &ps, void *context)
@@ -399,20 +386,9 @@ void StatsCollector::updateStatus()
     m_gioDesktopMapping.clear();
     m_gioRevPIDMapping.clear();
 
-    m_trayPIDToWndMap.clear();
-    m_guiPIDList.clear();
     m_appList.clear();
 
     m_procNetIOStat.clear();
-
-    m_wm->updateWindowInfos();
-    m_guiPIDList = m_wm->getWindowPids();
-
-    auto trayProcessXids = Utils::getTrayWindows();
-    for (auto xid : trayProcessXids) {
-        auto pid = m_wm->getWindowPid(xid);
-        m_trayPIDToWndMap[pid] = xid;
-    }
 
     b = ProcessStat::readProcStats(readProcStatsCallback, this);
 
@@ -421,18 +397,13 @@ void StatsCollector::updateStatus()
     decltype(m_appList) filteredAppList {};
     std::function<bool(pid_t ppid)> anyRootIsGuiProc;
     anyRootIsGuiProc = [&](pid_t ppid) -> bool {
-        bool b;
-        b = m_guiPIDList.contains(ppid);
-        if (!b && m_pidCtoPMapping.contains(ppid))
-        {
+        bool b {};
+        if (m_pidCtoPMapping.contains(ppid)) {
             b = anyRootIsGuiProc(m_pidCtoPMapping[ppid]);
         }
         return b;
     };
-    for (auto app : m_appList) {
-        if (m_guiPIDList.contains(app))
-            continue;
-
+    for (auto &app : m_appList) {
         auto isCmdInList = [ = ](QByteArray cmd) {
             bool b = false;
 
@@ -453,17 +424,19 @@ void StatsCollector::updateStatus()
         };
         auto cmd = m_procMap[kCurrentStat][app]->cmdline[0];
         bool b = false;
-        if (cmd[0] == '/') {
-            // cmd starts with full path
-            b = isCmdInList(cmd);
-        } else {
-            // cmd starts with raw name
-            for (auto p : m_envPathList) {
-                p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
+        if (!(m_gioDesktopMapping.contains(app) && m_gioPIDMapping.contains(app) && (m_gioPIDMapping[app] == app || !m_procMap->contains(m_gioPIDMapping[app])))) {
+            if (cmd[0] == '/') {
+                // cmd starts with full path
+                b = isCmdInList(cmd);
+            } else {
+                // cmd starts with raw name
+                for (auto p : m_envPathList) {
+                    p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
 
-                b = isCmdInList(p);
-                if (b) {
-                    break;
+                    b = isCmdInList(p);
+                    if (b) {
+                        break;
+                    }
                 }
             }
         }
@@ -471,9 +444,13 @@ void StatsCollector::updateStatus()
             continue;
         }
 
-        if (m_pidCtoPMapping.contains(app) &&
-                anyRootIsGuiProc(m_pidCtoPMapping[app])) {
-            continue;
+        if (m_pidCtoPMapping.contains(app) && m_procEntryMap.contains(m_pidCtoPMapping[app])) {
+            auto &parent = m_procEntryMap[m_pidCtoPMapping[app]];
+            auto &child = m_procEntryMap[app];
+            auto parentExecPath = parent.getCmdline().split(' ')[0];
+            auto childExecPath = child.getCmdline().split(' ')[0];
+            if (parent.getName()[0] == child.getName()[0] || QFileInfo(parentExecPath).path() == QFileInfo(childExecPath).path())
+                continue;
         }
 
         filteredAppList << app;
@@ -493,15 +470,13 @@ void StatsCollector::updateStatus()
             need = true;
         } else if (m_filterType == SystemMonitor::OnlyGUI
                    && m_euid == uid
-                   && (m_trayPIDToWndMap.contains(pid)
-                       || m_guiPIDList.contains(pid)
-                       || filteredAppList.contains(pid))) {
+                   && (filteredAppList.contains(pid))) {
             need = true;
 
             // =================================================================
             // transfer all children(eg: chrome...) & wineserver.real(winapps) traffic into this process
             // =================================================================
-            if (m_gioPIDMapping.contains(pid) && !m_trayPIDToWndMap.contains(pid)) {
+            if (m_gioPIDMapping.contains(pid)) {
                 // traffic from wineserver.real
                 auto mpid = m_gioPIDMapping[pid];
                 auto plist = m_gioRevPIDMapping.values(mpid);
@@ -541,7 +516,7 @@ void StatsCollector::updateStatus()
         Q_EMIT processListUpdated(filteredList);
     }
     if (m_procEntryMap.size() > 0) {
-        m_napps = m_guiPIDList.size() + filteredAppList.size() + m_trayPIDToWndMap.size();
+        m_napps = filteredAppList.size();
         Q_EMIT processSummaryUpdated(m_napps, m_nprocs - m_napps);
     }
 }
@@ -633,110 +608,34 @@ QPair<qreal, qreal> StatsCollector::calcProcDiskIOStats(const ProcStat &prev,
 
 void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps)
 {
-    // =====================================================================
-    // displayName & icon kinda tricky here
-    // =====================================================================
     DesktopEntry de {};
     bool nameSet{false}, iconSet{false};
     // empty cmdline usually means kernel space process, so use default name & icon
     if (!ps->cmdline.isEmpty()) {
-        if (ctx.m_trayPIDToWndMap.contains(proc.getPID())) {
-            auto xid = ctx.m_trayPIDToWndMap[proc.getPID()];
-            auto title = ctx.m_wm->getWindowName(xid);
-            if (!title.isEmpty()) {
-                nameSet = true;
-                proc.setDisplayName(QString("%1: %2")
-                                    .arg(DApplication::translate("Process.Table", "Tray"))
-                                    .arg(title));
-            } else if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
-                // can't grab window title, try use desktop file instead
-                auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
-                auto de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                if (!de->displayName.isEmpty()) {
-                    nameSet = true;
-                    proc.setDisplayName(QString("%1: %2")
-                                        .arg(DApplication::translate("Process.Table", "Tray"))
-                                        .arg(de->displayName));
-                }
-                if (!de->icon.isNull()) {
-                    iconSet = true;
-                    proc.setIcon(de->icon);
-                }
-            }
-        } else if (ctx.m_guiPIDList.contains(ps->pid)) {
-            auto title = ctx.m_wm->getWindowTitle(ps->pid);
-            if (!title.isEmpty()) {
-                if (ps->cmdline.size() > 1) {
-                    auto url = QUrl(ps->cmdline[ps->cmdline.size() - 1]);
-                    auto finfo = QFileInfo(url.fileName());
-                    auto rname = url.fileName();
-                    rname.chop(finfo.completeSuffix().length() + 1);
-                    if (url.isValid()
-                            && (url.isLocalFile() || !url.host().isEmpty())
-                            && !title.contains(rname)) {
-                        nameSet = true;
-                        proc.setDisplayName(QString("%1 - %2").arg(rname).arg(title));
-                    } else {
-                        nameSet = true;
-                        proc.setDisplayName(title);
-                    }
-                }
-                if (!nameSet) {
-                    nameSet = true;
-                    proc.setDisplayName(title);
-                }
+        if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
+            auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
+            auto desktopName = QFileInfo(desktopFile).fileName();
+            if (ctx.m_desktopEntryCache->entry(desktopName)) {
+                de = ctx.m_desktopEntryCache->entry(desktopName);
+            } else if (ctx.m_desktopEntryCache->entry(proc.getName())) {
+                de = ctx.m_desktopEntryCache->entry(proc.getName());
+            } else {
+                de = ctx.m_desktopEntryCache->createCachedEntry(desktopFile);
             }
 
-            if (ctx.m_desktopEntryCache.contains(proc.getName())) {
-                de = ctx.m_desktopEntryCache[proc.getName()];
-                if (de->icon.isNull()) {
-                    de->icon = ctx.m_defaultIcon;
+            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName())) {
+                if (de && !de->displayName.isEmpty()) {
+                    nameSet = true;
+                    proc.setDisplayName(de->displayName);
                 }
-                if (!iconSet) {
+                if (de && !de->icon.isNull()) {
                     iconSet = true;
                     proc.setIcon(de->icon);
-                }
-            } else {
-                if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE") &&
-                        ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") &&
-                        ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) {
-                    auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
-                    if (ctx.m_desktopEntryCache.contains(proc.getName())) {
-                        de = ctx.m_desktopEntryCache[proc.getName()];
-                    } else {
-                        de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                        // rare case, if .desktopFile contains no icon, we need use default icon,
-                        // otherwise cached desktop entry's icon will be null
-                        if (!de->icon.isNull()) {
-                            ctx.m_desktopEntryCache[de->name] = de;
-                        }
-                    }
-                    if (!de->icon.isNull()) {
-                        iconSet = true;
-                        proc.setIcon(de->icon);
-                    }
-                } else {
-                    QIcon icon;
-                    auto scale = qApp->devicePixelRatio();
-                    auto p24 = ctx.m_wm->getWindowIcon(
-                                   ctx.m_wm->getWindow(ps->pid),
-                                   int(24 * scale));
-                    p24.setDevicePixelRatio(scale);
-                    // 80p pixmaps are used in process attribute dialog
-                    auto p80 = ctx.m_wm->getWindowIcon(
-                                   ctx.m_wm->getWindow(ps->pid),
-                                   int(80 * scale));
-                    p80.setDevicePixelRatio(scale);
-                    icon.addPixmap(p24);
-                    icon.addPixmap(p80);
-                    if (!p24.isNull()) {
-                        iconSet = true;
-                        proc.setIcon(icon);
-                    }
+                    ctx.m_appList << ps->pid;
                 }
             }
-        } else if (ctx.m_desktopEntryCache.contains(proc.getName())) {
-            de = ctx.m_desktopEntryCache[proc.getName()];
+        } else if (ctx.m_desktopEntryCache->entry(proc.getName())) {
+            de = ctx.m_desktopEntryCache->entry(proc.getName());
             if (!de->displayName.isEmpty()) {
                 if (ps->cmdline.size() > 1) {
                     // check if last arg of cmdline is url, if so take it's filename
@@ -757,9 +656,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 iconSet = true;
                 proc.setIcon(de->icon);
 
-                if (!ctx.m_guiPIDList.contains(ps->pid)) {
-                    ctx.m_appList << ps->pid;
-                }
+                ctx.m_appList << ps->pid;
             }
             if (!de->startup_wm_class.isEmpty()) {
                 proc.setName(de->startup_wm_class);
@@ -773,48 +670,18 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 auto arrb = ps->cmdline.join(' ');
                 QString buf{arrb};
                 proc.setDisplayName(buf);
-            } else if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE") &&
-                       ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") &&
-                       ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) {
-                auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
-                if (ctx.m_desktopEntryCache.contains(proc.getName())) {
-                    de = ctx.m_desktopEntryCache[proc.getName()];
-                } else {
-                    de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                    if (!de->icon.isNull()) {
-                        ctx.m_desktopEntryCache[de->name] = de;
-                    }
-                }
-                if (!de->displayName.isEmpty()) {
+            } else if (ps->cmdline[0].startsWith("/opt")) {
+                QString fname = QFileInfo(QString(ps->cmdline[0]).split(' ')[0]).fileName();
+                de = ctx.m_desktopEntryCache->entryWithSubKey(fname);
+                if (de && !de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(de->displayName);
                 }
-                if (!de->icon.isNull()) {
+                if (de && !de->icon.isNull()) {
                     iconSet = true;
                     proc.setIcon(de->icon);
-                    if (!ctx.m_guiPIDList.contains(ps->pid)) {
-                        ctx.m_appList << ps->pid;
-                    }
                 }
-            } else if (ps->cmdline[0].startsWith("/opt")) {
-                // special case for google chrome that crap .desktop file & bin name
-                QString fname = QFileInfo(QString(ps->cmdline[0]).split(' ')[0]).fileName();
-                auto it = ctx.m_desktopEntryCache.constBegin();
-                while (it != ctx.m_desktopEntryCache.constEnd()) {
-                    if (it.key().contains(fname)) {
-                        de = it.value();
-                        if (!de->displayName.isEmpty()) {
-                            nameSet = true;
-                            proc.setDisplayName(de->displayName);
-                        }
-                        if (!de->icon.isNull()) {
-                            iconSet = true;
-                            proc.setIcon(de->icon);
-                        }
-                        break;
-                    }
-                    ++it;
-                }
+                ctx.m_appList << ps->pid;
             }
         }
     }

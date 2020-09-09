@@ -10,6 +10,7 @@
 #include <DShadowLine>
 #include <DStackedWidget>
 #include <DTitlebar>
+
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QJsonArray>
@@ -17,6 +18,7 @@
 #include <QJsonObject>
 #include <QProcess>
 #include <DPalette>
+#include <QKeyEvent>
 
 #include "constant.h"
 #include "main_window.h"
@@ -80,12 +82,6 @@ void MainWindow::displayShortcutHelpDialog()
     QJsonObject procObj;
     procObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Processes"));
     QJsonArray procObjArr;
-
-    QJsonObject killAppItem;
-    killAppItem.insert("name",
-                       DApplication::translate("Title.Bar.Context.Menu", "Force end application"));
-    killAppItem.insert("value", "Ctrl+Alt+K");
-    procObjArr.append(killAppItem);
 
     QJsonObject endProcItem;
     endProcItem.insert("name",
@@ -183,12 +179,6 @@ void MainWindow::initUI()
     titlebar()->setMenu(menu);
 
     setTabOrder(titlebar(), m_toolbar);
-
-    // kill process
-    m_killAction = new QAction(
-        DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
-    m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
-    connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 
     // display mode
     m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
@@ -328,7 +318,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             return true;
         } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) &&
                    kev->key() == Qt::Key_K) {
-            Q_EMIT killProcessPerformed();
             return true;
         } else if ((kev->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) &&
                    kev->key() == Qt::Key_Question) {
