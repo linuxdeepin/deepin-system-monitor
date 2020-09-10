@@ -404,9 +404,6 @@ void StatsCollector::updateStatus()
         return b;
     };
     for (auto &app : m_appList) {
-        if (app == 15528) {
-            qDebug() << "xxxxxxxxx";
-        }
         auto isCmdInList = [ = ](QByteArray cmd) {
             bool b = false;
 
