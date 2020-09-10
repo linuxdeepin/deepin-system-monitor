@@ -104,7 +104,8 @@ bool ProcessStat::readProcStats(ProcIterateCallback pfnCallback, void *context)
             b = readStat(ps);
             b = b && readCmdline(ps);
             readEnviron(ps);
-            b = b && readSchedStat(ps, ctx);
+            // schedstat might not exist in some kernel
+            readSchedStat(ps, ctx);
             b = b && readStatus(ps);
             b = b && readStatm(ps, ctx);
             readIO(ps);
