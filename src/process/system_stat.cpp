@@ -48,7 +48,7 @@
 
 #define MAX_NAME_LEN 128
 
-auto print_err = [](decltype(errno) e, const QString &msg)
+auto print_err_system = [](decltype(errno) e, const QString &msg)
 {
     qDebug() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
 };
@@ -63,7 +63,7 @@ bool SystemStat::readUpTime(qulonglong &uptime)
 
     errno = 0;
     if ((fp = fopen(PROC_PATH_UPTIME, "r")) == nullptr) {
-        print_err(errno, QString("open %1 failed").arg(PROC_PATH_UPTIME));
+        print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_UPTIME));
         return b;
     }
 
@@ -76,7 +76,7 @@ bool SystemStat::readUpTime(qulonglong &uptime)
     }
     fclose(fp);
     if (!b) {
-        print_err(errno, QString("read %1 failed").arg(PROC_PATH_UPTIME));
+        print_err_system(errno, QString("read %1 failed").arg(PROC_PATH_UPTIME));
     }
 
     return b;
@@ -92,7 +92,7 @@ bool SystemStat::readBootTime(time_t &btime)
 
     errno = 0;
     if (!(fp = fopen(PROC_PATH_STAT, "r"))) {
-        print_err(errno, QString("open %1 failed").arg(PROC_PATH_STAT));
+        print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_STAT));
         return b;
     }
 
@@ -103,7 +103,7 @@ bool SystemStat::readBootTime(time_t &btime)
         }
     }
     if (ferror(fp)) {
-        print_err(errno, QString("read %1 failed").arg(PROC_PATH_STAT));
+        print_err_system(errno, QString("read %1 failed").arg(PROC_PATH_STAT));
     }
     fclose(fp);
 
@@ -125,7 +125,7 @@ bool SystemStat::readCPUStats(CPUStat &cpuStat, CPUStatMap &cpuStatMap)
     cpuStatMap.clear();
 
     if ((fp = fopen(PROC_PATH_CPU, "r")) == nullptr) {
-        print_err(errno, QString("open %1 failed").arg(PROC_PATH_CPU));
+        print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_CPU));
         return false;
     }
 
@@ -171,7 +171,7 @@ bool SystemStat::readCPUStats(CPUStat &cpuStat, CPUStatMap &cpuStatMap)
     b = !ferror(fp) && b;
     fclose(fp);
     if (!b) {
-        print_err(errno, QString("read %1 failed").arg(PROC_PATH_CPU));
+        print_err_system(errno, QString("read %1 failed").arg(PROC_PATH_CPU));
     }
 
     return b;
@@ -186,7 +186,7 @@ bool SystemStat::readMemStats(MemStat &memStat)
     bool b = true;
 
     if ((fp = fopen(PROC_PATH_MEM, "r")) == nullptr) {
-        print_err(errno, QString("open %1 failed").arg(PROC_PATH_MEM));
+        print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_MEM));
         return false;
     }
 
@@ -241,7 +241,7 @@ bool SystemStat::readMemStats(MemStat &memStat)
     b = !ferror(fp) && b;
     fclose(fp);
     if (!b) {
-        print_err(errno, QString("read %1 failed").arg(PROC_PATH_MEM));
+        print_err_system(errno, QString("read %1 failed").arg(PROC_PATH_MEM));
     }
 
     return b;
@@ -273,7 +273,7 @@ bool SystemStat::readDiskIOStats(DiskIOStat &statSum, DiskIOStatMap &statIOMap)
     };
 
     if ((fp = fopen(PROC_PATH_DISK, "r")) == nullptr) {
-        print_err(errno, QString("open %1 failed").arg(PROC_PATH_DISK));
+        print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_DISK));
         return b;
     }
 
@@ -318,7 +318,7 @@ bool SystemStat::readDiskIOStats(DiskIOStat &statSum, DiskIOStatMap &statIOMap)
     b = !ferror(fp) && b;
     fclose(fp);
     if (!b) {
-        print_err(errno, QString("read %1 failed").arg(PROC_PATH_DISK));
+        print_err_system(errno, QString("read %1 failed").arg(PROC_PATH_DISK));
     }
 
     return b;
@@ -334,7 +334,7 @@ bool SystemStat::readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap)
     int rc;
 
     if ((fp = fopen(PROC_PATH_NET, "r")) == nullptr) {
-        print_err(errno, QString("open %1 failed").arg(PROC_PATH_NET));
+        print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_NET));
         return b;
     }
 
@@ -385,7 +385,7 @@ bool SystemStat::readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap)
     b = !ferror(fp) && b;
     fclose(fp);
     if (!b) {
-        print_err(errno, QString("read %1 failed").arg(PROC_PATH_NET));
+        print_err_system(errno, QString("read %1 failed").arg(PROC_PATH_NET));
     }
 
     return b;
@@ -411,7 +411,7 @@ bool SystemStat::readSockStat(SockStatMap &statMap)
         errno = 0;
         if (!(fp = fopen(proc, "r")))
         {
-            print_err(errno, QString("open %1 failed").arg(PROC_PATH_SOCK_TCP));
+            print_err_system(errno, QString("open %1 failed").arg(PROC_PATH_SOCK_TCP));
             return !ok;
         }
 
@@ -507,7 +507,7 @@ bool SystemStat::readSockStat(SockStatMap &statMap)
         if (ferror(fp))
         {
             ok = !ok;
-            print_err(errno, QString("read %1 failed").arg(proc));
+            print_err_system(errno, QString("read %1 failed").arg(proc));
         }
         fclose(fp);
 

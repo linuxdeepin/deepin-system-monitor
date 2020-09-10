@@ -33,6 +33,9 @@
 #include <QPainter>
 #include <QtMath>
 #include <QPropertyAnimation>
+#include <QMap>
+#include <QHash>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 

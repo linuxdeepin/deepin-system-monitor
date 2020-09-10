@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QtMath>
 #include <QModelIndex>
+#include <QPainterPath>
 
 //#include <cmath>
 

@@ -30,6 +30,7 @@
 #include <QtDBus>
 #include <QtMath>
 #include <QtX11Extras/QX11Info>
+#include <QPainterPath>
 
 #include <fstream>
 #include <string>
@@ -37,7 +38,6 @@
 #include <X11/extensions/shape.h>
 
 #include <proc/readproc.h>
-
 
 DCORE_USE_NAMESPACE
 

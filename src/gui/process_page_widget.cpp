@@ -46,6 +46,7 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QTimer>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 
