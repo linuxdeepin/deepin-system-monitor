@@ -404,6 +404,9 @@ void StatsCollector::updateStatus()
         return b;
     };
     for (auto &app : m_appList) {
+        if (app == 15528) {
+            qDebug() << "xxxxxxxxx";
+        }
         auto isCmdInList = [ = ](QByteArray cmd) {
             bool b = false;
 
@@ -449,7 +452,8 @@ void StatsCollector::updateStatus()
             auto &child = m_procEntryMap[app];
             auto parentExecPath = parent.getCmdline().split(' ')[0];
             auto childExecPath = child.getCmdline().split(' ')[0];
-            if (parent.getName()[0] == child.getName()[0] || QFileInfo(parentExecPath).path() == QFileInfo(childExecPath).path())
+            //            if (parent.getName()[0] == child.getName()[0] || QFileInfo(parentExecPath).path() == QFileInfo(childExecPath).path())
+            if (parent.getName()[0] == child.getName()[0])
                 continue;
         }
 
