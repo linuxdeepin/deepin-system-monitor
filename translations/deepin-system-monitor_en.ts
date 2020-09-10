@@ -1,48 +1,47 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>Gestore Attività</translation>
+        <translation>System Monitor</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Il Gestore Attività è uno strumento per monitorare lo stato del sistema in tempo reale, visualizzare e controllare processi e servizi in esecuzione sul sistema.
-Localizzazione italiana a cura di Massimo A. Carofano.</translation>
+        <translation>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation>Nessun risultato</translation>
+        <translation>No search results</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation>attivo</translation>
+        <translation>active</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation>ricaricamento</translation>
+        <translation>reloading</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation>inattivo</translation>
+        <translation>inactive</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>fallito</translation>
+        <translation>failed</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation>in attivazione</translation>
+        <translation>activating</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation>in disattivazione</translation>
+        <translation>deactivating</translation>
     </message>
 </context>
 <context>
@@ -53,27 +52,27 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation>non-trovato</translation>
+        <translation>not-found</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation>impostazione non ottimale</translation>
+        <translation>bad-setting</translation>
     </message>
     <message>
         <source>error</source>
-        <translation>errore</translation>
+        <translation>error</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation>uniti</translation>
+        <translation>merged</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>mascherato</translation>
+        <translation>masked</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation>caricato</translation>
+        <translation>loaded</translation>
     </message>
 </context>
 <context>
@@ -88,73 +87,73 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuale</translation>
+        <translation>Manual</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation>abilitato</translation>
+        <translation>enabled</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>disabilitato</translation>
+        <translation>disabled</translation>
     </message>
     <message>
         <source>static</source>
-        <translation>statico</translation>
+        <translation>static</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation>transitorio</translation>
+        <translation>transient</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation>indiretto</translation>
+        <translation>indirect</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation>runtime-abilitata</translation>
+        <translation>enabled-runtime</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>mascherata</translation>
+        <translation>masked</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation>generata</translation>
+        <translation>generated</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation>morta</translation>
+        <translation>dead</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation>avvia-prima</translation>
+        <translation>start-pre</translation>
     </message>
     <message>
         <source>start</source>
-        <translation>avvia</translation>
+        <translation>start</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation>avvia-dopo</translation>
+        <translation>start-post</translation>
     </message>
     <message>
         <source>running</source>
-        <translation>in esecuzione</translation>
+        <translation>running</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation>uscita</translation>
+        <translation>exited</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation>ricaricata</translation>
+        <translation>reload</translation>
     </message>
     <message>
         <source>stop</source>
@@ -162,35 +161,35 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation>ferma-watchdog</translation>
+        <translation>stop-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation>ferma-sigterm</translation>
+        <translation>stop-sigterm</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation>ferma-sigkill</translation>
+        <translation>stop-sigkill</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation>ferma-dopo</translation>
+        <translation>stop-post</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation>sigterm-finale</translation>
+        <translation>final-sigterm</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation>sigkill-finale</translation>
+        <translation>final-sigkill</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>fallito</translation>
+        <translation>failed</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation>riavvia-automaticamente</translation>
+        <translation>auto-restart</translation>
     </message>
 </context>
 <context>
@@ -204,11 +203,11 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation>System</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation>Visualizza scorciatoie</translation>
+        <translation>Display shortcuts</translation>
     </message>
 </context>
 <context>
@@ -216,65 +215,65 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Terminare questo processo potrebbe causare una perdita di dati.
-Sicuro di voler terminarlo?</translation>
+        <translation>Ending this process may cause data loss.
+Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Termina processo</translation>
+        <translation>End process</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Terminare questo processo potrebbe causare una perdita di dati.
-Sicuro di voler terminarlo?</translation>
+        <translation>Force ending this process may cause data loss.
+Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>Termina</translation>
+        <translation>End</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Terminare quest&apos;app potrebbe causare una perdita di dati.
-Sicuro di voler terminarla?</translation>
+        <translation>Force ending this application may cause data loss.
+Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation>Forza chiusura</translation>
+        <translation>Force End</translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
-        <translation>Linea di comando</translation>
+        <translation>Command line</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Tempo di esecuzione</translation>
+        <translation>Start time</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Name</translation>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Clicca sull&apos;App che vuoi terminare</translation>
+        <translation>Click the application you want to end</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.Title</name>
     <message>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Memory</translation>
     </message>
 </context>
 <context>
@@ -285,15 +284,15 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Lettura disco</translation>
+        <translation>Disk read</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Scrittura disco</translation>
+        <translation>Disk write</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Memory</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -301,7 +300,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Non attivo</translation>
+        <translation>Not enabled</translation>
     </message>
     <message>
         <source>Download</source>
@@ -313,122 +312,122 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Disk</source>
-        <translation>Disco</translation>
+        <translation>Disk</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation>Rete</translation>
+        <translation>Network</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation>Totale Ricevuti</translation>
+        <translation>Total Received</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Totale inviati</translation>
+        <translation>Total Sent</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Molto alta</translation>
+        <translation>Very high</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Alta</translation>
+        <translation>High</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Bassa</translation>
+        <translation>Low</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation>Molto bassa</translation>
+        <translation>Very low</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Personalizza</translation>
+        <translation>Custom</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>Non valido</translation>
+        <translation>Invalid</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Errore: [%2] %3</translation>
+        <translation>PID: %1, Error: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation>Variazione della priorità del Processo fallita</translation>
+        <translation>Failed to change process priority</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation>Applicazioni</translation>
+        <translation>Applications</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>I miei Processi</translation>
+        <translation>My processes</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Tutti i Processi</translation>
+        <translation>All processes</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation type="vanished">Interruzione processo fallito</translation>
+        <translation type="vanished">Failed to end proces</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
-        <translation>Pausa del processo fallita</translation>
+        <translation>Failed to pause process</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation>Ripristino del processo fallito</translation>
+        <translation>Failed to resume process</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation>Soppressione processo fallita</translation>
+        <translation>Failed to kill process</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation>Errore sconosciuto</translation>
+        <translation>Unknown error</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation>Invio segnale al processo fallito</translation>
+        <translation>Failed in sending signal to process</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation>Terminazione processo fallita</translation>
+        <translation>Failed to end process</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(%1 applicazioni e %2 processi in esecuzione)</translation>
+        <translation>(%1 applications and %2 processes are running)</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation>Nessuna risposta</translation>
+        <translation>No response</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Sospendi</translation>
+        <translation>Suspend</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -439,53 +438,53 @@ Sicuro di voler terminarla?</translation>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation>Visualizza locazione</translation>
+        <translation>View command location</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Proprietà</translation>
+        <translation>Properties</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Termina processo</translation>
+        <translation>End process</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Riprendi processo</translation>
+        <translation>Resume process</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>Termina processo</translation>
+        <translation>Kill process</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation>Cambia priorità</translation>
+        <translation>Change priority</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Sospendi processo</translation>
+        <translation>Suspend process</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation>Cambia</translation>
+        <translation>Change</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation>Priorità personalizzata</translation>
+        <translation>Custom Priority</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -493,15 +492,15 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Memory</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Scrittura disco</translation>
+        <translation>Disk write</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Lettura disco</translation>
+        <translation>Disk read</translation>
     </message>
     <message>
         <source>Download</source>
@@ -517,7 +516,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>User</source>
-        <translation>Utente</translation>
+        <translation>User</translation>
     </message>
     <message>
         <source>Nice</source>
@@ -525,7 +524,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Priorità</translation>
+        <translation>Priority</translation>
     </message>
 </context>
 <context>
@@ -536,18 +535,18 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="vanished">Non attivo</translation>
+        <translation type="vanished">Not enabled</translation>
     </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation>Impossibile settare il tipo di avvio del servizio</translation>
+        <translation>Failed to set service startup type</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Errore: impossibile settare il tipo di avvio del servizio per via del crash di un sotto-processo.</translation>
+        <translation>Error: Failed to set service startup type due to the crashed sub process.</translation>
     </message>
 </context>
 <context>
@@ -558,30 +557,30 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annulla</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation>Nome istanza di Servizio</translation>
+        <translation>Service instance name</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation>Aggiorna</translation>
+        <translation>Refresh</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Avvia</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Stoppa</translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Riavvia</translation>
+        <translation>Restart</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -589,40 +588,40 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuale</translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation>Tipo di avvio</translation>
+        <translation>Startup type</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Carica</translation>
+        <translation>Load</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Attivo</translation>
+        <translation>Active</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation>In esecuzione</translation>
+        <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation>Stato</translation>
+        <translation>State</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation>Descrizione</translation>
+        <translation>Description</translation>
     </message>
     <message>
         <source>PID</source>
@@ -631,44 +630,44 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation>Tipo di avvio</translation>
+        <translation>Startup Type</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Forza chiusura App</translation>
+        <translation>Force end application</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Espandi</translation>
+        <translation>Expand</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Comprimi</translation>
+        <translation>Compact</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Visualizza</translation>
+        <translation>View</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation>Cerca</translation>
+        <translation>Search</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>Processi</translation>
+        <translation>Processes</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation>Servizi</translation>
+        <translation>Services</translation>
     </message>
 </context>
 </TS>

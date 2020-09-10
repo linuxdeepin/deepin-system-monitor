@@ -296,7 +296,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>交換空間</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -359,7 +359,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Error: [%2] %3</translation>
+        <translation>進程號: %1, Error: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
@@ -512,7 +512,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>進程號</translation>
     </message>
     <message>
         <source>User</source>
@@ -531,7 +531,7 @@ Are you sure you want to continue?</source>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation type="vanished">Swap</translation>
+        <translation type="vanished">交換空間</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -625,7 +625,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>進程號</translation>
     </message>
     <message>
         <source>Startup Type</source>

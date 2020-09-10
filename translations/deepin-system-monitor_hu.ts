@@ -1,215 +1,213 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendszer figyelő</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation type="unfinished"></translation>
+        <translation>A Rendszer figyelő egy eszköz, a valós idejű rendszerterhelés figyelemmel kísérésére, a rendszeren futó folyamatok és szolgáltatások megtekintésére és vezérlésére.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Nincs keresési eredmény</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>aktív</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation type="unfinished"></translation>
+        <translation>újratöltés</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>inaktív</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>sikertelen</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation type="unfinished"></translation>
+        <translation>aktiválás</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation type="unfinished"></translation>
+        <translation>deaktiválás</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation type="unfinished"></translation>
+        <translation>gyomlál</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation type="unfinished"></translation>
+        <translation>nem található</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation type="unfinished"></translation>
+        <translation>rosszul beállított</translation>
     </message>
     <message>
         <source>error</source>
-        <translation type="unfinished"></translation>
+        <translation>hiba</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"></translation>
+        <translation>egyesített</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>maszkolt</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>betöltött</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>Nincs adat</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Kézi</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>engedélyezve</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>tiltva</translation>
     </message>
     <message>
         <source>static</source>
-        <translation type="unfinished"></translation>
+        <translation>statikus</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation type="unfinished"></translation>
+        <translation>átmeneti</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation type="unfinished"></translation>
+        <translation>közvetett</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"></translation>
+        <translation>engedélyezett futásidő</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation type="unfinished"></translation>
+        <translation>maszkolt</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation type="unfinished"></translation>
+        <translation>fejlesztett</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation type="unfinished"></translation>
+        <translation>halott</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"></translation>
+        <translation>előre indít</translation>
     </message>
     <message>
         <source>start</source>
-        <translation type="unfinished"></translation>
+        <translation>indít</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"></translation>
+        <translation>utána indít</translation>
     </message>
     <message>
         <source>running</source>
-        <translation type="unfinished"></translation>
+        <translation>futó</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"></translation>
+        <translation>kilépett</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation type="unfinished"></translation>
+        <translation>újratölt</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation type="unfinished"></translation>
+        <translation>megállít</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"></translation>
+        <translation>utána megállít</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation>végső jelző</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>failed</source>
-        <translation type="unfinished"></translation>
+        <translation>sikertelen</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation type="unfinished"></translation>
+        <translation>automatikus újraindítás</translation>
     </message>
 </context>
 <context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendszer</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Parancsikonok megjelenítése</translation>
     </message>
 </context>
 <context>
@@ -217,309 +215,315 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>A folyamat befejezése adatvesztést okozhat.
+Biztos benne, hogy folytatni akarja?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Folyamat leállítása</translation>
+        <translation>Folyamat befejezése</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>A folyamat kényszerített befejezése adatvesztést okozhat.
+Biztos benne, hogy folytatni akarja?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>Befejezés</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Az alkalmazás kényszerített befejezése adatvesztést okozhat. Biztos benne, hogy folytatja?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation type="unfinished"></translation>
+        <translation>Kényszerített befejezés</translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
-        <translation type="unfinished">Parancssor</translation>
+        <translation>Parancssor</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation type="unfinished">Kezdési idő</translation>
+        <translation>Kezdési idő</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation type="unfinished">Kattintson a bezárni kívánt alkalmazásra</translation>
+        <translation>Kattintson a bezárni kívánt alkalmazásra</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.Title</name>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Memória</translation>
+        <translation>Memória</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>Processzor</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Lemez olvasás</translation>
+        <translation>Lemez olvasás</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Lemez írás</translation>
+        <translation>Lemez írás</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Memória</translation>
+        <translation>Memória</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation type="unfinished">Cserehely</translation>
+        <translation>Cserehely</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation type="unfinished">Nem lehetséges</translation>
+        <translation>Nincs engedélyezve</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Letöltés</translation>
+        <translation>Letöltés</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Feltöltés</translation>
+        <translation>Feltöltés</translation>
     </message>
     <message>
         <source>Disk</source>
-        <translation type="unfinished">Lemez</translation>
+        <translation>Lemez</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation type="unfinished">Hálózat</translation>
+        <translation>Hálózat</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes beérkezett</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation type="unfinished"></translation>
+        <translation>Összes küldött</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyon magas</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Magas</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normál</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Alacsony</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyon alacsony</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyéni</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Érvénytelen</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation type="unfinished"></translation>
+        <translation>PID: %1, Hiba: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült megváltoztatni a folyamat prioritását</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation type="unfinished">Alkalmazások</translation>
+        <translation>Alkalmazások</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation type="unfinished">Saját szolgáltatások</translation>
+        <translation>Saját folyamatok</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation type="unfinished">Minden szolgáltatás</translation>
+        <translation>Minden folyamat</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
+        <source>Failed to end proces</source>
+        <translation type="vanished">Nem sikerült befejezni a folyamatot</translation>
+    </message>
+    <message>
         <source>Failed to pause process</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült szüneteltetni a folyamatot</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült folytatni a folyamatot</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült kilőni a folyamatot</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ismeretlen hiba</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült elküldeni a jelet a feldolgozáshoz</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült befejezni a folyamatokat</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation type="unfinished"></translation>
+        <translation>(%1 alkalmazás és %2 folyamat fut)</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation type="unfinished">Nem válaszol</translation>
+        <translation>Nem válaszol</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished">Felfüggesztés</translation>
+        <translation>Felfüggesztés</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished">Tálca</translation>
+        <translation>Tálca</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation type="unfinished"></translation>
+        <translation>A parancs helyének megtekintése</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation type="unfinished">Tulajdonságok</translation>
+        <translation>Tulajdonságok</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation type="unfinished">Folyamat leállítása</translation>
+        <translation>Folyamat leállítása</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation type="unfinished"></translation>
+        <translation>Folyamat folytatása</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation type="unfinished"></translation>
+        <translation>Folyamat kilövése</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Prioritás megváltoztatása</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation type="unfinished"></translation>
+        <translation>Folyamat felfüggesztése</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Változtatás</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyedi prioritás</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>Processzor</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished">Memória</translation>
+        <translation>Memória</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished">Lemez írás</translation>
+        <translation>Lemez írás</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished">Lemez olvasás</translation>
+        <translation>Lemez olvasás</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Letöltés</translation>
+        <translation>Letöltés</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished">Feltöltés</translation>
+        <translation>Feltöltés</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Felhasználó</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyszerű</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Prioritás</translation>
     </message>
 </context>
 <context>
@@ -537,132 +541,132 @@ Are you sure you want to continue?</source>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>A szolgáltatás indítási típusának beállítása sikertelen</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba: Nem sikerült beállítani a szolgáltatás indítási típusát az összeomlott alfolyamat miatt.</translation>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation type="unfinished"></translation>
+        <translation>Szolgáltatási példány neve</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Frissítés</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>indítás</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Leállítás</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Újraindítás</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Kézi</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Indítási típus</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Név</translation>
+        <translation>Név</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Betöltés</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktív</translation>
     </message>
     <message>
         <source>Sub</source>
         <extracomment>sub state (running status)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Al</translation>
     </message>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Állapot</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Leírás</translation>
     </message>
     <message>
         <source>PID</source>
-        <translation type="unfinished">PID</translation>
+        <translation>PID</translation>
     </message>
     <message>
         <source>Startup Type</source>
         <extracomment>service startup mode</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Indítási típus</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"></translation>
+        <translation>Kényszerített alkalmazás leállítás</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiterjesztés</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Tömörített</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Nézet</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Keresés</translation>
+        <translation>Keresés</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Folyamatok</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Szolgáltatások</translation>
     </message>
 </context>
 </TS>

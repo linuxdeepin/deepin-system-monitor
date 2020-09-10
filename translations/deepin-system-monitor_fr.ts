@@ -296,7 +296,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Échange</translation>
+        <translation>Mémoire virtuelle</translation>
     </message>
     <message>
         <source>Not enabled</source>
@@ -304,7 +304,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Télécharger</translation>
+        <translation>Réception</translation>
     </message>
     <message>
         <source>Upload</source>
@@ -504,7 +504,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Télécharger</translation>
+        <translation>Réception</translation>
     </message>
     <message>
         <source>Upload</source>
@@ -531,7 +531,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     <name>QObject</name>
     <message>
         <source>Swap</source>
-        <translation type="vanished">Échange</translation>
+        <translation type="vanished">Mémoire virtuelle</translation>
     </message>
     <message>
         <source>Not enabled</source>

@@ -21,7 +21,7 @@
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation> активно</translation>
+        <translation>активно</translation>
     </message>
     <message>
         <source>reloading</source>
@@ -324,7 +324,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Отпремњено</translation>
+        <translation>Отпремљено</translation>
     </message>
 </context>
 <context>
@@ -607,7 +607,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation> Активност</translation>
+        <translation>Активност</translation>
     </message>
     <message>
         <source>Sub</source>

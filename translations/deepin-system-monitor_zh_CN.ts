@@ -359,7 +359,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Error: [%2] %3</translation>
+        <translation>进程号: %1, Error: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>

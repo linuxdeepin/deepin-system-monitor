@@ -21,7 +21,7 @@
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation>ativar</translation>
+        <translation>ativo</translation>
     </message>
     <message>
         <source>reloading</source>
@@ -320,7 +320,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation>Total Recebido</translation>
+        <translation>Total Baixado</translation>
     </message>
     <message>
         <source>Total Sent</source>
@@ -331,7 +331,7 @@ Continuar?</translation>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Muito Alta</translation>
+        <translation>Muito alta</translation>
     </message>
     <message>
         <source>High</source>
@@ -351,7 +351,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Personalizado</translation>
+        <translation>Personalizada</translation>
     </message>
     <message>
         <source>Invalid</source>
@@ -374,7 +374,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Processos</translation>
+        <translation>Processos do usuário</translation>
     </message>
     <message>
         <source>All processes</source>
@@ -438,7 +438,7 @@ Continuar?</translation>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation>Exibir localização do comando</translation>
+        <translation>Visualizar o local do comando</translation>
     </message>
     <message>
         <source>Properties</source>
@@ -607,7 +607,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Ativo</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -617,7 +617,7 @@ Continuar?</translation>
     <message>
         <source>State</source>
         <extracomment>state</extracomment>
-        <translation>Status</translation>
+        <translation>Estado</translation>
     </message>
     <message>
         <source>Description</source>
@@ -641,11 +641,11 @@ Continuar?</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Expandido</translation>
+        <translation>Expandida</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Compacto</translation>
+        <translation>Compacta</translation>
     </message>
     <message>
         <source>View</source>

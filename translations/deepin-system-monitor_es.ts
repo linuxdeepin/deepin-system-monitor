@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Monitor del sistema es una herramienta para monitorear la carga del sistema en tiempo real, ver y controlar los procesos y servicios que se ejecutan en su sistema.</translation>
+        <translation>Monitor del sistema de Deepin es una herramienta para monitorear la carga del sistema en tiempo real, ver y controlar los procesos y servicios que se ejecutan en su sistema.</translation>
     </message>
 </context>
 <context>

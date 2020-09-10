@@ -385,7 +385,7 @@ Jesteś pewien, że chcesz kontynuować?</translation>
     <name>Process.Signal</name>
     <message>
         <source>Failed to end proces</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Nie udało się zakończyć procesu</translation>
     </message>
     <message>
         <source>Failed to pause process</source>
@@ -431,7 +431,7 @@ Jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation type="unfinished"/>
+        <translation>Zasobnik systemowy</translation>
     </message>
 </context>
 <context>
