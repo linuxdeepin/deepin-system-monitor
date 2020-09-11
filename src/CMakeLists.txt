@@ -50,8 +50,6 @@ set(APP_HEADERS
     compact_disk_monitor.h
     find_window_title.h
     smooth_curve_generator.h
-    interactive_kill.h
-    start_tooltip.h
     constant.h
     settings.h
     model/process_table_model.h
@@ -121,8 +119,6 @@ set(APP_SOURCES
     compact_disk_monitor.cpp
     find_window_title.cpp
     smooth_curve_generator.cpp
-    interactive_kill.cpp
-    start_tooltip.cpp
     settings.cpp
     model/system_service_table_model.cpp
     model/system_service_sort_filter_proxy_model.cpp

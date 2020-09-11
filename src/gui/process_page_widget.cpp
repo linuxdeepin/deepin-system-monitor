@@ -27,7 +27,6 @@
 #include "process/system_monitor.h"
 #include "process_table_view.h"
 #include "process/stats_collector.h"
-#include "interactive_kill.h"
 #include "constant.h"
 #include "settings.h"
 #include "ui_common.h"
