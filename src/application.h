@@ -8,40 +8,58 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-#ifndef PRIORITY_CONTROLLER_H
-#define PRIORITY_CONTROLLER_H
+#include <DApplication>
 
-#include "common/error_context.h"
+DCORE_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
 
-#include <QObject>
+#if defined(gApp)
+#undef gApp
+#endif
+#define gApp (qobject_cast<Application *>(Application::instance()))
 
-class QProcess;
-class PriorityController : public QObject
+class MainWindow;
+class Application : public DApplication
 {
     Q_OBJECT
 
 public:
-    explicit PriorityController(pid_t pid, int priority, QObject *parent = nullptr);
+    Application(int &argc, char **argv);
 
-    void execute();
+    enum TaskState {
+        kTaskStarted,
+        kTaskRunning,
+        kTaskFinished
+    };
+    Q_ENUM(Application::TaskState)
 
-Q_SIGNALS:
-    void resultReady(int code);
-    void finished();
+    inline void setMainWindow(MainWindow *mw)
+    {
+        m_mainWindow = mw;
+    }
+    inline MainWindow *mainWindow()
+    {
+        Q_ASSERT(m_mainWindow != nullptr);
+        return m_mainWindow;
+    }
+
+signals:
+    void backgroundTaskStateChanged(Application::TaskState state);
 
 private:
-    pid_t m_pid;
-    int m_priority {0};
-
-    QProcess *m_proc;
+    MainWindow *m_mainWindow {};
 };
 
-#endif  // PRIORITY_CONTROLLER_H
+#endif // APPLICATION_H

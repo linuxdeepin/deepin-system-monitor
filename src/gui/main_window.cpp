@@ -18,6 +18,7 @@
 
 #include "main_window.h"
 
+#include "application.h"
 #include "process/system_monitor.h"
 #include "process_page_widget.h"
 #include "system_service_page_widget.h"
@@ -27,7 +28,6 @@
 #include "settings.h"
 #include "constant.h"
 
-#include <DApplication>
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
 #include <DShadowLine>
@@ -44,12 +44,9 @@
 #include <QTimer>
 #include <QResizeEvent>
 
-std::atomic<MainWindow *> MainWindow::m_instance {nullptr};
-std::mutex MainWindow::m_mutex;
-
 DGUI_USE_NAMESPACE
 
-MainWindow::MainWindow(DWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
     m_settings = Settings::instance();
@@ -190,7 +187,7 @@ void MainWindow::initUI()
     resize(width, height);
 
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
-    m_toolbar = new Toolbar(this, this);
+    m_toolbar = new Toolbar(this);
     m_toolbar->setFocusPolicy(Qt::TabFocus);
     titlebar()->setCustomWidget(m_toolbar);
     titlebar()->setMenuDisabled(true);
@@ -301,14 +298,17 @@ void MainWindow::initConnections()
         m_tbShadow->raise();
         m_tbShadow->show();
     });
-    //    connect(m_pages, &DStackedWidget::currentChanged, this,
-    //    [ = ]() { m_toolbar->clearSearchText(); });
 
-    connect(this, &MainWindow::authProgressStarted, this, [ = ]() {
-        setEnabled(false);
-    });
-    connect(this, &MainWindow::authProgressEnded, this, [ = ]() {
-        setEnabled(true);
+    connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
+        if (state == Application::kTaskStarted) {
+            m_focusedwidget = gApp->focusWidget();
+            setEnabled(false);
+        } else if (state == Application::kTaskFinished) {
+            setEnabled(true);
+            if (m_focusedwidget) {
+                m_focusedwidget->setFocus();
+            }
+        }
     });
 }
 

@@ -87,6 +87,7 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
     if (rc == -1) {
         return errfmt(errno, ec);
     }
+    // we dont support adjust realtime sched process's priority
     if (param.sched_priority == 0) {
         // dynamic priority
         if (priority > kVeryLowPriorityMin)
@@ -99,7 +100,7 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
         if (rc == -1 && errno != 0) {
             if (errno == EACCES || errno == EPERM) {
                 // call pkexec to change priority
-                PriorityController *ctrl = new PriorityController(pid, priority, this);
+                auto *ctrl = new PriorityController(pid, priority, this);
                 connect(ctrl, &PriorityController::resultReady, this, [ = ](int code) {
                     if (code == 0) {
                         Q_EMIT processPriorityChanged(pid, priority);
@@ -118,7 +119,7 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
                     }
                 });
                 connect(ctrl, &PriorityController::finished, ctrl, &QObject::deleteLater);
-                ctrl->start();
+                ctrl->execute();
                 return {};
             } else {
                 return errfmt(errno, ec);
@@ -197,7 +198,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
             }
         });
         connect(ctrl, &ProcessController::finished, ctrl, &QObject::deleteLater);
-        ctrl->start();
+        ctrl->execute();
     };
     auto pkill = [this, pctl, errfmt, emitSignal, fmsg](pid_t pid, int signal) {
         int rc = 0;

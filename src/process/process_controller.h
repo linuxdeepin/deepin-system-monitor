@@ -21,24 +21,27 @@
 
 #include "common/error_context.h"
 
-#include <QThread>
+#include <QObject>
 
-class ProcessController : public QThread
+class QProcess;
+class ProcessController : public QObject
 {
     Q_OBJECT
 
 public:
     explicit ProcessController(pid_t pid, int signal, QObject *parent = nullptr);
 
+    void execute();
+
 Q_SIGNALS:
     void resultReady(int code);
-
-protected:
-    void run() override;
+    void finished();
 
 private:
     pid_t m_pid;
     int m_signal {0};
+
+    QProcess *m_proc;
 };
 
 #endif  // PROCESSCONTROLLER_H

@@ -19,6 +19,7 @@
 */
 #include "xwin_kill_preview_widget.h"
 
+#include "application.h"
 #include "xwin_kill_preview_background_widget.h"
 #include "wm/wm_info.h"
 #include "main_window.h"
@@ -52,7 +53,7 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 
 XWinKillPreviewWidget::~XWinKillPreviewWidget()
 {
-    auto *mw = MainWindow::instance();
+    auto *mw = gApp->mainWindow();
     mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
     setMouseTracking(false);
     releaseMouse();
@@ -144,7 +145,7 @@ void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         // restore main window
-        auto *mw = MainWindow::instance();
+        auto *mw = gApp->mainWindow();
         mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
 
         close();

@@ -16,6 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "application.h"
 #include "gui/main_window.h"
 #include "constant.h"
 #include "settings.h"
@@ -23,7 +24,7 @@
 #include "common/hash.h"
 #include "environments.h"
 
-#include <DApplication>
+//#include <DApplication>
 #include <DApplicationSettings>
 #include <DGuiApplicationHelper>
 #include <DMainWindow>
@@ -44,9 +45,9 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<QList<qreal>>();
 
-    DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    DApplication app(argc, argv);
+    Application app(argc, argv);
     app.setAutoActivateWindows(true);
 
     if (DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor"),
@@ -78,17 +79,18 @@ int main(int argc, char *argv[])
         DLogManager::registerConsoleAppender();
         DLogManager::registerFileAppender();
 
-        MainWindow *window = MainWindow::instance();
-        window->initDisplay();
+        MainWindow mw;
+        gApp->setMainWindow(&mw);
+        mw.initDisplay();
 
-        QObject::connect(&app, &DApplication::newInstanceStarted, window,
+        QObject::connect(&app,
+                         &DApplication::newInstanceStarted,
+                         &mw,
                          &MainWindow::activateWindow);
-        QObject::connect(&app, &QCoreApplication::aboutToQuit, window,
-        [ = ]() { window->deleteLater(); });
 
-        window->setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
-        Dtk::Widget::moveToCenter(window);
-        window->show();
+        mw.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
+        Dtk::Widget::moveToCenter(&mw);
+        mw.show();
 
         return app.exec();
     }

@@ -18,7 +18,7 @@
 
 #include "process_controller.h"
 
-#include <DApplication>
+#include "application.h"
 
 #include <QFile>
 #include <QProcess>
@@ -26,21 +26,33 @@
 #define CMD_PKEXEC "/usr/bin/pkexec"
 #define CMD_KILL "/usr/bin/kill"
 
-DWIDGET_USE_NAMESPACE
-
 ProcessController::ProcessController(pid_t pid, int signal, QObject *parent)
-    : QThread(parent)
+    : QObject(parent)
     , m_pid(pid)
     , m_signal(signal)
 {
+    m_proc = new QProcess(this);
+    connect(m_proc, &QProcess::started, this, [=]() {
+        Q_EMIT gApp->backgroundTaskStateChanged(Application::kTaskStarted);
+    });
+    connect(m_proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int rc, QProcess::ExitStatus) {
+        // EINVAL means call with invalid signal
+        Q_ASSERT(rc != EINVAL);
+        if (rc == ESRCH)
+            rc = ESRCH;
+        else if (rc != 0) {
+            rc = EPERM;
+        }
+        Q_EMIT resultReady(rc);
+        Q_EMIT gApp->backgroundTaskStateChanged(Application::kTaskFinished);
+        m_proc->deleteLater();
+        Q_EMIT finished();
+    });
 }
 
-void ProcessController::run()
+void ProcessController::execute()
 {
-    QProcess proc;
     QStringList params;
-    int rc;
-    ErrorContext ec {};
 
     // check bin existance
     if (!QFile::exists({CMD_PKEXEC})) {
@@ -58,13 +70,5 @@ void ProcessController::run()
     // EINVAL, EPERM, ESRCH
     // -2: cant not be started; -1: crashed; other: exit code of pkexec
     // pkexec: 127: not auth/cant auth/error; 126: dialog dismiss
-    rc = proc.execute({CMD_PKEXEC}, params);
-    // EINVAL means call with invalid signal
-    Q_ASSERT(rc != EINVAL);
-    if (rc == ESRCH)
-        rc = ESRCH;
-    else if (rc != 0) {
-        rc = EPERM;
-    }
-    Q_EMIT resultReady(rc);
+    m_proc->start({CMD_PKEXEC}, params);
 }

@@ -18,6 +18,7 @@
 
 #include "service_manager.h"
 
+#include "application.h"
 #include "dbus/dbus_common.h"
 #include "dbus/dbus_properties_interface.h"
 #include "dbus/environment_file.h"
@@ -38,6 +39,8 @@
 #include <QString>
 #include <QtDBus>
 #include <QTimer>
+
+#include <memory>
 
 #include <sys/types.h>
 #include <unistd.h>

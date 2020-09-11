@@ -18,6 +18,7 @@
 
 #include "stats_collector.h"
 
+#include "application.h"
 #include "find_window_title.h"
 #include "netif_monitor.h"
 #include "process_entry.h"
@@ -132,7 +133,6 @@ StatsCollector::~StatsCollector()
 
 void StatsCollector::start()
 {
-    (void)QApplication::instance();
     // Start timer.
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateStatus()));
@@ -675,9 +675,6 @@ QPair<qreal, qreal> StatsCollector::calcProcDiskIOStats(const ProcStat &prev,
 
 void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const ProcStat &ps)
 {
-    // =====================================================================
-    // displayName & icon kinda tricky here
-    // =====================================================================
     DesktopEntry de {};
     bool nameSet{false}, iconSet{false};
     // empty cmdline usually means kernel space process, so use default name & icon
@@ -694,13 +691,13 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 // can't grab window title, try use desktop file instead
                 auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
                 auto de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                if (!de->displayName.isEmpty()) {
+                if (de && !de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(QString("%1: %2")
                                         .arg(QApplication::translate("Process.Table", "Tray"))
                                         .arg(de->displayName));
                 }
-                if (!de->icon.isNull()) {
+                if (de && !de->icon.isNull()) {
                     iconSet = true;
                     proc.setIcon(de->icon);
                 }
@@ -731,7 +728,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
 
             if (ctx.m_desktopEntryCache.contains(proc.getName())) {
                 de = ctx.m_desktopEntryCache[proc.getName()];
-                if (de->icon.isNull()) {
+                if (de && de->icon.isNull()) {
                     de->icon = ctx.m_defaultIcon;
                 }
                 if (!iconSet) {
@@ -753,7 +750,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                             ctx.m_desktopEntryCache[de->name] = de;
                         }
                     }
-                    if (!de->icon.isNull()) {
+                    if (de && !de->icon.isNull()) {
                         iconSet = true;
                         proc.setIcon(de->icon);
                     }
@@ -779,7 +776,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             }
         } else if (ctx.m_desktopEntryCache.contains(proc.getName())) {
             de = ctx.m_desktopEntryCache[proc.getName()];
-            if (!de->displayName.isEmpty()) {
+            if (de && !de->displayName.isEmpty()) {
                 if (ps->cmdline.size() > 1) {
                     // check if last arg of cmdline is url, if so take it's filename
                     auto url = QUrl(ps->cmdline[ps->cmdline.size() - 1]);
@@ -795,7 +792,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     proc.setDisplayName(de->displayName);
                 }
             }
-            if (!de->icon.isNull()) {
+            if (de && !de->icon.isNull()) {
                 iconSet = true;
                 proc.setIcon(de->icon);
 
@@ -803,7 +800,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     ctx.m_appList << ps->pid;
                 }
             }
-            if (!de->startup_wm_class.isEmpty()) {
+            if (de && !de->startup_wm_class.isEmpty()) {
                 proc.setName(de->startup_wm_class);
             }
         } else {
@@ -823,15 +820,15 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     de = ctx.m_desktopEntryCache[proc.getName()];
                 } else {
                     de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                    if (!de->icon.isNull()) {
+                    if (de && !de->icon.isNull()) {
                         ctx.m_desktopEntryCache[de->name] = de;
                     }
                 }
-                if (!de->displayName.isEmpty()) {
+                if (de && !de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(de->displayName);
                 }
-                if (!de->icon.isNull()) {
+                if (de && !de->icon.isNull()) {
                     iconSet = true;
                     proc.setIcon(de->icon);
                     if (!ctx.m_guiPIDList.contains(ps->pid)) {
@@ -845,11 +842,11 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 while (it != ctx.m_desktopEntryCache.constEnd()) {
                     if (it.key().contains(fname)) {
                         de = it.value();
-                        if (!de->displayName.isEmpty()) {
+                        if (de && !de->displayName.isEmpty()) {
                             nameSet = true;
                             proc.setDisplayName(de->displayName);
                         }
-                        if (!de->icon.isNull()) {
+                        if (de && !de->icon.isNull()) {
                             iconSet = true;
                             proc.setIcon(de->icon);
                         }

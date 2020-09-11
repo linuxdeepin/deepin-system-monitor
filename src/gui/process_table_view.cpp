@@ -18,6 +18,7 @@
 
 #include "process_table_view.h"
 
+#include "application.h"
 #include "main_window.h"
 #include "kill_process_confirm_dialog.h"
 #include "priority_slider.h"
@@ -137,9 +138,6 @@ void ProcessTableView::endProcess()
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();
         if (sysmon) {
-            auto *mwnd = MainWindow::instance();
-            Q_ASSERT(mwnd != nullptr);
-            Q_EMIT mwnd->authProgressStarted();
             sysmon->endProcess(qvariant_cast<pid_t>(m_selectedPID));
         }
     } else {
@@ -158,9 +156,6 @@ void ProcessTableView::pauseProcess()
         return;
     }
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
-    Q_EMIT mwnd->authProgressStarted();
     smo->pauseProcess(pid);
 }
 
@@ -175,9 +170,6 @@ void ProcessTableView::resumeProcess()
         return;
     }
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
-    Q_EMIT mwnd->authProgressStarted();
     smo->resumeProcess(pid);
 }
 
@@ -255,7 +247,6 @@ void ProcessTableView::killProcess()
                                                   "loss.\nAre you sure you want to continue?");
 
     KillProcessConfirmDialog dialog(this);
-//    dialog.setTitle(title);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
@@ -264,9 +255,6 @@ void ProcessTableView::killProcess()
     if (dialog.result() == QMessageBox::Ok) {
         auto *sysmon = SystemMonitor::instance();
         if (sysmon) {
-            auto *mwnd = MainWindow::instance();
-            Q_ASSERT(mwnd != nullptr);
-            Q_EMIT mwnd->authProgressStarted();
             sysmon->killProcess(qvariant_cast<pid_t>(m_selectedPID));
         }
     } else {
@@ -290,9 +278,6 @@ void ProcessTableView::switchDisplayMode(SystemMonitor::FilterType type)
 
 void ProcessTableView::changeProcessPriority(int priority)
 {
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
-
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
 
@@ -303,12 +288,10 @@ void ProcessTableView::changeProcessPriority(int priority)
                 return;
 
             ErrorContext ec {};
-            Q_EMIT mwnd->authProgressStarted();
             ec = sysmon->setProcessPriority(pid, priority);
             if (ec) {
                 // show error dialog
                 ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-                Q_EMIT mwnd->authProgressEnded();
             }
         }
     }
@@ -419,7 +402,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
 void ProcessTableView::initConnections(bool settingsLoaded)
 {
-    MainWindow *mainWindow = MainWindow::instance();
+    auto *mainWindow = gApp->mainWindow();
     connect(mainWindow->toolbar(), &Toolbar::search, this, &ProcessTableView::search);
 
     // table context menu
@@ -705,29 +688,12 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         if (ec) {
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
-        Q_EMIT mainWindow->authProgressEnded();
     });
     connect(smo, &SystemMonitor::processControlResultReady, this,
     [ = ](const ErrorContext & ec) {
         if (ec) {
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
-        Q_EMIT mainWindow->authProgressEnded();
-    });
-    connect(smo, &SystemMonitor::processEnded, this, [ = ]() {
-        Q_EMIT mainWindow->authProgressEnded();
-    });
-    connect(smo, &SystemMonitor::processPaused, this, [ = ]() {
-        Q_EMIT mainWindow->authProgressEnded();
-    });
-    connect(smo, &SystemMonitor::processResumed, this, [ = ]() {
-        Q_EMIT mainWindow->authProgressEnded();
-    });
-    connect(smo, &SystemMonitor::processKilled, this, [ = ]() {
-        Q_EMIT mainWindow->authProgressEnded();
-    });
-    connect(smo, &SystemMonitor::processPriorityChanged, this, [ = ]() {
-        Q_EMIT mainWindow->authProgressEnded();
     });
 }
 
@@ -780,7 +746,7 @@ void ProcessTableView::adjustInfoLabelVisibility()
 {
     setUpdatesEnabled(false);
     m_notFoundLabel->setVisible(m_proxyModel->rowCount() == 0
-                                && MainWindow::instance()->toolbar()->isSearchContentEmpty());
+                                && gApp->mainWindow()->toolbar()->isSearchContentEmpty());
     if (m_notFoundLabel->isVisible())
         m_notFoundLabel->move(rect().center() - m_notFoundLabel->rect().center());
     setUpdatesEnabled(true);

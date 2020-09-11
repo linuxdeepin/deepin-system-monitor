@@ -18,11 +18,11 @@
 
 #include "toolbar.h"
 
+#include "application.h"
 #include "main_window.h"
 #include "constant.h"
 #include "utils.h"
 
-#include <DApplication>
 #include <DButtonBox>
 #include <DSearchEdit>
 
@@ -34,9 +34,8 @@
 
 using namespace Utils;
 
-Toolbar::Toolbar(MainWindow *m, QWidget *parent)
+Toolbar::Toolbar(QWidget *parent)
     : DWidget(parent)
-    , m_mainWindow(m)
 {
     installEventFilter(this);  // add event filter
     setMouseTracking(true);    // make MouseMove can response
@@ -88,8 +87,8 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
 
     connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged);
 
-    auto *mwnd = MainWindow::instance();
-    connect(mwnd, &MainWindow::loadingStatusChanged, this, [ = ](bool loading) {
+    auto *mw = gApp->mainWindow();
+    connect(mw, &MainWindow::loadingStatusChanged, this, [=](bool loading) {
         if (loading) {
             m_procBtn->setEnabled(false);
             m_svcBtn->setEnabled(false);

@@ -34,7 +34,7 @@ class Toolbar : public DWidget
     Q_OBJECT
 
 public:
-    Toolbar(MainWindow *m, QWidget *parent = nullptr);
+    Toolbar(QWidget *parent = nullptr);
     ~Toolbar();
 
     bool eventFilter(QObject *, QEvent *event);
@@ -67,8 +67,6 @@ Q_SIGNALS:
     void serviceTabButtonClicked();
 
 private:
-    MainWindow *m_mainWindow;
-
     DButtonBox *m_switchFuncTabBtnGrp;
     DButtonBoxButton *m_procBtn {nullptr};
     DButtonBoxButton *m_svcBtn {nullptr};

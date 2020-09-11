@@ -18,6 +18,7 @@
 
 #include "system_service_table_view.h"
 
+#include "application.h"
 #include "main_window.h"
 #include "dialog/error_dialog.h"
 #include "service_name_sub_input_dialog.h"
@@ -145,25 +146,23 @@ void SystemServiceTableView::startService()
         }
     }
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
-    Q_EMIT mwnd->authProgressStarted();
     auto *watcher  = new QFutureWatcher<ErrorContext>();
-    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
-        Q_EMIT mwnd->authProgressEnded();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
     QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname]() {
         auto ec = mgr->startService(sname);
         return ec;
     });
+    gApp->backgroundTaskStateChanged(Application::kTaskStarted);
     watcher->setFuture(fu);
 }
 
@@ -196,25 +195,23 @@ void SystemServiceTableView::stopService()
         }
     }
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
-    Q_EMIT mwnd->authProgressStarted();
     auto *watcher  = new QFutureWatcher<ErrorContext>();
-    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
-        Q_EMIT mwnd->authProgressEnded();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
     QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname]() {
         auto ec = mgr->stopService(sname);
         return ec;
     });
+    gApp->backgroundTaskStateChanged(Application::kTaskStarted);
     watcher->setFuture(fu);
 }
 
@@ -247,25 +244,23 @@ void SystemServiceTableView::restartService()
         }
     }
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
-    Q_EMIT mwnd->authProgressStarted();
     auto *watcher  = new QFutureWatcher<ErrorContext>();
-    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
-        Q_EMIT mwnd->authProgressEnded();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
     QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname]() {
         auto ec = mgr->restartService(sname);
         return ec;
     });
+    gApp->backgroundTaskStateChanged(Application::kTaskStarted);
     watcher->setFuture(fu);
 }
 
@@ -277,31 +272,29 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
 
     auto sname = m_selectedSName.toString();
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
-    Q_EMIT mwnd->authProgressStarted();
     auto *watcher  = new QFutureWatcher<ErrorContext>();
-    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, mwnd, watcher, sname]() {
-        Q_EMIT mwnd->authProgressEnded();
+    connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
     QFuture<ErrorContext> fu = QtConcurrent::run([mgr, sname, autoStart]() {
         auto ec = mgr->setServiceStartupMode(sname, autoStart);
         return ec;
     });
+    gApp->backgroundTaskStateChanged(Application::kTaskStarted);
     watcher->setFuture(fu);
 }
 
 void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
 {
-    MainWindow *mainWindow = MainWindow::instance();
+    auto *mainWindow = gApp->mainWindow();
     ErrorDialog::show(mainWindow, ec.getErrorName(), ec.getErrorMessage());
 }
 
@@ -513,9 +506,9 @@ void SystemServiceTableView::initConnections()
     connect(hdr, &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
-    auto *mwnd = MainWindow::instance();
-    Q_ASSERT(mwnd != nullptr);
-    connect(mwnd->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
+    auto *mw = gApp->mainWindow();
+    Q_ASSERT(mw != nullptr);
+    connect(mw->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
 
     connect(m_startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
     connect(m_stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
@@ -601,7 +594,7 @@ void SystemServiceTableView::initConnections()
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 
     // initialize service list
-    auto *tbar = mwnd->toolbar();
+    auto *tbar = mw->toolbar();
     connect(tbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
         if (!defer_initialized) {
             auto *mgr = ServiceManager::instance();
@@ -619,8 +612,8 @@ void SystemServiceTableView::initConnections()
     });
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
         m_loading = true;
-        auto *mwnd = MainWindow::instance();
-        Q_EMIT mwnd->loadingStatusChanged(m_loading);
+        auto *mw = gApp->mainWindow();
+        Q_EMIT mw->loadingStatusChanged(m_loading);
 
         setEnabled(false);
 
@@ -636,8 +629,8 @@ void SystemServiceTableView::initConnections()
         m_spinner->stop();
 
         m_loading = false;
-        auto *mwnd = MainWindow::instance();
-        Q_EMIT mwnd->loadingStatusChanged(m_loading);
+        auto *mw = gApp->mainWindow();
+        Q_EMIT mw->loadingStatusChanged(m_loading);
     });
 
     connect(m_model, &SystemServiceTableModel::currentRowChanged, this,

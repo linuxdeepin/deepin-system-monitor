@@ -43,19 +43,8 @@ class MainWindow : public DMainWindow
     Q_DISABLE_COPY(MainWindow)
 
 public:
-    static MainWindow *instance()
-    {
-        MainWindow *sin = m_instance.load();
-        if (!sin) {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            if (!sin) {
-                sin = new MainWindow();
-                m_instance.store(sin);
-            }
-        }
-
-        return sin;
-    }
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
 
     inline Toolbar *toolbar() const { return m_toolbar; }
     inline ProcessPageWidget *processPage() const { return m_procPage; }
@@ -65,8 +54,6 @@ Q_SIGNALS:
     void killProcessPerformed();
     void displayModeChanged(DisplayMode mode);
     void loadingStatusChanged(bool loading);
-    void authProgressStarted();
-    void authProgressEnded();
 
 public Q_SLOTS:
     inline void initDisplay()
@@ -87,9 +74,6 @@ protected:
     virtual void showEvent(QShowEvent *event) override;
 
 private:
-    MainWindow(DWidget *parent = nullptr);
-    ~MainWindow() override;
-
     Settings *m_settings;
 
     //kill process
@@ -107,9 +91,7 @@ private:
     bool m_loading {true};
     char __unused__[7];     // ##padding##
     QTimer *m_timer {nullptr};
-
-    static std::atomic<MainWindow *> m_instance;
-    static std::mutex m_mutex;
+    QWidget *m_focusedwidget {};
 };
 
 #endif  // MAIN_WINDOW_H

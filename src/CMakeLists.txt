@@ -35,6 +35,7 @@ set(APP_HEADERS
     config.h
     environments.h
     utils.h
+    application.h
     common/error_context.h
     common/hash.h
     common/han_latin.h
@@ -104,6 +105,7 @@ set(APP_HEADERS
     
 set(APP_SOURCES
     main.cpp
+    application.cpp
     utils.cpp
     common/error_context.cpp
     common/hash.cpp

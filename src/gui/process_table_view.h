@@ -73,14 +73,14 @@ private:
     void customizeProcessPriority();
 
 private:
-    ProcessTableModel *m_model;
-    ProcessSortFilterProxyModel *m_proxyModel;
+    ProcessTableModel *m_model {};
+    ProcessSortFilterProxyModel *m_proxyModel {};
 
-    DMenu *m_contextMenu;
-    DMenu *m_headerContextMenu;
-    DLabel *m_notFoundLabel;
-    ProcessItemDelegate *m_itemDelegate;
-    ProcessTableHeaderView *m_headerView;
+    DMenu *m_contextMenu {};
+    DMenu *m_headerContextMenu {};
+    DLabel *m_notFoundLabel {};
+    ProcessItemDelegate *m_itemDelegate {};
+    ProcessTableHeaderView *m_headerView {};
 
     QVariant m_selectedPID {};
 

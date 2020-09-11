@@ -18,6 +18,7 @@
 
 #include "process_page_widget.h"
 
+#include "application.h"
 #include "main_window.h"
 #include "kill_process_confirm_dialog.h"
 #include "xwin_kill_preview_widget.h"
@@ -214,7 +215,7 @@ void ProcessPageWidget::initUI()
 
 void ProcessPageWidget::initConnections()
 {
-    MainWindow *mainWindow = MainWindow::instance();
+    auto *mainWindow = gApp->mainWindow();
     connect(mainWindow, &MainWindow::killProcessPerformed, this,
             &ProcessPageWidget::showWindowKiller);
     connect(mainWindow, &MainWindow::displayModeChanged, this,
@@ -378,7 +379,7 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 
 void ProcessPageWidget::showWindowKiller()
 {
-    auto *mw = MainWindow::instance();
+    auto *mw = gApp->mainWindow();
     if (mw)
         mw->showMinimized();
 

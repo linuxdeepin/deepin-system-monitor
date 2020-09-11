@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
 * Author:      maojj <maojunjie@uniontech.com>
@@ -18,7 +18,7 @@
 
 #include "priority_controller.h"
 
-#include <DApplication>
+#include "application.h"
 
 #include <QProcess>
 #include <QFile>
@@ -26,21 +26,38 @@
 #define CMD_PKEXEC "/usr/bin/pkexec"
 #define CMD_RENICE "/usr/bin/renice"
 
-DWIDGET_USE_NAMESPACE
-
 PriorityController::PriorityController(pid_t pid, int priority, QObject *parent)
-    : QThread(parent)
+    : QObject(parent)
     , m_pid(pid)
     , m_priority(priority)
 {
+    m_proc = new QProcess(this);
+    connect(m_proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [=](int rc, QProcess::ExitStatus) {
+        if (rc != 0) {
+            if (rc == EPERM) {
+                Q_EMIT resultReady(EPERM);
+            } else if (rc == EACCES) {
+                Q_EMIT resultReady(EACCES);
+            } else {
+                Q_EMIT resultReady(EPERM);
+            }
+        } else {
+            Q_EMIT resultReady(0);
+        }
+        Q_EMIT gApp->backgroundTaskStateChanged(Application::kTaskFinished);
+        m_proc->deleteLater();
+        Q_EMIT finished();
+    });
+    connect(m_proc, &QProcess::stateChanged, this, [=](QProcess::ProcessState state) {
+        if (state == QProcess::Starting) {
+            Q_EMIT gApp->backgroundTaskStateChanged(Application::kTaskStarted);
+        }
+    });
 }
 
-void PriorityController::run()
+void PriorityController::execute()
 {
-    QProcess proc;
     QStringList params;
-    int rc;
-    ErrorContext ec {};
 
     // check bin existance
     if (!QFile::exists({CMD_PKEXEC})) {
@@ -57,16 +74,5 @@ void PriorityController::run()
 
     // -2: cant not be started; -1: crashed; other: exit code of pkexec
     // pkexec: 127: not auth/cant auth/error; 126: dialog dismiss
-    rc = proc.execute({CMD_PKEXEC}, params);
-    if (rc != 0) {
-        if (rc == EPERM) {
-            Q_EMIT resultReady(EPERM);
-        } else if (rc == EACCES) {
-            Q_EMIT resultReady(EACCES);
-        } else {
-            Q_EMIT resultReady(EPERM);
-        }
-    } else {
-        Q_EMIT resultReady(0);
-    }
+    m_proc->start({CMD_PKEXEC}, params);
 }
