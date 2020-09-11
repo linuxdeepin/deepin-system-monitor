@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QPropertyAnimation>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 

@@ -38,6 +38,7 @@
 #include <QImageReader>
 #include <QLayout>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPixmap>
 #include <QStandardPaths>
 #include <QString>

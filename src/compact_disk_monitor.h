@@ -26,6 +26,7 @@
 
 #include <DApplicationHelper>
 #include <QWidget>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 

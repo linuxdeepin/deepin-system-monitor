@@ -28,6 +28,7 @@
 #include <DStyle>
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <QtMath>
 #include <QPropertyAnimation>
 

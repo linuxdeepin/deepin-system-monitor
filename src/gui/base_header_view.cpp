@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QtMath>
 
 #include "base_header_view.h"

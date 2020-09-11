@@ -29,6 +29,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <QtMath>
 
 #include "compact_cpu_monitor.h"
