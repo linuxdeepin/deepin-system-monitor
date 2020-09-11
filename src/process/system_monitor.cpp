@@ -196,7 +196,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
                 emitSignal(signal);
             }
         });
-        connect(ctrl, &PriorityController::finished, ctrl, &QObject::deleteLater);
+        connect(ctrl, &ProcessController::finished, ctrl, &QObject::deleteLater);
         ctrl->start();
     };
     auto pkill = [this, pctl, errfmt, emitSignal, fmsg](pid_t pid, int signal) {
