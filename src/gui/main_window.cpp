@@ -301,12 +301,12 @@ void MainWindow::initConnections()
 
     connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
         if (state == Application::kTaskStarted) {
-            m_focusedwidget = gApp->focusWidget();
+            m_focusedWidget = gApp->mainWindow()->focusWidget();
             setEnabled(false);
         } else if (state == Application::kTaskFinished) {
             setEnabled(true);
-            if (m_focusedwidget) {
-                m_focusedwidget->setFocus();
+            if (m_focusedWidget && m_focusedWidget->isEnabled()) {
+                m_focusedWidget->setFocus();
             }
         }
     });

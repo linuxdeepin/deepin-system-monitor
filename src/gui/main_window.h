@@ -91,7 +91,8 @@ private:
     bool m_loading {true};
     char __unused__[7];     // ##padding##
     QTimer *m_timer {nullptr};
-    QWidget *m_focusedwidget {};
+
+    QWidget *m_focusedWidget {};
 };
 
 #endif  // MAIN_WINDOW_H
