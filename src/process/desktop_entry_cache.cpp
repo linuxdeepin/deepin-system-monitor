@@ -35,6 +35,7 @@ using Cache = std::unique_ptr<Container>;
 
 static const int kUpdateInterval = 1000 * 300; // 5 minutes interval
 
+#ifndef QT_SPECIALIZE_STD_HASH_TO_CALL_QHASH
 namespace std {
 template<>
 struct hash<QString> {
@@ -44,6 +45,7 @@ struct hash<QString> {
     }
 };
 } // namespace std
+#endif
 
 DCORE_USE_NAMESPACE
 
