@@ -56,6 +56,10 @@ set(APP_HEADERS
     model/process_sort_filter_proxy_model.h
     model/system_service_table_model.h
     model/system_service_sort_filter_proxy_model.h
+    model/cpu_stat_model.h
+    model/mem_stat_model.h
+    model/netif_stat_model.h
+    model/block_dev_stat_model.h
     gui/ui_common.h
     gui/toolbar.h
     gui/main_window.h
@@ -75,6 +79,46 @@ set(APP_HEADERS
     gui/dialog/error_dialog.h
     gui/xwin_kill_preview_widget.h
     gui/xwin_kill_preview_background_widget.h
+    gui/cpu_detail_view_widget.h
+    gui/cpu_summary_view_widget.h
+    gui/mem_detail_view_widget.h
+    gui/mem_summary_view_widget.h
+    gui/block_dev_detail_view_widget.h
+    gui/block_dev_summary_view_widget.h
+    gui/netif_detail_view_widget.h
+    gui/netif_summary_view_widget.h
+    gui/detail_view_stacked_widget.h
+    gui/view/graphics_stat_item.h
+    gui/view/graphics_stat_grid_item.h
+    gui/view/graphics_stat_grid_layout.h
+    gui/view/graphics_info_grid_item.h
+    gui/view/graphics_info_grid_layout.h
+    gui/view/graphics_cpu_stat_item.h
+    gui/view/graphics_cpu_stat_detail_view.h
+    gui/view/graphics_cpu_stat_summary_view.h
+    gui/view/graphics_cpu_stat_grid_layout.h
+    gui/view/graphics_cpu_info_grid_item.h
+    gui/view/graphics_cpu_info_grid_layout.h
+    gui/view/graphics_mem_stat_item.h
+    gui/view/graphics_mem_stat_detail_view.h
+    gui/view/graphics_mem_stat_summary_view.h
+    gui/view/graphics_mem_stat_grid_layout.h
+    gui/view/graphics_mem_info_grid_item.h
+    gui/view/graphics_mem_info_grid_layout.h
+    gui/view/graphics_block_dev_stat_item.h
+    gui/view/graphics_block_dev_stat_detail_view.h
+    gui/view/graphics_block_dev_stat_summary_view.h
+    gui/view/graphics_block_dev_stat_grid_layout.h
+    gui/view/graphics_block_dev_info_grid_item.h
+    gui/view/graphics_block_dev_info_grid_layout.h
+    gui/view/graphics_netif_stat_item.h
+    gui/view/graphics_netif_stat_detail_view.h
+    gui/view/graphics_netif_stat_summary_view.h
+    gui/view/graphics_netif_stat_grid_layout.h
+    gui/view/graphics_netif_info_grid_item.h
+    gui/view/graphics_netif_info_grid_layout.h
+    gui/view/graphics_stat_summary_view_layout.h
+    gui/view/graphics_stat_summary_view.h
     dbus/systemd1_manager_interface.h
     dbus/systemd1_service_interface.h
     dbus/systemd1_unit_interface.h
@@ -99,6 +143,11 @@ set(APP_HEADERS
     service/system_service_entry_data.h
     service/system_service_entry.h
     wm/wm_info.h
+    system/cpu_info_manager.h
+    system/mem_info_manager.h
+    system/block_dev_info_manager.h
+    system/netif_info_manager.h
+    system/stat_manager.h
 )
     
 set(APP_SOURCES
@@ -124,6 +173,10 @@ set(APP_SOURCES
     model/system_service_sort_filter_proxy_model.cpp
     model/process_table_model.cpp
     model/process_sort_filter_proxy_model.cpp
+    model/cpu_stat_model.cpp
+    model/mem_stat_model.cpp
+    model/netif_stat_model.cpp
+    model/block_dev_stat_model.cpp
     gui/toolbar.cpp
     gui/system_service_table_view.cpp
     gui/main_window.cpp
@@ -143,6 +196,46 @@ set(APP_SOURCES
     gui/ui_common.cpp
     gui/xwin_kill_preview_widget.cpp
     gui/xwin_kill_preview_background_widget.cpp
+    gui/cpu_detail_view_widget.cpp
+    gui/cpu_summary_view_widget.cpp
+    gui/mem_detail_view_widget.cpp
+    gui/mem_summary_view_widget.cpp
+    gui/block_dev_detail_view_widget.cpp
+    gui/block_dev_summary_view_widget.cpp
+    gui/netif_detail_view_widget.cpp
+    gui/netif_summary_view_widget.cpp
+    gui/detail_view_stacked_widget.cpp
+    gui/view/graphics_stat_item.cpp
+    gui/view/graphics_stat_grid_item.cpp
+    gui/view/graphics_stat_grid_layout.cpp
+    gui/view/graphics_info_grid_item.cpp
+    gui/view/graphics_info_grid_layout.cpp
+    gui/view/graphics_cpu_stat_item.cpp
+    gui/view/graphics_cpu_stat_detail_view.cpp
+    gui/view/graphics_cpu_stat_summary_view.cpp
+    gui/view/graphics_cpu_stat_grid_layout.cpp
+    gui/view/graphics_cpu_info_grid_item.cpp
+    gui/view/graphics_cpu_info_grid_layout.cpp
+    gui/view/graphics_mem_stat_item.cpp
+    gui/view/graphics_mem_stat_detail_view.cpp
+    gui/view/graphics_mem_stat_summary_view.cpp
+    gui/view/graphics_mem_stat_grid_layout.cpp
+    gui/view/graphics_mem_info_grid_item.cpp
+    gui/view/graphics_mem_info_grid_layout.cpp
+    gui/view/graphics_block_dev_stat_item.cpp
+    gui/view/graphics_block_dev_stat_detail_view.cpp
+    gui/view/graphics_block_dev_stat_summary_view.cpp
+    gui/view/graphics_block_dev_stat_grid_layout.cpp
+    gui/view/graphics_block_dev_info_grid_item.cpp
+    gui/view/graphics_block_dev_info_grid_layout.cpp
+    gui/view/graphics_netif_stat_item.cpp
+    gui/view/graphics_netif_stat_detail_view.cpp
+    gui/view/graphics_netif_stat_summary_view.cpp
+    gui/view/graphics_netif_stat_grid_layout.cpp
+    gui/view/graphics_netif_info_grid_item.cpp
+    gui/view/graphics_netif_info_grid_layout.cpp
+    gui/view/graphics_stat_summary_view_layout.cpp
+    gui/view/graphics_stat_summary_view.cpp
     dbus/environment_file.cpp
     dbus/unit_file_info.cpp
     dbus/unit_info.cpp
@@ -166,6 +259,11 @@ set(APP_SOURCES
     service/system_service_entry_data.cpp
     service/system_service_entry.cpp
     wm/wm_info.cpp
+    system/cpu_info_manager.cpp
+    system/mem_info_manager.cpp
+    system/block_dev_info_manager.cpp
+    system/netif_info_manager.cpp
+    system/stat_manager.cpp
 )
 
 add_executable(${APP_NAME}
