@@ -70,7 +70,7 @@ QVariant SystemServiceTableModel::data(const QModelIndex &index, int role) const
         return {};
     }
 
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (index.column()) {
         case kSystemServiceNameColumn:
             return m_svcMap[m_svcList[row]].getSName();
@@ -125,7 +125,7 @@ int SystemServiceTableModel::columnCount(const QModelIndex &parent) const
 QVariant SystemServiceTableModel::headerData(int section, Qt::Orientation orientation,
                                              int role) const
 {
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (section) {
         case kSystemServiceNameColumn:
             return DApplication::translate("Service.Table.Header", kSystemServiceName);

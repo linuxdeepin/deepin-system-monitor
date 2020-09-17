@@ -143,18 +143,21 @@ void ProcessPageWidget::initUI()
     m_appButton->setCheckable(true);
     m_appButton->setFocusPolicy(Qt::TabFocus);
     m_appButton->setToolTip(DApplication::translate("Process.Show.Mode", appText));
+    m_appButton->setAccessibleName(m_appButton->toolTip());
 
     m_myProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_myProcButton->setIconSize(QSize(26, 24));
     m_myProcButton->setCheckable(true);
     m_myProcButton->setFocusPolicy(Qt::TabFocus);
     m_myProcButton->setToolTip(DApplication::translate("Process.Show.Mode", myProcText));
+    m_myProcButton->setAccessibleName(m_myProcButton->toolTip());
 
     m_allProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
     m_allProcButton->setIconSize(QSize(26, 24));
     m_allProcButton->setCheckable(true);
     m_allProcButton->setFocusPolicy(Qt::TabFocus);
     m_allProcButton->setToolTip(DApplication::translate("Process.Show.Mode", allProcText));
+    m_allProcButton->setAccessibleName(m_allProcButton->toolTip());
 
     m_appButton->installEventFilter(this);
     m_myProcButton->installEventFilter(this);
@@ -221,19 +224,19 @@ void ProcessPageWidget::initConnections()
     connect(mainWindow, &MainWindow::displayModeChanged, this,
             &ProcessPageWidget::switchDisplayMode);
 
-    connect(m_appButton, &DButtonBoxButton::clicked, this, [ = ]() {
+    connect(m_appButton, &DButtonBoxButton::toggled, this, [=](bool) {
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyGUI);
     });
-    connect(m_myProcButton, &DButtonBoxButton::clicked, this, [ = ]() {
+    connect(m_myProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyMe);
     });
-    connect(m_allProcButton, &DButtonBoxButton::clicked, this, [ = ]() {
+    connect(m_allProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::AllProcess);

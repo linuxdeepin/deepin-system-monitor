@@ -34,6 +34,8 @@ find_package(ICU COMPONENTS i18n uc REQUIRED)
 set(APP_HEADERS
     config.h
     environments.h
+    accessible.h
+    accessibledefine.h
     utils.h
     application.h
     common/error_context.h

@@ -110,7 +110,7 @@ int ProcessTableModel::columnCount(const QModelIndex &parent) const
 
 QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (section) {
         case kProcessNameColumn: {
             return DApplication::translate("Process.Table.Header", kProcessName);
@@ -155,7 +155,7 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() >= m_processList.size())
         return {};
 
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         QString name;
         switch (index.column()) {
         case kProcessNameColumn: {

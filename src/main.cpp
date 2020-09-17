@@ -16,13 +16,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "application.h"
-#include "gui/main_window.h"
-#include "constant.h"
-#include "settings.h"
-#include "utils.h"
-#include "common/hash.h"
 #include "environments.h"
+#include "accessible.h"
+#include "constant.h"
+#include "utils.h"
+#include "application.h"
+#include "settings.h"
+#include "gui/main_window.h"
+#include "common/hash.h"
 
 //#include <DApplication>
 #include <DApplicationSettings>
@@ -73,6 +74,8 @@ int main(int argc, char *argv[])
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
         app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor"));
+
+        QAccessible::installFactory(accessibleFactory);
 
         DApplicationSettings appSettings;
 

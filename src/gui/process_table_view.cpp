@@ -323,6 +323,8 @@ void ProcessTableView::saveSettings()
 
 void ProcessTableView::initUI(bool settingsLoaded)
 {
+    setAccessibleName("ProcessTableView");
+
     // not found display label
     m_notFoundLabel = new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_notFoundLabel, DFontSizeManager::T4);

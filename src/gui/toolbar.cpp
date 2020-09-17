@@ -67,8 +67,8 @@ Toolbar::Toolbar(QWidget *parent)
     m_procBtn->installEventFilter(this);
     m_svcBtn->installEventFilter(this);
 
-    connect(m_procBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT procTabButtonClicked(); });
-    connect(m_svcBtn, &DButtonBoxButton::clicked, this, [ = ]() { Q_EMIT serviceTabButtonClicked(); });
+    connect(m_procBtn, &DButtonBoxButton::toggled, this, [=](bool) { Q_EMIT procTabButtonClicked(); });
+    connect(m_svcBtn, &DButtonBoxButton::toggled, this, [=](bool) { Q_EMIT serviceTabButtonClicked(); });
 
     // =========search=========
     searchEdit = new DSearchEdit(this);

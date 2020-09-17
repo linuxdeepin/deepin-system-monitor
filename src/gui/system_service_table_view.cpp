@@ -358,6 +358,8 @@ void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
 
 void SystemServiceTableView::initUI(bool settingsLoaded)
 {
+    setAccessibleName("SystemServiceTableView");
+
     // >>> "not found" display label
     m_noMatchingResultLabel =
         new DLabel(DApplication::translate("Common.Search", "No search results"), this);
