@@ -21,7 +21,7 @@
 
 namespace Constant {
 const int WINDOW_MIN_WIDTH = 1000;
-const int WINDOW_MIN_HEIGHT = 750;
+const int WINDOW_MIN_HEIGHT = 650;
 };  // namespace Constant
 
 #endif
