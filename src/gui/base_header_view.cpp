@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QtMath>
 #include <QModelIndex>
+#include <QPainterPath>
 
 // top/bottom margin for splitters between sections
 static const int kSpacingMargin = 4;

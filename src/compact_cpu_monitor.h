@@ -20,6 +20,7 @@
 #define COMPACTCPUMONITOR_H
 
 #include <QWidget>
+#include <QPainterPath>
 
 class CompactCpuMonitor : public QWidget
 {

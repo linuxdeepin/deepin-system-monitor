@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 using namespace Utils;

@@ -26,6 +26,7 @@
 #include <DStyle>
 
 #include <QHBoxLayout>
+#include <QPainterPath>
 
 SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     : DFrame(parent)
