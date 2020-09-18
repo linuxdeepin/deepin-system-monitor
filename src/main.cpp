@@ -36,6 +36,7 @@
 #include <DWidgetUtil>
 #include <DLog>
 
+#include "stack_trace.h"
 #include "constant.h"
 #include "gui/main_window.h"
 #include "service/service_manager.h"
@@ -52,16 +53,17 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    util::installCrashHandler();
+    utils::init_seed();
+
+    qRegisterMetaType<QList<qreal>>();
+
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     qputenv("_d_disableDBusFileDialog", "true");
     setenv("PULSE_PROP_media.role", "video", 1);
     QSurfaceFormat format;
     format.setRenderableType(QSurfaceFormat::OpenGLES);
     format.setDefaultFormat(format);
-
-    utils::init_seed();
-
-    qRegisterMetaType<QList<qreal>>();
 
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     //DApplication::loadDXcbPlugin();

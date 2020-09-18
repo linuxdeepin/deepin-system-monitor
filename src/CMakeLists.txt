@@ -31,6 +31,7 @@ set(APP_HEADERS
     config.h
     environments.h
     utils.h
+    stack_trace.h
     common/error_context.h
     common/hash.h
     common/han_latin.h
