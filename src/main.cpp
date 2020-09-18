@@ -17,6 +17,7 @@
 */
 
 #include "environments.h"
+#include "stack_trace.h"
 #include "accessible.h"
 #include "constant.h"
 #include "utils.h"
@@ -42,6 +43,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    util::installCrashHandler();
     util::common::init_seed();
 
     qRegisterMetaType<QList<qreal>>();

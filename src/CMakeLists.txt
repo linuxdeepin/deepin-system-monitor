@@ -38,6 +38,7 @@ set(APP_HEADERS
     accessibledefine.h
     utils.h
     application.h
+    stack_trace.h
     common/error_context.h
     common/hash.h
     common/han_latin.h
