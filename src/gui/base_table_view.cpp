@@ -77,6 +77,18 @@ BaseTableView::BaseTableView(DWidget *parent)
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
+void BaseTableView::setModel(QAbstractItemModel *model)
+{
+    DTreeView::setModel(model);
+
+    if (model) {
+        connect(model, &QAbstractItemModel::modelReset, this, [=]() {
+            m_hover = {};
+            m_pressed = {};
+        });
+    }
+}
+
 void BaseTableView::paintEvent(QPaintEvent *event)
 {
     QPainter painter(viewport());

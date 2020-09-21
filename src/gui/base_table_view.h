@@ -34,6 +34,8 @@ class BaseTableView : public DTreeView
 public:
     BaseTableView(DWidget *parent = nullptr);
 
+    void setModel(QAbstractItemModel *model) override;
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void drawRow(QPainter *painter, const QStyleOptionViewItem &options,
