@@ -384,10 +384,6 @@ Segur que voleu continuar?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Ha fallat acabar el procés.</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Ha fallat interrompre el procés.</translation>
     </message>
@@ -525,17 +521,6 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Priority</source>
         <translation>Prioritat</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercanvi</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">No habilitat</translation>
     </message>
 </context>
 <context>

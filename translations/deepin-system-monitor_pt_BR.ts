@@ -384,10 +384,6 @@ Continuar?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Falha ao encerrar o processo</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Falha ao pausar o processo</translation>
     </message>
@@ -525,17 +521,6 @@ Continuar?</translation>
     <message>
         <source>Priority</source>
         <translation>Prioridade</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">SWAP</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">não ativada</translation>
     </message>
 </context>
 <context>

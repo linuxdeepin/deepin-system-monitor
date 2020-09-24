@@ -384,10 +384,6 @@ Anda pasti mahu teruskannya?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Gagal menamatkan proses</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Gagal menjeda proses</translation>
     </message>
@@ -525,17 +521,6 @@ Anda pasti mahu teruskannya?</translation>
     <message>
         <source>Priority</source>
         <translation>Prioriti</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Silih</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Tidak dibenarkan</translation>
     </message>
 </context>
 <context>

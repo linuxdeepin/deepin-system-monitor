@@ -161,15 +161,15 @@
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"/>
+        <translation>stop-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"/>
+        <translation>stop-sigterm</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"/>
+        <translation>stop-sigkill</translation>
     </message>
     <message>
         <source>stop-post</source>
@@ -181,7 +181,7 @@
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"/>
+        <translation>final-sigkill</translation>
     </message>
     <message>
         <source>failed</source>
@@ -383,10 +383,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Nem sikerült befejezni a folyamatot</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Nem sikerült szüneteltetni a folyamatot</translation>
     </message>
@@ -524,17 +520,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Priority</source>
         <translation>Prioritás</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Cserehely</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nem lehetséges</translation>
     </message>
 </context>
 <context>

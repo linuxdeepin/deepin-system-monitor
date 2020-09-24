@@ -384,10 +384,6 @@ Devam etmek istediğine emin misin?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">İşlem sona erdirilemedi</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>İşlem duraklatılamadı</translation>
     </message>
@@ -525,17 +521,6 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Priority</source>
         <translation>Öncelik</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Takas</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Devre dışı</translation>
     </message>
 </context>
 <context>

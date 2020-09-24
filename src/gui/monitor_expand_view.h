@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -27,18 +29,29 @@ class CpuMonitor;
 class MemoryMonitor;
 class NetworkMonitor;
 
+/**
+ * @brief Expand monitor view frame
+ */
 class MonitorExpandView : public DFrame
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Default constructor
+     * @param parent Parent object
+     */
     explicit MonitorExpandView(QWidget *parent = nullptr);
+    // Default destructor
     ~MonitorExpandView() = default;
 
 private:
-    CpuMonitor *m_cpuMonitor;
-    MemoryMonitor *m_memoryMonitor;
-    NetworkMonitor *m_networkMonitor;
+    // Cpu monitor view
+    CpuMonitor *m_cpuMonitor {};
+    // Memory monitor view
+    MemoryMonitor *m_memoryMonitor {};
+    // Network monitor view
+    NetworkMonitor *m_networkMonitor {};
 };
 
 #endif  // MONITOR_EXPAND_VIEW_H

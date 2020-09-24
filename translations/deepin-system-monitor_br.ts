@@ -384,10 +384,6 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">C&apos;hwitet ez eus bet war fin ar prosesus</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>N&apos;heller ket paouez ar prosesus</translation>
     </message>
@@ -525,17 +521,6 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <source>Priority</source>
         <translation>Priorelezh</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Eskemm</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nann-enaouet</translation>
     </message>
 </context>
 <context>

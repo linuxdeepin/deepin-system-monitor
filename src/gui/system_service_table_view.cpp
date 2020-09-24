@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -51,33 +53,41 @@
 
 DWIDGET_USE_NAMESPACE
 
+// service table view backup setting key
 static const char *kSettingsOption_ServiceTableHeaderState = "service_table_header_state";
 
-// not thread-safe
+// multithread unsafe
 static bool defer_initialized {false};
 
+// constructor
 SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     : BaseTableView(parent)
 {
+    // install event handler for service table to handle key events
     installEventFilter(this);
 
-    // >>> table model
+    // service model & sort filter proxy model
     m_model = new SystemServiceTableModel(this);
     m_proxyModel = new SystemServiceSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
     setModel(m_proxyModel);
 
+    // load backup settings
     bool settingsLoaded = loadSettings();
 
+    // initialize ui components & connections
     initUI(settingsLoaded);
     initConnections();
 }
 
+// destructor
 SystemServiceTableView::~SystemServiceTableView()
 {
+    // backup settings when quit
     saveSettings();
 }
 
+// backup service table view settings
 void SystemServiceTableView::saveSettings()
 {
     Settings *s = Settings::instance();
@@ -88,6 +98,7 @@ void SystemServiceTableView::saveSettings()
     }
 }
 
+// load service table view settings from backup storage
 bool SystemServiceTableView::loadSettings()
 {
     Settings *s = Settings::instance();
@@ -102,11 +113,13 @@ bool SystemServiceTableView::loadSettings()
     return false;
 }
 
+// show service table header context menu
 void SystemServiceTableView::displayHeaderContextMenu(const QPoint &p)
 {
     m_headerContextMenu->popup(mapToGlobal(p));
 }
 
+// show service table context menu
 void SystemServiceTableView::displayTableContextMenu(const QPoint &p)
 {
     if (selectedIndexes().size() == 0)
@@ -118,14 +131,16 @@ void SystemServiceTableView::displayTableContextMenu(const QPoint &p)
     m_contextMenu->popup(point);
 }
 
+// start service handler
 void SystemServiceTableView::startService()
 {
+    // no selected item, do nothing
     if (!m_selectedSName.isValid())
         return;
 
     auto sname = m_selectedSName.toString();
 
-    // dialog
+    // request service sub name if origin service name ends  with '@'
     if (sname.endsWith('@')) {
         ServiceNameSubInputDialog dialog(this);
         dialog.setTitle(
@@ -137,6 +152,7 @@ void SystemServiceTableView::startService()
         dialog.setMessage(desc);
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
+            // no service sub name given, do nothing
             auto subName = dialog.getServiceSubName();
             if (subName.isEmpty())
                 return;
@@ -149,12 +165,15 @@ void SystemServiceTableView::startService()
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
+    // start service asynchronically
     auto *watcher  = new QFutureWatcher<ErrorContext>();
     connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
+        // show error dialog when error occurred
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
@@ -162,19 +181,23 @@ void SystemServiceTableView::startService()
         auto ec = mgr->startService(sname);
         return ec;
     });
+    // change global background task state to running state, so we can enable/disable ui components accordingly
     gApp->backgroundTaskStateChanged(Application::kTaskStarted);
+    // run async job
     watcher->setFuture(fu);
 }
 
+// stop service handler
 void SystemServiceTableView::stopService()
 {
+    // no selected item, do nothing
     if (!m_selectedSName.isValid()) {
         return;
     }
 
     auto sname = m_selectedSName.toString();
 
-    // service id syntax: xxx@
+    // service id syntax: xxx@, requires service sub name from user if origin service name ends with '@'
     if (sname.endsWith('@')) {
         ServiceNameSubInputDialog dialog(this);
         dialog.setTitle(
@@ -187,6 +210,7 @@ void SystemServiceTableView::stopService()
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
             auto subName = dialog.getServiceSubName();
+            // no service sub name given, do nothing
             if (subName.isEmpty())
                 return;
             sname = sname.append(subName);
@@ -198,12 +222,15 @@ void SystemServiceTableView::stopService()
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
+    // stop service in asynchronize way
     auto *watcher  = new QFutureWatcher<ErrorContext>();
     connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
+        // show error dialog when error occurred
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
@@ -211,19 +238,23 @@ void SystemServiceTableView::stopService()
         auto ec = mgr->stopService(sname);
         return ec;
     });
+    // change global background task state to running state, so we can enable/disable ui components accordingly
     gApp->backgroundTaskStateChanged(Application::kTaskStarted);
+    // run async job
     watcher->setFuture(fu);
 }
 
+// restart service handler
 void SystemServiceTableView::restartService()
 {
+    // no selected item, do nothing
     if (!m_selectedSName.isValid()) {
         return;
     }
 
     auto sname = m_selectedSName.toString();
 
-    // service id syntax: xxx@
+    // service id syntax: xxx@, requires service sub name from user if origin service name ends with '@'
     if (sname.endsWith('@')) {
         ServiceNameSubInputDialog dialog(this);
         dialog.setTitle(
@@ -236,6 +267,7 @@ void SystemServiceTableView::restartService()
         dialog.exec();
         if (dialog.result() == QMessageBox::Ok) {
             auto subName = dialog.getServiceSubName();
+            // no service sub name given, do nothing
             if (subName.isEmpty())
                 return;
             sname = sname.append(subName);
@@ -247,12 +279,15 @@ void SystemServiceTableView::restartService()
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
+    // restart service in asynchronize way
     auto *watcher  = new QFutureWatcher<ErrorContext>();
     connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
+        // show error dialog when error occurred
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
@@ -260,12 +295,16 @@ void SystemServiceTableView::restartService()
         auto ec = mgr->restartService(sname);
         return ec;
     });
+    // change global background task state to running state, so we can enable/disable ui components accordingly
     gApp->backgroundTaskStateChanged(Application::kTaskStarted);
+    // run async job
     watcher->setFuture(fu);
 }
 
+// set service startup mode handler
 void SystemServiceTableView::setServiceStartupMode(bool autoStart)
 {
+    // no selected item, do nothing
     if (!m_selectedSName.isValid()) {
         return;
     }
@@ -275,12 +314,15 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
 
+    // set service startup mode in asynchronize way
     auto *watcher  = new QFutureWatcher<ErrorContext>();
     connect(watcher, &QFutureWatcher<ErrorContext>::finished, this, [this, mgr, watcher, sname]() {
         refreshServiceStatus(sname);
+        // show error dialog when error occurred
         if (watcher->result()) {
             Q_EMIT mgr->errorOccurred(watcher->result());
         }
+        // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
         watcher->deleteLater();
     });
@@ -288,28 +330,35 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
         auto ec = mgr->setServiceStartupMode(sname, autoStart);
         return ec;
     });
+    // change global background task state to running state, so we can enable/disable ui components accordingly
     gApp->backgroundTaskStateChanged(Application::kTaskStarted);
+    // run async job
     watcher->setFuture(fu);
 }
 
+// handle task error, show error dialog
 void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
 {
     auto *mainWindow = gApp->mainWindow();
     ErrorDialog::show(mainWindow, ec.getErrorName(), ec.getErrorMessage());
 }
 
+// adjust search result tip label's visibility & positon
 void SystemServiceTableView::adjustInfoLabelVisibility()
 {
     setUpdatesEnabled(false);
+    // show label only when proxy model is empty, and spinner is not running
     m_noMatchingResultLabel->setVisible(!m_proxyModel->rowCount() &&
                                         m_spinner &&
                                         !m_spinner->isPlaying());
+    // move tip label to center of the service table view
     if (m_noMatchingResultLabel->isVisible())
         m_noMatchingResultLabel->move(
             rect().center() - m_noMatchingResultLabel->rect().center());
     setUpdatesEnabled(true);
 }
 
+// refresh servcie status if service gets updated
 void SystemServiceTableView::refreshServiceStatus(const QString sname)
 {
     auto *mgr = ServiceManager::instance();
@@ -317,31 +366,39 @@ void SystemServiceTableView::refreshServiceStatus(const QString sname)
 
     auto sn = mgr->normalizeServiceId(sname);
     auto o = Systemd1UnitInterface::normalizeUnitPath(sn);
+    // get refreshed service entry
     auto entry = mgr->updateServiceEntry(o.path());
 
+    // if service's active state is in none final state, start a timer to pull new state Periodically
     if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
         auto *timer = new CustomTimer(mgr, this);
         timer->start(o.path());
     }
 }
 
+// filter service on specific pattern
 void SystemServiceTableView::search(const QString &pattern)
 {
     m_proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
 
+    // adjust search result tip label's position & visibility
     adjustInfoLabelVisibility();
 }
 
+// resize event handler
 void SystemServiceTableView::resizeEvent(QResizeEvent *event)
 {
+    // move spinner to center while resizing
     if (m_spinner) {
         m_spinner->move(rect().center() - m_spinner->rect().center());
     }
+    // adjust search result tip label's position & visibility
     adjustInfoLabelVisibility();
 
     BaseTableView::resizeEvent(event);
 }
 
+// selection changed handler
 void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
                                               const QItemSelection &deselected)
 {
@@ -349,6 +406,7 @@ void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
         return;
     }
 
+    // backup currently selected item's service name
     m_selectedSName = selected.indexes()
                       .value(SystemServiceTableModel::kSystemServiceNameColumn)
                       .data();
@@ -356,36 +414,50 @@ void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
     BaseTableView::selectionChanged(selected, deselected);
 }
 
+// initialize ui components
 void SystemServiceTableView::initUI(bool settingsLoaded)
 {
     setAccessibleName("SystemServiceTableView");
 
-    // >>> "not found" display label
+    // search result tip label instance
     m_noMatchingResultLabel =
         new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
+    // set text color
     auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
     QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
 
+    // header view instance
     auto *hdr = header();
+    // header section movable
     hdr->setSectionsMovable(true);
+    // header section clickable
     hdr->setSectionsClickable(true);
+    // header section resizable
     hdr->setSectionResizeMode(DHeaderView::Interactive);
+    // stretch last section
     hdr->setStretchLastSection(true);
+    // show sort indicator on sort column
     hdr->setSortIndicatorShown(true);
+    // section default aligment
     hdr->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    // header view context menu policy
     hdr->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // table options
+    // enable sorting
     setSortingEnabled(true);
+    // only single row selection allowed
     setSelectionMode(QAbstractItemView::SingleSelection);
+    // select whole row
     setSelectionBehavior(QAbstractItemView::SelectRows);
+    // service table view context menu policy
     setContextMenuPolicy(Qt::CustomContextMenu);
 
-    // >>> table default style
+    // set service table default style when backup settings can not be loaded
     if (!settingsLoaded) {
         setColumnWidth(SystemServiceTableModel::kSystemServiceNameColumn, 200);
         setColumnHidden(SystemServiceTableModel::kSystemServiceNameColumn, false);
@@ -406,21 +478,24 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
         sortByColumn(SystemServiceTableModel::kSystemServiceNameColumn, Qt::AscendingOrder);
     }
 
-    // >>> service tableview context menu
+    // service table view context menu instance
     m_contextMenu = new DMenu(this);
-    // start service
+    // start service action
     m_startServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
+    // ALT + S
     m_startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
-    // stop service
+    // stop service action
     m_stopServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
+    // ALT + T
     m_stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
-    // restart service
+    // restart service action
     m_restartServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
+    // ALT + R
     m_restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
-    // service startup mode
+    // service startup mode action
     m_setServiceStartupModeMenu =
         m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Startup type"));
     m_setAutoStartAction = m_setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Auto"));
@@ -428,27 +503,28 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     // refresh context menu item
     m_refreshAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
+    // F5
     m_refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
 
-    // >>> header context menu
+    // >>> header context menu instance
     m_headerContextMenu = new DMenu(this);
-    // load state column
+    // load state column action
     m_loadStateHeaderAction = m_headerContextMenu->addAction(
                                   DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
     m_loadStateHeaderAction->setCheckable(true);
-    // active state column
+    // active state column action
     m_activeStateHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceActiveState));
     m_activeStateHeaderAction->setCheckable(true);
-    // sub state column
+    // sub state column action
     m_subStateHeaderAction = m_headerContextMenu->addAction(
                                  DApplication::translate("Service.Table.Header", kSystemServiceSubState));
     m_subStateHeaderAction->setCheckable(true);
-    // state column
+    // state column action
     m_stateHeaderAction = m_headerContextMenu->addAction(
                               DApplication::translate("Service.Table.Header", kSystemServiceState));
     m_stateHeaderAction->setCheckable(true);
-    // description column
+    // description column action
     m_descriptionHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceDescription));
     m_descriptionHeaderAction->setCheckable(true);
@@ -461,6 +537,7 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
                                     DApplication::translate("Service.Table.Header", kSystemServiceStartupMode));
     m_startupModeHeaderAction->setCheckable(true);
 
+    // set default checkable state when backup settings load without success
     if (!settingsLoaded) {
         m_loadStateHeaderAction->setChecked(false);
         m_activeStateHeaderAction->setChecked(true);
@@ -470,23 +547,32 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
         m_pidHeaderAction->setChecked(false);
     }
 
+    // refresh service table shortcut
     m_refreshKP = new QShortcut(QKeySequence(QKeySequence::Refresh), this);
+    // start service shortcut
     m_startKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this);
+    // stop service shortcut
     m_stopKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_T), this);
+    // restart service shortcut
     m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
 
+    // spinner instance
     m_spinner = new DSpinner(this);
     auto pa = DApplicationHelper::instance()->applicationPalette();
+    // set spinner color
     QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
     pa.setColor(DPalette::Highlight, hlBrush.color());
     m_spinner->setPalette(pa);
+    // move spinner to center of the viewport
     m_spinner->move(rect().center() - m_spinner->rect().center());
 }
 
+// initialize connections
 void SystemServiceTableView::initConnections()
 {
     auto *dAppHelper = DApplicationHelper::instance();
     Q_ASSERT(dAppHelper != nullptr);
+    // change search result tip label text color when theme type changed
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
         if (m_noMatchingResultLabel) {
             auto palette = DApplicationHelper::instance()->applicationPalette();
@@ -496,42 +582,56 @@ void SystemServiceTableView::initConnections()
         }
     });
 
-    // table events
+    // show context menu when custom context menu requested
     connect(this, &SystemServiceTableView::customContextMenuRequested, this,
             &SystemServiceTableView::displayTableContextMenu);
 
-    // table header events
+    // header view instance
     auto *hdr = header();
+    // backup settings when any of the following events happened
     connect(hdr, &QHeaderView::sectionResized, this, [ = ]() { saveSettings(); });
     connect(hdr, &QHeaderView::sectionMoved, this, [ = ]() { saveSettings(); });
     connect(hdr, &QHeaderView::sortIndicatorChanged, this, [ = ]() { saveSettings(); });
+    // show header context menu
     connect(hdr, &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
     auto *mw = gApp->mainWindow();
     Q_ASSERT(mw != nullptr);
+    // filter service table when search input text changed
     connect(mw->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
 
+    // call start service handler when start service menu item triggered
     connect(m_startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
+    // call stop service handler when stop service menu item triggered
     connect(m_stopServiceAction, &QAction::triggered, this, &SystemServiceTableView::stopService);
+    // call restart service handler when restart service menu item triggered
     connect(m_restartServiceAction, &QAction::triggered, this, &SystemServiceTableView::restartService);
+    // call set service startup mode handler when set auto startup menu item triggered
     connect(m_setAutoStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(true); });
+    // call set service startup mode handler when set manual startup menu item triggered
     connect(m_setManualStartAction, &QAction::triggered, this, [ = ]() { setServiceStartupMode(false); });
+    // call refresh handler when refresh menu item triggered
     connect(m_refreshAction, &QAction::triggered, this, &SystemServiceTableView::refresh);
 
+    // change context menu item usable state based on service's current state when popup
     connect(m_contextMenu, &QMenu::aboutToShow, this, [ = ]() {
         if (selectionModel()->selectedRows().size() > 0) {
             // proxy index
             auto index = selectionModel()->selectedRows()[0];
             if (index.isValid()) {
+                // unit file state
                 auto state = m_model->getUnitFileState(m_proxyModel->mapToSource(index));
+                // service name
                 auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
+                // disable set startup mode menu when service ends with '@' or noop
                 if (sname.endsWith("@") || isUnitNoOp(state)) {
                     m_setServiceStartupModeMenu->setEnabled(false);
                 } else {
                     m_setServiceStartupModeMenu->setEnabled(true);
                 }
 
+                // change auto/manual startup menu item's usable state based on current service's startup mode
                 if (isServiceAutoStartup(sname, state)) {
                     m_setAutoStartAction->setEnabled(false);
                     m_setManualStartAction->setEnabled(true);
@@ -543,35 +643,43 @@ void SystemServiceTableView::initConnections()
         }
     });
 
+    // swap load state header section visible state, then backup setting
     connect(m_loadStateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn, !b);
         saveSettings();
     });
+    // swap active state header section visible state, then backup setting
     connect(m_activeStateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn, !b);
         saveSettings();
     });
+    // swap sub state header section visible state, then backup setting
     connect(m_subStateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn, !b);
         saveSettings();
     });
+    // swap state header section visible state, then backup setting
     connect(m_stateHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn, !b);
         saveSettings();
     });
+    // swap description header section visible state, then backup setting
     connect(m_descriptionHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn, !b);
         saveSettings();
     });
+    // swap pid header section visible state, then backup setting
     connect(m_pidHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn, !b);
         saveSettings();
     });
+    // swap startup mode header section visible state, then backup setting
     connect(m_startupModeHeaderAction, &QAction::triggered, this, [ = ](bool b) {
         hdr->setSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn, !b);
         saveSettings();
     });
 
+    // change header context menu item's checkable state based on current section's visible state
     connect(m_headerContextMenu, &QMenu::aboutToShow, this, [ = ]() {
         bool b;
         b = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn);
@@ -590,9 +698,13 @@ void SystemServiceTableView::initConnections()
         m_pidHeaderAction->setChecked(!b);
     });
 
+    // connect refresh handler to refresh shortcut's activated signal
     connect(m_refreshKP, &QShortcut::activated, this, &SystemServiceTableView::refresh);
+    // connect start service handler to start shortcut's activated signal
     connect(m_startKP, &QShortcut::activated, this, &SystemServiceTableView::startService);
+    // connect stop service handler to stop shortcut's activated signal
     connect(m_stopKP, &QShortcut::activated, this, &SystemServiceTableView::stopService);
+    // connect restart service handler to restart shortcut's activated signal
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 
     // initialize service list
@@ -607,11 +719,13 @@ void SystemServiceTableView::initConnections()
 
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
+    // show error dialog when error occurred
     connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
         if (ec) {
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
+    // change loading state & hide tip label & show spinner before updating service list
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
         m_loading = true;
         auto *mw = gApp->mainWindow();
@@ -623,6 +737,7 @@ void SystemServiceTableView::initConnections()
         m_spinner->start();
         m_spinner->show();
     });
+    // hide tip label & spinner & reset loading state after service list updated
     connect(m_model, &SystemServiceTableModel::modelReset, this, [ = ]() {
         setEnabled(true);
 
@@ -635,6 +750,9 @@ void SystemServiceTableView::initConnections()
         Q_EMIT mw->loadingStatusChanged(m_loading);
     });
 
+    // we need override currentRowChanged method to overcome incremental service list fetch glitch, if user use [down] key
+    // to move current select item and next item is right out side of tableview's viewport region, then we need call fetch
+    // more on proxy model
     connect(m_model, &SystemServiceTableModel::currentRowChanged, this,
     [ = ](int row) {
         m_proxyModel->fetchMore({});
@@ -645,6 +763,7 @@ void SystemServiceTableView::initConnections()
                       QItemSelectionModel::Clear);
     });
 
+    // need update search result tip label while rows got removed or inserted
     connect(m_proxyModel, &SystemServiceTableModel::rowsInserted, this,
     [ = ]() {
         adjustInfoLabelVisibility();
@@ -655,6 +774,7 @@ void SystemServiceTableView::initConnections()
     });
 }
 
+// size hint for column to help calculate prefered section width while user double clicked section's gripper
 int SystemServiceTableView::sizeHintForColumn(int column) const
 {
     QStyleOptionHeader option;
@@ -666,11 +786,14 @@ int SystemServiceTableView::sizeHintForColumn(int column) const
                     BaseTableView::sizeHintForColumn(column) + margin * 2);
 }
 
+// refresh service list handler
 void SystemServiceTableView::refresh()
 {
+    // while already in processing state, do nothing
     if (m_loading)
         return;
 
+    // reset model & select service's name
     m_model->reset();
     m_selectedSName.clear();
 
@@ -679,13 +802,17 @@ void SystemServiceTableView::refresh()
     mgr->updateServiceList();
 }
 
+// event filter
 bool SystemServiceTableView::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == this) {
+        // handle key press event for service table view
         if (event->type() == QEvent::KeyPress) {
             auto *kev = dynamic_cast<QKeyEvent *>(event);
+            // ALT + M show context menu based on focused widget
             if (kev->modifiers() == Qt::ALT && kev->key() == Qt::Key_M) {
                 if (this->hasFocus()) {
+                    // show context menu for table view if table view itself has focus
                     if (selectedIndexes().size() > 0) {
                         auto index = selectedIndexes()[0];
                         auto rect = visualRect(index);
@@ -694,6 +821,7 @@ bool SystemServiceTableView::eventFilter(QObject *obj, QEvent *event)
                         return true;
                     }
                 } else if (header()->hasFocus()) {
+                    // show header context menu if header has focus
                     displayHeaderContextMenu({
                         header()->sectionSize(header()->logicalIndexAt(0)) / 2,
                         header()->height() / 2});

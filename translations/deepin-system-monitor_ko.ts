@@ -384,10 +384,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">프로세스를 종료하지 못했습니다</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>프로세스를 일시 중지하지 못했습니다</translation>
     </message>
@@ -525,17 +521,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Priority</source>
         <translation>우선 순위</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">스왑</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">사용하지 않음</translation>
     </message>
 </context>
 <context>

@@ -384,10 +384,6 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Het proces kan niet worden beëindigd</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Het proces kan niet worden gepauzeerd</translation>
     </message>
@@ -525,17 +521,6 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Priority</source>
         <translation>Prioriteit</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Wisselgeheugen</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Niet ingeschakeld</translation>
     </message>
 </context>
 <context>

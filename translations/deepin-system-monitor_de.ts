@@ -244,7 +244,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation>Beende erzwingen</translation>
+        <translation>Ende erzwingen</translation>
     </message>
 </context>
 <context>
@@ -384,10 +384,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Prozess beenden ist fehlgeschlagen</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Prozess pausieren ist fehlgeschlagen</translation>
     </message>
@@ -409,7 +405,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation>Prozess nicht beendet</translation>
+        <translation>Prozess beenden ist fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -525,17 +521,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Priority</source>
         <translation>Priorität</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Auslagerungsdatei</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nicht aktiviert</translation>
     </message>
 </context>
 <context>
