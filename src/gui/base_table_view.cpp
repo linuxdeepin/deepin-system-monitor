@@ -42,6 +42,9 @@
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
 {
+    // enable touch event handling
+    setAttribute(Qt::WA_AcceptTouchEvents);
+
     // set delegate instance
     m_itemDelegate = new BaseItemDelegate(this);
     setItemDelegate(m_itemDelegate);
@@ -353,6 +356,11 @@ bool BaseTableView::viewportEvent(QEvent *event)
         viewport()->update(region);
         break;
     }
+    case QEvent::TouchEnd: {
+        // when using touch screen, no need any hovered effect...so reset hovered item in case Qt translate touch events into mouse events
+        m_hover = {};
+        break;
+    }
     default:
         break;
     }
@@ -368,6 +376,9 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
         return;
     }
 
+    // reset last hovered item in case user scroll viewport with up/down key press
+    m_hover = {};
+
     auto area = viewport()->rect();
     // calculate current indexed item's rect
     QRect rect(columnViewportPosition(index.column()),
@@ -378,7 +389,10 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
     if (rect.isEmpty()) {
         // nothing to do
     } else if (hint == EnsureVisible && area.contains(rect)) {
-        viewport()->update(rect);
+        viewport()->update(QRect {0,
+                                  indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
+                                  viewport()->width(),
+                                  indexRowSizeHint(index)});
         // nothing to do
     } else {
         // current item above viewport rect

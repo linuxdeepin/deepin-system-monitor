@@ -428,7 +428,9 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
                                                   "Force ending this application may cause data "
                                                   "loss.\nAre you sure you want to continue?");
 
-    KillProcessConfirmDialog dialog(this);
+    KillProcessConfirmDialog dialog;
+    // always stay on top
+    dialog.setWindowFlag(Qt::WindowStaysOnTopHint);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
