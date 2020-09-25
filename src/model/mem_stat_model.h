@@ -22,10 +22,17 @@
 
 #include <QObject>
 
+/**
+ * @brief Memory stat model
+ */
 class MemStatModel : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Model constructor
+     * @param parent Parent object
+     */
     explicit MemStatModel(QObject *parent = nullptr);
 
 signals:

@@ -140,6 +140,12 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
     /**
+     * @brief Show event handler
+     * @param event Show event
+     */
+    void showEvent(QShowEvent *event) override;
+
+    /**
      * @brief selectionChanged Selection changed event handler
      * @param selected Selected items
      * @param deselected Deselected items

@@ -19,6 +19,7 @@
 */
 #include "mem_stat_model.h"
 
+// Model constructor
 MemStatModel::MemStatModel(QObject *parent)
     : QObject(parent)
 {

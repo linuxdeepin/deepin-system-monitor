@@ -805,6 +805,15 @@ void ProcessTableView::resizeEvent(QResizeEvent *event)
     DTreeView::resizeEvent(event);
 }
 
+// show event handler
+void ProcessTableView::showEvent(QShowEvent *)
+{
+    // hide search result not found on initial show
+    if (m_notFoundLabel) {
+        m_notFoundLabel->hide();
+    }
+}
+
 // backup current selected item's pid when selection changed
 void ProcessTableView::selectionChanged(const QItemSelection &selected,
                                         const QItemSelection &deselected)

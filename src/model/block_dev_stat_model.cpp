@@ -19,6 +19,7 @@
 */
 #include "block_dev_stat_model.h"
 
+// model constructor
 BlockDevStatModel::BlockDevStatModel(QObject *parent)
     : QObject(parent)
 {

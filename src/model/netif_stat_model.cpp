@@ -19,6 +19,7 @@
 */
 #include "netif_stat_model.h"
 
+// Network interface stat model
 NetifStatModel::NetifStatModel(QObject *parent)
     : QObject(parent)
 {

@@ -22,10 +22,17 @@
 
 #include <QObject>
 
+/**
+ * @brief Block device performance stat model
+ */
 class BlockDevStatModel : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Model constructor
+     * @param parent Parent object
+     */
     explicit BlockDevStatModel(QObject *parent = nullptr);
 
 signals:
