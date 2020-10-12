@@ -27,7 +27,7 @@
 DWIDGET_USE_NAMESPACE
 
 /**
- * @brief The ErrorDialog class
+ * @brief Dialog to display error messages when error occured
  */
 class ErrorDialog : public DDialog
 {

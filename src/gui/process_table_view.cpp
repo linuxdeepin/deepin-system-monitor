@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -59,24 +61,31 @@
 #include <QKeyEvent>
 #include <QShortcut>
 
+// process table view backup setting key
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
 
+// constructor
 ProcessTableView::ProcessTableView(DWidget *parent)
     : BaseTableView(parent)
 {
+    // install event filter for table view to handle key events
     installEventFilter(this);
 
+    // model & sort filter proxy model instance
     m_model = new ProcessTableModel(this);
     m_proxyModel = new ProcessSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
     // setModel must be called before calling loadSettings();
     setModel(m_proxyModel);
 
+    // load process table view backup settings
     bool settingsLoaded = loadSettings();
 
+    // initialize ui components & connections
     initUI(settingsLoaded);
     initConnections(settingsLoaded);
 
+    // adjust search result tip label text color dynamically on theme type change
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
         if (m_notFoundLabel) {
@@ -88,17 +97,23 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     });
 }
 
+// destructor
 ProcessTableView::~ProcessTableView()
 {
+    // backup table view settings
     saveSettings();
 }
 
+// event filter
 bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 {
+    // handle key press events for process table view
     if (obj == this) {
         if (event->type() == QEvent::KeyPress) {
             auto *kev = dynamic_cast<QKeyEvent *>(event);
+            // ALT+M show context menu
             if (kev->modifiers() == Qt::ALT && kev->key() == Qt::Key_M) {
+                // if table view itself has focus, then show context menu for selected item
                 if (this->hasFocus()) {
                     if (selectedIndexes().size() > 0) {
                         auto index = selectedIndexes()[0];
@@ -107,6 +122,7 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
                         return true;
                     }
                 } else if (header()->hasFocus()) {
+                    // if header view has focus, then show context menu for header view
                     displayProcessTableHeaderContextMenu({header()->sectionSize(header()->logicalIndexAt(0)) / 2, header()->height() / 2});
                     return true;
                 }
@@ -116,13 +132,15 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
     return BaseTableView::eventFilter(obj, event);
 }
 
+// end process handler
 void ProcessTableView::endProcess()
 {
+    // no selected item, do nothing
     if (m_selectedPID.isNull()) {
         return;
     }
 
-    // dialog
+    // kill confirm dialog title & description
     QString title = DApplication::translate("Kill.Process.Dialog", "End process");
     QString description = DApplication::translate("Kill.Process.Dialog",
                                                   "Ending this process may cause data "
@@ -145,6 +163,7 @@ void ProcessTableView::endProcess()
     }
 }
 
+// pause process handler
 void ProcessTableView::pauseProcess()
 {
     auto *smo = SystemMonitor::instance();
@@ -152,6 +171,7 @@ void ProcessTableView::pauseProcess()
 
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
 
+    // no selected item or app self been selected, then do nothing
     if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
         return;
     }
@@ -159,6 +179,7 @@ void ProcessTableView::pauseProcess()
     smo->pauseProcess(pid);
 }
 
+// resume process handler
 void ProcessTableView::resumeProcess()
 {
     auto *smo = SystemMonitor::instance();
@@ -166,6 +187,7 @@ void ProcessTableView::resumeProcess()
 
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
 
+    // no selected item or app self been selected, then do nothing
     if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
         return;
     }
@@ -173,8 +195,10 @@ void ProcessTableView::resumeProcess()
     smo->resumeProcess(pid);
 }
 
+// open process bin path in file manager
 void ProcessTableView::openExecDirWithFM()
 {
+    // selection check needed
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
         QString cmdline = Utils::getProcessCmdline(qvariant_cast<pid_t>(m_selectedPID));
@@ -218,10 +242,13 @@ void ProcessTableView::openExecDirWithFM()
     }
 }
 
+// show process attribute dialog
 void ProcessTableView::showProperties()
 {
+    // selection valid check
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
+        // get process entry item from model
         auto entry = m_model->getProcessEntry(pid);
         auto *attr = new ProcessAttributeDialog(pid,
                                                 entry.getName(),
@@ -234,8 +261,10 @@ void ProcessTableView::showProperties()
     }
 }
 
+// kill process handler
 void ProcessTableView::killProcess()
 {
+    // no selected item, do nothing
     if (m_selectedPID.isNull()) {
         return;
     }
@@ -246,6 +275,7 @@ void ProcessTableView::killProcess()
                                                   "Force ending this process may cause data "
                                                   "loss.\nAre you sure you want to continue?");
 
+    // show confirm dialog
     KillProcessConfirmDialog dialog(this);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
@@ -262,12 +292,15 @@ void ProcessTableView::killProcess()
     }
 }
 
+// filter process table based on searched text
 void ProcessTableView::search(const QString &text)
 {
     m_proxyModel->setSortFilterString(text);
+    // adjust search result tip label's visibility & position if needed
     adjustInfoLabelVisibility();
 }
 
+// switch process table view display mode
 void ProcessTableView::switchDisplayMode(SystemMonitor::FilterType type)
 {
     auto *sysmon = SystemMonitor::instance();
@@ -276,13 +309,16 @@ void ProcessTableView::switchDisplayMode(SystemMonitor::FilterType type)
     }
 }
 
+// change process priority
 void ProcessTableView::changeProcessPriority(int priority)
 {
+    // check selection first
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
 
         auto *sysmon = SystemMonitor::instance();
         if (sysmon) {
+            // if no changes in priority value, then do nothing
             SystemMonitor::ProcessPriority prio = m_model->getProcessPriorityStub(pid);
             if (prio == priority)
                 return;
@@ -297,6 +333,7 @@ void ProcessTableView::changeProcessPriority(int priority)
     }
 }
 
+// load & restore table view settings from backup storage
 bool ProcessTableView::loadSettings()
 {
     Settings *s = Settings::instance();
@@ -311,6 +348,7 @@ bool ProcessTableView::loadSettings()
     return false;
 }
 
+// save table view settings to backup storage
 void ProcessTableView::saveSettings()
 {
     Settings *s = Settings::instance();
@@ -321,35 +359,51 @@ void ProcessTableView::saveSettings()
     }
 }
 
+// initialize ui components
 void ProcessTableView::initUI(bool settingsLoaded)
 {
-    // not found display label
+    setAccessibleName("ProcessTableView");
+
+    // search result not found tip label instance
     m_notFoundLabel = new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_notFoundLabel, DFontSizeManager::T4);
+    // change text color
     auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
     QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_notFoundLabel->setPalette(palette);
     m_notFoundLabel->setVisible(false);
 
-    // header options
+    // header view options
+    // header section movable
     header()->setSectionsMovable(true);
+    // header section clickable
     header()->setSectionsClickable(true);
+    // header section resizable
     header()->setSectionResizeMode(DHeaderView::Interactive);
+    // stretch last header section
     header()->setStretchLastSection(true);
+    // show sort indicator on sort column
     header()->setSortIndicatorShown(true);
+    // header section default alignment
     header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    // header section context menu policy
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // table options
     setSortingEnabled(true);
+    // only single row selection allowed
     setSelectionMode(QAbstractItemView::SingleSelection);
+    // can only select whole row
     setSelectionBehavior(QAbstractItemView::SelectRows);
+    // table view context menu policy
     setContextMenuPolicy(Qt::CustomContextMenu);
 
+    // context menu & header context menu instance
     m_contextMenu = new DMenu(this);
     m_headerContextMenu = new DMenu(this);
 
+    // if no backup settings loaded, show default style
     if (!settingsLoaded) {
         // proc name
         setColumnWidth(ProcessTableModel::kProcessNameColumn, 300);
@@ -400,9 +454,11 @@ void ProcessTableView::initUI(bool settingsLoaded)
     }
 }
 
+// initialize connections
 void ProcessTableView::initConnections(bool settingsLoaded)
 {
     auto *mainWindow = gApp->mainWindow();
+    // connect search slot to toolbar's search signal
     connect(mainWindow->toolbar(), &Toolbar::search, this, &ProcessTableView::search);
 
     // table context menu
@@ -411,16 +467,19 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     // end process
     auto *endProcAction = m_contextMenu->addAction(
                               DApplication::translate("Process.Table.Context.Menu", "End process"));
+    // ALT + E
     endProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_E));
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
     // pause process
     auto *pauseProcAction = m_contextMenu->addAction(
                                 DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
+    // ALT + P
     pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
     connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
     // resume process
     auto *resumeProcAction = m_contextMenu->addAction(
                                  DApplication::translate("Process.Table.Context.Menu", "Resume process"));
+    // ALT + C
     resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
 
@@ -430,6 +489,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     QActionGroup *prioGroup = new QActionGroup(chgProcPrioMenu);
     prioGroup->setExclusive(true);
 
+    // very high priority action
     auto *setVeryHighPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Very high"));
     setVeryHighPrioAction->setCheckable(true);
@@ -437,6 +497,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(setVeryHighPrioAction, &QAction::triggered,
     [ = ]() { changeProcessPriority(SystemMonitor::kVeryHighPriority); });
 
+    // high priority action
     auto *setHighPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "High"));
     setHighPrioAction->setCheckable(true);
@@ -444,6 +505,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(setHighPrioAction, &QAction::triggered,
     [ = ]() { changeProcessPriority(SystemMonitor::kHighPriority); });
 
+    // normal priority action
     auto *setNormalPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Normal"));
     setNormalPrioAction->setCheckable(true);
@@ -451,6 +513,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(setNormalPrioAction, &QAction::triggered,
     [ = ]() { changeProcessPriority(SystemMonitor::kNormalPriority); });
 
+    // low priority action
     auto *setLowPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Low"));
     setLowPrioAction->setCheckable(true);
@@ -458,6 +521,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(setLowPrioAction, &QAction::triggered,
     [ = ]() { changeProcessPriority(SystemMonitor::kLowPriority); });
 
+    // very low priority action
     auto *setVeryLowPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Very low"));
     setVeryLowPrioAction->setCheckable(true);
@@ -465,47 +529,55 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(setVeryLowPrioAction, &QAction::triggered,
     [ = ]() { changeProcessPriority(SystemMonitor::kVeryLowPriority); });
 
+    // custom priority action
     auto *setCustomPrioAction =
         chgProcPrioMenu->addAction(DApplication::translate("Process.Priority", "Custom"));
     setCustomPrioAction->setCheckable(true);
     setCustomPrioAction->setActionGroup(prioGroup);
     connect(setCustomPrioAction, &QAction::triggered, [ = ]() { customizeProcessPriority(); });
 
-    // show exec location
+    // show exec location action
     auto *openExecDirAction = m_contextMenu->addAction(
                                   DApplication::translate("Process.Table.Context.Menu", "View command location"));
     connect(openExecDirAction, &QAction::triggered, this, &ProcessTableView::openExecDirWithFM);
-    // show property
+    // show property action
     auto *showAttrAction = m_contextMenu->addAction(
                                DApplication::translate("Process.Table.Context.Menu", "Properties"));
+    // ALt + ENTER
     showAttrAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Enter));
     connect(showAttrAction, &QAction::triggered, this, &ProcessTableView::showProperties);
     m_contextMenu->addSeparator();
     // kill process
     auto *killProcAction = m_contextMenu->addAction(
                                DApplication::translate("Process.Table.Context.Menu", "Kill process"));
+    // ALT + K
     killProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_K));
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
-    connect(m_contextMenu, &DMenu::aboutToShow, this, [ = ]() {
-        bool b = true;
+    // change menu item checkable state before context menu popup
+    connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
+        // process running or not flag
+        bool running = true;
         auto *sysmon = SystemMonitor::instance();
         if (m_selectedPID.isValid()) {
             pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
             char state = m_model->getProcessState(pid);
             if (state == 'T') {
-                b = false;
+                // process in stopped state
+                running = false;
             } else if (state == 'R') {
-                b = true;
+                // process in running state
+                running = true;
             }
-            bool b2 = b;
+            // monitor process itself cant be stopped, so we need a second modified running flag
+            bool modRunning = running;
             if (sysmon) {
-                b2 = b2 & !sysmon->isSelfProcess(pid);
+                modRunning = modRunning & !sysmon->isSelfProcess(pid);
             }
-            pauseProcAction->setEnabled(b2);
-            resumeProcAction->setEnabled(!b);
+            pauseProcAction->setEnabled(modRunning);
+            resumeProcAction->setEnabled(!running);
 
-            // initialize priority menu item checkable state
+            // change priority menu item checkable state
             SystemMonitor::ProcessPriority prio = m_model->getProcessPriorityStub(pid);
             switch (prio) {
             case SystemMonitor::kVeryHighPriority: {
@@ -533,7 +605,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         }
     });
 
-    // header
+    // backup table view settings if any of the header view state changes
     auto *h = header();
     connect(h, &QHeaderView::sectionResized, this, [ = ]() { saveSettings(); });
     connect(h, &QHeaderView::sectionMoved, this, [ = ]() { saveSettings(); });
@@ -542,7 +614,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             &ProcessTableView::displayProcessTableHeaderContextMenu);
 
     // header context menu
-    // cpu
+    // cpu action
     auto *cpuHeaderAction = m_headerContextMenu->addAction(
                                 DApplication::translate("Process.Table.Header", kProcessCPU));
     cpuHeaderAction->setCheckable(true);
@@ -550,7 +622,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessCPUColumn, !b);
         saveSettings();
     });
-    // user
+    // process user action
     auto *userHeaderAction = m_headerContextMenu->addAction(
                                  DApplication::translate("Process.Table.Header", kProcessUser));
     userHeaderAction->setCheckable(true);
@@ -558,7 +630,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessUserColumn, !b);
         saveSettings();
     });
-    // memory
+    // memory action
     auto *memHeaderAction = m_headerContextMenu->addAction(
                                 DApplication::translate("Process.Table.Header", kProcessMemory));
     memHeaderAction->setCheckable(true);
@@ -566,7 +638,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessMemoryColumn, !b);
         saveSettings();
     });
-    // upload
+    // upload rate action
     auto *uploadHeaderAction = m_headerContextMenu->addAction(
                                    DApplication::translate("Process.Table.Header", kProcessUpload));
     uploadHeaderAction->setCheckable(true);
@@ -574,7 +646,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessUploadColumn, !b);
         saveSettings();
     });
-    // download
+    // download rate action
     auto *downloadHeaderAction = m_headerContextMenu->addAction(
                                      DApplication::translate("Process.Table.Header", kProcessDownload));
     downloadHeaderAction->setCheckable(true);
@@ -582,7 +654,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessDownloadColumn, !b);
         saveSettings();
     });
-    // disk read
+    // disk read rate action
     auto *dreadHeaderAction = m_headerContextMenu->addAction(
                                   DApplication::translate("Process.Table.Header", kProcessDiskRead));
     dreadHeaderAction->setCheckable(true);
@@ -590,7 +662,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessDiskReadColumn, !b);
         saveSettings();
     });
-    // disk write
+    // disk write rate action
     auto *dwriteHeaderAction = m_headerContextMenu->addAction(
                                    DApplication::translate("Process.Table.Header", kProcessDiskWrite));
     dwriteHeaderAction->setCheckable(true);
@@ -598,7 +670,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessDiskWriteColumn, !b);
         saveSettings();
     });
-    // pid
+    // pid action
     auto *pidHeaderAction = m_headerContextMenu->addAction(
                                 DApplication::translate("Process.Table.Header", kProcessPID));
     pidHeaderAction->setCheckable(true);
@@ -606,7 +678,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessPIDColumn, !b);
         saveSettings();
     });
-    // nice
+    // nice value action
     auto *niceHeaderAction = m_headerContextMenu->addAction(
                                  DApplication::translate("Process.Table.Header", kProcessNice));
     niceHeaderAction->setCheckable(true);
@@ -614,7 +686,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessNiceColumn, !b);
         saveSettings();
     });
-    // priority
+    // priority value action
     auto *priorityHeaderAction = m_headerContextMenu->addAction(
                                      DApplication::translate("Process.Table.Header", kProcessPriority));
     priorityHeaderAction->setCheckable(true);
@@ -623,6 +695,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         saveSettings();
     });
 
+    // set default header context menu checkable state when settings load without success
     if (!settingsLoaded) {
         cpuHeaderAction->setChecked(true);
         memHeaderAction->setChecked(true);
@@ -634,6 +707,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         niceHeaderAction->setChecked(true);
         priorityHeaderAction->setChecked(true);
     }
+    // set header context menu checkable state based on current header section's visible state before popup
     connect(m_headerContextMenu, &QMenu::aboutToShow, this, [ = ]() {
         bool b;
         b = header()->isSectionHidden(ProcessTableModel::kProcessCPUColumn);
@@ -658,6 +732,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         userHeaderAction->setChecked(!b);
     });
 
+    // on each model update, we restore settings, adjust search result tip lable's visibility & positon, select the same process item before update if any
     connect(m_model, &ProcessTableModel::modelUpdated, this, [&]() {
         loadSettings();
         adjustInfoLabelVisibility();
@@ -670,25 +745,32 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         }
     });
 
+    // end process shortcut
     m_endProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_E), this);
     connect(m_endProcKP, &QShortcut::activated, this, &ProcessTableView::endProcess);
+    // pause process shortcut
     m_pauseProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_P), this);
     connect(m_pauseProcKP, &QShortcut::activated, this, &ProcessTableView::pauseProcess);
+    // resume process shortcut
     m_resumeProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_C), this);
     connect(m_resumeProcKP, &QShortcut::activated, this, &ProcessTableView::resumeProcess);
+    // view process attribute shortcut
     m_viewPropKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Return), this);
     connect(m_viewPropKP, &QShortcut::activated, this, &ProcessTableView::showProperties);
+    // kill process shortcut
     m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
     connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
 
     auto *smo = SystemMonitor::instance();
     Q_ASSERT(smo != nullptr);
+    // show error dialog if change priority failed
     connect(smo, &SystemMonitor::priorityPromoteResultReady, this,
     [ = ](const ErrorContext & ec) {
         if (ec) {
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
+    // show error dialog if sending signals to process failed
     connect(smo, &SystemMonitor::processControlResultReady, this,
     [ = ](const ErrorContext & ec) {
         if (ec) {
@@ -697,6 +779,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     });
 }
 
+// show process table view context menu on specified positon
 void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)
 {
     if (selectedIndexes().size() == 0)
@@ -707,21 +790,35 @@ void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)
     m_contextMenu->popup(point);
 }
 
+// show process header view context menu on specified position
 void ProcessTableView::displayProcessTableHeaderContextMenu(const QPoint &p)
 {
     m_headerContextMenu->popup(mapToGlobal(p));
 }
 
+// resize event handler
 void ProcessTableView::resizeEvent(QResizeEvent *event)
 {
+    // adjust search result tip label's visibility & position when resizing
     adjustInfoLabelVisibility();
 
     DTreeView::resizeEvent(event);
 }
 
+// show event handler
+void ProcessTableView::showEvent(QShowEvent *)
+{
+    // hide search result not found on initial show
+    if (m_notFoundLabel) {
+        m_notFoundLabel->hide();
+    }
+}
+
+// backup current selected item's pid when selection changed
 void ProcessTableView::selectionChanged(const QItemSelection &selected,
                                         const QItemSelection &deselected)
 {
+    // if no selection, do nothing
     if (selected.size() <= 0) {
         return;
     }
@@ -731,6 +828,7 @@ void ProcessTableView::selectionChanged(const QItemSelection &selected,
     DTreeView::selectionChanged(selected, deselected);
 }
 
+// return hinted size for specified column, so column can be resized to a prefered width when double clicked
 int ProcessTableView::sizeHintForColumn(int column) const
 {
     QStyleOptionHeader option;
@@ -742,18 +840,23 @@ int ProcessTableView::sizeHintForColumn(int column) const
                     DTreeView::sizeHintForColumn(column) + margin * 2);
 }
 
+// adjust search result tip label's visibility & position
 void ProcessTableView::adjustInfoLabelVisibility()
 {
     setUpdatesEnabled(false);
+    // show search not found label only when proxy model is empty & search text input is none empty
     m_notFoundLabel->setVisible(m_proxyModel->rowCount() == 0
                                 && gApp->mainWindow()->toolbar()->isSearchContentEmpty());
+    // move label to center of the process table view
     if (m_notFoundLabel->isVisible())
         m_notFoundLabel->move(rect().center() - m_notFoundLabel->rect().center());
     setUpdatesEnabled(true);
 }
 
+// show customize process priority dialog
 void ProcessTableView::customizeProcessPriority()
 {
+    // priority dialog instance
     DDialog *prioDialog = new DDialog(this);
     prioDialog->setIcon(QIcon::fromTheme("dialog-warning"));
     prioDialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -762,6 +865,7 @@ void ProcessTableView::customizeProcessPriority()
     prioDialog->addSpacing(20);
     PrioritySlider *slider = new PrioritySlider(Qt::Horizontal, prioDialog);
     slider->slider()->setInvertedAppearance(true);
+    // set slider range based on minimum & maximum priority value
     slider->setMinimum(SystemMonitor::kVeryHighPriorityMax);
     slider->setMaximum(SystemMonitor::kVeryLowPriorityMin);
     slider->setPageStep(1);
@@ -769,8 +873,10 @@ void ProcessTableView::customizeProcessPriority()
     slider->setMouseWheelEnabled(true);
     slider->setBelowTicks({QString("%1").arg(SystemMonitor::kVeryLowPriorityMin),
                            QString("%1").arg(SystemMonitor::kVeryHighPriorityMax)});
+    // change tip value dynamically when slider value changed
     connect(slider, &DSlider::valueChanged,
     [ = ](int value) { slider->setTipValue(QString("%1").arg(value)); });
+    // set initial slider & tip value based on current process priority
     QString prio {"0"};
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
@@ -784,6 +890,7 @@ void ProcessTableView::customizeProcessPriority()
                           false, DDialog::ButtonNormal);
     prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change"),
                           true, DDialog::ButtonRecommend);
+    // clear focus first, otherwise we wont get the tab order we want
     prioDialog->clearFocus();
     connect(prioDialog, &DDialog::buttonClicked, this, [ = ](int index, QString text) {
         Q_UNUSED(text);

@@ -39,34 +39,45 @@
 using namespace std;
 using namespace util::wm;
 
+// constructor
 XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 {
+    // new window manager instance
     m_wminfo = new WMInfo();
 
+    // init ui components & connections
     initUI();
     initConnections();
 
+    // resize preview widget to 1x1 in case any obvious black flash widgets occassionly shown on screen
     resize(1, 1);
+    // move preview widget way further away so it's impossible to show on screen
     move(-65536, -65536);
     show();
 }
 
+// destructor
 XWinKillPreviewWidget::~XWinKillPreviewWidget()
 {
+    // restore window state
     auto *mw = gApp->mainWindow();
     mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    // release any owned mouse & keyboard
     setMouseTracking(false);
     releaseMouse();
     releaseKeyboard();
     delete m_wminfo;
 }
 
+// mouse press event
 void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 {
+    // only accept left mouse button click event
     if (event->button() != Qt::LeftButton) {
         return;
     }
 
+    // get the list of windows under cursor in stacked order when mouse pressed
     auto pos = QCursor::pos();
     auto list = m_wminfo->selectWindow(pos);
 
@@ -76,10 +87,13 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     }
 
     for (auto &select : list) {
+        // if the window is created by ourself, then ignore it
         if (SystemMonitor::getCurrentPID() == select->pid)
             continue;
 
+        // if such window exists, we emit window clicked signal to notify kill application performed action
         if (select->rect.contains(pos)) {
+            // hide preview & background widgets first
             hide();
             for (auto &background : m_backgroundList) {
                 background->hide();
@@ -94,10 +108,12 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
+// mouse move event handler
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
     auto pos = QCursor::pos();
 
+    // get the list of windows under cursor from cache in stacked order
     auto list = m_wminfo->selectWindow(pos);
     bool found {false};
 
@@ -110,6 +126,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
     }
 
     for (auto &select : list) {
+        // if the window is created by ourself, then ignore it
         if (SystemMonitor::getCurrentPID() == select->pid)
             continue;
 
@@ -122,18 +139,21 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
             for (auto &hover : hoveredBy)
                 region = region.subtracted(hover->rect);
 
+            // if current selected window is crossing screens, we need update each sub part on each screen
             for (auto &bg : m_backgroundList) {
                 if (bg->geometry().intersects(select->rect)) {
                     auto area = region.intersected(bg->geometry());
                     bg->updateSelection(area);
                     emit cursorUpdated(m_killCursor);
                 } else {
+                    // if current screen doesn't intersect with the selected window, we need clear any selection left before
                     bg->clearSelection();
                 }
             }
             break;
         }
     }
+    // if no such window found, we need clear any selection left before, plus restore cursor to its default style (forbit style)
     if (!found) {
         for (auto &bg : m_backgroundList)
             bg->clearSelection();
@@ -141,10 +161,12 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
     }
 }
 
+// key press event handler
 void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
 {
+    // ESC pressed
     if (event->key() == Qt::Key_Escape) {
-        // restore main window
+        // restore main window state
         auto *mw = gApp->mainWindow();
         mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
 
@@ -152,39 +174,57 @@ void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
     }
 }
 
+// initialize ui components
 void XWinKillPreviewWidget::initUI()
 {
     Qt::WindowFlags flags {};
+    // frameless style
     flags |= Qt::FramelessWindowHint;
     flags |= Qt::Window;
+    // always on top
     flags |= Qt::WindowStaysOnTopHint;
     setWindowFlags(flags);
+    // transparent background
     setAttribute(Qt::WA_TranslucentBackground);
+    // self free after close
     setAttribute(Qt::WA_DeleteOnClose, true);
+
+    // rquest exclusive owning keyboard & mouse
     grabKeyboard();
     setMouseTracking(true);
     grabMouse();
 
+    // styled kill cursor
     m_killCursor = QCursor(iconPathFromQrc("kill_cursor.svg"));
+    // default forbid style cursor
     m_defaultCursor = QCursor(Qt::ForbiddenCursor);
 
     // show background window in all screens
     for (auto screen : QApplication::screens()) {
+        // screen geometry
         auto geom = screen->geometry();
+        // snapshot current screen
         auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(), geom.x(), geom.y(), geom.width(), geom.height());
 
+        // create preview background widget for each screen
         auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
+        // update cursor on cursor updated signal
         connect(this, &XWinKillPreviewWidget::cursorUpdated, background, &XWinKillPreviewBackgroundWidget::setCursor);
+        // resize background widget to current screen size
         background->resize(geom.size());
+        // move background widget to current screen position
         background->move(geom.x(), geom.y());
 
+        // keep a list of each background widget & screen
         m_backgroundList << background;
         m_screens << screen;
 
+        // show background preview widget on each screen
         background->show();
     }
 }
 
+// initialize connections (nothing to do here)
 void XWinKillPreviewWidget::initConnections()
 {
 }

@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -35,14 +37,17 @@
 
 DWIDGET_USE_NAMESPACE
 
+// constructor
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
 }
 
+// paint method for this delegate
 void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
+    // check index validity
     if (!index.isValid()) {
         QStyledItemDelegate::paint(painter, option, index);
         return;
@@ -52,6 +57,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(1);
 
+    // initialize style option for drawing
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
@@ -78,32 +84,44 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 #endif
     }
 
+    // DStyle instance
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
+    // content margin
     auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    // content spacing
     auto spacing = style->pixelMetric(DStyle::PM_ContentsSpacing, &option);
+    // icon size
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
 
+    // global palette
     auto palette = DApplicationHelper::instance()->applicationPalette();
 
     QPen forground;
     if (index.data(Qt::UserRole + 2).isValid()) {
+        // user provided text color (custom color used in treeview)
         forground.setColor(palette.color(cg, static_cast<DPalette::ColorType>(index.data(Qt::UserRole + 2).toInt())));
     } else {
+        // default text color
         forground.setColor(palette.color(cg, DPalette::Text));
     }
+    // adjust forground color only when in enabled state
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
+            // selected row's color
             forground.setColor(palette.color(cg, DPalette::TextLively));
             if (opt.state & DStyle::State_Sunken) {
+                // color used when current row pressed by mouse
                 auto hlColor = opt.palette.highlight().color();
                 hlColor.setAlphaF(.1);
                 auto newColor = style->adjustColor(forground.color(), 0, 0, 0, 0, 0, 0, -40);
                 forground = style->blendColor(newColor, hlColor);
             } else if (opt.state & DStyle::State_MouseOver) {
+                // color used when current row hovered by mouse
                 forground = style->adjustColor(forground.color(), 0, 0, 20);
             }
         } else {
+            // color used when it's normal row & hovered by mouse
             if (opt.state & DStyle::State_MouseOver) {
                 auto type = DApplicationHelper::instance()->themeType();
                 forground = style->adjustColor(forground.color(), 0, 0, type == DApplicationHelper::DarkType ? 20 : -50);
@@ -115,6 +133,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QFontMetrics fm(opt.font);
     QRect textRect = rect;
 
+    // adjust left/right most column's left/right margin
     switch (opt.viewItemPosition) {
     case QStyleOptionViewItem::Beginning: {
         rect.setX(rect.x() + margin);  // left margin
@@ -125,7 +144,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     case QStyleOptionViewItem::End: {
         rect.setWidth(rect.width() - margin);  // right margin
     } break;
-    case QStyleOptionViewItem::OnlyOne: {
+    case QStyleOptionViewItem::OnlyOne: { // when view has only one column
         rect.setX(rect.x() + margin);
         rect.setWidth(rect.width() - margin);
     } break;
@@ -140,7 +159,9 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QRect iconRect;
     if (opt.viewItemPosition == QStyleOptionViewItem::Beginning ||
             opt.viewItemPosition == QStyleOptionViewItem::OnlyOne) {
+        // left most column or when only has one column
         if (opt.features & QStyleOptionViewItem::HasDecoration) {
+            // icon decoration needed
             textRect = rect;
             // | margin - icon - spacing - text - margin |
             textRect.setX(textRect.x() + margin + spacing + iconSize);
@@ -151,6 +172,7 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             iconRect.setX(rect.x() + margin);
             iconRect.setWidth(iconSize);
         } else {
+            // no icon decoration needed
             // | margin - text - margin |
             textRect = rect;
             textRect.setX(textRect.x() + margin);
@@ -165,24 +187,30 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
     }
 
+    // draw icon when decoration needed
     if (opt.features & QStyleOptionViewItem::HasDecoration &&
             (opt.viewItemPosition == QStyleOptionViewItem::Beginning ||
              opt.viewItemPosition == QStyleOptionViewItem::OnlyOne)) {
+        // vmargins between icon and edge
         auto diff = (iconRect.height() - iconSize) / 2;
         opt.icon.paint(painter, iconRect.adjusted(0, diff, 0, -diff));
     }
+    // draw content text
     painter->setPen(forground);
     painter->drawText(textRect, static_cast<int>(opt.displayAlignment), text);
 
+    // restore painter state
     painter->restore();
 }
 
+// editor for editing item data, not used here
 QWidget *BaseItemDelegate::createEditor(QWidget *, const QStyleOptionViewItem &,
                                         const QModelIndex &) const
 {
     return nullptr;
 }
 
+// size hint for this delegate
 QSize BaseItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
@@ -190,25 +218,32 @@ QSize BaseItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
     return size;
 }
 
+// handler for help events
 bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
                                  const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     if (!e || !view)
         return false;
 
+    // only process tooltip events for now
     if (e->type() == QEvent::ToolTip) {
+        // hide tooltip first in case tooltip text not update quickly enough
         QToolTip::hideText();
         QRect rect = view->visualRect(index);
         QRect textRect = rect;
 
+        // initialize style option
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
+        // content margin
         auto margin = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsMargins);
+        // content spacing
         auto spacing = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsSpacing);
+        // icon size
         auto iconSize = view->style()->pixelMetric(DStyle::PM_ListViewIconSize);
 
-        // textRect
+        // calc textRect's size (exclude any decoration region)
         if (index.column() == 0) {
             if (opt.features & QStyleOptionViewItem::HasDecoration) {
                 textRect.setX(textRect.x() + margin * 2 + spacing + iconSize);
@@ -225,10 +260,11 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
             textRect.setWidth(textRect.width() - margin);
         }
 
-        // textWidth
+        // max width of current text calculated with current option's font metric
         QFontMetrics fm(opt.font);
         int w = fm.size(Qt::TextSingleLine, opt.text).width();
 
+        // show tooptip text when text is truncated (text width is larger than visible region)
         if (textRect.width() < w) {
             QVariant tooltip = index.data(Qt::DisplayRole);
             if (tooltip.canConvert<QString>()) {
@@ -239,28 +275,31 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
             }
         }
     }
-    if (!QStyledItemDelegate::helpEvent(e, view, option, index))
-        QToolTip::hideText();
 
-    //    return QStyledItemDelegate::helpEvent(e, view, option, index);
-    return false;
+    return QStyledItemDelegate::helpEvent(e, view, option, index);
 }
 
+// initialize style option
 void BaseItemDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
 {
     option->showDecorationSelected = true;
     bool ok = false;
+    // text alignment option
     if (index.data(Qt::TextAlignmentRole).isValid()) {
         uint value = index.data(Qt::TextAlignmentRole).toUInt(&ok);
         option->displayAlignment = static_cast<Qt::Alignment>(value);
     }
+    // use default alignment
     if (!ok)
         option->displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
+    // text elide option
     option->textElideMode = Qt::ElideRight;
+    // has display role
     option->features = QStyleOptionViewItem::HasDisplay;
     if (index.data(Qt::DisplayRole).isValid())
         option->text = index.data().toString();
 
+    // check if has decoration role
     if (index.data(Qt::DecorationRole).isValid()) {
         option->features |= QStyleOptionViewItem::HasDecoration;
         option->icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));

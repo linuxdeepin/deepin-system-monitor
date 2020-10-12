@@ -220,7 +220,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>End process</source>
@@ -266,7 +266,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klikněte na aplikaci, kterou chcete ukončit</translation>
+        <translation>Klepněte na program, který chcete ukončit</translation>
     </message>
 </context>
 <context>
@@ -384,10 +384,6 @@ Opravdu chcete pokračovat?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Proces se nepodařilo ukončit</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Proces se nepodařilo pozastavit</translation>
     </message>
@@ -469,7 +465,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Change</source>
@@ -528,17 +524,6 @@ Opravdu chcete pokračovat?</translation>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Odkládací prostor (swap)</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nepovoleno</translation>
-    </message>
-</context>
-<context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
@@ -557,7 +542,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Service instance name</source>

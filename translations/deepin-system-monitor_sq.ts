@@ -384,10 +384,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">S’u arrit të ndalej procesi</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>S’u arrit të pushohej procesi</translation>
     </message>
@@ -525,17 +521,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Priority</source>
         <translation>Përparësi</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">I paaktivizuar</translation>
     </message>
 </context>
 <context>

@@ -384,10 +384,6 @@ Es-tu sûr de vouloir continuer ?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Échec de la fermeture du processus</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Impossible de suspendre le processus</translation>
     </message>
@@ -525,17 +521,6 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>Priority</source>
         <translation>Priorité</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Mémoire virtuelle</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Non activé</translation>
     </message>
 </context>
 <context>

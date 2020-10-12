@@ -19,6 +19,7 @@
 */
 #include "cpu_stat_model.h"
 
+// Model constructor
 CPUStatModel::CPUStatModel(QObject *parent)
     : QObject(parent)
 {

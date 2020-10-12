@@ -523,17 +523,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">スワップ</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">未有効</translation>
-    </message>
-</context>
-<context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>

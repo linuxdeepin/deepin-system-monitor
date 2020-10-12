@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -36,32 +38,51 @@
 #include <QScrollerProperties>
 #include <QScrollBar>
 
+// default constructor
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
 {
+    // enable touch event handling
+    setAttribute(Qt::WA_AcceptTouchEvents);
+
+    // set delegate instance
     m_itemDelegate = new BaseItemDelegate(this);
     setItemDelegate(m_itemDelegate);
 
+    // set header view instance
     m_headerView = new BaseHeaderView(Qt::Horizontal, this);
     setHeader(m_headerView);
+    // section movable
     m_headerView->setSectionsMovable(true);
+    // section clickable
     m_headerView->setSectionsClickable(true);
+    // section resizable
     m_headerView->setSectionResizeMode(DHeaderView::Interactive);
+    // can stretch last section?
     m_headerView->setStretchLastSection(true);
+    // show sort indicator?
     m_headerView->setSortIndicatorShown(true);
+    // section default text alignment
     m_headerView->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    // header context menu policy
     m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+    // header view focus policy
     m_headerView->setFocusPolicy(Qt::TabFocus);
 
+    // not allowing expanding/collpasing top-level items
     setRootIsDecorated(false);
+    // items are not expandable
     setItemsExpandable(false);
     setFrameStyle(QFrame::NoFrame);
     viewport()->setAutoFillBackground(false);
     // if set to true, qt will draw item background for you, thats not what you want here!
     setAlternatingRowColors(false);
+    // disable default focus style
     setAllColumnsShowFocus(false);
+    // focus policy
     setFocusPolicy(Qt::TabFocus);
 
+    // adjust focus order (header -> treeview)
     setTabOrder(m_headerView, this);
 
     // treeview touch scroll support
@@ -72,17 +93,36 @@ BaseTableView::BaseTableView(DWidget *parent)
     prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
     prop.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0);
     prop.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 1);
+    // lock scroll direction to fix performance issue
     prop.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1);
     scroller->setScrollerProperties(prop);
+    // enable touch gesture
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
+// set view model
+void BaseTableView::setModel(QAbstractItemModel *model)
+{
+    DTreeView::setModel(model);
+
+    // listen on modelReset signal, reset any hovered or pressed index
+    if (model) {
+        connect(model, &QAbstractItemModel::modelReset, this, [=]() {
+            m_hover = {};
+            m_pressed = {};
+        });
+    }
+}
+
+// paint event handler
 void BaseTableView::paintEvent(QPaintEvent *event)
 {
+    // viewport's painter object
     QPainter painter(viewport());
     painter.save();
     painter.setRenderHints(QPainter::Antialiasing);
     painter.setOpacity(1);
+    // enable clipping
     painter.setClipping(true);
 
     QWidget *wnd = DApplication::activeWindow();
@@ -93,30 +133,43 @@ void BaseTableView::paintEvent(QPaintEvent *event)
         cg = DPalette::Active;
     }
 
+    // DStyle object
     auto style = dynamic_cast<DStyle *>(DApplication::style());
+    // global app helper instance
     auto *dAppHelper = DApplicationHelper::instance();
+    // global palette
     auto palette = dAppHelper->applicationPalette();
 
+    // background brush
     QBrush bgBrush(palette.color(cg, DPalette::Base));
 
+    // initialize style option
     QStyleOptionFrame option;
     initStyleOption(&option);
+
+    // frame radius
     int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
 
     QRect rect = viewport()->rect();
+    // create a clip region double height of viewport's rect
     QRectF clipRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height() * 2);
+    // create a rect equal to upper half part of clip region
     QRectF subRect(rect.x(), rect.y() - rect.height(), rect.width(), rect.height());
     QPainterPath clipPath, subPath;
     clipPath.addRoundedRect(clipRect, radius, radius);
     subPath.addRect(subRect);
+    // clip out upper half part of the clipRect
     clipPath = clipPath.subtracted(subPath);
 
+    // draw viewport's background
     painter.fillPath(clipPath, bgBrush);
 
+    // restore painter
     painter.restore();
     DTreeView::paintEvent(event);
 }
 
+// draw custom styled row
 void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &options,
                             const QModelIndex &index) const
 {
@@ -145,22 +198,29 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 #endif
     }
 
+    // DStyle instance
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
+    // frame radius
     auto radius = style->pixelMetric(DStyle::PM_FrameRadius, &options);
+    // content margin
     auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &options);
 
     auto palette = options.palette;
     QBrush background;
+    // base row color
     auto baseColor = palette.color(DPalette::Active, DPalette::Base);
+    // alternate row color
     if (!(index.row() & 1)) {
         background = palette.color(DPalette::Active, DPalette::AlternateBase);
     } else {
         background = baseColor;
     }
     QStyleOptionViewItem opt(options);
+    // adjust background color only if view's in enabled state
     if (options.state & DStyle::State_Enabled) {
         if (selectionModel()->isSelected(index)) {
+            // current row's color
             background = palette.color(cg, DPalette::Highlight);
             // #ref: DStyle::generatedBrush
             if (m_pressed.isValid() && m_pressed.row() == index.row()) {
@@ -182,18 +242,21 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
         }
     }
 
-    // draw row background
+    // adjust row's rect
     QPainterPath path;
-    QRect rowRect { options.rect.x() - header()->offset(),
-                    options.rect.y(),
-                    header()->length() - header()->sectionPosition(0),
-                    options.rect.height() };
+    QRect rowRect {options.rect.x() - header()->offset(), // x offset of horizontal scrollbar position
+                   options.rect.y(),
+                   header()->length() - header()->sectionPosition(0), // max width calculated from header's width
+                   options.rect.height()};
+    // set left/right most column's margin
     rowRect.setX(rowRect.x() + margin);
     rowRect.setWidth(rowRect.width() - margin);
 
+    // draw row background
     path.addRoundedRect(rowRect, radius, radius);
     painter->fillPath(path, background);
 
+    // delegate to base draw method
     QTreeView::drawRow(painter, opt, index);
 
     // draw focus
@@ -205,19 +268,23 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
         style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, painter);
     }
 
+    // restore painter state
     painter->restore();
 }
 
+// current selected item changed handler
 void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     DTreeView::currentChanged(current, previous);
 
+    // update previous item's paint region
     if (previous.isValid()) {
         QRect previousRect = visualRect(previous);
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
         viewport()->update(previousRect);
     }
+    // update current item's paint region
     if (current.isValid()) {
         QRect currentRect = visualRect(current);
         currentRect.setX(0);
@@ -226,10 +293,12 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
     }
 }
 
+// viewport event handler
 bool BaseTableView::viewportEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::HoverLeave: {
+        // hover leave event, update last hovered item's visual region
         if (m_hover.isValid()) {
             auto rect = visualRect(m_hover);
             rect.setX(0);
@@ -241,6 +310,7 @@ bool BaseTableView::viewportEvent(QEvent *event)
     }
     case QEvent::HoverEnter:
     case QEvent::HoverMove: {
+        // hover move event, update both last & current hovered item's visual region
         auto *hev = dynamic_cast<QHoverEvent *>(event);
         auto oldHover = m_hover;
         m_hover = indexAt(hev->pos());
@@ -268,6 +338,7 @@ bool BaseTableView::viewportEvent(QEvent *event)
         auto newIndex = indexAt(mev->pos());
         QRegion region;
         QRect rect;
+        // update pressed row's region if any
         if (m_pressed.isValid()) {
             rect = visualRect(m_pressed);
             rect.setX(0);
@@ -280,23 +351,36 @@ bool BaseTableView::viewportEvent(QEvent *event)
             rect.setWidth(viewport()->width());
             region += rect;
         }
+        // only left mouse button events (click & double click) need refresh
         m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? newIndex : QModelIndex();
         viewport()->update(region);
+        break;
+    }
+    case QEvent::TouchEnd: {
+        // when using touch screen, no need any hovered effect...so reset hovered item in case Qt translate touch events into mouse events
+        m_hover = {};
         break;
     }
     default:
         break;
     }
+    // delegate other events to base event handler
     return DTreeView::viewportEvent(event);
 }
 
+// scroll viewport to ensure specified indexed item be visible
 void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint hint)
 {
+    // check index validity
     if (!(index.isValid() && index.row() >= 0 && index.column() >= 0 && index.model() == model())) {
         return;
     }
 
+    // reset last hovered item in case user scroll viewport with up/down key press
+    m_hover = {};
+
     auto area = viewport()->rect();
+    // calculate current indexed item's rect
     QRect rect(columnViewportPosition(index.column()),
                indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
                columnWidth(index.column()),
@@ -305,12 +389,17 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
     if (rect.isEmpty()) {
         // nothing to do
     } else if (hint == EnsureVisible && area.contains(rect)) {
-        viewport()->update(rect);
+        viewport()->update(QRect {0,
+                                  indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
+                                  viewport()->width(),
+                                  indexRowSizeHint(index)});
         // nothing to do
     } else {
+        // current item above viewport rect
         bool above = (hint == EnsureVisible
                       && (rect.top() < area.top()
                           || area.height() < rect.height()));
+        // current item below viewport rect
         bool below = (hint == EnsureVisible
                       && rect.bottom() > area.bottom()
                       && rect.height() < area.height());
@@ -322,6 +411,7 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
             verticalValue += rect.bottom() - area.height();
         else if (hint == PositionAtCenter)
             verticalValue += rect.top() - ((area.height() - rect.height()) / 2);
+        // adjust scroll bar to a new position to ensure item visible
         verticalScrollBar()->setValue(verticalValue);
     }
 }

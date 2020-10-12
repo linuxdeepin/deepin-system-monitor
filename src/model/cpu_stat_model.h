@@ -22,10 +22,17 @@
 
 #include <QObject>
 
+/**
+ * @brief CPU stat model
+ */
 class CPUStatModel : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Model constructor
+     * @param parent Parent object
+     */
     explicit CPUStatModel(QObject *parent = nullptr);
 
 signals:

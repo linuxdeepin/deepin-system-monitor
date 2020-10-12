@@ -384,10 +384,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">No se pudo terminar el proceso</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>No se ha podido detener el proceso</translation>
     </message>
@@ -525,17 +521,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Priority</source>
         <translation>Prioridad</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercambio</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Inactivo</translation>
     </message>
 </context>
 <context>

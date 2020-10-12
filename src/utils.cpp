@@ -30,6 +30,7 @@
 #include <QtDBus>
 #include <QtMath>
 #include <QtX11Extras/QX11Info>
+#include <QPainterPath>
 
 #include <fstream>
 #include <string>

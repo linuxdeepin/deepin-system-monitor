@@ -22,10 +22,17 @@
 
 #include <QObject>
 
+/**
+ * @brief Network interface stat model
+ */
 class NetifStatModel : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Model constructor
+     * @param parent Parent object
+     */
     explicit NetifStatModel(QObject *parent = nullptr);
 
 signals:

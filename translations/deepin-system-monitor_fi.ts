@@ -384,10 +384,6 @@ Haluatko varmasti jatkaa?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Prosessin lopettaminen epäonnistui</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Prosessin pysäytys epäonnistui</translation>
     </message>
@@ -525,17 +521,6 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Priority</source>
         <translation>Prioriteetti</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Swap</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Ei käytössä</translation>
     </message>
 </context>
 <context>

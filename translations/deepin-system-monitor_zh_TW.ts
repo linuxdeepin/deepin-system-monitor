@@ -215,7 +215,7 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>結束此執行程式可能導致資料遺失。
+        <translation>結束此進程可能導致資料遺失。
 確定繼續？</translation>
     </message>
     <message>
@@ -224,17 +224,17 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>End process</source>
-        <translation>結束程式</translation>
+        <translation>結束進程</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>強制結束此執行程式可能導致資料遺失。
+        <translation>強制結束此進程可能導致資料遺失。
 確定繼續？</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>結束程式</translation>
+        <translation>結束進程</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
@@ -363,7 +363,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation>改變程式優先度失敗</translation>
+        <translation>改變進程優先度失敗</translation>
     </message>
 </context>
 <context>
@@ -374,30 +374,26 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>My processes</source>
-        <translation>我的程式</translation>
+        <translation>我的進程</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>所有程式</translation>
+        <translation>所有進程</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">結束程式失敗</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
-        <translation>暫停程式失敗</translation>
+        <translation>暫停進程失敗</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation>繼續程式失敗</translation>
+        <translation>繼續進程失敗</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation>強制結束程式失敗</translation>
+        <translation>強制結束進程失敗</translation>
     </message>
     <message>
         <source>Unknown error</source>
@@ -405,7 +401,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation>發送訊號到程式失敗</translation>
+        <translation>發送訊號到進程失敗</translation>
     </message>
     <message>
         <source>Failed to end process</source>
@@ -416,7 +412,7 @@ Are you sure you want to continue?</source>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>（正在執行 %1 個應用程式以及 %2 個程式）</translation>
+        <translation>（正在執行 %1 個應用程式以及 %2 個進程）</translation>
     </message>
 </context>
 <context>
@@ -446,15 +442,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>End process</source>
-        <translation>結束程式</translation>
+        <translation>結束進程</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>繼續程式</translation>
+        <translation>繼續進程</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>強制結束程式</translation>
+        <translation>強制結束進程</translation>
     </message>
     <message>
         <source>Change priority</source>
@@ -462,7 +458,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>暫停程式</translation>
+        <translation>暫停進程</translation>
     </message>
 </context>
 <context>
@@ -528,17 +524,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">交換空間</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">停用</translation>
-    </message>
-</context>
-<context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
@@ -546,7 +531,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>錯誤：由於子程式崩潰，服務的啟動方式設定失敗</translation>
+        <translation>錯誤：由於子進程崩潰，服務的啟動方式設定失敗</translation>
     </message>
 </context>
 <context>
@@ -663,7 +648,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>程式</translation>
+        <translation>程式進程</translation>
     </message>
     <message>
         <source>Services</source>
