@@ -498,6 +498,14 @@ void StatsCollector::updateStatus()
         m_trayPIDToWndMap[pid] = xid;
     }
 
+    // m_trayPIDToWndMap & m_guiPIDList diff
+    QMutableListIterator<pid_t> diffIter(m_guiPIDList);
+    while (diffIter.hasNext()) {
+        diffIter.next();
+        if (m_trayPIDToWndMap.contains(diffIter.value()))
+            diffIter.remove();
+    }
+
     // get process info
     b = ProcessStat::readProcStats(readProcStatsCallback, this);
 
@@ -535,7 +543,7 @@ void StatsCollector::updateStatus()
     // find if any ancestor processes is gui application
     anyRootIsGuiProc = [&](pid_t ppid) -> bool {
         bool b;
-        b = m_guiPIDList.contains(ppid);
+        b = m_guiPIDList.contains(ppid) || m_trayPIDToWndMap.contains(ppid);
         if (!b && m_pidCtoPMapping.contains(ppid))
         {
             b = anyRootIsGuiProc(m_pidCtoPMapping[ppid]);
@@ -543,7 +551,7 @@ void StatsCollector::updateStatus()
         return b;
     };
     for (auto app : m_appList) {
-        if (m_guiPIDList.contains(app))
+        if (m_guiPIDList.contains(app) || m_trayPIDToWndMap.contains(app))
             continue;
 
         // check if cmd is a shell or scripting language
