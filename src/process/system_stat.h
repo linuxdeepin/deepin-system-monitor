@@ -31,16 +31,16 @@
 
 // from /proc/stat, ref: sysstat#rd_stats.h#stats_cpu
 struct cpu_stat {
-    unsigned long long user;
-    unsigned long long nice;
-    unsigned long long sys;
-    unsigned long long idle;
-    unsigned long long iowait;
-    unsigned long long hardirq;
-    unsigned long long softirq;
-    unsigned long long steal;
-    unsigned long long guest;
-    unsigned long long guest_nice;
+    unsigned long long user; // user time
+    unsigned long long nice; // user time with low priority
+    unsigned long long sys; // system time
+    unsigned long long idle; // idle time
+    unsigned long long iowait; // io wait time
+    unsigned long long hardirq; // interrupt time
+    unsigned long long softirq; // soft interrupt time
+    unsigned long long steal; // stolen time
+    unsigned long long guest; // guest time
+    unsigned long long guest_nice; // guest time (niced)
 };
 
 // from /proc/meminfo, ref: sysstat#rd_stats.h#stats_memory
@@ -73,14 +73,14 @@ struct disk_io_stat {
 
 // from /proc/net/dev, ref: sysstat#rd_stats.h#stats_net_dev
 struct netif_stat {
-    unsigned long long rx_packets;
-    unsigned long long tx_packets;
-    unsigned long long rx_bytes;
-    unsigned long long tx_bytes;
-    unsigned long long rx_compressed;
-    unsigned long long tx_compressed;
-    unsigned long long multicast;
-    char iface[IF_NAMESIZE];
+    unsigned long long rx_packets; // received packets
+    unsigned long long tx_packets; // transmitted packets
+    unsigned long long rx_bytes; // received bytes
+    unsigned long long tx_bytes; // transmitted bytes
+    unsigned long long rx_compressed; // number of compressed packets received
+    unsigned long long tx_compressed; // number of compressed packets transmitted
+    unsigned long long multicast; // number of multicast frames transmitted or received
+    char iface[IF_NAMESIZE]; // interface name
 };
 
 // from /proc/net/tcp & /proc/net/udp & /proc/net/tcp6 & /proc/net/udp6
@@ -102,13 +102,13 @@ struct sock_stat_t {
 };
 
 struct net_ifaddr_t {
-    char iface[IF_NAMESIZE];
-    int family;
+    char iface[IF_NAMESIZE]; // interface name
+    int family; // address family
     // flags
     union {
         in_addr in4;
         in6_addr in6;
-    } addr;
+    } addr; // address
     // netmask
     // broadcast/p2p
 };
@@ -128,24 +128,96 @@ using NetIFAddrsMap = QMultiMap<QString, NetIFAddr>;
 class SystemStat
 {
 public:
+    /**
+     * @brief Read system uptime since startup
+     * @param uptime Uptime in seconds
+     * @return true: success; false: failure
+     */
     static bool readUpTime(qulonglong &uptime);
+    /**
+     * @brief Read bootup time
+     * @param btime Bootup time
+     * @return true: success; false: failure
+     */
     static bool readBootTime(time_t &btime);
+    /**
+     * @brief Read /proc/stat
+     * @param statSum Total cpu usage stat
+     * @param statSMPMap Logical cpu usage stat
+     * @return true: success; false: failure
+     */
     static bool readCPUStats(CPUStat &statSum, CPUStatMap &statSMPMap);
+    /**
+     * @brief Read /proc/meminfo
+     * @param stat Memory stat
+     * @return true: success; false: failure
+     */
     static bool readMemStats(MemStat &stat);
+    /**
+     * @brief Read /proc/diskstats
+     * @param statSum Total block device usage stats
+     * @param statIOMap Usage stats of each block device
+     * @return true: success; false: failure
+     */
     static bool readDiskIOStats(DiskIOStat &statSum, DiskIOStatMap &statIOMap);
+    /**
+     * @brief Read /proc/net/dev
+     * @param statSum Total network interface bandwidth usage stats
+     * @param statNetIfMap Bandwidth usage stats of each interface
+     * @return true: success; false: failure
+     */
     static bool readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap);
+    /**
+     * @brief Read /proc/net/tcp, /proc/net/udp, /proc/net/tcp6, /proc/net/udp6
+     * @param statMap TCP & UDP stat table
+     * @return true: success; false: failure
+     */
     static bool readSockStat(SockStatMap &statMap);
+    /**
+     * @brief Get all interfaces which have addresses set
+     * @param addrsMap Network interface address map
+     * @return true: success; false: failure
+     */
     static bool readNetIfAddrs(NetIFAddrsMap &addrsMap);
 
+    /**
+     * @brief Get current real user name
+     * @return Current real user name
+     */
     static QString getCurrentRealUserName();
+    /**
+     * @brief Get current real group name
+     * @return Current real group name
+     */
     static QString getCurrentRealGroupName();
 
+    /**
+     * @brief Get current effective user name
+     * @return Current effective user name
+     */
     static QString getCurrentEffectiveUserName();
+    /**
+     * @brief Get current effective group name
+     * @return Current effective group name
+     */
     static QString getCurrentEffectiveGroupName();
 
+    /**
+     * @brief Get user name by uid
+     * @param uid User Id
+     * @return User name
+     */
     static QString getUserName(uid_t uid);
+    /**
+     * @brief Get group name by gid
+     * @param gid Group Id
+     * @return Group name
+     */
     static QString getGroupName(gid_t gid);
 private:
+    /**
+     * @brief Default constructor
+     */
     SystemStat() = default;
 };
 

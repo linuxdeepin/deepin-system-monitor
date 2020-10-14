@@ -411,7 +411,7 @@ bool SystemStat::readSockStat(SockStatMap &statMap)
         errno = 0;
         if (!(fp = fopen(proc, "r")))
         {
-            print_err(errno, QString("open %1 failed").arg(PROC_PATH_SOCK_TCP));
+            print_err(errno, QString("open %1 failed").arg(proc));
             return !ok;
         }
 

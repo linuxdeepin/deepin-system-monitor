@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -22,32 +24,43 @@
 
 #include <QDebug>
 
+// constrcutor
 NetifMonitor::NetifMonitor(QObject *parent) : QThread(parent)
 {
     // packet monitor job
     m_packetMonitorJob = new NetifMonitorJob(this);
     m_packetMonitorJob->moveToThread(&m_packetMonitorThread);
+    // delete monitor job after thread finished
     connect(&m_packetMonitorThread, &QThread::finished, m_packetMonitorJob, &QObject::deleteLater);
+    // start monitor job when thread started
     connect(&m_packetMonitorThread, &QThread::started, m_packetMonitorJob, &NetifMonitorJob::startMonitorJob);
     m_packetMonitorThread.start();
 }
 
+// destructor
 NetifMonitor::~NetifMonitor()
 {
+    // async request monitor job quit
     m_packetMonitorJob->requestQuit();
+    // monitor thread quit
     m_packetMonitorThread.quit();
     m_packetMonitorThread.wait();
 }
 
+// run monitor thread
 void NetifMonitor::run()
 {
+    // if quit requested, break the loop
     while (!m_quitRequested.load()) {
         m_pktqLock.lock();      // +++m_pktqLock+++
+        // packets available for processing when pending queue mutex unlocked
         m_pktqWatcher.wait(&m_pktqLock);
 
+        // check if quit requested again after wakeup by another thread, break the loop if need
         if (m_quitRequested.load())
             break;
 
+        // append pending queue packets to local queue, so we dont lock the mutex for too long
         m_localPendingPackets.append(m_pendingPackets);
         m_pendingPackets.clear();
         m_pktqLock.unlock();    // ---m_pktqLock---
@@ -62,6 +75,7 @@ void NetifMonitor::run()
             // sum up sock io stat by inode
             auto ino = payload->ino;
             if (m_sockIOStatMap.contains(ino)) {
+                // sum up sock io stat if already exists with same inode stat
                 auto &hist = m_sockIOStatMap[ino];
                 if (payload->direction == kInboundPacket) {
                     hist->rx_bytes += payload->payload;
@@ -71,6 +85,7 @@ void NetifMonitor::run()
                     hist->tx_packets++;
                 }
             } else {
+                // add new sock io stat if sock ino no exists in cache before
                 auto stat = QSharedPointer<struct sock_io_stat_t>::create();
                 stat->ino = payload->ino;
                 if (payload->direction == kInboundPacket) {

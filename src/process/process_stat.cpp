@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -40,12 +42,14 @@
 #define PROC_FD_NAME_PATH       "/proc/%u/fd/%s"
 #define PROC_SCHEDSTAT_PATH     "/proc/%u/schedstat"
 
+// util to pring error message
 auto print_err = [](decltype(errno) e, const QString &msg)
 {
     qDebug() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
 };
 
 // ref: sysstat#common.c#get_kb_shift
+// get page shift in 1kb
 static inline unsigned int get_kb_shift(void)
 {
     int shift = 0;
@@ -66,6 +70,7 @@ static inline unsigned int get_kb_shift(void)
     return uint(shift);
 }
 
+// get user hz (clock ticks) of current platform
 static inline unsigned long get_HZ(void)
 {
     long ticks;
@@ -77,45 +82,59 @@ static inline unsigned long get_HZ(void)
     return ulong(ticks);
 }
 
+// read process stats info
 bool ProcessStat::readProcStats(ProcIterateCallback pfnCallback, void *context)
 {
     bool b = false;
-    DIR *dp;
-    struct dirent *dir;
-    struct stat_context ctx {};
+    DIR *dp; // dir
+    struct dirent *dir; // dir entry
+    struct stat_context ctx {
+    }; // stat context
 
+    // get stat context
     ProcessStat::getStatContext(ctx);
 
     errno = 0;
+    // open /proc
     dp = opendir(PROC_PATH);
     if (!dp) {
         print_err(errno, "open /proc failed");
         return b;
     }
 
+    // enumate each entry in /proc dir
     while ((dir = readdir(dp))) {
+        // if entry name starts with a digit, assume it's process dir & named with pid
         if (isdigit(dir->d_name[0])) {
             auto ps = ProcStat(new proc_stat {});
+            // convert dir name to pid
             auto pid = pid_t(atoi(dir->d_name));
             ps->pid = pid;
 
-            //读取cpu
+            // read stats
             b = readStat(ps);
+            // read cmdline
             b = b && readCmdline(ps);
+            // read environ
             readEnviron(ps);
+            // read sched stats
             b = b && readSchedStat(ps, ctx);
+            // read status
             b = b && readStatus(ps);
-            //读取内存
+            // read statm
             b = b && readStatm(ps, ctx);
-            //读取磁盘
+            // read disk io stats
             readIO(ps);
+            // read sock inodes
             readSockInodes(ps);
 
+            // after read all stats we need, call user callback
             if (b && pfnCallback) {
                 pfnCallback(ps, context);
             }
         }
     }
+    // error occurred, stop further processing
     if (errno) {
         print_err(errno, "read /proc failed");
         closedir(dp);
@@ -126,12 +145,14 @@ bool ProcessStat::readProcStats(ProcIterateCallback pfnCallback, void *context)
     return b;
 }
 
+// get stat context
 void ProcessStat::getStatContext(stat_context &ctx)
 {
     ctx.kb_shift = get_kb_shift();
     ctx.hz = get_HZ();
 }
 
+// read /proc/[pid]/stat
 bool ProcessStat::readStat(ProcStat &ps)
 {
     bool b = false;
@@ -143,11 +164,13 @@ bool ProcessStat::readStat(ProcStat &ps)
 
     errno = 0;
     sprintf(path, PROC_STAT_PATH, ps->pid);
+    // open /proc/[pid]/stat
     if ((fd = open(path, O_RDONLY)) < 0) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
     }
 
+    // read data
     sz = read(fd, buf.data(), 1024);
     if (sz < 0) {
         print_err(errno, QString("read %1 failed").arg(path));
@@ -157,6 +180,7 @@ bool ProcessStat::readStat(ProcStat &ps)
     buf.data()[sz] = '\0';
     close(fd);
 
+    // get process name between (...)
     begin = strchr(buf.data(), '(');
     begin += 1;
 
@@ -166,6 +190,7 @@ bool ProcessStat::readStat(ProcStat &ps)
     }
 
     *pos = '\0';
+    // process name (may be truncated by kernel if it's too long)
     ps->proc_name = QString(begin);
 
     pos += 2;
@@ -194,6 +219,7 @@ bool ProcessStat::readStat(ProcStat &ps)
     if (rc < 15) {
         return b;
     }
+    // have guest & cguest time
     if (rc < 17) {
         ps->guest_time = ps->cguest_time = 0;
     }
@@ -203,6 +229,7 @@ bool ProcessStat::readStat(ProcStat &ps)
     return b;
 }
 
+// read /proc/[pid]/cmdline
 bool ProcessStat::readCmdline(ProcStat &ps)
 {
     bool b = false;
@@ -216,6 +243,7 @@ bool ProcessStat::readCmdline(ProcStat &ps)
     sprintf(path, PROC_CMDLINE_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/cmdline
     if (!(fp = fopen(path, "r"))) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
@@ -234,6 +262,7 @@ bool ProcessStat::readCmdline(ProcStat &ps)
     begin = cur = cmd.data();
     end = cmd.data() + nb;
     while (cur < end) {
+        // cmdline may sperarted by null character
         if (*cur == '\0') {
             QByteArray buf(begin);
             ps->cmdline << buf;
@@ -250,6 +279,7 @@ bool ProcessStat::readCmdline(ProcStat &ps)
     return b;
 }
 
+// read /proc/[pid]/environ
 void ProcessStat::readEnviron(ProcStat &ps)
 {
     const size_t sz = 1024;
@@ -262,6 +292,7 @@ void ProcessStat::readEnviron(ProcStat &ps)
     sprintf(path, PROC_ENVIRON_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/environ
     fd = open(path, O_RDONLY);
     if (fd < 0) {
         print_err(errno, QString("open %1 failed").arg(path));
@@ -289,6 +320,7 @@ void ProcessStat::readEnviron(ProcStat &ps)
     }
 }
 
+// read /proc/[pid]/schedstat
 bool ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
 {
     bool b = false;
@@ -302,6 +334,7 @@ bool ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
     sprintf(path, PROC_SCHEDSTAT_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/schedstat
     if ((fd = open(path, O_RDONLY)) < 0) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
@@ -325,6 +358,7 @@ bool ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
     return b;
 }
 
+// read /proc/[pid]/status
 bool ProcessStat::readStatus(ProcStat &ps)
 {
     bool b = false;
@@ -336,11 +370,13 @@ bool ProcessStat::readStatus(ProcStat &ps)
     sprintf(path, PROC_STATUS_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/status
     if (!(fp = fopen(path, "r)"))) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
     }
 
+    // scan each line
     while (fgets(buf.data(), bsiz, fp)) {
         if (!strncmp(buf.data(), "Umask:", 6)) {
             sscanf(buf.data() + 7, "%u", &ps->mask);
@@ -370,6 +406,7 @@ bool ProcessStat::readStatus(ProcStat &ps)
     return b;
 }
 
+// read /proc/[pid]/statm
 bool ProcessStat::readStatm(ProcStat &ps, struct stat_context &ctx)
 {
     bool b = false;
@@ -381,6 +418,7 @@ bool ProcessStat::readStatm(ProcStat &ps, struct stat_context &ctx)
     sprintf(path, PROC_STATM_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/statm
     if ((fd = open(path, O_RDONLY)) < 0) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
@@ -395,12 +433,14 @@ bool ProcessStat::readStatm(ProcStat &ps, struct stat_context &ctx)
     close(fd);
 
     buf[nr] = '\0';
+    // get resident set size & resident shared size in pages
     nr = sscanf(buf, "%*u %llu %llu", &ps->rss, &ps->shm);
     if (nr != 2) {
         ps->rss = 0;
         ps->shm = 0;
         print_err(errno, QString("read %1 failed").arg(path));
     } else {
+        // convert to kB
         ps->rss <<= ctx.kb_shift;
         ps->shm <<= ctx.kb_shift;
         b = true;
@@ -408,6 +448,7 @@ bool ProcessStat::readStatm(ProcStat &ps, struct stat_context &ctx)
     return b;
 }
 
+// read /proc/[pid]/io
 bool ProcessStat::readIO(ProcStat &ps)
 {
     bool b = false;
@@ -418,11 +459,13 @@ bool ProcessStat::readIO(ProcStat &ps)
     sprintf(path, PROC_IO_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/io
     if (!(fp = fopen(path, "r"))) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
     }
 
+    // scan each line
     while (fgets(buf, bsiz, fp)) {
         if (!strncmp(buf, "read_bytes", 10)) {
             sscanf(buf + 12, "%llu", &ps->read_bytes);
@@ -442,6 +485,7 @@ bool ProcessStat::readIO(ProcStat &ps)
     return b;
 }
 
+// read /proc/[pid]/fd
 bool ProcessStat::readSockInodes(ProcStat &ps)
 {
     bool b = false;
@@ -453,16 +497,21 @@ bool ProcessStat::readSockInodes(ProcStat &ps)
     sprintf(path, PROC_FD_PATH, ps->pid);
 
     errno = 0;
+    // open /proc/[pid]/fd dir
     if (!(dir = opendir(path))) {
         print_err(errno, QString("open %1 failed").arg(path));
         return b;
     }
 
+    // enumerate each entry
     while ((dp = readdir(dir))) {
+        // only if entry name starts with a digit
         if (isdigit(dp->d_name[0])) {
+            // open /proc/[pid]/fd/[fd]
             sprintf(fdp, PROC_FD_NAME_PATH, ps->pid, dp->d_name);
             memset(&sbuf, 0, sizeof(struct stat));
             if (!stat(fdp, &sbuf)) {
+                // get inode if it's a socket descriptor
                 if (S_ISSOCK(sbuf.st_mode)) {
                     ps->sockInodes << sbuf.st_ino;
                 }

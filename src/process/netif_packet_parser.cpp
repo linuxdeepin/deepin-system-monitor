@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -28,19 +30,20 @@
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 
-#define IP6_NEXT_HEADER_HBH         0
-#define IP6_NEXT_HEADER_TCP         6
-#define IP6_NEXT_HEADER_UDP         17
-#define IP6_NEXT_HEADER_EIP6        41
-#define IP6_NEXT_HEADER_ROUTING     43
-#define IP6_NEXT_HEADER_FRAGMENT    44
-#define IP6_NEXT_HEADER_RRSVP       46
-#define IP6_NEXT_HEADER_ESP         50  // skip (TODO: ipsec packets)
-#define IP6_NEXT_HEADER_AUTH        51  // skip (TODO: ipsec packets)
-#define IP6_NEXT_HEADER_ICMP6       58  // skip (TODO: icmpv6 packets)
-#define IP6_NEXT_HEADER_NNH         59
-#define IP6_NEXT_HEADER_DESOPT      60
+#define IP6_NEXT_HEADER_HBH 0 // Hop-by-Hop Options Header
+#define IP6_NEXT_HEADER_TCP 6 // TCP header
+#define IP6_NEXT_HEADER_UDP 17 // UDP header
+#define IP6_NEXT_HEADER_EIP6 41 // Encapsulated IPv6 Header: IPv6 Tunneling
+#define IP6_NEXT_HEADER_ROUTING 43 // Routing header
+#define IP6_NEXT_HEADER_FRAGMENT 44 // Fragment header
+#define IP6_NEXT_HEADER_RRSVP 46 // Resource reSerVation protocol
+#define IP6_NEXT_HEADER_ESP 50 // Encapsulating security payload, skip (TODO: ipsec packets)
+#define IP6_NEXT_HEADER_AUTH 51 // Authentication header, skip (TODO: ipsec packets)
+#define IP6_NEXT_HEADER_ICMP6 58 // ICMPv6, skip (TODO: icmpv6 packets)
+#define IP6_NEXT_HEADER_NNH 59 // No next header: empty payload
+#define IP6_NEXT_HEADER_DESOPT 60 // Destination options header
 
+// parse packet
 bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
                                     const u_char *packet,
                                     PacketPayload &payload)
@@ -48,18 +51,22 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
     if (!payload) {
         payload = QSharedPointer<struct packet_payload_t>::create();
     }
+    // set timestamp
     payload->ts = pkt_hdr->ts;
 
+    // hdr pointing at the start of the packet
     const u_char *hdr = packet;
 
-    // parse hdr&packet
+    // ether header
     auto *eth_hdr = reinterpret_cast<const struct ether_header *>(packet);
     auto type = ntohs(eth_hdr->ether_type);
+    // ether header length
     auto eth_hdr_len = sizeof(struct ether_header);
     uint proto {};
     ulong ip_hdr_len {};
 
     if (type == ETHERTYPE_IP) {
+        // ip packet
         auto *ip_hdr = reinterpret_cast<const struct ip *>(packet + eth_hdr_len);
         // ip header length
         ip_hdr_len = ulong((ip_hdr->ip_hl & 0x0f) * 4);
@@ -79,6 +86,7 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
         payload->din4_addr = ip_hdr->ip_dst;
 
     } else if (type == ETHERTYPE_IPV6) {
+        // ipv6 packet
         auto *ip6_hdr = reinterpret_cast<const struct ip6_hdr *>(packet + eth_hdr_len);
 
         // next header field in ip6 header
@@ -169,19 +177,25 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
     }
 
     if (proto == IPPROTO_TCP) {
+        // tcp packet
         auto *tcp_hdr = reinterpret_cast<const struct tcphdr *>(hdr);
+        // tcp header length
         auto tcp_hdr_len = ulong(((tcp_hdr->th_off & 0xf0) >> 4) * 4);
         // no payload data
         if (pkt_hdr->caplen <= eth_hdr_len + ip_hdr_len + tcp_hdr_len) {
             return false;
         }
+        // tcp payload
         payload->payload = pkt_hdr->caplen - eth_hdr_len - ip_hdr_len - tcp_hdr_len;
         payload->s_port = ntohs(tcp_hdr->th_sport);
         payload->d_port = ntohs(tcp_hdr->th_dport);
 
     } else if (proto == IPPROTO_UDP) {
+        // udp packet
         auto *udp_hdr = reinterpret_cast<const struct udphdr *>(hdr);
+        // udp length
         auto udp_len = ulong(ntohs(udp_hdr->uh_ulen));
+        // udp header length
         auto udp_hdr_len = sizeof(struct udphdr);
         ulong ulen {};
         if (udp_len == 0) {
@@ -198,6 +212,7 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
         if (pkt_hdr->caplen <= eth_hdr_len + ip_hdr_len + ulen) {
             return false;
         }
+        // udp payload
         payload->payload = pkt_hdr->caplen - eth_hdr_len - ip_hdr_len - ulen;
         payload->s_port = ntohs(udp_hdr->uh_sport);
         payload->d_port = ntohs(udp_hdr->uh_dport);
