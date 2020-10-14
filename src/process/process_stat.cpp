@@ -118,7 +118,7 @@ bool ProcessStat::readProcStats(ProcIterateCallback pfnCallback, void *context)
             // read environ
             readEnviron(ps);
             // read sched stats
-            b = b && readSchedStat(ps, ctx);
+            readSchedStat(ps, ctx);
             // read status
             b = b && readStatus(ps);
             // read statm
@@ -321,9 +321,8 @@ void ProcessStat::readEnviron(ProcStat &ps)
 }
 
 // read /proc/[pid]/schedstat
-bool ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
+void ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
 {
-    bool b = false;
     const size_t bsiz = 1024;
     QScopedArrayPointer<char> buf(new char[bsiz] {});
     char path[128];
@@ -337,14 +336,14 @@ bool ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
     // open /proc/[pid]/schedstat
     if ((fd = open(path, O_RDONLY)) < 0) {
         print_err(errno, QString("open %1 failed").arg(path));
-        return b;
+        return;
     }
 
     n = read(fd, buf.data(), bsiz - 1);
     if (n < 0) {
         print_err(errno, QString("read %1 failed").arg(path));
         close(fd);
-        return b;
+        return;
     }
     close(fd);
 
@@ -352,10 +351,7 @@ bool ProcessStat::readSchedStat(ProcStat &ps, struct stat_context &ctx)
     rc = sscanf(buf.data(), "%*u %llu %*d", &wtime);
     if (rc == 1) {
         ps->wtime = wtime * ctx.hz / 1000000000;
-        b = true;
     }
-
-    return b;
 }
 
 // read /proc/[pid]/status

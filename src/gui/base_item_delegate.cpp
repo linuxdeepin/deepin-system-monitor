@@ -227,8 +227,6 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
 
     // only process tooltip events for now
     if (e->type() == QEvent::ToolTip) {
-        // hide tooltip first in case tooltip text not update quickly enough
-        QToolTip::hideText();
         QRect rect = view->visualRect(index);
         QRect textRect = rect;
 
@@ -274,6 +272,9 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
                 return true;
             }
         }
+        if (!QStyledItemDelegate::helpEvent(e, view, option, index))
+            QToolTip::hideText();
+        return true;
     }
 
     return QStyledItemDelegate::helpEvent(e, view, option, index);

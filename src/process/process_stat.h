@@ -131,9 +131,8 @@ private:
      * @brief Read /proc/[pid]/schedstat
      * @param ps Stat info
      * @param ctx Stat context
-     * @return true: success; false: failure
      */
-    static inline bool readSchedStat(ProcStat &ps, struct stat_context &ctx);
+    static inline void readSchedStat(ProcStat &ps, struct stat_context &ctx);
     /**
      * @brief Read /proc/[pid]/status
      * @param ps Stat info
