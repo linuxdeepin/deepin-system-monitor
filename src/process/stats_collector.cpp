@@ -616,7 +616,7 @@ void StatsCollector::updateStatus()
         } else if (m_filterType == SystemMonitor::OnlyMe && m_euid == uid) {
             need = true;
         } else if (m_filterType == SystemMonitor::OnlyGUI
-                   && m_euid == uid
+                   //                   && m_euid == uid
                    && (m_trayPIDToWndMap.contains(pid)
                        || m_guiPIDList.contains(pid)
                        || filteredAppList.contains(pid))) {
