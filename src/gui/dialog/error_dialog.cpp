@@ -43,6 +43,8 @@ void ErrorDialog::initUI()
     setIcon(QIcon::fromTheme("dialog-warning"));
     // set dialog attribute
     setAttribute(Qt::WA_DeleteOnClose);
+    // set maximum width to avoid displaying extra wide dialog
+    setMaximumWidth(720);
 
     m_detailLabel = new DLabel(this);
     // global palette of current theme
@@ -60,14 +62,12 @@ void ErrorDialog::initUI()
     // set error message and error detail text
     setMessage(m_errMsg);
     m_detailLabel->setText(m_detail);
+    m_detailLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     addSpacing(5);
 
     addContent(m_detailLabel, Qt::AlignHCenter);
     addButton(QApplication::translate("Error.Dialog", "OK"), true);
-
-    // set maximum width to avoid displaying extra wide dialog
-    setMaximumWidth(720);
 }
 
 // Private constructor
