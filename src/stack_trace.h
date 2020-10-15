@@ -71,9 +71,12 @@ static inline void printStacktrace(int signum)
     std::ofstream log(logN, std::ios::out);
 
     // get backtrace symbols list
-    std::vector<void *> stack(MAX_BACKTRACE_FRAMES);
-    auto size = backtrace(stack.data(), int(stack.size()));
-    BacktraceSymbols symbols(backtrace_symbols(stack.data(), size));
+    //    std::vector<void *> stack(MAX_BACKTRACE_FRAMES);
+    //    auto size = backtrace(stack.data(), int(stack.size()));
+    //    BacktraceSymbols symbols(backtrace_symbols(stack.data(), size));
+    void *stack[MAX_BACKTRACE_FRAMES];
+    auto size = backtrace(stack, MAX_BACKTRACE_FRAMES);
+    BacktraceSymbols symbols(backtrace_symbols(stack, size));
 
     // print all symbols as formatted text to output log stream
     if (symbols && size > 0) {

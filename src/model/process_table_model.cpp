@@ -65,6 +65,7 @@ void ProcessTableModel::updateProcessList(const QList<ProcessEntry> &list)
 {
     QHash<pid_t, ProcessEntry> hash;
     int row;
+
     for (const auto &entry : list) {
         if (m_processMap.contains(entry.getPID())) {
             // update the entry if already exists
@@ -77,6 +78,7 @@ void ProcessTableModel::updateProcessList(const QList<ProcessEntry> &list)
             beginInsertRows({}, row, row);
             m_processList << entry;
             m_processMap[entry.getPID()] = row;
+            ++m_nr;
             endInsertRows();
         }
         hash[entry.getPID()] = entry;
@@ -97,6 +99,8 @@ void ProcessTableModel::updateProcessList(const QList<ProcessEntry> &list)
                 if (value > row)
                     --value;
             }
+            if (m_nr)
+                m_nr--;
             endRemoveRows();
         }
     }
@@ -105,9 +109,12 @@ void ProcessTableModel::updateProcessList(const QList<ProcessEntry> &list)
 }
 
 // returns the number of rows under the given parent
-int ProcessTableModel::rowCount(const QModelIndex &) const
+int ProcessTableModel::rowCount(const QModelIndex &parent) const
 {
-    return m_processList.size();
+    if (parent.isValid())
+        return 0;
+
+    return m_nr;
 }
 
 // returns the number of columns for the children of the given parent
@@ -304,6 +311,31 @@ Qt::ItemFlags ProcessTableModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
+void ProcessTableModel::fetchMore(const QModelIndex &parent)
+{
+    if (parent.isValid())
+        return;
+
+    // fetch at most 100 items at a time
+    int left = m_processList.size() - m_nr;
+    int more = qMin(100, left);
+
+    if (more <= 0)
+        return;
+
+    beginInsertRows(QModelIndex(), m_nr, m_nr + more - 1);
+    m_nr += more;
+    endInsertRows();
+}
+
+bool ProcessTableModel::canFetchMore(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+        return false;
+
+    return (m_nr < m_processList.size());
+}
+
 // get process state with specified pid
 char ProcessTableModel::getProcessState(pid_t pid) const
 {
@@ -331,6 +363,8 @@ void ProcessTableModel::removeProcessEntry(pid_t pid)
             if (value > row)
                 --value;
         }
+        if (m_nr)
+            m_nr--;
         endRemoveRows();
     }
 }

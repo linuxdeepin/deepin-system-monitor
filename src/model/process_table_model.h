@@ -126,6 +126,18 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     /**
+     * @brief Fetches any available data for the items with the parent specified by the parent index
+     * @param parent Parent index
+     */
+    void fetchMore(const QModelIndex &parent) override;
+    /**
+     * @brief Check if more data can be fetched for parent index
+     * @param parent Parent index
+     * @return Returns true if there is more data available for parent; otherwise returns false
+     */
+    bool canFetchMore(const QModelIndex &parent) const override;
+
+    /**
      * @brief Get process state with specified pid
      * @param pid Id of the process to get state for
      * @return Process state string
@@ -194,6 +206,8 @@ private:
     QList<ProcessEntry> m_processList;
     // Process pid to <index> mapping
     QMap<pid_t, int> m_processMap;  // <pid, index>
+    // current loaded items (into the model)
+    int m_nr {};
 };
 
 #endif  // PROCESS_TABLE_MODEL_H

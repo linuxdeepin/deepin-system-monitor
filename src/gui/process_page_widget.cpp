@@ -430,7 +430,7 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 
     KillProcessConfirmDialog dialog;
     // always stay on top
-    dialog.setWindowFlag(Qt::WindowStaysOnTopHint);
+    dialog.setWindowFlags(Qt::ForeignWindow | Qt::WindowStaysOnTopHint);
     dialog.setMessage(description);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
     dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
