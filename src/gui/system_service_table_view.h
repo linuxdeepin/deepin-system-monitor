@@ -48,7 +48,7 @@ public:
      * @brief Service table view constructor
      * @param parent Parent object
      */
-    SystemServiceTableView(DWidget *parent = nullptr);
+    explicit SystemServiceTableView(DWidget *parent = nullptr);
     /**
      * @brief Destructor
      */
@@ -114,11 +114,11 @@ protected Q_SLOTS:
      * @brief Load backup settings
      * @return Backup settings loaded if or not flag
      */
-    virtual bool loadSettings();
+    bool loadSettings();
     /**
      * @brief Save backup settings
      */
-    virtual void saveSettings();
+    void saveSettings();
 
 protected:
     /**

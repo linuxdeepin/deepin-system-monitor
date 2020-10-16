@@ -39,7 +39,7 @@ public:
      * @brief Constrcutor
      * @param parent Parent object
      */
-    SystemServicePageWidget(DWidget *parent = nullptr);
+    explicit SystemServicePageWidget(DWidget *parent = nullptr);
     /**
     * @brief Destructor
     */

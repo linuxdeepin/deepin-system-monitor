@@ -226,14 +226,14 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         QColor c = cpuColors[i % cpuColors.size()];
         painter.setPen(QPen(c, strokeWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-        QPainterPath path;
+        QPainterPath Painterpath;
         // move to the first point (from right to left)
         qreal y = (1.0 - cpuPercents[i].at(pointsNumber - 1)) * drawHeight + penSize;
-        path.moveTo(offsetX, y);
+        Painterpath.moveTo(offsetX, y);
 
         for (int j = pointsNumber - 2; j >= 0; j--) {
             // method#1: draw Bezier curve
-            path.cubicTo(offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
+            Painterpath.cubicTo(offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
                          (1.0 - cpuPercents[i][j + 1]) * drawHeight + penSize + 0.5,
                          offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
                          (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5,
@@ -244,7 +244,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
             // path.lineTo(offsetX - ((pointsNumber - j - 1) * deltaX),
             //            (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
         }
-        painter.drawPath(path);
+        painter.drawPath(Painterpath);
     }
 
     setFixedHeight(gridFrame.y() + gridFrame.height() + penSize);

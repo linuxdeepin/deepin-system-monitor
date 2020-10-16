@@ -41,7 +41,7 @@ public:
      * @brief Default constructor
      * @param parent Parent object
      */
-    BaseTableView(DWidget *parent = nullptr);
+    explicit BaseTableView(DWidget *parent = nullptr);
 
     /**
      * @brief setModel Sets the model for the view to present (overloaded)

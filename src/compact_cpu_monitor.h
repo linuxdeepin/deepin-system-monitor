@@ -27,7 +27,7 @@ class CompactCpuMonitor : public QWidget
     Q_OBJECT
 
 public:
-    CompactCpuMonitor(QWidget *parent = nullptr);
+    explicit CompactCpuMonitor(QWidget *parent = nullptr);
     ~CompactCpuMonitor();
 
 public slots:

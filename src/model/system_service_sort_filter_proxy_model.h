@@ -35,7 +35,7 @@ public:
      * @brief Proxy model constructor
      * @param parent Parent object
      */
-    SystemServiceSortFilterProxyModel(QObject *parent = nullptr);
+    explicit SystemServiceSortFilterProxyModel(QObject *parent = nullptr);
     /**
      * @brief Check if more data can be fetched for given parent
      * @param parent

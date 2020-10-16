@@ -35,7 +35,7 @@ class MemoryMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    MemoryMonitor(QWidget *parent = nullptr);
+    explicit MemoryMonitor(QWidget *parent = nullptr);
     ~MemoryMonitor();
 
 public slots:

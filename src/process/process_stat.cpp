@@ -224,9 +224,8 @@ bool ProcessStat::readStat(ProcStat &ps)
         ps->guest_time = ps->cguest_time = 0;
     }
 
-    b = true;
 
-    return b;
+    return true;
 }
 
 // read /proc/[pid]/cmdline
@@ -274,9 +273,8 @@ bool ProcessStat::readCmdline(ProcStat &ps)
         QByteArray buf(begin);
         ps->cmdline << buf;
     }
-    b = true;
 
-    return b;
+    return true;
 }
 
 // read /proc/[pid]/environ

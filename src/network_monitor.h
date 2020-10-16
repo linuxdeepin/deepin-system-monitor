@@ -32,7 +32,7 @@ class NetworkMonitor : public QWidget
     Q_OBJECT
 
 public:
-    NetworkMonitor(QWidget *parent = nullptr);
+    explicit NetworkMonitor(QWidget *parent = nullptr);
     ~NetworkMonitor();
 
 public slots:

@@ -147,7 +147,7 @@ public Q_SLOTS:
     void sendSignalToProcess(pid_t pid, int signal);
 
 private:
-    SystemMonitor(QObject *parent = nullptr);
+    explicit SystemMonitor(QObject *parent = nullptr);
     ~SystemMonitor();
 
 private:

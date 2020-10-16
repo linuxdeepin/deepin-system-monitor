@@ -37,7 +37,7 @@ public:
      * @brief KillProcessConfirmDialog Default constructor
      * @param parent Parent object
      */
-    KillProcessConfirmDialog(QWidget *parent = nullptr);
+    explicit KillProcessConfirmDialog(QWidget *parent = nullptr);
 
     /**
      * @brief result Get standard button enum result

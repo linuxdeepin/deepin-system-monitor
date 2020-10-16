@@ -728,8 +728,8 @@ void SystemServiceTableView::initConnections()
     // change loading state & hide tip label & show spinner before updating service list
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
         m_loading = true;
-        auto *mw = gApp->mainWindow();
-        Q_EMIT mw->loadingStatusChanged(m_loading);
+        auto *mw1 = gApp->mainWindow();
+        Q_EMIT mw1->loadingStatusChanged(m_loading);
 
         setEnabled(false);
 
@@ -746,8 +746,8 @@ void SystemServiceTableView::initConnections()
         m_spinner->stop();
 
         m_loading = false;
-        auto *mw = gApp->mainWindow();
-        Q_EMIT mw->loadingStatusChanged(m_loading);
+        auto *mw2 = gApp->mainWindow();
+        Q_EMIT mw2->loadingStatusChanged(m_loading);
     });
 
     // we need override currentRowChanged method to overcome incremental service list fetch glitch, if user use [down] key

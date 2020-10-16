@@ -31,7 +31,7 @@ class DiskMonitor : public QWidget
     Q_OBJECT
 
 public:
-    DiskMonitor(QWidget *parent = nullptr);
+    explicit DiskMonitor(QWidget *parent = nullptr);
     ~DiskMonitor();
 
 public slots:

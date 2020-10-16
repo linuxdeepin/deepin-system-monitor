@@ -58,7 +58,6 @@ bool SystemStat::readUpTime(qulonglong &uptime)
     bool b = false;
     FILE *fp;
     char buf[128];
-    int rc;
     unsigned long up_nsec, up_ncent;
 
     errno = 0;
@@ -68,6 +67,7 @@ bool SystemStat::readUpTime(qulonglong &uptime)
     }
 
     if (fgets(buf, sizeof(buf), fp)) {
+        int rc;
         rc = sscanf(buf, "%lu.%lu", &up_nsec, &up_ncent);
         if (rc == 2) {
             uptime = up_nsec * 100 + up_nsec;
@@ -162,7 +162,7 @@ bool SystemStat::readCPUStats(CPUStat &cpuStat, CPUStatMap &cpuStatMap)
                         &stat->guest,
                         &stat->guest_nice);
             cpuStatMap[ncpu] = stat;
-            b = (rc = 11);
+            b = (rc == 11);
         } else {
             break;
         }
@@ -255,7 +255,6 @@ bool SystemStat::readDiskIOStats(DiskIOStat &statSum, DiskIOStatMap &statIOMap)
     QScopedArrayPointer<char> line(new char[bsiz] {});
     unsigned int major, minor;
     char dev_name[MAX_NAME_LEN];
-    int rc;
 
     // ignore any partition stats here, ref: sysstat#common.c#is_device
     auto is_block_dev = [ = ](char *dev_name) -> bool {
@@ -284,9 +283,10 @@ bool SystemStat::readDiskIOStats(DiskIOStat &statSum, DiskIOStatMap &statIOMap)
     statIOMap.clear();
 
     while (fgets(line.data(), bsiz, fp)) {
+        int rc;
         auto stat = DiskIOStat(new disk_io_stat {});
         //************************1**2**3****4********5********6*******7********************8********9**
-        rc = sscanf(line.data(), "%u %u %s %llu %*u %llu %*u %llu %*u %llu %*u %*u %*u %*u %llu %*u %llu",
+        rc = sscanf(line.data(), "%u %u %128s %llu %*u %llu %*u %llu %*u %llu %*u %*u %*u %*u %llu %*u %llu",
                     &major,
                     &minor,
                     dev_name,
@@ -330,7 +330,6 @@ bool SystemStat::readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap)
     FILE *fp;
     const size_t bsiz = 256;
     QScopedArrayPointer<char> line(new char[bsiz] {});
-    char *pos, *start;
     int rc;
 
     if ((fp = fopen(PROC_PATH_NET, "r")) == nullptr) {
@@ -346,6 +345,7 @@ bool SystemStat::readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap)
     strncpy(statSum->iface, "(sum)", 6);
 
     while (fgets(line.data(), bsiz, fp)) {
+        char *pos, *start;
         start = line.data();
         pos = strchr(line.data(), ':');
         if (!pos)
@@ -354,7 +354,7 @@ bool SystemStat::readNetIfStats(NetIFStat &statSum, NetIFStatMap &statNetIfMap)
         *pos++ = '\0';
 
         auto stat = NetIFStat(new netif_stat {});
-        rc = sscanf(start, "%s", stat->iface);
+        rc = sscanf(start, "%16s", stat->iface);
         if (rc != 1)
             continue;
 

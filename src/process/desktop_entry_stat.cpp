@@ -45,6 +45,7 @@ auto print_err = [](decltype(errno) e, const QString &msg)
 // constructor
 DesktopEntryStat::DesktopEntryStat(QObject *parent) : QObject(parent)
 {
+    m_timer = nullptr;
 }
 
 // create new desktop entry
@@ -93,6 +94,11 @@ DesktopEntry DesktopEntryStat::createDesktopEntry(const QString &desktopFile)
 // start cache update timer
 void DesktopEntryStat::start()
 {
+    if(m_timer)
+    {
+        delete m_timer;
+        m_timer = nullptr;
+    }
     m_timer = new QTimer{};
     // update interval
     m_timer->setInterval(kUpdateInterval);

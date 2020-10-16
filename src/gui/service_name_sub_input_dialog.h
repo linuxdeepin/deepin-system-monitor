@@ -39,7 +39,7 @@ public:
      * @brief Dialog constructor
      * @param parent Parent object
      */
-    ServiceNameSubInputDialog(DWidget *parent = nullptr);
+    explicit ServiceNameSubInputDialog(DWidget *parent = nullptr);
 
     /**
      * @brief Get service sub name

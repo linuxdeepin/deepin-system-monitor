@@ -105,7 +105,7 @@ public Q_SLOTS:
     ErrorContext setServiceStartupMode(const QString &id, bool autoStart);
 
 private:
-    ServiceManager(QObject *parent = nullptr);
+    explicit ServiceManager(QObject *parent = nullptr);
     ~ServiceManager();
 
     QThread m_workerThread;

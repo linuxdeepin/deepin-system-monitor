@@ -72,8 +72,9 @@ ErrorContext::ErrorContext()
 
 // overloaded constructor
 ErrorContext::ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage)
+    : data(new ErrorContextData())
 {
-    data = new ErrorContextData();
+   // data = new ErrorContextData();
     data->m_code = code;
     data->m_subCode = subCode;
     data->m_errName = errName;

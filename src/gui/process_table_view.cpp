@@ -557,9 +557,10 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     // change menu item checkable state before context menu popup
     connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
         // process running or not flag
-        bool running = true;
+
         auto *sysmon = SystemMonitor::instance();
         if (m_selectedPID.isValid()) {
+            bool running = true;
             pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
             char state = m_model->getProcessState(pid);
             if (state == 'T') {
@@ -572,7 +573,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             // monitor process itself cant be stopped, so we need a second modified running flag
             bool modRunning = running;
             if (sysmon) {
-                modRunning = modRunning & !sysmon->isSelfProcess(pid);
+                modRunning = (modRunning) & (!sysmon->isSelfProcess(pid));
             }
             pauseProcAction->setEnabled(modRunning);
             resumeProcAction->setEnabled(!running);

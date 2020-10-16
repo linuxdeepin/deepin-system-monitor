@@ -115,8 +115,8 @@ UnitInfo::UnitInfo(const QString &name,
                    quint32 jobId,
                    const QString &jobType,
                    const QString &jobObjectPath)
+    : data(new UnitInfoData())
 {
-    data = new UnitInfoData();
     data->m_name = name;
     data->m_description = description;
     data->m_loadState = loadState;

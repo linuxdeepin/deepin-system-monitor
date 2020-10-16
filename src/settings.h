@@ -61,7 +61,7 @@ public:
     inline void flush() { m_settings->sync(); }
 
 private:
-    Settings(QObject *parent = nullptr);
+    explicit Settings(QObject *parent = nullptr);
     ~Settings();
     Q_DISABLE_COPY(Settings)
 

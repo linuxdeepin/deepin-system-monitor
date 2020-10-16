@@ -21,7 +21,6 @@
 #include "collator.h"
 
 #include <QDebug>
-
 #include <unicode/coleitr.h>
 #include <unicode/locid.h>
 #include <unicode/unistr.h>
@@ -33,7 +32,7 @@ std::mutex util::common::Collator::m_mutex;
 
 int util::common::Collator::compare(const QString &left, const QString &right, bool caseIgnoreCompare) const
 {
-    icu::Collator::EComparisonResult result = icu::Collator::EQUAL;
+    icu::Collator::EComparisonResult result;
 
     // if icu::Collator cannot be initialized, use builtin compare method (builtin method kinda
     // buggy right now)

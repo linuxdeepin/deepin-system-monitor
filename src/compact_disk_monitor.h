@@ -27,7 +27,7 @@ class CompactDiskMonitor : public QWidget
     Q_OBJECT
 
 public:
-    CompactDiskMonitor(QWidget *parent = nullptr);
+    explicit CompactDiskMonitor(QWidget *parent = nullptr);
     ~CompactDiskMonitor();
 
 public slots:

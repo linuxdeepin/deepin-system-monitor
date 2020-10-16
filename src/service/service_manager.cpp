@@ -154,8 +154,8 @@ ErrorContext ServiceManager::startService(const QString &id,
     SystemServiceEntry entry;
     if (ec) {
         if (ec.getCode() == 3) {
-            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-            entry = updateServiceEntry(o.path());
+            auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o1.path());
         } else {
             qDebug() << "GetUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
             return ec;
@@ -199,8 +199,8 @@ ErrorContext ServiceManager::stopService(const QString &id)
     SystemServiceEntry entry;
     if (ec) {
         if (ec.getCode() == 3) {
-            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-            entry = updateServiceEntry(o.path());
+            auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o1.path());
         } else {
             qDebug() << "Get Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
@@ -244,8 +244,8 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
     SystemServiceEntry entry;
     if (ec) {
         if (ec.getCode() == 3) {
-            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-            entry = updateServiceEntry(o.path());
+            auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o1.path());
         } else {
             qDebug() << "Get Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
             return ec;

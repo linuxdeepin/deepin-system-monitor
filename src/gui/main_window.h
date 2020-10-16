@@ -52,7 +52,7 @@ public:
      * @brief MainWindow Constructor
      * @param parent Parent Object
      */
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     /**
      * @brief Destructor
     */

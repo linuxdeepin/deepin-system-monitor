@@ -43,7 +43,7 @@ public:
      * @brief Toolbar constructor
      * @param parent Parent object
      */
-    Toolbar(QWidget *parent = nullptr);
+    explicit Toolbar(QWidget *parent = nullptr);
     // Destroctor
     ~Toolbar();
 

@@ -37,7 +37,7 @@ class CpuMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    CpuMonitor(QWidget *parent = nullptr);
+    explicit CpuMonitor(QWidget *parent = nullptr);
     ~CpuMonitor();
 
 public slots:

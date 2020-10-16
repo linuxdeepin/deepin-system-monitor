@@ -69,8 +69,8 @@ UnitFileInfo::UnitFileInfo()
 
 // Overloaded constructor
 UnitFileInfo::UnitFileInfo(const QString &name, const QString &status)
+    : data(new UnitFileInfoData())
 {
-    data = new UnitFileInfoData();
     data->m_name = name;
     data->m_status = status;
 }

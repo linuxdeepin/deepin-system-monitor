@@ -38,11 +38,10 @@ DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
 DiskMonitor::DiskMonitor(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      iconDarkImage(iconPathFromQrc("dark/icon_disk_dark.svg")),
+      iconLightImage(iconPathFromQrc("light/icon_disk_light.svg"))
 {
-    iconDarkImage = iconPathFromQrc("dark/icon_disk_dark.svg");
-    iconLightImage = iconPathFromQrc("light/icon_disk_light.svg");
-
     int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     setFixedHeight(190);

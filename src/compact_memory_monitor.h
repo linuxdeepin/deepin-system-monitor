@@ -33,7 +33,7 @@ class CompactMemoryMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    CompactMemoryMonitor(QWidget *parent = nullptr);
+    explicit CompactMemoryMonitor(QWidget *parent = nullptr);
     ~CompactMemoryMonitor();
 
 public slots:

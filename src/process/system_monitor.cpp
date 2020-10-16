@@ -105,12 +105,12 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
                     if (code == 0) {
                         Q_EMIT processPriorityChanged(pid, priority);
                     } else {
-                        ErrorContext ec {};
-                        ec.setCode(ErrorContext::kErrorTypeSystem);
-                        ec.setSubCode(code);
-                        ec.setErrorName(QApplication::translate("Process.Priority",
+                        ErrorContext ec1 {};
+                        ec1.setCode(ErrorContext::kErrorTypeSystem);
+                        ec1.setSubCode(code);
+                        ec1.setErrorName(QApplication::translate("Process.Priority",
                                                                 "Failed to change process priority"));
-                        ec.setErrorMessage(
+                        ec1.setErrorMessage(
                             QApplication::translate("Process.Priority", "PID: %1, Error: [%2] %3")
                             .arg(pid)
                             .arg(code)
@@ -138,7 +138,7 @@ ErrorContext SystemMonitor::setProcessPriority(pid_t pid, int priority)
 
 void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
 {
-    int rc = 0;
+
     ErrorContext ec = {};
     auto errfmt = [ = ](decltype(errno) err, const QString & title, int p, int sig,
     ErrorContext & ectx) -> ErrorContext & {
@@ -190,9 +190,9 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
         connect(ctrl, &ProcessController::resultReady, this,
         [this, errfmt, emitSignal, pid, signal, fmsg](int code) {
             if (code != 0) {
-                ErrorContext ec = {};
-                ec = errfmt(code, fmsg(signal), pid, signal, ec);
-                Q_EMIT processControlResultReady(ec);
+                ErrorContext ec1 = {};
+                ec1 = errfmt(code, fmsg(signal), pid, signal, ec1);
+                Q_EMIT processControlResultReady(ec1);
             } else {
                 emitSignal(signal);
             }
@@ -203,14 +203,14 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
     auto pkill = [this, pctl, errfmt, emitSignal, fmsg](pid_t pid, int signal) {
         int rc = 0;
         errno = 0;
-        ErrorContext ec = {};
+        ErrorContext ec1 = {};
         rc = kill(pid, signal);
         if (rc == -1 && errno != 0) {
             if (errno == EPERM) {
                 pctl(pid, signal);
             } else {
-                ec = errfmt(errno, fmsg(signal), pid, signal, ec);
-                Q_EMIT processControlResultReady(ec);
+                ec1 = errfmt(errno, fmsg(signal), pid, signal, ec1);
+                Q_EMIT processControlResultReady(ec1);
                 return;
             }
         } else {
@@ -221,6 +221,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
     if (signal == SIGTERM || signal == SIGKILL) {
         ec = {};
         errno = 0;
+        int rc = 0;
         // send SIGCONT first, otherwise signal will hang
         rc = kill(pid, SIGCONT);
         if (rc == -1 && errno != 0) {

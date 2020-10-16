@@ -95,18 +95,18 @@ StatsCollector::StatsCollector(QObject *parent) :
 {
     qRegisterMetaType<QList<ProcessEntry>>("ProcessEntryList");
     qRegisterMetaType<QHash<QString, DesktopEntry>>("DesktopEntryCache");
-
+    m_timer = nullptr;
     m_cpuStat[kLastStat] = CPUStat(new cpu_stat {});
     m_cpuStat[kCurrentStat] = CPUStat(new cpu_stat {});
 
     // fill shell list
     [ = ] {
         FILE *fp;
-        char buf[128] {};
         fp = fopen("/etc/shells", "r");
-        char *s;
         if (fp)
         {
+            char buf[128] {};
+            char *s;
             while ((s = fgets(buf, 128, fp))) {
                 if (s[0] == '/') {
                     auto sh = QLatin1String(basename(s));
@@ -150,7 +150,12 @@ StatsCollector::~StatsCollector()
 // start stat job
 void StatsCollector::start()
 {
-    // start timer
+    if(m_timer)
+    {
+        delete m_timer;
+        m_timer = nullptr;
+    }
+    // Start timer.
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateStatus()));
 
@@ -556,41 +561,41 @@ void StatsCollector::updateStatus()
 
         // check if cmd is a shell or scripting language
         auto isCmdInList = [ = ](QByteArray cmd) {
-            bool b = false;
+            bool bb = false;
 
             auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
             for (auto s : m_shellList) {
                 if (subCmd.startsWith(s.toLocal8Bit())) {
-                    b = true;
-                    return b;
+                    bb = true;
+                    return bb;
                 }
             }
             for (auto s : m_scriptingList) {
                 if (cmd.startsWith(s.toLocal8Bit())) {
-                    b = true;
-                    return b;
+                    bb = true;
+                    return bb;
                 }
             }
-            return b;
+            return bb;
         };
         // get cmdline of current process from cache
         auto cmd = m_procMap[kCurrentStat][app]->cmdline[0];
-        bool b = false;
+        bool bb = false;
         if (cmd[0] == '/') {
             // cmd starts with full path
-            b = isCmdInList(cmd);
+            bb = isCmdInList(cmd);
         } else {
             // cmd starts with raw name
             for (auto p : m_envPathList) {
                 p = p.append('/').append(cmd); // e.g. /usr/bin/xxx2.7
 
-                b = isCmdInList(p);
-                if (b) {
+                bb = isCmdInList(p);
+                if (bb) {
                     break;
                 }
             }
         }
-        if (b) {
+        if (bb) {
             continue;
         }
 
@@ -790,17 +795,17 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             } else if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
                 // can't grab window title, try use desktop file instead
                 auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
-                auto de = DesktopEntryStat::createDesktopEntry(desktopFile);
-                if (de && !de->displayName.isEmpty()) {
+                auto de1 = DesktopEntryStat::createDesktopEntry(desktopFile);
+                if (de1 && !de1->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(QString("%1: %2")
                                         .arg(QApplication::translate("Process.Table", "Tray"))
-                                        .arg(de->displayName));
+                                        .arg(de1->displayName));
                 }
                 // use default icon if no desktop file found
-                if (de && !de->icon.isNull()) {
+                if (de1 && !de1->icon.isNull()) {
                     iconSet = true;
-                    proc.setIcon(de->icon);
+                    proc.setIcon(de1->icon);
                 }
             }
         } else if (ctx.m_guiPIDList.contains(ps->pid)) {
@@ -930,7 +935,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     }
                 }
                 if (de && !de->displayName.isEmpty()) {
-                    nameSet = true;
+                    nameSet = true; 
                     proc.setDisplayName(de->displayName);
                 }
                 if (de && !de->icon.isNull()) {

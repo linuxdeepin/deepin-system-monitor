@@ -31,7 +31,7 @@ class CompactNetworkMonitor : public QWidget
     Q_OBJECT
 
 public:
-    CompactNetworkMonitor(QWidget *parent = nullptr);
+    explicit CompactNetworkMonitor(QWidget *parent = nullptr);
     ~CompactNetworkMonitor();
 
 public slots:
