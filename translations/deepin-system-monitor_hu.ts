@@ -3,11 +3,11 @@
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>Rendszer figyelő</translation>
+        <translation>Rendszerfigyelő</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>A Rendszer figyelő egy eszköz, a valós idejű rendszerterhelés figyelemmel kísérésére, a rendszeren futó folyamatok és szolgáltatások megtekintésére és vezérlésére.</translation>
+        <translation>A Rendszerfigyelő egy eszköz, a valós idejű rendszerterhelés figyelemmel kísérésére, a rendszeren futó folyamatok és szolgáltatások megtekintésére és vezérlésére.</translation>
     </message>
 </context>
 <context>
@@ -41,14 +41,14 @@
     </message>
     <message>
         <source>deactivating</source>
-        <translation>deaktiválás</translation>
+        <translation>felfüggesztés</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation>gyomlál</translation>
+        <translation>gyomlálás</translation>
     </message>
     <message>
         <source>not-found</source>
@@ -161,15 +161,15 @@
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation>stop-watchdog</translation>
+        <translation>watchdog leállítás</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation>stop-sigterm</translation>
+        <translation>sigterm leállítás</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation>stop-sigkill</translation>
+        <translation>sigkill leállítás</translation>
     </message>
     <message>
         <source>stop-post</source>
@@ -177,11 +177,11 @@
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation>végső jelző</translation>
+        <translation>végső sigterm</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation>final-sigkill</translation>
+        <translation>végső sigkill</translation>
     </message>
     <message>
         <source>failed</source>
@@ -625,7 +625,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Kiterjesztés</translation>
+        <translation>Kibővített</translation>
     </message>
     <message>
         <source>Compact</source>
