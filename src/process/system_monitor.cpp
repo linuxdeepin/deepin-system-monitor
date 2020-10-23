@@ -21,16 +21,12 @@
 #include "utils.h"
 #include "stats_collector.h"
 
-std::atomic<SystemMonitor *> SystemMonitor::m_instance;
-std::mutex SystemMonitor::m_mutex;
-
 DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
 void SystemMonitor::startMonitorJob()
 {
     m_workerThread.start();
-    Q_EMIT monitorJobStarted(m_statsCollector);
 }
 
 void SystemMonitor::setFilterType(SystemMonitor::FilterType type)

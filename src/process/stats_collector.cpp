@@ -74,6 +74,9 @@ auto calcCPUUsage = [](const CPUStat &prev, const CPUStat &cur) -> qreal
 
 StatsCollector::StatsCollector(QObject *parent)
     : QObject(parent)
+    , m_timer(new QTimer(this))
+    , m_netifMonitor(new NetifMonitor(this))
+    , m_desktopEntryCache(new DesktopEntryCache(this))
 {
     qRegisterMetaType<QList<ProcessEntry>>("ProcessEntryList");
     qRegisterMetaType<QHash<QString, DesktopEntry>>("DesktopEntryCache");
@@ -119,25 +122,13 @@ StatsCollector::StatsCollector(QObject *parent)
     }
 }
 
-StatsCollector::~StatsCollector()
-{
-    m_netifMonitor->requestQuit();
-    m_netifMonitor->quit();
-    m_netifMonitor->wait();
-}
-
 void StatsCollector::start()
 {
     m_euid = geteuid();
     m_defaultIcon = QIcon::fromTheme("application-x-executable");
     m_desktopEntryCache = new DesktopEntryCache(this);
 
-    m_netifMonitor = new NetifMonitor(this);
-    connect(m_netifMonitor, &QThread::finished, m_netifMonitor, &QObject::deleteLater);
-    m_netifMonitor->start();
-
     // Start timer.
-    m_timer = new QTimer(this);
     m_timer->setInterval(kUpdateInterval);
     connect(m_timer, &QTimer::timeout, this, &StatsCollector::updateStatus);
     m_timer->start();

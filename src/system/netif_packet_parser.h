@@ -19,45 +19,7 @@
 #ifndef NETIF_PACKET_PARSER_H
 #define NETIF_PACKET_PARSER_H
 
-#include <time.h>
-#include <netinet/in.h>
-#include <pcap.h>
-
-#include <QQueue>
-#include <QSharedPointer>
-#include <QList>
-
-enum packet_direction {
-    kInboundPacket,
-    kOutboundPacket,
-};
-
-struct packet_payload_t {
-    struct timeval      ts;
-    packet_direction    direction;
-//    QList<ino_t>        inoList;
-    ino_t               ino;
-    int                 sa_family;
-    uint                proto;
-    union {
-        in_addr in4;
-        in6_addr in6;
-    } s_addr;
-#define sin4_addr s_addr.in4
-#define sin6_addr s_addr.in6
-    uint16_t            s_port;
-    union {
-        in_addr in4;
-        in6_addr in6;
-    } d_addr;
-#define din4_addr d_addr.in4
-#define din6_addr d_addr.in6
-    uint16_t            d_port;
-    qulonglong          payload;
-};
-
-using PacketPayload      = QSharedPointer<struct packet_payload_t>;
-using PacketPayloadQueue = QQueue<PacketPayload>;
+#include "packet.h"
 
 class NetifPacketParser
 {

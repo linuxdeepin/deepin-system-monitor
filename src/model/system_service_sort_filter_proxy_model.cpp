@@ -20,9 +20,13 @@ void SystemServiceSortFilterProxyModel::fetchMore(const QModelIndex &parent)
         while (canFetchMore(parent)) {
             QSortFilterProxyModel::fetchMore(parent);
         }
-    } else {
-        QSortFilterProxyModel::fetchMore(parent);
     }
+
+    if (canFetchMore(parent))
+        QSortFilterProxyModel::fetchMore(parent);
+    // fetch one more time to fix scroll malfuntion when scroll to the last page with key press
+    if (canFetchMore(parent))
+        QSortFilterProxyModel::fetchMore(parent);
 }
 
 bool SystemServiceSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const

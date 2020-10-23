@@ -30,9 +30,6 @@
 #include "utils.h"
 #include "process/stats_collector.h"
 
-std::atomic<MainWindow *> MainWindow::m_instance {nullptr};
-std::mutex MainWindow::m_mutex;
-
 DGUI_USE_NAMESPACE
 
 MainWindow::MainWindow(DWidget *parent)
@@ -180,7 +177,7 @@ void MainWindow::initUI()
 
     setTabOrder(titlebar(), m_toolbar);
 
-    // display mode
+    //    // display mode
     m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
     QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
     modeGroup->setExclusive(true);

@@ -28,11 +28,11 @@
 #include <QHash>
 #include <QThread>
 
-#include "system_stat.h"
+#include "system/system_stat.h"
 #include "process_stat.h"
 #include "process_entry.h"
 #include "system_monitor.h"
-#include "netif_monitor.h"
+#include "system/netif_monitor.h"
 #include "desktop_entry_cache.h"
 
 void readProcStatsCallback(ProcStat &ps, void *context);
@@ -57,7 +57,7 @@ class StatsCollector : public QObject
 
 public:
     explicit StatsCollector(QObject *parent = nullptr);
-    ~StatsCollector();
+    ~StatsCollector() = default;
 
 Q_SIGNALS:
     void cpuStatInfoUpdated(qreal cpuPercent, const QList<qreal> cpuPercents);
@@ -105,8 +105,8 @@ private:
     int m_napps {};     // current running gui apps)
     int m_nprocs {};    // current running total procs
 
-    qreal   m_interval {2.};
-    QTimer *m_timer {nullptr};
+    qreal m_interval;
+    QTimer *m_timer;
 
     NetifMonitor *m_netifMonitor {};
 

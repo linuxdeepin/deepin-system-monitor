@@ -36,6 +36,7 @@ void SystemServiceTableModel::updateServiceEntry(const SystemServiceEntry &entry
         beginInsertRows({}, row, row);
         m_svcList << sname;
         m_svcMap[sname] = entry;
+        ++m_nr;
         endInsertRows();
         Q_EMIT currentRowChanged(row);
     }

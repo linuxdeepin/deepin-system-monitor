@@ -48,16 +48,11 @@ public:
 
     inline static SystemMonitor *instance()
     {
-        SystemMonitor *sin = m_instance.load();
-        if (!sin) {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            sin = m_instance.load();
-            if (!sin) {
-                sin = new SystemMonitor();
-                m_instance.store(sin);
-            }
+        static SystemMonitor *m_instance;
+        if (!m_instance) {
+            m_instance = new SystemMonitor();
         }
-        return sin;
+        return m_instance;
     }
 
     inline static QString getPriorityName(int prio)
@@ -111,7 +106,6 @@ Q_SIGNALS:
     void processPriorityChanged(pid_t pid, int priority);
     void priorityPromoteResultReady(const ErrorContext &ec);
     void processControlResultReady(const ErrorContext &ec);
-    void monitorJobStarted(const StatsCollector *job);
     void filterTypeChanged(SystemMonitor::FilterType type);
 
 public Q_SLOTS:
@@ -135,9 +129,6 @@ private:
 private:
     QThread m_workerThread;
     StatsCollector *m_statsCollector {nullptr};
-
-    static std::atomic<SystemMonitor *> m_instance;
-    static std::mutex m_mutex;
 };
 
 #endif  // SYSTEM_MONITOR_H

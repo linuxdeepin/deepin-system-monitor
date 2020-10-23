@@ -30,16 +30,12 @@ class MainWindow : public DMainWindow
 public:
     static MainWindow *instance()
     {
-        MainWindow *sin = m_instance.load();
-        if (!sin) {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            if (!sin) {
-                sin = new MainWindow();
-                m_instance.store(sin);
-            }
-        }
+        static MainWindow *m_instance;
 
-        return sin;
+        if (!m_instance)
+            m_instance = new MainWindow();
+
+        return m_instance;
     }
 
     inline Toolbar *toolbar() const { return m_toolbar; }
@@ -88,9 +84,6 @@ private:
     bool m_loading {true};
     char __unused__[7];     // ##padding##
     QTimer *m_timer {nullptr};
-
-    static std::atomic<MainWindow *> m_instance;
-    static std::mutex m_mutex;
 };
 
 #endif  // MAIN_WINDOW_H
