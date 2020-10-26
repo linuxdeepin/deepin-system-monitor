@@ -29,6 +29,7 @@
 #include "settings.h"
 #include "toolbar.h"
 #include "ui_common.h"
+#include "common/perf.h"
 
 #include "model/process_sort_filter_proxy_model.h"
 #include "model/process_table_model.h"
@@ -298,6 +299,7 @@ void ProcessTableView::search(const QString &text)
     m_proxyModel->setSortFilterString(text);
     // adjust search result tip label's visibility & position if needed
     adjustInfoLabelVisibility();
+    PERF_PRINT_END("POINT-03");
 }
 
 // switch process table view display mode

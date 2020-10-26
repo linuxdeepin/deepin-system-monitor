@@ -45,6 +45,7 @@ set(APP_HEADERS
     common/hash.h
     common/han_latin.h
     common/collator.h
+    common/perf.h
     cpu_monitor.h
     memory_monitor.h
     network_monitor.h
@@ -163,6 +164,7 @@ set(APP_SOURCES
     common/hash.cpp
     common/collator.cpp
     common/han_latin.cpp
+    common/perf.cpp
     cpu_monitor.cpp
     memory_monitor.cpp
     network_monitor.cpp

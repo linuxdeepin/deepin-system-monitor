@@ -24,6 +24,7 @@
 #include "main_window.h"
 #include "constant.h"
 #include "utils.h"
+#include "common/perf.h"
 
 #include <DButtonBox>
 #include <DSearchEdit>
@@ -161,6 +162,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
 void Toolbar::handleSearch()
 {
     if (searchEdit->text() == searchTextCache) {
+        PERF_PRINT_BEGIN("POINT-03", QString("search(%1)").arg(searchTextCache));
         search(searchTextCache);
     }
 }

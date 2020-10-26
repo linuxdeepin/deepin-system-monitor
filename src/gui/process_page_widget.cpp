@@ -33,6 +33,7 @@
 #include "settings.h"
 #include "ui_common.h"
 #include "utils.h"
+#include "common/perf.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -271,24 +272,30 @@ void ProcessPageWidget::initConnections()
 
     // show my application when my application button toggled
     connect(m_appButton, &DButtonBoxButton::toggled, this, [=](bool) {
+        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyGUI);
+        PERF_PRINT_END("POINT-04");
     });
     // show my process when my process button toggled
     connect(m_myProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
+        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyMe);
+        PERF_PRINT_END("POINT-04");
     });
     // show all application when all application button toggled
     connect(m_allProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
+        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
         m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::AllProcess);
+        PERF_PRINT_END("POINT-04");
     });
 
     auto *smo = SystemMonitor::instance();

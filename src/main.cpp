@@ -25,6 +25,7 @@
 #include "settings.h"
 #include "gui/main_window.h"
 #include "common/hash.h"
+#include "common/perf.h"
 
 //#include <DApplication>
 #include <DApplicationSettings>
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
 {
     util::installCrashHandler();
     util::common::init_seed();
+    PERF_PRINT_BEGIN("POINT-01", "");
 
     qRegisterMetaType<QList<qreal>>();
 

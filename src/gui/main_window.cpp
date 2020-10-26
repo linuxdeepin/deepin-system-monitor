@@ -29,6 +29,7 @@
 #include "utils.h"
 #include "settings.h"
 #include "constant.h"
+#include "common/perf.h"
 
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
@@ -70,7 +71,10 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 // destructor
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow()
+{
+    PERF_PRINT_END("POINT-02");
+}
 
 // show shortcut help dialog
 void MainWindow::displayShortcutHelpDialog()
@@ -344,6 +348,7 @@ void MainWindow::initConnections()
 {
     // listen on process button triggered signal
     connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
+        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Services")).arg(DApplication::translate("Title.Bar.Switch", "Processes")));
         // clear search text input widget
         m_toolbar->clearSearchText();
         // swap stacked widget to show process page
@@ -351,9 +356,11 @@ void MainWindow::initConnections()
         // raise & show shadow widget incase corvered by other widgets
         m_tbShadow->raise();
         m_tbShadow->show();
+        PERF_PRINT_END("POINT-05");
     });
     // listen on service button triggered signal
     connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
         // clear search text input widget
         m_toolbar->clearSearchText();
         // swap stacked widget to show service page
@@ -361,6 +368,7 @@ void MainWindow::initConnections()
         // raise & show shadow widget incase corvered by other widgets
         m_tbShadow->raise();
         m_tbShadow->show();
+        PERF_PRINT_END("POINT-05");
     });
 
     // listen on background task state changed signal
@@ -399,6 +407,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 // close event handler
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    PERF_PRINT_BEGIN("POINT-02", "");
     // save new size to backup settings instace
     m_settings->setOption(kSettingKeyWindowWidth, width());
     m_settings->setOption(kSettingKeyWindowHeight, height());
@@ -451,4 +460,6 @@ void MainWindow::showEvent(QShowEvent *event)
     Q_ASSERT(smo != nullptr);
     // start monitoring background job
     smo->startMonitorJob();
+
+    PERF_PRINT_END("POINT-01");
 }
