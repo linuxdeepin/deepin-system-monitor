@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <QMutex>
 #include <QDebug>
+#include <QtDBus>
 
 // netlink
 #include <netlink/socket.h>
@@ -91,6 +92,9 @@ void nl_link_iter_callback(struct nl_object *obj, void *cookie)
     struct nl_addr *addr = rtnl_link_get_addr(link);
     nl_addr2str(addr, hwaddr, 32);
     strncpy(info->hwaddr, hwaddr, 32);
+
+    auto flags = rtnl_link_get_flags(link);
+    info->flags = flags;
 
     // TODO: other fields
     infoMap->emplace(std::make_pair(info->ifindex, info));
@@ -209,7 +213,12 @@ NetifInfoCache::NetifInfoCache(QObject *parent)
                 auto filter = m_linkStateMap.find(iter.first);
                 if (filter != m_linkStateMap.end()) {
                     nchanges_prev += filter->second->carrier_changes;
-                    // TODO: and flags
+
+                    // compare flags
+                    if ((filter->second->flags & (IFF_UP | IFF_RUNNING)) != (iter.second->flags & (IFF_UP | IFF_RUNNING))) {
+                        emit linkStateChanged();
+                        break;
+                    }
                 } else {
                     // link added maybe...
                     emit linkStateChanged();
@@ -230,6 +239,12 @@ NetifInfoCache::NetifInfoCache(QObject *parent)
         }
     });
     m_thread.start();
+
+    // monitor /com/deepin/daemon/Network=>DeviceEnabled signal
+    m_busIf = new QDBusInterface("com.deepin.daemon.Network",
+                                 "/com/deepin/daemon/Network",
+                                 "com.deepin.daemon.Network");
+    QObject::connect(m_busIf, SIGNAL(DeviceEnabled(const QString &, bool)), this, SLOT(updateDeviceState(const QString &, bool)));
 }
 
 void NetifInfoCache::backupLinkState()
@@ -245,6 +260,13 @@ void NetifInfoCache::backupLinkState()
             m_linkStateMap[state->ifindex] = std::move(state);
         }
     }
+}
+
+void NetifInfoCache::updateDeviceState(const QString &device, bool enabled)
+{
+    qDebug() << "network device enabled state changed: "
+             << "device: " << device << "enabled(?): " << enabled;
+    emit linkStateChanged();
 }
 
 #include "netif_info_cache.moc"

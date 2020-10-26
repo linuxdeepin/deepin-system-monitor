@@ -26,6 +26,7 @@
 #include <unordered_map>
 
 class NetifInfoCacheUpdater;
+class QDBusInterface;
 struct netif_info_t;
 class NetifInfoCache : public QObject
 {
@@ -35,6 +36,9 @@ public:
 
 signals:
     void linkStateChanged();
+
+private slots:
+    void updateDeviceState(const QString &device, bool enabled);
 
 private:
     void backupLinkState();
@@ -58,6 +62,8 @@ private:
     using LinkState = std::unique_ptr<struct link_state_t>;
     using LinkStateMap = std::unordered_map<int, LinkState>;
     LinkStateMap m_linkStateMap;
+
+    QDBusInterface *m_busIf;
 };
 
 #endif // NETIF_INFO_CACHE_H
