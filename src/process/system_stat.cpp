@@ -48,10 +48,10 @@
 
 #define MAX_NAME_LEN 128
 
-auto print_err = [](decltype(errno) e, const QString &msg)
+static void print_err(decltype(errno) e, const QString &msg)
 {
     qDebug() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
-};
+}
 
 bool SystemStat::readUpTime(qulonglong &uptime)
 {

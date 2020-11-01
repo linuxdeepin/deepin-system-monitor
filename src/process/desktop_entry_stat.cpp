@@ -37,10 +37,10 @@ DCORE_USE_NAMESPACE
 static const int kUpdateInterval = 1000 * 300; // 5 minutes interval
 
 // error debug output utility
-auto print_err = [](decltype(errno) e, const QString &msg)
+static void print_err(decltype(errno) e, const QString &msg)
 {
     qDebug() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
-};
+}
 
 // constructor
 DesktopEntryStat::DesktopEntryStat(QObject *parent) : QObject(parent)
