@@ -150,8 +150,7 @@ StatsCollector::~StatsCollector()
 // start stat job
 void StatsCollector::start()
 {
-    if(m_timer)
-    {
+    if(m_timer){
         delete m_timer;
         m_timer = nullptr;
     }

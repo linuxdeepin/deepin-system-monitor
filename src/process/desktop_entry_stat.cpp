@@ -94,8 +94,7 @@ DesktopEntry DesktopEntryStat::createDesktopEntry(const QString &desktopFile)
 // start cache update timer
 void DesktopEntryStat::start()
 {
-    if(m_timer)
-    {
+    if(m_timer) {
         delete m_timer;
         m_timer = nullptr;
     }
