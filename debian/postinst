@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -ex
 
 if [ "$1" = configure ]; then
 	if command -v setcap > /dev/null; then
