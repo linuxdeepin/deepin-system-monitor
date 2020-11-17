@@ -24,6 +24,7 @@
 #include <QIcon>
 #include <QLayout>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
