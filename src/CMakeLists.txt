@@ -46,6 +46,7 @@ set(APP_HEADERS
     common/han_latin.h
     common/collator.h
     common/perf.h
+    common/whitelistconfig.h
     cpu_monitor.h
     memory_monitor.h
     network_monitor.h
@@ -165,6 +166,7 @@ set(APP_SOURCES
     common/collator.cpp
     common/han_latin.cpp
     common/perf.cpp
+    common/whitelistconfig.cpp
     cpu_monitor.cpp
     memory_monitor.cpp
     network_monitor.cpp

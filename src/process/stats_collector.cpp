@@ -36,6 +36,7 @@
 #include <QThread>
 #include <QApplication>
 #include <QMutableMapIterator>
+#include "../common/whitelistconfig.h"
 
 // disk sector size shift
 #define SECTOR_SHIFT 9
@@ -607,7 +608,7 @@ void StatsCollector::updateStatus()
 
         filteredAppList << app;
     }
-
+    int count = 0;
     // check filterType
     QList<ProcessEntry> filteredList{};
     for (auto &pe : m_procEntryMap.values()) {
@@ -660,7 +661,11 @@ void StatsCollector::updateStatus()
                 pe.setSentBytes(sumIO->sentBytes);
             }
         }
-
+        // 判断是否要在进程列表中显示
+        if(need && WhiteListConfig::noShowProcess(pe.getName())) {
+            need = false;
+            count++; //  要减去不显示的进程数量
+        }
         if (need) {
             filteredList << pe;
         }
