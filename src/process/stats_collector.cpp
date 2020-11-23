@@ -676,7 +676,7 @@ void StatsCollector::updateStatus()
         Q_EMIT processListUpdated(filteredList);
     }
     if (m_procEntryMap.size() > 0) {
-        m_napps = m_guiPIDList.size() + filteredAppList.size() + m_trayPIDToWndMap.size();
+        m_napps = m_guiPIDList.size() + filteredAppList.size() + m_trayPIDToWndMap.size() - count;
         // emit process summary update signal
         Q_EMIT processSummaryUpdated(m_napps, m_nprocs - m_napps);
     }
