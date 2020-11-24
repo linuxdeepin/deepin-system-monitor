@@ -662,7 +662,7 @@ void StatsCollector::updateStatus()
             }
         }
         // 判断是否要在进程列表中显示
-        if(need && WhiteListConfig::noShowProcess(pe.getName())) {
+        if(need && m_guiPIDList.contains(pe.getPID()) && WhiteListConfig::noShowProcess(pe.getName())) { // 判断是否是GUI进程
             need = false;
             count++; //  要减去不显示的进程数量
         }
