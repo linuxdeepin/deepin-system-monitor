@@ -21,6 +21,7 @@
 #define GRAPHICS_STAT_GRID_LAYOUT_H
 
 #include <QGraphicsGridLayout>
+#include "graphics_stat_grid_item.h"
 
 /**
  * @brief Base class for stat graphics grid layout
@@ -29,6 +30,8 @@ class GraphicsStatGridLayout : public QGraphicsGridLayout
 {
 public:
     GraphicsStatGridLayout();
+
+
 };
 
 #endif // GRAPHICS_STAT_GRID_LAYOUT_H

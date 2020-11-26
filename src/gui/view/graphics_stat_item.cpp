@@ -115,7 +115,7 @@ QRectF GraphicsStatItem::boundingRect() const {
  void GraphicsStatItem::setGridColor(const QColor &color) {
     m_gridColor = color;
  }
- //  设置网格大小
+ // 设置网格大小
  void GraphicsStatItem::setGridSize(int size) {
      m_gridSize = size;
  }
