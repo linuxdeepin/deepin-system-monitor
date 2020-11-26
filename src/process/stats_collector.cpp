@@ -606,7 +606,6 @@ void StatsCollector::updateStatus()
 
         filteredAppList << app;
     }
-
     // check filterType
     QList<ProcessEntry> filteredList{};
     for (auto &pe : m_procEntryMap.values()) {
@@ -659,7 +658,6 @@ void StatsCollector::updateStatus()
                 pe.setSentBytes(sumIO->sentBytes);
             }
         }
-
         if (need) {
             filteredList << pe;
         }

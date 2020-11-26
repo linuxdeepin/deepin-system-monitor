@@ -28,7 +28,7 @@
 class GraphicsCPUStatItem : public GraphicsStatItem
 {
 public:
-    GraphicsCPUStatItem();
+    explicit GraphicsCPUStatItem();
 };
 
 #endif // GRAPHICS_CPU_STAT_ITEM_H
