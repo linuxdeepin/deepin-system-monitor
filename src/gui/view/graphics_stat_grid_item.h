@@ -70,35 +70,76 @@ public:
      * @param right Margin
      */
     void setRightMargin(int n);
+     /**
+     * @brief set background color
+     * @param background color
+     */
     void setBackground(const QColor& color);
+       /**
+     * @brief clear background
+     */
     void clearBackground();
+     /**
+     * @brief set left text color
+     * @param left text color
+     */
     void setLeftTextColor(const QColor& color);
+      /**
+     * @brief set right text color
+     * @param right text color
+     */
     void setRightTextColor(const QColor& color);
+      /**
+     * @brief set left text tool tip
+     * @param show tooltip text
+     */
     void setLeftTextTooltip(const QString& strText);
+     /**
+     * @brief set right text tool tip
+     * @param show tooltip text
+     */
     void setRightTextTooltip(const QString& strText);
+     /**
+     * @brief set Radius
+     * @param Radius value
+     */
     void setRadius(int radius);
 
 protected:
+    // repaint
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    // get rect
     QRectF boundingRect() const override;
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
     void setGeometry(const QRectF &geom) override;
 
 private:
+     /**
+     * @brief set right text pos
+     * @param
+     */
     void setRightTextPos();
+    /**
+     * @brief set left text pos
+     * @param
+     */
     void setLeftTextPos();
+     /**
+     * @brief get painter path
+     * @param result
+     */
     void getPainterPath(QPainterPath &path);
 private:
-    QRect  m_rect;
-    QColor m_lineColor = Qt::gray;
-    QColor m_backColor;
-    QGraphicsTextItem  *m_textLeftItem;
-    QGraphicsTextItem  *m_textRightItem;
-    int m_leftMargin = 0;
-    int m_rightMargin = 0;
-    RectType m_rectType;
-    bool isHaveBackground = false;
-    int m_iRadius = 10;
+    QRect  m_rect; // 当前item的rect
+    QColor m_lineColor = Qt::gray;// 边框颜色
+    QColor m_backColor; // 背景色
+    QGraphicsTextItem  *m_textLeftItem; // 左侧文字的item
+    QGraphicsTextItem  *m_textRightItem; // 右侧文字的item
+    int m_leftMargin = 0; // 左侧文字的margin
+    int m_rightMargin = 0; // 右侧的margin
+    RectType m_rectType; // item类型
+    bool isHaveBackground = false; // 是否有背景
+    int m_iRadius = 10; // 圆角大小
 };
 
 #endif // GRAPHICS_STAT_GRID_ITEM_H
