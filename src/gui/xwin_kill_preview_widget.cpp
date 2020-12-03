@@ -112,7 +112,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
     auto pos = QCursor::pos();
-
+    double x= QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
     // get the list of windows under cursor from cache in stacked order
     auto list = m_wminfo->selectWindow(pos);
     bool found {false};
@@ -129,19 +129,23 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
         // if the window is created by ourself, then ignore it
         if (SystemMonitor::getCurrentPID() == select->pid)
             continue;
-
-        if (select->rect.contains(pos)) {
+        // 根据缩放比例获得selectrect
+        auto selRect = QRect(static_cast<int>(select->rect.x()/x),static_cast<int>(select->rect.y()/x),static_cast<int>(select->rect.width()/x),static_cast<int>(select->rect.height()/x));
+        if (selRect.contains(pos)) {
             found = true;
 
             // find all windows hovered above, if any clip out the intersected region
-            auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, select->rect);
-            QRegion region {select->rect};
-            for (auto &hover : hoveredBy)
-                region = region.subtracted(hover->rect);
+            auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, selRect);
+            QRegion region {selRect};
+            for (auto &hover : hoveredBy) {
+                auto hoverrect = QRect(static_cast<int>(hover->rect.x()/x),static_cast<int>(hover->rect.y()/x),static_cast<int>(hover->rect.width()/x),static_cast<int>(hover->rect.height()/x));
+                region = region.subtracted(hoverrect);
+            }
+
 
             // if current selected window is crossing screens, we need update each sub part on each screen
             for (auto &bg : m_backgroundList) {
-                if (bg->geometry().intersects(select->rect)) {
+                if (bg->geometry().intersects(selRect)) {
                     auto area = region.intersected(bg->geometry());
                     bg->updateSelection(area);
                     emit cursorUpdated(m_killCursor);
