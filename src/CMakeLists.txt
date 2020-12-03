@@ -42,7 +42,6 @@ set(APP_HEADERS
     common/error_context.h
     common/hash.h
     common/han_latin.h
-    common/collator.h
     cpu_monitor.h
     memory_monitor.h
     network_monitor.h
@@ -110,7 +109,6 @@ set(APP_SOURCES
     utils.cpp
     common/error_context.cpp
     common/hash.cpp
-    common/collator.cpp
     common/han_latin.cpp
     cpu_monitor.cpp
     memory_monitor.cpp

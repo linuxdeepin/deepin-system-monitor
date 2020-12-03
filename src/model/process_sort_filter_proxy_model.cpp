@@ -1,8 +1,6 @@
-#include <QCollator>
 #include <QDebug>
 #include <QLocale>
 
-#include "common/collator.h"
 #include "common/han_latin.h"
 #include "process_sort_filter_proxy_model.h"
 #include "process_table_model.h"
@@ -71,30 +69,22 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
     switch (sortColumn()) {
     case ProcessTableModel::kProcessNameColumn: {
         // sort by name first, then by cpu
-        auto a = left.data(Qt::DisplayRole).toString();
-        auto b = right.data(Qt::DisplayRole).toString();
-        // trick: fix slow sorting issue
-        if (a.length() == 0 || b.length() == 0) {
-            return a < b;
-        }
-        if (a.at(0) == b.at(0) && a == b) {
+        auto lhs = left.data(Qt::DisplayRole).toString();
+        auto rhs = right.data(Qt::DisplayRole).toString();
+        auto rc = lhs.localeAwareCompare(rhs);
+
+        if (rc == 0) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole) <
                    right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole);
-        } else {
-            if (a.at(0).isLetterOrNumber() &&
-                    b.at(0).isLetterOrNumber() &&
-                    a.at(0) != b.at(0)) {
-                return a < b;
-            } else {
-                return Collator::instance()->compare(a, b) < 0;
-            }
-        }
+        } else
+            return rc < 0;
     }
     case ProcessTableModel::kProcessUserColumn: {
-        return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                             right.data(Qt::DisplayRole).toString()) < 0;
+        auto lhs = left.data(Qt::DisplayRole).toString();
+        auto rhs = right.data(Qt::DisplayRole).toString();
+        return lhs.localeAwareCompare(rhs) < 0;
     }
     case ProcessTableModel::kProcessMemoryColumn: {
         QVariant lmem, rmem;
