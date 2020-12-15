@@ -76,9 +76,9 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     if (event->button() != Qt::LeftButton) {
         return;
     }
-
+    double x= QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
     // get the list of windows under cursor in stacked order when mouse pressed
-    auto pos = QCursor::pos();
+    auto pos = QPoint(static_cast<int>(QCursor::pos().x()*x),static_cast<int>(QCursor::pos().y()*x));
     auto list = m_wminfo->selectWindow(pos);
 
     // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
