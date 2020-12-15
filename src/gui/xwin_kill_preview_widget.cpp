@@ -111,8 +111,9 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 // mouse move event handler
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
-    auto pos = QCursor::pos();
+
     double x= QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+    auto pos = QPoint(static_cast<int>(QCursor::pos().x()*x),static_cast<int>(QCursor::pos().y()*x));
     // get the list of windows under cursor from cache in stacked order
     auto list = m_wminfo->selectWindow(pos);
     bool found {false};
@@ -131,11 +132,10 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
             continue;
         // 根据缩放比例获得selectrect
         auto selRect = QRect(static_cast<int>(select->rect.x()/x),static_cast<int>(select->rect.y()/x),static_cast<int>(select->rect.width()/x),static_cast<int>(select->rect.height()/x));
-        if (selRect.contains(pos)) {
+        if (select->rect.contains(pos)) {
             found = true;
-
             // find all windows hovered above, if any clip out the intersected region
-            auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, selRect);
+            auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, select->rect);
             QRegion region {selRect};
             for (auto &hover : hoveredBy) {
                 auto hoverrect = QRect(static_cast<int>(hover->rect.x()/x),static_cast<int>(hover->rect.y()/x),static_cast<int>(hover->rect.width()/x),static_cast<int>(hover->rect.height()/x));
