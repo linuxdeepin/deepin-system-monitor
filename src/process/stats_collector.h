@@ -59,6 +59,25 @@ public:
     explicit StatsCollector(QObject *parent = nullptr);
     ~StatsCollector() = default;
 
+    pid_t getPidParent(pid_t pid)
+    {
+        if(m_pidCtoPMapping.find(pid) != m_pidCtoPMapping.end())
+        {
+            return m_pidCtoPMapping[pid];
+        }
+        return -1;
+    }
+
+    QList<pid_t> getPidChild(pid_t pid)
+    {
+        if(m_pidPtoCMapping.find(pid) != m_pidPtoCMapping.end())
+        {
+            return m_pidPtoCMapping.values(pid);
+        }
+
+        return QList<pid_t>();
+    }
+
 Q_SIGNALS:
     void cpuStatInfoUpdated(qreal cpuPercent, const QList<qreal> cpuPercents);
     void memStatInfoUpdated(qulonglong usedMemory,

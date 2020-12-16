@@ -176,7 +176,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
         connect(ctrl, &ProcessController::resultReady, this,
         [this, errfmt, emitSignal, pid, signal, fmsg](int code) {
             if (code != 0) {
-                ErrorContext ec = {};
+                ErrorContext ec = {}; 
                 ec = errfmt(code, fmsg(signal), pid, signal, ec);
                 Q_EMIT processControlResultReady(ec);
             } else {
@@ -190,7 +190,13 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
         int rc = 0;
         errno = 0;
         ErrorContext ec = {};
+        auto childPid = m_statsCollector->getPidChild(pid);
+        for(int i = 0; i < childPid.size(); ++i)
+        {
+            kill(childPid[i], signal);
+        }
         rc = kill(pid, signal);
+
         if (rc == -1 && errno != 0) {
             if (errno == EPERM) {
                 pctl(pid, signal);
@@ -211,7 +217,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
         rc = kill(pid, SIGCONT);
         if (rc == -1 && errno != 0) {
             // not authorized, use pkexec instead
-            if (errno == EPERM) {
+            if (errno == EPERM)  {
                 pctl(pid, signal);
             } else {
                 ec = errfmt(
