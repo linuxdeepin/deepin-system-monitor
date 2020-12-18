@@ -1,3 +1,4 @@
+%global debug_package   %{nil}
 %define pkgrelease  1
 %if 0%{?openeuler}
 %define specrelease %{pkgrelease}
