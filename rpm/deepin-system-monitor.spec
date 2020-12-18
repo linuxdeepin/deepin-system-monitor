@@ -29,7 +29,7 @@ BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xtst)
-BuildRequires:  pkgconfig(libxcb-icccm4)
+BuildRequires:  xcb-util-wm-devel
 # BuildRequires:  pkgconfig(Qt5DBus)
 # BuildRequires:  pkgconfig(Qt5Gui)
 # BuildRequires:  pkgconfig(Qt5Network)
