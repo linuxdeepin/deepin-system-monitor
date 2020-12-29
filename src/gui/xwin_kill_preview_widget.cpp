@@ -23,7 +23,6 @@
 #include "xwin_kill_preview_background_widget.h"
 #include "wm/wm_info.h"
 #include "main_window.h"
-#include "process/system_monitor.h"
 
 #include <QDebug>
 #include <QMouseEvent>
@@ -37,8 +36,10 @@
 #include <QDebug>
 #include <QRegion>
 
+#include <unistd.h>
+
 using namespace std;
-using namespace util::wm;
+using namespace core::wm;
 
 // constructor
 XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
@@ -89,7 +90,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 
     for (auto &select : list) {
         // if the window is created by ourself, then ignore it
-        if (SystemMonitor::getCurrentPID() == select->pid)
+        if (getpid() == select->pid)
             continue;
 
         // if such window exists, we emit window clicked signal to notify kill application performed action
@@ -128,7 +129,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 
     for (auto &select : list) {
         // if the window is created by ourself, then ignore it
-        if (SystemMonitor::getCurrentPID() == select->pid)
+        if (getpid() == select->pid)
             continue;
         auto selRect = QRect(static_cast<int>(select->rect.x()/x),static_cast<int>(select->rect.y()/x),static_cast<int>(select->rect.width()/x),static_cast<int>(select->rect.height()/x));
         if (selRect.contains(pos)) {

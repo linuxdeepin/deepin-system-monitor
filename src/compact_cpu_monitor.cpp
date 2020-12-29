@@ -18,10 +18,8 @@
 
 #include "compact_cpu_monitor.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
 #include "smooth_curve_generator.h"
-#include "utils.h"
+#include "common/common.h"
 #include "constant.h"
 
 #include <DApplication>
@@ -37,7 +35,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-using namespace Utils;
+using namespace common;
 
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     : QWidget(parent)
@@ -47,7 +45,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     option.initFrom(this);
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth - margin * 2);
     setFixedHeight(160);
 
@@ -81,10 +79,10 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
               << "#2CA7F8"
               << "#A005CE";
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
-            this, &CompactCpuMonitor::updateStatus);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
+    //    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
+    //            this, &CompactCpuMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -234,11 +232,11 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         for (int j = pointsNumber - 2; j >= 0; j--) {
             // method#1: draw Bezier curve
             Painterpath.cubicTo(offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
-                         (1.0 - cpuPercents[i][j + 1]) * drawHeight + penSize + 0.5,
-                         offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
-                         (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5,
-                         offsetX - ((pointsNumber - j - 1) * deltaX),
-                         (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
+                                (1.0 - cpuPercents[i][j + 1]) * drawHeight + penSize + 0.5,
+                                offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
+                                (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5,
+                                offsetX - ((pointsNumber - j - 1) * deltaX),
+                                (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
 
             // method#2: draw line instead
             // path.lineTo(offsetX - ((pointsNumber - j - 1) * deltaX),

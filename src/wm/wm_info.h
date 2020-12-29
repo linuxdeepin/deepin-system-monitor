@@ -26,6 +26,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QSharedPointer>
+#include <QByteArrayList>
 
 #include <xcb/xcb.h>
 #include <xcb/xproto.h>
@@ -35,7 +36,7 @@
 #include <map>
 #include <list>
 
-namespace util {
+namespace core {
 // x11/xcb stuff
 namespace wm {
 
@@ -46,18 +47,17 @@ struct wm_frame_extents_t;
 struct wm_tree_t;
 struct atom_meta;
 
-using WMWindow      = std::shared_ptr<struct wm_window_t>;
-using WMWindowExt   = std::unique_ptr<struct util::wm::wm_window_ext_t>;
+using WMWindow = std::unique_ptr<struct wm_window_t>;
+using WMWindowExt = std::unique_ptr<struct core::wm::wm_window_ext_t>;
 using AtomMeta      = std::unique_ptr<struct atom_meta>;
 using WMWindowArea  = std::unique_ptr<struct wm_window_area_t>;
 using WMWId         = xcb_window_t;
-using WMTree        = std::unique_ptr<struct util::wm::wm_tree_t>;
+using WMTree = std::unique_ptr<struct core::wm::wm_tree_t>;
 
 struct wm_window_t {
-    WMWId   wid;
+    WMWId winId;
     pid_t   pid;      // _NET_WM_PID
     QString title {}; // _NET_WM_NAME && UTF8_STRING || WM_NAME
-    QPixmap icon  {};
 };
 
 struct atom_meta {
@@ -74,8 +74,8 @@ struct wm_window_area_t {
 class WMInfo
 {
     enum intern_atom_type {
-        kOtherAtom              = -1,
-        kNetNameAtom            = 0,
+        kOtherAtom = -1,
+        kNetNameAtom = 0,
         kUTF8StringAtom,
         kNetDesktopAtom,
         kNetWindowTypeAtom,
@@ -83,7 +83,8 @@ class WMInfo
         kNetPIDAtom,
         kNetFrameExtentsAtom,
         kNetVirtualRootsAtom,
-        kStateAtom
+        kStateAtom,
+        kIconAtom
     };
 
 public:
@@ -97,7 +98,6 @@ public:
     bool isCursorHoveringDocks(const QPoint &pos) const;
 
 private:
-    std::map<pid_t, WMWindow> updateWindowStackCache();
     void buildWindowTreeSchema();
     void findDockWindows();
 
@@ -116,5 +116,5 @@ private:
 };
 
 } // !wm
-} // !util
+} // namespace core
 #endif // WM_INFO_H

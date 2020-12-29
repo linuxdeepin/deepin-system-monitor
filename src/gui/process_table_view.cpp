@@ -30,12 +30,10 @@
 #include "toolbar.h"
 #include "ui_common.h"
 #include "common/perf.h"
-
+#include "common/common.h"
+#include "common/error_context.h"
 #include "model/process_sort_filter_proxy_model.h"
 #include "model/process_table_model.h"
-
-#include "process/process_entry.h"
-#include "process/system_monitor.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -155,10 +153,10 @@ void ProcessTableView::endProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
-        auto *sysmon = SystemMonitor::instance();
-        if (sysmon) {
-            sysmon->endProcess(qvariant_cast<pid_t>(m_selectedPID));
-        }
+        //        auto *sysmon = SystemMonitor::instance();
+        //        if (sysmon) {
+        //            sysmon->endProcess(qvariant_cast<pid_t>(m_selectedPID));
+        //        }
     } else {
         return;
     }
@@ -167,33 +165,33 @@ void ProcessTableView::endProcess()
 // pause process handler
 void ProcessTableView::pauseProcess()
 {
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
 
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
 
     // no selected item or app self been selected, then do nothing
-    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
-        return;
-    }
+    //    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
+    //        return;
+    //    }
 
-    smo->pauseProcess(pid);
+    //    smo->pauseProcess(pid);
 }
 
 // resume process handler
 void ProcessTableView::resumeProcess()
 {
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
 
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
 
     // no selected item or app self been selected, then do nothing
-    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
-        return;
-    }
+    //    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
+    //        return;
+    //    }
 
-    smo->resumeProcess(pid);
+    //    smo->resumeProcess(pid);
 }
 
 // open process bin path in file manager
@@ -202,45 +200,45 @@ void ProcessTableView::openExecDirWithFM()
     // selection check needed
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
-        QString cmdline = Utils::getProcessCmdline(qvariant_cast<pid_t>(m_selectedPID));
+        //        QString cmdline = common::getProcessCmdline(qvariant_cast<pid_t>(m_selectedPID));
 
-        if (cmdline.size() > 0) {
-            // Found wine program location if cmdline starts with c://.
-            if (cmdline.startsWith("c:\\")) {
-                QString winePrefix = Utils::getProcessEnvironmentVariable(pid, "WINEPREFIX");
-                cmdline = cmdline.replace("\\", "/").replace("c:/", "/drive_c/");
+        //        if (cmdline.size() > 0) {
+        //            // Found wine program location if cmdline starts with c://.
+        //            if (cmdline.startsWith("c:\\")) {
+        //                QString winePrefix = common::getProcessEnvironmentVariable(pid, "WINEPREFIX");
+        //                cmdline = cmdline.replace("\\", "/").replace("c:/", "/drive_c/");
 
-                DDesktopServices::showFileItem(winePrefix + cmdline);
-            } else {
-                QString flatpakAppidEnv =
-                    Utils::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+        //                DDesktopServices::showFileItem(winePrefix + cmdline);
+        //            } else {
+        //                QString flatpakAppidEnv =
+        //                    common::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
 
-                // Else find program location through 'which' command.
-                if (flatpakAppidEnv == "") {
-                    QProcess whichProcess;
-                    QString exec = "which";
-                    QStringList params;
-                    params << cmdline.split(" ");
-                    whichProcess.start(exec, params);
-                    whichProcess.waitForFinished();
-                    QString output(whichProcess.readAllStandardOutput());
+        //                // Else find program location through 'which' command.
+        //                if (flatpakAppidEnv == "") {
+        //                    QProcess whichProcess;
+        //                    QString exec = "which";
+        //                    QStringList params;
+        //                    params << cmdline.split(" ");
+        //                    whichProcess.start(exec, params);
+        //                    whichProcess.waitForFinished();
+        //                    QString output(whichProcess.readAllStandardOutput());
 
-                    QString processPath = output.split("\n")[0];
-                    DDesktopServices::showFileItem(processPath);
-                }
-                // Find flatpak application location.
-                else {
-                    QDir flatpakRootDir = Utils::getFlatpakAppPath(flatpakAppidEnv);
-                    flatpakRootDir.cd("files");
-                    flatpakRootDir.cd("bin");
+        //                    QString processPath = output.split("\n")[0];
+        //                    DDesktopServices::showFileItem(processPath);
+        //                }
+        //                // Find flatpak application location.
+        //                else {
+        //                    QDir flatpakRootDir = Utils::getFlatpakAppPath(flatpakAppidEnv);
+        //                    flatpakRootDir.cd("files");
+        //                    flatpakRootDir.cd("bin");
 
-                    // Need split full path to get last filename.
-                    DDesktopServices::showFileItem(
-                        flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
-                }
-            }
-        }
-    }
+        //                    // Need split full path to get last filename.
+        //                    DDesktopServices::showFileItem(
+        //                        flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
+        //                }
+        //            }
+        //        } // ::if(cmdline)
+    } // ::if(selectedPID)
 }
 
 // show process attribute dialog
@@ -250,13 +248,13 @@ void ProcessTableView::showProperties()
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
         // get process entry item from model
-        auto entry = m_model->getProcessEntry(pid);
+        auto proc = m_model->getProcess(pid);
         auto *attr = new ProcessAttributeDialog(pid,
-                                                entry.getName(),
-                                                entry.getDisplayName(),
-                                                entry.getCmdline(),
-                                                entry.getIcon(),
-                                                entry.getStartTime(),
+                                                proc.name(),
+                                                proc.displayName(),
+                                                proc.cmdlineString(),
+                                                proc.icon(),
+                                                proc.startTime(),
                                                 this);
         attr->show();
     }
@@ -284,10 +282,10 @@ void ProcessTableView::killProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
-        auto *sysmon = SystemMonitor::instance();
-        if (sysmon) {
-            sysmon->killProcess(qvariant_cast<pid_t>(m_selectedPID));
-        }
+        //        auto *sysmon = SystemMonitor::instance();
+        //        if (sysmon) {
+        //            sysmon->killProcess(qvariant_cast<pid_t>(m_selectedPID));
+        //        }
     } else {
         return;
     }
@@ -303,12 +301,12 @@ void ProcessTableView::search(const QString &text)
 }
 
 // switch process table view display mode
-void ProcessTableView::switchDisplayMode(SystemMonitor::FilterType type)
+void ProcessTableView::switchDisplayMode(FilterType type)
 {
-    auto *sysmon = SystemMonitor::instance();
-    if (sysmon) {
-        sysmon->setFilterType(type);
-    }
+    //    auto *sysmon = SystemMonitor::instance();
+    //    if (sysmon) {
+    //        sysmon->setFilterType(type);
+    //    }
 }
 
 // change process priority
@@ -318,21 +316,21 @@ void ProcessTableView::changeProcessPriority(int priority)
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
 
-        auto *sysmon = SystemMonitor::instance();
-        if (sysmon) {
-            // if no changes in priority value, then do nothing
-            SystemMonitor::ProcessPriority prio = m_model->getProcessPriorityStub(pid);
-            if (prio == priority)
-                return;
+        //        auto *sysmon = SystemMonitor::instance();
+        //        if (sysmon) {
+        // if no changes in priority value, then do nothing
+        auto prio = m_model->getProcessPriority(pid);
+        if (prio == priority)
+            return;
 
-            ErrorContext ec {};
-            ec = sysmon->setProcessPriority(pid, priority);
-            if (ec) {
-                // show error dialog
-                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-            }
-        }
+        ErrorContext ec {};
+        //            ec = sysmon->setProcessPriority(pid, priority);
+        //        if (ec) {
+        // show error dialog
+        //            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+        //        }
     }
+    //}
 }
 
 // load & restore table view settings from backup storage
@@ -497,7 +495,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setVeryHighPrioAction->setCheckable(true);
     setVeryHighPrioAction->setActionGroup(prioGroup);
     connect(setVeryHighPrioAction, &QAction::triggered,
-    [ = ]() { changeProcessPriority(SystemMonitor::kVeryHighPriority); });
+            [=]() { changeProcessPriority(kVeryHighPriority); });
 
     // high priority action
     auto *setHighPrioAction =
@@ -505,7 +503,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setHighPrioAction->setCheckable(true);
     setHighPrioAction->setActionGroup(prioGroup);
     connect(setHighPrioAction, &QAction::triggered,
-    [ = ]() { changeProcessPriority(SystemMonitor::kHighPriority); });
+            [=]() { changeProcessPriority(kHighPriority); });
 
     // normal priority action
     auto *setNormalPrioAction =
@@ -513,7 +511,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setNormalPrioAction->setCheckable(true);
     setNormalPrioAction->setActionGroup(prioGroup);
     connect(setNormalPrioAction, &QAction::triggered,
-    [ = ]() { changeProcessPriority(SystemMonitor::kNormalPriority); });
+            [=]() { changeProcessPriority(kNormalPriority); });
 
     // low priority action
     auto *setLowPrioAction =
@@ -521,7 +519,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setLowPrioAction->setCheckable(true);
     setLowPrioAction->setActionGroup(prioGroup);
     connect(setLowPrioAction, &QAction::triggered,
-    [ = ]() { changeProcessPriority(SystemMonitor::kLowPriority); });
+            [=]() { changeProcessPriority(kLowPriority); });
 
     // very low priority action
     auto *setVeryLowPrioAction =
@@ -529,7 +527,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setVeryLowPrioAction->setCheckable(true);
     setVeryLowPrioAction->setActionGroup(prioGroup);
     connect(setVeryLowPrioAction, &QAction::triggered,
-    [ = ]() { changeProcessPriority(SystemMonitor::kVeryLowPriority); });
+            [=]() { changeProcessPriority(kVeryLowPriority); });
 
     // custom priority action
     auto *setCustomPrioAction =
@@ -560,7 +558,6 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
         // process running or not flag
 
-        auto *sysmon = SystemMonitor::instance();
         if (m_selectedPID.isValid()) {
             bool running = true;
             pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
@@ -574,31 +571,31 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             }
             // monitor process itself cant be stopped, so we need a second modified running flag
             bool modRunning = running;
-            if (sysmon) {
-                modRunning = (modRunning) & (!sysmon->isSelfProcess(pid));
-            }
+            //            if (sysmon) {
+            //                modRunning = (modRunning) & (!sysmon->isSelfProcess(pid));
+            //            }
             pauseProcAction->setEnabled(modRunning);
             resumeProcAction->setEnabled(!running);
 
             // change priority menu item checkable state
-            SystemMonitor::ProcessPriority prio = m_model->getProcessPriorityStub(pid);
+            auto prio = m_model->getProcessPriority(pid);
             switch (prio) {
-            case SystemMonitor::kVeryHighPriority: {
+            case kVeryHighPriority: {
                 setVeryHighPrioAction->setChecked(true);
             } break;
-            case SystemMonitor::kHighPriority: {
+            case kHighPriority: {
                 setHighPrioAction->setChecked(true);
             } break;
-            case SystemMonitor::kNormalPriority: {
+            case kNormalPriority: {
                 setNormalPrioAction->setChecked(true);
             } break;
-            case SystemMonitor::kLowPriority: {
+            case kLowPriority: {
                 setLowPrioAction->setChecked(true);
             } break;
-            case SystemMonitor::kVeryLowPriority: {
+            case kVeryLowPriority: {
                 setVeryLowPrioAction->setChecked(true);
             } break;
-            case SystemMonitor::kCustomPriority: {
+            case kCustomPriority: {
                 setCustomPrioAction->setChecked(true);
             } break;
             default: {
@@ -764,22 +761,22 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
     connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
     // show error dialog if change priority failed
-    connect(smo, &SystemMonitor::priorityPromoteResultReady, this,
-    [ = ](const ErrorContext & ec) {
-        if (ec) {
-            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-        }
-    });
+    //    connect(smo, &SystemMonitor::priorityPromoteResultReady, this,
+    //    [ = ](const ErrorContext & ec) {
+    //        if (ec) {
+    //            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+    //        }
+    //    });
     // show error dialog if sending signals to process failed
-    connect(smo, &SystemMonitor::processControlResultReady, this,
-    [ = ](const ErrorContext & ec) {
-        if (ec) {
-            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-        }
-    });
+    //    connect(smo, &SystemMonitor::processControlResultReady, this,
+    //    [ = ](const ErrorContext & ec) {
+    //        if (ec) {
+    //            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+    //        }
+    //    });
 }
 
 // show process table view context menu on specified positon
@@ -869,13 +866,13 @@ void ProcessTableView::customizeProcessPriority()
     PrioritySlider *slider = new PrioritySlider(Qt::Horizontal, prioDialog);
     slider->slider()->setInvertedAppearance(true);
     // set slider range based on minimum & maximum priority value
-    slider->setMinimum(SystemMonitor::kVeryHighPriorityMax);
-    slider->setMaximum(SystemMonitor::kVeryLowPriorityMin);
+    slider->setMinimum(kVeryHighPriorityMax);
+    slider->setMaximum(kVeryLowPriorityMin);
     slider->setPageStep(1);
     slider->slider()->setTracking(true);
     slider->setMouseWheelEnabled(true);
-    slider->setBelowTicks({QString("%1").arg(SystemMonitor::kVeryLowPriorityMin),
-                           QString("%1").arg(SystemMonitor::kVeryHighPriorityMax)});
+    slider->setBelowTicks({QString("%1").arg(kVeryLowPriorityMin),
+                           QString("%1").arg(kVeryHighPriorityMax)});
     // change tip value dynamically when slider value changed
     connect(slider, &DSlider::valueChanged,
     [ = ](int value) { slider->setTipValue(QString("%1").arg(value)); });

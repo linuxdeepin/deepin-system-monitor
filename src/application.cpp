@@ -19,10 +19,43 @@
 */
 #include "application.h"
 
+#include "common/thread_manager.h"
+#include "system/system_monitor_thread.h"
+
+#include <QEvent>
 #include <QMetaType>
+#include <QDebug>
+
+using namespace common::core;
+using namespace core::system;
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     qRegisterMetaType<Application::TaskState>("Application::BackgroundTaskState");
+
+    auto *mgr = ThreadManager::instance();
+    if (mgr) {
+        auto *monitorThread = new SystemMonitorThread();
+        mgr->attach(monitorThread);
+    }
+}
+
+bool Application::event(QEvent *event)
+{
+    if (event) {
+        if (event->type() == kMonitorStartEventType) {
+            auto *mgr = ThreadManager::instance();
+            if (mgr) {
+                auto *thread = mgr->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
+                thread->start();
+            }
+        }
+    }
+
+    return DApplication::event(event);
+}
+
+MonitorStartEvent::~MonitorStartEvent()
+{
 }

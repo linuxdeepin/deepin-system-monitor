@@ -26,7 +26,7 @@
 
 #include "wm/wm_info.h"
 
-using namespace util::wm;
+using namespace core::wm;
 
 class QScreen;
 class QPaintEvent;

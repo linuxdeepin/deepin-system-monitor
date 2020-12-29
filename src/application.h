@@ -31,6 +31,18 @@ DWIDGET_USE_NAMESPACE
 #define gApp (qobject_cast<Application *>(Application::instance()))
 
 class MainWindow;
+
+static const QEvent::Type kMonitorStartEventType = static_cast<QEvent::Type>(QEvent::User + 1);
+class MonitorStartEvent : public QEvent
+{
+public:
+    explicit MonitorStartEvent()
+        : QEvent(kMonitorStartEventType)
+    {
+    }
+    virtual ~MonitorStartEvent();
+};
+
 class Application : public DApplication
 {
     Q_OBJECT
@@ -45,21 +57,27 @@ public:
     };
     Q_ENUM(Application::TaskState)
 
-    inline void setMainWindow(MainWindow *mw)
-    {
-        m_mainWindow = mw;
-    }
-    inline MainWindow *mainWindow()
-    {
-        Q_ASSERT(m_mainWindow != nullptr);
-        return m_mainWindow;
-    }
+    void setMainWindow(MainWindow *mw);
+    MainWindow *mainWindow();
 
 signals:
     void backgroundTaskStateChanged(Application::TaskState state);
 
+protected:
+    bool event(QEvent *event) override;
+
 private:
     MainWindow *m_mainWindow {};
 };
+
+inline void Application::setMainWindow(MainWindow *mw)
+{
+    m_mainWindow = mw;
+}
+
+inline MainWindow *Application::mainWindow()
+{
+    return m_mainWindow;
+}
 
 #endif // APPLICATION_H

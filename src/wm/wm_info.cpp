@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
 * Author:      maojj <maojunjie@uniontech.com>
@@ -24,7 +24,7 @@
 
 #include <memory>
 
-using namespace util::wm;
+using namespace core::wm;
 using namespace std;
 
 enum wm_window_type_t {
@@ -75,7 +75,7 @@ enum wm_window_map_state_t {
     kViewableState                  = XCB_MAP_STATE_VIEWABLE
 };
 
-struct util::wm::wm_request_t {
+struct core::wm::wm_request_t {
     xcb_get_property_cookie_t           netNameCookie;
     xcb_get_property_cookie_t           nameCookie;
     xcb_get_geometry_cookie_t           geomCookie;
@@ -89,14 +89,14 @@ struct util::wm::wm_request_t {
     xcb_query_tree_cookie_t             treeCookie;
 };
 
-struct util::wm::wm_frame_extents_t {
+struct core::wm::wm_frame_extents_t {
     uint left;
     uint right;
     uint top;
     uint bottom;
 };
 
-struct util::wm::wm_window_ext_t {
+struct core::wm::wm_window_ext_t {
     WMWId                           windowId;       // window id
     WMWId                           parent      {}; // window tree schema
     QList<WMWId>                    children    {};
@@ -114,7 +114,7 @@ struct util::wm::wm_window_ext_t {
 };
 
 // tree schema in bottom to top stacking order
-struct util::wm::wm_tree_t {
+struct core::wm::wm_tree_t {
     struct wm_window_ext_t         *root;  // root window
     std::map<WMWId, WMWindowExt>    cache; // [windowId : window extended info] mapping
 };
@@ -296,12 +296,6 @@ std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) c
     scan_tree(m_tree->root, area);
 
     return list;
-}
-
-std::map<pid_t, WMWindow> WMInfo::updateWindowStackCache()
-{
-    // TODO: redo new fetch window title jobs
-    return {};
 }
 
 void WMInfo::buildWindowTreeSchema()

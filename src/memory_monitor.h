@@ -28,6 +28,7 @@ DWIDGET_USE_NAMESPACE
 
 class Settings;
 class QPropertyAnimation;
+class MemInfoModel;
 
 class MemoryMonitor : public QWidget
 {
@@ -37,10 +38,6 @@ class MemoryMonitor : public QWidget
 public:
     explicit MemoryMonitor(QWidget *parent = nullptr);
     ~MemoryMonitor();
-
-public slots:
-    void updateStatus(qulonglong uMemory, qulonglong tMemory,
-                      qulonglong uSwap, qulonglong tSwap);
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
@@ -86,12 +83,7 @@ private:
     int ringCenterPointerY = 70;
     int ringWidth = 6;
 
-    qulonglong m_prevUsedMemory = 0;
-    qulonglong m_prevUsedSwap = 0;
-    qulonglong m_totalMemory = 0;
-    qulonglong m_totalSwap = 0;
-    qulonglong m_usedMemory = 0;
-    qulonglong m_usedSwap = 0;
+    MemInfoModel *m_model {};
 
     QFont m_titleFont;
     QFont m_contentFont;

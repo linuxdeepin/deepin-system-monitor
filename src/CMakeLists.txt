@@ -21,6 +21,7 @@ include(CheckSymbolExists)
 check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+include(FindPkgConfig)
 
 find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
@@ -33,19 +34,22 @@ find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
-set(APP_HEADERS
+pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
+pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
+pkg_search_module(LIB_EVENT2_CORE REQUIRED libevent_core>=2.1.6)
+pkg_search_module(LIB_UDEV REQUIRED libudev)
+include_directories(${LIB_NL3_INCLUDE_DIRS})
+include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
+include_directories(${LIB_EVENT2_CORE_INCLUDE_DIRS})
+include_directories(${LIB_UDEV_INCLUDE_DIRS})
+
+set(HPP_GLOBAL
     config.h
     environments.h
     accessible.h
     accessibledefine.h
-    utils.h
     application.h
     stack_trace.h
-    common/error_context.h
-    common/hash.h
-    common/han_latin.h
-    common/collator.h
-    common/perf.h
     cpu_monitor.h
     memory_monitor.h
     network_monitor.h
@@ -54,18 +58,114 @@ set(APP_HEADERS
     compact_memory_monitor.h
     compact_network_monitor.h
     compact_disk_monitor.h
-    find_window_title.h
     smooth_curve_generator.h
     constant.h
     settings.h
+)
+set(CPP_GLOBAL
+    main.cpp
+    application.cpp
+    cpu_monitor.cpp
+    memory_monitor.cpp
+    network_monitor.cpp
+    disk_monitor.cpp
+    compact_cpu_monitor.cpp
+    compact_memory_monitor.cpp
+    compact_network_monitor.cpp
+    compact_disk_monitor.cpp
+    smooth_curve_generator.cpp
+    settings.cpp
+)
+
+set(HPP_COMMON
+    common/common.h
+    common/error_context.h
+    common/hash.h
+    common/han_latin.h
+    common/collator.h
+    common/perf.h
+    common/uevent.h
+    common/uevent_loop.h
+    common/uevent_filter.h
+    common/iconv.h
+    common/base_thread.h
+    common/thread_manager.h
+    common/time_period.h
+    common/sample.h
+)
+set(CPP_COMMON
+    common/common.cpp
+    common/error_context.cpp
+    common/hash.cpp
+    common/collator.cpp
+    common/han_latin.cpp
+    common/perf.cpp
+    common/uevent.cpp
+    common/uevent_loop.cpp
+    common/thread_manager.cpp
+    common/time_period.cpp
+)
+
+set(HPP_DBUS
+    dbus/systemd1_manager_interface.h
+    dbus/systemd1_service_interface.h
+    dbus/systemd1_unit_interface.h
+    dbus/dbus_properties_interface.h
+    dbus/dbus_common.h
+    dbus/environment_file.h
+    dbus/unit_file_info.h
+    dbus/unit_info.h
+)
+set(CPP_DBUS
+    dbus/environment_file.cpp
+    dbus/unit_file_info.cpp
+    dbus/unit_info.cpp
+    dbus/systemd1_manager_interface.cpp
+    dbus/systemd1_service_interface.cpp
+    dbus/systemd1_unit_interface.cpp
+    dbus/dbus_properties_interface.cpp
+)
+
+set(HPP_MODEL
     model/process_table_model.h
     model/process_sort_filter_proxy_model.h
     model/system_service_table_model.h
     model/system_service_sort_filter_proxy_model.h
+    model/cpu_info_model.h
     model/cpu_stat_model.h
+    model/cpu_list_model.h
+    model/cpu_list_sort_filter_proxy_model.h
+    model/mem_info_model.h
     model/mem_stat_model.h
+    model/netif_info_model.h
     model/netif_stat_model.h
+    model/netif_addr_model.h
+    model/netif_info_sort_filter_proxy_model.h
     model/block_dev_stat_model.h
+    model/block_dev_info_model.h
+    model/block_dev_info_sort_filter_proxy_model.h
+)
+set(CPP_MODEL
+    model/system_service_table_model.cpp
+    model/system_service_sort_filter_proxy_model.cpp
+    model/process_table_model.cpp
+    model/process_sort_filter_proxy_model.cpp
+    model/cpu_info_model.cpp
+    model/cpu_stat_model.cpp
+    model/cpu_list_model.cpp
+    model/cpu_list_sort_filter_proxy_model.cpp
+    model/mem_info_model.cpp
+    model/mem_stat_model.cpp
+    model/netif_info_model.cpp
+    model/netif_stat_model.cpp
+    model/netif_addr_model.cpp
+    model/netif_info_sort_filter_proxy_model.cpp
+    model/block_dev_info_model.cpp
+    model/block_dev_stat_model.cpp
+    model/block_dev_info_sort_filter_proxy_model.cpp
+)
+
+set(HPP_GUI
     gui/ui_common.h
     gui/toolbar.h
     gui/main_window.h
@@ -125,65 +225,8 @@ set(APP_HEADERS
     gui/view/graphics_netif_info_grid_layout.h
     gui/view/graphics_stat_summary_view_layout.h
     gui/view/graphics_stat_summary_view.h
-    dbus/systemd1_manager_interface.h
-    dbus/systemd1_service_interface.h
-    dbus/systemd1_unit_interface.h
-    dbus/dbus_properties_interface.h
-    dbus/dbus_common.h
-    dbus/environment_file.h
-    dbus/unit_file_info.h
-    dbus/unit_info.h
-    process/process_entry.h
-    process/system_monitor.h
-    process/priority_controller.h
-    process/process_controller.h
-    process/process_stat.h
-    process/system_stat.h
-    process/stats_collector.h
-    process/desktop_entry_stat.h
-    process/netif_monitor.h
-    process/netif_monitor_job.h
-    process/netif_packet_parser.h
-    service/service_manager_worker.h
-    service/service_manager.h
-    service/system_service_entry_data.h
-    service/system_service_entry.h
-    wm/wm_info.h
-    system/cpu_info_manager.h
-    system/mem_info_manager.h
-    system/block_dev_info_manager.h
-    system/netif_info_manager.h
-    system/stat_manager.h
 )
-    
-set(APP_SOURCES
-    main.cpp
-    application.cpp
-    utils.cpp
-    common/error_context.cpp
-    common/hash.cpp
-    common/collator.cpp
-    common/han_latin.cpp
-    common/perf.cpp
-    cpu_monitor.cpp
-    memory_monitor.cpp
-    network_monitor.cpp
-    disk_monitor.cpp
-    compact_cpu_monitor.cpp
-    compact_memory_monitor.cpp
-    compact_network_monitor.cpp
-    compact_disk_monitor.cpp
-    find_window_title.cpp
-    smooth_curve_generator.cpp
-    settings.cpp
-    model/system_service_table_model.cpp
-    model/system_service_sort_filter_proxy_model.cpp
-    model/process_table_model.cpp
-    model/process_sort_filter_proxy_model.cpp
-    model/cpu_stat_model.cpp
-    model/mem_stat_model.cpp
-    model/netif_stat_model.cpp
-    model/block_dev_stat_model.cpp
+set(CPP_GUI
     gui/toolbar.cpp
     gui/system_service_table_view.cpp
     gui/main_window.cpp
@@ -243,39 +286,150 @@ set(APP_SOURCES
     gui/view/graphics_netif_info_grid_layout.cpp
     gui/view/graphics_stat_summary_view_layout.cpp
     gui/view/graphics_stat_summary_view.cpp
-    dbus/environment_file.cpp
-    dbus/unit_file_info.cpp
-    dbus/unit_info.cpp
-    dbus/systemd1_manager_interface.cpp
-    dbus/systemd1_service_interface.cpp
-    dbus/systemd1_unit_interface.cpp
-    dbus/dbus_properties_interface.cpp
-    process/process_entry.cpp
-    process/system_monitor.cpp
+)
+
+set(HPP_PROCESS
+    process/private/process_p.h
+    process/process.h
+    process/process_set.h
+    process/process_icon.h
+    process/process_icon_cache.h
+    process/process_name.h
+    process/process_name_cache.h
+    process/tray_apps_cache.h
+    process/gui_apps_cache.h
+    process/priority_controller.h
+    process/process_controller.h
+    process/desktop_entry_cache.h
+    process/desktop_entry_cache_updater.h
+    process/process_db.h
+)
+set(CPP_PROCESS
+    process/process.cpp
+    process/process_set.cpp
+    process/process_icon.cpp
+    process/process_icon_cache.cpp
+    process/process_name.cpp
+    process/process_name_cache.cpp
+    process/tray_apps_cache.cpp
+    process/gui_apps_cache.cpp
     process/priority_controller.cpp
-    process/netif_monitor.cpp
-    process/netif_monitor_job.cpp
-    process/netif_packet_parser.cpp
     process/process_controller.cpp
-    process/process_stat.cpp
-    process/system_stat.cpp
-    process/stats_collector.cpp
-    process/desktop_entry_stat.cpp
+    process/desktop_entry_cache.cpp
+    process/desktop_entry_cache_updater.cpp
+    process/process_db.cpp
+)
+
+set(HPP_SERVICE
+    service/service_manager_worker.h
+    service/service_manager.h
+    service/system_service_entry_data.h
+    service/system_service_entry.h
+)
+set(CPP_SERVICE
     service/service_manager_worker.cpp
     service/service_manager.cpp
     service/system_service_entry_data.cpp
     service/system_service_entry.cpp
+)
+
+set(HPP_SYSTEM
+    system/private/mem_p.h
+    system/private/cpu_p.h
+    system/private/cpu_set_p.h
+    system/private/block_device_p.h
+    system/private/netif_p.h
+    system/private/sys_info_p.h
+    system/system_monitor.h
+    system/system_monitor_thread.h
+    system/device_id_cache.h
+    system/packet.h
+    system/netif.h
+    system/netif_info_db.h
+    system/netif_monitor.h
+    system/netif_monitor_thread.h
+    system/netif_packet_capture.h
+    system/netif_packet_parser.h
+    system/mem.h
+    system/cpu.h
+    system/cpu_set.h
+    system/block_device.h
+    system/block_device_info_db.h
+    system/device_db.h
+    system/sys_info.h
+    system/udev.h
+    system/udev_device.h
+    system/netlink.h
+    system/nl_addr.h
+    system/nl_link.h
+    system/wireless.h
+)
+set(CPP_SYSTEM
+    system/system_monitor.cpp
+    system/system_monitor_thread.cpp
+    system/device_id_cache.cpp
+    system/netif_monitor.cpp
+    system/netif_monitor_thread.cpp
+    system/netif_packet_capture.cpp
+    system/netif_packet_parser.cpp
+    system/device_db.cpp
+    system/netif.cpp
+    system/netif_info_db.cpp
+    system/mem.cpp
+    system/cpu.cpp
+    system/cpu_set.cpp
+    system/block_device.cpp
+    system/block_device_info_db.cpp
+    system/sys_info.cpp
+    system/udev.cpp
+    system/udev_device.cpp
+    system/netlink.cpp
+    system/nl_addr.cpp
+    system/nl_link.cpp
+    system/wireless.cpp
+)
+
+set(HPP_WM
+    wm/wm_atom.h
+    wm/wm_connection.h
+    wm/wm_info.h
+    wm/wm_window_list.h
+    wm/wm_window_tree.h
+)
+set(CPP_WM
+    wm/wm_atom.cpp
+    wm/wm_connection.cpp
     wm/wm_info.cpp
-    system/cpu_info_manager.cpp
-    system/mem_info_manager.cpp
-    system/block_dev_info_manager.cpp
-    system/netif_info_manager.cpp
-    system/stat_manager.cpp
+    wm/wm_window_list.cpp
+    wm/wm_window_tree.cpp
+)
+
+set(APP_HPP
+    ${HPP_GLOBAL}
+    ${HPP_COMMON}
+    ${HPP_DBUS}
+    ${HPP_MODEL}
+    ${HPP_GUI}
+    ${HPP_PROCESS}
+    ${HPP_SERVICE}
+    ${HPP_SYSTEM}
+    ${HPP_WM}
+)
+set(APP_CPP
+    ${CPP_GLOBAL}
+    ${CPP_COMMON}
+    ${CPP_DBUS}
+    ${CPP_MODEL}
+    ${CPP_GUI}
+    ${CPP_PROCESS}
+    ${CPP_SERVICE}
+    ${CPP_SYSTEM}
+    ${CPP_WM}
 )
 
 add_executable(${APP_NAME}
-    ${APP_HEADERS}
-    ${APP_SOURCES}
+    ${APP_HPP}
+    ${APP_CPP}
     ${CMAKE_SOURCE_DIR}/${APP_RESOURCES}
 )
 
@@ -297,6 +451,10 @@ target_link_libraries(${APP_NAME}
     ${LIB_XCB}
     ${LIB_XEXT}
     ${LIB_ICCCM}
+    ${LIB_NL3_LIBRARIES}
+    ${LIB_NL3_ROUTE_LIBRARIES}
+    ${LIB_EVENT2_CORE_LIBRARIES}
+    ${LIB_UDEV_LIBRARIES}
 )
 
 install(TARGETS ${APP_NAME} DESTINATION bin)

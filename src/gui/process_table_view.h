@@ -22,12 +22,13 @@
 #define PROCESS_TABLE_VIEW_H
 
 #include "base_table_view.h"
-#include "process/system_monitor.h"
+#include "process/process_set.h"
 
 #include <DLabel>
 #include <DTreeView>
 
 DWIDGET_USE_NAMESPACE
+using namespace core::process;
 
 class ProcessTableModel;
 class ProcessSortFilterProxyModel;
@@ -95,7 +96,7 @@ public Q_SLOTS:
      * @brief Switch process display mode
      * @param type Process display mode
      */
-    void switchDisplayMode(SystemMonitor::FilterType type);
+    void switchDisplayMode(FilterType type);
     /**
      * @brief Change process priority handler
      * @param priority Process priority

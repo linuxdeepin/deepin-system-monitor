@@ -20,7 +20,7 @@
 
 #include "kill_process_confirm_dialog.h"
 
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 #include <DHiDPIHelper>

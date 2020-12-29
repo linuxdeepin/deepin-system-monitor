@@ -81,13 +81,7 @@ public:
     /**
      * @brief Reset model
      */
-    inline void reset()
-    {
-        beginRemoveRows({}, 0, m_svcList.size() - 1);
-        m_svcList.clear();
-        m_svcMap.clear();
-        endRemoveRows();
-    }
+    void reset();
 
     /**
      * @brief Update model with source data provided by entry
@@ -100,26 +94,14 @@ public:
      * @param index Model index
      * @return Return unit file's state string
      */
-    inline QString getUnitFileState(const QModelIndex &index)
-    {
-        if (!index.isValid())
-            return {};
-
-        return m_svcMap[m_svcList[index.row()]].getState();
-    }
+    QString getUnitFileState(const QModelIndex &index);
 
     /**
      * @brief Get unit file's name string
      * @param index Model index
      * @return Return unit file's name string
      */
-    inline QString getUnitFileName(const QModelIndex &index)
-    {
-        if (!index.isValid())
-            return {};
-
-        return m_svcMap[m_svcList[index.row()]].getSName();
-    }
+    QString getUnitFileName(const QModelIndex &index);
 
     /**
      * @brief data Returns the data stored under the given role for the item referred to by the index
@@ -190,5 +172,29 @@ private:
     // current loaded items (into the model)
     int m_nr {};
 };
+
+inline void SystemServiceTableModel::reset()
+{
+    beginRemoveRows({}, 0, m_svcList.size() - 1);
+    m_svcList.clear();
+    m_svcMap.clear();
+    endRemoveRows();
+}
+
+inline QString SystemServiceTableModel::getUnitFileState(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return {};
+
+    return m_svcMap[m_svcList[index.row()]].getState();
+}
+
+inline QString SystemServiceTableModel::getUnitFileName(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return {};
+
+    return m_svcMap[m_svcList[index.row()]].getSName();
+}
 
 #endif  // SYSTEM_SERVICE_TABLE_MODEL_H

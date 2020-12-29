@@ -18,13 +18,11 @@
 
 #include "cpu_monitor.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
 #include "smooth_curve_generator.h"
 #include "gui/ui_common.h"
 #include "constant.h"
 #include "settings.h"
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -39,12 +37,12 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
 
 CpuMonitor::CpuMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedSize(statusBarMaxWidth, 240);
     waveformsRenderOffsetX = (statusBarMaxWidth - 140) / 2;
 
@@ -58,10 +56,10 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
-            this, &CpuMonitor::updateStatus);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
+    //    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
+    //            this, &CpuMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,

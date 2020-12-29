@@ -20,9 +20,7 @@
 
 #include "gui/ui_common.h"
 #include "smooth_curve_generator.h"
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
-#include "utils.h"
+#include "common/common.h"
 #include "constant.h"
 
 #include <DApplication>
@@ -37,7 +35,8 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
+using namespace common::format;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent)
     : QWidget(parent)
@@ -45,7 +44,7 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
     auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
 
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth - margin * 2);
     setFixedHeight(180);
 
@@ -64,10 +63,10 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::networkStatInfoUpdated,
-            this, &NetworkMonitor::updateStatus);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
+    //    connect(smo->jobInstance(), &StatsCollector::networkStatInfoUpdated,
+    //            this, &NetworkMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,

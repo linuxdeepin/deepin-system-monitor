@@ -158,12 +158,13 @@ private:
     // Shadow widget under titlebar
     DShadowLine *m_tbShadow {};
 
-    // loading status flag
-    bool m_loading {true};
-    char __unused__[7];     // ##padding##
-
     // Last focused widget
     QWidget *m_focusedWidget {};
+
+    // loading status flag
+    bool m_loading {true};
+
+    std::once_flag oflag;
 };
 
 #endif  // MAIN_WINDOW_H

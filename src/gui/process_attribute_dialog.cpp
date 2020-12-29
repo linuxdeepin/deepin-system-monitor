@@ -21,7 +21,7 @@
 #include "process_attribute_dialog.h"
 
 #include "settings.h"
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 #include <DApplicationHelper>

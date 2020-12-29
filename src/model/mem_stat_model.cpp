@@ -19,8 +19,79 @@
 */
 #include "mem_stat_model.h"
 
+#include "common/common.h"
+
+using namespace common::format;
+
 // Model constructor
-MemStatModel::MemStatModel(QObject *parent)
-    : QObject(parent)
+MemStatModel::MemStatModel(const TimePeriod &period, QObject *parent)
+    : QAbstractTableModel(parent)
+    , m_stat(new MemStatSample(period))
 {
+}
+
+MemStatModel::~MemStatModel()
+{
+}
+
+int MemStatModel::rowCount(const QModelIndex &) const
+{
+    return m_stat->count();
+}
+
+QVariant MemStatModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || !m_stat)
+        return {};
+
+    int row = index.row();
+    if (row < 0 || row >= int(m_stat->count()))
+        return {};
+
+    auto *sample = m_stat->sample(row);
+    if (!sample)
+        return {};
+
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
+        switch (index.column()) {
+        case kStatUsedMem: {
+            return formatUnit(sample->stat->memUsed << 10, B, 2);
+        }
+        case kStatTotalMem: {
+            return formatUnit(sample->stat->memTotal << 10, B, 1);
+        }
+        case kStatUsedSwap: {
+            return formatUnit(sample->stat->swapUsed << 10, B, 2);
+        }
+        case kStatTotalSwap: {
+            return formatUnit(sample->stat->swapTotal << 10, B, 1);
+        }
+        default:
+            break;
+        } // ::switch
+    } else if (role == kValueRole) {
+        switch (index.column()) {
+        case kStatUsedMem: {
+            return sample->stat->memUsed;
+        }
+        case kStatTotalMem: {
+            return sample->stat->memTotal;
+        }
+        case kStatUsedSwap: {
+            return sample->stat->swapUsed;
+        }
+        case kStatTotalSwap: {
+            return sample->stat->swapTotal;
+        }
+        default:
+            break;
+        } // ::switch
+    } // ::if
+
+    return {};
+}
+
+int MemStatModel::columnCount(const QModelIndex &) const
+{
+    return kStatPropMax;
 }

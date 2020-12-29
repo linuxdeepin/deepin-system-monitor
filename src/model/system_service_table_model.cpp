@@ -21,7 +21,7 @@
 #include "system_service_table_model.h"
 
 #include "service/service_manager.h"
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 
@@ -31,7 +31,7 @@
 #include <QFontMetrics>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
 
 // model constructor
 SystemServiceTableModel::SystemServiceTableModel(QObject *parent)

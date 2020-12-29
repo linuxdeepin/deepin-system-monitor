@@ -25,8 +25,6 @@
 #include <QDebug>
 #include <QMessageBox>
 
-#include "utils.h"
-
 // constructor
 ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     : DDialog(parent)

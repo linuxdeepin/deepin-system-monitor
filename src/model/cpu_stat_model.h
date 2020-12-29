@@ -20,24 +20,126 @@
 #ifndef CPU_STAT_MODEL_H
 #define CPU_STAT_MODEL_H
 
+#include "system/cpu.h"
+#include "common/sample.h"
+#include "common/time_period.h"
+#include "common/common.h"
+
 #include <QObject>
+#include <QAbstractTableModel>
+
+using namespace core::system;
+using namespace common::time;
+
+template<>
+class SampleFrame<cpu_stat_t>
+{
+public:
+    SampleFrame()
+        : ts()
+        , stat()
+    {
+    }
+    SampleFrame(const struct timeval &tv, const CPUStat &st)
+        : ts(tv)
+        , stat(st)
+    {
+    }
+    SampleFrame(const SampleFrame &other)
+        : ts(other.ts)
+        , stat(std::make_shared<cpu_stat_t>(*(other.stat)))
+    {
+    }
+
+    struct timeval ts;
+    CPUStat stat;
+};
+
+template<>
+class SampleFrame<cpu_usage_t>
+{
+public:
+    SampleFrame()
+        : ts()
+        , stat()
+    {
+    }
+    SampleFrame(const struct timeval &tv, const CPUUsage &st)
+        : ts(tv)
+        , stat(st)
+    {
+    }
+    SampleFrame(const SampleFrame &other)
+        : ts(other.ts)
+        , stat(std::make_shared<cpu_usage_t>(*(other.stat)))
+    {
+    }
+
+    SampleFrame &operator-=(const SampleFrame &rhs)
+    {
+        ts -= rhs.ts;
+        stat->total -= rhs.stat->total;
+        stat->idle -= rhs.stat->idle;
+        return *this;
+    }
+    const SampleFrame operator-(const SampleFrame &rhs)
+    {
+        return SampleFrame(*this) -= rhs;
+    }
+
+    struct timeval ts;
+    CPUUsage stat;
+};
+
+using CPUStatSampleFrame = SampleFrame<cpu_stat_t>;
+using CPUUsageSampleFrame = SampleFrame<cpu_usage_t>;
+using CPUStatSample = Sample<cpu_stat_t>;
+using CPUUsageSample = Sample<cpu_usage_t>;
+
+class CPUInfoModel;
 
 /**
  * @brief CPU stat model
  */
-class CPUStatModel : public QObject
+class CPUStatModel : public QAbstractTableModel
 {
     Q_OBJECT
+
 public:
+    enum StatProp {
+        kStatUserTime,
+        kStatNiceTime,
+        kStatSystemTime,
+        kStatIdleTime,
+        kStatIOWaitTime,
+        kStatHardIRQ,
+        kStatSoftIRQ,
+        kStatStealTime,
+        kStatGuestTime,
+        kStatGuestNice,
+
+        kStatTotalUsage,
+        kStatIdleUsage,
+
+        kStatPropMax
+    };
+
     /**
      * @brief Model constructor
      * @param parent Parent object
      */
-    explicit CPUStatModel(QObject *parent = nullptr);
+    explicit CPUStatModel(const TimePeriod &period, QObject *parent = nullptr);
+    virtual ~CPUStatModel() override;
 
-signals:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-public slots:
+private:
+    std::unique_ptr<Sample<cpu_stat_t>> m_statSampleDB;
+    std::unique_ptr<Sample<cpu_usage_t>> m_usageSampleDB;
+
+    friend class CPUInfoModel;
 };
 
 #endif // CPU_STAT_MODEL_H

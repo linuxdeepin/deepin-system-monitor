@@ -22,11 +22,11 @@
 
 #include <QWidget>
 
-namespace util {
+namespace core {
 namespace wm {
 class WMInfo;
 }
-}
+} // namespace core
 class XWinKillPreviewBackgroundWidget;
 
 /**
@@ -89,7 +89,7 @@ private:
 
 private:
     // Window manager (x11) instance
-    util::wm::WMInfo *m_wminfo;
+    core::wm::WMInfo *m_wminfo;
     // List of background widgets, per screen each
     QList<XWinKillPreviewBackgroundWidget *> m_backgroundList;
     // List of screens

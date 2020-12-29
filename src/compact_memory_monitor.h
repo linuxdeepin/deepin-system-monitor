@@ -26,6 +26,8 @@
 DWIDGET_USE_NAMESPACE
 
 class QPropertyAnimation;
+class MemStatModel;
+class MemInfoModel;
 
 class CompactMemoryMonitor : public QWidget
 {
@@ -35,10 +37,6 @@ class CompactMemoryMonitor : public QWidget
 public:
     explicit CompactMemoryMonitor(QWidget *parent = nullptr);
     ~CompactMemoryMonitor();
-
-public slots:
-    void updateStatus(qulonglong uMemory, qulonglong tMemory,
-                      qulonglong uSwap, qulonglong tSwap);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -79,12 +77,7 @@ private:
     int ringCenterPointerY = 45;
     int ringWidth = 6;
 
-    qulonglong m_prevUsedMemory {};
-    qulonglong m_prevUsedSwap {};
-    qulonglong m_totalMemory {};
-    qulonglong m_totalSwap {};
-    qulonglong m_usedMemory {};
-    qulonglong m_usedSwap {};
+    MemInfoModel *m_model;
 
     qreal m_progress {};
     QPropertyAnimation *m_animation {};

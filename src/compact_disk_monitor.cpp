@@ -18,10 +18,8 @@
 
 #include "compact_disk_monitor.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
 #include "smooth_curve_generator.h"
-#include "utils.h"
+#include "common/common.h"
 #include "constant.h"
 
 #include <DApplication>
@@ -36,7 +34,8 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
+using namespace common::format;
 
 CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
     : QWidget(parent)
@@ -63,10 +62,10 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
         writeSpeeds->append(0);
     }
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
-            this, &CompactDiskMonitor::updateStatus);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
+    //    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
+    //            this, &CompactDiskMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,

@@ -21,13 +21,13 @@
 #ifndef PROCESS_PAGE_WIDGET_H
 #define PROCESS_PAGE_WIDGET_H
 
+#include "ui_common.h"
+
 #include <DApplicationHelper>
 #include <DButtonBox>
 #include <DFrame>
 #include <DStackedWidget>
 #include <DLabel>
-
-#include "ui_common.h"
 
 DWIDGET_USE_NAMESPACE
 

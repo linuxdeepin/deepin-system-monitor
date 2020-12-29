@@ -21,8 +21,7 @@
 #ifndef PROCESS_TABLE_MODEL_H
 #define PROCESS_TABLE_MODEL_H
 
-#include "process/process_entry.h"
-#include "process/system_monitor.h"
+#include "process/process_set.h"
 
 #include <QAbstractTableModel>
 #include <QList>
@@ -51,13 +50,14 @@ constexpr const char *kProcessNice = QT_TRANSLATE_NOOP("Process.Table.Header", "
 // priority column display
 constexpr const char *kProcessPriority = QT_TRANSLATE_NOOP("Process.Table.Header", "Priority");
 
+using namespace core::process;
+
 /**
  * @brief Process table model class
  */
 class ProcessTableModel : public QAbstractTableModel
 {
     Q_OBJECT
-    Q_DISABLE_COPY(ProcessTableModel)
 
 public:
     /**
@@ -89,7 +89,7 @@ public:
      * @brief Update process model with the data provided by list
      * @param list Process entry list
      */
-    void updateProcessList(const QList<ProcessEntry> &list);
+    void updateProcessList(const ProcessSet &set);
 
     /**
      * @brief Returns the number of rows under the given parent
@@ -148,33 +148,19 @@ public:
      * @param pid Id of the process to get priority stub for
      * @return Process priority enum type
      */
-    SystemMonitor::ProcessPriority getProcessPriorityStub(pid_t pid) const;
+    ProcessPriority getProcessPriority(pid_t pid) const;
     /**
      * @brief Get process priority with specified pid
      * @param pid Id of the process to get priority for
      * @return Process priority
      */
-    inline int getProcessPriority(pid_t pid) const
-    {
-        int row = m_processMap.value(pid);
-        int prio = m_processList.at(row).getPriority();
-        return prio;
-    }
+    int getProcessNice(pid_t pid) const;
     /**
      * @brief Get process entry from list with specified pid
      * @param pid Process id
      * @return Process entry item
      */
-    inline ProcessEntry getProcessEntry(pid_t pid) const
-    {
-        if (m_processMap.contains(pid)) {
-            auto idx = m_processMap[pid];
-            if (idx >= 0 && idx < m_processList.size()) {
-                return m_processList[idx];
-            }
-        }
-        return {};
-    }
+    Process getProcess(pid_t pid) const;
 
 Q_SIGNALS:
     /**
@@ -187,7 +173,7 @@ private Q_SLOTS:
      * @brief Remove process entry from model with specified pid
      * @param pid Process id
      */
-    void removeProcessEntry(pid_t pid);
+    void removeProcess(pid_t pid);
     /**
      * @brief Update the state of the process entry with specified pid
      * @param pid Process id
@@ -202,12 +188,38 @@ private Q_SLOTS:
     void updateProcessPriority(pid_t pid, int priority);
 
 private:
-    // Process entry list cache
-    QList<ProcessEntry> m_processList;
-    // Process pid to <index> mapping
-    QMap<pid_t, int> m_processMap;  // <pid, index>
+    QList<pid_t> m_procList; // pid list
+    ProcessSet m_procSet; // process set
+
     // current loaded items (into the model)
     int m_nr {};
 };
+
+inline char ProcessTableModel::getProcessState(pid_t pid) const
+{
+    if (m_procList.contains(pid)) {
+        return m_procSet.getProcessById(pid).state();
+    }
+
+    return 0;
+}
+
+inline int ProcessTableModel::getProcessNice(pid_t pid) const
+{
+    if (m_procList.contains(pid)) {
+        return m_procSet.getProcessById(pid).priority();
+    }
+
+    return kInvalidPriority;
+}
+
+inline Process ProcessTableModel::getProcess(pid_t pid) const
+{
+    if (m_procList.contains(pid)) {
+        return m_procSet.getProcessById(pid);
+    }
+
+    return Process();
+}
 
 #endif  // PROCESS_TABLE_MODEL_H

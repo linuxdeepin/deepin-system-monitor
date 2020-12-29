@@ -17,17 +17,15 @@
 */
 
 #include "environments.h"
-#include "stack_trace.h"
 #include "accessible.h"
 #include "constant.h"
-#include "utils.h"
+#include "common/common.h"
 #include "application.h"
 #include "settings.h"
 #include "gui/main_window.h"
-#include "common/hash.h"
 #include "common/perf.h"
 
-//#include <DApplication>
+#include <DApplication>
 #include <DApplicationSettings>
 #include <DGuiApplicationHelper>
 #include <DMainWindow>
@@ -36,19 +34,15 @@
 
 #include <QApplication>
 #include <QDateTime>
-
-Q_DECLARE_METATYPE(QList<qreal>)
+#include <QAccessible>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    util::installCrashHandler();
-    util::common::init_seed();
+    common::init::global_init();
     PERF_PRINT_BEGIN("POINT-01", "");
-
-    qRegisterMetaType<QList<qreal>>();
 
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 

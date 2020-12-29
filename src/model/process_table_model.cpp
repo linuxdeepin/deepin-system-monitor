@@ -20,9 +20,7 @@
 
 #include "process_table_model.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -33,77 +31,78 @@
 #include <QStyleOption>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
+using namespace common::format;
 
 // model constructor
 ProcessTableModel::ProcessTableModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
     // update model's process list cache on process list updated signal
-    connect(smo->jobInstance(), &StatsCollector::processListUpdated,
-            this, &ProcessTableModel::updateProcessList);
+    //    connect(smo->jobInstance(), &StatsCollector::processListUpdated,
+    //            this, &ProcessTableModel::updateProcessList);
     // remove process entry from model's cache on process ended signal
-    connect(smo, &SystemMonitor::processEnded, this, &ProcessTableModel::removeProcessEntry);
+    //    connect(smo, &SystemMonitor::processEnded, this, &ProcessTableModel::removeProcessEntry);
     // update process's state in model's cache on process paused signal
-    connect(smo, &SystemMonitor::processPaused, this,
-            &ProcessTableModel::updateProcessState);
+    //    connect(smo, &SystemMonitor::processPaused, this,
+    //            &ProcessTableModel::updateProcessState);
     // update process's state in model's cache on process resumed signal
-    connect(smo, &SystemMonitor::processResumed, this,
-            &ProcessTableModel::updateProcessState);
+    //    connect(smo, &SystemMonitor::processResumed, this,
+    //            &ProcessTableModel::updateProcessState);
     // remove process entry from model's cache on process killed signal
-    connect(smo, &SystemMonitor::processKilled, this,
-            &ProcessTableModel::removeProcessEntry);
+    //    connect(smo, &SystemMonitor::processKilled, this,
+    //            &ProcessTableModel::removeProcessEntry);
     // update process's priority in model's cache on process priority changed signal
-    connect(smo, &SystemMonitor::processPriorityChanged, this,
-            &ProcessTableModel::updateProcessPriority);
+    //    connect(smo, &SystemMonitor::processPriorityChanged, this,
+    //            &ProcessTableModel::updateProcessPriority);
 }
 
 // update process model with the data provided by list
-void ProcessTableModel::updateProcessList(const QList<ProcessEntry> &list)
+void ProcessTableModel::updateProcessList(const ProcessSet &set)
 {
-    QHash<pid_t, ProcessEntry> hash;
-    int row;
+    //    QHash<pid_t, ProcessEntry> hash;
+    //    int row;
 
-    for (const auto &entry : list) {
-        if (m_processMap.contains(entry.getPID())) {
-            // update the entry if already exists
-            row = m_processMap.value(entry.getPID());
-            m_processList.replace(row, entry);
-            Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
-        } else {
-            // add the entry to cache otherwise
-            row = m_processList.size();
-            beginInsertRows({}, row, row);
-            m_processList << entry;
-            m_processMap[entry.getPID()] = row;
-            ++m_nr;
-            endInsertRows();
-        }
-        hash[entry.getPID()] = entry;
-    }
-    // remove the entry from cache if entry with same pid does not exist in the updated list
-    QMutableListIterator<ProcessEntry> it(m_processList);
-    while (it.hasNext()) {
-        it.next();
-        if (hash.contains(it.value().getPID())) {
-            continue;
-        } else {
-            pid_t pid = it.value().getPID();
-            row = m_processMap.value(pid);
-            beginRemoveRows({}, row, row);
-            it.remove();
-            m_processMap.remove(pid);
-            for (int &value : m_processMap) {
-                if (value > row)
-                    --value;
-            }
-            if (m_nr)
-                m_nr--;
-            endRemoveRows();
-        }
-    }
+    //    for (const auto &entry : list) {
+    //        if (m_processMap.contains(entry.getPID())) {
+    //            // update the entry if already exists
+    //            row = m_processMap.value(entry.getPID());
+    //            m_processList.replace(row, entry);
+    //            Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
+    //        } else {
+    //            // add the entry to cache otherwise
+    //            row = m_processList.size();
+    //            beginInsertRows({}, row, row);
+    //            m_processList << entry;
+    //            m_processMap[entry.getPID()] = row;
+    //            ++m_nr;
+    //            endInsertRows();
+    //        }
+    //        hash[entry.getPID()] = entry;
+    //    }
+    //    // remove the entry from cache if entry with same pid does not exist in the updated list
+    //    QMutableListIterator<ProcessEntry> it(m_processList);
+    //    while (it.hasNext()) {
+    //        it.next();
+    //        if (hash.contains(it.value().getPID())) {
+    //            continue;
+    //        } else {
+    //            pid_t pid = it.value().getPID();
+    //            row = m_processMap.value(pid);
+    //            beginRemoveRows({}, row, row);
+    //            it.remove();
+    //            m_processMap.remove(pid);
+    //            for (int &value : m_processMap) {
+    //                if (value > row)
+    //                    --value;
+    //            }
+    //            if (m_nr)
+    //                m_nr--;
+    //            endRemoveRows();
+    //        }
+    //    }
+    m_procList = set.getPIDList();
+    m_procSet = set;
 
     Q_EMIT modelUpdated();
 }
@@ -183,7 +182,12 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         return {};
 
     // validate index
-    if (index.row() < 0 || index.row() >= m_processList.size())
+    if (index.row() < 0 || index.row() >= m_procList.size())
+        return {};
+
+    int row = index.row();
+    auto proc = m_procSet.getProcessById(m_procList[row]);
+    if (!proc.isValid())
         return {};
 
     if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
@@ -191,8 +195,8 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case kProcessNameColumn: {
             // prepended tag based on process state
-            name = m_processList.at(index.row()).getDisplayName();
-            switch (m_processList.at(index.row()).getState()) {
+            name = proc.displayName();
+            switch (proc.state()) {
             case 'Z':
                 name = QString("(%1) %2")
                        .arg(DApplication::translate("Process.Table", "No response"))
@@ -208,38 +212,36 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         }
         case kProcessCPUColumn:
             // formated cpu percent utilization
-            return QString("%1%").arg(m_processList.at(index.row()).getCPU(), 0, 'f', 1);
+            return QString("%1%").arg(proc.cpu(), 0, 'f', 1);
         case kProcessUserColumn:
             // process's user name
-            return m_processList.at(index.row()).getUserName();
+            return proc.userName();
         case kProcessMemoryColumn:
             // formatted memory usage
-            return formatUnit(m_processList.at(index.row()).getMemory(), KB);
+            return formatUnit(proc.memory(), KB);
         case kProcessUploadColumn:
             // formatted upload speed text
-            return formatUnit(m_processList.at(index.row()).getSentBps(), B, 1, true);
+            return formatUnit(proc.sentBps(), B, 1, true);
         case kProcessDownloadColumn:
             // formated download speed text
-            return formatUnit(m_processList.at(index.row()).getRecvBps(), B, 1, true);
+            return formatUnit(proc.recvBps(), B, 1, true);
         case kProcessDiskReadColumn:
             // formatted disk read speed text
-            return QString("%1").arg(
-                       formatUnit(m_processList.at(index.row()).getReadBps(), B, 1, true));
+            return formatUnit(proc.readBps(), B, 1, true);
         case kProcessDiskWriteColumn:
             // formatted disk write speed text
-            return QString("%1").arg(
-                       formatUnit(m_processList.at(index.row()).getWriteBps(), B, 1, true));
+            return formatUnit(proc.writeBps(), B, 1, true);
         case kProcessPIDColumn: {
             // process pid text
-            return QString("%1").arg(m_processList.at(index.row()).getPID());
+            return QString("%1").arg(proc.pid());
         }
         case kProcessNiceColumn: {
             // process priority text
-            return QString("%1").arg(m_processList.at(index.row()).getPriority());
+            return QString("%1").arg(proc.priority());
         }
         case kProcessPriorityColumn: {
             // process priority enum text representation
-            return SystemMonitor::getPriorityName(m_processList.at(index.row()).getPriority());
+            return getPriorityName(proc.priority());
         }
         default:
             break;
@@ -248,7 +250,7 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case kProcessNameColumn:
             // process icon
-            return QVariant(m_processList.at(index.row()).getIcon());
+            return proc.icon();
         default:
             return {};
         }
@@ -256,23 +258,23 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         // get process's raw data
         switch (index.column()) {
         case kProcessNameColumn:
-            return QVariant(m_processList.at(index.row()).getName());
+            return proc.name();
         case kProcessMemoryColumn:
-            return QVariant(m_processList.at(index.row()).getMemory());
+            return proc.memory();
         case kProcessCPUColumn:
-            return QVariant(m_processList.at(index.row()).getCPU());
+            return proc.cpu();
         case kProcessUploadColumn:
-            return QVariant(m_processList.at(index.row()).getSentBps());
+            return proc.sentBps();
         case kProcessDownloadColumn:
-            return QVariant(m_processList.at(index.row()).getRecvBps());
+            return proc.recvBps();
         case kProcessPIDColumn:
-            return QVariant(m_processList.at(index.row()).getPID());
+            return proc.pid();
         case kProcessDiskReadColumn:
-            return QVariant(m_processList.at(index.row()).getReadBps());
+            return proc.readBps();
         case kProcessDiskWriteColumn:
-            return QVariant(m_processList.at(index.row()).getWriteBps());
+            return proc.writeBps();
         case kProcessNiceColumn:
-            return QVariant(m_processList.at(index.row()).getPriority());
+            return proc.priority();
         default:
             return {};
         }
@@ -280,9 +282,9 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         // get process's extra data
         switch (index.column()) {
         case kProcessUploadColumn:
-            return QVariant(m_processList.at(index.row()).getSentBytes());
+            return proc.sentBytes();
         case kProcessDownloadColumn:
-            return QVariant(m_processList.at(index.row()).getRecvBytes());
+            return proc.recvBytes();
         default:
             return {};
         }
@@ -292,7 +294,7 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 2) {
         // text color role based on process's state
         if (index.column() == kProcessNameColumn) {
-            char state = m_processList.at(index.row()).getState();
+            char state = proc.state();
             if (state == 'Z' || state == 'T') {
                 return QVariant(int(DPalette::TextWarning));
             }
@@ -317,7 +319,7 @@ void ProcessTableModel::fetchMore(const QModelIndex &parent)
         return;
 
     // fetch at most 100 items at a time
-    int left = m_processList.size() - m_nr;
+    int left = m_procList.size() - m_nr;
     int more = qMin(100, left);
 
     if (more <= 0)
@@ -333,36 +335,28 @@ bool ProcessTableModel::canFetchMore(const QModelIndex &parent) const
     if (parent.isValid())
         return false;
 
-    return (m_nr < m_processList.size());
-}
-
-// get process state with specified pid
-char ProcessTableModel::getProcessState(pid_t pid) const
-{
-    int row = m_processMap.value(pid);
-    return m_processList.at(row).getState();
+    return (m_nr < m_procList.size());
 }
 
 // get process priority enum type
-SystemMonitor::ProcessPriority ProcessTableModel::getProcessPriorityStub(pid_t pid) const
+ProcessPriority ProcessTableModel::getProcessPriority(pid_t pid) const
 {
-    int row = m_processMap.value(pid);
-    int prio = m_processList.at(row).getPriority();
-    return SystemMonitor::instance()->getProcessPriorityStub(prio);
+    if (m_procList.contains(pid)) {
+        int prio = m_procSet.getProcessById(pid).priority();
+        return getProcessPriorityStub(prio);
+    }
+
+    return kInvalidPriority;
 }
 
 // remove process entry from model with specified pid
-void ProcessTableModel::removeProcessEntry(pid_t pid)
+void ProcessTableModel::removeProcess(pid_t pid)
 {
-    if (m_processMap.contains(pid)) {
-        int row = m_processMap.value(pid);
+    if (m_procList.contains(pid)) {
+        int row = m_procList.indexOf(pid);
         beginRemoveRows({}, row, row);
-        m_processList.removeAt(row);
-        m_processMap.remove(pid);
-        for (int &value : m_processMap) {
-            if (value > row)
-                --value;
-        }
+        m_procList.removeAt(row);
+        m_procSet.removeProcess(pid);
         if (m_nr)
             m_nr--;
         endRemoveRows();
@@ -372,11 +366,9 @@ void ProcessTableModel::removeProcessEntry(pid_t pid)
 // update the state of the process entry with specified pid
 void ProcessTableModel::updateProcessState(pid_t pid, char state)
 {
-    if (m_processMap.contains(pid)) {
-        int row = m_processMap.value(pid);
-        ProcessEntry e = m_processList[row];
-        e.setState(state);
-        m_processList[row] = e;
+    if (m_procList.contains(pid)) {
+        int row = m_procList.indexOf(pid);
+        m_procSet.updateProcessState(pid, state);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
 }
@@ -384,11 +376,9 @@ void ProcessTableModel::updateProcessState(pid_t pid, char state)
 // update priority of the process entry with specified pid
 void ProcessTableModel::updateProcessPriority(pid_t pid, int priority)
 {
-    if (m_processMap.contains(pid)) {
-        int row = m_processMap.value(pid);
-        ProcessEntry e = m_processList[row];
-        e.setPriority(priority);
-        m_processList[row] = e;
+    if (m_procList.contains(pid)) {
+        int row = m_procList.indexOf(pid);
+        m_procSet.updateProcessPriority(pid, priority);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
 }

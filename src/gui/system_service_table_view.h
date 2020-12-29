@@ -22,6 +22,7 @@
 #define SYSTEM_SERVICE_TABLE_VIEW_H
 
 #include "base_table_view.h"
+#include "common/error_context.h"
 
 #include <DLabel>
 #include <DSpinner>
@@ -33,7 +34,6 @@ class SystemServiceTableModel;
 class SystemServiceEntry;
 class MainWindow;
 class ServiceManager;
-class ErrorContext;
 class QShortcut;
 
 /**

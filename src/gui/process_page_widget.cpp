@@ -26,14 +26,13 @@
 #include "xwin_kill_preview_widget.h"
 #include "monitor_compact_view.h"
 #include "monitor_expand_view.h"
-#include "process/system_monitor.h"
 #include "process_table_view.h"
-#include "process/stats_collector.h"
 #include "constant.h"
 #include "settings.h"
 #include "ui_common.h"
-#include "utils.h"
+#include "common/common.h"
 #include "common/perf.h"
+#include "process/process_set.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -52,6 +51,7 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
+using namespace core::process;
 
 // process context summary text
 static const char *kProcSummaryTemplateText =
@@ -236,28 +236,28 @@ void ProcessPageWidget::initUI()
     if (vindex.isValid())
         index = vindex.toInt();
     switch (index) {
-    case SystemMonitor::OnlyMe: {
+    case kFilterCurrentUser: {
         // show my process view
         m_myProcButton->setChecked(true);
-        m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
+        m_procTable->switchDisplayMode(kFilterCurrentUser);
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", myProcText));  // default text
     } break;
-    case SystemMonitor::AllProcess: {
+    case kNoFilter: {
         // show all process view
         m_allProcButton->setChecked(true);
-        m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
+        m_procTable->switchDisplayMode(kNoFilter);
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", allProcText));  // default text
     } break;
     default: {
         // show my application view by default
         m_appButton->setChecked(true);
-        m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
+        m_procTable->switchDisplayMode(kFilterApps);
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", appText));  // default text
     }
-    }
+    } // ::switch(index)
 }
 
 void ProcessPageWidget::initConnections()
@@ -275,8 +275,8 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(SystemMonitor::OnlyGUI);
-        m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyGUI);
+        m_procTable->switchDisplayMode(kFilterApps);
+        m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
         PERF_PRINT_END("POINT-04");
     });
     // show my process when my process button toggled
@@ -284,8 +284,8 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(SystemMonitor::OnlyMe);
-        m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::OnlyMe);
+        m_procTable->switchDisplayMode(kFilterCurrentUser);
+        m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
         PERF_PRINT_END("POINT-04");
     });
     // show all application when all application button toggled
@@ -293,16 +293,16 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(SystemMonitor::AllProcess);
-        m_settings->setOption(kSettingKeyProcessTabIndex, SystemMonitor::AllProcess);
+        m_procTable->switchDisplayMode(kNoFilter);
+        m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
         PERF_PRINT_END("POINT-04");
     });
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    // update process summary text when process summary info updated background
-    connect(smo->jobInstance(), &StatsCollector::processSummaryUpdated,
-            this, &ProcessPageWidget::updateProcessSummary);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
+    //    // update process summary text when process summary info updated background
+    //    connect(smo->jobInstance(), &StatsCollector::processSummaryUpdated,
+    //            this, &ProcessPageWidget::updateProcessSummary);
 
     auto *dAppHelper = DApplicationHelper::instance();
     // change text color dynamically on theme type change, if not do this way, text color wont synchronize with theme type
@@ -444,10 +444,10 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
-        auto *sysmon = SystemMonitor::instance();
-        if (sysmon) {
-            sysmon->killProcess(qvariant_cast<pid_t>(pid));
-        }
+        //        auto *sysmon = SystemMonitor::instance();
+        //        if (sysmon) {
+        //            sysmon->killProcess(qvariant_cast<pid_t>(pid));
+        //        }
     }
 }
 

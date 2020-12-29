@@ -21,12 +21,10 @@
 #include "main_window.h"
 
 #include "application.h"
-#include "process/system_monitor.h"
 #include "process_page_widget.h"
 #include "system_service_page_widget.h"
-#include "process/stats_collector.h"
 #include "toolbar.h"
-#include "utils.h"
+#include "common/common.h"
 #include "settings.h"
 #include "constant.h"
 #include "common/perf.h"
@@ -455,11 +453,10 @@ void MainWindow::showEvent(QShowEvent *event)
     // propogate show event to base handler first
     DMainWindow::showEvent(event);
 
-    // get monitor instace
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    // start monitoring background job
-    smo->startMonitorJob();
+    std::call_once(oflag, []() {
+        auto *msev = new MonitorStartEvent();
+        gApp->postEvent(gApp, msev);
 
-    PERF_PRINT_END("POINT-01");
+        PERF_PRINT_END("POINT-01");
+    });
 }

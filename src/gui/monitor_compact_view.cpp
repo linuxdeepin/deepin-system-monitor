@@ -24,7 +24,6 @@
 #include "compact_disk_monitor.h"
 #include "compact_memory_monitor.h"
 #include "compact_network_monitor.h"
-#include "process/system_monitor.h"
 
 #include <DApplicationHelper>
 #include <DPalette>

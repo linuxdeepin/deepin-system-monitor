@@ -32,12 +32,14 @@ const QString kSettingKeyWindowHeight = {"window_height"};
 const QString kSettingKeyProcessTabIndex = {"process_tab_index"};
 const QString kSettingKeyProcessAttributeDialogWidth = {"process_attribute_dialog_width"};
 const QString kSettingKeyProcessAttributeDialogHeight = {"process_attribute_dialog_height"};
+const QString kSettingKeyTimePeriod = {"time_period"};
 
 class QSettings;
 
 class Settings : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Settings)
 
 public:
     inline static Settings *instance()
@@ -63,7 +65,6 @@ public:
 private:
     explicit Settings(QObject *parent = nullptr);
     ~Settings();
-    Q_DISABLE_COPY(Settings)
 
     QSettings *m_settings;
     QString m_groupName;

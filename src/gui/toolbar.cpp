@@ -23,7 +23,7 @@
 #include "application.h"
 #include "main_window.h"
 #include "constant.h"
-#include "utils.h"
+#include "common/common.h"
 #include "common/perf.h"
 
 #include <DButtonBox>
@@ -35,7 +35,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 
-using namespace Utils;
+using namespace common;
 
 // constructor
 Toolbar::Toolbar(QWidget *parent)

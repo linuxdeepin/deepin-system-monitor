@@ -18,12 +18,10 @@
 
 #include "disk_monitor.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
 #include "smooth_curve_generator.h"
 #include "gui/ui_common.h"
 #include "constant.h"
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -35,14 +33,15 @@
 #include <QPainter>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
+using namespace common::format;
 
 DiskMonitor::DiskMonitor(QWidget *parent)
     : QWidget(parent),
       iconDarkImage(iconPathFromQrc("dark/icon_disk_dark.svg")),
       iconLightImage(iconPathFromQrc("light/icon_disk_light.svg"))
 {
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
     setFixedHeight(190);
 
@@ -61,10 +60,10 @@ DiskMonitor::DiskMonitor(QWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskMonitor::changeTheme);
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
-            this, &DiskMonitor::updateStatus);
+    //    auto *smo = SystemMonitor::instance();
+    //    Q_ASSERT(smo != nullptr);
+    //    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
+    //            this, &DiskMonitor::updateStatus);
 }
 
 DiskMonitor::~DiskMonitor()
