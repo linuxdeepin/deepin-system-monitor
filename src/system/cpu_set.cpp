@@ -344,15 +344,8 @@ void CPUSet::read_stats()
                 btime.tv_usec = 0;
 
                 // set sysinfo btime
-                auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-                if (thread) {
-                    auto *monitor = thread->threadJobInstance<SystemMonitor>();
-                    if (monitor) {
-                        auto ref = monitor->sysInfoRef().lock();
-                        if (ref)
-                            ref->set_btime(btime);
-                    } // ::if(monitor)
-                } // ::if(thread)
+                auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+                monitor->sysInfo()->set_btime(btime);
             } // ::if(nm == 1)
         } // ::if(btime)
     } // ::while(fgets)
@@ -376,8 +369,8 @@ void CPUSet::read_overall_info()
 
     while (fgets(line.data(), BUFSIZ, fp)) {
         if (line.startsWith("vendor")
-            || line.startsWith("vendor_id")
-            || line.startsWith("CPU implementer")) {
+                || line.startsWith("vendor_id")
+                || line.startsWith("CPU implementer")) {
             d->m_vendor = line.mid(line.indexOf(':')).trimmed();
 
         } else if (line.startsWith("model")

@@ -114,8 +114,7 @@ QIcon ProcessIcon::icon() const
     return icon;
 }
 
-struct icon_data_t *ProcessIcon::defaultIconData() const
-{
+struct icon_data_t *ProcessIcon::defaultIconData() const {
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
     iconData->proc_name = "[::default::]";
@@ -123,8 +122,7 @@ struct icon_data_t *ProcessIcon::defaultIconData() const
     return iconData;
 }
 
-struct icon_data_t *ProcessIcon::terminalIconData() const
-{
+struct icon_data_t *ProcessIcon::terminalIconData() const {
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
     iconData->proc_name = "[::terminal::]";
@@ -136,29 +134,21 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
 {
     std::shared_ptr<icon_data_t> iconDataPtr;
 
-    std::shared_ptr<DesktopEntryCache> desktopEntryCache {};
-    std::shared_ptr<GuiAppsCache> guiAppsCache {};
-    std::shared_ptr<TrayAppsCache> trayAppsCache {};
-    std::shared_ptr<WMWindowList> windowList {};
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            auto processDB = monitor->processDB().lock();
-            desktopEntryCache = processDB->desktopEntryCache().lock();
-            guiAppsCache = processDB->guiAppsCache().lock();
-            trayAppsCache = processDB->trayAppsCache().lock();
-            windowList = processDB->windowList().lock();
-        }
-    }
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    auto processDB = monitor->processDB();
+
+    WMWindowList *windowList = processDB->windowList();
+    GuiAppsCache *guiAppsCache = processDB->guiAppsCache();
+    TrayAppsCache *trayAppsCache = processDB->trayAppsCache();
+    DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
 
     Q_ASSERT(desktopEntryCache != nullptr);
     auto *iconCache = ProcessIconCache::instance();
     Q_ASSERT(iconCache != nullptr);
 
     if (desktopEntryCache
-        && (desktopEntryCache->contains(proc->name())
-            || desktopEntryCache->contains(proc->normalizedName()))) {
+            && (desktopEntryCache->contains(proc->name())
+                || desktopEntryCache->contains(proc->normalizedName()))) {
         DesktopEntry entry;
         entry = desktopEntryCache->entry(proc->name());
         if (entry && !entry->icon.isEmpty()) {
@@ -225,7 +215,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     }
 
     if ((guiAppsCache && guiAppsCache->isGuiApp(proc->pid()))
-        || (trayAppsCache && trayAppsCache->isTrayApp(proc->pid()))) {
+            || (trayAppsCache && trayAppsCache->isTrayApp(proc->pid()))) {
         if (windowList) {
             auto pixMap = windowList->getWindowIcon(proc->pid());
             if (pixMap.size() > 0) {

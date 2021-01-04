@@ -70,7 +70,7 @@ public slots:
 private:
     std::shared_ptr<MemStatModel> m_statModel;
 
-    MemInfo m_info;
+    MemInfo *m_info;
 };
 
 inline std::weak_ptr<MemStatModel> MemInfoModel::memStatModel() const
@@ -80,72 +80,72 @@ inline std::weak_ptr<MemStatModel> MemInfoModel::memStatModel() const
 
 inline qulonglong MemInfoModel::memTotal() const
 {
-    return m_info.memTotal();
+    return m_info->memTotal();
 }
 
 inline qulonglong MemInfoModel::memFree() const
 {
-    return m_info.memFree();
+    return m_info->memFree();
 }
 
 inline qulonglong MemInfoModel::memAvailable() const
 {
-    return m_info.memAvailable();
+    return m_info->memAvailable();
 }
 
 inline qulonglong MemInfoModel::buffers() const
 {
-    return m_info.buffers();
+    return m_info->buffers();
 }
 
 inline qulonglong MemInfoModel::cached() const
 {
-    return m_info.cached();
+    return m_info->cached();
 }
 
 inline qulonglong MemInfoModel::active() const
 {
-    return m_info.active();
+    return m_info->active();
 }
 
 inline qulonglong MemInfoModel::inactive() const
 {
-    return m_info.inactive();
+    return m_info->inactive();
 }
 
 inline qulonglong MemInfoModel::swapTotal() const
 {
-    return m_info.swapTotal();
+    return m_info->swapTotal();
 }
 
 inline qulonglong MemInfoModel::swapFree() const
 {
-    return m_info.swapFree();
+    return m_info->swapFree();
 }
 
 inline qulonglong MemInfoModel::swapCached() const
 {
-    return m_info.swapCached();
+    return m_info->swapCached();
 }
 
 inline qulonglong MemInfoModel::shmem() const
 {
-    return m_info.shmem();
+    return m_info->shmem();
 }
 
 inline qulonglong MemInfoModel::slab() const
 {
-    return m_info.slab();
+    return m_info->slab();
 }
 
 inline qulonglong MemInfoModel::dirty() const
 {
-    return m_info.dirty();
+    return m_info->dirty();
 }
 
 inline qulonglong MemInfoModel::mapped() const
 {
-    return m_info.mapped();
+    return m_info->mapped();
 }
 
 #endif // MEM_INFO_MODEL_H

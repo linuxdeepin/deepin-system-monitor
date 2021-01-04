@@ -49,15 +49,9 @@ public:
     }
     virtual ~BaseThread() {}
 
-    template<typename T>
-    T *threadJobInstance() const;
-
     bool hasLocalData(int key) const;
     void setLocalData(int key, QVariant value);
     QVariant localData(int key);
-
-protected:
-    virtual QObject *jobInstance() const = 0;
 
 private:
     QThreadStorage<QMap<int, QVariant>> m_localData;
@@ -84,12 +78,6 @@ inline QVariant BaseThread::localData(int key)
         return {};
 
     return m_localData.localData()[key];
-}
-
-template<typename T>
-inline T *BaseThread::threadJobInstance() const
-{
-    return static_cast<T *>(jobInstance());
 }
 
 } // namespace core

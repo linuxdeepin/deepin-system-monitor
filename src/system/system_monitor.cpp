@@ -41,78 +41,42 @@ SystemMonitor::SystemMonitor(QObject *parent)
     , m_deviceDB(new DeviceDB())
     , m_processDB(new ProcessDB(this))
     , m_windowList(new WMWindowList(this))
-    , m_eventLoop(new UEventLoop(this))
     , m_desktopEntryCacheUpdater(new DesktopEntryCacheUpdater(this))
-    , m_period(TimePeriod(TimePeriod::k1Min, timeval {2, 0})) /*TODO: change default setting from config*/
-    , m_desktopEntryCacheUpdateInterval(timeval {15, 0}) /*TODO: change default setting from config*/
 {
-    scheduleUpdate(m_eventLoop, &m_period.interval());
-    m_windowList->scheduleUpdate(m_eventLoop, &m_period.interval());
-    // TODO: schedule netlink sock fd event
 
-    // update desktop entry cache every 15 seconds
-    m_desktopEntryCacheUpdater->scheduleUpdate(m_eventLoop, &m_desktopEntryCacheUpdateInterval);
-
-    connect(this, &SystemMonitor::timePeriodChanged, [&](const TimePeriod &period) {
-        // update event interval
-        if (timercmp(&m_period.interval(), &period.interval(), !=)) {
-            scheduleUpdate(m_eventLoop, &m_period.interval());
-            m_windowList->scheduleUpdate(m_eventLoop, &m_period.interval());
-        }
-    });
 }
 
 SystemMonitor::~SystemMonitor()
 {
-    m_eventLoop->exit();
+    m_basictimer.stop();
+    delete m_sysInfo;
+    delete m_deviceDB;
+    delete m_processDB;
+    delete m_windowList;
+    delete m_desktopEntryCacheUpdater;
 }
 
 void SystemMonitor::startMonitorJob()
 {
-    m_eventLoop->run();
+    m_basictimer.stop();
+    m_basictimer.start(2000, Qt::VeryCoarseTimer, this);
 }
 
 void SystemMonitor::requestInterrupt()
 {
-    m_eventLoop->exit();
+    m_basictimer.stop();
 }
 
-void SystemMonitor::scheduleUpdate(UEventLoop *loop, const timeval *interval)
+void SystemMonitor::timerEvent(QTimerEvent *event)
 {
-    loop->installTimerEventFilter(kInfoStatUpdateTimer, true, UEvent::kEventPriorityNormal, interval, this);
-    loop->installTimerEventFilter(kProcessEventsTimer, true, UEvent::kEventPriorityLowest, interval, this);
-}
+    QObject::timerEvent(event);
+    if (event->timerId() == m_basictimer.timerId()) {
+        m_sysInfo->readSysInfo();
+        m_deviceDB->update();
+        m_processDB->update();
 
-// schedule update device & process info
-bool SystemMonitor::uevent(UEvent *event)
-{
-    if (!event)
-        return false;
-
-    if (event->type == UEvent::kEventTypeTimer) {
-        auto *ev = dynamic_cast<UTimerEvent *>(event);
-        if (ev->timerId == kInfoStatUpdateTimer) {
-            m_sysInfo->readSysInfo();
-            m_deviceDB->update();
-            m_processDB->update();
-
-            emit statInfoUpdated();
-            return true;
-        } else if (ev->timerId == kProcessEventsTimer) {
-            auto *evdsp = QAbstractEventDispatcher::instance(QThread::currentThread());
-            if (evdsp) {
-                evdsp->processEvents(QEventLoop::ExcludeUserInputEvents);
-                return true;
-            }
-        }
+        emit statInfoUpdated();
     }
-
-    return false;
-}
-
-void SystemMonitor::changeTimePeriod(const TimePeriod &period)
-{
-    setTimePeriod(period);
 }
 
 } // namespace system

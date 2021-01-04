@@ -34,6 +34,7 @@
 #include "common/error_context.h"
 #include "model/process_sort_filter_proxy_model.h"
 #include "model/process_table_model.h"
+#include "process/process_db.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -303,10 +304,7 @@ void ProcessTableView::search(const QString &text)
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
-    //    auto *sysmon = SystemMonitor::instance();
-    //    if (sysmon) {
-    //        sysmon->setFilterType(type);
-    //    }
+    ProcessDB::instance()->setFilterType(type);
 }
 
 // change process priority
@@ -495,7 +493,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setVeryHighPrioAction->setCheckable(true);
     setVeryHighPrioAction->setActionGroup(prioGroup);
     connect(setVeryHighPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(kVeryHighPriority); });
+    [ = ]() { changeProcessPriority(kVeryHighPriority); });
 
     // high priority action
     auto *setHighPrioAction =
@@ -503,7 +501,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setHighPrioAction->setCheckable(true);
     setHighPrioAction->setActionGroup(prioGroup);
     connect(setHighPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(kHighPriority); });
+    [ = ]() { changeProcessPriority(kHighPriority); });
 
     // normal priority action
     auto *setNormalPrioAction =
@@ -511,7 +509,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setNormalPrioAction->setCheckable(true);
     setNormalPrioAction->setActionGroup(prioGroup);
     connect(setNormalPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(kNormalPriority); });
+    [ = ]() { changeProcessPriority(kNormalPriority); });
 
     // low priority action
     auto *setLowPrioAction =
@@ -519,7 +517,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setLowPrioAction->setCheckable(true);
     setLowPrioAction->setActionGroup(prioGroup);
     connect(setLowPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(kLowPriority); });
+    [ = ]() { changeProcessPriority(kLowPriority); });
 
     // very low priority action
     auto *setVeryLowPrioAction =
@@ -527,7 +525,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     setVeryLowPrioAction->setCheckable(true);
     setVeryLowPrioAction->setActionGroup(prioGroup);
     connect(setVeryLowPrioAction, &QAction::triggered,
-            [=]() { changeProcessPriority(kVeryLowPriority); });
+    [ = ]() { changeProcessPriority(kVeryLowPriority); });
 
     // custom priority action
     auto *setCustomPrioAction =
@@ -555,7 +553,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
     // change menu item checkable state before context menu popup
-    connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
+    connect(m_contextMenu, &DMenu::aboutToShow, this, [ = ]() {
         // process running or not flag
 
         if (m_selectedPID.isValid()) {

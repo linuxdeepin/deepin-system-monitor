@@ -205,7 +205,7 @@ void WMWindowList::updateWindowListCache()
 
     auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
     if (thread) {
-        auto monitor = thread->threadJobInstance<SystemMonitor>();
+        auto monitor = thread->systemMonitorInstance();
         if (monitor) {
             //            // TODO: use qt signal or libevent custom fd event
         }

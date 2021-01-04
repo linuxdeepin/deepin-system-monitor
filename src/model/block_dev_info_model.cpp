@@ -38,13 +38,8 @@ BlockDevInfoModel::BlockDevInfoModel(const TimePeriod &period, QObject *parent)
     , m_infoDB {}
     , m_nr {0}
 {
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            //        connect(monitor.get(), &SystemMonitor::statInfoUpdated, this, &BlockDevInfoModel::updateModel);
-        } // ::if(monitor)
-    } // ::if(thread)
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &BlockDevInfoModel::updateModel);
 }
 
 QVariant BlockDevInfoModel::summaryStat(enum StatRole role) const
@@ -256,55 +251,44 @@ bool BlockDevInfoModel::canFetchMore(const QModelIndex &parent) const
 
 void BlockDevInfoModel::updateModel()
 {
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            auto devDB = monitor->deviceDB().lock();
-            if (devDB) {
-                auto blkDevDB = devDB->blockDeviceInfoDB().lock();
-                if (blkDevDB) {
-                    beginResetModel();
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    beginResetModel();
 
-                    m_infoDB = blkDevDB->deviceList();
+    m_infoDB = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
 
-                    struct IO sumIO {
-                    };
+    struct IO sumIO {
+    };
 
-                    // updata stat data
-                    for (auto &info : m_infoDB) {
-                        if (!m_statModelDB.contains(info.deviceName())
-                            || !m_statModelDB[info.deviceName()]) {
-                            std::unique_ptr<BlockDevStatModel> tmp(new BlockDevStatModel(m_period, this));
-                            m_statModelDB[info.deviceName()] = std::move(tmp);
-                        }
+    // updata stat data
+    for (auto &info : m_infoDB) {
+        if (!m_statModelDB.contains(info.deviceName())
+                || !m_statModelDB[info.deviceName()]) {
+            std::unique_ptr<BlockDevStatModel> tmp(new BlockDevStatModel(m_period, this));
+            m_statModelDB[info.deviceName()] = std::move(tmp);
+        }
 
-                        auto *statModel = m_statModelDB[info.deviceName()].get();
-                        if (statModel->m_ioSampleDB) {
-                            struct IO io = {info.bytesRead(), info.bytesWritten()};
-                            statModel->m_ioSampleDB->addSample(new IOSampleFrame(monitor->sysInfo().uptime(), io));
-                            sumIO += io;
-                        }
-                        if (statModel->m_iopsSampleDB) {
-                            auto pair = statModel->m_ioSampleDB->recentSamplePair();
-                            struct IOPS iops = IOSampleFrame::iops(pair.first, pair.second);
-                            statModel->m_iopsSampleDB->addSample(new IOPSSampleFrame(iops));
-                        }
-                    } // ::for
+        auto *statModel = m_statModelDB[info.deviceName()].get();
+        if (statModel->m_ioSampleDB) {
+            struct IO io = {info.bytesRead(), info.bytesWritten()};
+            statModel->m_ioSampleDB->addSample(new IOSampleFrame(monitor->sysInfo()->uptime(), io));
+            sumIO += io;
+        }
+        if (statModel->m_iopsSampleDB) {
+            auto pair = statModel->m_ioSampleDB->recentSamplePair();
+            struct IOPS iops = IOSampleFrame::iops(pair.first, pair.second);
+            statModel->m_iopsSampleDB->addSample(new IOPSSampleFrame(iops));
+        }
+    } // ::for
 
-                    // sum io & avg iops
-                    if (m_sumIO) {
-                        m_sumIO->addSample(new IOSampleFrame(monitor->sysInfo().uptime(), sumIO));
-                    }
-                    if (m_avgIOPS) {
-                        auto pair = m_sumIO->recentSamplePair();
-                        struct IOPS iops = IOSampleFrame::iops(pair.first, pair.second);
-                        m_avgIOPS->addSample(new IOPSSampleFrame(iops));
-                    }
+    // sum io & avg iops
+    if (m_sumIO) {
+        m_sumIO->addSample(new IOSampleFrame(monitor->sysInfo()->uptime(), sumIO));
+    }
+    if (m_avgIOPS) {
+        auto pair = m_sumIO->recentSamplePair();
+        struct IOPS iops = IOSampleFrame::iops(pair.first, pair.second);
+        m_avgIOPS->addSample(new IOPSSampleFrame(iops));
+    }
 
-                    endResetModel();
-                } // ::blkDevDB
-            } // ::if(devDB)
-        } // ::if(monitor)
-    } // ::if(thread)
+    endResetModel();
 }

@@ -32,36 +32,28 @@ namespace core {
 namespace system {
 
 DeviceDB::DeviceDB()
-    : m_blkDevInfoDB(new BlockDeviceInfoDB())
-    , m_netifInfoDB(new NetifInfoDB())
-    , m_memInfo {}
-    , m_cpuSet(/*TODO*/)
 {
+    m_cpuSet = new CPUSet();
+    m_memInfo = new MemInfo();
+    m_netifInfoDB = new NetifInfoDB();
+    m_blkDevInfoDB = new BlockDeviceInfoDB();
 }
 
 DeviceDB::~DeviceDB()
 {
+    delete m_memInfo;
+    delete m_cpuSet;
+    delete m_blkDevInfoDB;
+    delete m_netifInfoDB;
 }
 
-// TODO:
 void DeviceDB::update()
 {
-    MemInfo mem;
-    mem.readMemInfo();
-
-    auto blkDevDB = std::make_shared<BlockDeviceInfoDB>();
-    if (blkDevDB)
-        blkDevDB->update();
-
-    auto netifDB = std::make_shared<NetifInfoDB>();
-    if (netifDB)
-        netifDB->update();
-
     QWriteLocker lock(&m_rwlock);
-    // update info
-    m_memInfo = mem;
-    m_blkDevInfoDB = blkDevDB;
-    m_netifInfoDB = netifDB;
+    m_cpuSet->update();
+    m_memInfo->readMemInfo();
+    m_netifInfoDB->update();
+    m_blkDevInfoDB->update();
 }
 
 } // namespace system

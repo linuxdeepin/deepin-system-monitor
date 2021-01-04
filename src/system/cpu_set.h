@@ -60,7 +60,7 @@ public:
     const CPUStat statDB(const QByteArray &cpu) const;
     const CPUUsage usageDB(const QByteArray &cpu) const;
 
-protected:
+public:
     void update();
 
 private:

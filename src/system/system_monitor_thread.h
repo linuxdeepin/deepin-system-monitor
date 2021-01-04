@@ -21,6 +21,7 @@
 #define SYSTEM_MONITOR_THREAD_H
 
 #include "common/base_thread.h"
+#include "system/system_monitor.h"
 
 #include <QReadWriteLock>
 
@@ -43,8 +44,8 @@ public:
 
     int threadKey() const final;
 
-protected:
-    QObject *jobInstance() const;
+public:
+    SystemMonitor *systemMonitorInstance() const;
 
 private:
     SystemMonitor *m_monitor;

@@ -26,6 +26,7 @@
 
 #include <QObject>
 #include <QReadWriteLock>
+#include <QBasicTimer>
 
 #include <memory>
 
@@ -62,9 +63,11 @@ class DeviceDB;
 class SysInfo;
 
 class SystemMonitor : public QObject
-    , public UEventFilter
 {
     Q_OBJECT
+
+signals:
+    void statInfoUpdated();
 
 public:
     enum {
@@ -75,97 +78,48 @@ public:
     explicit SystemMonitor(QObject *parent = nullptr);
     virtual ~SystemMonitor();
 
-    const TimePeriod &timePeriod() const;
-    void setTimePeriod(const TimePeriod &period);
-    void setDesktopEntryCacheUpdateInterval(const struct timeval &tv);
+    SysInfo *sysInfo();
+    DeviceDB *deviceDB();
+    ProcessDB *processDB();
+    WMWindowList *windowList();
 
-    std::weak_ptr<DeviceDB> deviceDB();
-    std::weak_ptr<ProcessDB> processDB();
-    std::weak_ptr<WMWindowList> windowList();
-    SysInfo sysInfo();
-
-    UEventLoop *eventLoop() const;
     void startMonitorJob();
     // atomic operation, can be called from main thread (gui) when exit requested
     void requestInterrupt();
     void scheduleUpdate(UEventLoop *loop, const struct timeval *interval);
-    bool uevent(UEvent *event);
 
-signals:
-    void timePeriodChanged(const TimePeriod &period);
-    void statInfoUpdated();
-
-public slots:
-    void changeTimePeriod(const TimePeriod &period);
+protected:
+    void timerEvent(QTimerEvent *event);
 
 private:
-    std::weak_ptr<SysInfo> sysInfoRef();
+    SysInfo      *m_sysInfo;
+    DeviceDB     *m_deviceDB;
+    ProcessDB    *m_processDB;
+    WMWindowList *m_windowList;
 
-    mutable QReadWriteLock m_rwlock;
-    std::shared_ptr<SysInfo> m_sysInfo;
-    std::shared_ptr<DeviceDB> m_deviceDB;
-    std::shared_ptr<ProcessDB> m_processDB;
-    std::shared_ptr<WMWindowList> m_windowList;
-
-    UEventLoop *m_eventLoop;
     DesktopEntryCacheUpdater *m_desktopEntryCacheUpdater;
 
-    TimePeriod m_period;
-    struct timeval m_desktopEntryCacheUpdateInterval;
-
     friend class CPUSet;
+
+    QBasicTimer m_basictimer;
 };
 
-inline const TimePeriod &SystemMonitor::timePeriod() const
+inline DeviceDB *SystemMonitor::deviceDB()
 {
-    return m_period;
-}
-
-inline void SystemMonitor::setTimePeriod(const TimePeriod &period)
-{
-    if (m_period != period) {
-        m_period = period;
-        // queued connections are not supported, since libevent's eventloop will run forever before quit,
-        // so slots in this thread will have no chance being called by Qt's eventloop by any means
-        emit timePeriodChanged(m_period);
-    }
-}
-
-inline void SystemMonitor::setDesktopEntryCacheUpdateInterval(const timeval &tv)
-{
-    m_desktopEntryCacheUpdateInterval = tv;
-}
-
-inline std::weak_ptr<DeviceDB> SystemMonitor::deviceDB()
-{
-    QReadLocker lock(&m_rwlock);
     return m_deviceDB;
 }
 
-inline std::weak_ptr<ProcessDB> SystemMonitor::processDB()
+inline ProcessDB *SystemMonitor::processDB()
 {
-    QReadLocker lock(&m_rwlock);
     return m_processDB;
 }
 
-inline std::weak_ptr<WMWindowList> SystemMonitor::windowList()
+inline WMWindowList *SystemMonitor::windowList()
 {
-    QReadLocker lock(&m_rwlock);
     return m_windowList;
 }
 
-inline SysInfo SystemMonitor::sysInfo()
-{
-    QReadLocker lock(&m_rwlock);
-    return *m_sysInfo;
-}
-
-inline UEventLoop *SystemMonitor::eventLoop() const
-{
-    return m_eventLoop;
-}
-
-inline std::weak_ptr<SysInfo> SystemMonitor::sysInfoRef()
+inline SysInfo *SystemMonitor::sysInfo()
 {
     return m_sysInfo;
 }

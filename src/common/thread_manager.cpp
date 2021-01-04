@@ -25,8 +25,11 @@
 namespace common {
 namespace core {
 
-std::atomic<ThreadManager *> ThreadManager::m_instance;
-std::mutex ThreadManager::m_mutex;
+Q_GLOBAL_STATIC(ThreadManager, theInstance)
+ThreadManager *ThreadManager::instance()
+{
+    return theInstance();
+}
 
 void ThreadManager::attach(BaseThread *thread)
 {
@@ -36,9 +39,6 @@ void ThreadManager::attach(BaseThread *thread)
         return;
 
     m_threadDB[thread->threadKey()] = thread;
-    connect(thread, &QThread::finished, this, [=]() {
-        detach(thread->threadKey());
-    });
 }
 
 void ThreadManager::detach(int key)
@@ -50,9 +50,12 @@ void ThreadManager::detach(int key)
 ThreadManager::ThreadManager(QObject *parent)
     : QObject(parent)
 {
+
 }
+
 ThreadManager::~ThreadManager()
 {
+
 }
 
 } // namespace core

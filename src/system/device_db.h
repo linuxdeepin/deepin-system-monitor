@@ -48,12 +48,12 @@ public:
     explicit DeviceDB();
     ~DeviceDB();
 
-    static std::shared_ptr<DeviceDB> instance();
+    static DeviceDB *instance();
 
-    std::weak_ptr<BlockDeviceInfoDB> blockDeviceInfoDB();
-    std::weak_ptr<NetifInfoDB> netifInfoDB();
-    MemInfo memInfo();
-    CPUSet cpuSet();
+    CPUSet *cpuSet();
+    MemInfo *memInfo();
+    NetifInfoDB *netifInfoDB();
+    BlockDeviceInfoDB *blockDeviceInfoDB();
 
     void update();
 
@@ -61,44 +61,38 @@ private:
     // TODO: netlink
 
     mutable QReadWriteLock m_rwlock;
-    std::shared_ptr<BlockDeviceInfoDB> m_blkDevInfoDB;
-    std::shared_ptr<NetifInfoDB> m_netifInfoDB;
-    MemInfo m_memInfo;
-    CPUSet m_cpuSet;
+
+    CPUSet *m_cpuSet;
+    MemInfo *m_memInfo;
+    NetifInfoDB *m_netifInfoDB;
+    BlockDeviceInfoDB *m_blkDevInfoDB;
 };
 
-inline std::shared_ptr<DeviceDB> DeviceDB::instance()
+inline DeviceDB *DeviceDB::instance()
 {
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            return monitor->deviceDB().lock();
-        }
-    }
-
-    return {};
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    return monitor->deviceDB();
 }
 
-inline std::weak_ptr<BlockDeviceInfoDB> DeviceDB::blockDeviceInfoDB()
+inline BlockDeviceInfoDB *DeviceDB::blockDeviceInfoDB()
 {
     QReadLocker lock(&m_rwlock);
     return m_blkDevInfoDB;
 }
 
-inline std::weak_ptr<NetifInfoDB> DeviceDB::netifInfoDB()
+inline NetifInfoDB *DeviceDB::netifInfoDB()
 {
     QReadLocker lock(&m_rwlock);
     return m_netifInfoDB;
 }
 
-inline MemInfo DeviceDB::memInfo()
+inline MemInfo *DeviceDB::memInfo()
 {
     QReadLocker lock(&m_rwlock);
     return m_memInfo;
 }
 
-inline CPUSet DeviceDB::cpuSet()
+inline CPUSet *DeviceDB::cpuSet()
 {
     QReadLocker lock(&m_rwlock);
     return m_cpuSet;

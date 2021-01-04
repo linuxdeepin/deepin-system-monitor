@@ -55,32 +55,14 @@ public slots:
     void attach(BaseThread *thread);
     void detach(int key);
 
-private:
+public:
     explicit ThreadManager(QObject *parent = nullptr);
     virtual ~ThreadManager();
 
 private:
     mutable QReadWriteLock m_rwlock;
     QMap<int, BaseThread *> m_threadDB;
-
-    static std::atomic<ThreadManager *> m_instance;
-    static std::mutex m_mutex;
 };
-
-inline ThreadManager *ThreadManager::instance()
-{
-    ThreadManager *sin = m_instance.load();
-    if (!sin) {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        sin = m_instance.load();
-        if (!sin) {
-            sin = new ThreadManager();
-            connect(gApp, &QApplication::aboutToQuit, sin, &QObject::deleteLater);
-            m_instance.store(sin);
-        }
-    }
-    return sin;
-}
 
 template<typename T>
 inline T *ThreadManager::thread(int key)

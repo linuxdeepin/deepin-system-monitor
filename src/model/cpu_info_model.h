@@ -111,8 +111,8 @@ private:
 
     std::shared_ptr<CPUListModel> m_cpuListModel;
 
-    SysInfo m_sysInfo;
-    CPUSet m_cpuSet;
+    SysInfo *m_sysInfo;
+    CPUSet *m_cpuSet;
 };
 
 inline std::weak_ptr<CPUListModel> CPUInfoModel::cpuListModel() const
@@ -122,67 +122,67 @@ inline std::weak_ptr<CPUListModel> CPUInfoModel::cpuListModel() const
 
 inline QString CPUInfoModel::cpuFreq() const
 {
-    return formatHz(m_cpuSet.curfreq());
+    return formatHz(m_cpuSet->curfreq());
 }
 
 inline QString CPUInfoModel::maxFreq() const
 {
-    return formatHz(m_cpuSet.maxfreq());
+    return formatHz(m_cpuSet->maxfreq());
 }
 
 inline QString CPUInfoModel::minFreq() const
 {
-    return formatHz(m_cpuSet.minfreq());
+    return formatHz(m_cpuSet->minfreq());
 }
 
 inline QString CPUInfoModel::model() const
 {
-    return m_cpuSet.cpuModel();
+    return m_cpuSet->cpuModel();
 }
 
 inline QString CPUInfoModel::vendor() const
 {
-    return m_cpuSet.cpuVendor();
+    return m_cpuSet->cpuVendor();
 }
 
 inline uint CPUInfoModel::nCores() const
 {
-    return m_cpuSet.cores();
+    return m_cpuSet->cores();
 }
 
 inline uint CPUInfoModel::nSockets() const
 {
-    return m_cpuSet.sockets();
+    return m_cpuSet->sockets();
 }
 
 inline uint CPUInfoModel::nProcessors() const
 {
-    return m_cpuSet.processors();
+    return m_cpuSet->processors();
 }
 
 inline QString CPUInfoModel::virtualization() const
 {
-    return m_cpuSet.virtualization();
+    return m_cpuSet->virtualization();
 }
 
 inline QString CPUInfoModel::l1iCache() const
 {
-    return formatUnit({m_cpuSet.l1iCache()}, B, 0);
+    return formatUnit({m_cpuSet->l1iCache()}, B, 0);
 }
 
 inline QString CPUInfoModel::l1dCache() const
 {
-    return formatUnit({m_cpuSet.l1dCache()}, B, 0);
+    return formatUnit({m_cpuSet->l1dCache()}, B, 0);
 }
 
 inline QString CPUInfoModel::l2Cache() const
 {
-    return formatUnit({m_cpuSet.l2Cache()}, B, 0);
+    return formatUnit({m_cpuSet->l2Cache()}, B, 0);
 }
 
 inline QString CPUInfoModel::l3Cache() const
 {
-    return formatUnit({m_cpuSet.l3Cache()}, B, 0);
+    return formatUnit({m_cpuSet->l3Cache()}, B, 0);
 }
 
 inline QString CPUInfoModel::utilization() const
@@ -194,38 +194,38 @@ inline QString CPUInfoModel::utilization() const
 inline QString CPUInfoModel::loadavg() const
 {
     QString buffer {};
-    buffer << *m_sysInfo.loadAvg();
+    buffer << *m_sysInfo->loadAvg();
     return buffer;
 }
 
 inline uint CPUInfoModel::nProcesses() const
 {
-    return m_sysInfo.nprocesses();
+    return m_sysInfo->nprocesses();
 }
 
 inline uint CPUInfoModel::nThreads() const
 {
-    return m_sysInfo.nthreads();
+    return m_sysInfo->nthreads();
 }
 
 inline uint CPUInfoModel::nFileDescriptors() const
 {
-    return m_sysInfo.nfds();
+    return m_sysInfo->nfds();
 }
 
 inline QString CPUInfoModel::hostname() const
 {
-    return m_sysInfo.hostname();
+    return m_sysInfo->hostname();
 }
 
 inline QString CPUInfoModel::osType() const
 {
-    return m_sysInfo.arch();
+    return m_sysInfo->arch();
 }
 
 inline QString CPUInfoModel::osVersion() const
 {
-    return m_sysInfo.version();
+    return m_sysInfo->version();
 }
 
 #endif // CPU_INFO_MODEL_H

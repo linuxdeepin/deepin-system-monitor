@@ -65,11 +65,11 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     m_animation->setEasingCurve(QEasingCurve::OutQuad);
     m_animation->setStartValue(0);
     m_animation->setEndValue(1.0);
-    connect(m_animation, &QVariantAnimation::valueChanged, this, [=]() { update(); });
+    connect(m_animation, &QVariantAnimation::valueChanged, this, [ = ]() { update(); });
 
     TimePeriod period(TimePeriod::k1Min, {2, 0});
     m_model = new MemInfoModel(period, this);
-    connect(m_model, &MemInfoModel::modelUpdated, this, [=]() {
+    connect(m_model, &MemInfoModel::modelUpdated, this, [ = ]() {
         m_animation->start();
     });
 
@@ -197,8 +197,8 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                           .arg(DApplication::translate("Process.Graph.View", "Memory"))
                           .arg(QString::number(memPercent * 100, 'f', 1));
     QString memoryContent = QString("%1 / %2")
-                                .arg(curUsedMemIndex.data().toString())
-                                .arg(curTotalMemIndex.data().toString());
+                            .arg(curUsedMemIndex.data().toString())
+                            .arg(curTotalMemIndex.data().toString());
     QString swapTitle = "";
     QString swapContent = "";
     if (m_model->swapTotal() == 0) {
@@ -211,8 +211,8 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1 / %2")
-                          .arg(curUsedSwapIndex.data().toString())
-                          .arg(curTotalSwapIndex.data().toString());
+                      .arg(curUsedSwapIndex.data().toString())
+                      .arg(curTotalSwapIndex.data().toString());
     }
 
     QFontMetrics fmMem(m_contentFont);

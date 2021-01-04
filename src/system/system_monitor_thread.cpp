@@ -20,10 +20,12 @@
 #include "system_monitor_thread.h"
 
 #include "system/system_monitor.h"
+#include "process/process_db.h"
 
 #include <QReadLocker>
 #include <QWriteLocker>
 #include <QDebug>
+#include <QTimer>
 
 namespace core {
 namespace system {
@@ -44,7 +46,7 @@ SystemMonitorThread::~SystemMonitorThread()
     wait();
 }
 
-QObject *SystemMonitorThread::jobInstance() const
+SystemMonitor *SystemMonitorThread::systemMonitorInstance() const
 {
     return m_monitor;
 }

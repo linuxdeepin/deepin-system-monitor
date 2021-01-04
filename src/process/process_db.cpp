@@ -44,14 +44,23 @@ namespace process {
 ProcessDB::ProcessDB(QObject *parent)
     : QObject(parent)
 {
-    m_windowList = std::make_shared<WMWindowList>();
-    m_guiAppsCache = std::make_shared<GuiAppsCache>();
-    m_trayAppsCache = std::make_shared<TrayAppsCache>();
-    m_desktopEntryCache = std::make_shared<DesktopEntryCache>();
+    m_windowList = new WMWindowList();
+    m_guiAppsCache = new GuiAppsCache();
+    m_trayAppsCache = new TrayAppsCache();
+    m_desktopEntryCache = new DesktopEntryCache();
+}
+
+ProcessDB::~ProcessDB()
+{
+    delete m_windowList;
+    delete m_guiAppsCache;
+    delete m_trayAppsCache;
+    delete m_desktopEntryCache;
 }
 
 void ProcessDB::setFilterType(FilterType filter)
 {
+
 }
 
 void ProcessDB::endProcess(pid_t pid)

@@ -90,22 +90,13 @@ QString ProcessName::normalizeProcessName(const QString &source, const QByteArra
 
 QString ProcessName::getDisplayName(Process *proc)
 {
-    std::shared_ptr<TrayAppsCache> trayAppsCache;
-    std::shared_ptr<GuiAppsCache> guiAppsCache;
-    std::shared_ptr<DesktopEntryCache> desktopEntryCache;
-    std::shared_ptr<WMWindowList> windowList;
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    auto processDB = monitor->processDB();
 
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            auto processDB = monitor->processDB().lock();
-            guiAppsCache = processDB->guiAppsCache().lock();
-            trayAppsCache = processDB->trayAppsCache().lock();
-            desktopEntryCache = processDB->desktopEntryCache().lock();
-            windowList = processDB->windowList().lock();
-        } // ::monitor
-    } // ::monitorThreadPtr
+    WMWindowList *windowList = processDB->windowList();
+    GuiAppsCache *guiAppsCache = processDB->guiAppsCache();
+    TrayAppsCache *trayAppsCache = processDB->trayAppsCache();
+    DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
 
 #ifdef BUILD_WAYLAND
 
@@ -148,8 +139,8 @@ QString ProcessName::getDisplayName(Process *proc)
 
                         // check if commandline ends with file name, if so prepend it before process name
                         if (url.isValid()
-                            && (url.isLocalFile() || !url.host().isEmpty())
-                            && !title.contains(rname)) {
+                                && (url.isLocalFile() || !url.host().isEmpty())
+                                && !title.contains(rname)) {
                             return QString("%1 - %2").arg(rname).arg(title);
 
                         } else {

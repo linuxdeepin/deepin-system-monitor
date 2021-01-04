@@ -86,16 +86,8 @@ Process::~Process()
 
 time_t Process::startTime() const
 {
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            auto sysInfo = monitor->sysInfo();
-            return sysInfo.btime().tv_sec + time_t(d->start_time / HZ);
-        }
-    }
-
-    return 0;
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    return monitor->sysInfo()->btime().tv_sec + time_t(d->start_time / HZ);
 }
 
 void Process::readProcessInfo()
@@ -163,10 +155,10 @@ bool Process::readStat()
 
     //****************3**4**5***********************************14***15**
     rc = sscanf(pos, "%c %d %d %*d %*d %*d %*u %*u %*u %*u %*u %llu %llu"
-                     //*16***17******19*20******22************************************
-                     " %lld %lld %*d %d %u %*u %llu %*u %*u %*u %*u %*u %*u %*u %*u"
-                     //********************************39*40*41******43***44**********
-                     " %*u %*u %*u %*u %*u %*u %*u %*u %u %u %u %*u %llu %lld\n",
+                //*16***17******19*20******22************************************
+                " %lld %lld %*d %d %u %*u %llu %*u %*u %*u %*u %*u %*u %*u %*u"
+                //********************************39*40*41******43***44**********
+                " %*u %*u %*u %*u %*u %*u %*u %*u %u %u %u %*u %llu %lld\n",
                 &d->state, // 3
                 &d->ppid, // 4
                 &d->pgid, // 5
@@ -485,7 +477,8 @@ QString getPriorityName(int prio)
         {kLowPriority, QApplication::translate("Process.Priority", "Low")},
         {kVeryLowPriority, QApplication::translate("Process.Priority", "Very low")},
         {kCustomPriority, QApplication::translate("Process.Priority", "Custom")},
-        {kInvalidPriority, QApplication::translate("Process.Priority", "Invalid")}};
+        {kInvalidPriority, QApplication::translate("Process.Priority", "Invalid")}
+    };
 
     ProcessPriority p = kInvalidPriority;
     if (prio == kVeryHighPriority || prio == kHighPriority || prio == kNormalPriority || prio == kLowPriority || prio == kVeryLowPriority) {

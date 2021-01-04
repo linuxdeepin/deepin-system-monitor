@@ -28,15 +28,11 @@
 MemInfoModel::MemInfoModel(const TimePeriod &period, QObject *parent)
     : QObject(parent)
     , m_statModel(new MemStatModel(period, this))
-    , m_info {}
 {
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            connect(monitor, &SystemMonitor::statInfoUpdated, this, &MemInfoModel::updateModel);
-        } // ::if(monitor)
-    } // ::if(thread)
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    m_info = monitor->deviceDB()->memInfo();
+
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &MemInfoModel::updateModel);
 }
 
 MemInfoModel::~MemInfoModel()
@@ -45,25 +41,16 @@ MemInfoModel::~MemInfoModel()
 
 void MemInfoModel::updateModel()
 {
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            auto devDB = monitor->deviceDB().lock();
-            if (devDB) {
-                m_info = devDB->memInfo();
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
 
-                if (m_statModel && m_statModel->m_stat) {
-                    MemStat stat = std::make_shared<struct mem_stat_t>();
-                    stat->memUsed = m_info.memTotal() - m_info.memAvailable();
-                    stat->memTotal = m_info.memTotal();
-                    stat->swapUsed = m_info.swapTotal() - m_info.swapFree();
-                    stat->swapTotal = m_info.swapTotal();
-                    m_statModel->m_stat->addSample(new MemStatSampleFrame(monitor->sysInfo().uptime(), stat));
-                }
+    if (m_statModel->m_stat) {
+        MemStat stat = std::make_shared<struct mem_stat_t>();
+        stat->memUsed = m_info->memTotal() - m_info->memAvailable();
+        stat->memTotal = m_info->memTotal();
+        stat->swapUsed = m_info->swapTotal() - m_info->swapFree();
+        stat->swapTotal = m_info->swapTotal();
+        m_statModel->m_stat->addSample(new MemStatSampleFrame(monitor->sysInfo()->uptime(), stat));
+    }
 
-                emit modelUpdated();
-            } // ::if(devDB)
-        } // ::if(monitor)
-    } // ::if(thread)
+    emit modelUpdated();
 } // ::updateModel

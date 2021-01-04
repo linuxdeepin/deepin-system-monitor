@@ -56,14 +56,14 @@ class ProcessDB : public QObject
 
 public:
     explicit ProcessDB(QObject *parent = nullptr);
-    virtual ~ProcessDB() = default;
+    virtual ~ProcessDB();
 
-    static std::shared_ptr<ProcessDB> instance();
+    static ProcessDB *instance();
 
-    std::weak_ptr<GuiAppsCache> guiAppsCache();
-    std::weak_ptr<TrayAppsCache> trayAppsCache();
-    std::weak_ptr<WMWindowList> windowList();
-    std::weak_ptr<DesktopEntryCache> desktopEntryCache();
+    WMWindowList *windowList();
+    GuiAppsCache *guiAppsCache();
+    TrayAppsCache *trayAppsCache();
+    DesktopEntryCache *desktopEntryCache();
 
     static bool isCurrentProcess(pid_t pid);
 
@@ -95,46 +95,39 @@ private:
 private:
     QReadWriteLock m_rwlock;
 
-    std::shared_ptr<GuiAppsCache> m_guiAppsCache;
-    std::shared_ptr<TrayAppsCache> m_trayAppsCache;
-    std::shared_ptr<WMWindowList> m_windowList;
-    std::shared_ptr<DesktopEntryCache> m_desktopEntryCache;
+    WMWindowList *m_windowList;
+    GuiAppsCache *m_guiAppsCache;
+    TrayAppsCache *m_trayAppsCache;
+    DesktopEntryCache *m_desktopEntryCache;
 
-    std::shared_ptr<ProcessSet> m_procSet;
+    ProcessSet *m_procSet;
 };
 
-inline std::shared_ptr<ProcessDB> ProcessDB::instance()
+inline ProcessDB *ProcessDB::instance()
 {
     auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto *monitor = thread->threadJobInstance<SystemMonitor>();
-        if (monitor) {
-            return monitor->processDB().lock();
-        }
-    }
-
-    return {};
+    return thread->systemMonitorInstance()->processDB();
 }
 
-inline std::weak_ptr<GuiAppsCache> ProcessDB::guiAppsCache()
+inline GuiAppsCache *ProcessDB::guiAppsCache()
 {
     QReadLocker lock(&m_rwlock);
     return m_guiAppsCache;
 }
 
-inline std::weak_ptr<TrayAppsCache> ProcessDB::trayAppsCache()
+inline TrayAppsCache *ProcessDB::trayAppsCache()
 {
     QReadLocker lock(&m_rwlock);
     return m_trayAppsCache;
 }
 
-inline std::weak_ptr<WMWindowList> ProcessDB::windowList()
+inline WMWindowList *ProcessDB::windowList()
 {
     QReadLocker lock(&m_rwlock);
     return m_windowList;
 }
 
-inline std::weak_ptr<DesktopEntryCache> ProcessDB::desktopEntryCache()
+inline DesktopEntryCache *ProcessDB::desktopEntryCache()
 {
     QReadLocker lock(&m_rwlock);
     return m_desktopEntryCache;
