@@ -22,7 +22,7 @@
 
 #include "common/sample.h"
 #include "process/process_icon.h"
-//#include "process/process_name.h"
+#include "process/process_name.h"
 
 #include <QSharedData>
 
@@ -85,8 +85,8 @@ public:
         , write_bytes {0}
         , cancelled_write_bytes {0}
         , name {}
-        //        , proc_name     {}
-        //        , proc_icon     {}
+        , proc_name{}
+        , proc_icon{}
         , cmdline {}
         , environ {}
         , sockInodes {}
@@ -134,8 +134,8 @@ public:
         , write_bytes(other.write_bytes)
         , cancelled_write_bytes(other.cancelled_write_bytes)
         , name(other.name)
-        //        , proc_name(other.proc_name)
-        //        , proc_icon(other.proc_icon)
+        , proc_name(other.proc_name)
+        , proc_icon(other.proc_icon)
         , cmdline(other.cmdline)
         , environ(other.environ)
         , sockInodes(other.sockInodes)
@@ -197,7 +197,7 @@ private:
     unsigned long long cancelled_write_bytes; // cancelled write bytes
 
     QByteArray name; // raw name
-    //    ProcessName             proc_name;              // process name object
+    ProcessName proc_name; // process name object
     ProcessIcon proc_icon; // process icon object
     QByteArrayList cmdline; // process cmdline
     QHash<QString, QString> environ; // environment cache

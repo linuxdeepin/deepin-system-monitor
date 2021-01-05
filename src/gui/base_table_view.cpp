@@ -107,7 +107,7 @@ void BaseTableView::setModel(QAbstractItemModel *model)
 
     // listen on modelReset signal, reset any hovered or pressed index
     if (model) {
-        connect(model, &QAbstractItemModel::modelReset, this, [=]() {
+        connect(model, &QAbstractItemModel::modelReset, this, [ = ]() {
             m_hover = {};
             m_pressed = {};
         });

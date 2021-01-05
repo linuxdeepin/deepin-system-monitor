@@ -24,15 +24,6 @@
 
 #include <memory>
 
-class QFileInfo;
-
-namespace common {
-namespace core {
-class UEventFilter;
-class UEventLoop;
-} // namespace core
-} // namespace common
-
 namespace core {
 namespace process {
 
@@ -56,7 +47,8 @@ public:
     const DesktopEntry entryWithDesktopFile(const QString &desktopFile);
     const DesktopEntry entryWithSubName(const QString &subName) const;
 
-    void updateCache(const QHash<QString, DesktopEntry> &cache);
+    void updateCache();
+
 
 private:
     QHash<QString, DesktopEntry> m_cache;
@@ -79,11 +71,6 @@ inline const DesktopEntry DesktopEntryCache::entryWithSubName(const QString &sub
             return m_cache[key];
     }
     return {};
-}
-
-inline void DesktopEntryCache::updateCache(const QHash<QString, DesktopEntry> &cache)
-{
-    m_cache = cache;
 }
 
 } // namespace process

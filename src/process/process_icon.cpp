@@ -63,8 +63,12 @@ ProcessIcon::ProcessIcon()
 {
 }
 
-ProcessIcon::ProcessIcon(Process *proc)
-    : m_data(new icon_data_t())
+ProcessIcon::~ProcessIcon()
+{
+
+}
+
+void ProcessIcon::refreashProcessIcon(Process *proc)
 {
     if (proc) {
         auto *cache = ProcessIconCache::instance();
@@ -80,10 +84,6 @@ ProcessIcon::ProcessIcon(Process *proc)
             cache->addProcessIcon(proc->normalizedName(), procIcon);
         }
     }
-}
-
-ProcessIcon::~ProcessIcon()
-{
 }
 
 QIcon ProcessIcon::icon() const
@@ -134,9 +134,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
 {
     std::shared_ptr<icon_data_t> iconDataPtr;
 
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    auto processDB = monitor->processDB();
-
+    auto processDB = ProcessDB::instance();
     WMWindowList *windowList = processDB->windowList();
     GuiAppsCache *guiAppsCache = processDB->guiAppsCache();
     TrayAppsCache *trayAppsCache = processDB->trayAppsCache();
@@ -199,7 +197,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
         return iconDataPtr;
     }
 
-    if (proc->cmdline()[0].startsWith("/opt")) {
+    if (!proc->cmdline().isEmpty() && proc->cmdline()[0].startsWith("/opt")) {
         QString fname = QFileInfo(QString(proc->cmdline()[0]).split(' ')[0]).fileName();
         if (desktopEntryCache) {
             auto entry = desktopEntryCache->entryWithSubName(fname);

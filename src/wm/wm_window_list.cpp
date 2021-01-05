@@ -18,9 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "wm_window_list.h"
-
-#include "common/uevent_loop.h"
-#include "common/uevent.h"
 #include "wm_atom.h"
 #include "process/gui_apps_cache.h"
 #include "process/tray_apps_cache.h"
@@ -142,27 +139,6 @@ const QList<pid_t> WMWindowList::getGuiProcessList() const
     return list;
 }
 
-void WMWindowList::scheduleUpdate(UEventLoop *loop, const struct timeval *interval)
-{
-    loop->installTimerEventFilter(kListUpdateTimer, true, UEvent::kEventPriorityHigh, interval, this);
-}
-
-bool WMWindowList::uevent(UEvent *event)
-{
-    if (!event)
-        return false;
-
-    if (event->type == UEvent::kEventTypeTimer) {
-        auto *ev = dynamic_cast<UTimerEvent *>(event);
-        if (ev->timerId == kListUpdateTimer) {
-            updateWindowListCache();
-            return true;
-        }
-    }
-
-    return false;
-}
-
 QList<WMWId> WMWindowList::getTrayWindows() const
 {
     QDBusInterface bus("com.deepin.dde.TrayManager", "/com/deepin/dde/TrayManager",
@@ -201,14 +177,6 @@ void WMWindowList::updateWindowListCache()
         auto winfo = getWindowInfo(wid);
         if (winfo)
             m_cache.insert({winfo->pid, std::move(winfo)});
-    }
-
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    if (thread) {
-        auto monitor = thread->systemMonitorInstance();
-        if (monitor) {
-            //            // TODO: use qt signal or libevent custom fd event
-        }
     }
 }
 

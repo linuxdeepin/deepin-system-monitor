@@ -23,6 +23,7 @@
 #include "common/thread_manager.h"
 #include "system_monitor_thread.h"
 #include "system_monitor.h"
+#include "sys_info.h"
 
 #include <QMap>
 #include <QByteArray>

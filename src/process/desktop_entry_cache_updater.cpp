@@ -24,9 +24,6 @@
 
 #include <QDir>
 
-#define DESKTOP_ENTRY_PATH "/usr/share/applications"
-#define DESKTOP_ENTRY_SUFFIX ".desktop"
-
 DCORE_USE_NAMESPACE
 
 namespace core {
@@ -78,47 +75,6 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     }
 
     return entry;
-}
-
-void DesktopEntryCacheUpdater::scheduleUpdate(UEventLoop *loop, const timeval *interval)
-{
-    loop->installTimerEventFilter(kCacheUpdateTimer, true, UEvent::kEventPriorityLow, interval, this);
-}
-
-bool DesktopEntryCacheUpdater::uevent(UEvent *event)
-{
-    if (!event)
-        return false;
-
-    if (event->type == UEvent::kEventTypeTimer) {
-        auto *ev = dynamic_cast<UTimerEvent *>(event);
-        if (ev->timerId == kCacheUpdateTimer) {
-            updateCache();
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void DesktopEntryCacheUpdater::updateCache()
-{
-    m_cache.clear();
-
-    auto fileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
-    for (auto &fileInfo : fileInfoList) {
-        if (!fileInfo.fileName().endsWith(DESKTOP_ENTRY_SUFFIX))
-            continue;
-
-        auto entry = DesktopEntryCacheUpdater::createEntry(fileInfo);
-        if (entry) {
-            m_cache[fileInfo.fileName()] = entry;
-            m_cache[entry->name] = entry;
-        }
-    }
-
-    emit cacheUpdated();
 }
 
 } // namespace process

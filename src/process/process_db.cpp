@@ -41,17 +41,22 @@ using namespace core::wm;
 namespace core {
 namespace process {
 
+const int DesktopEntryTimeCount = 8;
 ProcessDB::ProcessDB(QObject *parent)
     : QObject(parent)
 {
+    m_procSet = new ProcessSet();
     m_windowList = new WMWindowList();
     m_guiAppsCache = new GuiAppsCache();
     m_trayAppsCache = new TrayAppsCache();
     m_desktopEntryCache = new DesktopEntryCache();
+
+    m_desktopEntryTimeCount = DesktopEntryTimeCount;
 }
 
 ProcessDB::~ProcessDB()
 {
+    delete m_procSet;
     delete m_windowList;
     delete m_guiAppsCache;
     delete m_trayAppsCache;
@@ -61,6 +66,43 @@ ProcessDB::~ProcessDB()
 void ProcessDB::setFilterType(FilterType filter)
 {
 
+}
+
+ProcessDB *ProcessDB::instance()
+{
+    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
+    return thread->systemMonitorInstance()->processDB();
+}
+
+ProcessSet *ProcessDB::processSet()
+{
+    return m_procSet;
+}
+
+GuiAppsCache *ProcessDB::guiAppsCache()
+{
+    return m_guiAppsCache;
+}
+
+TrayAppsCache *ProcessDB::trayAppsCache()
+{
+    return m_trayAppsCache;
+}
+
+WMWindowList *ProcessDB::windowList()
+{
+    return m_windowList;
+}
+
+DesktopEntryCache *ProcessDB::desktopEntryCache()
+{
+    return m_desktopEntryCache;
+}
+
+bool ProcessDB::isCurrentProcess(pid_t pid)
+{
+    pid_t cur = getpid();
+    return pid == cur;
 }
 
 void ProcessDB::endProcess(pid_t pid)
@@ -85,8 +127,15 @@ void ProcessDB::killProcess(pid_t pid)
 
 void ProcessDB::update()
 {
-    QWriteLocker lock(&m_rwlock);
-    // TODO: finish
+    if (m_desktopEntryTimeCount++ && m_desktopEntryTimeCount >= DesktopEntryTimeCount) {
+        m_desktopEntryTimeCount = 0;
+        m_desktopEntryCache->updateCache();
+    }
+
+    m_windowList->updateWindowListCache();
+    m_guiAppsCache->updateCache(m_windowList->getGuiProcessList());
+    m_trayAppsCache->updateCache(m_windowList->getTrayProcessList());
+    m_procSet->refresh();
 }
 
 ErrorContext ProcessDB::setProcessPriority(pid_t pid, int priority)

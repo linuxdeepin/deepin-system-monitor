@@ -19,16 +19,11 @@
 */
 #include "system_monitor.h"
 
-#include "common/time_period.h"
-#include "common/uevent_loop.h"
 #include "device_db.h"
 #include "process/process_db.h"
 #include "process/desktop_entry_cache_updater.h"
 #include "wm/wm_window_list.h"
-
-#include <QAbstractEventDispatcher>
-#include <QReadLocker>
-#include <QWriteLocker>
+#include "sys_info.h"
 
 using namespace common::core;
 
@@ -40,8 +35,6 @@ SystemMonitor::SystemMonitor(QObject *parent)
     , m_sysInfo(new SysInfo())
     , m_deviceDB(new DeviceDB())
     , m_processDB(new ProcessDB(this))
-    , m_windowList(new WMWindowList(this))
-    , m_desktopEntryCacheUpdater(new DesktopEntryCacheUpdater(this))
 {
 
 }
@@ -52,14 +45,28 @@ SystemMonitor::~SystemMonitor()
     delete m_sysInfo;
     delete m_deviceDB;
     delete m_processDB;
-    delete m_windowList;
-    delete m_desktopEntryCacheUpdater;
+}
+
+DeviceDB *SystemMonitor::SystemMonitor::deviceDB()
+{
+    return m_deviceDB;
+}
+
+ProcessDB *SystemMonitor::SystemMonitor::processDB()
+{
+    return m_processDB;
+}
+
+SysInfo *SystemMonitor::SystemMonitor::sysInfo()
+{
+    return m_sysInfo;
 }
 
 void SystemMonitor::startMonitorJob()
 {
     m_basictimer.stop();
     m_basictimer.start(2000, Qt::VeryCoarseTimer, this);
+    updateSystemMonitorInfo();
 }
 
 void SystemMonitor::requestInterrupt()
@@ -71,12 +78,17 @@ void SystemMonitor::timerEvent(QTimerEvent *event)
 {
     QObject::timerEvent(event);
     if (event->timerId() == m_basictimer.timerId()) {
-        m_sysInfo->readSysInfo();
-        m_deviceDB->update();
-        m_processDB->update();
-
-        emit statInfoUpdated();
+        updateSystemMonitorInfo();
     }
+}
+
+void SystemMonitor::updateSystemMonitorInfo()
+{
+    m_sysInfo->readSysInfo();
+    m_deviceDB->update();
+    m_processDB->update();
+
+    emit statInfoUpdated();
 }
 
 } // namespace system

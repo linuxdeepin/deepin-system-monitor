@@ -22,7 +22,7 @@
 #include "desktop_entry_cache_updater.h"
 
 #include <QFileInfo>
-
+#include <QDir>
 #include <DDesktopEntry>
 
 DCORE_USE_NAMESPACE
@@ -30,8 +30,12 @@ DCORE_USE_NAMESPACE
 namespace core {
 namespace process {
 
+#define DESKTOP_ENTRY_PATH "/usr/share/applications"
+#define DESKTOP_ENTRY_SUFFIX ".desktop"
+
 DesktopEntryCache::DesktopEntryCache()
 {
+
 }
 
 const DesktopEntry DesktopEntryCache::entryWithDesktopFile(const QString &desktopFile)
@@ -46,6 +50,23 @@ const DesktopEntry DesktopEntryCache::entryWithDesktopFile(const QString &deskto
         m_cache[entry->name] = entry;
     }
     return entry;
+}
+
+void DesktopEntryCache::updateCache()
+{
+    m_cache.clear();
+
+    auto fileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
+    for (auto &fileInfo : fileInfoList) {
+        if (!fileInfo.fileName().endsWith(DESKTOP_ENTRY_SUFFIX))
+            continue;
+
+        auto entry = DesktopEntryCacheUpdater::createEntry(fileInfo);
+        if (entry) {
+            m_cache[fileInfo.fileName()] = entry;
+            m_cache[entry->name] = entry;
+        }
+    }
 }
 
 } // namespace process

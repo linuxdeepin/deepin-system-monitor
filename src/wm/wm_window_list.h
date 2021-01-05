@@ -20,24 +20,9 @@
 #ifndef WM_WINDOW_LIST_H
 #define WM_WINDOW_LIST_H
 
-#include "common/uevent_filter.h"
 #include "wm_connection.h"
 #include "wm_atom.h"
 #include "wm_info.h"
-
-#include <QByteArrayList>
-#include <QThread>
-
-#include <memory>
-
-using namespace common::core;
-
-namespace common {
-namespace core {
-class UEvent;
-class UEventLoop;
-} // namespace core
-} // namespace common
 
 namespace core {
 namespace wm {
@@ -54,15 +39,10 @@ union size_u {
  * @brief The WMWindowList class
  */
 class WMWindowList : public QObject
-    , public UEventFilter
 {
     Q_OBJECT
 
 public:
-    enum {
-        kListUpdateTimer
-    };
-
     WMWindowList(QObject *parent = nullptr);
     ~WMWindowList() override = default;
 
@@ -71,12 +51,10 @@ public:
     const QList<pid_t> getTrayProcessList() const;
     const QList<pid_t> getGuiProcessList() const;
 
-    void scheduleUpdate(UEventLoop *loop, const struct timeval *interval);
-    bool uevent(UEvent *event) override;
+    void updateWindowListCache();
 
 private:
     QList<WMWId> getTrayWindows() const;
-    void updateWindowListCache();
     WMWindow getWindowInfo(WMWId winId);
 
 private:

@@ -34,8 +34,9 @@ class ProcessName
 {
 public:
     explicit ProcessName();
-    explicit ProcessName(Process *proc = nullptr);
     ~ProcessName() = default;
+
+    void refreashProcessName(Process *proc);
 
     QString name() const;
     QString displayName() const;

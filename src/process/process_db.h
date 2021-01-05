@@ -60,6 +60,7 @@ public:
 
     static ProcessDB *instance();
 
+    ProcessSet *processSet();
     WMWindowList *windowList();
     GuiAppsCache *guiAppsCache();
     TrayAppsCache *trayAppsCache();
@@ -76,6 +77,7 @@ public slots:
     ErrorContext setProcessPriority(pid_t pid, int priority);
 
 Q_SIGNALS:
+    void processListUpdated();
     void processEnded(pid_t pid);
     void processPaused(pid_t pid, char state);
     void processResumed(pid_t pid, char state);
@@ -93,51 +95,14 @@ private:
     void filterProcess(const QList<Process> &procList);
 
 private:
-    QReadWriteLock m_rwlock;
-
     WMWindowList *m_windowList;
     GuiAppsCache *m_guiAppsCache;
     TrayAppsCache *m_trayAppsCache;
     DesktopEntryCache *m_desktopEntryCache;
 
     ProcessSet *m_procSet;
+    int m_desktopEntryTimeCount;
 };
-
-inline ProcessDB *ProcessDB::instance()
-{
-    auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
-    return thread->systemMonitorInstance()->processDB();
-}
-
-inline GuiAppsCache *ProcessDB::guiAppsCache()
-{
-    QReadLocker lock(&m_rwlock);
-    return m_guiAppsCache;
-}
-
-inline TrayAppsCache *ProcessDB::trayAppsCache()
-{
-    QReadLocker lock(&m_rwlock);
-    return m_trayAppsCache;
-}
-
-inline WMWindowList *ProcessDB::windowList()
-{
-    QReadLocker lock(&m_rwlock);
-    return m_windowList;
-}
-
-inline DesktopEntryCache *ProcessDB::desktopEntryCache()
-{
-    QReadLocker lock(&m_rwlock);
-    return m_desktopEntryCache;
-}
-
-inline bool ProcessDB::isCurrentProcess(pid_t pid)
-{
-    pid_t cur = getpid();
-    return pid == cur;
-}
 
 } // namespace process
 } // namespace core

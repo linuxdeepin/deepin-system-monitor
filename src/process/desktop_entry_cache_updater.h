@@ -20,48 +20,24 @@
 #ifndef DESKTOP_ENTRY_CACHE_UPDATER_H
 #define DESKTOP_ENTRY_CACHE_UPDATER_H
 
-#include "common/uevent_filter.h"
+#include <QObject>
+#include <QFileInfo>
+
 #include "desktop_entry_cache.h"
-
-using namespace common::core;
-
-namespace common {
-namespace core {
-class UEventLoop;
-}
-} // namespace common
 
 namespace core {
 namespace process {
 
 class DesktopEntryCacheUpdater : public QObject
-    , public UEventFilter
 {
     Q_OBJECT
+    friend class DesktopEntryCache;
 
 public:
-    enum {
-        kCacheUpdateTimer = 0
-    };
-
     explicit DesktopEntryCacheUpdater(QObject *parent = nullptr);
     ~DesktopEntryCacheUpdater() override = default;
 
     static DesktopEntry createEntry(const QFileInfo &fileInfo);
-
-    void scheduleUpdate(UEventLoop *loop, const struct timeval *interval);
-    bool uevent(UEvent *event) override;
-
-signals:
-    void cacheUpdated();
-
-private:
-    void updateCache();
-
-private:
-    QHash<QString, DesktopEntry> m_cache;
-
-    friend class DesktopEntryCache;
 };
 
 } // namespace process

@@ -61,12 +61,12 @@ namespace process {
 Process::Process()
     : d(new ProcessPrivate())
 {
+
 }
 Process::Process(pid_t pid)
     : d(new ProcessPrivate())
 {
     d->pid = pid;
-    readProcessInfo();
 }
 Process::Process(const Process &other)
     : d(other.d)
@@ -80,6 +80,7 @@ Process &Process::operator=(const Process &rhs)
     d = rhs.d;
     return *this;
 }
+
 Process::~Process()
 {
 }
@@ -104,6 +105,9 @@ void Process::readProcessInfo()
     ok = ok && readStatm();
     readIO();
     readSockInodes();
+
+    d->proc_name.refreashProcessName(this);
+    d->proc_icon.refreashProcessIcon(this);
 
     d->valid = d->valid && ok;
 }

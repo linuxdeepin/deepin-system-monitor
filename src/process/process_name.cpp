@@ -43,7 +43,12 @@ using namespace core::process;
 namespace core {
 namespace process {
 
-ProcessName::ProcessName(Process *proc)
+ProcessName::ProcessName()
+{
+
+}
+
+void ProcessName::refreashProcessName(Process *proc)
 {
     if (proc) {
         auto *cache = ProcessNameCache::instance();
@@ -51,18 +56,20 @@ ProcessName::ProcessName(Process *proc)
 
         if (cache->contains(proc->pid()) && cache->processName(proc->pid())->name() == proc->name()) {
             auto *procName = cache->processName(proc->pid());
-            //            d->name = procName->name();
-            //            d->normalizedName = procName->normalizedName();
-            //            d->displayName = procName->displayName();
+            m_name = procName->name();
+            m_normalizedName = procName->normalizedName();
+            m_displayName = procName->displayName();
         } else {
-            //            d->name = proc->name();
-            //            d->normalizedName = ProcessName::normalizeProcessName(proc->name(), proc->cmdline());
-            //            // display name
-            //            d->displayName = getDisplayName(proc);
+            m_name = proc->name();
+            m_normalizedName = ProcessName::normalizeProcessName(proc->name(), proc->cmdline());
+            // display name
+            m_displayName = getDisplayName(proc);
 
-            //            auto *procName = new ProcessName();
-            //            procName->d = d;
-            //            cache->insert(proc->pid(), procName);
+            auto *procName = new ProcessName();
+            procName->m_name = m_name;
+            procName->m_displayName = m_normalizedName;
+            procName->m_displayName = m_displayName;
+            cache->insert(proc->pid(), procName);
         }
     }
 }
@@ -90,8 +97,7 @@ QString ProcessName::normalizeProcessName(const QString &source, const QByteArra
 
 QString ProcessName::getDisplayName(Process *proc)
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    auto processDB = monitor->processDB();
+    auto processDB = ProcessDB::instance();
 
     WMWindowList *windowList = processDB->windowList();
     GuiAppsCache *guiAppsCache = processDB->guiAppsCache();

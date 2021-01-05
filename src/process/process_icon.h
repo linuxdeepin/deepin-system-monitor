@@ -34,10 +34,10 @@ class ProcessIcon
 {
 public:
     explicit ProcessIcon();
-    explicit ProcessIcon(Process *proc);
     ~ProcessIcon();
 
     QIcon icon() const;
+    void refreashProcessIcon(Process *proc);
 
 private:
     std::shared_ptr<struct icon_data_t> getIcon(Process *proc);

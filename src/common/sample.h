@@ -47,12 +47,10 @@ struct IO {
         outBytes += rhs.outBytes;
         return *this;
     }
-    const struct IO operator-(const struct IO &other) const
-    {
+    const struct IO operator-(const struct IO &other) const {
         return IO(*this) -= other;
     }
-    const struct IO operator+(const struct IO &other) const
-    {
+    const struct IO operator+(const struct IO &other) const {
         return IO(*this) += other;
     }
 };
@@ -231,7 +229,7 @@ public:
 
     inline const SampleFrame<T> *recentSample() const
     {
-        if (m_samples.front())
+        if (m_samples.size() > 0)
             return m_samples.front().get();
         else
             return nullptr;
@@ -256,7 +254,7 @@ public:
     inline const QPair<const SampleFrame<T> *, const SampleFrame<T> *> recentSamplePair() const
     {
         QPair<const SampleFrame<T> *, const SampleFrame<T> *> pair {};
-        if (m_samples.front())
+        if (m_samples.size() > 0)
             pair.first = m_samples[0].get();
         if (m_samples.size() > 1)
             pair.second = m_samples[1].get();

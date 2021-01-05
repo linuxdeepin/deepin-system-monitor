@@ -115,8 +115,9 @@ public:
     qulonglong recvBytes() const;
     qulonglong sentBytes() const;
 
-private:
     void readProcessInfo();
+
+private:
     /**
      * @brief Read /proc/[pid]/stat
      * @return true: success; false: failure
@@ -182,14 +183,12 @@ inline void Process::setName(const QString &name)
 
 inline QString Process::displayName() const
 {
-    //    return d->proc_name.displayName();
-    return {};
+    return d->proc_name.displayName();
 }
 
 inline QString Process::normalizedName() const
 {
-    //    return d->proc_name.normalizedName();
-    return {};
+    return d->proc_name.normalizedName();
 }
 
 inline QIcon Process::icon() const

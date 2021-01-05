@@ -89,7 +89,7 @@ public:
      * @brief Update process model with the data provided by list
      * @param list Process entry list
      */
-    void updateProcessList(const ProcessSet &set);
+    void updateProcessList();
 
     /**
      * @brief Returns the number of rows under the given parent
@@ -124,18 +124,6 @@ public:
      * @return Combination of item flags
      */
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-
-    /**
-     * @brief Fetches any available data for the items with the parent specified by the parent index
-     * @param parent Parent index
-     */
-    void fetchMore(const QModelIndex &parent) override;
-    /**
-     * @brief Check if more data can be fetched for parent index
-     * @param parent Parent index
-     * @return Returns true if there is more data available for parent; otherwise returns false
-     */
-    bool canFetchMore(const QModelIndex &parent) const override;
 
     /**
      * @brief Get process state with specified pid
@@ -187,39 +175,11 @@ private Q_SLOTS:
      */
     void updateProcessPriority(pid_t pid, int priority);
 
+    void updateProcessListDelay();
+
 private:
-    QList<pid_t> m_procList; // pid list
-    ProcessSet m_procSet; // process set
-
-    // current loaded items (into the model)
-    int m_nr {};
+    QList<pid_t> m_procIdList; // pid list
+    QList<Process> m_processList; // pid list
 };
-
-inline char ProcessTableModel::getProcessState(pid_t pid) const
-{
-    if (m_procList.contains(pid)) {
-        return m_procSet.getProcessById(pid).state();
-    }
-
-    return 0;
-}
-
-inline int ProcessTableModel::getProcessNice(pid_t pid) const
-{
-    if (m_procList.contains(pid)) {
-        return m_procSet.getProcessById(pid).priority();
-    }
-
-    return kInvalidPriority;
-}
-
-inline Process ProcessTableModel::getProcess(pid_t pid) const
-{
-    if (m_procList.contains(pid)) {
-        return m_procSet.getProcessById(pid);
-    }
-
-    return Process();
-}
 
 #endif  // PROCESS_TABLE_MODEL_H

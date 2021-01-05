@@ -42,6 +42,11 @@ ProcessSet::ProcessSet(const ProcessSet &other)
 {
 }
 
+bool ProcessSet::containsById(pid_t pid)
+{
+    return m_set.contains(pid);
+}
+
 void ProcessSet::refresh()
 {
     m_set.clear();
@@ -50,7 +55,7 @@ void ProcessSet::refresh()
 
 void ProcessSet::scanProcess()
 {
-    QList<Process> list;
+    m_set.clear();
 
     Iterator iter;
     while (iter.hasNext()) {
@@ -58,7 +63,7 @@ void ProcessSet::scanProcess()
         if (!proc.isValid())
             continue;
 
-        list << proc;
+        m_set.insert(proc.pid(), proc);
     }
 }
 
@@ -85,6 +90,7 @@ Process ProcessSet::Iterator::next()
     if (m_dirent && isdigit(m_dirent->d_name[0])) {
         auto pid = pid_t(atoi(m_dirent->d_name));
         Process proc(pid);
+        proc.readProcessInfo();
 
         advance();
 

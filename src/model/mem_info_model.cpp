@@ -41,16 +41,15 @@ MemInfoModel::~MemInfoModel()
 
 void MemInfoModel::updateModel()
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-
     if (m_statModel->m_stat) {
+        auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
         MemStat stat = std::make_shared<struct mem_stat_t>();
         stat->memUsed = m_info->memTotal() - m_info->memAvailable();
         stat->memTotal = m_info->memTotal();
         stat->swapUsed = m_info->swapTotal() - m_info->swapFree();
         stat->swapTotal = m_info->swapTotal();
         m_statModel->m_stat->addSample(new MemStatSampleFrame(monitor->sysInfo()->uptime(), stat));
-    }
 
-    emit modelUpdated();
+        emit modelUpdated();
+    }
 } // ::updateModel
