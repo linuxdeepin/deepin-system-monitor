@@ -154,10 +154,7 @@ void ProcessTableView::endProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
-        //        auto *sysmon = SystemMonitor::instance();
-        //        if (sysmon) {
-        //            sysmon->endProcess(qvariant_cast<pid_t>(m_selectedPID));
-        //        }
+        ProcessDB::instance()->endProcess(qvariant_cast<pid_t>(m_selectedPID));
     } else {
         return;
     }
@@ -166,33 +163,24 @@ void ProcessTableView::endProcess()
 // pause process handler
 void ProcessTableView::pauseProcess()
 {
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
-
     // no selected item or app self been selected, then do nothing
-    //    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
-    //        return;
-    //    }
-
-    //    smo->pauseProcess(pid);
+    if (m_selectedPID.isNull() || ProcessDB::instance()->isCurrentProcess(pid)) {
+        return;
+    }
+    ProcessDB::instance()->pauseProcess(pid);
 }
 
 // resume process handler
 void ProcessTableView::resumeProcess()
 {
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
+    //no selected item or app self been selected, then do nothing
+    if (m_selectedPID.isNull() || ProcessDB::instance()->isCurrentProcess(pid)) {
+        return;
+    }
 
-    // no selected item or app self been selected, then do nothing
-    //    if (m_selectedPID.isNull() || smo->isSelfProcess(pid)) {
-    //        return;
-    //    }
-
-    //    smo->resumeProcess(pid);
+    ProcessDB::instance()->resumeProcess(pid);
 }
 
 // open process bin path in file manager
@@ -283,10 +271,7 @@ void ProcessTableView::killProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
-        //        auto *sysmon = SystemMonitor::instance();
-        //        if (sysmon) {
-        //            sysmon->killProcess(qvariant_cast<pid_t>(m_selectedPID));
-        //        }
+        ProcessDB::instance()->killProcess(qvariant_cast<pid_t>(m_selectedPID));
     } else {
         return;
     }
@@ -304,7 +289,7 @@ void ProcessTableView::search(const QString &text)
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
-    ProcessDB::instance()->setFilterType(type);
+    m_proxyModel->setFilterType(type);
 }
 
 // change process priority
@@ -314,21 +299,18 @@ void ProcessTableView::changeProcessPriority(int priority)
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
 
-        //        auto *sysmon = SystemMonitor::instance();
-        //        if (sysmon) {
         // if no changes in priority value, then do nothing
         auto prio = m_model->getProcessPriority(pid);
         if (prio == priority)
             return;
 
         ErrorContext ec {};
-        //            ec = sysmon->setProcessPriority(pid, priority);
-        //        if (ec) {
-        // show error dialog
-        //            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-        //        }
+        ec = ProcessDB::instance()->setProcessPriority(pid, priority);
+        if (ec) {
+            //show error dialog
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+        }
     }
-    //}
 }
 
 // load & restore table view settings from backup storage
@@ -759,22 +741,20 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
     connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    // show error dialog if change priority failed
-    //    connect(smo, &SystemMonitor::priorityPromoteResultReady, this,
-    //    [ = ](const ErrorContext & ec) {
-    //        if (ec) {
-    //            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-    //        }
-    //    });
-    // show error dialog if sending signals to process failed
-    //    connect(smo, &SystemMonitor::processControlResultReady, this,
-    //    [ = ](const ErrorContext & ec) {
-    //        if (ec) {
-    //            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-    //        }
-    //    });
+    //show error dialog if change priority failed
+    connect(ProcessDB::instance(), &ProcessDB::priorityPromoteResultReady, this,
+    [ = ](const ErrorContext & ec) {
+        if (ec) {
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+        }
+    });
+    //show error dialog if sending signals to process failed
+    connect(ProcessDB::instance(), &ProcessDB::processControlResultReady, this,
+    [ = ](const ErrorContext & ec) {
+        if (ec) {
+            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+        }
+    });
 }
 
 // show process table view context menu on specified positon

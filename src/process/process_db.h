@@ -45,8 +45,6 @@ using namespace core::wm;
 namespace core {
 namespace process {
 
-class GuiAppsCache;
-class TrayAppsCache;
 class DesktopEntryCache;
 class ProcessSet;
 
@@ -62,14 +60,13 @@ public:
 
     ProcessSet *processSet();
     WMWindowList *windowList();
-    GuiAppsCache *guiAppsCache();
-    TrayAppsCache *trayAppsCache();
     DesktopEntryCache *desktopEntryCache();
 
     static bool isCurrentProcess(pid_t pid);
 
+    uid_t processEuid();
+
 public slots:
-    void setFilterType(FilterType filter);
     void endProcess(pid_t pid);
     void pauseProcess(pid_t pid);
     void resumeProcess(pid_t pid);
@@ -92,16 +89,15 @@ public:
 
 private:
     void sendSignalToProcess(pid_t pid, int signal);
-    void filterProcess(const QList<Process> &procList);
 
 private:
     WMWindowList *m_windowList;
-    GuiAppsCache *m_guiAppsCache;
-    TrayAppsCache *m_trayAppsCache;
     DesktopEntryCache *m_desktopEntryCache;
 
     ProcessSet *m_procSet;
     int m_desktopEntryTimeCount;
+
+    uid_t m_euid;
 };
 
 } // namespace process

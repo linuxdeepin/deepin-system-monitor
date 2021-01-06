@@ -19,8 +19,6 @@
 */
 #include "process_db.h"
 
-#include "tray_apps_cache.h"
-#include "gui_apps_cache.h"
 #include "wm/wm_window_list.h"
 #include "desktop_entry_cache.h"
 #include "process_icon.h"
@@ -41,31 +39,24 @@ using namespace core::wm;
 namespace core {
 namespace process {
 
-const int DesktopEntryTimeCount = 8;
+const int DesktopEntryTimeCount = 150; // 5 minutes interval
 ProcessDB::ProcessDB(QObject *parent)
     : QObject(parent)
 {
     m_procSet = new ProcessSet();
     m_windowList = new WMWindowList();
-    m_guiAppsCache = new GuiAppsCache();
-    m_trayAppsCache = new TrayAppsCache();
     m_desktopEntryCache = new DesktopEntryCache();
 
     m_desktopEntryTimeCount = DesktopEntryTimeCount;
+
+    m_euid = geteuid();
 }
 
 ProcessDB::~ProcessDB()
 {
     delete m_procSet;
     delete m_windowList;
-    delete m_guiAppsCache;
-    delete m_trayAppsCache;
     delete m_desktopEntryCache;
-}
-
-void ProcessDB::setFilterType(FilterType filter)
-{
-
 }
 
 ProcessDB *ProcessDB::instance()
@@ -74,19 +65,14 @@ ProcessDB *ProcessDB::instance()
     return thread->systemMonitorInstance()->processDB();
 }
 
+uid_t ProcessDB::processEuid()
+{
+    return m_euid;
+}
+
 ProcessSet *ProcessDB::processSet()
 {
     return m_procSet;
-}
-
-GuiAppsCache *ProcessDB::guiAppsCache()
-{
-    return m_guiAppsCache;
-}
-
-TrayAppsCache *ProcessDB::trayAppsCache()
-{
-    return m_trayAppsCache;
 }
 
 WMWindowList *ProcessDB::windowList()
@@ -133,8 +119,6 @@ void ProcessDB::update()
     }
 
     m_windowList->updateWindowListCache();
-    m_guiAppsCache->updateCache(m_windowList->getGuiProcessList());
-    m_trayAppsCache->updateCache(m_windowList->getTrayProcessList());
     m_procSet->refresh();
 }
 

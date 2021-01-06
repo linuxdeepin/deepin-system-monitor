@@ -33,6 +33,8 @@
 #include "common/common.h"
 #include "common/perf.h"
 #include "process/process_set.h"
+#include "process/process_db.h"
+#include "wm/wm_window_list.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -271,7 +273,7 @@ void ProcessPageWidget::initConnections()
             &ProcessPageWidget::switchDisplayMode);
 
     // show my application when my application button toggled
-    connect(m_appButton, &DButtonBoxButton::toggled, this, [=](bool) {
+    connect(m_appButton, &DButtonBoxButton::clicked, this, [ = ](bool) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
@@ -280,7 +282,7 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_END("POINT-04");
     });
     // show my process when my process button toggled
-    connect(m_myProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
+    connect(m_myProcButton, &DButtonBoxButton::clicked, this, [ = ](bool) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
@@ -289,7 +291,7 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_END("POINT-04");
     });
     // show all application when all application button toggled
-    connect(m_allProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
+    connect(m_allProcButton, &DButtonBoxButton::clicked, this, [ = ](bool) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
@@ -298,11 +300,9 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_END("POINT-04");
     });
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    // update process summary text when process summary info updated background
-    //    connect(smo->jobInstance(), &StatsCollector::processSummaryUpdated,
-    //            this, &ProcessPageWidget::updateProcessSummary);
+    // update process summary text when process summary info updated background
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessPageWidget::onStatInfoUpdated);
 
     auto *dAppHelper = DApplicationHelper::instance();
     // change text color dynamically on theme type change, if not do this way, text color wont synchronize with theme type
@@ -381,11 +381,15 @@ void ProcessPageWidget::createWindowKiller()
             &ProcessPageWidget::popupKillConfirmDialog);
 }
 
-// update process context summary text
-void ProcessPageWidget::updateProcessSummary(int napps, int nprocs)
+void ProcessPageWidget::onStatInfoUpdated()
 {
-    QString buf = DApplication::translate("Process.Summary", kProcSummaryTemplateText);
-    m_procViewModeSummary->setText(buf.arg(napps).arg(nprocs));
+    const QString &buf = DApplication::translate("Process.Summary", kProcSummaryTemplateText);
+
+    ProcessSet *processSet = ProcessDB::instance()->processSet();
+    const QList<pid_t> &newpidlst = processSet->getPIDList();
+
+    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
+    m_procViewModeSummary->setText(buf.arg(wmwindowList->getAppCount()).arg(newpidlst.size()));
 }
 
 // change icon theme when theme changed
@@ -444,10 +448,7 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
-        //        auto *sysmon = SystemMonitor::instance();
-        //        if (sysmon) {
-        //            sysmon->killProcess(qvariant_cast<pid_t>(pid));
-        //        }
+        ProcessDB::instance()->killProcess(pid);
     }
 }
 
@@ -490,5 +491,5 @@ void ProcessPageWidget::adjustStatusBarWidth()
 //        }
 //    }
 // set fixed width temporary, might add splitter between sidebar & content area in a late update
-m_views->setFixedWidth(300);
+    m_views->setFixedWidth(300);
 }

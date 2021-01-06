@@ -21,8 +21,6 @@
 #include "process.h"
 #include "process_db.h"
 #include "process_name_cache.h"
-#include "tray_apps_cache.h"
-#include "gui_apps_cache.h"
 #include "desktop_entry_cache.h"
 #include "common/common.h"
 #include "common/thread_manager.h"
@@ -67,7 +65,7 @@ void ProcessName::refreashProcessName(Process *proc)
 
             auto *procName = new ProcessName();
             procName->m_name = m_name;
-            procName->m_displayName = m_normalizedName;
+            procName->m_normalizedName = m_normalizedName;
             procName->m_displayName = m_displayName;
             cache->insert(proc->pid(), procName);
         }
@@ -100,68 +98,62 @@ QString ProcessName::getDisplayName(Process *proc)
     auto processDB = ProcessDB::instance();
 
     WMWindowList *windowList = processDB->windowList();
-    GuiAppsCache *guiAppsCache = processDB->guiAppsCache();
-    TrayAppsCache *trayAppsCache = processDB->trayAppsCache();
     DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
 
 #ifdef BUILD_WAYLAND
 
 #else
     if (!proc->cmdline().isEmpty()) {
-        if (trayAppsCache && trayAppsCache->isTrayApp(proc->pid())) {
+        if (windowList->isTrayApp(proc->pid())) {
             // process with tray window
-            if (windowList) {
-                auto title = windowList->getWindowTitle(proc->pid());
+            auto title = windowList->getWindowTitle(proc->pid());
 
-                if (!title.isEmpty()) {
-                    return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(title);
+            if (!title.isEmpty()) {
+                return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(title);
 
-                } else if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE")) {
-                    // can't grab window title, try use desktop file instead
-                    auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
-                    if (desktopEntryCache) {
-                        auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
-                        if (entry && !entry->displayName.isEmpty())
-                            return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(entry->displayName);
-                    } // ::desktopEntryCache
+            } else if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE")) {
+                // can't grab window title, try use desktop file instead
+                auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
+                auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
+                if (entry && !entry->displayName.isEmpty())
+                    return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(entry->displayName);
 
-                } else {
-                    return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(proc->name());
-                }
-            } // ::widnowList
+            } else {
+                return QString("%1: %2").arg(QApplication::translate("Process.Table", "Tray")).arg(proc->name());
+            }
         } // ::if(traysAppsCache)
 
-        if (guiAppsCache && guiAppsCache->isGuiApp(proc->pid())) {
+        if (windowList->isGuiApp(proc->pid())) {
             // gui apps case, grab title with xcb call
-            if (windowList) {
-                auto title = windowList->getWindowTitle(proc->pid());
+            auto title = windowList->getWindowTitle(proc->pid());
 
-                if (!title.isEmpty()) {
-                    if (proc->cmdline().size() > 1) {
-                        auto url = QUrl(proc->cmdline()[proc->cmdline().size() - 1]);
-                        auto finfo = QFileInfo(url.fileName());
-                        auto rname = url.fileName();
-                        rname.chop(finfo.completeSuffix().length() + 1);
+            if (!title.isEmpty()) {
+                if (proc->cmdline().size() > 1) {
+                    auto url = QUrl(proc->cmdline()[proc->cmdline().size() - 1]);
+                    auto finfo = QFileInfo(url.fileName());
+                    auto rname = url.fileName();
+                    rname.chop(finfo.completeSuffix().length() + 1);
 
-                        // check if commandline ends with file name, if so prepend it before process name
-                        if (url.isValid()
-                                && (url.isLocalFile() || !url.host().isEmpty())
-                                && !title.contains(rname)) {
-                            return QString("%1 - %2").arg(rname).arg(title);
+                    // check if commandline ends with file name, if so prepend it before process name
+                    if (url.isValid()
+                            && (url.isLocalFile() || !url.host().isEmpty())
+                            && !title.contains(rname)) {
+                        return QString("%1 - %2").arg(rname).arg(title);
 
-                        } else {
-                            return title;
-                        }
-                    } // ::if(cmdline)
-                } // ::if(title)
-            } // ::if(windowList)
+                    } else {
+                        return title;
+                    }
+                } // ::if(cmdline)
+
+                return title;
+            } // ::if(title)
         } // ::if(guiAppsCache)
 
-        if (desktopEntryCache && desktopEntryCache->entry(proc->name())) {
+        if (desktopEntryCache->entry(proc->name())) {
             // found desktop entry
             auto &entry = desktopEntryCache->entry(proc->name());
             if (!entry->startup_wm_class.isEmpty()) {
-                //                d->normalizedName = entry->startup_wm_class;
+                return entry->startup_wm_class;
             }
             if (!entry->displayName.isEmpty()) {
                 if (proc->cmdline().size() > 1) {

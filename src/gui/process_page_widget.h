@@ -105,17 +105,14 @@ private Q_SLOTS:
      * @brief Create application preview widget
      */
     void createWindowKiller();
-    /**
-     * @brief Update process context & summary text
-     * @param napps Total number of applications
-     * @param nprocs Total number of processes
-     */
-    void updateProcessSummary(int napps, int nprocs);
+
     /**
      * @brief Change icons when theme changed
      * @param themeType Theme currently applied
      */
     void changeIconTheme(DApplicationHelper::ColorType themeType);
+
+    void onStatInfoUpdated();
 
 private:
     // global setttings instance

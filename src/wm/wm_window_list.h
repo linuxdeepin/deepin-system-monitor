@@ -46,19 +46,33 @@ public:
     WMWindowList(QObject *parent = nullptr);
     ~WMWindowList() override = default;
 
-    const QMap<uint64_t, QVector<uint>> getWindowIcon(pid_t pid) const;
-    const QString getWindowTitle(pid_t pid) const;
-    const QList<pid_t> getTrayProcessList() const;
-    const QList<pid_t> getGuiProcessList() const;
+    int getAppCount();
+
+    QMap<uint64_t, QVector<uint>> getWindowIcon(pid_t pid) const;
+    QString getWindowTitle(pid_t pid) const;
+    QList<pid_t> getTrayProcessList() const;
+    QList<pid_t> getGuiProcessList() const;
+
+    bool isTrayApp(pid_t pid) const;
+    bool isGuiApp(pid_t pid) const;
+    bool isDesktopEntryApp(pid_t pid) const;
+    void addDesktopEntryApp(pid_t pid);
+    QList<pid_t> getDektopEntryList();
 
     void updateWindowListCache();
 
 private:
     QList<WMWId> getTrayWindows() const;
     WMWindow getWindowInfo(WMWId winId);
+    pid_t getWindowPid(WMWId window) const;
+    QStringList getWindowType(WMWId winId) const;
+    QByteArray getAtomName(xcb_connection_t *conn, xcb_atom_t atom) const;
 
 private:
-    std::multimap<pid_t, WMWindow> m_cache;
+    std::map<pid_t, WMWindow> m_guiAppcache;
+    std::map<pid_t, WMWindow> m_trayAppcache;
+
+    QList<pid_t> m_desktopEntryCache;
     WMConnection m_conn;
 };
 

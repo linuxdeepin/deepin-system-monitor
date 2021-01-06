@@ -19,8 +19,6 @@
 */
 #include "wm_window_list.h"
 #include "wm_atom.h"
-#include "process/gui_apps_cache.h"
-#include "process/tray_apps_cache.h"
 #include "common/thread_manager.h"
 #include "system/system_monitor.h"
 #include "system/system_monitor_thread.h"
@@ -44,19 +42,54 @@ struct XReplyDeleter {
     }
 };
 using XGetPropertyReply = std::unique_ptr<xcb_get_property_reply_t, XReplyDeleter>;
+using XGetAtomNameReply = std::unique_ptr<xcb_get_atom_name_reply_t, XReplyDeleter>;
 
 WMWindowList::WMWindowList(QObject *parent)
     : QObject(parent)
 {
 }
 
-const QMap<uint64_t, QVector<uint>> WMWindowList::getWindowIcon(pid_t pid) const
+void WMWindowList::addDesktopEntryApp(pid_t pid)
+{
+    if (!isTrayApp(pid)
+            && !isGuiApp(pid)
+            && !m_desktopEntryCache.contains(pid)) {
+        m_desktopEntryCache << pid;
+    }
+}
+
+int WMWindowList::getAppCount()
+{
+    return static_cast<int>(m_trayAppcache.size() + m_guiAppcache.size()) + m_desktopEntryCache.size();
+}
+
+QList<pid_t> WMWindowList::getDektopEntryList()
+{
+    return m_desktopEntryCache;
+}
+
+bool WMWindowList::isTrayApp(pid_t pid) const
+{
+    return m_trayAppcache.find(pid) != m_trayAppcache.end();
+}
+
+bool WMWindowList::isGuiApp(pid_t pid) const
+{
+    return m_guiAppcache.find(pid) != m_guiAppcache.end();
+}
+
+bool WMWindowList::isDesktopEntryApp(pid_t pid) const
+{
+    return m_desktopEntryCache.contains(pid);
+}
+
+QMap<uint64_t, QVector<uint>> WMWindowList::getWindowIcon(pid_t pid) const
 {
     QMap<uint64_t, QVector<uint>> pixMap;
 
-    auto search = m_cache.find(pid);
+    auto search = m_guiAppcache.find(pid);
     WMWId winId = UINT32_MAX;
-    if (search != m_cache.end()) {
+    if (search != m_guiAppcache.end()) {
         winId = search->second->winId;
     }
 
@@ -95,10 +128,10 @@ const QMap<uint64_t, QVector<uint>> WMWindowList::getWindowIcon(pid_t pid) const
     return pixMap;
 }
 
-const QString WMWindowList::getWindowTitle(pid_t pid) const
+QString WMWindowList::getWindowTitle(pid_t pid) const
 {
     // process may have multiple window opened, each with a different title
-    auto range = m_cache.equal_range(pid);
+    auto range = m_guiAppcache.equal_range(pid);
     QList<QString> titles;
     for (auto i = range.first; i != range.second; ++i)
         titles << i->second->title;
@@ -119,21 +152,19 @@ const QString WMWindowList::getWindowTitle(pid_t pid) const
     }
 }
 
-const QList<pid_t> WMWindowList::getTrayProcessList() const
-{
-    auto trayWndList = getTrayWindows();
-    QList<pid_t> pidList;
-    for (auto &it : m_cache) {
-        if (trayWndList.contains(it.second->winId))
-            pidList << it.first;
-    }
-    return pidList;
-}
-
-const QList<pid_t> WMWindowList::getGuiProcessList() const
+QList<pid_t> WMWindowList::getTrayProcessList() const
 {
     QList<pid_t> list;
-    for (auto &it : m_cache) {
+    for (auto &it : m_trayAppcache) {
+        list << it.first;
+    }
+    return list;
+}
+
+QList<pid_t> WMWindowList::getGuiProcessList() const
+{
+    QList<pid_t> list;
+    for (auto &it : m_guiAppcache) {
         list << it.first;
     }
     return list;
@@ -175,9 +206,64 @@ void WMWindowList::updateWindowListCache()
     for (auto i = 0; i < len; i++) {
         auto wid = clientList[i];
         auto winfo = getWindowInfo(wid);
-        if (winfo)
-            m_cache.insert({winfo->pid, std::move(winfo)});
+        const QStringList &windowtype = getWindowType(wid);
+        if (winfo && (windowtype.contains("_NET_WM_WINDOW_TYPE_NORMAL") || windowtype.contains("_NET_WM_WINDOW_TYPE_DIALOG")))
+            m_guiAppcache.insert({winfo->pid, std::move(winfo)});
     }
+
+    const QList<WMWId> &trayWndList = getTrayWindows();
+    for (auto i = 0; i < trayWndList.size(); i++) {
+        auto wid = trayWndList[i];
+        auto winfo = getWindowInfo(wid);
+        if (winfo && winfo.get()->pid > 0)
+            m_trayAppcache.insert({winfo->pid, std::move(winfo)});
+    }
+}
+
+pid_t WMWindowList::getWindowPid(WMWId winId) const
+{
+    auto *conn = m_conn.xcb_connection();
+    auto pidCookie = xcb_get_property(conn, 0, winId, m_conn.atom(WMAtom::_NET_WM_PID), XCB_ATOM_CARDINAL, 0, 4);
+
+    XGetPropertyReply pidReply(xcb_get_property_reply(conn, pidCookie, nullptr));
+    if (pidReply && pidReply->type == XCB_ATOM_CARDINAL) {
+        auto *pid = reinterpret_cast<pid_t *>(xcb_get_property_value(pidReply.get()));
+        return *pid;
+    } else
+        return -1;
+}
+
+QByteArray WMWindowList::getAtomName(xcb_connection_t *conn, xcb_atom_t atom) const
+{
+    AtomMeta meta(new struct atom_meta());
+    meta->atom = atom;
+
+    auto cookie = xcb_get_atom_name(conn, atom);
+    XGetAtomNameReply reply(xcb_get_atom_name_reply(conn, cookie, nullptr));
+    if (reply) {
+        auto len = xcb_get_atom_name_name_length(reply.get());
+        auto name = xcb_get_atom_name_name(reply.get());
+        meta->name = QByteArray{name, len};
+    }
+
+    return meta->name;
+}
+
+QStringList WMWindowList::getWindowType(WMWId winId) const
+{
+    QStringList windowType;
+    auto *conn = m_conn.xcb_connection();
+    auto windowTypeCookie = xcb_get_property(conn, 0, winId, m_conn.atom(WMAtom::_NET_WM_WINDOW_TYPE), XCB_ATOM_ATOM, 0, BUFSIZ);
+
+    XGetPropertyReply windowTypeReply(xcb_get_property_reply(conn, windowTypeCookie, nullptr));
+    if (windowTypeReply && windowTypeReply->type != XCB_NONE && windowTypeReply->value_len > 0) {
+        auto *atoms = reinterpret_cast<xcb_atom_t *>(xcb_get_property_value(windowTypeReply.get()));
+        Q_ASSERT(atoms != nullptr);
+        for (uint32_t i = 0; i < windowTypeReply->value_len; ++i) {
+            windowType << getAtomName(conn, atoms[i]);
+        } // !for
+    }
+    return windowType;
 }
 
 WMWindow WMWindowList::getWindowInfo(WMWId winId)

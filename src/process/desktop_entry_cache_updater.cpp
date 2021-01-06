@@ -21,7 +21,7 @@
 #include "common/uevent_loop.h"
 
 #include <DDesktopEntry>
-
+#include <QDebug>
 #include <QDir>
 
 DCORE_USE_NAMESPACE
@@ -41,9 +41,6 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     }
 
     DDesktopEntry dde(fileInfo.filePath());
-    if (dde.status() != DDesktopEntry::NoError)
-        return {};
-
     DesktopEntry entry(new struct desktop_entry_t());
 
     // display name

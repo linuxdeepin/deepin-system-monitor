@@ -43,6 +43,8 @@ public:
      */
     void setSortFilterString(const QString &search);
 
+    void setFilterType(int type);
+
 protected:
     /**
      * @brief Filters the row of specified parent with given pattern
@@ -73,6 +75,8 @@ private:
     QString m_hanwords {};
     // String representation of initials of each words
     QString m_capwords {};
+
+    int m_fileterType = 0;
 };
 
 #endif  // PROCESS_SORT_FILTER_PROXY_MODEL_H

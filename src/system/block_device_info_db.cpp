@@ -44,8 +44,7 @@ get_child(struct udev *udev, struct udev_device *parent, const char *subsystem)
     struct udev_list_entry *devices = udev_enumerate_get_list_entry(enumerate);
     struct udev_list_entry *entry;
 
-    udev_list_entry_foreach(entry, devices)
-    {
+    udev_list_entry_foreach(entry, devices) {
         const char *path = udev_list_entry_get_name(entry);
         child = udev_device_new_from_syspath(udev, path);
         break;
@@ -66,8 +65,7 @@ static void enumerate_usb_mass_storage(struct udev *udev)
     struct udev_list_entry *devices = udev_enumerate_get_list_entry(enumerate);
     struct udev_list_entry *entry;
 
-    udev_list_entry_foreach(entry, devices)
-    {
+    udev_list_entry_foreach(entry, devices) {
         const char *path = udev_list_entry_get_name(entry);
         struct udev_device *scsi = udev_device_new_from_syspath(udev, path);
 
@@ -135,8 +133,7 @@ static void enum_block()
         return;
     }
 
-    udev_list_entry_foreach(dev_list_entry, devices)
-    {
+    udev_list_entry_foreach(dev_list_entry, devices) {
         const char *path, *tmp;
         unsigned long long disk_size = 0;
         unsigned short int block_size = 512;

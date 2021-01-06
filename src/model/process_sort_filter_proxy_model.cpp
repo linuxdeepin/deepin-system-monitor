@@ -19,8 +19,9 @@
 */
 
 #include "process_sort_filter_proxy_model.h"
-
+#include "process/process_db.h"
 #include "process_table_model.h"
+#include "wm/wm_window_list.h"
 
 #include "common/collator.h"
 #include "common/han_latin.h"
@@ -62,12 +63,39 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
     setFilterRegExp(QRegExp(search, Qt::CaseInsensitive));
 }
 
+void ProcessSortFilterProxyModel::setFilterType(int type)
+{
+    m_fileterType = type;
+    setFilterRegExp(QRegExp({}, Qt::CaseInsensitive));
+}
+
 // filters the row of specified parent with given pattern
 bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
+    QModelIndex pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
+    const QVariant &euid = ProcessDB::instance()->processEuid();
+    const QVariant &cpid = pid.data(Qt::UserRole);
+    const Process &process = ProcessDB::instance()->processSet()->getProcessById(cpid.toInt());
+
+    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
+
+    bool filter = false;
+    if (m_fileterType == kNoFilter) {
+        filter = true;
+    } else if (m_fileterType == kFilterCurrentUser && euid == process.uid()) {
+        filter = true;
+    } else if (m_fileterType == kFilterApps
+               && euid == process.uid()
+               && (wmwindowList->isGuiApp(cpid.toInt())
+                   || wmwindowList->isTrayApp(cpid.toInt())
+                   || wmwindowList->isDesktopEntryApp(cpid.toInt()))) {
+        filter = true;
+    }
+
+    if (!filter) return false;
+
     // name, displayName, pid, user, pinyin
     QModelIndex name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
-    QModelIndex pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
     QModelIndex user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
 
     bool rc = false;

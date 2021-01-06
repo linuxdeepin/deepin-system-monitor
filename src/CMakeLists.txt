@@ -296,8 +296,6 @@ set(HPP_PROCESS
     process/process_icon_cache.h
     process/process_name.h
     process/process_name_cache.h
-    process/tray_apps_cache.h
-    process/gui_apps_cache.h
     process/priority_controller.h
     process/process_controller.h
     process/desktop_entry_cache.h
@@ -311,8 +309,6 @@ set(CPP_PROCESS
     process/process_icon_cache.cpp
     process/process_name.cpp
     process/process_name_cache.cpp
-    process/tray_apps_cache.cpp
-    process/gui_apps_cache.cpp
     process/priority_controller.cpp
     process/process_controller.cpp
     process/desktop_entry_cache.cpp
