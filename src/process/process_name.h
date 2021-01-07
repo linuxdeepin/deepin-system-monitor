@@ -40,7 +40,6 @@ public:
 
     QString name() const;
     QString displayName() const;
-    QString normalizedName() const;
 
     static QString normalizeProcessName(const QString &name, const QByteArrayList &cmdline);
 
@@ -50,7 +49,6 @@ private:
 private:
     QString m_name {};
     QString m_displayName {};
-    QString m_normalizedName {};
 };
 
 inline QString ProcessName::name() const
@@ -61,11 +59,6 @@ inline QString ProcessName::name() const
 inline QString ProcessName::displayName() const
 {
     return m_displayName;
-}
-
-inline QString ProcessName::normalizedName() const
-{
-    return m_normalizedName;
 }
 
 } // namespace process

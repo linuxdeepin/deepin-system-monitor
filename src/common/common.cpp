@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QString>
 #include <QtDBus>
+#include <QDesktopServices>
 
 namespace common {
 
@@ -72,6 +73,14 @@ void setFontSize(QPainter &painter, int textSize)
     QFont font = painter.font();
     font.setPointSize(textSize);
     painter.setFont(font);
+}
+
+void openFilePathItem(const QString &path)
+{
+    bool result = QProcess::startDetached(QString("dde-file-manager --show-item \"%1\"").arg(path));
+    if (!result) {
+        QDesktopServices::openUrl(QUrl(path));
+    }
 }
 
 namespace init {

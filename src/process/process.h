@@ -77,7 +77,6 @@ public:
     QString name() const;
     void setName(const QString &name);
     QString displayName() const;
-    QString normalizedName() const;
 
     QIcon icon() const;
 
@@ -184,11 +183,6 @@ inline void Process::setName(const QString &name)
 inline QString Process::displayName() const
 {
     return d->proc_name.displayName();
-}
-
-inline QString Process::normalizedName() const
-{
-    return d->proc_name.normalizedName();
 }
 
 inline QIcon Process::icon() const

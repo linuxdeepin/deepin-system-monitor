@@ -172,11 +172,11 @@ QList<pid_t> WMWindowList::getGuiProcessList() const
 
 QList<WMWId> WMWindowList::getTrayWindows() const
 {
-    QDBusInterface bus("com.deepin.dde.TrayManager", "/com/deepin/dde/TrayManager",
-                       "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-    auto reply = bus.call("Get", "com.deepin.dde.TrayManager", "TrayIcons");
-    auto v = reply.arguments().first();
-    auto argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+    QDBusInterface busInterface("com.deepin.dde.TrayManager", "/com/deepin/dde/TrayManager",
+                                "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
+    QDBusMessage reply = busInterface.call("Get", "com.deepin.dde.TrayManager", "TrayIcons");
+    QVariant v = reply.arguments().first();
+    const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 
     argument.beginArray();
     QList<WMWId> winIds;

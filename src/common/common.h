@@ -138,7 +138,7 @@ namespace error {
 
 inline void print_errno(decltype(errno) e, const QString msg)
 {
-    qWarning() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
+    //qWarning() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
 }
 
 } // namespace error
@@ -190,6 +190,8 @@ void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, in
 void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
               int loadingAngle, int rotationAngle, QColor color, double opacity);
 void setFontSize(QPainter &painter, int textSize);
+
+void openFilePathItem(const QString &path);
 } // namespace common
 
 #endif

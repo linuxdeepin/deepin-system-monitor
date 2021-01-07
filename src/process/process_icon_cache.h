@@ -35,10 +35,10 @@ class ProcessIconCache : QObject
 public:
     static ProcessIconCache *instance();
 
-    ProcessIcon *getProcessIcon(const QString &procName) const;
-    void addProcessIcon(const QString &procName, ProcessIcon *procIcon);
-    void removeProcessIcon(const QString &procName);
-    bool contains(const QString &procName) const;
+    ProcessIcon *getProcessIcon(pid_t pid) const;
+    void addProcessIcon(pid_t pid, ProcessIcon *procIcon);
+    void removeProcessIcon(pid_t pid);
+    bool contains(pid_t pid) const;
     void clear();
     void setMaxCost(int cost);
 
@@ -46,7 +46,7 @@ private:
     explicit ProcessIconCache(QObject *parent = nullptr);
 
 private:
-    QCache<QString, ProcessIcon> m_cache {1024};
+    QCache<pid_t, ProcessIcon> m_cache {1024};
 
     static ProcessIconCache *m_instance;
 };
@@ -54,29 +54,32 @@ private:
 inline ProcessIconCache *ProcessIconCache::instance()
 {
     if (!m_instance)
-        m_instance = new ProcessIconCache(QThread::currentThread());
+        m_instance = new ProcessIconCache();
 
     return m_instance;
 }
 
-inline ProcessIcon *ProcessIconCache::getProcessIcon(const QString &procName) const
+inline ProcessIcon *ProcessIconCache::getProcessIcon(pid_t pid) const
 {
-    return m_cache[procName];
+    if (m_cache.contains(pid))
+        return m_cache[pid];
+
+    return nullptr;
 }
 
-inline void ProcessIconCache::addProcessIcon(const QString &procName, ProcessIcon *procIcon)
+inline void ProcessIconCache::addProcessIcon(pid_t pid, ProcessIcon *procIcon)
 {
-    m_cache.insert(procName, procIcon);
+    m_cache.insert(pid, procIcon);
 }
 
-inline void ProcessIconCache::removeProcessIcon(const QString &procName)
+inline void ProcessIconCache::removeProcessIcon(pid_t pid)
 {
-    m_cache.remove(procName);
+    m_cache.remove(pid);
 }
 
-inline bool ProcessIconCache::contains(const QString &procName) const
+inline bool ProcessIconCache::contains(pid_t pid) const
 {
-    return m_cache.contains(procName);
+    return m_cache.contains(pid);
 }
 
 inline void ProcessIconCache::clear()

@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <DDesktopEntry>
+#include <QDebug>
 
 DCORE_USE_NAMESPACE
 

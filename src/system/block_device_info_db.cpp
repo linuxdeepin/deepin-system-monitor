@@ -141,18 +141,18 @@ static void enum_block()
         path = udev_list_entry_get_name(dev_list_entry);
         dev = udev_device_new_from_syspath(udev, path);
 
-        qDebug() << "devNode" << udev_device_get_devnode(dev);
-        qDebug() << "devType" << udev_device_get_devtype(dev);
-        qDebug() << "sysName" << udev_device_get_sysname(dev);
-        qDebug() << "devPath" << udev_device_get_devpath(dev);
-        qDebug() << "sysPath" << udev_device_get_syspath(dev);
-        qDebug() << "sysnum" << udev_device_get_sysnum(dev);
-        qDebug() << "subsystem" << udev_device_get_subsystem(dev);
+//        qDebug() << "devNode" << udev_device_get_devnode(dev);
+//        qDebug() << "devType" << udev_device_get_devtype(dev);
+//        qDebug() << "sysName" << udev_device_get_sysname(dev);
+//        qDebug() << "devPath" << udev_device_get_devpath(dev);
+//        qDebug() << "sysPath" << udev_device_get_syspath(dev);
+//        qDebug() << "sysnum" << udev_device_get_sysnum(dev);
+//        qDebug() << "subsystem" << udev_device_get_subsystem(dev);
 
-        auto *parent = udev_device_get_parent(dev);
-        qDebug() << "parent sysname: " << udev_device_get_sysname(parent);
-        qDebug() << "parent devpath: " << udev_device_get_devpath(parent);
-        qDebug() << "parent syspath: " << udev_device_get_syspath(parent);
+//        auto *parent = udev_device_get_parent(dev);
+//        qDebug() << "parent sysname: " << udev_device_get_sysname(parent);
+//        qDebug() << "parent devpath: " << udev_device_get_devpath(parent);
+//        qDebug() << "parent syspath: " << udev_device_get_syspath(parent);
 
         //        /* skip if device/disk is a partition or loop device */
         //        if (strncmp(udev_device_get_devtype(dev), "partition", 9) != 0 &&

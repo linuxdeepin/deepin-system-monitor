@@ -38,7 +38,6 @@
 
 #include <DApplication>
 #include <DApplicationHelper>
-#include <DDesktopServices>
 #include <DDialog>
 #include <DErrorMessage>
 #include <DFontSizeManager>
@@ -189,44 +188,53 @@ void ProcessTableView::openExecDirWithFM()
     // selection check needed
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
-        //        QString cmdline = common::getProcessCmdline(qvariant_cast<pid_t>(m_selectedPID));
+        const Process &proc = ProcessDB::instance()->processSet()->getProcessById(pid);
+        QString cmdline =  proc.cmdlineString();
 
-        //        if (cmdline.size() > 0) {
-        //            // Found wine program location if cmdline starts with c://.
-        //            if (cmdline.startsWith("c:\\")) {
-        //                QString winePrefix = common::getProcessEnvironmentVariable(pid, "WINEPREFIX");
-        //                cmdline = cmdline.replace("\\", "/").replace("c:/", "/drive_c/");
+        if (cmdline.size() > 0) {
+            // Found wine program location if cmdline starts with c://.
+            if (cmdline.startsWith("c:")) {
+                QString winePrefix =  proc.environ().value("WINEPREFIX");
+                cmdline = cmdline.replace("\\", "/").replace("c:/", "/drive_c/");
 
-        //                DDesktopServices::showFileItem(winePrefix + cmdline);
-        //            } else {
-        //                QString flatpakAppidEnv =
-        //                    common::getProcessEnvironmentVariable(pid, "FLATPAK_APPID");
+                const QString &path = QString(winePrefix + cmdline).trimmed();
+                common::openFilePathItem(path);
+            } else {
+                QString flatpakAppidEnv = proc.environ().value("FLATPAK_APPID");
+                // Else find program location through 'which' command.
+                if (flatpakAppidEnv == "") {
+                    QProcess whichProcess;
+                    QString exec = "which";
+                    QStringList params;
+                    params << cmdline.split(" ");
+                    whichProcess.start(exec, params);
+                    whichProcess.waitForFinished();
+                    QString output(whichProcess.readAllStandardOutput());
 
-        //                // Else find program location through 'which' command.
-        //                if (flatpakAppidEnv == "") {
-        //                    QProcess whichProcess;
-        //                    QString exec = "which";
-        //                    QStringList params;
-        //                    params << cmdline.split(" ");
-        //                    whichProcess.start(exec, params);
-        //                    whichProcess.waitForFinished();
-        //                    QString output(whichProcess.readAllStandardOutput());
+                    const QString &path = QString(output.split("\n")[0]).trimmed();
+                    common::openFilePathItem(path);
+                }
+                // Find flatpak application location.
+                else {
+                    QProcess whichProcess;
+                    QString exec = "flatpak";
+                    QStringList params;
+                    params << "info";
+                    params << flatpakAppidEnv;
+                    whichProcess.start(exec, params);
+                    whichProcess.waitForFinished();
+                    QString output(whichProcess.readAllStandardOutput());
 
-        //                    QString processPath = output.split("\n")[0];
-        //                    DDesktopServices::showFileItem(processPath);
-        //                }
-        //                // Find flatpak application location.
-        //                else {
-        //                    QDir flatpakRootDir = Utils::getFlatpakAppPath(flatpakAppidEnv);
-        //                    flatpakRootDir.cd("files");
-        //                    flatpakRootDir.cd("bin");
+                    QDir flatpakRootDir(output.split("Location:")[1].split("\n")[0].simplified());
+                    flatpakRootDir.cd("files");
+                    flatpakRootDir.cd("bin");
 
-        //                    // Need split full path to get last filename.
-        //                    DDesktopServices::showFileItem(
-        //                        flatpakRootDir.absoluteFilePath(cmdline.split("/").last()));
-        //                }
-        //            }
-        //        } // ::if(cmdline)
+                    // Need split full path to get last filename.
+                    const QString &path = QString(flatpakRootDir.absoluteFilePath(cmdline.split("/").last())).trimmed();
+                    common::openFilePathItem(path);
+                }
+            }
+        } // ::if(cmdline)
     } // ::if(selectedPID)
 }
 

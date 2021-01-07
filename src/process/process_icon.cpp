@@ -69,9 +69,9 @@ ProcessIcon::~ProcessIcon()
 void ProcessIcon::refreashProcessIcon(Process *proc)
 {
     if (proc) {
-        auto *cache = ProcessIconCache::instance();
-        if (cache->contains(proc->displayName())) {
-            auto *procIcon = cache->getProcessIcon(proc->displayName());
+        ProcessIconCache *cache = ProcessIconCache::instance();
+        if (cache->contains(proc->pid())) {
+            auto *procIcon = cache->getProcessIcon(proc->pid());
             if (procIcon)
                 m_data = procIcon->m_data;
         } else {
@@ -79,7 +79,7 @@ void ProcessIcon::refreashProcessIcon(Process *proc)
             m_data = iconDataPtr;
             auto *procIcon = new ProcessIcon();
             procIcon->m_data = iconDataPtr;
-            cache->addProcessIcon(proc->displayName(), procIcon);
+            cache->addProcessIcon(proc->pid(), procIcon);
         }
     }
 }
@@ -140,24 +140,13 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     auto *iconCache = ProcessIconCache::instance();
     Q_ASSERT(iconCache != nullptr);
 
-    if (desktopEntryCache->contains(proc->name()) || desktopEntryCache->contains(proc->normalizedName())) {
+    if (desktopEntryCache->contains(proc->name())) {
         DesktopEntry entry;
         entry = desktopEntryCache->entry(proc->name());
         if (entry && !entry->icon.isEmpty()) {
             auto *iconData = new struct icon_data_name_type();
             iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->normalizedName();
-            iconData->icon_name = entry->icon;
-            iconDataPtr.reset(iconData);
-            windowList->addDesktopEntryApp(proc->pid());
-            return iconDataPtr;
-        }
-
-        entry = desktopEntryCache->entry(proc->normalizedName());
-        if (entry && !entry->icon.isEmpty()) {
-            auto *iconData = new struct icon_data_name_type();
-            iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->normalizedName();
+            iconData->proc_name = proc->name();
             iconData->icon_name = entry->icon;
             iconDataPtr.reset(iconData);
             windowList->addDesktopEntryApp(proc->pid());
@@ -171,7 +160,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
         if (entry && !entry->icon.isEmpty()) {
             auto *iconData = new struct icon_data_name_type();
             iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->normalizedName();
+            iconData->proc_name = proc->name();
             iconData->icon_name = entry->icon;
             iconDataPtr.reset(iconData);
             return iconDataPtr;
@@ -179,15 +168,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     }
 
     if (shellList.contains(proc->name())) {
-        if (!iconCache->contains("[::terminal::]")) {
-            iconDataPtr.reset(terminalIconData());
-            auto *procIcon = new ProcessIcon();
-            procIcon->m_data = iconDataPtr;
-            iconCache->addProcessIcon("[::terminal::]", procIcon);
-        } else {
-            auto *procIcon = iconCache->getProcessIcon("[::terminal::]");
-            iconDataPtr = procIcon->m_data;
-        }
+        iconDataPtr.reset(terminalIconData());
         return iconDataPtr;
     }
 
@@ -197,7 +178,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
         if (entry && !entry->icon.isEmpty()) {
             auto *iconData = new struct icon_data_name_type();
             iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->normalizedName();
+            iconData->proc_name = proc->name();
             iconData->icon_name = entry->icon;
             iconDataPtr.reset(iconData);
             return iconDataPtr;
@@ -209,7 +190,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
         if (pixMap.size() > 0) {
             auto *iconData = new struct icon_data_pix_map_type();
             iconData->pixMap = pixMap;
-            iconData->proc_name = proc->normalizedName();
+            iconData->proc_name = proc->name();
             iconData->type = kIconDataPixmapType;
             iconDataPtr.reset(iconData);
             return iconDataPtr;
@@ -232,17 +213,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     }
 
     // fallback to use default icon
-    if (!iconCache->contains("[::default::]")) {
-        auto *procIcon = new ProcessIcon();
-        auto *defaultIcon = defaultIconData();
-        iconDataPtr.reset(defaultIcon);
-        procIcon->m_data = iconDataPtr;
-        iconCache->addProcessIcon("[::default::]", procIcon);
-    } else {
-        auto *procIcon = iconCache->getProcessIcon("[::default::]");
-        iconDataPtr = procIcon->m_data;
-    }
-
+    iconDataPtr.reset(defaultIconData());
     return iconDataPtr;
 }
 

@@ -88,7 +88,6 @@ DWIDGET_USE_NAMESPACE
 SET_FORM_ACCESSIBLE(MainWindow, "MainWindow")
 SET_FORM_ACCESSIBLE(ErrorDialog, "ErrorDialog")
 SET_FORM_ACCESSIBLE(Toolbar, "Toolbar")
-SET_FORM_ACCESSIBLE(BaseTableView, "BaseTableView")
 SET_FORM_ACCESSIBLE(BaseHeaderView, "BaseHeaderView")
 SET_FORM_ACCESSIBLE(ProcessPageWidget, "ProcessPageWidget")
 SET_FORM_ACCESSIBLE(ServiceNameSubInputDialog, "ServiceNameSubInputDialog")
@@ -123,7 +122,6 @@ SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectN
 SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(QPushButton, m_w->text().isEmpty() ? "qpushbutton" : m_w->text())
 SET_SLIDER_ACCESSIBLE(QSlider, "qslider")
-SET_FORM_ACCESSIBLE(QMenu, "qmenu")
 SET_FORM_ACCESSIBLE(QStackedWidget, "qstackedwidget")
 //SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? "qlabel" : m_w->text())
 
@@ -151,7 +149,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MainWindow);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), ErrorDialog);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), Toolbar);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), BaseTableView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), BaseHeaderView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), ProcessPageWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), ServiceNameSubInputDialog);
@@ -186,7 +183,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QPushButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QSlider);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QMenu);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QStackedWidget);
     //    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QLabel);
 
