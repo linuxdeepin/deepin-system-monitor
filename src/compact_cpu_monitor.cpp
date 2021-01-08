@@ -21,6 +21,10 @@
 #include "smooth_curve_generator.h"
 #include "common/common.h"
 #include "constant.h"
+#include "process/process_db.h"
+#include "system/device_db.h"
+#include "model/cpu_info_model.h"
+#include "model/cpu_list_model.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -54,7 +58,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     numCPU = int(sysconf(_SC_NPROCESSORS_ONLN));
 
     for (int i = 0; i < numCPU; i++) {
-        QList<double> cpuPercent;
+        QList<qreal> cpuPercent;
         for (int j = 0; j < pointsNumber; j++) {
             cpuPercent.append(0);
         }
@@ -79,10 +83,9 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
               << "#2CA7F8"
               << "#A005CE";
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
-    //            this, &CompactCpuMonitor::updateStatus);
+    TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
+    m_cpuInfomodel = new CPUInfoModel(period, this);
+    connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CompactCpuMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -91,14 +94,15 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
 
-void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPercents)
+void CompactCpuMonitor::updateStatus()
 {
-    totalCpuPercent = cpuPercent;
+    totalCpuPercent = m_cpuInfomodel->cpuAllPercent();
 
-    for (int i = 0; i < cPercents.size(); i++) {
+    const auto &cpulist = m_cpuInfomodel->cpuPercentList();
+    for (int i = 0; i < cpulist.size(); i++) {
         QList<qreal> cpuPercent = cpuPercents[i];
 
-        cpuPercent.append(cPercents[i]);
+        cpuPercent.append(cpulist[i] / 100.0);
 
         if (cpuPercent.size() > pointsNumber) {
             cpuPercent.pop_front();

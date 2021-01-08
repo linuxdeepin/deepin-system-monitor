@@ -20,11 +20,10 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include "private/cpu_p.h"
-
 #include <QSharedDataPointer>
 
 #include <memory>
+#include <QDebug>
 
 namespace core {
 namespace system {
@@ -54,6 +53,7 @@ using CPUStat = std::shared_ptr<struct cpu_stat_t>;
 using CPUUsage = std::shared_ptr<struct cpu_usage_t>;
 
 class CPUSet;
+class CPUInfoPrivate;
 
 class CPUInfo
 {
@@ -95,91 +95,6 @@ private:
 private:
     QSharedDataPointer<CPUInfoPrivate> d;
 };
-
-inline int CPUInfo::logicalIndex() const
-{
-    return d->index;
-}
-
-inline QByteArray CPUInfo::logicalName() const
-{
-    return d->cpu;
-}
-
-inline quint32 CPUInfo::curfreq() const
-{
-    return d->curfreq;
-}
-
-inline quint32 CPUInfo::minfreq() const
-{
-    return d->minfreq;
-}
-
-inline quint32 CPUInfo::maxfreq() const
-{
-    return d->maxfreq;
-}
-
-inline int CPUInfo::packageID() const
-{
-    return d->package_id;
-}
-
-inline int CPUInfo::coreID() const
-{
-    return d->core_id;
-}
-
-inline int CPUInfo::bookID() const
-{
-    return d->book_id;
-}
-
-inline int CPUInfo::drawerID() const
-{
-    return d->drawer_id;
-}
-
-inline qulonglong CPUInfo::l1iCache() const
-{
-    for (auto &ce : d->cache) {
-        if (ce->level == 1 && ce->type == "Instruction")
-            return ce->size;
-    }
-
-    return 0;
-}
-
-inline qulonglong CPUInfo::l1dCache() const
-{
-    for (auto &ce : d->cache) {
-        if (ce->level == 1 && ce->type == "Data")
-            return ce->size;
-    }
-
-    return 0;
-}
-
-inline qulonglong CPUInfo::l2Cache() const
-{
-    for (auto &ce : d->cache) {
-        if (ce->level == 2)
-            return ce->size;
-    }
-
-    return 0;
-}
-
-inline qulonglong CPUInfo::l3Cache() const
-{
-    for (auto &ce : d->cache) {
-        if (ce->level == 3)
-            return ce->size;
-    }
-
-    return 0;
-}
 
 } // namespace system
 } // namespace core

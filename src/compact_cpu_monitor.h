@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QPainterPath>
 
+class CPUInfoModel;
 class CompactCpuMonitor : public QWidget
 {
     Q_OBJECT
@@ -31,7 +32,7 @@ public:
     ~CompactCpuMonitor();
 
 public slots:
-    void updateStatus(qreal totalCpuPercent, const QList<qreal> cPercents);
+    void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -55,6 +56,8 @@ private:
 
     QFont m_cpuFont;
     QFont m_statFont;
+
+    CPUInfoModel *m_cpuInfomodel;
 };
 
 #endif

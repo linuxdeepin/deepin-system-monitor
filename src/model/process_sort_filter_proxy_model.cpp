@@ -66,7 +66,7 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
 void ProcessSortFilterProxyModel::setFilterType(int type)
 {
     m_fileterType = type;
-    setFilterRegExp(QRegExp({}, Qt::CaseInsensitive));
+    setFilterRegExp(QRegExp({m_search}, Qt::CaseInsensitive));
 }
 
 // filters the row of specified parent with given pattern
@@ -95,8 +95,8 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
     if (!filter) return false;
 
     // name, displayName, pid, user, pinyin
-    QModelIndex name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
-    QModelIndex user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
+    const QModelIndex &name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
+    const QModelIndex &user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
 
     bool rc = false;
     // display name or name matches pattern

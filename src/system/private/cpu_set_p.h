@@ -30,6 +30,12 @@ namespace system {
 
 class CPUSet;
 
+enum StatIndex {
+    kLastStat = 0,
+    kCurrentStat = 1,
+    kStatCount = kCurrentStat + 1
+};
+
 class CPUSetPrivate : public QSharedData
 {
 public:
@@ -51,6 +57,7 @@ public:
         , m_statDB {}
         , m_usageDB {}
     {
+
     }
     CPUSetPrivate(const CPUSetPrivate &other)
         : QSharedData(other)
@@ -106,6 +113,7 @@ private:
     QMap<QByteArray, CPUStat> m_statDB; // per cpu stat
     QMap<QByteArray, CPUUsage> m_usageDB; // per cpu usage
 
+    qulonglong cpusageTotal[kStatCount] = {0, 0};
     friend class CPUSet;
 };
 

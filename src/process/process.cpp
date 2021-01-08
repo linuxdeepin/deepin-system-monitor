@@ -24,6 +24,8 @@
 #include "common/thread_manager.h"
 #include "common/base_thread.h"
 #include "system/system_monitor_thread.h"
+#include "system/device_db.h"
+#include "process/process_db.h"
 
 #include <QMap>
 #include <QList>
@@ -108,6 +110,12 @@ void Process::readProcessInfo()
 
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
+
+    CPUSet *cpuset = DeviceDB::instance()->cpuSet();
+    ProcessSet *procset =  ProcessDB::instance()->processSet();
+
+    qreal timedelta = d->stime + d->utime - procset->getProcUseageTotal(d->pid);
+    d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
 
     d->valid = d->valid && ok;
 }

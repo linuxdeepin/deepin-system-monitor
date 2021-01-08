@@ -20,6 +20,7 @@
 
 #include "cpu.h"
 #include "cpu_set.h"
+#include "private/cpu_p.h"
 
 #define PATH_TPL_CPU_CACHE "/sys/devices/system/cpu/%d/cache"
 #define PATH_TPL_CPU_CACHE_ID "/sys/devices/system/cpu/%d/cache/index%d/id"
@@ -92,6 +93,91 @@ void CPUInfo::read_cache(int index)
 
 void CPUInfo::read_topology(int index)
 {
+}
+
+int CPUInfo::logicalIndex() const
+{
+    return d->index;
+}
+
+QByteArray CPUInfo::logicalName() const
+{
+    return d->cpu;
+}
+
+quint32 CPUInfo::curfreq() const
+{
+    return d->curfreq;
+}
+
+quint32 CPUInfo::minfreq() const
+{
+    return d->minfreq;
+}
+
+quint32 CPUInfo::maxfreq() const
+{
+    return d->maxfreq;
+}
+
+int CPUInfo::packageID() const
+{
+    return d->package_id;
+}
+
+int CPUInfo::coreID() const
+{
+    return d->core_id;
+}
+
+int CPUInfo::bookID() const
+{
+    return d->book_id;
+}
+
+int CPUInfo::drawerID() const
+{
+    return d->drawer_id;
+}
+
+qulonglong CPUInfo::l1iCache() const
+{
+    for (auto &ce : d->cache) {
+        if (ce->level == 1 && ce->type == "Instruction")
+            return ce->size;
+    }
+
+    return 0;
+}
+
+qulonglong CPUInfo::l1dCache() const
+{
+    for (auto &ce : d->cache) {
+        if (ce->level == 1 && ce->type == "Data")
+            return ce->size;
+    }
+
+    return 0;
+}
+
+qulonglong CPUInfo::l2Cache() const
+{
+    for (auto &ce : d->cache) {
+        if (ce->level == 2)
+            return ce->size;
+    }
+
+    return 0;
+}
+
+qulonglong CPUInfo::l3Cache() const
+{
+    for (auto &ce : d->cache) {
+        if (ce->level == 3)
+            return ce->size;
+    }
+
+    return 0;
 }
 
 } // namespace system

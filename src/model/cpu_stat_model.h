@@ -87,6 +87,20 @@ public:
         return SampleFrame(*this) -= rhs;
     }
 
+    static qreal cpupc(const SampleFrame<cpu_usage_t> *lhs, const SampleFrame<cpu_usage_t> *rhs)
+    {
+        if (!lhs)
+            return 0;
+
+        if (!rhs)
+            return qreal(lhs->stat->total - lhs->stat->idle) * 1. / lhs->stat->total * 100;
+
+        auto totald = (rhs->stat->total > lhs->stat->total) ? (rhs->stat->total - lhs->stat->total) : 0;
+        auto idled = (rhs->stat->idle > lhs->stat->idle) ? (rhs->stat->idle - lhs->stat->idle) : 0;
+
+        return qreal(totald - idled) * 1. / totald * 100;
+    }
+
     struct timeval ts;
     CPUUsage stat;
 };

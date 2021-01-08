@@ -23,7 +23,6 @@
 #include "common/sample.h"
 #include "common/common.h"
 #include "system/sys_info.h"
-#include "system/cpu_set.h"
 #include "cpu_stat_model.h"
 
 #include <QObject>
@@ -87,7 +86,9 @@ public:
     QString l2Cache() const;
     QString l3Cache() const;
 
-    QString utilization() const;
+    QList<qreal> cpuPercentList() const;
+    qreal cpuAllPercent() const;
+
     QString loadavg() const;
     uint nProcesses() const;
     uint nThreads() const;
@@ -109,123 +110,10 @@ private:
     std::unique_ptr<Sample<cpu_usage_t>> m_overallUsageSample;
     std::unique_ptr<Sample<load_avg_t>> m_loadAvgSampleDB; // for loadavg monitoring extends
 
-    std::shared_ptr<CPUListModel> m_cpuListModel;
+    QMap<QByteArray, std::shared_ptr<Sample<cpu_usage_t>>> m_singleUsageSample;
 
     SysInfo *m_sysInfo;
     CPUSet *m_cpuSet;
 };
-
-inline std::weak_ptr<CPUListModel> CPUInfoModel::cpuListModel() const
-{
-    return m_cpuListModel;
-}
-
-inline QString CPUInfoModel::cpuFreq() const
-{
-    return formatHz(m_cpuSet->curfreq());
-}
-
-inline QString CPUInfoModel::maxFreq() const
-{
-    return formatHz(m_cpuSet->maxfreq());
-}
-
-inline QString CPUInfoModel::minFreq() const
-{
-    return formatHz(m_cpuSet->minfreq());
-}
-
-inline QString CPUInfoModel::model() const
-{
-    return m_cpuSet->cpuModel();
-}
-
-inline QString CPUInfoModel::vendor() const
-{
-    return m_cpuSet->cpuVendor();
-}
-
-inline uint CPUInfoModel::nCores() const
-{
-    return m_cpuSet->cores();
-}
-
-inline uint CPUInfoModel::nSockets() const
-{
-    return m_cpuSet->sockets();
-}
-
-inline uint CPUInfoModel::nProcessors() const
-{
-    return m_cpuSet->processors();
-}
-
-inline QString CPUInfoModel::virtualization() const
-{
-    return m_cpuSet->virtualization();
-}
-
-inline QString CPUInfoModel::l1iCache() const
-{
-    return formatUnit({m_cpuSet->l1iCache()}, B, 0);
-}
-
-inline QString CPUInfoModel::l1dCache() const
-{
-    return formatUnit({m_cpuSet->l1dCache()}, B, 0);
-}
-
-inline QString CPUInfoModel::l2Cache() const
-{
-    return formatUnit({m_cpuSet->l2Cache()}, B, 0);
-}
-
-inline QString CPUInfoModel::l3Cache() const
-{
-    return formatUnit({m_cpuSet->l3Cache()}, B, 0);
-}
-
-inline QString CPUInfoModel::utilization() const
-{
-    auto usage = m_overallUsageSample->recentSample()->stat;
-    return QString::number((usage->total - usage->idle) * 1. / usage->total * 100, 'f', 1).append('%');
-}
-
-inline QString CPUInfoModel::loadavg() const
-{
-    QString buffer {};
-    buffer << *m_sysInfo->loadAvg();
-    return buffer;
-}
-
-inline uint CPUInfoModel::nProcesses() const
-{
-    return m_sysInfo->nprocesses();
-}
-
-inline uint CPUInfoModel::nThreads() const
-{
-    return m_sysInfo->nthreads();
-}
-
-inline uint CPUInfoModel::nFileDescriptors() const
-{
-    return m_sysInfo->nfds();
-}
-
-inline QString CPUInfoModel::hostname() const
-{
-    return m_sysInfo->hostname();
-}
-
-inline QString CPUInfoModel::osType() const
-{
-    return m_sysInfo->arch();
-}
-
-inline QString CPUInfoModel::osVersion() const
-{
-    return m_sysInfo->version();
-}
 
 #endif // CPU_INFO_MODEL_H

@@ -230,7 +230,7 @@ public:
     inline const SampleFrame<T> *recentSample() const
     {
         if (m_samples.size() > 0)
-            return m_samples.front().get();
+            return m_samples.last().get();
         else
             return nullptr;
     }

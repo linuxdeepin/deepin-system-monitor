@@ -18,6 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "cpu_set.h"
+#include "private/cpu_set_p.h"
 
 #include "common/common.h"
 #include "common/thread_manager.h"
@@ -237,10 +238,139 @@ CPUSet::~CPUSet()
 {
 }
 
+quint32 CPUSet::curfreq() const
+{
+    quint32 freq = 0;
+    for (auto &cpuInfo : d->m_cpuInfoDB) {
+        if (freq < cpuInfo.curfreq())
+            freq = cpuInfo.curfreq();
+    }
+
+    return freq;
+}
+
+quint32 CPUSet::minfreq() const
+{
+    quint32 freq = UINT32_MAX;
+    for (auto &cpuInfo : d->m_cpuInfoDB) {
+        if (freq > cpuInfo.minfreq())
+            freq = cpuInfo.minfreq();
+    }
+
+    return freq;
+}
+
+quint32 CPUSet::maxfreq() const
+{
+    quint32 freq = 0;
+    for (auto &cpuInfo : d->m_cpuInfoDB) {
+        if (freq < cpuInfo.maxfreq())
+            freq = cpuInfo.maxfreq();
+    }
+
+    return freq;
+}
+
+QString CPUSet::cpuModel() const
+{
+    return d->m_model;
+}
+
+QString CPUSet::cpuVendor() const
+{
+    return d->m_vendor;
+}
+
+quint32 CPUSet::cores() const
+{
+    return d->m_cores;
+}
+
+quint32 CPUSet::sockets() const
+{
+    return d->m_sockets;
+}
+
+quint32 CPUSet::processors() const
+{
+    return d->m_processors;
+}
+
+QString CPUSet::virtualization() const
+{
+    return d->m_virtualization;
+}
+
+qulonglong CPUSet::l1iCache() const
+{
+    if (d->m_cpuInfoDB.size() > 0)
+        return d->m_cpuInfoDB[0].l1iCache();
+
+    return 0;
+}
+
+qulonglong CPUSet::l1dCache() const
+{
+    if (d->m_cpuInfoDB.size() > 0)
+        return d->m_cpuInfoDB[0].l1dCache();
+
+    return 0;
+}
+
+qulonglong CPUSet::l2Cache() const
+{
+    if (d->m_cpuInfoDB.size() > 0)
+        return d->m_cpuInfoDB[0].l2Cache();
+
+    return 0;
+}
+
+qulonglong CPUSet::l3Cache() const
+{
+    if (d->m_cpuInfoDB.size() > 0)
+        return d->m_cpuInfoDB[0].l3Cache();
+
+    return 0;
+}
+
+const CPUUsage CPUSet::usage() const
+{
+    return d->m_usage;
+}
+
+const CPUStat CPUSet::stat() const
+{
+    return d->m_stat;
+}
+
+QList<CPUInfo> CPUSet::cpuInfoDB() const
+{
+    return d->m_cpuInfoDB;
+}
+
+QList<QByteArray> CPUSet::cpuLogicName() const
+{
+    return d->m_usageDB.keys();
+}
+
+const CPUStat CPUSet::statDB(const QByteArray &cpu) const
+{
+    return d->m_statDB[cpu];
+}
+
+const CPUUsage CPUSet::usageDB(const QByteArray &cpu) const
+{
+    return d->m_usageDB[cpu];
+}
+
+
 void CPUSet::update()
 {
     read_stats();
     read_overall_info();
+
+    d->cpusageTotal[kLastStat] = d->cpusageTotal[kCurrentStat];
+    d->cpusageTotal[kCurrentStat] = d->m_usage->total;
 }
 
 void CPUSet::read_stats()
@@ -331,6 +461,7 @@ void CPUSet::read_stats()
                         d->m_statDB[stat->cpu] = stat;
                         d->m_usageDB[usage->cpu] = usage;
                     } //::if(usage)
+
                 } else
                     print_errno(errno, QString("read %1 failed, cpu%2").arg(PROC_PATH_STAT).arg(ncpu));
             } // ::if(stat)
@@ -405,6 +536,14 @@ void CPUSet::read_overall_info()
     // read online/possible/present
     // foreach(pos)->present
     CPUInfo info;
+}
+
+qulonglong CPUSet::getUsageTotalDelta() const
+{
+    if (d->cpusageTotal[kCurrentStat] <= d->cpusageTotal[kLastStat])
+        return 1;
+
+    return d->cpusageTotal[kCurrentStat] - d->cpusageTotal[kLastStat];
 }
 
 } // namespace system

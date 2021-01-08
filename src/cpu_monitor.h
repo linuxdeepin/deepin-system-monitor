@@ -30,6 +30,7 @@ DWIDGET_USE_NAMESPACE
 
 class Settings;
 class QPropertyAnimation;
+class CPUInfoModel;
 
 class CpuMonitor : public QWidget
 {
@@ -42,7 +43,7 @@ public:
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
-    void updateStatus(qreal cpuPercent, const QList<qreal> cPercents);
+    void updateStatus();
 
 private:
     void changeFont(const QFont &font);
@@ -92,6 +93,7 @@ private:
 
     qreal m_progress {};
     QPropertyAnimation *m_animation {};
+    CPUInfoModel *m_cpuInfomodel;
 };
 
 #endif

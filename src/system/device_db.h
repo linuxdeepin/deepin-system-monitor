@@ -76,25 +76,21 @@ inline DeviceDB *DeviceDB::instance()
 
 inline BlockDeviceInfoDB *DeviceDB::blockDeviceInfoDB()
 {
-    QReadLocker lock(&m_rwlock);
     return m_blkDevInfoDB;
 }
 
 inline NetifInfoDB *DeviceDB::netifInfoDB()
 {
-    QReadLocker lock(&m_rwlock);
     return m_netifInfoDB;
 }
 
 inline MemInfo *DeviceDB::memInfo()
 {
-    QReadLocker lock(&m_rwlock);
     return m_memInfo;
 }
 
 inline CPUSet *DeviceDB::cpuSet()
 {
-    QReadLocker lock(&m_rwlock);
     return m_cpuSet;
 }
 

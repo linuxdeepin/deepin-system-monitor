@@ -49,7 +49,10 @@ bool ProcessSet::containsById(pid_t pid)
 
 void ProcessSet::refresh()
 {
-    m_set.clear();
+    for (auto iter = m_set.begin(); iter != m_set.end(); iter++) {
+        m_procusageTotal[iter->pid()] = iter->utime() + iter->stime();
+    }
+
     scanProcess();
 }
 
@@ -65,6 +68,8 @@ void ProcessSet::scanProcess()
 
         m_set.insert(proc.pid(), proc);
     }
+
+    m_procusageTotal.clear();
 }
 
 ProcessSet::Iterator::Iterator()
@@ -110,6 +115,42 @@ void ProcessSet::Iterator::advance()
     if (!m_dirent && errno) {
         print_errno(errno, "read /proc failed");
     }
+}
+
+qulonglong ProcessSet::getProcUseageTotal(pid_t pid) const
+{
+    auto iter = m_procusageTotal.find(pid);
+    if (iter == m_procusageTotal.end())
+        return 0;
+
+    return iter.value();
+}
+
+const Process ProcessSet::getProcessById(pid_t pid) const
+{
+    return m_set[pid];
+}
+
+QList<pid_t> ProcessSet::getPIDList() const
+{
+    return m_set.keys();
+}
+
+void ProcessSet::removeProcess(pid_t pid)
+{
+    m_set.remove(pid);
+}
+
+void ProcessSet::updateProcessState(pid_t pid, char state)
+{
+    if (m_set.contains(pid))
+        m_set[pid].setState(state);
+}
+
+void ProcessSet::updateProcessPriority(pid_t pid, int priority)
+{
+    if (m_set.contains(pid))
+        m_set[pid].setPriority(priority);
 }
 
 } // namespace process

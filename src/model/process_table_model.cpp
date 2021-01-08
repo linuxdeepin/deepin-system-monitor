@@ -37,20 +37,20 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessTableModel::updateProcessList);
 
-//    //remove process entry from model's cache on process ended signal
-//    connect(smo, &SystemMonitor::processEnded, this, &ProcessTableModel::removeProcessEntry);
-//    //update process's state in model's cache on process paused signal
-//    connect(smo, &SystemMonitor::processPaused, this,
-//            &ProcessTableModel::updateProcessState);
-//    //update process's state in model's cache on process resumed signal
-//    connect(smo, &SystemMonitor::processResumed, this,
-//            &ProcessTableModel::updateProcessState);
-//    //remove process entry from model's cache on process killed signal
-//    connect(smo, &SystemMonitor::processKilled, this,
-//            &ProcessTableModel::removeProcessEntry);
-//    //update process's priority in model's cache on process priority changed signal
-//    connect(smo, &SystemMonitor::processPriorityChanged, this,
-//            &ProcessTableModel::updateProcessPriority);
+    //remove process entry from model's cache on process ended signal
+    connect(ProcessDB::instance(), &ProcessDB::processEnded, this, &ProcessTableModel::removeProcess);
+    //update process's state in model's cache on process paused signal
+    connect(ProcessDB::instance(), &ProcessDB::processPaused, this,
+            &ProcessTableModel::updateProcessState);
+    //update process's state in model's cache on process resumed signal
+    connect(ProcessDB::instance(), &ProcessDB::processResumed, this,
+            &ProcessTableModel::updateProcessState);
+    //remove process entry from model's cache on process killed signal
+    connect(ProcessDB::instance(), &ProcessDB::processKilled, this,
+            &ProcessTableModel::removeProcess);
+    //update process's priority in model's cache on process priority changed signal
+    connect(ProcessDB::instance(), &ProcessDB::processPriorityChanged, this,
+            &ProcessTableModel::updateProcessPriority);
 }
 
 char ProcessTableModel::getProcessState(pid_t pid) const

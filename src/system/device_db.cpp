@@ -49,7 +49,6 @@ DeviceDB::~DeviceDB()
 
 void DeviceDB::update()
 {
-    QWriteLocker lock(&m_rwlock);
     m_cpuSet->update();
     m_memInfo->readMemInfo();
     m_netifInfoDB->update();

@@ -23,6 +23,8 @@
 #include "constant.h"
 #include "settings.h"
 #include "common/common.h"
+#include "model/cpu_info_model.h"
+#include "model/cpu_stat_model.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -56,10 +58,9 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
-    //            this, &CpuMonitor::updateStatus);
+    TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
+    m_cpuInfomodel = new CPUInfoModel(period, this);
+    connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CpuMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -110,9 +111,9 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     update();
 }
 
-void CpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal>)
+void CpuMonitor::updateStatus()
 {
-    cpuPercents->append(cpuPercent);
+    cpuPercents->append(m_cpuInfomodel->cpuAllPercent());
 
     if (cpuPercents->size() > pointsNumber) {
         cpuPercents->pop_front();

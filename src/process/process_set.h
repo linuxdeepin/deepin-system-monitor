@@ -50,6 +50,7 @@ public:
     void removeProcess(pid_t pid);
     void updateProcessState(pid_t pid, char state);
     void updateProcessPriority(pid_t pid, int priority);
+    qulonglong getProcUseageTotal(pid_t pid) const;
 
     void refresh();
 
@@ -73,36 +74,10 @@ private:
 
 private:
     QMap<pid_t, Process> m_set;
+    QMap<pid_t, qulonglong> m_procusageTotal = {};
 
     friend class Iterator;
 };
-
-inline const Process ProcessSet::getProcessById(pid_t pid) const
-{
-    return m_set[pid];
-}
-
-inline QList<pid_t> ProcessSet::getPIDList() const
-{
-    return m_set.keys();
-}
-
-inline void ProcessSet::removeProcess(pid_t pid)
-{
-    m_set.remove(pid);
-}
-
-inline void ProcessSet::updateProcessState(pid_t pid, char state)
-{
-    if (m_set.contains(pid))
-        m_set[pid].setState(state);
-}
-
-inline void ProcessSet::updateProcessPriority(pid_t pid, int priority)
-{
-    if (m_set.contains(pid))
-        m_set[pid].setPriority(priority);
-}
 
 } // namespace process
 } // namespace core

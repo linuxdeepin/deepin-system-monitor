@@ -74,6 +74,9 @@ public:
 
     pid_t pid() const;
 
+    qulonglong utime() const;
+    qulonglong stime() const;
+
     QString name() const;
     void setName(const QString &name);
     QString displayName() const;
@@ -168,6 +171,16 @@ inline bool Process::isValid() const
 inline pid_t Process::pid() const
 {
     return d->pid;
+}
+
+inline qulonglong Process::utime() const
+{
+    return d->utime;
+}
+
+inline qulonglong Process::stime() const
+{
+    return d->stime;
 }
 
 inline QString Process::name() const
