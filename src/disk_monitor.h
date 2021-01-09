@@ -36,7 +36,7 @@ public:
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
-    void updateStatus(qreal totalReadKbs, qreal totalWriteKbs);
+    void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);

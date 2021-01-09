@@ -22,6 +22,11 @@
 #include "gui/ui_common.h"
 #include "constant.h"
 #include "common/common.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor_thread.h"
+#include "system/system_monitor.h"
+#include "system/device_db.h"
+#include "system/diskio_info.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -33,6 +38,7 @@
 #include <QPainter>
 
 DWIDGET_USE_NAMESPACE
+using namespace core::system;
 using namespace common;
 using namespace common::format;
 
@@ -60,10 +66,8 @@ DiskMonitor::DiskMonitor(QWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskMonitor::changeTheme);
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
-    //            this, &DiskMonitor::updateStatus);
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &DiskMonitor::updateStatus);
 }
 
 DiskMonitor::~DiskMonitor()
@@ -86,10 +90,10 @@ void DiskMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     }
 }
 
-void DiskMonitor::updateStatus(qreal tReadKbs, qreal tWriteKbs)
+void DiskMonitor::updateStatus()
 {
-    totalReadBps = tReadKbs;
-    totalWriteBps = tWriteKbs;
+    totalReadBps = DeviceDB::instance()->diskIoInfo()->diskIoReadBps();
+    totalWriteBps = DeviceDB::instance()->diskIoInfo()->diskIoWriteBps();
 
     // Init read path.
     readSpeeds->append(totalReadBps);

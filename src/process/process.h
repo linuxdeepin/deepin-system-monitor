@@ -20,7 +20,6 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include "private/process_p.h"
 #include "system/sys_info.h"
 
 #include <QByteArray>
@@ -61,6 +60,7 @@ ProcessPriority getProcessPriorityStub(int prio);
 /**
  * @brief The Process class
  */
+class ProcessPrivate;
 class Process
 {
 public:
@@ -98,6 +98,7 @@ public:
     QHash<QString, QString> environ() const;
 
     time_t startTime() const;
+    timeval procuptime() const;
 
     uid_t uid() const;
     QString userName() const;
@@ -110,6 +111,7 @@ public:
 
     qulonglong readBytes() const;
     qulonglong writeBytes() const;
+    qulonglong cancelledWriteBytes() const;
 
     qreal recvBps() const;
     qreal sentBps() const;
@@ -162,187 +164,6 @@ private:
 private:
     QSharedDataPointer<ProcessPrivate> d;
 };
-
-inline bool Process::isValid() const
-{
-    return d && d->isValid();
-}
-
-inline pid_t Process::pid() const
-{
-    return d->pid;
-}
-
-inline qulonglong Process::utime() const
-{
-    return d->utime;
-}
-
-inline qulonglong Process::stime() const
-{
-    return d->stime;
-}
-
-inline QString Process::name() const
-{
-    return d->name;
-}
-
-inline void Process::setName(const QString &name)
-{
-    d->name = name.toLocal8Bit();
-}
-
-inline QString Process::displayName() const
-{
-    return d->proc_name.displayName();
-}
-
-inline QIcon Process::icon() const
-{
-    return d->proc_icon.icon();
-}
-
-inline qreal Process::cpu() const
-{
-    auto *sample = d->cpuUsageSample->recentSample();
-    if (sample)
-        return sample->data;
-    else
-        return {};
-}
-
-inline qulonglong Process::memory() const
-{
-    return d->rss - d->shm;
-}
-
-inline int Process::priority() const
-{
-    return d->nice;
-}
-
-inline void Process::setPriority(int prio)
-{
-    d->nice = prio;
-}
-
-inline char Process::state() const
-{
-    return d->state;
-}
-
-inline void Process::setState(char state)
-{
-    d->state = state;
-}
-
-inline QByteArrayList Process::cmdline() const
-{
-    return d->cmdline;
-}
-
-inline QString Process::cmdlineString() const
-{
-    return QUrl::fromPercentEncoding(d->cmdline.join(' '));
-}
-
-inline QHash<QString, QString> Process::environ() const
-{
-    return d->environ;
-}
-
-inline uid_t Process::uid() const
-{
-    return d->uid;
-}
-
-inline QString Process::userName() const
-{
-    return SysInfo::userName(d->uid);
-}
-
-inline gid_t Process::gid() const
-{
-    return d->gid;
-}
-
-inline QString Process::groupName() const
-{
-    return SysInfo::groupName(d->gid);
-}
-
-inline qreal Process::readBps() const
-{
-    auto *sample = d->diskIOSpeedSample->recentSample();
-    if (sample)
-        return sample->data.inBps;
-    else
-        return {};
-}
-
-inline qreal Process::writeBps() const
-{
-    auto *sample = d->diskIOSpeedSample->recentSample();
-    if (sample)
-        return sample->data.outBps;
-    else
-        return {};
-}
-
-inline qulonglong Process::readBytes() const
-{
-    auto *sample = d->diskIOSample->recentSample();
-    if (sample)
-        return sample->data.inBytes;
-    else
-        return {};
-}
-
-inline qulonglong Process::writeBytes() const
-{
-    auto *sample = d->diskIOSample->recentSample();
-    if (sample)
-        return sample->data.outBytes;
-    else
-        return {};
-}
-
-inline qreal Process::recvBps() const
-{
-    auto *sample = d->networkBandwidthSample->recentSample();
-    if (sample)
-        return sample->data.inBps;
-    else
-        return {};
-}
-
-inline qreal Process::sentBps() const
-{
-    auto *sample = d->networkBandwidthSample->recentSample();
-    if (sample)
-        return sample->data.outBps;
-    else
-        return {};
-}
-
-inline qulonglong Process::recvBytes() const
-{
-    auto *sample = d->networkIOSample->recentSample();
-    if (sample)
-        return sample->data.inBytes;
-    else
-        return {};
-}
-
-inline qulonglong Process::sentBytes() const
-{
-    auto *sample = d->networkIOSample->recentSample();
-    if (sample)
-        return sample->data.outBytes;
-    else
-        return {};
-}
 
 } // namespace process
 } // namespace core

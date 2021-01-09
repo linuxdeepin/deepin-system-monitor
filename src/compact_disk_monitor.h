@@ -31,7 +31,7 @@ public:
     ~CompactDiskMonitor();
 
 public slots:
-    void updateStatus(qreal readBps, qreal writeBps);
+    void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);

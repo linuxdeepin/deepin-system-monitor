@@ -192,16 +192,16 @@ void BlockDeviceInfoDB::update()
     // TODO: enum device in /sys/block => phy & virtual
 
     // TEST begin (move udev logic to udev & udevice)
-    enum_block();
+//    enum_block();
 
-    struct udev *udev = udev_new();
+//    struct udev *udev = udev_new();
 
-    enumerate_usb_mass_storage(udev);
+//    enumerate_usb_mass_storage(udev);
 
-    udev_unref(udev);
-    // TEST end
+//    udev_unref(udev);
+//    // TEST end
 
-    QWriteLocker lock(&m_rwlock);
+//    QWriteLocker lock(&m_rwlock);
     // update device list
 }
 

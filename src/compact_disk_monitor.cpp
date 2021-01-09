@@ -21,6 +21,11 @@
 #include "smooth_curve_generator.h"
 #include "common/common.h"
 #include "constant.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor_thread.h"
+#include "system/system_monitor.h"
+#include "system/device_db.h"
+#include "system/diskio_info.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -34,6 +39,7 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
+using namespace core::system;
 using namespace common;
 using namespace common::format;
 
@@ -62,10 +68,8 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
         writeSpeeds->append(0);
     }
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
-    //            this, &CompactDiskMonitor::updateStatus);
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &CompactDiskMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -78,10 +82,10 @@ CompactDiskMonitor::~CompactDiskMonitor()
     delete writeSpeeds;
 }
 
-void CompactDiskMonitor::updateStatus(qreal readBps, qreal writeBps)
+void CompactDiskMonitor::updateStatus()
 {
-    m_readBps = readBps;
-    m_writeBps = writeBps;
+    m_readBps = DeviceDB::instance()->diskIoInfo()->diskIoReadBps();
+    m_writeBps = DeviceDB::instance()->diskIoInfo()->diskIoWriteBps();
 
     // Init read path.
     readSpeeds->append(m_readBps);

@@ -23,6 +23,10 @@
 #include "cpu_list_model.h"
 #include "system/device_db.h"
 #include "system/system_monitor.h"
+#include "system/sys_info.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor.h"
+#include "system/system_monitor_thread.h"
 
 CPUInfoModel::CPUInfoModel(const TimePeriod &period, QObject *parent)
     : QObject(parent)
@@ -33,8 +37,8 @@ CPUInfoModel::CPUInfoModel(const TimePeriod &period, QObject *parent)
     , m_cpuSet {}
 {
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    m_sysInfo = monitor->sysInfo();
-    m_cpuSet = monitor->deviceDB()->cpuSet();
+    m_sysInfo = SysInfo::instance();
+    m_cpuSet = DeviceDB::instance()->cpuSet();
 
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &CPUInfoModel::updateModel);
 }

@@ -22,6 +22,9 @@
 #include "common/time_period.h"
 #include "common/sample.h"
 #include "common/common.h"
+#include "system/system_monitor.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor_thread.h"
 
 #include <DSysInfo>
 
@@ -68,6 +71,12 @@ SysInfo &SysInfo::operator=(const SysInfo &rhs)
 }
 SysInfo::~SysInfo()
 {
+}
+
+SysInfo *SysInfo::instance()
+{
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    return monitor->sysInfo();
 }
 
 void SysInfo::readSysInfo()
@@ -147,8 +156,8 @@ QString SysInfo::read_arch()
 QString SysInfo::read_version()
 {
     auto ver = QString("%1 %2")
-                   .arg(DSysInfo::deepinVersion())
-                   .arg(DSysInfo::deepinTypeDisplayName());
+               .arg(DSysInfo::deepinVersion())
+               .arg(DSysInfo::deepinTypeDisplayName());
     return ver;
 }
 
@@ -167,7 +176,7 @@ void SysInfo::read_uptime(struct timeval &uptime)
             int nm = sscanf(buf, "%ld.%ld", &up_sec, &up_usec);
             if (nm == 2) {
                 uptime.tv_sec = up_sec;
-                uptime.tv_usec = up_usec * 10000;
+                uptime.tv_usec = up_usec * 1000000;
 
                 return;
             }

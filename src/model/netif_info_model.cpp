@@ -28,6 +28,9 @@
 #include "system/netif.h"
 #include "system/nl_link.h"
 #include "system/sys_info.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor.h"
+#include "system/system_monitor_thread.h"
 
 using namespace common::format;
 

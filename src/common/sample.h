@@ -55,6 +55,33 @@ struct IO {
     }
 };
 
+struct DiskIO {
+    qulonglong inBytes;
+    qulonglong outBytes;
+    qulonglong cancelBytes;
+
+    struct DiskIO &operator-=(const struct DiskIO &rhs)
+    {
+        inBytes -= rhs.inBytes;
+        outBytes -= rhs.outBytes;
+        cancelBytes -= rhs.cancelBytes;
+        return *this;
+    }
+    struct DiskIO &operator+=(const struct DiskIO &rhs)
+    {
+        inBytes += rhs.inBytes;
+        outBytes += rhs.outBytes;
+        cancelBytes += rhs.cancelBytes;
+        return *this;
+    }
+    const struct DiskIO operator-(const struct DiskIO &other) const {
+        return DiskIO(*this) -= other;
+    }
+    const struct DiskIO operator+(const struct DiskIO &other) const {
+        return DiskIO(*this) += other;
+    }
+};
+
 struct IOPS {
     qreal inBps;
     qreal outBps;
@@ -126,7 +153,7 @@ public:
         if (!lhs)
             return {.0, .0};
 
-        auto tmdiff = lhs->ts - rhs->ts;
+        auto tmdiff = lhs->ts - (rhs ? rhs->ts : timeval{0, 0});
         auto ratio = tmdiff.tv_sec + tmdiff.tv_usec * 1. / 1000000;
         auto inBps = (lhs->data.inBytes - (rhs ? rhs->data.inBytes : 0)) / ratio;
         auto outBps = (lhs->data.outBytes - (rhs ? rhs->data.outBytes : 0)) / ratio;
@@ -136,6 +163,85 @@ public:
 
     struct timeval ts;
     struct IO data;
+};
+
+template<>
+class SampleFrame<DiskIO>
+{
+public:
+    SampleFrame()
+        : ts()
+        , data()
+    {
+    }
+    SampleFrame(const struct timeval &tv, const struct DiskIO &d)
+        : ts(tv)
+        , data(d)
+    {
+    }
+    SampleFrame(const SampleFrame<DiskIO> &other)
+        : ts(other.ts)
+        , data(other.data)
+    {
+    }
+
+    SampleFrame<DiskIO> &operator+=(const SampleFrame<DiskIO> &rhs)
+    {
+        ts += rhs.ts;
+        data += rhs.data;
+        return *this;
+    }
+    SampleFrame<DiskIO> &operator-=(const SampleFrame<DiskIO> &rhs)
+    {
+        ts -= rhs.ts;
+        data -= rhs.data;
+        return *this;
+    }
+    const SampleFrame<DiskIO> operator+(const SampleFrame<DiskIO> &rhs) const
+    {
+        return SampleFrame<DiskIO>(*this) += rhs;
+    }
+    const SampleFrame<DiskIO> operator-(const SampleFrame<DiskIO> &rhs) const
+    {
+        return SampleFrame<DiskIO>(*this) -= rhs;
+    }
+
+    static IOPS diskiops(const SampleFrame<DiskIO> *lhs, const SampleFrame<DiskIO> *rhs)
+    {
+        if (!lhs || !rhs)
+            return {.0, .0};
+
+        auto ltime = lhs->ts.tv_sec + lhs->ts.tv_usec * 1. / 1000000;
+        auto rtime = rhs->ts.tv_sec + rhs->ts.tv_usec * 1. / 1000000;
+        auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
+
+        // read speed, write speed
+        qreal rdio {0}, wrio {0};
+        // current read/write/cancelled, previous read/write/cancelled
+        qulonglong crb{0}, cwb{0}, ccwb{0}, prb{0}, pwb{0}, pcwb{0};
+
+        // current read bytes, write bytes, cancelled write bytes
+        crb = rhs->data.inBytes;
+        cwb = rhs->data.outBytes;
+        ccwb = rhs->data.cancelBytes;
+
+        prb = lhs->data.inBytes;
+        pwb = lhs->data.outBytes;
+        pcwb = lhs->data.cancelBytes;
+
+        // read/write/cancelled write increments between stats
+        auto rdiff = (crb < prb) ? 0 : (crb - prb);
+        auto wdiff = (cwb < pwb) ? 0 : (cwb - pwb);
+        auto cwdiff = (ccwb < pcwb) ? 0 : (ccwb - pcwb);
+        // calculate read/write speed
+        rdio = qreal(rdiff) / interval;
+        wrio = qreal(wdiff - cwdiff) / interval;
+
+        return {rdio, wrio};
+    }
+
+    struct timeval ts;
+    struct DiskIO data;
 };
 
 template<>
@@ -283,8 +389,10 @@ private:
 };
 
 using IOSampleFrame = SampleFrame<IO>;
+using DISKIOSampleFrame = SampleFrame<DiskIO>;
 using IOPSSampleFrame = SampleFrame<IOPS>;
 using IOSample = Sample<IO>;
+using DISKIOSample = Sample<DiskIO>;
 using IOPSSample = Sample<IOPS>;
 
 #endif // SAMPLE_H

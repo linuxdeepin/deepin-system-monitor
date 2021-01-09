@@ -94,7 +94,7 @@ public:
         , cpuUsageSample(new CPUUsageSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
         , networkIOSample(new IOSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
         , networkBandwidthSample(new IOPSSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
-        , diskIOSample(new IOSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
+        , diskIOSample(new DISKIOSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
         , diskIOSpeedSample(new IOPSSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
     {
     }
@@ -143,7 +143,7 @@ public:
         , cpuUsageSample(std::unique_ptr<CPUUsageSample>(new CPUUsageSample(*(other.cpuUsageSample))))
         , networkIOSample(std::unique_ptr<IOSample>(new IOSample(*(other.networkIOSample))))
         , networkBandwidthSample(std::unique_ptr<IOPSSample>(new IOPSSample(*(other.networkBandwidthSample))))
-        , diskIOSample(std::unique_ptr<IOSample>(new IOSample(*(other.diskIOSample))))
+        , diskIOSample(std::unique_ptr<DISKIOSample>(new DISKIOSample(*(other.diskIOSample))))
         , diskIOSpeedSample(std::unique_ptr<IOPSSample>(new IOPSSample(*(other.diskIOSpeedSample))))
     {
     }
@@ -202,6 +202,8 @@ private:
     QByteArrayList cmdline; // process cmdline
     QHash<QString, QString> environ; // environment cache
 
+    struct timeval uptime;
+
     QList<ino_t> sockInodes; // socket inodes opened by this process
 
     // only 2 samples are kept here for each process, to avoid too much memory
@@ -210,7 +212,7 @@ private:
     std::unique_ptr<CPUUsageSample> cpuUsageSample;
     std::unique_ptr<IOSample> networkIOSample;
     std::unique_ptr<IOPSSample> networkBandwidthSample;
-    std::unique_ptr<IOSample> diskIOSample;
+    std::unique_ptr<DISKIOSample> diskIOSample;
     std::unique_ptr<IOPSSample> diskIOSpeedSample;
 
     friend class Process;

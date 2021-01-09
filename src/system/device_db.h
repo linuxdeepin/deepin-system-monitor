@@ -20,16 +20,6 @@
 #ifndef DEVICE_DB_H
 #define DEVICE_DB_H
 
-#include "block_device_info_db.h"
-#include "netif_info_db.h"
-#include "mem.h"
-#include "cpu_set.h"
-#include "common/thread_manager.h"
-#include "system/system_monitor.h"
-#include "system/system_monitor_thread.h"
-
-#include <QReadWriteLock>
-
 namespace core {
 namespace system {
 
@@ -38,6 +28,7 @@ class NetifInfoDB;
 class MemInfo;
 class CPUSet;
 class SystemMonitor;
+class DiskIOInfo;
 
 /**
  * @brief The DeviceDB class
@@ -54,45 +45,17 @@ public:
     MemInfo *memInfo();
     NetifInfoDB *netifInfoDB();
     BlockDeviceInfoDB *blockDeviceInfoDB();
+    DiskIOInfo *diskIoInfo();
 
     void update();
 
 private:
-    // TODO: netlink
-
-    mutable QReadWriteLock m_rwlock;
-
     CPUSet *m_cpuSet;
     MemInfo *m_memInfo;
     NetifInfoDB *m_netifInfoDB;
     BlockDeviceInfoDB *m_blkDevInfoDB;
+    DiskIOInfo *m_diskIoInfo;
 };
-
-inline DeviceDB *DeviceDB::instance()
-{
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    return monitor->deviceDB();
-}
-
-inline BlockDeviceInfoDB *DeviceDB::blockDeviceInfoDB()
-{
-    return m_blkDevInfoDB;
-}
-
-inline NetifInfoDB *DeviceDB::netifInfoDB()
-{
-    return m_netifInfoDB;
-}
-
-inline MemInfo *DeviceDB::memInfo()
-{
-    return m_memInfo;
-}
-
-inline CPUSet *DeviceDB::cpuSet()
-{
-    return m_cpuSet;
-}
 
 } // namespace system
 } // namespace core

@@ -26,6 +26,9 @@
 #include "system/sys_info.h"
 #include "system/block_device_info_db.h"
 #include "system/block_device.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor.h"
+#include "system/system_monitor_thread.h"
 
 using namespace common::format;
 

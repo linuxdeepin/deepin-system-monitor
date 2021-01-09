@@ -23,6 +23,10 @@
 #include "mem.h"
 #include "block_device_info_db.h"
 #include "netif_info_db.h"
+#include "diskio_info.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor.h"
+#include "system/system_monitor_thread.h"
 
 #include <QSharedData>
 #include <QReadLocker>
@@ -37,6 +41,7 @@ DeviceDB::DeviceDB()
     m_memInfo = new MemInfo();
     m_netifInfoDB = new NetifInfoDB();
     m_blkDevInfoDB = new BlockDeviceInfoDB();
+    m_diskIoInfo = new DiskIOInfo();
 }
 
 DeviceDB::~DeviceDB()
@@ -53,6 +58,38 @@ void DeviceDB::update()
     m_memInfo->readMemInfo();
     m_netifInfoDB->update();
     m_blkDevInfoDB->update();
+    m_diskIoInfo->update();
+}
+
+DeviceDB *DeviceDB::instance()
+{
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    return monitor->deviceDB();
+}
+
+BlockDeviceInfoDB *DeviceDB::blockDeviceInfoDB()
+{
+    return m_blkDevInfoDB;
+}
+
+NetifInfoDB *DeviceDB::netifInfoDB()
+{
+    return m_netifInfoDB;
+}
+
+MemInfo *DeviceDB::memInfo()
+{
+    return m_memInfo;
+}
+
+CPUSet *DeviceDB::cpuSet()
+{
+    return m_cpuSet;
+}
+
+DiskIOInfo *DeviceDB::diskIoInfo()
+{
+    return m_diskIoInfo;
 }
 
 } // namespace system

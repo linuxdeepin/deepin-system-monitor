@@ -37,6 +37,14 @@ enum FilterType { kNoFilter,
                   kFilterCurrentUser
                 };
 
+struct RecentProcStage {
+    qulonglong ptime = 0;
+    qulonglong read_bytes = 0; // disk read bytes
+    qulonglong write_bytes = 0; // disk write bytes
+    qulonglong cancelled_write_bytes = 0;
+    timeval uptime = {0, 0};
+};
+
 class ProcessSet
 {
 public:
@@ -50,7 +58,7 @@ public:
     void removeProcess(pid_t pid);
     void updateProcessState(pid_t pid, char state);
     void updateProcessPriority(pid_t pid, int priority);
-    qulonglong getProcUseageTotal(pid_t pid) const;
+    std::weak_ptr<RecentProcStage> getRecentProcStage(pid_t pid) const;
 
     void refresh();
 
@@ -74,7 +82,7 @@ private:
 
 private:
     QMap<pid_t, Process> m_set;
-    QMap<pid_t, qulonglong> m_procusageTotal = {};
+    QMap<pid_t, std::shared_ptr<RecentProcStage>> m_recentProcStage = {};
 
     friend class Iterator;
 };

@@ -19,13 +19,11 @@
 */
 
 #include "process.h"
-
-#include "system/system_monitor.h"
-#include "common/thread_manager.h"
-#include "common/base_thread.h"
-#include "system/system_monitor_thread.h"
+#include "private/process_p.h"
 #include "system/device_db.h"
 #include "process/process_db.h"
+#include "system/sys_info.h"
+#include "system/cpu_set.h"
 
 #include <QMap>
 #include <QList>
@@ -60,6 +58,41 @@ using namespace core::system;
 namespace core {
 namespace process {
 
+QString getPriorityName(int prio)
+{
+    const static QMap<ProcessPriority, QString> priorityMap = {
+        {kVeryHighPriority, QApplication::translate("Process.Priority", "Very high")},
+        {kHighPriority, QApplication::translate("Process.Priority", "High")},
+        {kNormalPriority, QApplication::translate("Process.Priority", "Normal")},
+        {kLowPriority, QApplication::translate("Process.Priority", "Low")},
+        {kVeryLowPriority, QApplication::translate("Process.Priority", "Very low")},
+        {kCustomPriority, QApplication::translate("Process.Priority", "Custom")},
+        {kInvalidPriority, QApplication::translate("Process.Priority", "Invalid")}
+    };
+
+    ProcessPriority p = kInvalidPriority;
+    if (prio == kVeryHighPriority || prio == kHighPriority || prio == kNormalPriority || prio == kLowPriority || prio == kVeryLowPriority) {
+        p = ProcessPriority(prio);
+    } else if (prio >= kVeryHighPriorityMax && prio <= kVeryLowPriorityMin) {
+        p = kCustomPriority;
+    }
+
+    return priorityMap[p];
+}
+
+ProcessPriority getProcessPriorityStub(int prio)
+{
+    if (prio == 0) {
+        return kNormalPriority;
+    } else if (prio == kVeryHighPriority || prio == kHighPriority || prio == kLowPriority || prio == kVeryLowPriority) {
+        return ProcessPriority(prio);
+    } else if (prio <= kVeryLowPriorityMin && prio >= kVeryHighPriorityMax) {
+        return kCustomPriority;
+    } else {
+        return kInvalidPriority;
+    }
+}
+
 Process::Process()
     : d(new ProcessPrivate())
 {
@@ -93,6 +126,11 @@ time_t Process::startTime() const
     return monitor->sysInfo()->btime().tv_sec + time_t(d->start_time / HZ);
 }
 
+timeval Process::procuptime() const
+{
+    return d->uptime;
+}
+
 void Process::readProcessInfo()
 {
     d->valid = true;
@@ -110,12 +148,27 @@ void Process::readProcessInfo()
 
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
+    d->uptime = SysInfo::instance()->uptime();
 
     CPUSet *cpuset = DeviceDB::instance()->cpuSet();
     ProcessSet *procset =  ProcessDB::instance()->processSet();
 
-    qreal timedelta = d->stime + d->utime - procset->getProcUseageTotal(d->pid);
+    auto recentProcptr = procset->getRecentProcStage(d->pid);
+    auto validrecentPtr = recentProcptr.lock();
+    qreal timedelta = d->stime + d->utime;
+    if (validrecentPtr) {
+        timedelta = timedelta - validrecentPtr->ptime;
+        struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
+        d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
+    }
     d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
+
+    struct DiskIO io = {d->read_bytes, d->write_bytes, d->cancelled_write_bytes};
+    d->diskIOSample->addSample(new DISKIOSampleFrame(d->uptime, io));
+
+    auto pair = d->diskIOSample->recentSamplePair();
+    struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
+    d->diskIOSpeedSample->addSample(new IOPSSampleFrame(iops));
 
     d->valid = d->valid && ok;
 }
@@ -480,39 +533,182 @@ void Process::readSockInodes()
     }
 }
 
-QString getPriorityName(int prio)
+bool Process::isValid() const
 {
-    const static QMap<ProcessPriority, QString> priorityMap = {
-        {kVeryHighPriority, QApplication::translate("Process.Priority", "Very high")},
-        {kHighPriority, QApplication::translate("Process.Priority", "High")},
-        {kNormalPriority, QApplication::translate("Process.Priority", "Normal")},
-        {kLowPriority, QApplication::translate("Process.Priority", "Low")},
-        {kVeryLowPriority, QApplication::translate("Process.Priority", "Very low")},
-        {kCustomPriority, QApplication::translate("Process.Priority", "Custom")},
-        {kInvalidPriority, QApplication::translate("Process.Priority", "Invalid")}
-    };
-
-    ProcessPriority p = kInvalidPriority;
-    if (prio == kVeryHighPriority || prio == kHighPriority || prio == kNormalPriority || prio == kLowPriority || prio == kVeryLowPriority) {
-        p = ProcessPriority(prio);
-    } else if (prio >= kVeryHighPriorityMax && prio <= kVeryLowPriorityMin) {
-        p = kCustomPriority;
-    }
-
-    return priorityMap[p];
+    return d && d->isValid();
 }
 
-ProcessPriority getProcessPriorityStub(int prio)
+pid_t Process::pid() const
 {
-    if (prio == 0) {
-        return kNormalPriority;
-    } else if (prio == kVeryHighPriority || prio == kHighPriority || prio == kLowPriority || prio == kVeryLowPriority) {
-        return ProcessPriority(prio);
-    } else if (prio <= kVeryLowPriorityMin && prio >= kVeryHighPriorityMax) {
-        return kCustomPriority;
-    } else {
-        return kInvalidPriority;
-    }
+    return d->pid;
+}
+
+qulonglong Process::utime() const
+{
+    return d->utime;
+}
+
+qulonglong Process::stime() const
+{
+    return d->stime;
+}
+
+QString Process::name() const
+{
+    return d->name;
+}
+
+void Process::setName(const QString &name)
+{
+    d->name = name.toLocal8Bit();
+}
+
+QString Process::displayName() const
+{
+    return d->proc_name.displayName();
+}
+
+QIcon Process::icon() const
+{
+    return d->proc_icon.icon();
+}
+
+qreal Process::cpu() const
+{
+    auto *sample = d->cpuUsageSample->recentSample();
+    if (sample)
+        return sample->data;
+    else
+        return {};
+}
+
+qulonglong Process::memory() const
+{
+    return d->rss - d->shm;
+}
+
+int Process::priority() const
+{
+    return d->nice;
+}
+
+void Process::setPriority(int prio)
+{
+    d->nice = prio;
+}
+
+char Process::state() const
+{
+    return d->state;
+}
+
+void Process::setState(char state)
+{
+    d->state = state;
+}
+
+QByteArrayList Process::cmdline() const
+{
+    return d->cmdline;
+}
+
+QString Process::cmdlineString() const
+{
+    return QUrl::fromPercentEncoding(d->cmdline.join(' '));
+}
+
+QHash<QString, QString> Process::environ() const
+{
+    return d->environ;
+}
+
+uid_t Process::uid() const
+{
+    return d->uid;
+}
+
+QString Process::userName() const
+{
+    return SysInfo::userName(d->uid);
+}
+
+gid_t Process::gid() const
+{
+    return d->gid;
+}
+
+QString Process::groupName() const
+{
+    return SysInfo::groupName(d->gid);
+}
+
+qreal Process::readBps() const
+{
+    auto *sample = d->diskIOSpeedSample->recentSample();
+    if (sample)
+        return sample->data.inBps;
+    else
+        return {};
+}
+
+qreal Process::writeBps() const
+{
+    auto *sample = d->diskIOSpeedSample->recentSample();
+    if (sample)
+        return sample->data.outBps;
+    else
+        return {};
+}
+
+qulonglong Process::readBytes() const
+{
+    return d->read_bytes;
+}
+
+qulonglong Process::writeBytes() const
+{
+    return d->write_bytes;
+}
+
+qulonglong Process::cancelledWriteBytes() const
+{
+    return d->cancelled_write_bytes;
+}
+
+qreal Process::recvBps() const
+{
+    auto *sample = d->networkBandwidthSample->recentSample();
+    if (sample)
+        return sample->data.inBps;
+    else
+        return {};
+}
+
+qreal Process::sentBps() const
+{
+    auto *sample = d->networkBandwidthSample->recentSample();
+    if (sample)
+        return sample->data.outBps;
+    else
+        return {};
+}
+
+qulonglong Process::recvBytes() const
+{
+    auto *sample = d->networkIOSample->recentSample();
+    if (sample)
+        return sample->data.inBytes;
+    else
+        return {};
+}
+
+qulonglong Process::sentBytes() const
+{
+    auto *sample = d->networkIOSample->recentSample();
+    if (sample)
+        return sample->data.outBytes;
+    else
+        return {};
 }
 
 } // namespace process

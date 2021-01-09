@@ -24,6 +24,9 @@
 #include "system/system_monitor.h"
 #include "system/device_db.h"
 #include "system/sys_info.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor.h"
+#include "system/system_monitor_thread.h"
 
 MemInfoModel::MemInfoModel(const TimePeriod &period, QObject *parent)
     : QObject(parent)

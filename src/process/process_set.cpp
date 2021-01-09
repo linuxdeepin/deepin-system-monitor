@@ -49,15 +49,21 @@ bool ProcessSet::containsById(pid_t pid)
 
 void ProcessSet::refresh()
 {
-    for (auto iter = m_set.begin(); iter != m_set.end(); iter++) {
-        m_procusageTotal[iter->pid()] = iter->utime() + iter->stime();
-    }
-
     scanProcess();
 }
 
 void ProcessSet::scanProcess()
 {
+    for (auto iter = m_set.begin(); iter != m_set.end(); iter++) {
+        std::shared_ptr<RecentProcStage> procstage = std::make_shared<RecentProcStage>();
+        procstage->ptime = iter->utime() + iter->stime();
+        procstage->read_bytes = iter->readBytes();
+        procstage->write_bytes = iter->writeBytes();
+        procstage->cancelled_write_bytes = iter->cancelledWriteBytes();
+        procstage->uptime = iter->procuptime();
+        m_recentProcStage[iter->pid()] = procstage;
+    }
+
     m_set.clear();
 
     Iterator iter;
@@ -69,7 +75,7 @@ void ProcessSet::scanProcess()
         m_set.insert(proc.pid(), proc);
     }
 
-    m_procusageTotal.clear();
+    m_recentProcStage.clear();
 }
 
 ProcessSet::Iterator::Iterator()
@@ -117,13 +123,9 @@ void ProcessSet::Iterator::advance()
     }
 }
 
-qulonglong ProcessSet::getProcUseageTotal(pid_t pid) const
+std::weak_ptr<RecentProcStage> ProcessSet::getRecentProcStage(pid_t pid) const
 {
-    auto iter = m_procusageTotal.find(pid);
-    if (iter == m_procusageTotal.end())
-        return 0;
-
-    return iter.value();
+    return m_recentProcStage[pid];
 }
 
 const Process ProcessSet::getProcessById(pid_t pid) const

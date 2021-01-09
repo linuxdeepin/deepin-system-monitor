@@ -63,6 +63,8 @@ public:
     SysInfo &operator=(const SysInfo &rhs);
     ~SysInfo();
 
+    static SysInfo *instance();
+
     quint32 nprocesses() const;
     quint32 nthreads() const;
     quint32 nfds() const;
@@ -229,9 +231,9 @@ inline void SysInfo::set_btime(timeval &btime)
 inline QString &operator<<(QString &buffer, const load_avg_t &rhs)
 {
     return buffer.append(QString("%1 %2 %3")
-                             .arg(rhs.lavg_1m / 100, 0, 'f', 2, QLatin1Char(' '))
-                             .arg(rhs.lavg_5m / 100, 0, 'f', 2, QLatin1Char(' '))
-                             .arg(rhs.lavg_15m / 100, 0, 'f', 2, QLatin1Char(' ')));
+                         .arg(rhs.lavg_1m / 100, 0, 'f', 2, QLatin1Char(' '))
+                         .arg(rhs.lavg_5m / 100, 0, 'f', 2, QLatin1Char(' '))
+                         .arg(rhs.lavg_15m / 100, 0, 'f', 2, QLatin1Char(' ')));
 }
 
 } // namespace system
