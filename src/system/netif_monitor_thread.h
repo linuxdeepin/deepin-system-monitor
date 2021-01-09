@@ -35,10 +35,13 @@ public:
     ~NetifMonitorThread();
 
     int threadKey() const final;
-    QObject *netifJobInstance() const;
+    NetifMonitor *netifJobInstance() const;
+protected:
+    void run();
 
 private:
     NetifMonitor *m_netifMonitor;
+    QThread m_netIfmoniterThread;
 };
 
 inline int NetifMonitorThread::threadKey() const
@@ -46,7 +49,7 @@ inline int NetifMonitorThread::threadKey() const
     return kNetifMonitorThread;
 }
 
-inline QObject *NetifMonitorThread::netifJobInstance() const
+inline NetifMonitor *NetifMonitorThread::netifJobInstance() const
 {
     return m_netifMonitor;
 }

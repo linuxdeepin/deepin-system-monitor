@@ -435,6 +435,7 @@ target_link_libraries(${APP_NAME}
     Qt5::Core
     Qt5::Widgets
     Qt5::Gui
+    Qt5::Network
     Qt5::DBus
     Qt5::Concurrent
     Qt5::X11Extras

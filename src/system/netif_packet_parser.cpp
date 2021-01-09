@@ -26,6 +26,10 @@
 #include <netinet/ip6.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <QNetworkInterface>
+
 
 #include <QDebug>
 
@@ -53,9 +57,7 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
         payload = QSharedPointer<struct packet_payload_t>::create();
     }
     payload->ts = pkt_hdr->ts;
-
     const u_char *hdr = packet;
-
     // parse hdr&packet
     auto *eth_hdr = reinterpret_cast<const struct ether_header *>(packet);
     auto type = ntohs(eth_hdr->ether_type);

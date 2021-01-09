@@ -33,6 +33,7 @@ DWIDGET_USE_NAMESPACE
 class MainWindow;
 
 static const QEvent::Type kMonitorStartEventType = static_cast<QEvent::Type>(QEvent::User + 1);
+static const QEvent::Type kNetifStartEventType = static_cast<QEvent::Type>(QEvent::User + 2);
 class MonitorStartEvent : public QEvent
 {
 public:
@@ -41,6 +42,16 @@ public:
     {
     }
     virtual ~MonitorStartEvent();
+};
+
+class NetifStartEvent : public QEvent
+{
+public:
+    explicit NetifStartEvent()
+        : QEvent(kNetifStartEventType)
+    {
+    }
+    virtual ~NetifStartEvent();
 };
 
 class Application : public DApplication

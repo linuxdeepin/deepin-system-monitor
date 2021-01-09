@@ -53,7 +53,7 @@ public:
     {
         std::unique_ptr<T> tPtr;
 
-        if (!d->next)
+        if (!d->m_next)
             return tPtr; // nullptr
 
         O *o = reinterpret_cast<O *>(d->m_next);

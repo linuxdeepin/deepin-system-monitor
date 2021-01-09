@@ -456,7 +456,8 @@ void MainWindow::showEvent(QShowEvent *event)
     std::call_once(oflag, []() {
         auto *msev = new MonitorStartEvent();
         gApp->postEvent(gApp, msev);
-
+        auto *netev = new NetifStartEvent();
+        gApp->postEvent(gApp, netev);
         PERF_PRINT_END("POINT-01");
     });
 }

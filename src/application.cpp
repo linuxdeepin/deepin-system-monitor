@@ -21,6 +21,7 @@
 
 #include "common/thread_manager.h"
 #include "system/system_monitor_thread.h"
+#include "system/netif_monitor_thread.h"
 #include "process/process_db.h"
 
 #include <QEvent>
@@ -37,6 +38,7 @@ Application::Application(int &argc, char **argv)
     qRegisterMetaType<Application::TaskState>("Application::BackgroundTaskState");
 
     ThreadManager::instance()->attach(new SystemMonitorThread);
+    ThreadManager::instance()->attach(new NetifMonitorThread);
 }
 
 bool Application::event(QEvent *event)
@@ -44,11 +46,17 @@ bool Application::event(QEvent *event)
     if (event && event->type() == kMonitorStartEventType) {
         SystemMonitorThread *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
         thread->start();
+    } else if(event && event->type() == kNetifStartEventType) {
+        NetifMonitorThread *thread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
+        thread->start();
     }
-
     return DApplication::event(event);
 }
 
 MonitorStartEvent::~MonitorStartEvent()
+{
+}
+
+NetifStartEvent::~NetifStartEvent()
 {
 }

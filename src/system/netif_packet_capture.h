@@ -21,19 +21,64 @@
 #define NETIF_PACKET_CAPTURE_H
 
 #include <QObject>
+#include "packet.h"
+#include <QTimer>
+#include <QMap>
+
+#define PROC_PATH_SOCK_TCP  "/proc/net/tcp"
+#define PROC_PATH_SOCK_TCP6 "/proc/net/tcp6"
+#define PROC_PATH_SOCK_UDP  "/proc/net/udp"
+#define PROC_PATH_SOCK_UDP6 "/proc/net/udp6"
 
 namespace core {
 namespace system {
-
+class NetifMonitor;
 class NetifPacketCapture : public QObject
 {
     Q_OBJECT
 public:
-    explicit NetifPacketCapture(QObject *parent = nullptr);
-
+    explicit NetifPacketCapture(NetifMonitor *netInfmontor, QObject *parent = nullptr);
+    inline void requestQuit()
+    {
+        m_quitRequested.store(true);
+    }
+    /**
+     * @brief Packet dispatch handler
+     */
+    void dispatchPackets();
+    pcap_t  *getHandle() { return m_handle;}
 signals:
 
 public slots:
+    /**
+     * @brief Start monitor job
+     */
+    void startNetifMonitorJob();
+private:
+
+    /**
+     * @brief Refresh network interface address hash cache
+     */
+    void refreshIfAddrsHashCache();
+private:
+    // socket io stat cache
+    SockStatMap     m_sockStats {};
+    // network interface name hash cache
+    QMap<QString, int> m_ifaddrsHashCache; // key: hash code generated from ifaddr; value: not used
+
+    // network interface monitor
+    NetifMonitor       *m_netifMonitor         {};
+    // pcap handler instance
+    pcap_t             *m_handle               {};
+    // local pending packet queue
+    PacketPayloadQueue  m_localPendingPackets  {};
+
+    // request quit atomic flag
+    std::atomic_bool m_quitRequested {false};
+    bool go {false};
+
+    friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
+
 };
 
 } // namespace system

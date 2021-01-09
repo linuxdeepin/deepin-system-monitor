@@ -18,18 +18,34 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "netif_monitor_thread.h"
+#include <QDebug>
 
 namespace core {
 namespace system {
 
 NetifMonitorThread::NetifMonitorThread(QObject *parent)
     : BaseThread(parent)
+    , m_netifMonitor(new NetifMonitor)
 {
+    m_netifMonitor->moveToThread(&m_netIfmoniterThread);
+    connect(&m_netIfmoniterThread, &QThread::finished, this, &QObject::deleteLater);
+    connect(&m_netIfmoniterThread, &QThread::started, m_netifMonitor, &NetifMonitor::startNetmonitorJob);
+    m_netIfmoniterThread.start();
 }
 
 NetifMonitorThread::~NetifMonitorThread()
 {
+    m_netifMonitor->deleteLater();
+    quit();
+    wait();
 }
+
+
+void NetifMonitorThread::run()
+{
+    m_netifMonitor->handleNetData();
+}
+
 
 } // namespace system
 } // namespace core

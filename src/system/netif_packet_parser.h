@@ -32,6 +32,7 @@ public:
                             const u_char *packet,
                             PacketPayload &payload);
 
+
 private:
     NetifPacketParser() = default;
 };

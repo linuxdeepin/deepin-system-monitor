@@ -26,7 +26,7 @@
 #include <QMultiMap>
 #include <QMap>
 #include <QReadWriteLock>
-
+#include "netif_monitor.h"
 #include <memory>
 
 class QReadWriteLock;
@@ -41,9 +41,10 @@ public:
     virtual ~NetifInfoDB() = default;
 
     QList<INetAddr> addrList(const QByteArray &ifname);
+    QMultiMap<QByteArray, INetAddr> addrmap();
     QList<NetifInfo> infoDB();
-
     void update();
+    inline bool getSockIOStatByInode(ino_t ino, SockIOStat &stat);
 
 private:
     std::unique_ptr<Netlink> m_netlink;
@@ -51,12 +52,19 @@ private:
     mutable QReadWriteLock m_rwlock;
     QMultiMap<QByteArray, INetAddr> m_addrDB;
     QList<NetifInfo> m_infoDB;
+    // socket inode to io stat mapping
+    QMap<ino_t, SockIOStat> m_sockIOStatMap     {};
 };
 
 inline QList<INetAddr> NetifInfoDB::addrList(const QByteArray &ifname)
 {
     QReadLocker lock(&m_rwlock);
     return m_addrDB.values(ifname);
+}
+
+inline QMultiMap<QByteArray, INetAddr> NetifInfoDB::addrmap(){
+    QReadLocker lock(&m_rwlock);
+    return m_addrDB;
 }
 
 inline QList<NetifInfo> NetifInfoDB::infoDB()
