@@ -131,10 +131,8 @@ public:
         kStatStealTime,
         kStatGuestTime,
         kStatGuestNice,
-
         kStatTotalUsage,
         kStatIdleUsage,
-
         kStatPropMax
     };
 

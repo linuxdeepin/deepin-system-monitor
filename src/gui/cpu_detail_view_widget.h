@@ -22,6 +22,7 @@
 
 #include <QWidget>
 
+class QTableWidget;
 /**
  * @brief CPU detail view widget
  */
@@ -31,9 +32,18 @@ class CPUDetailViewWidget : public QWidget
 public:
     explicit CPUDetailViewWidget(QWidget *parent = nullptr);
 
-signals:
-
-public slots:
+private:
+    QWidget      *m_graphicsTable;
+    QTableWidget *m_textTable;
 };
+//显示cpu的核心的折线图表
+class CPUCoreItem : public QWidget
+{
+    Q_OBJECT
+public:
+    CPUCoreItem(QWidget *parent): QWidget(parent) {}
 
+    void paintEvent(QPaintEvent *event);
+
+};
 #endif // CPU_DETAIL_VIEW_WIDGET_H

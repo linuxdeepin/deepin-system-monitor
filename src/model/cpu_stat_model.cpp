@@ -34,7 +34,7 @@ CPUStatModel::~CPUStatModel()
 int CPUStatModel::rowCount(const QModelIndex &) const
 {
     if (m_statSampleDB && m_usageSampleDB
-        && m_statSampleDB->count() == m_usageSampleDB->count())
+            && m_statSampleDB->count() == m_usageSampleDB->count())
         return m_usageSampleDB->count();
     else
         return 0;

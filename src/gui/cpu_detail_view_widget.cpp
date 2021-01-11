@@ -19,7 +19,42 @@
 */
 #include "cpu_detail_view_widget.h"
 
+#include <QGridLayout>
+#include <QTableWidget>
+#include <QPainter>
+#include <QVBoxLayout>
+#include <QHeaderView>
+
+
 CPUDetailViewWidget::CPUDetailViewWidget(QWidget *parent)
     : QWidget(parent)
 {
+    m_graphicsTable = new QWidget(this);
+    QGridLayout  *graphicsLayout = new QGridLayout(this);
+    for (int i = 0; i < 16; ++i) {
+        CPUCoreItem *item = new CPUCoreItem(this);
+        item->setFixedSize(82, 50);
+        graphicsLayout->addWidget(item, i / 4, i % 4);
+    }
+    m_graphicsTable->setLayout(graphicsLayout);
+    m_textTable = new QTableWidget(this);
+    m_textTable->setRowCount(8);
+    m_textTable->setColumnCount(2);
+    m_textTable->horizontalHeader()->hide();
+    m_textTable->verticalHeader()->hide();
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(m_graphicsTable);
+    layout->addWidget(m_textTable);
+    setLayout(layout);
+}
+
+void CPUCoreItem::paintEvent(QPaintEvent *event)
+{
+    {
+        QPainter painter(this);
+        painter.setBrush(Qt::black);
+        painter.setPen(Qt::NoPen);
+        painter.drawRect(this->rect());
+    }
 }
