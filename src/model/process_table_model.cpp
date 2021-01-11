@@ -83,7 +83,7 @@ Process ProcessTableModel::getProcess(pid_t pid) const
 // update process model with the data provided by list
 void ProcessTableModel::updateProcessList()
 {
-    QTimer::singleShot(1, this, SLOT(updateProcessListDelay()));
+    QTimer::singleShot(0, this, SLOT(updateProcessListDelay()));
 }
 
 void ProcessTableModel::updateProcessListDelay()

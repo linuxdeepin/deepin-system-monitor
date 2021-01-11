@@ -73,8 +73,6 @@ private:
     QString m_search {};
     // Pinyin represented as ascii string converted from chinese hanzi
     QString m_hanwords {};
-    // String representation of initials of each words
-    QString m_capwords {};
 
     int m_fileterType = 0;
 };

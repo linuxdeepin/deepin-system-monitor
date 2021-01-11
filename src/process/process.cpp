@@ -146,6 +146,7 @@ void Process::readProcessInfo()
     readIO();
     readSockInodes();
 
+    d->usrerName = SysInfo::userName(d->uid);
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
     d->uptime = SysInfo::instance()->uptime();
@@ -560,7 +561,7 @@ QString Process::name() const
 
 void Process::setName(const QString &name)
 {
-    d->name = name.toLocal8Bit();
+    d->name = name;
 }
 
 QString Process::displayName() const
@@ -629,7 +630,7 @@ uid_t Process::uid() const
 
 QString Process::userName() const
 {
-    return SysInfo::userName(d->uid);
+    return d->usrerName;
 }
 
 gid_t Process::gid() const

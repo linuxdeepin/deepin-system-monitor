@@ -44,19 +44,6 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
     // in chinese locale, we convert hanzi to pinyin words to help filter out processes named with pinyin
     if (QLocale::system().language() == QLocale::Chinese) {
         m_hanwords = util::common::convHanToLatin(search);
-        if (m_hanwords.isEmpty()) {
-            m_capwords = QString {};
-        } else {
-            QStringList wlist = m_hanwords.split(QRegExp("\\s+"));
-
-            // take each initial character of pinyin, and concate each as a whole string
-            for (const QString &w : wlist) {
-                if (w.isEmpty())
-                    continue;
-
-                m_capwords += w[0];
-            }
-        }
     }
 
     // set search pattern & do the filter
@@ -107,7 +94,6 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
             // pinyin matches pattern
             rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(m_hanwords);
         }
-        //        rc |= sourceModel()->data(name).toString().contains(m_capwords);
     }
     // pid matches pattern
     if (pid.isValid())

@@ -23,6 +23,7 @@
 #include "system/system_monitor.h"
 #include "system/system_monitor_thread.h"
 #include "process/process_db.h"
+#include "common/common.h"
 
 #include <QtDBus>
 
@@ -30,6 +31,7 @@
 
 using namespace core::process;
 using namespace common::core;
+using namespace common::init;
 using namespace core::system;
 
 namespace core {
@@ -49,12 +51,55 @@ WMWindowList::WMWindowList(QObject *parent)
 {
 }
 
-void WMWindowList::addDesktopEntryApp(pid_t pid)
+void WMWindowList::addDesktopEntryApp(Process *proc)
 {
+    if (!proc)
+        return;
+
+    auto pid = proc->pid();
+
     if (!isTrayApp(pid)
             && !isGuiApp(pid)
             && !m_desktopEntryCache.contains(pid)) {
-        m_desktopEntryCache << pid;
+
+        // check if cmd is a shell or scripting language
+        auto isCmdInList = [ = ](const QString & cmd) {
+            bool bb = false;
+            auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
+            for (auto s : shellList) {
+                if (subCmd.startsWith(s.toLocal8Bit())) {
+                    bb = true;
+                    return bb;
+                }
+            }
+            for (auto s : scriptList) {
+                if (cmd.startsWith(s.toLocal8Bit())) {
+                    bb = true;
+                    return bb;
+                }
+            }
+            return bb;
+        };
+
+        bool bb = false;
+        if (proc->cmdline().size() > 0) {
+            auto cmd = proc->cmdline()[0];
+            if (cmd.startsWith("/")) {
+                // cmd starts with full path
+                bb = isCmdInList(cmd);
+            } else {
+                // cmd starts with raw name
+                for (auto p : pathList) {
+                    bb = isCmdInList(p.append('/').append(cmd));
+                    if (bb) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!bb)
+            m_desktopEntryCache << pid;
     }
 }
 
@@ -193,6 +238,8 @@ QList<WMWId> WMWindowList::getTrayWindows() const
 
 void WMWindowList::updateWindowListCache()
 {
+    m_desktopEntryCache.clear();
+
     auto *conn = m_conn.xcb_connection();
     // get window info
     auto cookie = xcb_get_property(conn, 0, m_conn.rootWindow(), m_conn.atom(WMAtom::_NET_CLIENT_LIST_STACKING), XCB_ATOM_WINDOW, 0, UINT_MAX);
@@ -201,16 +248,19 @@ void WMWindowList::updateWindowListCache()
     if (!reply)
         return;
 
+    m_guiAppcache.clear();
     xcb_window_t *clientList = reinterpret_cast<xcb_window_t *>(xcb_get_property_value(reply.get()));
     auto len = xcb_get_property_value_length(reply.get());
     for (auto i = 0; i < len; i++) {
         auto wid = clientList[i];
         auto winfo = getWindowInfo(wid);
         const QStringList &windowtype = getWindowType(wid);
-        if (winfo && (windowtype.contains("_NET_WM_WINDOW_TYPE_NORMAL") || windowtype.contains("_NET_WM_WINDOW_TYPE_DIALOG")))
-            m_guiAppcache.insert({winfo->pid, std::move(winfo)});
+        if (winfo && (windowtype.contains("_NET_WM_WINDOW_TYPE_NORMAL") || windowtype.contains("_NET_WM_WINDOW_TYPE_DIALOG"))) {
+            m_guiAppcache[winfo->pid] = std::move(winfo);
+        }
     }
 
+    m_trayAppcache.clear();
     const QList<WMWId> &trayWndList = getTrayWindows();
     for (auto i = 0; i < trayWndList.size(); i++) {
         auto wid = trayWndList[i];

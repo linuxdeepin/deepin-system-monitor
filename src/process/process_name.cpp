@@ -49,24 +49,10 @@ ProcessName::ProcessName()
 void ProcessName::refreashProcessName(Process *proc)
 {
     if (proc) {
-        auto *cache = ProcessNameCache::instance();
-        Q_ASSERT(cache != nullptr);
-
-        if (cache->contains(proc->pid())) {
-            auto *procName = cache->processName(proc->pid());
-            m_name = procName->name();
-            m_displayName = procName->displayName();
-        } else {
-            proc->setName(ProcessName::normalizeProcessName(proc->name(), proc->cmdline()));
-            m_name = proc->name();
-            // display name
-            m_displayName = getDisplayName(proc);
-
-            auto *procName = new ProcessName();
-            procName->m_name = m_name;
-            procName->m_displayName = m_displayName;
-            cache->insert(proc->pid(), procName);
-        }
+        proc->setName(ProcessName::normalizeProcessName(proc->name(), proc->cmdline()));
+        m_name = proc->name();
+        // display name
+        m_displayName = getDisplayName(proc);
     }
 }
 

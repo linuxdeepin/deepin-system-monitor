@@ -196,7 +196,9 @@ private:
     unsigned long long write_bytes; // disk write bytes
     unsigned long long cancelled_write_bytes; // cancelled write bytes
 
-    QByteArray name; // raw name
+    QString usrerName;
+
+    QString name; // raw name
     ProcessName proc_name; // process name object
     ProcessIcon proc_icon; // process icon object
     QByteArrayList cmdline; // process cmdline

@@ -25,6 +25,12 @@
 #include "wm_info.h"
 
 namespace core {
+namespace process {
+class Process;
+}
+}
+
+namespace core {
 namespace wm {
 
 union size_u {
@@ -56,7 +62,7 @@ public:
     bool isTrayApp(pid_t pid) const;
     bool isGuiApp(pid_t pid) const;
     bool isDesktopEntryApp(pid_t pid) const;
-    void addDesktopEntryApp(pid_t pid);
+    void addDesktopEntryApp(core::process::Process *proc);
     QList<pid_t> getDektopEntryList();
 
     void updateWindowListCache();
