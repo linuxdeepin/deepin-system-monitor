@@ -31,11 +31,15 @@ public:
     explicit CompactCpuMonitor(QWidget *parent = nullptr);
     ~CompactCpuMonitor();
 
+signals:
+    void signalArrowClicked(int moduleIndex);
+
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     void changeFont(const QFont &font);
@@ -53,6 +57,8 @@ private:
     double totalCpuPercent = 0;
 
     int pointerRadius = 6;
+
+    QRect m_arrowRect;
 
     QFont m_cpuFont;
     QFont m_statFont;

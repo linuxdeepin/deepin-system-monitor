@@ -25,6 +25,8 @@
 #include "compact_memory_monitor.h"
 #include "compact_network_monitor.h"
 
+#include "menu/performance_param_menu.h"
+
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
@@ -66,4 +68,6 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 
     // set frame layout
     setLayout(layout);
+
+    connect(m_cpuMonitor, &CompactCpuMonitor::signalArrowClicked, this, &MonitorCompactView::signalShowPerformMenu);
 }

@@ -48,6 +48,9 @@ public:
      */
     ~MonitorCompactView() = default;
 
+signals:
+    void signalShowPerformMenu(int moduleIndex);
+
 private:
     // Compact cpu view instance
     CompactCpuMonitor *m_cpuMonitor {};

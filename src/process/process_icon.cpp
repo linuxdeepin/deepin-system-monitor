@@ -140,10 +140,72 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     WMWindowList *windowList = processDB->windowList();
     DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
 
-    if (windowList->isTrayApp(proc->pid())) {
-        if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE")) {
+    if (!proc->cmdline().isEmpty()) {
+        if (windowList->isTrayApp(proc->pid())) {
+            if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE")) {
+                auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
+                auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
+                if (entry && !entry->icon.isEmpty()) {
+                    auto *iconData = new struct icon_data_name_type();
+                    iconData->type = kIconDataNameType;
+                    iconData->proc_name = proc->name();
+                    iconData->icon_name = entry->icon;
+                    iconDataPtr.reset(iconData);
+                    return iconDataPtr;
+                }
+            }
+        }
+
+        if (windowList->isGuiApp(proc->pid())) {
+            auto pixMap = windowList->getWindowIcon(proc->pid());
+            if (pixMap.size() > 0) {
+                auto *iconData = new struct icon_data_pix_map_type();
+                iconData->pixMap = pixMap;
+                iconData->proc_name = proc->name();
+                iconData->type = kIconDataPixmapType;
+                iconDataPtr.reset(iconData);
+                return iconDataPtr;
+            }
+        }
+
+        if (desktopEntryCache->contains(proc->name())) {
+            DesktopEntry entry;
+            entry = desktopEntryCache->entry(proc->name());
+            if (entry && !entry->icon.isEmpty()) {
+                auto *iconData = new struct icon_data_name_type();
+                iconData->desktopentry = true;
+                iconData->type = kIconDataNameType;
+                iconData->proc_name = proc->name();
+                iconData->icon_name = entry->icon;
+                iconDataPtr.reset(iconData);
+                windowList->addDesktopEntryApp(proc);
+                return iconDataPtr;
+            }
+        }
+
+        if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE") && proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && proc->environ()["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == proc->pid()) {
             auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
             auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
+            if (entry && !entry->icon.isEmpty()) {
+                auto *iconData = new struct icon_data_name_type();
+                iconData->desktopentry = true;
+                iconData->type = kIconDataNameType;
+                iconData->proc_name = proc->name();
+                iconData->icon_name = entry->icon;
+                iconDataPtr.reset(iconData);
+                windowList->addDesktopEntryApp(proc);
+                return iconDataPtr;
+            }
+        }
+
+        if (shellList.contains(proc->name())) {
+            iconDataPtr.reset(terminalIconData());
+            return iconDataPtr;
+        }
+
+        if (!proc->cmdline().isEmpty() && proc->cmdline()[0].startsWith("/opt")) {
+            QString fname = QFileInfo(QString(proc->cmdline()[0]).split(' ')[0]).fileName();
+            auto entry = desktopEntryCache->entryWithSubName(fname);
             if (entry && !entry->icon.isEmpty()) {
                 auto *iconData = new struct icon_data_name_type();
                 iconData->type = kIconDataNameType;
@@ -152,66 +214,6 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
                 iconDataPtr.reset(iconData);
                 return iconDataPtr;
             }
-        }
-    }
-
-    if (windowList->isGuiApp(proc->pid())) {
-        auto pixMap = windowList->getWindowIcon(proc->pid());
-        if (pixMap.size() > 0) {
-            auto *iconData = new struct icon_data_pix_map_type();
-            iconData->pixMap = pixMap;
-            iconData->proc_name = proc->name();
-            iconData->type = kIconDataPixmapType;
-            iconDataPtr.reset(iconData);
-            return iconDataPtr;
-        }
-    }
-
-    if (desktopEntryCache->contains(proc->name())) {
-        DesktopEntry entry;
-        entry = desktopEntryCache->entry(proc->name());
-        if (entry && !entry->icon.isEmpty()) {
-            auto *iconData = new struct icon_data_name_type();
-            iconData->desktopentry = true;
-            iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->name();
-            iconData->icon_name = entry->icon;
-            iconDataPtr.reset(iconData);
-            windowList->addDesktopEntryApp(proc);
-            return iconDataPtr;
-        }
-    }
-
-    if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE") && proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && proc->environ()["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == proc->pid()) {
-        auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
-        auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
-        if (entry && !entry->icon.isEmpty()) {
-            auto *iconData = new struct icon_data_name_type();
-            iconData->desktopentry = true;
-            iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->name();
-            iconData->icon_name = entry->icon;
-            iconDataPtr.reset(iconData);
-            windowList->addDesktopEntryApp(proc);
-            return iconDataPtr;
-        }
-    }
-
-    if (shellList.contains(proc->name())) {
-        iconDataPtr.reset(terminalIconData());
-        return iconDataPtr;
-    }
-
-    if (!proc->cmdline().isEmpty() && proc->cmdline()[0].startsWith("/opt")) {
-        QString fname = QFileInfo(QString(proc->cmdline()[0]).split(' ')[0]).fileName();
-        auto entry = desktopEntryCache->entryWithSubName(fname);
-        if (entry && !entry->icon.isEmpty()) {
-            auto *iconData = new struct icon_data_name_type();
-            iconData->type = kIconDataNameType;
-            iconData->proc_name = proc->name();
-            iconData->icon_name = entry->icon;
-            iconDataPtr.reset(iconData);
-            return iconDataPtr;
         }
     }
 

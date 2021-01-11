@@ -36,6 +36,8 @@
 #include "process/process_db.h"
 #include "wm/wm_window_list.h"
 
+#include "cpu_detail_view_widget.h"
+
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
@@ -101,10 +103,13 @@ void ProcessPageWidget::initUI()
     // content margin
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
+    m_rightStackView = new DStackedWidget(this);
+
     // tool area background
     auto *tw = new QWidget(this);
     // content area background
     auto *cw = new QWidget(this);
+    m_rightStackView->addWidget(cw);
 
     // left =====> stackview
     m_views = new DStackedWidget(this);
@@ -113,6 +118,7 @@ void ProcessPageWidget::initUI()
     m_views->setAutoFillBackground(false);
     // compact view instance
     m_compactView = new MonitorCompactView(m_views);
+    connect(m_compactView, &MonitorCompactView::signalShowPerformMenu, this, &ProcessPageWidget::onShowPerformMenu);
     // expand view instance
     m_expandView = new MonitorExpandView(m_views);
     m_views->addWidget(m_compactView);
@@ -227,7 +233,7 @@ void ProcessPageWidget::initUI()
     layout->setContentsMargins(margin, margin, margin, margin);
     layout->setSpacing(margin);
     layout->addWidget(m_views);
-    layout->addWidget(cw);
+    layout->addWidget(m_rightStackView);
     setLayout(layout);
 
     setAutoFillBackground(false);
@@ -492,4 +498,15 @@ void ProcessPageWidget::adjustStatusBarWidth()
 //    }
 // set fixed width temporary, might add splitter between sidebar & content area in a late update
     m_views->setFixedWidth(300);
+}
+
+void ProcessPageWidget::onShowPerformMenu(int moduleIndex)
+{
+    if (kDisPlayCPUIndex == moduleIndex) {
+        if (m_cpudetailWidget == nullptr) {
+            m_cpudetailWidget = new CPUDetailViewWidget(this);
+            m_rightStackView->addWidget(m_cpudetailWidget);
+        }
+        m_rightStackView->setCurrentWidget(m_cpudetailWidget);
+    }
 }

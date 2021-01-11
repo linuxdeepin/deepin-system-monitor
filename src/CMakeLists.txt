@@ -402,6 +402,13 @@ set(CPP_WM
     wm/wm_window_tree.cpp
 )
 
+set(HPP_MENU
+    menu/performance_param_menu.h
+)
+set(CPP_MENU
+    menu/performance_param_menu.cpp
+)
+
 set(APP_HPP
     ${HPP_GLOBAL}
     ${HPP_COMMON}
@@ -412,6 +419,7 @@ set(APP_HPP
     ${HPP_SERVICE}
     ${HPP_SYSTEM}
     ${HPP_WM}
+    ${HPP_MENU}
 )
 set(APP_CPP
     ${CPP_GLOBAL}
@@ -423,6 +431,7 @@ set(APP_CPP
     ${CPP_SERVICE}
     ${CPP_SYSTEM}
     ${CPP_WM}
+    ${CPP_MENU}
 )
 
 add_executable(${APP_NAME}

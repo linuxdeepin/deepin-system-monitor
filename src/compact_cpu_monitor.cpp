@@ -36,6 +36,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QtMath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -114,6 +115,14 @@ void CompactCpuMonitor::updateStatus()
     update();
 }
 
+void CompactCpuMonitor::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    if (m_arrowRect.contains(event->pos())) {
+        emit signalArrowClicked(1);
+    }
+}
+
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -152,6 +161,9 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
                       pointerRadius, pointerRadius);
     QRect statRect(cpuRect.x() + cpuRect.width() + spacing, cpuRect.y(), fmStat.width(cpuStatText),
                    fmStat.height());
+
+    m_arrowRect = QRect(statRect.right() + 10, statRect.y(), 20, statRect.height());
+    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     // draw section
     painter.setPen(sectionColor);
