@@ -35,8 +35,7 @@
 #include "process/process_set.h"
 #include "process/process_db.h"
 #include "wm/wm_window_list.h"
-
-#include "cpu_detail_view_widget.h"
+#include "detail_view_stacked_widget.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -103,13 +102,13 @@ void ProcessPageWidget::initUI()
     // content margin
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
-    m_rightStackView = new DStackedWidget(this);
+    m_rightStackView = new DetailViewStackedWidget(this);
 
     // tool area background
     auto *tw = new QWidget(this);
     // content area background
     auto *cw = new QWidget(this);
-    m_rightStackView->addWidget(cw);
+    m_rightStackView->addProcessWidget(cw);
 
     // left =====> stackview
     m_views = new DStackedWidget(this);
@@ -118,9 +117,10 @@ void ProcessPageWidget::initUI()
     m_views->setAutoFillBackground(false);
     // compact view instance
     m_compactView = new MonitorCompactView(m_views);
-    connect(m_compactView, &MonitorCompactView::signalShowPerformMenu, this, &ProcessPageWidget::onShowPerformMenu);
+    connect(m_compactView, &MonitorCompactView::signalShowPerformMenu, m_rightStackView, &DetailViewStackedWidget::onShowPerformMenu);
     // expand view instance
     m_expandView = new MonitorExpandView(m_views);
+    connect(m_expandView, &MonitorExpandView::signalShowPerformMenu, m_rightStackView, &DetailViewStackedWidget::onShowPerformMenu);
     m_views->addWidget(m_compactView);
     m_views->addWidget(m_expandView);
     m_views->setFixedWidth(300);
@@ -470,7 +470,6 @@ void ProcessPageWidget::showWindowKiller()
     QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
-// switch performance view display mode
 void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
 {
     switch (mode) {
@@ -480,33 +479,5 @@ void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
     case kDisplayModeCompact: {
         m_views->setCurrentIndex(0);
     } break;
-    }
-}
-
-void ProcessPageWidget::adjustStatusBarWidth()
-{
-//    QRect rect = QApplication::desktop()->screenGeometry();
-
-//    // Just change status monitor width when screen width is more than 1024.
-//    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-//    if (rect.width() * 0.2 > statusBarMaxWidth) {
-//        if (windowState() == Qt::WindowMaximized) {
-//            m_views->setFixedWidth(int(rect.width() * 0.2));
-//        } else {
-//            m_views->setFixedWidth(statusBarMaxWidth);
-//        }
-//    }
-// set fixed width temporary, might add splitter between sidebar & content area in a late update
-    m_views->setFixedWidth(300);
-}
-
-void ProcessPageWidget::onShowPerformMenu(int moduleIndex)
-{
-    if (kDisPlayCPUIndex == moduleIndex) {
-        if (m_cpudetailWidget == nullptr) {
-            m_cpudetailWidget = new CPUDetailViewWidget(this);
-            m_rightStackView->addWidget(m_cpudetailWidget);
-        }
-        m_rightStackView->setCurrentWidget(m_cpudetailWidget);
     }
 }

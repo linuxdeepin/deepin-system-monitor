@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QtMath>
 #include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -157,6 +158,14 @@ void CompactNetworkMonitor::updateStatus(qulonglong tRecvBytes, qulonglong tSent
     update();
 }
 
+void CompactNetworkMonitor::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    if (m_arrowRect.contains(event->pos())) {
+        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
+    }
+}
+
 void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -210,6 +219,9 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
                      fmContent.elidedText(recvTotalTitle, Qt::ElideRight, crect12.width()));
     painter.drawText(crect32, Qt::AlignLeft | Qt::AlignVCenter,
                      fmContent.elidedText(sentTotalTitle, Qt::ElideRight, crect32.width()));
+
+    m_arrowRect = QRect(this->width() - 12, crect12.y(), 12, crect12.height());
+    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);

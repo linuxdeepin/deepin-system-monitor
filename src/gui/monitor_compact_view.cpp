@@ -70,4 +70,7 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     setLayout(layout);
 
     connect(m_cpuMonitor, &CompactCpuMonitor::signalArrowClicked, this, &MonitorCompactView::signalShowPerformMenu);
+    connect(m_memoryMonitor, &CompactMemoryMonitor::signalArrowClicked, this, &MonitorCompactView::signalShowPerformMenu);
+    connect(m_networkMonitor, &CompactNetworkMonitor::signalArrowClicked, this, &MonitorCompactView::signalShowPerformMenu);
+    connect(m_diskMonitor, &CompactDiskMonitor::signalArrowClicked, this, &MonitorCompactView::signalShowPerformMenu);
 }

@@ -30,11 +30,15 @@ public:
     explicit CompactDiskMonitor(QWidget *parent = nullptr);
     ~CompactDiskMonitor();
 
+signals:
+    void signalArrowClicked(QPoint pos);
+
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     void changeFont(const QFont &font);
@@ -58,6 +62,8 @@ private:
     int readRenderMaxHeight = 30;
     int writeRenderMaxHeight = 30;
     int writeWaveformsRenderOffsetY = -5;
+
+    QRect m_arrowRect;
 
     QFont m_tagFont;
     QFont m_statFont;

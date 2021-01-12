@@ -119,7 +119,7 @@ void CompactCpuMonitor::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
     if (m_arrowRect.contains(event->pos())) {
-        emit signalArrowClicked(1);
+        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
     }
 }
 

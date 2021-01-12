@@ -45,6 +45,9 @@ public:
     // Default destructor
     ~MonitorExpandView() = default;
 
+signals:
+    void signalShowPerformMenu(QPoint pos);
+
 private:
     // Cpu monitor view
     CpuMonitor *m_cpuMonitor {};

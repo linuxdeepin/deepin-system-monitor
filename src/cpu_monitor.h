@@ -41,6 +41,9 @@ public:
     explicit CpuMonitor(QWidget *parent = nullptr);
     ~CpuMonitor();
 
+signals:
+    void signalArrowClicked(QPoint pos);
+
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void updateStatus();
@@ -50,6 +53,7 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
     qreal progress() const
     {
@@ -90,6 +94,8 @@ private:
 
     QFont m_cpuUsageFont;
     QFont m_cpuDisplayFont;
+
+    QRect m_arrowRect;
 
     qreal m_progress {};
     QPropertyAnimation *m_animation {};

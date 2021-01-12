@@ -65,4 +65,8 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     layout->setContentsMargins(margin, margin, margin, margin);
     // set monitor view layout
     setLayout(layout);
+
+    connect(m_cpuMonitor, &CpuMonitor::signalArrowClicked, this, &MonitorExpandView::signalShowPerformMenu);
+    connect(m_memoryMonitor, &MemoryMonitor::signalArrowClicked, this, &MonitorExpandView::signalShowPerformMenu);
+    connect(m_networkMonitor, &NetworkMonitor::signalArrowClicked, this, &MonitorExpandView::signalShowPerformMenu);
 }

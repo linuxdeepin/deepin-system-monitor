@@ -37,6 +37,7 @@
 #include <QtMath>
 #include <QPropertyAnimation>
 #include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 using namespace common;
@@ -151,6 +152,14 @@ void CpuMonitor::changeFont(const QFont &font)
     m_cpuDisplayFont.setPointSize(m_cpuDisplayFont.pointSize() + 12);
 }
 
+void CpuMonitor::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    if (m_arrowRect.contains(event->pos())) {
+        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
+    }
+}
+
 void CpuMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -173,6 +182,9 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                          rect().y() + titleRenderOffsetY, titleWidth, fm.height());
     painter.drawText(cpuDisplayRect, Qt::AlignCenter,
                      DApplication::translate("Process.Graph.View", "CPU"));
+
+    m_arrowRect = QRect(cpuDisplayRect.right() + 10, cpuDisplayRect.center().y() - 10, 12, 20);
+    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     QRect iconRect(cpuDisplayRect.x() - margin - iconSize + 6,
                    cpuDisplayRect.y() + qCeil((cpuDisplayRect.height() - iconSize) / 2.) + 2,

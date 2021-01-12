@@ -37,6 +37,7 @@
 #include <QPainter>
 #include <QtMath>
 #include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 using namespace core::system;
@@ -152,6 +153,14 @@ void CompactDiskMonitor::updateStatus()
     update();
 }
 
+void CompactDiskMonitor::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    if (m_arrowRect.contains(event->pos())) {
+        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
+    }
+}
+
 void CompactDiskMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -212,6 +221,9 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     painter.setFont(m_statFont);
     painter.drawText(rcol2, Qt::AlignLeft | Qt::AlignVCenter, rstat);
     painter.drawText(wcol2, Qt::AlignLeft | Qt::AlignVCenter, wstat);
+
+    m_arrowRect = QRect(this->width() - 12, rcol2.y(), 12, rcol2.height());
+    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     // Draw background grid.
     painter.setRenderHint(QPainter::Antialiasing, false);

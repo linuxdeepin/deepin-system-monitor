@@ -25,10 +25,26 @@
 /**
  * @brief Detail view stacked widget (main content stacked area)
  */
+class CPUDetailViewWidget;
+class MemDetailViewWidget;
+class NetifDetailViewWidget;
+class BlockDevDetailViewWidget;
 class DetailViewStackedWidget : public QStackedWidget
 {
 public:
-    DetailViewStackedWidget();
+    DetailViewStackedWidget(QWidget *parent);
+
+    void addProcessWidget(QWidget *processWidget);
+
+public slots:
+    void onShowPerformMenu(QPoint pos);
+
+private:
+    QWidget *m_processWidget = nullptr;
+    CPUDetailViewWidget *m_cpudetailWidget = nullptr;
+    MemDetailViewWidget *m_memDetailWidget = nullptr;
+    NetifDetailViewWidget *m_netifDetailWidget = nullptr;
+    BlockDevDetailViewWidget *m_blockDevDetailWidget = nullptr;
 };
 
 #endif // DETAIL_VIEW_STACKED_WIDGET_H

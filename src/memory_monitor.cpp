@@ -34,6 +34,7 @@
 #include <QtMath>
 #include <QPropertyAnimation>
 #include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -70,7 +71,7 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
 
     TimePeriod period(TimePeriod::k1Min, {2, 0});
     m_model = new MemInfoModel(period, this);
-    connect(m_model, &MemInfoModel::modelUpdated, this, [=]() {
+    connect(m_model, &MemInfoModel::modelUpdated, this, [ = ]() {
         m_animation->start();
     });
 
@@ -129,6 +130,14 @@ void MemoryMonitor::changeFont(const QFont &font)
     m_memPercentFont = font;
     m_memPercentFont.setPointSize(m_memPercentFont.pointSize());
     m_memPercentFont.setBold(true);
+}
+
+void MemoryMonitor::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    if (m_arrowRect.contains(event->pos())) {
+        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
+    }
 }
 
 void MemoryMonitor::paintEvent(QPaintEvent *)
@@ -214,16 +223,19 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                      fm.elidedText(title, Qt::ElideRight,
                                    rect().width() - titleRect.x() - outsideRingRadius - 50));
 
+    m_arrowRect = QRect(titleRect.right() + 10, titleRect.center().y() - 10, 12, 20);
+    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
+
     int spacing = 10;
     int sectionSize = 6;
 
     // Draw memory summary.
     QString memoryTitle = QString("%1(%2%)")
-                              .arg(DApplication::translate("Process.Graph.View", "Memory"))
-                              .arg(QString::number(memPercent * 100, 'f', 1));
+                          .arg(DApplication::translate("Process.Graph.View", "Memory"))
+                          .arg(QString::number(memPercent * 100, 'f', 1));
     QString memoryContent = QString("%1 / %2")
-                                .arg(curUsedMemIndex.data().toString())
-                                .arg(curTotalMemIndex.data().toString());
+                            .arg(curUsedMemIndex.data().toString())
+                            .arg(curTotalMemIndex.data().toString());
     QString swapTitle = "";
     QString swapContent = "";
     if (m_model->swapTotal() == 0) {
@@ -236,8 +248,8 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1 / %2")
-                          .arg(curUsedSwapIndex.data().toString())
-                          .arg(curTotalSwapIndex.data().toString());
+                      .arg(curUsedSwapIndex.data().toString())
+                      .arg(curTotalSwapIndex.data().toString());
     }
 
     QFontMetrics fmMem(m_contentFont);

@@ -32,7 +32,7 @@ public:
     ~CompactCpuMonitor();
 
 signals:
-    void signalArrowClicked(int moduleIndex);
+    void signalArrowClicked(QPoint pos);
 
 public slots:
     void updateStatus();

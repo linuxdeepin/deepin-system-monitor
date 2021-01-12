@@ -18,7 +18,67 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "detail_view_stacked_widget.h"
+#include "cpu_detail_view_widget.h"
+#include "mem_detail_view_widget.h"
+#include "netif_detail_view_widget.h"
+#include "block_dev_detail_view_widget.h"
 
-DetailViewStackedWidget::DetailViewStackedWidget()
+#include <DMenu>
+
+DWIDGET_USE_NAMESPACE
+DetailViewStackedWidget::DetailViewStackedWidget(QWidget *parent) : QStackedWidget(parent)
 {
+
+}
+
+void DetailViewStackedWidget::addProcessWidget(QWidget *processWidget)
+{
+    m_processWidget = processWidget;
+    this->addWidget(processWidget);
+}
+
+void DetailViewStackedWidget::onShowPerformMenu(QPoint pos)
+{
+    DMenu menu;
+    QAction *showPerformParamAct = menu.addAction(tr("View performance parameters"));
+    QAction *hidePerformParamAct = menu.addAction(tr("Hiding performance parameters"));
+    if (this->currentWidget() == m_processWidget) {
+        hidePerformParamAct->setDisabled(true);
+    }
+
+    DMenu subMenu;
+    showPerformParamAct->setMenu(&subMenu);
+    QAction *cpuAct = subMenu.addAction(tr("CPU"));
+    QAction *memAct = subMenu.addAction(tr("Memory"));
+    QAction *netifAct = subMenu.addAction(tr("Netif"));
+    QAction *blockDevAct = subMenu.addAction(tr("BlockDev"));
+
+    QAction *resAct = menu.exec(pos);
+    if (resAct == cpuAct) {
+        if (m_cpudetailWidget == nullptr) {
+            m_cpudetailWidget = new CPUDetailViewWidget(this);
+            this->addWidget(m_cpudetailWidget);
+        }
+        this->setCurrentWidget(m_cpudetailWidget);
+    } else if (resAct == memAct) {
+        if (m_memDetailWidget == nullptr) {
+            m_memDetailWidget = new MemDetailViewWidget(this);
+            this->addWidget(m_memDetailWidget);
+        }
+        this->setCurrentWidget(m_memDetailWidget);
+    } else if (resAct == netifAct) {
+        if (m_netifDetailWidget == nullptr) {
+            m_netifDetailWidget = new NetifDetailViewWidget(this);
+            this->addWidget(m_netifDetailWidget);
+        }
+        this->setCurrentWidget(m_netifDetailWidget);
+    } else if (resAct == blockDevAct) {
+        if (m_blockDevDetailWidget == nullptr) {
+            m_blockDevDetailWidget = new BlockDevDetailViewWidget(this);
+            this->addWidget(m_blockDevDetailWidget);
+        }
+        this->setCurrentWidget(m_blockDevDetailWidget);
+    } else if (resAct == hidePerformParamAct) {
+        this->setCurrentWidget(m_processWidget);
+    }
 }

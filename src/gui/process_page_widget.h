@@ -37,7 +37,7 @@ class MonitorExpandView;
 class ProcessTableView;
 class Settings;
 class XWinKillPreviewWidget;
-class CPUDetailViewWidget;
+class DetailViewStackedWidget;
 /**
  * @brief Process & performance monitor view frame
  */
@@ -55,11 +55,6 @@ public:
      * @brief Destructor
      */
     ~ProcessPageWidget();
-
-    /**
-     * @brief Adjust status bar width
-     */
-    void adjustStatusBarWidth();
 
     /**
      * @brief Initialize ui components
@@ -114,15 +109,13 @@ private Q_SLOTS:
 
     void onStatInfoUpdated();
 
-    void onShowPerformMenu(int moduleIndex);
-
 private:
     // global setttings instance
     Settings *m_settings;
 
     // stacked widget to hold expand & compact monitor view
     DStackedWidget *m_views {};
-    DStackedWidget *m_rightStackView {};
+    DetailViewStackedWidget *m_rightStackView {};
     // expand monitor view
     MonitorExpandView *m_expandView {};
     // compact monitor view
@@ -144,8 +137,6 @@ private:
 
     // kill process by window selection preview widget
     XWinKillPreviewWidget *m_xwkillPreview {};
-
-    CPUDetailViewWidget *m_cpudetailWidget = nullptr;
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

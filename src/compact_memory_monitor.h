@@ -38,8 +38,12 @@ public:
     explicit CompactMemoryMonitor(QWidget *parent = nullptr);
     ~CompactMemoryMonitor();
 
+signals:
+    void signalArrowClicked(QPoint pos);
+
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
     qreal progress() const
     {
@@ -76,6 +80,8 @@ private:
     int ringCenterPointerX;
     int ringCenterPointerY = 45;
     int ringWidth = 6;
+
+    QRect m_arrowRect;
 
     MemInfoModel *m_model;
 
