@@ -21,6 +21,10 @@
 #include "smooth_curve_generator.h"
 #include "common/common.h"
 #include "constant.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor_thread.h"
+#include "system/device_db.h"
+#include "system/net_info.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -36,8 +40,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+using namespace core::system;
 using namespace common;
 using namespace common::format;
+using namespace common::core;
 
 CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     : QWidget(parent)
@@ -65,10 +71,8 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
             &CompactNetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    connect(smo->jobInstance(), &StatsCollector::networkStatInfoUpdated,
-    //            this, &CompactNetworkMonitor::updateStatus);
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &CompactNetworkMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()),
@@ -83,13 +87,15 @@ CompactNetworkMonitor::~CompactNetworkMonitor()
     delete uploadSpeeds;
 }
 
-void CompactNetworkMonitor::updateStatus(qulonglong tRecvBytes, qulonglong tSentBytes,
-                                         qreal recvBps, qreal sentBps)
+void CompactNetworkMonitor::updateStatus()
 {
-    m_totalRecvBytes = tRecvBytes;
-    m_totalSentBytes = tSentBytes;
-    m_recvBps = recvBps;
-    m_sentBps = sentBps;
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    auto netInfo = monitor->deviceDB()->netInfo();
+
+    m_totalRecvBytes = netInfo->totalRecvBytes();
+    m_totalSentBytes = netInfo->totalSentBytes();
+    m_recvBps = netInfo->recvBps();
+    m_sentBps = netInfo->sentBps();
 
     // Init download path.
     downloadSpeeds->append(m_recvBps);

@@ -62,7 +62,8 @@ inline QList<INetAddr> NetifInfoDB::addrList(const QByteArray &ifname)
     return m_addrDB.values(ifname);
 }
 
-inline QMultiMap<QByteArray, INetAddr> NetifInfoDB::addrmap(){
+inline QMultiMap<QByteArray, INetAddr> NetifInfoDB::addrmap()
+{
     QReadLocker lock(&m_rwlock);
     return m_addrDB;
 }

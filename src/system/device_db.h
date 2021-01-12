@@ -29,6 +29,7 @@ class MemInfo;
 class CPUSet;
 class SystemMonitor;
 class DiskIOInfo;
+class NetInfo;
 
 /**
  * @brief The DeviceDB class
@@ -46,6 +47,7 @@ public:
     NetifInfoDB *netifInfoDB();
     BlockDeviceInfoDB *blockDeviceInfoDB();
     DiskIOInfo *diskIoInfo();
+    NetInfo *netInfo();
 
     void update();
 
@@ -55,6 +57,7 @@ private:
     NetifInfoDB *m_netifInfoDB;
     BlockDeviceInfoDB *m_blkDevInfoDB;
     DiskIOInfo *m_diskIoInfo;
+    NetInfo *m_netInfo;
 };
 
 } // namespace system

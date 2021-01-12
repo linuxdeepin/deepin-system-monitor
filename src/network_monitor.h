@@ -39,10 +39,7 @@ signals:
     void signalArrowClicked(QPoint pos);
 
 public slots:
-    void updateStatus(qulonglong totalRecvBytes,
-                      qulonglong totalSentBytes,
-                      qreal recvBps,
-                      qreal sentBps);
+    void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);

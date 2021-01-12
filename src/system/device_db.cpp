@@ -24,6 +24,7 @@
 #include "block_device_info_db.h"
 #include "netif_info_db.h"
 #include "diskio_info.h"
+#include "net_info.h"
 #include "common/thread_manager.h"
 #include "system/system_monitor.h"
 #include "system/system_monitor_thread.h"
@@ -42,6 +43,7 @@ DeviceDB::DeviceDB()
     m_netifInfoDB = new NetifInfoDB();
     m_blkDevInfoDB = new BlockDeviceInfoDB();
     m_diskIoInfo = new DiskIOInfo();
+    m_netInfo = new NetInfo();
 }
 
 DeviceDB::~DeviceDB()
@@ -50,6 +52,7 @@ DeviceDB::~DeviceDB()
     delete m_cpuSet;
     delete m_blkDevInfoDB;
     delete m_netifInfoDB;
+    delete m_netInfo;
 }
 
 void DeviceDB::update()
@@ -59,6 +62,7 @@ void DeviceDB::update()
     m_netifInfoDB->update();
     m_blkDevInfoDB->update();
     m_diskIoInfo->update();
+    m_netInfo->resdNetInfo();
 }
 
 DeviceDB *DeviceDB::instance()
@@ -90,6 +94,11 @@ CPUSet *DeviceDB::cpuSet()
 DiskIOInfo *DeviceDB::diskIoInfo()
 {
     return m_diskIoInfo;
+}
+
+NetInfo *DeviceDB::netInfo()
+{
+    return m_netInfo;
 }
 
 } // namespace system

@@ -360,6 +360,7 @@ set(HPP_SYSTEM
     system/nl_link.h
     system/wireless.h
     system/diskio_info.h
+    system/net_info.h
 )
 set(CPP_SYSTEM
     system/system_monitor.cpp
@@ -385,6 +386,7 @@ set(CPP_SYSTEM
     system/nl_link.cpp
     system/wireless.cpp
     system/diskio_info.cpp
+    system/net_info.cpp
 )
 
 set(HPP_WM

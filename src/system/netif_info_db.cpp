@@ -50,20 +50,20 @@ void NetifInfoDB::update()
     AddrIterator iter = m_netlink->addrIterator();;
     while (iter.hasNext()) {
         auto it = iter.next();
-        if(it->family() == AF_INET) {
+        if (it->family() == AF_INET) {
             std::shared_ptr<struct inet_addr4_t> ip4net = std::make_shared<struct inet_addr4_t>();
             ip4net->family = it->family();
             ip4net->addr = it->local();
             ip4net->mask = it->multicast();
             ip4net->bcast = it->broadcast();
-            m_addrDB.insert(it->local(),ip4net);
-        } else if(it->family() == AF_INET6) {
+            m_addrDB.insert(it->local(), ip4net);
+        } else if (it->family() == AF_INET6) {
             std::shared_ptr<struct inet_addr6_t> temp = std::make_shared<struct inet_addr6_t>();
             temp->family = it->family();
             temp->addr = it->local();
             temp->scope = it->scope();
             temp->prefixlen = it->prefixlen();
-            m_addrDB.insert(it->local(),temp);
+            m_addrDB.insert(it->local(), temp);
         }
 
     }
@@ -77,7 +77,7 @@ bool NetifInfoDB::getSockIOStatByInode(ino_t ino, SockIOStat &stat)
 {
     NetifMonitorThread *thread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
     auto netifMonitor = thread->netifJobInstance();
-    return netifMonitor->getSockIOStatByInode(ino,stat);
+    return netifMonitor->getSockIOStatByInode(ino, stat);
 
 }
 

@@ -20,8 +20,12 @@
 
 #include "gui/ui_common.h"
 #include "smooth_curve_generator.h"
+#include "common/thread_manager.h"
 #include "common/common.h"
+#include "system/system_monitor_thread.h"
 #include "constant.h"
+#include "system/device_db.h"
+#include "system/net_info.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -36,8 +40,10 @@
 #include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
+using namespace core::system;
 using namespace common;
 using namespace common::format;
+using namespace common::core;
 
 NetworkMonitor::NetworkMonitor(QWidget *parent)
     : QWidget(parent)
@@ -64,10 +70,8 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    //    auto *smo = SystemMonitor::instance();
-    //    Q_ASSERT(smo != nullptr);
-    //    connect(smo->jobInstance(), &StatsCollector::networkStatInfoUpdated,
-    //            this, &NetworkMonitor::updateStatus);
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &NetworkMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -107,15 +111,15 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     m_frameColor = palette.color(DPalette::FrameBorder);
 }
 
-void NetworkMonitor::updateStatus(qulonglong tRecvBytes,
-                                  qulonglong tSentBytes,
-                                  qreal recvBps,
-                                  qreal sentBps)
+void NetworkMonitor::updateStatus()
 {
-    m_totalRecvBytes = tRecvBytes;
-    m_totalSentBytes = tSentBytes;
-    m_recvBps = recvBps;
-    m_sentBps = sentBps;
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    auto netInfo = monitor->deviceDB()->netInfo();
+
+    m_totalRecvBytes = netInfo->totalRecvBytes();
+    m_totalSentBytes = netInfo->totalSentBytes();
+    m_recvBps = netInfo->recvBps();
+    m_sentBps = netInfo->sentBps();
 
     // Init download path.
     downloadSpeeds->append(m_recvBps);
