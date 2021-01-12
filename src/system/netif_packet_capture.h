@@ -25,10 +25,6 @@
 #include <QTimer>
 #include <QMap>
 
-#define PROC_PATH_SOCK_TCP  "/proc/net/tcp"
-#define PROC_PATH_SOCK_TCP6 "/proc/net/tcp6"
-#define PROC_PATH_SOCK_UDP  "/proc/net/udp"
-#define PROC_PATH_SOCK_UDP6 "/proc/net/udp6"
 
 namespace core {
 namespace system {

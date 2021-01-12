@@ -19,13 +19,14 @@
 */
 #include "netif_packet_capture.h"
 #include "netif_packet_parser.h"
-#include <arpa/inet.h>
 #include "common/hash.h"
 #include "netif_monitor.h"
+#include <arpa/inet.h>
 #include "device_db.h"
 #include <net/ethernet.h>
 #include <QNetworkInterface>
 #include <QDebug>
+#include "sys_info.h"
 #define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
 #define PACKET_DISPATCH_BATCH_COUNT 64 // packets to process in a batch
 #define PACKET_DISPATCH_QUEUE_LWAT 64 // queue low water mark
@@ -37,137 +38,6 @@
 namespace core {
 namespace system {
 
-
-bool readSockStat(SockStatMap &statMap)
-{
-    bool ok {true};
-
-    auto parseSocks = [](int family, int proto, const char *proc, SockStatMap & statMap) -> bool {
-        bool ok {true};
-        FILE *fp {};
-        const size_t BLEN = 4096;
-        QByteArray buffer {BLEN, 0};
-        int nr {};
-        ino_t ino {};
-        char s_addr[128] {}, d_addr[128] {};
-        uint64_t hash {};
-        QByteArray fmtbuf {};
-        uint64_t cchash[2] {};
-        QString patternA {}, patternB {};
-
-        errno = 0;
-        if (!(fp = fopen(proc, "r")))
-        {
-            return !ok;
-        }
-
-        while (fgets(buffer.data(), BLEN, fp))
-        {
-            auto stat = QSharedPointer<struct sock_stat_t>::create();
-
-            //*****************************************************************
-            nr = sscanf(buffer.data(), "%*s %64[0-9A-Fa-f]:%x %64[0-9A-Fa-f]:%x %*x %*s %*s %*s %u %*u %ld",
-                        s_addr,
-                        &stat->s_port,
-                        d_addr,
-                        &stat->d_port,
-                        &stat->uid,
-                        &ino);
-
-            // ignore first line
-            if (nr == 0)
-                continue;
-
-            // socket still in waiting state
-            if (ino == 0) {
-                continue;
-            }
-
-            stat->ino = ino;
-            stat->sa_family = family;
-            stat->proto = proto;
-
-            // saddr & daddr
-            if (family == AF_INET6) {
-                sscanf(s_addr, "%08x%08x%08x%08x",
-                       &stat->s_addr.in6.s6_addr32[0],
-                       &stat->s_addr.in6.s6_addr32[1],
-                       &stat->s_addr.in6.s6_addr32[2],
-                       &stat->s_addr.in6.s6_addr32[3]);
-                sscanf(d_addr, "%08x%08x%08x%08x",
-                       &stat->d_addr.in6.s6_addr32[0],
-                       &stat->d_addr.in6.s6_addr32[1],
-                       &stat->d_addr.in6.s6_addr32[2],
-                       &stat->d_addr.in6.s6_addr32[3]);
-                // convert ipv4 mapped ipv6 address to ipv4
-                if (stat->s_addr.in6.s6_addr32[0] == 0x0 &&
-                        stat->s_addr.in6.s6_addr32[1] == 0x0 &&
-                        stat->s_addr.in6.s6_addr32[2] == 0xffff0000) {
-                    stat->sa_family = AF_INET;
-                    stat->s_addr.in4.s_addr = stat->s_addr.in6.s6_addr32[3];
-                    stat->d_addr.in4.s_addr = stat->d_addr.in6.s6_addr32[3];
-                }
-            } else {
-                sscanf(s_addr, "%x", &stat->s_addr.in4.s_addr);
-                sscanf(d_addr, "%x", &stat->d_addr.in4.s_addr);
-            }
-
-            if (stat->sa_family == AF_INET) {
-                char saddr_str[INET_ADDRSTRLEN + 1] {}, daddr_str[INET_ADDRSTRLEN + 1] {};
-                inet_ntop(AF_INET, &stat->s_addr.in4, saddr_str, INET_ADDRSTRLEN);
-                inet_ntop(AF_INET, &stat->d_addr.in4, daddr_str, INET_ADDRSTRLEN);
-
-                patternA = QString("%1:%2-%3:%4").arg(saddr_str).arg(stat->s_port).arg(daddr_str).arg(stat->d_port);
-                if (proto == IPPROTO_TCP) {
-                    patternB = QString("%1:%2-%3:%4").arg(daddr_str).arg(stat->d_port).arg(saddr_str).arg(stat->s_port);
-                }
-
-            } else if (stat->sa_family == AF_INET6) {
-                char saddr6_str[INET6_ADDRSTRLEN + 1] {}, daddr6_str[INET6_ADDRSTRLEN + 1] {};
-                inet_ntop(AF_INET6, &stat->s_addr.in6, saddr6_str, INET6_ADDRSTRLEN);
-                inet_ntop(AF_INET6, &stat->d_addr.in6, daddr6_str, INET6_ADDRSTRLEN);
-
-                patternA = QString("%1:%2-%3:%4").arg(saddr6_str).arg(stat->s_port).arg(daddr6_str).arg(stat->d_port);
-                if (proto == IPPROTO_TCP) {
-                    patternB = QString("%1:%2-%3:%4").arg(daddr6_str).arg(stat->d_port).arg(saddr6_str).arg(stat->s_port);
-                }
-
-            } else {
-                // unexpected here
-            }
-
-            fmtbuf = patternA.toLocal8Bit();
-            util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
-            hash = cchash[0];
-            statMap.insert(hash, stat);
-
-            // if it's TCP, we need add reverse mapping due to its bidirectional piping feature,
-            // otherwise we wont be able to get the inode
-            if (proto == IPPROTO_TCP) {
-                fmtbuf = patternB.toLocal8Bit();
-                util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
-                hash = cchash[0];
-                statMap.insert(hash, stat);
-            }
-        }
-        if (ferror(fp))
-        {
-            ok = !ok;
-        }
-        fclose(fp);
-
-        return ok;
-    };
-
-    statMap.clear();
-
-    ok = parseSocks(AF_INET, IPPROTO_TCP, PROC_PATH_SOCK_TCP, statMap);
-    ok = parseSocks(AF_INET, IPPROTO_UDP, PROC_PATH_SOCK_UDP, statMap) && ok;
-    ok = parseSocks(AF_INET6, IPPROTO_TCP, PROC_PATH_SOCK_TCP6, statMap) && ok;
-    ok = parseSocks(AF_INET6, IPPROTO_UDP, PROC_PATH_SOCK_UDP6, statMap) && ok;
-
-    return ok;
-}
 
 
 
@@ -389,7 +259,7 @@ void NetifPacketCapture::dispatchPackets()
         time_t now = time(nullptr);
         if (!last_sockstat || (now - last_sockstat) >= SOCKSTAT_REFRESH_INTERVAL) {
             m_sockStats.clear();
-            readSockStat(m_sockStats);
+            SysInfo::readSockStat(m_sockStats);
             last_sockstat = now;
         }
 
@@ -424,13 +294,11 @@ void NetifPacketCapture::dispatchPackets()
 // refresh network interface hash cache
 void NetifPacketCapture::refreshIfAddrsHashCache()
 {
-  //  NetIFAddrsMap addrsMap;
-
+    //  NetIFAddrsMap addrsMap;
     foreach (QNetworkInterface netInterface, QNetworkInterface::allInterfaces())
     {
           m_ifaddrsHashCache.insert(netInterface.hardwareAddress(),0);
     }
-
 }
 
 

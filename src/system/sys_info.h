@@ -22,7 +22,7 @@
 
 // local
 #include "private/sys_info_p.h"
-
+#include "packet.h"
 // qt
 #include <QtGlobal>
 #include <QSharedDataPointer>
@@ -89,6 +89,7 @@ public:
     static QByteArray groupName(gid_t gid);
 
     void readSysInfo();
+    static bool readSockStat(SockStatMap &statMap);
 
 private:
     quint32 read_file_nr();

@@ -44,7 +44,7 @@ public:
     QMultiMap<QByteArray, INetAddr> addrmap();
     QList<NetifInfo> infoDB();
     void update();
-    inline bool getSockIOStatByInode(ino_t ino, SockIOStat &stat);
+    bool getSockIOStatByInode(ino_t ino, SockIOStat &stat);
 
 private:
     std::unique_ptr<Netlink> m_netlink;
