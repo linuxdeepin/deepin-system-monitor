@@ -59,6 +59,11 @@ void BaseDetailViewWidget::fontChanged(const QFont &font)
     updateWidgetGrometry();
 }
 
+int BaseDetailViewWidget::titleHeight()
+{
+    return QFontMetrics(m_titleFont).height();
+}
+
 void BaseDetailViewWidget::setTitle(const QString &text)
 {
     m_titleText = text;

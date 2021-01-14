@@ -46,6 +46,8 @@ public:
     void setDetail(const QString &text);
     QString detail();
 
+    int titleHeight();
+
 public slots:
     virtual void fontChanged(const QFont &font);
 

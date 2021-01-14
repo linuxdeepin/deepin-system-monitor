@@ -31,14 +31,19 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void changeFont(const QFont &font);
 
 private:
+    void drawBackPixmap();
+
+private:
     int gridSize = 10;
 
     QFont m_textfont;
+    QPixmap m_backPixmap;
 };
 
 #endif // CHART_VIEW_WIDGET_H

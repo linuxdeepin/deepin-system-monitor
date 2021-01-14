@@ -38,16 +38,24 @@ void ChartViewWidget::changeFont(const QFont &font)
     m_textfont.setPointSize(m_textfont.pointSize() - 2);
 }
 
-void ChartViewWidget::paintEvent(QPaintEvent *event)
+void ChartViewWidget::resizeEvent(QResizeEvent *event)
 {
-    QWidget::paintEvent(event);
-    QPainter painter(this);
+    QWidget::resizeEvent(event);
+    drawBackPixmap();
+}
+
+void ChartViewWidget::drawBackPixmap()
+{
+    m_backPixmap = QPixmap(this->size());
+    m_backPixmap.fill(Qt::transparent);
+
+    QPainter painter(&m_backPixmap);
 
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
-    frameColor.setAlphaF(0.5);
+    frameColor.setAlphaF(0.4);
 
     QPen framePen;
     int penSize = 1;
@@ -92,6 +100,11 @@ void ChartViewWidget::paintEvent(QPaintEvent *event)
         gridLineY += gridSize + penSize;
         painter.drawLine(gridX + 1, gridLineY, gridX + gridWidth - 1, gridLineY);
     }
+}
 
-    painter.setRenderHint(QPainter::Antialiasing, true);
+void ChartViewWidget::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, m_backPixmap);
 }
