@@ -66,7 +66,5 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     // set monitor view layout
     setLayout(layout);
 
-    connect(m_cpuMonitor, &CpuMonitor::signalArrowClicked, this, &MonitorExpandView::signalShowPerformMenu);
-    connect(m_memoryMonitor, &MemoryMonitor::signalArrowClicked, this, &MonitorExpandView::signalShowPerformMenu);
-    connect(m_networkMonitor, &NetworkMonitor::signalArrowClicked, this, &MonitorExpandView::signalShowPerformMenu);
+    connect(m_cpuMonitor, &CpuMonitor::signalDetailInfoClicked, this, &MonitorExpandView::signalDetailInfoClicked);
 }

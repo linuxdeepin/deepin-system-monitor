@@ -117,10 +117,10 @@ void ProcessPageWidget::initUI()
     m_views->setAutoFillBackground(false);
     // compact view instance
     m_compactView = new MonitorCompactView(m_views);
-    connect(m_compactView, &MonitorCompactView::signalShowPerformMenu, m_rightStackView, &DetailViewStackedWidget::onShowPerformMenu);
+    connect(m_compactView, &MonitorCompactView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
     // expand view instance
     m_expandView = new MonitorExpandView(m_views);
-    connect(m_expandView, &MonitorExpandView::signalShowPerformMenu, m_rightStackView, &DetailViewStackedWidget::onShowPerformMenu);
+    connect(m_expandView, &MonitorExpandView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
     m_views->addWidget(m_compactView);
     m_views->addWidget(m_expandView);
     m_views->setFixedWidth(300);

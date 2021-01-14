@@ -75,6 +75,10 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     connect(m_animation, &QVariantAnimation::valueChanged, [ = ]() {
         update();
     });
+
+    m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
+    m_detailButton->setFont(m_detailFont);
+    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::signalDetailInfoClicked);
 }
 
 CpuMonitor::~CpuMonitor()
@@ -148,16 +152,20 @@ void CpuMonitor::changeFont(const QFont &font)
     m_cpuUsageFont = font;
     m_cpuUsageFont.setBold(true);
     m_cpuUsageFont.setPointSize(m_cpuUsageFont.pointSize() + 3);
+
     m_cpuDisplayFont = font;
     m_cpuDisplayFont.setPointSize(m_cpuDisplayFont.pointSize() + 12);
+
+    m_detailFont = font;
+    m_detailFont.setWeight(QFont::Medium);
+    m_detailFont.setPointSize(m_detailFont.pointSize() - 1);
 }
 
-void CpuMonitor::mousePressEvent(QMouseEvent *event)
+void CpuMonitor::resizeEvent(QResizeEvent *event)
 {
-    QWidget::mousePressEvent(event);
-    if (m_arrowRect.contains(event->pos())) {
-        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
-    }
+    QWidget::resizeEvent(event);
+    const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()), m_detailButton->fontMetrics().height());
+    m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - paddingRight, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
 }
 
 void CpuMonitor::paintEvent(QPaintEvent *)
@@ -182,9 +190,6 @@ void CpuMonitor::paintEvent(QPaintEvent *)
                          rect().y() + titleRenderOffsetY, titleWidth, fm.height());
     painter.drawText(cpuDisplayRect, Qt::AlignCenter,
                      DApplication::translate("Process.Graph.View", "CPU"));
-
-    m_arrowRect = QRect(cpuDisplayRect.right() + 10, cpuDisplayRect.center().y() - 10, 12, 20);
-    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     QRect iconRect(cpuDisplayRect.x() - margin - iconSize + 6,
                    cpuDisplayRect.y() + qCeil((cpuDisplayRect.height() - iconSize) / 2.) + 2,
@@ -219,5 +224,5 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#0081FF"), 1.5));
     painter.drawPath(cpuPath);
 
-    setFixedHeight(cpuDisplayRect.y() + cpuDisplayRect.height() + 1);
+    setFixedHeight(cpuDisplayRect.y() + cpuDisplayRect.height() + 1 + m_detailButton->fontMetrics().height());
 }

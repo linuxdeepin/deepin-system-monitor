@@ -20,17 +20,20 @@
 #ifndef CPU_DETAIL_VIEW_WIDGET_H
 #define CPU_DETAIL_VIEW_WIDGET_H
 
-#include <QWidget>
+#include "base_detail_view_widget.h"
 
 class QTableWidget;
 /**
  * @brief CPU detail view widget
  */
-class CPUDetailViewWidget : public QWidget
+class CPUDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
 public:
     explicit CPUDetailViewWidget(QWidget *parent = nullptr);
+
+public slots:
+    void fontChanged(const QFont &font) override;
 
 private:
     QWidget      *m_graphicsTable;

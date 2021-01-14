@@ -19,7 +19,16 @@
 */
 #include "netif_detail_view_widget.h"
 
+#include <DApplication>
+
 NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseDetailViewWidget(parent)
 {
+    setTitle(DApplication::translate("Process.Graph.View", "Network"));
+}
+
+void NetifDetailViewWidget::fontChanged(const QFont &font)
+{
+    BaseDetailViewWidget::fontChanged(font);
+    //Child Todo
 }

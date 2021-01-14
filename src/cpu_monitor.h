@@ -25,6 +25,7 @@
 #include <QList>
 #include <QWidget>
 #include <QPainterPath>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -42,7 +43,7 @@ public:
     ~CpuMonitor();
 
 signals:
-    void signalArrowClicked(QPoint pos);
+    void signalDetailInfoClicked();
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
@@ -53,7 +54,7 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
     qreal progress() const
     {
@@ -94,12 +95,13 @@ private:
 
     QFont m_cpuUsageFont;
     QFont m_cpuDisplayFont;
-
-    QRect m_arrowRect;
+    QFont m_detailFont;
 
     qreal m_progress {};
     QPropertyAnimation *m_animation {};
     CPUInfoModel *m_cpuInfomodel;
+
+    DCommandLinkButton *m_detailButton;
 };
 
 #endif

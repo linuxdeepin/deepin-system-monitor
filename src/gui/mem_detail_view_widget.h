@@ -20,20 +20,26 @@
 #ifndef MEM_DETAIL_VIEW_WIDGET_H
 #define MEM_DETAIL_VIEW_WIDGET_H
 
-#include <QWidget>
+#include "base_detail_view_widget.h"
 
 /**
  * @brief Memory detail view widget
  */
-class MemDetailViewWidget : public QWidget
+class MemStatViewWidget;
+class MemSummaryViewWidget;
+class MemDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
+
 public:
     explicit MemDetailViewWidget(QWidget *parent = nullptr);
 
-signals:
-
 public slots:
+    void fontChanged(const QFont &font) override;
+
+private:
+    MemStatViewWidget *m_memstatWIdget;
+    MemSummaryViewWidget *m_memsummaryWidget;
 };
 
 #endif // MEM_DETAIL_VIEW_WIDGET_H

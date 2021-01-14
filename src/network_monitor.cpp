@@ -188,14 +188,6 @@ void NetworkMonitor::updateStatus()
     update();
 }
 
-void NetworkMonitor::mousePressEvent(QMouseEvent *event)
-{
-    QWidget::mousePressEvent(event);
-    if (m_arrowRect.contains(event->pos())) {
-        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
-    }
-}
-
 void NetworkMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -219,9 +211,6 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setFont(m_sectionFont);
     painter.setPen(QPen(textColor));
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignTop, sectionTitle);
-
-    m_arrowRect = QRect(titleRect.right() + 10, titleRect.center().y() - 10, 12, 20);
-    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     // Draw icon.
     QRect iconRect(rect().x(), titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,

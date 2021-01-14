@@ -46,7 +46,7 @@ public:
     ~MonitorExpandView() = default;
 
 signals:
-    void signalShowPerformMenu(QPoint pos);
+    void signalDetailInfoClicked();
 
 private:
     // Cpu monitor view

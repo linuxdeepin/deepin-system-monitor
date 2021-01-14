@@ -126,14 +126,6 @@ void CompactMemoryMonitor::changeFont(const QFont &font)
     m_memPercentFont.setBold(true);
 }
 
-void CompactMemoryMonitor::mousePressEvent(QMouseEvent *event)
-{
-    QWidget::mousePressEvent(event);
-    if (m_arrowRect.contains(event->pos())) {
-        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
-    }
-}
-
 void CompactMemoryMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -233,9 +225,6 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                       fmMemStat.height());
     QRectF memIndicatorRect(0, memRect.y() + qCeil((memRect.height() - sectionSize) / 2.),
                             sectionSize, sectionSize);
-
-    m_arrowRect = QRect(this->width() - 12, memRect.y(), 12, memRect.height());
-    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     QPainterPath section;
     section.addEllipse(memIndicatorRect);

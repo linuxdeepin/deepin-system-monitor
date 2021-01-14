@@ -24,13 +24,13 @@
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QHeaderView>
-
+#include <DApplication>
 
 CPUDetailViewWidget::CPUDetailViewWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseDetailViewWidget(parent)
 {
     m_graphicsTable = new QWidget(this);
-    QGridLayout  *graphicsLayout = new QGridLayout(this);
+    QGridLayout  *graphicsLayout = new QGridLayout();
     for (int i = 0; i < 16; ++i) {
         CPUCoreItem *item = new CPUCoreItem(this);
         item->setFixedSize(82, 50);
@@ -43,10 +43,16 @@ CPUDetailViewWidget::CPUDetailViewWidget(QWidget *parent)
     m_textTable->horizontalHeader()->hide();
     m_textTable->verticalHeader()->hide();
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(m_graphicsTable);
-    layout->addWidget(m_textTable);
-    setLayout(layout);
+    setTitle(DApplication::translate("Process.Graph.View", "CPU"));
+    m_centralLayout->addWidget(m_graphicsTable);
+    m_centralLayout->addWidget(m_textTable);
+    m_centralLayout->addStretch(1);
+}
+
+void CPUDetailViewWidget::fontChanged(const QFont &font)
+{
+    BaseDetailViewWidget::fontChanged(font);
+    //Child Todo
 }
 
 void CPUCoreItem::paintEvent(QPaintEvent *event)

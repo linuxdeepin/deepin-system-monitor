@@ -20,7 +20,7 @@
 #ifndef DETAIL_VIEW_STACKED_WIDGET_H
 #define DETAIL_VIEW_STACKED_WIDGET_H
 
-#include <QStackedWidget>
+#include "animation_stackedwidget.h"
 
 /**
  * @brief Detail view stacked widget (main content stacked area)
@@ -29,22 +29,27 @@ class CPUDetailViewWidget;
 class MemDetailViewWidget;
 class NetifDetailViewWidget;
 class BlockDevDetailViewWidget;
-class DetailViewStackedWidget : public QStackedWidget
+class DetailViewStackedWidget : public AnimationStackedWidget
 {
 public:
     DetailViewStackedWidget(QWidget *parent);
 
     void addProcessWidget(QWidget *processWidget);
 
+    void deleteDetailPage();
+
 public slots:
     void onShowPerformMenu(QPoint pos);
+    void onDetailInfoClicked();
+    void onSwitchProcessPage();
+    void onSwitchPageFinished();
 
 private:
     QWidget *m_processWidget = nullptr;
-    CPUDetailViewWidget *m_cpudetailWidget = nullptr;
-    MemDetailViewWidget *m_memDetailWidget = nullptr;
-    NetifDetailViewWidget *m_netifDetailWidget = nullptr;
-    BlockDevDetailViewWidget *m_blockDevDetailWidget = nullptr;
+    QWidget *m_cpudetailWidget = nullptr;
+    QWidget *m_memDetailWidget = nullptr;
+    QWidget *m_netifDetailWidget = nullptr;
+    QWidget *m_blockDevDetailWidget = nullptr;
 };
 
 #endif // DETAIL_VIEW_STACKED_WIDGET_H

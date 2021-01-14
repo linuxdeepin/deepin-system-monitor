@@ -34,15 +34,11 @@ public:
     explicit CompactNetworkMonitor(QWidget *parent = nullptr);
     ~CompactNetworkMonitor();
 
-signals:
-    void signalArrowClicked(QPoint pos);
-
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
@@ -83,8 +79,6 @@ private:
     int uploadRenderSize = 9;
     int uploadWaveformsRenderOffsetY = -5;
     int waveformRenderPadding = 4;
-
-    QRect m_arrowRect;
 
     qreal m_recvBps {};
     qreal m_sentBps {};

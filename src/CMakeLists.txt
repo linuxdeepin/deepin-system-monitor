@@ -189,11 +189,15 @@ set(HPP_GUI
     gui/cpu_summary_view_widget.h
     gui/mem_detail_view_widget.h
     gui/mem_summary_view_widget.h
+    gui/mem_stat_view_widget.h
     gui/block_dev_detail_view_widget.h
     gui/block_dev_summary_view_widget.h
     gui/netif_detail_view_widget.h
     gui/netif_summary_view_widget.h
     gui/detail_view_stacked_widget.h
+    gui/chart_view_widget.h
+    gui/animation_stackedwidget.h
+    gui/base_detail_view_widget.h
     gui/view/graphics_stat_item.h
     gui/view/graphics_stat_grid_item.h
     gui/view/graphics_stat_grid_layout.h
@@ -250,11 +254,15 @@ set(CPP_GUI
     gui/cpu_summary_view_widget.cpp
     gui/mem_detail_view_widget.cpp
     gui/mem_summary_view_widget.cpp
+    gui/mem_stat_view_widget.cpp
     gui/block_dev_detail_view_widget.cpp
     gui/block_dev_summary_view_widget.cpp
     gui/netif_detail_view_widget.cpp
     gui/netif_summary_view_widget.cpp
     gui/detail_view_stacked_widget.cpp
+    gui/chart_view_widget.cpp
+    gui/animation_stackedwidget.cpp
+    gui/base_detail_view_widget.cpp
     gui/view/graphics_stat_item.cpp
     gui/view/graphics_stat_grid_item.cpp
     gui/view/graphics_stat_grid_layout.cpp
@@ -404,13 +412,6 @@ set(CPP_WM
     wm/wm_window_tree.cpp
 )
 
-set(HPP_MENU
-    menu/performance_param_menu.h
-)
-set(CPP_MENU
-    menu/performance_param_menu.cpp
-)
-
 set(APP_HPP
     ${HPP_GLOBAL}
     ${HPP_COMMON}
@@ -421,7 +422,6 @@ set(APP_HPP
     ${HPP_SERVICE}
     ${HPP_SYSTEM}
     ${HPP_WM}
-    ${HPP_MENU}
 )
 set(APP_CPP
     ${CPP_GLOBAL}
@@ -433,7 +433,6 @@ set(APP_CPP
     ${CPP_SERVICE}
     ${CPP_SYSTEM}
     ${CPP_WM}
-    ${CPP_MENU}
 )
 
 add_executable(${APP_NAME}

@@ -24,61 +24,93 @@
 #include "block_dev_detail_view_widget.h"
 
 #include <DMenu>
+#include <DApplication>
+
+#define DELETE_PAGE(obj) if(obj) { delete obj; obj = nullptr; }
 
 DWIDGET_USE_NAMESPACE
-DetailViewStackedWidget::DetailViewStackedWidget(QWidget *parent) : QStackedWidget(parent)
+DetailViewStackedWidget::DetailViewStackedWidget(QWidget *parent) : AnimationStackedWidget(LR, parent)
 {
-
+    connect(this, &AnimationStackedWidget::signalIsFinished, this, &DetailViewStackedWidget::onSwitchPageFinished);
 }
 
 void DetailViewStackedWidget::addProcessWidget(QWidget *processWidget)
 {
     m_processWidget = processWidget;
-    this->addWidget(processWidget);
+    this->insertWidget(0, processWidget);
+}
+
+void DetailViewStackedWidget::onSwitchPageFinished()
+{
+    if (this->currentWidget() == m_processWidget) {
+        deleteDetailPage();
+    }
+}
+
+void DetailViewStackedWidget::onDetailInfoClicked()
+{
+    if (m_cpudetailWidget == nullptr) {
+        m_cpudetailWidget = new CPUDetailViewWidget(this);
+        this->insertWidget(1, m_cpudetailWidget);
+    }
+    this->setCurrent(m_cpudetailWidget);
+}
+
+void DetailViewStackedWidget::onSwitchProcessPage()
+{
+    this->setCurrent(m_processWidget);
 }
 
 void DetailViewStackedWidget::onShowPerformMenu(QPoint pos)
 {
     DMenu menu;
-    QAction *showPerformParamAct = menu.addAction(tr("View performance parameters"));
-    QAction *hidePerformParamAct = menu.addAction(tr("Hiding performance parameters"));
-    if (this->currentWidget() == m_processWidget) {
-        hidePerformParamAct->setDisabled(true);
-    }
+    QAction *cpuAct = menu.addAction(DApplication::translate("Process.Graph.View", "CPU"));
+    QAction *memAct = menu.addAction(DApplication::translate("Process.Graph.Title", "Memory"));
+    QAction *netifAct = menu.addAction(DApplication::translate("Process.Graph.View", "Network"));
+    QAction *blockDevAct = menu.addAction(DApplication::translate("Process.Graph.View", "Disk"));
 
-    DMenu subMenu;
-    showPerformParamAct->setMenu(&subMenu);
-    QAction *cpuAct = subMenu.addAction(tr("CPU"));
-    QAction *memAct = subMenu.addAction(tr("Memory"));
-    QAction *netifAct = subMenu.addAction(tr("Netif"));
-    QAction *blockDevAct = subMenu.addAction(tr("BlockDev"));
+    if (this->currentWidget() == m_cpudetailWidget) {
+        cpuAct->setDisabled(true);
+    } else if (this->currentWidget() == m_memDetailWidget) {
+        memAct->setDisabled(true);
+    } else if (this->currentWidget() == m_netifDetailWidget) {
+        netifAct->setDisabled(true);
+    } else if (this->currentWidget() == m_blockDevDetailWidget) {
+        blockDevAct->setDisabled(true);
+    }
 
     QAction *resAct = menu.exec(pos);
     if (resAct == cpuAct) {
         if (m_cpudetailWidget == nullptr) {
             m_cpudetailWidget = new CPUDetailViewWidget(this);
-            this->addWidget(m_cpudetailWidget);
+            this->insertWidget(1, m_cpudetailWidget);
         }
-        this->setCurrentWidget(m_cpudetailWidget);
+        this->setCurrent(m_cpudetailWidget);
     } else if (resAct == memAct) {
         if (m_memDetailWidget == nullptr) {
             m_memDetailWidget = new MemDetailViewWidget(this);
-            this->addWidget(m_memDetailWidget);
+            this->insertWidget(2, m_memDetailWidget);
         }
-        this->setCurrentWidget(m_memDetailWidget);
+        this->setCurrent(m_memDetailWidget);
     } else if (resAct == netifAct) {
         if (m_netifDetailWidget == nullptr) {
             m_netifDetailWidget = new NetifDetailViewWidget(this);
-            this->addWidget(m_netifDetailWidget);
+            this->insertWidget(3, m_netifDetailWidget);
         }
-        this->setCurrentWidget(m_netifDetailWidget);
+        this->setCurrent(m_netifDetailWidget);
     } else if (resAct == blockDevAct) {
         if (m_blockDevDetailWidget == nullptr) {
             m_blockDevDetailWidget = new BlockDevDetailViewWidget(this);
-            this->addWidget(m_blockDevDetailWidget);
+            this->insertWidget(4, m_blockDevDetailWidget);
         }
-        this->setCurrentWidget(m_blockDevDetailWidget);
-    } else if (resAct == hidePerformParamAct) {
-        this->setCurrentWidget(m_processWidget);
+        this->setCurrent(m_blockDevDetailWidget);
     }
+}
+
+void DetailViewStackedWidget::deleteDetailPage()
+{
+    DELETE_PAGE(m_cpudetailWidget);
+    DELETE_PAGE(m_memDetailWidget);
+    DELETE_PAGE(m_netifDetailWidget);
+    DELETE_PAGE(m_blockDevDetailWidget);
 }

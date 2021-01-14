@@ -38,8 +38,6 @@
 #include <QtMath>
 #include <QMouseEvent>
 
-DWIDGET_USE_NAMESPACE
-
 using namespace common;
 
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
@@ -91,6 +89,10 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &CompactCpuMonitor::changeFont);
+
+    m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
+    m_detailButton->setFont(m_cpuFont);
+    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::signalDetailInfoClicked);
 }
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
@@ -115,12 +117,11 @@ void CompactCpuMonitor::updateStatus()
     update();
 }
 
-void CompactCpuMonitor::mousePressEvent(QMouseEvent *event)
+void CompactCpuMonitor::resizeEvent(QResizeEvent *event)
 {
-    QWidget::mousePressEvent(event);
-    if (m_arrowRect.contains(event->pos())) {
-        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
-    }
+    QWidget::resizeEvent(event);
+    const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()), m_detailButton->fontMetrics().height());
+    m_detailButton->setGeometry(this->width() - detailtextSize.width(), 0, detailtextSize.width(), detailtextSize.height());
 }
 
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
@@ -161,9 +162,6 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
                       pointerRadius, pointerRadius);
     QRect statRect(cpuRect.x() + cpuRect.width() + spacing, cpuRect.y(), fmStat.width(cpuStatText),
                    fmStat.height());
-
-    m_arrowRect = QRect(statRect.right() + 10, statRect.y(), 20, statRect.height());
-    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     // draw section
     painter.setPen(sectionColor);

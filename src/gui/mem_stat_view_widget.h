@@ -18,22 +18,42 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef PERFORMANCE_PARAM_MENU_H
-#define PERFORMANCE_PARAM_MENU_H
+#ifndef MEM_STAT_VIEW_WIDGET_H
+#define MEM_STAT_VIEW_WIDGET_H
 
-#include <DMenu>
+#include <QWidget>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
-class PerformanceParamMenu : public DMenu
+class ChartViewWidget;
+class MemInfoModel;
+class MemStatViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PerformanceParamMenu(DWidget *parent = nullptr);
+    explicit MemStatViewWidget(QWidget *parent = nullptr);
 
-private:
-    void initAction();
+protected:
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 public slots:
+    void fontChanged(const QFont &font);
+    void onModelUpdate();
+
+private:
+    void updateWidgetGeometry();
+
+private:
+    QColor memoryColor {"#00C5C0"};
+    QColor swapColor {"#FEDF19"};
+
+    ChartViewWidget *m_memChartWidget;
+    ChartViewWidget *m_swapChartWidget;
+
+    MemInfoModel *m_model;
+
+    QFont m_font;
 };
 
-#endif // PERFORMANCE_PARAM_MENU_H
+#endif // MEM_STAT_VIEW_WIDGET_H

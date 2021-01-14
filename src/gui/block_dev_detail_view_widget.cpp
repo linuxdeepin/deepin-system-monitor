@@ -19,7 +19,16 @@
 */
 #include "block_dev_detail_view_widget.h"
 
+#include <DApplication>
+
 BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseDetailViewWidget(parent)
 {
+    setTitle(DApplication::translate("Process.Graph.View", "Disk"));
+}
+
+void BlockDevDetailViewWidget::fontChanged(const QFont &font)
+{
+    BaseDetailViewWidget::fontChanged(font);
+    //Child Todo
 }

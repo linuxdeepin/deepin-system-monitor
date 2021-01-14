@@ -20,20 +20,23 @@
 #ifndef MEM_SUMMARY_VIEW_WIDGET_H
 #define MEM_SUMMARY_VIEW_WIDGET_H
 
-#include <QWidget>
+#include <DTableView>
 
 /**
  * @brief Memory summary view widget
  */
-class MemSummaryViewWidget : public QWidget
+DWIDGET_USE_NAMESPACE
+class MemSummaryViewWidget : public DTableView
 {
     Q_OBJECT
 public:
     explicit MemSummaryViewWidget(QWidget *parent = nullptr);
 
-signals:
-
 public slots:
+    void fontChanged(const QFont &font);
+
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // MEM_SUMMARY_VIEW_WIDGET_H

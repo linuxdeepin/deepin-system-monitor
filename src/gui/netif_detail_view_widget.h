@@ -20,20 +20,19 @@
 #ifndef NETIF_DETAIL_VIEW_WIDGET_H
 #define NETIF_DETAIL_VIEW_WIDGET_H
 
-#include <QWidget>
+#include "base_detail_view_widget.h"
 
 /**
  * @brief Network interface detail view widget
  */
-class NetifDetailViewWidget : public QWidget
+class NetifDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
 public:
     explicit NetifDetailViewWidget(QWidget *parent = nullptr);
 
-signals:
-
 public slots:
+    void fontChanged(const QFont &font);
 };
 
 #endif // NETIF_DETAIL_VIEW_WIDGET_H

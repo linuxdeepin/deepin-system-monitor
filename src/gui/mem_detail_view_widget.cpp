@@ -18,8 +18,30 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "mem_detail_view_widget.h"
+#include "mem_stat_view_widget.h"
+#include "mem_summary_view_widget.h"
+
+#include <DApplicationHelper>
+#include <DApplication>
+#include <QVBoxLayout>
 
 MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
-    : QWidget(parent)
+    : BaseDetailViewWidget(parent)
 {
+    m_memstatWIdget = new MemStatViewWidget(this);
+    m_memsummaryWidget = new MemSummaryViewWidget(this);
+
+    setTitle(DApplication::translate("Process.Graph.Title", "Memory"));
+    m_centralLayout->addWidget(m_memstatWIdget);
+    m_centralLayout->addWidget(m_memsummaryWidget);
+    m_centralLayout->addStretch(1);
+
+    fontChanged(DApplication::font());
+}
+
+void MemDetailViewWidget::fontChanged(const QFont &font)
+{
+    BaseDetailViewWidget::fontChanged(font);
+    m_memstatWIdget->fontChanged(font);
+    m_memsummaryWidget->fontChanged(font);
 }

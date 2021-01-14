@@ -49,7 +49,7 @@ public:
     ~MonitorCompactView() = default;
 
 signals:
-    void signalShowPerformMenu(QPoint pos);
+    void signalDetailInfoClicked();
 
 private:
     // Compact cpu view instance

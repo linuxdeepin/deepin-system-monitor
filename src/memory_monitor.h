@@ -39,16 +39,12 @@ public:
     explicit MemoryMonitor(QWidget *parent = nullptr);
     ~MemoryMonitor();
 
-signals:
-    void signalArrowClicked(QPoint pos);
-
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void changeFont(const QFont &font);
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
 
     qreal progress() const
     {
@@ -93,8 +89,6 @@ private:
     QFont m_contentFont;
     QFont m_subContentFont;
     QFont m_memPercentFont;
-
-    QRect m_arrowRect;
 
     qreal m_progress {};
     QPropertyAnimation *m_animation {};

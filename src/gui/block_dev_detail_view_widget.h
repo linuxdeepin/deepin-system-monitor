@@ -20,20 +20,20 @@
 #ifndef BLOCK_DEV_DETAIL_VIEW_WIDGET_H
 #define BLOCK_DEV_DETAIL_VIEW_WIDGET_H
 
-#include <QWidget>
+#include "base_detail_view_widget.h"
 
 /**
  * @brief Block device detail view widget
  */
-class BlockDevDetailViewWidget : public QWidget
+class BlockDevDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
 public:
     explicit BlockDevDetailViewWidget(QWidget *parent = nullptr);
 
-signals:
-
 public slots:
+    void fontChanged(const QFont &font);
+
 };
 
 #endif // BLOCK_DEV_DETAIL_VIEW_WIDGET_H

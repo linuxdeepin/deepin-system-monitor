@@ -132,14 +132,6 @@ void MemoryMonitor::changeFont(const QFont &font)
     m_memPercentFont.setBold(true);
 }
 
-void MemoryMonitor::mousePressEvent(QMouseEvent *event)
-{
-    QWidget::mousePressEvent(event);
-    if (m_arrowRect.contains(event->pos())) {
-        emit signalArrowClicked(this->mapToGlobal(m_arrowRect.bottomLeft()));
-    }
-}
-
 void MemoryMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -222,9 +214,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter,
                      fm.elidedText(title, Qt::ElideRight,
                                    rect().width() - titleRect.x() - outsideRingRadius - 50));
-
-    m_arrowRect = QRect(titleRect.right() + 10, titleRect.center().y() - 10, 12, 20);
-    painter.drawPixmap(m_arrowRect.center().x() - 6, m_arrowRect.center().y() - 6, DStyle::standardIcon(this->style(), DStyle::SP_ReduceElement).pixmap(12, 12));
 
     int spacing = 10;
     int sectionSize = 6;

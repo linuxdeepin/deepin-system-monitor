@@ -22,7 +22,10 @@
 #include <QWidget>
 #include <QPainterPath>
 
+#include <DCommandLinkButton>
+
 class CPUInfoModel;
+DWIDGET_USE_NAMESPACE
 class CompactCpuMonitor : public QWidget
 {
     Q_OBJECT
@@ -32,14 +35,14 @@ public:
     ~CompactCpuMonitor();
 
 signals:
-    void signalArrowClicked(QPoint pos);
+    void signalDetailInfoClicked();
 
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     void changeFont(const QFont &font);
@@ -58,12 +61,11 @@ private:
 
     int pointerRadius = 6;
 
-    QRect m_arrowRect;
-
     QFont m_cpuFont;
     QFont m_statFont;
 
     CPUInfoModel *m_cpuInfomodel;
+    DCommandLinkButton *m_detailButton;
 };
 
 #endif

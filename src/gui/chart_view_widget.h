@@ -18,14 +18,27 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "performance_param_menu.h"
+#ifndef CHART_VIEW_WIDGET_H
+#define CHART_VIEW_WIDGET_H
 
-PerformanceParamMenu::PerformanceParamMenu(DWidget *parent) : DMenu(parent)
+#include <QWidget>
+
+class ChartViewWidget : public QWidget
 {
-    initAction();
-}
+    Q_OBJECT
+public:
+    explicit ChartViewWidget(QWidget *parent = nullptr);
 
-void PerformanceParamMenu::initAction()
-{
+protected:
+    void paintEvent(QPaintEvent *);
 
-}
+private slots:
+    void changeFont(const QFont &font);
+
+private:
+    int gridSize = 10;
+
+    QFont m_textfont;
+};
+
+#endif // CHART_VIEW_WIDGET_H
