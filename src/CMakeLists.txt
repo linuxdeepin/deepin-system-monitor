@@ -186,6 +186,7 @@ set(HPP_GUI
     gui/xwin_kill_preview_widget.h
     gui/xwin_kill_preview_background_widget.h
     gui/cpu_detail_view_widget.h
+    gui/cpu_detail_widget.h
     gui/cpu_summary_view_widget.h
     gui/mem_detail_view_widget.h
     gui/mem_summary_view_widget.h
@@ -250,6 +251,7 @@ set(CPP_GUI
     gui/ui_common.cpp
     gui/xwin_kill_preview_widget.cpp
     gui/xwin_kill_preview_background_widget.cpp
+    gui/cpu_detail_widget.cpp
     gui/cpu_detail_view_widget.cpp
     gui/cpu_summary_view_widget.cpp
     gui/mem_detail_view_widget.cpp

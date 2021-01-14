@@ -18,7 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "detail_view_stacked_widget.h"
-#include "cpu_detail_view_widget.h"
+#include "cpu_detail_widget.h"
 #include "mem_detail_view_widget.h"
 #include "netif_detail_view_widget.h"
 #include "block_dev_detail_view_widget.h"
@@ -50,7 +50,7 @@ void DetailViewStackedWidget::onSwitchPageFinished()
 void DetailViewStackedWidget::onDetailInfoClicked()
 {
     if (m_cpudetailWidget == nullptr) {
-        m_cpudetailWidget = new CPUDetailViewWidget(this);
+        m_cpudetailWidget = new CPUDetailWidget(this);
         this->insertWidget(1, m_cpudetailWidget);
     }
     this->setCurrent(m_cpudetailWidget);
@@ -82,7 +82,7 @@ void DetailViewStackedWidget::onShowPerformMenu(QPoint pos)
     QAction *resAct = menu.exec(pos);
     if (resAct == cpuAct) {
         if (m_cpudetailWidget == nullptr) {
-            m_cpudetailWidget = new CPUDetailViewWidget(this);
+            m_cpudetailWidget = new CPUDetailWidget(this);
             this->insertWidget(1, m_cpudetailWidget);
         }
         this->setCurrent(m_cpudetailWidget);

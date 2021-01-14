@@ -481,3 +481,4 @@ void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
     } break;
     }
 }
+

@@ -65,33 +65,30 @@ public:
     ~CPUInfo();
 
     int logicalIndex() const;
+    QString coreID() const;
+    QString modelName() const;
+    QString vendorId() const;
+    QString cpuFreq() const;
+    QString cacheSize() const;
+
     QByteArray logicalName() const;
 
-    quint32 curfreq() const;
-    quint32 minfreq() const;
-    quint32 maxfreq() const;
-
     int packageID() const;
-    int coreID() const;
     int bookID() const;
     int drawerID() const;
 
     // TODO: cache vary depends on different cpu arch, some dont have level3 cache
-    qulonglong l1iCache() const;
-    qulonglong l1dCache() const;
-    qulonglong l2Cache() const;
-    qulonglong l3Cache() const;
+    QString l1iCache() const;
+    QString l1dCache() const;
+    QString l2Cache() const;
+    QString l3Cache() const;
 
-protected:
-    void readCPUInfo(int index);
-
-private:
-    void read_min_freq(int index);
-    void read_max_freq(int index);
-    void read_cur_freq(int index);
-    void read_cache(int index);
-    void read_topology(int index);
-
+    void setIndex(int index);
+    void setCoreId(quint32 coreId);
+    void setModelName(QString modelName);
+    void setVendorId(QString vendorId);
+    void setCpuFreq(QString cpuFreq);
+    void setCacheSize(QString cacheSize);
 private:
     QSharedDataPointer<CPUInfoPrivate> d;
 };

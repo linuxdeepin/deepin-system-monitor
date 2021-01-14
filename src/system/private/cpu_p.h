@@ -45,11 +45,7 @@ public:
     CPUInfoPrivate()
         : QSharedData()
         , index {0}
-        , curfreq {0}
-        , minfreq {0}
-        , maxfreq {0}
         , package_id {0}
-        , core_id {0}
         , book_id {0}
         , drawer_id {0}
         , cpu {}
@@ -60,11 +56,7 @@ public:
     CPUInfoPrivate(const CPUInfoPrivate &other)
         : QSharedData(other)
         , index {other.index}
-        , curfreq {other.curfreq}
-        , minfreq {other.minfreq}
-        , maxfreq {other.maxfreq}
         , package_id {other.package_id}
-        , core_id {other.core_id}
         , book_id {other.book_id}
         , drawer_id {other.drawer_id}
         , cpu {other.cpu}
@@ -79,12 +71,14 @@ public:
     ~CPUInfoPrivate() {}
 
 private:
-    int index; // logical index
-    quint32 curfreq; // current frequency
-    quint32 minfreq; // minimum frequency
-    quint32 maxfreq; // maximum frequency
+    int index = -1;          // logical index
+    int m_core_id = -1;   // number of cores
+    QString m_model_name; // processor model
+    QString m_vendor_id; // processor vendor
+    QString m_cpu_freq;  //m hz
+    QString m_cache_size;
+
     int package_id; // cpu package index
-    int core_id; // cpu core index
     int book_id; // cpu book index
     int drawer_id; // cpu drawer index
 

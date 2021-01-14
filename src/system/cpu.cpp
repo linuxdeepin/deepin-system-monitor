@@ -21,6 +21,7 @@
 #include "cpu.h"
 #include "cpu_set.h"
 #include "private/cpu_p.h"
+#include "common/common.h"
 
 #define PATH_TPL_CPU_CACHE "/sys/devices/system/cpu/%d/cache"
 #define PATH_TPL_CPU_CACHE_ID "/sys/devices/system/cpu/%d/cache/index%d/id"
@@ -48,7 +49,7 @@ CPUInfo::CPUInfo()
 CPUInfo::CPUInfo(int index)
     : d(new CPUInfoPrivate())
 {
-    readCPUInfo(index);
+
 }
 CPUInfo::CPUInfo(const CPUInfo &other)
     : d(other.d)
@@ -66,35 +67,6 @@ CPUInfo::~CPUInfo()
 {
 }
 
-void CPUInfo::readCPUInfo(int index)
-{
-    read_min_freq(index);
-    read_max_freq(index);
-    read_cur_freq(index);
-    read_cache(index);
-    read_topology(index);
-}
-
-void CPUInfo::read_min_freq(int index)
-{
-}
-
-void CPUInfo::read_max_freq(int index)
-{
-}
-
-void CPUInfo::read_cur_freq(int index)
-{
-}
-
-void CPUInfo::read_cache(int index)
-{
-}
-
-void CPUInfo::read_topology(int index)
-{
-}
-
 int CPUInfo::logicalIndex() const
 {
     return d->index;
@@ -105,29 +77,34 @@ QByteArray CPUInfo::logicalName() const
     return d->cpu;
 }
 
-quint32 CPUInfo::curfreq() const
-{
-    return d->curfreq;
-}
-
-quint32 CPUInfo::minfreq() const
-{
-    return d->minfreq;
-}
-
-quint32 CPUInfo::maxfreq() const
-{
-    return d->maxfreq;
-}
-
 int CPUInfo::packageID() const
 {
     return d->package_id;
 }
 
-int CPUInfo::coreID() const
+QString CPUInfo::coreID() const
 {
-    return d->core_id;
+    return QString::number(d->m_core_id);
+}
+
+QString CPUInfo::modelName() const
+{
+    return d->m_model_name;
+}
+
+QString CPUInfo::vendorId() const
+{
+    return d->m_vendor_id;
+}
+
+QString CPUInfo::cpuFreq() const
+{
+    return d->m_cpu_freq + "MHz";
+}
+
+QString CPUInfo::cacheSize() const
+{
+    return d->m_cache_size;
 }
 
 int CPUInfo::bookID() const
@@ -140,44 +117,74 @@ int CPUInfo::drawerID() const
     return d->drawer_id;
 }
 
-qulonglong CPUInfo::l1iCache() const
+QString CPUInfo::l1iCache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 1 && ce->type == "Instruction")
-            return ce->size;
+            return common::format::formatUnit({ce->size}, common::format::B, 0);
     }
 
-    return 0;
+    return "";
 }
 
-qulonglong CPUInfo::l1dCache() const
+QString CPUInfo::l1dCache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 1 && ce->type == "Data")
-            return ce->size;
+            return common::format::formatUnit({ce->size}, common::format::B, 0);
     }
 
-    return 0;
+    return "";
 }
 
-qulonglong CPUInfo::l2Cache() const
+QString CPUInfo::l2Cache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 2)
-            return ce->size;
+            return common::format::formatUnit({ce->size}, common::format::B, 0);
     }
 
-    return 0;
+    return "";
 }
 
-qulonglong CPUInfo::l3Cache() const
+QString CPUInfo::l3Cache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 3)
-            return ce->size;
+            return common::format::formatUnit({ce->size}, common::format::B, 0);
     }
 
-    return 0;
+    return "";
+}
+
+void CPUInfo::setIndex(int index)
+{
+    d->index = index;
+}
+
+void CPUInfo::setCoreId(quint32 coreId)
+{
+    d->m_core_id = coreId;
+}
+
+void CPUInfo::setModelName(QString modelName)
+{
+    d->m_model_name = modelName;
+}
+
+void CPUInfo::setVendorId(QString vendorId)
+{
+    d->m_vendor_id = vendorId;
+}
+
+void CPUInfo::setCpuFreq(QString cpuFreq)
+{
+    d->m_cpu_freq = cpuFreq;
+}
+
+void CPUInfo::setCacheSize(QString cacheSize)
+{
+    d->m_cache_size = cacheSize;
 }
 
 } // namespace system

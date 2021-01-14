@@ -58,6 +58,16 @@ QString CPUInfoModel::uptime() const
     return buffer;
 }
 
+SysInfo *CPUInfoModel::sysInfo()
+{
+    return m_sysInfo;
+}
+
+CPUSet *CPUInfoModel::cpuSet()
+{
+    return m_cpuSet;
+}
+
 void CPUInfoModel::updateModel()
 {
     m_overallStatSample->addSample(new CPUStatSampleFrame(m_sysInfo->uptime(), std::make_shared<struct cpu_stat_t>(*m_cpuSet->stat())));
@@ -87,71 +97,6 @@ void CPUInfoModel::updateModel()
 
     emit modelUpdated();
 } // ::updateModel
-
-QString CPUInfoModel::cpuFreq() const
-{
-    return formatHz(m_cpuSet->curfreq());
-}
-
-QString CPUInfoModel::maxFreq() const
-{
-    return formatHz(m_cpuSet->maxfreq());
-}
-
-QString CPUInfoModel::minFreq() const
-{
-    return formatHz(m_cpuSet->minfreq());
-}
-
-QString CPUInfoModel::model() const
-{
-    return m_cpuSet->cpuModel();
-}
-
-QString CPUInfoModel::vendor() const
-{
-    return m_cpuSet->cpuVendor();
-}
-
-uint CPUInfoModel::nCores() const
-{
-    return m_cpuSet->cores();
-}
-
-uint CPUInfoModel::nSockets() const
-{
-    return m_cpuSet->sockets();
-}
-
-uint CPUInfoModel::nProcessors() const
-{
-    return m_cpuSet->processors();
-}
-
-QString CPUInfoModel::virtualization() const
-{
-    return m_cpuSet->virtualization();
-}
-
-QString CPUInfoModel::l1iCache() const
-{
-    return formatUnit({m_cpuSet->l1iCache()}, B, 0);
-}
-
-QString CPUInfoModel::l1dCache() const
-{
-    return formatUnit({m_cpuSet->l1dCache()}, B, 0);
-}
-
-QString CPUInfoModel::l2Cache() const
-{
-    return formatUnit({m_cpuSet->l2Cache()}, B, 0);
-}
-
-QString CPUInfoModel::l3Cache() const
-{
-    return formatUnit({m_cpuSet->l3Cache()}, B, 0);
-}
 
 QList<qreal> CPUInfoModel::cpuPercentList() const
 {

@@ -26,6 +26,7 @@
 // qt
 #include <QtGlobal>
 #include <QSharedDataPointer>
+#include <QDebug>
 
 // c++11
 #include <memory>
@@ -216,6 +217,7 @@ inline QByteArray SysInfo::groupName(gid_t gid)
 
 inline void SysInfo::set_nprocesses(quint32 nprocs)
 {
+    qDebug() << 123;
     d->nprocs = nprocs;
 }
 

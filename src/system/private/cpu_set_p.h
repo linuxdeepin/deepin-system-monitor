@@ -53,12 +53,13 @@ public:
         , m_virtualization {}
         , m_stat {}
         , m_usage {}
-        , m_cpuInfoDB {}
+        , m_infos {}
         , m_statDB {}
         , m_usageDB {}
     {
 
     }
+
     CPUSetPrivate(const CPUSetPrivate &other)
         : QSharedData(other)
         , ncpus_max(other.ncpus_max)
@@ -74,9 +75,9 @@ public:
         , m_stat(std::make_shared<cpu_stat_t>(*(other.m_stat)))
         , m_usage(std::make_shared<cpu_usage_t>(*(other.m_usage)))
     {
-        for (auto &info : other.m_cpuInfoDB) {
+        for (auto &info : other.m_infos) {
             CPUInfo cp(info);
-            m_cpuInfoDB << cp;
+            m_infos << cp;
         }
         for (auto &stat : other.m_statDB) {
             if (stat) {
@@ -109,12 +110,15 @@ private:
     CPUUsage m_usage; // overall usage
 
     QList<int> m_cpuNum;
-    QList<CPUInfo> m_cpuInfoDB;
+
     QMap<QByteArray, CPUStat> m_statDB; // per cpu stat
     QMap<QByteArray, CPUUsage> m_usageDB; // per cpu usage
 
     qulonglong cpusageTotal[kStatCount] = {0, 0};
     friend class CPUSet;
+
+    QMap<QString, QString> m_info;   //overall info
+    QList<CPUInfo> m_infos;         //per cpu info
 };
 
 } // namespace system

@@ -72,20 +72,6 @@ public:
 
     std::weak_ptr<CPUListModel> cpuListModel() const;
 
-    QString cpuFreq() const;
-    QString maxFreq() const;
-    QString minFreq() const;
-    QString model() const;
-    QString vendor() const;
-    uint nCores() const;
-    uint nSockets() const;
-    uint nProcessors() const;
-    QString virtualization() const;
-    QString l1iCache() const;
-    QString l1dCache() const;
-    QString l2Cache() const;
-    QString l3Cache() const;
-
     QList<qreal> cpuPercentList() const;
     qreal cpuAllPercent() const;
 
@@ -97,6 +83,9 @@ public:
     QString osType() const;
     QString osVersion() const;
     QString uptime() const;
+
+    SysInfo *sysInfo();
+    CPUSet *cpuSet();
 
 signals:
     void modelUpdated();

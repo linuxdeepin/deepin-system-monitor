@@ -38,6 +38,7 @@ class ProcessTableView;
 class Settings;
 class XWinKillPreviewWidget;
 class DetailViewStackedWidget;
+
 /**
  * @brief Process & performance monitor view frame
  */
@@ -115,6 +116,7 @@ private:
 
     // stacked widget to hold expand & compact monitor view
     DStackedWidget *m_views {};
+
     DetailViewStackedWidget *m_rightStackView {};
     // expand monitor view
     MonitorExpandView *m_expandView {};

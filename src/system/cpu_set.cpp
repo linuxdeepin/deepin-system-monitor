@@ -28,6 +28,9 @@
 
 #include <QMap>
 #include <QByteArray>
+#include <QFile>
+#include <QTextStream>
+#include <QProcess>
 
 #include <ctype.h>
 #include <errno.h>
@@ -234,103 +237,75 @@ CPUSet &CPUSet::operator=(const CPUSet &rhs)
     d = rhs.d;
     return *this;
 }
+
 CPUSet::~CPUSet()
 {
+
 }
 
-quint32 CPUSet::curfreq() const
+QString CPUSet::modelName() const
 {
-    quint32 freq = 0;
-    for (auto &cpuInfo : d->m_cpuInfoDB) {
-        if (freq < cpuInfo.curfreq())
-            freq = cpuInfo.curfreq();
-    }
-
-    return freq;
+    return d->m_info.value("Model name");
 }
 
-quint32 CPUSet::minfreq() const
+QString CPUSet::vendor() const
 {
-    quint32 freq = UINT32_MAX;
-    for (auto &cpuInfo : d->m_cpuInfoDB) {
-        if (freq > cpuInfo.minfreq())
-            freq = cpuInfo.minfreq();
-    }
-
-    return freq;
+    return d->m_info.value("Vendor ID");
 }
 
-quint32 CPUSet::maxfreq() const
+int CPUSet::cpuCount() const
 {
-    quint32 freq = 0;
-    for (auto &cpuInfo : d->m_cpuInfoDB) {
-        if (freq < cpuInfo.maxfreq())
-            freq = cpuInfo.maxfreq();
-    }
-
-    return freq;
+    return d->m_info.value("CPU(s)").toInt();
 }
 
-QString CPUSet::cpuModel() const
+int CPUSet::socketCount() const
 {
-    return d->m_model;
-}
-
-QString CPUSet::cpuVendor() const
-{
-    return d->m_vendor;
-}
-
-quint32 CPUSet::cores() const
-{
-    return d->m_cores;
-}
-
-quint32 CPUSet::sockets() const
-{
-    return d->m_sockets;
-}
-
-quint32 CPUSet::processors() const
-{
-    return d->m_processors;
+    return d->m_info.value("Socket(s)").toInt();
 }
 
 QString CPUSet::virtualization() const
 {
-    return d->m_virtualization;
+    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("not support") : d->m_info.value("Virtualization");
 }
 
-qulonglong CPUSet::l1iCache() const
+QString CPUSet::curFreq() const
 {
-    if (d->m_cpuInfoDB.size() > 0)
-        return d->m_cpuInfoDB[0].l1iCache();
-
-    return 0;
+    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
 }
 
-qulonglong CPUSet::l1dCache() const
+QString CPUSet::minFreq() const
 {
-    if (d->m_cpuInfoDB.size() > 0)
-        return d->m_cpuInfoDB[0].l1dCache();
-
-    return 0;
+    return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
 }
 
-qulonglong CPUSet::l2Cache() const
+QString CPUSet::maxFreq() const
 {
-    if (d->m_cpuInfoDB.size() > 0)
-        return d->m_cpuInfoDB[0].l2Cache();
-
-    return 0;
+    return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
 }
 
-qulonglong CPUSet::l3Cache() const
+QString CPUSet::l1dCache() const
 {
-    if (d->m_cpuInfoDB.size() > 0)
-        return d->m_cpuInfoDB[0].l3Cache();
+    return d->m_info.value("L1d cache");
+}
 
-    return 0;
+QString CPUSet::l1iCache() const
+{
+    return d->m_info.value("L1i cache");
+}
+
+QString CPUSet::l2Cache() const
+{
+    return d->m_info.value("L2 cache");
+}
+
+QString CPUSet::l3Cache() const
+{
+    return d->m_info.value("L3 cache");
+}
+
+QString CPUSet::coreId(int index) const
+{
+    return d->m_infos.value(index).coreID();
 }
 
 const CPUUsage CPUSet::usage() const
@@ -341,11 +316,6 @@ const CPUUsage CPUSet::usage() const
 const CPUStat CPUSet::stat() const
 {
     return d->m_stat;
-}
-
-QList<CPUInfo> CPUSet::cpuInfoDB() const
-{
-    return d->m_cpuInfoDB;
 }
 
 QList<QByteArray> CPUSet::cpuLogicName() const
@@ -488,54 +458,50 @@ void CPUSet::read_stats()
 
 void CPUSet::read_overall_info()
 {
-    FILE *fp;
-    uFile fPtr;
-    QByteArray line(BUFSIZ, '\0');
+    //proc/cpuinfo
+    QList<CPUInfo> infos;
 
-    if (!(fp = fopen(PROC_PATH_CPUINFO, "r"))) {
-        print_errno(errno, QString("open %1 failed").arg(PROC_PATH_CPUINFO));
-        return;
-    } // ::if(fopen)
+    QProcess process;
+    process.start("cat /proc/cpuinfo");
+    process.waitForFinished(3000);
+    QString cpuinfo = process.readAllStandardOutput();
+    QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
 
-    fPtr.reset(fp);
+    for (int i = 0; i < processors.count(); ++i) {
+        CPUInfo info;
+        QStringList list = processors[i].split("\n", QString::SkipEmptyParts);
+        for (QString text : list) {
+            if (text.startsWith("processor")) {
+                info.setIndex(text.split(":").value(1).toInt());
+            } else if (text.startsWith("vendor_id")) {
+                info.setVendorId(text.split(":").value(1));
+            } else if (text.startsWith("cpu MHz")) {
+                info.setCpuFreq(text.split(":").value(1));
+            } else if (text.startsWith("core id")) {
+                info.setCoreId(text.split(":").value(1).toUInt());
+            } else if (text.startsWith("model name")) {
+                info.setModelName(text.split(":").value(1));
+            } else if (text.startsWith("cache size")) {
+                info.setCacheSize(text.split(":").value(1));
+            }
+        }
 
-    while (fgets(line.data(), BUFSIZ, fp)) {
-        if (line.startsWith("vendor")
-                || line.startsWith("vendor_id")
-                || line.startsWith("CPU implementer")) {
-            d->m_vendor = line.mid(line.indexOf(':')).trimmed();
-
-        } else if (line.startsWith("model")
-                   || line.startsWith("CPU part")
-                   || line.startsWith("cpu model")) {
-            // model id
-        } else if (line.startsWith("model name")) {
-            d->m_model = line.mid(line.indexOf(':')).trimmed();
-
-        } else if (line.startsWith("flags")
-                   || line.startsWith("features")
-                   || line.startsWith("Features")
-                   || line.startsWith("ASEs implemented")
-                   || line.startsWith("type")) {
-            QByteArray flags = line.mid(line.indexOf(':'));
-            if (flags.contains(" vmx "))
-                d->m_virtualization = "VT-x";
-
-            else if (flags.contains(" svm "))
-                d->m_virtualization = "AMD-V";
-
-        } // ::if
-    } // ::while(fgets)
-
-    if (ferror(fp)) {
-        print_errno(errno, QString("read %1 failed").arg(PROC_PATH_CPUINFO));
-        return;
+        infos.append(info);
     }
 
-    // read kernel_max
-    // read online/possible/present
-    // foreach(pos)->present
-    CPUInfo info;
+    //ls cpu
+    process.start("lscpu");
+    process.waitForFinished(3000);
+    QString lscpu = process.readAllStandardOutput();
+    QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+    d->m_info.clear();
+    for (QString lscpuLine : lscpuList) {
+        QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+        if (keyValue.count() > 1)
+            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+    }
+
+    d->m_infos = infos;
 }
 
 qulonglong CPUSet::getUsageTotalDelta() const
