@@ -37,6 +37,10 @@ public:
 
     void setMode(int mode);
 
+    void sethorizontal(bool isHorizontalLast);
+
+    void setVerticalLast(bool isVerticalLast);
+
     void setColor(QColor color);
 
 public slots:
@@ -57,6 +61,8 @@ private:
     QColor m_color;
     int m_mode  = 1;        //1:normal 2:simple 3:text
     int m_index = -1;
+    bool m_isHorizontalLast = false;
+    bool m_isVerticalLast = false;
 };
 
 class CPUDetailGrapTable : public QWidget
@@ -97,8 +103,12 @@ public:
 
     void paintEvent(QPaintEvent *);
 
+    void adjustGeometry(QSize rect);
+
 private slots:
     void onCPUInfoUpdated();
+
+    void fontChanged(const QFont &font);
 
 private:
     CPUInfoModel *m_cpuInfomodel = nullptr;

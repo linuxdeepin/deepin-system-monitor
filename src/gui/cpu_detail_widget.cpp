@@ -66,7 +66,18 @@ CPUDetailGrapTableItem::~CPUDetailGrapTableItem()
 void CPUDetailGrapTableItem::setMode(int mode)
 {
     m_mode = mode;
+    setToolTip(3 == m_mode ? ("CPU" + QString::number(m_index)) : "");
     update();
+}
+
+void CPUDetailGrapTableItem::sethorizontal(bool isHorizontalLast)
+{
+    m_isHorizontalLast = isHorizontalLast;
+}
+
+void CPUDetailGrapTableItem::setVerticalLast(bool isVerticalLast)
+{
+    m_isVerticalLast = isVerticalLast;
 }
 
 void CPUDetailGrapTableItem::setColor(QColor color)
@@ -87,6 +98,8 @@ void CPUDetailGrapTableItem::updateStat()
 
 void CPUDetailGrapTableItem::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
+
     QPainter painter(this);
 
     if (1 == m_mode)
@@ -101,7 +114,17 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 {
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QRect rect = QRect(0, 0, this->width(), this->height());
+    //draw text
+    QFont font = DApplication::font();
+    font.setPointSize(font.pointSize() - 2);
+    painter.setFont(font);
+
+    painter.drawText(QRect(5, 5, this->width() - 10, 25), Qt::AlignLeft | Qt::AlignBottom, "CPU" + QString::number(m_index));
+    painter.drawText(QRect(5, 5, this->width() - 10, 25), Qt::AlignRight | Qt::AlignBottom, "100%");
+    painter.drawText(QRect(5, this->height() - 30, this->width() - 10, 30), Qt::AlignTop | Qt::AlignLeft, tr("60 seconds"));
+    painter.drawText(QRect(5, this->height() - 30, this->width() - 10, 30), Qt::AlignTop | Qt::AlignRight, "0");
+
+    QRect graphicRect = QRect(5, 30, this->width() - 10, this->height() - 60);
 
     // draw frame
     auto *dAppHelper = DApplicationHelper::instance();
@@ -115,22 +138,35 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 
     painter.setPen(frameColor);
     painter.setBrush(Qt::white);
-    painter.drawRect(rect);
+    painter.drawRect(graphicRect);
 
     // draw grid
-    //...
+    painter.setPen(frameColor);
+
+    double sectionHeight = graphicRect.height() / 10.0;
+    for (int i = 1; i <= 9; ++i)    //横线
+        painter.drawLine(graphicRect.x(), static_cast<int>(graphicRect.y() + sectionHeight * i),
+                         graphicRect.x() + graphicRect.width(), static_cast<int>(graphicRect.y() + sectionHeight * i));
+
+    double sectionWidth = graphicRect.width() / 20.0;
+    for (int i = 1; i <= 19; ++i)    //竖线
+        painter.drawLine(static_cast<int>(graphicRect.x() + sectionWidth * i), graphicRect.y(),
+                         static_cast<int>(graphicRect.x() + sectionWidth * i), graphicRect.y() + graphicRect.height());
 
     // draw cpu
-
     painter.setPen(QPen(m_color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     QPainterPath Painterpath;
-    qreal y = (1.0 - m_cpuPercents.value(0)) * rect.height();
-    Painterpath.moveTo(rect.width(), y);
+    qreal y = (1.0 - m_cpuPercents.value(0)) * graphicRect.height();
+    Painterpath.moveTo(graphicRect.width(), y);
 
     for (int i = 1; i < 31; ++i) {
         if (m_cpuPercents.count() > i) {
-            Painterpath.lineTo(QPointF(rect.width() - static_cast<double>(rect.width()) / (30.0 / static_cast<double>(i)), (1.0 - m_cpuPercents[i]) * rect.height()));
+            QPointF sp = QPointF(graphicRect.width() - static_cast<double>(graphicRect.width()) / (30.0 / static_cast<double>(i)), (1.0 - m_cpuPercents.value(i)) * graphicRect.height());
+            QPointF ep = QPointF(graphicRect.width() - static_cast<double>(graphicRect.width()) / (30.0 / static_cast<double>(i + 1)), (1.0 - m_cpuPercents.value(i + 1)) * graphicRect.height());
+            QPointF c1 = QPointF((sp.x() + ep.x()) / 2, sp.y());
+            QPointF c2 = QPointF((sp.x() + ep.x()) / 2, ep.y());
+            Painterpath.cubicTo(c1, c2, ep);
         }
     }
 
@@ -141,7 +177,56 @@ void CPUDetailGrapTableItem::drawSimpleMode(QPainter &painter)
 {
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QRect rect = QRect(0, 0, this->width(), this->height());
+    QRect graphicRect = QRect(0, 0, this->width(), this->height());
+
+    // draw frame
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    QColor frameColor = palette.color(DPalette::FrameBorder);
+#ifndef THEME_FALLBACK_COLOR
+    QColor cpuColor = palette.color(DPalette::TextTitle);
+#else
+    QColor cpuColor = palette.color(DPalette::Text);
+#endif
+
+    painter.setPen(frameColor);
+    painter.setBrush(Qt::white);
+    painter.drawRect(graphicRect);
+
+    // draw grid
+    painter.setPen(frameColor);
+
+    double sectionHeight = this->height() / 5.0;
+    for (int i = 0; i < 5; ++i)
+        painter.drawLine(0, static_cast<int>(sectionHeight * i), this->width(), static_cast<int>(sectionHeight * i));
+
+    double sectionWidth = this->width() / 10.0;
+    for (int i = 0; i < 10; ++i)
+        painter.drawLine(static_cast<int>(sectionWidth * i), 0, static_cast<int>(sectionWidth * i), this->height());
+
+    // draw cpu
+    painter.setPen(QPen(m_color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+    QPainterPath Painterpath;
+    qreal y = (1.0 - m_cpuPercents.value(0)) * graphicRect.height();
+    Painterpath.moveTo(graphicRect.width(), y);
+
+    for (int i = 1; i < 31; ++i) {
+        if (m_cpuPercents.count() > i) {
+            QPointF sp = QPointF(graphicRect.width() - static_cast<double>(graphicRect.width()) / (30.0 / static_cast<double>(i)), (1.0 - m_cpuPercents.value(i)) * graphicRect.height());
+            QPointF ep = QPointF(graphicRect.width() - static_cast<double>(graphicRect.width()) / (30.0 / static_cast<double>(i + 1)), (1.0 - m_cpuPercents.value(i + 1)) * graphicRect.height());
+            QPointF c1 = QPointF((sp.x() + ep.x()) / 2, sp.y());
+            QPointF c2 = QPointF((sp.x() + ep.x()) / 2, ep.y());
+            Painterpath.cubicTo(c1, c2, ep);
+        }
+    }
+
+    painter.drawPath(Painterpath);
+}
+
+void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
+{
+    QRect rect = QRect(1, 1, this->width() - (m_isHorizontalLast ? 2 : 0), this->height() - (m_isVerticalLast ? 2 : 0));
 
     // draw frame
     auto *dAppHelper = DApplicationHelper::instance();
@@ -157,38 +242,8 @@ void CPUDetailGrapTableItem::drawSimpleMode(QPainter &painter)
     painter.setBrush(Qt::white);
     painter.drawRect(rect);
 
-    // draw grid
-    painter.setPen(frameColor);
-
-    int sectionHeight = this->height() / 5;
-    for (int i = 0; i < 5; ++i)
-        painter.drawLine(0, sectionHeight * i, this->width(), sectionHeight * i);
-
-    int sectionWidth = this->width() / 10;
-    for (int i = 0; i < 10; ++i)
-        painter.drawLine(sectionWidth * i, 0, sectionWidth * i, this->height());
-
-    // draw cpu
-    painter.setPen(QPen(m_color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-
-    QPainterPath Painterpath;
-    qreal y = (1.0 - m_cpuPercents.value(0)) * rect.height();
-    Painterpath.moveTo(rect.width(), y);
-
-    for (int i = 1; i < 31; ++i) {
-        if (m_cpuPercents.count() > i) {
-            Painterpath.lineTo(QPointF(rect.width() - static_cast<double>(rect.width()) / (30.0 / static_cast<double>(i)), (1.0 - m_cpuPercents[i]) * rect.height()));
-        }
-    }
-
-    painter.drawPath(Painterpath);
-}
-
-void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
-{
-    QRect rect = QRect(0, 0, this->width(), this->height());
-
-    painter.drawText(rect, QString::number(m_cpuPercents.value(0) * 100));
+    painter.setPen(m_color);
+    painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(m_index) * 100, 'f', 1) + "%");
 }
 
 CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
@@ -198,7 +253,6 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CPUDetailWidget::onCPUInfoUpdated);
 
     m_graphicsTable = new CPUDetailGrapTable(m_cpuInfomodel, this);
-    m_graphicsTable->move(0, 72);
 
     m_textArea = new QScrollArea(this);
     m_textTable = new CPUDetailInfoTable(m_textArea);
@@ -224,8 +278,6 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
     m_textTable->addItem(tr("Version"), m_cpuInfomodel->osVersion());   //版本号
     m_textTable->addItem(tr("Up time"), m_cpuInfomodel->uptime());   //最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
     m_textArea->setFrameShape(QFrame::NoFrame);
-    m_textArea->setBackgroundRole(QPalette::NoRole);
-    m_textArea->setAttribute(Qt::WA_TranslucentBackground);
     m_textArea->setWidget(m_textTable);
 
     setTitle(DApplication::translate("Process.Graph.View", "CPU"));
@@ -234,11 +286,7 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 
 void CPUDetailWidget::resizeEvent(QResizeEvent *event)
 {
-    m_graphicsTable->resize(event->size().width(), event->size().height() / 2 - 78);
-    m_textArea->move(10, event->size().height() / 2);
-    m_textArea->resize(event->size().width() - 20, event->size().height() / 2);
-    m_textTable->setFixedWidth(event->size().width() - 20);
-
+    adjustGeometry(event->size());
     BaseDetailViewWidget::resizeEvent(event);
 }
 
@@ -252,6 +300,15 @@ void CPUDetailWidget::paintEvent(QPaintEvent *e)
     BaseDetailViewWidget::paintEvent(e);
 }
 
+void CPUDetailWidget::adjustGeometry(QSize size)
+{
+    m_graphicsTable->move(5, titleHeight());
+    m_graphicsTable->resize(size.width() - 10, size.height() / 2 - titleHeight());
+    m_textArea->move(10, size.height() / 2);
+    m_textArea->resize(size.width() - 20, size.height() / 2);
+    m_textTable->setFixedWidth(size.width() - 20);
+}
+
 void CPUDetailWidget::onCPUInfoUpdated()
 {
     m_textTable->modItem(0, tr("Utilization"), QString::number(m_cpuInfomodel->cpuAllPercent(), 'f', 0) + "%");
@@ -259,6 +316,12 @@ void CPUDetailWidget::onCPUInfoUpdated()
     m_textTable->modItem(14, tr("File descriptors"), QString::number(m_cpuInfomodel->nFileDescriptors())); //文件描述符数
     m_textTable->modItem(15, tr("Processes"), QString::number(m_cpuInfomodel->nProcesses())); //进程数量（格式：数字）
     m_textTable->modItem(16, tr("Threads"), QString::number(m_cpuInfomodel->nThreads()));  //线程数量（格式：数字）
+}
+
+void CPUDetailWidget::fontChanged(const QFont &font)
+{
+    BaseDetailViewWidget::fontChanged(font);
+    adjustGeometry(this->size());
 }
 
 CPUDetailInfoTable::CPUDetailInfoTable(QWidget *parent): QWidget(parent)
@@ -291,52 +354,63 @@ void CPUDetailInfoTable::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QRect drawRect = QRect(1, 1, this->rect().width() - 2, this->rect().height() - 2);
+
     // draw frame
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
-#ifndef THEME_FALLBACK_COLOR
-    QColor cpuColor = palette.color(DPalette::TextTitle);
-#else
-    QColor cpuColor = palette.color(DPalette::Text);
-#endif
+    QColor keyColor = palette.color(DPalette::TextTitle);
+    QColor valueColor = palette.color(DPalette::Text);
 
-    painter.setPen(cpuColor);
+    painter.setPen(frameColor);
     painter.setOpacity(0.3);
     painter.setBrush(Qt::NoBrush);
-    painter.drawRect(0, 0, this->rect().width() - 1, this->rect().height() - 1);
+    painter.drawRoundedRect(drawRect, 8, 8);
 
+    //draw items
     int itemHeight = 60;
     painter.setOpacity(1);
-    QRect drawRect = QRect(1, 1, this->rect().width() - 2, this->rect().height() - 2);
+
     for (int i = 0; i < m_items.count(); ++i) {
         if (i % 2 == 0) {
             //draw background
             if (i % 4 == 0)
-                painter.setBrush(Qt::lightGray);
+                painter.setBrush(QColor(0, 0, 0, 8));
             else
-                painter.setBrush(Qt::white);
+                painter.setBrush(Qt::NoBrush);
 
             painter.setPen(Qt::NoPen);
-            painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), itemHeight);
+
+            if (0 == i) {//top rounded
+                painter.drawRoundedRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), 8, 8, 8);
+                painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight + 8, drawRect.width(), itemHeight - 8);
+            } else if (m_items.count() - 1 == i || m_items.count() - 2 == i) {//bottom rounded
+                painter.drawRoundedRect(drawRect.x(), drawRect.height() - 8, drawRect.width(), 8, 8, 8);
+                painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), itemHeight - 9);
+            } else//middle
+                painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), itemHeight);
 
             //draw left left text
-            painter.setPen(Qt::black);
+            painter.setPen(keyColor);
             painter.drawText(drawRect.x() + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignLeft | Qt::AlignVCenter, m_items[i].first);
             //draw left right text
+            painter.setPen(valueColor);
             painter.drawText(drawRect.x() + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignRight | Qt::AlignVCenter, m_items[i].second);
         } else {
             //draw right left text
-            painter.setPen(Qt::black);
+            painter.setPen(keyColor);
             painter.drawText(drawRect.x() + drawRect.width() / 2 + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignLeft | Qt::AlignVCenter, m_items[i].first);
             //draw right right text
+            painter.setPen(valueColor);
             painter.drawText(drawRect.x() + drawRect.width() / 2 + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignRight | Qt::AlignVCenter, m_items[i].second);
         }
     }
 
-    painter.setPen(Qt::black);
-    painter.setBrush(QBrush(QColor(0, 0, 0)));
-    painter.setOpacity(0.08);
+    //draw middle line
+    painter.setPen(frameColor);
     painter.drawLine(drawRect.x() + drawRect.width() / 2, drawRect.y(), drawRect.x() + drawRect.width() / 2,  drawRect.y() + drawRect.height());
 }
 
@@ -411,6 +485,19 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             graphicsLayout->addWidget(item, i / 8, i % 8);
         }
         graphicsLayout->setSpacing(5);
+    } else if (32 < cpuCount) {
+        for (int i = 0; i < cpuCount; ++i) {
+            CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
+            item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            item->setMode(3);
+            item->setColor(cpuColors[i % cpuColors.size()]);
+            if ((i % 8) == 7)
+                item->sethorizontal(true);
+            if ((i / 8) == (cpuCount / 8 - 1))
+                item->setVerticalLast(true);
+            graphicsLayout->addWidget(item, i / 8, i % 8);
+        }
+        graphicsLayout->setSpacing(0);
     } else {
         //模式2
         for (int i = 0; i < cpuCount; ++i) {
@@ -422,8 +509,6 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
         }
         graphicsLayout->setSpacing(5);
     }
-
-
 
     setLayout(graphicsLayout);
 }
