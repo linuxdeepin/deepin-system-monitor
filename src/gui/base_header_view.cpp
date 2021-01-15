@@ -131,7 +131,8 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
             m_hover > 0 ? spos + 1 - offset() : spos - offset(),
             0,
             m_hover > 0 ? sw - 1 : sw,
-            height()};
+            height()
+        };
     }
 
     QStyleOptionHeader option;
@@ -258,13 +259,15 @@ void BaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
             contentRect.x() + margin,
             contentRect.y(),
             contentRect.width() - margin * 3 - kDropDownSize.width(),
-            contentRect.height()};
+            contentRect.height()
+        };
     } else {
         textRect = {
             contentRect.x() + margin,
             contentRect.y(),
             contentRect.width() - margin,
-            contentRect.height()};
+            contentRect.height()
+        };
     }
     // get section title data from model
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();

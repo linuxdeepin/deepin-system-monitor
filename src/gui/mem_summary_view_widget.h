@@ -26,6 +26,7 @@
  * @brief Memory summary view widget
  */
 DWIDGET_USE_NAMESPACE
+class DeailTableModel;
 class MemSummaryViewWidget : public DTableView
 {
     Q_OBJECT
@@ -36,7 +37,11 @@ public slots:
     void fontChanged(const QFont &font);
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+
+private:
+    QFont m_font;
+    DeailTableModel *m_model;
 };
 
 #endif // MEM_SUMMARY_VIEW_WIDGET_H

@@ -29,6 +29,10 @@ class ChartViewWidget : public QWidget
 public:
     explicit ChartViewWidget(QWidget *parent = nullptr);
 
+public:
+    void setDataColor(const QColor &color);
+    void addData(qreal data);
+
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *event);
@@ -38,12 +42,19 @@ private slots:
 
 private:
     void drawBackPixmap();
+    void drawData(QPainter *painter);
+
+    void getPainterPathByData(const QList<qreal> &listData, QPainterPath &path);
 
 private:
     int gridSize = 10;
 
     QFont m_textfont;
     QPixmap m_backPixmap;
+
+    QRect m_chartRect;
+    QColor m_dataColor = {"#00C5C0"};
+    QList<qreal> m_listData;
 };
 
 #endif // CHART_VIEW_WIDGET_H

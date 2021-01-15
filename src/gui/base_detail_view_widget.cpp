@@ -104,6 +104,8 @@ void BaseDetailViewWidget::resizeEvent(QResizeEvent *event)
 
 void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
 {
+    QWidget::paintEvent(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
@@ -112,7 +114,7 @@ void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(palette.color(DPalette::Base));
-    painter.drawRoundRect(this->rect(), 4, 4);
+    painter.drawRoundRect(this->rect(), 2, 2);
 
     painter.setFont(m_titleFont);
     painter.setPen(palette.color(DPalette::Text));

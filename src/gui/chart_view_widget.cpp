@@ -25,11 +25,24 @@
 #include <DApplication>
 
 DWIDGET_USE_NAMESPACE
+const int allDatacount = 30;
 ChartViewWidget::ChartViewWidget(QWidget *parent) : QWidget(parent)
 {
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ChartViewWidget::changeFont);
+}
+
+void ChartViewWidget::setDataColor(const QColor &color)
+{
+    m_dataColor = color;
+}
+
+void ChartViewWidget::addData(qreal data)
+{
+    m_listData << data;
+    if (m_listData.size() > allDatacount + 10)
+        m_listData.pop_front();
 }
 
 void ChartViewWidget::changeFont(const QFont &font)
@@ -44,6 +57,43 @@ void ChartViewWidget::resizeEvent(QResizeEvent *event)
     drawBackPixmap();
 }
 
+void ChartViewWidget::getPainterPathByData(const QList<qreal> &listData, QPainterPath &path)
+{
+    qreal offsetX = 0;
+    qreal distance = m_chartRect.width() * 1.0 / allDatacount;
+    int dataCount = listData.size();
+    int startIndex = qMax(0, dataCount - allDatacount - 5);
+
+    path.moveTo(offsetX, -m_chartRect.height() *listData[0]);
+    for (int i = dataCount - 1;  i > startIndex; i--) {
+        QPointF sp(offsetX, -m_chartRect.height() *listData[i]);
+        QPointF ep(offsetX - distance, -m_chartRect.height() * listData[i - 1]);
+        offsetX -= distance;
+
+        QPointF c1 = QPointF((sp.x() + ep.x()) / 2.0, sp.y());
+        QPointF c2 = QPointF((sp.x() + ep.x()) / 2.0, ep.y());
+        path.cubicTo(c1, c2, ep);
+    }
+
+}
+
+void ChartViewWidget::drawData(QPainter *painter)
+{
+    if (m_listData.size() <= 0)
+        return;
+
+    painter->setClipRect(m_chartRect);
+
+    QPainterPath path;
+    painter->setRenderHints(QPainter::Antialiasing, true);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(m_dataColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->translate(m_chartRect.bottomRight());
+
+    getPainterPathByData(m_listData, path);
+    painter->drawPath(path);
+}
+
 void ChartViewWidget::drawBackPixmap()
 {
     m_backPixmap = QPixmap(this->size());
@@ -55,7 +105,7 @@ void ChartViewWidget::drawBackPixmap()
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
-    frameColor.setAlphaF(0.4);
+    frameColor.setAlphaF(0.3);
 
     QPen framePen;
     int penSize = 1;
@@ -77,8 +127,8 @@ void ChartViewWidget::drawBackPixmap()
 
     painter.setRenderHint(QPainter::Antialiasing, false);
     QPainterPath framePath;
-    QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
-    framePath.addRect(gridFrame);
+    m_chartRect = QRect(gridX, gridY, gridWidth, gridHeight);
+    framePath.addRect(m_chartRect);
     painter.drawPath(framePath);
 
     // Draw grid.
@@ -107,4 +157,5 @@ void ChartViewWidget::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
     QPainter painter(this);
     painter.drawPixmap(0, 0, m_backPixmap);
+    drawData(&painter);
 }
