@@ -35,10 +35,8 @@ using namespace common::format;
 class DetailItemDelegate : public QStyledItemDelegate
 {
 public:
-    explicit DetailItemDelegate(QObject *parent = nullptr): QStyledItemDelegate(parent)
-    {
-
-    }
+    explicit DetailItemDelegate(QObject *parent = nullptr);
+    virtual ~DetailItemDelegate();
 
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
@@ -46,9 +44,7 @@ public:
     {
         auto palette = option.palette;
         QBrush background = palette.color(DPalette::Active, DPalette::Base);
-        if (!(index.row() & 1)) {
-            background = palette.color(DPalette::Active, DPalette::AlternateBase);
-        }
+        if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
 
         painter->save();
         QPainterPath clipPath;
@@ -72,15 +68,19 @@ public:
     }
 };
 
+DetailItemDelegate::DetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
+{
+}
+
+DetailItemDelegate::~DetailItemDelegate()
+{
+}
+
 class DeailTableModel : public QAbstractTableModel
 {
 public:
-    explicit DeailTableModel(QObject *parent = nullptr): QAbstractTableModel(parent)
-    {
-        m_memInfo = DeviceDB::instance()->memInfo();
-    }
-
-    virtual ~DeailTableModel() {}
+    explicit DeailTableModel(QObject *parent = nullptr);
+    virtual ~DeailTableModel();
 
 private:
     MemInfo *m_memInfo;
@@ -207,6 +207,16 @@ protected:
         return Qt::NoItemFlags;
     }
 };
+
+DeailTableModel::DeailTableModel(QObject *parent): QAbstractTableModel(parent)
+{
+    m_memInfo = DeviceDB::instance()->memInfo();
+}
+
+DeailTableModel::~DeailTableModel()
+{
+
+}
 
 MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)
     : DTableView(parent)

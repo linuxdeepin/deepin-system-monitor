@@ -35,6 +35,8 @@ constexpr const char *kProcessCPU = QT_TRANSLATE_NOOP("Process.Table.Header", "C
 constexpr const char *kProcessUser = QT_TRANSLATE_NOOP("Process.Table.Header", "User");
 // memory column display
 constexpr const char *kProcessMemory = QT_TRANSLATE_NOOP("Process.Table.Header", "Memory");
+constexpr const char *kProcessShareMemory = QT_TRANSLATE_NOOP("Process.Table.Header", "Share Memory");
+constexpr const char *kProcessVtrMemory = QT_TRANSLATE_NOOP("Process.Table.Header", "Virtual Memory");
 // upload column display
 constexpr const char *kProcessUpload = QT_TRANSLATE_NOOP("Process.Table.Header", "Upload");
 // download column display
@@ -68,6 +70,8 @@ public:
         kProcessCPUColumn, // cpu column index
         kProcessUserColumn, // user column index
         kProcessMemoryColumn, // memory column index
+        kProcessShareMemoryColumn, // share memory column index
+        kProcessVTRMemoryColumn, // vtr memory column index
         kProcessUploadColumn, // upload column index
         kProcessDownloadColumn, // download column index
         kProcessDiskReadColumn, // disk read column index

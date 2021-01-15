@@ -153,6 +153,12 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
         case kProcessMemoryColumn:
             // memory column display text
             return DApplication::translate("Process.Table.Header", kProcessMemory);
+        case kProcessShareMemoryColumn:
+            // memory column display text
+            return DApplication::translate("Process.Table.Header", kProcessShareMemory);
+        case kProcessVTRMemoryColumn:
+            // memory column display text
+            return DApplication::translate("Process.Table.Header", kProcessVtrMemory);
         case kProcessUploadColumn:
             // upload column display text
             return DApplication::translate("Process.Table.Header", kProcessUpload);
@@ -231,6 +237,12 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         case kProcessMemoryColumn:
             // formatted memory usage
             return formatUnit(proc.memory(), KB);
+        case kProcessShareMemoryColumn:
+            // formatted memory usage
+            return formatUnit(proc.sharememory(), KB);
+        case kProcessVTRMemoryColumn:
+            // formatted memory usage
+            return formatUnit(proc.vtrmemory(), KB);
         case kProcessUploadColumn:
             // formatted upload speed text
             return formatUnit(proc.sentBps(), B, 1, true);
@@ -273,6 +285,10 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             return proc.name();
         case kProcessMemoryColumn:
             return proc.memory();
+        case kProcessShareMemoryColumn:
+            return proc.sharememory();
+        case kProcessVTRMemoryColumn:
+            return proc.vtrmemory();
         case kProcessCPUColumn:
             return proc.cpu();
         case kProcessUploadColumn:

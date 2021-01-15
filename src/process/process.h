@@ -85,6 +85,8 @@ public:
 
     qreal cpu() const;
     qulonglong memory() const;
+    qulonglong vtrmemory() const;
+    qulonglong sharememory() const;
 
     int priority() const;
     void setPriority(int priority);

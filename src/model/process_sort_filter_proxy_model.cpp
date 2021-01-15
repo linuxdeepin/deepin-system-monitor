@@ -115,7 +115,8 @@ bool ProcessSortFilterProxyModel::filterAcceptsColumn(int column, const QModelIn
 // compare two items with the specified index
 bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    switch (sortColumn()) {
+    int sortcolumn = sortColumn();
+    switch (sortcolumn) {
     case ProcessTableModel::kProcessNameColumn: {
         // sort by name first, then by cpu
         auto a = left.data(Qt::DisplayRole).toString();
@@ -145,7 +146,9 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
                                                            right.data(Qt::DisplayRole).toString())
                < 0;
     }
-    case ProcessTableModel::kProcessMemoryColumn: {
+    case ProcessTableModel::kProcessMemoryColumn:
+    case ProcessTableModel::kProcessShareMemoryColumn:
+    case ProcessTableModel::kProcessVTRMemoryColumn: {
         QVariant lmem, rmem;
         lmem = left.data(Qt::UserRole);
         rmem = right.data(Qt::UserRole);

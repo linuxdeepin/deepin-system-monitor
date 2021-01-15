@@ -409,6 +409,14 @@ void ProcessTableView::initUI(bool settingsLoaded)
         setColumnWidth(ProcessTableModel::kProcessMemoryColumn, 70);
         setColumnHidden(ProcessTableModel::kProcessMemoryColumn, false);
 
+        // share memory
+        setColumnWidth(ProcessTableModel::kProcessShareMemoryColumn, 70);
+        setColumnHidden(ProcessTableModel::kProcessShareMemoryColumn, false);
+
+        // vtr memory
+        setColumnWidth(ProcessTableModel::kProcessVTRMemoryColumn, 70);
+        setColumnHidden(ProcessTableModel::kProcessVTRMemoryColumn, false);
+
         // download
         setColumnWidth(ProcessTableModel::kProcessDownloadColumn, 70);
         setColumnHidden(ProcessTableModel::kProcessDownloadColumn, false);
@@ -626,6 +634,22 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         header()->setSectionHidden(ProcessTableModel::kProcessMemoryColumn, !b);
         saveSettings();
     });
+    // share memory action
+    auto *sharememHeaderAction = m_headerContextMenu->addAction(
+                                     DApplication::translate("Process.Table.Header", kProcessShareMemory));
+    sharememHeaderAction->setCheckable(true);
+    connect(sharememHeaderAction, &QAction::triggered, this, [this](bool b) {
+        header()->setSectionHidden(ProcessTableModel::kProcessShareMemoryColumn, !b);
+        saveSettings();
+    });
+    //vtr memory action
+    auto *vtrmemHeaderAction = m_headerContextMenu->addAction(
+                                   DApplication::translate("Process.Table.Header", kProcessVtrMemory));
+    vtrmemHeaderAction->setCheckable(true);
+    connect(vtrmemHeaderAction, &QAction::triggered, this, [this](bool b) {
+        header()->setSectionHidden(ProcessTableModel::kProcessVTRMemoryColumn, !b);
+        saveSettings();
+    });
     // upload rate action
     auto *uploadHeaderAction = m_headerContextMenu->addAction(
                                    DApplication::translate("Process.Table.Header", kProcessUpload));
@@ -687,6 +711,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     if (!settingsLoaded) {
         cpuHeaderAction->setChecked(true);
         memHeaderAction->setChecked(true);
+        sharememHeaderAction->setChecked(true);
         uploadHeaderAction->setChecked(true);
         downloadHeaderAction->setChecked(true);
         dreadHeaderAction->setChecked(false);
@@ -702,6 +727,10 @@ void ProcessTableView::initConnections(bool settingsLoaded)
         cpuHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(ProcessTableModel::kProcessMemoryColumn);
         memHeaderAction->setChecked(!b);
+        b = header()->isSectionHidden(ProcessTableModel::kProcessShareMemoryColumn);
+        sharememHeaderAction->setChecked(!b);
+        b = header()->isSectionHidden(ProcessTableModel::kProcessVTRMemoryColumn);
+        vtrmemHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(ProcessTableModel::kProcessUploadColumn);
         uploadHeaderAction->setChecked(!b);
         b = header()->isSectionHidden(ProcessTableModel::kProcessDownloadColumn);

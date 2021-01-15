@@ -453,13 +453,15 @@ bool Process::readStatm()
 
     buf[nr] = '\0';
     // get resident set size & resident shared size in pages
-    nr = sscanf(buf, "%*u %llu %llu", &d->rss, &d->shm);
-    if (nr != 2) {
+    nr = sscanf(buf, "%llu %llu %llu", &d->vmsize, &d->rss, &d->shm);
+    if (nr != 3) {
+        d->vmsize = 0;
         d->rss = 0;
         d->shm = 0;
         print_errno(errno, QString("read %1 failed").arg(path));
     } else {
         // convert to kB
+        d->vmsize <<= kb_shift;
         d->rss <<= kb_shift;
         d->shm <<= kb_shift;
     }
@@ -586,6 +588,16 @@ qreal Process::cpu() const
 qulonglong Process::memory() const
 {
     return d->rss - d->shm;
+}
+
+qulonglong Process::vtrmemory() const
+{
+    return d->vmsize;
+}
+
+qulonglong Process::sharememory() const
+{
+    return d->shm;
 }
 
 int Process::priority() const
