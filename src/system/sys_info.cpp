@@ -30,6 +30,8 @@
 
 #include <QString>
 #include <QtDBus>
+#include <QFileInfo>
+#include <QDir>
 
 #include <sys/time.h>
 #include <unistd.h>
@@ -218,9 +220,6 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
     return ok;
 }
 
-
-
-
 void SysInfo::readSysInfo()
 {
     d->uid = getuid();
@@ -239,6 +238,8 @@ void SysInfo::readSysInfo()
         d->effective_group_name = QByteArray(getenv("GROUP"));
 
     d->nfds = read_file_nr();
+    d->nprocs = read_processes();
+    d->nthrs = read_threads();
     d->hostname = read_hostname();
     d->arch = read_arch();
     d->version = read_version();
@@ -270,6 +271,35 @@ quint32 SysInfo::read_file_nr()
 
     print_errno(errno, QString("open %1 failed").arg(PROC_PATH_FILE_NR));
     return 0;
+}
+
+quint32 SysInfo::read_threads()
+{
+    QDir dir("/proc");
+    QFileInfoList infoList = dir.entryInfoList();
+    quint32 threads = 0;
+    for (QFileInfo info : infoList) {
+        if (info.isDir() && info.fileName().toInt() > 0) {
+            QDir taskDir("/proc/" + info.fileName() + "/task");
+            threads += taskDir.entryInfoList().count();
+        }
+    }
+
+    return threads;
+}
+
+quint32 SysInfo::read_processes()
+{
+    QDir dir("/proc");
+    QFileInfoList infoList = dir.entryInfoList();
+    quint32 processes = 0;
+    for (QFileInfo info : infoList) {
+        if (info.isDir() && info.fileName().toInt() > 0) {
+            processes++;
+        }
+    }
+
+    return processes;
 }
 
 QString SysInfo::read_hostname()

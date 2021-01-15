@@ -101,8 +101,6 @@ public:
 
     void resizeEvent(QResizeEvent *event);
 
-    void paintEvent(QPaintEvent *);
-
     void adjustGeometry(QSize rect);
 
 private slots:

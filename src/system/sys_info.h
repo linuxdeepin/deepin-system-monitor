@@ -94,6 +94,8 @@ public:
 
 private:
     quint32 read_file_nr();
+    quint32 read_threads();
+    quint32 read_processes();
     QString read_hostname();
     QString read_arch();
     QString read_version();
