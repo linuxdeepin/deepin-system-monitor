@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sq">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +17,21 @@
     <message>
         <source>No search results</source>
         <translation>S’ka përfundime kërkimi</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -52,11 +69,11 @@
     </message>
     <message>
         <source>not-found</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>error</source>
@@ -64,7 +81,7 @@
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>masked</source>
@@ -114,7 +131,7 @@
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>masked</source>
@@ -133,7 +150,7 @@
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>start</source>
@@ -141,7 +158,7 @@
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>running</source>
@@ -149,7 +166,7 @@
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>reload</source>
@@ -161,27 +178,27 @@
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>failed</source>
@@ -190,6 +207,33 @@
     <message>
         <source>auto-restart</source>
         <translation>vetërinisu</translation>
+    </message>
+</context>
+<context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Kujtesë</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -516,7 +560,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Priority</source>
@@ -596,12 +640,10 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Gjendje</translation>
     </message>
     <message>
@@ -614,7 +656,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Lloj Nisjeje</translation>
     </message>
 </context>
@@ -653,6 +694,16 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Services</source>
         <translation>Shërbime</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

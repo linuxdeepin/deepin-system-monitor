@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ko">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +17,21 @@
     <message>
         <source>No search results</source>
         <translation>검색 결과 없음</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -190,6 +207,33 @@
     <message>
         <source>auto-restart</source>
         <translation>자동-재시작</translation>
+    </message>
+</context>
+<context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">메모리</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -596,12 +640,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>하위</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>상태</translation>
     </message>
     <message>
@@ -614,7 +656,6 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>시작 프로그램 유형</translation>
     </message>
 </context>
@@ -653,6 +694,15 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>서비스</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

@@ -20,6 +20,21 @@
     </message>
 </context>
 <context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
@@ -191,6 +206,33 @@
     </message>
     <message>
         <source>auto-restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Atmintis</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -596,12 +638,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -614,7 +654,6 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -653,6 +692,17 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

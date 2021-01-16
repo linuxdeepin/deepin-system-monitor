@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="br" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="br">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +17,21 @@
     <message>
         <source>No search results</source>
         <translation>N&apos;eus bet kavet disoc&apos;h ebet</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -190,6 +207,33 @@
     <message>
         <source>auto-restart</source>
         <translation>em-adloc&apos;hañ</translation>
+    </message>
+</context>
+<context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Memor</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -596,12 +640,10 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Dindan</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Statud</translation>
     </message>
     <message>
@@ -614,7 +656,6 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Doareoù loc&apos;hañ</translation>
     </message>
 </context>
@@ -653,6 +694,16 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <source>Services</source>
         <translation>Servijoù</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

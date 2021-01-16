@@ -23,6 +23,14 @@
 #include <QReadLocker>
 #include <QWriteLocker>
 #include <QDebug>
+#include <QFile>
+#include "diskio_info.h"
+#include "common/common.h"
+#include "system/sys_info.h"
+#include <QDir>
+#include <ctype.h>
+#include <errno.h>
+#include <sched.h>
 
 #include <libudev.h>
 
@@ -30,7 +38,6 @@
 
 namespace core {
 namespace system {
-
 static struct udev_device *
 get_child(struct udev *udev, struct udev_device *parent, const char *subsystem)
 {
@@ -102,6 +109,73 @@ BlockDeviceInfoDB::BlockDeviceInfoDB()
 {
 }
 
+void BlockDeviceInfoDB::readDiskInfo()
+{
+    QDir dir(SYSFS_PATH_BLOCK);
+    if(!dir.exists()) {
+        return;
+    }
+
+    QFileInfoList list = dir.entryInfoList();
+    for(int i = 0; i < list.size(); ++i)
+    {
+        if(list[i].fileName() != "." && list[i].fileName() != "..")
+        {
+            int index = -1;
+            //  查找当前的device是否存在
+            for(int si = 0; si < m_deviceList.size(); ++si )
+            {
+                if(m_deviceList[si].deviceName() == list[i].fileName().toLocal8Bit()) // 存在
+                {
+                    index = si;
+                    break;
+                }
+            }
+            if(index == -1) // 不存在的话将该disk存储起来
+            {
+                BlockDevice bd;
+                bd.setDeviceName(list[i].fileName().toLocal8Bit());
+                m_deviceList << bd;
+            }
+            else
+            {
+                m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit()); // 更新disk数据
+            }
+
+        }
+    }
+
+    for(int i = 0; i < m_deviceList.size(); ++i)
+    {
+        bool isFind = false;
+        for(int si = 0; si < list.size(); ++si) {
+            if(list[si].fileName().toLocal8Bit() == m_deviceList[i].deviceName()) {
+                isFind = true;
+                break;
+            }
+        }
+        if(!isFind) {
+           m_deviceList.removeAt(i);
+        }
+    }
+
+
+
+    for(int i = 0; i < m_deviceList.size(); ++i)
+    {
+        qInfo() << "*******************************************";
+        BlockDevice bd = m_deviceList[i];
+        qInfo() << "DeviceNmae:" << bd.deviceName();
+        qInfo() << "Model:" << bd.model();
+        qInfo() << "Capacity:" << bd.capacity();
+        qInfo() << "read speed:" << bd.readSpeed();
+        qInfo() << "write speed:" << bd.writeSpeed();
+        qInfo() << "*******************************************";
+    }
+
+}
+
+
 static void enum_block()
 {
     struct udev *udev;
@@ -168,7 +242,7 @@ static void enum_block()
         //                disk_size = strtoull(tmp, NULL, 10);
 
         //            tmp = udev_device_get_sysattr_value(dev, "queue/logical_block_size");
-        //            if (tmp)
+        //            if (tmp)<device>
         //                block_size = atoi(tmp);
 
         //            printf("I: DEVSIZE=");
@@ -189,6 +263,10 @@ static void enum_block()
 
 void BlockDeviceInfoDB::update()
 {
+
+
+    readDiskInfo();
+
     // TODO: enum device in /sys/block => phy & virtual
 
     // TEST begin (move udev logic to udev & udevice)

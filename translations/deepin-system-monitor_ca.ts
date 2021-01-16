@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ca">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +17,21 @@
     <message>
         <source>No search results</source>
         <translation>Cap resultat de la cerca</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -190,6 +207,33 @@
     <message>
         <source>auto-restart</source>
         <translation>autoreinici</translation>
+    </message>
+</context>
+<context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Memòria</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -596,12 +640,10 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Estat</translation>
     </message>
     <message>
@@ -614,7 +656,6 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Tipus d&apos;inici</translation>
     </message>
 </context>
@@ -653,6 +694,16 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Services</source>
         <translation>Serveis</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

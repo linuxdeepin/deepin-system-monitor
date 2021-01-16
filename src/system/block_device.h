@@ -23,6 +23,11 @@
 #include "private/block_device_p.h"
 
 #include <QSharedDataPointer>
+#define MAX_NAME_LEN 128
+#define PROC_PATH_DISK      "/proc/diskstats"
+#define SYSFS_PATH_BLOCK    "/sys/block"
+#define SYSFS_PATH_MODEL    "/sys/block/%1/device/model"
+#define SYSFS_PATH_SIZE     "/sys/block/%1/size"
 
 namespace core {
 namespace system {
@@ -53,12 +58,28 @@ public:
     qreal writeRequestIssuedPerSecond() const;
     qreal writeRequestMergedPerSecond() const;
     qreal writeRequestMergedPercent() const;
+    quint64  readIssuer() const;// 获取读完成次数
+    quint64  writeComplete() const; // 获取写完成次数
+    quint64  readMerged() const; //  获得合并读完成次数
+    quint64  writeMerged() const; // 获取合并写完成次数
+    quint64  readSpeed() const; // 获取读速度
+    quint64  writeSpeed() const; // 获取写速度
+
+
+
+
+
+    void setDeviceName(const QByteArray& deviceName);
 
 protected:
     void readDeviceInfo();
+    void readDeviceModel();
+    void readDeviceSize();
+    void calcDiskIoStates(const QStringList& diskInfo);
 
 private:
     QSharedDataPointer<BlockDevicePrivate> d;
+    qint64 m_time_sec{0};
 };
 
 inline QByteArray BlockDevice::deviceName() const
@@ -145,6 +166,34 @@ inline qreal BlockDevice::writeRequestMergedPercent() const
 {
     return d->p_wrqm;
 }
+
+inline quint64  BlockDevice::readIssuer() const
+{
+    return d->read_iss;
+}
+inline quint64  BlockDevice::writeComplete() const
+{
+    return d->write_com;
+}
+inline quint64  BlockDevice::readMerged() const
+{
+    return d->read_merged;
+}
+
+inline quint64  BlockDevice::writeMerged() const
+{
+    return d->write_merged;
+}
+inline quint64  BlockDevice::readSpeed() const
+{
+    return d->read_speed;
+}
+inline quint64  BlockDevice::writeSpeed() const
+{
+    return d->wirte_speed;
+}
+
+
 
 } // namespace system
 } // namespace core

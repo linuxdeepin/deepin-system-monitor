@@ -24,6 +24,7 @@
 #include "process/process_db.h"
 #include "system/sys_info.h"
 #include "system/cpu_set.h"
+#include "system/netif_info_db.h"
 
 #include <QMap>
 #include <QList>
@@ -166,6 +167,20 @@ void Process::readProcessInfo()
 
     struct DiskIO io = {d->read_bytes, d->write_bytes, d->cancelled_write_bytes};
     d->diskIOSample->addSample(new DISKIOSampleFrame(d->uptime, io));
+
+    quint64 sum_recv = 0;
+    quint64 sum_send = 0;
+    for(int i = 0; i < d->sockInodes.size(); ++i) {
+        SockIOStat sockIOStat;
+        bool ok = DeviceDB::instance()->netifInfoDB()->getSockIOStatByInode(d->sockInodes[i],sockIOStat);
+        if (ok) {
+           sum_recv += sockIOStat->rx_bytes;
+           sum_send += sockIOStat->tx_bytes;
+        }
+
+    }
+    struct IOPS netIo = {static_cast<qreal>(sum_recv),static_cast<qreal>(sum_send)};
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
 
     auto pair = d->diskIOSample->recentSamplePair();
     struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
