@@ -185,9 +185,6 @@ set(HPP_GUI
     gui/dialog/error_dialog.h
     gui/xwin_kill_preview_widget.h
     gui/xwin_kill_preview_background_widget.h
-    gui/cpu_detail_view_widget.h
-    gui/cpu_detail_widget.h
-    gui/cpu_summary_view_widget.h
     gui/mem_detail_view_widget.h
     gui/mem_summary_view_widget.h
     gui/mem_stat_view_widget.h
@@ -199,17 +196,12 @@ set(HPP_GUI
     gui/chart_view_widget.h
     gui/animation_stackedwidget.h
     gui/base_detail_view_widget.h
+    gui/cpu_detail_widget.h
     gui/view/graphics_stat_item.h
     gui/view/graphics_stat_grid_item.h
     gui/view/graphics_stat_grid_layout.h
     gui/view/graphics_info_grid_item.h
     gui/view/graphics_info_grid_layout.h
-    gui/view/graphics_cpu_stat_item.h
-    gui/view/graphics_cpu_stat_detail_view.h
-    gui/view/graphics_cpu_stat_summary_view.h
-    gui/view/graphics_cpu_stat_grid_layout.h
-    gui/view/graphics_cpu_info_grid_item.h
-    gui/view/graphics_cpu_info_grid_layout.h
     gui/view/graphics_mem_stat_item.h
     gui/view/graphics_mem_stat_detail_view.h
     gui/view/graphics_mem_stat_summary_view.h
@@ -251,9 +243,6 @@ set(CPP_GUI
     gui/ui_common.cpp
     gui/xwin_kill_preview_widget.cpp
     gui/xwin_kill_preview_background_widget.cpp
-    gui/cpu_detail_widget.cpp
-    gui/cpu_detail_view_widget.cpp
-    gui/cpu_summary_view_widget.cpp
     gui/mem_detail_view_widget.cpp
     gui/mem_summary_view_widget.cpp
     gui/mem_stat_view_widget.cpp
@@ -265,17 +254,12 @@ set(CPP_GUI
     gui/chart_view_widget.cpp
     gui/animation_stackedwidget.cpp
     gui/base_detail_view_widget.cpp
+    gui/cpu_detail_widget.cpp
     gui/view/graphics_stat_item.cpp
     gui/view/graphics_stat_grid_item.cpp
     gui/view/graphics_stat_grid_layout.cpp
     gui/view/graphics_info_grid_item.cpp
     gui/view/graphics_info_grid_layout.cpp
-    gui/view/graphics_cpu_stat_item.cpp
-    gui/view/graphics_cpu_stat_detail_view.cpp
-    gui/view/graphics_cpu_stat_summary_view.cpp
-    gui/view/graphics_cpu_stat_grid_layout.cpp
-    gui/view/graphics_cpu_info_grid_item.cpp
-    gui/view/graphics_cpu_info_grid_layout.cpp
     gui/view/graphics_mem_stat_item.cpp
     gui/view/graphics_mem_stat_detail_view.cpp
     gui/view/graphics_mem_stat_summary_view.cpp

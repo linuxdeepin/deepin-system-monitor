@@ -25,7 +25,6 @@
 /**
  * @brief Detail view stacked widget (main content stacked area)
  */
-class CPUDetailViewWidget;
 class MemDetailViewWidget;
 class NetifDetailViewWidget;
 class BlockDevDetailViewWidget;

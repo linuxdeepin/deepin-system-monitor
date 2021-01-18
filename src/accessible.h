@@ -41,8 +41,7 @@
 #include "gui/dialog/error_dialog.h"
 #include "gui/xwin_kill_preview_widget.h"
 #include "gui/xwin_kill_preview_background_widget.h"
-#include "gui/cpu_detail_view_widget.h"
-#include "gui/cpu_summary_view_widget.h"
+#include "gui/cpu_detail_widget.h"
 #include "gui/mem_detail_view_widget.h"
 #include "gui/mem_summary_view_widget.h"
 #include "gui/block_dev_detail_view_widget.h"
@@ -99,8 +98,7 @@ SET_FORM_ACCESSIBLE(KillProcessConfirmDialog, "KillProcessConfirmDialog")
 SET_FORM_ACCESSIBLE(ProcessAttributeDialog, "ProcessAttributeDialog")
 SET_FORM_ACCESSIBLE(XWinKillPreviewWidget, "XWinKillPreviewWidget")
 SET_FORM_ACCESSIBLE(XWinKillPreviewBackgroundWidget, "XWinKillPreviewBackgroundWidget")
-SET_FORM_ACCESSIBLE(CPUDetailViewWidget, "CPUDetailViewWidget")
-SET_FORM_ACCESSIBLE(CPUSummaryViewWidget, "CPUSummaryViewWidget")
+SET_FORM_ACCESSIBLE(CPUDetailWidget, "CPUDetailWidget")
 SET_FORM_ACCESSIBLE(MemDetailViewWidget, "MemDetailViewWidget")
 SET_FORM_ACCESSIBLE(MemSummaryViewWidget, "MemSummaryViewWidget")
 SET_FORM_ACCESSIBLE(BlockDevDetailViewWidget, "BlockDevDetailViewWidget")
@@ -160,8 +158,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), ProcessAttributeDialog);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), XWinKillPreviewWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), XWinKillPreviewBackgroundWidget);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CPUDetailViewWidget);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CPUSummaryViewWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CPUDetailWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MemDetailViewWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MemSummaryViewWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), BlockDevDetailViewWidget);
