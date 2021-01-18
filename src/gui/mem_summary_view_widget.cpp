@@ -153,7 +153,7 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return formatUnit(m_memInfo->memTotal() << 10, B, 1);
+                    return formatUnit((m_memInfo->memTotal() - m_memInfo->memAvailable())  << 10, B, 1);
                 else if (column == 1)
                     return formatUnit(m_memInfo->memAvailable() << 10, B, 1);
                 break;

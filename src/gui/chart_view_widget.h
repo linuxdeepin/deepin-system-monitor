@@ -30,8 +30,13 @@ public:
     explicit ChartViewWidget(QWidget *parent = nullptr);
 
 public:
-    void setDataColor(const QColor &color);
-    void addData(qreal data);
+    void setData1Color(const QColor &color);
+    void addData1(qreal data);
+
+    void setData2Color(const QColor &color);
+    void addData2(qreal data);
+
+    void setAxisTitle(const QString &text);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -42,19 +47,25 @@ private slots:
 
 private:
     void drawBackPixmap();
-    void drawData(QPainter *painter);
+    void drawData1(QPainter *painter);
+    void drawData2(QPainter *painter);
 
     void getPainterPathByData(const QList<qreal> &listData, QPainterPath &path);
 
 private:
     int gridSize = 10;
 
+    QString m_axisTitle = {"100%"};
+
     QFont m_textfont;
     QPixmap m_backPixmap;
 
     QRect m_chartRect;
-    QColor m_dataColor = {"#00C5C0"};
-    QList<qreal> m_listData;
+    QColor m_data1Color = {"#00C5C0"};
+    QColor m_data2Color = {"#FEDF19"};
+
+    QList<qreal> m_listData1;
+    QList<qreal> m_listData2;
 };
 
 #endif // CHART_VIEW_WIDGET_H

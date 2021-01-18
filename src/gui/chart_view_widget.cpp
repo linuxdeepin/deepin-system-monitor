@@ -33,16 +33,33 @@ ChartViewWidget::ChartViewWidget(QWidget *parent) : QWidget(parent)
             this, &ChartViewWidget::changeFont);
 }
 
-void ChartViewWidget::setDataColor(const QColor &color)
+void ChartViewWidget::setData1Color(const QColor &color)
 {
-    m_dataColor = color;
+    m_data1Color = color;
 }
 
-void ChartViewWidget::addData(qreal data)
+void ChartViewWidget::addData1(qreal data)
 {
-    m_listData << data;
-    if (m_listData.size() > allDatacount + 10)
-        m_listData.pop_front();
+    m_listData1 << data;
+    if (m_listData1.size() > allDatacount + 10)
+        m_listData1.pop_front();
+}
+
+void ChartViewWidget::setData2Color(const QColor &color)
+{
+    m_data2Color = color;
+}
+
+void ChartViewWidget::addData2(qreal data)
+{
+    m_listData2 << data;
+    if (m_listData2.size() > allDatacount + 10)
+        m_listData2.pop_front();
+}
+
+void ChartViewWidget::setAxisTitle(const QString &text)
+{
+    m_axisTitle = text;
 }
 
 void ChartViewWidget::changeFont(const QFont &font)
@@ -77,9 +94,9 @@ void ChartViewWidget::getPainterPathByData(const QList<qreal> &listData, QPainte
 
 }
 
-void ChartViewWidget::drawData(QPainter *painter)
+void ChartViewWidget::drawData1(QPainter *painter)
 {
-    if (m_listData.size() <= 0)
+    if (m_listData1.size() <= 0)
         return;
 
     painter->setClipRect(m_chartRect);
@@ -87,10 +104,27 @@ void ChartViewWidget::drawData(QPainter *painter)
     QPainterPath path;
     painter->setRenderHints(QPainter::Antialiasing, true);
     painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(m_dataColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->setPen(QPen(m_data1Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->translate(m_chartRect.bottomRight());
 
-    getPainterPathByData(m_listData, path);
+    getPainterPathByData(m_listData1, path);
+    painter->drawPath(path);
+}
+
+void ChartViewWidget::drawData2(QPainter *painter)
+{
+    if (m_listData2.size() <= 0)
+        return;
+
+    painter->setClipRect(m_chartRect);
+
+    QPainterPath path;
+    painter->setRenderHints(QPainter::Antialiasing, true);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(m_data2Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->translate(m_chartRect.bottomRight());
+
+    getPainterPathByData(m_listData2, path);
     painter->drawPath(path);
 }
 
@@ -114,7 +148,7 @@ void ChartViewWidget::drawBackPixmap()
     painter.setPen(framePen);
 
     painter.setFont(m_textfont);
-    painter.drawText(0, 0, this->width(), painter.fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, "100%");
+    painter.drawText(0, 0, this->width(), painter.fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, m_axisTitle);
 
     int gridX = penSize;
     int gridY = penSize + painter.fontMetrics().height();
@@ -157,5 +191,6 @@ void ChartViewWidget::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
     QPainter painter(this);
     painter.drawPixmap(0, 0, m_backPixmap);
-    drawData(&painter);
+    drawData1(&painter);
+    drawData2(&painter);
 }

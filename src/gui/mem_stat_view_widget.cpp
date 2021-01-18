@@ -37,8 +37,8 @@ MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
     m_memChartWidget = new ChartViewWidget(this);
     m_swapChartWidget = new ChartViewWidget(this);
 
-    m_memChartWidget->setDataColor(memoryColor);
-    m_swapChartWidget->setDataColor(swapColor);
+    m_memChartWidget->setData1Color(memoryColor);
+    m_swapChartWidget->setData1Color(swapColor);
 
     TimePeriod period(TimePeriod::k1Min, {2, 0});
     m_model = new MemInfoModel(period, this);
@@ -60,8 +60,8 @@ void MemStatViewWidget::onModelUpdate()
                            .arg(formatUnit(m_model->memTotal() << 10, B, 1));
     parent()->setProperty("detail", memoryDetail);
 
-    m_memChartWidget->addData((m_model->memTotal() - m_model->memAvailable()) * 1.0 / m_model->memTotal());
-    m_swapChartWidget->addData((m_model->swapTotal() - m_model->swapFree()) * 1.0 / m_model->swapTotal());
+    m_memChartWidget->addData1((m_model->memTotal() - m_model->memAvailable()) * 1.0 / m_model->memTotal());
+    m_swapChartWidget->addData1((m_model->swapTotal() - m_model->swapFree()) * 1.0 / m_model->swapTotal());
     updateWidgetGeometry();
 }
 
