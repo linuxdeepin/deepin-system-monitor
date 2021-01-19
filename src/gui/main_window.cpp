@@ -46,6 +46,9 @@
 #include <QDebug>
 #include <QTimer>
 #include <QResizeEvent>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDesktopWidget>
 
 DGUI_USE_NAMESPACE
 
@@ -201,6 +204,13 @@ void MainWindow::displayShortcutHelpDialog()
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
 
+void MainWindow::initDisplay()
+{
+    initUI();
+    initConnections();
+    QTimer::singleShot(100, this, SLOT(initVirtualKeyboard()));
+}
+
 // initialize ui components
 void MainWindow::initUI()
 {
@@ -209,22 +219,9 @@ void MainWindow::initUI()
     // trigger loading status changed signal for once
     Q_EMIT loadingStatusChanged(m_loading);
 
-    // default window size
-    int width = Constant::WINDOW_MIN_WIDTH;
-    int height = Constant::WINDOW_MIN_HEIGHT;
-
-    // if settings has window width saved, restore with saved width
-    if (m_settings->getOption(kSettingKeyWindowWidth).isValid()) {
-        width = m_settings->getOption(kSettingKeyWindowWidth).toInt();
-    }
-
-    // if settings has window height saved, restore with saved height
-    if (m_settings->getOption(kSettingKeyWindowHeight).isValid()) {
-        height = m_settings->getOption(kSettingKeyWindowHeight).toInt();
-    }
-
-    // resize main window
-    resize(width, height);
+    this->setEnableSystemMove(false);
+    this->setEnableSystemResize(false);
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
     // set titlebar icon
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
@@ -236,71 +233,8 @@ void MainWindow::initUI()
     // disable toolbar menu right after initialization, only when loading status changed to finished then we enable it
     titlebar()->setMenuDisabled(true);
 
-    // custom menu to hold custom menu items
-    DMenu *menu = new DMenu(this);
-    titlebar()->setMenu(menu);
-
     // adjust toolbar tab order
     setTabOrder(titlebar(), m_toolbar);
-
-    // kill process menu item
-    m_killAction = new QAction(
-        DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
-    // control + alt + k
-    m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
-    // emit process kill requested signal if kill process menu item triggered
-    connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
-
-    // display mode menu item
-    m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
-    QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
-    // set group items auto exclusive
-    modeGroup->setExclusive(true);
-    // expand mode sub menu item
-    auto *expandModeAction =
-        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Expand"), modeGroup);
-    expandModeAction->setCheckable(true);
-    // compact mode sub menu item
-    auto *compactModeAction =
-        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
-    compactModeAction->setCheckable(true);
-    // add compact & expand sub menus into display mode menu as a group
-    m_modeMenu->addAction(expandModeAction);
-    m_modeMenu->addAction(compactModeAction);
-
-    // load display mode backup setting
-    QVariant vmode = m_settings->getOption(kSettingKeyDisplayMode);
-    if (vmode.isValid()) {
-        bool ok = false;
-        int mode = vmode.toInt(&ok);
-        if (ok) {
-            // if backup settings has display mode saved, use saved setting
-            if (mode == kDisplayModeExpand) {
-                expandModeAction->setChecked(true);
-            } else if (mode == kDisplayModeCompact) {
-                compactModeAction->setChecked(true);
-            }
-        } else {
-            // if no backup settings saved or setting load failed, show expand mode by default
-            expandModeAction->setChecked(true);
-            m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
-            Q_EMIT displayModeChanged(kDisplayModeExpand);
-        }
-    }
-
-    // emit display mode changed signal if ether expand or compact menu item triggered
-    connect(expandModeAction, &QAction::triggered, this, [ = ]() {
-        m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
-        Q_EMIT displayModeChanged(kDisplayModeExpand);
-    });
-    connect(compactModeAction, &QAction::triggered, this, [ = ]() {
-        m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeCompact);
-        Q_EMIT displayModeChanged(kDisplayModeCompact);
-    });
-
-    menu->addAction(m_killAction);
-    menu->addSeparator();
-    menu->addMenu(m_modeMenu);
 
     // listen on theme changed signal
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
@@ -341,13 +275,30 @@ void MainWindow::initUI()
 
     // install event filter for main window widget
     installEventFilter(this);
+
+    this->move(0, 0);
+    this->setFixedSize(QApplication::desktop()->availableGeometry().size());
+}
+
+void MainWindow::initVirtualKeyboard()
+{
+    m_virtualKeyboard = new QDBusInterface("com.deepin.im",
+                                           "/com/deepin/im",
+                                           "com.deepin.im",
+                                           QDBusConnection::sessionBus());
+    if (m_virtualKeyboard->isValid()) {
+        connect(m_virtualKeyboard, SIGNAL(imActiveChanged(bool)), this, SLOT(onVirtualKeyboardShow(bool)));
+    } else {
+        delete m_virtualKeyboard;
+        m_virtualKeyboard = nullptr;
+    }
 }
 
 // initialize connections
 void MainWindow::initConnections()
 {
     // listen on process button triggered signal
-    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Services")).arg(DApplication::translate("Title.Bar.Switch", "Processes")));
         // clear search text input widget
         m_toolbar->clearSearchText();
@@ -359,7 +310,7 @@ void MainWindow::initConnections()
         PERF_PRINT_END("POINT-05");
     });
     // listen on service button triggered signal
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
         // clear search text input widget
         m_toolbar->clearSearchText();
@@ -372,7 +323,7 @@ void MainWindow::initConnections()
     });
 
     // listen on background task state changed signal
-    connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
+    connect(gApp, &Application::backgroundTaskStateChanged, this, [ = ](Application::TaskState state) {
         if (state == Application::kTaskStarted) {
             // save last focused widget inside main window
             m_focusedWidget = gApp->mainWindow()->focusWidget();
@@ -389,6 +340,21 @@ void MainWindow::initConnections()
     });
 }
 
+void MainWindow::onVirtualKeyboardShow(bool visible)
+{
+    if (visible && this->isActiveWindow()) {
+        QTimer::singleShot(300, this, SLOT(onDelayResizeHeight()));
+    } else {
+        this->setFixedHeight(QApplication::desktop()->availableGeometry().height());
+    }
+}
+
+void MainWindow::onDelayResizeHeight()
+{
+    QRect rc = m_virtualKeyboard->property("geometry").toRect();
+    this->setFixedHeight(QApplication::desktop()->geometry().height() - rc.height());
+}
+
 // resize event handler
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -398,22 +364,12 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // resize shadow widget
     if (m_tbShadow)
         m_tbShadow->setFixedWidth(event->size().width());
-
-    // save new size to backup settings instace
-    m_settings->setOption(kSettingKeyWindowWidth, event->size().width());
-    m_settings->setOption(kSettingKeyWindowHeight, event->size().height());
 }
 
 // close event handler
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     PERF_PRINT_BEGIN("POINT-02", "");
-    // save new size to backup settings instace
-    m_settings->setOption(kSettingKeyWindowWidth, width());
-    m_settings->setOption(kSettingKeyWindowHeight, height());
-    // flush backup settings
-    m_settings->flush();
-
     // propogate close event to base event handler
     DMainWindow::closeEvent(event);
 }

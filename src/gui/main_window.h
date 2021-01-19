@@ -38,6 +38,7 @@ class SystemServicePageWidget;
 class ProcessPageWidget;
 class Settings;
 class QTimer;
+class QDBusInterface;
 
 /**
  * @brief The MainWindow class
@@ -46,6 +47,7 @@ class MainWindow : public DMainWindow
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)
+    Q_PROPERTY(int fixHeight READ height WRITE setFixedHeight)
 
 public:
     /**
@@ -94,16 +96,22 @@ public Q_SLOTS:
     /**
      * @brief Initialize ui components
      */
-    inline void initDisplay()
-    {
-        initUI();
-        initConnections();
-    }
+    void initDisplay();
+
+    /**
+     * @brief initVirtualKeyboard
+     */
+    void initVirtualKeyboard();
 
     /**
      * @brief Show shortcut help dialog
      */
     void displayShortcutHelpDialog();
+
+private slots:
+    void onVirtualKeyboardShow(bool);
+
+    void onDelayResizeHeight();
 
 protected:
     /**
@@ -142,11 +150,6 @@ private:
     // Global config settings instance
     Settings *m_settings;
 
-    // Interactive kill application (select by window) action instance
-    QAction *m_killAction {};
-    // Display mode menu (compact/detail)
-    DMenu *m_modeMenu {};
-
     // Toolbar instance
     Toolbar *m_toolbar {};
     // Stacked widget to hold process & service page
@@ -164,6 +167,7 @@ private:
 
     // Last focused widget
     QWidget *m_focusedWidget {};
+    QDBusInterface *m_virtualKeyboard {nullptr};
 };
 
 #endif  // MAIN_WINDOW_H

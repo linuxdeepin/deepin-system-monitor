@@ -21,7 +21,7 @@
 #ifndef MONITOR_COMPACT_VIEW_H
 #define MONITOR_COMPACT_VIEW_H
 
-#include <DFrame>
+#include <DScrollArea>
 
 DWIDGET_USE_NAMESPACE
 
@@ -33,7 +33,7 @@ class CompactDiskMonitor;
 /**
  * @brief Compact view frame
  */
-class MonitorCompactView : public DFrame
+class MonitorCompactView : public DScrollArea
 {
     Q_OBJECT
 

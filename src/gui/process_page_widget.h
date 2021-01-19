@@ -78,13 +78,6 @@ public:
      */
     bool eventFilter(QObject *obj, QEvent *event);
 
-public Q_SLOTS:
-    /**
-     * @brief Switch performance display mode when required
-     * @param mode Display mode
-     */
-    void switchDisplayMode(DisplayMode mode);
-
 protected:
     /**
      * @brief Paint event handler
@@ -123,8 +116,6 @@ private:
 
     // stacked widget to hold expand & compact monitor view
     DStackedWidget *m_views {};
-    // expand monitor view
-    MonitorExpandView *m_expandView {};
     // compact monitor view
     MonitorCompactView *m_compactView {};
 

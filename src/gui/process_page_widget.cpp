@@ -85,19 +85,13 @@ ProcessPageWidget::~ProcessPageWidget() {}
 // initialize ui components
 void ProcessPageWidget::initUI()
 {
-    // global DStyle instance
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
     // global app helper instance
     auto *dAppHelper = DApplicationHelper::instance();
     // global palette
     auto palette = dAppHelper->applicationPalette();
 
-    // initialize style option
-    QStyleOption option;
-    option.initFrom(this);
-
     // content margin
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = 10;
 
     // tool area background
     auto *tw = new QWidget(this);
@@ -111,24 +105,11 @@ void ProcessPageWidget::initUI()
     m_views->setAutoFillBackground(false);
     // compact view instance
     m_compactView = new MonitorCompactView(m_views);
-    // expand view instance
-    m_expandView = new MonitorExpandView(m_views);
     m_views->addWidget(m_compactView);
-    m_views->addWidget(m_expandView);
     m_views->setFixedWidth(300);
 
     // restore previous backupped display mode if any
-    auto *settings = Settings::instance();
-    if (settings) {
-        auto mode = settings->getOption(kSettingKeyDisplayMode);
-        if (mode.isValid()) {
-            if (qvariant_cast<int>(mode) == kDisplayModeCompact) {
-                m_views->setCurrentIndex(0);
-            } else {
-                m_views->setCurrentIndex(1);
-            }
-        }
-    }
+    m_views->setCurrentIndex(0);
 
     // right ====> tab button + process table
     auto *contentlayout = new QVBoxLayout(cw);
@@ -143,7 +124,7 @@ void ProcessPageWidget::initUI()
     // process context instance
     m_procViewMode = new DLabel(tw);
     m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));  // default text
-    DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T7, QFont::Medium);
+    DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T6, QFont::Medium);
     // text aligment
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     // change text color to text title style
@@ -153,7 +134,7 @@ void ProcessPageWidget::initUI()
 
     // process context summary instance
     m_procViewModeSummary = new DLabel(tw);
-    DFontSizeManager::instance()->bind(m_procViewModeSummary, DFontSizeManager::T7, QFont::Medium);
+    DFontSizeManager::instance()->bind(m_procViewModeSummary, DFontSizeManager::T6, QFont::Medium);
     // text aligment & elide mode
     m_procViewModeSummary->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_procViewModeSummary->setElideMode(Qt::ElideRight);
@@ -167,12 +148,12 @@ void ProcessPageWidget::initUI()
             &ProcessPageWidget::changeIconTheme);
 
     auto *modeButtonGroup = new DButtonBox(tw);
-    modeButtonGroup->setFixedWidth(30 * 3);
-    modeButtonGroup->setFixedHeight(26);
+    modeButtonGroup->setFixedWidth(46 * 3);
+    modeButtonGroup->setFixedHeight(36);
 
     // show application mode button
     m_appButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
-    m_appButton->setIconSize(QSize(26, 24));
+    m_appButton->setIconSize(QSize(34, 32));
     m_appButton->setCheckable(true);
     m_appButton->setFocusPolicy(Qt::TabFocus);
     m_appButton->setToolTip(DApplication::translate("Process.Show.Mode", appText));
@@ -180,7 +161,7 @@ void ProcessPageWidget::initUI()
 
     // show my process mode button
     m_myProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
-    m_myProcButton->setIconSize(QSize(26, 24));
+    m_myProcButton->setIconSize(QSize(34, 32));
     m_myProcButton->setCheckable(true);
     m_myProcButton->setFocusPolicy(Qt::TabFocus);
     m_myProcButton->setToolTip(DApplication::translate("Process.Show.Mode", myProcText));
@@ -188,7 +169,7 @@ void ProcessPageWidget::initUI()
 
     // show all process mode button
     m_allProcButton = new DButtonBoxButton(QIcon(), {}, modeButtonGroup);
-    m_allProcButton->setIconSize(QSize(26, 24));
+    m_allProcButton->setIconSize(QSize(34, 32));
     m_allProcButton->setCheckable(true);
     m_allProcButton->setFocusPolicy(Qt::TabFocus);
     m_allProcButton->setToolTip(DApplication::translate("Process.Show.Mode", allProcText));
@@ -266,12 +247,9 @@ void ProcessPageWidget::initConnections()
     // kill application signal triggered, show application kill preview widget
     connect(mainWindow, &MainWindow::killProcessPerformed, this,
             &ProcessPageWidget::showWindowKiller);
-    // switch display mode signal triggered, switch performance display mode
-    connect(mainWindow, &MainWindow::displayModeChanged, this,
-            &ProcessPageWidget::switchDisplayMode);
 
     // show my application when my application button toggled
-    connect(m_appButton, &DButtonBoxButton::toggled, this, [=](bool) {
+    connect(m_appButton, &DButtonBoxButton::toggled, this, [ = ](bool) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
@@ -280,7 +258,7 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_END("POINT-04");
     });
     // show my process when my process button toggled
-    connect(m_myProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
+    connect(m_myProcButton, &DButtonBoxButton::toggled, this, [ = ](bool) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
@@ -289,7 +267,7 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_END("POINT-04");
     });
     // show all application when all application button toggled
-    connect(m_allProcButton, &DButtonBoxButton::toggled, this, [=](bool) {
+    connect(m_allProcButton, &DButtonBoxButton::toggled, this, [ = ](bool) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
@@ -463,19 +441,6 @@ void ProcessPageWidget::showWindowKiller()
     QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
-// switch performance view display mode
-void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
-{
-    switch (mode) {
-    case kDisplayModeExpand: {
-        m_views->setCurrentIndex(1);
-    } break;
-    case kDisplayModeCompact: {
-        m_views->setCurrentIndex(0);
-    } break;
-    }
-}
-
 void ProcessPageWidget::adjustStatusBarWidth()
 {
 //    QRect rect = QApplication::desktop()->screenGeometry();
@@ -490,5 +455,5 @@ void ProcessPageWidget::adjustStatusBarWidth()
 //        }
 //    }
 // set fixed width temporary, might add splitter between sidebar & content area in a late update
-m_views->setFixedWidth(300);
+    m_views->setFixedWidth(300);
 }

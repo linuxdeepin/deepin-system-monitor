@@ -557,7 +557,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
     // change menu item checkable state before context menu popup
-    connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
+    connect(m_contextMenu, &DMenu::aboutToShow, this, [ = ]() {
         // process running or not flag
 
         auto *sysmon = SystemMonitor::instance();

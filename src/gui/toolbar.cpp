@@ -76,11 +76,12 @@ Toolbar::Toolbar(QWidget *parent)
     m_svcBtn->installEventFilter(this);
 
     // emit button clicked signal when process or service tab button toggled
-    connect(m_procBtn, &DButtonBoxButton::toggled, this, [=](bool) { Q_EMIT procTabButtonClicked(); });
-    connect(m_svcBtn, &DButtonBoxButton::toggled, this, [=](bool) { Q_EMIT serviceTabButtonClicked(); });
+    connect(m_procBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT procTabButtonClicked(); });
+    connect(m_svcBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT serviceTabButtonClicked(); });
 
     // search text editor instance
     searchEdit = new DSearchEdit(this);
+    searchEdit->setObjectName("ProcessSearchEdit");
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
     searchEdit->setEnabled(false);
@@ -101,7 +102,7 @@ Toolbar::Toolbar(QWidget *parent)
 
     // monitoring loading status changed signal, change button/input enabled/disabled state accordingly
     auto *mw = gApp->mainWindow();
-    connect(mw, &MainWindow::loadingStatusChanged, this, [=](bool loading) {
+    connect(mw, &MainWindow::loadingStatusChanged, this, [ = ](bool loading) {
         if (loading) {
             m_procBtn->setEnabled(false);
             m_svcBtn->setEnabled(false);
