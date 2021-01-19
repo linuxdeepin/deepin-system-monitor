@@ -11,14 +11,15 @@ type = QT
 
 [deepin-system-monitor.deepin-system-monitor-desktop]
 file_filter = translations/desktop/desktop_<lang>.ts
-source_file = translations/desktop/desktop.ts
 preTranlate_file = translations/desktop/deepin-system-monitor.desktop
+source_file = translations/desktop/desktop.ts
 source_lang = en_US
 type = QT
 
 [deepin-system-monitor.deepin-system-monitor-policy]
 file_filter = translations/policy/policy_<lang>.ts
-source_file = translations/policy/policy.ts
 preTranlate_file = translations/policy/com.deepin.pkexec.deepin-system-monitor.policy
+source_file = translations/policy/policy.ts
 source_lang = en_US
 type = QT
+

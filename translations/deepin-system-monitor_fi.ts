@@ -280,7 +280,7 @@ Haluatko varmasti jatkaa?</translation>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation>Prosessori</translation>
+        <translation>Kuorma</translation>
     </message>
     <message>
         <source>Disk read</source>

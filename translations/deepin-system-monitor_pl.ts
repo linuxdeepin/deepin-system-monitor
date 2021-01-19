@@ -106,11 +106,11 @@
     </message>
     <message>
         <source>transient</source>
-        <translation type="unfinished"/>
+        <translation>przejściowy</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation type="unfinished"/>
+        <translation>pośredni</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
@@ -122,14 +122,14 @@
     </message>
     <message>
         <source>generated</source>
-        <translation type="unfinished"/>
+        <translation>wygenerowany</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation type="unfinished"/>
+        <translation>martwy</translation>
     </message>
     <message>
         <source>start-pre</source>
@@ -153,7 +153,7 @@
     </message>
     <message>
         <source>reload</source>
-        <translation type="unfinished"/>
+        <translation>przeładuj</translation>
     </message>
     <message>
         <source>stop</source>

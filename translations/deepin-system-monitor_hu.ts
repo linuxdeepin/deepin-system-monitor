@@ -556,7 +556,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Start</source>
-        <translation>indítás</translation>
+        <translation>Indítás</translation>
     </message>
     <message>
         <source>Stop</source>
