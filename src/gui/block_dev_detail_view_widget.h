@@ -25,6 +25,8 @@
 /**
  * @brief Block device detail view widget
  */
+class BlockStatViewWidget;
+class BlockDevSummaryViewWidget;
 class BlockDevDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
@@ -33,6 +35,9 @@ public:
 
 public slots:
     void fontChanged(const QFont &font);
+private:
+    BlockStatViewWidget *m_blockStatWidget;
+    BlockDevSummaryViewWidget *m_blocksummaryWidget;
 
 };
 

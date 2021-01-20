@@ -20,12 +20,13 @@
 #ifndef BLOCK_DEV_SUMMARY_VIEW_WIDGET_H
 #define BLOCK_DEV_SUMMARY_VIEW_WIDGET_H
 
-#include <QWidget>
-
+#include <DTableView>
+DWIDGET_USE_NAMESPACE
 /**
  * @brief Block device summary view widget
  */
-class BlockDevSummaryViewWidget : public QWidget
+class DeailTableModelBlock;
+class BlockDevSummaryViewWidget : public DTableView
 {
     Q_OBJECT
 public:
@@ -34,6 +35,13 @@ public:
 signals:
 
 public slots:
+    void fontChanged(const QFont &font);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+private:
+    QFont m_font;
+    DeailTableModelBlock *m_model;
 };
 
 #endif // BLOCK_DEV_SUMMARY_VIEW_WIDGET_H

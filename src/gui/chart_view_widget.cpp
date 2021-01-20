@@ -66,6 +66,7 @@ void ChartViewWidget::setData2Color(const QColor &color)
     m_data2Color = color;
 }
 
+
 void ChartViewWidget::addData2(qreal data)
 {
     qreal maxdata = qMax(m_maxData2, data);

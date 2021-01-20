@@ -18,17 +18,28 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "block_dev_detail_view_widget.h"
+#include "block_dev_stat_view_widget.h"
+#include "block_dev_summary_view_widget.h"
 
 #include <DApplication>
 
 BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
+    m_blockStatWidget = new BlockStatViewWidget(this);
+    m_blocksummaryWidget = new BlockDevSummaryViewWidget(this);
     setTitle(DApplication::translate("Process.Graph.View", "Disk"));
+    m_centralLayout->addWidget(m_blockStatWidget);
+    m_centralLayout->addWidget(m_blocksummaryWidget);
+    m_centralLayout->addStretch(1);
+
+    fontChanged(DApplication::font());
 }
 
 void BlockDevDetailViewWidget::fontChanged(const QFont &font)
 {
     BaseDetailViewWidget::fontChanged(font);
+  //  m_blockStatWidget->fontChanged(font);
+  //  m_blocksummaryWidget->fontChanged(font);
     //Child Todo
 }

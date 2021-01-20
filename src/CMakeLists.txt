@@ -194,9 +194,11 @@ set(HPP_GUI
     gui/netif_summary_view_widget.h
     gui/detail_view_stacked_widget.h
     gui/chart_view_widget.h
+    gui/block_dev_stat_view_widget.h
     gui/animation_stackedwidget.h
     gui/base_detail_view_widget.h
     gui/cpu_detail_widget.h
+    gui/block_dev_item_widget.h
     gui/view/graphics_stat_item.h
     gui/view/graphics_stat_grid_item.h
     gui/view/graphics_stat_grid_layout.h
@@ -222,6 +224,7 @@ set(HPP_GUI
     gui/view/graphics_netif_info_grid_layout.h
     gui/view/graphics_stat_summary_view_layout.h
     gui/view/graphics_stat_summary_view.h
+
 )
 set(CPP_GUI
     gui/toolbar.cpp
@@ -257,6 +260,8 @@ set(CPP_GUI
     gui/animation_stackedwidget.cpp
     gui/base_detail_view_widget.cpp
     gui/cpu_detail_widget.cpp
+    gui/block_dev_item_widget.cpp
+    gui/block_dev_stat_view_widget.cpp
     gui/view/graphics_stat_item.cpp
     gui/view/graphics_stat_grid_item.cpp
     gui/view/graphics_stat_grid_layout.cpp
