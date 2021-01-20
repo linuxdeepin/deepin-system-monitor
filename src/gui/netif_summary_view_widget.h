@@ -20,20 +20,32 @@
 #ifndef NETIF_SUMMARY_VIEW_WIDGET_H
 #define NETIF_SUMMARY_VIEW_WIDGET_H
 
-#include <QWidget>
 
+#include <DTableView>
+#include "system/device_db.h"
+using namespace core::system;
+DWIDGET_USE_NAMESPACE
 /**
  * @brief Network interface summary view widget
  */
-class NetifSummaryViewWidget : public QWidget
+class NetInfoModel;
+class NetifSummaryViewWidget : public DTableView
 {
     Q_OBJECT
 public:
     explicit NetifSummaryViewWidget(QWidget *parent = nullptr);
-
+    void updateWidgetGeometry(DeviceDB *info);
 signals:
 
 public slots:
+    void fontChanged(const QFont &font);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+private:
+    QFont  m_font;
+    NetInfoModel *m_netInfoModel;
+    int m_index;        // 标识.
 };
 
 #endif // NETIF_SUMMARY_VIEW_WIDGET_H

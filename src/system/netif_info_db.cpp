@@ -39,15 +39,11 @@ NetifInfoDB::NetifInfoDB()
 {
 }
 
-void NetifInfoDB::update()
-{
+void NetifInfoDB::update_addr(){
     // iterator
-
-    QWriteLocker lock(&m_rwlock);
-//    AddrIterator addrIter = m_netlink->addrIterator();
-//    auto it = addrIter.next();
-
-    AddrIterator iter = m_netlink->addrIterator();;
+    // 查找所有的addr
+    AddrIterator iter = m_netlink->addrIterator();
+    m_addrDB.clear();
     while (iter.hasNext()) {
         auto it = iter.next();
         if (it->family() == AF_INET) {
@@ -65,8 +61,31 @@ void NetifInfoDB::update()
             temp->prefixlen = it->prefixlen();
             m_addrDB.insert(it->local(), temp);
         }
-
     }
+
+}
+// 更新网络信息
+void NetifInfoDB::update_netif_info(){
+    LinkIterator iter = m_netlink->linkIterator();
+    m_infoDB.clear();
+    while(iter.hasNext()){
+        auto it = iter.next();
+
+        if(it->ifname() == "lo"){
+            continue;
+        }
+        NetifInfo  item;
+
+        item.updateLinkInfo(it.get());
+        item.updateAddrInfo(m_addrDB.values(it->addr()));
+        m_infoDB.push_back(item);
+    }
+}
+void NetifInfoDB::update()
+{
+    QWriteLocker lock(&m_rwlock);
+    this->update_addr();
+    this->update_netif_info();
 
     // d->infoMap =
     // d->addrMap =

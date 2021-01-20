@@ -189,6 +189,8 @@ set(HPP_GUI
     gui/block_dev_detail_view_widget.h
     gui/block_dev_summary_view_widget.h
     gui/netif_detail_view_widget.h
+    gui/netif_stat_view_widget.h
+    gui/netif_item_view_widget.h
     gui/netif_summary_view_widget.h
     gui/detail_view_stacked_widget.h
     gui/chart_view_widget.h
@@ -248,6 +250,8 @@ set(CPP_GUI
     gui/block_dev_summary_view_widget.cpp
     gui/netif_detail_view_widget.cpp
     gui/netif_summary_view_widget.cpp
+    gui/netif_stat_view_widget.cpp
+    gui/netif_item_view_widget.cpp
     gui/detail_view_stacked_widget.cpp
     gui/chart_view_widget.cpp
     gui/animation_stackedwidget.cpp

@@ -21,6 +21,7 @@
 
 #include "nl_addr.h"
 #include "nl_link.h"
+#include "wireless.h"
 
 #include <netlink/route/link.h>
 #include <netlink/addr.h>
@@ -88,12 +89,35 @@ void NetifInfo::updateLinkInfo(const NLLink *link)
     d->tx_dropped = link->tx_dropped();
     d->tx_fifo = link->tx_fifo();
     d->tx_carrier = link->tx_carrier();
-
     d->collisions = link->collisions();
+
+    this->updateWirelessInfo(d->ifname);
 }
 
 void NetifInfo::updateAddrInfo(const QList<INetAddr> &addrList)
 {
+    d->addrs = addrList;
+}
+
+void NetifInfo::updateWirelessInfo(QByteArray ifname){
+
+    wireless wireless1(ifname);
+
+    if(wireless1.is_wireless())
+    {
+        strcpy(d->iw_info->essid,wireless1.essid().data());
+        d->iw_info->qual.qual = wireless1.link_quality();
+        d->iw_info->qual.level = wireless1.signal_levle();
+        d->iw_info->qual.noise = wireless1.noise_level();
+    }
+
+
+   // wireless.read_wireless_info();
+     //  d->iw_info = iwInfot;
+    /* strcpy(d->iw_info->essid,iwInfot->essid);
+     d->iw_info->freq = iwInfot->freq;
+     d->iw_info->qual = iwInfot->qual;*/
+     //  d->iw_info->freq = iwInfot->freq;
 }
 
 } // namespace system

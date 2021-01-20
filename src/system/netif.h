@@ -51,6 +51,7 @@ class NetifInfoData;
 class NetifInfoDB;
 class NLLink;
 class NLAddr;
+class wireless;
 
 class NetifInfo
 {
@@ -106,7 +107,7 @@ public:
 protected:
     void updateLinkInfo(const NLLink *link);
     void updateAddrInfo(const QList<INetAddr> &addrList);
-    void updateWirelessInfo(); // ioctl
+    void updateWirelessInfo(QByteArray ifname); // ioctl
     void updateBrandInfo(); // udev
 
 private:

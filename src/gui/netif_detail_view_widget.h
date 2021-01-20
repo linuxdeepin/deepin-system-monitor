@@ -25,14 +25,25 @@
 /**
  * @brief Network interface detail view widget
  */
+class NetifStatViewWidget;
+class NetifSummaryViewWidget;
+class QTimer;
+
 class NetifDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
+
 public:
     explicit NetifDetailViewWidget(QWidget *parent = nullptr);
 
 public slots:
-    void fontChanged(const QFont &font);
+    void fontChanged(const QFont &font) override;
+    void updateData();   // 更新数据
+private:
+    NetifStatViewWidget *m_netifstatWIdget;
+    NetifSummaryViewWidget *m_netifsummaryWidget;
+    QTimer *m_timer;
+
 };
 
 #endif // NETIF_DETAIL_VIEW_WIDGET_H

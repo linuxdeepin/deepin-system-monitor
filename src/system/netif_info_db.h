@@ -46,6 +46,10 @@ public:
     void update();
     bool getSockIOStatByInode(ino_t ino, SockIOStat &stat);
 
+protected:
+    void update_addr();
+    void update_netif_info();
+
 private:
     std::unique_ptr<Netlink> m_netlink;
 

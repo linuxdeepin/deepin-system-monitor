@@ -196,7 +196,7 @@ inline QByteArray NLLink::bcast() const
     }
     return buffer;
 }
-
+// https://www.infradead.org/~tgr/libnl/doc/api/group__link.html#gabe368ecaa2f41e8392325b8060862ba6
 inline unsigned long long NLLink::rx_packets() const
 {
     return rtnl_link_get_stat(m_link, RTNL_LINK_RX_PACKETS);
