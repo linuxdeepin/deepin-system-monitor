@@ -20,11 +20,13 @@
 #include "mem_detail_view_widget.h"
 #include "mem_stat_view_widget.h"
 #include "mem_summary_view_widget.h"
+#include "system/system_monitor.h"
 
 #include <DApplicationHelper>
 #include <DApplication>
 #include <QVBoxLayout>
 
+using namespace core::system;
 MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
@@ -37,6 +39,15 @@ MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
     m_centralLayout->addStretch(1);
 
     fontChanged(DApplication::font());
+
+    onModelUpdate();
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemDetailViewWidget::onModelUpdate);
+}
+
+void MemDetailViewWidget::onModelUpdate()
+{
+    m_memstatWIdget->onModelUpdate();
+    m_memsummaryWidget->onModelUpdate();
 }
 
 void MemDetailViewWidget::fontChanged(const QFont &font)

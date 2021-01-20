@@ -167,13 +167,10 @@ void ChartViewWidget::drawBackPixmap()
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
-    frameColor.setAlphaF(0.3);
 
-    QPen framePen;
     int penSize = 1;
-    framePen.setColor(frameColor);
-    framePen.setWidth(penSize);
-    painter.setPen(framePen);
+    painter.setPen(QPen(frameColor, penSize));
+    painter.setBrush(Qt::NoBrush);
 
     painter.setFont(m_textfont);
     painter.drawText(0, 0, this->width(), painter.fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, m_axisTitle);
@@ -187,8 +184,8 @@ void ChartViewWidget::drawBackPixmap()
     painter.drawText(bottomTextRect, Qt::AlignRight | Qt::AlignVCenter, "0");
     painter.drawText(bottomTextRect, Qt::AlignLeft | Qt::AlignVCenter, tr("60 seconds"));
 
-    painter.setRenderHint(QPainter::Antialiasing, false);
     QPainterPath framePath;
+    painter.setOpacity(0.3);
     m_chartRect = QRect(gridX, gridY, gridWidth, gridHeight);
     framePath.addRect(m_chartRect);
     painter.drawPath(framePath);

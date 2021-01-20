@@ -35,6 +35,7 @@ public:
 
 public slots:
     void fontChanged(const QFont &font);
+    void onModelUpdate();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

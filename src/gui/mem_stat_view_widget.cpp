@@ -21,7 +21,6 @@
 #include "mem_stat_view_widget.h"
 #include "chart_view_widget.h"
 #include "common/common.h"
-#include "system/system_monitor.h"
 #include "system/device_db.h"
 #include "system/mem.h"
 
@@ -44,8 +43,6 @@ MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
     m_swapChartWidget->setData1Color(swapColor);
 
     m_memInfo = DeviceDB::instance()->memInfo();
-    onModelUpdate();
-    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemStatViewWidget::onModelUpdate);
 }
 
 void MemStatViewWidget::fontChanged(const QFont &font)

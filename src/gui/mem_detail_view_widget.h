@@ -36,6 +36,7 @@ public:
 
 public slots:
     void fontChanged(const QFont &font) override;
+    void onModelUpdate();
 
 private:
     MemStatViewWidget *m_memstatWIdget;
