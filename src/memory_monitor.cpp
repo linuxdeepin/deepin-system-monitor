@@ -21,8 +21,9 @@
 #include "gui/ui_common.h"
 #include "common/common.h"
 #include "constant.h"
-#include "model/mem_info_model.h"
-#include "model/mem_stat_model.h"
+#include "system/mem.h"
+#include "system/device_db.h"
+#include "system/system_monitor.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -40,6 +41,7 @@ DWIDGET_USE_NAMESPACE
 
 using namespace common;
 using namespace common::format;
+using namespace core::system;
 
 MemoryMonitor::MemoryMonitor(QWidget *parent)
     : QWidget(parent)
@@ -69,9 +71,13 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
         update();
     });
 
-    TimePeriod period(TimePeriod::k1Min, {2, 0});
-    m_model = new MemInfoModel(period, this);
-    connect(m_model, &MemInfoModel::modelUpdated, this, [ = ]() {
+    connect(m_animation, &QPropertyAnimation::finished, [ = ]() {
+        m_lastMemPercent = (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal();
+        m_lastSwapPercent = (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal();
+    });
+
+    m_memInfo = DeviceDB::instance()->memInfo();
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, [ = ]() {
         m_animation->start();
     });
 
@@ -137,64 +143,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    auto statModel = m_model->memStatModel().lock();
 
-    auto nrow = statModel->rowCount();
-
-    QModelIndex prevUsedMemIndex, prevTotalMemIndex, prevUsedSwapIndex, prevTotalSwapIndex;
-    QModelIndex curUsedMemIndex, curTotalMemIndex, curUsedSwapIndex, curTotalSwapIndex;
-
-    if (nrow > 1) {
-        prevUsedMemIndex = statModel->index(nrow - 2, MemStatModel::kStatUsedMem);
-        prevTotalMemIndex = statModel->index(nrow - 2, MemStatModel::kStatTotalMem);
-        prevUsedSwapIndex = statModel->index(nrow - 2, MemStatModel::kStatUsedSwap);
-        prevTotalSwapIndex = statModel->index(nrow - 2, MemStatModel::kStatTotalSwap);
-    }
-
-    if (nrow > 0) {
-        curUsedMemIndex = statModel->index(nrow - 1, MemStatModel::kStatUsedMem);
-        curTotalMemIndex = statModel->index(nrow - 1, MemStatModel::kStatTotalMem);
-        curUsedSwapIndex = statModel->index(nrow - 1, MemStatModel::kStatUsedSwap);
-        curTotalSwapIndex = statModel->index(nrow - 1, MemStatModel::kStatTotalSwap);
-    }
-
-    qulonglong prevUsedMem {}, prevTotalMem {}, prevUsedSwap {}, prevTotalSwap {};
-    qulonglong curUsedMem {}, curTotalMem {}, curUsedSwap {}, curTotalSwap {};
-
-    if (curUsedMemIndex.isValid())
-        curUsedMem = curUsedMemIndex.data(MemStatModel::kValueRole).toULongLong();
-    if (curTotalMemIndex.isValid())
-        curTotalMem = curTotalMemIndex.data(MemStatModel::kValueRole).toULongLong();
-    if (curUsedSwapIndex.isValid())
-        curUsedSwap = curUsedSwapIndex.data(MemStatModel::kValueRole).toULongLong();
-    if (curTotalSwapIndex.isValid())
-        curTotalSwap = curTotalSwapIndex.data(MemStatModel::kValueRole).toULongLong();
-
-    if (prevUsedMemIndex.isValid())
-        prevUsedMem = prevUsedMemIndex.data(MemStatModel::kValueRole).toULongLong();
-    if (prevTotalMemIndex.isValid())
-        prevTotalMem = prevTotalMemIndex.data(MemStatModel::kValueRole).toULongLong();
-    if (prevUsedSwapIndex.isValid())
-        prevUsedSwap = prevUsedSwapIndex.data(MemStatModel::kValueRole).toULongLong();
-    if (prevTotalSwapIndex.isValid())
-        prevTotalSwap = prevTotalSwapIndex.data(MemStatModel::kValueRole).toULongLong();
-
-    auto memdiff = qlonglong(curUsedMem - prevUsedMem);
-    auto memPercent = (prevUsedMem + m_progress * memdiff) / curTotalMem;
-    if (memPercent > 100.) {
-        memPercent = 100.;
-    }
-
-    auto swpdiff = qlonglong(curUsedSwap - prevUsedSwap);
-    qreal swapPercent;
-    if (curTotalSwap == 0) {
-        swapPercent = 0;
-    } else {
-        swapPercent = (prevUsedSwap + m_progress * swpdiff) / curTotalSwap;
-        if (swapPercent > 100.) {
-            swapPercent = 100.;
-        }
-    }
 
     int iconSize = 24;
 
@@ -218,16 +167,19 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     int spacing = 10;
     int sectionSize = 6;
 
+    qreal memPercent = m_lastMemPercent + ((m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal() - m_lastMemPercent) * m_progress;
+    qreal swapPercent = m_lastSwapPercent + ((m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal() - m_lastSwapPercent) * m_progress;
+
     // Draw memory summary.
     QString memoryTitle = QString("%1(%2%)")
                           .arg(DApplication::translate("Process.Graph.View", "Memory"))
                           .arg(QString::number(memPercent * 100, 'f', 1));
     QString memoryContent = QString("%1 / %2")
-                            .arg(curUsedMemIndex.data().toString())
-                            .arg(curTotalMemIndex.data().toString());
+                            .arg(formatUnit((m_memInfo->memTotal() - m_memInfo->memAvailable()) << 10, B, 1))
+                            .arg(formatUnit(m_memInfo->memTotal() << 10, B, 1));
     QString swapTitle = "";
     QString swapContent = "";
-    if (m_model->swapTotal() == 0) {
+    if (m_memInfo->swapTotal() == 0) {
         swapTitle = QString("%1(%2)")
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
@@ -237,8 +189,8 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1 / %2")
-                      .arg(curUsedSwapIndex.data().toString())
-                      .arg(curTotalSwapIndex.data().toString());
+                      .arg(formatUnit((m_memInfo->swapTotal() - m_memInfo->swapFree()) << 10, B, 1))
+                      .arg(formatUnit(m_memInfo->swapTotal() << 10, B, 1));
     }
 
     QFontMetrics fmMem(m_contentFont);

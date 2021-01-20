@@ -18,47 +18,18 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MEM_STAT_VIEW_WIDGET_H
-#define MEM_STAT_VIEW_WIDGET_H
+#ifndef MODEL_MANAGER_H
+#define MODEL_MANAGER_H
 
-#include <QWidget>
-#include <DCommandLinkButton>
+#include <QObject>
 
-namespace core {
-namespace system {
-class MemInfo;
-}
-}
-
-DWIDGET_USE_NAMESPACE
-class ChartViewWidget;
-class MemStatViewWidget : public QWidget
+class ModelManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit MemStatViewWidget(QWidget *parent = nullptr);
+    explicit ModelManager(QObject *parent = nullptr);
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-
-public slots:
-    void fontChanged(const QFont &font);
-    void onModelUpdate();
-
-private:
-    void updateWidgetGeometry();
-
-private:
-    QColor memoryColor {"#00C5C0"};
-    QColor swapColor {"#FEDF19"};
-
-    ChartViewWidget *m_memChartWidget;
-    ChartViewWidget *m_swapChartWidget;
-
-    core::system::MemInfo *m_memInfo;
-
-    QFont m_font;
+    static ModelManager *instance();
 };
 
-#endif // MEM_STAT_VIEW_WIDGET_H
+#endif // MODEL_MANAGER_H

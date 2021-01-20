@@ -1,8 +1,8 @@
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:      leiyu <leiyu@uniontech.com>
+* Maintainer:  leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "mem.h"
-
+#include "private/mem_p.h"
 #include "common/common.h"
 
 #include <stdio.h>
@@ -49,6 +49,76 @@ MemInfo &MemInfo::operator=(const MemInfo &rhs)
 }
 MemInfo::~MemInfo()
 {
+}
+
+qulonglong MemInfo::memTotal() const
+{
+    return d->mem_total_kb;
+}
+
+qulonglong MemInfo::memFree() const
+{
+    return d->mem_free_kb;
+}
+
+qulonglong MemInfo::memAvailable() const
+{
+    return d->mem_avail_kb;
+}
+
+qulonglong MemInfo::buffers() const
+{
+    return d->buffers_kb;
+}
+
+qulonglong MemInfo::cached() const
+{
+    return d->cached_kb;
+}
+
+qulonglong MemInfo::active() const
+{
+    return d->active_kb;
+}
+
+qulonglong MemInfo::inactive() const
+{
+    return d->inactive_kb;
+}
+
+qulonglong MemInfo::swapTotal() const
+{
+    return d->swap_total_kb;
+}
+
+qulonglong MemInfo::swapFree() const
+{
+    return d->swap_free_kb;
+}
+
+qulonglong MemInfo::swapCached() const
+{
+    return d->swap_cached_kb;
+}
+
+qulonglong MemInfo::shmem() const
+{
+    return d->shmem_kb;
+}
+
+qulonglong MemInfo::slab() const
+{
+    return d->slab_kb;
+}
+
+qulonglong MemInfo::dirty() const
+{
+    return d->dirty_kb;
+}
+
+qulonglong MemInfo::mapped() const
+{
+    return d->mapped_kb;
 }
 
 void MemInfo::readMemInfo()

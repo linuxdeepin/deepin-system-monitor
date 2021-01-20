@@ -49,6 +49,8 @@ public:
     explicit SystemMonitor(QObject *parent = nullptr);
     virtual ~SystemMonitor();
 
+    static SystemMonitor *instance();
+
     SysInfo *sysInfo();
     DeviceDB *deviceDB();
     ProcessDB *processDB();

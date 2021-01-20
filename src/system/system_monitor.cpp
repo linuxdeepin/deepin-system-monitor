@@ -47,6 +47,11 @@ SystemMonitor::~SystemMonitor()
     delete m_processDB;
 }
 
+SystemMonitor *SystemMonitor::instance()
+{
+    return ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+}
+
 DeviceDB *SystemMonitor::SystemMonitor::deviceDB()
 {
     return m_deviceDB;

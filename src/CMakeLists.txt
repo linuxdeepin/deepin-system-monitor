@@ -135,8 +135,6 @@ set(HPP_MODEL
     model/cpu_stat_model.h
     model/cpu_list_model.h
     model/cpu_list_sort_filter_proxy_model.h
-    model/mem_info_model.h
-    model/mem_stat_model.h
     model/netif_info_model.h
     model/netif_stat_model.h
     model/netif_addr_model.h
@@ -144,6 +142,7 @@ set(HPP_MODEL
     model/block_dev_stat_model.h
     model/block_dev_info_model.h
     model/block_dev_info_sort_filter_proxy_model.h
+    model/model_manager.h
 )
 set(CPP_MODEL
     model/system_service_table_model.cpp
@@ -154,8 +153,6 @@ set(CPP_MODEL
     model/cpu_stat_model.cpp
     model/cpu_list_model.cpp
     model/cpu_list_sort_filter_proxy_model.cpp
-    model/mem_info_model.cpp
-    model/mem_stat_model.cpp
     model/netif_info_model.cpp
     model/netif_stat_model.cpp
     model/netif_addr_model.cpp
@@ -163,6 +160,7 @@ set(CPP_MODEL
     model/block_dev_info_model.cpp
     model/block_dev_stat_model.cpp
     model/block_dev_info_sort_filter_proxy_model.cpp
+    model/model_manager.cpp
 )
 
 set(HPP_GUI

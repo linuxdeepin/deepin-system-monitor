@@ -99,6 +99,7 @@ void ChartViewWidget::drawData1(QPainter *painter)
     if (m_listData1.size() <= 0)
         return;
 
+    painter->save();
     painter->setClipRect(m_chartRect);
 
     QPainterPath path;
@@ -109,6 +110,7 @@ void ChartViewWidget::drawData1(QPainter *painter)
 
     getPainterPathByData(m_listData1, path);
     painter->drawPath(path);
+    painter->restore();
 }
 
 void ChartViewWidget::drawData2(QPainter *painter)
@@ -116,6 +118,7 @@ void ChartViewWidget::drawData2(QPainter *painter)
     if (m_listData2.size() <= 0)
         return;
 
+    painter->save();
     painter->setClipRect(m_chartRect);
 
     QPainterPath path;
@@ -126,6 +129,7 @@ void ChartViewWidget::drawData2(QPainter *painter)
 
     getPainterPathByData(m_listData2, path);
     painter->drawPath(path);
+    painter->restore();
 }
 
 void ChartViewWidget::drawBackPixmap()

@@ -30,6 +30,12 @@ class Settings;
 class QPropertyAnimation;
 class MemInfoModel;
 
+namespace core {
+namespace system {
+class MemInfo;
+}
+}
+
 class MemoryMonitor : public QWidget
 {
     Q_OBJECT
@@ -83,7 +89,7 @@ private:
     int ringCenterPointerY = 70;
     int ringWidth = 6;
 
-    MemInfoModel *m_model {};
+    core::system::MemInfo *m_memInfo {};
 
     QFont m_titleFont;
     QFont m_contentFont;
@@ -91,6 +97,8 @@ private:
     QFont m_memPercentFont;
 
     qreal m_progress {};
+    qreal m_lastMemPercent = 0.;
+    qreal m_lastSwapPercent = 0.;
     QPropertyAnimation *m_animation {};
 
     Settings *m_settings;

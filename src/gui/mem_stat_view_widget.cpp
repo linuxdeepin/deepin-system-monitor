@@ -20,8 +20,10 @@
 */
 #include "mem_stat_view_widget.h"
 #include "chart_view_widget.h"
-#include "model/mem_info_model.h"
 #include "common/common.h"
+#include "system/system_monitor.h"
+#include "system/device_db.h"
+#include "system/mem.h"
 
 #include <QPainter>
 
@@ -29,6 +31,7 @@
 #include <DApplicationHelper>
 
 using namespace common::format;
+using namespace core::system;
 
 MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
 {
@@ -40,11 +43,9 @@ MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
     m_memChartWidget->setData1Color(memoryColor);
     m_swapChartWidget->setData1Color(swapColor);
 
-    TimePeriod period(TimePeriod::k1Min, {2, 0});
-    m_model = new MemInfoModel(period, this);
-
+    m_memInfo = DeviceDB::instance()->memInfo();
     onModelUpdate();
-    connect(m_model, &MemInfoModel::modelUpdated, this, &MemStatViewWidget::onModelUpdate);
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemStatViewWidget::onModelUpdate);
 }
 
 void MemStatViewWidget::fontChanged(const QFont &font)
@@ -57,18 +58,18 @@ void MemStatViewWidget::onModelUpdate()
 {
     QString memoryDetail = QString("%1(%2)")
                            .arg(tr("Memory Size"))
-                           .arg(formatUnit(m_model->memTotal() << 10, B, 1));
+                           .arg(formatUnit(m_memInfo->memTotal() << 10, B, 1));
     parent()->setProperty("detail", memoryDetail);
 
-    m_memChartWidget->addData1((m_model->memTotal() - m_model->memAvailable()) * 1.0 / m_model->memTotal());
-    m_swapChartWidget->addData1((m_model->swapTotal() - m_model->swapFree()) * 1.0 / m_model->swapTotal());
+    m_memChartWidget->addData1((m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1.0 / m_memInfo->memTotal());
+    m_swapChartWidget->addData1((m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1.0 / m_memInfo->swapTotal());
     updateWidgetGeometry();
 }
 
 void MemStatViewWidget::updateWidgetGeometry()
 {
     int avgWidth = this->width();
-    if (m_model->swapTotal() > 0) {
+    if (m_memInfo->swapTotal() > 0) {
         avgWidth = this->width() / 2 - 10;
         m_swapChartWidget->setVisible(true);
     } else {
