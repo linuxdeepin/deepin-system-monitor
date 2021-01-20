@@ -19,10 +19,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "chart_view_widget.h"
+#include "common/common.h"
 
 #include <QPainter>
 #include <DApplicationHelper>
 #include <DApplication>
+
+using namespace common::format;
 
 DWIDGET_USE_NAMESPACE
 const int allDatacount = 30;
@@ -33,6 +36,11 @@ ChartViewWidget::ChartViewWidget(QWidget *parent) : QWidget(parent)
             this, &ChartViewWidget::changeFont);
 }
 
+void ChartViewWidget::setSpeedAxis(bool speed)
+{
+    m_speedAxis = speed;
+}
+
 void ChartViewWidget::setData1Color(const QColor &color)
 {
     m_data1Color = color;
@@ -40,9 +48,17 @@ void ChartViewWidget::setData1Color(const QColor &color)
 
 void ChartViewWidget::addData1(qreal data)
 {
+    qreal maxdata = qMax(m_maxData1, data);
     m_listData1 << data;
-    if (m_listData1.size() > allDatacount + 10)
+    if (m_listData1.size() > allDatacount + 10) {
         m_listData1.pop_front();
+    }
+
+    if (!qFuzzyCompare(maxdata, m_maxData1)) {
+        m_maxData1 = maxdata;
+        if (m_speedAxis)
+            setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
+    }
 }
 
 void ChartViewWidget::setData2Color(const QColor &color)
@@ -52,9 +68,17 @@ void ChartViewWidget::setData2Color(const QColor &color)
 
 void ChartViewWidget::addData2(qreal data)
 {
+    qreal maxdata = qMax(m_maxData2, data);
     m_listData2 << data;
-    if (m_listData2.size() > allDatacount + 10)
+    if (m_listData2.size() > allDatacount + 10) {
         m_listData2.pop_front();
+    }
+
+    if (!qFuzzyCompare(maxdata, m_maxData2)) {
+        m_maxData2 = maxdata;
+        if (m_speedAxis)
+            setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
+    }
 }
 
 void ChartViewWidget::setAxisTitle(const QString &text)
@@ -74,17 +98,17 @@ void ChartViewWidget::resizeEvent(QResizeEvent *event)
     drawBackPixmap();
 }
 
-void ChartViewWidget::getPainterPathByData(const QList<qreal> &listData, QPainterPath &path)
+void ChartViewWidget::getPainterPathByData(const QList<qreal> &listData, QPainterPath &path, qreal maxYvalue)
 {
     qreal offsetX = 0;
     qreal distance = m_chartRect.width() * 1.0 / allDatacount;
     int dataCount = listData.size();
     int startIndex = qMax(0, dataCount - allDatacount - 5);
 
-    path.moveTo(offsetX, -m_chartRect.height() *listData[0]);
+    path.moveTo(offsetX, -m_chartRect.height() *listData[0] / maxYvalue);
     for (int i = dataCount - 1;  i > startIndex; i--) {
-        QPointF sp(offsetX, -m_chartRect.height() *listData[i]);
-        QPointF ep(offsetX - distance, -m_chartRect.height() * listData[i - 1]);
+        QPointF sp(offsetX, -m_chartRect.height() *listData[i] / maxYvalue);
+        QPointF ep(offsetX - distance, -m_chartRect.height() * listData[i - 1] / maxYvalue);
         offsetX -= distance;
 
         QPointF c1 = QPointF((sp.x() + ep.x()) / 2.0, sp.y());
@@ -108,7 +132,7 @@ void ChartViewWidget::drawData1(QPainter *painter)
     painter->setPen(QPen(m_data1Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->translate(m_chartRect.bottomRight());
 
-    getPainterPathByData(m_listData1, path);
+    getPainterPathByData(m_listData1, path, m_maxData1);
     painter->drawPath(path);
     painter->restore();
 }
@@ -127,7 +151,7 @@ void ChartViewWidget::drawData2(QPainter *painter)
     painter->setPen(QPen(m_data2Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->translate(m_chartRect.bottomRight());
 
-    getPainterPathByData(m_listData2, path);
+    getPainterPathByData(m_listData2, path, m_maxData2);
     painter->drawPath(path);
     painter->restore();
 }

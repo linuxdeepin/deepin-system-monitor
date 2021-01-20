@@ -36,7 +36,7 @@ public:
     void setData2Color(const QColor &color);
     void addData2(qreal data);
 
-    void setAxisTitle(const QString &text);
+    void setSpeedAxis(bool speed);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -50,7 +50,8 @@ private:
     void drawData1(QPainter *painter);
     void drawData2(QPainter *painter);
 
-    void getPainterPathByData(const QList<qreal> &listData, QPainterPath &path);
+    void setAxisTitle(const QString &text);
+    void getPainterPathByData(const QList<qreal> &listData, QPainterPath &path,  qreal maxYvalue);
 
 private:
     int gridSize = 10;
@@ -64,6 +65,9 @@ private:
     QColor m_data1Color = {"#00C5C0"};
     QColor m_data2Color = {"#FEDF19"};
 
+    bool  m_speedAxis = false;
+    qreal m_maxData1 = 1.0;
+    qreal m_maxData2 = 1.0;
     QList<qreal> m_listData1;
     QList<qreal> m_listData2;
 };
