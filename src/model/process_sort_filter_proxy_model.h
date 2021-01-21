@@ -53,13 +53,7 @@ protected:
      * @return Returns true if the item in the row indicated by the given row and parent should be included in the model; otherwise returns false
      */
     bool filterAcceptsRow(int row, const QModelIndex &parent) const override;
-    /**
-     * @brief Filters the column of specified parent with given pattern
-     * @param column The column to be filtered
-     * @param parent Parent index of the row
-     * @return Returns true if the item in the column indicated by the given column and parent should be included in the model; otherwise returns false
-     */
-    bool filterAcceptsColumn(int column, const QModelIndex &parent) const override;
+
     /**
      * @brief Compare two items with the specified index
      * @param left Index of the item to be compared on left side

@@ -328,6 +328,8 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             }
         }
         return {};
+    } else if (role == Qt::UserRole + 3) {
+        return proc.appType();
     }
     return {};
 }

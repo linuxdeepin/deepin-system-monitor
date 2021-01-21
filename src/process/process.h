@@ -74,6 +74,8 @@ public:
 
     pid_t pid() const;
 
+    int appType() const;
+
     qulonglong utime() const;
     qulonglong stime() const;
 

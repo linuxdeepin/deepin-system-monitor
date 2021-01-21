@@ -159,6 +159,7 @@ private:
     char state; // process state
     char __pad0[2];
 
+    int apptype;
     pid_t pid; // pid
     pid_t ppid; // parent process
     pid_t pgid; // process group id

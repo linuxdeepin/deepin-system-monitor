@@ -21,7 +21,6 @@
 #include "process_sort_filter_proxy_model.h"
 #include "process/process_db.h"
 #include "process_table_model.h"
-#include "wm/wm_window_list.h"
 
 #include "common/collator.h"
 #include "common/han_latin.h"
@@ -53,63 +52,52 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
 void ProcessSortFilterProxyModel::setFilterType(int type)
 {
     m_fileterType = type;
-    setFilterRegExp(QRegExp({m_search}, Qt::CaseInsensitive));
+    setFilterRegExp(filterRegExp());
 }
 
 // filters the row of specified parent with given pattern
 bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
-    QModelIndex pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
-    const QVariant &euid = ProcessDB::instance()->processEuid();
-    const QVariant &cpid = pid.data(Qt::UserRole);
-    const Process &process = ProcessDB::instance()->processSet()->getProcessById(cpid.toInt());
-
-    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
-
     bool filter = false;
-    if (m_fileterType == kNoFilter) {
+    const QModelIndex &pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
+    int apptype = pid.data(Qt::UserRole + 3).toInt();
+    if (m_fileterType == kNoFilter)
         filter = true;
-    } else if (m_fileterType == kFilterCurrentUser && euid == process.uid()) {
+    else if (m_fileterType == kFilterCurrentUser && apptype > kNoFilter)
         filter = true;
-    } else if (m_fileterType == kFilterApps
-               && euid == process.uid()
-               && (wmwindowList->isGuiApp(cpid.toInt())
-                   || wmwindowList->isTrayApp(cpid.toInt())
-                   || wmwindowList->isDesktopEntryApp(cpid.toInt()))) {
+    else if (m_fileterType == kFilterApps && apptype == kFilterApps)
         filter = true;
-    }
 
     if (!filter) return false;
 
-    // name, displayName, pid, user, pinyin
-    const QModelIndex &name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
-    const QModelIndex &user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
-
     bool rc = false;
+    const QModelIndex &name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
     // display name or name matches pattern
     if (name.isValid()) {
-        rc |= sourceModel()->data(name).toString().contains(filterRegExp());
-        rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(filterRegExp());
+        rc |= name.data().toString().contains(filterRegExp());
+        if (rc) return rc;
+
+        rc |= name.data(Qt::UserRole).toString().contains(filterRegExp());
+        if (rc) return rc;
+
         if (QLocale::system().language() == QLocale::Chinese) {
             // pinyin matches pattern
-            rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(m_hanwords);
+            rc |= name.data(Qt::UserRole).toString().contains(m_hanwords);
+            if (rc) return rc;
         }
     }
+
     // pid matches pattern
     if (pid.isValid())
-        rc |= sourceModel()->data(pid).toString().contains(filterRegExp());
+        rc |= pid.data().toString().contains(filterRegExp());
+    if (rc) return rc;
+
     // user name matches pattern
+    const QModelIndex &user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
     if (user.isValid())
-        rc |= sourceModel()->data(user).toString().contains(filterRegExp());
+        rc |= user.data().toString().contains(filterRegExp());
 
     return rc;
-}
-
-// filters the column of specified parent with given pattern
-bool ProcessSortFilterProxyModel::filterAcceptsColumn(int column, const QModelIndex &parent) const
-{
-    // no column filters here
-    return QSortFilterProxyModel::filterAcceptsColumn(column, parent);
 }
 
 // compare two items with the specified index
@@ -119,32 +107,24 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
     switch (sortcolumn) {
     case ProcessTableModel::kProcessNameColumn: {
         // sort by name first, then by cpu
-        auto a = left.data(Qt::DisplayRole).toString();
-        auto b = right.data(Qt::DisplayRole).toString();
+        const QString &a = left.data(Qt::DisplayRole).toString();
+        const QString &b = right.data(Qt::DisplayRole).toString();
         // trick: fix slow sorting issue
         if (a.length() == 0 || b.length() == 0) {
             return a < b;
         }
-        if (a.at(0) == b.at(0) && a == b) {
+        if (a == b) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole) <
                    right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole);
         } else {
-            if (a.at(0).isLetterOrNumber() &&
-                    b.at(0).isLetterOrNumber() &&
-                    a.at(0) != b.at(0)) {
-                return a < b;
-            } else {
-                return util::common::Collator::instance()->compare(a, b) < 0;
-            }
+            return a < b;
         }
     }
     case ProcessTableModel::kProcessUserColumn: {
         // compare user name
-        return util::common::Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                                           right.data(Qt::DisplayRole).toString())
-               < 0;
+        return left.data(Qt::DisplayRole).toString() < right.data(Qt::DisplayRole).toString();
     }
     case ProcessTableModel::kProcessMemoryColumn:
     case ProcessTableModel::kProcessShareMemoryColumn:
