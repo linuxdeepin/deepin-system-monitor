@@ -46,16 +46,16 @@ void ChartViewWidget::setData1Color(const QColor &color)
     m_data1Color = color;
 }
 
-void ChartViewWidget::addData1(qreal data)
+void ChartViewWidget::addData1(QVariant data)
 {
-    qreal maxdata = qMax(m_maxData1, data);
+    QVariant maxdata = qMax(m_maxData1, data);
     m_listData1 << data;
     if (m_listData1.size() > allDatacount + 10) {
         m_listData1.pop_front();
     }
 
-    if (!qFuzzyCompare(maxdata, m_maxData1)) {
-        m_maxData1 = maxdata;
+    if (maxdata != m_maxData1) {
+        m_maxData1 = QVariant(maxdata.toLongLong() * 1.1);
         if (m_speedAxis)
             setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
     }
@@ -66,17 +66,16 @@ void ChartViewWidget::setData2Color(const QColor &color)
     m_data2Color = color;
 }
 
-
-void ChartViewWidget::addData2(qreal data)
+void ChartViewWidget::addData2(QVariant data)
 {
-    qreal maxdata = qMax(m_maxData2, data);
+    QVariant maxdata = qMax(m_maxData2, data);
     m_listData2 << data;
     if (m_listData2.size() > allDatacount + 10) {
         m_listData2.pop_front();
     }
 
-    if (!qFuzzyCompare(maxdata, m_maxData2)) {
-        m_maxData2 = maxdata;
+    if (maxdata != m_maxData2) {
+        m_maxData2 = QVariant(maxdata.toLongLong() * 1.1);
         if (m_speedAxis)
             setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
     }
@@ -99,17 +98,31 @@ void ChartViewWidget::resizeEvent(QResizeEvent *event)
     drawBackPixmap();
 }
 
-void ChartViewWidget::getPainterPathByData(const QList<qreal> &listData, QPainterPath &path, qreal maxYvalue)
+void ChartViewWidget::getPainterPathByData(const QList<QVariant> &listData, QPainterPath &path, QVariant maxYvalue)
 {
     qreal offsetX = 0;
     qreal distance = m_chartRect.width() * 1.0 / allDatacount;
     int dataCount = listData.size();
     int startIndex = qMax(0, dataCount - allDatacount - 5);
 
-    path.moveTo(offsetX, -m_chartRect.height() *listData[0] / maxYvalue);
+    qlonglong maxL = maxYvalue.toLongLong();
+    if (listData[0].canConvert(QMetaType::Double))
+        path.moveTo(offsetX, -m_chartRect.height() *listData[0].toDouble() * 1.0 / maxL);
+    else
+        path.moveTo(offsetX, -m_chartRect.height() *listData[0].toLongLong() * 1.0 / maxL);
+
     for (int i = dataCount - 1;  i > startIndex; i--) {
-        QPointF sp(offsetX, -m_chartRect.height() *listData[i] / maxYvalue);
-        QPointF ep(offsetX - distance, -m_chartRect.height() * listData[i - 1] / maxYvalue);
+        QPointF sp;
+        QPointF ep;
+
+        if (listData[0].canConvert(QMetaType::Double)) {
+            sp = QPointF(offsetX, -m_chartRect.height() * listData[i].toDouble() / maxL);
+            ep = QPointF(offsetX - distance, -m_chartRect.height() * listData[i - 1].toDouble() / maxL);
+        } else {
+            sp = QPointF(offsetX, -m_chartRect.height() * listData[i].toLongLong() / maxL);
+            ep = QPointF(offsetX - distance, -m_chartRect.height() * listData[i - 1].toLongLong() / maxL);
+        }
+
         offsetX -= distance;
 
         QPointF c1 = QPointF((sp.x() + ep.x()) / 2.0, sp.y());

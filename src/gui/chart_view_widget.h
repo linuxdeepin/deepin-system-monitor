@@ -22,6 +22,7 @@
 #define CHART_VIEW_WIDGET_H
 
 #include <QWidget>
+#include <QVariant>
 
 class ChartViewWidget : public QWidget
 {
@@ -31,10 +32,10 @@ public:
 
 public:
     void setData1Color(const QColor &color);
-    void addData1(qreal data);
+    void addData1(QVariant data);
 
     void setData2Color(const QColor &color);
-    void addData2(qreal data);
+    void addData2(QVariant data);
 
     void setSpeedAxis(bool speed);
 
@@ -51,7 +52,7 @@ private:
     void drawData2(QPainter *painter);
 
     void setAxisTitle(const QString &text);
-    void getPainterPathByData(const QList<qreal> &listData, QPainterPath &path,  qreal maxYvalue);
+    void getPainterPathByData(const QList<QVariant> &listData, QPainterPath &path,  QVariant maxYvalue);
 
 private:
     int gridSize = 10;
@@ -66,10 +67,10 @@ private:
     QColor m_data2Color = {"#FEDF19"};
 
     bool  m_speedAxis = false;
-    qreal m_maxData1 = 1.0;
-    qreal m_maxData2 = 1.0;
-    QList<qreal> m_listData1;
-    QList<qreal> m_listData2;
+    QVariant m_maxData1 = 1;
+    QVariant m_maxData2 = 1;
+    QList<QVariant> m_listData1;
+    QList<QVariant> m_listData2;
 };
 
 #endif // CHART_VIEW_WIDGET_H
