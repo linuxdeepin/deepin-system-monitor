@@ -39,6 +39,7 @@ ChartViewWidget::ChartViewWidget(QWidget *parent) : QWidget(parent)
 void ChartViewWidget::setSpeedAxis(bool speed)
 {
     m_speedAxis = speed;
+    setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
 }
 
 void ChartViewWidget::setData1Color(const QColor &color)
@@ -84,6 +85,7 @@ void ChartViewWidget::addData2(QVariant data)
 void ChartViewWidget::setAxisTitle(const QString &text)
 {
     m_axisTitle = text;
+    update();
 }
 
 void ChartViewWidget::changeFont(const QFont &font)
@@ -185,18 +187,12 @@ void ChartViewWidget::drawBackPixmap()
     int penSize = 1;
     painter.setPen(QPen(frameColor, penSize));
     painter.setBrush(Qt::NoBrush);
-
     painter.setFont(m_textfont);
-    painter.drawText(0, 0, this->width(), painter.fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, m_axisTitle);
 
     int gridX = penSize;
     int gridY = penSize + painter.fontMetrics().height();
     int gridWidth = this->width() - 2 * penSize;
     int gridHeight = this->height() - 2 * gridY;
-
-    QRect bottomTextRect(0, this->height() - painter.fontMetrics().height(), this->width(), painter.fontMetrics().height());
-    painter.drawText(bottomTextRect, Qt::AlignRight | Qt::AlignVCenter, "0");
-    painter.drawText(bottomTextRect, Qt::AlignLeft | Qt::AlignVCenter, tr("60 seconds"));
 
     QPainterPath framePath;
     painter.setOpacity(0.3);
@@ -225,6 +221,19 @@ void ChartViewWidget::drawBackPixmap()
     }
 }
 
+void ChartViewWidget::drawAxisText(QPainter *painter)
+{
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    painter->setPen(palette.color(DPalette::TextTips));
+    painter->setFont(m_textfont);
+    painter->drawText(0, 0, this->width(), painter->fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, m_axisTitle);
+
+    QRect bottomTextRect(0, this->height() - painter->fontMetrics().height(), this->width(), painter->fontMetrics().height());
+    painter->drawText(bottomTextRect, Qt::AlignRight | Qt::AlignVCenter, "0");
+    painter->drawText(bottomTextRect, Qt::AlignLeft | Qt::AlignVCenter, tr("60 seconds"));
+}
+
 void ChartViewWidget::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
@@ -232,4 +241,5 @@ void ChartViewWidget::paintEvent(QPaintEvent *event)
     painter.drawPixmap(0, 0, m_backPixmap);
     drawData1(&painter);
     drawData2(&painter);
+    drawAxisText(&painter);
 }

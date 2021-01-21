@@ -50,6 +50,7 @@ private:
     void drawBackPixmap();
     void drawData1(QPainter *painter);
     void drawData2(QPainter *painter);
+    void drawAxisText(QPainter *painter);
 
     void setAxisTitle(const QString &text);
     void getPainterPathByData(const QList<QVariant> &listData, QPainterPath &path,  QVariant maxYvalue);
