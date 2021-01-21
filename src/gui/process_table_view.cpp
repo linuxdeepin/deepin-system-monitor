@@ -539,9 +539,9 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(setCustomPrioAction, &QAction::triggered, [ = ]() { customizeProcessPriority(); });
 
     // show exec location action
-    auto *openExecDirAction = m_contextMenu->addAction(
-                                  DApplication::translate("Process.Table.Context.Menu", "View command location"));
-    connect(openExecDirAction, &QAction::triggered, this, &ProcessTableView::openExecDirWithFM);
+//    auto *openExecDirAction = m_contextMenu->addAction(
+//                                  DApplication::translate("Process.Table.Context.Menu", "View command location"));
+//    connect(openExecDirAction, &QAction::triggered, this, &ProcessTableView::openExecDirWithFM);
     // show property action
     auto *showAttrAction = m_contextMenu->addAction(
                                DApplication::translate("Process.Table.Context.Menu", "Properties"));
