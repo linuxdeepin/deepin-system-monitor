@@ -32,10 +32,10 @@ public:
 
 public:
     void setData1Color(const QColor &color);
-    void addData1(QVariant data);
+    void addData1(const QVariant &data);
 
     void setData2Color(const QColor &color);
-    void addData2(QVariant data);
+    void addData2(const QVariant &data);
 
     void setSpeedAxis(bool speed);
 
@@ -68,8 +68,11 @@ private:
     QColor m_data2Color = {"#FEDF19"};
 
     bool  m_speedAxis = false;
+
+    QVariant m_maxData  = 1;
     QVariant m_maxData1 = 1;
     QVariant m_maxData2 = 1;
+
     QList<QVariant> m_listData1;
     QList<QVariant> m_listData2;
 };

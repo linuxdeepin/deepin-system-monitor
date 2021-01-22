@@ -47,18 +47,20 @@ void ChartViewWidget::setData1Color(const QColor &color)
     m_data1Color = color;
 }
 
-void ChartViewWidget::addData1(QVariant data)
+void ChartViewWidget::addData1(const QVariant &data)
 {
-    QVariant maxdata = qMax(m_maxData1, data);
     m_listData1 << data;
-    if (m_listData1.size() > allDatacount + 10) {
+    if (m_listData1.size() > allDatacount + 1) {
         m_listData1.pop_front();
     }
 
+    const QVariant &maxdata = *std::max_element(m_listData1.begin(), m_listData1.end());
     if (maxdata != m_maxData1) {
         m_maxData1 = QVariant(maxdata.toLongLong() * 1.1);
+        m_maxData = qMax(m_maxData1, m_maxData2);
+
         if (m_speedAxis)
-            setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
+            setAxisTitle(formatUnit(m_maxData, B, 1, true));
     }
 }
 
@@ -67,18 +69,20 @@ void ChartViewWidget::setData2Color(const QColor &color)
     m_data2Color = color;
 }
 
-void ChartViewWidget::addData2(QVariant data)
+void ChartViewWidget::addData2(const QVariant &data)
 {
-    QVariant maxdata = qMax(m_maxData2, data);
     m_listData2 << data;
-    if (m_listData2.size() > allDatacount + 10) {
+    if (m_listData2.size() > allDatacount + 1) {
         m_listData2.pop_front();
     }
 
+    const QVariant &maxdata = *std::max_element(m_listData2.begin(), m_listData2.end());
     if (maxdata != m_maxData2) {
         m_maxData2 = QVariant(maxdata.toLongLong() * 1.1);
+        m_maxData = qMax(m_maxData1, m_maxData2);
+
         if (m_speedAxis)
-            setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
+            setAxisTitle(formatUnit(m_maxData, B, 1, true));
     }
 }
 
@@ -105,19 +109,20 @@ void ChartViewWidget::getPainterPathByData(const QList<QVariant> &listData, QPai
     qreal offsetX = 0;
     qreal distance = m_chartRect.width() * 1.0 / allDatacount;
     int dataCount = listData.size();
-    int startIndex = qMax(0, dataCount - allDatacount - 5);
+    int startIndex = qMax(0, dataCount - allDatacount - 1);
 
     qlonglong maxL = maxYvalue.toLongLong();
-    if (listData[0].canConvert(QMetaType::Double))
-        path.moveTo(offsetX, -m_chartRect.height() *listData[0].toDouble() * 1.0 / maxL);
+    const QVariant &lastData = listData.last();
+    if (lastData.canConvert(QMetaType::Double))
+        path.moveTo(offsetX, -m_chartRect.height() * lastData.toDouble() * 1.0 / maxL);
     else
-        path.moveTo(offsetX, -m_chartRect.height() *listData[0].toLongLong() * 1.0 / maxL);
+        path.moveTo(offsetX, -m_chartRect.height() * lastData.toLongLong() * 1.0 / maxL);
 
     for (int i = dataCount - 1;  i > startIndex; i--) {
         QPointF sp;
         QPointF ep;
 
-        if (listData[0].canConvert(QMetaType::Double)) {
+        if (listData[i].canConvert(QMetaType::Double)) {
             sp = QPointF(offsetX, -m_chartRect.height() * listData[i].toDouble() / maxL);
             ep = QPointF(offsetX - distance, -m_chartRect.height() * listData[i - 1].toDouble() / maxL);
         } else {
@@ -141,14 +146,14 @@ void ChartViewWidget::drawData1(QPainter *painter)
 
     painter->save();
     painter->setClipRect(m_chartRect);
+    painter->setRenderHints(QPainter::Antialiasing, false);
 
     QPainterPath path;
-    painter->setRenderHints(QPainter::Antialiasing, true);
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(m_data1Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->translate(m_chartRect.bottomRight());
 
-    getPainterPathByData(m_listData1, path, m_maxData1);
+    getPainterPathByData(m_listData1, path, m_maxData);
     painter->drawPath(path);
     painter->restore();
 }
@@ -160,14 +165,14 @@ void ChartViewWidget::drawData2(QPainter *painter)
 
     painter->save();
     painter->setClipRect(m_chartRect);
+    painter->setRenderHints(QPainter::Antialiasing, false);
 
     QPainterPath path;
-    painter->setRenderHints(QPainter::Antialiasing, true);
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(m_data2Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->translate(m_chartRect.bottomRight());
 
-    getPainterPathByData(m_listData2, path, m_maxData2);
+    getPainterPathByData(m_listData2, path, m_maxData);
     painter->drawPath(path);
     painter->restore();
 }
@@ -237,8 +242,11 @@ void ChartViewWidget::drawAxisText(QPainter *painter)
 void ChartViewWidget::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
+
     QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, true);
     painter.drawPixmap(0, 0, m_backPixmap);
+
     drawData1(&painter);
     drawData2(&painter);
     drawAxisText(&painter);
