@@ -150,11 +150,7 @@ private:
      * @brief Initialize connections
      */
     void initConnections();
-    /**
-     * @brief Error handler
-     * @param ec Error context
-     */
-    void handleTaskError(const ErrorContext &ec) const;
+
     /**
      * @brief Adjust search result tip label visibility and position
      */

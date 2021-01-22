@@ -56,6 +56,7 @@ protected:
     {
         return m_progress;
     }
+
     void setProgress(qreal p)
     {
         m_progress = p;

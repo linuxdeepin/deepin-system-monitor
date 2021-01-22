@@ -336,13 +336,6 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
     watcher->setFuture(fu);
 }
 
-// handle task error, show error dialog
-void SystemServiceTableView::handleTaskError(const ErrorContext &ec) const
-{
-    auto *mainWindow = gApp->mainWindow();
-    ErrorDialog::show(mainWindow, ec.getErrorName(), ec.getErrorMessage());
-}
-
 // adjust search result tip label's visibility & positon
 void SystemServiceTableView::adjustInfoLabelVisibility()
 {
@@ -596,10 +589,7 @@ void SystemServiceTableView::initConnections()
     connect(hdr, &QHeaderView::customContextMenuRequested, this,
             &SystemServiceTableView::displayHeaderContextMenu);
 
-    auto *mw = gApp->mainWindow();
-    Q_ASSERT(mw != nullptr);
-    // filter service table when search input text changed
-    connect(mw->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
+    connect(gApp->mainWindow()->toolbar(), &Toolbar::search, this, &SystemServiceTableView::search);
 
     // call start service handler when start service menu item triggered
     connect(m_startServiceAction, &QAction::triggered, this, &SystemServiceTableView::startService);
@@ -707,9 +697,7 @@ void SystemServiceTableView::initConnections()
     // connect restart service handler to restart shortcut's activated signal
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 
-    // initialize service list
-    auto *tbar = mw->toolbar();
-    connect(tbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
+    connect(gApp->mainWindow()->toolbar(), &Toolbar::serviceTabButtonClicked, this, [ = ]() {
         if (!defer_initialized) {
             auto *mgr = ServiceManager::instance();
             mgr->updateServiceList();

@@ -20,7 +20,6 @@
 
 #include "smooth_curve_generator.h"
 #include "gui/ui_common.h"
-#include "constant.h"
 #include "settings.h"
 #include "common/common.h"
 #include "model/cpu_info_model.h"

@@ -20,7 +20,6 @@
 
 #include "smooth_curve_generator.h"
 #include "common/common.h"
-#include "constant.h"
 #include "common/thread_manager.h"
 #include "system/system_monitor_thread.h"
 #include "system/system_monitor.h"

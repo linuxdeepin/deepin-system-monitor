@@ -1,8 +1,8 @@
 /*
 * Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
-* Author:      Wang Yong <wangyong@deepin.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:      leiyu <maojunjie@uniontech.com>
+* Maintainer:  leiyu <maojunjie@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,9 @@
 #define SETTINGS_H
 
 #include <QString>
-#include <QSettings>
-
-#include <mutex>
-#include <thread>
+#include <QVariant>
 
 const QString kSettingKeyDisplayMode = {"display_mode"};
-const QString kSettingKeyThemeType = {"theme_type"};
 const QString kSettingKeyWindowWidth = {"window_width"};
 const QString kSettingKeyWindowHeight = {"window_height"};
 const QString kSettingKeyProcessTabIndex = {"process_tab_index"};
@@ -35,42 +31,20 @@ const QString kSettingKeyProcessAttributeDialogHeight = {"process_attribute_dial
 const QString kSettingKeyTimePeriod = {"time_period"};
 
 class QSettings;
-
-class Settings : public QObject
+class Settings
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(Settings)
-
 public:
-    inline static Settings *instance()
-    {
-        Settings *sin = m_instance.load();
-        if (!sin) {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            sin = m_instance.load();
-            if (!sin) {
-                sin = new Settings();
-                m_instance.store(sin);
-            }
-        }
-        return sin;
-    }
-
-    static QString configPath();
-    QVariant getOption(const QString &key);
-    void init();
-    void setOption(const QString &key, const QVariant &value);
-    inline void flush() { m_settings->sync(); }
-
-private:
-    explicit Settings(QObject *parent = nullptr);
+    explicit Settings();
     ~Settings();
 
-    QSettings *m_settings;
-    QString m_groupName;
+    static Settings *instance();
+    void flush();
 
-    static std::atomic<Settings *> m_instance;
-    static std::mutex m_mutex;
+    QVariant getOption(const QString &key, const QVariant &defaultValue = QVariant());
+    void setOption(const QString &key, const QVariant &value);
+
+private:
+    QSettings *m_settings;
 };
 
 #endif  // SETTINGS_H

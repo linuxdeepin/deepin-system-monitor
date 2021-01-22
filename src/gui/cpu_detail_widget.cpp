@@ -21,7 +21,6 @@
 #include "model/cpu_info_model.h"
 #include "smooth_curve_generator.h"
 #include "common/common.h"
-#include "constant.h"
 #include "process/process_db.h"
 #include "system/device_db.h"
 #include "model/cpu_info_model.h"

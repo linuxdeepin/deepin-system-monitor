@@ -18,7 +18,6 @@
 
 #include "environments.h"
 #include "accessible.h"
-#include "constant.h"
 #include "common/common.h"
 #include "application.h"
 #include "settings.h"
@@ -89,7 +88,6 @@ int main(int argc, char *argv[])
                          &mw,
                          &MainWindow::activateWindow);
 
-        mw.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         Dtk::Widget::moveToCenter(&mw);
         mw.show();
 

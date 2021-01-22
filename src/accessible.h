@@ -56,7 +56,6 @@
 #include "memory_monitor.h"
 #include "network_monitor.h"
 #include "cpu_monitor.h"
-#include "disk_monitor.h"
 
 #include <DSwitchButton>
 #include <DBackgroundGroup>
@@ -111,7 +110,6 @@ SET_FORM_ACCESSIBLE(CompactDiskMonitor, "CompactDiskMonitor")
 SET_FORM_ACCESSIBLE(CompactMemoryMonitor, "CompactMemoryMonitor")
 SET_FORM_ACCESSIBLE(CompactNetworkMonitor, "CompactNetworkMonitor")
 SET_FORM_ACCESSIBLE(CpuMonitor, "CpuMonitor")
-SET_FORM_ACCESSIBLE(DiskMonitor, "DiskMonitor")
 SET_FORM_ACCESSIBLE(MemoryMonitor, "MemoryMonitor")
 SET_FORM_ACCESSIBLE(NetworkMonitor, "NetworkMonitor")
 
@@ -172,7 +170,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CompactNetworkMonitor);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CpuMonitor);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MemoryMonitor);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DiskMonitor);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), NetworkMonitor);
 
     //  Qt 控件

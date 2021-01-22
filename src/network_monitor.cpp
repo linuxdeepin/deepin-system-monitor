@@ -23,7 +23,6 @@
 #include "common/thread_manager.h"
 #include "common/common.h"
 #include "system/system_monitor_thread.h"
-#include "constant.h"
 #include "system/device_db.h"
 #include "system/net_info.h"
 

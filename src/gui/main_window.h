@@ -21,15 +21,11 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#include "ui_common.h"
-
 #include <DMainWindow>
 #include <DShadowLine>
-#include <DSpinner>
 #include <DStackedWidget>
 
 #include <mutex>
-#include <thread>
 
 DWIDGET_USE_NAMESPACE
 
@@ -37,11 +33,7 @@ class Toolbar;
 class SystemServicePageWidget;
 class ProcessPageWidget;
 class Settings;
-class QTimer;
 
-/**
- * @brief The MainWindow class
- */
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
@@ -53,9 +45,6 @@ public:
      * @param parent Parent Object
      */
     explicit MainWindow(QWidget *parent = nullptr);
-    /**
-     * @brief Destructor
-    */
     ~MainWindow() override;
 
     /**
@@ -63,16 +52,6 @@ public:
      * @return Toolbar instance
      */
     inline Toolbar *toolbar() const { return m_toolbar; }
-    /**
-     * @brief processPage Get process page instance
-     * @return Process page instance
-     */
-    inline ProcessPageWidget *processPage() const { return m_procPage; }
-    /**
-     * @brief systemServicePage Get service page instance
-     * @return Service page instance
-     */
-    inline SystemServicePageWidget *systemServicePage() const { return m_svcPage; }
 
 Q_SIGNALS:
     /**
@@ -83,7 +62,7 @@ Q_SIGNALS:
      * @brief Display mode changed signal
      * @param mode Display mode
      */
-    void displayModeChanged(DisplayMode mode);
+    void displayModeChanged(int mode);
     /**
      * @brief Loading status changed signal
      * @param loading Loading state flag
@@ -94,16 +73,17 @@ public Q_SLOTS:
     /**
      * @brief Initialize ui components
      */
-    inline void initDisplay()
-    {
-        initUI();
-        initConnections();
-    }
+    void initDisplay();
 
     /**
      * @brief Show shortcut help dialog
      */
     void displayShortcutHelpDialog();
+
+    /**
+     * @brief onLoadStatusChanged
+     */
+    void onLoadStatusChanged(bool loading);
 
 protected:
     /**
@@ -119,12 +99,12 @@ protected:
      * @brief resizeEvent Resize event handler
      * @param event Resize event
      */
-    virtual void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
     /**
      * @brief closeEvent Close event handler
      * @param event Close event
      */
-    virtual void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
     /**
      * @brief eventFilter Filters events if this object has been installed as an event filter for the watched object.
      * @param obj Object being watched
@@ -132,39 +112,24 @@ protected:
      * @return To filter the event out, return true; otherwise return false
      */
     bool eventFilter(QObject *obj, QEvent *event) override;
+
     /**
      * @brief showEvent Show event handler
      * @param event Show event
      */
-    virtual void showEvent(QShowEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
-    // Global config settings instance
-    Settings *m_settings;
+    Settings *m_settings = nullptr;
 
-    // Interactive kill application (select by window) action instance
-    QAction *m_killAction {};
-    // Display mode menu (compact/detail)
-    DMenu *m_modeMenu {};
-
-    // Toolbar instance
-    Toolbar *m_toolbar {};
-    // Stacked widget to hold process & service page
-    DStackedWidget *m_pages {};
-    // Process page widget
-    ProcessPageWidget *m_procPage {};
-    // Service page widget
-    SystemServicePageWidget *m_svcPage {};
-    // Shadow widget under titlebar
-    DShadowLine *m_tbShadow {};
-
-    // Last focused widget
-    QWidget *m_focusedWidget {};
-
-    // loading status flag
-    bool m_loading {true};
+    Toolbar *m_toolbar = nullptr;
+    DStackedWidget *m_pages = nullptr;
+    ProcessPageWidget *m_procPage = nullptr;
+    SystemServicePageWidget *m_svcPage = nullptr;
 
     std::once_flag oflag;
+    DShadowLine *m_tbShadow  = nullptr;
+    QWidget *m_focusedWidget = nullptr;
 };
 
 #endif  // MAIN_WINDOW_H

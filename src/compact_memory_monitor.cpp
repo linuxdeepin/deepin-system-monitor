@@ -19,7 +19,6 @@
 #include "compact_memory_monitor.h"
 
 #include "common/common.h"
-#include "constant.h"
 #include "system/mem.h"
 #include "system/device_db.h"
 #include "system/system_monitor.h"

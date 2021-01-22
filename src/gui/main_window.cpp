@@ -26,59 +26,46 @@
 #include "toolbar.h"
 #include "common/common.h"
 #include "settings.h"
-#include "constant.h"
 #include "common/perf.h"
 
 #include <DApplicationHelper>
-#include <DHiDPIHelper>
-#include <DShadowLine>
-#include <DStackedWidget>
 #include <DTitlebar>
-#include <DPalette>
 
-#include <QHBoxLayout>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
-#include <QDebug>
-#include <QTimer>
-#include <QResizeEvent>
+#include <QKeyEvent>
 
-DGUI_USE_NAMESPACE
-
-// constructor
+const int WINDOW_MIN_HEIGHT = 750;
+const int WINDOW_MIN_WIDTH = 1000;
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
-    // get global setings instance
     m_settings = Settings::instance();
-    if (m_settings)
-        m_settings->init();
-
-    // listen on loading status changed signal
-    connect(this, &MainWindow::loadingStatusChanged, [ = ](bool loading) {
-        if (loading) {
-            // disable titlebar menu
-            titlebar()->setMenuDisabled(true);
-        } else {
-            // enable titlebar menu
-            titlebar()->setMenuDisabled(false);
-        }
-    });
+    setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
+    connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 }
 
-// destructor
 MainWindow::~MainWindow()
 {
     PERF_PRINT_END("POINT-02");
 }
 
-// show shortcut help dialog
+void MainWindow::initDisplay()
+{
+    initUI();
+    initConnections();
+}
+
+void MainWindow::onLoadStatusChanged(bool loading)
+{
+    titlebar()->setMenuDisabled(loading);
+}
+
 void MainWindow::displayShortcutHelpDialog()
 {
-    // calculate mainwindow central point
-    QRect rect = window()->geometry();
+    QRect rect = this->geometry();
     QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 
     QJsonObject shortcutObj;
@@ -184,7 +171,7 @@ void MainWindow::displayShortcutHelpDialog()
     QJsonDocument doc(shortcutObj);
 
     // fork new shortcut display process
-    QProcess *shortcutViewProcess = new QProcess();
+    QProcess shortcutViewProcess;
     QStringList shortcutString;
     // shortcut help json formatted text param
     QString param1 = "-j=" + QString(doc.toJson().data());
@@ -193,35 +180,18 @@ void MainWindow::displayShortcutHelpDialog()
     shortcutString << param1 << param2;
 
     // detach this process
-    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
-
-    // delete process instance after successfully forked shortcut display process
-    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
 }
 
 // initialize ui components
 void MainWindow::initUI()
 {
-    // initialize loading status flag
-    m_loading = true;
     // trigger loading status changed signal for once
-    Q_EMIT loadingStatusChanged(m_loading);
+    Q_EMIT loadingStatusChanged(true);
 
     // default window size
-    int width = Constant::WINDOW_MIN_WIDTH;
-    int height = Constant::WINDOW_MIN_HEIGHT;
-
-    // if settings has window width saved, restore with saved width
-    if (m_settings->getOption(kSettingKeyWindowWidth).isValid()) {
-        width = m_settings->getOption(kSettingKeyWindowWidth).toInt();
-    }
-
-    // if settings has window height saved, restore with saved height
-    if (m_settings->getOption(kSettingKeyWindowHeight).isValid()) {
-        height = m_settings->getOption(kSettingKeyWindowHeight).toInt();
-    }
-
-    // resize main window
+    int width = m_settings->getOption(kSettingKeyWindowWidth, WINDOW_MIN_WIDTH).toInt();
+    int height = m_settings->getOption(kSettingKeyWindowHeight, WINDOW_MIN_HEIGHT).toInt();
     resize(width, height);
 
     // set titlebar icon
@@ -242,48 +212,33 @@ void MainWindow::initUI()
     setTabOrder(titlebar(), m_toolbar);
 
     // kill process menu item
-    m_killAction = new QAction(
-        DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
+    QAction *killAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     // control + alt + k
-    m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+    killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
     // emit process kill requested signal if kill process menu item triggered
-    connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
+    connect(killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 
     // display mode menu item
-    m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
-    QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
+    DMenu *modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
+    QActionGroup *modeGroup = new QActionGroup(modeMenu);
     // set group items auto exclusive
     modeGroup->setExclusive(true);
     // expand mode sub menu item
-    auto *expandModeAction =
-        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Expand"), modeGroup);
+    auto *expandModeAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Expand"), modeGroup);
     expandModeAction->setCheckable(true);
     // compact mode sub menu item
-    auto *compactModeAction =
-        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
+    auto *compactModeAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
     compactModeAction->setCheckable(true);
     // add compact & expand sub menus into display mode menu as a group
-    m_modeMenu->addAction(expandModeAction);
-    m_modeMenu->addAction(compactModeAction);
+    modeMenu->addAction(expandModeAction);
+    modeMenu->addAction(compactModeAction);
 
     // load display mode backup setting
-    QVariant vmode = m_settings->getOption(kSettingKeyDisplayMode);
-    if (vmode.isValid()) {
-        bool ok = false;
-        int mode = vmode.toInt(&ok);
-        if (ok) {
-            // if backup settings has display mode saved, use saved setting
-            if (mode == kDisplayModeExpand) {
-                expandModeAction->setChecked(true);
-            } else if (mode == kDisplayModeCompact) {
-                compactModeAction->setChecked(true);
-            }
-        } else {
-            // if no backup settings saved or setting load failed, show expand mode by default
-            expandModeAction->setChecked(true);
-            m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
-            Q_EMIT displayModeChanged(kDisplayModeExpand);
-        }
+    int mode = m_settings->getOption(kSettingKeyDisplayMode).toInt();
+    if (mode == kDisplayModeExpand) {
+        expandModeAction->setChecked(true);
+    } else if (mode == kDisplayModeCompact) {
+        compactModeAction->setChecked(true);
     }
 
     // emit display mode changed signal if ether expand or compact menu item triggered
@@ -296,14 +251,9 @@ void MainWindow::initUI()
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
 
-    menu->addAction(m_killAction);
+    menu->addAction(killAction);
     menu->addSeparator();
-    menu->addMenu(m_modeMenu);
-
-    // listen on theme changed signal
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
-    [ = ]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
+    menu->addMenu(modeMenu);
 
     // stacked widget instance to hold process & service pages
     m_pages = new DStackedWidget(this);
@@ -317,60 +267,43 @@ void MainWindow::initUI()
     m_tbShadow->move(0, 0);
     m_tbShadow->show();
 
-    // change application highlight color to themed highlight color
-    auto pa = DApplicationHelper::instance()->applicationPalette();
-    QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
-    pa.setColor(DPalette::Highlight, hlBrush.color());
-
-    // process page widget
     m_procPage = new ProcessPageWidget(m_pages);
-    // service page widget
     m_svcPage = new SystemServicePageWidget(m_pages);
+
     m_pages->setContentsMargins(0, 0, 0, 0);
     m_pages->addWidget(m_procPage);
     m_pages->addWidget(m_svcPage);
 
-    // raise shadow widget in case being corvered by other children widgets
     m_tbShadow->raise();
 
-    // finally emit loading status changed signal to finished state
-    m_loading = false;
-    Q_EMIT loadingStatusChanged(m_loading);
-
-    // install event filter for main window widget
+    Q_EMIT loadingStatusChanged(false);
     installEventFilter(this);
 }
 
 // initialize connections
 void MainWindow::initConnections()
 {
-    // listen on process button triggered signal
-    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
+    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Services")).arg(DApplication::translate("Title.Bar.Switch", "Processes")));
-        // clear search text input widget
         m_toolbar->clearSearchText();
-        // swap stacked widget to show process page
-        m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
-        // raise & show shadow widget incase corvered by other widgets
-        m_tbShadow->raise();
-        m_tbShadow->show();
-        PERF_PRINT_END("POINT-05");
-    });
-    // listen on service button triggered signal
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
-        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
-        // clear search text input widget
-        m_toolbar->clearSearchText();
-        // swap stacked widget to show service page
-        m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
-        // raise & show shadow widget incase corvered by other widgets
+        m_pages->setCurrentWidget(m_procPage);
+
         m_tbShadow->raise();
         m_tbShadow->show();
         PERF_PRINT_END("POINT-05");
     });
 
-    // listen on background task state changed signal
-    connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
+        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
+        m_toolbar->clearSearchText();
+        m_pages->setCurrentWidget(m_svcPage);
+
+        m_tbShadow->raise();
+        m_tbShadow->show();
+        PERF_PRINT_END("POINT-05");
+    });
+
+    connect(gApp, &Application::backgroundTaskStateChanged, this, [ = ](Application::TaskState state) {
         if (state == Application::kTaskStarted) {
             // save last focused widget inside main window
             m_focusedWidget = gApp->mainWindow()->focusWidget();
@@ -392,14 +325,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     // propogate resize event to base handler first
     DMainWindow::resizeEvent(event);
-
-    // resize shadow widget
-    if (m_tbShadow)
-        m_tbShadow->setFixedWidth(event->size().width());
-
-    // save new size to backup settings instace
-    m_settings->setOption(kSettingKeyWindowWidth, event->size().width());
-    m_settings->setOption(kSettingKeyWindowHeight, event->size().height());
+    m_tbShadow->setFixedWidth(this->width());
 }
 
 // close event handler
@@ -409,14 +335,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
     // save new size to backup settings instace
     m_settings->setOption(kSettingKeyWindowWidth, width());
     m_settings->setOption(kSettingKeyWindowHeight, height());
-    // flush backup settings
     m_settings->flush();
 
-    // propogate close event to base event handler
     DMainWindow::closeEvent(event);
 }
 
-// event filter handler
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     // handle key press events
@@ -438,13 +361,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             // CTRL + SHIFT + ? pressed
             displayShortcutHelpDialog();
             return true;
-        } else {
-            return false;
         }
-    } else {
-        // propogate other events to base handler
-        return DMainWindow::eventFilter(obj, event);
     }
+    return DMainWindow::eventFilter(obj, event);
 }
 
 // show event handler

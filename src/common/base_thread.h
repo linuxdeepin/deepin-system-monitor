@@ -21,9 +21,6 @@
 #define BASE_THREAD_H
 
 #include <QThread>
-#include <QThreadStorage>
-#include <QMap>
-#include <QVariant>
 
 namespace common {
 namespace core {
@@ -44,41 +41,10 @@ public:
     virtual int threadKey() const { return kUnknowThread; }
 
     explicit BaseThread(QObject *parent = nullptr)
-        : QThread(parent)
-    {
-    }
+        : QThread(parent) {}
+
     virtual ~BaseThread() {}
-
-    bool hasLocalData(int key) const;
-    void setLocalData(int key, QVariant value);
-    QVariant localData(int key);
-
-private:
-    QThreadStorage<QMap<int, QVariant>> m_localData;
 };
-
-inline bool BaseThread::hasLocalData(int key) const
-{
-    return m_localData.hasLocalData() && m_localData.localData().contains(key);
-}
-
-inline void BaseThread::setLocalData(int key, QVariant value)
-{
-    if (!m_localData.hasLocalData()) {
-        QMap<int, QVariant> map;
-        m_localData.setLocalData(map);
-    }
-
-    m_localData.localData().insert(key, value);
-}
-
-inline QVariant BaseThread::localData(int key)
-{
-    if (!m_localData.hasLocalData())
-        return {};
-
-    return m_localData.localData()[key];
-}
 
 } // namespace core
 } // namespace common

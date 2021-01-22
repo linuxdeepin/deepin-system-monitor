@@ -79,7 +79,7 @@ public Q_SLOTS:
      * @brief Switch performance display mode when required
      * @param mode Display mode
      */
-    void switchDisplayMode(DisplayMode mode);
+    void switchDisplayMode(int mode);
 
 protected:
     /**

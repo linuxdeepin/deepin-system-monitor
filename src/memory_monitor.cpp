@@ -20,7 +20,6 @@
 
 #include "gui/ui_common.h"
 #include "common/common.h"
-#include "constant.h"
 #include "system/mem.h"
 #include "system/device_db.h"
 #include "system/system_monitor.h"
@@ -58,8 +57,7 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
 
     setFixedHeight(160);
 
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged,
-            this, &MemoryMonitor::changeTheme);
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MemoryMonitor::changeTheme);
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
@@ -105,13 +103,12 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 
         m_icon = QIcon(iconPathFromQrc("dark/icon_memory_light.svg"));
         break;
-    default:
-        break;
     }
 
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
+
 #ifndef THEME_FALLBACK_COLOR
     numberColor = palette.color(DPalette::TextTitle);
     ltextColor = palette.color(DPalette::TextTitle);
@@ -142,8 +139,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-
 
     int iconSize = 24;
 

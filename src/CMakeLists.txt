@@ -53,13 +53,11 @@ set(HPP_GLOBAL
     cpu_monitor.h
     memory_monitor.h
     network_monitor.h
-    disk_monitor.h
     compact_cpu_monitor.h
     compact_memory_monitor.h
     compact_network_monitor.h
     compact_disk_monitor.h
     smooth_curve_generator.h
-    constant.h
     settings.h
 )
 set(CPP_GLOBAL
@@ -68,7 +66,6 @@ set(CPP_GLOBAL
     cpu_monitor.cpp
     memory_monitor.cpp
     network_monitor.cpp
-    disk_monitor.cpp
     compact_cpu_monitor.cpp
     compact_memory_monitor.cpp
     compact_network_monitor.cpp
@@ -82,7 +79,6 @@ set(HPP_COMMON
     common/error_context.h
     common/hash.h
     common/han_latin.h
-    common/collator.h
     common/perf.h
     common/uevent.h
     common/uevent_loop.h
@@ -97,7 +93,6 @@ set(CPP_COMMON
     common/common.cpp
     common/error_context.cpp
     common/hash.cpp
-    common/collator.cpp
     common/han_latin.cpp
     common/perf.cpp
     common/uevent.cpp

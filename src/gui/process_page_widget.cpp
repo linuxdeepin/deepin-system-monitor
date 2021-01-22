@@ -27,7 +27,6 @@
 #include "monitor_compact_view.h"
 #include "monitor_expand_view.h"
 #include "process_table_view.h"
-#include "constant.h"
 #include "settings.h"
 #include "ui_common.h"
 #include "common/common.h"
@@ -73,10 +72,6 @@ ProcessPageWidget::ProcessPageWidget(DWidget *parent)
 {
     // initialize global settings
     m_settings = Settings::instance();
-    if (m_settings) {
-        m_settings->init();
-    }
-
     // initialize ui components
     initUI();
     initConnections();
@@ -121,22 +116,13 @@ void ProcessPageWidget::initUI()
     // expand view instance
     m_expandView = new MonitorExpandView(m_views);
     connect(m_expandView, &MonitorExpandView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
-    m_views->addWidget(m_compactView);
-    m_views->addWidget(m_expandView);
+    m_views->insertWidget(kDisplayModeCompact, m_compactView);
+    m_views->insertWidget(kDisplayModeExpand, m_expandView);
     m_views->setFixedWidth(300);
 
     // restore previous backupped display mode if any
-    auto *settings = Settings::instance();
-    if (settings) {
-        auto mode = settings->getOption(kSettingKeyDisplayMode);
-        if (mode.isValid()) {
-            if (qvariant_cast<int>(mode) == kDisplayModeCompact) {
-                m_views->setCurrentIndex(0);
-            } else {
-                m_views->setCurrentIndex(1);
-            }
-        }
-    }
+    const QVariant &mode = Settings::instance()->getOption(kSettingKeyDisplayMode, kDisplayModeCompact);
+    m_views->setCurrentIndex(mode.toInt());
 
     // right ====> tab button + process table
     auto *contentlayout = new QVBoxLayout(cw);
@@ -239,10 +225,8 @@ void ProcessPageWidget::initUI()
     setAutoFillBackground(false);
 
     // restore previous saved process view mode if any previous settings found
-    QVariant vindex = m_settings->getOption(kSettingKeyProcessTabIndex);
-    int index = 0;
-    if (vindex.isValid())
-        index = vindex.toInt();
+    const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, 0);
+    int index = vindex.toInt();
     switch (index) {
     case kFilterCurrentUser: {
         // show my process view
@@ -461,24 +445,12 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 // show application kill preview widget
 void ProcessPageWidget::showWindowKiller()
 {
-    auto *mw = gApp->mainWindow();
-    // minimize main window before show application kill preview widget
-    if (mw)
-        mw->showMinimized();
-
-    // use a timer to slightly delay preview widget shown to fix glitched screen snapshot pixmap on low end platforms
+    gApp->mainWindow()->showMinimized();
     QTimer::singleShot(500, this, SLOT(createWindowKiller()));
 }
 
-void ProcessPageWidget::switchDisplayMode(DisplayMode mode)
+void ProcessPageWidget::switchDisplayMode(int mode)
 {
-    switch (mode) {
-    case kDisplayModeExpand: {
-        m_views->setCurrentIndex(1);
-    } break;
-    case kDisplayModeCompact: {
-        m_views->setCurrentIndex(0);
-    } break;
-    }
+    m_views->setCurrentIndex(mode);
 }
 
