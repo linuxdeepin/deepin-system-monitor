@@ -23,6 +23,7 @@
 #include "common/common.h"
 #include <QPen>
 #include <QPainter>
+#include <QPalette>
 #include <DApplication>
 #include <DApplicationHelper>
 DWIDGET_USE_NAMESPACE
@@ -32,29 +33,30 @@ BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
 {
    // m_blokeDeviceInfo = info;
     m_memChartWidget = new ChartViewWidget(this);
-    this->setMinimumSize(QSize(342,190));
-    updateWidgetGeometry();
-
+    m_memChartWidget->setSpeedAxis(true);
     m_memChartWidget->setData1Color(readColor);
     m_memChartWidget->setData2Color(writeColor);
    // updateData(info);
-
-
 }
 
 void BlockDevItemWidget::updateWidgetGeometry()
 {
     int avgWidth = this->width();
-
+    int avHeight = this->height();
     int fontHeight = QFontMetrics(m_font).height();
+    if(m_mode != 0) {
+        m_memChartWidget->setGeometry(0, (fontHeight*3+35)/ 2, avgWidth-10, avHeight - fontHeight * 2-20);
+    } else {
+        m_memChartWidget->setGeometry(0, (fontHeight)/ 2, avgWidth-10, avHeight - fontHeight * 2-20);
+    }
 
-    m_memChartWidget->setGeometry(0, (fontHeight*3+35)/ 2, avgWidth, 100+2 * fontHeight - fontHeight / 2);
+
 }
 
 void BlockDevItemWidget::fontChanged(const QFont &font)
 {
     m_font = font;
-    setFixedHeight(100 + 2 * QFontMetrics(font).height());
+    //setFixedHeight(100 + 2 * QFontMetrics(font).height());
 }
 
 void BlockDevItemWidget::resizeEvent(QResizeEvent *event)
@@ -66,40 +68,44 @@ void BlockDevItemWidget::resizeEvent(QResizeEvent *event)
 void BlockDevItemWidget::updateData(BlockDevice info)
 {
     m_blokeDeviceInfo = info;
-    m_listReadSpeed<< info.readSpeed()/2;
-    m_listWriteSpeed << info.writeSpeed()/2;
-    if (m_listReadSpeed.size() > 60) {
-        m_listReadSpeed.pop_front();
-    }
+    m_memChartWidget->addData1(info.readSpeed());
+    m_memChartWidget->addData2(info.writeSpeed());
+    m_memChartWidget->update();
+}
 
-    if (m_listWriteSpeed.size() > 60) {
-        m_listWriteSpeed.pop_front();
-    }
-    qreal readMaxHeight = 0;
-    qreal writeMaxHeight = 0;
-    for(int i = 0; i < m_listReadSpeed.size(); ++i) {
-        if(m_listReadSpeed[i] > readMaxHeight) {
-            readMaxHeight = m_listReadSpeed[i];
-        }
-    }
+void BlockDevItemWidget::showBackGround(bool isShow)
+{
+    haveBackGround = isShow;
+    update();
+}
 
-    for(int i = 0; i < m_listWriteSpeed.size(); ++i) {
-        if(m_listWriteSpeed[i] > writeMaxHeight) {
-            writeMaxHeight = m_listWriteSpeed[i];
-        }
-    }
-    QList<qreal> readList {0};
-    QList<qreal> wirteList {0};
-//    int height = m_memChartWidget->getGridHeight();
-//    qreal maxH = std::max(readMaxHeight, writeMaxHeight);
-//    for(int i = 0; i < m_listReadSpeed.size(); ++i) {
-//        qreal readval =  maxH == 0. ? 0 :m_listReadSpeed.at(i) * ulong(height-10) /maxH;
-//        qreal writeval = maxH == 0. ? 0 :m_listWriteSpeed.at(i) * ulong(height-10) /maxH;
-//        readList << ((readval/100 >=0.9) ? 0.9 : readval/100);
-//        wirteList << ((writeval/100 >=0.9) ? 0.9 : writeval/100);
+void BlockDevItemWidget::mousePressEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event)
+    haveBackGround = true;
+    emit clicked(m_blokeDeviceInfo.deviceName());
+    update();
+//    DPalette pb = DApplicationHelper::instance()->palette(this);
+//    pb.setBrush(DPalette::Background, Qt::red);
+//    setPalette(pb);
+
+//    QPainter painter(this);
+//    if(haveBackGround) {
+
+//        painter.save();
+//        painter.setPen(Qt::NoPen);
+//        painter.setBrush(Qt::blue);
+//        painter.drawRect(rect());
+//        painter.restore();
+
+//    } else{
+//        painter.save();
+//        painter.setPen(Qt::NoPen);
+//        painter.setBrush(Qt::transparent);
+//        painter.drawRect(rect());
+//        painter.restore();
 //    }
-//    m_memChartWidget->addAllData1(readList);
-//    m_memChartWidget->addAllData2(wirteList);
+
 }
 
 void BlockDevItemWidget::paintEvent(QPaintEvent *event)
@@ -124,20 +130,57 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
                          .arg(DApplication::translate("Process.Graph.View", "Disk write"))
                          .arg(formatUnit(m_blokeDeviceInfo.writeSpeed(), B, 1, true));
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(readColor);
-    painter.drawEllipse(devtitleRect.bottomLeft().x(),devtitleRect.bottomLeft().y()+spacing+3, sectionSize, sectionSize); // 读硬盘速度的颜色提示
-    QRect readStrRect (devtitleRect.bottomLeft().x()+3+spacing,devtitleRect.bottomLeft().y()+spacing-3,painter.fontMetrics().width(readTitle)+10, painter.fontMetrics().height());
-    painter.setPen(palette.color(DPalette::TextTips));
-    painter.drawText(readStrRect,readTitle);
+    if(m_mode == 0){
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(writeColor);
-    painter.drawEllipse(devtitleRect.bottomLeft().x(),readStrRect.bottomLeft().y()+spacing+3, sectionSize, sectionSize); // 写硬盘速度的颜色提示
-    QRect writeStrRect (devtitleRect.bottomLeft().x()+3+spacing,readStrRect.bottomLeft().y()+spacing-3,painter.fontMetrics().width(writeTitle)+10, painter.fontMetrics().height());
-    painter.setPen(palette.color(DPalette::TextTips));
-    painter.drawText(writeStrRect,writeTitle);
+       QRect memtitleRect(sectionSize + devtitleRect.topRight().x()+spacing*2,devtitleRect.y(), painter.fontMetrics().width(readTitle), painter.fontMetrics().height());
+       painter.drawText(memtitleRect, Qt::AlignLeft | Qt::AlignVCenter, readTitle);
 
+       QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y(), painter.fontMetrics().width(writeTitle), painter.fontMetrics().height());
+       painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, writeTitle);
+
+
+       painter.setPen(Qt::NoPen);
+       painter.setBrush(readColor);
+       painter.drawEllipse(devtitleRect.topRight().x()+spacing, memtitleRect.center().y(), sectionSize, sectionSize);
+
+       painter.setBrush(writeColor);
+       painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.center().y(), sectionSize, sectionSize);
+   } else {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(readColor);
+        painter.drawEllipse(devtitleRect.bottomLeft().x(),devtitleRect.bottomLeft().y()+spacing+3, sectionSize, sectionSize); // 读硬盘速度的颜色提示
+        QRect readStrRect (devtitleRect.bottomLeft().x()+3+spacing,devtitleRect.bottomLeft().y()+spacing-3,painter.fontMetrics().width(readTitle)+10, painter.fontMetrics().height());
+        painter.setPen(palette.color(DPalette::TextTips));
+        painter.drawText(readStrRect,readTitle);
+
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(writeColor);
+        painter.drawEllipse(devtitleRect.bottomLeft().x(),readStrRect.bottomLeft().y()+spacing+3, sectionSize, sectionSize); // 写硬盘速度的颜色提示
+        QRect writeStrRect (devtitleRect.bottomLeft().x()+3+spacing,readStrRect.bottomLeft().y()+spacing-3,painter.fontMetrics().width(writeTitle)+10, painter.fontMetrics().height());
+        painter.setPen(palette.color(DPalette::TextTips));
+        painter.drawText(writeStrRect,writeTitle);
+    }
+    if(haveBackGround) {
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QColor::fromRgb(0,129,255,26));
+        painter.drawRect(rect());
+        painter.restore();
+
+    } else {
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Qt::transparent);
+        painter.drawRect(rect());
+        painter.restore();
+
+    }
 }
+
+void BlockDevItemWidget::setMode(int mode)
+{
+        m_mode = mode;
+}
+
 
 

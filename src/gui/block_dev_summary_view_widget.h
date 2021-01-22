@@ -36,7 +36,7 @@ signals:
 
 public slots:
     void fontChanged(const QFont &font);
-
+    void chageSummaryInfo(const QString& deviceName);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:

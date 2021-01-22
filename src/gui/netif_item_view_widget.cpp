@@ -44,8 +44,7 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
         painter.setBrush(downColor);
         painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.center().y(), sectionSize, sectionSize);
-    }
-    else{
+    }else{
          QString memory = DApplication::translate("Process.Graph.Title", "上传");
          QRect memtitleRect(sectionSize + spacing, 0, painter.fontMetrics().width(memory), painter.fontMetrics().height());
          painter.drawText(memtitleRect, Qt::AlignLeft | Qt::AlignVCenter, memory);
@@ -69,8 +68,8 @@ void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     int fontHeight = QFontMetrics(m_font).height();
-   int avgWidth =  this->width();
-   int avgHeight = this->height();
+    int avgWidth =  this->width();
+    int avgHeight = this->height();
     m_ChartWidget->setGeometry(0,fontHeight / 2,avgWidth,avgHeight - fontHeight / 2);
 }
 

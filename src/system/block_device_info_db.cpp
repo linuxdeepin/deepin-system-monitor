@@ -159,20 +159,6 @@ void BlockDeviceInfoDB::readDiskInfo()
         }
     }
 
-
-
-    for(int i = 0; i < m_deviceList.size(); ++i)
-    {
-        qInfo() << "*******************************************";
-        BlockDevice bd = m_deviceList[i];
-        qInfo() << "*DeviceNmae:" << bd.deviceName() << "*";
-        qInfo() << "*Model:" << bd.model()<< "*";
-        qInfo() << "*Capacity:" << bd.capacity()<< "*";
-        qInfo() << "*read speed:" << bd.readSpeed()<< "*";
-        qInfo() << "*write speed:" << bd.writeSpeed()<< "*";
-        qInfo() << "*******************************************";
-    }
-
 }
 
 

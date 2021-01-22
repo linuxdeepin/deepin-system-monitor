@@ -35,18 +35,24 @@ public:
     explicit BlockDevItemWidget(QWidget *parent = nullptr);
 
 signals:
+    void clicked(const QString& deviceName);
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 public slots:
      void fontChanged(const QFont &font);
+     void showBackGround(bool isShow);
     // void onModelUpdate();
 public:
      void updateData(BlockDevice info);
+     void setMode(int mode);
+     bool backGround(){ return  haveBackGround;}
 
 private:
     void updateWidgetGeometry();
 private:
+     int m_mode;
     QColor readColor {"#8F88FF"};
     QColor writeColor {"#6AD787"};
     ChartViewWidget *m_memChartWidget;
@@ -54,6 +60,7 @@ private:
     BlockDevice  m_blokeDeviceInfo;
     QList<qreal> m_listWriteSpeed;
     QList<qreal> m_listReadSpeed;
+    bool haveBackGround = false;
 
 
 };

@@ -20,27 +20,26 @@
 */
 #include "block_dev_stat_view_widget.h"
 #include "block_dev_item_widget.h"
-#include "common/thread_manager.h"
-#include "system/system_monitor_thread.h"
+#include "system/system_monitor.h"
 #include "system/block_device_info_db.h"
 #include "system/device_db.h"
 #include <QThread>
 #include <QGridLayout>
 #include <QTimer>
 
-using namespace common::core;
 using namespace core::system;
 
-BlockStatViewWidget::BlockStatViewWidget(QWidget *parent) : QWidget(parent)
+BlockStatViewWidget::BlockStatViewWidget(QWidget *parent) : QScrollArea(parent)
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-//    auto info = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
-//    for(int i =0; i < info.size(); ++i) {
-//        BlockDevItemWidget *item  = new BlockDevItemWidget(info[i],this);
-//        m_listBlockItemWidget << item;
-//    }
+    auto *monitor = SystemMonitor::instance();
+    m_listDevice = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
 
-   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_centralWidget = new QWidget(this);
+    this->setWidget(m_centralWidget);
+   // m_centralWidget->setMinimumHeight(300);
+    m_centralWidget->setWindowFlags(Qt::FramelessWindowHint);
+    this->setFrameShape(QFrame::NoFrame);
 
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &BlockStatViewWidget::onUpdateData);
    // m_timer->start(2000);
@@ -48,9 +47,50 @@ BlockStatViewWidget::BlockStatViewWidget(QWidget *parent) : QWidget(parent)
 
 void BlockStatViewWidget::resizeEvent(QResizeEvent *event)
 {
+    QScrollArea::resizeEvent(event);
+    updateItemWidget();
+}
 
-    QWidget::resizeEvent(event);
-    updateWidgetGeometry();
+void BlockStatViewWidget::updateItemWidget()
+{
+    int deviceCount  = m_listBlockItemWidget.size();
+    if(deviceCount <=0 ){
+        return ;
+    }
+
+    int Width = this->width();
+    int height = this->height();
+    int fontHeight = QFontMetrics(m_font).height();
+
+    int avgWidth = this->width() / 2 - 10;
+    int avgheight = height - fontHeight/2;
+
+    if(deviceCount == 1) {
+        m_listBlockItemWidget[0]->setGeometry(0,0,avgWidth,avgheight);
+        m_listBlockItemWidget[0]->update();
+    } else if(deviceCount ==2) {
+        m_listBlockItemWidget[0]->setGeometry(0, 0, avgWidth, avgheight-20);
+        m_listBlockItemWidget[1]->setGeometry(m_listBlockItemWidget[0]->geometry().right() + 10, 0,avgWidth, avgheight-20);
+        m_listBlockItemWidget[0]->update();
+        m_listBlockItemWidget[1]->update();
+    } else {
+         for(int i = 0 ; i < m_listBlockItemWidget.size();i++)
+         {
+             int page = i /4;
+             BlockDevItemWidget *item1 = m_listBlockItemWidget.at(i);
+             m_mapDeviceItemWidget.insert(m_listDevice[i].deviceName(),item1);
+             if(i%4 == 0){
+                  item1->setGeometry(page*Width,0,avgWidth,avgheight/2);
+             }else if(i%4 == 1){
+                   item1->setGeometry(page*Width+avgWidth+10,0,avgWidth,avgheight/2);
+             }else if(i%4 == 2){
+                   item1->setGeometry(page*Width,avgheight/2,avgWidth,avgheight/2);
+             }else if(i%4 == 3){
+                   item1->setGeometry(page*Width+avgWidth+10,avgheight/2,avgWidth,avgheight/2);
+             }
+             item1->update();
+         }
+    }
 }
 void BlockStatViewWidget::updateWidgetGeometry()
 {
@@ -63,27 +103,131 @@ void BlockStatViewWidget::updateWidgetGeometry()
     if( m_list_len < deviceCount)
     {
         for( int i = 0 ; i < deviceCount - m_list_len ;i++){
-               BlockDevItemWidget *item = new BlockDevItemWidget(this);
+               BlockDevItemWidget *item = new BlockDevItemWidget(m_centralWidget);
                m_listBlockItemWidget << item;
+               connect(item,&BlockDevItemWidget::clicked,this, &BlockStatViewWidget::onSetItemStatus);
+              // m_mapDeviceItemWidget.insert();
         }
     }
 
     if(deviceCount == 1){
-        //showItem1();
+        showItem1();
     }else if(deviceCount == 2){
-        //showItem2();
+        showItem2();
     }else if(deviceCount > 2){
-       // showItemLg2(netCount);
+        showItemLg2(deviceCount);
     }
 }
 
+void BlockStatViewWidget::onSetItemStatus(const QString& deviceName)
+{
+    auto it = m_mapDeviceItemWidget.begin();
+    for(; it != m_mapDeviceItemWidget.end(); ++it) {
+        if(it.key() == deviceName) {
+
+        } else {
+            it.value()->showBackGround(false);
+        }
+    }
+    emit changeInfo(deviceName);
+}
+
+void BlockStatViewWidget::showItem1()
+{
+    int avgWidth = this->width();
+    int avgheight = this->height();
+     BlockDevItemWidget *item = m_listBlockItemWidget.at(0);
+     item->show();
+     m_mapDeviceItemWidget.insert(m_listDevice[0].deviceName(),item);
+    // int fontHeight = QFontMetrics(m_font).height();
+     item->setGeometry(0,0,avgWidth,avgheight);
+     item->setMode(0);
+     m_centralWidget->resize(avgWidth, avgheight);
+     item->updateData(m_listDevice[0]);
+     item->update();
+     for(int i = 1 ; i < m_listBlockItemWidget.size();i++){
+        m_listBlockItemWidget.at(i)->hide();
+     }
+     emit changeInfo(m_listDevice[0].deviceName());
+}
+void BlockStatViewWidget::showItem2()
+{
+    int avgWidth = this->width();
+    int avgheight = this->height();
+    avgWidth = this->width() / 2 - 10;
+    BlockDevItemWidget *item1 = m_listBlockItemWidget.at(0);
+    BlockDevItemWidget *item2 = m_listBlockItemWidget.at(1);
+    item1->show();
+    item2->show();
+    m_mapDeviceItemWidget.insert(m_listDevice[0].deviceName(),item1);
+    m_mapDeviceItemWidget.insert(m_listDevice[1].deviceName(),item2);
+    //   unsigned int fontHeight = QFontMetrics(m_font).height();
+
+    item1->setGeometry(0, 0, avgWidth, avgheight-20);
+    item2->setGeometry(item1->geometry().right() + 10, 0,avgWidth, avgheight-20);
+    item1->setMode(1);
+    item2->setMode(1);
+    m_centralWidget->resize(item2->geometry().right(), avgheight - 20);
+    item1->updateData(m_listDevice[0]);
+    item2->updateData(m_listDevice[1]);
+
+    item1->update();
+    item2->update();
+    bool  haveSelect = false;
+    for(int i = 2 ; i < m_listBlockItemWidget.size();i++){
+    m_listBlockItemWidget.at(i)->hide();
+    if( m_listBlockItemWidget.at(i)->backGround()) {
+            haveSelect = true;
+        }
+    }
+    if(haveSelect) {
+         emit changeInfo(m_listDevice[0].deviceName());
+    }
+}
+void BlockStatViewWidget::showItemLg2(int count)
+{
+    int Width = this->width();
+    int height = this->height();
+    int fontHeight = QFontMetrics(m_font).height();
+
+    int avgWidth = this->width() / 2 - 10;
+    int avgheight = height - fontHeight/2;
+    for(int i =0 ;i < count;i++){
+        int page = i /4;
+        BlockDevItemWidget *item1 = m_listBlockItemWidget.at(i);
+        item1->setMode(2);
+        item1->show();
+         m_mapDeviceItemWidget.insert(m_listDevice[i].deviceName(),item1);
+        if(i%4 == 0){
+             item1->setGeometry(page*Width,0,avgWidth,avgheight/2);
+        }else if(i%4 == 1){
+              item1->setGeometry(page*Width+avgWidth+10,0,avgWidth,avgheight/2);
+        }else if(i%4 == 2){
+              item1->setGeometry(page*Width,avgheight/2,avgWidth,avgheight/2);
+        }else if(i%4 == 3){
+              item1->setGeometry(page*Width+avgWidth+10,avgheight/2,avgWidth,avgheight/2);
+        }
+        item1->updateData(m_listDevice[i]);
+        item1->update();
+    }
+    m_centralWidget->resize(Width*(((count-1)/4)+1), height);
+    bool  haveSelect = false;
+    for(int i = count ; i < m_listBlockItemWidget.size();i++){
+       m_listBlockItemWidget.at(i)->hide();
+       if( m_listBlockItemWidget.at(i)->backGround()) {
+               haveSelect = true;
+           }
+    }
+    if(haveSelect) {
+         emit changeInfo(m_listDevice[0].deviceName());
+    }
+}
+
+
 void BlockStatViewWidget::onUpdateData()
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    auto info = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
-    for(int i =0; i < info.size(); ++i) {
-        m_listBlockItemWidget[i]->updateData(info[i]);
-        m_listBlockItemWidget[i]->update();
-    }
-
+    auto *monitor =  SystemMonitor::instance();;
+    m_listDevice = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
+    m_mapDeviceItemWidget.clear();
+    updateWidgetGeometry();
 }

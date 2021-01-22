@@ -30,12 +30,12 @@ NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : QScrollArea(parent)
 
 void NetifStatViewWidget::paintEvent(QPaintEvent *event)
 {
-    QWidget::paintEvent(event);
+    QScrollArea::paintEvent(event);
 }
 void NetifStatViewWidget::resizeEvent(QResizeEvent *event)
 {
 
-    QWidget::resizeEvent(event);
+    QScrollArea::resizeEvent(event);
     updateWidgetGeometry();
 }
 

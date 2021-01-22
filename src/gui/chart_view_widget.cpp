@@ -202,8 +202,17 @@ void ChartViewWidget::drawBackPixmap()
     QPainterPath framePath;
     painter.setOpacity(0.3);
     m_chartRect = QRect(gridX, gridY, gridWidth, gridHeight);
+
+    painter.save();
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::white);
+    painter.drawRect(m_chartRect);
+    painter.restore();
+
     framePath.addRect(m_chartRect);
     painter.drawPath(framePath);
+
+
 
     // Draw grid.
     QPen gridPen;
@@ -250,4 +259,7 @@ void ChartViewWidget::paintEvent(QPaintEvent *event)
     drawData1(&painter);
     drawData2(&painter);
     drawAxisText(&painter);
+
+
+
 }

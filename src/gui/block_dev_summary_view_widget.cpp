@@ -34,6 +34,7 @@
 #include <QPainter>
 #include <DApplication>
 #include <DStyle>
+#include <QMap>
 using namespace core::system;
 using namespace common::format;
 
@@ -100,7 +101,7 @@ protected:
 
     QVariant data(const QModelIndex &index, int role) const {
 
-        if (!index.isValid() || m_infoDB.size()<=0 )
+        if (!index.isValid() || currDeciveName.isEmpty() )
             return QVariant();
         int row = index.row();
         int column = index.column();
@@ -154,45 +155,45 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return m_infoDB[m_index].model();
+                    return m_blockInfo.model();
                 else if (column == 1)
-                    return formatUnit(m_infoDB[m_index].readSpeed(), B, 1);
+                    return formatUnit(m_blockInfo.readSpeed(), B, 1);
                 break;
             case 1:
                 if (column == 0)
-                    return formatUnit(m_infoDB[m_index].writeSpeed(), B, 1);
+                    return formatUnit(m_blockInfo.writeSpeed(), B, 1);
                 else if (column == 1)
-                    return formatUnit(m_infoDB[m_index].capacity(), B, 1);
+                    return formatUnit(m_blockInfo.capacity(), B, 1);
                 break;
             case  2:
                 if (column == 0)
-                    return m_infoDB[m_index].blocksRead();
+                    return m_blockInfo.blocksRead();
                 else if(column == 1)
-                    return m_infoDB[m_index].readRequestIssuedPerSecond();
+                    return m_blockInfo.readRequestIssuedPerSecond();
                 break;
             case  3:
                 if (column == 0)
-                    return m_infoDB[m_index].sectorsReadPerSecond();
+                    return m_blockInfo.sectorsReadPerSecond();
                 else if(column == 1)
-                    return m_infoDB[m_index].readRequestMergedPerSecond();
+                    return m_blockInfo.readRequestMergedPerSecond();
                 break;
             case  4:
                 if (column == 0)
-                    return m_infoDB[m_index].blocksWritten();
+                    return m_blockInfo.blocksWritten();
                 else if(column == 1)
-                    return m_infoDB[m_index].writeMerged();
+                    return m_blockInfo.writeMerged();
                 break;
             case  5:
                 if (column == 0)
-                    return m_infoDB[m_index].readMerged();
+                    return m_blockInfo.readMerged();
                 else if(column == 1)
-                    return m_infoDB[m_index].writeRequestIssuedPerSecond();
+                    return m_blockInfo.writeRequestIssuedPerSecond();
                 break;
             case  6:
                 if (column == 0)
-                    return m_infoDB[m_index].sectorsWrittenPerSecond();
+                    return m_blockInfo.sectorsWrittenPerSecond();
                 else if(column == 1)
-                    return m_infoDB[m_index].writeRequestMergedPerSecond();
+                    return m_blockInfo.writeRequestMergedPerSecond();
                 break;
             }
         } else if (role == Qt::TextColorRole) {
@@ -210,26 +211,42 @@ protected:
     }
 public slots:
     void updateModel();
+public:
+    void setCurrentName(const QString& str) {
+        currDeciveName = str;
+        if(!str.isEmpty())
+            m_blockInfo = m_mapInfo.find(currDeciveName).value();
+        updateModel();
+    }
 private:
-    int m_index {0};
-    QList<BlockDevice> m_infoDB;
+    QString currDeciveName;
+    BlockDevice m_blockInfo;
+    QMap<QString,BlockDevice> m_mapInfo;
 };
 
 DeailTableModelBlock::DeailTableModelBlock(QObject *parent): QAbstractTableModel(parent)
 {
-    m_index = 0;
+    currDeciveName = "";
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &DeailTableModelBlock::updateModel);
-
-   // m_infoDB ={};
-  //  m_memInfo = DeviceDB::instance()->memInfo();
+    updateModel();
 }
 
 void DeailTableModelBlock::updateModel()
 {
     beginResetModel();
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    m_infoDB = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
+    auto infoDB = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
+
+    for(int i =0; i < infoDB.size(); ++i) {
+        m_mapInfo.insert(infoDB[i].deviceName(),infoDB[i]);
+    }
+    if(currDeciveName == "" && infoDB.size() >=0) {
+        currDeciveName = infoDB[0].deviceName();
+        m_blockInfo = infoDB[0];
+    } else if(infoDB.size() >=0) {
+        m_blockInfo = m_mapInfo.find(currDeciveName).value();
+    }
     endResetModel();
 }
 
@@ -241,7 +258,7 @@ DeailTableModelBlock::~DeailTableModelBlock()
 BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     : DTableView(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
 
@@ -256,6 +273,13 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
 
 
 }
+
+
+void BlockDevSummaryViewWidget::chageSummaryInfo(const QString& deviceName)
+{
+    m_model->setCurrentName(deviceName);
+}
+
 void BlockDevSummaryViewWidget::fontChanged(const QFont &font)
 {
     m_font = font;
