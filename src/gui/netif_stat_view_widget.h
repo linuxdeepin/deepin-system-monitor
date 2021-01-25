@@ -37,6 +37,7 @@ public slots:
     void fontChanged(const QFont &font);
 
     void onModelUpdate();
+    void onSetItemActiveStatus(const QString &mac);
 private:
     QFont m_font;
     NetifInfoDB *m_info;

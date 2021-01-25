@@ -81,6 +81,19 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
         painter.drawEllipse(0 , sentRect.center().y(), sectionSize, sectionSize);
      }
 
+     if(m_isActive){
+         painter.save();
+         painter.setPen(Qt::NoPen);
+         painter.setBrush(QColor::fromRgb(0,129,255,26));
+         painter.drawRect(rect());
+         painter.restore();
+     }else{
+         painter.save();
+         painter.setPen(Qt::NoPen);
+         painter.setBrush(Qt::transparent);
+         painter.drawRect(rect());
+         painter.restore();
+     }
 }
 
 void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
@@ -89,13 +102,21 @@ void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
     updateWidgetGeometry();
 }
 
-void NetifItemViewWidget::fontChanged(const QFont &font)
+void NetifItemViewWidget::mousePressEvent(QMouseEvent *event)
 {
-    QString memoryDetail = "f";
-    parent()->setProperty("detail", memoryDetail);
+    Q_UNUSED(event)
+    m_isActive = true;
+    update();
+    qInfo()<<"m_mac"<<m_mac;
+    emit changeAllActive(m_mac);
 }
 
-
+void NetifItemViewWidget::fontChanged(const QFont &font)
+{
+    m_font = font;
+    this->setFont(m_font);
+    setFixedHeight(QFontMetrics(font).height() * 11);
+}
 
 void NetifItemViewWidget::setMode(int mode)
 {
@@ -112,8 +133,8 @@ void NetifItemViewWidget::updateData(NetifInfo netifInfo)
     m_recv_bps = formatUnit(netifInfo.recv_bps(), B, 1, true);
     m_sent_bps = formatUnit(netifInfo.sent_bps(), B, 1, true);
 
-    qInfo()<<"m_recv_bps:"<<m_recv_bps;
-    qInfo()<<"m_sent_bps:"<<m_sent_bps;
+//    qInfo()<<"m_recv_bps:"<<m_recv_bps;
+//    qInfo()<<"m_sent_bps:"<<m_sent_bps;
 }
 
 QByteArray NetifItemViewWidget::getMac()
@@ -126,6 +147,12 @@ void NetifItemViewWidget::setMac(QByteArray mac)
     m_mac = mac;
 }
 
+void NetifItemViewWidget::updateActiveStatus(bool active)
+{
+    m_isActive = active;
+    updateWidgetGeometry();
+}
+
 void NetifItemViewWidget::updateWidgetGeometry()
 {
 
@@ -136,7 +163,9 @@ void NetifItemViewWidget::updateWidgetGeometry()
         m_ChartWidget->setGeometry(0,fontHeight / 2,avgWidth,avgHeight - fontHeight / 2);
     }
     else{
-        m_ChartWidget->setGeometry(0,fontHeight * 2.5 ,avgWidth,avgHeight - (fontHeight* 2.5));
+        m_ChartWidget->setGeometry(0,int(fontHeight * 2.5) ,avgWidth,avgHeight - int(fontHeight* 2.5));
     }
+
+
 
 }

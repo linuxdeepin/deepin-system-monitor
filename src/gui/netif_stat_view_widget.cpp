@@ -56,9 +56,18 @@ void NetifStatViewWidget::onModelUpdate()
        QByteArray mac = iter.key();
       if(!m_mapItemView.contains(mac)){
                NetifItemViewWidget *temp = new NetifItemViewWidget(this,mac);
+             //   NetifItemViewWidget *temp1 = new NetifItemViewWidget(this,"iter.key()");
+
                temp->updateData(iter.value());
                temp->update();
+
+              // temp1->updateData(iter.value());
+            //   temp1->update();
+
+               connect(temp,&NetifItemViewWidget::changeAllActive,this, &NetifStatViewWidget::onSetItemActiveStatus);
+             //  connect(temp1,&NetifItemViewWidget::changeAllActive,this, &NetifStatViewWidget::onSetItemActiveStatus);
                m_mapItemView.insert(iter.key(),temp);
+           //    m_mapItemView.insert("iter.key()",temp1);
        }
       else{
             NetifItemViewWidget *temp = m_mapItemView.value(mac);
@@ -70,12 +79,29 @@ void NetifStatViewWidget::onModelUpdate()
     updateWidgetGeometry();
 }
 
-//static int t_i = 100;
+void NetifStatViewWidget::onSetItemActiveStatus(const QString &mac)
+{
+    qInfo()<<"onSetItemActiveStatus start";
+    auto iter = m_mapItemView.begin();
+    while(iter !=  m_mapItemView.end()){
+       auto itemView = iter.value();
+
+        if(iter.key() == mac){
+            itemView->updateActiveStatus(true);
+        }
+        else{
+            itemView->updateActiveStatus(false);
+        }
+        itemView->update();
+        iter ++;
+    }
+}
+
 
 void NetifStatViewWidget::updateWidgetGeometry()
 {
 
-   int netCount  = m_info->infoDB().size();
+   int netCount  = 2;//m_info->infoDB().size();
 
     if(netCount == 1){
         showItem1();
@@ -127,6 +153,7 @@ void NetifStatViewWidget::showItem2()
                 itemView->setMode(1);
                 itemView->setGeometry(itemWidth+16,0,itemWidth,avgheight);
             }
+            itemView->update();
             i++;
         }
         else {
