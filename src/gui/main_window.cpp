@@ -115,13 +115,6 @@ void MainWindow::displayShortcutHelpDialog()
     procObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Processes"));
     QJsonArray procObjArr;
 
-    // force end application shortcut help
-    QJsonObject killAppItem;
-    killAppItem.insert("name",
-                       DApplication::translate("Title.Bar.Context.Menu", "Force end application"));
-    killAppItem.insert("value", "Ctrl+Alt+K");
-    procObjArr.append(killAppItem);
-
     // end process shortcut help
     QJsonObject endProcItem;
     endProcItem.insert("name",
@@ -387,10 +380,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         } else if (kev->matches(QKeySequence::Find)) {
             // CTRL + F pressed
             toolbar()->focusInput();
-            return true;
-        } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) && kev->key() == Qt::Key_K) {
-            // CTRL + ALT + K pressed
-            Q_EMIT killProcessPerformed();
             return true;
         } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) && kev->key() == Qt::Key_Question) {
             // CTRL + SHIFT + ? pressed
