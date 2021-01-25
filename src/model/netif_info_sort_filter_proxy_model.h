@@ -22,41 +22,41 @@
 
 #include <QSortFilterProxyModel>
 
-class NetifInfoSortFilterProxyModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
+//class NetifInfoSortFilterProxyModel : public QSortFilterProxyModel
+//{
+//    Q_OBJECT
 
-public:
-    enum SortKey {
-        kSortByName = 0,
-        kSortByIndex,
-        kSortBySentSpeed,
-        kSortByRecvSpeed,
-        kSortByTotalSentBytes,
-        kSortByTotalRecvBytes,
-        kSortByTotalSentPackets,
-        kSortByTotalRecvPackets,
+//public:
+//    enum SortKey {
+//        kSortByName = 0,
+//        kSortByIndex,
+//        kSortBySentSpeed,
+//        kSortByRecvSpeed,
+//        kSortByTotalSentBytes,
+//        kSortByTotalRecvBytes,
+//        kSortByTotalSentPackets,
+//        kSortByTotalRecvPackets,
 
-        kSortKeyMax
-    };
+//        kSortKeyMax
+//    };
 
-    explicit NetifInfoSortFilterProxyModel(QObject *parent = nullptr);
-    virtual ~NetifInfoSortFilterProxyModel() override;
+//    explicit NetifInfoSortFilterProxyModel(QObject *parent = nullptr);
+//    virtual ~NetifInfoSortFilterProxyModel() override;
 
-    void setSortKey(enum SortKey key = kSortByName);
+//    void setSortKey(enum SortKey key = kSortByName);
 
-protected:
-    bool filterAcceptsRow(int row, const QModelIndex &parent) const override;
-    bool filterAcceptsColumn(int column, const QModelIndex &parent) const override;
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+//protected:
+//    bool filterAcceptsRow(int row, const QModelIndex &parent) const override;
+//    bool filterAcceptsColumn(int column, const QModelIndex &parent) const override;
+//    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
-private:
-    enum SortKey m_sortKey;
-};
+//private:
+//    enum SortKey m_sortKey;
+//};
 
-inline void NetifInfoSortFilterProxyModel::setSortKey(NetifInfoSortFilterProxyModel::SortKey key)
-{
-    m_sortKey = key;
-}
+//inline void NetifInfoSortFilterProxyModel::setSortKey(NetifInfoSortFilterProxyModel::SortKey key)
+//{
+//    m_sortKey = key;
+//}
 
 #endif // NETIF_INFO_SORT_FILTER_PROXY_MODEL_H

@@ -27,6 +27,8 @@
 #include <QWriteLocker>
 #include "common/thread_manager.h"
 #include "netif_monitor_thread.h"
+#include "system/sys_info.h"
+
 #include <memory>
 using namespace common::core;
 namespace core {
@@ -67,6 +69,7 @@ void NetifInfoDB::update_addr(){
 // 更新网络信息
 void NetifInfoDB::update_netif_info(){
     LinkIterator iter = m_netlink->linkIterator();
+    QMap<QByteArray, NetifInfo> old_infoDB = m_infoDB;
     m_infoDB.clear();
     while(iter.hasNext()){
         auto it = iter.next();
@@ -75,10 +78,36 @@ void NetifInfoDB::update_netif_info(){
             continue;
         }
         NetifInfo  item;
-
         item.updateLinkInfo(it.get());
         item.updateAddrInfo(m_addrDB.values(it->addr()));
-        m_infoDB.push_back(item);
+        // 更新速率
+
+        if(old_infoDB.contains(it->addr()))
+        {
+            timevalList[kLastStat] = timevalList[kCurrentStat];
+            timevalList[kCurrentStat] = SysInfo::instance()->uptime();
+
+            auto old_item = old_infoDB.value(it->addr());
+            // receive increment between interval
+            auto rxdiff = (item.rxBytes() > old_item.rxBytes()) ? (item.rxBytes() - old_item.rxBytes()) : 0;
+            // transfer increment between interval
+            auto txdiff = (item.txBytes() > old_item.txBytes()) ? (item.txBytes() - old_item.txBytes()) : 0;
+            timeval cur_time = timevalList[kCurrentStat];
+            timeval prev_time = timevalList[kLastStat];
+
+            auto ltime = prev_time.tv_sec + prev_time.tv_usec * 1. / 1000000;
+            auto rtime = cur_time.tv_sec + cur_time.tv_usec * 1. / 1000000;
+            auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
+            qreal recv_bps = rxdiff / interval;   // Bps
+            qreal sent_bps = txdiff / interval;
+            item.set_recv_bps(recv_bps);
+            item.set_sent_bps(sent_bps);
+            qInfo()<<"recv_bps:"<<recv_bps;
+            qInfo()<<"sent_bps:"<<sent_bps;
+        }
+
+
+        m_infoDB.insert(it->addr(),item);
     }
 }
 void NetifInfoDB::update()

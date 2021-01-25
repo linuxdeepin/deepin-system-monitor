@@ -35,6 +35,8 @@ NetifInfo::NetifInfo()
 }
 NetifInfo::NetifInfo(const NetifInfo &other)
     : d(other.d)
+    , m_recv_bps(other.m_recv_bps)
+    , m_sent_bps(other.m_sent_bps)
 {
 }
 NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
@@ -43,11 +45,35 @@ NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
         return *this;
 
     d = rhs.d;
+    m_recv_bps = rhs.m_recv_bps;
+    m_sent_bps = rhs.m_sent_bps;
     return *this;
 }
 NetifInfo::~NetifInfo()
 {
 }
+
+qreal NetifInfo::recv_bps()
+{
+    return m_recv_bps;
+}
+
+qreal NetifInfo::sent_bps()
+{
+    return m_sent_bps;
+}
+
+qreal NetifInfo::set_recv_bps(qreal recv_bps)
+{
+    m_recv_bps = recv_bps;
+}
+
+qreal NetifInfo::set_sent_bps(qreal sent_bps)
+{
+    m_sent_bps = sent_bps;
+}
+
+
 
 void NetifInfo::updateLinkInfo(const NLLink *link)
 {
@@ -110,14 +136,6 @@ void NetifInfo::updateWirelessInfo(QByteArray ifname){
         d->iw_info->qual.level = wireless1.signal_levle();
         d->iw_info->qual.noise = wireless1.noise_level();
     }
-
-
-   // wireless.read_wireless_info();
-     //  d->iw_info = iwInfot;
-    /* strcpy(d->iw_info->essid,iwInfot->essid);
-     d->iw_info->freq = iwInfot->freq;
-     d->iw_info->qual = iwInfot->qual;*/
-     //  d->iw_info->freq = iwInfot->freq;
 }
 
 } // namespace system

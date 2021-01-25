@@ -6,6 +6,7 @@
 #include <vector>
 #include "system/device_db.h"
 #include <QScrollArea>
+#include <QMap>
 DWIDGET_USE_NAMESPACE
 
 class ChartViewWidget;
@@ -41,7 +42,7 @@ private:
     NetifInfoDB *m_info;
     QWidget *m_centralWidget;
     QGridLayout  *m_graphicsLayout;
-    vector<NetifItemViewWidget*> m_lists;
+    QMap<QByteArray ,NetifItemViewWidget*> m_mapItemView;
 };
 
 #endif // NETIF_STAT_VIEW_WIDGET_H
