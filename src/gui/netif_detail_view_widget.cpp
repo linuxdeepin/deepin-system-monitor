@@ -34,14 +34,16 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
 {
     m_netifstatWIdget = new NetifStatViewWidget(this);
     m_netifsummaryWidget = new NetifSummaryViewWidget(this);
-    updateData();
+
     setTitle(DApplication::translate("Process.Graph.View", "Network"));
     m_centralLayout->addWidget(m_netifstatWIdget);
     m_centralLayout->addWidget(m_netifsummaryWidget);
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+
+   // connect(m_netifstatWIdget,&NetifStatViewWidget::changeInfo,m_blocksummaryWidget,&BlockDevSummaryViewWidget::chageSummaryInfo);
+
     fontChanged(DApplication::font());
-    m_timer->start(2000);
+
+    updateData();
 }
 
 void NetifDetailViewWidget::fontChanged(const QFont &font)
@@ -56,6 +58,6 @@ void NetifDetailViewWidget::updateData()
 {
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     auto *info = monitor->deviceDB();
-    m_netifstatWIdget->updateWidgetGeometry();
+    m_netifstatWIdget->onModelUpdate();
     m_netifsummaryWidget->updateWidgetGeometry(info);
 }

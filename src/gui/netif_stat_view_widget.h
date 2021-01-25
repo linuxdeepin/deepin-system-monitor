@@ -26,7 +26,7 @@ public:
 private:
     void showItem1();
     void showItem2();
-    void showItemLg2(const unsigned long count);
+    void showItemLg2();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -43,6 +43,9 @@ private:
     QWidget *m_centralWidget;
     QGridLayout  *m_graphicsLayout;
     QMap<QByteArray ,NetifItemViewWidget*> m_mapItemView;
+
+
+
 };
 
 #endif // NETIF_STAT_VIEW_WIDGET_H

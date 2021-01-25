@@ -42,7 +42,6 @@ public slots:
 private:
     NetifStatViewWidget *m_netifstatWIdget;
     NetifSummaryViewWidget *m_netifsummaryWidget;
-    QTimer *m_timer;
 
 };
 

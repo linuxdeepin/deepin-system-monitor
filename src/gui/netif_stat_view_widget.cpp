@@ -26,6 +26,9 @@ NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : QScrollArea(parent)
     this->setWidget(m_centralWidget);
     m_centralWidget->setWindowFlags(Qt::FramelessWindowHint);
     this->setFrameShape(QFrame::NoFrame);
+    onModelUpdate();
+     auto *monitor = SystemMonitor::instance();
+     connect(monitor, &SystemMonitor::statInfoUpdated, this, &NetifStatViewWidget::onModelUpdate);
 }
 
 void NetifStatViewWidget::paintEvent(QPaintEvent *event)
@@ -47,114 +50,124 @@ void NetifStatViewWidget::fontChanged(const QFont &font)
 
 void NetifStatViewWidget::onModelUpdate()
 {
-   // QString memoryDetail = "f";
-   // parent()->setProperty("detail", memoryDetail);
-
-
-//   auto iter = m_info =   DeviceDB::instance()->netifInfoDB();
-//   while(iter != m_info->infoDB().end()){
-//        QByteArray value = iter.
-////       if(m_mapItemView.contains()){
-
-////       }
-//       iter++;
-//   }
-
-
-
+    QMap<QByteArray, NetifInfo>  NetifInfoDB = m_info->infoDB();
+    auto iter =  NetifInfoDB.begin();
+    while(iter != NetifInfoDB.end()){
+       QByteArray mac = iter.key();
+      if(!m_mapItemView.contains(mac)){
+               NetifItemViewWidget *temp = new NetifItemViewWidget(this,mac);
+               temp->updateData(iter.value());
+               temp->update();
+               m_mapItemView.insert(iter.key(),temp);
+       }
+      else{
+            NetifItemViewWidget *temp = m_mapItemView.value(mac);
+            temp->updateData(iter.value());
+            temp->update();
+      }
+       iter++;
+    }
+    updateWidgetGeometry();
 }
 
-static int t_i = 100;
+//static int t_i = 100;
 
 void NetifStatViewWidget::updateWidgetGeometry()
 {
 
-//    int netCount  = t_i%18;//m_info->infoDB().size();
-//    t_i--;
-//    qInfo()<<"t_i="<<t_i;
-//    if(netCount <=0 ){
-//        return ;
-//    }
-//    // 界面和数据相等。
-//    unsigned long m_list_len = m_lists.size();
-//    if( m_list_len < netCount)
-//    {
-//        for( unsigned long i = 0 ; i < netCount - m_list_len ;i++){
-//               NetifItemViewWidget *item = new NetifItemViewWidget(m_centralWidget);
-//                m_lists.push_back(item);
-//        }
-//    }
+   int netCount  = m_info->infoDB().size();
 
-//    if(netCount == 1){
-//        showItem1();
-//    }else if(netCount == 2){
-//        showItem2();
-//    }else if(netCount > 2){
-//        showItemLg2(netCount);
-//    }
+    if(netCount == 1){
+        showItem1();
+    }else if(netCount == 2){
+        showItem2();
+    }else if(netCount > 2){
+        showItemLg2();
+    }
 }
 
 void NetifStatViewWidget::showItem1()
 {
-//    int avgWidth = this->width();
-//    int avgheight = this->height();
-//     NetifItemViewWidget *item = m_lists.at(0);
-//     item->show();
-//     int fontHeight = QFontMetrics(m_font).height();
-//     item->setGeometry(0,0,avgWidth,avgheight);
-//     m_centralWidget->resize(avgWidth, avgheight);
+    int avgWidth = this->width();
+    int avgheight = this->height();
 
-//     for(int i = 1 ; i < m_lists.size();i++){
-//        m_lists.at(i)->hide();
-//     }
+    auto iter = m_mapItemView.begin();
+    while(iter !=  m_mapItemView.end()){
+        auto itemView = iter.value();
+        if(m_info->infoDB().contains(iter.key()) ){
+            itemView->show();
+            itemView->setMode(1);
+            itemView->setGeometry(0,0,avgWidth,avgheight);
+        }
+        else {
+            itemView->hide();
+        }
+        iter ++;
+    }
+    m_centralWidget->resize(avgWidth, avgheight);
 }
 
 void NetifStatViewWidget::showItem2()
 {
-//    int avgWidth = this->width();
-//    int avgheight = this->height();
-//     avgWidth = this->width() / 2 - 10;
-//     NetifItemViewWidget *item1 = m_lists.at(0);
-//     NetifItemViewWidget *item2 = m_lists.at(1);
-//     item1->show();
-//     item2->show();
-//     unsigned int fontHeight = QFontMetrics(m_font).height();
-
-//     item1->setGeometry(0, 0, avgWidth, avgheight-20);
-//     item2->setGeometry(item1->geometry().right() + 20, 0,avgWidth + 20, avgheight-20);
-//     m_centralWidget->resize(item2->geometry().right(), avgheight - 20);
-
-//     for(int i = 2 ; i < m_lists.size();i++){
-//        m_lists.at(i)->hide();
-//     }
+    int avgWidth = this->width();
+    int avgheight = this->height();
+    int itemWidth = avgWidth / 2 - 10;
+    auto iter = m_mapItemView.begin();
+    int i = 0;
+    while(iter !=  m_mapItemView.end()){
+        auto itemView = iter.value();
+        if(m_info->infoDB().contains(iter.key())){
+            if(i == 0 ){
+                itemView->show();
+                itemView->setMode(1);
+                itemView->setGeometry(0,0,itemWidth,avgheight);
+            }
+            else{
+                itemView->show();
+                itemView->setMode(1);
+                itemView->setGeometry(itemWidth+16,0,itemWidth,avgheight);
+            }
+            i++;
+        }
+        else {
+            itemView->hide();
+        }
+        iter ++;
+    }
 }
 
-void NetifStatViewWidget::showItemLg2(const unsigned long count)
+void NetifStatViewWidget::showItemLg2()
 {
-//    int Width = this->width();
-//    int height = this->height();
-//    unsigned int fontHeight = QFontMetrics(m_font).height();
-
-//    int avgWidth = this->width() / 2 - 10;
-//    int avgheight = height - fontHeight/2;
-//    for(int i =0 ;i < count;i++){
-//        int page = i /4;
-//        NetifItemViewWidget *item1 = m_lists.at(i);
-//        item1->show();
-//        if(i%4 == 0){
-//             item1->setGeometry(page*Width,0,avgWidth,avgheight/2);
-//        }else if(i%4 == 1){
-//              item1->setGeometry(page*Width+avgWidth+10,0,avgWidth,avgheight/2);
-//        }else if(i%4 == 2){
-//              item1->setGeometry(page*Width,avgheight/2,avgWidth,avgheight/2);
-//        }else if(i%4 == 3){
-//              item1->setGeometry(page*Width+avgWidth+10,avgheight/2,avgWidth,avgheight/2);
-//        }
-//    }
-//    m_centralWidget->resize(Width*(((count-1)/4)+1), height);
-//    for(unsigned long i = count ; i < m_lists.size();i++){
-//       m_lists.at(i)->hide();
-//    }
-
+    int Width = this->width();
+    int height = this->height();
+    int fontHeight = QFontMetrics(m_font).height();
+    int avgWidth = this->width() / 2 - 16;
+    int avgheight = height - fontHeight/2;
+    auto iter = m_mapItemView.begin();
+    int i = 0;
+    while(iter !=  m_mapItemView.end()){
+        int page = i /4;
+        auto itemView = iter.value();
+        if(m_info->infoDB().contains(iter.key())){
+           auto itemView = iter.value();
+           itemView->setMode(1);
+            if(i%4 == 0){
+                 itemView->setGeometry(page*Width,0,avgWidth,avgheight/2);
+            }else if(i%4 == 1){
+                  itemView->setGeometry(page*Width+avgWidth+16,0,avgWidth,avgheight/2);
+            }else if(i%4 == 2){
+                  itemView->setGeometry(page*Width,avgheight/2,avgWidth,avgheight/2);
+            }else if(i%4 == 3){
+                  itemView->setGeometry(page*Width+avgWidth+16,avgheight/2,avgWidth,avgheight/2);
+            }
+            itemView->update();
+            itemView->show();
+            i++;
+        }
+        else {
+            itemView->hide();
+        }
+        iter ++;
+    }
 }
 
