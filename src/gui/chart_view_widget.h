@@ -45,6 +45,7 @@ protected:
 
 private slots:
     void changeFont(const QFont &font);
+    void changeTheme();
 
 private:
     void drawBackPixmap();

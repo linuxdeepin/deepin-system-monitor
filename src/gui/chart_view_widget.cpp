@@ -34,6 +34,14 @@ ChartViewWidget::ChartViewWidget(QWidget *parent) : QWidget(parent)
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ChartViewWidget::changeFont);
+
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ChartViewWidget::changeTheme);
+}
+
+void ChartViewWidget::changeTheme()
+{
+    drawBackPixmap();
+    update();
 }
 
 void ChartViewWidget::setSpeedAxis(bool speed)
@@ -191,7 +199,7 @@ void ChartViewWidget::drawBackPixmap()
 
     int penSize = 1;
     painter.setPen(QPen(frameColor, penSize));
-    painter.setBrush(Qt::NoBrush);
+    painter.setBrush(palette.color(QPalette::Base));
     painter.setFont(m_textfont);
 
     int gridX = penSize;
@@ -203,16 +211,8 @@ void ChartViewWidget::drawBackPixmap()
     painter.setOpacity(0.3);
     m_chartRect = QRect(gridX, gridY, gridWidth, gridHeight);
 
-    painter.save();
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::white);
-    painter.drawRect(m_chartRect);
-    painter.restore();
-
     framePath.addRect(m_chartRect);
     painter.drawPath(framePath);
-
-
 
     // Draw grid.
     QPen gridPen;
