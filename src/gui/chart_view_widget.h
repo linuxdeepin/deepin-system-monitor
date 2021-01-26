@@ -62,7 +62,7 @@ private:
     QString m_axisTitle = {"100%"};
 
     QFont m_textfont;
-    QPixmap m_backPixmap;
+    QPixmap m_backPixmap = QPixmap();
 
     QRect m_chartRect;
     QColor m_data1Color = {"#00C5C0"};

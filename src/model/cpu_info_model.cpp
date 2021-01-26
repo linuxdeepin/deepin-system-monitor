@@ -28,6 +28,8 @@
 #include "system/system_monitor.h"
 #include "system/system_monitor_thread.h"
 
+#include <QApplication>
+
 CPUInfoModel::CPUInfoModel(const TimePeriod &period, QObject *parent)
     : QObject(parent)
     , m_period(period)
@@ -52,7 +54,7 @@ QString CPUInfoModel::uptime() const
     long mins = (uptime - days * 86400 - hours * 3600) / 60;
     // TODO: move tr to i18n.cpp
     buffer = QString("%1, %2:%3")
-             .arg(QCoreApplication::translate("up %1 days(s)", "SysInfo.Uptime", nullptr, int(days)))
+             .arg(QApplication::translate("up %1 days(s)", "SysInfo.Uptime", nullptr, int(days)))
              .arg(hours)
              .arg(mins);
     return buffer;

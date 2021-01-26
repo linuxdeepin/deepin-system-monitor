@@ -18,9 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "thread_manager.h"
-
-#include <QReadLocker>
-#include <QWriteLocker>
+#include "base_thread.h"
 
 namespace common {
 namespace core {
@@ -33,8 +31,6 @@ ThreadManager *ThreadManager::instance()
 
 void ThreadManager::attach(BaseThread *thread)
 {
-    QWriteLocker lock(&m_rwlock);
-
     if (m_threadDB.contains(thread->threadKey()))
         return;
 
@@ -43,19 +39,7 @@ void ThreadManager::attach(BaseThread *thread)
 
 void ThreadManager::detach(int key)
 {
-    QWriteLocker lock(&m_rwlock);
     m_threadDB.remove(key);
-}
-
-ThreadManager::ThreadManager(QObject *parent)
-    : QObject(parent)
-{
-
-}
-
-ThreadManager::~ThreadManager()
-{
-
 }
 
 } // namespace core

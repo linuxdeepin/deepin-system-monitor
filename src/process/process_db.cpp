@@ -30,6 +30,7 @@
 
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QApplication>
 #include <QDebug>
 
 #include <sys/resource.h>

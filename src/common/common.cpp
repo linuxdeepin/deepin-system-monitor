@@ -26,8 +26,128 @@
 #include <QString>
 #include <QtDBus>
 #include <QDesktopServices>
+#include <QApplication>
 
 namespace common {
+
+void displayShortcutHelpDialog(const QRect &rect)
+{
+    QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+
+    QJsonObject shortcutObj;
+    QJsonArray jsonGroups;
+
+    // system section
+    QJsonObject sysObj;
+    sysObj.insert("groupName", QApplication::translate("Help.Shortcut.System", "System"));
+    QJsonArray sysObjArr;
+
+    // display shortcut shortcut help
+    QJsonObject shortcutItem;
+    shortcutItem.insert("name",
+                        QApplication::translate("Help.Shortcut.System", "Display shortcuts"));
+    shortcutItem.insert("value", "Ctrl+Shift+?");
+    sysObjArr.append(shortcutItem);
+
+    // display search shortcut help
+    QJsonObject searchItem;
+    searchItem.insert("name", QApplication::translate("Title.Bar.Search", "Search"));
+    searchItem.insert("value", "Ctrl+F");
+    sysObjArr.append(searchItem);
+
+    sysObj.insert("groupItems", sysObjArr);
+    jsonGroups.append(sysObj);
+
+    // processes section
+    QJsonObject procObj;
+    procObj.insert("groupName", QApplication::translate("Title.Bar.Switch", "Processes"));
+    QJsonArray procObjArr;
+
+    // force end application shortcut help
+    QJsonObject killAppItem;
+    killAppItem.insert("name",
+                       QApplication::translate("Title.Bar.Context.Menu", "Force end application"));
+    killAppItem.insert("value", "Ctrl+Alt+K");
+    procObjArr.append(killAppItem);
+
+    // end process shortcut help
+    QJsonObject endProcItem;
+    endProcItem.insert("name",
+                       QApplication::translate("Process.Table.Context.Menu", "End process"));
+    endProcItem.insert("value", "Alt+E");
+    procObjArr.append(endProcItem);
+    // suspend process shortcut help
+    QJsonObject pauseProcItem;
+    pauseProcItem.insert("name",
+                         QApplication::translate("Process.Table.Context.Menu", "Suspend process"));
+    pauseProcItem.insert("value", "Alt+P");
+    procObjArr.append(pauseProcItem);
+    // resume process shortcut help
+    QJsonObject resumeProcItem;
+    resumeProcItem.insert("name",
+                          QApplication::translate("Process.Table.Context.Menu", "Resume process"));
+    resumeProcItem.insert("value", "Alt+C");
+    procObjArr.append(resumeProcItem);
+    // properties shortcut help
+    QJsonObject propItem;
+    propItem.insert("name", QApplication::translate("Process.Table.Context.Menu", "Properties"));
+    propItem.insert("value", "Alt+Enter");
+    procObjArr.append(propItem);
+    // kill process shortcut help
+    QJsonObject killProcItem;
+    killProcItem.insert("name",
+                        QApplication::translate("Process.Table.Context.Menu", "Kill process"));
+    killProcItem.insert("value", "Alt+K");
+    procObjArr.append(killProcItem);
+
+    procObj.insert("groupItems", procObjArr);
+    jsonGroups.append(procObj);
+
+    // services section
+    QJsonObject svcObj;
+    svcObj.insert("groupName", QApplication::translate("Title.Bar.Switch", "Services"));
+    QJsonArray svcObjArr;
+
+    // start service shortcut help
+    QJsonObject startSvcItem;
+    startSvcItem.insert("name", QApplication::translate("Service.Table.Context.Menu", "Start"));
+    startSvcItem.insert("value", "Alt+S");
+    svcObjArr.append(startSvcItem);
+    // stop service shortcut help
+    QJsonObject stopSvcItem;
+    stopSvcItem.insert("name", QApplication::translate("Service.Table.Context.Menu", "Stop"));
+    stopSvcItem.insert("value", "Alt+T");
+    svcObjArr.append(stopSvcItem);
+    // restart service shortcut help
+    QJsonObject restartSvcItem;
+    restartSvcItem.insert("name", QApplication::translate("Service.Table.Context.Menu", "Restart"));
+    restartSvcItem.insert("value", "Alt+R");
+    svcObjArr.append(restartSvcItem);
+    // refresh service shortcut help
+    QJsonObject refreshSvcItem;
+    refreshSvcItem.insert("name", QApplication::translate("Service.Table.Context.Menu", "Refresh"));
+    refreshSvcItem.insert("value", "F5");
+    svcObjArr.append(refreshSvcItem);
+
+    svcObj.insert("groupItems", svcObjArr);
+    jsonGroups.append(svcObj);
+
+    shortcutObj.insert("shortcut", jsonGroups);
+
+    QJsonDocument doc(shortcutObj);
+
+    // fork new shortcut display process
+    QProcess shortcutViewProcess;
+    QStringList shortcutString;
+    // shortcut help json formatted text param
+    QString param1 = "-j=" + QString(doc.toJson().data());
+    // display position param
+    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+    shortcutString << param1 << param2;
+
+    // detach this process
+    shortcutViewProcess.startDetached("deepin-shortcut-viewer", shortcutString);
+}
 
 int getStatusBarMaxWidth()
 {

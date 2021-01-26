@@ -30,6 +30,7 @@
 #include <QMap>
 #include <QList>
 #include <QDebug>
+#include <QApplication>
 
 #include <memory>
 

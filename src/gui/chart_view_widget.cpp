@@ -63,7 +63,7 @@ void ChartViewWidget::addData1(const QVariant &data)
     }
 
     const QVariant &maxdata = *std::max_element(m_listData1.begin(), m_listData1.end());
-    if (maxdata != m_maxData1) {
+    if (maxdata.toLongLong() > 0 && maxdata != m_maxData1) {
         m_maxData1 = QVariant(maxdata.toLongLong() * 1.1);
         m_maxData = qMax(m_maxData1, m_maxData2);
 
@@ -85,7 +85,7 @@ void ChartViewWidget::addData2(const QVariant &data)
     }
 
     const QVariant &maxdata = *std::max_element(m_listData2.begin(), m_listData2.end());
-    if (maxdata != m_maxData2) {
+    if (maxdata.toLongLong() > 0 && maxdata != m_maxData2) {
         m_maxData2 = QVariant(maxdata.toLongLong() * 1.1);
         m_maxData = qMax(m_maxData1, m_maxData2);
 
@@ -153,13 +153,12 @@ void ChartViewWidget::drawData1(QPainter *painter)
         return;
 
     painter->save();
-    painter->setClipRect(m_chartRect);
-    painter->setRenderHints(QPainter::Antialiasing, false);
+    painter->setClipRect(m_chartRect.adjusted(1, -1, 1, 1));
 
     QPainterPath path;
     painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(m_data1Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter->translate(m_chartRect.bottomRight());
+    painter->setPen(QPen(m_data1Color, 1.5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->translate(m_chartRect.bottomRight() + QPoint(1, 1));
 
     getPainterPathByData(m_listData1, path, m_maxData);
     painter->drawPath(path);
@@ -172,13 +171,12 @@ void ChartViewWidget::drawData2(QPainter *painter)
         return;
 
     painter->save();
-    painter->setClipRect(m_chartRect);
-    painter->setRenderHints(QPainter::Antialiasing, false);
+    painter->setClipRect(m_chartRect.adjusted(1, -1, 1, 1));
 
     QPainterPath path;
     painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(m_data2Color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter->translate(m_chartRect.bottomRight());
+    painter->setPen(QPen(m_data2Color, 1.5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->translate(m_chartRect.bottomRight() + QPoint(1, 1));
 
     getPainterPathByData(m_listData2, path, m_maxData);
     painter->drawPath(path);
@@ -187,6 +185,9 @@ void ChartViewWidget::drawData2(QPainter *painter)
 
 void ChartViewWidget::drawBackPixmap()
 {
+    if (this->width() == 0 || this->height() == 0)
+        return;
+
     m_backPixmap = QPixmap(this->size());
     m_backPixmap.fill(Qt::transparent);
 
@@ -259,7 +260,4 @@ void ChartViewWidget::paintEvent(QPaintEvent *event)
     drawData1(&painter);
     drawData2(&painter);
     drawAxisText(&painter);
-
-
-
 }

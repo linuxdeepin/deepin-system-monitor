@@ -24,8 +24,8 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <DApplication>
 
-DWIDGET_USE_NAMESPACE
 using namespace common;
 using namespace common::format;
 
@@ -141,45 +141,45 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
         switch (section) {
         case kProcessNameColumn: {
             // name column display text
-            return DApplication::translate("Process.Table.Header", kProcessName);
+            return QApplication::translate("Process.Table.Header", kProcessName);
         }
         case kProcessCPUColumn: {
             // cpu column display text
-            return DApplication::translate("Process.Table.Header", kProcessCPU);
+            return QApplication::translate("Process.Table.Header", kProcessCPU);
         }
         case kProcessUserColumn:
             // user column display text
-            return DApplication::translate("Process.Table.Header", kProcessUser);
+            return QApplication::translate("Process.Table.Header", kProcessUser);
         case kProcessMemoryColumn:
             // memory column display text
-            return DApplication::translate("Process.Table.Header", kProcessMemory);
+            return QApplication::translate("Process.Table.Header", kProcessMemory);
         case kProcessShareMemoryColumn:
             // memory column display text
-            return DApplication::translate("Process.Table.Header", kProcessShareMemory);
+            return QApplication::translate("Process.Table.Header", kProcessShareMemory);
         case kProcessVTRMemoryColumn:
             // memory column display text
-            return DApplication::translate("Process.Table.Header", kProcessVtrMemory);
+            return QApplication::translate("Process.Table.Header", kProcessVtrMemory);
         case kProcessUploadColumn:
             // upload column display text
-            return DApplication::translate("Process.Table.Header", kProcessUpload);
+            return QApplication::translate("Process.Table.Header", kProcessUpload);
         case kProcessDownloadColumn:
             // download column display text
-            return DApplication::translate("Process.Table.Header", kProcessDownload);
+            return QApplication::translate("Process.Table.Header", kProcessDownload);
         case kProcessDiskReadColumn:
             // disk read column display text
-            return DApplication::translate("Process.Table.Header", kProcessDiskRead);
+            return QApplication::translate("Process.Table.Header", kProcessDiskRead);
         case kProcessDiskWriteColumn:
             // disk write column display text
-            return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
+            return QApplication::translate("Process.Table.Header", kProcessDiskWrite);
         case kProcessPIDColumn:
             // pid column display text
-            return DApplication::translate("Process.Table.Header", kProcessPID);
+            return QApplication::translate("Process.Table.Header", kProcessPID);
         case kProcessNiceColumn:
             // nice column display text
-            return DApplication::translate("Process.Table.Header", kProcessNice);
+            return QApplication::translate("Process.Table.Header", kProcessNice);
         case kProcessPriorityColumn:
             // priority column display text
-            return DApplication::translate("Process.Table.Header", kProcessPriority);
+            return QApplication::translate("Process.Table.Header", kProcessPriority);
         default:
             break;
         }
@@ -217,12 +217,12 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             switch (proc.state()) {
             case 'Z':
                 name = QString("(%1) %2")
-                       .arg(DApplication::translate("Process.Table", "No response"))
+                       .arg(QApplication::translate("Process.Table", "No response"))
                        .arg(name);
                 break;
             case 'T':
                 name = QString("(%1) %2")
-                       .arg(DApplication::translate("Process.Table", "Suspend"))
+                       .arg(QApplication::translate("Process.Table", "Suspend"))
                        .arg(name);
                 break;
             }
@@ -324,7 +324,7 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         if (index.column() == kProcessNameColumn) {
             char state = proc.state();
             if (state == 'Z' || state == 'T') {
-                return QVariant(int(DPalette::TextWarning));
+                return QVariant(int(Dtk::Gui::DPalette::TextWarning));
             }
         }
         return {};

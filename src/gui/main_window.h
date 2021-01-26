@@ -76,11 +76,6 @@ public Q_SLOTS:
     void initDisplay();
 
     /**
-     * @brief Show shortcut help dialog
-     */
-    void displayShortcutHelpDialog();
-
-    /**
      * @brief onLoadStatusChanged
      */
     void onLoadStatusChanged(bool loading);

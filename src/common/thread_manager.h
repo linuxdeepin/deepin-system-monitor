@@ -20,17 +20,8 @@
 #ifndef THREAD_MANAGER_H
 #define THREAD_MANAGER_H
 
-#include "application.h"
-#include "base_thread.h"
-
 #include <QThread>
-#include <QThreadStorage>
-#include <QMutex>
-#include <QReadWriteLock>
-#include <QApplication>
 #include <QMap>
-
-#include <mutex>
 
 namespace common {
 namespace core {
@@ -38,6 +29,7 @@ namespace core {
 /**
  * @brief Thread Manager class to keep tracking of long running threads
  */
+class BaseThread;
 class ThreadManager : public QObject
 {
     Q_OBJECT
@@ -56,18 +48,16 @@ public slots:
     void detach(int key);
 
 public:
-    explicit ThreadManager(QObject *parent = nullptr);
-    virtual ~ThreadManager();
+    explicit ThreadManager() {}
+    virtual ~ThreadManager() {}
 
 private:
-    mutable QReadWriteLock m_rwlock;
     QMap<int, BaseThread *> m_threadDB;
 };
 
 template<typename T>
 inline T *ThreadManager::thread(int key)
 {
-    QReadLocker lock(&m_rwlock);
     auto *thr = m_threadDB[key];
     return static_cast<T *>(thr);
 }

@@ -25,6 +25,8 @@
 #include "wm/wm_window_list.h"
 #include "sys_info.h"
 
+#include <QTimerEvent>
+
 using namespace common::core;
 
 namespace core {

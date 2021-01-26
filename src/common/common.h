@@ -182,7 +182,8 @@ inline struct timeval &operator+=(struct timeval &lhs, const struct timeval &rhs
 
 } // namespace time
 
-int getStatusBarMaxWidth();
+int  getStatusBarMaxWidth();
+void displayShortcutHelpDialog(const QRect &rect);
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
                      int loadingAngle, int rotationAngle, QColor foregroundColor,
                      double foregroundOpacity, QColor backgroundColor, double backgroundOpacity,
