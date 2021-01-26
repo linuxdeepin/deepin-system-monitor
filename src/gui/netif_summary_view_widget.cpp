@@ -29,7 +29,7 @@ using namespace core::system;
 using namespace common::format;
 
 
-class NetInfoModel :public QAbstractTableModel
+class NetInfoModel : public QAbstractTableModel
 {
 public:
     explicit NetInfoModel(QObject *parent = nullptr);
@@ -64,37 +64,28 @@ NetInfoModel::~NetInfoModel()
 
 }
 
-
-
-
 NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     : DTableView(parent),
       m_index(0)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-  this->horizontalHeader()->setVisible(false);
-  this->verticalHeader()->setVisible(false);
-  this->horizontalHeader()->setSectionResizeMode(DHeaderView::Stretch);
-  this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
-  this->setGridStyle(Qt::NoPen);
-  this->setFrameShape(QFrame::NoFrame);
-   m_netInfoModel = new NetInfoModel(this);
-   this->setModel(m_netInfoModel);
+    this->horizontalHeader()->setVisible(false);
+    this->verticalHeader()->setVisible(false);
+    this->horizontalHeader()->setSectionResizeMode(DHeaderView::Stretch);
+    this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
+    this->setGridStyle(Qt::NoPen);
+    this->setFrameShape(QFrame::NoFrame);
+    m_netInfoModel = new NetInfoModel(this);
+    this->setModel(m_netInfoModel);
 }
 
-void NetifSummaryViewWidget::updateWidgetGeometry(DeviceDB *info)
+void NetifSummaryViewWidget::onModelUpdate()
 {
     // update model
-
 }
 
 void NetifSummaryViewWidget::fontChanged(const QFont &font)
-{
-
-}
-
-void NetifSummaryViewWidget::paintEvent(QPaintEvent *event)
 {
 
 }

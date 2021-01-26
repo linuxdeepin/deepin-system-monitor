@@ -29,7 +29,6 @@ private:
     void showItemLg2();
 
 protected:
-    void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 signals:
 
@@ -43,10 +42,7 @@ private:
     NetifInfoDB *m_info;
     QWidget *m_centralWidget;
     QGridLayout  *m_graphicsLayout;
-    QMap<QByteArray ,NetifItemViewWidget*> m_mapItemView;
-
-
-
+    QMap<QByteArray, NetifItemViewWidget *> m_mapItemView;
 };
 
 #endif // NETIF_STAT_VIEW_WIDGET_H

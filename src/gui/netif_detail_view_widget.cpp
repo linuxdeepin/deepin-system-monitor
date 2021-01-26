@@ -20,15 +20,11 @@
 #include "netif_detail_view_widget.h"
 #include "netif_stat_view_widget.h"
 #include "netif_summary_view_widget.h"
-#include "common/thread_manager.h"
-#include "system/system_monitor_thread.h"
-#include "system/device_db.h"
+#include "system/system_monitor.h"
+
 #include <DApplication>
-#include <QTimer>
 
-using namespace common::core;
 using namespace core::system;
-
 NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
@@ -39,25 +35,22 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     m_centralLayout->addWidget(m_netifstatWIdget);
     m_centralLayout->addWidget(m_netifsummaryWidget);
 
-   // connect(m_netifstatWIdget,&NetifStatViewWidget::changeInfo,m_blocksummaryWidget,&BlockDevSummaryViewWidget::chageSummaryInfo);
-
     fontChanged(DApplication::font());
 
     updateData();
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetifDetailViewWidget::updateData);
 }
 
 void NetifDetailViewWidget::fontChanged(const QFont &font)
 {
     BaseDetailViewWidget::fontChanged(font);
-    //Child Todo
+
     m_netifstatWIdget->fontChanged(font);
     m_netifsummaryWidget->fontChanged(font);
 }
 
 void NetifDetailViewWidget::updateData()
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    auto *info = monitor->deviceDB();
     m_netifstatWIdget->onModelUpdate();
-    m_netifsummaryWidget->updateWidgetGeometry(info);
+    m_netifsummaryWidget->onModelUpdate();
 }

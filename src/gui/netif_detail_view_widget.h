@@ -27,8 +27,6 @@
  */
 class NetifStatViewWidget;
 class NetifSummaryViewWidget;
-class QTimer;
-
 class NetifDetailViewWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
@@ -39,6 +37,7 @@ public:
 public slots:
     void fontChanged(const QFont &font) override;
     void updateData();   // 更新数据
+
 private:
     NetifStatViewWidget *m_netifstatWIdget;
     NetifSummaryViewWidget *m_netifsummaryWidget;
