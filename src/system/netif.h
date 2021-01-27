@@ -46,6 +46,8 @@ struct inet_addr6_t : public inet_addr_t {
     int scope;
 };
 using INetAddr = std::shared_ptr<struct inet_addr_t>;
+using INet4Addr = std::shared_ptr<struct inet_addr4_t>;
+using INet6Addr = std::shared_ptr<struct inet_addr6_t>;
 
 class NetifInfoData;
 class NetifInfoDB;
@@ -73,6 +75,7 @@ public:
     quint8 linkMode() const;
     quint8 carrier() const;
     uint carrierChanges() const;
+    uint netspeed() const;
     QByteArray connectionType() const;
     QByteArray linkAddress() const;
     QByteArray linkBroadcast() const;
@@ -83,6 +86,7 @@ public:
     uint8_t linkQuality() const;
     uint8_t signalLevel() const;
     uint8_t noiseLevel() const;
+    bool isWireless() const;
 
     // link stats
     qulonglong rxPackets() const;
@@ -101,19 +105,21 @@ public:
 
     qulonglong collisions() const;
 
-    // address list
-    QList<INetAddr> addrList() const;
-    qreal m_recv_bps = 0;             // 接收速度
-    qreal m_sent_bps = 0;             // 发送速度
     qreal recv_bps() const;
     qreal sent_bps() const;
-    qreal set_recv_bps(qreal recv_bps);
-    qreal set_sent_bps(qreal sent_bps);
+
+    void set_recv_bps(qreal recv_bps);
+    void set_sent_bps(qreal sent_bps);
+
+    QList<INet4Addr> addr4InfoList() const;
+    QList<INet6Addr> addr6InfoList() const;
+
+    void updateAddr4Info(const QList<INet4Addr> &addrList);
+    void updateAddr6Info(const QList<INet6Addr> &addrList);
 
 protected:
     void updateLinkInfo(const NLLink *link);
-    void updateAddrInfo(const QList<INetAddr> &addrList);
-    void updateWirelessInfo(QByteArray ifname); // ioctl
+    void updateWirelessInfo(); // ioctl
     void updateBrandInfo(); // udev
 
 private:
@@ -177,6 +183,11 @@ inline uint NetifInfo::carrierChanges() const
     return d->carrier_changes;
 }
 
+inline uint NetifInfo::netspeed() const
+{
+    return d->net_speed;
+}
+
 inline QByteArray NetifInfo::connectionType() const
 {
     return d->conn_type;
@@ -219,6 +230,11 @@ inline uint8_t NetifInfo::signalLevel() const
         return d->iw_info->qual.level;
     else
         return 0;
+}
+
+inline bool NetifInfo::isWireless() const
+{
+    return d->isWireless;
 }
 
 inline uint8_t NetifInfo::noiseLevel() const
@@ -294,14 +310,30 @@ inline qulonglong NetifInfo::collisions() const
     return d->collisions;
 }
 
-inline QList<INetAddr> NetifInfo::addrList() const
+inline QList<INet4Addr> NetifInfo::addr4InfoList() const
 {
-    return d->addrs;
+    return d->addr4infolst;
+}
+
+inline QList<INet6Addr> NetifInfo::addr6InfoList() const
+{
+    return d->addr6infolst;
+}
+
+inline void NetifInfo::updateAddr4Info(const QList<INet4Addr> &addrList)
+{
+    d->addr4infolst = addrList;
+}
+
+inline void NetifInfo::updateAddr6Info(const QList<INet6Addr> &addrList)
+{
+    d->addr6infolst = addrList;
 }
 
 } // namespace system
 } // namespace core
 
 Q_DECLARE_TYPEINFO(core::system::NetifInfo, Q_MOVABLE_TYPE);
+using NetifInfoPtr = std::shared_ptr<class core::system::NetifInfo>;
 
 #endif // NETIF_H

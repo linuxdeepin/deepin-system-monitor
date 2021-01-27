@@ -67,24 +67,34 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     m_animation->setEasingCurve(QEasingCurve::OutQuad);
     m_animation->setStartValue(0);
     m_animation->setEndValue(1.0);
-    connect(m_animation, &QVariantAnimation::valueChanged, this, [ = ]() { update(); });
+    connect(m_animation, &QVariantAnimation::valueChanged, this, &CompactMemoryMonitor::onValueChanged);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &CompactMemoryMonitor::changeFont);
 
     m_memInfo = DeviceDB::instance()->memInfo();
-    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, [ = ]() {
-        m_animation->start();
-    });
-
-    connect(m_animation, &QPropertyAnimation::finished, [ = ]() {
-        m_lastMemPercent = (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal();
-        m_lastSwapPercent = (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal();
-    });
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &CompactMemoryMonitor::onStatInfoUpdated);
+    connect(m_animation, &QPropertyAnimation::finished, this, &CompactMemoryMonitor::animationFinshed);
 }
 
 CompactMemoryMonitor::~CompactMemoryMonitor() {}
+
+void CompactMemoryMonitor::onStatInfoUpdated()
+{
+    m_animation->start();
+}
+
+void CompactMemoryMonitor::animationFinshed()
+{
+    m_lastMemPercent = (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal();
+    m_lastSwapPercent = (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal();
+}
+
+void CompactMemoryMonitor::onValueChanged()
+{
+    this->update();
+}
 
 void CompactMemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {

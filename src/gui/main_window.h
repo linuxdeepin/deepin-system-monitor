@@ -25,8 +25,6 @@
 #include <DShadowLine>
 #include <DStackedWidget>
 
-#include <mutex>
-
 DWIDGET_USE_NAMESPACE
 
 class Toolbar;
@@ -122,7 +120,7 @@ private:
     ProcessPageWidget *m_procPage = nullptr;
     SystemServicePageWidget *m_svcPage = nullptr;
 
-    std::once_flag oflag;
+    bool m_initLoad = false;
     DShadowLine *m_tbShadow  = nullptr;
     QWidget *m_focusedWidget = nullptr;
 };

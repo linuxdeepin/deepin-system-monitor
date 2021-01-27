@@ -21,13 +21,13 @@
 #define NETIF_MONITOR_THREAD_H
 
 #include "common/base_thread.h"
-#include "netif_monitor.h"
 
 using namespace common::core;
 
 namespace core {
 namespace system {
 
+class NetifMonitor;
 class NetifMonitorThread : public BaseThread
 {
 public:
@@ -47,11 +47,6 @@ private:
 inline int NetifMonitorThread::threadKey() const
 {
     return kNetifMonitorThread;
-}
-
-inline NetifMonitor *NetifMonitorThread::netifJobInstance() const
-{
-    return m_netifMonitor;
 }
 
 } // namespace system

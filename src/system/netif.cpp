@@ -35,8 +35,6 @@ NetifInfo::NetifInfo()
 }
 NetifInfo::NetifInfo(const NetifInfo &other)
     : d(other.d)
-    , m_recv_bps(other.m_recv_bps)
-    , m_sent_bps(other.m_sent_bps)
 {
 }
 NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
@@ -45,8 +43,6 @@ NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
         return *this;
 
     d = rhs.d;
-    m_recv_bps = rhs.m_recv_bps;
-    m_sent_bps = rhs.m_sent_bps;
     return *this;
 }
 NetifInfo::~NetifInfo()
@@ -55,25 +51,23 @@ NetifInfo::~NetifInfo()
 
 qreal NetifInfo::recv_bps() const
 {
-    return m_recv_bps;
+    return d->recv_bps;
 }
 
 qreal NetifInfo::sent_bps() const
 {
-    return m_sent_bps;
+    return d->sent_bps;
 }
 
-qreal NetifInfo::set_recv_bps(qreal recv_bps)
+void NetifInfo::set_recv_bps(qreal recv_bps)
 {
-    m_recv_bps = recv_bps;
+    d->recv_bps = recv_bps;
 }
 
-qreal NetifInfo::set_sent_bps(qreal sent_bps)
+void NetifInfo::set_sent_bps(qreal sent_bps)
 {
-    m_sent_bps = sent_bps;
+    d->sent_bps = sent_bps;
 }
-
-
 
 void NetifInfo::updateLinkInfo(const NLLink *link)
 {
@@ -117,24 +111,20 @@ void NetifInfo::updateLinkInfo(const NLLink *link)
     d->tx_carrier = link->tx_carrier();
     d->collisions = link->collisions();
 
-    this->updateWirelessInfo(d->ifname);
+    this->updateWirelessInfo();
 }
 
-void NetifInfo::updateAddrInfo(const QList<INetAddr> &addrList)
+void NetifInfo::updateWirelessInfo()
 {
-    d->addrs = addrList;
-}
-
-void NetifInfo::updateWirelessInfo(QByteArray ifname)
-{
-
-    wireless wireless1(ifname);
-
+    wireless wireless1(d->ifname);
     if (wireless1.is_wireless()) {
+        d->isWireless = true;
         strcpy(d->iw_info->essid, wireless1.essid().data());
         d->iw_info->qual.qual = wireless1.link_quality();
         d->iw_info->qual.level = wireless1.signal_levle();
         d->iw_info->qual.noise = wireless1.noise_level();
+    } else {
+        d->isWireless = false;
     }
 }
 

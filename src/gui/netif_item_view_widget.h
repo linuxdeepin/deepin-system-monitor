@@ -2,6 +2,7 @@
 #define NETIF_ITEM_VIEW_WIDGET_H
 
 #include <QWidget>
+#include <memory>
 
 namespace core {
 namespace system {
@@ -38,7 +39,7 @@ signals:
 
 public slots:
     void fontChanged(const QFont &font);
-    void updateData(const core::system::NetifInfo &netifInfo);
+    void updateData(const std::shared_ptr<class core::system::NetifInfo> &netifInfo);
 
 private:
     void updateWidgetGeometry();

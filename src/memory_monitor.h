@@ -62,6 +62,11 @@ protected:
         m_progress = p;
     }
 
+private slots:
+    void onStatInfoUpdated();
+    void onAnimationFinished();
+    void onValueChanged();
+
 private:
     QIcon m_icon {};
 

@@ -247,11 +247,12 @@ void MainWindow::showEvent(QShowEvent *event)
     // propogate show event to base handler first
     DMainWindow::showEvent(event);
 
-    std::call_once(oflag, []() {
+    if (!m_initLoad) {
+        m_initLoad = true;
         auto *msev = new MonitorStartEvent();
         gApp->postEvent(gApp, msev);
         auto *netev = new NetifStartEvent();
         gApp->postEvent(gApp, netev);
         PERF_PRINT_END("POINT-01");
-    });
+    }
 }

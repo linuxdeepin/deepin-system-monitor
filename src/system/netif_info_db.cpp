@@ -36,33 +36,33 @@ namespace system {
 
 NetifInfoDB::NetifInfoDB()
     : m_netlink(new Netlink())
-    , m_addrDB {}
-    , m_infoDB {}
 {
 }
 
 void NetifInfoDB::update_addr()
 {
-    // iterator
-    // 查找所有的addr
     AddrIterator iter = m_netlink->addrIterator();
-    m_addrDB.clear();
+    m_addrIpv4DB.clear();
+    m_addrIpv6DB.clear();
+
     while (iter.hasNext()) {
         auto it = iter.next();
         if (it->family() == AF_INET) {
             std::shared_ptr<struct inet_addr4_t> ip4net = std::make_shared<struct inet_addr4_t>();
+            it->local();
             ip4net->family = it->family();
-            ip4net->addr = it->local();
-            ip4net->mask = it->multicast();
+            ip4net->addr = it->netaddr();
+            ip4net->mask = it->netmask();
             ip4net->bcast = it->broadcast();
-            m_addrDB.insert(it->local(), ip4net);
+            m_addrIpv4DB.insert(it->ifindex(), ip4net);
         } else if (it->family() == AF_INET6) {
-            std::shared_ptr<struct inet_addr6_t> temp = std::make_shared<struct inet_addr6_t>();
-            temp->family = it->family();
-            temp->addr = it->local();
-            temp->scope = it->scope();
-            temp->prefixlen = it->prefixlen();
-            m_addrDB.insert(it->local(), temp);
+            std::shared_ptr<struct inet_addr6_t> ip6net = std::make_shared<struct inet_addr6_t>();
+            it->local();
+            ip6net->family = it->family();
+            ip6net->addr = it->netaddr();
+            ip6net->scope = it->scope();
+            ip6net->prefixlen = it->prefixlen();
+            m_addrIpv6DB.insert(it->ifindex(), ip6net);
         }
     }
 
@@ -71,7 +71,8 @@ void NetifInfoDB::update_addr()
 void NetifInfoDB::update_netif_info()
 {
     LinkIterator iter = m_netlink->linkIterator();
-    QMap<QByteArray, NetifInfo> old_infoDB = m_infoDB;
+    QMap<QByteArray, NetifInfoPtr> old_infoDB = m_infoDB;
+
     m_infoDB.clear();
     while (iter.hasNext()) {
         auto it = iter.next();
@@ -79,20 +80,21 @@ void NetifInfoDB::update_netif_info()
         if (it->ifname() == "lo") {
             continue;
         }
-        NetifInfo  item;
-        item.updateLinkInfo(it.get());
-        item.updateAddrInfo(m_addrDB.values(it->addr()));
-        // 更新速率
+        NetifInfoPtr item = std::make_shared<NetifInfo>();
+        item->updateLinkInfo(it.get());
+        item->updateAddr4Info(m_addrIpv4DB.values(it->ifindex()));
+        item->updateAddr6Info(m_addrIpv6DB.values(it->ifindex()));
 
+        // 更新速率
         if (old_infoDB.contains(it->addr())) {
             timevalList[kLastStat] = timevalList[kCurrentStat];
             timevalList[kCurrentStat] = SysInfo::instance()->uptime();
 
             auto old_item = old_infoDB.value(it->addr());
             // receive increment between interval
-            auto rxdiff = (item.rxBytes() > old_item.rxBytes()) ? (item.rxBytes() - old_item.rxBytes()) : 0;
+            auto rxdiff = (item->rxBytes() > old_item->rxBytes()) ? (item->rxBytes() - old_item->rxBytes()) : 0;
             // transfer increment between interval
-            auto txdiff = (item.txBytes() > old_item.txBytes()) ? (item.txBytes() - old_item.txBytes()) : 0;
+            auto txdiff = (item->txBytes() > old_item->txBytes()) ? (item->txBytes() - old_item->txBytes()) : 0;
             timeval cur_time = timevalList[kCurrentStat];
             timeval prev_time = timevalList[kLastStat];
 
@@ -101,31 +103,24 @@ void NetifInfoDB::update_netif_info()
             auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
             qreal recv_bps = rxdiff / interval;   // Bps
             qreal sent_bps = txdiff / interval;
-            item.set_recv_bps(recv_bps);
-            item.set_sent_bps(sent_bps);
+            item->set_recv_bps(recv_bps);
+            item->set_sent_bps(sent_bps);
         }
-
 
         m_infoDB.insert(it->addr(), item);
     }
 }
 void NetifInfoDB::update()
 {
-    QWriteLocker lock(&m_rwlock);
     this->update_addr();
     this->update_netif_info();
-
-    // d->infoMap =
-    // d->addrMap =
 }
 
-// 获取进程的上传和下载的流量
 bool NetifInfoDB::getSockIOStatByInode(ino_t ino, SockIOStat &stat)
 {
     NetifMonitorThread *thread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
     auto netifMonitor = thread->netifJobInstance();
     return netifMonitor->getSockIOStatByInode(ino, stat);
-
 }
 
 } // namespace system

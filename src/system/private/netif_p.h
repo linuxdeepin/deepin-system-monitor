@@ -40,6 +40,8 @@ namespace system {
 
 struct inet_addr_t;
 using INetAddr = std::shared_ptr<struct inet_addr_t>;
+using INet4Addr = std::shared_ptr<struct inet_addr4_t>;
+using INet6Addr = std::shared_ptr<struct inet_addr6_t>;
 struct iw_info_t {
     char essid[ESSID_MAX_SIZE + 1] {'\0'};
     struct iw_freq freq {
@@ -70,12 +72,17 @@ public:
         , arp_type {0}
         , txqlen {0}
         , carrier_changes {0}
+        , net_speed {0}
         , ifname {}
         , alias {}
         , conn_type {}
         , hw_addr {}
         , hw_bcast {}
         , brand {}
+        , recv_bps {0}
+        , sent_bps {0}
+        , addr4infolst {}
+        , addr6infolst {}
         , iw_info {}
         , rx_packets {0}
         , rx_bytes {0}
@@ -90,7 +97,6 @@ public:
         , tx_fifo {0}
         , tx_carrier {0}
         , collisions {0}
-        , addrs {}
     {
     }
 
@@ -105,12 +111,17 @@ public:
         , arp_type {other.arp_type}
         , txqlen {other.txqlen}
         , carrier_changes {other.carrier_changes}
+        , net_speed {other.net_speed}
         , ifname {other.ifname}
         , alias {other.alias}
         , conn_type {other.conn_type}
         , hw_addr {other.hw_addr}
         , hw_bcast {other.hw_bcast}
         , brand {other.brand}
+        , recv_bps {other.recv_bps}
+        , sent_bps {other.sent_bps}
+        , addr4infolst {other.addr4infolst}
+        , addr6infolst {other.addr6infolst}
         , iw_info {std::unique_ptr<iw_info_t>(new iw_info_t(*(other.iw_info)))}
         , rx_packets {other.rx_packets}
         , rx_bytes {other.rx_bytes}
@@ -125,7 +136,6 @@ public:
         , tx_fifo {other.tx_fifo}
         , tx_carrier {other.tx_carrier}
         , collisions {other.collisions}
-        , addrs {other.addrs}
     {
     }
     ~NetifInfoPrivate() {}
@@ -143,6 +153,7 @@ private:
     uint arp_type; // connection type
     uint txqlen; // transmission queue length
     uint carrier_changes; // carrier state changes since boot
+    uint net_speed;
 
     QByteArray ifname;
     QByteArray alias;
@@ -151,9 +162,15 @@ private:
     QByteArray hw_bcast; // link layer broadcast address
     QString brand;
 
+    qreal recv_bps = 0;             // 接收速度
+    qreal sent_bps = 0;             // 发送速度
+
+    QList<INet4Addr> addr4infolst;
+    QList<INet6Addr> addr6infolst;
+
     // wireless link extension
     std::unique_ptr<iw_info_t> iw_info;
-
+    bool isWireless = false;
     // ====stats====
 
     unsigned long long rx_packets; // total packets received
@@ -171,10 +188,6 @@ private:
     unsigned long long tx_carrier; // loss of link pulse
 
     unsigned long long collisions; // network congestion
-
-    // ====addresses====
-
-    QList<INetAddr> addrs;
 
     friend class NetifInfo;
 };

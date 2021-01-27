@@ -80,6 +80,11 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     this->setModel(m_netInfoModel);
 }
 
+void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
+{
+
+}
+
 void NetifSummaryViewWidget::onModelUpdate()
 {
     // update model

@@ -88,8 +88,6 @@ void NetifMonitor::handleNetData()
                 }
                 m_sockIOStatMap[stat->ino] = stat;
             }
-
-            // unlock sockiostatmap
             m_sockIOStatMapLock.unlock();   // ---m_sockIOStatMapLock---
         }
     }
@@ -104,11 +102,9 @@ void NetifMonitor::timerEvent(QTimerEvent *event)
 {
     QObject::timerEvent(event);
     if (event->timerId() == m_basictimer.timerId()) {
-         m_netifCapture->dispatchPackets();
-
+        m_netifCapture->dispatchPackets();
     }
 }
-
 
 }
 }

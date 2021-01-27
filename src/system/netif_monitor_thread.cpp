@@ -18,7 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "netif_monitor_thread.h"
-#include <QDebug>
+#include "netif_monitor.h"
 
 namespace core {
 namespace system {
@@ -40,12 +40,15 @@ NetifMonitorThread::~NetifMonitorThread()
     wait();
 }
 
+NetifMonitor *NetifMonitorThread::netifJobInstance() const
+{
+    return m_netifMonitor;
+}
 
 void NetifMonitorThread::run()
 {
     m_netifMonitor->handleNetData();
 }
-
 
 } // namespace system
 } // namespace core

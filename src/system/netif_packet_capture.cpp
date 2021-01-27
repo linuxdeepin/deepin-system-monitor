@@ -41,9 +41,9 @@ namespace system {
 
 
 
-NetifPacketCapture::NetifPacketCapture(NetifMonitor* netIfmontor, QObject *parent)
+NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *parent)
     : QObject(parent)
-    ,m_netifMonitor(netIfmontor)
+    , m_netifMonitor(netIfmontor)
 {
     startNetifMonitorJob();
 }
@@ -130,9 +130,9 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         return;
     char dMac[256];
     auto *eth_hdr = reinterpret_cast<const struct ether_header *>(packet);
-    sprintf(dMac,"%x:%x:%x:%x:%x:%x",(eth_hdr->ether_dhost)[0],(eth_hdr->ether_dhost)[1],
-                (eth_hdr->ether_dhost)[2],(eth_hdr->ether_dhost)[3],
-                (eth_hdr->ether_dhost)[4],(eth_hdr->ether_dhost)[5]);
+    sprintf(dMac, "%x:%x:%x:%x:%x:%x", (eth_hdr->ether_dhost)[0], (eth_hdr->ether_dhost)[1],
+            (eth_hdr->ether_dhost)[2], (eth_hdr->ether_dhost)[3],
+            (eth_hdr->ether_dhost)[4], (eth_hdr->ether_dhost)[5]);
     // calc hash from caputured packet's src:sport-dest:dport
     if (payload->sa_family == AF_INET) {
         // ipv4 packet payload
@@ -172,7 +172,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
     hash = cchash[0];
 
     // get ino from map
-   if (netifMonitorJob->m_sockStats.contains(hash)) {
+    if (netifMonitorJob->m_sockStats.contains(hash)) {
         QMultiMap<uint64_t, SockStat>::const_iterator it = netifMonitorJob->m_sockStats.find(hash);
         while (it != netifMonitorJob->m_sockStats.cend() && it.key() == hash) {
             // TODO: UDP traffic identify method refine
@@ -218,7 +218,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
 // dispatch packet handler
 void NetifPacketCapture::dispatchPackets()
 {
-    if(!go) return;
+    if (!go) return;
     // check pending packets before dispatching packets
     auto npkts = m_localPendingPackets.size();
     if (npkts > 0) {
@@ -251,7 +251,7 @@ void NetifPacketCapture::dispatchPackets()
         // quit requested, break the loop then
         auto quit = m_quitRequested.load();
         if (quit) {
-           // m_timer->stop();
+            // m_timer->stop();
             break;
         }
 
@@ -294,10 +294,8 @@ void NetifPacketCapture::dispatchPackets()
 // refresh network interface hash cache
 void NetifPacketCapture::refreshIfAddrsHashCache()
 {
-    //  NetIFAddrsMap addrsMap;
-    foreach (QNetworkInterface netInterface, QNetworkInterface::allInterfaces())
-    {
-          m_ifaddrsHashCache.insert(netInterface.hardwareAddress(),0);
+    foreach (QNetworkInterface netInterface, QNetworkInterface::allInterfaces()) {
+        m_ifaddrsHashCache.insert(netInterface.hardwareAddress(), 0);
     }
 }
 

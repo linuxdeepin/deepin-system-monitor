@@ -39,6 +39,7 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
 
     updateData();
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetifDetailViewWidget::updateData);
+    connect(m_netifstatWIdget, &NetifStatViewWidget::netifItemClicked, m_netifsummaryWidget, &NetifSummaryViewWidget::onNetifItemClicked);
 }
 
 void NetifDetailViewWidget::fontChanged(const QFont &font)

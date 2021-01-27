@@ -23,6 +23,9 @@ public:
     explicit NetifStatViewWidget(QWidget *parent = nullptr);
     void updateWidgetGeometry();
 
+signals:
+    void netifItemClicked(const QString &mac);
+
 private:
     void showItemOnlyeOne();
     void showItemDouble();
@@ -40,6 +43,7 @@ public slots:
 private:
     core::system::NetifInfoDB *m_info;
 
+    bool m_initStatus = false;
     QWidget *m_centralWidget;
     QMap<QByteArray, NetifItemViewWidget *> m_mapItemView;
 };

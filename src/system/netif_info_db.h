@@ -25,11 +25,9 @@
 
 #include <QMultiMap>
 #include <QMap>
-#include <QReadWriteLock>
+
 #include "netif_monitor.h"
 #include <memory>
-
-class QReadWriteLock;
 
 namespace core {
 namespace system {
@@ -42,15 +40,13 @@ struct netif_stat {
 
 class NetifInfoDB
 {
-      enum StatIndex { kLastStat = 0, kCurrentStat = 1, kStatCount = kCurrentStat + 1 };
+    enum StatIndex { kLastStat = 0, kCurrentStat = 1, kStatCount = kCurrentStat + 1 };
 
 public:
     explicit NetifInfoDB();
     virtual ~NetifInfoDB() = default;
 
-    QList<INetAddr> addrList(const QByteArray &ifname);
-    QMultiMap<QByteArray, INetAddr> addrmap();
-    QMap<QByteArray, NetifInfo> infoDB();
+    QMap<QByteArray, NetifInfoPtr> infoDB();
     void update();
     bool getSockIOStatByInode(ino_t ino, SockIOStat &stat);
 
@@ -61,32 +57,20 @@ protected:
 private:
     std::unique_ptr<Netlink> m_netlink;
 
-    mutable QReadWriteLock m_rwlock;
-    QMultiMap<QByteArray, INetAddr> m_addrDB;
-    QMap<QByteArray, NetifInfo> m_infoDB;
-    // socket inode to io stat mapping
-    QMap<ino_t, SockIOStat> m_sockIOStatMap     {};
+    QMultiMap<int, INet4Addr> m_addrIpv4DB;
+    QMultiMap<int, INet6Addr> m_addrIpv6DB;
+
+    QMap<QByteArray, NetifInfoPtr> m_infoDB;
+
+    QMap<ino_t, SockIOStat> m_sockIOStatMap;
 
 
     timeval timevalList[kStatCount] = {timeval{0, 0}, timeval{0, 0}};
     QSharedPointer<struct netif_stat> m_netStat[kStatCount] {{}, {}};
 };
 
-inline QList<INetAddr> NetifInfoDB::addrList(const QByteArray &ifname)
+inline QMap<QByteArray, NetifInfoPtr> NetifInfoDB::infoDB()
 {
-    QReadLocker lock(&m_rwlock);
-    return m_addrDB.values(ifname);
-}
-
-inline QMultiMap<QByteArray, INetAddr> NetifInfoDB::addrmap()
-{
-    QReadLocker lock(&m_rwlock);
-    return m_addrDB;
-}
-
-inline QMap<QByteArray, NetifInfo> NetifInfoDB::infoDB()
-{
-    QReadLocker lock(&m_rwlock);
     return m_infoDB;
 }
 

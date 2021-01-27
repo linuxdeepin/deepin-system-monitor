@@ -110,10 +110,6 @@ void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
 void NetifItemViewWidget::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
-
-    m_isActive = true;
-    update();
-
     emit clicked(m_mac);
 }
 
@@ -130,15 +126,15 @@ void NetifItemViewWidget::setMode(int mode)
     this->update();
 }
 
-void NetifItemViewWidget::updateData(const NetifInfo &netifInfo)
+void NetifItemViewWidget::updateData(const std::shared_ptr<class core::system::NetifInfo> &netifInfo)
 {
-    m_ChartWidget->addData1(netifInfo.recv_bps());
-    m_ChartWidget->addData2(netifInfo.sent_bps());
+    m_ChartWidget->addData1(netifInfo->recv_bps());
+    m_ChartWidget->addData2(netifInfo->sent_bps());
 
-    if (!netifInfo.ifname().isNull()) {m_ifname = netifInfo.ifname();}
+    if (!netifInfo->ifname().isNull()) {m_ifname = netifInfo->ifname();}
 
-    m_recv_bps = formatUnit(netifInfo.recv_bps(), B, 1, true);
-    m_sent_bps = formatUnit(netifInfo.sent_bps(), B, 1, true);
+    m_recv_bps = formatUnit(netifInfo->recv_bps(), B, 1, true);
+    m_sent_bps = formatUnit(netifInfo->sent_bps(), B, 1, true);
 
     this->update();
 }

@@ -65,26 +65,33 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
     m_animation->setStartValue(0.0);
     m_animation->setEndValue(1.0);
     m_animation->setDuration(250);
-    connect(m_animation, &QPropertyAnimation::valueChanged, [ = ]() {
-        update();
-    });
-
-    connect(m_animation, &QPropertyAnimation::finished, [ = ]() {
-        m_lastMemPercent = (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal();
-        m_lastSwapPercent = (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal();
-    });
+    connect(m_animation, &QPropertyAnimation::valueChanged, this, &MemoryMonitor::onValueChanged);
+    connect(m_animation, &QPropertyAnimation::finished, this, &MemoryMonitor::onAnimationFinished);
 
     m_memInfo = DeviceDB::instance()->memInfo();
-    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, [ = ]() {
-        m_animation->start();
-    });
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemoryMonitor::onStatInfoUpdated);
 
     changeFont(DApplication::font());
-    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-            this, &MemoryMonitor::changeFont);
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged, this, &MemoryMonitor::changeFont);
 }
 
 MemoryMonitor::~MemoryMonitor() {}
+
+void MemoryMonitor::onStatInfoUpdated()
+{
+    m_animation->start();
+}
+
+void MemoryMonitor::onAnimationFinished()
+{
+    m_lastMemPercent = (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal();
+    m_lastSwapPercent = (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal();
+}
+
+void MemoryMonitor::onValueChanged()
+{
+    update();
+}
 
 void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {

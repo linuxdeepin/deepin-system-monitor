@@ -60,6 +60,11 @@ private:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void changeFont(const QFont &font);
 
+private slots:
+    void onStatInfoUpdated();
+    void animationFinshed();
+    void onValueChanged();
+
 private:
     QColor memoryBackgroundColor;
     QColor memoryColor {"#00C5C0"};

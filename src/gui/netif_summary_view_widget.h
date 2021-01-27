@@ -37,6 +37,8 @@ public slots:
     void fontChanged(const QFont &font);
     void onModelUpdate();
 
+    void onNetifItemClicked(const QString &mac);
+
 private:
     QFont m_font;
     int m_index;

@@ -121,7 +121,6 @@ void NetInfo::resdNetInfo()
         print_errno(errno, QString("read %1 failed").arg(PROC_PATH_NET));
     }
 
-
     m_netStat[kLastStat] = m_netStat[kCurrentStat];
     m_netStat[kCurrentStat] = statSum;
 
