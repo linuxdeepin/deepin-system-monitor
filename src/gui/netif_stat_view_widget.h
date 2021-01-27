@@ -1,47 +1,46 @@
 #ifndef NETIF_STAT_VIEW_WIDGET_H
 #define NETIF_STAT_VIEW_WIDGET_H
 
-#include <QWidget>
-#include <DCommandLinkButton>
-#include <vector>
-#include "system/device_db.h"
-#include <QScrollArea>
+#include <DScrollArea>
 #include <QMap>
-DWIDGET_USE_NAMESPACE
 
 class ChartViewWidget;
 class NetifInfoModel;
 class QGridLayout;
 class NetifItemViewWidget;
 
-using namespace std;
-using namespace core::system;
+namespace core {
+namespace system {
+class NetifInfoDB;
+}
+}
 
-class NetifStatViewWidget : public QScrollArea
+DWIDGET_USE_NAMESPACE
+class NetifStatViewWidget : public DScrollArea
 {
     Q_OBJECT
 public:
     explicit NetifStatViewWidget(QWidget *parent = nullptr);
     void updateWidgetGeometry();
+
 private:
-    void showItem1();
-    void showItem2();
-    void showItemLg2();
+    void showItemOnlyeOne();
+    void showItemDouble();
+    void showItemLgDouble();
 
 protected:
     void resizeEvent(QResizeEvent *event);
-signals:
 
 public slots:
     void fontChanged(const QFont &font);
 
     void onModelUpdate();
     void onSetItemActiveStatus(const QString &mac);
+
 private:
-    QFont m_font;
-    NetifInfoDB *m_info;
+    core::system::NetifInfoDB *m_info;
+
     QWidget *m_centralWidget;
-    QGridLayout  *m_graphicsLayout;
     QMap<QByteArray, NetifItemViewWidget *> m_mapItemView;
 };
 

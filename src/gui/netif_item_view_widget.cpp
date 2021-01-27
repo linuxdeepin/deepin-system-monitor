@@ -1,99 +1,104 @@
 #include "netif_item_view_widget.h"
 #include "chart_view_widget.h"
 #include "common/common.h"
+#include "system/netif.h"
+
 #include <QPainter>
 
 #include <DApplication>
 #include <DApplicationHelper>
 
 using namespace common::format;
-NetifItemViewWidget::NetifItemViewWidget(QWidget *parent,QByteArray mac) : QWidget(parent)
-  ,m_mode(0)
-  ,m_mac(mac)
-  ,m_ifname("以太网")
-{
-   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-   m_ChartWidget = new ChartViewWidget(this);
-   m_ChartWidget->setData1Color(m_recvColor);
-   m_ChartWidget->setData2Color(m_sentColor);
-   m_ChartWidget->setSpeedAxis(true);
-   updateWidgetGeometry();
+using namespace core::system;
 
+const int margin = 6;
+const int spacing = 6;
+const int sectionSize = 6;
+
+DWIDGET_USE_NAMESPACE
+NetifItemViewWidget::NetifItemViewWidget(QWidget *parent, const QByteArray &mac) : QWidget(parent)
+{
+    m_mac = mac;
+    m_ifname = "Ethernet";
+
+    m_ChartWidget = new ChartViewWidget(this);
+    m_ChartWidget->setData1Color(m_recvColor);
+    m_ChartWidget->setData2Color(m_sentColor);
+    m_ChartWidget->setSpeedAxis(true);
+    updateWidgetGeometry();
 }
 
 void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 {
-
     QWidget::paintEvent(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setFont(m_font);
 
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    painter.setPen(palette.color(DPalette::TextTips));
-    QRect ifnameRect(0,0,painter.fontMetrics().width(m_ifname), painter.fontMetrics().height());
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    const DPalette &palette = dAppHelper->applicationPalette();
+
+    const QColor &textColor = palette.color(DPalette::TextTips);
+    if (m_isActive) {
+        painter.setPen(Qt::NoPen);
+        QColor selectColor = palette.color(DPalette::Highlight);
+        selectColor.setAlphaF(0.1);
+
+        painter.setBrush(selectColor);
+        painter.drawRoundedRect(rect(), 8, 8);
+
+        painter.setPen(palette.color(DPalette::Highlight));
+    } else {
+        painter.setPen(textColor);
+    }
+
+
+    QRect ifnameRect(margin, margin / 2, painter.fontMetrics().width(m_ifname), painter.fontMetrics().height());
     painter.drawText(ifnameRect, Qt::AlignLeft | Qt::AlignVCenter, m_ifname);
 
-   int spacing = 10;
-   int sectionSize = 6;
-
-     if(m_mode == 0){
+    painter.setPen(textColor);
+    if (m_mode == TITLE_HORIZONTAL) {
         QString strLeftBrackets = "(";
-         QRect leftBracketsRect(ifnameRect.right() + spacing, 0, painter.fontMetrics().width(strLeftBrackets), painter.fontMetrics().height());
-          painter.drawText(leftBracketsRect, Qt::AlignLeft | Qt::AlignVCenter, strLeftBrackets);
+        QRect leftBracketsRect(ifnameRect.right() + spacing, ifnameRect.y(), painter.fontMetrics().width(strLeftBrackets), painter.fontMetrics().height());
+        painter.drawText(leftBracketsRect, Qt::AlignLeft | Qt::AlignVCenter, strLeftBrackets);
 
-        QString strRecvData = DApplication::translate("Process.Graph.Title", "接收");
-        strRecvData = strRecvData +" "+ m_recv_bps;
-        QRect recvRect(leftBracketsRect.right() + spacing*2 + sectionSize , 0, painter.fontMetrics().width(strRecvData), painter.fontMetrics().height());
-        painter.drawText(recvRect, Qt::AlignLeft | Qt::AlignVCenter, strRecvData);
-
-        QString strSentData = DApplication::translate("Process.Graph.View", "发送");
-        strSentData = strSentData + " " + m_sent_bps + "  )";
-        QRect sentRect(sectionSize + recvRect.right() + 2 * spacing, recvRect.y(), painter.fontMetrics().width(strSentData), painter.fontMetrics().height());
-        painter.drawText(sentRect, Qt::AlignLeft | Qt::AlignVCenter, strSentData);
-
-
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(m_recvColor);
-        painter.drawEllipse(leftBracketsRect.right()+spacing, leftBracketsRect.center().y(), sectionSize, sectionSize);
-
-        painter.setBrush(m_sentColor);
-        painter.drawEllipse(recvRect.right() + spacing, recvRect.center().y(), sectionSize, sectionSize);
-    }else{
-
-        QString strRecvData = DApplication::translate("Process.Graph.Title", "接收");
+        QString strRecvData = DApplication::translate("Process.Graph.Title", "Receive");
         strRecvData = strRecvData + " " + m_recv_bps;
-        QRect recvRect(spacing + sectionSize, ifnameRect.height(), painter.fontMetrics().width(strRecvData), painter.fontMetrics().height());
+        QRect recvRect(leftBracketsRect.right() + spacing * 2 + sectionSize, ifnameRect.y(), painter.fontMetrics().width(strRecvData), painter.fontMetrics().height());
         painter.drawText(recvRect, Qt::AlignLeft | Qt::AlignVCenter, strRecvData);
 
-        QString strSentData = DApplication::translate("Process.Graph.View", "发送");
+        QString strSentData = DApplication::translate("Process.Graph.View", "Send");
+        strSentData = strSentData + " " + m_sent_bps + " )";
+        QRect sentRect(sectionSize + recvRect.right() + 3 * spacing, ifnameRect.y(), painter.fontMetrics().width(strSentData), painter.fontMetrics().height());
+        painter.drawText(sentRect, Qt::AlignLeft | Qt::AlignVCenter, strSentData);
+
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(m_recvColor);
+        painter.drawEllipse(leftBracketsRect.right() + spacing, leftBracketsRect.center().y(), sectionSize, sectionSize);
+
+        painter.setBrush(m_sentColor);
+        painter.drawEllipse(recvRect.right() + 2 * spacing, recvRect.center().y(), sectionSize, sectionSize);
+    } else {
+
+        QString strRecvData = DApplication::translate("Process.Graph.Title", "Receive");
+        strRecvData = strRecvData + " " + m_recv_bps;
+        QRect recvRect(margin + spacing + sectionSize, ifnameRect.bottom(), painter.fontMetrics().width(strRecvData), painter.fontMetrics().height());
+        painter.drawText(recvRect, Qt::AlignLeft | Qt::AlignVCenter, strRecvData);
+
+        QString strSentData = DApplication::translate("Process.Graph.View", "Send");
         strSentData = strSentData  + " " + m_sent_bps;
-        QRect sentRect(spacing + sectionSize, recvRect.y() + recvRect.height(), painter.fontMetrics().width(strSentData), painter.fontMetrics().height());
+        QRect sentRect(margin + spacing + sectionSize, recvRect.bottom(), painter.fontMetrics().width(strSentData), painter.fontMetrics().height());
         painter.drawText(sentRect, Qt::AlignLeft | Qt::AlignVCenter, strSentData);
 
 
         painter.setPen(Qt::NoPen);
         painter.setBrush(m_recvColor);
-        painter.drawEllipse(0, recvRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(margin, recvRect.center().y(), sectionSize, sectionSize);
 
         painter.setBrush(m_sentColor);
-        painter.drawEllipse(0 , sentRect.center().y(), sectionSize, sectionSize);
-     }
-
-     if(m_isActive){
-         painter.save();
-         painter.setPen(Qt::NoPen);
-         painter.setBrush(QColor::fromRgb(0,129,255,26));
-         painter.drawRect(rect());
-         painter.restore();
-     }else{
-         painter.save();
-         painter.setPen(Qt::NoPen);
-         painter.setBrush(Qt::transparent);
-         painter.drawRect(rect());
-         painter.restore();
-     }
+        painter.drawEllipse(margin, sentRect.center().y(), sectionSize, sectionSize);
+    }
 }
 
 void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
@@ -104,37 +109,38 @@ void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
 
 void NetifItemViewWidget::mousePressEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event)
+    QWidget::mousePressEvent(event);
+
     m_isActive = true;
     update();
-    qInfo()<<"m_mac"<<m_mac;
-    emit changeAllActive(m_mac);
+
+    emit clicked(m_mac);
 }
 
 void NetifItemViewWidget::fontChanged(const QFont &font)
 {
     m_font = font;
     this->setFont(m_font);
-    setFixedHeight(QFontMetrics(font).height() * 11);
+    updateWidgetGeometry();
 }
 
 void NetifItemViewWidget::setMode(int mode)
 {
     m_mode = mode;
+    this->update();
 }
 
-void NetifItemViewWidget::updateData(NetifInfo netifInfo)
+void NetifItemViewWidget::updateData(const NetifInfo &netifInfo)
 {
     m_ChartWidget->addData1(netifInfo.recv_bps());
     m_ChartWidget->addData2(netifInfo.sent_bps());
 
-    if(!netifInfo.ifname().isNull()){m_ifname = netifInfo.ifname();}
+    if (!netifInfo.ifname().isNull()) {m_ifname = netifInfo.ifname();}
 
     m_recv_bps = formatUnit(netifInfo.recv_bps(), B, 1, true);
     m_sent_bps = formatUnit(netifInfo.sent_bps(), B, 1, true);
 
-//    qInfo()<<"m_recv_bps:"<<m_recv_bps;
-//    qInfo()<<"m_sent_bps:"<<m_sent_bps;
+    this->update();
 }
 
 QByteArray NetifItemViewWidget::getMac()
@@ -150,22 +156,15 @@ void NetifItemViewWidget::setMac(QByteArray mac)
 void NetifItemViewWidget::updateActiveStatus(bool active)
 {
     m_isActive = active;
-    updateWidgetGeometry();
+    update();
 }
 
 void NetifItemViewWidget::updateWidgetGeometry()
 {
-
     int fontHeight = QFontMetrics(m_font).height();
-    int avgWidth =  this->width();
-    int avgHeight = this->height();
-    if(m_mode == 0){
-        m_ChartWidget->setGeometry(0,fontHeight / 2,avgWidth,avgHeight - fontHeight / 2);
+    if (m_mode == TITLE_HORIZONTAL) {
+        m_ChartWidget->setGeometry(margin, fontHeight / 2, this->width() - 2 * margin, this->height() - fontHeight / 2 - margin);
+    } else {
+        m_ChartWidget->setGeometry(margin, int(fontHeight * 2.5), this->width() - 2 * margin, this->height() - int(fontHeight * 2.5) - margin);
     }
-    else{
-        m_ChartWidget->setGeometry(0,int(fontHeight * 2.5) ,avgWidth,avgHeight - int(fontHeight* 2.5));
-    }
-
-
-
 }

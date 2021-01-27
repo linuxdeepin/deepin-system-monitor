@@ -53,12 +53,12 @@ NetifInfo::~NetifInfo()
 {
 }
 
-qreal NetifInfo::recv_bps()
+qreal NetifInfo::recv_bps() const
 {
     return m_recv_bps;
 }
 
-qreal NetifInfo::sent_bps()
+qreal NetifInfo::sent_bps() const
 {
     return m_sent_bps;
 }
@@ -125,13 +125,13 @@ void NetifInfo::updateAddrInfo(const QList<INetAddr> &addrList)
     d->addrs = addrList;
 }
 
-void NetifInfo::updateWirelessInfo(QByteArray ifname){
+void NetifInfo::updateWirelessInfo(QByteArray ifname)
+{
 
     wireless wireless1(ifname);
 
-    if(wireless1.is_wireless())
-    {
-        strcpy(d->iw_info->essid,wireless1.essid().data());
+    if (wireless1.is_wireless()) {
+        strcpy(d->iw_info->essid, wireless1.essid().data());
         d->iw_info->qual.qual = wireless1.link_quality();
         d->iw_info->qual.level = wireless1.signal_levle();
         d->iw_info->qual.noise = wireless1.noise_level();

@@ -197,6 +197,7 @@ void ChartViewWidget::drawBackPixmap()
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
 
     int penSize = 1;
     painter.setPen(QPen(frameColor, penSize));
@@ -209,7 +210,6 @@ void ChartViewWidget::drawBackPixmap()
     int gridHeight = this->height() - 2 * gridY;
 
     QPainterPath framePath;
-    painter.setOpacity(0.3);
     m_chartRect = QRect(gridX, gridY, gridWidth, gridHeight);
 
     framePath.addRect(m_chartRect);

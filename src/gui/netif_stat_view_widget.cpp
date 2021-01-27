@@ -1,26 +1,15 @@
-
 #include "netif_stat_view_widget.h"
 #include "netif_item_view_widget.h"
-#include "chart_view_widget.h"
-#include "common/common.h"
-#include "common/thread_manager.h"
-#include "system/system_monitor_thread.h"
 
+#include "system/device_db.h"
 #include "system/netif_info_db.h"
-#include <QPainter>
 
-#include <DApplication>
-#include <DApplicationHelper>
-#include <QGridLayout>
-#include <QTimer>
+#include <QDebug>
 
-using namespace common::format;
+const int itemSpace = 6;
 using namespace core::system;
-
-NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : QScrollArea(parent)
+NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : DScrollArea(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
     m_centralWidget = new QWidget(this);
     this->setWidget(m_centralWidget);
     this->setFrameShape(QFrame::NoFrame);
@@ -30,158 +19,135 @@ NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : QScrollArea(parent)
 
 void NetifStatViewWidget::resizeEvent(QResizeEvent *event)
 {
-
     QScrollArea::resizeEvent(event);
     updateWidgetGeometry();
 }
 
 void NetifStatViewWidget::fontChanged(const QFont &font)
 {
-    m_font = font;
-    //setFixedHeight(130 + 2 * QFontMetrics(font).height());
+    for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
+        NetifItemViewWidget *itemView = iter.value();
+        itemView->fontChanged(font);
+    }
 }
 
 void NetifStatViewWidget::onModelUpdate()
 {
-    QMap<QByteArray, NetifInfo>  NetifInfoDB = m_info->infoDB();
-    auto iter =  NetifInfoDB.begin();
-    while (iter != NetifInfoDB.end()) {
-        QByteArray mac = iter.key();
+    const QMap<QByteArray, NetifInfo> &netifInfoDB = m_info->infoDB();
+    for (auto iter = netifInfoDB.begin(); iter != netifInfoDB.end(); iter++) {
+        const QByteArray &mac = iter.key();
         if (!m_mapItemView.contains(mac)) {
-            NetifItemViewWidget *temp = new NetifItemViewWidget(this, mac);
-            //   NetifItemViewWidget *temp1 = new NetifItemViewWidget(this,"iter.key()");
+            NetifItemViewWidget *itemWidget = new NetifItemViewWidget(m_centralWidget, mac);
+            connect(itemWidget, &NetifItemViewWidget::clicked, this, &NetifStatViewWidget::onSetItemActiveStatus);
+            itemWidget->updateData(iter.value());
 
-            temp->updateData(iter.value());
-            temp->update();
-
-            // temp1->updateData(iter.value());
-            //   temp1->update();
-
-            connect(temp, &NetifItemViewWidget::changeAllActive, this, &NetifStatViewWidget::onSetItemActiveStatus);
-            //  connect(temp1,&NetifItemViewWidget::changeAllActive,this, &NetifStatViewWidget::onSetItemActiveStatus);
-            m_mapItemView.insert(iter.key(), temp);
-            //    m_mapItemView.insert("iter.key()",temp1);
+            m_mapItemView.insert(mac, itemWidget);
         } else {
-            NetifItemViewWidget *temp = m_mapItemView.value(mac);
-            temp->updateData(iter.value());
-            temp->update();
+            NetifItemViewWidget *itemWidget = m_mapItemView.value(mac);
+            itemWidget->updateData(iter.value());
         }
-        iter++;
     }
     updateWidgetGeometry();
 }
 
 void NetifStatViewWidget::onSetItemActiveStatus(const QString &mac)
 {
-    qInfo() << "onSetItemActiveStatus start";
-    auto iter = m_mapItemView.begin();
-    while (iter !=  m_mapItemView.end()) {
-        auto itemView = iter.value();
+    const QMap<QByteArray, NetifInfo> &netifInfoDB = m_info->infoDB();
+    int netCount  = netifInfoDB.size();
 
-        if (iter.key() == mac) {
+    for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
+        NetifItemViewWidget *itemView = iter.value();
+        if (netCount > 1 && iter.key() == mac) {
             itemView->updateActiveStatus(true);
         } else {
             itemView->updateActiveStatus(false);
         }
-        itemView->update();
-        iter ++;
     }
 }
-
 
 void NetifStatViewWidget::updateWidgetGeometry()
 {
+    const QMap<QByteArray, NetifInfo> &netifInfoDB = m_info->infoDB();
+    int netCount  = netifInfoDB.size();
 
-    int netCount  = m_info->infoDB().size();
-
-    if (netCount == 1) {
-        showItem1();
-    } else if (netCount == 2) {
-        showItem2();
-    } else if (netCount > 2) {
-        showItemLg2();
-    }
+    if (netCount == 1)
+        showItemOnlyeOne();
+    else if (netCount == 2)
+        showItemDouble();
+    else if (netCount > 2)
+        showItemLgDouble();
 }
 
-void NetifStatViewWidget::showItem1()
+void NetifStatViewWidget::showItemOnlyeOne()
 {
-    int avgWidth = this->width();
-    int avgheight = this->height();
-
-    auto iter = m_mapItemView.begin();
-    while (iter !=  m_mapItemView.end()) {
-        auto itemView = iter.value();
-        if (m_info->infoDB().contains(iter.key())) {
+    const QMap<QByteArray, NetifInfo> &netifInfoDB = m_info->infoDB();
+    for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
+        NetifItemViewWidget *itemView = iter.value();
+        if (netifInfoDB.contains(iter.key())) {
             itemView->show();
-            itemView->setMode(1);
-            itemView->setGeometry(0, 0, avgWidth, avgheight);
+            itemView->setMode(NetifItemViewWidget::TITLE_HORIZONTAL);
+            itemView->setGeometry(0, 0, this->width(), this->height());
         } else {
             itemView->hide();
         }
-        iter ++;
     }
-    m_centralWidget->resize(avgWidth, avgheight);
+
+    m_centralWidget->setFixedSize(this->width(), this->height());
 }
 
-void NetifStatViewWidget::showItem2()
+void NetifStatViewWidget::showItemDouble()
 {
-    int avgWidth = this->width();
-    int avgheight = this->height();
-    int itemWidth = avgWidth / 2 - 10;
-    auto iter = m_mapItemView.begin();
-    int i = 0;
-    while (iter !=  m_mapItemView.end()) {
-        auto itemView = iter.value();
-        if (m_info->infoDB().contains(iter.key())) {
-            if (i == 0) {
-                itemView->show();
-                itemView->setMode(1);
-                itemView->setGeometry(0, 0, itemWidth, avgheight);
-            } else {
-                itemView->show();
-                itemView->setMode(1);
-                itemView->setGeometry(itemWidth + 16, 0, itemWidth, avgheight);
-            }
-            itemView->update();
-            i++;
-        } else {
-            itemView->hide();
-        }
-        iter ++;
-    }
-}
+    int itemOffsetX = 0;
+    int itemHeight  = this->height();
+    int itemWidth   = (this->width() - itemSpace) / 2;
 
-void NetifStatViewWidget::showItemLg2()
-{
-    int Width = this->width();
-    int height = this->height();
-    int fontHeight = QFontMetrics(m_font).height();
-    int avgWidth = this->width() / 2 - 16;
-    int avgheight = height - fontHeight / 2;
-    auto iter = m_mapItemView.begin();
-    int i = 0;
-    while (iter !=  m_mapItemView.end()) {
-        int page = i / 4;
-        auto itemView = iter.value();
-        if (m_info->infoDB().contains(iter.key())) {
-            auto itemView = iter.value();
-            itemView->setMode(1);
-            if (i % 4 == 0) {
-                itemView->setGeometry(page * Width, 0, avgWidth, avgheight / 2);
-            } else if (i % 4 == 1) {
-                itemView->setGeometry(page * Width + avgWidth + 16, 0, avgWidth, avgheight / 2);
-            } else if (i % 4 == 2) {
-                itemView->setGeometry(page * Width, avgheight / 2, avgWidth, avgheight / 2);
-            } else if (i % 4 == 3) {
-                itemView->setGeometry(page * Width + avgWidth + 16, avgheight / 2, avgWidth, avgheight / 2);
-            }
-            itemView->update();
+    const QMap<QByteArray, NetifInfo> &netifInfoDB = m_info->infoDB();
+    for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
+        NetifItemViewWidget *itemView = iter.value();
+        if (netifInfoDB.contains(iter.key())) {
             itemView->show();
-            i++;
+            itemView->setMode(NetifItemViewWidget::TITLE_VERTICAL);
+            itemView->setGeometry(itemOffsetX, 0, itemWidth, itemHeight);
+            itemOffsetX = itemOffsetX + itemWidth + itemSpace;
         } else {
             itemView->hide();
         }
-        iter ++;
     }
+
+    m_centralWidget->setFixedSize(this->width(), this->height());
+}
+
+void NetifStatViewWidget::showItemLgDouble()
+{
+    const QMap<QByteArray, NetifInfo> &netifInfoDB = m_info->infoDB();
+
+    int itemHeight  = this->height() / 2;
+    int itemWidth   = (this->width() - itemSpace) / 2;
+
+    int itemCurrentCnt = -1;
+    int page = 0;
+    for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
+        NetifItemViewWidget *itemView = iter.value();
+        if (netifInfoDB.contains(iter.key())) {
+            itemCurrentCnt++;
+            itemView->setMode(NetifItemViewWidget::TITLE_VERTICAL);
+            itemView->show();
+
+            page = itemCurrentCnt / 4;
+            if (itemCurrentCnt % 4 == 0) {
+                itemView->setGeometry(page * this->width(), 0, itemWidth, itemHeight);
+            } else if (itemCurrentCnt % 4 == 1) {
+                itemView->setGeometry(page * this->width() + itemWidth + itemSpace, 0, itemWidth, itemHeight);
+            } else if (itemCurrentCnt % 4 == 2) {
+                itemView->setGeometry(page * this->width(), itemHeight, itemWidth, itemHeight);
+            } else if (itemCurrentCnt % 4 == 3) {
+                itemView->setGeometry(page * this->width() + itemWidth + itemSpace, itemHeight, itemWidth, itemHeight);
+            }
+
+        } else {
+            itemView->hide();
+        }
+    }
+    m_centralWidget->setFixedSize(this->width() + this->width() * page, this->height());
 }
 

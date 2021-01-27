@@ -41,7 +41,8 @@ NetifInfoDB::NetifInfoDB()
 {
 }
 
-void NetifInfoDB::update_addr(){
+void NetifInfoDB::update_addr()
+{
     // iterator
     // 查找所有的addr
     AddrIterator iter = m_netlink->addrIterator();
@@ -67,14 +68,15 @@ void NetifInfoDB::update_addr(){
 
 }
 // 更新网络信息
-void NetifInfoDB::update_netif_info(){
+void NetifInfoDB::update_netif_info()
+{
     LinkIterator iter = m_netlink->linkIterator();
     QMap<QByteArray, NetifInfo> old_infoDB = m_infoDB;
     m_infoDB.clear();
-    while(iter.hasNext()){
+    while (iter.hasNext()) {
         auto it = iter.next();
 
-        if(it->ifname() == "lo"){
+        if (it->ifname() == "lo") {
             continue;
         }
         NetifInfo  item;
@@ -82,8 +84,7 @@ void NetifInfoDB::update_netif_info(){
         item.updateAddrInfo(m_addrDB.values(it->addr()));
         // 更新速率
 
-        if(old_infoDB.contains(it->addr()))
-        {
+        if (old_infoDB.contains(it->addr())) {
             timevalList[kLastStat] = timevalList[kCurrentStat];
             timevalList[kCurrentStat] = SysInfo::instance()->uptime();
 
@@ -102,12 +103,10 @@ void NetifInfoDB::update_netif_info(){
             qreal sent_bps = txdiff / interval;
             item.set_recv_bps(recv_bps);
             item.set_sent_bps(sent_bps);
-            qInfo()<<"recv_bps:"<<recv_bps;
-            qInfo()<<"sent_bps:"<<sent_bps;
         }
 
 
-        m_infoDB.insert(it->addr(),item);
+        m_infoDB.insert(it->addr(), item);
     }
 }
 void NetifInfoDB::update()

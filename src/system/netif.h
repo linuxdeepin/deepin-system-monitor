@@ -105,8 +105,8 @@ public:
     QList<INetAddr> addrList() const;
     qreal m_recv_bps = 0;             // 接收速度
     qreal m_sent_bps = 0;             // 发送速度
-    qreal recv_bps();
-    qreal sent_bps();
+    qreal recv_bps() const;
+    qreal sent_bps() const;
     qreal set_recv_bps(qreal recv_bps);
     qreal set_sent_bps(qreal sent_bps);
 
