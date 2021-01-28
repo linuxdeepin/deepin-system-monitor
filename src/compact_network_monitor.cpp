@@ -20,17 +20,15 @@
 
 #include "smooth_curve_generator.h"
 #include "common/common.h"
-#include "common/thread_manager.h"
-#include "system/system_monitor_thread.h"
 #include "system/device_db.h"
 #include "system/net_info.h"
+#include "system/system_monitor.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
 
-#include <QApplication>
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
@@ -42,27 +40,25 @@ DWIDGET_USE_NAMESPACE
 using namespace core::system;
 using namespace common;
 using namespace common::format;
-using namespace common::core;
 
+const int gridSize = 10;
+const int pointsNumber = 30;
 CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
     auto *dAppHelper = DApplicationHelper::instance();
-    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - margin * 2);
+    setFixedWidth(statusBarMaxWidth - 20);
     setFixedHeight(150);
 
-    pointsNumber = int(statusBarMaxWidth / 5.4);
-
     downloadSpeeds = new QList<double>();
-    for (int i = 0; i < pointsNumber; i++) {
+    for (int i = 0; i <= pointsNumber; i++) {
         downloadSpeeds->append(0);
     }
 
     uploadSpeeds = new QList<double>();
-    for (int i = 0; i < pointsNumber; i++) {
+    for (int i = 0; i <= pointsNumber; i++) {
         uploadSpeeds->append(0);
     }
 
@@ -70,8 +66,7 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
             &CompactNetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    connect(monitor, &SystemMonitor::statInfoUpdated, this, &CompactNetworkMonitor::updateStatus);
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &CompactNetworkMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()),
@@ -86,10 +81,27 @@ CompactNetworkMonitor::~CompactNetworkMonitor()
     delete uploadSpeeds;
 }
 
+void CompactNetworkMonitor::getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue)
+{
+    qreal offsetX = 0;
+    qreal distance = (this->width() - 2) * 1.0 / pointsNumber;
+    int dataCount = listData->size();
+
+    for (int i = 0;  i < dataCount - 1; i++) {
+        QPointF sp = QPointF(offsetX, renderMaxHeight * listData->at(i) / maxVlaue);;
+        QPointF ep = QPointF(offsetX + distance, renderMaxHeight * listData->at(i + 1) / maxVlaue);;
+
+        offsetX += distance;
+
+        QPointF c1 = QPointF((sp.x() + ep.x()) / 2.0, sp.y());
+        QPointF c2 = QPointF((sp.x() + ep.x()) / 2.0, ep.y());
+        path.cubicTo(c1, c2, ep);
+    }
+}
+
 void CompactNetworkMonitor::updateStatus()
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    auto netInfo = monitor->deviceDB()->netInfo();
+    auto netInfo = DeviceDB::instance()->netInfo();
 
     m_totalRecvBytes = netInfo->totalRecvBytes();
     m_totalSentBytes = netInfo->totalSentBytes();
@@ -99,66 +111,28 @@ void CompactNetworkMonitor::updateStatus()
     // Init download path.
     downloadSpeeds->append(m_recvBps);
 
-    if (downloadSpeeds->size() > pointsNumber) {
+    if (downloadSpeeds->size() > pointsNumber + 1) {
         downloadSpeeds->pop_front();
     }
-
-    double downloadMaxHeight = 0;
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadSpeeds->at(i) > downloadMaxHeight) {
-            downloadMaxHeight = downloadSpeeds->at(i);
-        }
-    }
+    double downloadMaxHeight = *std::max_element(downloadSpeeds->begin(), downloadSpeeds->end()) * 1.1;
 
     // Init upload path.
     uploadSpeeds->append(m_sentBps);
 
-    if (uploadSpeeds->size() > pointsNumber) {
+    if (uploadSpeeds->size() > pointsNumber + 1) {
         uploadSpeeds->pop_front();
     }
+    double uploadMaxHeight = *std::max_element(uploadSpeeds->begin(), uploadSpeeds->end()) * 1.1;
 
-    QList<QPointF> uploadPoints;
+    double maxHeight = qMax(downloadMaxHeight, uploadMaxHeight);
 
-    double uploadMaxHeight = 0;
-    for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadSpeeds->at(i) > uploadMaxHeight) {
-            uploadMaxHeight = uploadSpeeds->at(i);
-        }
-    }
+    QPainterPath tmpDownloadpath;
+    getPainterPathByData(downloadSpeeds, tmpDownloadpath, maxHeight);
+    downloadPath = tmpDownloadpath;
 
-    qreal maxHeight = std::max(uploadMaxHeight, downloadMaxHeight);
-    // top/bottom margin
-    int modDownloadRenderMaxHeight = downloadRenderMaxHeight - 2;
-    int modUploadRenderMaxHeight = uploadRenderMaxHeight - 2;
-
-    QList<QPointF> downloadPoints;
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadMaxHeight < modDownloadRenderMaxHeight) {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
-        } else {
-            qreal scale = downloadSpeeds->at(i) * modDownloadRenderMaxHeight / maxHeight;
-            if (scale > 0 && scale < 0.5) {
-                scale = 0.5;
-            }
-            downloadPoints.append(QPointF(i * 5, scale));
-        }
-    }
-
-    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
-
-    for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadMaxHeight < modUploadRenderMaxHeight) {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
-        } else {
-            qreal scale = uploadSpeeds->at(i) * modUploadRenderMaxHeight / maxHeight;
-            if (scale > 0 && scale < 0.5) {
-                scale = 0.5;
-            }
-            uploadPoints.append(QPointF(i * 5, scale));
-        }
-    }
-
-    uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
+    QPainterPath tmpUploadpath;
+    getPainterPathByData(uploadSpeeds, tmpUploadpath, maxHeight);
+    uploadPath = tmpUploadpath;
 
     update();
 }
@@ -244,14 +218,13 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     painter.setPen(framePen);
 
     int gridX = rect().x() + penSize;
-    int gridY = rect().y() + crect42.y() + crect42.height() + margin;
-    int gridWidth =
-        rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
-    int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + 4 * penSize;
+    int gridY = rect().y() + crect42.bottom() + margin;
+    int gridWidth = this->width() - 2 * penSize;
+    int gridHeight = renderMaxHeight + renderMaxHeight + 4 * penSize;
 
     QPainterPath framePath;
-    QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
-    framePath.addRect(gridFrame);
+    QRect chartRect(gridX, gridY, gridWidth, gridHeight);
+    framePath.addRect(chartRect);
     painter.drawPath(framePath);
 
     // Draw grid.
@@ -278,24 +251,24 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     QPainterPath clip;
-    clip.addRect(gridFrame);
+    clip.addRect(chartRect);
     painter.setClipPath(clip);
 
     qreal networkCurveWidth = 1.2;
 
     QBrush recvBrush(recvColor), sentBrush(sentColor);
 
-    painter.translate(gridFrame.x() + 2, gridFrame.y() + gridFrame.height() / 2 - 2);
+    painter.translate(chartRect.x() + 2, chartRect.y() + chartRect.height() / 2 - 2);
     painter.scale(1, -1);
     painter.setPen(QPen(recvBrush, networkCurveWidth));
     painter.drawPath(downloadPath);
 
-    painter.translate(0, uploadWaveformsRenderOffsetY);
+    painter.translate(0, -5);
     painter.scale(1, -1);
     painter.setPen(QPen(sentBrush, networkCurveWidth));
     painter.drawPath(uploadPath);
 
-    setFixedHeight(gridFrame.y() + gridFrame.height() + penSize);
+    setFixedHeight(chartRect.bottom() + 2 * penSize);
 }
 
 void CompactNetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeType)
