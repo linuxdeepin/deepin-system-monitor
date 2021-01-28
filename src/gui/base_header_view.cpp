@@ -164,7 +164,7 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
     painter.restore();
 
     // draw focus
-    if (hasFocus()) {
+    if (hasFocus() && m_focusReason == Qt::TabFocusReason) {
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(option);
         // need take scroll offset into consideration
@@ -172,6 +172,12 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
         o.rect = style->visualRect(layoutDirection(), rect, focusRect);
         style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, &painter);
     }
+}
+
+void BaseHeaderView::focusInEvent(QFocusEvent *event)
+{
+    DHeaderView::focusInEvent(event);
+    m_focusReason =  event->reason();
 }
 
 // Section paint handler

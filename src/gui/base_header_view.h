@@ -94,6 +94,11 @@ protected:
      */
     bool viewportEvent(QEvent *e) override;
 
+    /**
+     * @brief focusInEvent
+     */
+    void focusInEvent(QFocusEvent *event) override;
+
 private:
     // spacing between sections
     int m_spacing {1};
@@ -102,6 +107,8 @@ private:
     int m_hover {-1};
     // logical index of the section of which currently being pressed by mouse
     int m_pressed {-1};
+
+    int m_focusReason = Qt::TabFocusReason;
 };
 
 #endif  // BASE_HEADER_VIEW_H

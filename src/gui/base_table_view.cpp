@@ -37,6 +37,7 @@
 #include <QScroller>
 #include <QScrollerProperties>
 #include <QScrollBar>
+#include <QFocusEvent>
 
 // default constructor
 BaseTableView::BaseTableView(DWidget *parent)
@@ -67,7 +68,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     // header context menu policy
     m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
     // header view focus policy
-    m_headerView->setFocusPolicy(Qt::TabFocus);
+    m_headerView->setFocusPolicy(Qt::StrongFocus);
 
     // not allowing expanding/collpasing top-level items
     setRootIsDecorated(false);
@@ -79,8 +80,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     setAlternatingRowColors(false);
     // disable default focus style
     setAllColumnsShowFocus(false);
-    // focus policy
-    setFocusPolicy(Qt::TabFocus);
+    setFocusPolicy(Qt::StrongFocus);
 
     // adjust focus order (header -> treeview)
     setTabOrder(m_headerView, this);
@@ -260,7 +260,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     QTreeView::drawRow(painter, opt, index);
 
     // draw focus
-    if (hasFocus() && currentIndex().row() == index.row()) {
+    if (hasFocus() && m_focusReason == Qt::TabFocusReason && currentIndex().row() == index.row()) {
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(options);
         o.state |= QStyle::State_KeyboardFocusChange | QStyle::State_HasFocus;
@@ -270,6 +270,12 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 
     // restore painter state
     painter->restore();
+}
+
+void BaseTableView::focusInEvent(QFocusEvent *event)
+{
+    DTreeView::focusInEvent(event);
+    m_focusReason =  event->reason();
 }
 
 // current selected item changed handler
