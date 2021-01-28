@@ -45,6 +45,29 @@ struct inet_addr6_t : public inet_addr_t {
     int prefixlen;
     int scope;
 };
+
+struct ethtool_cmd
+{
+  uint32_t cmd;
+  uint32_t supported;                                  /* Features this interface supports */
+  uint32_t advertising;                                /* Features this interface advertises */
+  uint16_t speed;                                      /* The forced speed, 10Mb, 100Mb, gigabit */
+  uint8_t duplex;                                      /* Duplex, half or full */
+  uint8_t port;                                        /* Which connector port */
+  uint8_t phy_address;
+  uint8_t transceiver;                                 /* Which tranceiver to use */
+  uint8_t autoneg;                                     /* Enable or disable autonegotiation */
+  uint16_t maxtxpkt;                                   /* Tx pkts before generating tx int */
+  uint16_t maxrxpkt;                                   /* Rx pkts before generating rx int */
+  uint16_t reserved[4];
+};
+
+/* The forced speed, 10Mb, 100Mb, gigabit, 10GbE. */
+#define SPEED_10                10
+#define SPEED_100               100
+#define SPEED_1000              1000
+#define SPEED_10000             10000
+
 using INetAddr = std::shared_ptr<struct inet_addr_t>;
 using INet4Addr = std::shared_ptr<struct inet_addr4_t>;
 using INet6Addr = std::shared_ptr<struct inet_addr6_t>;
@@ -75,7 +98,8 @@ public:
     quint8 linkMode() const;
     quint8 carrier() const;
     uint carrierChanges() const;
-    uint netspeed() const;
+    uint speed() const;
+    QByteArray netspeed() const;
     QByteArray connectionType() const;
     QByteArray linkAddress() const;
     QByteArray linkBroadcast() const;
@@ -114,10 +138,12 @@ public:
     QList<INet4Addr> addr4InfoList() const;
     QList<INet6Addr> addr6InfoList() const;
 
+
+
+protected:
     void updateAddr4Info(const QList<INet4Addr> &addrList);
     void updateAddr6Info(const QList<INet6Addr> &addrList);
 
-protected:
     void updateLinkInfo(const NLLink *link);
     void updateWirelessInfo(); // ioctl
     void updateBrandInfo(); // udev
@@ -183,7 +209,12 @@ inline uint NetifInfo::carrierChanges() const
     return d->carrier_changes;
 }
 
-inline uint NetifInfo::netspeed() const
+inline uint NetifInfo::speed() const
+{
+    return d->speed;
+}
+
+inline QByteArray NetifInfo::netspeed() const
 {
     return d->net_speed;
 }
@@ -328,6 +359,18 @@ inline void NetifInfo::updateAddr4Info(const QList<INet4Addr> &addrList)
 inline void NetifInfo::updateAddr6Info(const QList<INet6Addr> &addrList)
 {
     d->addr6infolst = addrList;
+}
+
+
+
+inline qreal NetifInfo::recv_bps() const
+{
+    return d->recv_bps;
+}
+
+inline qreal NetifInfo::sent_bps() const
+{
+    return d->sent_bps;
 }
 
 } // namespace system

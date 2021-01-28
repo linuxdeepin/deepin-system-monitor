@@ -234,7 +234,7 @@ public:
 
             // 速率
             stInfo.strKey = "Bandwidth";
-            stInfo.strValue = QString("%1").arg(stNetifInfo->netspeed());
+            stInfo.strValue = stNetifInfo->netspeed();
             m_listInfo << stInfo;
 
             // 接收包数量

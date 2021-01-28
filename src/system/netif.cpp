@@ -25,6 +25,9 @@
 
 #include <netlink/route/link.h>
 #include <netlink/addr.h>
+#include <linux/sockios.h>
+#include<unistd.h>
+#include<sys/ioctl.h>
 
 namespace core {
 namespace system {
@@ -49,15 +52,6 @@ NetifInfo::~NetifInfo()
 {
 }
 
-qreal NetifInfo::recv_bps() const
-{
-    return d->recv_bps;
-}
-
-qreal NetifInfo::sent_bps() const
-{
-    return d->sent_bps;
-}
 
 void NetifInfo::set_recv_bps(qreal recv_bps)
 {
@@ -112,6 +106,7 @@ void NetifInfo::updateLinkInfo(const NLLink *link)
     d->collisions = link->collisions();
 
     this->updateWirelessInfo();
+    this->updateBrandInfo();
 }
 
 void NetifInfo::updateWirelessInfo()
@@ -126,6 +121,39 @@ void NetifInfo::updateWirelessInfo()
     } else {
         d->isWireless = false;
     }
+}
+
+void NetifInfo::updateBrandInfo()
+{
+    struct ifreq ifr;
+    struct ethtool_cmd ecmd;
+
+     ecmd.cmd = 0x00000001;
+     memset(&ifr, 0, sizeof(ifr));
+     strcpy(ifr.ifr_name,d->ifname);
+
+    ifr.ifr_data = reinterpret_cast<caddr_t>(&ecmd);
+    int fd = socket(PF_INET, SOCK_DGRAM, 0);
+    if (ioctl(fd, SIOCETHTOOL, &ifr) == 0)
+    {
+         switch(ecmd.speed) {
+            case SPEED_10:
+                d->net_speed  ="10Mbit/s";
+                break;
+            case SPEED_100:
+                d->net_speed  ="100Mbit/s";
+                break;
+            case SPEED_1000:
+                d->net_speed  ="1Gbit/s";
+                break;
+            case SPEED_10000:
+                d->net_speed  ="10Gbit/s";
+                break;
+         }
+
+          d->speed   = ecmd.speed;
+     }
+     close(fd);
 }
 
 } // namespace system

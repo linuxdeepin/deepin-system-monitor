@@ -72,7 +72,8 @@ public:
         , arp_type {0}
         , txqlen {0}
         , carrier_changes {0}
-        , net_speed {0}
+        , net_speed {""}
+        , speed {0}
         , ifname {}
         , alias {}
         , conn_type {}
@@ -112,6 +113,7 @@ public:
         , txqlen {other.txqlen}
         , carrier_changes {other.carrier_changes}
         , net_speed {other.net_speed}
+        , speed {other.speed}
         , ifname {other.ifname}
         , alias {other.alias}
         , conn_type {other.conn_type}
@@ -153,7 +155,8 @@ private:
     uint arp_type; // connection type
     uint txqlen; // transmission queue length
     uint carrier_changes; // carrier state changes since boot
-    uint net_speed;
+    uint speed;		// 原始speed值
+    QByteArray net_speed;
 
     QByteArray ifname;
     QByteArray alias;
