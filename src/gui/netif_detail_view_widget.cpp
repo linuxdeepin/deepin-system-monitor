@@ -31,6 +31,9 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     m_netifstatWIdget = new NetifStatViewWidget(this);
     m_netifsummaryWidget = new NetifSummaryViewWidget(this);
 
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetifDetailViewWidget::updateData);
+    connect(m_netifstatWIdget, &NetifStatViewWidget::netifItemClicked, m_netifsummaryWidget, &NetifSummaryViewWidget::onNetifItemClicked);
+
     setTitle(DApplication::translate("Process.Graph.View", "Network"));
     m_centralLayout->addWidget(m_netifstatWIdget);
     m_centralLayout->addWidget(m_netifsummaryWidget);
@@ -38,8 +41,6 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     fontChanged(DApplication::font());
 
     updateData();
-    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetifDetailViewWidget::updateData);
-    connect(m_netifstatWIdget, &NetifStatViewWidget::netifItemClicked, m_netifsummaryWidget, &NetifSummaryViewWidget::onNetifItemClicked);
 }
 
 void NetifDetailViewWidget::fontChanged(const QFont &font)

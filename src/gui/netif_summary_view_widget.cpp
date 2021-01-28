@@ -21,23 +21,292 @@
 #include "system/device_db.h"
 #include "common/common.h"
 #include "system/netif.h"
+#include "common/thread_manager.h"
+#include "system/system_monitor_thread.h"
+#include "system/netif_info_db.h"
 
 #include <QHeaderView>
 #include <QAbstractTableModel>
+#include <QPainter>
+#include <DApplicationHelper>
+#include <QStyledItemDelegate>
+#include <QHeaderView>
+#include <DStyle>
+#include <DApplication>
 
 using namespace core::system;
 using namespace common::format;
+using namespace common::core;
 
+#define LEFTMARGIN  15  // 左边距
+#define TOPMARGIN   10  // 上边距
+#define TEXTSPACING 30  // 内容文字间距
+
+Q_DECLARE_METATYPE(ShowInfo)
+class NetInfoDetailItemDelegate : public QStyledItemDelegate
+{
+public:
+    explicit NetInfoDetailItemDelegate(QObject *parent = nullptr);
+    virtual ~NetInfoDetailItemDelegate();
+
+    void paint(QPainter *painter,
+               const QStyleOptionViewItem &option,
+               const QModelIndex &index) const
+    {
+        auto palette = option.palette;
+        QBrush background = palette.color(DPalette::Active, DPalette::Base);
+        if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
+
+        painter->save();
+        QPainterPath clipPath;
+        clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
+        painter->setClipPath(clipPath);
+
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(background);
+        painter->drawRect(option.rect);
+
+        if (index.isValid()) {
+            QRect textRect = option.rect;
+            textRect.setX(textRect.x() + LEFTMARGIN);
+
+            QPen forground;
+            forground.setColor(palette.color(DPalette::Active, DPalette::Text));
+            painter->setPen(forground);
+
+            ShowInfo stInfo = index.data(Qt::UserRole).value<ShowInfo>();
+
+            if (index.column() == 1 && stInfo.eType != ShowInfo::Normal) {
+                // 绘制第2列IPV
+                QStringList listKey;
+                QStringList listValue = stInfo.strValue.split("/");
+
+                if (stInfo.eType == ShowInfo::IPV4) {
+                    listKey << tr("IP address:") << tr("Subnet mask:") << tr("Broadcast:");
+                } else {
+                    listKey << tr("IP address:") << tr("Prefixlen:") << tr("Scope:");
+                }
+
+                if ((listKey.count() == listValue.count()) && (listValue.count() == 3)) {
+                    // 获取key最宽的数值
+                    QFontMetrics fm(painter->font());
+                    int iMaxW = fm.width(listKey[0]);
+                    for (int i = 1; i < listKey.count(); ++i) {
+                        if (iMaxW < fm.width(listKey[i]))
+                            iMaxW = fm.width(listKey[i]);
+                    }
+
+                    // 绘制内容
+                    for (int i = 0; i < listKey.count(); ++i) {
+                        // 绘制IPV标题
+                        QRect titleRect;
+                        titleRect.setX(textRect.x());
+                        titleRect.setY(textRect.y() + TOPMARGIN + i * fm.height());
+                        titleRect.setWidth(fm.width(listKey[i]));
+                        titleRect.setHeight(fm.height());
+                        painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, listKey[i]);
+
+                        // 绘制IP
+                        QRect valueRect;
+                        valueRect.setX(textRect.x() + iMaxW + TEXTSPACING);
+                        valueRect.setY(textRect.y() + TOPMARGIN + i * fm.height());
+                        valueRect.setWidth(fm.width(listValue[i]));
+                        valueRect.setHeight(fm.height());
+                        painter->drawText(valueRect, Qt::AlignLeft | Qt::AlignVCenter, listValue[i]);
+                    }
+                }
+
+            } else if (index.column() == 0 && stInfo.eType != ShowInfo::Normal) {
+                // 绘制第1列IPV
+                textRect.setY(textRect.y() + TOPMARGIN);
+                painter->drawText(textRect, Qt::AlignLeft | Qt::AlignTop, stInfo.strKey);
+            } else {
+                // 其余左对齐、垂直居中
+                painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::DisplayRole).toString());
+            }
+
+        }
+        painter->restore();
+
+//        QStyledItemDelegate::paint(painter, option, index);
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    {
+        if (index.isValid()) {
+            ShowInfo stInfo = index.data(Qt::UserRole).value<ShowInfo>();
+
+            if (stInfo.eType != ShowInfo::Normal)
+                return QSize(option.rect.width(), 90);
+
+            return QSize(option.rect.width(), 30);
+        }
+
+        return QSize(option.rect.width(), 30);
+    }
+};
+
+NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
+{
+}
+
+NetInfoDetailItemDelegate::~NetInfoDetailItemDelegate()
+{
+}
 
 class NetInfoModel : public QAbstractTableModel
 {
 public:
     explicit NetInfoModel(QObject *parent = nullptr);
     virtual ~NetInfoModel();
+
+public:
+    /**
+     * @brief refreshNetifInfo  刷新网络信息
+     * @param stNetifInfo       网络信息
+     */
+    void refreshNetifInfo(const QString &strKey)
+    {
+        ThreadManager::instance();
+        auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+        QMap<QByteArray, NetifInfoPtr> mapInfo = monitor->deviceDB()->netifInfoDB()->infoDB();
+
+
+        m_listInfo.clear();
+
+        beginResetModel();
+        if (mapInfo.find(strKey.toLocal8Bit()) != mapInfo.end()) {
+            NetifInfoPtr stNetifInfo = mapInfo.first();//mapInfo[strKey];
+
+            ShowInfo stInfo;
+
+            // 处理IPV4
+            QList<INet4Addr> listAddr4 = stNetifInfo->addr4InfoList();
+            for (int i = 0; i < listAddr4.count(); ++i) {
+                stInfo.eType = ShowInfo::IPV4;
+                stInfo.strKey = "IPV4 " + QString::number(i + 1);
+                stInfo.strValue =  QString("%1/%2/%3").arg(QString(listAddr4[i]->addr)).arg(QString(listAddr4[i]->mask)).arg(QString(listAddr4[i]->bcast));
+                m_listInfo << stInfo;
+            }
+
+            // 处理IPV6
+            QList<INet6Addr> listAddr6 = stNetifInfo->addr6InfoList();
+            for (int i = 0; i < listAddr6.count(); ++i) {
+                stInfo.eType = ShowInfo::IPV6;
+                stInfo.strKey = "IPV6 " + QString::number(i + 1);
+                stInfo.strValue = QString("%1/%2/%3").arg(QString(listAddr6[i]->addr)).arg(listAddr6[i]->prefixlen).arg(listAddr6[i]->scope);
+                m_listInfo << stInfo;
+            }
+
+            // 处理连接类型
+            stInfo.eType = ShowInfo::Normal;
+            stInfo.strKey = "Connection type";
+            stInfo.strValue = stNetifInfo->connectionType();
+            m_listInfo << stInfo;
+
+            // 是否是无线网
+            if (stNetifInfo->isWireless()) {
+                // 服务器别号
+                stInfo.strKey = "essid";
+                stInfo.strValue = stNetifInfo->essid();
+                m_listInfo << stInfo;
+
+                // 信号质量
+                stInfo.strKey = "Link quality";
+                stInfo.strValue = QString("%1").arg(stNetifInfo->linkQuality());
+                m_listInfo << stInfo;
+
+                // 信号强度
+                stInfo.strKey = "Signal level";
+                stInfo.strValue = QString("%1 dBm").arg(stNetifInfo->signalLevel());
+                m_listInfo << stInfo;
+            }
+
+            // 底噪
+            stInfo.strKey = "Noise level";
+            stInfo.strValue = QString("%1 dB").arg(stNetifInfo->noiseLevel());
+            m_listInfo << stInfo;
+
+            // Mac地址
+            stInfo.strKey = "Mac address";
+            stInfo.strValue = stNetifInfo->linkAddress();
+            m_listInfo << stInfo;
+
+            // 速率
+            stInfo.strKey = "Bandwidth";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->netspeed());
+            m_listInfo << stInfo;
+
+            // 接收包数量
+            stInfo.strKey = "RX packets";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->rxPackets());
+            m_listInfo << stInfo;
+
+            // 总计接收
+            stInfo.strKey = "RX bytes";
+            stInfo.strValue = formatUnit(stNetifInfo->rxBytes(), B, 1);
+            m_listInfo << stInfo;
+
+            // 接收错误包
+            stInfo.strKey = "RX errors";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->rxErrors());
+            m_listInfo << stInfo;
+
+            // 接收丢包数
+            stInfo.strKey = "RX dropped";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->rxDropped());
+            m_listInfo << stInfo;
+
+            // 接收FIFO
+            stInfo.strKey = "RX overruns";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->rxFIFO());
+            m_listInfo << stInfo;
+
+            // 分组帧错误
+            stInfo.strKey = "RX frame";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->rxFrame());
+            m_listInfo << stInfo;
+
+            // 发送包数量
+            stInfo.strKey = "TX packets";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->txPackets());
+            m_listInfo << stInfo;
+
+            // 总计发送
+            stInfo.strKey = "TX bytes";
+            stInfo.strValue = formatUnit(stNetifInfo->txBytes(), B, 1);
+            m_listInfo << stInfo;
+
+            // 发送错误包
+            stInfo.strKey = "TX errors";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->txErrors());
+            m_listInfo << stInfo;
+
+            // 发送丢包数
+            stInfo.strKey = "TX dropped";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->txDropped());
+            m_listInfo << stInfo;
+
+            // 发送FIFO
+            stInfo.strKey = "TX overruns";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->txFIFO());
+            m_listInfo << stInfo;
+
+            // 载波损耗
+            stInfo.strKey = "TX carrier";
+            stInfo.strValue = QString("%1").arg(stNetifInfo->txCarrier());
+            m_listInfo << stInfo;
+        }
+        endResetModel();
+    }
+
+private:
+    QList<ShowInfo> m_listInfo;
+
 protected:
     int rowCount(const QModelIndex &) const
     {
-        return 7;
+        return m_listInfo.count();
     }
 
     int columnCount(const QModelIndex &) const
@@ -50,13 +319,37 @@ protected:
         if (!index.isValid())
             return QVariant();
 
+        int iRow = index.row();
+        int iColumn = index.column();
+
+        if (iRow >= m_listInfo.count() || iRow < 0)
+            return QVariant();
+
+        if (role == Qt::UserRole) {
+            return QVariant::fromValue(m_listInfo[iRow]);
+        } else if (role == Qt::DisplayRole) {
+            switch (iColumn) {
+            case 0:
+                return m_listInfo[iRow].strKey;
+            case 1:
+                return m_listInfo[iRow].strValue;
+            default:
+                break;
+            }
+        }
+
 
         return QVariant();
     }
+
+    Qt::ItemFlags flags(const QModelIndex &) const
+    {
+        return Qt::NoItemFlags;
+    }
 };
+
 NetInfoModel::NetInfoModel(QObject *parent): QAbstractTableModel(parent)
 {
-    //m_memInfo = DeviceDB::instance()->memInfo();
 }
 
 NetInfoModel::~NetInfoModel()
@@ -65,8 +358,7 @@ NetInfoModel::~NetInfoModel()
 }
 
 NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
-    : DTableView(parent),
-      m_index(0)
+    : DTableView(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -76,23 +368,43 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
     this->setGridStyle(Qt::NoPen);
     this->setFrameShape(QFrame::NoFrame);
+    this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_netInfoModel = new NetInfoModel(this);
     this->setModel(m_netInfoModel);
+    this->setItemDelegate(new NetInfoDetailItemDelegate(this));
 }
 
 void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
 {
-
-}
-
-void NetifSummaryViewWidget::onModelUpdate()
-{
-    // update model
+    // 按照点击IP刷新数据
+    m_strCurrentKey = mac;
+    m_netInfoModel->refreshNetifInfo(m_strCurrentKey);
 }
 
 void NetifSummaryViewWidget::fontChanged(const QFont &font)
 {
+    m_font = font;
+    this->setFont(m_font);
+    setFixedHeight(QFontMetrics(font).height() * 16);
+}
 
+void NetifSummaryViewWidget::onModelUpdate()
+{
+    m_netInfoModel->refreshNetifInfo(m_strCurrentKey);  // 按时间间隔刷新数据
+}
+
+void NetifSummaryViewWidget::paintEvent(QPaintEvent *event)
+{
+    DTableView::paintEvent(event);
+
+    QPainter painter(this->viewport());
+    const auto &palette = DApplicationHelper::instance()->applicationPalette();
+    QColor frameColor = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
+    painter.setPen(QPen(frameColor, 1));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);
+    painter.drawRoundedRect(this->rect().adjusted(1, 1, -1, -1), 6, 6);
 }
 
 

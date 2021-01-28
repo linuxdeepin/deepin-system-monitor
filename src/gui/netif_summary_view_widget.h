@@ -21,17 +21,37 @@
 #define NETIF_SUMMARY_VIEW_WIDGET_H
 
 #include <DTableView>
-
+#include "system/netif.h"
+using namespace core::system;
+DWIDGET_USE_NAMESPACE
 /**
  * @brief Network interface summary view widget
  */
-DWIDGET_USE_NAMESPACE
+
 class NetInfoModel;
+struct ShowInfo {
+    enum InfoType {
+        Normal,     // 正常数据
+        IPV4,       // IPV4
+        IPV6        // IPV6
+    };
+
+    InfoType eType = Normal;
+    QString strKey;     // 第一列内容
+    QString strValue;   // 第二列值
+//    bool isIPV = false;  // 是否是IPV数据
+};
 class NetifSummaryViewWidget : public DTableView
 {
     Q_OBJECT
 public:
     explicit NetifSummaryViewWidget(QWidget *parent = nullptr);
+    void updateInfo(const QByteArray &strKey);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+signals:
 
 public slots:
     void fontChanged(const QFont &font);
@@ -41,8 +61,8 @@ public slots:
 
 private:
     QFont m_font;
-    int m_index;
     NetInfoModel *m_netInfoModel;
+    QString m_strCurrentKey;
 };
 
 #endif // NETIF_SUMMARY_VIEW_WIDGET_H
