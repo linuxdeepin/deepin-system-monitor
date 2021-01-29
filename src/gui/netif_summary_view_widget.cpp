@@ -176,7 +176,7 @@ public:
 
         beginResetModel();
         if (mapInfo.find(strKey.toLocal8Bit()) != mapInfo.end()) {
-            NetifInfoPtr stNetifInfo = mapInfo.first();//mapInfo[strKey];
+            NetifInfoPtr stNetifInfo = mapInfo[strKey.toLocal8Bit()];
 
             ShowInfo stInfo;
 

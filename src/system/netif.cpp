@@ -22,6 +22,7 @@
 #include "nl_addr.h"
 #include "nl_link.h"
 #include "wireless.h"
+#include "nl_hwaddr.h"
 
 #include <netlink/route/link.h>
 #include <netlink/addr.h>
@@ -61,6 +62,13 @@ void NetifInfo::set_recv_bps(qreal recv_bps)
 void NetifInfo::set_sent_bps(qreal sent_bps)
 {
     d->sent_bps = sent_bps;
+}
+
+void NetifInfo::updateHWAddr(const QByteArray ifname)
+{
+    NLHWAddr nl_hwaddr(ifname);
+    d->conn_type = nl_hwaddr.conn_type();
+
 }
 
 void NetifInfo::updateLinkInfo(const NLLink *link)
@@ -107,6 +115,7 @@ void NetifInfo::updateLinkInfo(const NLLink *link)
 
     this->updateWirelessInfo();
     this->updateBrandInfo();
+    this->updateHWAddr(d->ifname);
 }
 
 void NetifInfo::updateWirelessInfo()
@@ -150,8 +159,7 @@ void NetifInfo::updateBrandInfo()
                 d->net_speed  ="10Gbit/s";
                 break;
          }
-
-          d->speed   = ecmd.speed;
+         d->speed   = ecmd.speed;
      }
      close(fd);
 }

@@ -143,7 +143,7 @@ public:
 protected:
     void updateAddr4Info(const QList<INet4Addr> &addrList);
     void updateAddr6Info(const QList<INet6Addr> &addrList);
-
+    void updateHWAddr(const QByteArray ifname);
     void updateLinkInfo(const NLLink *link);
     void updateWirelessInfo(); // ioctl
     void updateBrandInfo(); // udev

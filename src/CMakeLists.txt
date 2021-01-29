@@ -353,6 +353,7 @@ set(HPP_SYSTEM
     system/udev_device.h
     system/netlink.h
     system/nl_addr.h
+    system/nl_hwaddr.h
     system/nl_link.h
     system/wireless.h
     system/diskio_info.h
@@ -379,6 +380,7 @@ set(CPP_SYSTEM
     system/udev_device.cpp
     system/netlink.cpp
     system/nl_addr.cpp
+    system/nl_hwaddr.cpp
     system/nl_link.cpp
     system/wireless.cpp
     system/diskio_info.cpp

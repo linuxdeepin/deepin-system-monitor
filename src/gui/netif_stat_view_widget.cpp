@@ -52,10 +52,25 @@ void NetifStatViewWidget::onModelUpdate()
     int netifCnt = netifInfoDB.size();
     if (!m_initStatus && netifCnt > 0) {
         m_initStatus = true;
-        if (netifCnt > 1)
+        if (netifCnt > 1){
             onSetItemActiveStatus(netifInfoDB.begin().key());
-        else
+        }
+        else{
             emit netifItemClicked(netifInfoDB.begin().key());
+        }
+        m_currentMac = netifInfoDB.begin().key();
+    }
+
+    if(netifCnt > 0 && !netifInfoDB.contains(m_currentMac)){
+        if(netifInfoDB.size()  == 1){
+              m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(false);
+        }
+        else{
+              m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(true);
+        }
+        m_currentMac = netifInfoDB.begin().key();
+        emit netifItemClicked(netifInfoDB.begin().key());
+        return ;
     }
 }
 
@@ -63,6 +78,7 @@ void NetifStatViewWidget::onSetItemActiveStatus(const QString &mac)
 {
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
     int netCount  = netifInfoDB.size();
+    m_currentMac = mac.toUtf8();
 
     for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
         NetifItemViewWidget *itemView = iter.value();
@@ -97,8 +113,10 @@ void NetifStatViewWidget::showItemOnlyeOne()
             itemView->show();
             itemView->setMode(NetifItemViewWidget::TITLE_HORIZONTAL);
             itemView->setGeometry(0, 0, this->width(), this->height());
+            itemView->updateActiveStatus(false);
         } else {
             itemView->hide();
+            itemView->updateActiveStatus(false);
         }
     }
 
@@ -119,8 +137,12 @@ void NetifStatViewWidget::showItemDouble()
             itemView->setMode(NetifItemViewWidget::TITLE_VERTICAL);
             itemView->setGeometry(itemOffsetX, 0, itemWidth, itemHeight);
             itemOffsetX = itemOffsetX + itemWidth + itemSpace;
+            if(iter.key() == m_currentMac){
+                   itemView->updateActiveStatus(true);
+            }
         } else {
             itemView->hide();
+            itemView->updateActiveStatus(false);
         }
     }
 
@@ -133,7 +155,6 @@ void NetifStatViewWidget::showItemLgDouble()
 
     int itemHeight  = this->height() / 2;
     int itemWidth   = (this->width() - itemSpace) / 2;
-
     int itemCurrentCnt = -1;
     int page = 0;
     for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
@@ -142,7 +163,6 @@ void NetifStatViewWidget::showItemLgDouble()
             itemCurrentCnt++;
             itemView->setMode(NetifItemViewWidget::TITLE_VERTICAL);
             itemView->show();
-
             page = itemCurrentCnt / 4;
             if (itemCurrentCnt % 4 == 0) {
                 itemView->setGeometry(page * this->width(), 0, itemWidth, itemHeight);
@@ -153,9 +173,12 @@ void NetifStatViewWidget::showItemLgDouble()
             } else if (itemCurrentCnt % 4 == 3) {
                 itemView->setGeometry(page * this->width() + itemWidth + itemSpace, itemHeight, itemWidth, itemHeight);
             }
-
+            if(iter.key() == m_currentMac){
+                   itemView->updateActiveStatus(true);
+            }
         } else {
             itemView->hide();
+            itemView->updateActiveStatus(false);
         }
     }
     m_centralWidget->setFixedSize(this->width() + this->width() * page, this->height());

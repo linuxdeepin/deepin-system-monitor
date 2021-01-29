@@ -45,6 +45,7 @@ private:
 
     bool m_initStatus = false;
     QWidget *m_centralWidget;
+    QByteArray m_currentMac;
     QMap<QByteArray, NetifItemViewWidget *> m_mapItemView;
 };
 
