@@ -93,7 +93,6 @@ void BlockStatViewWidget::updateItemWidget()
          {
              int page = i/4;
              BlockDevItemWidget *item1 = m_listBlockItemWidget.at(i);
-
              item1->setMode(2);
              m_mapDeviceItemWidget.insert(m_listDevice[i].deviceName(),item1);
              if(i%4 == 0){
