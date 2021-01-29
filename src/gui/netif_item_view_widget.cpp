@@ -60,7 +60,7 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
     painter.setPen(textColor);
     if (m_mode == TITLE_HORIZONTAL) {
         QString strLeftBrackets = "(";
-        QRect leftBracketsRect(ifnameRect.right() + spacing, ifnameRect.y(), painter.fontMetrics().width(strLeftBrackets), painter.fontMetrics().height());
+        QRect leftBracketsRect(ifnameRect.right() + spacing, 0, painter.fontMetrics().width(strLeftBrackets), painter.fontMetrics().height());
         painter.drawText(leftBracketsRect, Qt::AlignLeft | Qt::AlignVCenter, strLeftBrackets);
 
         QString strRecvData = DApplication::translate("Process.Graph.Title", "Receive");

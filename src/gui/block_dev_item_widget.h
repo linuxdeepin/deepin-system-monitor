@@ -32,7 +32,7 @@ class BlockDevItemWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BlockDevItemWidget(QWidget *parent = nullptr);
+    explicit BlockDevItemWidget(BlockDevice info,QWidget *parent = nullptr);
 
 signals:
     void clicked(const QString& deviceName);
@@ -52,7 +52,7 @@ public:
 private:
     void updateWidgetGeometry();
 private:
-     int m_mode;
+    int m_mode;
     QColor readColor {"#8F88FF"};
     QColor writeColor {"#6AD787"};
     ChartViewWidget *m_memChartWidget;

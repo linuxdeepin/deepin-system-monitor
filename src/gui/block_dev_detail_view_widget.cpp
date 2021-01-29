@@ -29,7 +29,6 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     setTitle(DApplication::translate("Process.Graph.View", "Disk"));
     m_blockStatWidget = new BlockStatViewWidget(this);
     m_blocksummaryWidget = new BlockDevSummaryViewWidget(this);
-
     m_centralLayout->addWidget(m_blockStatWidget);
     m_centralLayout->addWidget(m_blocksummaryWidget);
    // m_centralLayout->setSpacing(0);
@@ -41,7 +40,7 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
 void BlockDevDetailViewWidget::fontChanged(const QFont &font)
 {
     BaseDetailViewWidget::fontChanged(font);
-  //  m_blockStatWidget->fontChanged(font);
-  //  m_blocksummaryWidget->fontChanged(font);
+    m_blockStatWidget->fontChanged(font);
+    m_blocksummaryWidget->fontChanged(font);
     //Child Todo
 }

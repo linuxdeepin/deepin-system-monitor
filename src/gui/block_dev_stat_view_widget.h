@@ -41,11 +41,13 @@ signals:
     void changeInfo(const QString& deviceName);
 protected:
     void resizeEvent(QResizeEvent *event) override;
+
     //void updateWidgetGeometry();
 public slots:
     void updateWidgetGeometry();
     void updateItemWidget();
     void onUpdateData();
+     void fontChanged(const QFont &font);
     void onSetItemStatus(const QString& deviceName);
 private:
     void showItem1();

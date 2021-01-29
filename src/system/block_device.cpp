@@ -68,7 +68,8 @@ void BlockDevice::readDeviceInfo()
     strList << line.split(" ",QString::SkipEmptyParts);
     while (!line.isNull()) {
       line = in.readLine();
-      strList << line.split(" ",QString::SkipEmptyParts);
+      if(!line.contains("loop"))
+        strList << line.split(" ",QString::SkipEmptyParts);
     }
     file.close();
 
@@ -80,7 +81,7 @@ void BlockDevice::readDeviceInfo()
             qint64 interval = m_time_sec - d->_time_Sec > 0 ? m_time_sec - d->_time_Sec :1;
             calcDiskIoStates(deviceInfo);
             readDeviceModel();
-            readDeviceSize();
+            d->capacity = readDeviceSize(deviceInfo[2]);
             if(d->read_iss != 0)
                 d->r_ps = (deviceInfo[3].toULongLong() - d->read_iss) / static_cast<quint64>(interval);
             if(d->blk_read != 0)
@@ -126,16 +127,16 @@ void BlockDevice::readDeviceModel()
     file.close();
 }
 
-void BlockDevice::readDeviceSize()
+quint64 BlockDevice::readDeviceSize(const QString& deviceName)
 {
-    QString path = QString(SYSFS_PATH_SIZE).arg(d->name.data());
+    QString path = QString(SYSFS_PATH_SIZE).arg(deviceName);
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)) {
-        return;
+        return 0;
     }
     quint64 size = file.readLine().replace("\n","").trimmed().toULongLong() * SECTOR_SIZE;
-    d->capacity = size;
     file.close();
+    return size;
 
 }
 

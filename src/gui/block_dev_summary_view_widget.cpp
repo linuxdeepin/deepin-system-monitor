@@ -111,11 +111,11 @@ protected:
                 if (column == 0)
                     return tr("Model");
                 else if (column == 1)
-                    return tr("Reading speed");
+                    return DApplication::translate("Process.Graph.View", "Disk read");
                 break;
             case 1:
                 if (column == 0)
-                    return tr("Write speed");
+                    return DApplication::translate("Process.Graph.View", "Disk write");
                 else if (column == 1)
                     return tr("Capacity");
                 break;
@@ -200,8 +200,6 @@ protected:
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
             return palette.color(DPalette::Text);
         }
-
-
         return QVariant();
     }
 
@@ -269,11 +267,7 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     m_model = new DeailTableModelBlock(this);
     this->setModel(m_model);
     this->setItemDelegate(new DetailItemDelegateBlock(this));
-
-
-
 }
-
 
 void BlockDevSummaryViewWidget::chageSummaryInfo(const QString& deviceName)
 {

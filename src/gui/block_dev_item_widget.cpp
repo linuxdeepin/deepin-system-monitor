@@ -29,14 +29,14 @@
 DWIDGET_USE_NAMESPACE
 using namespace common::format;
 
-BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
+BlockDevItemWidget::BlockDevItemWidget(BlockDevice info,QWidget *parent) : QWidget(parent)
 {
-   // m_blokeDeviceInfo = info;
+    m_blokeDeviceInfo = info;
     m_memChartWidget = new ChartViewWidget(this);
     m_memChartWidget->setSpeedAxis(true);
     m_memChartWidget->setData1Color(readColor);
     m_memChartWidget->setData2Color(writeColor);
-   // updateData(info);
+    updateData(info);
 }
 
 void BlockDevItemWidget::updateWidgetGeometry()
@@ -49,8 +49,6 @@ void BlockDevItemWidget::updateWidgetGeometry()
     } else {
         m_memChartWidget->setGeometry(0, (fontHeight)/ 2, avgWidth-10, avHeight - fontHeight * 2-20);
     }
-
-
 }
 
 void BlockDevItemWidget::fontChanged(const QFont &font)
@@ -69,6 +67,7 @@ void BlockDevItemWidget::updateData(BlockDevice info)
 {
     m_blokeDeviceInfo = info;
     m_memChartWidget->addData1(info.readSpeed());
+
     m_memChartWidget->addData2(info.writeSpeed());
     m_memChartWidget->update();
 }
@@ -81,31 +80,13 @@ void BlockDevItemWidget::showBackGround(bool isShow)
 
 void BlockDevItemWidget::mousePressEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event)
-    haveBackGround = true;
+    if(m_mode != 0) {
+        Q_UNUSED(event)
+        haveBackGround = true;
+
+    }
     emit clicked(m_blokeDeviceInfo.deviceName());
     update();
-//    DPalette pb = DApplicationHelper::instance()->palette(this);
-//    pb.setBrush(DPalette::Background, Qt::red);
-//    setPalette(pb);
-
-//    QPainter painter(this);
-//    if(haveBackGround) {
-
-//        painter.save();
-//        painter.setPen(Qt::NoPen);
-//        painter.setBrush(Qt::blue);
-//        painter.drawRect(rect());
-//        painter.restore();
-
-//    } else{
-//        painter.save();
-//        painter.setPen(Qt::NoPen);
-//        painter.setBrush(Qt::transparent);
-//        painter.drawRect(rect());
-//        painter.restore();
-//    }
-
 }
 
 void BlockDevItemWidget::paintEvent(QPaintEvent *event)
@@ -148,29 +129,24 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
    } else {
         painter.setPen(Qt::NoPen);
         painter.setBrush(readColor);
-        painter.drawEllipse(devtitleRect.bottomLeft().x(),devtitleRect.bottomLeft().y()+spacing+3, sectionSize, sectionSize); // 读硬盘速度的颜色提示
-        QRect readStrRect (devtitleRect.bottomLeft().x()+3+spacing,devtitleRect.bottomLeft().y()+spacing-3,painter.fontMetrics().width(readTitle)+10, painter.fontMetrics().height());
+        painter.drawEllipse(devtitleRect.bottomLeft().x(),devtitleRect.bottomLeft().y()+spacing+4, sectionSize, sectionSize); // 读硬盘速度的颜色提示
+        QRect readStrRect (devtitleRect.bottomLeft().x()+8+spacing,devtitleRect.bottomLeft().y()+spacing-4,painter.fontMetrics().width(readTitle)+10, painter.fontMetrics().height());
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(readStrRect,readTitle);
 
         painter.setPen(Qt::NoPen);
         painter.setBrush(writeColor);
-        painter.drawEllipse(devtitleRect.bottomLeft().x(),readStrRect.bottomLeft().y()+spacing+3, sectionSize, sectionSize); // 写硬盘速度的颜色提示
-        QRect writeStrRect (devtitleRect.bottomLeft().x()+3+spacing,readStrRect.bottomLeft().y()+spacing-3,painter.fontMetrics().width(writeTitle)+10, painter.fontMetrics().height());
+        painter.drawEllipse(devtitleRect.bottomLeft().x(),readStrRect.bottomLeft().y()+spacing+4, sectionSize, sectionSize); // 写硬盘速度的颜色提示
+        QRect writeStrRect (devtitleRect.bottomLeft().x()+8+spacing,readStrRect.bottomLeft().y()+spacing-4,painter.fontMetrics().width(writeTitle)+10, painter.fontMetrics().height());
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(writeStrRect,writeTitle);
     }
     if(haveBackGround) {
         painter.save();
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor::fromRgb(0,129,255,26));
-        painter.drawRect(rect());
-        painter.restore();
-
-    } else {
-        painter.save();
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(Qt::transparent);
+        QColor color = palette.color(DPalette::Highlight);
+        color.setAlpha(26);
+        painter.setBrush(color);
         painter.drawRect(rect());
         painter.restore();
 
@@ -180,6 +156,9 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
 void BlockDevItemWidget::setMode(int mode)
 {
         m_mode = mode;
+        if(mode == 0) {
+            haveBackGround = false;
+        }
 }
 
 

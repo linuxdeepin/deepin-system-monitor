@@ -71,10 +71,10 @@ public:
 
     void setDeviceName(const QByteArray& deviceName);
 
-protected:
+public:
     void readDeviceInfo();
     void readDeviceModel();
-    void readDeviceSize();
+    quint64 readDeviceSize(const QString& deviceName);
     void calcDiskIoStates(const QStringList& diskInfo);
 
 private:
