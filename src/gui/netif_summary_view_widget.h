@@ -29,6 +29,7 @@ DWIDGET_USE_NAMESPACE
  */
 
 class NetInfoModel;
+class NetInfoDetailItemDelegate;
 struct ShowInfo {
     enum InfoType {
         Normal,     // 正常数据
@@ -62,6 +63,7 @@ public slots:
 private:
     QFont m_font;
     NetInfoModel *m_netInfoModel;
+    NetInfoDetailItemDelegate *m_netInfoDetailItemDelegate;
     QString m_strCurrentKey;
 };
 

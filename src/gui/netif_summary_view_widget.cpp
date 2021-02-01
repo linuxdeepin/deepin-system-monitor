@@ -49,6 +49,9 @@ public:
     explicit NetInfoDetailItemDelegate(QObject *parent = nullptr);
     virtual ~NetInfoDetailItemDelegate();
 
+    void setFont(const QFont &font){
+        m_font = font;
+    }
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
                const QModelIndex &index) const
@@ -133,17 +136,23 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
+        int item_width =230;
+
+
         if (index.isValid()) {
             ShowInfo stInfo = index.data(Qt::UserRole).value<ShowInfo>();
 
             if (stInfo.eType != ShowInfo::Normal)
-                return QSize(option.rect.width(), 90);
+                return QSize(item_width, QFontMetrics(m_font).height() * 3 + 2 * TOPMARGIN);
 
-            return QSize(option.rect.width(), 30);
+            return QSize(item_width, 30);
         }
 
-        return QSize(option.rect.width(), 30);
+        return QSize(item_width, 30);
     }
+
+private:
+    QFont  m_font;
 };
 
 NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
@@ -376,14 +385,17 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
 
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
-    this->horizontalHeader()->setSectionResizeMode(DHeaderView::Stretch);
+    this->horizontalHeader()->setSectionResizeMode(DHeaderView::Fixed);
     this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
     this->setGridStyle(Qt::NoPen);
+    this->horizontalHeader()->setStretchLastSection(true);
     this->setFrameShape(QFrame::NoFrame);
     this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    this->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_netInfoModel = new NetInfoModel(this);
     this->setModel(m_netInfoModel);
-    this->setItemDelegate(new NetInfoDetailItemDelegate(this));
+    m_netInfoDetailItemDelegate = new NetInfoDetailItemDelegate(this);
+    this->setItemDelegate(dynamic_cast<QAbstractItemDelegate*>(m_netInfoDetailItemDelegate));
 }
 
 void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
