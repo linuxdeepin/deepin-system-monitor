@@ -73,6 +73,9 @@ void NetifInfoDB::update_netif_info()
     LinkIterator iter = m_netlink->linkIterator();
     QMap<QByteArray, NetifInfoPtr> old_infoDB = m_infoDB;
 
+    timevalList[kLastStat] = timevalList[kCurrentStat];
+    timevalList[kCurrentStat] = SysInfo::instance()->uptime();
+
     m_infoDB.clear();
     while (iter.hasNext()) {
         auto it = iter.next();
@@ -87,14 +90,12 @@ void NetifInfoDB::update_netif_info()
 
         // 更新速率
         if (old_infoDB.contains(it->addr())) {
-            timevalList[kLastStat] = timevalList[kCurrentStat];
-            timevalList[kCurrentStat] = SysInfo::instance()->uptime();
-
             auto old_item = old_infoDB.value(it->addr());
             // receive increment between interval
             auto rxdiff = (item->rxBytes() > old_item->rxBytes()) ? (item->rxBytes() - old_item->rxBytes()) : 0;
             // transfer increment between interval
             auto txdiff = (item->txBytes() > old_item->txBytes()) ? (item->txBytes() - old_item->txBytes()) : 0;
+
             timeval cur_time = timevalList[kCurrentStat];
             timeval prev_time = timevalList[kLastStat];
 
