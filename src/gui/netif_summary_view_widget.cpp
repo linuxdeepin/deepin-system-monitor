@@ -220,12 +220,12 @@ public:
                 stInfo.strKey = "Signal level";
                 stInfo.strValue = QString("%1 dBm").arg(stNetifInfo->signalLevel());
                 m_listInfo << stInfo;
-            }
 
-            // 底噪
-            stInfo.strKey = "Noise level";
-            stInfo.strValue = QString("%1 dB").arg(stNetifInfo->noiseLevel());
-            m_listInfo << stInfo;
+                // 底噪
+                stInfo.strKey = "Noise level";
+                stInfo.strValue = QString("%1 dB").arg(stNetifInfo->noiseLevel());
+                m_listInfo << stInfo;
+            }
 
             // Mac地址
             stInfo.strKey = "Mac address";
