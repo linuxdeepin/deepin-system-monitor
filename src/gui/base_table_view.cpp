@@ -288,14 +288,16 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         QRect previousRect = visualRect(previous);
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
-        viewport()->update(previousRect);
+        previousRect.adjust(-1, -1, 1, 1);
+        viewport()->update();
     }
     // update current item's paint region
     if (current.isValid()) {
         QRect currentRect = visualRect(current);
         currentRect.setX(0);
         currentRect.setWidth(viewport()->width());
-        viewport()->update(currentRect);
+        currentRect.adjust(-1, -1, 1, 1);
+        viewport()->update();
     }
 }
 
