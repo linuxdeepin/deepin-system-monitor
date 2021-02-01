@@ -55,7 +55,7 @@ public:
 
         painter->save();
         QPainterPath clipPath;
-        clipPath.addRoundedRect(option.widget->rect(), 8, 8);
+        clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
         painter->setClipPath(clipPath);
 
         painter->setPen(Qt::NoPen);
@@ -256,7 +256,8 @@ DeailTableModelBlock::~DeailTableModelBlock()
 BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     : DTableView(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
 
@@ -287,9 +288,10 @@ void BlockDevSummaryViewWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
-    painter.setPen(palette.color(DPalette::TextTips));
-    painter.setOpacity(0.2);
+    QColor frameColor = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
+    painter.setPen(QPen(frameColor, 1));
     painter.setBrush(Qt::NoBrush);
-    painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 1, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 1);
-    painter.drawRoundedRect(this->rect().adjusted(1, 1, -1, -1), 8, 8);
+    painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);
+    painter.drawRoundedRect(this->rect().adjusted(1, 1, -1, -1), 6, 6);
 }

@@ -45,9 +45,9 @@ void BlockDevItemWidget::updateWidgetGeometry()
     int avHeight = this->height();
     int fontHeight = QFontMetrics(m_font).height();
     if(m_mode != 0) {
-        m_memChartWidget->setGeometry(0, (fontHeight*3+35)/ 2, avgWidth-10, avHeight - fontHeight * 2-10);
+        m_memChartWidget->setGeometry(5, (fontHeight*3+35)/ 2, avgWidth-10, avHeight - fontHeight * 2-5);
     } else {
-        m_memChartWidget->setGeometry(0, (fontHeight)/ 2, avgWidth-10, avHeight - fontHeight * 2-10);
+        m_memChartWidget->setGeometry(5, (fontHeight)/ 2, avgWidth-10, avHeight - fontHeight * 2+28);
     }
 }
 
@@ -83,7 +83,6 @@ void BlockDevItemWidget::mousePressEvent(QMouseEvent *event)
     if(m_mode != 0) {
         Q_UNUSED(event)
         haveBackGround = true;
-
     }
     emit clicked(m_blokeDeviceInfo.deviceName());
     update();
@@ -101,7 +100,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
     int spacing = 5;
     int sectionSize = 6;
     QString deviceName = m_blokeDeviceInfo.deviceName().data();
-    QRect devtitleRect(0, 0, painter.fontMetrics().width(deviceName), painter.fontMetrics().height());
+    QRect devtitleRect(5, 0, painter.fontMetrics().width(deviceName), painter.fontMetrics().height());
     painter.drawText(devtitleRect,deviceName);
 
     QString readTitle = QString("%1 %2")
@@ -155,10 +154,10 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
 
 void BlockDevItemWidget::setMode(int mode)
 {
-        m_mode = mode;
-        if(mode == 0) {
-            haveBackGround = false;
-        }
+    m_mode = mode;
+    if(mode == 0) {
+        haveBackGround = false;
+    }
 }
 
 
