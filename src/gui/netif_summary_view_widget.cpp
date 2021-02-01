@@ -171,7 +171,6 @@ public:
         auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
         QMap<QByteArray, NetifInfoPtr> mapInfo = monitor->deviceDB()->netifInfoDB()->infoDB();
 
-
         m_listInfo.clear();
 
         beginResetModel();
@@ -182,18 +181,31 @@ public:
 
             // 处理IPV4
             QList<INet4Addr> listAddr4 = stNetifInfo->addr4InfoList();
-            for (int i = 0; i < listAddr4.count(); ++i) {
+            const int ipv4_addr_totle = listAddr4.count();
+            for (int i = 0; i < ipv4_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV4;
-                stInfo.strKey = "IPV4 " + QString::number(i + 1);
+                if(1 == ipv4_addr_totle){
+                    stInfo.strKey = "IPV4";
+                }
+                else{
+                    stInfo.strKey = "IPV4 " + QString::number(i + 1);
+                }
+
                 stInfo.strValue =  QString("%1/%2/%3").arg(QString(listAddr4[i]->addr)).arg(QString(listAddr4[i]->mask)).arg(QString(listAddr4[i]->bcast));
                 m_listInfo << stInfo;
             }
 
             // 处理IPV6
             QList<INet6Addr> listAddr6 = stNetifInfo->addr6InfoList();
-            for (int i = 0; i < listAddr6.count(); ++i) {
+             const int ipv6_addr_totle = listAddr6.count();
+            for (int i = 0; i < ipv6_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV6;
-                stInfo.strKey = "IPV6 " + QString::number(i + 1);
+                if(1 == ipv6_addr_totle){
+                    stInfo.strKey = "IPV6";
+                }else{
+                    stInfo.strKey = "IPV6 " + QString::number(i + 1);
+                }
+
                 stInfo.strValue = QString("%1/%2/%3").arg(QString(listAddr6[i]->addr)).arg(listAddr6[i]->prefixlen).arg(listAddr6[i]->scope);
                 m_listInfo << stInfo;
             }
@@ -360,7 +372,7 @@ NetInfoModel::~NetInfoModel()
 NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     : DTableView(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
@@ -385,7 +397,7 @@ void NetifSummaryViewWidget::fontChanged(const QFont &font)
 {
     m_font = font;
     this->setFont(m_font);
-    setFixedHeight(QFontMetrics(font).height() * 16);
+    //setFixedHeight(QFontMetrics(font).height() * 16);
 }
 
 void NetifSummaryViewWidget::onModelUpdate()
