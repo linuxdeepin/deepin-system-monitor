@@ -45,9 +45,9 @@ void BlockDevItemWidget::updateWidgetGeometry()
     int avHeight = this->height();
     int fontHeight = QFontMetrics(m_font).height();
     if(m_mode != 0) {
-        m_memChartWidget->setGeometry(0, (fontHeight*3+35)/ 2, avgWidth-10, avHeight - fontHeight * 2-20);
+        m_memChartWidget->setGeometry(0, (fontHeight*3+35)/ 2, avgWidth-10, avHeight - fontHeight * 2-10);
     } else {
-        m_memChartWidget->setGeometry(0, (fontHeight)/ 2, avgWidth-10, avHeight - fontHeight * 2-20);
+        m_memChartWidget->setGeometry(0, (fontHeight)/ 2, avgWidth-10, avHeight - fontHeight * 2-10);
     }
 }
 

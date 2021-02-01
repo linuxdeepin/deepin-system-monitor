@@ -37,7 +37,9 @@ BlockStatViewWidget::BlockStatViewWidget(QWidget *parent) : QScrollArea(parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_centralWidget = new QWidget(this);
     this->setWidget(m_centralWidget);
-   // this->resize(720,500);
+
+
+    m_centralWidget->setMinimumHeight(300);
     m_centralWidget->setWindowFlags(Qt::FramelessWindowHint);
     this->setFrameShape(QFrame::NoFrame);
     onUpdateData();
@@ -75,16 +77,16 @@ void BlockStatViewWidget::updateItemWidget()
         }
     }
     if(deviceCount == 1) {
-        m_centralWidget->resize(Width, height);
         m_listBlockItemWidget[0]->setMode(0);
-        m_listBlockItemWidget[0]->setGeometry(0,0,avgWidth,avgheight);
+        m_centralWidget->resize(Width, height);
+        m_listBlockItemWidget[0]->setGeometry(0,0,Width,height);
         m_listBlockItemWidget[0]->update();
     } else if(deviceCount ==2) {
         m_listBlockItemWidget[0]->setMode(1);
         m_listBlockItemWidget[1]->setMode(1);
-        m_listBlockItemWidget[0]->setGeometry(0, 0, avgWidth, avgheight-20);
-        m_listBlockItemWidget[1]->setGeometry(m_listBlockItemWidget[0]->geometry().right() + 10, 0,avgWidth, avgheight-20);
-        m_centralWidget->resize(m_listBlockItemWidget[1]->geometry().right(), avgheight - 20);
+        m_listBlockItemWidget[0]->setGeometry(0, 0, avgWidth, height-10);
+        m_listBlockItemWidget[1]->setGeometry(m_listBlockItemWidget[0]->geometry().right() + 10, 0,avgWidth, height-10);
+        m_centralWidget->resize(m_listBlockItemWidget[1]->geometry().right(), height - 10);
         m_listBlockItemWidget[0]->update();
         m_listBlockItemWidget[1]->update();
 
@@ -192,13 +194,13 @@ void BlockStatViewWidget::showItem2()
     m_mapDeviceItemWidget.insert(m_listDevice[1].deviceName(),item2);
     //   unsigned int fontHeight = QFontMetrics(m_font).height();
 
-    item1->setGeometry(0, 0, avgWidth, avgheight-20);
-    item2->setGeometry(item1->geometry().right() + 10, 0,avgWidth, avgheight-20);
+    item1->setGeometry(0, 0, avgWidth, avgheight-10);
+    item2->setGeometry(item1->geometry().right() + 10, 0,avgWidth, avgheight-10);
     if(!item1->backGround() && !item2->backGround()) {
         item1->showBackGround(true);
     }
 
-    m_centralWidget->resize(item2->geometry().right(), avgheight - 20);
+    m_centralWidget->resize(item2->geometry().right(), avgheight - 10);
     item1->updateData(m_listDevice[0]);
     item2->updateData(m_listDevice[1]);
 
