@@ -289,7 +289,7 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
         previousRect.adjust(-1, -1, 1, 1);
-        viewport()->update();
+        viewport()->update(previousRect);
     }
     // update current item's paint region
     if (current.isValid()) {
@@ -297,7 +297,7 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         currentRect.setX(0);
         currentRect.setWidth(viewport()->width());
         currentRect.adjust(-1, -1, 1, 1);
-        viewport()->update();
+        viewport()->update(currentRect);
     }
 }
 

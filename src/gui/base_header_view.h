@@ -47,12 +47,6 @@ public:
      * @return Hint size
      */
     QSize sizeHint() const override;
-    /**
-     * @brief sectionSizeHint Hint size of section
-     * @param logicalIndex Section logical index
-     * @return Hint size in pixels
-     */
-    int sectionSizeHint(int logicalIndex) const;
 
     /**
      * @brief getSpacing Get section spacing
@@ -71,15 +65,6 @@ protected:
      * @param e Paint event object
      */
     void paintEvent(QPaintEvent *e) override;
-    /**
-     * @brief paintSection Section paint handler for header view
-     * @param painter Painter object
-     * @param rect Section bounding rect
-     * @param logicalIndex Section logical index
-     */
-    void paintSection(QPainter *painter,
-                      const QRect &rect,
-                      int logicalIndex) const override;
     /**
      * @brief eventFilter Event filter for header view
      * @param obj Object being watched
