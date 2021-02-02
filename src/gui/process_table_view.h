@@ -103,6 +103,11 @@ public Q_SLOTS:
      */
     void changeProcessPriority(int priority);
 
+    /**
+     * @brief onThemeTypeChanged
+     */
+    void onThemeTypeChanged();
+
 protected:
     /**
      * @brief Load process table view backup settings

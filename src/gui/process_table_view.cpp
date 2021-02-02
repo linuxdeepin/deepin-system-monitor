@@ -85,15 +85,8 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     initConnections(settingsLoaded);
 
     // adjust search result tip label text color dynamically on theme type change
-    auto *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
-        if (m_notFoundLabel) {
-            auto palette = DApplicationHelper::instance()->applicationPalette();
-            QColor labelColor = palette.color(DPalette::PlaceholderText);
-            palette.setColor(DPalette::Text, labelColor);
-            m_notFoundLabel->setPalette(palette);
-        }
-    });
+    onThemeTypeChanged();
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
 }
 
 // destructor
@@ -101,6 +94,17 @@ ProcessTableView::~ProcessTableView()
 {
     // backup table view settings
     saveSettings();
+}
+
+void ProcessTableView::onThemeTypeChanged()
+{
+    auto palette = DApplicationHelper::instance()->applicationPalette();
+    palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
+    m_notFoundLabel->setPalette(palette);
+
+    palette.setColor(DPalette::Base, palette.color(DPalette::Base));
+    palette.setColor(DPalette::Background, palette.color(DPalette::Base));
+    viewport()->setPalette(palette);
 }
 
 // event filter
@@ -411,11 +415,11 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
         // share memory
         setColumnWidth(ProcessTableModel::kProcessShareMemoryColumn, 70);
-        setColumnHidden(ProcessTableModel::kProcessShareMemoryColumn, false);
+        setColumnHidden(ProcessTableModel::kProcessShareMemoryColumn, true);
 
         // vtr memory
         setColumnWidth(ProcessTableModel::kProcessVTRMemoryColumn, 70);
-        setColumnHidden(ProcessTableModel::kProcessVTRMemoryColumn, false);
+        setColumnHidden(ProcessTableModel::kProcessVTRMemoryColumn, true);
 
         // download
         setColumnWidth(ProcessTableModel::kProcessDownloadColumn, 70);
@@ -567,9 +571,6 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             }
             // monitor process itself cant be stopped, so we need a second modified running flag
             bool modRunning = running;
-            //            if (sysmon) {
-            //                modRunning = (modRunning) & (!sysmon->isSelfProcess(pid));
-            //            }
             pauseProcAction->setEnabled(modRunning);
             resumeProcAction->setEnabled(!running);
 
@@ -711,7 +712,8 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     if (!settingsLoaded) {
         cpuHeaderAction->setChecked(true);
         memHeaderAction->setChecked(true);
-        sharememHeaderAction->setChecked(true);
+        sharememHeaderAction->setChecked(false);
+        vtrmemHeaderAction->setChecked(false);
         uploadHeaderAction->setChecked(true);
         downloadHeaderAction->setChecked(true);
         dreadHeaderAction->setChecked(false);
@@ -751,7 +753,6 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 
     // on each model update, we restore settings, adjust search result tip lable's visibility & positon, select the same process item before update if any
     connect(m_model, &ProcessTableModel::modelUpdated, this, [&]() {
-        loadSettings();
         adjustInfoLabelVisibility();
         if (m_selectedPID.isValid()) {
             for (int i = 0; i < m_proxyModel->rowCount(); i++) {

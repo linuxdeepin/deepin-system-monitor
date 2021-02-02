@@ -225,7 +225,7 @@ void ProcessPageWidget::initUI()
     setAutoFillBackground(false);
 
     // restore previous saved process view mode if any previous settings found
-    const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, 0);
+    const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
     int index = vindex.toInt();
     switch (index) {
     case kFilterCurrentUser: {

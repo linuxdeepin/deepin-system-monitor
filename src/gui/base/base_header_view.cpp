@@ -33,12 +33,6 @@
 #include <QModelIndex>
 #include <QPainterPath>
 
-// top/bottom margin for splitters between sections
-static const int kSpacingMargin = 4;
-// recommend size
-// static const QSize kDropDownSize {10, 6};
-static const QSize kDropDownSize {11, 10};
-
 // Constructor
 BaseHeaderView::BaseHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
