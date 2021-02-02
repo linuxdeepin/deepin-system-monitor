@@ -27,6 +27,7 @@
 #include "system/system_monitor_thread.h"
 #include "system/block_device_info_db.h"
 #include "system/device_db.h"
+#include "base/base_detail_item_delegate.h"
 #include <QHeaderView>
 #include <DApplicationHelper>
 #include <QAbstractTableModel>
@@ -35,11 +36,12 @@
 #include <DApplication>
 #include <DStyle>
 #include <QMap>
+
 using namespace core::system;
 using namespace common::format;
 
 
-class DetailItemDelegateBlock : public QStyledItemDelegate
+class DetailItemDelegateBlock : public BaseDetailItemDelegate
 {
 public:
     explicit DetailItemDelegateBlock(QObject *parent = nullptr);
@@ -74,7 +76,7 @@ public:
         QStyledItemDelegate::paint(painter, option, index);
     }
 };
-DetailItemDelegateBlock::DetailItemDelegateBlock(QObject *parent): QStyledItemDelegate(parent)
+DetailItemDelegateBlock::DetailItemDelegateBlock(QObject *parent): BaseDetailItemDelegate(parent)
 {
 
 }

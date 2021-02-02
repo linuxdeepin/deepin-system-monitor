@@ -54,6 +54,7 @@ void BlockDevItemWidget::updateWidgetGeometry()
 void BlockDevItemWidget::fontChanged(const QFont &font)
 {
     m_font = font;
+    updateWidgetGeometry();
     //setFixedHeight(100 + 2 * QFontMetrics(font).height());
 }
 
