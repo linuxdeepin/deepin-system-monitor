@@ -133,7 +133,11 @@ void NetInfo::resdNetInfo()
         prxb = m_netStat[kLastStat]->rx_bytes;
         ptxb = m_netStat[kLastStat]->tx_bytes;
     }
-
+    if(m_netStat[kLastStat].isNull()){
+        m_recvBps = 1;   // Bps
+        m_sentBps = 1;
+        return ;
+    }
     // receive increment between interval
     auto rxdiff = (crxb > prxb) ? (crxb - prxb) : 0;
     // transfer increment between interval
