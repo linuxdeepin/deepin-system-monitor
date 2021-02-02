@@ -18,7 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "desktop_entry_cache_updater.h"
-#include "common/uevent_loop.h"
 
 #include <DDesktopEntry>
 #include <QDebug>

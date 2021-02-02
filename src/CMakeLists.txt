@@ -26,7 +26,6 @@ include(FindPkgConfig)
 find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
-find_package(DtkWm REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_PROCPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
@@ -36,11 +35,9 @@ find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
-pkg_search_module(LIB_EVENT2_CORE REQUIRED libevent_core>=2.1.6)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
-include_directories(${LIB_EVENT2_CORE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
 
 set(HPP_GLOBAL
@@ -80,9 +77,6 @@ set(HPP_COMMON
     common/hash.h
     common/han_latin.h
     common/perf.h
-    common/uevent.h
-    common/uevent_loop.h
-    common/uevent_filter.h
     common/iconv.h
     common/base_thread.h
     common/thread_manager.h
@@ -95,8 +89,6 @@ set(CPP_COMMON
     common/hash.cpp
     common/han_latin.cpp
     common/perf.cpp
-    common/uevent.cpp
-    common/uevent_loop.cpp
     common/thread_manager.cpp
     common/time_period.cpp
 )
@@ -195,32 +187,6 @@ set(HPP_GUI
     gui/base/base_detail_view_widget.h
     gui/cpu_detail_widget.h
     gui/block_dev_item_widget.h
-    gui/view/graphics_stat_item.h
-    gui/view/graphics_stat_grid_item.h
-    gui/view/graphics_stat_grid_layout.h
-    gui/view/graphics_info_grid_item.h
-    gui/view/graphics_info_grid_layout.h
-    gui/view/graphics_mem_stat_item.h
-    gui/view/graphics_mem_stat_detail_view.h
-    gui/view/graphics_mem_stat_summary_view.h
-    gui/view/graphics_mem_stat_grid_layout.h
-    gui/view/graphics_mem_info_grid_item.h
-    gui/view/graphics_mem_info_grid_layout.h
-    gui/view/graphics_block_dev_stat_item.h
-    gui/view/graphics_block_dev_stat_detail_view.h
-    gui/view/graphics_block_dev_stat_summary_view.h
-    gui/view/graphics_block_dev_stat_grid_layout.h
-    gui/view/graphics_block_dev_info_grid_item.h
-    gui/view/graphics_block_dev_info_grid_layout.h
-    gui/view/graphics_netif_stat_item.h
-    gui/view/graphics_netif_stat_detail_view.h
-    gui/view/graphics_netif_stat_summary_view.h
-    gui/view/graphics_netif_stat_grid_layout.h
-    gui/view/graphics_netif_info_grid_item.h
-    gui/view/graphics_netif_info_grid_layout.h
-    gui/view/graphics_stat_summary_view_layout.h
-    gui/view/graphics_stat_summary_view.h
-
 )
 set(CPP_GUI
     gui/base/base_detail_item_delegate.cpp
@@ -259,31 +225,6 @@ set(CPP_GUI
     gui/cpu_detail_widget.cpp
     gui/block_dev_item_widget.cpp
     gui/block_dev_stat_view_widget.cpp
-    gui/view/graphics_stat_item.cpp
-    gui/view/graphics_stat_grid_item.cpp
-    gui/view/graphics_stat_grid_layout.cpp
-    gui/view/graphics_info_grid_item.cpp
-    gui/view/graphics_info_grid_layout.cpp
-    gui/view/graphics_mem_stat_item.cpp
-    gui/view/graphics_mem_stat_detail_view.cpp
-    gui/view/graphics_mem_stat_summary_view.cpp
-    gui/view/graphics_mem_stat_grid_layout.cpp
-    gui/view/graphics_mem_info_grid_item.cpp
-    gui/view/graphics_mem_info_grid_layout.cpp
-    gui/view/graphics_block_dev_stat_item.cpp
-    gui/view/graphics_block_dev_stat_detail_view.cpp
-    gui/view/graphics_block_dev_stat_summary_view.cpp
-    gui/view/graphics_block_dev_stat_grid_layout.cpp
-    gui/view/graphics_block_dev_info_grid_item.cpp
-    gui/view/graphics_block_dev_info_grid_layout.cpp
-    gui/view/graphics_netif_stat_item.cpp
-    gui/view/graphics_netif_stat_detail_view.cpp
-    gui/view/graphics_netif_stat_summary_view.cpp
-    gui/view/graphics_netif_stat_grid_layout.cpp
-    gui/view/graphics_netif_info_grid_item.cpp
-    gui/view/graphics_netif_info_grid_layout.cpp
-    gui/view/graphics_stat_summary_view_layout.cpp
-    gui/view/graphics_stat_summary_view.cpp
 )
 
 set(HPP_PROCESS
@@ -444,7 +385,6 @@ target_link_libraries(${APP_NAME}
     dtkcore
     dtkwidget
     dtkgui
-    dtkwm
     ${LIB_PCAP}
     ${LIB_PROCPS}
     ICU::i18n
@@ -454,7 +394,6 @@ target_link_libraries(${APP_NAME}
     ${LIB_ICCCM}
     ${LIB_NL3_LIBRARIES}
     ${LIB_NL3_ROUTE_LIBRARIES}
-    ${LIB_EVENT2_CORE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
 )
 

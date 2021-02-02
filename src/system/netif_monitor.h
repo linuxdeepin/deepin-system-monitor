@@ -21,20 +21,12 @@
 #define NETIF_MONITOR_H
 
 #include <QObject>
-#include "common/uevent_filter.h"
 #include "common/time_period.h"
 #include "netif_packet_capture.h"
 #include <QBasicTimer>
 #include <QMutex>
 #include <QWaitCondition>
-using namespace core;
-using namespace core::system;
 using namespace common::core;
-namespace common {
-namespace core {
-class UEventLoop;
-}
-} // namespace common
 
 namespace core {
 namespace system {
@@ -66,7 +58,6 @@ public slots:
 
 public:
     void startNetmonitorJob();
-    void scheduleUpdate(UEventLoop *loop, const struct timeval *interval);
     void requestInterrupt();
 
     void handleNetData();
@@ -101,33 +92,33 @@ public:
 protected:
     void timerEvent(QTimerEvent *event);
 private:
-     QBasicTimer m_basictimer;
-     NetifPacketCapture *m_netifCapture;
+    QBasicTimer m_basictimer;
+    NetifPacketCapture *m_netifCapture;
 
-     // pending packet queue
-     PacketPayloadQueue  m_pendingPackets        {};
-     // pending packet queue locker
-     QMutex              m_pktqLock              {};
-     // packet queue watcher
-     QWaitCondition      m_pktqWatcher           {};
-     // local pending packet queue
-     PacketPayloadQueue  m_localPendingPackets   {}; // local cache
-
-
-     // socket io stat map access locker
-     QMutex                  m_sockIOStatMapLock {};
-
-     // packet monitor thread object
-     //QThread             m_packetMonitorThread;
-     // packet monitor job instace
-
-     // quit atomic test flag
-     std::atomic_bool m_quitRequested {false};
+    // pending packet queue
+    PacketPayloadQueue  m_pendingPackets        {};
+    // pending packet queue locker
+    QMutex              m_pktqLock              {};
+    // packet queue watcher
+    QWaitCondition      m_pktqWatcher           {};
+    // local pending packet queue
+    PacketPayloadQueue  m_localPendingPackets   {}; // local cache
 
 
+    // socket io stat map access locker
+    QMutex                  m_sockIOStatMapLock {};
 
-     friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
-     friend class NetifPacketCapture;
+    // packet monitor thread object
+    //QThread             m_packetMonitorThread;
+    // packet monitor job instace
+
+    // quit atomic test flag
+    std::atomic_bool m_quitRequested {false};
+
+
+
+    friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
+    friend class NetifPacketCapture;
 };
 }
 }
