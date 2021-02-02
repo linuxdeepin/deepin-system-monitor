@@ -33,7 +33,7 @@
 #include <QHeaderView>
 #include <DStyle>
 #include <DApplication>
-
+#include "base/base_detail_item_delegate.h"
 using namespace core::system;
 using namespace common::format;
 using namespace common::core;
@@ -43,7 +43,7 @@ using namespace common::core;
 #define TEXTSPACING 30  // 内容文字间距
 
 Q_DECLARE_METATYPE(ShowInfo)
-class NetInfoDetailItemDelegate : public QStyledItemDelegate
+class NetInfoDetailItemDelegate : public BaseDetailItemDelegate
 {
 public:
     explicit NetInfoDetailItemDelegate(QObject *parent = nullptr);
@@ -136,8 +136,7 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
-        int item_width =230;
-
+        const int item_width =230;
 
         if (index.isValid()) {
             ShowInfo stInfo = index.data(Qt::UserRole).value<ShowInfo>();
@@ -155,7 +154,7 @@ private:
     QFont  m_font;
 };
 
-NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
+NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): BaseDetailItemDelegate(parent)
 {
 }
 
@@ -358,8 +357,6 @@ protected:
                 break;
             }
         }
-
-
         return QVariant();
     }
 
@@ -408,7 +405,8 @@ void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
 void NetifSummaryViewWidget::fontChanged(const QFont &font)
 {
     m_font = font;
-    this->setFont(m_font);
+    this->setFont(m_font);;
+    m_netInfoDetailItemDelegate->setFont(m_font);
     //setFixedHeight(QFontMetrics(font).height() * 16);
 }
 

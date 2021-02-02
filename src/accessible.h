@@ -25,9 +25,9 @@
 
 #include "gui/toolbar.h"
 #include "gui/main_window.h"
-#include "gui/base_table_view.h"
-#include "gui/base_item_delegate.h"
-#include "gui/base_header_view.h"
+#include "gui/base/base_table_view.h"
+#include "gui/base/base_item_delegate.h"
+#include "gui/base/base_header_view.h"
 #include "gui/process_table_view.h"
 #include "gui/process_page_widget.h"
 #include "gui/service_name_sub_input_dialog.h"

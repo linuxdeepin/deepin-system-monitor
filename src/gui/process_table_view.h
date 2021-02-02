@@ -21,7 +21,7 @@
 #ifndef PROCESS_TABLE_VIEW_H
 #define PROCESS_TABLE_VIEW_H
 
-#include "base_table_view.h"
+#include "base/base_table_view.h"
 #include "process/process_set.h"
 
 #include <DLabel>

@@ -21,7 +21,7 @@
 #ifndef SYSTEM_SERVICE_TABLE_VIEW_H
 #define SYSTEM_SERVICE_TABLE_VIEW_H
 
-#include "base_table_view.h"
+#include "base/base_table_view.h"
 #include "common/error_context.h"
 
 #include <DLabel>

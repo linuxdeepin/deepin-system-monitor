@@ -20,7 +20,7 @@
 #ifndef MEM_DETAIL_VIEW_WIDGET_H
 #define MEM_DETAIL_VIEW_WIDGET_H
 
-#include "base_detail_view_widget.h"
+#include "base/base_detail_view_widget.h"
 
 /**
  * @brief Memory detail view widget

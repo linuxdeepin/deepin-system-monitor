@@ -20,7 +20,7 @@
 #ifndef NETIF_DETAIL_VIEW_WIDGET_H
 #define NETIF_DETAIL_VIEW_WIDGET_H
 
-#include "base_detail_view_widget.h"
+#include "base/base_detail_view_widget.h"
 
 /**
  * @brief Network interface detail view widget

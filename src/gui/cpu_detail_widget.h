@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <DPushButton>
-#include "base_detail_view_widget.h"
+#include "base/base_detail_view_widget.h"
 
 class CPUInfoModel;
 class QScrollArea;

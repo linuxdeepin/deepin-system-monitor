@@ -19,7 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "base_detail_view_widget.h"
-#include "detail_view_stacked_widget.h"
+#include "../detail_view_stacked_widget.h"
 
 #include <QPainter>
 #include <DApplication>
