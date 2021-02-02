@@ -80,6 +80,7 @@ public:
 private:
     QSharedDataPointer<BlockDevicePrivate> d;
     qint64 m_time_sec{0};
+    timeval timevalList[2] = {timeval{0, 0}, timeval{0, 0}};
 };
 
 inline QByteArray BlockDevice::deviceName() const

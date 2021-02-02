@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QSharedData>
 #include <QTextStream>
+#include "system/sys_info.h"
 #include "common/common.h"
 namespace core {
 namespace system {
@@ -77,6 +78,8 @@ void BlockDevice::readDeviceInfo()
         QStringList deviceInfo = strList[i];
         if( deviceInfo[2] == d->name ) {
             m_time_sec = QDateTime::currentSecsSinceEpoch();
+            timevalList[0] = timevalList[1];
+            timevalList[1] = SysInfo::instance()->uptime();
 
             qint64 interval = m_time_sec - d->_time_Sec > 0 ? m_time_sec - d->_time_Sec :1;
             calcDiskIoStates(deviceInfo);
@@ -145,6 +148,8 @@ void BlockDevice::calcDiskIoStates(const QStringList& diskInfo)
     quint64 curr_read_sector =  diskInfo[5].toULongLong();
     quint64 curr_write_sector = diskInfo[9].toULongLong();
     quint64 curr_discard_sector = diskInfo[16].toULongLong();
+    timeval cur_time = timevalList[1];
+    timeval prev_time = timevalList[0];
 
     // read increment between interval
     auto rdiff = (curr_read_sector > d->blk_read) ? (curr_read_sector - d->blk_read) : 0;
@@ -155,7 +160,11 @@ void BlockDevice::calcDiskIoStates(const QStringList& diskInfo)
     // calculate actual size
     auto rsize = rdiff * SECTOR_SIZE;
     auto wsize = (wdiff + ddiff) * SECTOR_SIZE;
-    auto interval = (m_time_sec > d->_time_Sec) ? (m_time_sec - d->_time_Sec) : 1;
+  //  auto interval = (m_time_sec > d->_time_Sec) ? (m_time_sec - d->_time_Sec) : 1;
+    auto ltime = prev_time.tv_sec + prev_time.tv_usec * 1. / 1000000;
+    auto rtime = cur_time.tv_sec + cur_time.tv_usec * 1. / 1000000;
+    auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
+
     d->read_speed = rsize / static_cast<quint64>(interval);
     d->wirte_speed = wsize / static_cast<quint64>(interval);
 }
