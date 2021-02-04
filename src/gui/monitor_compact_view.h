@@ -48,6 +48,12 @@ public:
      */
     ~MonitorCompactView() = default;
 
+    /**
+     * @brief 详情按钮是否可见
+     * @param visible
+     */
+    void setDetailButtonVisible(bool visible);
+
 signals:
     void signalDetailInfoClicked();
 

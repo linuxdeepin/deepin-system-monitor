@@ -42,12 +42,18 @@ public:
     explicit CpuMonitor(QWidget *parent = nullptr);
     ~CpuMonitor();
 
+public:
+    void setDetailButtonVisible(bool visible);
+
 signals:
     void signalDetailInfoClicked();
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void updateStatus();
+
+private:
+    void onDetailInfoClicked();
 
 private:
     void changeFont(const QFont &font);

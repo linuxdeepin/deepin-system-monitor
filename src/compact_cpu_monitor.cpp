@@ -91,10 +91,16 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
 
     m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
     m_detailButton->setFont(m_cpuFont);
-    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::signalDetailInfoClicked);
+    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::onDetailInfoClicked);
 }
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
+
+void CompactCpuMonitor::onDetailInfoClicked()
+{
+    setDetailButtonVisible(false);
+    emit signalDetailInfoClicked();
+}
 
 void CompactCpuMonitor::updateStatus()
 {
@@ -114,6 +120,11 @@ void CompactCpuMonitor::updateStatus()
     }
 
     update();
+}
+
+void CompactCpuMonitor::setDetailButtonVisible(bool visible)
+{
+    m_detailButton->setVisible(visible);
 }
 
 void CompactCpuMonitor::resizeEvent(QResizeEvent *event)

@@ -102,8 +102,8 @@ void ProcessPageWidget::initUI()
     // tool area background
     auto *tw = new QWidget(this);
     // content area background
-    auto *cw = new QWidget(this);
-    m_rightStackView->addProcessWidget(cw);
+    m_processWidget = new QWidget(this);
+    m_rightStackView->addProcessWidget(m_processWidget);
 
     // left =====> stackview
     m_views = new DStackedWidget(this);
@@ -125,7 +125,7 @@ void ProcessPageWidget::initUI()
     m_views->setCurrentIndex(mode.toInt());
 
     // right ====> tab button + process table
-    auto *contentlayout = new QVBoxLayout(cw);
+    auto *contentlayout = new QVBoxLayout(m_processWidget);
     contentlayout->setSpacing(margin);
     contentlayout->setContentsMargins(0, 0, 0, 0);
 
@@ -209,10 +209,10 @@ void ProcessPageWidget::initUI()
     tw->setLayout(toolsLayout);
 
     // process table view instance
-    m_procTable = new ProcessTableView(cw);
+    m_procTable = new ProcessTableView(m_processWidget);
     contentlayout->addWidget(tw);
     contentlayout->addWidget(m_procTable, 1);
-    cw->setLayout(contentlayout);
+    m_processWidget->setLayout(contentlayout);
 
     // fill left side bar & main content area
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -250,6 +250,8 @@ void ProcessPageWidget::initUI()
             DApplication::translate("Process.Show.Mode", appText));  // default text
     }
     } // ::switch(index)
+
+    connect(m_rightStackView, &DetailViewStackedWidget::currentChanged, this, &ProcessPageWidget::onDetailWidgetChanged);
 }
 
 void ProcessPageWidget::initConnections()
@@ -308,6 +310,13 @@ void ProcessPageWidget::initConnections()
             m_procViewModeSummary->setPalette(palette);
         }
     });
+}
+
+void ProcessPageWidget::onDetailWidgetChanged(int index)
+{
+    QWidget *curDetailWidget = m_rightStackView->widget(index);
+    m_compactView->setDetailButtonVisible(m_processWidget == curDetailWidget);
+    m_expandView->setDetailButtonVisible(m_processWidget == curDetailWidget);
 }
 
 // event filter

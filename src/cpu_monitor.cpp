@@ -77,12 +77,23 @@ CpuMonitor::CpuMonitor(QWidget *parent)
 
     m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
     m_detailButton->setFont(m_detailFont);
-    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::signalDetailInfoClicked);
+    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
 }
 
 CpuMonitor::~CpuMonitor()
 {
     delete cpuPercents;
+}
+
+void CpuMonitor::onDetailInfoClicked()
+{
+    setDetailButtonVisible(false);
+    emit signalDetailInfoClicked();
+}
+
+void CpuMonitor::setDetailButtonVisible(bool visible)
+{
+    m_detailButton->setVisible(visible);
 }
 
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)

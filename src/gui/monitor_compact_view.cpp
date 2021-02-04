@@ -69,3 +69,8 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 
     connect(m_cpuMonitor, &CompactCpuMonitor::signalDetailInfoClicked, this, &MonitorCompactView::signalDetailInfoClicked);
 }
+
+void MonitorCompactView::setDetailButtonVisible(bool visible)
+{
+    m_cpuMonitor->setDetailButtonVisible(visible);
+}

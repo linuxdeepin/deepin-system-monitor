@@ -108,37 +108,46 @@ private Q_SLOTS:
      */
     void changeIconTheme(DApplicationHelper::ColorType themeType);
 
+    /**
+     * @brief 列表数据刷新
+     */
     void onStatInfoUpdated();
+
+    /**
+     * @brief 详情页切换
+     */
+    void onDetailWidgetChanged(int index);
 
 private:
     // global setttings instance
-    Settings *m_settings;
+    Settings *m_settings = nullptr;
 
     // stacked widget to hold expand & compact monitor view
-    DStackedWidget *m_views {};
+    DStackedWidget *m_views = nullptr;
 
-    DetailViewStackedWidget *m_rightStackView {};
+    DetailViewStackedWidget *m_rightStackView = nullptr;
     // expand monitor view
-    MonitorExpandView *m_expandView {};
+    MonitorExpandView *m_expandView = nullptr;
     // compact monitor view
-    MonitorCompactView *m_compactView {};
+    MonitorCompactView *m_compactView = nullptr;
 
     // process view context text
-    DLabel *m_procViewMode {};
+    DLabel *m_procViewMode = nullptr;
     // process view context summary
-    DLabel *m_procViewModeSummary {};
+    DLabel *m_procViewModeSummary = nullptr;
     // show app view mode button
-    DButtonBoxButton *m_appButton {};
+    DButtonBoxButton *m_appButton = nullptr;
     // show my proc view mode button
-    DButtonBoxButton *m_myProcButton {};
+    DButtonBoxButton *m_myProcButton = nullptr;
     // show all proc mode button
-    DButtonBoxButton *m_allProcButton {};
+    DButtonBoxButton *m_allProcButton = nullptr;
 
     // process table view
-    ProcessTableView *m_procTable {};
+    ProcessTableView *m_procTable = nullptr;
+    QWidget *m_processWidget = nullptr;
 
     // kill process by window selection preview widget
-    XWinKillPreviewWidget *m_xwkillPreview {};
+    XWinKillPreviewWidget *m_xwkillPreview = nullptr;
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

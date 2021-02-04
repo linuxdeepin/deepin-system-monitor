@@ -34,11 +34,17 @@ public:
     explicit CompactCpuMonitor(QWidget *parent = nullptr);
     ~CompactCpuMonitor();
 
+public:
+    void setDetailButtonVisible(bool visible);
+
 signals:
     void signalDetailInfoClicked();
 
 public slots:
     void updateStatus();
+
+private slots:
+    void onDetailInfoClicked();
 
 protected:
     void paintEvent(QPaintEvent *event);

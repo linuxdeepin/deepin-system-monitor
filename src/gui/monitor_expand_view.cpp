@@ -68,3 +68,8 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
 
     connect(m_cpuMonitor, &CpuMonitor::signalDetailInfoClicked, this, &MonitorExpandView::signalDetailInfoClicked);
 }
+
+void MonitorExpandView::setDetailButtonVisible(bool visible)
+{
+    m_cpuMonitor->setDetailButtonVisible(visible);
+}

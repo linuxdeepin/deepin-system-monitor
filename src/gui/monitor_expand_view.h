@@ -45,6 +45,9 @@ public:
     // Default destructor
     ~MonitorExpandView() = default;
 
+public:
+    void setDetailButtonVisible(bool visible);
+
 signals:
     void signalDetailInfoClicked();
 
