@@ -48,17 +48,6 @@ public:
      */
     QSize sizeHint() const override;
 
-    /**
-     * @brief getSpacing Get section spacing
-     * @return Spacing in pixels
-     */
-    inline int getSpacing() const { return m_spacing; }
-    /**
-     * @brief setSpacing Set section spacing
-     * @param spacing Spacing in pixels
-     */
-    inline void setSpacing(int spacing) { m_spacing = spacing; }
-
 protected:
     /**
      * @brief paintEvent Paint event handler for header view
@@ -72,12 +61,6 @@ protected:
      * @return true: Event being handled & no further processing; false: event should be propagated further
      */
     bool eventFilter(QObject *obj, QEvent *ev) override;
-    /**
-     * @brief viewportEvent Event handler for header view's viewport
-     * @param e Events to be handled
-     * @return true: Event being handled & no further processing; false: event should be propagated further
-     */
-    bool viewportEvent(QEvent *e) override;
 
     /**
      * @brief focusInEvent
@@ -85,14 +68,6 @@ protected:
     void focusInEvent(QFocusEvent *event) override;
 
 private:
-    // spacing between sections
-    int m_spacing {1};
-
-    // logical index of the section of which currently being hovered by cursor
-    int m_hover {-1};
-    // logical index of the section of which currently being pressed by mouse
-    int m_pressed {-1};
-
     int m_focusReason = Qt::TabFocusReason;
 };
 

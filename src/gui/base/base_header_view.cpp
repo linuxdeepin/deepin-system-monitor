@@ -38,14 +38,12 @@ BaseHeaderView::BaseHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
 {
     installEventFilter(this);
-
-    viewport()->setAutoFillBackground(false);
 }
 
 // Get header view's hint size
 QSize BaseHeaderView::sizeHint() const
 {
-    return QSize(width(), 36 + m_spacing);
+    return QSize(width(), 37);
 }
 
 // Paint event handler
@@ -90,56 +88,4 @@ bool BaseHeaderView::eventFilter(QObject *obj, QEvent *ev)
         }
     }
     return DHeaderView::eventFilter(obj, ev);
-}
-
-// Viewport event filter
-bool BaseHeaderView::viewportEvent(QEvent *event)
-{
-    // #ref: QTreeView::event
-    switch (event->type()) {
-    case QEvent::HoverEnter: {
-        auto *he = dynamic_cast<QHoverEvent *>(event);
-        // mark current section under cursor as hovered
-        m_hover = logicalIndexAt(he->pos());
-        if (m_hover != -1)
-            // repaint section in hovered state
-            updateSection(m_hover);
-        break;
-    }
-    case QEvent::Leave:
-    case QEvent::HoverLeave: {
-        if (m_hover != -1)
-            // repaint section in normal state after hover leave
-            updateSection(m_hover);
-        m_hover = -1;
-        break;
-    }
-    case QEvent::HoverMove: {
-        auto *he = dynamic_cast<QHoverEvent *>(event);
-        int oldHover = m_hover;
-        // mark current row under cursor as hovered
-        m_hover = logicalIndexAt(he->pos());
-        if (m_hover != oldHover) {
-            if (oldHover != -1)
-                // repaint old section in normal state
-                updateSection(oldHover);
-            if (m_hover != -1)
-                // repaint new hovered section in hovered state
-                updateSection(m_hover);
-        }
-        break;
-    }
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseButtonPress: {
-        auto *mev = dynamic_cast<QMouseEvent *>(event);
-        m_pressed = logicalIndexAt(mev->pos());
-        m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? m_pressed : -1;
-        update();
-        break;
-    }
-    default:
-        break;
-    }
-    return DHeaderView::viewportEvent(event);
 }

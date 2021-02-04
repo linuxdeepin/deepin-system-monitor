@@ -102,9 +102,8 @@ void ProcessTableView::onThemeTypeChanged()
     palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
     m_notFoundLabel->setPalette(palette);
 
-    palette.setColor(DPalette::Base, palette.color(DPalette::Base));
-    palette.setColor(DPalette::Background, palette.color(DPalette::Base));
-    viewport()->setPalette(palette);
+    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+    header()->setPalette(palette);
 }
 
 // event filter
