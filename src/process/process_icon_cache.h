@@ -46,7 +46,7 @@ private:
     explicit ProcessIconCache(QObject *parent = nullptr);
 
 private:
-    QCache<pid_t, ProcessIcon> m_cache {1024};
+    QCache<pid_t, ProcessIcon> m_cache {200};
 
     static ProcessIconCache *m_instance;
 };

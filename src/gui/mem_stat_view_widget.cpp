@@ -32,6 +32,7 @@
 using namespace common::format;
 using namespace core::system;
 
+const int itemHeight = 240;
 MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -48,7 +49,7 @@ MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
 void MemStatViewWidget::fontChanged(const QFont &font)
 {
     m_font = font;
-    setFixedHeight(130 + 2 * QFontMetrics(font).height());
+    setFixedHeight(itemHeight + 2 * QFontMetrics(font).height());
 }
 
 void MemStatViewWidget::onModelUpdate()
@@ -74,8 +75,8 @@ void MemStatViewWidget::updateWidgetGeometry()
     }
 
     int fontHeight = QFontMetrics(m_font).height();
-    m_memChartWidget->setGeometry(0, fontHeight / 2, avgWidth, 130 + 2 * fontHeight - fontHeight / 2);
-    m_swapChartWidget->setGeometry(m_memChartWidget->width() + 20, m_memChartWidget->y(), avgWidth, 130 + 2 * fontHeight - fontHeight / 2);
+    m_memChartWidget->setGeometry(0, fontHeight / 2, avgWidth, itemHeight + 2 * fontHeight - fontHeight / 2);
+    m_swapChartWidget->setGeometry(m_memChartWidget->width() + 20, m_memChartWidget->y(), avgWidth, itemHeight + 2 * fontHeight - fontHeight / 2);
 }
 
 void MemStatViewWidget::resizeEvent(QResizeEvent *event)

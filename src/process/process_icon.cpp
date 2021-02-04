@@ -73,16 +73,19 @@ void ProcessIcon::refreashProcessIcon(Process *proc)
         ProcessIconCache *cache = ProcessIconCache::instance();
         if (cache->contains(proc->pid())) {
             auto *procIcon = cache->getProcessIcon(proc->pid());
-            if (procIcon) {
+            if (proc->name().compare(procIcon->m_data->proc_name, Qt::CaseInsensitive) == 0) {
                 m_data = procIcon->m_data;
-                if (m_data->desktopentry)
-                    ProcessDB::instance()->windowList()->addDesktopEntryApp(proc);
+            } else {
+                m_data = getIcon(proc);
+                procIcon->m_data = m_data;
             }
+
+            if (m_data->desktopentry)
+                ProcessDB::instance()->windowList()->addDesktopEntryApp(proc);
         } else {
-            auto iconDataPtr = getIcon(proc);
-            m_data = iconDataPtr;
             auto *procIcon = new ProcessIcon();
-            procIcon->m_data = iconDataPtr;
+            m_data = getIcon(proc);
+            procIcon->m_data = m_data;
             cache->addProcessIcon(proc->pid(), procIcon);
         }
     }
@@ -116,7 +119,7 @@ QIcon ProcessIcon::icon() const
     return icon;
 }
 
-struct icon_data_t *ProcessIcon::defaultIconData() const {
+struct icon_data_t *ProcessIcon::defaultIconData(const QString &procname) const {
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
     iconData->proc_name = "[::default::]";
@@ -124,7 +127,7 @@ struct icon_data_t *ProcessIcon::defaultIconData() const {
     return iconData;
 }
 
-struct icon_data_t *ProcessIcon::terminalIconData() const {
+struct icon_data_t *ProcessIcon::terminalIconData(const QString &procname) const {
     auto *iconData = new struct icon_data_name_type();
     iconData->type = kIconDataNameType;
     iconData->proc_name = "[::terminal::]";
@@ -199,7 +202,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
         }
 
         if (shellList.contains(proc->name())) {
-            iconDataPtr.reset(terminalIconData());
+            iconDataPtr.reset(terminalIconData(proc->name()));
             return iconDataPtr;
         }
 
@@ -218,7 +221,7 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     }
 
     // fallback to use default icon
-    iconDataPtr.reset(defaultIconData());
+    iconDataPtr.reset(defaultIconData(proc->name()));
     return iconDataPtr;
 }
 

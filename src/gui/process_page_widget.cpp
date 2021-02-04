@@ -118,7 +118,7 @@ void ProcessPageWidget::initUI()
     connect(m_expandView, &MonitorExpandView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
     m_views->insertWidget(kDisplayModeCompact, m_compactView);
     m_views->insertWidget(kDisplayModeExpand, m_expandView);
-    m_views->setFixedWidth(300);
+    m_views->setFixedWidth(common::getStatusBarMaxWidth());
 
     // restore previous backupped display mode if any
     const QVariant &mode = Settings::instance()->getOption(kSettingKeyDisplayMode, kDisplayModeCompact);
