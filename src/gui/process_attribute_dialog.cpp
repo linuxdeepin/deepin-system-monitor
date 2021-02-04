@@ -161,7 +161,6 @@ void ProcessAttributeDialog::initUI()
     m_procNameText->setFrameStyle(QFrame::NoFrame);
     m_procNameText->setFocusPolicy(Qt::ClickFocus);
     m_procNameText->setReadOnly(true);
-    m_procNameText->setFixedWidth(kPreferedTextWidth);
     m_procNameText->viewport()->setBackgroundRole(QPalette::Window);
     m_procNameText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procNameText->document()->setDocumentMargin(0);
@@ -171,7 +170,6 @@ void ProcessAttributeDialog::initUI()
     m_procCmdText->setFrameStyle(QFrame::NoFrame);
     m_procCmdText->setFocusPolicy(Qt::ClickFocus);
     m_procCmdText->setReadOnly(true);
-    m_procCmdText->setFixedWidth(kPreferedTextWidth);
     m_procCmdText->viewport()->setBackgroundRole(QPalette::Window);
     m_procCmdText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procCmdText->document()->setDocumentMargin(0);
@@ -181,7 +179,6 @@ void ProcessAttributeDialog::initUI()
     m_procStartText->setFrameStyle(QFrame::NoFrame);
     m_procStartText->setFocusPolicy(Qt::ClickFocus);
     m_procStartText->setReadOnly(true);
-    m_procStartText->setFixedWidth(kPreferedTextWidth);
     m_procStartText->viewport()->setBackgroundRole(QPalette::Window);
     m_procStartText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procStartText->document()->setDocumentMargin(0);
@@ -235,14 +232,15 @@ void ProcessAttributeDialog::resizeItemWidget()
     m_procCmdLabel->setFixedSize(m_procCmdLabel->fontMetrics().width(m_procCmdLabel->text()), m_procCmdLabel->fontMetrics().height());
     m_procStartLabel->setFixedSize(m_procStartLabel->fontMetrics().width(m_procStartLabel->text()), m_procStartLabel->fontMetrics().height());
 
-    m_procNameText->setFixedSize(kPreferedTextWidth, m_procNameLabel->fontMetrics().height());
-    m_procStartText->setFixedSize(kPreferedTextWidth, m_procStartLabel->fontMetrics().height());
+    int procNametextH = qMin(120, int(m_procNameText->document()->size().height()));
+    m_procNameText->setFixedSize(qMin(kPreferedTextWidth, m_procNameText->fontMetrics().size(Qt::TextSingleLine, m_procNameText->toPlainText()).width()), procNametextH);
+    m_procStartText->setFixedSize(qMin(kPreferedTextWidth, m_procStartText->fontMetrics().size(Qt::TextSingleLine, m_procStartText->toPlainText()).width()), m_procStartLabel->fontMetrics().height());
 
     m_cmdh = m_frame->height() - (kAppIconSize + m_appNameLabel->height() + m_margin * 4) - m_procNameText->height() - m_procStartText->height();
     if (m_cmdh > m_procCmdText->document()->size().height()) {
         m_cmdh = int(m_procCmdText->document()->size().height());
     }
-    m_procCmdText->setFixedSize(kPreferedTextWidth, m_cmdh);
+    m_procCmdText->setFixedSize(qMin(kPreferedTextWidth, m_procCmdText->fontMetrics().size(Qt::TextSingleLine, m_procCmdText->toPlainText()).width()), m_cmdh);
     m_procCmdText->verticalScrollBar()->setValue(0);
 }
 
