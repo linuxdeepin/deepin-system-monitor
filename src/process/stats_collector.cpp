@@ -614,8 +614,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             } else {
                 de = ctx.m_desktopEntryCache->createCachedEntry(desktopFile);
             }
-
-            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName())) {
+            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName() && de->startup_wm_class != "wpsoffice")) {
                 if (de && !de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(de->displayName);
