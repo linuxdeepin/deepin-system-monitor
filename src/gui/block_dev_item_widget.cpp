@@ -102,7 +102,15 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
     int sectionSize = 6;
     QString deviceName = m_blokeDeviceInfo.deviceName().data();
     QRect devtitleRect(5, 0, painter.fontMetrics().width(deviceName), painter.fontMetrics().height());
-    painter.drawText(devtitleRect,deviceName);
+    if(haveBackGround) {
+        painter.save();
+        painter.setPen(palette.color(DPalette::Highlight));
+        painter.drawText(devtitleRect,deviceName);
+        painter.restore();
+    } else {
+        painter.drawText(devtitleRect,deviceName);
+    }
+
 
     QString readTitle = QString("%1 %2")
                         .arg(DApplication::translate("Process.Graph.View", "Disk read"))
@@ -147,7 +155,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
         QColor color = palette.color(DPalette::Highlight);
         color.setAlpha(26);
         painter.setBrush(color);
-        painter.drawRect(rect());
+        painter.drawRoundRect(rect(),8,8);
         painter.restore();
 
     }
