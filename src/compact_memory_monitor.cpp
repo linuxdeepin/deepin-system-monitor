@@ -45,14 +45,10 @@ using namespace core::system;
 CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     auto *dAppHelper = DApplicationHelper::instance();
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - margin * 2);
+    setFixedWidth(statusBarMaxWidth);
     ringCenterPointerX = rect().width() - outsideRingRadius - 4;
 
     setFixedHeight(150);

@@ -53,6 +53,7 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 
     // vertical layout to hold monitor instances
     QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(0);
     layout->setSpacing(10);
     layout->addStretch(1);
     layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);

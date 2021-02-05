@@ -765,11 +765,7 @@ void SystemServiceTableView::initConnections()
 // size hint for column to help calculate prefered section width while user double clicked section's gripper
 int SystemServiceTableView::sizeHintForColumn(int column) const
 {
-    QStyleOptionHeader option;
-    option.initFrom(this);
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-
+    int margin = 10;
     return std::max(header()->sizeHintForColumn(column) + margin * 2,
                     BaseTableView::sizeHintForColumn(column) + margin * 2);
 }

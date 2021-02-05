@@ -34,19 +34,13 @@
 SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     : DFrame(parent)
 {
-    // global DStyle instance
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
     // global app helper instance
     auto *dAppHelper = DApplicationHelper::instance();
     // global palette
     auto palette = dAppHelper->applicationPalette();
 
-    // initialize style option
-    QStyleOption option;
-    option.initFrom(this);
-
     // content margin
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = 10;
 
     // main frame layout
     auto *layout = new QHBoxLayout(this);

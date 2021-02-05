@@ -34,9 +34,6 @@
 MonitorExpandView::MonitorExpandView(QWidget *parent)
     : DFrame(parent)
 {
-    // content margin
-    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
-
     // disable auto fill frame background
     setAutoFillBackground(false);
     // set background role
@@ -53,6 +50,7 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
 
     // monitor view layout
     QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(0);
     layout->setSpacing(0);
     layout->addStretch(1);
     layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);
@@ -61,8 +59,6 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     layout->addStretch(2);
     layout->addWidget(m_networkMonitor, 0, Qt::AlignHCenter);
     layout->addStretch(1);
-
-    layout->setContentsMargins(margin, margin, margin, margin);
     // set monitor view layout
     setLayout(layout);
 

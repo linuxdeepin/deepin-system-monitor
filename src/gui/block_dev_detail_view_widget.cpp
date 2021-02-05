@@ -31,9 +31,7 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     m_blocksummaryWidget = new BlockDevSummaryViewWidget(this);
     m_centralLayout->addWidget(m_blockStatWidget);
     m_centralLayout->addWidget(m_blocksummaryWidget);
-   // m_centralLayout->setSpacing(0);
-    //m_centralLayout->setMargin(0);
-    connect(m_blockStatWidget,&BlockStatViewWidget::changeInfo,m_blocksummaryWidget,&BlockDevSummaryViewWidget::chageSummaryInfo);
+    connect(m_blockStatWidget, &BlockStatViewWidget::changeInfo, m_blocksummaryWidget, &BlockDevSummaryViewWidget::chageSummaryInfo);
 
     fontChanged(DApplication::font());
 }
@@ -42,5 +40,4 @@ void BlockDevDetailViewWidget::fontChanged(const QFont &font)
     BaseDetailViewWidget::fontChanged(font);
     m_blockStatWidget->fontChanged(font);
     m_blocksummaryWidget->fontChanged(font);
-    //Child Todo
 }

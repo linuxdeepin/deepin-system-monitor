@@ -25,10 +25,10 @@
 
 #include <DMenu>
 #include <DApplication>
+#include <QActionGroup>
 
 #define DELETE_PAGE(obj) if(obj) { delete obj; obj = nullptr; }
 
-DWIDGET_USE_NAMESPACE
 DetailViewStackedWidget::DetailViewStackedWidget(QWidget *parent) : AnimationStackedWidget(LR, parent)
 {
     connect(this, &AnimationStackedWidget::signalIsFinished, this, &DetailViewStackedWidget::onSwitchPageFinished);
@@ -63,23 +63,38 @@ void DetailViewStackedWidget::onSwitchProcessPage()
 
 void DetailViewStackedWidget::onShowPerformMenu(QPoint pos)
 {
-    DMenu menu;
-    QAction *cpuAct = menu.addAction(DApplication::translate("Process.Graph.View", "CPU"));
-    QAction *memAct = menu.addAction(DApplication::translate("Process.Graph.Title", "Memory"));
-    QAction *netifAct = menu.addAction(DApplication::translate("Process.Graph.View", "Network"));
-    QAction *blockDevAct = menu.addAction(DApplication::translate("Process.Graph.View", "Disk"));
+    if (m_menu == nullptr) {
+        m_menu = new DMenu(this);
+        cpuAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "CPU"));
+        memAct = m_menu->addAction(DApplication::translate("Process.Graph.Title", "Memory"));
+        netifAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Network"));
+        blockDevAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Disk"));
 
-    if (this->currentWidget() == m_cpudetailWidget) {
-        cpuAct->setDisabled(true);
-    } else if (this->currentWidget() == m_memDetailWidget) {
-        memAct->setDisabled(true);
-    } else if (this->currentWidget() == m_netifDetailWidget) {
-        netifAct->setDisabled(true);
-    } else if (this->currentWidget() == m_blockDevDetailWidget) {
-        blockDevAct->setDisabled(true);
+        QActionGroup *actionGroup = new QActionGroup(m_menu);
+        actionGroup->addAction(cpuAct);
+        actionGroup->addAction(memAct);
+        actionGroup->addAction(netifAct);
+        actionGroup->addAction(blockDevAct);
+
+        cpuAct->setCheckable(true);
+        memAct->setCheckable(true);
+        netifAct->setCheckable(true);
+        blockDevAct->setCheckable(true);
     }
 
-    QAction *resAct = menu.exec(pos);
+
+
+    if (this->currentWidget() == m_cpudetailWidget) {
+        cpuAct->setChecked(true);
+    } else if (this->currentWidget() == m_memDetailWidget) {
+        memAct->setChecked(true);
+    } else if (this->currentWidget() == m_netifDetailWidget) {
+        netifAct->setChecked(true);
+    } else if (this->currentWidget() == m_blockDevDetailWidget) {
+        blockDevAct->setChecked(true);
+    }
+
+    QAction *resAct = m_menu->exec(pos);
     if (resAct == cpuAct) {
         if (m_cpudetailWidget == nullptr) {
             m_cpudetailWidget = new CPUDetailWidget(this);

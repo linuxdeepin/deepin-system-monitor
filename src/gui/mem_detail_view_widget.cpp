@@ -36,7 +36,6 @@ MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
     setTitle(DApplication::translate("Process.Graph.Title", "Memory"));
     m_centralLayout->addWidget(m_memstatWIdget);
     m_centralLayout->addWidget(m_memsummaryWidget);
-    m_centralLayout->addStretch(1);
 
     fontChanged(DApplication::font());
 

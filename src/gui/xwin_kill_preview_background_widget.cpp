@@ -81,7 +81,7 @@ void XWinKillPreviewBackgroundWidget::paintEvent(QPaintEvent *)
     // frame radius
     auto radius = style->pixelMetric(DStyle::PM_FrameRadius);
     // content margin
-    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins);
+    auto margin = 10;
     // background color
     auto background = palette.color(DPalette::Current, DPalette::Background);
     // forground color

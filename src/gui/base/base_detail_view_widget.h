@@ -57,6 +57,7 @@ private:
 protected:
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 protected:
     QFont m_contentFont;

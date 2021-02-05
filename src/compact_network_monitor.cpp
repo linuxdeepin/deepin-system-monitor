@@ -49,7 +49,7 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     auto *dAppHelper = DApplicationHelper::instance();
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - 20);
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(150);
 
     downloadSpeeds = new QList<double>();
@@ -146,8 +146,8 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
     int padleft = bulletSize * 2 + 2;
     QRect contentRect(padleft, 0, rect().x() + rect().width() - padleft, 1);
 
-    auto spacing = DStyle::pixelMetric(style(), DStyle::PM_ContentsSpacing);
-    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
+    auto spacing = 10;
+    auto margin = 10;
 
     // Draw network summary.
     QString recvTitle = DApplication::translate("Process.Graph.View", "Download");

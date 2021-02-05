@@ -44,10 +44,8 @@ const int pointsNumber = 30;
 NetworkMonitor::NetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    auto *dAppHelper = DApplicationHelper::instance();
-
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - 20);
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(180);
 
     downloadSpeeds = new QList<double>();
@@ -60,6 +58,7 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
         uploadSpeeds->append(0);
     }
 
+    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
@@ -201,7 +200,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);
-    QRect contentRect(padleft, titleRect.y() + titleRect.height() + spacing,
+    QRect contentRect(padleft, titleRect.y() + titleRect.height(),
                       rect().x() + rect().width() - padleft, 1);
     QRect crect11(contentRect.x(), contentRect.y(), qCeil((contentRect.width() - spacing) / 2),
                   fmContent.height());

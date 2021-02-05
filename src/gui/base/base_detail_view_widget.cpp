@@ -129,3 +129,8 @@ void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
         painter.drawText(detailRect, Qt::AlignLeft | Qt::AlignVCenter, m_detailText);
     }
 }
+
+void BaseDetailViewWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    //not Todo
+}

@@ -45,14 +45,10 @@ using namespace core::system;
 MemoryMonitor::MemoryMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     auto *dAppHelper = DApplicationHelper::instance();
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - margin * 2);
+    setFixedWidth(statusBarMaxWidth);
     ringCenterPointerX = rect().width() - outsideRingRadius - 4;
 
     setFixedHeight(160);
@@ -197,7 +193,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmMem(m_contentFont);
     QFontMetrics fmMemStat(m_subContentFont);
-    QRect memRect(sectionSize * 2 + 4, titleRect.y() + titleRect.height() + spacing,
+    QRect memRect(sectionSize * 2 + 4, titleRect.y() + titleRect.height(),
                   fmMem.size(Qt::TextSingleLine, memoryTitle).width(), fmMem.height());
     QRect memStatRect(memRect.x(), memRect.y() + memRect.height(),
                       fmMemStat.size(Qt::TextSingleLine, memoryContent).width(),

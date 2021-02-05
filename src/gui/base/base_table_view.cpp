@@ -204,7 +204,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     // frame radius
     auto radius = style->pixelMetric(DStyle::PM_FrameRadius, &options);
     // content margin
-    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &options);
+    auto margin = 10;
 
     auto palette = options.palette;
     QBrush background;

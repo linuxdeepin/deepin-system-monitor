@@ -45,7 +45,7 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
 {
     // TODO: use more elegent way to set width
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - 20);
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(160);
 
     readSpeeds = new QList<qreal>();

@@ -252,10 +252,12 @@ void MemSummaryViewWidget::paintEvent(QPaintEvent *event)
     DTableView::paintEvent(event);
 
     QPainter painter(this->viewport());
+    painter.setRenderHint(QPainter::Antialiasing, true);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
     frameColor.setAlphaF(0.3);
-    painter.setPen(QPen(frameColor, 1));
+
+    painter.setPen(QPen(frameColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setBrush(Qt::NoBrush);
     painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);
     painter.drawRoundedRect(this->rect().adjusted(1, 1, -1, -1), 6, 6);

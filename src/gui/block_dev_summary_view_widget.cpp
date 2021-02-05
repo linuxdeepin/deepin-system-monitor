@@ -86,7 +86,8 @@ DetailItemDelegateBlock::~DetailItemDelegateBlock()
 
 }
 
-class DeailTableModelBlock : public QAbstractTableModel {
+class DeailTableModelBlock : public QAbstractTableModel
+{
 public:
     explicit DeailTableModelBlock(QObject *parent = nullptr);
     virtual ~DeailTableModelBlock();
@@ -101,15 +102,16 @@ protected:
         return 2;
     }
 
-    QVariant data(const QModelIndex &index, int role) const {
+    QVariant data(const QModelIndex &index, int role) const
+    {
 
-        if (!index.isValid() || currDeciveName.isEmpty() )
+        if (!index.isValid() || currDeciveName.isEmpty())
             return QVariant();
         int row = index.row();
         int column = index.column();
         if (role == Qt::DisplayRole) {
             switch (row) {
-             case 0:
+            case 0:
                 if (column == 0)
                     return tr("Model");
                 else if (column == 1)
@@ -153,7 +155,7 @@ protected:
                 break;
 
             }
-        }else if (role == Qt::UserRole) {
+        } else if (role == Qt::UserRole) {
             switch (row) {
             case 0:
                 if (column == 0)
@@ -170,31 +172,31 @@ protected:
             case  2:
                 if (column == 0)
                     return m_blockInfo.blocksRead();
-                else if(column == 1)
+                else if (column == 1)
                     return m_blockInfo.readRequestIssuedPerSecond();
                 break;
             case  3:
                 if (column == 0)
                     return m_blockInfo.sectorsReadPerSecond();
-                else if(column == 1)
+                else if (column == 1)
                     return m_blockInfo.readRequestMergedPerSecond();
                 break;
             case  4:
                 if (column == 0)
                     return m_blockInfo.blocksWritten();
-                else if(column == 1)
+                else if (column == 1)
                     return m_blockInfo.writeMerged();
                 break;
             case  5:
                 if (column == 0)
                     return m_blockInfo.readMerged();
-                else if(column == 1)
+                else if (column == 1)
                     return m_blockInfo.writeRequestIssuedPerSecond();
                 break;
             case  6:
                 if (column == 0)
                     return m_blockInfo.sectorsWrittenPerSecond();
-                else if(column == 1)
+                else if (column == 1)
                     return m_blockInfo.writeRequestMergedPerSecond();
                 break;
             }
@@ -209,42 +211,44 @@ protected:
     {
         return Qt::NoItemFlags;
     }
+
 public slots:
     void updateModel();
+
 public:
-    void setCurrentName(const QString& str) {
+    void setCurrentName(const QString &str)
+    {
         currDeciveName = str;
-        if(!str.isEmpty())
+        if (!str.isEmpty())
             m_blockInfo = m_mapInfo.find(currDeciveName).value();
         updateModel();
     }
+
 private:
     QString currDeciveName;
     BlockDevice m_blockInfo;
-    QMap<QString,BlockDevice> m_mapInfo;
+    QMap<QString, BlockDevice> m_mapInfo;
 };
 
 DeailTableModelBlock::DeailTableModelBlock(QObject *parent): QAbstractTableModel(parent)
 {
-    currDeciveName = "";
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    connect(monitor, &SystemMonitor::statInfoUpdated, this, &DeailTableModelBlock::updateModel);
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &DeailTableModelBlock::updateModel);
     updateModel();
 }
 
 void DeailTableModelBlock::updateModel()
 {
     beginResetModel();
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    auto infoDB = monitor->deviceDB()->blockDeviceInfoDB()->deviceList();
+    const QList<BlockDevice> &infoDB = DeviceDB::instance()->blockDeviceInfoDB()->deviceList();
 
-    for(int i =0; i < infoDB.size(); ++i) {
-        m_mapInfo.insert(infoDB[i].deviceName(),infoDB[i]);
+    for (int i = 0; i < infoDB.size(); ++i) {
+        m_mapInfo.insert(infoDB[i].deviceName(), infoDB[i]);
     }
-    if(currDeciveName == "" && infoDB.size() >=0) {
+
+    if (currDeciveName == "" && infoDB.size() >= 0) {
         currDeciveName = infoDB[0].deviceName();
         m_blockInfo = infoDB[0];
-    } else if(infoDB.size() >=0) {
+    } else if (infoDB.size() >= 0) {
         m_blockInfo = m_mapInfo.find(currDeciveName).value();
     }
     endResetModel();
@@ -267,12 +271,13 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
     this->setGridStyle(Qt::NoPen);
     this->setFrameShape(QFrame::NoFrame);
+
     m_model = new DeailTableModelBlock(this);
     this->setModel(m_model);
     this->setItemDelegate(new DetailItemDelegateBlock(this));
 }
 
-void BlockDevSummaryViewWidget::chageSummaryInfo(const QString& deviceName)
+void BlockDevSummaryViewWidget::chageSummaryInfo(const QString &deviceName)
 {
     m_model->setCurrentName(deviceName);
 }

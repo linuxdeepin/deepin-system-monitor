@@ -83,19 +83,13 @@ ProcessPageWidget::~ProcessPageWidget() {}
 // initialize ui components
 void ProcessPageWidget::initUI()
 {
-    // global DStyle instance
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
     // global app helper instance
     auto *dAppHelper = DApplicationHelper::instance();
     // global palette
     auto palette = dAppHelper->applicationPalette();
 
-    // initialize style option
-    QStyleOption option;
-    option.initFrom(this);
-
     // content margin
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = 10;
 
     m_rightStackView = new DetailViewStackedWidget(this);
 
@@ -216,7 +210,7 @@ void ProcessPageWidget::initUI()
 
     // fill left side bar & main content area
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(margin, margin, margin, margin);
+    layout->setMargin(margin);
     layout->setSpacing(margin);
     layout->addWidget(m_views);
     layout->addWidget(m_rightStackView);

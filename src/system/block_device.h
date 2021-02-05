@@ -65,17 +65,13 @@ public:
     quint64  readSpeed() const; // 获取读速度
     quint64  writeSpeed() const; // 获取写速度
 
-
-
-
-
-    void setDeviceName(const QByteArray& deviceName);
+    void setDeviceName(const QByteArray &deviceName);
 
 public:
     void readDeviceInfo();
     void readDeviceModel();
-    quint64 readDeviceSize(const QString& deviceName);
-    void calcDiskIoStates(const QStringList& diskInfo);
+    quint64 readDeviceSize(const QString &deviceName);
+    void calcDiskIoStates(const QStringList &diskInfo);
 
 private:
     QSharedDataPointer<BlockDevicePrivate> d;

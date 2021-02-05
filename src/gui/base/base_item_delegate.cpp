@@ -88,9 +88,9 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
     // content margin
-    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    auto margin = 10;
     // content spacing
-    auto spacing = style->pixelMetric(DStyle::PM_ContentsSpacing, &option);
+    auto spacing = 10;
     // icon size
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
 
@@ -235,9 +235,9 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
         initStyleOption(&opt, index);
 
         // content margin
-        auto margin = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsMargins);
+        auto margin = 10;
         // content spacing
-        auto spacing = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsSpacing);
+        auto spacing = 10;
         // icon size
         auto iconSize = view->style()->pixelMetric(DStyle::PM_ListViewIconSize);
 

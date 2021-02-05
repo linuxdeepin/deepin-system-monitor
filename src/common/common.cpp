@@ -152,7 +152,7 @@ void displayShortcutHelpDialog(const QRect &rect)
 int getStatusBarMaxWidth()
 {
     // TODO: use more elegent way to calc bar width
-    return 260;
+    return 280;
 }
 
 void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,

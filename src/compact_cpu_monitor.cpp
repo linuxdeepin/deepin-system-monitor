@@ -42,13 +42,8 @@ using namespace common;
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - margin * 2);
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(160);
 
     pointsNumber = int(statusBarMaxWidth / 10);
@@ -85,13 +80,15 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     m_cpuInfomodel = new CPUInfoModel(period, this);
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CompactCpuMonitor::updateStatus);
 
+    m_detailText = tr("Detail Information");
+    m_detailButton = new DCommandLinkButton(m_detailText, this);
+    m_detailButton->setToolTip(m_detailText);
+    m_detailButton->setFont(m_cpuFont);
+    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::onDetailInfoClicked);
+
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &CompactCpuMonitor::changeFont);
-
-    m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
-    m_detailButton->setFont(m_cpuFont);
-    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::onDetailInfoClicked);
 }
 
 CompactCpuMonitor::~CompactCpuMonitor() {}
@@ -130,7 +127,11 @@ void CompactCpuMonitor::setDetailButtonVisible(bool visible)
 void CompactCpuMonitor::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()), m_detailButton->fontMetrics().height());
+}
+
+void CompactCpuMonitor::resizeItemRect()
+{
+    const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 10, m_detailButton->fontMetrics().height());
     m_detailButton->setGeometry(this->width() - detailtextSize.width(), 0, detailtextSize.width(), detailtextSize.height());
 }
 
@@ -139,11 +140,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     auto *dAppHelper = DApplicationHelper::instance();
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     // init colors
     auto palette = dAppHelper->applicationPalette();
@@ -173,6 +170,9 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QRect statRect(cpuRect.x() + cpuRect.width() + spacing, cpuRect.y(), fmStat.width(cpuStatText),
                    fmStat.height());
 
+    m_detailButton->setText(m_detailButton->fontMetrics().elidedText(m_detailText, Qt::ElideRight, this->width() - statRect.right() - 2 * spacing));
+    resizeItemRect();
+
     // draw section
     painter.setPen(sectionColor);
     QPainterPath path;
@@ -197,7 +197,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     painter.setPen(framePen);
 
     int gridX = rect().x() + penSize;
-    int gridY = cpuRect.y() + cpuRect.height() + margin;
+    int gridY = cpuRect.y() + cpuRect.height() + 10;
     int gridWidth =
         rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
     int gridHeight = cpuRenderMaxHeight + 8 * penSize;
@@ -279,4 +279,6 @@ void CompactCpuMonitor::changeFont(const QFont &font)
     m_cpuFont.setPointSize(m_cpuFont.pointSize() - 1);
     m_statFont = font;
     m_statFont.setPointSize(m_statFont.pointSize() - 1);
+
+    resizeItemRect();
 }

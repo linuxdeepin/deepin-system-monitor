@@ -49,7 +49,8 @@ public:
     explicit NetInfoDetailItemDelegate(QObject *parent = nullptr);
     virtual ~NetInfoDetailItemDelegate();
 
-    void setFont(const QFont &font){
+    void setFont(const QFont &font)
+    {
         m_font = font;
     }
     void paint(QPainter *painter,
@@ -136,7 +137,7 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
-        const int item_width =230;
+        const int item_width = 230;
 
         if (index.isValid()) {
             ShowInfo stInfo = index.data(Qt::UserRole).value<ShowInfo>();
@@ -192,10 +193,9 @@ public:
             const int ipv4_addr_totle = listAddr4.count();
             for (int i = 0; i < ipv4_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV4;
-                if(1 == ipv4_addr_totle){
+                if (1 == ipv4_addr_totle) {
                     stInfo.strKey = "IPV4";
-                }
-                else{
+                } else {
                     stInfo.strKey = "IPV4 " + QString::number(i + 1);
                 }
 
@@ -205,12 +205,12 @@ public:
 
             // 处理IPV6
             QList<INet6Addr> listAddr6 = stNetifInfo->addr6InfoList();
-             const int ipv6_addr_totle = listAddr6.count();
+            const int ipv6_addr_totle = listAddr6.count();
             for (int i = 0; i < ipv6_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV6;
-                if(1 == ipv6_addr_totle){
+                if (1 == ipv6_addr_totle) {
                     stInfo.strKey = "IPV6";
-                }else{
+                } else {
                     stInfo.strKey = "IPV6 " + QString::number(i + 1);
                 }
 
@@ -392,7 +392,7 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     m_netInfoModel = new NetInfoModel(this);
     this->setModel(m_netInfoModel);
     m_netInfoDetailItemDelegate = new NetInfoDetailItemDelegate(this);
-    this->setItemDelegate(dynamic_cast<QAbstractItemDelegate*>(m_netInfoDetailItemDelegate));
+    this->setItemDelegate(dynamic_cast<QAbstractItemDelegate *>(m_netInfoDetailItemDelegate));
 }
 
 void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
@@ -407,7 +407,7 @@ void NetifSummaryViewWidget::fontChanged(const QFont &font)
     m_font = font;
     this->setFont(m_font);;
     m_netInfoDetailItemDelegate->setFont(m_font);
-    //setFixedHeight(QFontMetrics(font).height() * 16);
+    setFixedHeight(QFontMetrics(font).height() * 11);
 }
 
 void NetifSummaryViewWidget::onModelUpdate()
@@ -420,10 +420,12 @@ void NetifSummaryViewWidget::paintEvent(QPaintEvent *event)
     DTableView::paintEvent(event);
 
     QPainter painter(this->viewport());
+    painter.setRenderHint(QPainter::Antialiasing, true);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
     frameColor.setAlphaF(0.3);
-    painter.setPen(QPen(frameColor, 1));
+
+    painter.setPen(QPen(frameColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setBrush(Qt::NoBrush);
     painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);
     painter.drawRoundedRect(this->rect().adjusted(1, 1, -1, -1), 6, 6);

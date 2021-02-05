@@ -21,6 +21,7 @@
 #define DETAIL_VIEW_STACKED_WIDGET_H
 
 #include "animation_stackedwidget.h"
+#include <DMenu>
 
 /**
  * @brief Detail view stacked widget (main content stacked area)
@@ -28,6 +29,8 @@
 class MemDetailViewWidget;
 class NetifDetailViewWidget;
 class BlockDevDetailViewWidget;
+
+DWIDGET_USE_NAMESPACE
 class DetailViewStackedWidget : public AnimationStackedWidget
 {
 public:
@@ -49,6 +52,13 @@ private:
     QWidget *m_memDetailWidget = nullptr;
     QWidget *m_netifDetailWidget = nullptr;
     QWidget *m_blockDevDetailWidget = nullptr;
+
+    QAction *cpuAct;
+    QAction *memAct;
+    QAction *netifAct;
+    QAction *blockDevAct;
+
+    DMenu *m_menu = nullptr;
 };
 
 #endif // DETAIL_VIEW_STACKED_WIDGET_H

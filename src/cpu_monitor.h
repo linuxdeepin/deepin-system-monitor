@@ -51,9 +51,10 @@ signals:
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void updateStatus();
+    void onDetailInfoClicked();
 
 private:
-    void onDetailInfoClicked();
+    void resizeItemWidgetRect();
 
 private:
     void changeFont(const QFont &font);

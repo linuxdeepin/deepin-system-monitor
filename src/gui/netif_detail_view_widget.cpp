@@ -35,7 +35,6 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     connect(m_netifstatWIdget, &NetifStatViewWidget::netifItemClicked, m_netifsummaryWidget, &NetifSummaryViewWidget::onNetifItemClicked);
 
     setTitle(DApplication::translate("Process.Graph.View", "Network"));
-    m_netifstatWIdget->setMinimumHeight(300);
     m_centralLayout->addWidget(m_netifstatWIdget);
     m_centralLayout->addWidget(m_netifsummaryWidget);
 

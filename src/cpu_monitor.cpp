@@ -62,10 +62,6 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     m_cpuInfomodel = new CPUInfoModel(period, this);
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CpuMonitor::updateStatus);
 
-    changeFont(DApplication::font());
-    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-            this, &CpuMonitor::changeFont);
-
     m_animation = new QPropertyAnimation(this, "progress", this);
     m_animation->setDuration(250);
     m_animation->setStartValue(0.0);
@@ -78,6 +74,10 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
     m_detailButton->setFont(m_detailFont);
     connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &CpuMonitor::changeFont);
 }
 
 CpuMonitor::~CpuMonitor()
@@ -169,11 +169,18 @@ void CpuMonitor::changeFont(const QFont &font)
     m_detailFont = font;
     m_detailFont.setWeight(QFont::Medium);
     m_detailFont.setPointSize(m_detailFont.pointSize() - 1);
+
+    resizeItemWidgetRect();
 }
 
 void CpuMonitor::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
+    resizeItemWidgetRect();
+}
+
+void CpuMonitor::resizeItemWidgetRect()
+{
     const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()), m_detailButton->fontMetrics().height());
     m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - paddingRight, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
 }
@@ -183,10 +190,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = 10;
 
     QFontMetrics fm(m_cpuDisplayFont);
     int titleWidth =

@@ -29,9 +29,9 @@ bool BaseDetailItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view, c
         initStyleOption(&opt, index);
 
         // content margin
-        auto margin = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsMargins);
+        auto margin = 10;
         // content spacing
-        auto spacing = DStyle::pixelMetric(view->style(), DStyle::PM_ContentsSpacing);
+        auto spacing = 10;
         // icon size
         auto iconSize = view->style()->pixelMetric(DStyle::PM_ListViewIconSize);
 

@@ -52,6 +52,7 @@ protected:
 
 private:
     void changeFont(const QFont &font);
+    void resizeItemRect();
 
 private:
     QList<QList<qreal>> cpuPercents;
@@ -70,6 +71,7 @@ private:
     QFont m_cpuFont;
     QFont m_statFont;
 
+    QString m_detailText;
     CPUInfoModel *m_cpuInfomodel;
     DCommandLinkButton *m_detailButton;
 };

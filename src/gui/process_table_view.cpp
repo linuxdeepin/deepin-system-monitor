@@ -846,11 +846,7 @@ void ProcessTableView::selectionChanged(const QItemSelection &selected,
 // return hinted size for specified column, so column can be resized to a prefered width when double clicked
 int ProcessTableView::sizeHintForColumn(int column) const
 {
-    QStyleOptionHeader option;
-    option.initFrom(this);
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-
+    int margin = 10;
     return std::max(header()->sizeHintForColumn(column) + margin * 2,
                     DTreeView::sizeHintForColumn(column) + margin * 2);
 }
