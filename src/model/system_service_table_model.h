@@ -104,6 +104,13 @@ public:
     QString getUnitFileName(const QModelIndex &index);
 
     /**
+     * @brief Get unit active's state
+     * @param index Model index
+     * @return Return unit active's state string
+     */
+    QString getUnitActiveState(const QModelIndex &index);
+
+    /**
      * @brief data Returns the data stored under the given role for the item referred to by the index
      * @param index Index of the data
      * @param role Role of the data
@@ -195,6 +202,14 @@ inline QString SystemServiceTableModel::getUnitFileName(const QModelIndex &index
         return {};
 
     return m_svcMap[m_svcList[index.row()]].getSName();
+}
+
+inline QString SystemServiceTableModel::getUnitActiveState(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return {};
+
+    return m_svcMap[m_svcList[index.row()]].getActiveState();
 }
 
 #endif  // SYSTEM_SERVICE_TABLE_MODEL_H

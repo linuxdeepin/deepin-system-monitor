@@ -203,6 +203,12 @@ inline bool isFinalState(const char *state)
     return b;
 }
 
+inline bool isActiveState(const char *state)
+{
+    bool b = !strcmp(state, "active");
+    return b;
+}
+
 // service unit substates
 enum ServiceUnitSubState {
     kServiceUnitDeadSubState,

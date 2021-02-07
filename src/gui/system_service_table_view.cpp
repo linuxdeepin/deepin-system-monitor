@@ -611,14 +611,26 @@ void SystemServiceTableView::initConnections()
             auto index = selectionModel()->selectedRows()[0];
             if (index.isValid()) {
                 // unit file state
-                auto state = m_model->getUnitFileState(m_proxyModel->mapToSource(index));
+                const QModelIndex &sourceIndex = m_proxyModel->mapToSource(index);
+                auto state = m_model->getUnitFileState(sourceIndex);
                 // service name
-                auto sname = m_model->getUnitFileName(m_proxyModel->mapToSource(index));
+                auto sname = m_model->getUnitFileName(sourceIndex);
                 // disable set startup mode menu when service ends with '@' or noop
                 if (sname.endsWith("@") || isUnitNoOp(state)) {
                     m_setServiceStartupModeMenu->setEnabled(false);
                 } else {
                     m_setServiceStartupModeMenu->setEnabled(true);
+                }
+
+                auto activeState = m_model->getUnitActiveState(sourceIndex);
+                if (isActiveState(activeState.toLocal8Bit())) {
+                    m_startServiceAction->setEnabled(false);
+                    m_stopServiceAction->setEnabled(true);
+                    m_restartServiceAction->setEnabled(true);
+                } else {
+                    m_startServiceAction->setEnabled(true);
+                    m_stopServiceAction->setEnabled(false);
+                    m_restartServiceAction->setEnabled(false);
                 }
 
                 // change auto/manual startup menu item's usable state based on current service's startup mode
