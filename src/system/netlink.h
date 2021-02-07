@@ -64,6 +64,12 @@ public:
         return tPtr;
     }
 
+public:
+    ~CacheIterator()
+    {
+        delete d;
+    }
+
 private:
     struct context {
         struct nl_sock *m_sock;

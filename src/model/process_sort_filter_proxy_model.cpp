@@ -22,6 +22,7 @@
 #include "process/process_db.h"
 #include "process_table_model.h"
 #include "common/han_latin.h"
+#include "common/common.h"
 
 #include <QCollator>
 #include <QDebug>
@@ -106,6 +107,15 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
     case ProcessTableModel::kProcessNameColumn: {
         const QString &lhs = left.data(Qt::DisplayRole).toString();
         const QString &rhs = right.data(Qt::DisplayRole).toString();
+
+        bool lstartHz = common::startWithHanzi(lhs);
+        bool rstartHz = common::startWithHanzi(rhs);
+        if (!lstartHz && rstartHz)
+            return true;
+
+        if (lstartHz && !rstartHz)
+            return false;
+
         int rc = lhs.localeAwareCompare(rhs);
 
         if (rc == 0) {

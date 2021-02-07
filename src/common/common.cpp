@@ -195,6 +195,14 @@ void setFontSize(QPainter &painter, int textSize)
     painter.setFont(font);
 }
 
+bool startWithHanzi(const QString &text)
+{
+    if (text.isEmpty())
+        return false;
+
+    return text.at(0).script() == QChar::Script_Han;
+}
+
 void openFilePathItem(const QString &path)
 {
     bool result = QProcess::startDetached(QString("dde-file-manager --show-item \"%1\"").arg(path));

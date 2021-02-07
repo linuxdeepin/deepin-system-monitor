@@ -212,7 +212,6 @@ bool Process::readStat()
     int fd, rc;
     ssize_t sz;
     char *pos, *begin;
-    uFD ufd;
 
     buf.reserve(1025);
 
@@ -223,10 +222,10 @@ bool Process::readStat()
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
-    ufd.reset(new int {fd});
 
     // read data
     sz = read(fd, buf.data(), 1024);
+    close(fd);
     if (sz < 0) {
         print_errno(errno, QString("read %1 failed").arg(path));
         return !ok;
@@ -337,7 +336,6 @@ void Process::readEnviron()
     QByteArray sbuf {};
     char buf[sz + 1] {};
     int fd;
-    uFD ufd;
 
     sprintf(path, PROC_ENVIRON_PATH, d->pid);
 
@@ -348,12 +346,13 @@ void Process::readEnviron()
         print_errno(errno, QString("open %1 failed").arg(path));
         return;
     }
-    ufd.reset(new int {fd});
 
     while ((nb = read(fd, buf, sz))) {
         buf[nb] = '\0';
         sbuf.append(buf, int(nb));
     }
+    close(fd);
+
     if (nb == 0 && errno != 0) {
         print_errno(errno, QString("read %1 failed").arg(path));
         return;
@@ -380,7 +379,6 @@ void Process::readSchedStat()
     int fd, rc;
     ssize_t n;
     unsigned long long wtime = 0;
-    uFD ufd;
 
     buf.reserve(bsiz);
     sprintf(path, PROC_SCHEDSTAT_PATH, d->pid);
@@ -391,9 +389,10 @@ void Process::readSchedStat()
         print_errno(errno, QString("open %1 failed").arg(path));
         return;
     }
-    ufd.reset(new int {fd});
 
     n = read(fd, buf.data(), bsiz - 1);
+    close(fd);
+
     if (n < 0) {
         print_errno(errno, QString("read %1 failed").arg(path));
         return;
@@ -462,7 +461,6 @@ bool Process::readStatm()
     const size_t bsiz = 1024;
     char path[128] {}, buf[bsiz + 1] {};
     ssize_t nr;
-    uFD ufd;
 
     sprintf(path, PROC_STATM_PATH, d->pid);
 
@@ -472,9 +470,9 @@ bool Process::readStatm()
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
-    ufd.reset(new int {fd});
 
     nr = read(fd, buf, bsiz);
+    close(fd);
     if (nr < 0) {
         print_errno(errno, QString("read %1 failed").arg(path));
         return !ok;

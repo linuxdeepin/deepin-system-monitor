@@ -20,6 +20,7 @@
 
 #include "system_service_sort_filter_proxy_model.h"
 #include "system_service_table_model.h"
+#include "common/common.h"
 
 // proxy model constructor
 SystemServiceSortFilterProxyModel::SystemServiceSortFilterProxyModel(QObject *parent)
@@ -96,6 +97,15 @@ bool SystemServiceSortFilterProxyModel::lessThan(const QModelIndex &left,
     case SystemServiceTableModel::kSystemServiceDescriptionColumn: {
         const QString &lhs = left.data(Qt::DisplayRole).toString();
         const QString &rhs = right.data(Qt::DisplayRole).toString();
+
+        bool lstartHz = common::startWithHanzi(lhs);
+        bool rstartHz = common::startWithHanzi(rhs);
+        if (!lstartHz && rstartHz)
+            return true;
+
+        if (lstartHz && !rstartHz)
+            return false;
+
         return lhs.localeAwareCompare(rhs) < 0;
     }
     default:

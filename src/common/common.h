@@ -193,6 +193,7 @@ void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWi
 void setFontSize(QPainter &painter, int textSize);
 
 void openFilePathItem(const QString &path);
+bool startWithHanzi(const QString &text);
 } // namespace common
 
 #endif
