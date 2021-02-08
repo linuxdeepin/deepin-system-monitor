@@ -71,7 +71,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
         update();
     });
 
-    m_detailButton = new DCommandLinkButton(tr("Detail Information"), this);
+    m_detailButton = new DCommandLinkButton(tr("Details"), this);
     m_detailButton->setFont(m_detailFont);
     connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
 

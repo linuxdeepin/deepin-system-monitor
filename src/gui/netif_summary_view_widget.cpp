@@ -86,7 +86,7 @@ public:
                 QStringList listValue = stInfo.strValue.split("/");
 
                 if (stInfo.eType == ShowInfo::IPV4) {
-                    listKey << tr("IP address:") << tr("Subnet mask:") << tr("Broadcast:");
+                    listKey << tr("IP address:") << tr("Netmask:") << tr("Broadcast:");
                 } else {
                     listKey << tr("IP address:") << tr("Prefixlen:") << tr("Scope:");
                 }
@@ -131,8 +131,6 @@ public:
 
         }
         painter->restore();
-
-//        QStyledItemDelegate::paint(painter, option, index);
     }
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -194,9 +192,9 @@ public:
             for (int i = 0; i < ipv4_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV4;
                 if (1 == ipv4_addr_totle) {
-                    stInfo.strKey = "IPV4";
+                    stInfo.strKey = tr("IPV4");
                 } else {
-                    stInfo.strKey = "IPV4 " + QString::number(i + 1);
+                    stInfo.strKey = tr("IPV4") + " " + QString::number(i + 1);
                 }
 
                 stInfo.strValue =  QString("%1/%2/%3").arg(QString(listAddr4[i]->addr)).arg(QString(listAddr4[i]->mask)).arg(QString(listAddr4[i]->bcast));
@@ -209,9 +207,9 @@ public:
             for (int i = 0; i < ipv6_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV6;
                 if (1 == ipv6_addr_totle) {
-                    stInfo.strKey = "IPV6";
+                    stInfo.strKey = tr("IPV6");
                 } else {
-                    stInfo.strKey = "IPV6 " + QString::number(i + 1);
+                    stInfo.strKey = tr("IPV6") + " " + QString::number(i + 1);
                 }
 
                 stInfo.strValue = QString("%1/%2/%3").arg(QString(listAddr6[i]->addr)).arg(listAddr6[i]->prefixlen).arg(listAddr6[i]->scope);
@@ -220,100 +218,100 @@ public:
 
             // 处理连接类型
             stInfo.eType = ShowInfo::Normal;
-            stInfo.strKey = "Connection type";
+            stInfo.strKey = tr("Connection type");
             stInfo.strValue = stNetifInfo->connectionType();
             m_listInfo << stInfo;
 
             // 是否是无线网
             if (stNetifInfo->isWireless()) {
                 // 服务器别号
-                stInfo.strKey = "essid";
+                stInfo.strKey = tr("ESSID");
                 stInfo.strValue = stNetifInfo->essid();
                 m_listInfo << stInfo;
 
                 // 信号质量
-                stInfo.strKey = "Link quality";
+                stInfo.strKey = tr("Link quality");
                 stInfo.strValue = QString("%1").arg(stNetifInfo->linkQuality());
                 m_listInfo << stInfo;
 
                 // 信号强度
-                stInfo.strKey = "Signal level";
+                stInfo.strKey = tr("Signal strength");
                 stInfo.strValue = QString("%1 dBm").arg(stNetifInfo->signalLevel());
                 m_listInfo << stInfo;
 
                 // 底噪
-                stInfo.strKey = "Noise level";
+                stInfo.strKey = tr("Noise level");
                 stInfo.strValue = QString("%1 dB").arg(stNetifInfo->noiseLevel());
                 m_listInfo << stInfo;
             }
 
             // Mac地址
-            stInfo.strKey = "Mac address";
+            stInfo.strKey = tr("MAC");
             stInfo.strValue = stNetifInfo->linkAddress();
             m_listInfo << stInfo;
 
             // 速率
-            stInfo.strKey = "Bandwidth";
+            stInfo.strKey = tr("Bandwidth");
             stInfo.strValue = stNetifInfo->netspeed();
             m_listInfo << stInfo;
 
             // 接收包数量
-            stInfo.strKey = "RX packets";
+            stInfo.strKey = tr("RX packets");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxPackets());
             m_listInfo << stInfo;
 
             // 总计接收
-            stInfo.strKey = "RX bytes";
+            stInfo.strKey = tr("RX bytes");
             stInfo.strValue = formatUnit(stNetifInfo->rxBytes(), B, 1);
             m_listInfo << stInfo;
 
             // 接收错误包
-            stInfo.strKey = "RX errors";
+            stInfo.strKey = tr("RX errors");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxErrors());
             m_listInfo << stInfo;
 
             // 接收丢包数
-            stInfo.strKey = "RX dropped";
+            stInfo.strKey = tr("RX dropped");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxDropped());
             m_listInfo << stInfo;
 
             // 接收FIFO
-            stInfo.strKey = "RX overruns";
+            stInfo.strKey = tr("RX overruns");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxFIFO());
             m_listInfo << stInfo;
 
             // 分组帧错误
-            stInfo.strKey = "RX frame";
+            stInfo.strKey = tr("RX frame");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxFrame());
             m_listInfo << stInfo;
 
             // 发送包数量
-            stInfo.strKey = "TX packets";
+            stInfo.strKey = tr("TX packets");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txPackets());
             m_listInfo << stInfo;
 
             // 总计发送
-            stInfo.strKey = "TX bytes";
+            stInfo.strKey = tr("TX bytes");
             stInfo.strValue = formatUnit(stNetifInfo->txBytes(), B, 1);
             m_listInfo << stInfo;
 
             // 发送错误包
-            stInfo.strKey = "TX errors";
+            stInfo.strKey = tr("TX errors");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txErrors());
             m_listInfo << stInfo;
 
             // 发送丢包数
-            stInfo.strKey = "TX dropped";
+            stInfo.strKey = tr("TX  dropped");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txDropped());
             m_listInfo << stInfo;
 
             // 发送FIFO
-            stInfo.strKey = "TX overruns";
+            stInfo.strKey = tr("TX overruns");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txFIFO());
             m_listInfo << stInfo;
 
             // 载波损耗
-            stInfo.strKey = "TX carrier";
+            stInfo.strKey = tr("TX carrier");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txCarrier());
             m_listInfo << stInfo;
         }

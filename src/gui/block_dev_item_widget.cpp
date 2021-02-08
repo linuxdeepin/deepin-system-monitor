@@ -116,11 +116,11 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
     painter.setPen(textColor);
 
     QString readTitle = QString("%1 %2")
-                        .arg(DApplication::translate("Process.Graph.View", "Disk read"))
+                        .arg(tr("Read"))
                         .arg(formatUnit(m_blokeDeviceInfo.readSpeed(), B, 1, true));
 
     QString writeTitle = QString("%1 %2")
-                         .arg(DApplication::translate("Process.Graph.View", "Disk write"))
+                         .arg(tr("Write"))
                          .arg(formatUnit(m_blokeDeviceInfo.writeSpeed(), B, 1, true));
 
     if (m_mode == TITLE_HORIZONTAL) {

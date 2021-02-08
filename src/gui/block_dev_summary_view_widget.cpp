@@ -115,43 +115,43 @@ protected:
                 if (column == 0)
                     return tr("Model");
                 else if (column == 1)
-                    return DApplication::translate("Process.Graph.View", "Disk read");
+                    return tr("Read speed");
                 break;
             case 1:
                 if (column == 0)
-                    return DApplication::translate("Process.Graph.View", "Disk write");
+                    return tr("Write speed");
                 else if (column == 1)
                     return tr("Capacity");
                 break;
             case 2:
                 if (column == 0)
-                    return tr("Num of reads sectors");
+                    return tr("Sectors read");
                 else if (column == 1)
-                    return tr("r/s");
+                    return tr("Reads/s");
                 break;
             case 3:
                 if (column == 0)
-                    return tr("rsec/s");
+                    return tr("Sectors read/s");
                 else if (column == 1)
-                    return tr("rrqm/s");
+                    return tr("Reads merged/s");
                 break;
             case 4:
                 if (column == 0)
-                    return tr("Num of write sectors");
+                    return tr("Sectors written");
                 else if (column == 1)
-                    return tr("Num of write completions");
+                    return tr("Writes completed ");
                 break;
             case 5:
                 if (column == 0)
-                    return tr("Num of merge write completions");
+                    return tr("Writes merged");
                 else if (column == 1)
-                    return tr("w/s");
+                    return tr("Writes/s");
                 break;
             case 6:
                 if (column == 0)
-                    return tr("wsec/s");
+                    return tr("Sectors written/s");
                 else if (column == 1)
-                    return tr("wrqm/s");
+                    return tr("Writes merged/s");
                 break;
 
             }

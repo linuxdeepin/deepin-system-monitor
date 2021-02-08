@@ -265,7 +265,7 @@ int CPUSet::socketCount() const
 
 QString CPUSet::virtualization() const
 {
-    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("not support") : d->m_info.value("Virtualization");
+    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("Not support") : d->m_info.value("Virtualization");
 }
 
 QString CPUSet::curFreq() const

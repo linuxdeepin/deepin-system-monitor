@@ -114,7 +114,7 @@ protected:
                 break;
             case 1:
                 if (column == 0)
-                    return tr("Shmem");
+                    return tr("Shared");
                 else if (column == 1)
                     return tr("Cached");
                 break;
@@ -122,7 +122,7 @@ protected:
                 if (column == 0)
                     return tr("Buffers");
                 else if (column == 1)
-                    return tr("SwapCached");
+                    return tr("Cached swap");
                 break;
             case 3:
                 if (column == 0)
@@ -138,9 +138,9 @@ protected:
                 break;
             case 5:
                 if (column == 0)
-                    return tr("SwapTotal");
+                    return tr("Total swap");
                 else if (column == 1)
-                    return tr("SwapFree");
+                    return tr("Free swap");
                 break;
             case 6:
                 if (column == 0)

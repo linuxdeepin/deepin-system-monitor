@@ -13,10 +13,128 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailWidget</name>
+    <message>
+        <source>Utilization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation type="unfinished">Processes</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
         <translation>No search results</translation>
+    </message>
+</context>
+<context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -31,6 +149,13 @@
     </message>
     <message>
         <source>15 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -210,29 +335,116 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
+        <source>Used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
+        <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
-    </message>
-    <message>
-        <source>Memory</source>
-        <translation type="unfinished">Memory</translation>
-    </message>
-    <message>
-        <source>Netif</source>
+        <source>Shared</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>BlockDev</source>
+        <source>Cached</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished">Active</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -292,6 +504,123 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>IPV4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IPV6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +647,10 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Memory</source>
         <translation>Memory</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -369,6 +702,10 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Total Sent</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -565,6 +902,21 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Priority</source>
         <translation>Priority</translation>
+    </message>
+    <message>
+        <source>Shared memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

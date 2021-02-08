@@ -80,7 +80,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     m_cpuInfomodel = new CPUInfoModel(period, this);
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CompactCpuMonitor::updateStatus);
 
-    m_detailText = tr("Detail Information");
+    m_detailText = tr("Details");
     m_detailButton = new DCommandLinkButton(m_detailText, this);
     m_detailButton->setToolTip(m_detailText);
     m_detailButton->setFont(m_cpuFont);

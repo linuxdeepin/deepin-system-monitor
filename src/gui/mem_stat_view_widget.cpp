@@ -53,7 +53,7 @@ void MemStatViewWidget::fontChanged(const QFont &font)
 void MemStatViewWidget::onModelUpdate()
 {
     QString memoryDetail = QString("%1(%2)")
-                           .arg(tr("Memory Size"))
+                           .arg(tr("Size"))
                            .arg(formatUnit(m_memInfo->memTotal() << 10, B, 1));
     parent()->setProperty("detail", memoryDetail);
 
