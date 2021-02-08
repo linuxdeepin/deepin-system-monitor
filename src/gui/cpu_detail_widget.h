@@ -81,7 +81,7 @@ class CPUDetailInfoTable: public QWidget
 {
     Q_OBJECT
 public:
-    CPUDetailInfoTable(QWidget *parent);
+    explicit CPUDetailInfoTable(QWidget *parent);
 
     void addItem(QString first, QString second);
 

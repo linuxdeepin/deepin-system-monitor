@@ -7,9 +7,19 @@
 #include <QToolTip>
 #include <QStyleOptionViewItem>
 
+// content margin
+const int margin = 10;
+// content spacing
+const int spacing = 10;
+
 DWIDGET_USE_NAMESPACE
 BaseDetailItemDelegate::BaseDetailItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
+{
+
+}
+
+BaseDetailItemDelegate::~BaseDetailItemDelegate()
 {
 
 }
@@ -28,10 +38,6 @@ bool BaseDetailItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view, c
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
-        // content margin
-        auto margin = 10;
-        // content spacing
-        auto spacing = 10;
         // icon size
         auto iconSize = view->style()->pixelMetric(DStyle::PM_ListViewIconSize);
 

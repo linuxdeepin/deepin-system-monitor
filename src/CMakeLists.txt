@@ -77,7 +77,6 @@ set(HPP_COMMON
     common/hash.h
     common/han_latin.h
     common/perf.h
-    common/iconv.h
     common/base_thread.h
     common/thread_manager.h
     common/time_period.h

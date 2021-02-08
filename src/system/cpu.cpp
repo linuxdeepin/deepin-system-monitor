@@ -49,7 +49,7 @@ CPUInfo::CPUInfo()
 CPUInfo::CPUInfo(int index)
     : d(new CPUInfoPrivate())
 {
-
+    d->index = index;
 }
 CPUInfo::CPUInfo(const CPUInfo &other)
     : d(other.d)
@@ -107,11 +107,6 @@ QString CPUInfo::cacheSize() const
     return d->m_cache_size;
 }
 
-int CPUInfo::bookID() const
-{
-    return d->book_id;
-}
-
 int CPUInfo::drawerID() const
 {
     return d->drawer_id;
@@ -162,7 +157,7 @@ void CPUInfo::setIndex(int index)
     d->index = index;
 }
 
-void CPUInfo::setCoreId(quint32 coreId)
+void CPUInfo::setCoreId(int coreId)
 {
     d->m_core_id = coreId;
 }

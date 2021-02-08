@@ -397,8 +397,6 @@ void CPUDetailInfoTable::paintEvent(QPaintEvent *)
             painter.setPen(keyColor);
             painter.drawText(drawRect.x() + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignLeft | Qt::AlignVCenter, m_items[i].first);
             //draw left right text
-            QFont font = DApplication::font();
-            font.setPointSize(font.pointSize() - 2);
             painter.setFont(font);
             painter.setPen(valueColor);
             painter.drawText(drawRect.x() + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignRight | Qt::AlignVCenter, m_items[i].second);
@@ -408,8 +406,6 @@ void CPUDetailInfoTable::paintEvent(QPaintEvent *)
             painter.setPen(keyColor);
             painter.drawText(drawRect.x() + drawRect.width() / 2 + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignLeft | Qt::AlignVCenter, m_items[i].first);
             //draw right right text
-            QFont font = DApplication::font();
-            font.setPointSize(font.pointSize() - 2);
             painter.setFont(font);
             painter.setPen(valueColor);
             painter.drawText(drawRect.x() + drawRect.width() / 2 + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignRight | Qt::AlignVCenter, m_items[i].second);

@@ -174,12 +174,11 @@ void Process::readProcessInfo()
     quint64 sum_send = 0;
     for (int i = 0; i < d->sockInodes.size(); ++i) {
         SockIOStat sockIOStat;
-        bool ok = DeviceDB::instance()->netifInfoDB()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
-        if (ok) {
+        bool result = DeviceDB::instance()->netifInfoDB()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
+        if (result) {
             sum_recv += sockIOStat->rx_bytes;
             sum_send += sockIOStat->tx_bytes;
         }
-
     }
     struct IOPS netIo = {static_cast<qreal>(sum_recv), static_cast<qreal>(sum_send)};
     d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));

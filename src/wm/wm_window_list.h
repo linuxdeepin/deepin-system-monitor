@@ -49,7 +49,7 @@ class WMWindowList : public QObject
     Q_OBJECT
 
 public:
-    WMWindowList(QObject *parent = nullptr);
+    explicit WMWindowList(QObject *parent = nullptr);
     ~WMWindowList() override = default;
 
     int getAppCount();

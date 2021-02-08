@@ -65,8 +65,8 @@ public:
         painter->drawRect(option.rect);
 
         if (index.isValid()) {
-            const auto &palette = DApplicationHelper::instance()->applicationPalette();
-            painter->setPen(palette.color(DPalette::TextTips));
+            const auto &textpalette = DApplicationHelper::instance()->applicationPalette();
+            painter->setPen(textpalette.color(DPalette::TextTips));
 
             const QString &text = index.data(Qt::UserRole).toString();
             painter->drawText(option.rect.adjusted(0, 0, -10, 0), Qt::AlignRight | Qt::AlignVCenter, text);

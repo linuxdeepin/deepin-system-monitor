@@ -53,6 +53,7 @@ public:
         : QSharedData()
         , valid {false}
         , state {'\0'}
+        , apptype {2}
         , pid {0}
         , ppid {0}
         , pgid {0}
@@ -102,6 +103,7 @@ public:
         : QSharedData(other)
         , valid(other.valid)
         , state(other.state)
+        , apptype(other.apptype)
         , pid(other.pid)
         , ppid(other.ppid)
         , pgid(other.pgid)
@@ -157,7 +159,6 @@ public:
 private:
     bool valid;
     char state; // process state
-    char __pad0[2];
 
     int apptype;
     pid_t pid; // pid
@@ -177,7 +178,6 @@ private:
     unsigned int policy; // scheduling policy
     unsigned int nthreads; // number of threads
     int nice; // process nice
-    char __pad1[4];
 
     unsigned long long utime; // user time
     unsigned long long stime; // kernel time

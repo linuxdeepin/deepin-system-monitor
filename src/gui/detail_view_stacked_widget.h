@@ -34,7 +34,7 @@ DWIDGET_USE_NAMESPACE
 class DetailViewStackedWidget : public AnimationStackedWidget
 {
 public:
-    DetailViewStackedWidget(QWidget *parent);
+    explicit DetailViewStackedWidget(QWidget *parent);
 
     void addProcessWidget(QWidget *processWidget);
 

@@ -7,7 +7,7 @@ using namespace std;
 class NLHWAddr
 {
 public:
-    NLHWAddr(const QByteArray &ifname);
+    explicit NLHWAddr(const QByteArray &ifname);
 
 public:
     QByteArray conn_type() const;

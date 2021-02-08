@@ -32,8 +32,6 @@ using namespace core::system;
 const int itemSpace = 6;
 BlockStatViewWidget::BlockStatViewWidget(QWidget *parent) : QScrollArea(parent)
 {
-    m_listDevice = DeviceDB::instance()->blockDeviceInfoDB()->deviceList();
-
     m_centralWidget = new QWidget(this);
     this->setWidget(m_centralWidget);
     this->setFrameShape(QFrame::NoFrame);

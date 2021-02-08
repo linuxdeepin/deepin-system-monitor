@@ -42,11 +42,6 @@ ProcessSet::ProcessSet(const ProcessSet &other)
 {
 }
 
-bool ProcessSet::containsById(pid_t pid)
-{
-    return m_set.contains(pid);
-}
-
 void ProcessSet::refresh()
 {
     scanProcess();

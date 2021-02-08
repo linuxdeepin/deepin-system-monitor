@@ -61,7 +61,7 @@ private:
     void updateWidgetGeometry();
 
 private:
-    int m_mode;
+    int m_mode = TITLE_HORIZONTAL;
     QColor readColor {"#8F88FF"};
     QColor writeColor {"#6AD787"};
     ChartViewWidget *m_memChartWidget;

@@ -34,6 +34,7 @@ public:
     // Copy constructor
     UnitFileInfoData(const UnitFileInfoData &rhs)
         : QSharedData(rhs)
+        , __alignment(rhs.__alignment)
         , m_name(rhs.m_name)
         , m_status(rhs.m_status)
     {

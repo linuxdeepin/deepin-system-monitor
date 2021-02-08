@@ -143,16 +143,6 @@ inline void print_errno(decltype(errno) e, const QString msg)
 
 } // namespace error
 
-namespace io {
-
-int path_scanf(const char *path, const char *fmt, ...) __attribute__((__format__(__scanf__, 2, 0)));
-bool read_path_s32(const char *path, int32_t *value);
-bool read_path_u32(const char *path, uint32_t *value);
-bool read_path_s64(const char *path, int64_t *value);
-bool read_path_u64(const char *path, uint64_t *value);
-
-} // namespace io
-
 namespace time {
 
 inline const struct timeval operator-(const struct timeval &lhs, const struct timeval &rhs)

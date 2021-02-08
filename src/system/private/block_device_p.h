@@ -35,6 +35,8 @@ public:
         : QSharedData()
         , name {}
         , model {}
+        , read_speed {0}
+        , wirte_speed {0}
         , capacity {0}
         , blk_read {0}
         , bytes_read {0}
@@ -55,13 +57,15 @@ public:
         , read_merged{0}
         , write_merged{0}
         , discard_sector{0}
-        ,_time_Sec{ QDateTime::currentSecsSinceEpoch() }
+        , _time_Sec{ QDateTime::currentSecsSinceEpoch() }
     {
     }
     BlockDevicePrivate(const BlockDevicePrivate &other)
         : QSharedData(other)
         , name(other.name)
         , model(other.model)
+        , read_speed {other.read_speed}
+        , wirte_speed {other.wirte_speed}
         , capacity(other.capacity)
         , blk_read(other.blk_read)
         , bytes_read(other.bytes_read)

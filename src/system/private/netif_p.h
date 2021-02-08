@@ -146,7 +146,6 @@ private:
     // ====link params====
 
     int index;
-    char __unused__[1];
     uint8_t carrier; // on:1/off:0
     uint8_t oper_stat; // operational status
     uint8_t link_mode;
@@ -155,7 +154,7 @@ private:
     uint arp_type; // connection type
     uint txqlen; // transmission queue length
     uint carrier_changes; // carrier state changes since boot
-    uint speed;		// 原始speed值
+    uint speed;     // 原始speed值
     QByteArray net_speed;
 
     QByteArray ifname;

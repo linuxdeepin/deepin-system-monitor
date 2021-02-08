@@ -53,7 +53,6 @@ public:
     ~ProcessSet() = default;
 
     const Process getProcessById(pid_t pid) const;
-    bool containsById(pid_t pid);
     QList<pid_t> getPIDList() const;
     void removeProcess(pid_t pid);
     void updateProcessState(pid_t pid, char state);

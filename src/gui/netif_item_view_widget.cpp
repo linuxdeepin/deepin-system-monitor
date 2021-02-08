@@ -139,16 +139,6 @@ void NetifItemViewWidget::updateData(const std::shared_ptr<class core::system::N
     this->update();
 }
 
-QByteArray NetifItemViewWidget::getMac()
-{
-    return m_mac;
-}
-
-void NetifItemViewWidget::setMac(QByteArray mac)
-{
-    m_mac = mac;
-}
-
 void NetifItemViewWidget::updateActiveStatus(bool active)
 {
     m_isActive = active;

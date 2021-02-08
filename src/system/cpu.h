@@ -74,7 +74,6 @@ public:
     QByteArray logicalName() const;
 
     int packageID() const;
-    int bookID() const;
     int drawerID() const;
 
     // TODO: cache vary depends on different cpu arch, some dont have level3 cache
@@ -84,7 +83,7 @@ public:
     QString l3Cache() const;
 
     void setIndex(int index);
-    void setCoreId(quint32 coreId);
+    void setCoreId(int coreId);
     void setModelName(QString modelName);
     void setVendorId(QString vendorId);
     void setCpuFreq(QString cpuFreq);

@@ -30,6 +30,7 @@ public:
     // copy constructor
     ErrorContextData(const ErrorContextData &rhs)
         : QSharedData(rhs)
+        , __alignment(rhs.__alignment)
         , m_code(rhs.m_code)
         , m_subCode(rhs.m_subCode)
         , m_errName(rhs.m_errName)
@@ -39,7 +40,6 @@ public:
     // copy assignment
     ErrorContextData &operator=(const ErrorContextData &rhs)
     {
-        Q_UNUSED(padding);
         if (this != &rhs) {
             m_code = rhs.m_code;
             m_subCode = rhs.m_subCode;
@@ -53,11 +53,11 @@ public:
     friend class ErrorContext;
 
 private:
+    int __alignment {0};
     // error code
     int m_code {0};
     // sub error code
     int m_subCode {0};
-    int padding;  // 4bytes padding to avoid warning
     // error name
     QString m_errName {};
     // error detail description
@@ -74,7 +74,7 @@ ErrorContext::ErrorContext()
 ErrorContext::ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage)
     : data(new ErrorContextData())
 {
-   // data = new ErrorContextData();
+    // data = new ErrorContextData();
     data->m_code = code;
     data->m_subCode = subCode;
     data->m_errName = errName;

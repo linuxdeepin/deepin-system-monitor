@@ -6,9 +6,9 @@ class BaseDetailItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    BaseDetailItemDelegate(QObject *parent = nullptr);
+    explicit BaseDetailItemDelegate(QObject *parent = nullptr);
 
-    // QAbstractItemDelegate interface
+    virtual ~BaseDetailItemDelegate();
 public:
     bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
 };

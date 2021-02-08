@@ -86,7 +86,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         accessibleMap[r].append(newAccessibleName);
         objnameMap.insert(w, newAccessibleName);
 
-        QObject::connect(w, &QWidget::destroyed, [=](QObject *obj) { // 对象销毁后移除占用名称
+        QObject::connect(w, &QWidget::destroyed, [ = ](QObject * obj) { // 对象销毁后移除占用名称
             objnameMap.remove(obj);
             accessibleMap[r].removeOne(newAccessibleName);
         });
@@ -95,7 +95,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         accessibleMap[r].append(accessibleName);
         objnameMap.insert(w, accessibleName);
 
-        QObject::connect(w, &QWidget::destroyed, [=](QObject *obj) { // 对象销毁后移除占用名称
+        QObject::connect(w, &QWidget::destroyed, [ = ](QObject * obj) { // 对象销毁后移除占用名称
             objnameMap.remove(obj);
             accessibleMap[r].removeOne(accessibleName);
         });
@@ -192,7 +192,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     class Accessible##classname : public QAccessibleWidget \
     { \
     public: \
-        FUNC_CREATE(classname, QAccessible::Form, accessdescription) \
+        explicit FUNC_CREATE(classname, QAccessible::Form, accessdescription) \
         QString text(QAccessible::Text t) const override; \
         void *interface_cast(QAccessible::InterfaceType t) override \
         { \
@@ -203,7 +203,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
                 return nullptr; \
             } \
         } \
-\
+        \
     private: \
         classname *m_w; \
         QString m_description; \
@@ -214,7 +214,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     class Accessible##classname : public QAccessibleWidget \
     { \
     public: \
-        FUNC_CREATE(classname, QAccessible::Button, accessdescription) \
+        explicit FUNC_CREATE(classname, QAccessible::Button, accessdescription) \
         QString text(QAccessible::Text t) const override; \
         void *interface_cast(QAccessible::InterfaceType t) override \
         { \
@@ -227,7 +227,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         } \
         QStringList actionNames() const override; \
         void doAction(const QString &actionName) override; \
-\
+        \
     private: \
         classname *m_w; \
         QString m_description; \
@@ -241,7 +241,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         , public QAccessibleTextInterface \
     { \
     public: \
-        FUNC_CREATE(classname, QAccessible::StaticText, accessdescription) \
+        explicit FUNC_CREATE(classname, QAccessible::StaticText, accessdescription) \
         QString text(QAccessible::Text t) const override; \
         void *interface_cast(QAccessible::InterfaceType t) override \
         { \
@@ -267,7 +267,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         int offsetAtPoint(const QPoint &point) const override { return 0; } \
         void scrollToSubstring(int startIndex, int endIndex) override {} \
         QString attributes(int offset, int *startOffset, int *endOffset) const override { return QString(); } \
-\
+        \
     private: \
         classname *m_w; \
         QString m_description; \
@@ -280,7 +280,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         , public QAccessibleValueInterface \
     { \
     public: \
-        FUNC_CREATE(classname, QAccessible::Slider, accessdescription) \
+        explicit FUNC_CREATE(classname, QAccessible::Slider, accessdescription) \
         QString text(QAccessible::Text t) const override; \
         void *interface_cast(QAccessible::InterfaceType t) override \
         { \
@@ -298,7 +298,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         QVariant maximumValue() const override; \
         QVariant minimumValue() const override; \
         QVariant minimumStepSize() const override; \
-\
+        \
     private: \
         classname *m_w; \
         QString m_description; \
@@ -316,7 +316,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         , public QAccessibleTextInterface \
     { \
     public: \
-        FUNC_CREATE(classname, QAccessible::EditableText, accessdescription) \
+        explicit FUNC_CREATE(classname, QAccessible::EditableText, accessdescription) \
         QString text(QAccessible::Text t) const override; \
         QAccessibleInterface *child(int index) const override { return nullptr; } \
         void *interface_cast(QAccessible::InterfaceType t) override \
@@ -348,7 +348,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         void insertText(int offset, const QString &text) override {} \
         void deleteText(int startOffset, int endOffset) override {}; \
         void replaceText(int startOffset, int endOffset, const QString &text) override {} \
-\
+        \
     private: \
         classname *m_w; \
         QString m_description; \

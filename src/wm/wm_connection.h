@@ -31,7 +31,7 @@ namespace wm {
 class WMConnection
 {
 public:
-    WMConnection(const QByteArray &display = {});
+    explicit WMConnection(const QByteArray &display = {});
     ~WMConnection();
 
     inline xcb_atom_t atom(WMAtom::atom_t type) const { return m_atoms.atom(type); }

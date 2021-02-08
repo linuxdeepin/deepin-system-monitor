@@ -54,7 +54,7 @@ QString CPUInfoModel::uptime() const
     long mins = (uptime - days * 86400 - hours * 3600) / 60;
     // TODO: move tr to i18n.cpp
     buffer = QString("%1, %2:%3")
-             .arg(QApplication::translate("up %1 days(s)", "SysInfo.Uptime", nullptr, int(days)))
+             .arg(QApplication::translate("SysInfo.Uptime", "up %1 days(s)", nullptr, int(days)))
              .arg(hours)
              .arg(mins);
     return buffer;

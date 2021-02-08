@@ -23,9 +23,6 @@ public:
     explicit  NetifItemViewWidget(QWidget *parent = nullptr, const QByteArray &mac = "");
 
 public:
-    QByteArray getMac();
-    void setMac(QByteArray mac);
-
     void updateActiveStatus(bool active);
     void setMode(int mode);
 
