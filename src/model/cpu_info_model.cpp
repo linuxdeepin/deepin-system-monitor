@@ -24,9 +24,6 @@
 #include "system/device_db.h"
 #include "system/system_monitor.h"
 #include "system/sys_info.h"
-#include "common/thread_manager.h"
-#include "system/system_monitor.h"
-#include "system/system_monitor_thread.h"
 
 #include <QApplication>
 
@@ -38,11 +35,10 @@ CPUInfoModel::CPUInfoModel(const TimePeriod &period, QObject *parent)
     , m_loadAvgSampleDB(new LoadAvgSample(period))
     , m_cpuSet {}
 {
-    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     m_sysInfo = SysInfo::instance();
     m_cpuSet = DeviceDB::instance()->cpuSet();
 
-    connect(monitor, &SystemMonitor::statInfoUpdated, this, &CPUInfoModel::updateModel);
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &CPUInfoModel::updateModel);
 }
 
 QString CPUInfoModel::uptime() const

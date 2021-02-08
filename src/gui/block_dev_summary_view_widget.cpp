@@ -113,45 +113,45 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return tr("Model");
+                    return QApplication::translate("DeailTableModelBlock", "Model");
                 else if (column == 1)
-                    return tr("Read speed");
+                    return QApplication::translate("DeailTableModelBlock", "Read speed");
                 break;
             case 1:
                 if (column == 0)
-                    return tr("Write speed");
+                    return QApplication::translate("DeailTableModelBlock", "Write speed");
                 else if (column == 1)
-                    return tr("Capacity");
+                    return QApplication::translate("DeailTableModelBlock", "Capacity");
                 break;
             case 2:
                 if (column == 0)
-                    return tr("Sectors read");
+                    return QApplication::translate("DeailTableModelBlock", "Sectors read");
                 else if (column == 1)
-                    return tr("Reads/s");
+                    return QApplication::translate("DeailTableModelBlock", "Reads/s");
                 break;
             case 3:
                 if (column == 0)
-                    return tr("Sectors read/s");
+                    return QApplication::translate("DeailTableModelBlock", "Sectors read/s");
                 else if (column == 1)
-                    return tr("Reads merged/s");
+                    return QApplication::translate("DeailTableModelBlock", "Reads merged/s");
                 break;
             case 4:
                 if (column == 0)
-                    return tr("Sectors written");
+                    return QApplication::translate("DeailTableModelBlock", "Sectors written");
                 else if (column == 1)
-                    return tr("Writes completed ");
+                    return QApplication::translate("DeailTableModelBlock", "Writes completed ");
                 break;
             case 5:
                 if (column == 0)
-                    return tr("Writes merged");
+                    return QApplication::translate("DeailTableModelBlock", "Writes merged");
                 else if (column == 1)
-                    return tr("Writes/s");
+                    return QApplication::translate("DeailTableModelBlock", "Writes/s");
                 break;
             case 6:
                 if (column == 0)
-                    return tr("Sectors written/s");
+                    return QApplication::translate("DeailTableModelBlock", "Sectors written/s");
                 else if (column == 1)
-                    return tr("Writes merged/s");
+                    return QApplication::translate("DeailTableModelBlock", "Writes merged/s");
                 break;
 
             }

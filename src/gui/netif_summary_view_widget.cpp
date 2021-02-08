@@ -86,9 +86,9 @@ public:
                 QStringList listValue = stInfo.strValue.split("/");
 
                 if (stInfo.eType == ShowInfo::IPV4) {
-                    listKey << tr("IP address:") << tr("Netmask:") << tr("Broadcast:");
+                    listKey << QApplication::translate("NetInfoDetailItemDelegate", "IP address:") << QApplication::translate("NetInfoDetailItemDelegate", "Netmask:") << QApplication::translate("NetInfoDetailItemDelegate", "Broadcast:");
                 } else {
-                    listKey << tr("IP address:") << tr("Prefixlen:") << tr("Scope:");
+                    listKey << QApplication::translate("NetInfoDetailItemDelegate", "IP address:") << QApplication::translate("NetInfoDetailItemDelegate", "Prefixlen:") << QApplication::translate("NetInfoDetailItemDelegate", "Scope:");
                 }
 
                 if ((listKey.count() == listValue.count()) && (listValue.count() == 3)) {
@@ -192,9 +192,9 @@ public:
             for (int i = 0; i < ipv4_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV4;
                 if (1 == ipv4_addr_totle) {
-                    stInfo.strKey = tr("IPv4");
+                    stInfo.strKey = QApplication::translate("NetInfoModel", "IPv4");
                 } else {
-                    stInfo.strKey = tr("IPv4") + " " + QString::number(i + 1);
+                    stInfo.strKey = QApplication::translate("NetInfoModel", "IPv4") + " " + QString::number(i + 1);
                 }
 
                 stInfo.strValue =  QString("%1/%2/%3").arg(QString(listAddr4[i]->addr)).arg(QString(listAddr4[i]->mask)).arg(QString(listAddr4[i]->bcast));
@@ -207,9 +207,9 @@ public:
             for (int i = 0; i < ipv6_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV6;
                 if (1 == ipv6_addr_totle) {
-                    stInfo.strKey = tr("IPv6");
+                    stInfo.strKey = QApplication::translate("NetInfoModel", "IPv6");
                 } else {
-                    stInfo.strKey = tr("IPv6") + " " + QString::number(i + 1);
+                    stInfo.strKey = QApplication::translate("NetInfoModel", "IPv6") + " " + QString::number(i + 1);
                 }
 
                 stInfo.strValue = QString("%1/%2/%3").arg(QString(listAddr6[i]->addr)).arg(listAddr6[i]->prefixlen).arg(listAddr6[i]->scope);
@@ -218,100 +218,100 @@ public:
 
             // 处理连接类型
             stInfo.eType = ShowInfo::Normal;
-            stInfo.strKey = tr("Connection type");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "Connection type");
             stInfo.strValue = stNetifInfo->connectionType();
             m_listInfo << stInfo;
 
             // 是否是无线网
             if (stNetifInfo->isWireless()) {
                 // 服务器别号
-                stInfo.strKey = tr("ESSID");
+                stInfo.strKey = QApplication::translate("NetInfoModel", "ESSID");
                 stInfo.strValue = stNetifInfo->essid();
                 m_listInfo << stInfo;
 
                 // 信号质量
-                stInfo.strKey = tr("Link quality");
+                stInfo.strKey = QApplication::translate("NetInfoModel", "Link quality");
                 stInfo.strValue = QString("%1").arg(stNetifInfo->linkQuality());
                 m_listInfo << stInfo;
 
                 // 信号强度
-                stInfo.strKey = tr("Signal strength");
+                stInfo.strKey = QApplication::translate("NetInfoModel", "Signal strength");
                 stInfo.strValue = QString("%1 dBm").arg(stNetifInfo->signalLevel());
                 m_listInfo << stInfo;
 
                 // 底噪
-                stInfo.strKey = tr("Noise level");
+                stInfo.strKey = QApplication::translate("NetInfoModel", "Noise level");
                 stInfo.strValue = QString("%1 dB").arg(stNetifInfo->noiseLevel());
                 m_listInfo << stInfo;
             }
 
             // Mac地址
-            stInfo.strKey = tr("MAC");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "MAC");
             stInfo.strValue = stNetifInfo->linkAddress();
             m_listInfo << stInfo;
 
             // 速率
-            stInfo.strKey = tr("Bandwidth");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "Bandwidth");
             stInfo.strValue = stNetifInfo->netspeed();
             m_listInfo << stInfo;
 
             // 接收包数量
-            stInfo.strKey = tr("RX packets");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "RX packets");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxPackets());
             m_listInfo << stInfo;
 
             // 总计接收
-            stInfo.strKey = tr("RX bytes");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "RX bytes");
             stInfo.strValue = formatUnit(stNetifInfo->rxBytes(), B, 1);
             m_listInfo << stInfo;
 
             // 接收错误包
-            stInfo.strKey = tr("RX errors");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "RX errors");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxErrors());
             m_listInfo << stInfo;
 
             // 接收丢包数
-            stInfo.strKey = tr("RX dropped");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "RX dropped");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxDropped());
             m_listInfo << stInfo;
 
             // 接收FIFO
-            stInfo.strKey = tr("RX overruns");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "RX overruns");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxFIFO());
             m_listInfo << stInfo;
 
             // 分组帧错误
-            stInfo.strKey = tr("RX frame");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "RX frame");
             stInfo.strValue = QString("%1").arg(stNetifInfo->rxFrame());
             m_listInfo << stInfo;
 
             // 发送包数量
-            stInfo.strKey = tr("TX packets");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX packets");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txPackets());
             m_listInfo << stInfo;
 
             // 总计发送
-            stInfo.strKey = tr("TX bytes");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX bytes");
             stInfo.strValue = formatUnit(stNetifInfo->txBytes(), B, 1);
             m_listInfo << stInfo;
 
             // 发送错误包
-            stInfo.strKey = tr("TX errors");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX errors");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txErrors());
             m_listInfo << stInfo;
 
             // 发送丢包数
-            stInfo.strKey = tr("TX  dropped");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX  dropped");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txDropped());
             m_listInfo << stInfo;
 
             // 发送FIFO
-            stInfo.strKey = tr("TX overruns");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX overruns");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txFIFO());
             m_listInfo << stInfo;
 
             // 载波损耗
-            stInfo.strKey = tr("TX carrier");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX carrier");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txCarrier());
             m_listInfo << stInfo;
         }

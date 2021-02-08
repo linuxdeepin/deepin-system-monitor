@@ -108,43 +108,43 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return tr("Used");
+                    return QApplication::translate("DeailTableModel", "Used");
                 else if (column == 1)
-                    return tr("Available");
+                    return QApplication::translate("DeailTableModel", "Available");
                 break;
             case 1:
                 if (column == 0)
-                    return tr("Shared");
+                    return QApplication::translate("DeailTableModel", "Shared");
                 else if (column == 1)
-                    return tr("Cached");
+                    return QApplication::translate("DeailTableModel", "Cached");
                 break;
             case 2:
                 if (column == 0)
-                    return tr("Buffers");
+                    return QApplication::translate("DeailTableModel", "Buffers");
                 else if (column == 1)
-                    return tr("Cached swap");
+                    return QApplication::translate("DeailTableModel", "Cached swap");
                 break;
             case 3:
                 if (column == 0)
-                    return tr("Active");
+                    return QApplication::translate("DeailTableModel", "Active");
                 else if (column == 1)
-                    return tr("Inactive");
+                    return QApplication::translate("DeailTableModel", "Inactive");
                 break;
             case 4:
                 if (column == 0)
-                    return tr("Dirty");
+                    return QApplication::translate("DeailTableModel", "Dirty");
                 else if (column == 1)
-                    return tr("Mapped");
+                    return QApplication::translate("DeailTableModel", "Mapped");
                 break;
             case 5:
                 if (column == 0)
-                    return tr("Total swap");
+                    return QApplication::translate("DeailTableModel", "Total swap");
                 else if (column == 1)
-                    return tr("Free swap");
+                    return QApplication::translate("DeailTableModel", "Free swap");
                 break;
             case 6:
                 if (column == 0)
-                    return tr("Slab");
+                    return QApplication::translate("DeailTableModel", "Slab");
                 break;
             default:
                 break;
