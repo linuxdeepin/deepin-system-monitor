@@ -117,6 +117,13 @@
     </message>
 </context>
 <context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ChartViewWidget</name>
     <message>
         <source>60 seconds</source>
@@ -134,21 +141,6 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Core</name>
-    <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -536,14 +528,6 @@ Are you sure you want to continue?</translation>
 <context>
     <name>NetInfoModel</name>
     <message>
-        <source>IPV4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IPV6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Connection type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -617,6 +601,14 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>TX carrier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IPv6</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1046,16 +1038,6 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Services</source>
         <translation>Services</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

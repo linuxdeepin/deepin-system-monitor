@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Részletek elrejtése</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Olvasás</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Írás</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 másodperc</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailWidget</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Felhasználás</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Jelenlegi frekvencia</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frekvencia</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Kereskedő</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Foglalatok</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Logikai processzor</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualizáció</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i gyorsítótár</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d gyorsítótár</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2 gyorsítótár</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3 gyorsítótár</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Terhelési átlag</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Fájlleírók</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Folyamatok</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Szálak</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Gazda név</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Operációs rendszer típusa</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Verzió</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Futásidő</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 másodperc</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Részletek</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Részletek</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Használt</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Elérhető</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">Processzor</translation>
+        <source>Shared</source>
+        <translation>Megosztott</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">Memória</translation>
+        <source>Cached</source>
+        <translation>Gyorsítótárazott</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>Pufferek</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>Gyorsítótárazott cserehely</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Aktív</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Tétlen</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Szennyezett</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Feltérképezett</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Teljes cserehely</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Szabad cserehely</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Tömb</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Modell</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Olvasási sebesség</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Írási sebesség</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Kapacitás</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Olvasott szektorok</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Olvasások/mp</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Olvasott szektorok/mp</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Összevont olvasások/mp</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Írt szektorok</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Az írások befejeződtek</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Összevont írások</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Írások/mp</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Írt szektorok/mp</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Összevont írások/mp</translation>
     </message>
 </context>
 <context>
@@ -291,6 +493,123 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Méret</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP cím:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Hálózati maszk:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Adás:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Előtag hossza:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Hatókör:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Csatlakozás típusa</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Link minősége</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Jelerősség</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Zajszint</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Sávszélesség</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX csomagok</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX bájtok</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX hibák</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX eldobások</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX túlfutások</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX keret</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX csomagok</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX bájtok</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX hibák</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>TX eldobások</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX túlfutások</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX szállító</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -317,6 +636,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>Memória</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Fogadás</translation>
     </message>
 </context>
 <context>
@@ -368,6 +691,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>Összes küldött</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Küldés</translation>
     </message>
 </context>
 <context>
@@ -565,6 +892,21 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>Prioritás</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Megosztott memória</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Virtuális memória</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Nem támogatott</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -600,7 +942,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Start</source>
-        <translation>indítás</translation>
+        <translation>Indítás</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -693,15 +1035,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Szolgáltatások</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

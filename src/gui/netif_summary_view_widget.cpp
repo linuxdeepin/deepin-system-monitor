@@ -192,9 +192,9 @@ public:
             for (int i = 0; i < ipv4_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV4;
                 if (1 == ipv4_addr_totle) {
-                    stInfo.strKey = tr("IPV4");
+                    stInfo.strKey = tr("IPv4");
                 } else {
-                    stInfo.strKey = tr("IPV4") + " " + QString::number(i + 1);
+                    stInfo.strKey = tr("IPv4") + " " + QString::number(i + 1);
                 }
 
                 stInfo.strValue =  QString("%1/%2/%3").arg(QString(listAddr4[i]->addr)).arg(QString(listAddr4[i]->mask)).arg(QString(listAddr4[i]->bcast));
@@ -207,9 +207,9 @@ public:
             for (int i = 0; i < ipv6_addr_totle; ++i) {
                 stInfo.eType = ShowInfo::IPV6;
                 if (1 == ipv6_addr_totle) {
-                    stInfo.strKey = tr("IPV6");
+                    stInfo.strKey = tr("IPv6");
                 } else {
-                    stInfo.strKey = tr("IPV6") + " " + QString::number(i + 1);
+                    stInfo.strKey = tr("IPv6") + " " + QString::number(i + 1);
                 }
 
                 stInfo.strValue = QString("%1/%2/%3").arg(QString(listAddr6[i]->addr)).arg(listAddr6[i]->prefixlen).arg(listAddr6[i]->scope);

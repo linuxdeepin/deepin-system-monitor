@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>隐藏详情</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>读取</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>写入</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60秒</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailWidget</name>
+    <message>
+        <source>Utilization</source>
+        <translation>利用率</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>当前频率</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>频率</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>制造商</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>插槽</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>逻辑处理器</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>虚拟化</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1缓存（指令）</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1缓存（数据）</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2缓存</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3缓存</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>负载均衡</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>文件描述符数</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>进程数</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>线程数</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>主机名</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>类型</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>版本</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>运行时间</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1天%2小时%3分钟</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60秒</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>详细信息</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>详细信息</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>已使用</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>可用</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">处理器</translation>
+        <source>Shared</source>
+        <translation>共享内存</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">内存</translation>
+        <source>Cached</source>
+        <translation>高速缓存</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>数据缓存</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>交换缓存区</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>活跃的缓冲文件</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>不活跃的缓冲文件</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>脏页</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>映射大小</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>交换空间大小</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>可用交换空间</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>内核数据结构缓存</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>型号</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>读取速度</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>写入速度</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>容量</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>读扇区次数</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>每秒读操作次数</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>每秒读扇区次数</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>每秒合并读操作次数</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>写扇区次数</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>写完成次数</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>合并写完成次数</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>每秒写操作次数</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>每秒写扇区次数</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>每秒合并写操作次数</translation>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>容量大小</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP地址：</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>子网掩码：</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>广播：</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>掩码长度：</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>域：</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>连接类型</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>服务器别号</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>信号质量</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>信号强度</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>底噪</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>速率</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>接收包数量</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>总计接收</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>接收（错误包）</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>接收（丢弃包）</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>接收FIFO</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>分组帧错误</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>发送包数量</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>总计发送</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>发送（错误包）</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>发送（丢弃包）</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>发送FIFO</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>载波损耗</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +637,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>内存</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>接收</translation>
     </message>
 </context>
 <context>
@@ -369,6 +692,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>总计发送</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>发送</translation>
     </message>
 </context>
 <context>
@@ -566,6 +893,21 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>优先级</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>共享内存</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>虚拟内存</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>不支持</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -694,15 +1036,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>系统服务</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>
