@@ -63,6 +63,7 @@ public:
 
 private:
     void scanProcess();
+    void mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps);
 
     class Iterator
     {
@@ -82,6 +83,8 @@ private:
 private:
     QMap<pid_t, Process> m_set;
     QMap<pid_t, std::shared_ptr<RecentProcStage>> m_recentProcStage = {};
+
+    QMultiMap<pid_t, pid_t> m_pidPtoCMapping {}; // parent to child pid mapping
 
     friend class Iterator;
 };

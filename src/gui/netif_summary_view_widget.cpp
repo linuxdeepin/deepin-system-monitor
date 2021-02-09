@@ -174,9 +174,7 @@ public:
      */
     void refreshNetifInfo(const QString &strKey)
     {
-        ThreadManager::instance();
-        auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-        QMap<QByteArray, NetifInfoPtr> mapInfo = monitor->deviceDB()->netifInfoDB()->infoDB();
+        const QMap<QByteArray, NetifInfoPtr> &mapInfo = DeviceDB::instance()->netifInfoDB()->infoDB();
 
         m_listInfo.clear();
 

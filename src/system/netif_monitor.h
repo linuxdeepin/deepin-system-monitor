@@ -20,9 +20,10 @@
 #ifndef NETIF_MONITOR_H
 #define NETIF_MONITOR_H
 
-#include <QObject>
 #include "common/time_period.h"
 #include "netif_packet_capture.h"
+
+#include <QObject>
 #include <QBasicTimer>
 #include <QMutex>
 #include <QWaitCondition>
@@ -52,11 +53,9 @@ public:
     explicit NetifMonitor(QObject *parent = nullptr);
     virtual ~NetifMonitor();
 
-signals:
-
-public slots:
-
 public:
+    static NetifMonitor *instance();
+
     void startNetmonitorJob();
 
     void handleNetData();

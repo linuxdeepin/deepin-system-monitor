@@ -18,16 +18,25 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "netif_monitor.h"
+#include "common/thread_manager.h"
+#include "netif_monitor_thread.h"
+
 #include <QTimerEvent>
 #include <QDebug>
+
 namespace core {
 namespace system {
 NetifMonitor::NetifMonitor(QObject *parent)
     : QObject(parent)
     , m_netifCapture(new NetifPacketCapture(this))
 {
+
 }
 
+NetifMonitor *NetifMonitor::instance()
+{
+    return ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread)->netifJobInstance();
+}
 
 NetifMonitor::~NetifMonitor()
 {

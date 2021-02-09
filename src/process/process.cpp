@@ -170,19 +170,6 @@ void Process::readProcessInfo()
     struct DiskIO io = {d->read_bytes, d->write_bytes, d->cancelled_write_bytes};
     d->diskIOSample->addSample(new DISKIOSampleFrame(d->uptime, io));
 
-    quint64 sum_recv = 0;
-    quint64 sum_send = 0;
-    for (int i = 0; i < d->sockInodes.size(); ++i) {
-        SockIOStat sockIOStat;
-        bool result = DeviceDB::instance()->netifInfoDB()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
-        if (result) {
-            sum_recv += sockIOStat->rx_bytes;
-            sum_send += sockIOStat->tx_bytes;
-        }
-    }
-    struct IOPS netIo = {static_cast<qreal>(sum_recv), static_cast<qreal>(sum_send)};
-    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
-
     auto pair = d->diskIOSample->recentSamplePair();
     struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
     d->diskIOSpeedSample->addSample(new IOPSSampleFrame(iops));
@@ -197,6 +184,22 @@ void Process::readProcessInfo()
         d->apptype = kFilterApps;
     } else if (euid == d->uid) {
         d->apptype = kFilterCurrentUser;
+    }
+
+    if (d->apptype != kFilterApps) {
+        qint64 sum_recv = 0;
+        qint64 sum_send = 0;
+        for (int i = 0; i < d->sockInodes.size(); ++i) {
+            SockIOStat sockIOStat;
+            bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
+            if (result) {
+                sum_recv += sockIOStat->rx_bytes;
+                sum_send += sockIOStat->tx_bytes;
+            }
+        }
+
+        struct IOPS netIo = {static_cast<qreal>(sum_recv), static_cast<qreal>(sum_send)};
+        d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
     }
 
     d->valid = d->valid && ok;
@@ -567,6 +570,11 @@ bool Process::isValid() const
     return d && d->isValid();
 }
 
+pid_t Process::ppid() const
+{
+    return d->ppid;
+}
+
 pid_t Process::pid() const
 {
     return d->pid;
@@ -730,6 +738,12 @@ qreal Process::sentBps() const
         return sample->data.outBps;
     else
         return {};
+}
+
+void Process::setNetIoBps(qreal recvBps, qreal sendBps)
+{
+    struct IOPS netIo = {recvBps, sendBps};
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
 }
 
 qulonglong Process::recvBytes() const

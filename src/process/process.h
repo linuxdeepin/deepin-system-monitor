@@ -73,6 +73,7 @@ public:
     bool isValid() const;
 
     pid_t pid() const;
+    pid_t ppid() const;
 
     int appType() const;
 
@@ -119,6 +120,7 @@ public:
 
     qreal recvBps() const;
     qreal sentBps() const;
+    void setNetIoBps(qreal recvBps, qreal sendBps);
 
     qulonglong recvBytes() const;
     qulonglong sentBytes() const;

@@ -117,12 +117,5 @@ void NetifInfoDB::update()
     this->update_netif_info();
 }
 
-bool NetifInfoDB::getSockIOStatByInode(ino_t ino, SockIOStat &stat)
-{
-    NetifMonitorThread *thread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
-    auto netifMonitor = thread->netifJobInstance();
-    return netifMonitor->getSockIOStatByInode(ino, stat);
-}
-
 } // namespace system
 } // namespace core

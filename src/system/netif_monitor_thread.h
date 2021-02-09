@@ -36,6 +36,7 @@ public:
 
     int threadKey() const final;
     NetifMonitor *netifJobInstance() const;
+
 protected:
     void run();
 

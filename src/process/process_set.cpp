@@ -42,6 +42,19 @@ ProcessSet::ProcessSet(const ProcessSet &other)
 {
 }
 
+void ProcessSet::mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps)
+{
+    auto it = m_pidPtoCMapping.find(ppid);
+    while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
+        mergeSubProcNetIO(it.value(), recvBps, sendBps);
+        ++it;
+    }
+
+    const Process &proc = m_set[ppid];
+    recvBps += proc.recvBps();
+    sendBps += proc.sentBps();
+}
+
 void ProcessSet::refresh()
 {
     scanProcess();
@@ -60,14 +73,28 @@ void ProcessSet::scanProcess()
     }
 
     m_set.clear();
+    m_pidPtoCMapping.clear();
 
     Iterator iter;
+    QList<pid_t> appLst;
     while (iter.hasNext()) {
         Process proc = iter.next();
         if (!proc.isValid())
             continue;
 
         m_set.insert(proc.pid(), proc);
+        m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
+
+        if (proc.appType() == kFilterApps) {
+            appLst << proc.pid();
+        }
+    }
+
+    for (const pid_t &pid : appLst) {
+        qreal recvBps = 0;
+        qreal sendBps = 0;
+        mergeSubProcNetIO(pid, recvBps, sendBps);
+        m_set[pid].setNetIoBps(recvBps, sendBps);
     }
 
     m_recentProcStage.clear();

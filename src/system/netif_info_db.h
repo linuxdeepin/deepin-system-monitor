@@ -48,7 +48,6 @@ public:
 
     QMap<QByteArray, NetifInfoPtr> infoDB();
     void update();
-    bool getSockIOStatByInode(ino_t ino, SockIOStat &stat);
 
 protected:
     void update_addr();
