@@ -37,6 +37,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+// content margin
+const int margin = 10;
+// content spacing
+const int spacing = 10;
+
 // constructor
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -86,11 +91,6 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     // DStyle instance
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
-
-    // content margin
-    auto margin = 10;
-    // content spacing
-    auto spacing = 10;
     // icon size
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
 
@@ -234,10 +234,6 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
-        // content margin
-        auto margin = 10;
-        // content spacing
-        auto spacing = 10;
         // icon size
         auto iconSize = view->style()->pixelMetric(DStyle::PM_ListViewIconSize);
 

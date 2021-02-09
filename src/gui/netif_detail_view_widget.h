@@ -35,7 +35,7 @@ public:
     explicit NetifDetailViewWidget(QWidget *parent = nullptr);
 
 public slots:
-    void fontChanged(const QFont &font) override;
+    void detailFontChanged(const QFont &font) override;
     void updateData();   // 更新数据
 
 private:

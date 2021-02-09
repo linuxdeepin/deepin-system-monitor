@@ -56,14 +56,11 @@ public:
 
     QMap<uint64_t, QVector<uint>> getWindowIcon(pid_t pid) const;
     QString getWindowTitle(pid_t pid) const;
-    QList<pid_t> getTrayProcessList() const;
-    QList<pid_t> getGuiProcessList() const;
 
     bool isTrayApp(pid_t pid) const;
     bool isGuiApp(pid_t pid) const;
     bool isDesktopEntryApp(pid_t pid) const;
     void addDesktopEntryApp(core::process::Process *proc);
-    QList<pid_t> getDektopEntryList();
 
     void updateWindowListCache();
 

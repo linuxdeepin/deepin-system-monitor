@@ -89,8 +89,8 @@ inline void NLAddr::local()
     const size_t bufsiz = 128;
     char tmpbuf[bufsiz];
 
-    auto *addr = rtnl_addr_get_local(m_addr);
-    nl_addr2str(addr, tmpbuf, bufsiz);
+    auto *addrPtr = rtnl_addr_get_local(m_addr);
+    nl_addr2str(addrPtr, tmpbuf, bufsiz);
     tmpbuf[bufsiz - 1] = '\0';
     buffer.append(tmpbuf);
 

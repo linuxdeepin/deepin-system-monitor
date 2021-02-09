@@ -35,7 +35,7 @@ public:
     explicit MemDetailViewWidget(QWidget *parent = nullptr);
 
 public slots:
-    void fontChanged(const QFont &font) override;
+    void detailFontChanged(const QFont &font) override;
     void onModelUpdate();
 
 private:

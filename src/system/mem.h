@@ -35,7 +35,6 @@ public:
     ~MemInfo();
 
     qulonglong memTotal() const;
-    qulonglong memFree() const;
     qulonglong memAvailable() const;
     qulonglong buffers() const;
     qulonglong cached() const;

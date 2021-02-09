@@ -56,11 +56,6 @@ qulonglong MemInfo::memTotal() const
     return d->mem_total_kb;
 }
 
-qulonglong MemInfo::memFree() const
-{
-    return d->mem_free_kb;
-}
-
 qulonglong MemInfo::memAvailable() const
 {
     return d->mem_avail_kb;
@@ -127,11 +122,11 @@ void MemInfo::readMemInfo()
     uFile ufp;
     const size_t BUFLEN = 512;
     QByteArray line(BUFLEN, '\0');
-    int nr = 0;
 
     if ((fp = fopen(PROC_PATH_MEM, "r"))) {
         ufp.reset(fp);
 
+        int nr = 0;
         while (fgets(line.data(), BUFLEN, fp)) {
             if (!strncmp(line.data(), "MemTotal:", 9)) {
                 nr = sscanf(line.data() + 9, "%llu", &d->mem_total_kb);

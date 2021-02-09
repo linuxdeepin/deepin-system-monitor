@@ -57,23 +57,6 @@ public:
 
     HANDLE handle() const;
 
-    class DeviceIteratorData;
-    class DeviceIterator
-    {
-    public:
-        bool hasNext() const;
-        UDevDevice next();
-
-    private:
-        DeviceIteratorData *d;
-    };
-
-    DeviceIterator enumDevicesWithSubSystem(const QByteArray &subsystem) const;
-    DeviceIterator enumDevicesWithSysAttr(const QByteArray &attr, const QByteArray &value) const;
-    DeviceIterator enumDevicesWithProperty(const QByteArray &prop, const QByteArray &value) const;
-    DeviceIterator enumDevicesWithSysName(const QByteArray &sysname) const;
-    DeviceIterator enumDevicesWithParent(const std::unique_ptr<UDevDevice> &parent) const;
-
 private:
     HANDLE m_udev;
 };

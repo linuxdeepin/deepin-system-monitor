@@ -76,11 +76,6 @@ void SystemMonitor::startMonitorJob()
     updateSystemMonitorInfo();
 }
 
-void SystemMonitor::requestInterrupt()
-{
-    m_basictimer.stop();
-}
-
 void SystemMonitor::timerEvent(QTimerEvent *event)
 {
     QObject::timerEvent(event);

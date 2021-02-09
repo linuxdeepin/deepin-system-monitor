@@ -34,35 +34,5 @@ UDev::~UDev()
     udev_unref(m_udev);
 }
 
-UDev::DeviceIterator UDev::enumDevicesWithSubSystem(const QByteArray &subsystem) const
-{
-    // TODO
-    return {};
-}
-
-UDev::DeviceIterator UDev::enumDevicesWithSysAttr(const QByteArray &attr, const QByteArray &value) const
-{
-    // TODO
-    return {};
-}
-
-UDev::DeviceIterator UDev::enumDevicesWithProperty(const QByteArray &prop, const QByteArray &value) const
-{
-    // TODO
-    return {};
-}
-
-UDev::DeviceIterator UDev::enumDevicesWithSysName(const QByteArray &sysname) const
-{
-    // TODO
-    return {};
-}
-
-UDev::DeviceIterator UDev::enumDevicesWithParent(const std::unique_ptr<UDevDevice> &parent) const
-{
-    // TODO
-    return {};
-}
-
 } // namespace system
 } // namespace core

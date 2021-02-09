@@ -55,7 +55,7 @@ public:
     friend class UnitFileInfo;
 
 private:
-    int __alignment;  // simply used for suppressing compiler warnings
+    int __alignment {};  // simply used for suppressing compiler warnings
     // unit file name
     QString m_name {};
     // unit file status

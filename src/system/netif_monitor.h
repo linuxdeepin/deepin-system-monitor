@@ -58,7 +58,6 @@ public slots:
 
 public:
     void startNetmonitorJob();
-    void requestInterrupt();
 
     void handleNetData();
 public:

@@ -62,15 +62,6 @@ char ProcessTableModel::getProcessState(pid_t pid) const
     return 0;
 }
 
-int ProcessTableModel::getProcessNice(pid_t pid) const
-{
-    if (m_procIdList.contains(pid)) {
-        return ProcessDB::instance()->processSet()->getProcessById(pid).priority();
-    }
-
-    return kInvalidPriority;
-}
-
 Process ProcessTableModel::getProcess(pid_t pid) const
 {
     if (m_procIdList.contains(pid)) {

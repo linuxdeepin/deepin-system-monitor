@@ -85,7 +85,7 @@ QString ProcessName::getDisplayName(Process *proc)
     DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
 
 #ifdef BUILD_WAYLAND
-
+    Q_UNUSED(desktopEntryCache);
 #else
     if (!proc->cmdline().isEmpty()) {
         if (windowList->isTrayApp(proc->pid())) {

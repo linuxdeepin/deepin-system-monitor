@@ -64,21 +64,18 @@ void WMWindowList::addDesktopEntryApp(Process *proc)
 
         // check if cmd is a shell or scripting language
         auto isCmdInList = [ = ](const QString & cmd) {
-            bool bb = false;
             auto subCmd = cmd.mid(cmd.lastIndexOf('/') + 1);
             for (auto s : shellList) {
                 if (subCmd.startsWith(s.toLocal8Bit())) {
-                    bb = true;
-                    return bb;
+                    return true;
                 }
             }
             for (auto s : scriptList) {
                 if (cmd.startsWith(s.toLocal8Bit())) {
-                    bb = true;
-                    return bb;
+                    return true;
                 }
             }
-            return bb;
+            return false;
         };
 
         bool bb = false;
@@ -106,11 +103,6 @@ void WMWindowList::addDesktopEntryApp(Process *proc)
 int WMWindowList::getAppCount()
 {
     return static_cast<int>(m_trayAppcache.size() + m_guiAppcache.size()) + m_desktopEntryCache.size();
-}
-
-QList<pid_t> WMWindowList::getDektopEntryList()
-{
-    return m_desktopEntryCache;
 }
 
 bool WMWindowList::isTrayApp(pid_t pid) const
@@ -195,24 +187,6 @@ QString WMWindowList::getWindowTitle(pid_t pid) const
     } else {
         return {};
     }
-}
-
-QList<pid_t> WMWindowList::getTrayProcessList() const
-{
-    QList<pid_t> list;
-    for (auto &it : m_trayAppcache) {
-        list << it.first;
-    }
-    return list;
-}
-
-QList<pid_t> WMWindowList::getGuiProcessList() const
-{
-    QList<pid_t> list;
-    for (auto &it : m_guiAppcache) {
-        list << it.first;
-    }
-    return list;
 }
 
 QList<WMWId> WMWindowList::getTrayWindows() const

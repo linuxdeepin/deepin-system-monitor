@@ -180,7 +180,6 @@ void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, in
                      double percent);
 void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
               int loadingAngle, int rotationAngle, QColor color, double opacity);
-void setFontSize(QPainter &painter, int textSize);
 
 void openFilePathItem(const QString &path);
 bool startWithHanzi(const QString &text);

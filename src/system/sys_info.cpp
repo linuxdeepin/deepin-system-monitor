@@ -251,14 +251,14 @@ void SysInfo::readSysInfo()
 quint32 SysInfo::read_file_nr()
 {
     FILE *fp;
-    uFile fPtr;
-    char buf[128] {};
     unsigned int file_nr = 0;
 
     errno = 0;
     if ((fp = fopen(PROC_PATH_UPTIME, "r"))) {
+        uFile fPtr;
         fPtr.reset(fp);
 
+        char buf[128] {};
         if (fgets(buf, sizeof(buf), fp)) {
             int nm = sscanf(buf, "%u", &file_nr);
             if (nm == 1)
@@ -336,14 +336,14 @@ QString SysInfo::read_version()
 void SysInfo::read_uptime(struct timeval &uptime)
 {
     FILE *fp;
-    uFile fPtr;
-    char buf[128] {};
-    long up_sec, up_usec;
-
     errno = 0;
+
     if ((fp = fopen(PROC_PATH_UPTIME, "r"))) {
+        uFile fPtr;
         fPtr.reset(fp);
 
+        char buf[128] {};
+        long up_sec, up_usec;
         if (fgets(buf, sizeof(buf), fp)) {
             int nm = sscanf(buf, "%ld.%ld", &up_sec, &up_usec);
             if (nm == 2) {
@@ -364,14 +364,13 @@ void SysInfo::read_uptime(struct timeval &uptime)
 void SysInfo::read_btime(struct timeval &btime)
 {
     FILE *fp;
-    uFile fPtr;
-    char line[4095] {};
-    long nsec {0};
-
     errno = 0;
     if ((fp = fopen(PROC_PATH_STAT, "r"))) {
+        uFile fPtr;
         fPtr.reset(fp);
 
+        char line[4095] {};
+        long nsec {0};
         while (fgets(line, sizeof(line), fp)) {
             if (!strncmp(line, "btime", 5)) {
                 int nm = sscanf(line + 5, "%ld", &nsec);

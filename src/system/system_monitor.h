@@ -56,8 +56,6 @@ public:
     ProcessDB *processDB();
 
     void startMonitorJob();
-    // atomic operation, can be called from main thread (gui) when exit requested
-    void requestInterrupt();
 
 protected:
     void timerEvent(QTimerEvent *event);

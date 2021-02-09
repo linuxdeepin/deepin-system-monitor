@@ -77,11 +77,6 @@ QByteArray CPUInfo::logicalName() const
     return d->cpu;
 }
 
-int CPUInfo::packageID() const
-{
-    return d->package_id;
-}
-
 QString CPUInfo::coreID() const
 {
     return QString::number(d->m_core_id);
@@ -105,11 +100,6 @@ QString CPUInfo::cpuFreq() const
 QString CPUInfo::cacheSize() const
 {
     return d->m_cache_size;
-}
-
-int CPUInfo::drawerID() const
-{
-    return d->drawer_id;
 }
 
 QString CPUInfo::l1iCache() const

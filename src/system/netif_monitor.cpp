@@ -93,11 +93,6 @@ void NetifMonitor::handleNetData()
     }
 }
 
-void NetifMonitor::requestInterrupt()
-{
-    m_basictimer.stop();
-}
-
 void NetifMonitor::timerEvent(QTimerEvent *event)
 {
     QObject::timerEvent(event);

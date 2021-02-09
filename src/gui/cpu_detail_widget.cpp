@@ -313,9 +313,9 @@ void CPUDetailWidget::onCPUInfoUpdated()
     m_textTable->modItem(14, tr("Threads"), QString::number(m_cpuInfomodel->nThreads()));  //线程数量（格式：数字）
 }
 
-void CPUDetailWidget::fontChanged(const QFont &font)
+void CPUDetailWidget::detailFontChanged(const QFont &font)
 {
-    BaseDetailViewWidget::fontChanged(font);
+    BaseDetailViewWidget::detailFontChanged(font);
     adjustGeometry(this->size());
 }
 

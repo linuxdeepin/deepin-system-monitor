@@ -38,14 +38,14 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     m_centralLayout->addWidget(m_netifstatWIdget);
     m_centralLayout->addWidget(m_netifsummaryWidget);
 
-    fontChanged(DApplication::font());
+    detailFontChanged(DApplication::font());
 
     updateData();
 }
 
-void NetifDetailViewWidget::fontChanged(const QFont &font)
+void NetifDetailViewWidget::detailFontChanged(const QFont &font)
 {
-    BaseDetailViewWidget::fontChanged(font);
+    BaseDetailViewWidget::detailFontChanged(font);
 
     m_netifstatWIdget->fontChanged(font);
     m_netifsummaryWidget->fontChanged(font);

@@ -80,47 +80,6 @@ void AnimationStackedWidget::setCurrent(QWidget *widget)
     setCurrentWidget(index, getBeginValue());
 }
 
-void AnimationStackedWidget::setPre()
-{
-    //获取堆窗口数
-    const int count = this->count();
-    switch (m_animationOri) {
-    case LR: {
-        m_moveOri = LeftToRight;
-    }
-    break;
-    case TB: {
-        m_moveOri = TopToBottom;
-    }
-    break;
-    }
-    //获取下一个窗口编号
-    int nextIndex = currentIndex() - 1;
-    if (nextIndex < 0) {
-        nextIndex = nextIndex + count;
-    }
-    setCurrentWidget(nextIndex, getBeginValue());
-}
-
-void AnimationStackedWidget::setNext()
-{
-    //获取堆窗口数
-    const int count = this->count();
-    switch (m_animationOri) {
-    case LR: {
-        m_moveOri = RightToLeft;
-    }
-    break;
-    case TB: {
-        m_moveOri = BottomToTop;
-    }
-    break;
-    }
-    //获取下一个窗口编号
-    int nextIndex = (currentIndex() + 1) % count;
-    setCurrentWidget(nextIndex, getBeginValue());
-}
-
 void AnimationStackedWidget::setCurrentWidget(int &index, int beginWidth)
 {
     //如果正在动画，那么退出

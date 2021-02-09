@@ -25,6 +25,7 @@
 #include <DApplication>
 #include <DApplicationHelper>
 
+DWIDGET_USE_NAMESPACE
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 {
     m_centralLayout = new QVBoxLayout(this);
@@ -43,12 +44,12 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
         stackViewWidget->onShowPerformMenu(m_arrowButton->mapToGlobal(QPoint(0, m_arrowButton->height() + 6)));
     });
 
-    fontChanged(DApplication::font());
+    detailFontChanged(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-            this, &BaseDetailViewWidget::fontChanged);
+            this, &BaseDetailViewWidget::detailFontChanged);
 }
 
-void BaseDetailViewWidget::fontChanged(const QFont &font)
+void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 {
     m_titleFont = font;
     m_titleFont.setPointSize(m_titleFont.pointSize() + 12);

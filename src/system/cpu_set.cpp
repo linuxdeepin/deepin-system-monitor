@@ -56,118 +56,118 @@ namespace system {
  *      ^  ^     ^           ^
  *      start  off   group_len         end
  */
-struct region {
-    unsigned int start;
-    unsigned int off;
-    unsigned int group_len;
-    unsigned int end;
-};
+//struct region {
+//    unsigned int start;
+//    unsigned int off;
+//    unsigned int group_len;
+//    unsigned int end;
+//};
 
-static bool cpuset_set_region(const struct region *r,
-                              cpu_set_t *set, size_t size)
-{
-    unsigned int start;
+//static bool cpuset_set_region(const struct region *r,
+//                              cpu_set_t *set, size_t size)
+//{
+//    unsigned int start;
 
-    if (r->end >= size)
-        return false;
+//    if (r->end >= size)
+//        return false;
 
-    for (start = r->start; start <= r->end; start += r->group_len) {
-        auto len = std::min(r->end - start + 1, r->off);
-        for (size_t pos = 0; pos < len; pos++)
-            CPU_SET_S(start + pos, size, set);
-    }
+//    for (start = r->start; start <= r->end; start += r->group_len) {
+//        auto len = std::min(r->end - start + 1, r->off);
+//        for (size_t pos = 0; pos < len; pos++)
+//            CPU_SET_S(start + pos, size, set);
+//    }
 
-    return true;
-}
+//    return true;
+//}
 
-static bool cpuset_check_region(const struct region *r)
-{
-    if (r->start > r->end || r->group_len == 0 || r->off > r->group_len)
-        return false;
+//static bool cpuset_check_region(const struct region *r)
+//{
+//    if (r->start > r->end || r->group_len == 0 || r->off > r->group_len)
+//        return false;
 
-    return true;
-}
+//    return true;
+//}
 
-static const char *cpuset_getnum(const char *str, unsigned int *num)
-{
-    unsigned long long n;
-    char *ptr;
+//static const char *cpuset_getnum(const char *str, unsigned int *num)
+//{
+//    unsigned long long n;
+//    char *ptr;
 
-    errno = 0;
-    n = strtoull(str, &ptr, 10);
-    if (errno == ERANGE || n != uint(n))
-        return nullptr;
+//    errno = 0;
+//    n = strtoull(str, &ptr, 10);
+//    if (errno == ERANGE || n != uint(n))
+//        return nullptr;
 
-    *num = uint(n);
-    return ptr;
-}
+//    *num = uint(n);
+//    return ptr;
+//}
 
-static inline bool end_of_str(char c)
-{
-    return c == '\0' || c == '\n';
-}
+//static inline bool end_of_str(char c)
+//{
+//    return c == '\0' || c == '\n';
+//}
 
-static inline bool __end_of_region(char c)
-{
-    return isspace(c) || c == ',';
-}
+//static inline bool __end_of_region(char c)
+//{
+//    return isspace(c) || c == ',';
+//}
 
-static inline bool end_of_region(char c)
-{
-    return __end_of_region(c) || end_of_str(c);
-}
+//static inline bool end_of_region(char c)
+//{
+//    return __end_of_region(c) || end_of_str(c);
+//}
 
-/*
- * The format allows commas and whitespaces at the beginning
- * of the region.
- */
-static const char *cpuset_find_region(const char *str)
-{
-    while (__end_of_region(*str))
-        str++;
+///*
+// * The format allows commas and whitespaces at the beginning
+// * of the region.
+// */
+//static const char *cpuset_find_region(const char *str)
+//{
+//    while (__end_of_region(*str))
+//        str++;
 
-    return end_of_str(*str) ? nullptr : str;
-}
+//    return end_of_str(*str) ? nullptr : str;
+//}
 
-static const char *cpuset_parse_region(const char *str, struct region *r)
-{
-    str = cpuset_getnum(str, &r->start);
-    if (!str)
-        return nullptr;
+//static const char *cpuset_parse_region(const char *str, struct region *r)
+//{
+//    str = cpuset_getnum(str, &r->start);
+//    if (!str)
+//        return nullptr;
 
-    if (end_of_region(*str))
-        goto no_end;
+//    if (end_of_region(*str))
+//        goto no_end;
 
-    if (*str != '-')
-        return nullptr;
+//    if (*str != '-')
+//        return nullptr;
 
-    str = cpuset_getnum(str + 1, &r->end);
-    if (!str)
-        return nullptr;
+//    str = cpuset_getnum(str + 1, &r->end);
+//    if (!str)
+//        return nullptr;
 
-    if (end_of_region(*str))
-        goto no_pattern;
+//    if (end_of_region(*str))
+//        goto no_pattern;
 
-    if (*str != ':')
-        return nullptr;
+//    if (*str != ':')
+//        return nullptr;
 
-    str = cpuset_getnum(str + 1, &r->off);
-    if (!str)
-        return nullptr;
+//    str = cpuset_getnum(str + 1, &r->off);
+//    if (!str)
+//        return nullptr;
 
-    if (*str != '/')
-        return nullptr;
+//    if (*str != '/')
+//        return nullptr;
 
-    return cpuset_getnum(str + 1, &r->group_len);
+//    return cpuset_getnum(str + 1, &r->group_len);
 
-no_end:
-    r->end = r->start;
-no_pattern:
-    r->off = r->end + 1;
-    r->group_len = r->end + 1;
+//no_end:
+//    r->end = r->start;
+//no_pattern:
+//    r->off = r->end + 1;
+//    r->group_len = r->end + 1;
 
-    return end_of_str(*str) ? nullptr : str;
-}
+//    return end_of_str(*str) ? nullptr : str;
+//}
 
 /**
  * cpuset_parselist - convert list format ASCII string to cpuset
@@ -193,33 +193,31 @@ no_pattern:
  *   - ``-ERANGE``: bit number specified too large for mask
  *   - ``-EOVERFLOW``: integer overflow in the input parameters
  */
-bool cpuset_parse_list(const char *buf, cpu_set_t *set, size_t size)
-{
-    struct region r;
-    bool ok;
+//bool cpuset_parse_list(const char *buf, cpu_set_t *set, size_t size)
+//{
+//    struct region r;
+//    CPU_ZERO_S(size, set);
 
-    CPU_ZERO_S(size, set);
+//    while (buf) {
+//        buf = cpuset_find_region(buf);
+//        if (!buf)
+//            return false;
 
-    while (buf) {
-        buf = cpuset_find_region(buf);
-        if (!buf)
-            return false;
+//        buf = cpuset_parse_region(buf, &r);
+//        if (!buf)
+//            return false;
 
-        buf = cpuset_parse_region(buf, &r);
-        if (!buf)
-            return false;
+//        bool ok = cpuset_check_region(&r);
+//        if (!ok)
+//            return false;
 
-        ok = cpuset_check_region(&r);
-        if (!ok)
-            return false;
+//        ok = cpuset_set_region(&r, set, size);
+//        if (!ok)
+//            return false;
+//    }
 
-        ok = cpuset_set_region(&r, set, size);
-        if (!ok)
-            return false;
-    }
-
-    return true;
-}
+//    return true;
+//}
 
 CPUSet::CPUSet()
     : d(new CPUSetPrivate())

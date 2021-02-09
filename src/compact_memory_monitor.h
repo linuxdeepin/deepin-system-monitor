@@ -19,11 +19,7 @@
 #ifndef COMPACTMEMORYMONITOR_H
 #define COMPACTMEMORYMONITOR_H
 
-#include <DApplicationHelper>
-
 #include <QWidget>
-
-DWIDGET_USE_NAMESPACE
 
 class QPropertyAnimation;
 class MemStatModel;
@@ -41,24 +37,18 @@ class CompactMemoryMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    explicit CompactMemoryMonitor(QWidget *parent = nullptr);
+    explicit CompactMemoryMonitor(QWidget *parent);
     ~CompactMemoryMonitor();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
-    qreal progress() const
-    {
-        return m_progress;
-    }
-    void setProgress(qreal p)
-    {
-        m_progress = p;
-    }
-
 private:
-    void changeTheme(DApplicationHelper::ColorType themeType);
+    void changeTheme(int themeType);
     void changeFont(const QFont &font);
+
+    qreal progress() const;
+    void setProgress(qreal p);
 
 private slots:
     void onStatInfoUpdated();
@@ -98,8 +88,6 @@ private:
     QFont m_contentFont;
     QFont m_subContentFont;
     QFont m_memPercentFont;
-
-    DApplicationHelper::ColorType m_themeType;
 };
 
 #endif

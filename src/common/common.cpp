@@ -188,13 +188,6 @@ void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWi
                     -loadingAngle * 16);
 }
 
-void setFontSize(QPainter &painter, int textSize)
-{
-    QFont font = painter.font();
-    font.setPointSize(textSize);
-    painter.setFont(font);
-}
-
 bool startWithHanzi(const QString &text)
 {
     if (text.isEmpty())

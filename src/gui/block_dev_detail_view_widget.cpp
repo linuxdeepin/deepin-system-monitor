@@ -33,11 +33,11 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     m_centralLayout->addWidget(m_blocksummaryWidget);
     connect(m_blockStatWidget, &BlockStatViewWidget::changeInfo, m_blocksummaryWidget, &BlockDevSummaryViewWidget::chageSummaryInfo);
 
-    fontChanged(DApplication::font());
+    detailFontChanged(DApplication::font());
 }
-void BlockDevDetailViewWidget::fontChanged(const QFont &font)
+void BlockDevDetailViewWidget::detailFontChanged(const QFont &font)
 {
-    BaseDetailViewWidget::fontChanged(font);
+    BaseDetailViewWidget::detailFontChanged(font);
     m_blockStatWidget->fontChanged(font);
     m_blocksummaryWidget->fontChanged(font);
 }

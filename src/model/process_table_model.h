@@ -141,12 +141,7 @@ public:
      * @return Process priority enum type
      */
     ProcessPriority getProcessPriority(pid_t pid) const;
-    /**
-     * @brief Get process priority with specified pid
-     * @param pid Id of the process to get priority for
-     * @return Process priority
-     */
-    int getProcessNice(pid_t pid) const;
+
     /**
      * @brief Get process entry from list with specified pid
      * @param pid Process id

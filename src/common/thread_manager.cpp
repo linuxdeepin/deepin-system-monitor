@@ -37,10 +37,5 @@ void ThreadManager::attach(BaseThread *thread)
     m_threadDB[thread->threadKey()] = thread;
 }
 
-void ThreadManager::detach(int key)
-{
-    m_threadDB.remove(key);
-}
-
 } // namespace core
 } // namespace common

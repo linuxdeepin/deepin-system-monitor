@@ -38,13 +38,15 @@ class BlockDeviceInfoDB
 {
 public:
     explicit BlockDeviceInfoDB();
-    virtual ~BlockDeviceInfoDB() = default;
+    ~BlockDeviceInfoDB();
 
     QList<BlockDevice> deviceList();
 
     void update();
+
 private:
     void readDiskInfo();
+
 private:
     mutable QReadWriteLock m_rwlock;
     QList<BlockDevice> m_deviceList;

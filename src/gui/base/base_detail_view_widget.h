@@ -26,7 +26,6 @@
 #include <DIconButton>
 #include <QVBoxLayout>
 
-DWIDGET_USE_NAMESPACE
 class BaseDetailViewWidget : public QWidget
 {
     Q_OBJECT
@@ -49,7 +48,7 @@ public:
     int titleHeight();
 
 public slots:
-    virtual void fontChanged(const QFont &font);
+    virtual void detailFontChanged(const QFont &font);
 
 private:
     void updateWidgetGrometry();
@@ -66,8 +65,8 @@ protected:
     QString m_titleText;
     QString m_detailText;
 
-    DCommandLinkButton *m_detailButton;
-    DIconButton *m_arrowButton;
+    Dtk::Widget::DCommandLinkButton *m_detailButton;
+    Dtk::Widget::DIconButton *m_arrowButton;
 
     QVBoxLayout *m_centralLayout;
 };

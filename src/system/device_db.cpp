@@ -48,6 +48,7 @@ DeviceDB::DeviceDB()
 
 DeviceDB::~DeviceDB()
 {
+    delete m_diskIoInfo;
     delete m_memInfo;
     delete m_cpuSet;
     delete m_blkDevInfoDB;

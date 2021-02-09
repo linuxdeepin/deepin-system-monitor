@@ -86,14 +86,7 @@ public slots:
      * @param widget
      */
     void setCurrent(QWidget *widget);
-    /**
-     * @brief setPre 设置上一个索引的窗口
-     */
-    void setPre();
-    /**
-     * @brief setNext 设置下一个索引的窗口
-     */
-    void setNext();
+
 private:
     /**
      * @brief setCurrentWidget  根据索引设置当前窗口，开启动画绘制

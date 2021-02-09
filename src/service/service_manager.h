@@ -44,7 +44,7 @@ public:
     void start(const QString &path);
 
 private:
-    char __padding__[4];
+    int __padding__ {0};
     int m_cnt {0};
     QTimer *m_timer {};
     ServiceManager *m_mgr {};

@@ -73,9 +73,6 @@ public:
 
     QByteArray logicalName() const;
 
-    int packageID() const;
-    int drawerID() const;
-
     // TODO: cache vary depends on different cpu arch, some dont have level3 cache
     QString l1iCache() const;
     QString l1dCache() const;

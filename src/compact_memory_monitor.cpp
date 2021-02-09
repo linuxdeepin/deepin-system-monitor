@@ -55,8 +55,8 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
 
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &CompactMemoryMonitor::changeTheme);
-    m_themeType = dAppHelper->themeType();
-    changeTheme(m_themeType);
+
+    changeTheme(dAppHelper->themeType());
 
     m_animation = new QPropertyAnimation(this, "progress", this);
     m_animation->setDuration(250);
@@ -76,6 +76,15 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
 
 CompactMemoryMonitor::~CompactMemoryMonitor() {}
 
+qreal CompactMemoryMonitor::progress() const
+{
+    return m_progress;
+}
+void CompactMemoryMonitor::setProgress(qreal p)
+{
+    m_progress = p;
+}
+
 void CompactMemoryMonitor::onStatInfoUpdated()
 {
     m_animation->start();
@@ -92,11 +101,9 @@ void CompactMemoryMonitor::onValueChanged()
     this->update();
 }
 
-void CompactMemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
+void CompactMemoryMonitor::changeTheme(int themeType)
 {
-    m_themeType = themeType;
-
-    switch (m_themeType) {
+    switch (themeType) {
     case DApplicationHelper::LightType:
         memoryBackgroundColor = "#000000";
         swapBackgroundColor = "#000000";

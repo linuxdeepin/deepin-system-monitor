@@ -96,17 +96,19 @@ private:
 class CPUDetailWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
+
 public:
     explicit CPUDetailWidget(QWidget *parent = nullptr);
 
-    void resizeEvent(QResizeEvent *event);
-
     void adjustGeometry(QSize rect);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void onCPUInfoUpdated();
 
-    void fontChanged(const QFont &font);
+    void detailFontChanged(const QFont &font) override;
 
 private:
     CPUInfoModel *m_cpuInfomodel = nullptr;

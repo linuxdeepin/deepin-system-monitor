@@ -339,8 +339,9 @@ void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
 // initialize global seed
 void init_seed()
 {
-    bool ok {false};
-    int cnt {};
+    bool ok = false;
+    int cnt = 0;
+    Q_UNUSED(cnt);
 
 #define MAX_RETRY 6
 #if defined HAVE_SYS_RANDOM_H

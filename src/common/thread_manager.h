@@ -45,7 +45,6 @@ public:
 
 public slots:
     void attach(BaseThread *thread);
-    void detach(int key);
 
 public:
     explicit ThreadManager() {}

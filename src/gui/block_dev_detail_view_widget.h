@@ -34,7 +34,8 @@ public:
     explicit BlockDevDetailViewWidget(QWidget *parent = nullptr);
 
 public slots:
-    void fontChanged(const QFont &font);
+    void detailFontChanged(const QFont &font) override;
+
 private:
     BlockStatViewWidget *m_blockStatWidget;
     BlockDevSummaryViewWidget *m_blocksummaryWidget;

@@ -37,7 +37,7 @@ MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
     m_centralLayout->addWidget(m_memstatWIdget);
     m_centralLayout->addWidget(m_memsummaryWidget);
 
-    fontChanged(DApplication::font());
+    detailFontChanged(DApplication::font());
 
     onModelUpdate();
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemDetailViewWidget::onModelUpdate);
@@ -49,9 +49,9 @@ void MemDetailViewWidget::onModelUpdate()
     m_memsummaryWidget->onModelUpdate();
 }
 
-void MemDetailViewWidget::fontChanged(const QFont &font)
+void MemDetailViewWidget::detailFontChanged(const QFont &font)
 {
-    BaseDetailViewWidget::fontChanged(font);
+    BaseDetailViewWidget::detailFontChanged(font);
     m_memstatWIdget->fontChanged(font);
     m_memsummaryWidget->fontChanged(font);
 }
