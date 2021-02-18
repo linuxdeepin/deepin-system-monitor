@@ -423,6 +423,9 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
 
+    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+    header()->setPalette(palette);
+
     // header view instance
     auto *hdr = header();
     // header section movable
@@ -567,12 +570,15 @@ void SystemServiceTableView::initConnections()
     Q_ASSERT(dAppHelper != nullptr);
     // change search result tip label text color when theme type changed
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
+        auto palette = DApplicationHelper::instance()->applicationPalette();
         if (m_noMatchingResultLabel) {
-            auto palette = DApplicationHelper::instance()->applicationPalette();
             QColor labelColor = palette.color(DPalette::PlaceholderText);
             palette.setColor(DPalette::Text, labelColor);
             m_noMatchingResultLabel->setPalette(palette);
         }
+
+        palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+        header()->setPalette(palette);
     });
 
     // show context menu when custom context menu requested
