@@ -61,9 +61,8 @@
 #include <QShortcut>
 
 // process table view backup setting key
+const QByteArray header_version = "_1.0.0";
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
-
-// constructor
 ProcessTableView::ProcessTableView(DWidget *parent)
     : BaseTableView(parent)
 {
@@ -329,11 +328,15 @@ bool ProcessTableView::loadSettings()
 {
     Settings *s = Settings::instance();
     if (s) {
-        QVariant opt = s->getOption(kSettingsOption_ProcessTableHeaderState);
+        const QVariant &opt = s->getOption(kSettingsOption_ProcessTableHeaderState);
         if (opt.isValid()) {
-            QByteArray buf = QByteArray::fromBase64(opt.toByteArray());
-            header()->restoreState(buf);
-            return true;
+            const QByteArray &buf = QByteArray::fromBase64(opt.toByteArray());
+            if (buf.endsWith(header_version)) {
+                header()->restoreState(buf);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
     return false;
@@ -345,6 +348,8 @@ void ProcessTableView::saveSettings()
     Settings *s = Settings::instance();
     if (s) {
         QByteArray buf = header()->saveState();
+        buf += header_version;
+
         s->setOption(kSettingsOption_ProcessTableHeaderState, buf.toBase64());
         s->flush();
     }
@@ -413,11 +418,11 @@ void ProcessTableView::initUI(bool settingsLoaded)
         setColumnHidden(ProcessTableModel::kProcessMemoryColumn, false);
 
         // share memory
-        setColumnWidth(ProcessTableModel::kProcessShareMemoryColumn, 70);
+        setColumnWidth(ProcessTableModel::kProcessShareMemoryColumn, 80);
         setColumnHidden(ProcessTableModel::kProcessShareMemoryColumn, true);
 
         // vtr memory
-        setColumnWidth(ProcessTableModel::kProcessVTRMemoryColumn, 70);
+        setColumnWidth(ProcessTableModel::kProcessVTRMemoryColumn, 80);
         setColumnHidden(ProcessTableModel::kProcessVTRMemoryColumn, true);
 
         // download

@@ -62,7 +62,7 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
     int apptype = pid.data(Qt::UserRole + 3).toInt();
     if (m_fileterType == kNoFilter)
         filter = true;
-    else if (m_fileterType == kFilterCurrentUser && apptype > kNoFilter)
+    else if (m_fileterType == kFilterCurrentUser && (apptype == kFilterApps || apptype == kFilterCurrentUser))
         filter = true;
     else if (m_fileterType == kFilterApps && apptype == kFilterApps)
         filter = true;

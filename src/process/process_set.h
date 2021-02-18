@@ -32,9 +32,9 @@ using namespace common::alloc;
 namespace core {
 namespace process {
 
-enum FilterType { kNoFilter,
-                  kFilterApps,
-                  kFilterCurrentUser
+enum FilterType { kFilterApps,
+                  kFilterCurrentUser,
+                  kNoFilter
                 };
 
 struct RecentProcStage {
