@@ -137,31 +137,16 @@ void NetifInfo::updateBrandInfo()
     struct ifreq ifr;
     struct ethtool_cmd ecmd;
 
-     ecmd.cmd = 0x00000001;
-     memset(&ifr, 0, sizeof(ifr));
-     strcpy(ifr.ifr_name,d->ifname);
+    ecmd.cmd = 0x00000001;
+    memset(&ifr, 0, sizeof(ifr));
+    strcpy(ifr.ifr_name, d->ifname);
 
     ifr.ifr_data = reinterpret_cast<caddr_t>(&ecmd);
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
-    if (ioctl(fd, SIOCETHTOOL, &ifr) == 0)
-    {
-         switch(ecmd.speed) {
-            case SPEED_10:
-                d->net_speed  ="10Mbit/s";
-                break;
-            case SPEED_100:
-                d->net_speed  ="100Mbit/s";
-                break;
-            case SPEED_1000:
-                d->net_speed  ="1Gbit/s";
-                break;
-            case SPEED_10000:
-                d->net_speed  ="10Gbit/s";
-                break;
-         }
-         d->speed   = ecmd.speed;
-     }
-     close(fd);
+    if (ioctl(fd, SIOCETHTOOL, &ifr) == 0) {
+        d->speed   = ecmd.speed;
+    }
+    close(fd);
 }
 
 } // namespace system

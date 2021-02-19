@@ -96,8 +96,6 @@ private:
     int waveformsRenderOffsetX;
     int waveformsRenderOffsetY = 96;
 
-    DApplicationHelper::ColorType m_themeType;
-
     Settings *m_settings;
 
     QFont m_cpuUsageFont;

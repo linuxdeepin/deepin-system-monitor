@@ -29,6 +29,7 @@
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
+#include <DFontSizeManager>
 
 #include <QDebug>
 #include <QIcon>
@@ -55,8 +56,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
-    m_themeType = dAppHelper->themeType();
-    changeTheme(m_themeType);
+    changeTheme(dAppHelper->themeType());
 
     TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
     m_cpuInfomodel = new CPUInfoModel(period, this);
@@ -72,7 +72,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     });
 
     m_detailButton = new DCommandLinkButton(tr("Details"), this);
-    m_detailButton->setFont(m_detailFont);
+    DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
 
     changeFont(DApplication::font());
@@ -98,9 +98,7 @@ void CpuMonitor::setDetailButtonVisible(bool visible)
 
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    m_themeType = themeType;
-
-    switch (m_themeType) {
+    switch (themeType) {
     case DApplicationHelper::LightType:
         ringBackgroundColor = "#000000";
         m_icon = QIcon(iconPathFromQrc("light/icon_cpu_light.svg"));

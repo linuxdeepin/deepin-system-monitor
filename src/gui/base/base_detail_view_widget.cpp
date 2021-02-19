@@ -24,6 +24,7 @@
 #include <QPainter>
 #include <DApplication>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
@@ -34,7 +35,7 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
     DetailViewStackedWidget *stackViewWidget = dynamic_cast<DetailViewStackedWidget *>(parent);
     m_detailButton = new DCommandLinkButton(tr("Hide details"), this);
-    m_detailButton->setFont(m_contentFont);
+    DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     connect(m_detailButton, &DCommandLinkButton::clicked, stackViewWidget, &DetailViewStackedWidget::onSwitchProcessPage);
 
     m_arrowButton = new DIconButton(DStyle::SP_ReduceElement, this);

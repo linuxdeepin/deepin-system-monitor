@@ -46,20 +46,19 @@ struct inet_addr6_t : public inet_addr_t {
     int scope;
 };
 
-struct ethtool_cmd
-{
-  uint32_t cmd;
-  uint32_t supported;                                  /* Features this interface supports */
-  uint32_t advertising;                                /* Features this interface advertises */
-  uint16_t speed;                                      /* The forced speed, 10Mb, 100Mb, gigabit */
-  uint8_t duplex;                                      /* Duplex, half or full */
-  uint8_t port;                                        /* Which connector port */
-  uint8_t phy_address;
-  uint8_t transceiver;                                 /* Which tranceiver to use */
-  uint8_t autoneg;                                     /* Enable or disable autonegotiation */
-  uint16_t maxtxpkt;                                   /* Tx pkts before generating tx int */
-  uint16_t maxrxpkt;                                   /* Rx pkts before generating rx int */
-  uint16_t reserved[4];
+struct ethtool_cmd {
+    uint32_t cmd;
+    uint32_t supported;                                  /* Features this interface supports */
+    uint32_t advertising;                                /* Features this interface advertises */
+    uint16_t speed;                                      /* The forced speed, 10Mb, 100Mb, gigabit */
+    uint8_t duplex;                                      /* Duplex, half or full */
+    uint8_t port;                                        /* Which connector port */
+    uint8_t phy_address;
+    uint8_t transceiver;                                 /* Which tranceiver to use */
+    uint8_t autoneg;                                     /* Enable or disable autonegotiation */
+    uint16_t maxtxpkt;                                   /* Tx pkts before generating tx int */
+    uint16_t maxrxpkt;                                   /* Rx pkts before generating rx int */
+    uint16_t reserved[4];
 };
 
 /* The forced speed, 10Mb, 100Mb, gigabit, 10GbE. */
@@ -99,7 +98,6 @@ public:
     quint8 carrier() const;
     uint carrierChanges() const;
     uint speed() const;
-    QByteArray netspeed() const;
     QByteArray connectionType() const;
     QByteArray linkAddress() const;
     QByteArray linkBroadcast() const;
@@ -212,11 +210,6 @@ inline uint NetifInfo::carrierChanges() const
 inline uint NetifInfo::speed() const
 {
     return d->speed;
-}
-
-inline QByteArray NetifInfo::netspeed() const
-{
-    return d->net_speed;
 }
 
 inline QByteArray NetifInfo::connectionType() const

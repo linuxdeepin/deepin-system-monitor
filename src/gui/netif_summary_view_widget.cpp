@@ -250,7 +250,7 @@ public:
 
             // 速率
             stInfo.strKey = QApplication::translate("NetInfoModel", "Bandwidth");
-            stInfo.strValue = stNetifInfo->netspeed();
+            stInfo.strValue = formatUnit(stNetifInfo->speed(), MB, 0, true);
             m_listInfo << stInfo;
 
             // 接收包数量
