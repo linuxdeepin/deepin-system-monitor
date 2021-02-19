@@ -210,8 +210,8 @@ void ProcessPageWidget::initUI()
 
     // fill left side bar & main content area
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(margin);
-    layout->setSpacing(margin);
+    layout->setMargin(16);
+    layout->setSpacing(16);
     layout->addWidget(m_views);
     layout->addWidget(m_rightStackView);
     setLayout(layout);

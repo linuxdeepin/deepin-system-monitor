@@ -99,7 +99,9 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
-    m_frameColor = palette.color(DPalette::FrameBorder);
+
+    m_frameColor = palette.color(DPalette::TextTips);
+    m_frameColor.setAlphaF(0.3);
 }
 
 void NetworkMonitor::getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue)
@@ -164,7 +166,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     int bulletSize = 6;
-    int padleft = bulletSize * 2 + 2;
+    int padleft = bulletSize * 2;
 
     auto spacing = 10;
     auto margin = 10;
@@ -215,9 +217,9 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QRect crect41(contentRect.x(), crect31.y() + crect31.height(), crect11.width(),
                   crect21.height());
     QRect crect42(crect12.x(), crect41.y(), crect12.width(), crect21.height());
-    QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
+    QRectF r1Ind(0, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
-    QRectF r2Ind(3, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
+    QRectF r2Ind(0, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
 
     painter.setPen(ltextColor);

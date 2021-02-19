@@ -49,7 +49,7 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
-    ringCenterPointerX = rect().width() - outsideRingRadius - 4;
+    ringCenterPointerX = rect().width() - outsideRingRadius;
 
     setFixedHeight(160);
 
@@ -193,12 +193,12 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmMem(m_contentFont);
     QFontMetrics fmMemStat(m_subContentFont);
-    QRect memRect(sectionSize * 2 + 4, titleRect.y() + titleRect.height(),
+    QRect memRect(sectionSize * 2, titleRect.y() + titleRect.height(),
                   fmMem.size(Qt::TextSingleLine, memoryTitle).width(), fmMem.height());
     QRect memStatRect(memRect.x(), memRect.y() + memRect.height(),
                       fmMemStat.size(Qt::TextSingleLine, memoryContent).width(),
                       fmMemStat.height());
-    QRectF memIndicatorRect(3, memRect.y() + qCeil((memRect.height() - sectionSize) / 2.),
+    QRectF memIndicatorRect(0, memRect.y() + qCeil((memRect.height() - sectionSize) / 2.),
                             sectionSize, sectionSize);
 
     QPainterPath section;

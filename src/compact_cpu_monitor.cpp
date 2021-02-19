@@ -29,6 +29,7 @@
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyleHelper>
+#include <DFontSizeManager>
 
 #include <QApplication>
 #include <QDebug>
@@ -82,8 +83,8 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
 
     m_detailText = tr("Details");
     m_detailButton = new DCommandLinkButton(m_detailText, this);
+    DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     m_detailButton->setToolTip(m_detailText);
-    m_detailButton->setFont(m_cpuFont);
     connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::onDetailInfoClicked);
 
     changeFont(DApplication::font());
@@ -144,7 +145,8 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
 
     // init colors
     auto palette = dAppHelper->applicationPalette();
-    QColor frameColor = palette.color(DPalette::FrameBorder);
+    QColor frameColor  = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
 
 #ifndef THEME_FALLBACK_COLOR
     QColor cpuColor = palette.color(DPalette::TextTitle);

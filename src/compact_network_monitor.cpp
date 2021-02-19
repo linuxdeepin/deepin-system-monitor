@@ -285,7 +285,8 @@ void CompactNetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeTy
 #endif
 
     summaryColor = palette.color(DPalette::TextTips);
-    m_frameColor = palette.color(DPalette::FrameBorder);
+    m_frameColor = palette.color(DPalette::TextTips);
+    m_frameColor.setAlphaF(0.3);
 }
 
 void CompactNetworkMonitor::changeFont(const QFont &font)

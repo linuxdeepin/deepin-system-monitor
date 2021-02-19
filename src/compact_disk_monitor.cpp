@@ -139,7 +139,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 #endif
 
     QColor statColor = palette.color(DPalette::TextTips);
-    QColor frameColor = palette.color(DPalette::FrameBorder);
+    QColor frameColor  = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
 
     // Draw disk summary.
     QFontMetrics fm(m_tagFont);
