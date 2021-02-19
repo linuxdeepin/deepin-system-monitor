@@ -55,6 +55,14 @@ protected:
 
     void drawTextMode(QPainter &painter);
 
+    /**
+     * @brief drawBackground
+     * 绘制边框和表格线
+     * @param painter
+     * @param graphicRect
+     */
+    void drawBackground(QPainter &painter, const QRect &graphicRect);
+
 private:
     QList<qreal>  m_cpuPercents;
     CPUInfoModel *m_cpuInfomodel = nullptr;

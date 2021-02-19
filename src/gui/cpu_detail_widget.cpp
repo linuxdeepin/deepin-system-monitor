@@ -111,9 +111,15 @@ void CPUDetailGrapTableItem::paintEvent(QPaintEvent *event)
 
 void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 {
-    painter.setRenderHint(QPainter::Antialiasing);
+    //draw background
+    QRect graphicRect = QRect(5, 30, this->width() - 10, this->height() - 60);
+    drawBackground(painter, graphicRect);
 
     //draw text
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    painter.setPen(palette.color(DPalette::TextTips));
+
     QFont font = DApplication::font();
     font.setPointSize(font.pointSize() - 2);
     painter.setFont(font);
@@ -122,35 +128,6 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
     painter.drawText(QRect(5, 5, this->width() - 10, 25), Qt::AlignRight | Qt::AlignBottom, "100%");
     painter.drawText(QRect(5, this->height() - 30, this->width() - 10, 30), Qt::AlignTop | Qt::AlignLeft, tr("60 seconds"));
     painter.drawText(QRect(5, this->height() - 30, this->width() - 10, 30), Qt::AlignTop | Qt::AlignRight, "0");
-
-    QRect graphicRect = QRect(5, 30, this->width() - 10, this->height() - 60);
-
-    // draw frame
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    QColor frameColor = palette.color(DPalette::FrameBorder);
-#ifndef THEME_FALLBACK_COLOR
-    QColor cpuColor = palette.color(DPalette::TextTitle);
-#else
-    QColor cpuColor = palette.color(DPalette::Text);
-#endif
-
-    painter.setPen(frameColor);
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(graphicRect);
-
-    // draw grid
-    painter.setPen(frameColor);
-
-    double sectionHeight = graphicRect.height() / 10.0;
-    for (int i = 1; i <= 9; ++i)    //横线
-        painter.drawLine(graphicRect.x(), static_cast<int>(graphicRect.y() + sectionHeight * i),
-                         graphicRect.x() + graphicRect.width(), static_cast<int>(graphicRect.y() + sectionHeight * i));
-
-    double sectionWidth = graphicRect.width() / 20.0;
-    for (int i = 1; i <= 19; ++i)    //竖线
-        painter.drawLine(static_cast<int>(graphicRect.x() + sectionWidth * i), graphicRect.y(),
-                         static_cast<int>(graphicRect.x() + sectionWidth * i), graphicRect.y() + graphicRect.height());
 
     // draw cpu
     if (m_cpuPercents.count() > 0) {
@@ -177,36 +154,13 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 
 void CPUDetailGrapTableItem::drawSimpleMode(QPainter &painter)
 {
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    QRect graphicRect = QRect(0, 0, this->width(), this->height());
-
-    // draw frame
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    QColor frameColor = palette.color(DPalette::FrameBorder);
-#ifndef THEME_FALLBACK_COLOR
-    QColor cpuColor = palette.color(DPalette::TextTitle);
-#else
-    QColor cpuColor = palette.color(DPalette::Text);
-#endif
-
-    painter.setPen(frameColor);
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(graphicRect);
-
-    // draw grid
-    painter.setPen(frameColor);
-
-    double sectionHeight = this->height() / 5.0;
-    for (int i = 0; i < 5; ++i)
-        painter.drawLine(0, static_cast<int>(sectionHeight * i), this->width(), static_cast<int>(sectionHeight * i));
-
-    double sectionWidth = this->width() / 10.0;
-    for (int i = 0; i < 10; ++i)
-        painter.drawLine(static_cast<int>(sectionWidth * i), 0, static_cast<int>(sectionWidth * i), this->height());
+    //draw background
+    QRect graphicRect = QRect(1, 1, this->width() - 2, this->height() - 2);
+    drawBackground(painter, graphicRect);
 
     // draw cpu
+    painter.setRenderHint(QPainter::Antialiasing);
+
     if (m_cpuPercents.count() > 0) {
         painter.setPen(QPen(m_color, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
@@ -237,18 +191,48 @@ void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
-#ifndef THEME_FALLBACK_COLOR
-    QColor cpuColor = palette.color(DPalette::TextTitle);
-#else
-    QColor cpuColor = palette.color(DPalette::Text);
-#endif
-
     painter.setPen(frameColor);
     painter.setBrush(Qt::NoBrush);
     painter.drawRect(rect);
 
     painter.setPen(m_color);
     painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(m_index) * 100, 'f', 1) + "%");
+}
+
+void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &graphicRect)
+{
+    // draw frame
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    QColor frameColor = palette.color(DPalette::FrameBorder);
+
+    painter.setPen(frameColor);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(graphicRect);
+
+    // draw grid
+    QPen gridPen;
+    QVector<qreal> dashes;
+    qreal space = 2;
+    dashes << space << space;
+    gridPen.setDashPattern(dashes);
+    gridPen.setColor(frameColor);
+    painter.setPen(gridPen);
+    int section = 10;
+
+    int totalHeight = graphicRect.height();
+    int currentHeight = graphicRect.y();
+    while (currentHeight < totalHeight + graphicRect.y()) {
+        painter.drawLine(graphicRect.x(), currentHeight, graphicRect.x() + graphicRect.width(), currentHeight);
+        currentHeight += section;
+    }
+
+    int totalWidth = graphicRect.width();
+    int currentWidth = graphicRect.x();
+    while (currentWidth < totalWidth + graphicRect.x()) {
+        painter.drawLine(currentWidth, graphicRect.y(), currentWidth, graphicRect.y() + graphicRect.height());
+        currentWidth += section;
+    }
 }
 
 CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
@@ -262,8 +246,8 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
     m_textArea = new QScrollArea(this);
     m_textTable = new CPUDetailInfoTable(m_textArea);
     m_textTable->addItem(tr("Utilization"), QString::number(m_cpuInfomodel->cpuAllPercent(), 'f', 0) + "%"); //百分比显示，为CPU的总体利用率，显示精度为1%，2秒刷新1次；
-    m_textTable->addItem(tr("Current frequency"), m_cpuInfomodel->cpuSet()->curFreq());  //显示当前CPU的实际运行速度，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
-    m_textTable->addItem(tr("Frequency"), m_cpuInfomodel->cpuSet()->minFreq() + " ~ " + m_cpuInfomodel->cpuSet()->maxFreq()); //最小频率  ~ 最大频率；
+    m_textTable->addItem(tr("CPU freq"), m_cpuInfomodel->cpuSet()->curFreq());  //显示当前CPU的实际运行速度，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
+    m_textTable->addItem(tr("Min freq~Max freq"), m_cpuInfomodel->cpuSet()->minFreq() + " ~ " + m_cpuInfomodel->cpuSet()->maxFreq()); //最小频率  ~ 最大频率；
     //m_textTable->addItem(tr("Model"), m_cpuInfomodel->cpuSet()->modelName()); //CPU属于的名字及其编号、标称主频；
     m_textTable->addItem(tr("Vendor"), m_cpuInfomodel->cpuSet()->vendor());    //显示制造商名称。格式：字串
     //m_textTable->addItem(tr("Core ID"), m_cpuInfomodel->cpuSet()->coreId(0));   //处理器ID
