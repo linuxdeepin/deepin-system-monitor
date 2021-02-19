@@ -219,7 +219,6 @@ inline QByteArray SysInfo::groupName(gid_t gid)
 
 inline void SysInfo::set_nprocesses(quint32 nprocs)
 {
-    qDebug() << 123;
     d->nprocs = nprocs;
 }
 
