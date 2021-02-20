@@ -27,6 +27,7 @@ ProcessIconCache *ProcessIconCache::m_instance = nullptr;
 ProcessIconCache::ProcessIconCache(QObject *parent)
     : QObject(parent)
 {
+
 }
 
 } // namespace process

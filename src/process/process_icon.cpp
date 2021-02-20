@@ -49,6 +49,8 @@ struct icon_data_t {
     char __pad__[4];
     QString proc_name;
     bool desktopentry = false;
+
+    virtual ~icon_data_t() {}
 };
 
 struct icon_data_name_type : public icon_data_t {

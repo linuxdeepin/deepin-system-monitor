@@ -22,6 +22,7 @@
 
 #include <QCache>
 #include <QThread>
+#include <QPixmapCache>
 
 namespace core {
 namespace process {
@@ -41,6 +42,9 @@ public:
     bool contains(pid_t pid) const;
     void clear();
     void setMaxCost(int cost);
+
+public:
+    QPixmapCache iconPixmapCache;
 
 private:
     explicit ProcessIconCache(QObject *parent = nullptr);

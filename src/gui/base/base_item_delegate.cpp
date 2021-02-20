@@ -19,6 +19,7 @@
 */
 
 #include "base_item_delegate.h"
+#include "process/process_icon_cache.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -46,6 +47,7 @@ const int spacing = 10;
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
+
 }
 
 // paint method for this delegate
@@ -192,8 +194,18 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             (opt.viewItemPosition == QStyleOptionViewItem::Beginning ||
              opt.viewItemPosition == QStyleOptionViewItem::OnlyOne)) {
         // vmargins between icon and edge
+        const QIcon &icon = opt.icon;
         auto diff = (iconRect.height() - iconSize) / 2;
-        opt.icon.paint(painter, iconRect.adjusted(0, diff, 0, -diff));
+        iconRect.adjust(0, diff, 0, -diff);
+
+        const QString &procPid = index.data(Qt::UserRole + 4).toString();
+        if (QPixmap *iconPixmap = core::process::ProcessIconCache::instance()->iconPixmapCache.find(procPid)) {
+            painter->drawPixmap(iconRect, *iconPixmap);
+        } else {
+            const QPixmap &iconPix = icon.pixmap(iconRect.size());
+            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procPid, iconPix);
+            painter->drawPixmap(iconRect, iconPix);
+        }
     }
     // draw content text
     painter->setPen(forground);
