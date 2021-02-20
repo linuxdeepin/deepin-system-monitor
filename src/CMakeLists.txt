@@ -185,6 +185,7 @@ set(HPP_GUI
     gui/animation_stackedwidget.h
     gui/base/base_detail_view_widget.h
     gui/cpu_detail_widget.h
+    gui/cpu_summary_view_widget.h
     gui/block_dev_item_widget.h
 )
 set(CPP_GUI
@@ -222,6 +223,7 @@ set(CPP_GUI
     gui/animation_stackedwidget.cpp
     gui/base/base_detail_view_widget.cpp
     gui/cpu_detail_widget.cpp
+    gui/cpu_summary_view_widget.cpp
     gui/block_dev_item_widget.cpp
     gui/block_dev_stat_view_widget.cpp
 )

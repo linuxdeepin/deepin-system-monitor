@@ -26,6 +26,7 @@
 #include "model/cpu_info_model.h"
 #include "model/cpu_list_model.h"
 #include "system/cpu_set.h"
+#include "cpu_summary_view_widget.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -204,10 +205,11 @@ void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &grap
     // draw frame
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-    QColor frameColor = palette.color(DPalette::FrameBorder);
+    QColor frameColor = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
 
-    painter.setPen(frameColor);
-    painter.setBrush(Qt::NoBrush);
+    painter.setPen(QPen(frameColor, 1));
+    painter.setBrush(palette.color(QPalette::Base));
     painter.drawRect(graphicRect);
 
     // draw grid
@@ -238,38 +240,15 @@ void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &grap
 CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 {
     TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
+
     m_cpuInfomodel = new CPUInfoModel(period, this);
-    connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CPUDetailWidget::onCPUInfoUpdated);
 
     m_graphicsTable = new CPUDetailGrapTable(m_cpuInfomodel, this);
 
-    m_textArea = new QScrollArea(this);
-    m_textTable = new CPUDetailInfoTable(m_textArea);
-    m_textTable->addItem(tr("Utilization"), QString::number(m_cpuInfomodel->cpuAllPercent(), 'f', 0) + "%"); //百分比显示，为CPU的总体利用率，显示精度为1%，2秒刷新1次；
-    m_textTable->addItem(tr("CPU freq"), m_cpuInfomodel->cpuSet()->curFreq());  //显示当前CPU的实际运行速度，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
-    m_textTable->addItem(tr("Min freq~Max freq"), m_cpuInfomodel->cpuSet()->minFreq() + " ~ " + m_cpuInfomodel->cpuSet()->maxFreq()); //最小频率  ~ 最大频率；
-    //m_textTable->addItem(tr("Model"), m_cpuInfomodel->cpuSet()->modelName()); //CPU属于的名字及其编号、标称主频；
-    m_textTable->addItem(tr("Vendor"), m_cpuInfomodel->cpuSet()->vendor());    //显示制造商名称。格式：字串
-    //m_textTable->addItem(tr("Core ID"), m_cpuInfomodel->cpuSet()->coreId(0));   //处理器ID
-    m_textTable->addItem(tr("Sockets"), QString::number(m_cpuInfomodel->cpuSet()->socketCount()));   //插槽
-    m_textTable->addItem(tr("Logical processors"), QString::number(m_cpuInfomodel->cpuSet()->cpuCount()));    //逻辑处理器数量；（格式：数字）
-    m_textTable->addItem(tr("Virtualization"), m_cpuInfomodel->cpuSet()->virtualization());    //虚拟化机制；（Intel 的VT-x，AMD的AMD-v），如果当前CPU不支持虚拟化，显示“不支持”；
-    m_textTable->addItem(tr("L1i cache"), m_cpuInfomodel->cpuSet()->l1iCache());    //L1缓存（指令）：1级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
-    m_textTable->addItem(tr("L1d cache"), m_cpuInfomodel->cpuSet()->l1dCache());    //L1缓存（数据）：1级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
-    m_textTable->addItem(tr("L2 cache"), m_cpuInfomodel->cpuSet()->l2Cache());     //L2缓存：2级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
-    m_textTable->addItem(tr("L3 cache"), m_cpuInfomodel->cpuSet()->l3Cache());     //L3缓存：3级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
-    m_textTable->addItem(tr("Load average"), m_cpuInfomodel->loadavg());  //负载均衡：Load Average 就是一段时间 (1 分钟、5分钟、15分钟) 内平均 Load；
-    m_textTable->addItem(tr("File descriptors"), QString::number(m_cpuInfomodel->nFileDescriptors()));  //文件描述符数
-    m_textTable->addItem(tr("Processes"), QString::number(m_cpuInfomodel->nProcesses())); //进程数量（格式：数字）
-    m_textTable->addItem(tr("Threads"), QString::number(m_cpuInfomodel->nThreads()));   //线程数量（格式：数字）
-    m_textTable->addItem(tr("Host name"), m_cpuInfomodel->hostname()); //显示主机名称。（格式：字符串）
-    m_textTable->addItem(tr("OS type"), m_cpuInfomodel->osType());   //系统类型
-    m_textTable->addItem(tr("Version"), m_cpuInfomodel->osVersion());   //版本号
-    m_textTable->addItem(tr("Up time"), m_cpuInfomodel->uptime());   //最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
-    m_textArea->setFrameShape(QFrame::NoFrame);
-    m_textArea->setWidget(m_textTable);
+    m_summary  = new  CPUDetailSummaryTable(m_cpuInfomodel, this);
 
     setTitle(DApplication::translate("Process.Graph.View", "CPU"));
+
     setDetail(m_cpuInfomodel->cpuSet()->modelName());
 }
 
@@ -283,122 +262,14 @@ void CPUDetailWidget::adjustGeometry(QSize size)
 {
     m_graphicsTable->move(5, titleHeight());
     m_graphicsTable->resize(size.width() - 10, size.height() / 2 - titleHeight());
-    m_textArea->move(10, size.height() / 2);
-    m_textArea->resize(size.width() - 20, size.height() / 2);
-    m_textTable->setFixedWidth(size.width() - 20);
-}
-
-void CPUDetailWidget::onCPUInfoUpdated()
-{
-    m_textTable->modItem(0, tr("Utilization"), QString::number(m_cpuInfomodel->cpuAllPercent(), 'f', 0) + "%");
-    m_textTable->modItem(1, tr("Current frequency"), m_cpuInfomodel->cpuSet()->curFreq());
-    m_textTable->modItem(12, tr("File descriptors"), QString::number(m_cpuInfomodel->nFileDescriptors())); //文件描述符数
-    m_textTable->modItem(13, tr("Processes"), QString::number(m_cpuInfomodel->nProcesses())); //进程数量（格式：数字）
-    m_textTable->modItem(14, tr("Threads"), QString::number(m_cpuInfomodel->nThreads()));  //线程数量（格式：数字）
+    m_summary->move(10, size.height() / 2);
+    m_summary->resize(size.width() - 20, size.height() / 2);
 }
 
 void CPUDetailWidget::detailFontChanged(const QFont &font)
 {
     BaseDetailViewWidget::detailFontChanged(font);
     adjustGeometry(this->size());
-}
-
-CPUDetailInfoTable::CPUDetailInfoTable(QWidget *parent): QWidget(parent)
-{
-
-}
-
-void CPUDetailInfoTable::addItem(QString first, QString second)
-{
-    CPUDetailInfoTableItem item;
-    item.first = first;
-    item.second = second;
-    m_items.append(item);
-    setFixedHeight((m_items.count() / 2 + (m_items.count() % 2 == 0 ? 0 : 1)) * 60 + 2);
-}
-
-void CPUDetailInfoTable::modItem(int index, QString first, QString second)
-{
-    if (m_items.count() <= index)
-        return;
-
-    CPUDetailInfoTableItem item;
-    item.first = first;
-    item.second = second;
-    m_items[index] = item;
-    update();
-}
-
-void CPUDetailInfoTable::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    QRect drawRect = QRect(1, 1, this->rect().width() - 2, this->rect().height() - 2);
-
-    // draw frame
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto palette = dAppHelper->applicationPalette();
-    QColor frameColor = palette.color(DPalette::FrameBorder);
-    QColor keyColor = palette.color(DPalette::TextTitle);
-    QColor valueColor = palette.color(DPalette::Text);
-
-    painter.setPen(frameColor);
-    painter.setOpacity(0.3);
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(drawRect, 8, 8);
-
-    //draw items
-    int itemHeight = 60;
-    painter.setOpacity(1);
-
-    QFont font = DApplication::font();
-    font.setPointSize(font.pointSize() - 2);
-    painter.setFont(font);
-
-    for (int i = 0; i < m_items.count(); ++i) {
-        if (i % 2 == 0) {
-            //draw background
-            if (i % 4 == 0)
-                painter.setBrush(QColor(0, 0, 0, 8));
-            else
-                painter.setBrush(Qt::NoBrush);
-
-            painter.setPen(Qt::NoPen);
-
-            if (0 == i) {//top rounded
-                painter.drawRoundedRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), 8, 8, 8);
-                painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight + 8, drawRect.width(), itemHeight - 8);
-            } else if (m_items.count() - 1 == i || m_items.count() - 2 == i) {//bottom rounded
-                painter.drawRoundedRect(drawRect.x(), drawRect.height() - 8, drawRect.width(), 8, 8, 8);
-                painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), itemHeight - 9);
-            } else//middle
-                painter.drawRect(drawRect.x(), drawRect.y() + i / 2 * itemHeight, drawRect.width(), itemHeight);
-
-            //draw left left text
-            painter.setFont(DApplication::font());
-            painter.setPen(keyColor);
-            painter.drawText(drawRect.x() + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignLeft | Qt::AlignVCenter, m_items[i].first);
-            //draw left right text
-            painter.setFont(font);
-            painter.setPen(valueColor);
-            painter.drawText(drawRect.x() + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignRight | Qt::AlignVCenter, m_items[i].second);
-        } else {
-            //draw right left text
-            painter.setFont(DApplication::font());
-            painter.setPen(keyColor);
-            painter.drawText(drawRect.x() + drawRect.width() / 2 + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignLeft | Qt::AlignVCenter, m_items[i].first);
-            //draw right right text
-            painter.setFont(font);
-            painter.setPen(valueColor);
-            painter.drawText(drawRect.x() + drawRect.width() / 2 + 20, drawRect.y() + i / 2 * itemHeight, drawRect.width() / 2 - 40, itemHeight, Qt::AlignRight | Qt::AlignVCenter, m_items[i].second);
-        }
-    }
-
-    //draw middle line
-    painter.setPen(frameColor);
-    painter.drawLine(drawRect.x() + drawRect.width() / 2, drawRect.y(), drawRect.x() + drawRect.width() / 2,  drawRect.y() + drawRect.height());
 }
 
 CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QWidget(parent)

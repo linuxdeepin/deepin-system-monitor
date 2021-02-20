@@ -22,6 +22,8 @@
 
 #include <QWidget>
 #include <DPushButton>
+#include <QScrollArea>
+
 #include "base/base_detail_view_widget.h"
 
 class CPUInfoModel;
@@ -80,27 +82,7 @@ public:
     CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent);
 };
 
-struct CPUDetailInfoTableItem {
-    QString first;
-    QString second;
-};
-
-class CPUDetailInfoTable: public QWidget
-{
-    Q_OBJECT
-public:
-    explicit CPUDetailInfoTable(QWidget *parent);
-
-    void addItem(QString first, QString second);
-
-    void modItem(int index, QString first, QString second);
-
-    void paintEvent(QPaintEvent *);
-
-private:
-    QList<CPUDetailInfoTableItem> m_items;
-};
-
+class CPUDetailSummaryTable;
 class CPUDetailWidget : public BaseDetailViewWidget
 {
     Q_OBJECT
@@ -114,16 +96,13 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void onCPUInfoUpdated();
-
     void detailFontChanged(const QFont &font) override;
 
 private:
     CPUInfoModel *m_cpuInfomodel = nullptr;
-    CPUDetailGrapTable *m_graphicsTable = nullptr;
     Dtk::Widget::DPushButton *m_backBtn = nullptr;
-    QScrollArea *m_textArea = nullptr;
-    CPUDetailInfoTable *m_textTable = nullptr;
+    CPUDetailGrapTable *m_graphicsTable = nullptr;
+    CPUDetailSummaryTable *m_summary = nullptr;
 };
 
 #endif // CPU_DETAIL_WIDGET_H

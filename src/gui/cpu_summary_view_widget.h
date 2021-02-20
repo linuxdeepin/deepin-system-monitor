@@ -20,20 +20,31 @@
 #ifndef CPU_SUMMARY_VIEW_WIDGET_H
 #define CPU_SUMMARY_VIEW_WIDGET_H
 
-#include <QWidget>
+#include <DTableView>
 
 /**
- * @brief CPU summary view widget
+ * @brief Memory summary view widget
  */
-class CPUSummaryViewWidget : public QWidget
+DWIDGET_USE_NAMESPACE
+class CPUInfoModel;
+class CPUSummaryTableModel;
+class CPUDetailSummaryTable : public DTableView
 {
     Q_OBJECT
 public:
-    explicit CPUSummaryViewWidget(QWidget *parent = nullptr);
-
-signals:
+    explicit CPUDetailSummaryTable(CPUInfoModel *dataModel, QWidget *parent = nullptr);
 
 public slots:
+    void fontChanged(const QFont &font);
+
+    void onModelUpdate();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+private:
+    QFont m_font;
+    CPUSummaryTableModel *m_model;
 };
 
 #endif // CPU_SUMMARY_VIEW_WIDGET_H
