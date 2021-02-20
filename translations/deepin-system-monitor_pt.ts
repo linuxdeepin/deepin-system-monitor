@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Ocultar detalhes</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Leitura</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Gravação</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 segundos</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 dias %2 horas %3 minutos</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Utilização</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Frequência atual</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frequência</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Fornecedor</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Tomadas</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Processadores lógicos</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualização</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>Cache L1i</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>Cache L1d</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>Cache L2</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>Cache L3</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Média de carga</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Descritores de ficheiros</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Processos</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Fios de execução</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Nome da máquina</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Tipo de SO</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versão</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Tempo ligado</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 segundos</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Detalhes</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Detalhes</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Utilizado</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Disponível</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <source>Shared</source>
+        <translation>Partilhado</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <source>Cached</source>
+        <translation>Em cache</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>Buffers</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>Swap em cache</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Ativo</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Inativo</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Corrupto</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Mapeado</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Swap total</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Swap livre</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Slab</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Modelo</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Velocidade de leitura</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Velocidade de gravação</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Capacidade</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Leitura de sectores</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Leituras/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Leitura/s de sectores</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Leituras unidas/s</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Sectores gravados</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Gravações concluídas</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Gravações unidas</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Gravações/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Sectores gravados/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Gravações unidas/s</translation>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Tamanho</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>Endereço de IP:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Máscara de rede:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Transmissão:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Prefixado:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Âmbito:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Tipo de ligação</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Qualidade de ligação</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Intensidade do sinal</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Nível de ruído</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Banda larga</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>Pacotes RX</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>Bytes RX</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>Erros RX</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX largados</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX excedentes</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX frame</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>Pacotes TX</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>Bytes TX</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>Erros TX</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>TX  largados</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX excedentes</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>Portador TX</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +637,10 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Memory</source>
         <translation>RAM</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Receber</translation>
     </message>
 </context>
 <context>
@@ -369,6 +692,10 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Total enviado</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Enviar</translation>
     </message>
 </context>
 <context>
@@ -566,6 +893,21 @@ Tem a certeza de que deseja continuar?</translation>
         <source>Priority</source>
         <translation>Prioridade</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Memória partilhada</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Memória virtual</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Não suportado</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -694,16 +1036,6 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Services</source>
         <translation>Serviços</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

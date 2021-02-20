@@ -66,6 +66,11 @@ public:
 
         QStyledItemDelegate::paint(painter, option, index);
     }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    {
+        return QSize(option.rect.width(), 36);
+    }
 };
 
 DetailItemDelegate::DetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
@@ -225,14 +230,19 @@ MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)
 
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
+
+    this->horizontalHeader()->setStretchLastSection(true);
+
     this->horizontalHeader()->setSectionResizeMode(DHeaderView::Stretch);
-    this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
+    this->verticalHeader()->setSectionResizeMode(DHeaderView::ResizeToContents);
     this->setGridStyle(Qt::NoPen);
     this->setFrameShape(QFrame::NoFrame);
 
     m_model = new DeailTableModel(this);
     this->setModel(m_model);
     this->setItemDelegate(new DetailItemDelegate(this));
+
+    setFixedHeight(260);
 }
 
 void MemSummaryViewWidget::onModelUpdate()
@@ -244,7 +254,6 @@ void MemSummaryViewWidget::fontChanged(const QFont &font)
 {
     m_font = font;
     this->setFont(m_font);
-    setFixedHeight(QFontMetrics(font).height() * 11);
 }
 
 void MemSummaryViewWidget::paintEvent(QPaintEvent *event)

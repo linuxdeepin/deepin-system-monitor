@@ -32,8 +32,8 @@
 #include <DTitlebar>
 #include <QKeyEvent>
 
-const int WINDOW_MIN_HEIGHT = 750;
-const int WINDOW_MIN_WIDTH = 1000;
+const int WINDOW_MIN_HEIGHT = 760;
+const int WINDOW_MIN_WIDTH = 1080;
 
 const int WINDOW_MAX_HEIGHT = 1080;
 const int WINDOW_MAX_WIDTH = 1920;

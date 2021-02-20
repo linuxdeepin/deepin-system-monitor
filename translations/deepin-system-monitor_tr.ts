@@ -36,7 +36,14 @@
     </message>
 </context>
 <context>
-    <name>CPUDetailWidget</name>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
         <translation>Kullanım</translation>
@@ -112,13 +119,6 @@
     <message>
         <source>Up time</source>
         <translation>Açık kalma süresi</translation>
-    </message>
-</context>
-<context>
-    <name>CPUInfoModel</name>
-    <message>
-        <source>%1 days %2 hours %3 minutes</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     </message>
     <message>
         <source>Cached swap</source>
-        <translation type="unfinished"/>
+        <translation>Önbelleklenen takas</translation>
     </message>
     <message>
         <source>Active</source>
@@ -387,11 +387,11 @@
     </message>
     <message>
         <source>Read speed</source>
-        <translation type="unfinished"/>
+        <translation>Okuma hızı</translation>
     </message>
     <message>
         <source>Write speed</source>
-        <translation type="unfinished"/>
+        <translation>Yazma hızı</translation>
     </message>
     <message>
         <source>Capacity</source>
@@ -551,7 +551,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Bandwidth</source>
-        <translation type="unfinished"/>
+        <translation>Bant genişliği</translation>
     </message>
     <message>
         <source>RX packets</source>
@@ -603,11 +603,11 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>IPv4</source>
-        <translation type="unfinished"/>
+        <translation>IPv4</translation>
     </message>
     <message>
         <source>IPv6</source>
-        <translation type="unfinished"/>
+        <translation>IPv6</translation>
     </message>
 </context>
 <context>
@@ -640,7 +640,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Receive</source>
-        <translation type="unfinished"/>
+        <translation>Alınan</translation>
     </message>
 </context>
 <context>
@@ -695,7 +695,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation type="unfinished"/>
+        <translation>Gönderilen</translation>
     </message>
 </context>
 <context>

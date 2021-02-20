@@ -9,7 +9,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.renice!description" line="0"/>
 			<source>Renice process</source>
-			<translation type="unfinished"/>
+			<translation>Rikthejini procesit vlerën për “nice”</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!message" line="0"/>

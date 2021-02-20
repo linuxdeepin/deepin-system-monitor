@@ -38,7 +38,14 @@
     </message>
 </context>
 <context>
-    <name>CPUDetailWidget</name>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
         <translation type="unfinished"></translation>
@@ -113,13 +120,6 @@
     </message>
     <message>
         <source>Up time</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>CPUInfoModel</name>
-    <message>
-        <source>%1 days %2 hours %3 minutes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

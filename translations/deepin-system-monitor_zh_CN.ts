@@ -36,7 +36,14 @@
     </message>
 </context>
 <context>
-    <name>CPUDetailWidget</name>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1天%2小时%3分钟</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
         <translation>利用率</translation>
@@ -112,13 +119,6 @@
     <message>
         <source>Up time</source>
         <translation>运行时间</translation>
-    </message>
-</context>
-<context>
-    <name>CPUInfoModel</name>
-    <message>
-        <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1天%2小时%3分钟</translation>
     </message>
 </context>
 <context>

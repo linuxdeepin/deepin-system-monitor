@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Informatie verbergen</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Uitgelezen</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Weggeschreven</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 seconden</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 dagen, %2 uur, %3 minuten</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Gebruik</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Huidige snelheid</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Snelheid</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Maker</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Sockets</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Logische processors</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualisatie</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i-cache</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d-cache</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2-cache</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3-cache</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Gemiddelde belasting</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Bestandsomschrijvingen</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Processen</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Processen</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Hostnaam</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Soort besturingssysteem</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versie</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Uptime</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 seconden</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Informatie</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Informatie</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Gebruikt</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Beschikbaar</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">Processor</translation>
+        <source>Shared</source>
+        <translation>Gedeeld</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">Geheugen</translation>
+        <source>Cached</source>
+        <translation>Gecachet</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>Buffers</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>Gecachet wisselgeheugen</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Actief</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Inactief</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Dirty</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Toegewezen</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Totaal wisselgeheugen</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Vrij wisselgeheugen</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Model</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Leessnelheid</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Schrijfsnelheid</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Capaciteit</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Uitgelezen sectoren</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Uitgelezen/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Uitgelezen sectoren/s</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Uitgelezen+samengevoegd/s</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Weggeschreven sectoren</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Voltooide wegschrijvingen</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Samengevoegde wegschrijvingen</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Weggeschreven/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Weggeschreven sectoren/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Samengevoegde wegschrijvingen/s</translation>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Grootte</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP-adres:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Netmask:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Uitgezonden:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Voorvoegsel:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Bereik:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Soort verbinding</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Linkkwaliteit</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Signaalsterkte</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Ruisniveau</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Bandbreedte</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX-pakketten</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX-bytes</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX-fouten</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX-loslatingen</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX-overvloeiingen</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX-frame</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX-pakketten</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX-bytes</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX-fouten</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>TX-loslatingen</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX-overvloeiingen</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX-provider</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +637,10 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Memory</source>
         <translation>Geheugen</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Ontvangen</translation>
     </message>
 </context>
 <context>
@@ -369,6 +692,10 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Totaal verstuurd</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Verstuurd</translation>
     </message>
 </context>
 <context>
@@ -566,6 +893,21 @@ Weet je zeker dat je door wilt gaan?</translation>
         <source>Priority</source>
         <translation>Prioriteit</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Gedeeld geheugen</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Virtueel geheugen</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Niet ondersteund</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -694,16 +1036,6 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Services</source>
         <translation>Diensten</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

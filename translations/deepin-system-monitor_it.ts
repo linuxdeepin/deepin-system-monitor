@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -14,6 +12,124 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Nascondi dettagli</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Lettura</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Scrittura</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 secondi</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 giorni %2 ore %3 minuti</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Utilizzo</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Frequenza attuale</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frequenza</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Marca</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Socket</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Processori logici</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualizzazione</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i cache</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d cache</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2 cache</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3 cache</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Carico medio</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Descrittori file</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Processi</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Thread</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Nome Host</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Tipo OS</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versione</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Utilizzo</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 secondi</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -21,18 +137,17 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Dettagli</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Dettagli</translation>
     </message>
 </context>
 <context>
@@ -211,30 +326,117 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Utilizzato</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Disponibile</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <source>Shared</source>
+        <translation>Condiviso</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">Memoria</translation>
+        <source>Cached</source>
+        <translation>Cache</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>Buffer</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>Swap cache</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Attivo</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Non attivo</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Sporco</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Mappato</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Swap totale</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Swap libera</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Slab</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Modello</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Velocità di lettura</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Velocità di scrittura</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Capacità</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Settori letti</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Letti/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Settori letti/s</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Letture unite/s</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Settori scritti</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Scritture completate</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Scritture unite</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Scrittura/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Settori scritti/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Scritture unite/s</translation>
     </message>
 </context>
 <context>
@@ -293,6 +495,123 @@ Sicuro di voler terminarla?</translation>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Dimensioni</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>Indirizzo IP:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Netmask:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Broadcast:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Prefixlen:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Scope:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Tipo connessione</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Qualità collegamento</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Potenza segnale</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Livello rumore</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Larghezza di banda</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX pachetti</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX byte</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX errori</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX persi</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX saltati</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX frame</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX pacchetti</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX byte</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX errori</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>TX persi</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX saltati</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX vettore</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -319,6 +638,10 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Memory</source>
         <translation>Memoria</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Ricevuti</translation>
     </message>
 </context>
 <context>
@@ -370,6 +693,10 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Totale inviati</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Inviati</translation>
     </message>
 </context>
 <context>
@@ -567,6 +894,21 @@ Sicuro di voler terminarla?</translation>
         <source>Priority</source>
         <translation>Priorità</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Memoria condivisa</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Memoria virtuale</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Non supportato</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -695,16 +1037,6 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Services</source>
         <translation>Servizi</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

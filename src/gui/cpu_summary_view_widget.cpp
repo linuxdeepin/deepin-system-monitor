@@ -66,6 +66,11 @@ public:
 
         QStyledItemDelegate::paint(painter, option, index);
     }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    {
+        return QSize(option.rect.width(), 36);
+    }
 };
 
 CPUSummaryDelegate::CPUSummaryDelegate(QObject *parent): QStyledItemDelegate(parent)
@@ -89,7 +94,7 @@ private:
 protected:
     int rowCount(const QModelIndex &) const
     {
-        return 7;
+        return 10;
     }
 
     int columnCount(const QModelIndex &) const
@@ -111,12 +116,12 @@ protected:
                 if (column == 0)
                     return QApplication::translate("CPUSummaryTableModel", "Utilization"); //百分比显示，为CPU的总体利用率，显示精度为1%，2秒刷新1次；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "CPU freq");//显示当前CPU的实际运行速度，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
+                    return QApplication::translate("CPUSummaryTableModel", "Current frequency");//显示当前CPU的实际运行速度，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
                 break;
 
             case 1:
                 if (column == 0)    //m_model->cpuSet()->modelName()); //CPU属于的名字及其编号、标称主频；
-                    return QApplication::translate("CPUSummaryTableModel", "Min freq~Max freq");//最小频率  ~ 最大频率；
+                    return QApplication::translate("CPUSummaryTableModel", "Frequency");//最小频率  ~ 最大频率；
                 else if (column == 1)
                     return QApplication::translate("CPUSummaryTableModel", "Vendor");//显示制造商名称。格式：字串
                 break;
@@ -272,8 +277,11 @@ CPUDetailSummaryTable::CPUDetailSummaryTable(CPUInfoModel *dataModel, QWidget *p
 
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
-    this->horizontalHeader()->setSectionResizeMode(DHeaderView::Stretch);
-    this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
+
+    this->horizontalHeader()->setStretchLastSection(true);
+
+    this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->setGridStyle(Qt::NoPen);
     this->setFrameShape(QFrame::NoFrame);
 
@@ -291,7 +299,7 @@ void CPUDetailSummaryTable::fontChanged(const QFont &font)
 {
     m_font = font;
     this->setFont(m_font);
-    setFixedHeight(QFontMetrics(font).height() * 11);
+    setFixedHeight(260);
 }
 
 void CPUDetailSummaryTable::paintEvent(QPaintEvent *event)

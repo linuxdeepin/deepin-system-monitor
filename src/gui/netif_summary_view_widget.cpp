@@ -143,10 +143,10 @@ public:
             if (stInfo.eType != ShowInfo::Normal)
                 return QSize(item_width, QFontMetrics(m_font).height() * 3 + 2 * TOPMARGIN);
 
-            return QSize(item_width, 30);
+            return QSize(item_width, 36);
         }
 
-        return QSize(item_width, 30);
+        return QSize(item_width, 36);
     }
 
 private:
@@ -378,13 +378,15 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
 
     this->horizontalHeader()->setVisible(false);
     this->verticalHeader()->setVisible(false);
-    this->horizontalHeader()->setSectionResizeMode(DHeaderView::Fixed);
-    this->verticalHeader()->setSectionResizeMode(DHeaderView::Stretch);
-    this->setGridStyle(Qt::NoPen);
+
     this->horizontalHeader()->setStretchLastSection(true);
-    this->setFrameShape(QFrame::NoFrame);
+
     this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    this->setGridStyle(Qt::NoPen);
+    this->setFrameShape(QFrame::NoFrame);
+
     m_netInfoModel = new NetInfoModel(this);
     this->setModel(m_netInfoModel);
     m_netInfoDetailItemDelegate = new NetInfoDetailItemDelegate(this);
@@ -403,7 +405,7 @@ void NetifSummaryViewWidget::fontChanged(const QFont &font)
     m_font = font;
     this->setFont(m_font);;
     m_netInfoDetailItemDelegate->setFont(m_font);
-    setFixedHeight(QFontMetrics(font).height() * 11);
+    setFixedHeight(260);
 }
 
 void NetifSummaryViewWidget::onModelUpdate()

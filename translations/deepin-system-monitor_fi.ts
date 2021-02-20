@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Piilota tiedot</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Luku</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Kirjoitus</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 sekuntia</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 pv %2 t %3 min</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Käyttö</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Nykyinen taajuus</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Taajuus</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Valmistaja</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Korttipaikat</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Loogiset suorittimet</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualisointi</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i-välimuisti</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d-välimuisti</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2-välimuisti</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3-välimuisti</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Kuormituksen keskiarvo</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Tiedoston kuvaus</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Prosessit</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Säikeet</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Koneen nimi</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Järjestelmä</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versio</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Käyntiaika</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 sekuntia</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Tiedot</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Tiedot</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Käytetty</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Saatavilla</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">Prosessori</translation>
+        <source>Shared</source>
+        <translation>Jaettu</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <source>Cached</source>
+        <translation>Välimuisti</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>Puskurit</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>Välimuisti swap</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Aktiivinen</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Toimeton</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Huono</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Kartoitettu </translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Yhteensä swap</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Vapaa swap</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Laatta</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Malli</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Lukunopeus</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Kirjoitusnopeus</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Kapasiteetti</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Luetut sektorit</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Luku/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Luetut sektorit/s</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Yhdistetty luku/s</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Kirjoitetut sektorit</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Kirjoitus valmis</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Yhdistetty kirjoitus</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Kirjoitus/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Kirjoitetut sektorit/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Yhdistetty kirjoitus/s</translation>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Koko</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP osoite:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Verkkopeite:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Lähtevä:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Etuliite:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Laajuus:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Yhteystyyppi</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Linkin laatu</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Signaalin voimakkuus</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Melutaso</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Kaista</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX paketit</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX tavua</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX virheet</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX pudotetut</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX ylitykset</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX kehys</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX paketit</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX tavua</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX virheet</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>TX pudotetut</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX ylitykset</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX kantoaalto</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -319,12 +638,16 @@ Haluatko varmasti jatkaa?</translation>
         <source>Memory</source>
         <translation>Muisti </translation>
     </message>
+    <message>
+        <source>Receive</source>
+        <translation>Saatu</translation>
+    </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation>Prosessori</translation>
+        <translation>Kuorma</translation>
     </message>
     <message>
         <source>Disk read</source>
@@ -369,6 +692,10 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Lähetetty</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Lähetys</translation>
     </message>
 </context>
 <context>
@@ -566,6 +893,21 @@ Haluatko varmasti jatkaa?</translation>
         <source>Priority</source>
         <translation>Prioriteetti</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Jaettu muisti</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Virtuaalinen muisti</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Ei tukea</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -694,16 +1036,6 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Services</source>
         <translation>Palvelut</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

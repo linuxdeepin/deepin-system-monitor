@@ -36,7 +36,14 @@
     </message>
 </context>
 <context>
-    <name>CPUDetailWidget</name>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 nap %2 óra %3 perc</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
         <translation>Felhasználás</translation>
@@ -112,13 +119,6 @@
     <message>
         <source>Up time</source>
         <translation>Futásidő</translation>
-    </message>
-</context>
-<context>
-    <name>CPUInfoModel</name>
-    <message>
-        <source>%1 days %2 hours %3 minutes</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -602,11 +602,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>IPv4</source>
-        <translation type="unfinished"/>
+        <translation>IPv4</translation>
     </message>
     <message>
         <source>IPv6</source>
-        <translation type="unfinished"/>
+        <translation>IPv6</translation>
     </message>
 </context>
 <context>

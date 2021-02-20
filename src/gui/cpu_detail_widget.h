@@ -90,17 +90,10 @@ class CPUDetailWidget : public BaseDetailViewWidget
 public:
     explicit CPUDetailWidget(QWidget *parent = nullptr);
 
-    void adjustGeometry(QSize rect);
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
 private slots:
     void detailFontChanged(const QFont &font) override;
 
 private:
-    CPUInfoModel *m_cpuInfomodel = nullptr;
-    Dtk::Widget::DPushButton *m_backBtn = nullptr;
     CPUDetailGrapTable *m_graphicsTable = nullptr;
     CPUDetailSummaryTable *m_summary = nullptr;
 };
