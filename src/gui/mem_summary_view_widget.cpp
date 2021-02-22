@@ -21,6 +21,7 @@
 #include "system/device_db.h"
 #include "system/mem.h"
 #include "common/common.h"
+#include "base/base_detail_item_delegate.h"
 
 #include <QHeaderView>
 #include <DApplicationHelper>
@@ -32,54 +33,6 @@
 
 using namespace core::system;
 using namespace common::format;
-class DetailItemDelegate : public QStyledItemDelegate
-{
-public:
-    explicit DetailItemDelegate(QObject *parent = nullptr);
-    virtual ~DetailItemDelegate();
-
-    void paint(QPainter *painter,
-               const QStyleOptionViewItem &option,
-               const QModelIndex &index) const
-    {
-        auto palette = option.palette;
-        QBrush background = palette.color(DPalette::Active, DPalette::Base);
-        if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
-
-        painter->save();
-        QPainterPath clipPath;
-        clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
-        painter->setClipPath(clipPath);
-
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(background);
-        painter->drawRect(option.rect);
-
-        if (index.isValid()) {
-            const auto &textpalette = DApplicationHelper::instance()->applicationPalette();
-            painter->setPen(textpalette.color(DPalette::TextTips));
-
-            const QString &text = index.data(Qt::UserRole).toString();
-            painter->drawText(option.rect.adjusted(0, 0, -10, 0), Qt::AlignRight | Qt::AlignVCenter, text);
-        }
-        painter->restore();
-
-        QStyledItemDelegate::paint(painter, option, index);
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-    {
-        return QSize(option.rect.width(), 36);
-    }
-};
-
-DetailItemDelegate::DetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
-{
-}
-
-DetailItemDelegate::~DetailItemDelegate()
-{
-}
 
 class DeailTableModel : public QAbstractTableModel
 {
@@ -240,7 +193,7 @@ MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)
 
     m_model = new DeailTableModel(this);
     this->setModel(m_model);
-    this->setItemDelegate(new DetailItemDelegate(this));
+    this->setItemDelegate(new BaseDetailItemDelegate(this));
 
     setFixedHeight(260);
 }

@@ -21,6 +21,7 @@
 #include "common/common.h"
 #include "model/cpu_info_model.h"
 #include "system/cpu_set.h"
+#include "base/base_detail_item_delegate.h"
 
 #include <QHeaderView>
 #include <DApplicationHelper>
@@ -32,54 +33,6 @@
 
 using namespace core::system;
 using namespace common::format;
-class CPUSummaryDelegate : public QStyledItemDelegate
-{
-public:
-    explicit CPUSummaryDelegate(QObject *parent = nullptr);
-    virtual ~CPUSummaryDelegate();
-
-    void paint(QPainter *painter,
-               const QStyleOptionViewItem &option,
-               const QModelIndex &index) const
-    {
-        auto palette = option.palette;
-        QBrush background = palette.color(DPalette::Active, DPalette::Base);
-        if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
-
-        painter->save();
-        QPainterPath clipPath;
-        clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
-        painter->setClipPath(clipPath);
-
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(background);
-        painter->drawRect(option.rect);
-
-        if (index.isValid()) {
-            const auto &textpalette = DApplicationHelper::instance()->applicationPalette();
-            painter->setPen(textpalette.color(DPalette::TextTips));
-
-            const QString &text = index.data(Qt::UserRole).toString();
-            painter->drawText(option.rect.adjusted(0, 0, -10, 0), Qt::AlignRight | Qt::AlignVCenter, text);
-        }
-        painter->restore();
-
-        QStyledItemDelegate::paint(painter, option, index);
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-    {
-        return QSize(option.rect.width(), 36);
-    }
-};
-
-CPUSummaryDelegate::CPUSummaryDelegate(QObject *parent): QStyledItemDelegate(parent)
-{
-}
-
-CPUSummaryDelegate::~CPUSummaryDelegate()
-{
-}
 
 class CPUSummaryTableModel : public QAbstractTableModel
 {
@@ -287,7 +240,7 @@ CPUDetailSummaryTable::CPUDetailSummaryTable(CPUInfoModel *dataModel, QWidget *p
 
     m_model = new CPUSummaryTableModel(dataModel, this);
     this->setModel(m_model);
-    this->setItemDelegate(new CPUSummaryDelegate(this));
+    this->setItemDelegate(new BaseDetailItemDelegate(this));
 }
 
 void CPUDetailSummaryTable::onModelUpdate()

@@ -33,7 +33,7 @@
 #include <QHeaderView>
 #include <DStyle>
 #include <DApplication>
-#include "base/base_detail_item_delegate.h"
+
 using namespace core::system;
 using namespace common::format;
 using namespace common::core;
@@ -43,7 +43,7 @@ using namespace common::core;
 #define TEXTSPACING 30  // 内容文字间距
 
 Q_DECLARE_METATYPE(ShowInfo)
-class NetInfoDetailItemDelegate : public BaseDetailItemDelegate
+class NetInfoDetailItemDelegate : public QStyledItemDelegate
 {
 public:
     explicit NetInfoDetailItemDelegate(QObject *parent = nullptr);
@@ -133,7 +133,7 @@ public:
         painter->restore();
     }
 
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &index) const
     {
         const int item_width = 230;
 
@@ -153,7 +153,7 @@ private:
     QFont  m_font;
 };
 
-NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): BaseDetailItemDelegate(parent)
+NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
 {
 }
 

@@ -28,6 +28,7 @@
 #include "system/block_device_info_db.h"
 #include "system/device_db.h"
 #include "base/base_detail_item_delegate.h"
+
 #include <QHeaderView>
 #include <DApplicationHelper>
 #include <QAbstractTableModel>
@@ -39,57 +40,6 @@
 
 using namespace core::system;
 using namespace common::format;
-
-
-class DetailItemDelegateBlock : public BaseDetailItemDelegate
-{
-public:
-    explicit DetailItemDelegateBlock(QObject *parent = nullptr);
-    virtual ~DetailItemDelegateBlock();
-
-    void paint(QPainter *painter,
-               const QStyleOptionViewItem &option,
-               const QModelIndex &index) const
-    {
-        auto palette = option.palette;
-        QBrush background = palette.color(DPalette::Active, DPalette::Base);
-        if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
-
-        painter->save();
-        QPainterPath clipPath;
-        clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
-        painter->setClipPath(clipPath);
-
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(background);
-        painter->drawRect(option.rect);
-
-        if (index.isValid()) {
-            const auto &textpalette = DApplicationHelper::instance()->applicationPalette();
-            painter->setPen(textpalette.color(DPalette::TextTips));
-
-            const QString &text = index.data(Qt::UserRole).toString();
-            painter->drawText(option.rect.adjusted(0, 0, -10, 0), Qt::AlignRight | Qt::AlignVCenter, text);
-        }
-        painter->restore();
-
-        QStyledItemDelegate::paint(painter, option, index);
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-    {
-        return QSize(option.rect.width(), 36);
-    }
-};
-DetailItemDelegateBlock::DetailItemDelegateBlock(QObject *parent): BaseDetailItemDelegate(parent)
-{
-
-}
-
-DetailItemDelegateBlock::~DetailItemDelegateBlock()
-{
-
-}
 
 class DeailTableModelBlock : public QAbstractTableModel
 {
@@ -281,7 +231,7 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
 
     m_model = new DeailTableModelBlock(this);
     this->setModel(m_model);
-    this->setItemDelegate(new DetailItemDelegateBlock(this));
+    this->setItemDelegate(new BaseDetailItemDelegate(this));
 }
 
 void BlockDevSummaryViewWidget::chageSummaryInfo(const QString &deviceName)
