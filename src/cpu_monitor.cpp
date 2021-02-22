@@ -159,14 +159,14 @@ void CpuMonitor::changeFont(const QFont &font)
 {
     m_cpuUsageFont = font;
     m_cpuUsageFont.setBold(true);
-    m_cpuUsageFont.setPointSize(m_cpuUsageFont.pointSize() + 3);
+    m_cpuUsageFont.setPointSizeF(m_cpuUsageFont.pointSizeF() + 3);
 
     m_cpuDisplayFont = font;
-    m_cpuDisplayFont.setPointSize(m_cpuDisplayFont.pointSize() + 12);
+    m_cpuDisplayFont.setPointSizeF(m_cpuDisplayFont.pointSizeF() + 12);
 
     m_detailFont = font;
     m_detailFont.setWeight(QFont::Medium);
-    m_detailFont.setPointSize(m_detailFont.pointSize() - 1);
+    m_detailFont.setPointSizeF(m_detailFont.pointSizeF() - 1);
 
     resizeItemWidgetRect();
 }

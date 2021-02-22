@@ -103,7 +103,7 @@ void ChartViewWidget::setAxisTitle(const QString &text)
 void ChartViewWidget::changeFont(const QFont &font)
 {
     m_textfont = font;
-    m_textfont.setPointSize(m_textfont.pointSize() - 2);
+    m_textfont.setPointSizeF(m_textfont.pointSizeF() - 2);
 }
 
 void ChartViewWidget::resizeEvent(QResizeEvent *event)

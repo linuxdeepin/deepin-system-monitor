@@ -114,11 +114,11 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 {
     const int pensize = 1;
     QFont font = DApplication::font();
-    font.setPointSize(font.pointSize() - 1);
+    font.setPointSizeF(font.pointSizeF() - 1);
     painter.setFont(font);
 
     QFont midFont = font;
-    midFont.setPointSize(font.pointSize() - 1);
+    midFont.setPointSizeF(font.pointSizeF() - 1);
 
     int textHeight = painter.fontMetrics().height();
     //draw background

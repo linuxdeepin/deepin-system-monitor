@@ -53,10 +53,10 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 {
     m_titleFont = font;
-    m_titleFont.setPointSize(m_titleFont.pointSize() + 12);
+    m_titleFont.setPointSizeF(m_titleFont.pointSizeF() + 12);
 
     m_contentFont = font;
-    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
+    m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
 
     updateWidgetGrometry();
 }

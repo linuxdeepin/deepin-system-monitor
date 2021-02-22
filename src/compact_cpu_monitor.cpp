@@ -278,9 +278,9 @@ void CompactCpuMonitor::changeFont(const QFont &font)
 {
     m_cpuFont = font;
     m_cpuFont.setWeight(QFont::Medium);
-    m_cpuFont.setPointSize(m_cpuFont.pointSize() - 1);
+    m_cpuFont.setPointSizeF(m_cpuFont.pointSizeF() - 1);
     m_statFont = font;
-    m_statFont.setPointSize(m_statFont.pointSize() - 1);
+    m_statFont.setPointSizeF(m_statFont.pointSizeF() - 1);
 
     resizeItemRect();
 }
