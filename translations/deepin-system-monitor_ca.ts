@@ -678,10 +678,6 @@ Segur que voleu continuar?</translation>
         <translation>Carrega</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disc</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Xarxa</translation>
     </message>
@@ -696,6 +692,10 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Send</source>
         <translation>Envia</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

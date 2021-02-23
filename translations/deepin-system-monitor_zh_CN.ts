@@ -678,10 +678,6 @@ Are you sure you want to continue?</source>
         <translation>正在发送</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>磁盘</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>网络</translation>
     </message>
@@ -696,6 +692,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Send</source>
         <translation>发送</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>磁盘</translation>
     </message>
 </context>
 <context>

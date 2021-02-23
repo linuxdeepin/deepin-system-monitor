@@ -678,10 +678,6 @@ Devam etmek istediğine emin misin?</translation>
         <translation>Yükleme</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disk</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Ağ</translation>
     </message>
@@ -696,6 +692,10 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Send</source>
         <translation>Gönderilen</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Сакриј детаље</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Читање</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Уписивање</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 секунди</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 дана %2 сати %3 минута</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Употреба</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Тренутни радни такт</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Радни такт</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Произвиђач</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Лежишта</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Логички процесори</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Виртуелизација</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i кеш</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d кеш</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2 кеш</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3 кеш</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Просечно оптерећање</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Процеси</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Нити</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Име домаћина</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Врста ОС-а</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Верзија</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Време у раду</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 секунди</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Детаљи</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Детаљи</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Заузето</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Доступно</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">ЦПЈ</translation>
+        <source>Shared</source>
+        <translation>Дељено</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">Меморија</translation>
+        <source>Cached</source>
+        <translation>Кеширано</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Активност</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Неактивно</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Модел</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Брзина читања</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Брзина уписивања</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Капацитет</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Величина</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>ИП адреса:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Мрежна маска:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Опсег:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Врста везе</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ЕССИД</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Квалитет везе</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Јачина сигнала</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Ниво шума</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>МАК</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Пропусни опсег</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX пакети</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX бајтови</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX грешке</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX пакети</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX бајтови</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX грешке</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>ИПв4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>ИПв6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +637,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>Меморија</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Примање</translation>
     </message>
 </context>
 <context>
@@ -355,10 +678,6 @@ Are you sure you want to continue?</source>
         <translation>Отпремање</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Мрежа</translation>
     </message>
@@ -369,6 +688,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>Отпремљено</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Слање</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -566,6 +893,21 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>Приоритет</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Дељена меморија</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Виртуелна меморија</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Неподржано</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -694,17 +1036,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Услуге</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

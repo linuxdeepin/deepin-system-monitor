@@ -678,10 +678,6 @@ Continuar?</translation>
         <translation>Upload</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disco</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Rede</translation>
     </message>
@@ -695,6 +691,10 @@ Continuar?</translation>
     </message>
     <message>
         <source>Send</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disks</source>
         <translation type="unfinished"/>
     </message>
 </context>

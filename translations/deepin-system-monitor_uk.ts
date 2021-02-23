@@ -676,10 +676,6 @@ Are you sure you want to continue?</source>
         <translation>Надсилання</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Мережа</translation>
     </message>
@@ -694,6 +690,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Send</source>
         <translation>Надіслання</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

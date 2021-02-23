@@ -46,7 +46,7 @@
     <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
-        <translation>Felhasználás</translation>
+        <translation>Hasznosítás</translation>
     </message>
     <message>
         <source>Current frequency</source>
@@ -677,10 +677,6 @@ Are you sure you want to continue?</source>
         <translation>Feltöltés</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Lemez</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Hálózat</translation>
     </message>
@@ -695,6 +691,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Send</source>
         <translation>Küldés</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Lemezek</translation>
     </message>
 </context>
 <context>

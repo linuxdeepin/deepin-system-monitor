@@ -678,10 +678,6 @@ Haluatko varmasti jatkaa?</translation>
         <translation>Lähetys</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Levy</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Verkko</translation>
     </message>
@@ -696,6 +692,10 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Send</source>
         <translation>Lähetys</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

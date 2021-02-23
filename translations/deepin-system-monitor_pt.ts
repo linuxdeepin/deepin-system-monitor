@@ -678,10 +678,6 @@ Tem a certeza de que deseja continuar?</translation>
         <translation>Enviar</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disco</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Rede</translation>
     </message>
@@ -696,6 +692,10 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Send</source>
         <translation>Enviar</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

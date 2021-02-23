@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Fshihi hollësitë</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Lexim</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Shkrim</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 sekonda</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 ditë %2 orë %3 minuta</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Përdorim</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Frekuenca e tanishme</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frekuenca</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Tregtues</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Socket-e</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Procesorë logjikë</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualizim</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>Fshehtinë L1i</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>Fshehtinë L1d</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>Fshehtinë L2</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>Fshehtinë L3</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Mesatare ngarkese</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Përshkrues kartelash</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Procese</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Rrjedha</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Emër strehe</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Lloj OS-i</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Version</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Kohë në punë</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 sekonda</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Hollësi</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Hollësi</translation>
     </message>
 </context>
 <context>
@@ -69,11 +184,11 @@
     </message>
     <message>
         <source>not-found</source>
-        <translation type="unfinished"></translation>
+        <translation>s’u gjet</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation type="unfinished"></translation>
+        <translation>parametër i gabuar</translation>
     </message>
     <message>
         <source>error</source>
@@ -81,7 +196,7 @@
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>masked</source>
@@ -131,7 +246,7 @@
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>masked</source>
@@ -150,7 +265,7 @@
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>start</source>
@@ -158,7 +273,7 @@
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>running</source>
@@ -166,7 +281,7 @@
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>reload</source>
@@ -178,27 +293,27 @@
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>failed</source>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Të përdorur</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>Të lira</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <source>Shared</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">Kujtesë</translation>
+        <source>Cached</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Aktiv</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Jo aktiv</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Swap gjithsej</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Swap i lirë</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Shpejtësi leximesh</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Shpejtësi shkrimesh</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Kapacitet</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Sektorë të lexuar</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Lexime/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Sektorë të lexuar/s</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Sektorë të shkruar</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Shkrime/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Sektorë të shkruar/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Madhësi</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>Adresë IP:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Lloj lidhjeje</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Cilësi lidhjeje</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Fortësi sinjali</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Nivel zhurmash</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>Paketa RX</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>Bajte RX</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>Gabime RX</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX të humbur</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>Paketa TX</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>Bajte TX</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>Gabime TX</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>TX  të humbur</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>Operator TX</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +637,10 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Memory</source>
         <translation>Kujtesë</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Marrje</translation>
     </message>
 </context>
 <context>
@@ -355,10 +678,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
         <translation>Ngarkim</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disk</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Rrjet</translation>
     </message>
@@ -369,6 +688,14 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Të dërguar gjithsej</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Dërgim</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -560,11 +887,26 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Priority</source>
         <translation>Përparësi</translation>
+    </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Kujtesë e përbashkët</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Kujtesë virtuale</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Pa mbulim</translation>
     </message>
 </context>
 <context>
@@ -694,16 +1036,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Services</source>
         <translation>Shërbime</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

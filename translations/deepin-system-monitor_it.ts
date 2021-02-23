@@ -679,10 +679,6 @@ Sicuro di voler terminarla?</translation>
         <translation>Upload</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disco</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Rete</translation>
     </message>
@@ -697,6 +693,10 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>Send</source>
         <translation>Inviati</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

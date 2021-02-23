@@ -678,10 +678,6 @@ Weet je zeker dat je door wilt gaan?</translation>
         <translation>Uploaden</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Schijf</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
@@ -696,6 +692,10 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Send</source>
         <translation>Verstuurd</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
