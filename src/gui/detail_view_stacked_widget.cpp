@@ -68,7 +68,7 @@ void DetailViewStackedWidget::onShowPerformMenu(QPoint pos)
         cpuAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "CPU"));
         memAct = m_menu->addAction(DApplication::translate("Process.Graph.Title", "Memory"));
         netifAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Network"));
-        blockDevAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Disk"));
+        blockDevAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Disks"));
 
         QActionGroup *actionGroup = new QActionGroup(m_menu);
         actionGroup->addAction(cpuAct);

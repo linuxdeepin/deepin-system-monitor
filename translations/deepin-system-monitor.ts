@@ -680,10 +680,6 @@ Are you sure you want to continue?</translation>
         <translation>Upload</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disk</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Network</translation>
     </message>
@@ -697,6 +693,10 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disks</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

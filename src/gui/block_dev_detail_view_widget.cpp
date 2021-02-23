@@ -26,7 +26,7 @@
 BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
-    setTitle(DApplication::translate("Process.Graph.View", "Disk"));
+    setTitle(DApplication::translate("Process.Graph.View", "Disks"));
     m_blockStatWidget = new BlockStatViewWidget(this);
     m_blocksummaryWidget = new BlockDevSummaryViewWidget(this);
     m_centralLayout->addWidget(m_blockStatWidget);
