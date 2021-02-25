@@ -24,10 +24,21 @@ Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor inte
 | Network | Display the upload and download speed of the current network in real-time |
 | Disk    | Display the reading and writing speed in the current disk which is only in "Compact" view |
 
-![1|monitor](fig/expand.png)
+  ![1|monitor](fig/expand.png)
 
-![1|monitor](fig/compact.png)
+  ![1|monitor](fig/compact.png)
 
+#### View Hardware info
+
+You can view the detailed processor, memory, network and disk info in the compact and expand view mode.
+
+1. On the System Monitor interface, click the **Details** icon on the left and the detailed CPU info will be displayed on the right by default.
+3. Click the ![down](../common/nextdown.svg) icon besides CPU to expand the drop-down list and view the detailed info on memory, network or disk.
+4. Click **Hide details** to compact the detailed info.
+
+![1|monitor](fig/detail1.png)
+
+![1|monitor](fig/detail.png)
 
 ### Process Management
 
@@ -43,7 +54,7 @@ Click the top right tabs on the System Monitoring interface to view **Applicatio
 
 #### Adjust Process Order
 
-You can adjust the process order by Name, CPU, User, Memory, Upload, Download, Disk read, Disk write, PID, Nice and Priority.
+You can adjust the process order by Name, CPU, User, Memory, Shared memory, Virtual memory, Upload, Download, Disk read, Disk write, PID, Nice and Priority.
 
 - On the System Monitor interface, click the tabs in the top of the process list to sort the processes. Multiple clicks allow sorting from low to high or high to low.
 - Right-click the top tabs to check the options you want to view or uncheck the options you want to hide.
@@ -66,14 +77,14 @@ System Monitor can be used to end processes.
 
 1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
 
-2. Select **Force end application**.
-> ![notes](../common/notes.svg) Notes: This function can only end graphical processes.
+2. Select **Force end application** ( available for graphical processes only).
 
 3. Click the window of application you want to close according to the prompt.
 
 4. Click **Force End** in the pop-up window to confirm.
 
 > ![notes](../common/notes.svg) Notes: Press **Esc** on the keyboard to terminate the operation above and return to the System Monitor interface.
+>
 
 
 #### Suspend/Resume Process
