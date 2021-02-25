@@ -104,19 +104,7 @@ void ProcessPageWidget::initUI()
     m_views->setAutoFillBackground(false);
     m_views->setContentsMargins(0, 0, 0, 0);
     m_views->setAutoFillBackground(false);
-    // compact view instance
-    m_compactView = new MonitorCompactView(m_views);
-    connect(m_compactView, &MonitorCompactView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
-    // expand view instance
-    m_expandView = new MonitorExpandView(m_views);
-    connect(m_expandView, &MonitorExpandView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
-    m_views->insertWidget(kDisplayModeCompact, m_compactView);
-    m_views->insertWidget(kDisplayModeExpand, m_expandView);
     m_views->setFixedWidth(common::getStatusBarMaxWidth());
-
-    // restore previous backupped display mode if any
-    const QVariant &mode = Settings::instance()->getOption(kSettingKeyDisplayMode, kDisplayModeCompact);
-    m_views->setCurrentIndex(mode.toInt());
 
     // right ====> tab button + process table
     auto *contentlayout = new QVBoxLayout(m_processWidget);
@@ -246,6 +234,7 @@ void ProcessPageWidget::initUI()
     } // ::switch(index)
 
     connect(m_rightStackView, &DetailViewStackedWidget::currentChanged, this, &ProcessPageWidget::onDetailWidgetChanged);
+    QTimer::singleShot(5, this, SLOT(onLoadLeftDataWidgetDelay()));
 }
 
 void ProcessPageWidget::initConnections()
@@ -304,6 +293,21 @@ void ProcessPageWidget::initConnections()
             m_procViewModeSummary->setPalette(palette);
         }
     });
+}
+
+void ProcessPageWidget::onLoadLeftDataWidgetDelay()
+{
+    // compact view instance
+    m_compactView = new MonitorCompactView(m_views);
+    connect(m_compactView, &MonitorCompactView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
+    // expand view instance
+    m_expandView = new MonitorExpandView(m_views);
+    connect(m_expandView, &MonitorExpandView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
+    m_views->insertWidget(kDisplayModeCompact, m_compactView);
+    m_views->insertWidget(kDisplayModeExpand, m_expandView);
+    // restore previous backupped display mode if any
+    const QVariant &mode = Settings::instance()->getOption(kSettingKeyDisplayMode, kDisplayModeCompact);
+    m_views->setCurrentIndex(mode.toInt());
 }
 
 void ProcessPageWidget::onDetailWidgetChanged(int index)

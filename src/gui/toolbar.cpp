@@ -55,13 +55,11 @@ Toolbar::Toolbar(QWidget *parent)
         DApplication::translate("Title.Bar.Switch", "Processes"), m_switchFuncTabBtnGrp);
     m_procBtn->setCheckable(true);
     m_procBtn->setChecked(true);
-    m_procBtn->setEnabled(false);
     m_procBtn->setFocusPolicy(Qt::TabFocus);
     // service tab button instance
     m_svcBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Services"), m_switchFuncTabBtnGrp);
     m_svcBtn->setCheckable(true);
-    m_svcBtn->setEnabled(false);
     m_svcBtn->setFocusPolicy(Qt::TabFocus);
     QList<DButtonBoxButton *> list;
     list << m_procBtn << m_svcBtn;
@@ -82,8 +80,6 @@ Toolbar::Toolbar(QWidget *parent)
     searchEdit = new DSearchEdit(this);
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
-    searchEdit->setEnabled(false);
-
     // add widgets into layout
     layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
     layout->addStretch();
@@ -99,8 +95,7 @@ Toolbar::Toolbar(QWidget *parent)
     connect(searchEdit, &DSearchEdit::textChanged, this, &Toolbar::handleSearchTextChanged);
 
     // monitoring loading status changed signal, change button/input enabled/disabled state accordingly
-    auto *mw = gApp->mainWindow();
-    connect(mw, &MainWindow::loadingStatusChanged, this, [ = ](bool loading) {
+    connect(gApp->mainWindow(), &MainWindow::loadingStatusChanged, this, [ = ](bool loading) {
         if (loading) {
             m_procBtn->setEnabled(false);
             m_svcBtn->setEnabled(false);

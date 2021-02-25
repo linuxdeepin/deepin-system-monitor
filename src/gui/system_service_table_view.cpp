@@ -78,6 +78,8 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     // initialize ui components & connections
     initUI(settingsLoaded);
     initConnections();
+
+    QTimer::singleShot(10, this, SLOT(onLoadServiceDataList()));
 }
 
 // destructor
@@ -715,14 +717,6 @@ void SystemServiceTableView::initConnections()
     // connect restart service handler to restart shortcut's activated signal
     connect(m_restartKP, &QShortcut::activated, this, &SystemServiceTableView::restartService);
 
-    connect(gApp->mainWindow()->toolbar(), &Toolbar::serviceTabButtonClicked, this, [ = ]() {
-        if (!defer_initialized) {
-            auto *mgr = ServiceManager::instance();
-            mgr->updateServiceList();
-            defer_initialized = true;
-        }
-    });
-
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
     // show error dialog when error occurred
@@ -734,8 +728,6 @@ void SystemServiceTableView::initConnections()
     // change loading state & hide tip label & show spinner before updating service list
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
         m_loading = true;
-        auto *mw1 = gApp->mainWindow();
-        Q_EMIT mw1->loadingStatusChanged(m_loading);
 
         setEnabled(false);
 
@@ -752,8 +744,6 @@ void SystemServiceTableView::initConnections()
         m_spinner->stop();
 
         m_loading = false;
-        auto *mw2 = gApp->mainWindow();
-        Q_EMIT mw2->loadingStatusChanged(m_loading);
     });
 
     // we need override currentRowChanged method to overcome incremental service list fetch glitch, if user use [down] key
@@ -780,6 +770,14 @@ void SystemServiceTableView::initConnections()
     });
 }
 
+void SystemServiceTableView::onLoadServiceDataList()
+{
+    if (!defer_initialized) {
+        ServiceManager::instance()->updateServiceList();
+        defer_initialized = true;
+    }
+}
+
 // size hint for column to help calculate prefered section width while user double clicked section's gripper
 int SystemServiceTableView::sizeHintForColumn(int column) const
 {
@@ -799,9 +797,7 @@ void SystemServiceTableView::refresh()
     m_model->reset();
     m_selectedSName.clear();
 
-    auto *mgr = ServiceManager::instance();
-    Q_ASSERT(mgr != nullptr);
-    mgr->updateServiceList();
+    ServiceManager::instance()->updateServiceList();
 }
 
 // event filter

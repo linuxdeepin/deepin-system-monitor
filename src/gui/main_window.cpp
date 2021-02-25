@@ -31,6 +31,7 @@
 #include <DApplicationHelper>
 #include <DTitlebar>
 #include <QKeyEvent>
+#include <QTimer>
 
 const int WINDOW_MIN_HEIGHT = 760;
 const int WINDOW_MIN_WIDTH = 1080;
@@ -65,9 +66,6 @@ void MainWindow::onLoadStatusChanged(bool loading)
 // initialize ui components
 void MainWindow::initUI()
 {
-    // trigger loading status changed signal for once
-    Q_EMIT loadingStatusChanged(true);
-
     // default window size
     int width = m_settings->getOption(kSettingKeyWindowWidth, WINDOW_MIN_WIDTH).toInt();
     int height = m_settings->getOption(kSettingKeyWindowHeight, WINDOW_MIN_HEIGHT).toInt();
@@ -80,8 +78,6 @@ void MainWindow::initUI()
     // set toolbar focus policy to only accept tab focus
     m_toolbar->setFocusPolicy(Qt::TabFocus);
     titlebar()->setCustomWidget(m_toolbar);
-    // disable toolbar menu right after initialization, only when loading status changed to finished then we enable it
-    titlebar()->setMenuDisabled(true);
 
     // custom menu to hold custom menu items
     DMenu *menu = new DMenu(this);
@@ -155,7 +151,6 @@ void MainWindow::initUI()
 
     m_tbShadow->raise();
 
-    Q_EMIT loadingStatusChanged(false);
     installEventFilter(this);
 }
 
@@ -245,18 +240,21 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return DMainWindow::eventFilter(obj, event);
 }
 
-// show event handler
 void MainWindow::showEvent(QShowEvent *event)
 {
-    // propogate show event to base handler first
     DMainWindow::showEvent(event);
 
     if (!m_initLoad) {
         m_initLoad = true;
-        auto *msev = new MonitorStartEvent();
-        gApp->postEvent(gApp, msev);
-        auto *netev = new NetifStartEvent();
-        gApp->postEvent(gApp, netev);
+        QTimer::singleShot(5, this, SLOT(onStartMonitorJob()));
         PERF_PRINT_END("POINT-01");
     }
+}
+
+void MainWindow::onStartMonitorJob()
+{
+    auto *msev = new MonitorStartEvent();
+    gApp->postEvent(gApp, msev);
+    auto *netev = new NetifStartEvent();
+    gApp->postEvent(gApp, netev);
 }

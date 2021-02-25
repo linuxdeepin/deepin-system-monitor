@@ -118,6 +118,11 @@ private Q_SLOTS:
      */
     void onDetailWidgetChanged(int index);
 
+    /**
+     * @brief 延迟加载左侧数据控件
+     */
+    void onLoadLeftDataWidgetDelay();
+
 private:
     // global setttings instance
     Settings *m_settings = nullptr;

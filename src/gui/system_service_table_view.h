@@ -120,6 +120,11 @@ protected Q_SLOTS:
      */
     void saveSettings();
 
+    /**
+     * @brief onLoadServiceDataList
+     */
+    void onLoadServiceDataList();
+
 protected:
     /**
      * @brief Return hinted size for specified column

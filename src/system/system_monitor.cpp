@@ -71,6 +71,8 @@ SysInfo *SystemMonitor::SystemMonitor::sysInfo()
 
 void SystemMonitor::startMonitorJob()
 {
+    common::init::global_init();
+
     m_basictimer.stop();
     m_basictimer.start(2000, Qt::VeryCoarseTimer, this);
     updateSystemMonitorInfo();

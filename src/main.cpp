@@ -40,11 +40,9 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    common::init::global_init();
     PERF_PRINT_BEGIN("POINT-01", "");
 
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
     Application app(argc, argv);
     app.setAutoActivateWindows(true);
 
@@ -70,7 +68,7 @@ int main(int argc, char *argv[])
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor"));
+        //app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor")); //耗时40ms
 
         QAccessible::installFactory(accessibleFactory);
 

@@ -78,6 +78,11 @@ public Q_SLOTS:
      */
     void onLoadStatusChanged(bool loading);
 
+    /**
+     * @brief onStartMonitorJob
+     */
+    void onStartMonitorJob();
+
 protected:
     /**
      * @brief Initialize ui components
