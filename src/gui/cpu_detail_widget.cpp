@@ -53,8 +53,7 @@ using namespace common;
 
 CPUDetailGrapTableItem::CPUDetailGrapTableItem(CPUInfoModel *model, int index, QWidget *parent): QWidget(parent), m_cpuInfomodel(model), m_index(index)
 {
-    TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
-    m_cpuInfomodel = new CPUInfoModel(period, this);
+    m_cpuInfomodel = CPUInfoModel::instance();
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CPUDetailGrapTableItem::updateStat);
 }
 
@@ -255,7 +254,7 @@ void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &grap
 CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 {
     TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
-    CPUInfoModel *cpuInfomodel = new CPUInfoModel(period, this);
+    CPUInfoModel *cpuInfomodel = CPUInfoModel::instance();
 
     m_graphicsTable = new CPUDetailGrapTable(cpuInfomodel, this);
     m_summary  = new  CPUDetailSummaryTable(cpuInfomodel, this);

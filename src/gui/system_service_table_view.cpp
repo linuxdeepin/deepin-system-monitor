@@ -79,7 +79,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     initUI(settingsLoaded);
     initConnections();
 
-    QTimer::singleShot(10, this, SLOT(onLoadServiceDataList()));
+    QTimer::singleShot(100, this, SLOT(onLoadServiceDataList()));
 }
 
 // destructor

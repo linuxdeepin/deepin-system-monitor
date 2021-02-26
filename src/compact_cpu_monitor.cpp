@@ -77,8 +77,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
               << "#2CA7F8"
               << "#A005CE";
 
-    TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
-    m_cpuInfomodel = new CPUInfoModel(period, this);
+    m_cpuInfomodel = CPUInfoModel::instance();
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CompactCpuMonitor::updateStatus);
 
     m_detailText = tr("Details");

@@ -27,18 +27,23 @@
 
 #include <QApplication>
 
-CPUInfoModel::CPUInfoModel(const TimePeriod &period, QObject *parent)
-    : QObject(parent)
-    , m_period(period)
-    , m_overallStatSample(new CPUStatSample(period))
-    , m_overallUsageSample(new CPUUsageSample(period))
-    , m_loadAvgSampleDB(new LoadAvgSample(period))
-    , m_cpuSet {}
+Q_GLOBAL_STATIC(CPUInfoModel, theInstance)
+CPUInfoModel::CPUInfoModel() : QObject(nullptr)
 {
+    m_period = TimePeriod(TimePeriod::kNoPeriod, {2, 0});
+    m_overallStatSample.reset(new CPUStatSample(m_period));
+    m_overallUsageSample.reset(new CPUUsageSample(m_period));
+    m_loadAvgSampleDB.reset(new LoadAvgSample(m_period));
+
     m_sysInfo = SysInfo::instance();
     m_cpuSet = DeviceDB::instance()->cpuSet();
 
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &CPUInfoModel::updateModel);
+}
+
+CPUInfoModel *CPUInfoModel::instance()
+{
+    return theInstance();
 }
 
 QString CPUInfoModel::uptime() const

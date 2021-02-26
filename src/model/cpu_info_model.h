@@ -67,8 +67,10 @@ class CPUInfoModel : public QObject
     Q_OBJECT
 
 public:
-    explicit CPUInfoModel(const TimePeriod &period, QObject *parent = nullptr);
+    explicit CPUInfoModel();
     virtual ~CPUInfoModel() override = default;
+
+    static CPUInfoModel *instance();
 
     std::weak_ptr<CPUListModel> cpuListModel() const;
 

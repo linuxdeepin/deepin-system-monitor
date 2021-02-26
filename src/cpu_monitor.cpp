@@ -58,8 +58,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
-    m_cpuInfomodel = new CPUInfoModel(period, this);
+    m_cpuInfomodel = CPUInfoModel::instance();
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CpuMonitor::updateStatus);
 
     m_animation = new QPropertyAnimation(this, "progress", this);
