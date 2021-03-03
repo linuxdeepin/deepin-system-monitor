@@ -94,8 +94,9 @@ void BaseDetailViewWidget::updateWidgetGrometry()
     const QMargins &margin = m_centralLayout->contentsMargins();
     m_arrowButton->setGeometry(margin.left() + titleFont.width(m_titleText) + 6, 10 + titleFont.height() / 2 - m_arrowButton->height() / 2, m_arrowButton->width(), m_arrowButton->height());
 
-    const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()), m_detailButton->fontMetrics().height());
-    m_detailButton->setGeometry(this->width() - detailtextSize.width() - margin.right(), 10 + titleFont.height() / 2 - detailtextSize.height() / 2, detailtextSize.width(), detailtextSize.height());
+    m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
+    const QSize &detailtextSize =  m_detailButton->size();
+    m_detailButton->setGeometry(this->width() - detailtextSize.width() - 6, 10 + titleFont.height() / 2 - detailtextSize.height() / 2, detailtextSize.width(), detailtextSize.height());
 }
 
 void BaseDetailViewWidget::resizeEvent(QResizeEvent *event)

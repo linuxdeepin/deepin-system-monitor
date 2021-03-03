@@ -178,8 +178,9 @@ void CpuMonitor::resizeEvent(QResizeEvent *event)
 
 void CpuMonitor::resizeItemWidgetRect()
 {
-    const QSize &detailtextSize =  QSize(m_detailButton->fontMetrics().width(m_detailButton->text()), m_detailButton->fontMetrics().height());
-    m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - paddingRight, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
+    m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
+    const QSize &detailtextSize =  m_detailButton->size();
+    m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - paddingRight - 4, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
 }
 
 void CpuMonitor::paintEvent(QPaintEvent *)
