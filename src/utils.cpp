@@ -83,6 +83,14 @@ int getStatusBarMaxWidth()
     return 300;
 }
 
+bool startWithHanzi(const QString &text)
+{
+    if (text.isEmpty())
+        return false;
+
+    return text.at(0).script() == QChar::Script_Han;
+}
+
 int getWindowPid(DWindowManager *windowManager, xcb_window_t window)
 {
     int windowPid = -1;

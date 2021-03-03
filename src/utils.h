@@ -93,6 +93,7 @@ inline QString normalizeProcName(const QString &proc_name, const QByteArrayList 
 }
 
 int getStatusBarMaxWidth();
+bool startWithHanzi(const QString &text);
 int getWindowPid(DWindowManager *windowManager, xcb_window_t window);
 long getProcessMemory(QString cmdline, long residentMemroy, long shareMemory);
 QList<xcb_window_t> getTrayWindows();

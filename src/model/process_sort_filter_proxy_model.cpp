@@ -101,40 +101,38 @@ bool ProcessSortFilterProxyModel::filterAcceptsColumn(int column, const QModelIn
 // compare two items with the specified index
 bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    switch (sortColumn()) {
+    int sortcolumn = sortColumn();
+    switch (sortcolumn) {
     case ProcessTableModel::kProcessNameColumn: {
-        // sort by name first, then by cpu
-        auto a = left.data(Qt::DisplayRole).toString();
-        auto b = right.data(Qt::DisplayRole).toString();
-        // trick: fix slow sorting issue
-        if (a.length() == 0 || b.length() == 0) {
-            return a < b;
-        }
-        if (a.at(0) == b.at(0) && a == b) {
+        const QString &lhs = left.data(Qt::DisplayRole).toString();
+        const QString &rhs = right.data(Qt::DisplayRole).toString();
+
+        bool lstartHz = Utils::startWithHanzi(lhs);
+        bool rstartHz = Utils::startWithHanzi(rhs);
+        if (!lstartHz && rstartHz)
+            return true;
+
+        if (lstartHz && !rstartHz)
+            return false;
+
+        int rc = lhs.localeAwareCompare(rhs);
+
+        if (rc == 0) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole) <
                    right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole);
-        } else {
-            if (a.at(0).isLetterOrNumber() &&
-                    b.at(0).isLetterOrNumber() &&
-                    a.at(0) != b.at(0)) {
-                return a < b;
-            } else {
-                return util::common::Collator::instance()->compare(a, b) < 0;
-            }
-        }
+        } else
+            return rc < 0;
     }
     case ProcessTableModel::kProcessUserColumn: {
-        // compare user name
-        return util::common::Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                                           right.data(Qt::DisplayRole).toString())
-               < 0;
+        const QString &lhs = left.data(Qt::DisplayRole).toString();
+        const QString &rhs = right.data(Qt::DisplayRole).toString();
+        return lhs.localeAwareCompare(rhs) < 0;
     }
     case ProcessTableModel::kProcessMemoryColumn: {
-        QVariant lmem, rmem;
-        lmem = left.data(Qt::UserRole);
-        rmem = right.data(Qt::UserRole);
+        const QVariant &lmem = left.data(Qt::UserRole);
+        const QVariant &rmem = right.data(Qt::UserRole);
 
         // compare memory usage first, then by cpu time
         if (lmem == rmem) {
@@ -147,13 +145,11 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         }
     }
     case ProcessTableModel::kProcessCPUColumn: {
-        QVariant lcpu, rcpu, lmem, rmem;
-        lcpu = left.data(Qt::UserRole);
-        rcpu = right.data(Qt::UserRole);
-        lmem = left.sibling(left.row(), ProcessTableModel::kProcessMemoryColumn)
-               .data(Qt::UserRole);
-        rmem = right.sibling(right.row(), ProcessTableModel::kProcessMemoryColumn)
-               .data(Qt::UserRole);
+        const QVariant &lcpu = left.data(Qt::UserRole);
+        const QVariant &rcpu = right.data(Qt::UserRole);
+
+        const QVariant &lmem = left.sibling(left.row(), ProcessTableModel::kProcessMemoryColumn).data(Qt::UserRole);
+        const QVariant &rmem = right.sibling(right.row(), ProcessTableModel::kProcessMemoryColumn).data(Qt::UserRole);
 
         // compare cpu time first, then by memory usage
         if (qFuzzyCompare(lcpu.toReal(), rcpu.toReal())) {
@@ -169,25 +165,18 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
 
         // compare upload speed first, then by total send bytes
         if (qFuzzyCompare(lkbs, rkbs)) {
-            qulonglong lb, rb;
-            lb = left.data(Qt::UserRole + 1).toULongLong();
-            rb = right.data(Qt::UserRole + 1).toULongLong();
-            return lb < rb;
+            return left.data(Qt::UserRole + 1).toULongLong() < right.data(Qt::UserRole + 1).toULongLong();
         } else {
             return lkbs < rkbs;
         }
     }
     case ProcessTableModel::kProcessDownloadColumn: {
-        qreal lkbs, rkbs;
-        lkbs = left.data(Qt::UserRole).toReal();
-        rkbs = right.data(Qt::UserRole).toReal();
+        qreal lkbs = left.data(Qt::UserRole).toReal();
+        qreal rkbs = right.data(Qt::UserRole).toReal();
 
         // compare download speed first, then by total download bytes
         if (qFuzzyCompare(lkbs, rkbs)) {
-            qulonglong lb, rb;
-            lb = left.data(Qt::UserRole + 1).toULongLong();
-            rb = right.data(Qt::UserRole + 1).toULongLong();
-            return lb < rb;
+            return left.data(Qt::UserRole + 1).toULongLong() < right.data(Qt::UserRole + 1).toULongLong();
         } else {
             return lkbs < rkbs;
         }
@@ -210,10 +199,7 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
     }
     case ProcessTableModel::kProcessPriorityColumn: {
         // compare priority with nice value instead of nice display name
-        return !(
-                   left.sibling(left.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole) <
-                   right.sibling(right.row(), ProcessTableModel::kProcessNiceColumn)
-                   .data(Qt::UserRole));
+        return !(left.sibling(left.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole) < right.sibling(right.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole));
     }
     default:
         break;
