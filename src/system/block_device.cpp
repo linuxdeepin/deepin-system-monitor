@@ -89,6 +89,8 @@ void BlockDevice::readDeviceInfo()
                 d->r_ps = (deviceInfo[3].toULongLong() - d->read_iss) / static_cast<quint64>(interval);
             if (d->blk_read != 0)
                 d->rsec_ps = (deviceInfo[5].toULongLong() - d->blk_read) / static_cast<quint64>(interval);
+            if (d->blk_wrtn != 0)
+                d->wsec_ps = (deviceInfo[9].toULongLong() - d->blk_wrtn) / static_cast<quint64>(interval);
             if (d->read_merged != 0)
                 d->rrqm_ps = (deviceInfo[4].toULongLong() - d->read_merged) / static_cast<quint64>(interval);
             if (d->write_com != 0)

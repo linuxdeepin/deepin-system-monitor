@@ -140,11 +140,11 @@ protected:
                 if (column == 0)
                     return m_blockInfo.blocksWritten();
                 else if (column == 1)
-                    return m_blockInfo.writeMerged();
+                    return m_blockInfo.writeComplete();
                 break;
             case  5:
                 if (column == 0)
-                    return m_blockInfo.readMerged();
+                    return m_blockInfo.writeMerged();
                 else if (column == 1)
                     return m_blockInfo.writeRequestIssuedPerSecond();
                 break;
