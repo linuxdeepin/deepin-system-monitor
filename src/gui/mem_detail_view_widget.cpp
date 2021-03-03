@@ -30,6 +30,7 @@ using namespace core::system;
 MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
+    this->setObjectName("MemDetailViewWidget");
     m_memstatWIdget = new MemStatViewWidget(this);
     m_memsummaryWidget = new MemSummaryViewWidget(this);
 

@@ -47,6 +47,8 @@ public slots:
     void onSwitchPageFinished();
 
 private:
+    QString m_lastDteailWidgetName;
+
     QWidget *m_processWidget = nullptr;
     QWidget *m_cpudetailWidget = nullptr;
     QWidget *m_memDetailWidget = nullptr;

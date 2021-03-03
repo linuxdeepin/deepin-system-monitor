@@ -44,16 +44,38 @@ void DetailViewStackedWidget::onSwitchPageFinished()
 {
     if (this->currentWidget() == m_processWidget) {
         deleteDetailPage();
+    } else {
+        m_lastDteailWidgetName = this->currentWidget()->objectName();
     }
 }
 
 void DetailViewStackedWidget::onDetailInfoClicked()
 {
-    if (m_cpudetailWidget == nullptr) {
-        m_cpudetailWidget = new CPUDetailWidget(this);
-        this->insertWidget(1, m_cpudetailWidget);
+    if (m_lastDteailWidgetName == "MemDetailViewWidget") {
+        if (m_memDetailWidget == nullptr) {
+            m_memDetailWidget = new MemDetailViewWidget(this);
+            this->insertWidget(2, m_memDetailWidget);
+        }
+        this->setCurrent(m_memDetailWidget);
+    } else if (m_lastDteailWidgetName == "NetifDetailViewWidget") {
+        if (m_netifDetailWidget == nullptr) {
+            m_netifDetailWidget = new NetifDetailViewWidget(this);
+            this->insertWidget(3, m_netifDetailWidget);
+        }
+        this->setCurrent(m_netifDetailWidget);
+    } else if (m_lastDteailWidgetName == "BlockDevDetailViewWidget") {
+        if (m_blockDevDetailWidget == nullptr) {
+            m_blockDevDetailWidget = new BlockDevDetailViewWidget(this);
+            this->insertWidget(4, m_blockDevDetailWidget);
+        }
+        this->setCurrent(m_blockDevDetailWidget);
+    } else {
+        if (m_cpudetailWidget == nullptr) {
+            m_cpudetailWidget = new CPUDetailWidget(this);
+            this->insertWidget(1, m_cpudetailWidget);
+        }
+        this->setCurrent(m_cpudetailWidget);
     }
-    this->setCurrent(m_cpudetailWidget);
 }
 
 void DetailViewStackedWidget::onSwitchProcessPage()

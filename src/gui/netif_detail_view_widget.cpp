@@ -28,6 +28,8 @@ using namespace core::system;
 NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
+    this->setObjectName("NetifDetailViewWidget");
+
     m_netifstatWIdget = new NetifStatViewWidget(this);
     m_netifsummaryWidget = new NetifSummaryViewWidget(this);
 

@@ -253,6 +253,8 @@ void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &grap
 
 CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 {
+    this->setObjectName("CPUDetailWidget");
+
     TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
     CPUInfoModel *cpuInfomodel = CPUInfoModel::instance();
 

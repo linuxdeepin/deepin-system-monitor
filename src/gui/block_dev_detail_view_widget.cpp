@@ -26,6 +26,8 @@
 BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
+    this->setObjectName("BlockDevDetailViewWidget");
+
     setTitle(DApplication::translate("Process.Graph.View", "Disks"));
     m_blockStatWidget = new BlockStatViewWidget(this);
     m_blocksummaryWidget = new BlockDevSummaryViewWidget(this);
