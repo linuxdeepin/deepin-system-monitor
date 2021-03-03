@@ -125,7 +125,8 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
 
     // init colors
     auto palette = dAppHelper->applicationPalette();
-    QColor frameColor = palette.color(DPalette::FrameBorder);
+    QColor frameColor  = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
 
 #ifndef THEME_FALLBACK_COLOR
     QColor cpuColor = palette.color(DPalette::TextTitle);
@@ -234,11 +235,11 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
         for (int j = pointsNumber - 2; j >= 0; j--) {
             // method#1: draw Bezier curve
             Painterpath.cubicTo(offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
-                         (1.0 - cpuPercents[i][j + 1]) * drawHeight + penSize + 0.5,
-                         offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
-                         (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5,
-                         offsetX - ((pointsNumber - j - 1) * deltaX),
-                         (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
+                                (1.0 - cpuPercents[i][j + 1]) * drawHeight + penSize + 0.5,
+                                offsetX - (pointsNumber - j - 1 - 0.5) * deltaX,
+                                (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5,
+                                offsetX - ((pointsNumber - j - 1) * deltaX),
+                                (1.0 - cpuPercents[i][j]) * drawHeight + penSize + 0.5);
 
             // method#2: draw line instead
             // path.lineTo(offsetX - ((pointsNumber - j - 1) * deltaX),
