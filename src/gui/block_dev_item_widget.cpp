@@ -21,11 +21,15 @@
 #include "block_dev_item_widget.h"
 #include "chart_view_widget.h"
 #include "common/common.h"
+
 #include <QPen>
 #include <QPainter>
 #include <QPalette>
+#include <QtMath>
+
 #include <DApplication>
 #include <DApplicationHelper>
+
 DWIDGET_USE_NAMESPACE
 using namespace common::format;
 
@@ -132,16 +136,16 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
 
         painter.setPen(Qt::NoPen);
         painter.setBrush(readColor);
-        painter.drawEllipse(devtitleRect.right() + spacing, memtitleRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(devtitleRect.right() + spacing, memtitleRect.y() + qCeil((memtitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
 
         painter.setBrush(writeColor);
-        painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.y() + qCeil((swaptitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
     } else {
         painter.setPen(Qt::NoPen);
         painter.setBrush(readColor);
 
         QRect readStrRect(devtitleRect.left() + spacing + sectionSize, devtitleRect.bottom(), painter.fontMetrics().width(readTitle), painter.fontMetrics().height());
-        painter.drawEllipse(devtitleRect.left(), readStrRect.center().y(), sectionSize, sectionSize); // 读硬盘速度的颜色提示
+        painter.drawEllipse(devtitleRect.left(), readStrRect.y() + qCeil((readStrRect.height() - sectionSize) / 2.0), sectionSize, sectionSize); // 读硬盘速度的颜色提示
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(readStrRect, readTitle);
 
@@ -149,7 +153,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
         painter.setBrush(writeColor);
 
         QRect writeStrRect(devtitleRect.left() + spacing + sectionSize, readStrRect.bottom(), painter.fontMetrics().width(writeTitle), painter.fontMetrics().height());
-        painter.drawEllipse(devtitleRect.left(), writeStrRect.center().y(), sectionSize, sectionSize); // 写硬盘速度的颜色提示
+        painter.drawEllipse(devtitleRect.left(), writeStrRect.y() + qCeil((writeStrRect.height() - sectionSize) / 2.0), sectionSize, sectionSize); // 写硬盘速度的颜色提示
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(writeStrRect, writeTitle);
     }

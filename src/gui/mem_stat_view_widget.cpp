@@ -25,6 +25,7 @@
 #include "system/mem.h"
 
 #include <QPainter>
+#include <QtMath>
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -107,8 +108,8 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(memoryColor);
-    painter.drawEllipse(0, memtitleRect.center().y(), sectionSize, sectionSize);
+    painter.drawEllipse(0, memtitleRect.y() + qCeil((memtitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
 
     painter.setBrush(swapColor);
-    painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.center().y(), sectionSize, sectionSize);
+    painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.y() + qCeil((swaptitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
 }

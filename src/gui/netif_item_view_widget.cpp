@@ -3,6 +3,7 @@
 #include "common/common.h"
 #include "system/netif.h"
 
+#include <QtMath>
 #include <QPainter>
 
 #include <DApplication>
@@ -75,10 +76,10 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
         painter.setPen(Qt::NoPen);
         painter.setBrush(m_recvColor);
-        painter.drawEllipse(leftBracketsRect.right() + spacing, leftBracketsRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(leftBracketsRect.right() + spacing, leftBracketsRect.y() + qCeil((leftBracketsRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
 
         painter.setBrush(m_sentColor);
-        painter.drawEllipse(recvRect.right() + 2 * spacing, recvRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(recvRect.right() + 2 * spacing, recvRect.y() + qCeil((recvRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
     } else {
 
         QString strRecvData = DApplication::translate("Process.Graph.Title", "Receive");
@@ -94,10 +95,10 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
         painter.setPen(Qt::NoPen);
         painter.setBrush(m_recvColor);
-        painter.drawEllipse(margin, recvRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(margin, recvRect.y() + qCeil((recvRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
 
         painter.setBrush(m_sentColor);
-        painter.drawEllipse(margin, sentRect.center().y(), sectionSize, sectionSize);
+        painter.drawEllipse(margin, sentRect.y() + qCeil((sentRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
     }
 }
 
