@@ -207,7 +207,7 @@ private:
     enum StatIndex { kLastStat = 0, kCurrentStat = 1, kStatCount = kCurrentStat + 1 };
 
     // filter type
-    SystemMonitor::FilterType m_filterType {SystemMonitor::OnlyGUI};
+    int m_filterType = -1;
     // effective user id
     uid_t m_euid;
 
