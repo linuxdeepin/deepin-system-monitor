@@ -49,15 +49,10 @@ QString Settings::configPath()
            .filePath(qApp->applicationName());
 }
 
-QVariant Settings::getOption(const QString &key)
+QVariant Settings::getOption(const QString &key, const QVariant &defaultValue)
 {
     m_settings->beginGroup(m_groupName);
-    QVariant result;
-    if (m_settings->contains(key)) {
-        result = m_settings->value(key);
-    } else {
-        result = QVariant();
-    }
+    const QVariant &result = m_settings->value(key, defaultValue);
     m_settings->endGroup();
 
     return result;

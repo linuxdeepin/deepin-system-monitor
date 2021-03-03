@@ -55,7 +55,7 @@ public:
     }
 
     static QString configPath();
-    QVariant getOption(const QString &key);
+    QVariant getOption(const QString &key, const QVariant &defaultValue = QVariant());
     void init();
     void setOption(const QString &key, const QVariant &value);
     inline void flush() { m_settings->sync(); }

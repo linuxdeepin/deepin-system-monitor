@@ -66,6 +66,7 @@ private:
      * @brief Initialize ui components
      */
     void initUI();
+    void resizeItemWidget();
 
 protected:
     /**
