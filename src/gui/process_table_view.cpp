@@ -89,12 +89,15 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     // adjust search result tip label text color dynamically on theme type change
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
+        auto palette = DApplicationHelper::instance()->applicationPalette();
         if (m_notFoundLabel) {
-            auto palette = DApplicationHelper::instance()->applicationPalette();
             QColor labelColor = palette.color(DPalette::PlaceholderText);
             palette.setColor(DPalette::Text, labelColor);
             m_notFoundLabel->setPalette(palette);
         }
+
+        palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+        header()->setPalette(palette);
     });
 }
 
@@ -376,6 +379,9 @@ void ProcessTableView::initUI(bool settingsLoaded)
     m_notFoundLabel->setPalette(palette);
     m_notFoundLabel->setVisible(false);
 
+    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+    header()->setPalette(palette);
+
     // header view options
     // header section movable
     header()->setSectionsMovable(true);
@@ -557,7 +563,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
     // change menu item checkable state before context menu popup
-    connect(m_contextMenu, &DMenu::aboutToShow, this, [=]() {
+    connect(m_contextMenu, &DMenu::aboutToShow, this, [ = ]() {
         // process running or not flag
 
         auto *sysmon = SystemMonitor::instance();

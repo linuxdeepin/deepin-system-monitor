@@ -37,6 +37,7 @@
 #include <QScroller>
 #include <QScrollerProperties>
 #include <QScrollBar>
+#include <QFocusEvent>
 
 // default constructor
 BaseTableView::BaseTableView(DWidget *parent)
@@ -67,7 +68,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     // header context menu policy
     m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
     // header view focus policy
-    m_headerView->setFocusPolicy(Qt::TabFocus);
+    m_headerView->setFocusPolicy(Qt::StrongFocus);
 
     // not allowing expanding/collpasing top-level items
     setRootIsDecorated(false);
@@ -79,8 +80,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     setAlternatingRowColors(false);
     // disable default focus style
     setAllColumnsShowFocus(false);
-    // focus policy
-    setFocusPolicy(Qt::TabFocus);
+    setFocusPolicy(Qt::StrongFocus);
 
     // adjust focus order (header -> treeview)
     setTabOrder(m_headerView, this);
@@ -107,7 +107,7 @@ void BaseTableView::setModel(QAbstractItemModel *model)
 
     // listen on modelReset signal, reset any hovered or pressed index
     if (model) {
-        connect(model, &QAbstractItemModel::modelReset, this, [=]() {
+        connect(model, &QAbstractItemModel::modelReset, this, [ = ]() {
             m_hover = {};
             m_pressed = {};
         });
@@ -204,7 +204,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     // frame radius
     auto radius = style->pixelMetric(DStyle::PM_FrameRadius, &options);
     // content margin
-    auto margin = style->pixelMetric(DStyle::PM_ContentsMargins, &options);
+    auto margin = 10;
 
     auto palette = options.palette;
     QBrush background;
@@ -260,7 +260,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     QTreeView::drawRow(painter, opt, index);
 
     // draw focus
-    if (hasFocus() && currentIndex().row() == index.row()) {
+    if (hasFocus() && m_focusReason == Qt::TabFocusReason && currentIndex().row() == index.row()) {
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(options);
         o.state |= QStyle::State_KeyboardFocusChange | QStyle::State_HasFocus;
@@ -270,6 +270,12 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 
     // restore painter state
     painter->restore();
+}
+
+void BaseTableView::focusInEvent(QFocusEvent *event)
+{
+    DTreeView::focusInEvent(event);
+    m_focusReason =  event->reason();
 }
 
 // current selected item changed handler
@@ -282,6 +288,7 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         QRect previousRect = visualRect(previous);
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
+        previousRect.adjust(-1, -1, 1, 1);
         viewport()->update(previousRect);
     }
     // update current item's paint region
@@ -289,6 +296,7 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         QRect currentRect = visualRect(current);
         currentRect.setX(0);
         currentRect.setWidth(viewport()->width());
+        currentRect.adjust(-1, -1, 1, 1);
         viewport()->update(currentRect);
     }
 }

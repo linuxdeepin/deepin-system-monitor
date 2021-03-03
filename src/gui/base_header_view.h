@@ -47,23 +47,6 @@ public:
      * @return Hint size
      */
     QSize sizeHint() const override;
-    /**
-     * @brief sectionSizeHint Hint size of section
-     * @param logicalIndex Section logical index
-     * @return Hint size in pixels
-     */
-    int sectionSizeHint(int logicalIndex) const;
-
-    /**
-     * @brief getSpacing Get section spacing
-     * @return Spacing in pixels
-     */
-    inline int getSpacing() const { return m_spacing; }
-    /**
-     * @brief setSpacing Set section spacing
-     * @param spacing Spacing in pixels
-     */
-    inline void setSpacing(int spacing) { m_spacing = spacing; }
 
 protected:
     /**
@@ -72,36 +55,20 @@ protected:
      */
     void paintEvent(QPaintEvent *e) override;
     /**
-     * @brief paintSection Section paint handler for header view
-     * @param painter Painter object
-     * @param rect Section bounding rect
-     * @param logicalIndex Section logical index
-     */
-    void paintSection(QPainter *painter,
-                      const QRect &rect,
-                      int logicalIndex) const override;
-    /**
      * @brief eventFilter Event filter for header view
      * @param obj Object being watched
      * @param ev Event to be filtered
      * @return true: Event being handled & no further processing; false: event should be propagated further
      */
     bool eventFilter(QObject *obj, QEvent *ev) override;
+
     /**
-     * @brief viewportEvent Event handler for header view's viewport
-     * @param e Events to be handled
-     * @return true: Event being handled & no further processing; false: event should be propagated further
+     * @brief focusInEvent
      */
-    bool viewportEvent(QEvent *e) override;
+    void focusInEvent(QFocusEvent *event) override;
 
 private:
-    // spacing between sections
-    int m_spacing {1};
-
-    // logical index of the section of which currently being hovered by cursor
-    int m_hover {-1};
-    // logical index of the section of which currently being pressed by mouse
-    int m_pressed {-1};
+    int m_focusReason = Qt::TabFocusReason;
 };
 
 #endif  // BASE_HEADER_VIEW_H
