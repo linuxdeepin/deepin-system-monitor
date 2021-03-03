@@ -253,8 +253,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 void CompactDiskMonitor::changeFont(const QFont &font)
 {
     m_tagFont = font;
-    m_tagFont.setPointSize(m_tagFont.pointSize() - 1);
+    m_tagFont.setPointSizeF(m_tagFont.pointSizeF() - 1);
     m_tagFont.setWeight(QFont::Medium);
     m_statFont = font;
-    m_statFont.setPointSize(m_statFont.pointSize() - 1);
+    m_statFont.setPointSizeF(m_statFont.pointSizeF() - 1);
 }

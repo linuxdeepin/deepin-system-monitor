@@ -140,14 +140,14 @@ void MemoryMonitor::updateStatus(qulonglong uMemory, qulonglong tMemory,
 void MemoryMonitor::changeFont(const QFont &font)
 {
     m_titleFont = font;
-    m_titleFont.setPointSize(m_titleFont.pointSize() + 12);
+    m_titleFont.setPointSizeF(m_titleFont.pointSizeF() + 12);
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
-    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
+    m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
     m_subContentFont = font;
-    m_subContentFont.setPointSize(m_subContentFont.pointSize() - 1);
+    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF() - 1);
     m_memPercentFont = font;
-    m_memPercentFont.setPointSize(m_memPercentFont.pointSize());
+    m_memPercentFont.setPointSizeF(m_memPercentFont.pointSizeF());
     m_memPercentFont.setBold(true);
 }
 

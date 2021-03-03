@@ -166,7 +166,7 @@ void DiskMonitor::paintEvent(QPaintEvent *)
 
     // Draw title.
     QFont font = painter.font();
-    font.setPointSize(titleRenderSize);
+    font.setPointSizeF(titleRenderSize);
     font.setWeight(QFont::Light);
     painter.setFont(font);
     painter.setPen(QPen(textColor));

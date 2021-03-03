@@ -328,10 +328,10 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 void NetworkMonitor::changeFont(const QFont &font)
 {
     m_sectionFont = font;
-    m_sectionFont.setPointSize(m_sectionFont.pointSize() + 12);
+    m_sectionFont.setPointSizeF(m_sectionFont.pointSizeF() + 12);
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
-    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
+    m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
     m_subContentFont = font;
-    m_subContentFont.setPointSize(m_subContentFont.pointSize() - 1);
+    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF() - 1);
 }

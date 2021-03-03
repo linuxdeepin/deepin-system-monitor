@@ -198,7 +198,7 @@ QPixmap getProcessIcon(int pid, std::string desktopFile,
 QSize getRenderSize(int fontSize, QString string)
 {
     QFont font;
-    font.setPointSize(fontSize);
+    font.setPointSizeF(fontSize);
     QFontMetrics fm(font);
 
     int width = 0;
@@ -446,7 +446,7 @@ void removeLayoutChild(QLayout *layout, int index)
 void setFontSize(QPainter &painter, int textSize)
 {
     QFont font = painter.font();
-    font.setPointSize(textSize);
+    font.setPointSizeF(textSize);
     painter.setFont(font);
 }
 }  // namespace Utils
