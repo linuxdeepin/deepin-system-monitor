@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Sockets</source>
-        <translation>Tomadas</translation>
+        <translation>Sockets</translation>
     </message>
     <message>
         <source>Logical processors</source>
@@ -102,7 +102,7 @@
     </message>
     <message>
         <source>Threads</source>
-        <translation>Fios de execução</translation>
+        <translation>Threads</translation>
     </message>
     <message>
         <source>Host name</source>
@@ -695,7 +695,7 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Discos</translation>
     </message>
 </context>
 <context>

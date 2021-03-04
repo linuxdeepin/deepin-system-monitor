@@ -695,7 +695,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Levyt</translation>
     </message>
 </context>
 <context>

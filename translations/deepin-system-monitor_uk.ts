@@ -693,7 +693,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Диски</translation>
     </message>
 </context>
 <context>

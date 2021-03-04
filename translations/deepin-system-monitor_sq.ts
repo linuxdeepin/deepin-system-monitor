@@ -54,7 +54,7 @@
     </message>
     <message>
         <source>Frequency</source>
-        <translation>Frekuenca</translation>
+        <translation>Frekuencë</translation>
     </message>
     <message>
         <source>Vendor</source>
@@ -695,7 +695,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Disqe</translation>
     </message>
 </context>
 <context>

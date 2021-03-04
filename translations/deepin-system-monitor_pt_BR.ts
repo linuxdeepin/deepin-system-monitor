@@ -21,11 +21,11 @@
     <name>BlockDevItemWidget</name>
     <message>
         <source>Read</source>
-        <translation type="unfinished"/>
+        <translation>Ler</translation>
     </message>
     <message>
         <source>Write</source>
-        <translation type="unfinished"/>
+        <translation>Gravar</translation>
     </message>
 </context>
 <context>
@@ -50,7 +50,7 @@
     </message>
     <message>
         <source>Current frequency</source>
-        <translation>Frequência</translation>
+        <translation>Frequência atual</translation>
     </message>
     <message>
         <source>Frequency</source>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Sockets</source>
-        <translation type="unfinished"/>
+        <translation>Sockets</translation>
     </message>
     <message>
         <source>Logical processors</source>
@@ -90,11 +90,11 @@
     </message>
     <message>
         <source>Load average</source>
-        <translation type="unfinished"/>
+        <translation>Carga média</translation>
     </message>
     <message>
         <source>File descriptors</source>
-        <translation type="unfinished"/>
+        <translation>Descritores de arquivo</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -360,7 +360,7 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>Sujo</translation>
     </message>
     <message>
         <source>Mapped</source>
@@ -376,7 +376,7 @@
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Placa</translation>
     </message>
 </context>
 <context>
@@ -403,15 +403,15 @@
     </message>
     <message>
         <source>Reads/s</source>
-        <translation type="unfinished"/>
+        <translation>Leituras / s</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation type="unfinished"/>
+        <translation>Setores lidos / s</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Leituras mescladas / s</translation>
     </message>
     <message>
         <source>Sectors written</source>
@@ -427,15 +427,15 @@
     </message>
     <message>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>Gravações / s</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation type="unfinished"/>
+        <translation>Setores gravados / s</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Gravações mescladas / s</translation>
     </message>
 </context>
 <context>
@@ -512,15 +512,15 @@ Continuar?</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation type="unfinished"/>
+        <translation>Transmissão:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>Prefixlen:</translation>
     </message>
     <message>
         <source>Scope:</source>
-        <translation type="unfinished"/>
+        <translation>Âmbito:</translation>
     </message>
 </context>
 <context>
@@ -559,7 +559,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>RX bytes</source>
-        <translation type="unfinished"/>
+        <translation>Bytes Rx</translation>
     </message>
     <message>
         <source>RX errors</source>
@@ -571,11 +571,11 @@ Continuar?</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>Rx overruns</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>Rx frame</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -583,7 +583,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>TX bytes</source>
-        <translation type="unfinished"/>
+        <translation>Bytes Tx</translation>
     </message>
     <message>
         <source>TX errors</source>
@@ -595,11 +595,11 @@ Continuar?</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation>Tx overruns</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>Transportador Tx</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -640,7 +640,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Receive</source>
-        <translation type="unfinished"/>
+        <translation>Receber</translation>
     </message>
 </context>
 <context>
@@ -691,11 +691,11 @@ Continuar?</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation type="unfinished"/>
+        <translation>Enviar</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Discos</translation>
     </message>
 </context>
 <context>

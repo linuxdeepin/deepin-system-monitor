@@ -695,7 +695,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Schijven</translation>
     </message>
 </context>
 <context>

@@ -696,7 +696,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Dischi</translation>
     </message>
 </context>
 <context>

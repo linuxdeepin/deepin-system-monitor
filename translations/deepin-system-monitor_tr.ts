@@ -39,7 +39,7 @@
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation type="unfinished"/>
+        <translation>%1 gün %2 saat %3 dakika</translation>
     </message>
 </context>
 <context>
@@ -360,7 +360,7 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>Kirli</translation>
     </message>
     <message>
         <source>Mapped</source>
@@ -399,43 +399,43 @@
     </message>
     <message>
         <source>Sectors read</source>
-        <translation type="unfinished"/>
+        <translation>Bölgeler okundu</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation type="unfinished"/>
+        <translation>Okur/s</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation type="unfinished"/>
+        <translation>Bölgeler okundu/s</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Okumalar birleştirildi/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation type="unfinished"/>
+        <translation>Bölgeler yazıldı</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation type="unfinished"/>
+        <translation>Yazılar tamamlandı</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>Yazılar birleştirildi</translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>Yazar/s</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation type="unfinished"/>
+        <translation>Bölgeler yazıldı/s</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Yazılar birleştirildi/s</translation>
     </message>
 </context>
 <context>
@@ -516,7 +516,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>Prefixlen:</translation>
     </message>
     <message>
         <source>Scope:</source>
@@ -543,7 +543,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Noise level</source>
-        <translation type="unfinished"/>
+        <translation>Bozukluk seviyesi</translation>
     </message>
     <message>
         <source>MAC</source>
@@ -575,7 +575,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>RX çerçevesi</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -695,7 +695,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation type="unfinished"/>
+        <translation>Diskler</translation>
     </message>
 </context>
 <context>
