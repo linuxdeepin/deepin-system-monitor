@@ -1,4 +1,4 @@
-# System Monitor |../common/deepin_system_monitor_96.svg|
+# System Monitor|deepin-system-monitor|
 
 ## Overview
 
@@ -8,7 +8,7 @@ System Monitor is a system tool monitoring and managing hardware load, program r
 
 ### Search Process
 
-1. Click ![search](../common/search.svg)in the Search box.  
+1. Click ![search](../common/search.svg) in the Search box.  
 2. Enter keywords and the search results will be displayed automatically.
 
 ![1|search](fig/search.png)
@@ -24,9 +24,9 @@ Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor inte
 | Network | Display the upload and download speed of the current network in real-time |
 | Disk    | Display the reading and writing speed in the current disk which is only in "Compact" view |
 
-  ![1|monitor](fig/expand.png)
+![1|monitor](fig/expand.png)
 
-  ![1|monitor](fig/compact.png)
+![1|monitor](fig/compact.png)
 
 #### View Hardware info
 
@@ -76,15 +76,11 @@ System Monitor can be used to end processes.
 #### End Application
 
 1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
-
 2. Select **Force end application** ( available for graphical processes only).
-
 3. Click the window of application you want to close according to the prompt.
-
 4. Click **Force End** in the pop-up window to confirm.
 
 > ![notes](../common/notes.svg) Notes: Press **Esc** on the keyboard to terminate the operation above and return to the System Monitor interface.
->
 
 
 #### Suspend/Resume Process
@@ -123,7 +119,7 @@ In the list of system services, force-ending of application is prohibited.
 >![attention](../common/attention.svg) Attention: For better system operation, please don't end any system services processes and root processes.
 
 #### Start system service
-1. Select **Services** tab on the System Monitor interface.
+1. Select the **Services** tab on the System Monitor interface.
 2. Select a process that is not started yet, right-click it, and select **Start**. Enter the password if an authentication window pops up.
 3. **active** is displayed in the **Active** column.
 4. Right-click the service and select **Startup type**. Select from **Auto** and **Manual** options.
@@ -131,7 +127,7 @@ In the list of system services, force-ending of application is prohibited.
 
 #### Stop system service
 
-1. Select **Services** tab on the System Monitor interface.
+1. Select the **Services** tab on the System Monitor interface.
 2. Select a process that is started already, right-click it, and select **Stop**. Enter the password if an authentication window pops up.
 3. **inactive** is displayed in the **Active** column.
 4. Right-click the service and select **Refresh**.

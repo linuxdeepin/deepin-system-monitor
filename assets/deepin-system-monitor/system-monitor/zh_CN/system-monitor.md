@@ -1,4 +1,4 @@
-# 系统监视器|../common/deepin_system_monitor_96.svg|
+# 系统监视器|deepin-system-monitor|
 
 ## 概述
 
@@ -37,7 +37,7 @@
 
 ![1|monitor](fig/detail.png)
 
-3. 单击右侧 **隐藏详情 **收起详情页。
+3. 单击右侧 **隐藏详情**收起详情页。
 
 
 

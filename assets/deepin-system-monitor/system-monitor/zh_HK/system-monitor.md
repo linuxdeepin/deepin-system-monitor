@@ -1,4 +1,4 @@
-# 系統監視器|../common/deepin_system_monitor_96.svg|
+# 系統監視器|deepin-system-monitor|
 
 ## 概述
 
@@ -22,6 +22,7 @@
 | 內存 |   顯示內存總量和當前佔用量，交換空間大小和當前佔用量。    |
 | 網絡 |   實時顯示當前網絡上傳下載速度。   |
 | 磁盤 |  僅在「緊湊」視圖下顯示；實時顯示當前磁盤讀取與寫入速度。  |
+
 ![1|monitor](fig/expand.png)
 
 ![1|compact](fig/compact.png)
@@ -36,7 +37,7 @@
 
 ![1|monitor](fig/detail.png)
 
-3. 單擊右側 **隱藏詳情 **收起詳情頁。
+3. 單擊右側 **隱藏詳情** 收起詳情頁。
 
 
 
