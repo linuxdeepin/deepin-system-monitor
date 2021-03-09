@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <DApplication>
 #include <DStyle>
+#include <QScroller>
 
 using namespace core::system;
 using namespace common::format;
@@ -241,6 +242,19 @@ CPUDetailSummaryTable::CPUDetailSummaryTable(CPUInfoModel *dataModel, QWidget *p
     m_model = new CPUSummaryTableModel(dataModel, this);
     this->setModel(m_model);
     this->setItemDelegate(new BaseDetailItemDelegate(this));
+
+    auto *scroller = QScroller::scroller(viewport());
+    auto prop = scroller->scrollerProperties();
+    // turn off overshoot to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 1);
+    // lock scroll direction to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1);
+    scroller->setScrollerProperties(prop);
+    // enable touch gesture
+    QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
 void CPUDetailSummaryTable::onModelUpdate()

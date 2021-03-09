@@ -37,6 +37,7 @@
 #include <DApplication>
 #include <DStyle>
 #include <QMap>
+#include <QScroller>
 
 using namespace core::system;
 using namespace common::format;
@@ -232,6 +233,19 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     m_model = new DeailTableModelBlock(this);
     this->setModel(m_model);
     this->setItemDelegate(new BaseDetailItemDelegate(this));
+
+    auto *scroller = QScroller::scroller(viewport());
+    auto prop = scroller->scrollerProperties();
+    // turn off overshoot to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 1);
+    // lock scroll direction to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1);
+    scroller->setScrollerProperties(prop);
+    // enable touch gesture
+    QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
 void BlockDevSummaryViewWidget::chageSummaryInfo(const QString &deviceName)

@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <DApplication>
 #include <DStyle>
+#include <QScroller>
 
 using namespace core::system;
 using namespace common::format;
@@ -196,6 +197,19 @@ MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)
     this->setItemDelegate(new BaseDetailItemDelegate(this));
 
     setFixedHeight(260);
+
+    auto *scroller = QScroller::scroller(viewport());
+    auto prop = scroller->scrollerProperties();
+    // turn off overshoot to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 1);
+    // lock scroll direction to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1);
+    scroller->setScrollerProperties(prop);
+    // enable touch gesture
+    QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
 void MemSummaryViewWidget::onModelUpdate()

@@ -33,9 +33,11 @@
 #include <QHeaderView>
 #include <DStyle>
 #include <DApplication>
+#include <QScroller>
 
 using namespace core::system;
 using namespace common::format;
+
 using namespace common::core;
 
 #define LEFTMARGIN  15  // 左边距
@@ -391,6 +393,19 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     this->setModel(m_netInfoModel);
     m_netInfoDetailItemDelegate = new NetInfoDetailItemDelegate(this);
     this->setItemDelegate(dynamic_cast<QAbstractItemDelegate *>(m_netInfoDetailItemDelegate));
+
+    auto *scroller = QScroller::scroller(viewport());
+    auto prop = scroller->scrollerProperties();
+    // turn off overshoot to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0);
+    prop.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 1);
+    // lock scroll direction to fix performance issue
+    prop.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1);
+    scroller->setScrollerProperties(prop);
+    // enable touch gesture
+    QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 }
 
 void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
