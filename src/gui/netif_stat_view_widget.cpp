@@ -1,3 +1,23 @@
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "netif_stat_view_widget.h"
 #include "netif_item_view_widget.h"
 
@@ -52,21 +72,19 @@ void NetifStatViewWidget::onModelUpdate()
     int netifCnt = netifInfoDB.size();
     if (!m_initStatus && netifCnt > 0) {
         m_initStatus = true;
-        if (netifCnt > 1){
+        if (netifCnt > 1) {
             onSetItemActiveStatus(netifInfoDB.begin().key());
-        }
-        else{
+        } else {
             emit netifItemClicked(netifInfoDB.begin().key());
         }
         m_currentMac = netifInfoDB.begin().key();
     }
 
-    if(netifCnt > 0 && !netifInfoDB.contains(m_currentMac)){
-        if(netifInfoDB.size()  == 1){
-              m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(false);
-        }
-        else{
-              m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(true);
+    if (netifCnt > 0 && !netifInfoDB.contains(m_currentMac)) {
+        if (netifInfoDB.size()  == 1) {
+            m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(false);
+        } else {
+            m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(true);
         }
         m_currentMac = netifInfoDB.begin().key();
         emit netifItemClicked(netifInfoDB.begin().key());
@@ -137,8 +155,8 @@ void NetifStatViewWidget::showItemDouble()
             itemView->setMode(NetifItemViewWidget::TITLE_VERTICAL);
             itemView->setGeometry(itemOffsetX, 0, itemWidth, itemHeight);
             itemOffsetX = itemOffsetX + itemWidth + itemSpace;
-            if(iter.key() == m_currentMac){
-                   itemView->updateActiveStatus(true);
+            if (iter.key() == m_currentMac) {
+                itemView->updateActiveStatus(true);
             }
         } else {
             itemView->hide();
@@ -173,8 +191,8 @@ void NetifStatViewWidget::showItemLgDouble()
             } else if (itemCurrentCnt % 4 == 3) {
                 itemView->setGeometry(page * this->width() + itemWidth + itemSpace, itemHeight, itemWidth, itemHeight);
             }
-            if(iter.key() == m_currentMac){
-                   itemView->updateActiveStatus(true);
+            if (iter.key() == m_currentMac) {
+                itemView->updateActiveStatus(true);
             }
         } else {
             itemView->hide();
