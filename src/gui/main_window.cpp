@@ -32,18 +32,17 @@
 #include <DTitlebar>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QDesktopWidget>
 
 const int WINDOW_MIN_HEIGHT = 760;
 const int WINDOW_MIN_WIDTH = 1080;
 
-const int WINDOW_MAX_HEIGHT = 1080;
-const int WINDOW_MAX_WIDTH = 1920;
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
     m_settings = Settings::instance();
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
-    setMaximumSize(WINDOW_MAX_WIDTH, WINDOW_MAX_HEIGHT);
+    setMaximumSize(QApplication::desktop()->size());
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 }
 
