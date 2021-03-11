@@ -85,7 +85,6 @@ private:
     double ringForegroundOpacity = 1;
     int animationIndex = 0;
     int cpuRenderMaxHeight = 45;
-    int paddingRight = 10;
     int percentRenderOffsetY = 131;
     int pointsNumber = 28;
     int ringRadius = 90;

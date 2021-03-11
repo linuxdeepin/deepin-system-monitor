@@ -180,7 +180,7 @@ void CpuMonitor::resizeItemWidgetRect()
 {
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
     const QSize &detailtextSize =  m_detailButton->size();
-    m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - paddingRight - 4, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
+    m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - 4, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
 }
 
 void CpuMonitor::paintEvent(QPaintEvent *)
@@ -198,7 +198,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     painter.setFont(m_cpuDisplayFont);
     painter.setPen(QPen(textColor));
-    QRect cpuDisplayRect(((rect().x() + rect().width() - titleWidth) / 2) - paddingRight,
+    QRect cpuDisplayRect(((rect().x() + rect().width() - titleWidth) / 2),
                          rect().y() + titleRenderOffsetY, titleWidth, fm.height());
     painter.drawText(cpuDisplayRect, Qt::AlignCenter,
                      DApplication::translate("Process.Graph.View", "CPU"));
@@ -214,10 +214,10 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.setFont(m_cpuUsageFont);
     painter.setPen(QPen(numberColor));
     painter.drawText(
-        QRect(rect().x() - paddingRight, rect().y() + percentRenderOffsetY, rect().width(), 30),
+        QRect(rect().x(), rect().y() + percentRenderOffsetY, rect().width(), 30),
         Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
 
-    int centerX = rect().x() + rect().width() / 2 - paddingRight;
+    int centerX = rect().x() + rect().width() / 2;
     int centerY = rect().y() + ringRenderOffsetY;
     drawLoadingRing(painter, centerX, centerY, ringRadius, ringWidth, 270, 135, ringForegroundColor,
                     ringForegroundOpacity, ringBackgroundColor, ringBackgroundOpacity,
