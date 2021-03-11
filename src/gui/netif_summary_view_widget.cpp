@@ -34,6 +34,7 @@
 #include <DStyle>
 #include <DApplication>
 #include <QScroller>
+#include <QPainterPath>
 
 using namespace core::system;
 using namespace common::format;

@@ -28,6 +28,7 @@
 #include <QAbstractItemView>
 #include <QToolTip>
 #include <QStyleOptionViewItem>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 

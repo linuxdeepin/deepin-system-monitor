@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QVariant>
+#include <QPainterPath>
 
 class ChartViewWidget : public QWidget
 {
