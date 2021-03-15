@@ -314,12 +314,7 @@ void ProcessTableView::changeProcessPriority(int priority)
         if (prio == priority)
             return;
 
-        ErrorContext ec {};
-        ec = ProcessDB::instance()->setProcessPriority(pid, priority);
-        if (ec) {
-            //show error dialog
-            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
-        }
+        ProcessDB::instance()->setProcessPriority(pid, priority);
     }
 }
 

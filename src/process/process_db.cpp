@@ -51,6 +51,7 @@ ProcessDB::ProcessDB(QObject *parent)
     m_desktopEntryTimeCount = DesktopEntryTimeCount;
 
     m_euid = geteuid();
+    connect(this, &ProcessDB::signalProcessPrioritysetChanged, this, &ProcessDB::onProcessPrioritysetChanged);
 }
 
 ProcessDB::~ProcessDB()
@@ -123,7 +124,12 @@ void ProcessDB::update()
     m_procSet->refresh();
 }
 
-ErrorContext ProcessDB::setProcessPriority(pid_t pid, int priority)
+void ProcessDB::setProcessPriority(pid_t pid, int priority)
+{
+    emit signalProcessPrioritysetChanged(pid, priority);
+}
+
+void ProcessDB::onProcessPrioritysetChanged(pid_t pid, int priority)
 {
     sched_param param {};
     ErrorContext ec {};
@@ -141,7 +147,8 @@ ErrorContext ProcessDB::setProcessPriority(pid_t pid, int priority)
     errno = 0;
     int rc = sched_getparam(pid, &param);
     if (rc == -1) {
-        return errfmt(errno, ec);
+        emit processControlResultReady(errfmt(errno, ec));
+        return;
     }
     // we dont support adjust realtime sched process's priority
     if (param.sched_priority == 0) {
@@ -176,20 +183,20 @@ ErrorContext ProcessDB::setProcessPriority(pid_t pid, int priority)
                 });
                 connect(ctrl, &PriorityController::finished, ctrl, &QObject::deleteLater);
                 ctrl->execute();
-                return {};
+                return;
             } else {
-                return errfmt(errno, ec);
+                Q_EMIT processControlResultReady(errfmt(errno, ec));
             }
         } else {
             Q_EMIT processPriorityChanged(pid, priority);
-            return ec;
+            Q_EMIT processControlResultReady(ec);
         }
     } else {
         // static priority
         // TODO: do nothing at this moment, call sched_setparam to change static priority when
         // needed
     }
-    return ec;
+    Q_EMIT processControlResultReady(ec);
 }
 
 void ProcessDB::sendSignalToProcess(pid_t pid, int signal)

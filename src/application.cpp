@@ -35,7 +35,9 @@ using namespace core::system;
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    qRegisterMetaType<Application::TaskState>("Application::BackgroundTaskState");
+    qRegisterMetaType<Application::TaskState>("Application::TaskState");
+    qRegisterMetaType<pid_t>("pid_t");
+    qRegisterMetaType<ErrorContext>("ErrorContext");
 
     ThreadManager::instance()->attach(new SystemMonitorThread);
     ThreadManager::instance()->attach(new NetifMonitorThread);
@@ -46,7 +48,7 @@ bool Application::event(QEvent *event)
     if (event && event->type() == kMonitorStartEventType) {
         SystemMonitorThread *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
         thread->start();
-    } else if(event && event->type() == kNetifStartEventType) {
+    } else if (event && event->type() == kNetifStartEventType) {
         NetifMonitorThread *thread = ThreadManager::instance()->thread<NetifMonitorThread>(BaseThread::kNetifMonitorThread);
         thread->start();
     }

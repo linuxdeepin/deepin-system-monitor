@@ -71,7 +71,7 @@ public slots:
     void pauseProcess(pid_t pid);
     void resumeProcess(pid_t pid);
     void killProcess(pid_t pid);
-    ErrorContext setProcessPriority(pid_t pid, int priority);
+    void setProcessPriority(pid_t pid, int priority);
 
 Q_SIGNALS:
     void processListUpdated();
@@ -84,11 +84,16 @@ Q_SIGNALS:
     void processControlResultReady(const ErrorContext &ec);
     void filterTypeChanged(FilterType filter);
 
+    void signalProcessPrioritysetChanged(pid_t pid, int priority);
+
 public:
     void update();
 
 private:
     void sendSignalToProcess(pid_t pid, int signal);
+
+private slots:
+    void onProcessPrioritysetChanged(pid_t pid, int priority);
 
 private:
     WMWindowList *m_windowList;
