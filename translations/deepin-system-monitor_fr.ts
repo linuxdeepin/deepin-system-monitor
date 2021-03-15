@@ -859,7 +859,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Mémoire</translation>
+        <translation>Mémoire </translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -895,11 +895,11 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation>Mémoire partagée</translation>
+        <translation>Mémoire partagée </translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation>Mémoire virtuelle</translation>
+        <translation>Mémoire virtuelle </translation>
     </message>
 </context>
 <context>
