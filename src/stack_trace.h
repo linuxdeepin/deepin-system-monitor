@@ -71,7 +71,7 @@ static inline void printStacktrace(int signum)
     std::string logN {"/tmp/"};
     logN.append(logstr);
     std::ofstream log(logN, std::ios::out);
-    qInfo() << "=================stckprintStacktrace============" << QString(logN.c_str());
+    qInfo() << "=================stckprintStacktrace============" << QString(logN.c_str())  << "========" << signum;
 
     // get backtrace symbols list
     //    std::vector<void *> stack(MAX_BACKTRACE_FRAMES);
