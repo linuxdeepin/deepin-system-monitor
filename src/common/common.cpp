@@ -290,7 +290,7 @@ static void get_kb_shift()
 
 void global_init()
 {
-    util::installCrashHandler();
+    //util::installCrashHandler();
     util::common::init_seed();
 
     init_shell_list();
