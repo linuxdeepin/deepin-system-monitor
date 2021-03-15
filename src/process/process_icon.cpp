@@ -110,8 +110,10 @@ QIcon ProcessIcon::icon() const
                     union size_u sz;
                     sz.k = it.key();
                     QImage img(reinterpret_cast<const uchar *>(it.value().constData()), int(sz.s.w), int(sz.s.h), QImage::Format_ARGB32);
-                    auto pix = QPixmap::fromImage(img);
-                    icon.addPixmap(pix);
+                    if (!img.isNull()) {
+                        auto pix = QPixmap::fromImage(img);
+                        icon.addPixmap(pix);
+                    }
                     ++it;
                 } // ::while
             } // ::if(iconData)

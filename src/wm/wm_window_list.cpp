@@ -148,7 +148,7 @@ QMap<uint64_t, QVector<uint>> WMWindowList::getWindowIcon(pid_t pid) const
             width = *ptr++;
             height = *ptr++;
             // malformed data (non ARGB32)
-            if (width == 0 || height == 0 || (len - pos) < (2 + width * height))
+            if (width == 0 || height == 0 || (len - pos) < (2 + width * height) || width > 10240 || height > 10240)
                 return pixMap;
 
             QVector<uint> pix(int(width * height)); // assume image wouldn't be large enough to cause overflow

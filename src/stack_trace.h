@@ -31,8 +31,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <QDebug>
-
 namespace util {
 
 #define MAX_BACKTRACE_FRAMES 128
@@ -71,7 +69,6 @@ static inline void printStacktrace(int signum)
     std::string logN {"/tmp/"};
     logN.append(logstr);
     std::ofstream log(logN, std::ios::out);
-    qInfo() << "=================stckprintStacktrace============" << QString(logN.c_str())  << "========" << signum;
 
     // get backtrace symbols list
     //    std::vector<void *> stack(MAX_BACKTRACE_FRAMES);
@@ -120,7 +117,6 @@ void installCrashHandler()
     sigaction(SIGILL, &act, nullptr);
     // Abort signal from abort call
     sigaction(SIGABRT, &act, nullptr);
-    sigaction(SIGTERM, &act, nullptr);
 }
 
 } // namespace util
