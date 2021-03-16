@@ -120,10 +120,8 @@ bool WMWindowList::isDesktopEntryApp(pid_t pid) const
     return m_desktopEntryCache.contains(pid);
 }
 
-QMap<uint64_t, QVector<uint>> WMWindowList::getWindowIcon(pid_t pid) const
+QImage WMWindowList::getWindowIcon(pid_t pid) const
 {
-    QMap<uint64_t, QVector<uint>> pixMap;
-
     auto search = m_guiAppcache.find(pid);
     WMWId winId = UINT32_MAX;
     if (search != m_guiAppcache.end()) {
@@ -139,30 +137,24 @@ QMap<uint64_t, QVector<uint>> WMWindowList::getWindowIcon(pid_t pid) const
         if (len < 2)
             return {};
 
-        uint *data, *ptr;
-        uint width, height;
-        uint pos = 0;
-        data = reinterpret_cast<uint *>(xcb_get_property_value(reply.get()));
-        ptr = data;
-        while (pos + 2 < len) {
-            width = *ptr++;
-            height = *ptr++;
-            // malformed data (non ARGB32)
-            if (width == 0 || height == 0 || (len - pos) < (2 + width * height) || width > 10240 || height > 10240)
-                return pixMap;
+        uint *data = reinterpret_cast<uint *>(xcb_get_property_value(reply.get()));
+        if (data == nullptr)
+            return {};
 
-            QVector<uint> pix(int(width * height)); // assume image wouldn't be large enough to cause overflow
-            std::copy(ptr, ptr + width * height, pix.data());
-            union size_u sz;
-            sz.s.w = width;
-            sz.s.h = height;
-            pixMap[sz.k] = pix;
+        int width = static_cast<int>(data[0]);
+        int height = static_cast<int>(data[1]);
 
-            pos += (width * height + 2);
-            ptr += width * height;
+        if (width < 0 || height < 0 || width > 10240 || height > 10240)
+            return QImage();
+
+        QImage img(width, height, QImage::Format_ARGB32);
+        int byteCount = img.byteCount() / 4;
+        for (int i = 0; i < byteCount; ++i) {
+            ((uint *)img.bits())[i] = data[i + 2];
         }
+        return img;
     }
-    return pixMap;
+    return {};
 }
 
 QString WMWindowList::getWindowTitle(pid_t pid) const

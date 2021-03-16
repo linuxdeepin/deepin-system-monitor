@@ -54,7 +54,7 @@ public:
 
     int getAppCount();
 
-    QMap<uint64_t, QVector<uint>> getWindowIcon(pid_t pid) const;
+    QImage getWindowIcon(pid_t pid) const;
     QString getWindowTitle(pid_t pid) const;
 
     bool isTrayApp(pid_t pid) const;

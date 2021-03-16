@@ -57,7 +57,7 @@ struct icon_data_name_type : public icon_data_t {
     QString icon_name;
 };
 struct icon_data_pix_map_type : public icon_data_t {
-    QMap<uint64_t, QVector<uint>> pixMap;
+    QImage image;
 };
 
 ProcessIcon::ProcessIcon()
@@ -105,17 +105,7 @@ QIcon ProcessIcon::icon() const
         } else if (m_data->type == kIconDataPixmapType) {
             auto *iconData = reinterpret_cast<struct icon_data_pix_map_type *>(m_data.get());
             if (iconData) {
-                QMap<uint64_t, QVector<uint>>::const_iterator it = iconData->pixMap.constBegin();
-                while (it != iconData->pixMap.constEnd()) {
-                    union size_u sz;
-                    sz.k = it.key();
-                    QImage img(reinterpret_cast<const uchar *>(it.value().constData()), int(sz.s.w), int(sz.s.h), QImage::Format_ARGB32);
-                    if (!img.isNull()) {
-                        auto pix = QPixmap::fromImage(img);
-                        icon.addPixmap(pix);
-                    }
-                    ++it;
-                } // ::while
+                icon.addPixmap(QPixmap::fromImage(iconData->image));
             } // ::if(iconData)
         }
     } // ::if(m_data)
@@ -164,10 +154,10 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
         }
 
         if (windowList->isGuiApp(proc->pid())) {
-            auto pixMap = windowList->getWindowIcon(proc->pid());
-            if (pixMap.size() > 0) {
+            const QImage &image = windowList->getWindowIcon(proc->pid());
+            if (!image.isNull()) {
                 auto *iconData = new struct icon_data_pix_map_type();
-                iconData->pixMap = pixMap;
+                iconData->image = image;
                 iconData->proc_name = proc->name();
                 iconData->type = kIconDataPixmapType;
                 iconDataPtr.reset(iconData);
