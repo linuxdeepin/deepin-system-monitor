@@ -87,6 +87,8 @@ public:
     QIcon icon() const;
 
     qreal cpu() const;
+    void setCpu(qreal cpu);
+
     qulonglong memory() const;
     qulonglong vtrmemory() const;
     qulonglong sharememory() const;

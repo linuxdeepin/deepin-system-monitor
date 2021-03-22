@@ -18,8 +18,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "process_set.h"
-
+#include "process/process_db.h"
 #include "common/common.h"
+#include "wm/wm_window_list.h"
 
 #include <QDebug>
 
@@ -55,6 +56,18 @@ void ProcessSet::mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps)
     sendBps += proc.sentBps();
 }
 
+void ProcessSet::mergeSubProcCpu(pid_t ppid, qreal &cpu)
+{
+    auto it = m_pidPtoCMapping.find(ppid);
+    while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
+        mergeSubProcCpu(it.value(), cpu);
+        ++it;
+    }
+
+    const Process &proc = m_set[ppid];
+    cpu += proc.cpu();
+}
+
 void ProcessSet::refresh()
 {
     scanProcess();
@@ -74,6 +87,7 @@ void ProcessSet::scanProcess()
 
     m_set.clear();
     m_pidPtoCMapping.clear();
+    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
 
     Iterator iter;
     QList<pid_t> appLst;
@@ -85,7 +99,7 @@ void ProcessSet::scanProcess()
         m_set.insert(proc.pid(), proc);
         m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
 
-        if (proc.appType() == kFilterApps) {
+        if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
             appLst << proc.pid();
         }
     }
@@ -95,6 +109,10 @@ void ProcessSet::scanProcess()
         qreal sendBps = 0;
         mergeSubProcNetIO(pid, recvBps, sendBps);
         m_set[pid].setNetIoBps(recvBps, sendBps);
+
+        qreal ptotalCpu = 0.;
+        mergeSubProcCpu(pid, ptotalCpu);
+        m_set[pid].setCpu(ptotalCpu);
     }
 
     m_recentProcStage.clear();

@@ -133,7 +133,7 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
     XGetPropertyReply reply(xcb_get_property_reply(conn, cookie, nullptr));
 
     if (reply) {
-        auto len = uint(xcb_get_property_value_length(reply.get()));
+        auto len = xcb_get_property_value_length(reply.get());
         if (len < 2)
             return {};
 

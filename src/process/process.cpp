@@ -619,6 +619,11 @@ qreal Process::cpu() const
         return {};
 }
 
+void Process::setCpu(qreal cpu)
+{
+    d->cpuUsageSample->addSample(new CPUUsageSampleFrame(cpu));
+}
+
 qulonglong Process::memory() const
 {
     return d->rss - d->shm;
