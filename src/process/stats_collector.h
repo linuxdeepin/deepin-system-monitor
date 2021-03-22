@@ -200,6 +200,8 @@ private:
      */
     inline void mergeSubProcNetIO(pid_t ppid, ProcNetIOStat &sum);
 
+    inline void mergeSubProcCpu(pid_t ppid, qreal &cpu);
+
 private:
     /**
      * @brief Stat index enum

@@ -150,8 +150,7 @@ StatsCollector::~StatsCollector()
 // start stat job
 void StatsCollector::start()
 {
-    if(m_timer)
-    {
+    if (m_timer) {
         delete m_timer;
         m_timer = nullptr;
     }
@@ -661,6 +660,12 @@ void StatsCollector::updateStatus()
             }
         }
 
+        if (m_guiPIDList.contains(pid) || filteredAppList.contains(pid)) {
+            qreal ptotalCpu = 0.0;
+            mergeSubProcCpu(pid, ptotalCpu);
+            pe.setCPU(ptotalCpu);
+        }
+
         if (need) {
             filteredList << pe;
         }
@@ -935,7 +940,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     }
                 }
                 if (de && !de->displayName.isEmpty()) {
-                    nameSet = true; 
+                    nameSet = true;
                     proc.setDisplayName(de->displayName);
                 }
                 if (de && !de->icon.isNull()) {
@@ -988,6 +993,17 @@ void StatsCollector::mergeSubProcNetIO(pid_t ppid, ProcNetIOStat &sum)
     sum->recvBytes += ppe.getRecvBytes();
     sum->sentBps += ppe.getSentBps();
     sum->sentBytes += ppe.getSentBytes();
+}
+
+void StatsCollector::mergeSubProcCpu(pid_t ppid, qreal &cpu)
+{
+    auto ppe = m_procEntryMap[ppid];
+    auto it = m_pidPtoCMapping.find(ppid);
+    while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
+        mergeSubProcCpu(it.value(), cpu);
+        ++it;
+    }
+    cpu += ppe.getCPU();
 }
 
 // calculate process's network stat
