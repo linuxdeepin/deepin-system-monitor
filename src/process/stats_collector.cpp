@@ -151,8 +151,7 @@ StatsCollector::~StatsCollector()
 // start stat job
 void StatsCollector::start()
 {
-    if(m_timer)
-    {
+    if (m_timer) {
         delete m_timer;
         m_timer = nullptr;
     }
@@ -662,7 +661,7 @@ void StatsCollector::updateStatus()
             }
         }
         // 判断是否要在进程列表中显示
-        if(need && m_guiPIDList.contains(pe.getPID()) && WhiteListConfig::noShowProcess(pe.getName())) { // 判断是否是GUI进程
+        if (need && ((m_guiPIDList.contains(pe.getPID()) && WhiteListConfig::noShowProcess(pe.getName())) || WhiteListConfig::isHpidPrcoress(pe.getPID(), m_pidCtoPMapping))) { // 判断是否是GUI进程
             need = false;
             count++; //  要减去不显示的进程数量
         }
@@ -940,7 +939,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                     }
                 }
                 if (de && !de->displayName.isEmpty()) {
-                    nameSet = true; 
+                    nameSet = true;
                     proc.setDisplayName(de->displayName);
                 }
                 if (de && !de->icon.isNull()) {

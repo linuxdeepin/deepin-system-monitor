@@ -22,6 +22,7 @@
 #define WHITELISTCONFIG_H
 
 #define JSON_CONFIG_FILE_PATH "/usr/share/deepin-system-monitor/translations/whitelist.json"
+#define HPID_CONFIG_FILE_PATH "/var/run/system-monitor-custom.hpid"
 
 #include <QObject>
 
@@ -30,8 +31,8 @@ class WhiteListConfig : public QObject
     Q_OBJECT
 public:
     explicit WhiteListConfig(QObject *parent = nullptr);
-    static bool noShowProcess(const QString& strAppName);
-
+    static bool noShowProcess(const QString &strAppName);
+    static bool isHpidPrcoress(pid_t pid, const QMultiMap<pid_t, pid_t> &ctopMap);
 
 private:
     static QString getFileContent();
