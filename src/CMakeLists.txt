@@ -22,9 +22,9 @@ check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-find_package(DtkCore REQUIRED)
-find_package(DtkGui REQUIRED)
-find_package(DtkWidget REQUIRED)
+find_package(DtkCore5.5 REQUIRED)
+find_package(DtkGui5.5 REQUIRED)
+find_package(DtkWidget5.5 REQUIRED)
 find_package(DtkWm REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_PROCPS NAMES procps REQUIRED)
@@ -286,9 +286,9 @@ target_link_libraries(${APP_NAME}
     Qt5::DBus
     Qt5::Concurrent
     Qt5::X11Extras
-    dtkcore
-    dtkwidget
-    dtkgui
+    dtkcore5.5
+    dtkwidget5.5
+    dtkgui5.5
     dtkwm
     ${LIB_PCAP}
     ${LIB_PROCPS}
