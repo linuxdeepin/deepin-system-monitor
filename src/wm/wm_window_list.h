@@ -62,6 +62,7 @@ public:
     bool isDesktopEntryApp(pid_t pid) const;
     void addDesktopEntryApp(core::process::Process *proc);
 
+    void removeDesktopEntryApp(pid_t pid);
     void updateWindowListCache();
 
 private:

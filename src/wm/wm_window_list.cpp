@@ -120,6 +120,11 @@ bool WMWindowList::isDesktopEntryApp(pid_t pid) const
     return m_desktopEntryCache.contains(pid);
 }
 
+void WMWindowList::removeDesktopEntryApp(pid_t pid)
+{
+    m_desktopEntryCache.removeAll(pid);
+}
+
 QImage WMWindowList::getWindowIcon(pid_t pid) const
 {
     auto search = m_guiAppcache.find(pid);

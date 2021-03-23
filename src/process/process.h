@@ -76,6 +76,7 @@ public:
     pid_t ppid() const;
 
     int appType() const;
+    void setAppType(int type);
 
     qulonglong utime() const;
     qulonglong stime() const;

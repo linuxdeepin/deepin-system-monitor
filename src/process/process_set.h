@@ -85,6 +85,7 @@ private:
     QMap<pid_t, Process> m_set;
     QMap<pid_t, std::shared_ptr<RecentProcStage>> m_recentProcStage = {};
 
+    QMap<pid_t, pid_t> m_pidCtoPMapping {}; // child to parent pid mapping
     QMultiMap<pid_t, pid_t> m_pidPtoCMapping {}; // parent to child pid mapping
 
     friend class Iterator;

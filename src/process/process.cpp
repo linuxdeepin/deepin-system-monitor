@@ -186,21 +186,19 @@ void Process::readProcessInfo()
         d->apptype = kFilterCurrentUser;
     }
 
-    if (d->apptype != kFilterApps) {
-        qint64 sum_recv = 0;
-        qint64 sum_send = 0;
-        for (int i = 0; i < d->sockInodes.size(); ++i) {
-            SockIOStat sockIOStat;
-            bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
-            if (result) {
-                sum_recv += sockIOStat->rx_bytes;
-                sum_send += sockIOStat->tx_bytes;
-            }
+    qint64 sum_recv = 0;
+    qint64 sum_send = 0;
+    for (int i = 0; i < d->sockInodes.size(); ++i) {
+        SockIOStat sockIOStat;
+        bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
+        if (result) {
+            sum_recv += sockIOStat->rx_bytes;
+            sum_send += sockIOStat->tx_bytes;
         }
-
-        struct IOPS netIo = {static_cast<qreal>(sum_recv), static_cast<qreal>(sum_send)};
-        d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
     }
+
+    struct IOPS netIo = {static_cast<qreal>(sum_recv), static_cast<qreal>(sum_send)};
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
 
     d->valid = d->valid && ok;
 }
@@ -772,6 +770,11 @@ qulonglong Process::sentBytes() const
 int Process::appType() const
 {
     return d->apptype;
+}
+
+void Process::setAppType(int type)
+{
+    d->apptype = type;
 }
 
 } // namespace process

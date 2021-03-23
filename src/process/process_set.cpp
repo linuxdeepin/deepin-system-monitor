@@ -87,6 +87,7 @@ void ProcessSet::scanProcess()
 
     m_set.clear();
     m_pidPtoCMapping.clear();
+    m_pidCtoPMapping.clear();
     WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
 
     Iterator iter;
@@ -98,11 +99,24 @@ void ProcessSet::scanProcess()
 
         m_set.insert(proc.pid(), proc);
         m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
+        m_pidCtoPMapping.insert(proc.pid(), proc.ppid());
 
         if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
             appLst << proc.pid();
         }
     }
+
+    std::function<bool(pid_t ppid)> anyRootIsGuiProc;
+    // find if any ancestor processes is gui application
+    anyRootIsGuiProc = [&](pid_t ppid) -> bool {
+        bool b;
+        b = wmwindowList->isGuiApp(ppid);
+        if (!b && m_pidCtoPMapping.contains(ppid))
+        {
+            b = anyRootIsGuiProc(m_pidCtoPMapping[ppid]);
+        }
+        return b;
+    };
 
     for (const pid_t &pid : appLst) {
         qreal recvBps = 0;
@@ -113,6 +127,15 @@ void ProcessSet::scanProcess()
         qreal ptotalCpu = 0.;
         mergeSubProcCpu(pid, ptotalCpu);
         m_set[pid].setCpu(ptotalCpu);
+
+        if (!wmwindowList->isGuiApp(pid)) {
+            // only if no ancestor process is gui app we keep this process
+            if (m_pidCtoPMapping.contains(pid) &&
+                    anyRootIsGuiProc(m_pidCtoPMapping[pid])) {
+                m_set[pid].setAppType(kFilterCurrentUser);
+                wmwindowList->removeDesktopEntryApp(pid);
+            }
+        }
     }
 
     m_recentProcStage.clear();
