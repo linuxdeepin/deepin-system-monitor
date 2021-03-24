@@ -344,7 +344,7 @@
     </message>
     <message>
         <source>Buffers</source>
-        <translation type="unfinished"/>
+        <translation>Попуне</translation>
     </message>
     <message>
         <source>Cached swap</source>
@@ -360,7 +360,7 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>Прљаво</translation>
     </message>
     <message>
         <source>Mapped</source>
