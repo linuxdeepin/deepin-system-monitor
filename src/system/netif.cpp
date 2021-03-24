@@ -123,7 +123,7 @@ void NetifInfo::updateWirelessInfo()
     wireless wireless1(d->ifname);
     if (wireless1.is_wireless()) {
         d->isWireless = true;
-        strcpy(d->iw_info->essid, wireless1.essid().data());
+        d->iw_info->essid = wireless1.essid();
         d->iw_info->qual.qual = wireless1.link_quality();
         d->iw_info->qual.level = wireless1.signal_levle();
         d->iw_info->qual.noise = wireless1.noise_level();

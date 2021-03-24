@@ -226,9 +226,11 @@ public:
             // 是否是无线网
             if (stNetifInfo->isWireless()) {
                 // 服务器别号
-                stInfo.strKey = QApplication::translate("NetInfoModel", "ESSID");
-                stInfo.strValue = stNetifInfo->essid();
-                m_listInfo << stInfo;
+                if (!stNetifInfo->essid().isEmpty()) {
+                    stInfo.strKey = QApplication::translate("NetInfoModel", "ESSID");
+                    stInfo.strValue = stNetifInfo->essid();
+                    m_listInfo << stInfo;
+                }
 
                 // 信号质量
                 stInfo.strKey = QApplication::translate("NetInfoModel", "Link quality");

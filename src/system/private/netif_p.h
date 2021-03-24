@@ -43,7 +43,7 @@ using INetAddr = std::shared_ptr<struct inet_addr_t>;
 using INet4Addr = std::shared_ptr<struct inet_addr4_t>;
 using INet6Addr = std::shared_ptr<struct inet_addr6_t>;
 struct iw_info_t {
-    char essid[ESSID_MAX_SIZE + 1] {'\0'};
+    QByteArray essid;
     struct iw_freq freq {
         0, 0, 0, 0
     };
@@ -83,7 +83,7 @@ public:
         , sent_bps {0}
         , addr4infolst {}
         , addr6infolst {}
-        , iw_info {}
+        , iw_info(std::unique_ptr<iw_info_t>(new iw_info_t()))
         , rx_packets {0}
         , rx_bytes {0}
         , rx_errors {0}
