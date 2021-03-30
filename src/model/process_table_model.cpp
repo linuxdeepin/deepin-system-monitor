@@ -301,9 +301,9 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         // get process's extra data
         switch (index.column()) {
         case kProcessUploadColumn:
-            return proc.sentBytes();
+            return proc.sentBps();
         case kProcessDownloadColumn:
-            return proc.recvBytes();
+            return proc.recvBps();
         default:
             return {};
         }

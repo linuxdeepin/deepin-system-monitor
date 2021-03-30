@@ -150,13 +150,15 @@ public:
 
     static IOPS iops(const SampleFrame<IO> *lhs, const SampleFrame<IO> *rhs)
     {
-        if (!lhs)
+        if (!lhs || !rhs)
             return {.0, .0};
 
-        auto tmdiff = lhs->ts - (rhs ? rhs->ts : timeval{0, 0});
-        auto ratio = tmdiff.tv_sec + tmdiff.tv_usec * 1. / 1000000;
-        auto inBps = (lhs->data.inBytes - (rhs ? rhs->data.inBytes : 0)) / ratio;
-        auto outBps = (lhs->data.outBytes - (rhs ? rhs->data.outBytes : 0)) / ratio;
+        auto ltime = lhs->ts.tv_sec + lhs->ts.tv_usec * 1. / 1000000;
+        auto rtime = rhs->ts.tv_sec + rhs->ts.tv_usec * 1. / 1000000;
+        auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
+
+        auto inBps = rhs->data.inBytes / interval;
+        auto outBps = rhs->data.outBytes / interval;
 
         return {inBps, outBps};
     }

@@ -164,6 +164,8 @@ void Process::readProcessInfo()
         timedelta = timedelta - validrecentPtr->ptime;
         struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
         d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
+
+        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {0, 0}));
     }
     d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
 
@@ -186,8 +188,9 @@ void Process::readProcessInfo()
         d->apptype = kFilterCurrentUser;
     }
 
-    qint64 sum_recv = 0;
-    qint64 sum_send = 0;
+    qulonglong sum_recv = 0;
+    qulonglong sum_send = 0;
+
     for (int i = 0; i < d->sockInodes.size(); ++i) {
         SockIOStat sockIOStat;
         bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
@@ -196,9 +199,11 @@ void Process::readProcessInfo()
             sum_send += sockIOStat->tx_bytes;
         }
     }
+    d->networkIOSample->addSample(new IOSampleFrame(d->uptime, {sum_recv, sum_send}));
 
-    struct IOPS netIo = {static_cast<qreal>(sum_recv), static_cast<qreal>(sum_send)};
-    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netIo));
+    auto netpair = d->networkIOSample->recentSamplePair();
+    struct IOPS netiops = IOSampleFrame::iops(netpair.first, netpair.second);
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
 
     d->valid = d->valid && ok;
 }
@@ -731,7 +736,7 @@ qreal Process::recvBps() const
     if (sample)
         return sample->data.inBps;
     else
-        return {};
+        return 0;
 }
 
 qreal Process::sentBps() const
@@ -740,7 +745,7 @@ qreal Process::sentBps() const
     if (sample)
         return sample->data.outBps;
     else
-        return {};
+        return 0;
 }
 
 void Process::setNetIoBps(qreal recvBps, qreal sendBps)
@@ -755,7 +760,7 @@ qulonglong Process::recvBytes() const
     if (sample)
         return sample->data.inBytes;
     else
-        return {};
+        return 0;
 }
 
 qulonglong Process::sentBytes() const
@@ -764,7 +769,7 @@ qulonglong Process::sentBytes() const
     if (sample)
         return sample->data.outBytes;
     else
-        return {};
+        return 0;
 }
 
 int Process::appType() const
