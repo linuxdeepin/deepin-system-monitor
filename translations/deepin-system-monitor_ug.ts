@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ug">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>تەپسىلاتىنى يوشۇرۇش</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>ئوقۇش</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>يېزىش</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 سېكونت</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 كۈن %2 سائەت %3 مىنۇت</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>پايدىلىنىشچانلىقى</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>ھازىرقى چاستوتا</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>چاستوتا</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>ياسىغۇچى</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>ئوقۇر</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>لوگىكىلىق بىر تەرەپ قىلغۇچ</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>مەۋھۇملاشتۇرۇش</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1 غەملەك (بۇيرۇق)</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1 غەملەك (سانلىق مەلۇمات)</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2 غەملەك</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3 غەملەك</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>يۈك تەڭپۇڭلۇقى</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>ھۆججەت چۈشەندۈرۈلۈش خەت سانى</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>جەريانلار</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>لىنىيە سانى</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>ئاپپارات نامى</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>تىپى</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>نەشرى</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>ئىشلىگەن ۋاقىت</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 سېكونت</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>تەپسىلىي ئۇچۇر</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>تەپسىلىي ئۇچۇر</translation>
     </message>
 </context>
 <context>
@@ -210,30 +325,117 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>ئىشلەتكىنى</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>ئىشلەتكىلى بولىدىغىنى</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <source>Shared</source>
+        <translation>ئىچكى ساقلىغۇچ ھەمبەھرىلىنىش</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">ساقلىغۇ</translation>
+        <source>Cached</source>
+        <translation>يۇقىرى سۈرئەتلىك غەملەك</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>سانلىق مەلۇمات غەملىكى</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>غەملەك ئالماشتۇرۇش رايونى</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>ئاكتىپ</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>پاسسىپ غەملەك ھۆججىتى</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>مەينەت بەت</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>ئەكس ئەتتۈرۈش چوڭلۇقى</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>بوشلۇق ئالماشتۇرۇش سىغىمى</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>ئالماشتۇرۇشقا بولىدىغان بوشلۇق</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>ئىچكى يادرو سانلىق مەلۇمات قۇرۇلمىسى ساقلىغۇچى</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>تىپى</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>ئوقۇش سۈرئىتى</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>يېزىش سۈرئىتى</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>سىغىمى</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>بۇ سېكتورنىڭ قېتىم سانى</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>ھەر سېكونتتىكى مەشغۇلات سانى</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>بۇ سېكتورنى ھەر سېكونتتا ئوقۇش سانى</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>ھەر سېكونتتىكى قوشۇپ مەشغۇلات قىلىش سانى</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>بۇ سېكتورغا يېزىش قېتىم سانى</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>يېزىپ تاماملانغان سانى</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>قوشۇپ يېزىش تاماملانغان سانى</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>ھەر سېكونتتىكى يېزىش سۈرئىتى</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>بۇ سېكتورغا ھەر سېكونتتا يېزىش سانى</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>ھەر سېكونتتىكى قوشۇپ يېزىش سانى</translation>
     </message>
 </context>
 <context>
@@ -292,6 +494,123 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>سىغىمى</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP ئادرېسى:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>تارماق تور يوشۇرۇن نومۇرى:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>رادىيو:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>يوشۇرۇن نومۇر ئۇزۇنلۇقى:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>دائىرە</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>ئۇلىنىش تىپى</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>مۇلازىمىتېرنىڭ باشقا نامى</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>سىگنال سۈپىتى</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>سىگنال كۈچى</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>تۆۋەن شاۋقۇن</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>سۈرئەت نىسبىتى</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>قوبۇللىغان بولاق سانى</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>جەمئىي قوبۇللىغىنى</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>قوبۇللاش(خاتا بولاق)</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>قوبۇللاش(تاشلىۋېتىلگەن بولاق)</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>قوبۇللاش FIFO</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>گۇرۇپپا كاندۇك خاتالىقى</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>يوللانغان بولاق سانى</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>جەمئىي ئەۋەتىلگىنى</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>يوللاش (خاتا بولاق)</translation>
+    </message>
+    <message>
+        <source>TX  dropped</source>
+        <translation>يوللاش (تاشلىۋېتىلگەن بولاق)</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>يوللاشFIFO</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>توشۇش زىيىنى</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+</context>
+<context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
@@ -318,6 +637,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>ساقلىغۇ</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>قوبۇللاش</translation>
     </message>
 </context>
 <context>
@@ -355,10 +678,6 @@ Are you sure you want to continue?</source>
         <translation>يۈكلەش</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>دىسكا</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>تور</translation>
     </message>
@@ -369,6 +688,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>ئومۇمىي ئەۋەتىلگەن</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>يوللاش</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>دىسكا</translation>
     </message>
 </context>
 <context>
@@ -566,6 +893,21 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>ئىمتىيازى</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>ھەمبەھرىلەنگەن ئىچكى ساقلىغۇچ</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>مەۋھۇم ئىچكى ساقلىغۇچ</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>قوللىمايدۇ</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -694,16 +1036,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>مۇلازىمەتلەر</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>
