@@ -47,15 +47,13 @@ struct packet_payload_t {
         in_addr in4;
         in6_addr in6;
     } s_addr;
-#define sin4_addr s_addr.in4
-#define sin6_addr s_addr.in6
+
     uint16_t s_port;
     union {
         in_addr in4;
         in6_addr in6;
     } d_addr;
-#define din4_addr d_addr.in4
-#define din6_addr d_addr.in6
+
     uint16_t d_port;
     unsigned long long payload;
 };

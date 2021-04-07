@@ -60,7 +60,7 @@ private:
     // socket io stat cache
     SockStatMap     m_sockStats {};
     // network interface name hash cache
-    QMap<QString, int> m_ifaddrsHashCache; // key: hash code generated from ifaddr; value: not used
+    QMap<uint64_t, int> m_ifaddrsHashCache; // key: hash code generated from ifaddr; value: not used
 
     // network interface monitor
     NetifMonitor       *m_netifMonitor         {};

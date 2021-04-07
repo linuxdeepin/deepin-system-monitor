@@ -11,7 +11,6 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
 find_package(Qt5 COMPONENTS X11Extras REQUIRED)
 find_package(Qt5 COMPONENTS DBus REQUIRED)
-find_package(Qt5 COMPONENTS Network REQUIRED)
 find_package(Qt5 COMPONENTS Concurrent REQUIRED)
 find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
 

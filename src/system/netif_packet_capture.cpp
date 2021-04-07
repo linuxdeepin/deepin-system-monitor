@@ -24,9 +24,11 @@
 #include <arpa/inet.h>
 #include "device_db.h"
 #include <net/ethernet.h>
-#include <QNetworkInterface>
 #include <QDebug>
+
 #include "sys_info.h"
+#include <ifaddrs.h>
+
 #define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
 #define PACKET_DISPATCH_BATCH_COUNT 64 // packets to process in a batch
 #define PACKET_DISPATCH_QUEUE_LWAT 64 // queue low water mark
@@ -143,10 +145,17 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
 
         // pattern that matches kernel sock stat table
         pattern = QString("%1:%2-%3:%4").arg(saddr_str).arg(payload->s_port).arg(daddr_str).arg(payload->d_port);
-        if (netifMonitorJob->m_ifaddrsHashCache.contains(QString(dMac).toUpper())) {
+        uint64_t saddr_hpair[2] {}, daddr_hpair[2] {};
+        // generate source address hash
+        util::common::hash(saddr_str, int(strlen(saddr_str)), util::common::global_seed, saddr_hpair);
+        // generate destination address hash
+        util::common::hash(daddr_str, int(strlen(daddr_str)), util::common::global_seed, daddr_hpair);
+        if (netifMonitorJob->m_ifaddrsHashCache.contains(saddr_hpair[0])) {
+            payload->direction = kOutboundPacket;
+        } else if (netifMonitorJob->m_ifaddrsHashCache.contains(daddr_hpair[0])) {
             payload->direction = kInboundPacket;
         } else {
-            payload->direction = kOutboundPacket;
+            return;
         }
 
     } else if (payload->sa_family == AF_INET6) {
@@ -157,10 +166,17 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
 
         // pattern that matches kernel sock stat table
         pattern = QString("%1:%2-%3:%4").arg(saddr6_str).arg(payload->s_port).arg(daddr6_str).arg(payload->d_port);
-        if (netifMonitorJob->m_ifaddrsHashCache.contains(QString(dMac).toUpper())) {
-            payload->direction = kInboundPacket;
-        } else  {
+        uint64_t saddr6_hpair[2] {}, daddr6_hpair[2] {};
+        // generate source address hash
+        util::common::hash(saddr6_str, int(strlen(saddr6_str)), util::common::global_seed, saddr6_hpair);
+        // generate destination address hash
+        util::common::hash(daddr6_str, int(strlen(daddr6_str)), util::common::global_seed, daddr6_hpair);
+        if (netifMonitorJob->m_ifaddrsHashCache.contains(saddr6_hpair[0])) {
             payload->direction = kOutboundPacket;
+        } else if (netifMonitorJob->m_ifaddrsHashCache.contains(daddr6_hpair[0])) {
+            payload->direction = kInboundPacket;
+        } else {
+            return;
         }
 
     } else {
@@ -291,11 +307,76 @@ void NetifPacketCapture::dispatchPackets()
     pcap_close(m_handle);
 }
 
+bool readNetIfAddrs(NetIFAddrsMap &addrsMap)
+{
+    struct ifaddrs *addr_hdr, *addr_p;
+
+    errno = 0;
+    if (getifaddrs(&addr_hdr) == -1) {
+        qWarning() << QString("getifaddrs failed: [%1] %2").arg(errno).arg(strerror(errno));
+        return false;
+    }
+
+    for (addr_p = addr_hdr; addr_p != nullptr; addr_p = addr_p->ifa_next) {
+        if (!addr_p->ifa_addr)
+            continue;
+
+        auto netifAddr = QSharedPointer<struct net_ifaddr_t>::create();
+        netifAddr->family = addr_p->ifa_addr->sa_family;
+        if (netifAddr->family == AF_INET) {
+            netifAddr->addr.in4 = reinterpret_cast<struct sockaddr_in *>(addr_p->ifa_addr)->sin_addr;
+        } else if (netifAddr->family == AF_INET6) {
+            netifAddr->addr.in6 = reinterpret_cast<struct sockaddr_in6 *>(addr_p->ifa_addr)->sin6_addr;
+        } else {
+            continue;
+        }
+
+        strncpy(netifAddr->iface, addr_p->ifa_name, strlen(addr_p->ifa_name) + 1);
+        addrsMap.insert(netifAddr->iface, netifAddr);
+    }
+    freeifaddrs(addr_hdr);
+
+    if (addrsMap.size() > 0)
+        return true;
+    else
+        return false;
+}
+
 // refresh network interface hash cache
 void NetifPacketCapture::refreshIfAddrsHashCache()
 {
-    foreach (QNetworkInterface netInterface, QNetworkInterface::allInterfaces()) {
-        m_ifaddrsHashCache.insert(netInterface.hardwareAddress(), 0);
+    NetIFAddrsMap addrsMap;
+
+    // get network interface map
+    auto ok = readNetIfAddrs(addrsMap);
+    if (ok) {
+        NetIFAddrsMap::const_iterator it = addrsMap.constBegin();
+        // process each address in map
+        while (it != addrsMap.constEnd()) {
+            auto ifaddr = it.value();
+
+            uint64_t ifaddr_hash[2] {};
+            if (ifaddr->family == AF_INET) {
+                char addr_str[INET_ADDRSTRLEN + 1] {};
+                // convert to ipv4 format string
+                inet_ntop(AF_INET, &ifaddr->addr.in4, addr_str, INET_ADDRSTRLEN);
+
+                // calculate hash
+                util::common::hash(addr_str, int(strlen(addr_str)), util::common::global_seed, ifaddr_hash);
+                m_ifaddrsHashCache[ifaddr_hash[0]] = 0;
+
+            } else if (ifaddr->family == AF_INET6) {
+                char addr6_str[INET6_ADDRSTRLEN + 1] {};
+                // convert to ipv6 format string
+                inet_ntop(AF_INET6, &ifaddr->addr.in6, addr6_str, INET6_ADDRSTRLEN);
+
+                // calculate hash
+                util::common::hash(addr6_str, int(strlen(addr6_str)), util::common::global_seed, ifaddr_hash);
+                m_ifaddrsHashCache[ifaddr_hash[0]] = 0;
+            }
+
+            ++it;
+        }
     }
 }
 

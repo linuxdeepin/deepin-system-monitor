@@ -28,10 +28,6 @@
 #include <netinet/udp.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
-#include <QNetworkInterface>
-
-
-#include <QDebug>
 
 #define IP6_NEXT_HEADER_HBH 0
 #define IP6_NEXT_HEADER_TCP 6
@@ -81,8 +77,8 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
 
         payload->sa_family = AF_INET;
         payload->proto = proto;
-        payload->sin4_addr = ip_hdr->ip_src;
-        payload->din4_addr = ip_hdr->ip_dst;
+        payload->s_addr.in4 = ip_hdr->ip_src;
+        payload->d_addr.in4 = ip_hdr->ip_dst;
 
     } else if (type == ETHERTYPE_IPV6) {
         auto *ip6_hdr = reinterpret_cast<const struct ip6_hdr *>(packet + eth_hdr_len);
@@ -166,8 +162,8 @@ bool NetifPacketParser::parsePacket(const pcap_pkthdr *pkt_hdr,
 
         payload->sa_family = AF_INET6;
         payload->proto = proto;
-        payload->sin6_addr = ip6_hdr->ip6_src;
-        payload->din6_addr = ip6_hdr->ip6_dst;
+        payload->s_addr.in6 = ip6_hdr->ip6_src;
+        payload->d_addr.in6 = ip6_hdr->ip6_dst;
 
     } else {
         // ignore non ip4 & ip6 packets
