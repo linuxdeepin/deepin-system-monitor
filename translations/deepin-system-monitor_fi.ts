@@ -590,10 +590,6 @@ Haluatko varmasti jatkaa?</translation>
         <translation>TX virheet</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>TX pudotetut</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>TX ylitykset</translation>
     </message>
@@ -608,6 +604,10 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

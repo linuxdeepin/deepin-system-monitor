@@ -590,10 +590,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
         <translation>TX-Fehler</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>TX-Verworfen</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation type="unfinished"/>
     </message>
@@ -608,6 +604,10 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

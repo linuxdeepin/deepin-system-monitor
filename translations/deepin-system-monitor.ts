@@ -592,10 +592,6 @@ Are you sure you want to continue?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation type="unfinished"></translation>
     </message>
@@ -609,6 +605,10 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>IPv6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

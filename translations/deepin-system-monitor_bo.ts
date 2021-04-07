@@ -74,15 +74,15 @@
     </message>
     <message>
         <source>L1i cache</source>
-        <translation>L1གསོག་ཉར།（བཀའ་བརྡ།）</translation>
+        <translation>L1གསོག་ཉར།</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation>L1གསོག་ཉར།（གཞི་གྲངས།）</translation>
+        <translation>L1གསོག་ཉར།</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation>L1གསོག་ཉར།</translation>
+        <translation>L2 གསོག་ཉར།</translation>
     </message>
     <message>
         <source>L3 cache</source>
@@ -563,11 +563,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>RX errors</source>
-        <translation>དང་ལེན།（ནོར་བའི་ཁུག་མ།）</translation>
+        <translation>ནོར་བའི་ཁུག་མ་དང་ལེན།</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation>དང་ལེན།（གཡུག་པའི་ཁུག་མ།）</translation>
+        <translation>གཡུག་པའི་ཁུག་མ་དང་ལེན།</translation>
     </message>
     <message>
         <source>RX overruns</source>
@@ -587,11 +587,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>TX errors</source>
-        <translation>བསྐུར་བ།（ནོར་བའི་ཁུག་མ།）</translation>
-    </message>
-    <message>
-        <source>TX  dropped</source>
-        <translation>བསྐུར་བ།（གཡུག་པའི་ཁུག་མ།）</translation>
+        <translation>ནོར་བའི་ཁུག་མ་བསྐུར་བ།</translation>
     </message>
     <message>
         <source>TX overruns</source>
@@ -608,6 +604,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>གཡུག་པའི་ཁུག་མ་བསྐུར་བ།</translation>
     </message>
 </context>
 <context>

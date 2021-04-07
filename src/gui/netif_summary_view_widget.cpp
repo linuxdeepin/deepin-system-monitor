@@ -304,7 +304,7 @@ public:
             m_listInfo << stInfo;
 
             // 发送丢包数
-            stInfo.strKey = QApplication::translate("NetInfoModel", "TX  dropped");
+            stInfo.strKey = QApplication::translate("NetInfoModel", "TX dropped");
             stInfo.strValue = QString("%1").arg(stNetifInfo->txDropped());
             m_listInfo << stInfo;
 

@@ -588,10 +588,6 @@ Are you sure you want to continue?</source>
         <translation>Помилки передавання</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>Відкинуто переданих</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>Переповнень передавання</translation>
     </message>
@@ -606,6 +602,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

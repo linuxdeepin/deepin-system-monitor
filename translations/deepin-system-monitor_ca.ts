@@ -590,10 +590,6 @@ Segur que voleu continuar?</translation>
         <translation>Errors RX</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>TX caigut/s</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>Excessos TX</translation>
     </message>
@@ -608,6 +604,10 @@ Segur que voleu continuar?</translation>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -590,10 +590,6 @@ Weet je zeker dat je door wilt gaan?</translation>
         <translation>TX-fouten</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>TX-loslatingen</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>TX-overvloeiingen</translation>
     </message>
@@ -608,6 +604,10 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1017,7 +1017,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Tonen</translation>
+        <translation>Weergave</translation>
     </message>
 </context>
 <context>

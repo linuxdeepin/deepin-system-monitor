@@ -590,10 +590,6 @@ Are you sure you want to continue?</source>
         <translation>发送（错误包）</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>发送（丢弃包）</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>发送FIFO</translation>
     </message>
@@ -608,6 +604,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>发送（丢弃包）</translation>
     </message>
 </context>
 <context>

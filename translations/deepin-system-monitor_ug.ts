@@ -211,7 +211,7 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>N / A</translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -219,7 +219,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation>قولدا</translation>
     </message>
 </context>
 <context>
@@ -265,7 +265,7 @@
     </message>
     <message>
         <source>start-pre</source>
-        <translation>start-pre</translation>
+        <translation>ئالدىن قوزغىتىش</translation>
     </message>
     <message>
         <source>start</source>
@@ -590,10 +590,6 @@ Are you sure you want to continue?</source>
         <translation>يوللاش (خاتا بولاق)</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>يوللاش (تاشلىۋېتىلگەن بولاق)</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>يوللاشFIFO</translation>
     </message>
@@ -608,6 +604,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>يوللاش (تاشلىۋېتىلگەن بولاق)</translation>
     </message>
 </context>
 <context>
@@ -855,7 +855,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>بىر تەرەپ قىلغۇچ</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -879,7 +879,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>جەريان نومۇرى</translation>
     </message>
     <message>
         <source>User</source>
@@ -994,7 +994,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>جەريان نومۇرى</translation>
     </message>
     <message>
         <source>Startup Type</source>

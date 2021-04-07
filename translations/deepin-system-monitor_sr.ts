@@ -94,7 +94,7 @@
     </message>
     <message>
         <source>File descriptors</source>
-        <translation type="unfinished"/>
+        <translation>Дескриптор датотеке</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -348,7 +348,7 @@
     </message>
     <message>
         <source>Cached swap</source>
-        <translation type="unfinished"/>
+        <translation>Кеирана пом. мем.</translation>
     </message>
     <message>
         <source>Active</source>
@@ -364,19 +364,19 @@
     </message>
     <message>
         <source>Mapped</source>
-        <translation type="unfinished"/>
+        <translation>Пресликано</translation>
     </message>
     <message>
         <source>Total swap</source>
-        <translation type="unfinished"/>
+        <translation>Укупна пом. мем.</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation type="unfinished"/>
+        <translation>Слободна пом. мем.</translation>
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Плоча</translation>
     </message>
 </context>
 <context>
@@ -399,43 +399,43 @@
     </message>
     <message>
         <source>Sectors read</source>
-        <translation type="unfinished"/>
+        <translation>Читања сектора</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation type="unfinished"/>
+        <translation>Читања/сек</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation type="unfinished"/>
+        <translation>Читања сектора/сек</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Читања спојено/сек</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation type="unfinished"/>
+        <translation>Уписаних сектора</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation type="unfinished"/>
+        <translation>Завршених уписивања </translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>Уписивања спојено </translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>Уписивања/сек</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation type="unfinished"/>
+        <translation>Уписаних сектора/сек</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Читања спојено/сек</translation>
     </message>
 </context>
 <context>
@@ -512,11 +512,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation type="unfinished"/>
+        <translation>Емитовање:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>Префикслен:</translation>
     </message>
     <message>
         <source>Scope:</source>
@@ -567,15 +567,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation type="unfinished"/>
+        <translation>RX одбачено</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>RX прекорачења</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>RX оквир</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -590,16 +590,12 @@ Are you sure you want to continue?</source>
         <translation>TX грешке</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation>TX прекорачења</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>TX носилац</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -608,6 +604,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>IPv6</source>
         <translation>ИПв6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -591,10 +591,6 @@ Sicuro di voler terminarla?</translation>
         <translation>TX errori</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>TX persi</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation>TX saltati</translation>
     </message>
@@ -609,6 +605,10 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

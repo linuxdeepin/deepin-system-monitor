@@ -590,10 +590,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
         <translation>Gabime TX</translation>
     </message>
     <message>
-        <source>TX  dropped</source>
-        <translation>TX  të humbur</translation>
-    </message>
-    <message>
         <source>TX overruns</source>
         <translation type="unfinished"/>
     </message>
@@ -608,6 +604,10 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>IPv6</source>
         <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
