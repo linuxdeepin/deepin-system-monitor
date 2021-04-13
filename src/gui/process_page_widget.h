@@ -84,11 +84,6 @@ protected:
      */
     void paintEvent(QPaintEvent *);
 
-    /**
-     * @brief resize Event handler
-     */
-    void resizeEvent(QResizeEvent *event);
-
 private Q_SLOTS:
     /**
      * @brief Popup up process kill confirm dialog

@@ -330,20 +330,6 @@ bool ProcessPageWidget::eventFilter(QObject *obj, QEvent *event)
     return DFrame::eventFilter(obj, event);
 }
 
-void ProcessPageWidget::resizeEvent(QResizeEvent *event)
-{
-    DFrame::resizeEvent(event);
-
-    const QRect &desktoprect = qApp->desktop()->screenGeometry(topLevelWidget());
-    if (desktoprect.width() > desktoprect.height()) {
-        //Horizontal screen
-        m_views->setVisible(true);
-    } else {
-        //Vertical screen
-        m_views->setVisible(false);
-    }
-}
-
 // paint event handler
 void ProcessPageWidget::paintEvent(QPaintEvent *)
 {
