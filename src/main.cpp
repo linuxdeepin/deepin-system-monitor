@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        //app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor")); //耗时40ms
+        // app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor")); //耗时40ms
 
         QAccessible::installFactory(accessibleFactory);
 
