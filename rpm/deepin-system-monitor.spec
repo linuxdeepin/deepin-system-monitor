@@ -22,7 +22,7 @@ BuildRequires:  cmake
 BuildRequires:  pkgconfig(dtkwidget)
 BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkgui)
-BuildRequires:  pkgconfig(dtkwm)
+# BuildRequires:  pkgconfig(dtkwm)
 
 BuildRequires:  pkgconfig(libprocps)
 BuildRequires:  pkgconfig(xcb)
@@ -49,7 +49,7 @@ BuildRequires:  deepin-gettext-tools
 BuildRequires:  libicu-devel
 BuildRequires:  libnl3-devel
 BuildRequires:  systemd-devel
-BuildRequires:  pkgconfig(libnl-route-3)
+# BuildRequires:  pkgconfig(libnl-route-3)
 #Requires:       hicolor-icon-theme
 Recommends:     deepin-manual
 
@@ -89,5 +89,5 @@ popd
 %{_datadir}/polkit-1/actions/com.deepin.pkexec.deepin-system-monitor.policy
 
 %changelog
-* Thu Apr 15 2021 Zhang Ding <zhangdingwen@uniontech.com> - 5.8.0.30-1
+* Thu Apr 15 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.8.0.30-1
 - Initial release for OpenEuler
