@@ -87,6 +87,7 @@ popd
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/%{name}/translations/*.qm
 %{_datadir}/polkit-1/actions/com.deepin.pkexec.deepin-system-monitor.policy
+%{_datadir}/deepin-manual/manual-assets/application/deepin-system-monitor/system-monitor/*
 
 %changelog
 * Thu Apr 15 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.8.0.30-1
