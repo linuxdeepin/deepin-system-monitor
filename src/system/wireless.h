@@ -49,10 +49,6 @@ private:
     unsigned char m_link_quality;
     unsigned char m_signal_levle;
     unsigned char m_noise_level;
-
-
-
-
 };
 
 

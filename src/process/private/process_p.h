@@ -85,11 +85,13 @@ public:
         , read_bytes {0}
         , write_bytes {0}
         , cancelled_write_bytes {0}
+        , usrerName {}
         , name {}
         , proc_name{}
         , proc_icon{}
         , cmdline {}
         , environ {}
+        , uptime {timeval {0, 0}}
         , sockInodes {}
         , cpuTimeSample(new CPUTimeSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
         , cpuUsageSample(new CPUUsageSample(TimePeriod(TimePeriod::kNoPeriod, default_interval())))
@@ -135,11 +137,13 @@ public:
         , read_bytes(other.read_bytes)
         , write_bytes(other.write_bytes)
         , cancelled_write_bytes(other.cancelled_write_bytes)
+        , usrerName(other.name)
         , name(other.name)
         , proc_name(other.proc_name)
         , proc_icon(other.proc_icon)
         , cmdline(other.cmdline)
         , environ(other.environ)
+        , uptime {other.uptime}
         , sockInodes(other.sockInodes)
         , cpuTimeSample(std::unique_ptr<CPUTimeSample>(new CPUTimeSample(*(other.cpuTimeSample))))
         , cpuUsageSample(std::unique_ptr<CPUUsageSample>(new CPUUsageSample(*(other.cpuUsageSample))))
