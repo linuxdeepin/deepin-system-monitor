@@ -76,7 +76,7 @@ void BlockDevice::readDeviceInfo()
 
     for (int i = 0; i < strList.size(); ++i) {
         QStringList deviceInfo = strList[i];
-        if (deviceInfo[2] == d->name) {
+        if (deviceInfo.size() > 16 && deviceInfo[2] == d->name) {
             m_time_sec = QDateTime::currentSecsSinceEpoch();
             timevalList[0] = timevalList[1];
             timevalList[1] = SysInfo::instance()->uptime();

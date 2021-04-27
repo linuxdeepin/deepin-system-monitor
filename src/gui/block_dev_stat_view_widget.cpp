@@ -23,6 +23,7 @@
 #include "system/system_monitor.h"
 #include "system/block_device_info_db.h"
 #include "system/device_db.h"
+
 #include <QThread>
 #include <QGridLayout>
 #include <QTimer>
@@ -141,7 +142,7 @@ void BlockStatViewWidget::showItem2()
 }
 void BlockStatViewWidget::showItemLg2(int count)
 {
-    int totalPage = count / 4;
+    int totalPage = (count - 1) / 4;
     int itemWidth = (this->width() - itemSpace) / 2;;
     int itemHeight = this->height() / 2;
 
