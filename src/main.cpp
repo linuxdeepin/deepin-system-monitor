@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 {
     utils::init_seed();
 
-    qRegisterMetaType<QList<qreal>>();
+    qRegisterMetaType<QList<qreal>>("QList<qreal>");
 
     DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
