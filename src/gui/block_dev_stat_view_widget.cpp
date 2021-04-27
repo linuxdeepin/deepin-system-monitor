@@ -142,7 +142,7 @@ void BlockStatViewWidget::showItem2()
 }
 void BlockStatViewWidget::showItemLg2(int count)
 {
-    int totalPage = (count - 1) / 4;
+    int totalPage = qMax(0, (count - 1) / 4);
     int itemWidth = (this->width() - itemSpace) / 2;;
     int itemHeight = this->height() / 2;
 
