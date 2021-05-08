@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     util::common::init_seed();
     PERF_PRINT_BEGIN("POINT-01", "");
 
-    qRegisterMetaType<QList<qreal>>();
+    qRegisterMetaType<QList<qreal>>("QList<qreal>");
 
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 

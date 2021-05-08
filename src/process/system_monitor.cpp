@@ -247,7 +247,7 @@ void SystemMonitor::sendSignalToProcess(pid_t pid, int signal)
 SystemMonitor::SystemMonitor(QObject *parent)
     : QObject(parent)
 {
-    qRegisterMetaType<SystemMonitor::FilterType>();
+    qRegisterMetaType<SystemMonitor::FilterType>("SystemMonitor::FilterType");
 
     m_statsCollector = new StatsCollector();
     m_statsCollector->moveToThread(&m_workerThread);

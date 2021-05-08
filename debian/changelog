@@ -1,3 +1,9 @@
+deepin-system-monitor (5.8.0.24-1) UNRELEASED; urgency=medium
+
+  * 修改cpu百分比不显示问题
+
+ -- Deepin Packages Builder <leiyu@leiyu-PC>  Sat, 08 May 2021 15:43:20 +0800
+
 deepin-system-monitor (1.0.0-1) unstable; urgency=medium
 
   * Initial release 
