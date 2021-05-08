@@ -46,6 +46,10 @@ struct XReplyDeleter {
 using XGetPropertyReply = std::unique_ptr<xcb_get_property_reply_t, XReplyDeleter>;
 using XGetAtomNameReply = std::unique_ptr<xcb_get_atom_name_reply_t, XReplyDeleter>;
 
+const int maxImageW = 1024;
+const int maxImageH = 1024;
+const int offsetImagePointerWH = 2;
+
 WMWindowList::WMWindowList(QObject *parent)
     : QObject(parent)
 {
@@ -138,7 +142,7 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
     XGetPropertyReply reply(xcb_get_property_reply(conn, cookie, nullptr));
 
     if (reply) {
-        auto len = xcb_get_property_value_length(reply.get());
+        int len = xcb_get_property_value_length(reply.get());
         if (len < 2)
             return {};
 
@@ -146,18 +150,48 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
         if (data == nullptr)
             return {};
 
-        int width = static_cast<int>(data[0]);
-        int height = static_cast<int>(data[1]);
+        //get the maximum image from data
+        int max_w = 0;
+        int max_h = 0;
 
-        if (width < 0 || height < 0 || width > 10240 || height > 10240)
-            return QImage();
+        uint *max_icon = nullptr;
+        uint *data_end = data + len;
 
-        QImage img(width, height, QImage::Format_ARGB32);
-        int byteCount = img.byteCount() / 4;
-        for (int i = 0; i < byteCount; ++i) {
-            ((uint *)img.bits())[i] = data[i + 2];
+        while ((data + offsetImagePointerWH) < data_end) {
+
+            int w = static_cast<int>(data[0]);
+            int h = static_cast<int>(data[1]);
+            int size = w * h;
+
+            data += offsetImagePointerWH;
+
+            if (size <= 0 || w > maxImageW || h > maxImageH) {
+                break;
+            }
+
+            if (w > max_w || h > max_h) {
+                max_icon = data;
+                max_w = w;
+                max_h = h;
+            }
+
+            data += size;
         }
-        return img;
+
+        if (max_icon != nullptr) {
+            if (max_w > maxImageW || max_h > maxImageH) {
+                return QImage();
+            }
+
+            QImage img(max_w, max_h, QImage::Format_ARGB32);
+            int byteCount = img.byteCount() / 4;
+
+            for (int i = 0; i < byteCount; ++i) {
+                //Save covert uchar* to uint*
+                (reinterpret_cast<uint*>(img.bits()))[i] = max_icon[i];
+            }
+            return img;
+        }
     }
     return {};
 }
