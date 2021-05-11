@@ -25,6 +25,7 @@
 #include "system_monitor_thread.h"
 #include "system_monitor.h"
 #include "sys_info.h"
+#include "dlscpu.h"
 
 #include <QMap>
 #include <QByteArray>
@@ -222,11 +223,14 @@ namespace system {
 CPUSet::CPUSet()
     : d(new CPUSetPrivate())
 {
+    m_lscpu = QSharedPointer<DLscpu>(new DLscpu());
 }
 CPUSet::CPUSet(const CPUSet &other)
     : d(other.d)
 {
+    m_lscpu = QSharedPointer<DLscpu>(new DLscpu());
 }
+
 CPUSet &CPUSet::operator=(const CPUSet &rhs)
 {
     if (this == &rhs)
@@ -243,62 +247,63 @@ CPUSet::~CPUSet()
 
 QString CPUSet::modelName() const
 {
-    return d->m_info.value("Model name");
+    return m_lscpu->modelName();
 }
 
 QString CPUSet::vendor() const
 {
-    return d->m_info.value("Vendor ID");
+    return m_lscpu->vendorId();
 }
 
 int CPUSet::cpuCount() const
 {
-    return d->m_info.value("CPU(s)").toInt();
+    return m_lscpu->cpuCount();
 }
 
 int CPUSet::socketCount() const
 {
-    return d->m_info.value("Socket(s)").toInt();
+    return m_lscpu->socketCount();
 }
 
 QString CPUSet::virtualization() const
 {
-    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("Not support") : d->m_info.value("Virtualization");
+    const QString& virtualization = m_lscpu->virtualization();
+    return virtualization.isEmpty() ? QObject::tr("Not support") : virtualization;
 }
 
 QString CPUSet::curFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
+    return common::format::formatHz(m_lscpu->curFreq().toDouble(), common::format::MHz);
 }
 
 QString CPUSet::minFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
+    return common::format::formatHz(m_lscpu->minFreq(), common::format::MHz);
 }
 
 QString CPUSet::maxFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
+    return common::format::formatHz(m_lscpu->maxFreq(), common::format::MHz);
 }
 
 QString CPUSet::l1dCache() const
 {
-    return d->m_info.value("L1d cache");
+    return m_lscpu->l1dCache();
 }
 
 QString CPUSet::l1iCache() const
 {
-    return d->m_info.value("L1i cache");
+    return m_lscpu->l1iCache();
 }
 
 QString CPUSet::l2Cache() const
 {
-    return d->m_info.value("L2 cache");
+    return m_lscpu->l2Cache();
 }
 
 QString CPUSet::l3Cache() const
 {
-    return d->m_info.value("L3 cache");
+    return m_lscpu->l3Cache();
 }
 
 QString CPUSet::coreId(int index) const

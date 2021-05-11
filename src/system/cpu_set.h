@@ -26,6 +26,8 @@
 #include <QList>
 #include <QSharedDataPointer>
 
+class DLscpu;
+
 namespace core {
 namespace system {
 
@@ -94,6 +96,7 @@ private:
 
 private:
     QSharedDataPointer<CPUSetPrivate> d;
+    QSharedPointer<DLscpu> m_lscpu;
 };
 
 } // namespace system

@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(APP_NAME ${CMAKE_PROJECT_NAME})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall ")
-set(CMAKE_CXX_FLAGS "-Wl,--as-need -fPIE")
+set(CMAKE_CXX_FLAGS "-Wl,--as-need -fPIE -fpermissive")
 set(CMAKE_EXE_LINKER_FLAGS "-pie")
 if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
@@ -40,6 +40,9 @@ include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lscpu)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lscpu/include)
+
 set(HPP_GLOBAL
     config.h
     environments.h
@@ -57,6 +60,7 @@ set(HPP_GLOBAL
     smooth_curve_generator.h
     settings.h
 )
+
 set(CPP_GLOBAL
     main.cpp
     application.cpp
@@ -130,6 +134,7 @@ set(HPP_MODEL
     model/block_dev_info_sort_filter_proxy_model.h
     model/model_manager.h
 )
+
 set(CPP_MODEL
     model/system_service_table_model.cpp
     model/system_service_sort_filter_proxy_model.cpp
@@ -346,6 +351,21 @@ set(CPP_WM
     wm/wm_window_tree.cpp
 )
 
+set(CPP_LSCPU
+    lscpu/cpuset.c
+    lscpu/path.c
+    lscpu/strutils.c
+    lscpu/lscpu-arm.c
+    lscpu/lscpu-cpu.c
+    lscpu/lscpu-cputype.c
+    lscpu/lscpu-dmi.c
+    lscpu/lscpu-topology.c
+    lscpu/lscpu-virt.c
+    lscpu/lscpu.c
+    lscpu/fileutils.c
+    lscpu/dlscpu.cpp
+)
+
 set(APP_HPP
     ${HPP_GLOBAL}
     ${HPP_COMMON}
@@ -367,6 +387,7 @@ set(APP_CPP
     ${CPP_SERVICE}
     ${CPP_SYSTEM}
     ${CPP_WM}
+    ${CPP_LSCPU}
 )
 
 add_executable(${APP_NAME}
