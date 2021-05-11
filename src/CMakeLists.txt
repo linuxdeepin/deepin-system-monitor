@@ -25,7 +25,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DI
 find_package(DtkCore5.5 REQUIRED)
 find_package(DtkGui5.5 REQUIRED)
 find_package(DtkWidget5.5 REQUIRED)
-find_package(DtkWm REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_PROCPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
@@ -149,6 +148,10 @@ set(APP_HEADERS
     service/system_service_entry_data.h
     service/system_service_entry.h
     wm/wm_info.h
+    wm/dscreenwindowsutil.h
+    wm/dwindowmanager.h
+    wm/dtkwm_global.h
+    wm/dtkwm_config.h
     system/cpu_info_manager.h
     system/mem_info_manager.h
     system/block_dev_info_manager.h
@@ -266,12 +269,16 @@ set(APP_SOURCES
     service/system_service_entry_data.cpp
     service/system_service_entry.cpp
     wm/wm_info.cpp
+    wm/dscreenwindowsutil.cpp
+    wm/dwindowmanager.cpp
     system/cpu_info_manager.cpp
     system/mem_info_manager.cpp
     system/block_dev_info_manager.cpp
     system/netif_info_manager.cpp
     system/stat_manager.cpp
 )
+
+link_libraries("X11")
 
 add_executable(${APP_NAME}
     ${APP_HEADERS}
@@ -289,7 +296,6 @@ target_link_libraries(${APP_NAME}
     dtkcore5.5
     dtkwidget5.5
     dtkgui5.5
-    dtkwm
     ${LIB_PCAP}
     ${LIB_PROCPS}
     ICU::i18n

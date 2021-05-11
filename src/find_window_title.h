@@ -19,7 +19,7 @@
 #ifndef FINDWINDOWTITLE_H
 #define FINDWINDOWTITLE_H
 
-#include <dwindowmanager.h>
+#include "wm/dwindowmanager.h"
 
 #include <QMap>
 

@@ -21,7 +21,7 @@
 
 #include "find_window_title.h"
 
-#include <dwindowmanager.h>
+#include "wm/dwindowmanager.h"
 
 #include <QFileInfo>
 #include <QString>
