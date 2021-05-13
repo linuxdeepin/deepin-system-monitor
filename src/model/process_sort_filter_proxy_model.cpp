@@ -104,25 +104,26 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
     switch (sortColumn()) {
     case ProcessTableModel::kProcessNameColumn: {
         // sort by name first, then by cpu
-        auto a = left.data(Qt::DisplayRole).toString();
-        auto b = right.data(Qt::DisplayRole).toString();
-        // trick: fix slow sorting issue
-        if (a.length() == 0 || b.length() == 0) {
-            return a < b;
-        }
-        if (a.at(0) == b.at(0) && a == b) {
+        const QString &lhs = left.data(Qt::DisplayRole).toString();
+        const QString &rhs = right.data(Qt::DisplayRole).toString();
+
+        bool lstartHz = Utils::startWithChineseCharacters(lhs);
+        bool rstartHz = Utils::startWithChineseCharacters(rhs);
+        if (!lstartHz && rstartHz)
+            return true;
+
+        if (lstartHz && !rstartHz)
+            return false;
+
+        int rc = lhs.localeAwareCompare(rhs);
+
+        if (rc == 0) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole) <
                    right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole);
         } else {
-            if (a.at(0).isLetterOrNumber() &&
-                    b.at(0).isLetterOrNumber() &&
-                    a.at(0) != b.at(0)) {
-                return a < b;
-            } else {
-                return util::common::Collator::instance()->compare(a, b) < 0;
-            }
+            return rc < 0;
         }
     }
     case ProcessTableModel::kProcessUserColumn: {

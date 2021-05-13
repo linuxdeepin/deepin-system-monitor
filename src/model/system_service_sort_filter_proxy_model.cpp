@@ -22,6 +22,7 @@
 
 #include "system_service_table_model.h"
 #include "common/collator.h"
+#include "utils.h"
 
 // proxy model constructor
 SystemServiceSortFilterProxyModel::SystemServiceSortFilterProxyModel(QObject *parent)
@@ -96,10 +97,18 @@ bool SystemServiceSortFilterProxyModel::lessThan(const QModelIndex &left,
         return left.data().toUInt() < right.data().toUInt();
     case SystemServiceTableModel::kSystemServiceNameColumn:
     case SystemServiceTableModel::kSystemServiceDescriptionColumn: {
-        // sort name & description column with icu string collator
-        return util::common::Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                                           right.data(Qt::DisplayRole).toString())
-               < 0;
+        const QString &lhs = left.data(Qt::DisplayRole).toString();
+        const QString &rhs = right.data(Qt::DisplayRole).toString();
+
+        bool lstartHz = Utils::startWithChineseCharacters(lhs);
+        bool rstartHz = Utils::startWithChineseCharacters(rhs);
+        if (!lstartHz && rstartHz)
+            return true;
+
+        if (lstartHz && !rstartHz)
+            return false;
+
+        return lhs.localeAwareCompare(rhs) < 0;
     }
     default:
         break;

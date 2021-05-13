@@ -441,4 +441,13 @@ void setFontSize(QPainter &painter, int textSize)
     font.setPointSize(textSize);
     painter.setFont(font);
 }
+
+bool startWithChineseCharacters(const QString &text)
+{
+    if (text.isEmpty())
+        return false;
+
+    return text.at(0).script() == QChar::Script_Han;
+}
+
 }  // namespace Utils

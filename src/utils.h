@@ -123,6 +123,8 @@ void drawTooltipBackground(QPainter &painter, QRect rect, qreal opacity = 0.4);
 void drawTooltipText(QPainter &painter, QString text, QString textColor, int textSize, QRectF rect);
 void passInputEvent(WId wid);
 void setFontSize(QPainter &painter, int textSize);
+
+bool startWithChineseCharacters(const QString &text);
 }  // namespace Utils
 
 #endif
