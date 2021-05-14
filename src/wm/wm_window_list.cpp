@@ -155,7 +155,7 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
         int max_h = 0;
 
         uint *max_icon = nullptr;
-        uint *data_end = data + len;
+        uint *data_end = reinterpret_cast<uint *>(xcb_get_property_value_end(reply.get()).data);
 
         while ((data + offsetImagePointerWH) < data_end) {
 
@@ -254,9 +254,11 @@ void WMWindowList::updateWindowListCache()
         return;
 
     m_guiAppcache.clear();
-    xcb_window_t *clientList = reinterpret_cast<xcb_window_t *>(xcb_get_property_value(reply.get()));
-    auto len = xcb_get_property_value_length(reply.get());
-    for (auto i = 0; i < len; i++) {
+    const xcb_get_property_reply_t *R = reply.get();
+    xcb_window_t *clientList = reinterpret_cast<xcb_window_t *>(xcb_get_property_value(R));
+    int len = xcb_get_property_value_length(R);
+
+    for (int i = 0, index = 0; index < len; i++, index += sizeof(xcb_window_t)) {
         auto wid = clientList[i];
         auto winfo = getWindowInfo(wid);
         const QStringList &windowtype = getWindowType(wid);
