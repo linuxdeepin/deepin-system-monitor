@@ -1,382 +1,382 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.1">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>Systeemmonitor</translation>
+        <translation>Sistem İzləyici</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Systeemmonitor is een hulpprogramma voor het monitoren van systeembelasting en het bekijken en beheren van processen en achtergronddiensten.</translation>
+        <translation>Sistem İzləyici, sistemin yüklənməsini, sisteminizdəki işlək proseslərə və xidmətlərə baxış və onlara nəzarəti izləmək üçün alətdir.</translation>
     </message>
 </context>
 <context>
     <name>BaseDetailViewWidget</name>
     <message>
         <source>Hide details</source>
-        <translation>Informatie verbergen</translation>
+        <translation>Təfərrüatları gizlətmək</translation>
     </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
     <message>
         <source>Read</source>
-        <translation>Uitgelezen</translation>
+        <translation>Oxumaq</translation>
     </message>
     <message>
         <source>Write</source>
-        <translation>Weggeschreven</translation>
+        <translation>Yazmaq</translation>
     </message>
 </context>
 <context>
     <name>CPUDetailGrapTableItem</name>
     <message>
         <source>60 seconds</source>
-        <translation>60 seconden</translation>
+        <translation>60 saniyə</translation>
     </message>
 </context>
 <context>
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 dagen, %2 uur, %3 minuten</translation>
+        <translation>%1 gün %2 saat %3 dəqiqə</translation>
     </message>
 </context>
 <context>
     <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
-        <translation>Gebruik</translation>
+        <translation>İstifadə edilmə</translation>
     </message>
     <message>
         <source>Current frequency</source>
-        <translation>Huidige snelheid</translation>
+        <translation>Cari tezlik</translation>
     </message>
     <message>
         <source>Frequency</source>
-        <translation>Snelheid</translation>
+        <translation>Tezlik</translation>
     </message>
     <message>
         <source>Vendor</source>
-        <translation>Maker</translation>
+        <translation>İstehsalçı</translation>
     </message>
     <message>
         <source>Sockets</source>
-        <translation>Sockets</translation>
+        <translation>Soketlər</translation>
     </message>
     <message>
         <source>Logical processors</source>
-        <translation>Logische processors</translation>
+        <translation>Məntiqi proseslər</translation>
     </message>
     <message>
         <source>Virtualization</source>
-        <translation>Virtualisatie</translation>
+        <translation>Virtuallaşdırma</translation>
     </message>
     <message>
         <source>L1i cache</source>
-        <translation>L1i-cache</translation>
+        <translation>L1i keş</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation>L1d-cache</translation>
+        <translation>L1d keş</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation>L2-cache</translation>
+        <translation>L2 keş</translation>
     </message>
     <message>
         <source>L3 cache</source>
-        <translation>L3-cache</translation>
+        <translation>L3 keş</translation>
     </message>
     <message>
         <source>Load average</source>
-        <translation>Gemiddelde belasting</translation>
+        <translation>Orta yüklənmə</translation>
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Bestandsomschrijvingen</translation>
+        <translation>Fayl təsvirçisi</translation>
     </message>
     <message>
         <source>Processes</source>
-        <translation>Processen</translation>
+        <translation>Proseslər</translation>
     </message>
     <message>
         <source>Threads</source>
-        <translation>Processen</translation>
+        <translation>Axınlar</translation>
     </message>
     <message>
         <source>Host name</source>
-        <translation>Hostnaam</translation>
+        <translation>Host adı</translation>
     </message>
     <message>
         <source>OS type</source>
-        <translation>Soort besturingssysteem</translation>
+        <translation>ƏS növü</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation>Versie</translation>
+        <translation>Versiya</translation>
     </message>
     <message>
         <source>Up time</source>
-        <translation>Uptime</translation>
+        <translation>İşləmə müddəti</translation>
     </message>
 </context>
 <context>
     <name>ChartViewWidget</name>
     <message>
         <source>60 seconds</source>
-        <translation>60 seconden</translation>
+        <translation>60 saniyə</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation>Geen zoekresultaat</translation>
+        <translation>Axtarış nəticəsi yoxdur</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation>Informatie</translation>
+        <translation>Təfərrüatlar</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation>Informatie</translation>
+        <translation>Təfərrüatlar</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation>actief</translation>
+        <translation>aktiv</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation>aan het herladen</translation>
+        <translation>yenidən yüklənir</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation>inactief</translation>
+        <translation>Qeyri-aktiv</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>mislukt</translation>
+        <translation>alınmadı</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation>aan het inschakelen</translation>
+        <translation>aktiv olunur</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation>aan het uitschakelen</translation>
+        <translation>söndürülür</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation>zombie</translation>
+        <translation>tıxac</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation>niet geladen</translation>
+        <translation>tapılmadı</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation>onjuist afgesteld</translation>
+        <translation>səhv-ayar</translation>
     </message>
     <message>
         <source>error</source>
-        <translation>foutmelding</translation>
+        <translation>xəta</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation>samengevoegd</translation>
+        <translation>birləşmiş</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>gemaskeerd</translation>
+        <translation>maskalandı</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation>geladen</translation>
+        <translation>yüklənmiş</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>Niet beschikbaar</translation>
+        <translation>Ə/D</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Automatisch</translation>
+        <translation>Öz-özünə</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Handmatig</translation>
+        <translation>Əl ilə</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation>ingeschakeld</translation>
+        <translation>qoşulmuş</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>uitgeschakeld</translation>
+        <translation>söndürülmüş</translation>
     </message>
     <message>
         <source>static</source>
-        <translation>statisch</translation>
+        <translation>sabit</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation>overgankelijk</translation>
+        <translation>müvəqqəti</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation>indirect</translation>
+        <translation>dolayı</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation>ingeschakeld bij opstarten</translation>
+        <translation>aktiv-runtime</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>gemaskeerd</translation>
+        <translation>maskalandı</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation>gegenereerd</translation>
+        <translation>yaradıldı</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation>zombie</translation>
+        <translation>məhv edilmiş</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation>vroegtijdig starten</translation>
+        <translation>öncə başlatmaq</translation>
     </message>
     <message>
         <source>start</source>
-        <translation>starten</translation>
+        <translation>başlamaq</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation>achteraf starten</translation>
+        <translation>start-post</translation>
     </message>
     <message>
         <source>running</source>
-        <translation>wordt uitgevoerd</translation>
+        <translation>işləyir</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation>afgesloten</translation>
+        <translation>çıxıldı</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation>herladen</translation>
+        <translation>yenidən yükləmək</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation>stoppen</translation>
+        <translation>dayan</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation>bijhouden stoppen</translation>
+        <translation>stop-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation>vernietigen</translation>
+        <translation>məhvetmə-siqnalı</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation>geforceerd afsluiten</translation>
+        <translation>dayan-siqnalı</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation>achteraf stoppen</translation>
+        <translation>stop-post</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation>écht vernietigen</translation>
+        <translation>sonlandırma-siqnalı</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation>écht geforceerd afsluiten</translation>
+        <translation>son-məhvetmə-siqnalı</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>mislukt</translation>
+        <translation>alınmadı</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation>automatisch herstarten</translation>
+        <translation>öz-özünə yenidən başlatmaq</translation>
     </message>
 </context>
 <context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
-        <translation>Gebruikt</translation>
+        <translation>İstifadə olunan</translation>
     </message>
     <message>
         <source>Available</source>
-        <translation>Beschikbaar</translation>
+        <translation>Əlçatan</translation>
     </message>
     <message>
         <source>Shared</source>
-        <translation>Gedeeld</translation>
+        <translation>Paylaşılan</translation>
     </message>
     <message>
         <source>Cached</source>
-        <translation>Gecachet</translation>
+        <translation>Keşlənmiş</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation>Buffers</translation>
+        <translation>Buferlər</translation>
     </message>
     <message>
         <source>Cached swap</source>
-        <translation>Gecachet wisselgeheugen</translation>
+        <translation>Keşlənmiş mübadilə bölməsi</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Actief</translation>
+        <translation>Aktiv</translation>
     </message>
     <message>
         <source>Inactive</source>
-        <translation>Inactief</translation>
+        <translation>Qeyri-aktiv</translation>
     </message>
     <message>
         <source>Dirty</source>
-        <translation>Dirty</translation>
+        <translation>Çirkli</translation>
     </message>
     <message>
         <source>Mapped</source>
-        <translation>Toegewezen</translation>
+        <translation>Xəritələndi</translation>
     </message>
     <message>
         <source>Total swap</source>
-        <translation>Totaal wisselgeheugen</translation>
+        <translation>Ümumi mübadilə bölməsi</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation>Vrij wisselgeheugen</translation>
+        <translation>Boş mübadilə bölməsi</translation>
     </message>
     <message>
         <source>Slab</source>
-        <translation>Model</translation>
+        <translation>Hissə</translation>
     </message>
 </context>
 <context>
@@ -387,73 +387,73 @@
     </message>
     <message>
         <source>Read speed</source>
-        <translation>Leessnelheid</translation>
+        <translation>Oxuma sürəti</translation>
     </message>
     <message>
         <source>Write speed</source>
-        <translation>Schrijfsnelheid</translation>
+        <translation>Yazma sürəti</translation>
     </message>
     <message>
         <source>Capacity</source>
-        <translation>Capaciteit</translation>
+        <translation>Tutum</translation>
     </message>
     <message>
         <source>Sectors read</source>
-        <translation>Uitgelezen sectoren</translation>
+        <translation>Oxunan sektorlar</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation>Uitgelezen/s</translation>
+        <translation>Oxunur</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation>Uitgelezen sectoren/s</translation>
+        <translation>Sektorlar oxunur</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation>Uitgelezen+samengevoegd/s</translation>
+        <translation>Birləşmiş oxunanlar</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation>Weggeschreven sectoren</translation>
+        <translation>Yazılmış sektorlar</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation>Voltooide wegschrijvingen</translation>
+        <translation>Yazılma başa çatdı</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation>Samengevoegde wegschrijvingen</translation>
+        <translation>Birləşdirilmiş yazılar</translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation>Weggeschreven/s</translation>
+        <translation>Yazılır</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation>Weggeschreven sectoren/s</translation>
+        <translation>Yazılmış sektorlar</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation>Samengevoegde wegschrijvingen/s</translation>
+        <translation>Birləşdirilmiş yazılar</translation>
     </message>
 </context>
 <context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation>Oké</translation>
+        <translation>OLDU</translation>
     </message>
 </context>
 <context>
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation>Systeem</translation>
+        <translation>Sistem</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation>Sneltoetsen tonen</translation>
+        <translation>Qısayolları göstərmək</translation>
     </message>
 </context>
 <context>
@@ -461,73 +461,73 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
-Weet je zeker dat je wilt doorgaan?</translation>
+        <translation>Bu prosesin sonlandırılması ilə verilənlər itirilə bilər.
+Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Proces beëindigen</translation>
+        <translation>Prosesin sonu</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
-Weet je zeker dat je wilt doorgaan?</translation>
+        <translation>Bu prosesin məcburi sonlandırılması verilənlərin itirilməsi ilə nəticələnər.
+Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>Beëindigen</translation>
+        <translation>Sonlandırmaq</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Het beëindigen van dit programma kan gegevensverlies veroorzaken.
-Weet je zeker dat je door wilt gaan?</translation>
+        <translation>Bu tətbiqin məcburi sonlandırılması ilə verilənlər itirilə bilər.
+Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>Force End</source>
-        <translation>Geforceerd afsluiten</translation>
+        <translation>Məcburi sonlandırmaq</translation>
     </message>
 </context>
 <context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
-        <translation>Grootte</translation>
+        <translation>Ölçü</translation>
     </message>
 </context>
 <context>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <source>IP address:</source>
-        <translation>IP-adres:</translation>
+        <translation>İP ünvanı:</translation>
     </message>
     <message>
         <source>Netmask:</source>
-        <translation>Netmask:</translation>
+        <translation>Şəbəkə maskası:</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation>Uitgezonden:</translation>
+        <translation>Yayım:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation>Voorvoegsel:</translation>
+        <translation>Prefiksin uzun.:</translation>
     </message>
     <message>
         <source>Scope:</source>
-        <translation>Bereik:</translation>
+        <translation>Sahəsi:</translation>
     </message>
 </context>
 <context>
     <name>NetInfoModel</name>
     <message>
         <source>Connection type</source>
-        <translation>Soort verbinding</translation>
+        <translation>Bağlantı növü</translation>
     </message>
     <message>
         <source>ESSID</source>
@@ -535,15 +535,15 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Link quality</source>
-        <translation>Linkkwaliteit</translation>
+        <translation>Bağlantı keyfiyyəti</translation>
     </message>
     <message>
         <source>Signal strength</source>
-        <translation>Signaalsterkte</translation>
+        <translation>Siqnal gücü</translation>
     </message>
     <message>
         <source>Noise level</source>
-        <translation>Ruisniveau</translation>
+        <translation>Səs səviyyəsi</translation>
     </message>
     <message>
         <source>MAC</source>
@@ -551,51 +551,51 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Bandwidth</source>
-        <translation>Bandbreedte</translation>
+        <translation>Zolaq genişliyi</translation>
     </message>
     <message>
         <source>RX packets</source>
-        <translation>RX-pakketten</translation>
+        <translation>Alınan paketlər</translation>
     </message>
     <message>
         <source>RX bytes</source>
-        <translation>RX-bytes</translation>
+        <translation>Alınan baytlar</translation>
     </message>
     <message>
         <source>RX errors</source>
-        <translation>RX-fouten</translation>
+        <translation>Alınma xətaları</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation>RX-loslatingen</translation>
+        <translation>Tullanılmış alınanlar</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation>RX-overvloeiingen</translation>
+        <translation>Alınanların daşması</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation>RX-frame</translation>
+        <translation>Alınma çərçivəsi</translation>
     </message>
     <message>
         <source>TX packets</source>
-        <translation>TX-pakketten</translation>
+        <translation>Göndərilən paketlər</translation>
     </message>
     <message>
         <source>TX bytes</source>
-        <translation>TX-bytes</translation>
+        <translation>Alınan baytlar</translation>
     </message>
     <message>
         <source>TX errors</source>
-        <translation>TX-fouten</translation>
+        <translation>Göndərmə çərçivəsi</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation>TX-overvloeiingen</translation>
+        <translation>Göndərilənlərin daşması</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation>TX-provider</translation>
+        <translation>Göndəriş daşıyıcısı</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -607,275 +607,275 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation>TX-loslatingen</translation>
+        <translation>Tullanılmış alınanlar</translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
-        <translation>Opdrachtregel</translation>
+        <translation>Əmr sətri</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Starttijd</translation>
+        <translation>Başlama vaxtı</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation>Adı</translation>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klik op het programma dat je wilt beëindigen</translation>
+        <translation>Sonlandırmaq istədiyiniz tətbiqi seçin</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.Title</name>
     <message>
         <source>Memory</source>
-        <translation>Geheugen</translation>
+        <translation>Yddaş</translation>
     </message>
     <message>
         <source>Receive</source>
-        <translation>Ontvangen</translation>
+        <translation>Almaq</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation>Processor</translation>
+        <translation>MP</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Schijfuitlezing</translation>
+        <translation>Diskin oxunması</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Schijfwegschrijving</translation>
+        <translation>Diskin yazılması</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Geheugen</translation>
+        <translation>Yddaş</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Wisselgeheugen</translation>
+        <translation>Mübadilə bölməsi</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>Niet ingeschakeld</translation>
+        <translation>Qoşulmayıb</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Downloaden</translation>
+        <translation>Yükləmək</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Uploaden</translation>
+        <translation>Göndərmək</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation>Netwerk</translation>
+        <translation>Şəbəkə</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation>Totaal ontvangen</translation>
+        <translation>Ümumi alınan</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Totaal verstuurd</translation>
+        <translation>Ümumi göndərilən</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Verstuurd</translation>
+        <translation>Göndərmək</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation>Schijven</translation>
+        <translation>Disklər</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Erg hoog</translation>
+        <translation>Çox yüksək</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Hoog</translation>
+        <translation>Yüksək</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normaal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Laag</translation>
+        <translation>Aşağı</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation>Erg laag</translation>
+        <translation>Çox aşağı</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Aangepast</translation>
+        <translation>Xüsusi</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>Ongeldig</translation>
+        <translation>Yararsız</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Foutmelding: [%2] %3</translation>
+        <translation>PID: %1, Xəta: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation>Het aanpassen van de procesprioriteit is mislukt</translation>
+        <translation>Prosesin üstünlüyünü dəyişmək alınmadı</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation>Programma&apos;s</translation>
+        <translation>Tətbiqlər</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Mijn processen</translation>
+        <translation>Mənim proseslərim</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Alle processen</translation>
+        <translation>Bütün proseslər</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
-        <translation>Het proces kan niet worden onderbroken</translation>
+        <translation>Prosesə fasilə vermək alınmadı</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation>Het proces kan niet worden hervat</translation>
+        <translation>Prosesi davam etdirmək alınmadı</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation>Het proces kan niet worden vernietigd</translation>
+        <translation>Prosesi məhv etmək alınmadı</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation>Onbekende fout</translation>
+        <translation>Bilinməyən xəta</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation>Er kan geen signaal worden verstuurd naar het proces</translation>
+        <translation>Prosesə siqnal göndərilə bilmədi</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation>Het proces kan niet worden beëindigd</translation>
+        <translation>Prosesi sonlandırmaq baş tutmadı</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(er worden %1 programma&apos;s en %2 processen uitgevoerd)</translation>
+        <translation>(%1 tətbiq və %2 proses işləyir)</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation>Geen antwoord</translation>
+        <translation>Cavab yoxdur</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Onderbreken</translation>
+        <translation>Dayandırmaq</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Systeemvak</translation>
+        <translation>Panel</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation>Opdrachtlocatie tonen</translation>
+        <translation>Əmrin yerinə baxmaq</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Eigenschappen</translation>
+        <translation>Xüsusiyyətlər</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Proces beëindigen</translation>
+        <translation>Prosesin sonu</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Proces hervatten</translation>
+        <translation>Prosesə davam</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>Geforceerd beëindigen</translation>
+        <translation>Prosesi məh etmək</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation>Prioriteit aanpassen</translation>
+        <translation>Üstünlüyü dəyişmək</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Proces onderbreken</translation>
+        <translation>Prosesi dayandırmaq</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation>Aanpassen</translation>
+        <translation>Dəyişmək</translation>
     </message>
     <message>
         <source>Custom Priority</source>
-        <translation>Aangepaste prioriteit</translation>
+        <translation>Xüsusi üstünlük</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Processor</translation>
+        <translation>MP</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Geheugen</translation>
+        <translation>Yaddaş</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Schijfwegschrijving</translation>
+        <translation>Diskin yazılması</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Schijfuitlezing</translation>
+        <translation>Diskin oxunması</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Downloaden</translation>
+        <translation>Yükləmək</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Uploaden</translation>
+        <translation>Göndərmək</translation>
     </message>
     <message>
         <source>PID</source>
@@ -883,114 +883,114 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>User</source>
-        <translation>Gebruiker</translation>
+        <translation>İstifadəçi</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation>Yaxşı</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Prioriteit</translation>
+        <translation>Üstünlük</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation>Gedeeld geheugen</translation>
+        <translation>Paylaşılan yaddaş</translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation>Virtueel geheugen</translation>
+        <translation>Virtual yaddaş</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Not support</source>
-        <translation>Niet ondersteund</translation>
+        <translation>Dəstəklənmir</translation>
     </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation>Kan het soort opstart niet instellen</translation>
+        <translation>Xidmətin başladılma növünü təyin etmək baş tutmadı</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Foutmelding: kan het soort opstart niet instellen wegens een gecrasht onderliggend proces.</translation>
+        <translation>Xəta: Ona tabe olan proses çökdüyü halda, xidmətin başladılma növü dəyişdirilə bilmədi.</translation>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>OK</source>
-        <translation>Oké</translation>
+        <translation>OLDU</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation>Naam van dienstproces</translation>
+        <translation>Xidmətin adı</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation>Verversen</translation>
+        <translation>Təzələmək</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Starten</translation>
+        <translation>Başlamaq</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Stoppen</translation>
+        <translation>Dayandırmaq</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Herstarten</translation>
+        <translation>Yenidən başlatmaq</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Automatisch</translation>
+        <translation>Öz-özünə</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Handmatig</translation>
+        <translation>Əl ilə</translation>
     </message>
     <message>
         <source>Startup type</source>
-        <translation>Soort opstart</translation>
+        <translation>Başladılma növü</translation>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>Naam</translation>
+        <translation>Adı</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Laden</translation>
+        <translation>Yükləmək</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Actief</translation>
+        <translation>Aktiv</translation>
     </message>
     <message>
         <source>Sub</source>
-        <translation>Onderliggend</translation>
+        <translation>Tabe olan</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Status</translation>
+        <translation>Vəziyyət</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation>Omschrijving</translation>
+        <translation>Təsviri</translation>
     </message>
     <message>
         <source>PID</source>
@@ -998,44 +998,44 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <translation>Soort opstart</translation>
+        <translation>Başladılma növü</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Programma geforceerd beëindigen</translation>
+        <translation>Tətbiqi məcburi sonlandırmaq</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Uitklappen</translation>
+        <translation>Genişləndirmək</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Compact</translation>
+        <translation>Yığcam</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Weergave</translation>
+        <translation>Görünüş</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation>Zoeken</translation>
+        <translation>Axtarış</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>Processen</translation>
+        <translation>Proseslər</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation>Diensten</translation>
+        <translation>Xidmətlər</translation>
     </message>
 </context>
 </TS>

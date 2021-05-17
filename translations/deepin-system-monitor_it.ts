@@ -608,7 +608,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX persi</translation>
     </message>
 </context>
 <context>

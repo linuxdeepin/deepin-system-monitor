@@ -39,7 +39,7 @@
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 дана %2 сати %3 минута</translation>
+        <translation>%1 дана %2 сат. %3 мин.</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Дескриптор датотеке</translation>
+        <translation>Дескриптори датотека</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -332,7 +332,7 @@
     </message>
     <message>
         <source>Available</source>
-        <translation>Доступно</translation>
+        <translation>Слободно</translation>
     </message>
     <message>
         <source>Shared</source>
@@ -348,11 +348,11 @@
     </message>
     <message>
         <source>Cached swap</source>
-        <translation>Кеирана пом. мем.</translation>
+        <translation>Кеширана помоћна мем.</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Активност</translation>
+        <translation>Активно</translation>
     </message>
     <message>
         <source>Inactive</source>
@@ -368,11 +368,11 @@
     </message>
     <message>
         <source>Total swap</source>
-        <translation>Укупна пом. мем.</translation>
+        <translation>Укупна помоћна мем.</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation>Слободна пом. мем.</translation>
+        <translation>Слободна помоћна мем.</translation>
     </message>
     <message>
         <source>Slab</source>
@@ -607,7 +607,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX одбачено</translation>
     </message>
 </context>
 <context>

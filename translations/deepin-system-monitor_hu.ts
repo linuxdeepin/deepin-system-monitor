@@ -606,7 +606,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX eldobások</translation>
     </message>
 </context>
 <context>

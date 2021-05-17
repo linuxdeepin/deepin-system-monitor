@@ -567,7 +567,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation>RX aşağıda</translation>
+        <translation>RX düştü</translation>
     </message>
     <message>
         <source>RX overruns</source>
@@ -607,7 +607,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX düştü</translation>
     </message>
 </context>
 <context>

@@ -607,7 +607,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>Tx descartado</translation>
     </message>
 </context>
 <context>

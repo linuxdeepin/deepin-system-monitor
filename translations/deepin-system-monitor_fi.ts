@@ -607,7 +607,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX pudotetut</translation>
     </message>
 </context>
 <context>

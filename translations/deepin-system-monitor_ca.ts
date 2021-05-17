@@ -607,7 +607,7 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX caigut/s</translation>
     </message>
 </context>
 <context>

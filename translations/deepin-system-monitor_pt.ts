@@ -90,7 +90,7 @@
     </message>
     <message>
         <source>Load average</source>
-        <translation>Média de carga</translation>
+        <translation>Carga média</translation>
     </message>
     <message>
         <source>File descriptors</source>
@@ -607,7 +607,7 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX largados</translation>
     </message>
 </context>
 <context>
