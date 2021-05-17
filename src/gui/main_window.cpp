@@ -215,6 +215,8 @@ void MainWindow::initUI()
     this->setEnableSystemMove(false);
     this->setEnableSystemResize(false);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowMaximizeButtonHint);
+    //Set the radius to 0 and display normal on the tablet
+    this->setWindowRadius(0);
 
     // set titlebar icon
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
