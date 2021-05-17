@@ -60,7 +60,7 @@ void DiskIOInfo::readDiskIOStats()
     const size_t bsiz = 2048;
     QScopedArrayPointer<char> line(new char[bsiz] {});
     unsigned int major, minor;
-    char dev_name[MAX_NAME_LEN];
+    char dev_name[MAX_NAME_LEN + 1];
 
     // ignore any partition stats here, ref: sysstat#common.c#is_device
     auto is_block_dev = [ = ](char *dev_name) -> bool {

@@ -113,14 +113,13 @@ QString DLscpu::modelName() const
 
 QString DLscpu::virtualization() const
 {
-    struct lscpu_virt *virt = lscpu_read_virtualization(cxt);
-    if(virt && virt->cpuflag){
-        if (!strcmp(virt->cpuflag, "svm"))
+    if(cxt && cxt->virt && cxt->virt->cpuflag){
+        if (!strcmp(cxt->virt->cpuflag, "svm"))
             return "AMD-V";
-        else if (!strcmp(virt->cpuflag, "vmx"))
+        else if (!strcmp(cxt->virt->cpuflag, "vmx"))
             return "VT-x";
         else
-            return QString(virt->cpuflag);
+            return QString(cxt->virt->cpuflag);
     }
     return QString();
 }

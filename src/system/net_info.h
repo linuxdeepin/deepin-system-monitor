@@ -33,7 +33,7 @@ namespace system {
 struct net_stat {
     unsigned long long rx_bytes; // received bytes
     unsigned long long tx_bytes; // transmitted bytes
-    char iface[IF_NAMESIZE]; // interface name
+    char iface[IF_NAMESIZE + 1]; // interface name
 };
 
 class NetInfo

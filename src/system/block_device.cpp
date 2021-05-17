@@ -65,13 +65,14 @@ void BlockDevice::readDeviceInfo()
     }
     QList<QStringList> strList;
     QTextStream in(&file);
-    QString line = in.readLine();
-    strList << line.split(" ", QString::SkipEmptyParts);
-    while (!line.isNull()) {
+
+    QString line;
+    do{
         line = in.readLine();
-        if (!line.contains("loop"))
+        if (!line.contains("loop")){
             strList << line.split(" ", QString::SkipEmptyParts);
-    }
+        }
+    }while (!line.isNull());
     file.close();
 
     for (int i = 0; i < strList.size(); ++i) {

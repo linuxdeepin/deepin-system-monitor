@@ -123,7 +123,7 @@ void BlockDeviceInfoDB::readDiskInfo()
 
     QFileInfoList list = dir.entryInfoList();
     for (int i = 0; i < list.size(); ++i) {
-        if (list[i].fileName() != "." && list[i].fileName() != "..") {
+        if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("loop")) {
             int index = -1;
             //  查找当前的device是否存在
             for (int si = 0; si < m_deviceList.size(); ++si) {

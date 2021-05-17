@@ -35,11 +35,17 @@ namespace process {
 
 ProcessSet::ProcessSet()
     : m_set {}
+    , m_recentProcStage {}
+    , m_pidCtoPMapping {}
+    , m_pidPtoCMapping {}
 {
 }
 
 ProcessSet::ProcessSet(const ProcessSet &other)
     : m_set(other.m_set)
+    , m_recentProcStage(other.m_recentProcStage)
+    , m_pidCtoPMapping(other.m_pidCtoPMapping)
+    , m_pidPtoCMapping(other.m_pidPtoCMapping)
 {
 }
 

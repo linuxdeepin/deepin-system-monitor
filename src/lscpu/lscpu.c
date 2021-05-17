@@ -127,6 +127,8 @@ struct lscpu_cxt *initCpuInfo()
 
     lscpu_decode_arm(cxt);
 
+    cxt->virt = lscpu_read_virtualization(cxt);
+
     return cxt;
 }
 

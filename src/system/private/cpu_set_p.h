@@ -53,9 +53,10 @@ public:
         , m_virtualization {}
         , m_stat {}
         , m_usage {}
-        , m_infos {}
         , m_statDB {}
         , m_usageDB {}
+        , m_info {}
+        , m_infos {}
     {
 
     }
@@ -74,11 +75,8 @@ public:
         , m_virtualization(other.m_virtualization)
         , m_stat(std::make_shared<cpu_stat_t>(*(other.m_stat)))
         , m_usage(std::make_shared<cpu_usage_t>(*(other.m_usage)))
+        , m_info(other.m_info)
     {
-        for (auto &info : other.m_infos) {
-            CPUInfo cp(info);
-            m_infos << cp;
-        }
         for (auto &stat : other.m_statDB) {
             if (stat) {
                 auto cp = std::make_shared<cpu_stat_t>(*stat);
@@ -90,6 +88,10 @@ public:
                 auto cp = std::make_shared<cpu_usage_t>(*usage);
                 m_usageDB[usage->cpu] = cp;
             }
+        }
+        for (auto &info : other.m_infos) {
+            CPUInfo cp(info);
+            m_infos << cp;
         }
     }
     ~CPUSetPrivate() {}
@@ -108,8 +110,6 @@ private:
 
     CPUStat m_stat; // overall stat
     CPUUsage m_usage; // overall usage
-
-    QList<int> m_cpuNum;
 
     QMap<QByteArray, CPUStat> m_statDB; // per cpu stat
     QMap<QByteArray, CPUUsage> m_usageDB; // per cpu usage

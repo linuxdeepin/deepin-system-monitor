@@ -30,11 +30,11 @@ wireless::wireless()
 }
 
 wireless::wireless(QByteArray ifname)
-    :m_ifname(ifname)
+    : m_bwireless(false)
+    , m_ifname(ifname)
     , m_link_quality(0)
-    ,m_signal_levle(0)
-    ,m_noise_level(0)
-    ,m_bwireless(false)
+    , m_signal_levle(0)
+    , m_noise_level(0)
 {
 
     read_wireless_info();
