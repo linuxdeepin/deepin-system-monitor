@@ -24,6 +24,7 @@
 #include "common/common.h"
 #include "model/cpu_info_model.h"
 #include "model/cpu_stat_model.h"
+#include "base_commandlink_button.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -70,9 +71,9 @@ CpuMonitor::CpuMonitor(QWidget *parent)
         update();
     });
 
-    m_detailButton = new DCommandLinkButton(tr("Details"), this);
+    m_detailButton = new BaseCommandLinkButton(tr("Details"), this);
     DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
-    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
+    connect(m_detailButton, &BaseCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,

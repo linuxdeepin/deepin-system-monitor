@@ -22,10 +22,9 @@
 #include <QWidget>
 #include <QPainterPath>
 
-#include <DCommandLinkButton>
-
 class CPUInfoModel;
-DWIDGET_USE_NAMESPACE
+class BaseCommandLinkButton;
+
 class CompactCpuMonitor : public QWidget
 {
     Q_OBJECT
@@ -73,7 +72,7 @@ private:
 
     QString m_detailText;
     CPUInfoModel *m_cpuInfomodel;
-    DCommandLinkButton *m_detailButton;
+    BaseCommandLinkButton *m_detailButton;
 };
 
 #endif

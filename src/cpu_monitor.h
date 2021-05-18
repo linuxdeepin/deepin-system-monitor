@@ -32,6 +32,7 @@ DWIDGET_USE_NAMESPACE
 class Settings;
 class QPropertyAnimation;
 class CPUInfoModel;
+class BaseCommandLinkButton;
 
 class CpuMonitor : public QWidget
 {
@@ -105,7 +106,7 @@ private:
     QPropertyAnimation *m_animation {};
     CPUInfoModel *m_cpuInfomodel;
 
-    DCommandLinkButton *m_detailButton;
+    BaseCommandLinkButton *m_detailButton;
 };
 
 #endif

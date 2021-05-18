@@ -39,6 +39,7 @@ pkg_search_module(LIB_UDEV REQUIRED libudev)
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui/base)
 
 set(HPP_GLOBAL
     config.h
@@ -151,12 +152,14 @@ set(CPP_MODEL
 
 set(HPP_GUI
     gui/base/base_detail_item_delegate.h
-    gui/ui_common.h
-    gui/toolbar.h
-    gui/main_window.h
     gui/base/base_table_view.h
     gui/base/base_item_delegate.h
     gui/base/base_header_view.h
+    gui/base/base_detail_view_widget.h
+    gui/base/base_commandlink_button.h
+    gui/ui_common.h
+    gui/toolbar.h
+    gui/main_window.h
     gui/process_table_view.h
     gui/process_page_widget.h
     gui/service_name_sub_input_dialog.h
@@ -183,13 +186,17 @@ set(HPP_GUI
     gui/chart_view_widget.h
     gui/block_dev_stat_view_widget.h
     gui/animation_stackedwidget.h
-    gui/base/base_detail_view_widget.h
     gui/cpu_detail_widget.h
     gui/cpu_summary_view_widget.h
     gui/block_dev_item_widget.h
 )
 set(CPP_GUI
     gui/base/base_detail_item_delegate.cpp
+    gui/base/base_table_view.cpp
+    gui/base/base_item_delegate.cpp
+    gui/base/base_header_view.cpp
+    gui/base/base_detail_view_widget.cpp
+    gui/base/base_commandlink_button.cpp
     gui/toolbar.cpp
     gui/system_service_table_view.cpp
     gui/main_window.cpp
@@ -197,9 +204,6 @@ set(CPP_GUI
     gui/process_page_widget.cpp
     gui/service_name_sub_input_dialog.cpp
     gui/process_table_view.cpp
-    gui/base/base_table_view.cpp
-    gui/base/base_item_delegate.cpp
-    gui/base/base_header_view.cpp
     gui/dialog/error_dialog.cpp
     gui/monitor_expand_view.cpp
     gui/monitor_compact_view.cpp
@@ -221,7 +225,6 @@ set(CPP_GUI
     gui/detail_view_stacked_widget.cpp
     gui/chart_view_widget.cpp
     gui/animation_stackedwidget.cpp
-    gui/base/base_detail_view_widget.cpp
     gui/cpu_detail_widget.cpp
     gui/cpu_summary_view_widget.cpp
     gui/block_dev_item_widget.cpp

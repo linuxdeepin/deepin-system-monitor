@@ -20,11 +20,13 @@
 */
 #include "base_detail_view_widget.h"
 #include "../detail_view_stacked_widget.h"
+#include "base_commandlink_button.h"
 
 #include <QPainter>
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
+#include <QKeyEvent>
 
 DWIDGET_USE_NAMESPACE
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
@@ -34,9 +36,9 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     m_centralLayout->setSpacing(16);
 
     DetailViewStackedWidget *stackViewWidget = dynamic_cast<DetailViewStackedWidget *>(parent);
-    m_detailButton = new DCommandLinkButton(tr("Hide details"), this);
+    m_detailButton = new BaseCommandLinkButton(tr("Hide details"), this);
     DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
-    connect(m_detailButton, &DCommandLinkButton::clicked, stackViewWidget, &DetailViewStackedWidget::onSwitchProcessPage);
+    connect(m_detailButton, &BaseCommandLinkButton::clicked, stackViewWidget, &DetailViewStackedWidget::onSwitchProcessPage);
 
     m_arrowButton = new DIconButton(DStyle::SP_ReduceElement, this);
     m_arrowButton->setIconSize(QSize(10, 10));

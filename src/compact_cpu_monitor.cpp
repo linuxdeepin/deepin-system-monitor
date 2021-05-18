@@ -24,6 +24,7 @@
 #include "system/device_db.h"
 #include "model/cpu_info_model.h"
 #include "model/cpu_list_model.h"
+#include "base_commandlink_button.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -38,6 +39,7 @@
 #include <QtMath>
 #include <QMouseEvent>
 
+DWIDGET_USE_NAMESPACE
 using namespace common;
 
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
@@ -81,10 +83,10 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CompactCpuMonitor::updateStatus);
 
     m_detailText = tr("Details");
-    m_detailButton = new DCommandLinkButton(m_detailText, this);
+    m_detailButton = new BaseCommandLinkButton(m_detailText, this);
     DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     m_detailButton->setToolTip(m_detailText);
-    connect(m_detailButton, &DCommandLinkButton::clicked, this, &CompactCpuMonitor::onDetailInfoClicked);
+    connect(m_detailButton, &BaseCommandLinkButton::clicked, this, &CompactCpuMonitor::onDetailInfoClicked);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,

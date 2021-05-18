@@ -26,6 +26,8 @@
 #include <DIconButton>
 #include <QVBoxLayout>
 
+class BaseCommandLinkButton;
+
 class BaseDetailViewWidget : public QWidget
 {
     Q_OBJECT
@@ -65,7 +67,7 @@ protected:
     QString m_titleText;
     QString m_detailText;
 
-    Dtk::Widget::DCommandLinkButton *m_detailButton;
+    BaseCommandLinkButton *m_detailButton;
     Dtk::Widget::DIconButton *m_arrowButton;
 
     QVBoxLayout *m_centralLayout;
