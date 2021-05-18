@@ -272,7 +272,8 @@ void MainWindow::initUI()
     installEventFilter(this);
 
     this->move(0, 0);
-    this->setFixedSize(QApplication::desktop()->availableGeometry().size());
+    //Setup window adaptive screen
+    this->setWindowState(Qt::WindowMaximized);
 }
 
 void MainWindow::initVirtualKeyboard()
