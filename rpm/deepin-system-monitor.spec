@@ -78,6 +78,9 @@ popd
 # desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 #appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
+%post
+%caps(cap_kill,cap_net_raw,cap_dac_read_search,cap_sys_ptrace=+ep) %{_bindir}/%{name}
+
 %files
 %doc README.md
 %license LICENSE
@@ -90,5 +93,5 @@ popd
 %{_datadir}/deepin-manual/manual-assets/application/deepin-system-monitor/system-monitor/*
 
 %changelog
-* Thu Apr 15 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.8.0.30-1
+* Thu Apr 15 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.8.0.30-1
 - Initial release for OpenEuler
