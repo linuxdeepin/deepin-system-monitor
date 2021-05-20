@@ -42,6 +42,7 @@
 #include <QVBoxLayout>
 #include <QtMath>
 #include <QScrollBar>
+#include <QScroller>
 
 // prefered text width
 static const int kPreferedTextWidth = 200;
@@ -256,6 +257,15 @@ void ProcessAttributeDialog::initUI()
 
     m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
+
+    // Because the text content exceeds the boundary, the current mouse selection needs to disable the text attribute
+    m_procNameText->setTextInteractionFlags(Qt::TextSelectableByKeyboard);
+    m_procCmdText->setTextInteractionFlags(Qt::TextSelectableByKeyboard);
+    m_procStartText->setTextInteractionFlags(Qt::TextSelectableByKeyboard);
+    // enable touch gesture
+    QScroller::grabGesture(m_procNameText, QScroller::TouchGesture);
+    QScroller::grabGesture(m_procCmdText, QScroller::TouchGesture);
+    QScroller::grabGesture(m_procStartText, QScroller::TouchGesture);
 }
 
 // resize event handler
