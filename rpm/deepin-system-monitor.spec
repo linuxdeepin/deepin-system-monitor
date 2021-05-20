@@ -78,19 +78,6 @@ popd
 # desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 #appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
-%post
-if command -v setcap > /dev/null; then
-	if setcap cap_net_raw,cap_dac_read_search,cap_sys_ptrace+ep /usr/bin/deepin-system-monitor;then
-		chmod u-s /usr/bin/deepin-system-monitor
-	else
-		echo "Setcap failed, falling back to setuid"
-		chmod u+s /usr/bin/deepin-system-monitor
-	fi
-else
-	echo "Setcap is not installed, falling back to setuid"
-	chmod u+s /usr/bin/deepin-system-monitor
-fi  
-
 %files
 %doc README.md
 %license LICENSE
