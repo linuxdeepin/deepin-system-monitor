@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Peru</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Lopeta prosessi</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Loppu</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Sovelluksen lopettaminen voi aiheuttaa tietojen häviämisen.
 Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Peru</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Pakota lopetus</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Loppu</translation>
     </message>
 </context>
 <context>
@@ -607,7 +611,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX pudotetut</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Haluatko varmasti jatkaa?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Muokattu prioriteetti</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Peru</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Muutos</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Muokattu prioriteetti</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Haluatko varmasti jatkaa?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Palvelun esiintymän nimi</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Peruuta</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Palvelun esiintymän nimi</translation>
+        <comment>button</comment>
+        <translation>Peru</translation>
     </message>
 </context>
 <context>

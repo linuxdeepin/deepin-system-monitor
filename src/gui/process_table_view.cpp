@@ -150,8 +150,8 @@ void ProcessTableView::endProcess()
     KillProcessConfirmDialog dialog(this);
 //    dialog.setTitle(title);
     dialog.setMessage(description);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "End"), true,
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel", "button"), false);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "End", "button"), true,
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
@@ -276,8 +276,8 @@ void ProcessTableView::killProcess()
     // show confirm dialog
     KillProcessConfirmDialog dialog(this);
     dialog.setMessage(description);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel"), false);
-    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End"), true,
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Cancel", "button"), false);
+    dialog.addButton(DApplication::translate("Kill.Process.Dialog", "Force End", "button"), true,
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
@@ -897,9 +897,9 @@ void ProcessTableView::customizeProcessPriority()
     }
     prioDialog->addContent(slider);
     prioDialog->addSpacing(16);
-    prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Cancel"),
+    prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Cancel", "button"),
                           false, DDialog::ButtonNormal);
-    prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change"),
+    prioDialog->addButton(DApplication::translate("Process.Table.Custom.Priority.Dialog", "Change", "button"),
                           true, DDialog::ButtonRecommend);
     // clear focus first, otherwise we wont get the tab order we want
     prioDialog->clearFocus();

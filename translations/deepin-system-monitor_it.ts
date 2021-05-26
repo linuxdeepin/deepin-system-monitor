@@ -443,6 +443,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
 </context>
@@ -466,10 +467,6 @@ Are you sure you want to continue?</source>
 Sicuro di voler terminarlo?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Annulla</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Termina processo</translation>
     </message>
@@ -480,18 +477,25 @@ Are you sure you want to continue?</source>
 Sicuro di voler terminarlo?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Termina</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Terminare quest&apos;app potrebbe causare una perdita di dati.
 Sicuro di voler terminarla?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Annulla</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Forza chiusura</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Termina</translation>
     </message>
 </context>
 <context>
@@ -608,7 +612,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX persi</translation>
     </message>
 </context>
 <context>
@@ -836,16 +840,18 @@ Sicuro di voler terminarla?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Priorità personalizzata</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annulla</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Cambia</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Priorità personalizzata</translation>
     </message>
 </context>
 <context>
@@ -924,16 +930,18 @@ Sicuro di voler terminarla?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Nome istanza di Servizio</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annulla</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Nome istanza di Servizio</translation>
     </message>
 </context>
 <context>

@@ -39,7 +39,7 @@
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 дана %2 сати %3 минута</translation>
+        <translation>%1 дана %2 сат. %3 мин.</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Дескриптор датотеке</translation>
+        <translation>Дескриптори датотека</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -332,7 +332,7 @@
     </message>
     <message>
         <source>Available</source>
-        <translation>Доступно</translation>
+        <translation>Слободно</translation>
     </message>
     <message>
         <source>Shared</source>
@@ -348,11 +348,11 @@
     </message>
     <message>
         <source>Cached swap</source>
-        <translation>Кеирана пом. мем.</translation>
+        <translation>Кеширана помоћна мем.</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Активност</translation>
+        <translation>Активно</translation>
     </message>
     <message>
         <source>Inactive</source>
@@ -368,11 +368,11 @@
     </message>
     <message>
         <source>Total swap</source>
-        <translation>Укупна пом. мем.</translation>
+        <translation>Укупна помоћна мем.</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation>Слободна пом. мем.</translation>
+        <translation>Слободна помоћна мем.</translation>
     </message>
     <message>
         <source>Slab</source>
@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>У реду</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 Заиста желите да наставите?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Откажи</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Окончај процес</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 Заиста желите да наставите?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Окончај</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Принудно окончање овог програма може изазвати губитак података.
 Заиста желите да наставите?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Откажи</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Принудно окончај</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Окончај</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Прилагођени приоритет</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Откажи</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Промени</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Прилагођени приоритет</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Назив инстанце услуге</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>У реду</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Откажи</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Назив инстанце услуге</translation>
     </message>
 </context>
 <context>

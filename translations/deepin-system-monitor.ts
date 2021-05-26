@@ -444,6 +444,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation type="unfinished">OK</translation>
     </message>
 </context>
@@ -467,10 +468,6 @@ Are you sure you want to continue?</source>
 Are you sure you want to continue?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Cancel</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>End process</translation>
     </message>
@@ -481,18 +478,25 @@ Are you sure you want to continue?</source>
 Are you sure you want to continue?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>End</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Force ending this application may cause data loss.
 Are you sure you want to continue?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished">Cancel</translation>
+    </message>
+    <message>
         <source>Force End</source>
-        <translation>Force End</translation>
+        <comment>button</comment>
+        <translation type="unfinished">Force End</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation type="unfinished">End</translation>
     </message>
 </context>
 <context>
@@ -837,16 +841,18 @@ Are you sure you want to continue?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Custom Priority</translation>
+    </message>
+    <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <comment>button</comment>
+        <translation type="unfinished">Cancel</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation>Change</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Custom Priority</translation>
+        <comment>button</comment>
+        <translation type="unfinished">Change</translation>
     </message>
 </context>
 <context>
@@ -925,16 +931,18 @@ Are you sure you want to continue?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Service instance name</translation>
+    </message>
+    <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <comment>button</comment>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Service instance name</translation>
+        <comment>button</comment>
+        <translation type="unfinished">Cancel</translation>
     </message>
 </context>
 <context>

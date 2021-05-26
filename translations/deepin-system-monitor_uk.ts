@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
 </context>
@@ -464,10 +465,6 @@ Are you sure you want to continue?</source>
         <translation>Завершення роботи цього процесу може призвести до втрати даних. Ви справді хочете виконати цю дію?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Скасувати</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Завершити процес</translation>
     </message>
@@ -477,18 +474,25 @@ Are you sure you want to continue?</source>
         <translation>Примусове завершення роботи цього процесу може призвести до втрати даних. Ви справді хочете виконати цю дію?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Завершити</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Примусове припинення роботи цієї програми може призвести до втрати даних.
 Ви впевнені, що хочете продовжити?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Скасувати</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Примусове завершення</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Завершити</translation>
     </message>
 </context>
 <context>
@@ -605,7 +609,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>Відкинуто переданих</translation>
     </message>
 </context>
 <context>
@@ -833,16 +837,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Нетипова пріоритетність</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Змінити</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Нетипова пріоритетність</translation>
     </message>
 </context>
 <context>
@@ -921,16 +927,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Назва екземпляра служби</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Назва екземпляра служби</translation>
     </message>
 </context>
 <context>

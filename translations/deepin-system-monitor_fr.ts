@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 Êtes-vous sur de vouloir continuer ?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Terminer le processus</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 Êtes-vous sur de vouloir continuer ?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Fin</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Forcer la fermeture de cette application peut entraîner une perte de données.
 Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Annuler</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Forcer à quitter</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Fin</translation>
     </message>
 </context>
 <context>
@@ -607,7 +611,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX abandonné</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Es-tu sûr de vouloir continuer ?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Priorité personnalisée</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annuler</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Changer</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Priorité personnalisée</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Es-tu sûr de vouloir continuer ?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Nom de l&apos;instance de service</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Nom de l&apos;instance de service</translation>
     </message>
 </context>
 <context>

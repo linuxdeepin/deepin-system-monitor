@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>error</source>
-        <translation>fout</translation>
+        <translation>foutmelding</translation>
     </message>
     <message>
         <source>merged</source>
@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Oké</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 Weet je zeker dat je wilt doorgaan?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Proces beëindigen</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 Weet je zeker dat je wilt doorgaan?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Beëindigen</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Het beëindigen van dit programma kan gegevensverlies veroorzaken.
 Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Geforceerd afsluiten</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Beëindigen</translation>
     </message>
 </context>
 <context>
@@ -607,7 +611,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX-loslatingen</translation>
     </message>
 </context>
 <context>
@@ -730,7 +734,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Fout: [%2] %3</translation>
+        <translation>PID: %1, Foutmelding: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
@@ -756,7 +760,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
-        <translation>Het proces kan niet worden gepauzeerd</translation>
+        <translation>Het proces kan niet worden onderbroken</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
@@ -829,22 +833,24 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Proces pauzeren</translation>
+        <translation>Proces onderbreken</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Aangepaste prioriteit</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annuleren</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Aanpassen</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Aangepaste prioriteit</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Naam van dienstproces</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Oké</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Naam van dienstproces</translation>
     </message>
 </context>
 <context>

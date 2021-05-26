@@ -442,7 +442,8 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation>確定</translation>
+        <comment>button</comment>
+        <translation>確 定</translation>
     </message>
 </context>
 <context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 您確定要結束選中的進程嗎？</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>結束進程</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 您確定要結束選中的進程嗎？</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>結束進程</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>強制結束應用會有丟失數據的風險。
 您確定要結束選中的應用嗎？</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>取 消</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>強制結束</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>結束進程</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>自定義優先級</translation>
+    </message>
+    <message>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <comment>button</comment>
+        <translation>取 消</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation>更改</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>自定義優先級</translation>
+        <comment>button</comment>
+        <translation>更 改</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>服務實例名</translation>
+    </message>
+    <message>
         <source>OK</source>
-        <translation>確定</translation>
+        <comment>button</comment>
+        <translation>確 定</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>服務實例名</translation>
+        <comment>button</comment>
+        <translation>取 消</translation>
     </message>
 </context>
 <context>

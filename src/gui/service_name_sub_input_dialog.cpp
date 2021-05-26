@@ -40,8 +40,8 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     addContent(m_nameLineEdit);
 
     // add ok & cancel button
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK"), true);
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel"));
+    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK", "button"), true);
+    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel", "button"));
 
     // connect button clicked signal
     connect(this,

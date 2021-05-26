@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Tamam</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>İptal</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>İşlemi sonlandır</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Sonlandır</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Bu uygulamayı sonlandırmaya zorlamak veri kaybına neden olabilir.
 Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>İptal</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Zorla Sonlandır</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Sonlandır</translation>
     </message>
 </context>
 <context>
@@ -567,7 +571,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation>RX aşağıda</translation>
+        <translation>RX düştü</translation>
     </message>
     <message>
         <source>RX overruns</source>
@@ -607,7 +611,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX düştü</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Devam etmek istediğine emin misin?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Özel Öncelik</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Değiştir</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Özel Öncelik</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Devam etmek istediğine emin misin?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Hizmet örneği adı</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Tamam</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>İptal</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Hizmet örneği adı</translation>
     </message>
 </context>
 <context>

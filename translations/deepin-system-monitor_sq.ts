@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Anuloje</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Përfundoje procesin</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Përfundoje</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Përfundimi me zor i këtij aplikacioni mund të shkaktojë humbje të dhënash.
 Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Anuloje</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Detyro Përfundim</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Përfundoje</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Jeni i sigurt se doni të vazhdohet?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Përparësi Vetjake</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Anuloje</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Ndryshoje</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Përparësi Vetjake</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Jeni i sigurt se doni të vazhdohet?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Emër instance shërbimi</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Anuloje</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Emër instance shërbimi</translation>
     </message>
 </context>
 <context>

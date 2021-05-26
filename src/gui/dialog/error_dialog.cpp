@@ -67,7 +67,7 @@ void ErrorDialog::initUI()
     addSpacing(5);
 
     addContent(m_detailLabel, Qt::AlignHCenter);
-    addButton(QApplication::translate("Error.Dialog", "OK"), true);
+    addButton(QApplication::translate("Error.Dialog", "OK", "button"), true);
 }
 
 // Private constructor

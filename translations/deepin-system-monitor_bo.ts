@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>ཆོག</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 ཁྱེད་ཀྱིས་བདམས་པའི་བརྒྱུད་རིམ་མཇུག་སྒྲིལ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>འདོར་བ།</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>བརྒྱུད་རིམ་མཇུག་སྒྲིལ་བ།</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 ཁྱེད་ཀྱིས་བདམས་པའི་བརྒྱུད་རིམ་མཇུག་སྒྲིལ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>བརྒྱུད་རིམ་མཇུག་སྒྲིལ་བ།</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>བཙན་ཐབས་ཀྱིས་ཉེར་སྤྱོད་མཇུག་སྒྲིལ་་བྱས་ན་གཞི་གྲངས་བོར་བའི་ཉེན་ཁ་ཡོད། 
 ཁྱེད་ཀྱིས་བདམས་པའི་ཉེར་སྤྱོད་མཇུག་སྒྲིལ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>འདོར་བ།</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>བཙན་ཐབས་ཀྱིས་མཇུག་སྒྲིལ་བ།</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>བརྒྱུད་རིམ་མཇུག་སྒྲིལ་བ།</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>རང་སྒྲུབ་སྔོན་རིམ།</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>བསྒྱུར་བ།</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>རང་སྒྲུབ་སྔོན་རིམ།</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>ཞབས་ཞུ་དངོས་དཔེའི་མིང་།</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>ཆོག</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>འདོར་བ།</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>ཞབས་ཞུ་དངོས་དཔེའི་མིང་།</translation>
     </message>
 </context>
 <context>

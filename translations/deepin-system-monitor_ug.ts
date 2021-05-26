@@ -442,6 +442,7 @@
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>ماقۇل</translation>
     </message>
 </context>
@@ -465,10 +466,6 @@ Are you sure you want to continue?</source>
 داۋاملاشتۇرۇشنى خالامسىز؟</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>بىكار قىلىش</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>جەرياننى ئاخىرلاشتۇرۇش</translation>
     </message>
@@ -479,18 +476,25 @@ Are you sure you want to continue?</source>
 داۋاملاشتۇرۇشنى خالامسىز؟</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>ئاخىرلاشتۇرۇش</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>بۇ پروگراممىنى ئاخىرلاشتۇرىدىغان كۈچ سانلىق مەلۇماتلارنىڭ يوقىلىشىنى كەلتۈرۈپ چىقىرىشى مۇمكىن.
 داۋاملاشتۇرۇشنى خالامسىز؟</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>بىكار قىلىش</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>مەجبۇرى ئاخرلاشتۇرۇش</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>ئاخىرلاشتۇرۇش</translation>
     </message>
 </context>
 <context>
@@ -835,16 +839,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Custom Priority</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>بىكار قىلىش</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>ئۆزگەرتىش</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Custom Priority</translation>
     </message>
 </context>
 <context>
@@ -923,16 +929,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>مۇلازىمەت ئۈلگە ئىسمى</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>ماقۇل</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>بىكار قىلىش</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>مۇلازىمەت ئۈلگە ئىسمى</translation>
     </message>
 </context>
 <context>
