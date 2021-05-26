@@ -47,7 +47,10 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
     : QObject(parent)
     , m_netifMonitor(netIfmontor)
 {
-    startNetifMonitorJob();
+    m_timer = new QTimer(this);
+    m_timer->setSingleShot(true);
+    // dispatch packets on timerout signal
+    connect(m_timer, &QTimer::timeout, this, &NetifPacketCapture::dispatchPackets);
 }
 
 //
@@ -107,6 +110,7 @@ void NetifPacketCapture::startNetifMonitorJob()
         return;
     }
     go = true;
+    m_timer->start();
 }
 
 void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char *packet)
@@ -267,7 +271,7 @@ void NetifPacketCapture::dispatchPackets()
         // quit requested, break the loop then
         auto quit = m_quitRequested.load();
         if (quit) {
-            // m_timer->stop();
+            m_timer->stop();
             break;
         }
 
@@ -292,13 +296,16 @@ void NetifPacketCapture::dispatchPackets()
                                 reinterpret_cast<u_char *>(this));
         if (nr == 0) {
             // no packets are available, idle this loop for a fraction second
+            m_timer->start(PACKET_DISPATCH_IDLE_TIME);
             return;
         } else if (nr == -1) {
             // error occurred while processing packets
             qDebug() << "pcap_dispatch failed: " << pcap_geterr(m_handle);
+            m_timer->stop();
             break;
         } else if (nr == -2) {
             // breakloop requested (can only happen inside the callbackm_localPendingPackets function)
+            m_timer->stop();
             break;
         }
     } while (true);

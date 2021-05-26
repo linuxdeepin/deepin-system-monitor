@@ -28,9 +28,14 @@ namespace core {
 namespace system {
 NetifMonitor::NetifMonitor(QObject *parent)
     : QObject(parent)
-    , m_netifCapture(new NetifPacketCapture(this))
 {
-
+    // packet monitor job
+    m_netifCapture = new NetifPacketCapture(this);
+    m_netifCapture->moveToThread(&m_packetMonitorThread);
+    // delete monitor job after thread finished
+    connect(&m_packetMonitorThread, &QThread::finished, m_netifCapture, &QObject::deleteLater);
+    // start monitor job when thread started
+    connect(&m_packetMonitorThread, &QThread::started, m_netifCapture, &NetifPacketCapture::startNetifMonitorJob);
 }
 
 NetifMonitor *NetifMonitor::instance()
@@ -40,13 +45,16 @@ NetifMonitor *NetifMonitor::instance()
 
 NetifMonitor::~NetifMonitor()
 {
-    m_basictimer.stop();
-    delete  m_netifCapture;
+    // async request monitor job quit
+    m_netifCapture->requestQuit();
+    // monitor thread quit
+    m_packetMonitorThread.quit();
+    m_packetMonitorThread.wait();
 }
+
 void NetifMonitor::startNetmonitorJob()
 {
-    m_basictimer.stop();
-    m_basictimer.start(2000, Qt::VeryCoarseTimer, this);
+    m_packetMonitorThread.start();
 }
 
 void NetifMonitor::handleNetData()
@@ -99,14 +107,6 @@ void NetifMonitor::handleNetData()
             }
             m_sockIOStatMapLock.unlock();   // ---m_sockIOStatMapLock---
         }
-    }
-}
-
-void NetifMonitor::timerEvent(QTimerEvent *event)
-{
-    QObject::timerEvent(event);
-    if (event->timerId() == m_basictimer.timerId()) {
-        m_netifCapture->dispatchPackets();
     }
 }
 

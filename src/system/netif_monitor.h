@@ -27,6 +27,8 @@
 #include <QBasicTimer>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QThread>
+
 using namespace common::core;
 
 namespace core {
@@ -52,6 +54,12 @@ class NetifMonitor : public QObject
 public:
     explicit NetifMonitor(QObject *parent = nullptr);
     virtual ~NetifMonitor();
+
+    inline void requestQuit()
+    {
+        m_quitRequested.store(true);
+        m_pktqWatcher.wakeAll();
+    }
 
 public:
     static NetifMonitor *instance();
@@ -87,11 +95,11 @@ public:
     }
     // socket inode to io stat mapping
     QMap<ino_t, SockIOStat> m_sockIOStatMap     {};
-protected:
-    void timerEvent(QTimerEvent *event);
+
 private:
-    QBasicTimer m_basictimer;
     NetifPacketCapture *m_netifCapture;
+    // packet monitor thread object
+    QThread m_packetMonitorThread;
 
     // pending packet queue
     PacketPayloadQueue  m_pendingPackets        {};
