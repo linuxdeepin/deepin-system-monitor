@@ -35,6 +35,10 @@ NetifMonitorThread::NetifMonitorThread(QObject *parent)
 
 NetifMonitorThread::~NetifMonitorThread()
 {
+    m_netifMonitor->requestQuit();
+    m_netIfmoniterThread.quit();
+    m_netIfmoniterThread.wait();
+
     m_netifMonitor->deleteLater();
     quit();
     wait();

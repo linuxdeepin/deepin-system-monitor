@@ -73,6 +73,9 @@ private:
     std::atomic_bool m_quitRequested {false};
     bool go {false};
 
+    // packet dispatch timer
+    QTimer *m_timer {};
+
     friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
 };

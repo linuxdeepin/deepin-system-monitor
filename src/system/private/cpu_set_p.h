@@ -51,8 +51,8 @@ public:
         , m_model {}
         , m_vendor {}
         , m_virtualization {}
-        , m_stat {}
-        , m_usage {}
+        , m_stat {std::make_shared<cpu_stat_t>()}
+        , m_usage {std::make_shared<cpu_usage_t>()}
         , m_statDB {}
         , m_usageDB {}
         , m_info {}
