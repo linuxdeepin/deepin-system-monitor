@@ -604,28 +604,7 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
     bool nameSet{false}, iconSet{false};
     // empty cmdline usually means kernel space process, so use default name & icon
     if (!ps->cmdline.isEmpty()) {
-        if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
-            auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
-            auto desktopName = QFileInfo(desktopFile).fileName();
-            if (ctx.m_desktopEntryCache->entry(desktopName)) {
-                de = ctx.m_desktopEntryCache->entry(desktopName);
-            } else if (ctx.m_desktopEntryCache->entry(proc.getName())) {
-                de = ctx.m_desktopEntryCache->entry(proc.getName());
-            } else {
-                de = ctx.m_desktopEntryCache->createCachedEntry(desktopFile);
-            }
-            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName() && de->startup_wm_class != "wpsoffice")) {
-                if (de && !de->displayName.isEmpty()) {
-                    nameSet = true;
-                    proc.setDisplayName(de->displayName);
-                }
-                if (de && !de->icon.isNull()) {
-                    iconSet = true;
-                    proc.setIcon(de->icon);
-                    ctx.m_appList << ps->pid;
-                }
-            }
-        } else if (ctx.m_desktopEntryCache->entry(proc.getName())) {
+        if (ctx.m_desktopEntryCache->entry(proc.getName())) {
             de = ctx.m_desktopEntryCache->entry(proc.getName());
             if (!de->displayName.isEmpty()) {
                 if (ps->cmdline.size() > 1) {
@@ -651,6 +630,27 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
             }
             if (!de->startup_wm_class.isEmpty()) {
                 proc.setName(de->startup_wm_class);
+            }
+        } else if (ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE")) {
+            auto desktopFile = ps->environ["GIO_LAUNCHED_DESKTOP_FILE"];
+            auto desktopName = QFileInfo(desktopFile).fileName();
+            if (ctx.m_desktopEntryCache->entry(desktopName)) {
+                de = ctx.m_desktopEntryCache->entry(desktopName);
+            } else if (ctx.m_desktopEntryCache->entry(proc.getName())) {
+                de = ctx.m_desktopEntryCache->entry(proc.getName());
+            } else {
+                de = ctx.m_desktopEntryCache->createCachedEntry(desktopFile);
+            }
+            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName() && de->startup_wm_class != "wpsoffice")) {
+                if (de && !de->displayName.isEmpty()) {
+                    nameSet = true;
+                    proc.setDisplayName(de->displayName);
+                }
+                if (de && !de->icon.isNull()) {
+                    iconSet = true;
+                    proc.setIcon(de->icon);
+                    ctx.m_appList << ps->pid;
+                }
             }
         } else {
             // is shell?
