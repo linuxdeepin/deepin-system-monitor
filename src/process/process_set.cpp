@@ -138,6 +138,12 @@ void ProcessSet::scanProcess()
             // only if no ancestor process is gui app we keep this process
             if (m_pidCtoPMapping.contains(pid) &&
                     anyRootIsGuiProc(m_pidCtoPMapping[pid])) {
+                // when we start app with deepin-terminal, we should skip setting apptype as CurrentUser
+                const Process parentProc = getProcessById(m_pidCtoPMapping[pid]);
+                QString parentCmdLineString = parentProc.cmdlineString();
+                if (parentCmdLineString == QString("/bin/bash")) {
+                    continue;
+                }
                 m_set[pid].setAppType(kFilterCurrentUser);
                 wmwindowList->removeDesktopEntryApp(pid);
             }
