@@ -30,6 +30,10 @@
 
 DWM_BEGIN_NAMESPACE
 
+const int maxImageW = 1024;
+const int maxImageH = 1024;
+const int offsetImagePointerWH = 2;
+
 class DWindowManagerPrivate : public DTK_CORE_NAMESPACE::DObjectPrivate
 {
 public:
@@ -433,7 +437,7 @@ QPixmap DWindowManager::getWindowIcon(xcb_window_t win, int iconSize)
     if (win > 0) {
         int format;
         ulong type, nitems, extra;
-        ulong* data = 0;
+        uint* data = 0;
 
         XGetWindowProperty(QX11Info::display(), win, getAtom("_NET_WM_ICON"),
                            0, LONG_MAX, False, AnyPropertyType,
@@ -443,16 +447,50 @@ QPixmap DWindowManager::getWindowIcon(xcb_window_t win, int iconSize)
             return defaultPixmap;
         }
 
-        QImage img (data[0], data[1], QImage::Format_ARGB32);
-        for (int i=0; i<img.byteCount()/4; ++i) {
-            ((uint*)img.bits())[i] = data[i+2];
+        //get the maximum image from data
+        int max_w = 0;
+        int max_h = 0;
+
+        uint *max_icon = nullptr;
+        for (unsigned int i = 0; i < nitems; i++) {
+            int w = static_cast<int>(data[0]);
+            int h = static_cast<int>(data[1]);
+            int size = w * h;
+
+            if (size <= 0 || w > maxImageW || h > maxImageH) {
+                break;
+            }
+            data += offsetImagePointerWH;
+
+            if (w > max_w || h > max_h) {
+                max_icon = data;
+                max_w = w;
+                max_h = h;
+            }
+
+            data += size;
         }
-        
-        // Need add options Qt::KeepAspectRatio and Qt::SmoothTransformation to keep window icon scaled smoothly.
-        QPixmap pixmap = QPixmap::fromImage(img).scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        XFree(data);
-        
-        return pixmap;
+
+        if (max_icon != nullptr) {
+            if (max_w > maxImageW || max_h > maxImageH) {
+                return defaultPixmap;
+            }
+
+            QImage img (max_w, max_h, QImage::Format_ARGB32);
+            int byteCount = img.byteCount() / 4;
+            for (int i = 0; i < byteCount; ++i) {
+                //Save covert uchar* to uint*
+                (reinterpret_cast<uint*>(img.bits()))[i] = max_icon[i];
+            }
+
+            // Need add options Qt::KeepAspectRatio and Qt::SmoothTransformation to keep window icon scaled smoothly.
+            QPixmap pixmap = QPixmap::fromImage(img).scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            XFree(data);
+
+            return pixmap;
+        }
+
+
     }
 
     return defaultPixmap;
