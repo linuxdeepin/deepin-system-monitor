@@ -247,10 +247,17 @@ void ProcessTableView::openExecDirWithFM()
 void ProcessTableView::showProperties()
 {
     // selection valid check
+    qInfo() << "1==============1";
     if (m_selectedPID.isValid()) {
+        qInfo() << "2==============2";
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
         // get process entry item from model
+        qInfo() << "NNN==============NNN";
+        if (m_model) {
+            qInfo() << "MMMMMMMMMMMMMMMMMMMMMMM";
+        }
         auto entry = m_model->getProcessEntry(pid);
+        qInfo() << "3==============3";
         auto *attr = new ProcessAttributeDialog(pid,
                                                 entry.getName(),
                                                 entry.getDisplayName(),
@@ -258,8 +265,10 @@ void ProcessTableView::showProperties()
                                                 entry.getIcon(),
                                                 entry.getStartTime(),
                                                 this);
+        qInfo() << "4==============4";
         attr->show();
     }
+    qInfo() << "5=================5";
 }
 
 // kill process handler
