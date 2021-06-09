@@ -142,7 +142,8 @@ void ProcessAttributeDialog::initUI()
     setWindowModality(Qt::WindowModal);
     setWindowFlags(Qt::Dialog);
     // hide menu on titlebar
-    titlebar()->setQuitMenuDisabled(true);
+    // tablet is not support setQuitMenuDisable to set the parameter as true if we set,the progress will be coredump
+    //titlebar()->setQuitMenuDisabled(true);
     titlebar()->setMenuVisible(false);
     setTitlebarShadowEnabled(false);
     // set dialog title
