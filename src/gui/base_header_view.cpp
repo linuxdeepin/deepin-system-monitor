@@ -46,6 +46,8 @@ BaseHeaderView::BaseHeaderView(Qt::Orientation orientation, QWidget *parent)
     installEventFilter(this);
 
     viewport()->setAutoFillBackground(false);
+    // enable touch event handling
+    this->setAttribute(Qt::WA_AcceptTouchEvents);
 }
 
 // Get header view's hint size
@@ -351,8 +353,16 @@ bool BaseHeaderView::viewportEvent(QEvent *event)
         auto *mev = dynamic_cast<QMouseEvent *>(event);
         m_pressed = logicalIndexAt(mev->pos());
         m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? m_pressed : -1;
+        // as we use tablet when we don't use touch screen the mouse who don't move it press again,the headerview will be changed. add this code under two line.
+        m_hover = m_pressed;
+        this->repaint();
         // repaint section in pressed state
         updateSection(m_pressed);
+        // when tablet use touch screen we need make the headerview repaint.
+        if (event->type() == QEvent::MouseButtonRelease) {
+            m_hover = -1;
+            this->repaint();
+        }
         break;
     }
     default:
