@@ -197,24 +197,27 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     int sectionSize = 6;
 
     // Draw memory summary.
-    QString memoryTitle = QString("%1(%2%)")
+    // After the memory and swap space text, add a space before the brackets
+    QString memoryTitle = QString("%1 (%2%)")
                           .arg(DApplication::translate("Process.Graph.View", "Memory"))
                           .arg(QString::number(memoryPercent * 100, 'f', 1));
-    QString memoryContent = QString("%1/%2")
+    QString memoryContent = QString("%1 / %2")
                             .arg(formatUnit(m_usedMemory, KB, 2))
                             .arg(formatUnit(m_totalMemory, KB, 1));
     QString swapTitle = "";
     QString swapContent = "";
     if (m_totalSwap == 0) {
-        swapTitle = QString("%1(%2)")
+        // After the memory and swap space text, add a space before the brackets
+        swapTitle = QString("%1 (%2)")
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
         swapContent = "";
     } else {
-        swapTitle = QString("%1(%2%)")
+        // After the memory and swap space text, add a space before the brackets
+        swapTitle = QString("%1 (%2%)")
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(QString::number(swapPercent * 100, 'f', 1));
-        swapContent = QString("%1/%2")
+        swapContent = QString("%1 / %2")
                       .arg(formatUnit(m_usedSwap * 1024, B, 2))
                       .arg(formatUnit(m_totalSwap, KB, 1));
     }
