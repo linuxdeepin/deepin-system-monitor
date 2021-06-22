@@ -204,6 +204,10 @@ void MainWindow::displayShortcutHelpDialog()
 // initialize ui components
 void MainWindow::initUI()
 {
+    //the Gui Application don't show shortcut tips in the menu,the macro can be set the application always hide the shortcut tips
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    QGuiApplication::styleHints()->setShowShortcutsInContextMenus(false);
+#endif
     // initialize loading status flag
     m_loading = true;
     // trigger loading status changed signal for once
@@ -248,8 +252,10 @@ void MainWindow::initUI()
         DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     // control + alt + k
     m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+#if QT_VERSION < QT_VERSION_CHECK(5, 13, 0)
     // when we not set Qt::AA_DontShowShortcutsInContextMenus in this application we should set this func to hide shortcut tips
     m_killAction->setShortcutVisibleInContextMenu(false);
+#endif
     // emit process kill requested signal if kill process menu item triggered
     connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 
