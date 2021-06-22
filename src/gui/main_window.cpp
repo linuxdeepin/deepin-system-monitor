@@ -248,6 +248,8 @@ void MainWindow::initUI()
         DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     // control + alt + k
     m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+    // when we not set Qt::AA_DontShowShortcutsInContextMenus in this application we should set this func to hide shortcut tips
+    m_killAction->setShortcutVisibleInContextMenu(false);
     // emit process kill requested signal if kill process menu item triggered
     connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 
