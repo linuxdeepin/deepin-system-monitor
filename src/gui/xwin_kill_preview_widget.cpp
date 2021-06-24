@@ -142,6 +142,9 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 region = region.subtracted(hoverrect);
             }
 
+            // 判断当前的region是否为空，如果为空，则不做下面的更新操作
+            if (region.isNull())
+                continue;
 
             // if current selected window is crossing screens, we need update each sub part on each screen
             for (auto &bg : m_backgroundList) {

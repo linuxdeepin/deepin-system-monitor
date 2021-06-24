@@ -46,6 +46,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QResizeEvent>
+#include <QStyleHints>
 
 DGUI_USE_NAMESPACE
 
