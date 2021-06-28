@@ -26,6 +26,7 @@
 #include "gui/main_window.h"
 #include "common/hash.h"
 #include "common/perf.h"
+#include "dbus/dbus_object.h"
 
 //#include <DApplication>
 #include <DApplicationSettings>
@@ -44,6 +45,10 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    //=======通知已经打开的进程
+    if (!DBusObject::instance()->registerOrNotify())
+        return 0;
+
     util::installCrashHandler();
     util::common::init_seed();
     PERF_PRINT_BEGIN("POINT-01", "");

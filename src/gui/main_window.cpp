@@ -30,6 +30,7 @@
 #include "settings.h"
 #include "constant.h"
 #include "common/perf.h"
+#include "dbus/dbus_object.h"
 
 #include <DApplicationHelper>
 #include <DHiDPIHelper>
@@ -77,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     PERF_PRINT_END("POINT-02");
+    DBusObject::instance()->unRegister();
 }
 
 // show shortcut help dialog

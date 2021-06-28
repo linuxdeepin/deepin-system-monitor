@@ -41,8 +41,11 @@ using namespace Utils;
 Toolbar::Toolbar(QWidget *parent)
     : DWidget(parent)
 {
+    this->setFocusPolicy(Qt::ClickFocus);
     // install event filter for toolbar
     installEventFilter(this);
+
+
 
     // toolbar layout
     QHBoxLayout *layout = new QHBoxLayout(this);

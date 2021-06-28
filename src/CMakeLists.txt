@@ -132,6 +132,7 @@ set(APP_HEADERS
     dbus/environment_file.h
     dbus/unit_file_info.h
     dbus/unit_info.h
+    dbus/dbus_object.h
     process/process_entry.h
     process/system_monitor.h
     process/priority_controller.h
@@ -253,6 +254,7 @@ set(APP_SOURCES
     dbus/systemd1_service_interface.cpp
     dbus/systemd1_unit_interface.cpp
     dbus/dbus_properties_interface.cpp
+    dbus/dbus_object.cpp
     process/process_entry.cpp
     process/system_monitor.cpp
     process/priority_controller.cpp
