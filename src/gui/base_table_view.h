@@ -64,6 +64,8 @@ protected:
     void drawRow(QPainter *painter,
                  const QStyleOptionViewItem &options,
                  const QModelIndex &index) const override;
+
+    void focusInEvent(QFocusEvent *event) override;
     /**
      * @brief currentChanged This slot is called when a new item becomes the current item.
      * @param current New current item
@@ -95,6 +97,8 @@ private:
     QModelIndex m_hover;
     // Current index (row) being pressed by mouse
     QModelIndex m_pressed;
+
+    int m_focusReason = Qt::TabFocusReason;
 };
 
 #endif  // BASE_TABLE_VIEW_H

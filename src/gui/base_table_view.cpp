@@ -80,7 +80,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     // disable default focus style
     setAllColumnsShowFocus(false);
     // focus policy
-    setFocusPolicy(Qt::TabFocus);
+    setFocusPolicy(Qt::StrongFocus);
 
     // adjust focus order (header -> treeview)
     setTabOrder(m_headerView, this);
@@ -260,7 +260,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
     QTreeView::drawRow(painter, opt, index);
 
     // draw focus
-    if (hasFocus() && currentIndex().row() == index.row()) {
+    if (hasFocus() && currentIndex().row() == index.row() && m_focusReason == Qt::TabFocusReason) {
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(options);
         o.state |= QStyle::State_KeyboardFocusChange | QStyle::State_HasFocus;
@@ -270,6 +270,13 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 
     // restore painter state
     painter->restore();
+}
+
+void BaseTableView::focusInEvent(QFocusEvent *event)
+{
+    //we filter the tab focus reason to grab the draw focus Attribute
+    DTreeView::focusInEvent(event);
+    m_focusReason =  event->reason();
 }
 
 // current selected item changed handler
