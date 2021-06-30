@@ -94,6 +94,7 @@ Toolbar::Toolbar(QWidget *parent)
     layout->addStretch();
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
+    layout->addSpacing(m_switchFuncTabBtnGrp->width());
 
     // timer instance, handle search process only after timed out
     searchTimer = new QTimer(this);

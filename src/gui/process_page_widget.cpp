@@ -188,6 +188,8 @@ void ProcessPageWidget::initUI()
     modeButtonGroup->setButtonList(list, true);
 
     // add widgets to tools layout
+    toolsLayout->addStretch();
+    toolsLayout->addSpacing(modeButtonGroup->width());
     toolsLayout->addWidget(m_procViewMode, 0, Qt::AlignLeft | Qt::AlignVCenter);
     toolsLayout->addWidget(m_procViewModeSummary, 0, Qt::AlignLeft | Qt::AlignVCenter);
     toolsLayout->addStretch();

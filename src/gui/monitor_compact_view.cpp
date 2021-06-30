@@ -43,8 +43,6 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     // set no frame borders
     setFrameStyle(DScrollArea::NoFrame);
 
-    QWidget *contentWidget = new QWidget(this);
-
     // cpu monitor view instance
     m_cpuMonitor = new CompactCpuMonitor(this);
     // memory monitor view instance
@@ -55,7 +53,7 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     m_diskMonitor = new CompactDiskMonitor(this);
 
     // vertical layout to hold monitor instances
-    QVBoxLayout *layout = new QVBoxLayout(contentWidget);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(10);
     layout->addStretch(1);
     layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);
@@ -67,7 +65,5 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     layout->addWidget(m_diskMonitor, 0, Qt::AlignHCenter);
     layout->addStretch(1);
 
-    // set frame layout
-    contentWidget->setLayout(layout);
-    this->setWidget(contentWidget);
+    setLayout(layout);
 }
