@@ -124,7 +124,7 @@ void ProcessPageWidget::initUI()
     // process context instance
     m_procViewMode = new DLabel(tw);
     m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));  // default text
-    DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T6, QFont::Medium);
+    DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T3, QFont::DemiBold);
     // text aligment
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     // change text color to text title style
@@ -188,11 +188,11 @@ void ProcessPageWidget::initUI()
     modeButtonGroup->setButtonList(list, true);
 
     // add widgets to tools layout
-    toolsLayout->addStretch();
-    toolsLayout->addSpacing(modeButtonGroup->width());
-    toolsLayout->addWidget(m_procViewMode, 0, Qt::AlignLeft | Qt::AlignVCenter);
+//    toolsLayout->addStretch();
     toolsLayout->addWidget(m_procViewModeSummary, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    toolsLayout->addStretch();
+//    toolsLayout->addSpacing(modeButtonGroup->width());
+    toolsLayout->addWidget(m_procViewMode, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+//    toolsLayout->addStretch();
     toolsLayout->addWidget(modeButtonGroup, 0, Qt::AlignRight);
 
     tw->setLayout(toolsLayout);
