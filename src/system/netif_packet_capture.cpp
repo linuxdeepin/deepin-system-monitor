@@ -29,7 +29,8 @@
 #include "sys_info.h"
 #include <ifaddrs.h>
 
-#define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
+// when we use euler computer we should set pcap dispatch interval as 5
+#define PACKET_DISPATCH_IDLE_TIME 5 // pcap dispatch interval
 #define PACKET_DISPATCH_BATCH_COUNT 64 // packets to process in a batch
 #define PACKET_DISPATCH_QUEUE_LWAT 64 // queue low water mark
 #define PACKET_DISPATCH_QUEUE_HWAT 256 // queue high water mark
