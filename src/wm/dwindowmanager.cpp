@@ -473,6 +473,8 @@ QPixmap DWindowManager::getWindowIcon(xcb_window_t win, int iconSize)
 
         if (max_icon != nullptr) {
             if (max_w > maxImageW || max_h > maxImageH) {
+                //The function returns Success if it executes successfully. To free the resulting data, use XFree.
+                XFree(data);
                 return defaultPixmap;
             }
 
@@ -489,8 +491,8 @@ QPixmap DWindowManager::getWindowIcon(xcb_window_t win, int iconSize)
 
             return pixmap;
         }
-
-
+        //The function returns Success if it executes successfully. To free the resulting data, use XFree.
+        XFree(data);
     }
 
     return defaultPixmap;
