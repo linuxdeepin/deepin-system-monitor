@@ -216,7 +216,8 @@ void MainWindow::initUI()
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
 
-    menu->addAction(m_killAction);
+    // the kill action not used it will be crashed on the panguW
+//    menu->addAction(m_killAction);
     menu->addSeparator();
     menu->addMenu(m_modeMenu);
 
