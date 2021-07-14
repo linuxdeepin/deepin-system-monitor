@@ -105,18 +105,20 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPerce
         //防止QList内存溢出
         if (i >= cpuPercents.size())
             break;
+        if (!cpuPercents[i].isEmpty()) {
+            QList<qreal> cpuPercent = cpuPercents[i];
+            cpuPercent.append(cPercents[i]);
 
-        QList<qreal> cpuPercent = cpuPercents[i];
-        cpuPercent.append(cPercents[i]);
+            if (cpuPercent.size() > pointsNumber) {
+                cpuPercent.pop_front();
+            }
 
-        if (cpuPercent.size() > pointsNumber) {
-            cpuPercent.pop_front();
+            cpuPercents[i] = cpuPercent;
         }
-
-        cpuPercents[i] = cpuPercent;
     }
 
     update();
+
 }
 
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
