@@ -102,8 +102,11 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPerce
     totalCpuPercent = cpuPercent;
 
     for (int i = 0; i < cPercents.size(); i++) {
-        QList<qreal> cpuPercent = cpuPercents[i];
+        //防止QList内存溢出
+        if (i >= cpuPercents.size())
+            break;
 
+        QList<qreal> cpuPercent = cpuPercents[i];
         cpuPercent.append(cPercents[i]);
 
         if (cpuPercent.size() > pointsNumber) {
