@@ -585,7 +585,8 @@ void SystemServiceTableView::initConnections()
     Q_ASSERT(mgr != nullptr);
     connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
         if (ec) {
-            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+            if (ec.getErrorMessage() != "Permission denied")
+                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
