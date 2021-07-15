@@ -739,7 +739,8 @@ void SystemServiceTableView::initConnections()
     // show error dialog when error occurred
     connect(mgr, &ServiceManager::errorOccurred, this, [ = ](const ErrorContext & ec) {
         if (ec) {
-            ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+            if (ec.getErrorMessage() != "Permission denied")
+                ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
     // change loading state & hide tip label & show spinner before updating service list
