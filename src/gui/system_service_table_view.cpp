@@ -96,6 +96,9 @@ void SystemServiceTableView::saveSettings()
         s->setOption(kSettingsOption_ServiceTableHeaderState, buf.toBase64());
         s->flush();
     }
+
+    //if there is only one column, fix Single column width
+    fixSingleCol();
 }
 
 // load service table view settings from backup storage
@@ -568,6 +571,9 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     m_spinner->setPalette(pa);
     // move spinner to center of the viewport
     m_spinner->move(rect().center() - m_spinner->rect().center());
+
+    //if there is only one column, fix its width and do not let it drag
+    fixSingleCol();
 }
 
 // initialize connections
@@ -783,6 +789,24 @@ void SystemServiceTableView::initConnections()
     [ = ]() {
         adjustInfoLabelVisibility();
     });
+}
+
+//if there is only one column, fix Single column width
+void SystemServiceTableView::fixSingleCol()
+{
+    auto *hdr = header();
+    bool isOneCol = hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceLoadStateColumn) &
+            hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceActiveStateColumn) &
+            hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceSubStateColumn) &
+            hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceStateColumn) &
+            hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceStartupModeColumn) &
+            hdr->isSectionHidden(SystemServiceTableModel::kSystemServiceDescriptionColumn) &
+            hdr->isSectionHidden(SystemServiceTableModel::kSystemServicePIDColumn);
+
+    if (isOneCol == true)
+        header()->setSectionResizeMode(0, DHeaderView::Fixed);
+    else
+        header()->setSectionResizeMode(DHeaderView::Interactive);
 }
 
 // size hint for column to help calculate prefered section width while user double clicked section's gripper

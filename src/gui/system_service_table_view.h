@@ -164,6 +164,10 @@ private:
      * @param sname Servcie name
      */
     inline void refreshServiceStatus(const QString sname);
+    /**
+     * @brief fix Single column width
+     */
+    void fixSingleCol();
 
 private:
     // Service data model

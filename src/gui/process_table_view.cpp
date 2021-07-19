@@ -362,6 +362,9 @@ void ProcessTableView::saveSettings()
         s->setOption(kSettingsOption_ProcessTableHeaderState, buf.toBase64());
         s->flush();
     }
+
+    //if there is only one column, fix Single column width
+    fixSingleCol();
 }
 
 // initialize ui components
@@ -410,6 +413,9 @@ void ProcessTableView::initUI(bool settingsLoaded)
     // context menu & header context menu instance
     m_contextMenu = new DMenu(this);
     m_headerContextMenu = new DMenu(this);
+
+    //if there is only one column, fix Single column width
+    fixSingleCol();
 
     // if no backup settings loaded, show default style
     if (!settingsLoaded) {
@@ -786,6 +792,26 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
+}
+
+//if there is only one column, fix Single column width
+void ProcessTableView::fixSingleCol()
+{
+    bool isOneCol = header()->isSectionHidden(ProcessTableModel::kProcessCPUColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessMemoryColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessUploadColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessDownloadColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessDiskReadColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessDiskWriteColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessPIDColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessNiceColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessPriorityColumn) &
+            header()->isSectionHidden(ProcessTableModel::kProcessUserColumn);
+
+    if (isOneCol == true)
+        header()->setSectionResizeMode(0, DHeaderView::Fixed);
+    else
+        header()->setSectionResizeMode(DHeaderView::Interactive);
 }
 
 // show process table view context menu on specified positon

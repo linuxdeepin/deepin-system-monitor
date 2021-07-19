@@ -101,7 +101,6 @@ public Q_SLOTS:
      * @param priority Process priority
      */
     void changeProcessPriority(int priority);
-
 protected:
     /**
      * @brief Load process table view backup settings
@@ -168,6 +167,10 @@ private:
      * @brief Customize process priority handler
      */
     void customizeProcessPriority();
+    /**
+     * @brief fix Single column width
+     */
+    void fixSingleCol();
 
 private:
     // Process model for process table view
