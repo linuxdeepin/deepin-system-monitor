@@ -99,7 +99,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     // enable touch gesture
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
 
-    setDragDropMode(NoDragDrop);
+    setDragEnabled(false);
 }
 
 // set view model
