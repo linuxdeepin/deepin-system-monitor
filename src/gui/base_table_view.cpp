@@ -98,6 +98,8 @@ BaseTableView::BaseTableView(DWidget *parent)
     scroller->setScrollerProperties(prop);
     // enable touch gesture
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
+
+    setDragDropMode(NoDragDrop);
 }
 
 // set view model
