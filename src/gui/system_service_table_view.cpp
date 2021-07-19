@@ -585,6 +585,12 @@ void SystemServiceTableView::initConnections()
         }
         palette.setColor(DPalette::Button, palette.color(DPalette::Base));
         header()->setPalette(palette);
+
+        // set spinner color
+        auto pa = DApplicationHelper::instance()->applicationPalette();
+        QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
+        pa.setColor(DPalette::Highlight, hlBrush.color());
+        m_spinner->setPalette(pa);
     });
 
     // show context menu when custom context menu requested
