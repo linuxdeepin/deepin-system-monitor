@@ -89,6 +89,8 @@ private:
     NetifMonitor       *m_netifMonitor         {};
     // pcap handler instance
     pcap_t             *m_handle               {};
+    // pcap all dev
+    pcap_if_t          *m_alldev               {};
     // local pending packet queue
     PacketPayloadQueue  m_localPendingPackets  {};
 

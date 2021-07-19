@@ -61,17 +61,36 @@ void NetifMonitorJob::startMonitorJob()
     char *dev {};
     int rc = 0;
 
-    // create & initialize pcap dev
-    dev = pcap_lookupdev(errbuf);
-    if (!dev) {
-        qDebug() << "pcap_lookupdev failed: " << errbuf;
+    // the pcap_lookupdev function only return default first device, so we should find netx device to grab the pcap
+    if (PCAP_ERROR == pcap_findalldevs(&m_alldev, errbuf)) {
+        qInfo() << "pcap_findalldevs failed: " << errbuf;
         return;
     }
+    QString deviceName;
+    for (auto device = m_alldev; device != nullptr; device = m_alldev->next) {
+        deviceName = QString(device->name);
+        if (deviceName.contains(QString("uengine"), Qt::CaseInsensitive)) {
+            // if device name is 'uengine' we need skip this device
+            continue;
+        } else {
+            break;
+        }
+    }
+
+//    // create & initialize pcap dev
+//    dev = pcap_lookupdev(errbuf);
+//    if (!dev) {
+//        qDebug() << "pcap_lookupdev failed: " << errbuf;
+//        return;
+//    }
 
     // create pcap handler
-    m_handle = pcap_create(dev, errbuf);
+    m_handle = pcap_create(deviceName.toStdString().c_str(), errbuf);
+//    m_handle = pcap_create(dev, errbuf);
     if (!m_handle) {
         qDebug() << "pcap_create failed: " << errbuf;
+        // need free all pcap device
+        pcap_freealldevs(m_alldev);
         return;
     }
     // set non block dispatch mode
@@ -79,6 +98,8 @@ void NetifMonitorJob::startMonitorJob()
     if (rc == -1) {
         qDebug() << "pcap_setnonblock failed: " << errbuf;
         pcap_close(m_handle);
+        // need free all pcap device
+        pcap_freealldevs(m_alldev);
         return;
     }
 
@@ -108,6 +129,8 @@ void NetifMonitorJob::startMonitorJob()
     } else if (rc < 0) {
         qDebug() << "pcap_setnonblock failed: " << pcap_statustostr(rc);
         pcap_close(m_handle);
+        // need free all pcap device
+        pcap_freealldevs(m_alldev);
         return;
     }
 
