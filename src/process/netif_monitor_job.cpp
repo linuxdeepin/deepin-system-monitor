@@ -58,7 +58,7 @@ NetifMonitorJob::NetifMonitorJob(NetifMonitor *netifMonitor, QObject *parent) :
 void NetifMonitorJob::startMonitorJob()
 {
     char errbuf[PCAP_ERRBUF_SIZE] {};
-    char *dev {};
+//    char *dev {};
     int rc = 0;
 
     // the pcap_lookupdev function only return default first device, so we should find netx device to grab the pcap
@@ -67,14 +67,17 @@ void NetifMonitorJob::startMonitorJob()
         return;
     }
     QString deviceName;
-    for (auto device = m_alldev; device != nullptr; device = m_alldev->next) {
-        deviceName = QString(device->name);
-        if (deviceName.contains(QString("uengine"), Qt::CaseInsensitive)) {
-            // if device name is 'uengine' we need skip this device
-            continue;
-        } else {
+    while (m_alldev) {
+        QString tmpDevice = QString(m_alldev->name);
+        if (tmpDevice.contains(QString("enx"), Qt::CaseInsensitive)) {
+            deviceName = tmpDevice;
             break;
         }
+        m_alldev = m_alldev->next;
+    }
+    if (deviceName.isEmpty()) {
+        pcap_freealldevs(m_alldev);
+        return;
     }
 
 //    // create & initialize pcap dev
@@ -336,6 +339,7 @@ void NetifMonitorJob::dispatchPackets()
 
     // close pcap handle
     pcap_close(m_handle);
+    pcap_freealldevs(m_alldev);
 }
 
 // refresh network interface hash cache
