@@ -37,6 +37,8 @@
 #include "toolbar.h"
 #include "utils.h"
 
+#define MAX_TEXT_LEN 2000
+
 DWIDGET_USE_NAMESPACE
 using namespace Utils;
 
@@ -82,6 +84,8 @@ Toolbar::Toolbar(MainWindow *m, QWidget *parent)
 
     // =========search=========
     searchEdit = new DSearchEdit(this);
+    // set the search edit text max length
+    searchEdit->lineEdit()->setMaxLength(MAX_TEXT_LEN);
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
     searchEdit->setEnabled(false);
