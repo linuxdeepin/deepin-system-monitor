@@ -65,4 +65,7 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     layout->setContentsMargins(margin, margin, margin, margin);
     // set monitor view layout
     setLayout(layout);
+
+    // add focus policy to grab the draw focus attribute
+    setFocusPolicy(Qt::StrongFocus);
 }

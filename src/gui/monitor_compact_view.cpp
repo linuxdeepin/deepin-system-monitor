@@ -67,4 +67,7 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 
     // set frame layout
     setLayout(layout);
+
+    // add focus policy to grab the draw focus attribute
+    setFocusPolicy(Qt::StrongFocus);
 }
