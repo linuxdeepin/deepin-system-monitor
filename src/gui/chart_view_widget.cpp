@@ -69,6 +69,10 @@ void ChartViewWidget::addData1(const QVariant &data)
 
         if (m_speedAxis)
             setAxisTitle(formatUnit(m_maxData, B, 1, true));
+    } else {
+        // when the data hold the zero num,we should set the chart max value as 0
+        if (m_speedAxis)
+            setAxisTitle(formatUnit(0, B, 1, true));
     }
 }
 
@@ -91,6 +95,10 @@ void ChartViewWidget::addData2(const QVariant &data)
 
         if (m_speedAxis)
             setAxisTitle(formatUnit(m_maxData, B, 1, true));
+    } else {
+        // when the data hold the zero num,we should set the chart max value as 0
+        if (m_speedAxis)
+            setAxisTitle(formatUnit(0, B, 1, true));
     }
 }
 
