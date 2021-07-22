@@ -46,6 +46,27 @@ struct inet_addr6_t : public inet_addr_t {
     int scope;
 };
 
+#ifdef __sw_64__
+struct ethtool_cmd {
+        uint32_t   cmd;
+        uint32_t   supported;
+        uint32_t   advertising;
+        uint16_t   speed;
+        uint8_t    duplex;
+        uint8_t    port;
+        uint8_t    phy_address;
+        uint8_t    transceiver;
+        uint8_t    autoneg;
+        uint8_t    mdio_support;
+        uint32_t   maxtxpkt;
+        uint32_t   maxrxpkt;
+        uint16_t   speed_hi;
+        uint8_t    eth_tp_mdix;
+        uint8_t    eth_tp_mdix_ctrl;
+        uint32_t   lp_advertising;
+        uint16_t reserved[4];
+};
+#else
 struct ethtool_cmd {
     uint32_t cmd;
     uint32_t supported;                                  /* Features this interface supports */
@@ -60,6 +81,7 @@ struct ethtool_cmd {
     uint16_t maxrxpkt;                                   /* Rx pkts before generating rx int */
     uint16_t reserved[4];
 };
+#endif
 
 /* The forced speed, 10Mb, 100Mb, gigabit, 10GbE. */
 #define SPEED_10                10
