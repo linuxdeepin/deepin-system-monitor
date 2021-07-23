@@ -441,7 +441,10 @@ void StatsCollector::updateStatus()
             auto parentExecPath = parent.getCmdline().split(' ')[0];
             auto childExecPath = child.getCmdline().split(' ')[0];
             //            if (parent.getName()[0] == child.getName()[0] || QFileInfo(parentExecPath).path() == QFileInfo(childExecPath).path())
-            if (parent.getName()[0] == child.getName()[0])
+
+
+            // the process contains child process,we should compare the parent name and child name
+            if (parent.getName().startsWith(child.getName()))
                 continue;
         }
 
