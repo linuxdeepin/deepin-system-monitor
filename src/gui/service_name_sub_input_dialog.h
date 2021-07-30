@@ -30,6 +30,11 @@ private:
     QString m_name {};
     int m_result {0};
     DLineEdit *m_nameLineEdit;
+
+    //确认按钮翻译名称
+    QString m_okButtonTranslateName {};
+    //取消按钮翻译名称
+    QString m_cancelButtonTranslateName {};
 };
 
 #endif  // SERVICE_NAME_SUB_INPUT_DIALOG_H

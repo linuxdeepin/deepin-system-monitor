@@ -32,6 +32,9 @@ void SystemServiceTableModel::updateServiceEntry(const SystemServiceEntry &entry
             }
         }
     } else {
+        // when we create empty service we need jump this error service
+        if (sname.isEmpty())
+            return;
         auto row = m_svcList.size();
         beginInsertRows({}, row, row);
         m_svcList << sname;
@@ -174,6 +177,9 @@ void SystemServiceTableModel::updateServiceList(const QList<SystemServiceEntry> 
     m_svcMap.clear();
     m_nr = 0;
     for (auto &ent : list) {
+        // when we create empty service we need jump this error service
+        if (ent.getSName().isEmpty())
+            continue;
         m_svcList << ent.getSName();
         m_svcMap[ent.getSName()] = ent;
     }
