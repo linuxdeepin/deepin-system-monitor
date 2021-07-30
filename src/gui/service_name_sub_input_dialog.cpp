@@ -65,6 +65,7 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
         auto okBtn = dynamic_cast<QPushButton*>(getButton(0));
         if (m_nameLineEdit->text().length() == 0) {
             okBtn->setEnabled(false);
+            m_nameLineEdit->setAlert(false);
         } else {
             okBtn->setEnabled(true);
         }
