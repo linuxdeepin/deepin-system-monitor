@@ -24,9 +24,12 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QPushButton>
 
 #include "utils.h"
 
+// define max service name limit at 30 charactor
+#define MAX_SERVICE_NAME 30
 // constructor
 ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     : DDialog(parent)
@@ -40,16 +43,36 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     m_nameLineEdit = new DLineEdit(this);
     Q_ASSERT(m_nameLineEdit);
     addContent(m_nameLineEdit);
+    // set max service name
+    m_nameLineEdit->lineEdit()->setMaxLength(MAX_SERVICE_NAME);
 
     // add ok & cancel button
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK"), true);
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel"));
+    m_okButtonTranslateName = DApplication::translate("Service.Instance.Name.Dialog", "OK");
+    m_cancelButtonTranslateName = DApplication::translate("Service.Instance.Name.Dialog", "Cancel");
+    addButton(m_okButtonTranslateName, true);
+    addButton(m_cancelButtonTranslateName);
+    // default the button OK is not enabled
+    getButton(getButtonIndexByText(m_okButtonTranslateName))->setEnabled(false);
 
     // connect button clicked signal
     connect(this,
             &ServiceNameSubInputDialog::buttonClicked,
             this,
             &ServiceNameSubInputDialog::onButtonClicked);
+
+    // set alert when the text length reach the max length and set the button enable if the text length is not zero
+    connect(m_nameLineEdit, &DLineEdit::textChanged, this, [=]() {
+        if (m_nameLineEdit->text().length() >= MAX_SERVICE_NAME) {
+            m_nameLineEdit->setAlert(true);
+        }
+        auto okBtn = dynamic_cast<QPushButton*>(getButton(getButtonIndexByText(m_okButtonTranslateName)));
+        if (m_nameLineEdit->text().length() == 0) {
+            okBtn->setEnabled(false);
+            m_nameLineEdit->setAlert(false);
+        } else {
+            okBtn->setEnabled(true);
+        }
+    });
 }
 
 // button click event handler
