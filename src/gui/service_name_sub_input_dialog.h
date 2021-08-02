@@ -85,6 +85,11 @@ private:
     int m_result {0};
     // Service sub name text input
     DLineEdit *m_nameLineEdit {};
+
+    //确认按钮翻译名称
+    QString m_okButtonTranslateName {};
+    //取消按钮翻译名称
+    QString m_cancelButtonTranslateName {};
 };
 
 #endif  // SERVICE_NAME_SUB_INPUT_DIALOG_H
