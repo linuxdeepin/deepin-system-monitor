@@ -46,10 +46,12 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     m_nameLineEdit->lineEdit()->setMaxLength(MAX_SERVICE_NAME);
 
     // add ok & cancel button
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK"), true);
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel"));
+    m_okButtonTranslateName = DApplication::translate("Service.Instance.Name.Dialog", "OK");
+    m_cancelButtonTranslateName = DApplication::translate("Service.Instance.Name.Dialog", "Cancel");
+    addButton(m_okButtonTranslateName, true);
+    addButton(m_cancelButtonTranslateName);
     // default the button OK is not enabled
-    getButton(0)->setEnabled(false);
+    getButton(getButtonIndexByText(m_okButtonTranslateName))->setEnabled(false);
 
     // connect button clicked signal
     connect(this,
@@ -62,7 +64,7 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
         if (m_nameLineEdit->text().length() >= MAX_SERVICE_NAME) {
             m_nameLineEdit->setAlert(true);
         }
-        auto okBtn = dynamic_cast<QPushButton*>(getButton(0));
+        auto okBtn = dynamic_cast<QPushButton*>(getButton(getButtonIndexByText(m_okButtonTranslateName)));
         if (m_nameLineEdit->text().length() == 0) {
             okBtn->setEnabled(false);
             m_nameLineEdit->setAlert(false);
