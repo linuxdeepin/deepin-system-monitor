@@ -23,6 +23,7 @@
 #include "settings.h"
 #include "gui/main_window.h"
 #include "common/perf.h"
+#include "constant.h"
 
 #include <DApplication>
 #include <DApplicationSettings>
@@ -85,7 +86,7 @@ int main(int argc, char *argv[])
                          &DApplication::newInstanceStarted,
                          &mw,
                          &MainWindow::activateWindow);
-
+        mw.setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
         Dtk::Widget::moveToCenter(&mw);
         mw.show();
 

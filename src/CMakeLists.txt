@@ -59,6 +59,7 @@ set(HPP_GLOBAL
     compact_disk_monitor.h
     smooth_curve_generator.h
     settings.h
+    constant.h
 )
 
 set(CPP_GLOBAL
