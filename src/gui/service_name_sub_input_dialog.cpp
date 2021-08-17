@@ -52,7 +52,8 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     addButton(m_okButtonTranslateName, true);
     addButton(m_cancelButtonTranslateName);
     // default the button OK is not enabled
-    getButton(getButtonIndexByText(m_okButtonTranslateName))->setEnabled(false);
+    if(buttonCount() > 0)
+        getButton(0)->setEnabled(false);
 
     // connect button clicked signal
     connect(this,
@@ -65,12 +66,17 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
         if (m_nameLineEdit->text().length() >= MAX_SERVICE_NAME) {
             m_nameLineEdit->setAlert(true);
         }
-        auto okBtn = dynamic_cast<QPushButton*>(getButton(getButtonIndexByText(m_okButtonTranslateName)));
-        if (m_nameLineEdit->text().length() == 0) {
-            okBtn->setEnabled(false);
-            m_nameLineEdit->setAlert(false);
-        } else {
-            okBtn->setEnabled(true);
+
+        if(buttonCount() > 0)
+        {
+            auto okBtn = dynamic_cast<QPushButton*>(getButton(0));
+            qInfo()<<"ok:"<<okBtn->text();
+            if (m_nameLineEdit->text().length() == 0) {
+                okBtn->setEnabled(false);
+                m_nameLineEdit->setAlert(false);
+            } else {
+                okBtn->setEnabled(true);
+            }
         }
     });
 }
