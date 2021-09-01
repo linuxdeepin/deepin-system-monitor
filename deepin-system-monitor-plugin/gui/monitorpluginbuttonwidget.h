@@ -1,0 +1,94 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     yukuan  <yukuan@uniontech.com>
+*
+* Maintainer: yukuan  <yukuan@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#ifndef MONITORPLUGINBUTTONWIDGET_H
+#define MONITORPLUGINBUTTONWIDGET_H
+
+// smo-plugin
+#include "/usr/include/dde-dock/constants.h"
+//#include "constants.h"
+// Qt
+#include <QWidget>
+#include <QIcon>
+
+class MonitorPluginButtonWidget :public QWidget
+{
+    Q_OBJECT
+public:
+    //!
+    //! \brief MonitorPluginButtonWidget 构造函数
+    //! \param parent
+    //!
+    explicit MonitorPluginButtonWidget(QWidget *parent = nullptr);
+
+protected:
+    //!
+    //! \brief paintEvent 重绘事件
+    //! \param e
+    //!
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    //!
+    //! \brief resizeEvent 界面调整大小缩放事件
+    //! \param event
+    //!
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    //!
+    //! \brief mouseMoveEvent 鼠标移动事件
+    //! \param event
+    //!
+    void mouseMoveEvent(QMouseEvent *event) override;
+    //!
+    //! \brief mousePressEvent 鼠标按下事件
+    //! \param event
+    //!
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    //!
+    //! \brief mouseReleaseEvent 鼠标释放事件
+    //! \param event
+    //!
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    //!
+    //! \brief leaveEvent 鼠标移出事件
+    //! \param event
+    //!
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+    //!
+private:
+
+    //! \brief loadSvg 加载SVG图标
+    //! \param iconName 图标名称
+    //! \param localPath 图标路径
+    //! \param size 图标大小
+    //! \param ratio 缩放比例
+    //! \return
+    //!
+    const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
+    //!
+    //! \brief containCursorPos 是否鼠标在界面上
+    //! \return
+    //!
+    bool containCursorPos();
+
+private:
+    bool m_hover;   //鼠标悬浮状态
+    bool m_pressed; //鼠标按下状态
+};
+
+#endif // MONITORPLUGINBUTTONWIDGET_H
