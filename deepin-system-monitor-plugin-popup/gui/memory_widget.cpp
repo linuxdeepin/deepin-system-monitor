@@ -18,6 +18,7 @@
 
 #include "memory_widget.h"
 #include "../common/utils.h"
+#include "common/datacommon.h"
 #include "datadealsingleton.h"
 
 #include <DApplication>
@@ -98,25 +99,16 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
     case DApplicationHelper::LightType:
+        m_titleTrans = Globals::TitleTransLight;
+        m_contentTrans = Globals::contentTransLight;
+        m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/icon_memory_light.png"));
         break;
     case DApplicationHelper::DarkType:
+        m_titleTrans = Globals::TitleTransLight;
+        m_contentTrans = Globals::contentTransLight;
+        m_hoverTrans = Globals::hoverTransLight;
 //        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
-        break;
-    default:
-        break;
-    }
-
-    switch (themeType) {
-    case DApplicationHelper::LightType:
-        memoryBackgroundColor = "#000000";
-        swapBackgroundColor = "#000000";
-
-        break;
-    case DApplicationHelper::DarkType:
-        memoryBackgroundColor = "#FFFFFF";
-        swapBackgroundColor = "#FFFFFF";
-
         break;
     default:
         break;
@@ -148,20 +140,16 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     path.addRoundedRect(rect(), 8, 8);
     painter.setClipPath(path);
     if (m_isHover) {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 50)));
+        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, m_hoverTrans)));
     } else {
         painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 0)));
     }
 
-    //背景
+    //标题栏背景
     QRect titleRect(rect().x(), rect().y(), 280, 36);
-    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255,25)));
+    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
     QRect contentRect(rect().x(), rect().y()+36, 280, 167);
-    if (m_isHover) {
-        painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,100)));
-    } else {
-        painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,50)));
-    }
+    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
     painter.setFont(m_sectionFont);

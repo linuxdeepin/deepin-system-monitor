@@ -81,6 +81,9 @@ private:
     QString m_totalSendUnit;
 
     bool m_isHover = false;
+    int m_titleTrans = 0;
+    int m_contentTrans = 0;
+    int m_hoverTrans = 0;
 };
 
 #endif

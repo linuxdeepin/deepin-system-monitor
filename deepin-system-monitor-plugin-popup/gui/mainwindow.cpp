@@ -22,6 +22,11 @@
 #include "common/datacommon.h"
 //#include "itemwidget.h"
 
+#include <DApplication>
+#include <DApplicationHelper>
+#include <DPalette>
+#include <DStyleHelper>
+
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -194,19 +199,12 @@ void MainWindow::initUI()
     mainLayout->setContentsMargins(0, 10, 0, 10);
     mainLayout->setSpacing(0);
 
-    // disable auto fill frame background
-    setAutoFillBackground(false);
-    QPalette palette;
-    palette.setColor(QPalette::Background,QColor(210,210,210,33));
-    setPalette(palette);
-    setBackgroundRole(DPalette::Window);
-
-
     m_cpuMonitor = new CpuWidget(this);
     m_netWidget = new NetWidget(this);
     m_diskWidget = new DiskWidget(this);
     m_memoryWidget = new MemoryWidget(this);
     m_processWidget = new ProcessWidget(this);
+
     mainLayout->setMargin(10);
     mainLayout->addWidget(m_cpuMonitor);
     mainLayout->addWidget(m_netWidget);
@@ -237,6 +235,10 @@ void MainWindow::initAni()
 
     m_aniGroup->addAnimation(m_xAni);
     m_aniGroup->addAnimation(m_widthAni);
+
+    auto *dAppHelper = DApplicationHelper::instance();
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MainWindow::changeTheme);
+    changeTheme(dAppHelper->themeType());
 }
 
 void MainWindow::initConnect()
@@ -267,6 +269,30 @@ void MainWindow::initConnect()
             return;
         disconnect(m_regionMonitor);
     });
+}
+
+void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
+{
+    // disable auto fill frame background
+    QPalette palette;
+    setAutoFillBackground(true);
+
+    switch (themeType) {
+    case DApplicationHelper::LightType:
+        palette.setColor(QPalette::Background,QColor(250,250,250,0));
+        break;
+    case DApplicationHelper::DarkType:
+        setAutoFillBackground(false);
+        //Dark主题的透明度为204
+        palette.setColor(QPalette::Background,QColor(25,25,25,204));
+        qInfo()<<"themeType:"<<themeType;
+        break;
+    default:
+        break;
+    }
+
+    setPalette(palette);
+    setBackgroundRole(DPalette::Window);
 }
 
 void MainWindow::adjustPosition()

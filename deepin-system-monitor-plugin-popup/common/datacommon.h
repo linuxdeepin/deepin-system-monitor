@@ -34,7 +34,6 @@
 #define MIN(a,b) ((a) < (b) ? (a):(b))
 
 
-
 static const QString DBusClipBoardService = "com.deepin.dde.Clipboard";
 static const QString DBusClipBoardPath = "/com/deepin/dde/Clipboard";
 
@@ -65,6 +64,15 @@ const static int PixmapyStep = 5;
 const static int ContentMargin = 21;
 const static int TextContentTopMargin = 20;
 const static int AnimationTime = 300;           //ms
+
+//浅色透明度
+const static int TitleTransLight = 75;
+const static int contentTransLight = 50;
+const static int hoverTransLight = 75;
+//深色透明度
+const static int TitleTransDark = 20;
+const static int contentTransDark = 13;
+const static int hoverTransDark = 38;
 
 /*!
  * \~chinese \name GetScale

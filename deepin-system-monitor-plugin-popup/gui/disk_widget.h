@@ -54,8 +54,8 @@ private:
 
     QList<double> *readSpeeds;
     QList<double> *writeSpeeds;
-    QPainterPath downloadPath;
-    QPainterPath uploadPath;
+    QPainterPath readDiskPath;
+    QPainterPath writeDiskPath;
 
     int pointsNumber = 25;
     int pointerRadius = 6;
@@ -83,6 +83,9 @@ private:
     QString m_diskAvailableUnit;
 
     bool m_isHover = false;
+    int m_titleTrans = 0;
+    int m_contentTrans = 0;
+    int m_hoverTrans = 0;
 };
 
 #endif

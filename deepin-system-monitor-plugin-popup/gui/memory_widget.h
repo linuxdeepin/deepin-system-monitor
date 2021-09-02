@@ -98,6 +98,9 @@ private:
     QString m_swapPercent;
 
     bool m_isHover = false;
+    int m_titleTrans = 0;
+    int m_contentTrans = 0;
+    int m_hoverTrans = 0;
 };
 
 #endif

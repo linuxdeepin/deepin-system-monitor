@@ -18,6 +18,7 @@
 
 #include "disk_widget.h"
 #include "../common/utils.h"
+#include "common/datacommon.h"
 #include "datadealsingleton.h"
 
 #include <DApplication>
@@ -53,11 +54,11 @@ DiskWidget::DiskWidget(QWidget *parent)
     }
 
 
-     auto *dAppHelper = DApplicationHelper::instance();
+    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    setFixedSize(280, 204);
+    setFixedSize(280, 154);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -116,11 +117,11 @@ void DiskWidget::updateStatus()
 
     QPainterPath tmpDownloadpath;
     getPainterPathByData(readSpeeds, tmpDownloadpath, maxHeight);
-    downloadPath = tmpDownloadpath;
+    readDiskPath = tmpDownloadpath;
 
     QPainterPath tmpUploadpath;
     getPainterPathByData(writeSpeeds, tmpUploadpath, maxHeight);
-    uploadPath = tmpUploadpath;
+    writeDiskPath = tmpUploadpath;
 
 
     //zong
@@ -149,9 +150,15 @@ void DiskWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
     case DApplicationHelper::LightType:
+        m_titleTrans = Globals::TitleTransLight;
+        m_contentTrans = Globals::contentTransLight;
+        m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/hard-disk_light.png"));
         break;
     case DApplicationHelper::DarkType:
+        m_titleTrans = Globals::TitleTransLight;
+        m_contentTrans = Globals::contentTransLight;
+        m_hoverTrans = Globals::hoverTransLight;
 //        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
         break;
     default:
@@ -203,28 +210,25 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     path.addRoundedRect(rect(), 8, 8);
     painter.setClipPath(path);
     if (m_isHover) {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 50)));
+        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, m_hoverTrans)));
     } else {
         painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 0)));
     }
 
-    //背景
+    //标题栏背景
     QRect titleRect(rect().x(), rect().y(), 280, 36);
-    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255,25)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 167);
-    if (m_isHover) {
-        painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,100)));
-    } else {
-        painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,50)));
-    }
+    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
+
+    QRect contentRect(rect().x(), rect().y()+36, 280, 118);
+    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitleTxt = fmTitle.width("磁盘");
+    int widthTitleTxt = fmTitle.width(tr("磁盘"));
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,"磁盘");
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,tr("磁盘"));
 
     //图标
     int iconSize = 20;
@@ -244,111 +248,79 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     QRect separatorRect4(contentRect.x()+10+87*3, contentRect.y()+10, 1, sepHeight);
     painter.fillRect(separatorRect4, QBrush(QColor(0, 0, 0,20)));
 
-
     int bulletSize = 6;
     int padleft = 36;
     auto spacing = 20;
     auto margin = 10;
 
-    // Draw network summary.
     QString recvTitle = DApplication::translate("Process.Graph.View", "磁盘读取");//Download
-    QString recvTotalTitle = DApplication::translate("Process.Graph.View", "总容量");//Total Received"
     QString sentTitle = DApplication::translate("Process.Graph.View", "磁盘写入");//Upload
-    QString sentTotalTitle = DApplication::translate("Process.Graph.View", "可用空间");//otal Sent
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmContentUnit(m_contentUnitFont);
     QFontMetrics fmSubContent(m_subContentFont);
-    QRect contentNetRect(padleft, separatorRect1.y() + separatorRect1.height(),
+    QRect contentDiskRect(padleft, separatorRect1.y() + separatorRect1.height()+margin,
                       rect().x() + rect().width() - padleft, 1);
 
-    //正在接受
-    QRect recv1Rect(contentNetRect.x(), contentNetRect.y(),
+    //磁盘读取
+    QRect readRect(contentDiskRect.x(), contentDiskRect.y(),
                           fmContent.size(Qt::TextSingleLine, m_diskRead).width(), fmContent.height());
-    //正在接受单位
-    QRect recv2UnitRect(recv1Rect.x()+recv1Rect.width(), contentNetRect.y()+8,
+    //磁盘读取单位
+    QRect readUnitRect(readRect.x()+readRect.width(), contentDiskRect.y()+8,
                               fmContentUnit.size(Qt::TextSingleLine, m_diskReadUnit).width(), fmContent.height());
-    //"总计接受"的值
-    QRect totalReceiveRect(qCeil((contentNetRect.width() + spacing) / 2) + spacing, recv1Rect.y(),
-                  contentNetRect.width() - recv1Rect.width() - spacing, recv1Rect.height());
-    QRect Receive1Rect(totalReceiveRect.x(), totalReceiveRect.y(),
-                          fmContent.size(Qt::TextSingleLine, m_diskTotal).width(), fmContent.height());
-    QRect Receive2Rect(Receive1Rect.x()+Receive1Rect.width(), Receive1Rect.y()+8,
-                              fmContentUnit.size(Qt::TextSingleLine, m_diskTotalUnit).width(), fmContent.height());
 
-    //正在接受标题
-    QRect recvTitleRect(contentNetRect.x(), recv1Rect.y() + recv1Rect.height(),
+    //磁盘读取标题
+    QRect readTitleRect(contentDiskRect.x(), readRect.y() + readRect.height(),
                         fmContent.size(Qt::TextSingleLine, recvTitle).width(), fmSubContent.height());
-    //"总计接受"标题
-    QRect totalReceiveTitleRect(totalReceiveRect.x(), recvTitleRect.y(), totalReceiveRect.width(), recvTitleRect.height());
+//    //"总计接受"标题
+//    QRect totalReceiveTitleRect(totalReceiveRect.x(), recvTitleRect.y(), totalReceiveRect.width(), recvTitleRect.height());
 
 
-    //"正在发送"的值
-    QRect Sent1Rect(recvTitleRect.x(), recvTitleRect.y() + recvTitleRect.height()+10,
+    //"磁盘写入"的值
+    QRect writeRect(qCeil((contentDiskRect.width() + spacing) / 2) + spacing, contentDiskRect.y() ,
                           fmContent.size(Qt::TextSingleLine, m_diskWrite).width(), fmContent.height());
-    QRect Sent2Rect(Sent1Rect.x()+Sent1Rect.width(), Sent1Rect.y() + 8,
+    QRect writeUnitRect(writeRect.x()+writeRect.width(), writeRect.y() + 8,
                               fmContentUnit.size(Qt::TextSingleLine, m_diskWriteUnit).width(), fmContent.height());
-    //"总计发送"的值
-    QRect crect32(totalReceiveRect.x(), Sent1Rect.y(), totalReceiveRect.width(), recv1Rect.height());
-    QRect SentTotal1Rect(crect32.x(), crect32.y(),
-                          fmContent.size(Qt::TextSingleLine, m_diskAvailable).width(), fmContent.height());
-    QRect SentTotal2Rect(SentTotal1Rect.x()+SentTotal1Rect.width(), SentTotal1Rect.y()+8,
-                              fmContentUnit.size(Qt::TextSingleLine, m_diskAvailableUnit).width(), fmContent.height());
+//    //"总计发送"的值
+//    QRect crect32(totalReceiveRect.x(), Sent1Rect.y(), totalReceiveRect.width(), recv1Rect.height());
+//    QRect SentTotal1Rect(crect32.x(), crect32.y(),
+//                          fmContent.size(Qt::TextSingleLine, m_diskAvailable).width(), fmContent.height());
+//    QRect SentTotal2Rect(SentTotal1Rect.x()+SentTotal1Rect.width(), SentTotal1Rect.y()+8,
+//                              fmContentUnit.size(Qt::TextSingleLine, m_diskAvailableUnit).width(), fmContent.height());
 
 
-    //正在发送标题
-    QRect sentTitleRect(contentNetRect.x(), Sent1Rect.y() + Sent1Rect.height(),
+    //磁盘写入标题writeRect.x(), writeRect.y() + writeRect.height() + 8,
+    QRect writeTitleRect(writeRect.x(), writeRect.y() + writeRect.height(),
                   fmContent.size(Qt::TextSingleLine, recvTitle).width(), fmSubContent.height());
-    QRect sentTotalTitleRect(totalReceiveRect.x(), sentTitleRect.y(), totalReceiveRect.width(), recvTitleRect.height());
-    QRectF r1Ind(contentNetRect.x() - margin, recvTitleRect.y() + qCeil((recvTitleRect.height() - bulletSize) / 2.), bulletSize,
+//    QRect sentTotalTitleRect(totalReceiveRect.x(), sentTitleRect.y(), totalReceiveRect.width(), recvTitleRect.height());
+    QRectF r1Ind(contentDiskRect.x() - margin, readTitleRect.y() + qCeil((readTitleRect.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
-    QRectF r2Ind(contentNetRect.x() - margin, sentTitleRect.y() + qCeil((sentTitleRect.height() - bulletSize) / 2.), bulletSize,
+    QRectF r2Ind(writeTitleRect.x() - margin, writeTitleRect.y() + qCeil((writeTitleRect.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
 
-    //正在接受
+    //磁盘读取
     painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
-    painter.drawText(recv1Rect, Qt::AlignLeft | Qt::AlignHCenter,m_diskRead);
-    //正在接受的单位
+    painter.drawText(readRect, Qt::AlignLeft | Qt::AlignHCenter,m_diskRead);
+    //磁盘读取的单位
     painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
-    painter.drawText(recv2UnitRect, Qt::AlignLeft | Qt::AlignHCenter,m_diskReadUnit);
+    painter.drawText(readUnitRect, Qt::AlignLeft | Qt::AlignHCenter,m_diskReadUnit);
 
-    //总计接受
+    //磁盘写入
     painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
-    painter.drawText(Receive1Rect, Qt::AlignLeft | Qt::AlignVCenter,m_diskTotal);
-    //总计接受的单位
+    painter.drawText(writeRect, Qt::AlignLeft | Qt::AlignVCenter,m_diskWrite);
+    //磁盘写入的单位
     painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
-    painter.drawText(Receive2Rect, Qt::AlignLeft | Qt::AlignHCenter, m_diskTotalUnit);
-
-    //正在发送
-    painter.setPen(ltextColor);
-    painter.setFont(m_contentFont);
-    painter.drawText(Sent1Rect, Qt::AlignLeft | Qt::AlignVCenter,m_diskWrite);
-    //正在发送的单位
-    painter.setPen(ltextColor);
-    painter.setFont(m_contentUnitFont);
-    painter.drawText(Sent2Rect, Qt::AlignLeft | Qt::AlignHCenter, m_diskWriteUnit);
-
-    //总发送
-    painter.setPen(ltextColor);
-    painter.setFont(m_contentFont);
-    painter.drawText(SentTotal1Rect, Qt::AlignLeft | Qt::AlignVCenter,m_diskAvailable);
-    //总的单位
-    painter.setPen(ltextColor);
-    painter.setFont(m_contentUnitFont);
-    painter.drawText(SentTotal2Rect, Qt::AlignLeft | Qt::AlignHCenter, m_diskAvailableUnit);
-
+    painter.drawText(writeUnitRect, Qt::AlignLeft | Qt::AlignHCenter, m_diskWriteUnit);
 
     //标题
     painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
-    painter.drawText(recvTitleRect, Qt::AlignLeft | Qt::AlignVCenter,recvTitle);
-    painter.drawText(sentTitleRect, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
-    painter.drawText(totalReceiveTitleRect, Qt::AlignLeft | Qt::AlignVCenter, recvTotalTitle);
-    painter.drawText(sentTotalTitleRect, Qt::AlignLeft | Qt::AlignVCenter,sentTotalTitle);
+    painter.drawText(readTitleRect, Qt::AlignLeft | Qt::AlignVCenter,recvTitle);
+    painter.drawText(writeTitleRect, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
 
     QPainterPath path1, path2;
     path1.addEllipse(r1Ind);
@@ -357,14 +329,14 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     painter.fillPath(path1, m_diskReadColor);
     painter.fillPath(path2, m_diskWriteColor);
 
-    //quxian
+    //走势图
     QPainterPath framePath;
     QRect chartRect(separatorRect1.x(), separatorRect1.y(), contentRect.width()-20, 38);
 //    framePath.addRect(chartRect);
 
 
-    QBrush recvBrush(m_diskReadColor);
-    QBrush sentBrush(m_diskWriteColor);
+    QBrush readBrush(m_diskReadColor);
+    QBrush writeBrush(m_diskWriteColor);
     qreal networkCurveWidth = 1.2;
 
     painter.setRenderHint(QPainter::Antialiasing, true);//反锯齿
@@ -373,13 +345,13 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     painter.setClipPath(clip);
     painter.translate(chartRect.x() + 2, chartRect.y() + chartRect.height() / 2 - 2);
     painter.scale(1, -1);
-    painter.setPen(QPen(recvBrush, networkCurveWidth));
-    painter.drawPath(downloadPath);
+    painter.setPen(QPen(readBrush, networkCurveWidth));
+    painter.drawPath(readDiskPath);
 
     painter.translate(0, -5);
     painter.scale(1, -1);
-    painter.setPen(QPen(sentBrush, networkCurveWidth));
-    painter.drawPath(uploadPath);
+    painter.setPen(QPen(writeBrush, networkCurveWidth));
+    painter.drawPath(writeDiskPath);
 }
 
 bool DiskWidget::eventFilter(QObject *target, QEvent *event)

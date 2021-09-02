@@ -145,6 +145,8 @@ private:
 
 
     bool initDBus();
+    void changeTheme(DApplicationHelper::ColorType themeType);
+
 protected:
     /*!
      * \~chinese \name initConnect

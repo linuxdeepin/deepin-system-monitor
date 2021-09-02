@@ -17,6 +17,7 @@
 */
 
 #include "cpu_widget.h"
+#include "common/datacommon.h"
 #include "datadealsingleton.h"
 
 #include <DApplication>
@@ -119,9 +120,15 @@ void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
     case DApplicationHelper::LightType:
+        m_titleTrans = Globals::TitleTransLight;
+        m_contentTrans = Globals::contentTransLight;
+        m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/icon_network_light.png"));
         break;
     case DApplicationHelper::DarkType:
+        m_titleTrans = Globals::TitleTransDark;
+        m_contentTrans = Globals::contentTransDark;
+        m_hoverTrans = Globals::hoverTransDark;
 //        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
         break;
     default:
@@ -138,9 +145,7 @@ void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
 #endif
 
     textColor = palette.color(DPalette::Text);
-    textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
-
 }
 
 void CpuWidget::paintEvent(QPaintEvent *e)
@@ -158,21 +163,16 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     path.addRoundedRect(rect(), 8, 8);
     painter.setClipPath(path);
     if (m_isHover) {
-        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 50)));
+        painter.fillRect(rect(), QBrush(QColor(255, 255, 255, m_hoverTrans)));
     } else {
         painter.fillRect(rect(), QBrush(QColor(255, 255, 255, 0)));
     }
 
-    //背景
+    //标题栏背景
     QRect titleRect(rect().x(), rect().y(), 280, 36);
-    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255,25)));
+    painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
     QRect contentRect(rect().x(), rect().y()+36, 280, 75);
-    if (m_isHover) {
-        painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,100)));
-    } else {
-        painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,50)));
-    }
-
+    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //图标
     m_icon = QIcon(QString(":/icons/icon_cpu_light.png"));
@@ -189,9 +189,8 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,
                      fmContent.elidedText("处理器", Qt::ElideRight, cpuTitleRect.width()));
 
-
     //cpu使用率
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_cpuFont);
     QFontMetrics fmCpu = painter.fontMetrics();
     QString cpuStatText = QString::number(m_cpuPer, 'f', 1);
@@ -208,7 +207,7 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     painter.drawText(cpuperUsageRect, Qt::AlignLeft | Qt::AlignTop, "%");
 
     //总使用率 文本
-    painter.setPen(summaryColor);
+//    painter.setPen(summaryColor);
     painter.setFont(m_textFont);
     QFontMetrics fmText = painter.fontMetrics();
     int widthText = fmText.width("总使用率");
@@ -229,7 +228,7 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     QRect separatorRect3(rightMax, contentRect.y()+10, 1, sepheight);
     painter.fillRect(separatorRect3, QBrush(QColor(0, 0, 0,20)));
 
-    //quxian
+    //走势图
     QPainterPath framePath;
     QRect chartRect(separatorRect1.x(), separatorRect1.y(), contentRect.width()-cpuTxtWidth-10, sepheight*2);
 //    framePath.addRect(chartRect);
