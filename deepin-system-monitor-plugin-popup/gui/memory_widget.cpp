@@ -99,15 +99,17 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
     case DApplicationHelper::LightType:
+        numberColor.setRgb(0,26,46);
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/icon_memory_light.png"));
         break;
     case DApplicationHelper::DarkType:
-        m_titleTrans = Globals::TitleTransLight;
-        m_contentTrans = Globals::contentTransLight;
-        m_hoverTrans = Globals::hoverTransLight;
+        numberColor.setRgb(192,198,212);
+        m_titleTrans = Globals::TitleTransDark;
+        m_contentTrans = Globals::contentTransDark;
+        m_hoverTrans = Globals::hoverTransDark;
 //        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
         break;
     default:
@@ -117,16 +119,9 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-#ifndef THEME_FALLBACK_COLOR
-    textColor = palette.color(DPalette::TextTitle);
-    numberColor = palette.color(DPalette::TextTitle);
-#else
+
     textColor = palette.color(DPalette::Text);
-    numberColor = palette.color(DPalette::Text);
-#endif
-
     summaryColor = palette.color(DPalette::TextTips);
-
 }
 
 void MemoryWidget::paintEvent(QPaintEvent *e)
@@ -171,14 +166,9 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                             .arg(m_memUsageUnit)
                             .arg(m_memTotal);
 
-
     QString memoryContent = QString("%1 (%2%)")
                           .arg(DApplication::translate("Process.Graph.View", "内存"))//Memory
                           .arg(m_memPercent);
-
-
-
-
 
     QString swapTitle = "";
     QString swapContent = "";
@@ -197,9 +187,6 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                               .arg(DApplication::translate("Process.Graph.View", "交换内存"))//Memory
                               .arg(m_swapPercent);
     }
-
-//    qInfo()<<"swapTitle: "<<swapTitle;
-//    qInfo()<<"swapContent: "<<swapContent;
 
     QFontMetrics fmMem(m_memFont);
     QFontMetrics fmMemUnit(m_memUnitFont);
@@ -221,26 +208,24 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     QRectF memIndicatorRect(memTxtRect.x() - margin, memTxtRect.y() + qCeil((memTxtRect.height() - sectionSize) / 2.),
                             sectionSize, sectionSize);
 
-
-
     QPainterPath section;
     section.addEllipse(memIndicatorRect);
     painter.fillPath(section, memoryColor);
 
 //    m_memFont.setWeight(QFont::Medium);
     painter.setFont(m_memFont);
-    painter.setPen(QPen(textColor));
+//    painter.setPen(QPen(textColor));
     painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter,
                      fmMem.elidedText(m_memUsage, Qt::ElideRight,
                                       rect().width() - memRect.x() - outsideRingRadius));
 
 //    m_memFont.setWeight(QFont::Medium);
     painter.setFont(m_memUnitFont);
-    painter.setPen(QPen(textColor));
+//    painter.setPen(QPen(textColor));
     painter.drawText(memRectUnit, Qt::AlignLeft | Qt::AlignHCenter, memoryTitleUnit);
 
     painter.setFont(m_memTxtFont);
-    painter.setPen(QPen(summaryColor));
+//    painter.setPen(QPen(summaryColor));
     painter.drawText(memTxtRect, Qt::AlignLeft | Qt::AlignVCenter, memoryContent);
 
 //    qInfo()<<"m_swapUsage: "<<m_swapUsage;
@@ -265,15 +250,15 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     painter.fillPath(section2, swapColor);
 
     painter.setFont(m_memFont);
-    painter.setPen(QPen(textColor));
+//    painter.setPen(QPen(textColor));
     painter.drawText(swapRect, m_swapUsage);
 
     painter.setFont(m_memUnitFont);
-    painter.setPen(QPen(textColor));
+//    painter.setPen(QPen(textColor));
     painter.drawText(swapRectUnit, swapTitle);
 
     painter.setFont(m_memTxtFont);
-    painter.setPen(QPen(summaryColor));
+//    painter.setPen(QPen(summaryColor));
     painter.drawText(swapTxtRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
 
     ringCenterPointerX = 200;
@@ -290,7 +275,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     // Draw percent text.
     painter.setFont(m_memPercentFont);
-    painter.setPen(QPen(numberColor));
+    painter.setPen(numberColor);
     painter.drawText(QRect(contentRect.x() + ringCenterPointerX - insideRingRadius,
                            contentRect.y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
                            insideRingRadius * 2),
@@ -318,22 +303,18 @@ bool MemoryWidget::eventFilter(QObject *target, QEvent *event)
 void MemoryWidget::changeFont(const QFont &font)
 {
     m_sectionFont = font;
-    m_sectionFont.setFamily("SourceHanSansSC");
     m_sectionFont.setWeight(QFont::DemiBold);
     m_sectionFont.setPointSizeF(m_sectionFont.pointSizeF());
 
     m_memFont = font;
-    m_memFont.setFamily("HelveticaNeueLT");
     m_memFont.setWeight(QFont::Normal);
     m_memFont.setPointSizeF(m_memFont.pointSizeF()+5);
 
     m_memUnitFont = font;
-    m_memUnitFont.setFamily("HelveticaNeueLT");
     m_memUnitFont.setWeight(QFont::Normal);
     m_memUnitFont.setPointSizeF(m_memUnitFont.pointSizeF());
 
     m_memTxtFont = font;
-    m_memTxtFont.setFamily("SourceHanSansSC");
     m_memTxtFont.setWeight(QFont::ExtraLight);
     m_memTxtFont.setPointSizeF(m_memTxtFont.pointSizeF()-2 );
 }

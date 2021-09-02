@@ -186,17 +186,14 @@ bool ProcessWidget::eventFilter(QObject *target, QEvent *event)
 void ProcessWidget::changeFont(const QFont &font)
 {
     m_sectionFont = font;
-    m_sectionFont.setFamily("SourceHanSansSC");
     m_sectionFont.setWeight(QFont::DemiBold);
     m_sectionFont.setPointSizeF(m_sectionFont.pointSizeF());
 
     m_contentFont = font;
-    m_contentFont.setFamily("HelveticaNeueLT");
     m_contentFont.setWeight(QFont::Normal);
     m_contentFont.setPointSizeF(m_contentFont.pointSizeF()+5);
 
     m_subContentFont = font;
-    m_subContentFont.setFamily("SourceHanSansSC");
     m_subContentFont.setWeight(QFont::ExtraLight);
     m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF()-2 );
 }

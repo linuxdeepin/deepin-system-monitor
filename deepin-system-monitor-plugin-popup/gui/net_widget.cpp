@@ -196,16 +196,9 @@ void NetWidget::changeTheme(DApplicationHelper::ColorType themeType)
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-#ifndef THEME_FALLBACK_COLOR
-    ltextColor = palette.color(DPalette::TextTitle);
-#else
-    ltextColor = palette.color(DPalette::Text);
-#endif
 
-    textColor = palette.color(DPalette::Text);
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
-
 }
 
 void NetWidget::paintEvent(QPaintEvent *e)
@@ -243,7 +236,6 @@ void NetWidget::paintEvent(QPaintEvent *e)
     int iconSize = 20;
     QRect iconRect(titleRect.x()+titleRect.width()/2-netTitleRect.width() -5, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
-
 
     //分隔符
     painter.setFont(m_contentFont);
@@ -317,44 +309,44 @@ void NetWidget::paintEvent(QPaintEvent *e)
                  bulletSize);
 
     //正在接受
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(recv1Rect, Qt::AlignLeft | Qt::AlignHCenter,m_netReceive);
     //正在接受的单位
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
     painter.drawText(recv2UnitRect, Qt::AlignLeft | Qt::AlignHCenter,m_netReceiveUnit);
 
     //总计接受
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(Receive1Rect, Qt::AlignLeft | Qt::AlignVCenter,m_netTotalReceive);
     //总计接受的单位
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
     painter.drawText(Receive2Rect, Qt::AlignLeft | Qt::AlignHCenter, m_netTotalReceiveUnit);
 
     //正在发送
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(Sent1Rect, Qt::AlignLeft | Qt::AlignVCenter,m_netSend);
     //正在发送的单位
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
     painter.drawText(Sent2Rect, Qt::AlignLeft | Qt::AlignHCenter, m_netSendUnit);
 
     //总发送
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(SentTotal1Rect, Qt::AlignLeft | Qt::AlignVCenter,m_totalSend);
     //总的单位
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
     painter.drawText(SentTotal2Rect, Qt::AlignLeft | Qt::AlignHCenter, m_totalSendUnit);
 
 
     //标题
-    painter.setPen(summaryColor);
+//    painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
     painter.drawText(recvTitleRect, Qt::AlignLeft | Qt::AlignVCenter,recvTitle);
     painter.drawText(sentTitleRect, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
@@ -416,22 +408,18 @@ bool NetWidget::eventFilter(QObject *target, QEvent *event)
 void NetWidget::changeFont(const QFont &font)
 {
     m_sectionFont = font;
-    m_sectionFont.setFamily("SourceHanSansSC");
     m_sectionFont.setWeight(QFont::DemiBold);
     m_sectionFont.setPointSizeF(m_sectionFont.pointSizeF());
 
     m_contentFont = font;
-    m_contentFont.setFamily("HelveticaNeueLT");
     m_contentFont.setWeight(QFont::Normal);
     m_contentFont.setPointSizeF(m_contentFont.pointSizeF()+5);
 
     m_contentUnitFont = font;
-    m_contentUnitFont.setFamily("HelveticaNeueLT");
     m_contentUnitFont.setWeight(QFont::Normal);
     m_contentUnitFont.setPointSizeF(m_contentUnitFont.pointSizeF());
 
     m_subContentFont = font;
-    m_subContentFont.setFamily("SourceHanSansSC");
     m_subContentFont.setWeight(QFont::ExtraLight);
     m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF()-2 );
 }

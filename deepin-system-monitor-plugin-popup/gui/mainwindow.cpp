@@ -279,7 +279,7 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
 
     switch (themeType) {
     case DApplicationHelper::LightType:
-        palette.setColor(QPalette::Background,QColor(250,250,250,0));
+        palette.setColor(QPalette::Background,QColor(250,250,250,75));
         break;
     case DApplicationHelper::DarkType:
         setAutoFillBackground(false);

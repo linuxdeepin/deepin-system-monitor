@@ -270,17 +270,14 @@ bool CpuWidget::eventFilter(QObject *target, QEvent *event)
 void CpuWidget::changeFont(const QFont &font)
 {
     m_TitleFont = font;
-    m_TitleFont.setFamily("SourceHanSansSC");
     m_TitleFont.setWeight(QFont::DemiBold);
     m_TitleFont.setPointSizeF(m_TitleFont.pointSizeF());
 
     m_cpuFont = font;
-    m_cpuFont.setFamily("HelveticaNeueLT");
     m_cpuFont.setWeight(QFont::Normal);
     m_cpuFont.setPointSizeF(m_cpuFont.pointSizeF()+8);
 
     m_textFont = font;
-    m_textFont.setFamily("SourceHanSansSC");
     m_textFont.setWeight(QFont::ExtraLight);
     m_textFont.setPointSizeF(m_textFont.pointSizeF() - 2);
 }

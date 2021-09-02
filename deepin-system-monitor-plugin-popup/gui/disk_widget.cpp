@@ -156,9 +156,9 @@ void DiskWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_icon = QIcon(QString(":/icons/hard-disk_light.png"));
         break;
     case DApplicationHelper::DarkType:
-        m_titleTrans = Globals::TitleTransLight;
-        m_contentTrans = Globals::contentTransLight;
-        m_hoverTrans = Globals::hoverTransLight;
+        m_titleTrans = Globals::TitleTransDark;
+        m_contentTrans = Globals::contentTransDark;
+        m_hoverTrans = Globals::hoverTransDark;
 //        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
         break;
     default:
@@ -299,25 +299,25 @@ void DiskWidget::paintEvent(QPaintEvent *e)
                  bulletSize);
 
     //磁盘读取
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(readRect, Qt::AlignLeft | Qt::AlignHCenter,m_diskRead);
     //磁盘读取的单位
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
     painter.drawText(readUnitRect, Qt::AlignLeft | Qt::AlignHCenter,m_diskReadUnit);
 
     //磁盘写入
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentFont);
     painter.drawText(writeRect, Qt::AlignLeft | Qt::AlignVCenter,m_diskWrite);
     //磁盘写入的单位
-    painter.setPen(ltextColor);
+//    painter.setPen(ltextColor);
     painter.setFont(m_contentUnitFont);
     painter.drawText(writeUnitRect, Qt::AlignLeft | Qt::AlignHCenter, m_diskWriteUnit);
 
     //标题
-    painter.setPen(summaryColor);
+//    painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
     painter.drawText(readTitleRect, Qt::AlignLeft | Qt::AlignVCenter,recvTitle);
     painter.drawText(writeTitleRect, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
@@ -374,22 +374,18 @@ bool DiskWidget::eventFilter(QObject *target, QEvent *event)
 void DiskWidget::changeFont(const QFont &font)
 {
     m_sectionFont = font;
-    m_sectionFont.setFamily("SourceHanSansSC");
     m_sectionFont.setWeight(QFont::DemiBold);
     m_sectionFont.setPointSizeF(m_sectionFont.pointSizeF());
 
     m_contentFont = font;
-    m_contentFont.setFamily("HelveticaNeueLT");
     m_contentFont.setWeight(QFont::Normal);
     m_contentFont.setPointSizeF(m_contentFont.pointSizeF()+5);
 
     m_contentUnitFont = font;
-    m_contentUnitFont.setFamily("HelveticaNeueLT");
     m_contentUnitFont.setWeight(QFont::Normal);
     m_contentUnitFont.setPointSizeF(m_contentUnitFont.pointSizeF());
 
     m_subContentFont = font;
-    m_subContentFont.setFamily("SourceHanSansSC");
     m_subContentFont.setWeight(QFont::ExtraLight);
     m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF()-2 );
 
