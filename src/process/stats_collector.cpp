@@ -645,8 +645,8 @@ void setProcDisplayNameAndIcon(StatsCollector &ctx, ProcessEntry &proc, const Pr
                 de = ctx.m_desktopEntryCache->createCachedEntry(desktopFile);
             }
             // 磁盘管理器存在多进程情况，但是environ文件并不能通过pid去判断当前进程的名称，需要依赖desktop_start_id中的名称和de->name去做匹配才行
-            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName() && de->startup_wm_class != "wpsoffice")
-                    || (de && ps->environ["DESKTOP_STARTUP_ID"].contains(de->name) && ps->environ["GIO_LAUNCHED_DESKTOP_FILE"].contains(proc.getName()))) {
+            //|| (de && ps->environ["DESKTOP_STARTUP_ID"].contains(de->name) && ps->environ["GIO_LAUNCHED_DESKTOP_FILE"].contains(proc.getName()))
+            if ((ps->environ.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && ps->environ["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == ps->pid) || (de && de->startup_wm_class == proc.getName() && de->startup_wm_class != "wpsoffice")) {
                 if (de && !de->displayName.isEmpty()) {
                     nameSet = true;
                     proc.setDisplayName(de->displayName);

@@ -80,6 +80,10 @@ public Q_SLOTS:
                 continue;
 
             auto entry = createEntry(fileInfo);
+            // 对于panguV机器，系统监视器获取不到正确的desktop翻译文件，是由于dde-open.desktop文件和dde-file-manager.desktop文件的exec执行路径一致，造成了主键覆盖的问题，对于这类问题，
+            // 需要修复的方法是判断desktop文件的文件名添加过滤规则
+            if (fileInfo.fileName() == "dde-open.desktop")
+                continue;
             if (entry) {
                 (*cache)[fileInfo.fileName()] = entry;
                 (*cache)[entry->name] = entry;
@@ -194,8 +198,8 @@ DesktopEntry DesktopEntryCache::createCachedEntry(const QString &desktopPath)
 
     auto entry = m_cacheUpdater->createEntry(fileInfo);
     if (entry) {
-        (*m_cache)[entry->name] = entry;
         (*m_cache)[fileInfo.fileName()] = entry;
+        (*m_cache)[entry->name] = entry;
     }
     return entry;
 }
