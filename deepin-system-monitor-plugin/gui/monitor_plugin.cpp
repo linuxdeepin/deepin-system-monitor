@@ -33,14 +33,12 @@
 namespace constantVal {
     const QString PLUGIN_STATE_KEY = "enable";
 }
-//#define PLUGIN_STATE_KEY "enable"
 
 DWIDGET_USE_NAMESPACE
 
 MonitorPlugin::MonitorPlugin(QObject *parent)
     : QObject (parent)
     , m_pluginLoaded(false)
-//    , m_notifyInter(new NotifyInter(server, path, QDBusConnection::sessionBus(), this))
     , m_tipsLabel(new QLabel)
     , m_refershTimer(new QTimer(this))
 {
@@ -81,16 +79,13 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
-    QSettings settings("deepoin", "deepin-system-monitor-plugin");
+    QSettings settings("deepin", "deepin-system-monitor-plugin");
     if (QFile::exists(settings.fileName())) {
         Dock::DisplayMode mode = displayMode();
         const QString key = QString("pos_%1_%2").arg(pluginName()).arg(mode);
         proxyInter->saveValue(this, key, settings.value(key, mode == Dock::DisplayMode::Fashion ? 6 : -1));
         QFile::remove(settings.fileName());
     }
-    if (pluginIsDisable())
-        return;
-
 
 
     if (!pluginIsDisable()) {
@@ -107,19 +102,14 @@ QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 
 void MonitorPlugin::pluginStateSwitched()
 {
-    bool pluginState = m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool();
     m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
-//    m_notifyInter->SetSystemInfo(5, QDBusVariant(pluginState));
-    if (pluginState) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        m_proxyInter->itemAdded(this, pluginName());
-    }
+    refreshPluginItemsVisible();
 }
 
 bool MonitorPlugin::pluginIsDisable()
 {
-    return m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool();
 }
 
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
@@ -139,12 +129,12 @@ QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
         break;
     }
 
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%</font>").arg(txtColor).arg(32.2)
+    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%   </font>").arg(txtColor).arg(0)
                          + QString("<font style='color:red;'>↓</font>")
-                         + QString("<font style='color:%1;'>%2kb/s<br/>\n</font>").arg(txtColor).arg(4.8)
-                         + QString("<font style='color:%1;'>MEM:%2%</font>").arg(txtColor).arg(76.3)
+                         + QString("<font style='color:%1;'>%2kb/s<br/>\n</font>").arg(txtColor).arg(0)
+                         + QString("<font style='color:%1;'>MEM: %2%   </font>").arg(txtColor).arg(0)
                          + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2kb/s</font>").arg(txtColor).arg(4.9));
+                         + QString("<font style='color:%1;'>%2kb/s</font>").arg(txtColor).arg(0));
 
     return m_tipsLabel;
 }
@@ -179,11 +169,6 @@ void MonitorPlugin::setSortKey(const QString &itemKey, const int order)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
     m_proxyInter->saveValue(this, key, order);
-}
-
-void MonitorPlugin::pluginSettingsChanged()
-{
-    refreshPluginItemsVisible();
 }
 
 const QString MonitorPlugin::itemContextMenu(const QString &itemKey)
@@ -241,25 +226,18 @@ void MonitorPlugin::changeTheme(Dtk::Gui::DGuiApplicationHelper::ColorType theme
     QPalette pa = m_tipsLabel->palette();
     pa.setBrush(QPalette::WindowText, pa.brightText());
     m_tipsLabel->setPalette(pa);
-
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%</font>").arg(txtColor).arg(32.2)
-                         + QString("<font style='color:red;'>↓</font>")
-                         + QString("<font style='color:%1;'>%2kb/s<br/>\n</font>").arg(txtColor).arg(4.8)
-                         + QString("<font style='color:%1;'>MEM:%2%</font>").arg(txtColor).arg(76.3)
-                         + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2kb/s</font>").arg(txtColor).arg(4.9));
 }
 
 QString MonitorPlugin::KB(long k)
 {
     QString s = "";
     if(k > 999999){
-        s = QString::number(k/(1024*1024.0),'f',2) + "GB";
+        s = QString::number(k/(1024*1024.0),'f',2) + "gb";
     }else{
         if(k > 999){
-            s = QString::number(k/1024.0,'f',2) + "MB";
+            s = QString::number(k/1024.0,'f',2) + "mb";
         }else{
-            s = QString::number(k/1.0,'f',2) + "KB";
+            s = QString::number(k/1.0,'f',2) + "kb";
         }
     }
     return s;
@@ -270,15 +248,15 @@ QString MonitorPlugin::BS(long b)
     QString s = "";
     if(b > 999999999){
         //s = QString("%1").arg(b/(1024*1024*1024.0), 6, 'f', 2, QLatin1Char(' ')) + "GB";
-        s = QString::number(b/(1024*1024*1024.0), 'f', 2) + "GB";
+        s = QString::number(b/(1024*1024*1024.0), 'f', 2) + "gb";
     }else{
         if(b > 999999){
             //s = QString("%1").arg(b/(1024*1024.0), 6, 'f', 2, QLatin1Char(' ')) + "MB";
-            s = QString::number(b/(1024*1024.0), 'f', 2) + "MB";
+            s = QString::number(b/(1024*1024.0), 'f', 2) + "mb";
         }else{
             if(b>999){
                 //s = QString("%1").arg(b/1024.0, 6, 'f', 2, QLatin1Char(' ')) + "KB";
-                s = QString::number(b/(1024.0), 'f',2) + "KB";
+                s = QString::number(b/(1024.0), 'f',2) + "kb";
             }else{
                 s = b + "B";
             }
@@ -291,9 +269,9 @@ QString MonitorPlugin::NB(long b)
 {
     QString s = "";
     if (b>999) {
-        s = QString("%1").arg(b/1024, 5, 'f', 0, QLatin1Char(' ')) + "KB";
+        s = QString("%1").arg(b/1024, 5, 'f', 0, QLatin1Char(' ')) + "kb";
     } else { // <1K => 0
-        s = QString("%1").arg(0, 5, 'f', 0, QLatin1Char(' ')) + "KB";
+        s = QString("%1").arg(0, 5, 'f', 0, QLatin1Char(' ')) + "kb";
     }
     return s;
 }
@@ -383,13 +361,23 @@ void MonitorPlugin::udpateTipsInfo()
         txtColor = "white";
         break;
     }
+    QString cpStr = QString::number(cp, 'f', 1);
+    if (cpStr.length() == 3) {
+        cpStr = QString(" ") + cpStr;
+    }
 
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%</font>").arg(txtColor).arg(QString::number(cp, 'g', 1))
+    QString mpStr = QString::number(mp, 'f', 1);
+    if (mpStr.length() == 3) {
+        mpStr = QString(" ") + mpStr;
+    }
+
+    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%   </font>").arg(txtColor).arg(cpStr)
                          + QString("<font style='color:red;'>↓</font>")
                          + QString("<font style='color:%1;'>%2<br/>\n</font>").arg(txtColor).arg(dss)
-                         + QString("<font style='color:%1;'>MEM:%2%</font>").arg(txtColor).arg(QString::number(mp, 'g', 1))
+                         + QString("<font style='color:%1;'>MEM: %2%   </font>").arg(txtColor).arg(mpStr)
                          + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2kb/s</font>").arg(txtColor).arg(uss));
+                         + QString("<font style='color:%1;'>%2</font>").arg(txtColor).arg(uss));
+
 }
 
 void MonitorPlugin::loadPlugin()
@@ -397,45 +385,24 @@ void MonitorPlugin::loadPlugin()
     if (m_pluginLoaded)
         return;
 
-    initPluginState();
-
     m_pluginLoaded = true;
 
     m_itemWidget = new MonitorPluginButtonWidget;
 
-    if (m_isShowIcon) {
-        m_proxyInter->itemAdded(this, pluginName());
-//        m_itemWidget->setDisturb(m_disturb);
-    }
+    m_proxyInter->itemAdded(this, pluginName());
 
     displayModeChanged(displayMode());
 }
 
 void MonitorPlugin::refreshPluginItemsVisible()
 {
-    if (!pluginIsDisable()) {
+    if (pluginIsDisable()) {
+        m_proxyInter->itemRemoved(this, pluginName());
+    } else {
         if (!m_pluginLoaded) {
             loadPlugin();
             return;
         }
         m_proxyInter->itemAdded(this, pluginName());
-    } else {
-        m_proxyInter->itemRemoved(this, pluginName());
     }
 }
-
-void MonitorPlugin::initPluginState()
-{
-//    if (m_settings == nullptr)
-//        return;
-    m_isShowIcon = m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool();
-//    m_settings->set("show-icon", m_isShowIcon);
-}
-
-void MonitorPlugin::updateDockIcon(uint item, const QDBusVariant &var)
-{
-
-    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, true);
-    refreshPluginItemsVisible();
-}
-

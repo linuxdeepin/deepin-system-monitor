@@ -172,26 +172,12 @@ private:
     //!
     void refreshPluginItemsVisible();
 
-    //!
-    //! \brief initPluginState 初始化插件状态
-    //!
-    void initPluginState();
-
-    //!
-    //! \brief updateDockIcon 更新dock栏的图标
-    //! \param item
-    //! \param var
-    //!
-    void updateDockIcon(uint item, const QDBusVariant &var);
 
     QString KB(long k);
     QString BS(long b);
     QString NB(long b);
 private:
     bool m_pluginLoaded;
-//    NotifyInter *m_notifyInter;
-
-    bool m_isShowIcon = true;
 
     MonitorPluginButtonWidget *m_itemWidget = nullptr;
 
