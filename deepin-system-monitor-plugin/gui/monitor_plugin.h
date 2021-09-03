@@ -47,7 +47,7 @@ class MonitorPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginsItemInterface)
-    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "systemmonitor.json")
+    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
 public:
     //!
     //! \brief MonitorPlugin 构造函数
@@ -129,11 +129,6 @@ public:
     //! \param order
     //!
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
-
-    //!
-    //! \brief pluginSettingsChanged
-    //!
-    void pluginSettingsChanged() Q_DECL_OVERRIDE;
 
     //!
     //! \brief itemContextMenu 返回鼠标右键点击插件主控件后要显示的菜单数据

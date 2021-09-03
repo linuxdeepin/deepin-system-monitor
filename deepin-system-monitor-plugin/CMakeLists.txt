@@ -47,6 +47,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${DFrameworkDBus_LIBRARIES}
   ${QGSettings_LIBRARIES}
 )
-INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
+INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /usr/lib/dde-dock/plugins)
 

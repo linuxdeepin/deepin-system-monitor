@@ -45,7 +45,7 @@ MonitorPlugin::MonitorPlugin(QObject *parent)
     i=db=ub=dbt=ubt=dbt1=ubt1=dbt0=ubt0=0;
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("system-monitor");
-    m_tipsLabel->setStyleSheet("color:white; padding:0px 3px;");
+//    m_tipsLabel->setStyleSheet("color:white; padding:0px 3px;");
 
     m_refershTimer->setInterval(2000);
     m_refershTimer->start();
@@ -79,18 +79,14 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
-    QSettings settings("deepin", "deepin-system-monitor-plugin");
-    if (QFile::exists(settings.fileName())) {
-        Dock::DisplayMode mode = displayMode();
-        const QString key = QString("pos_%1_%2").arg(pluginName()).arg(mode);
-        proxyInter->saveValue(this, key, settings.value(key, mode == Dock::DisplayMode::Fashion ? 6 : -1));
-        QFile::remove(settings.fileName());
-    }
+    //初始化系统监视器的时候,默认不加载插件
+    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
 
-
-    if (!pluginIsDisable()) {
-        loadPlugin();
-    }
+    refreshPluginItemsVisible();
+    ///////////////
+//    if (!pluginIsDisable()) {
+//        loadPlugin();
+//    }
 }
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
@@ -104,8 +100,10 @@ void MonitorPlugin::pluginStateSwitched()
 {
     bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool();
     m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
+
     refreshPluginItemsVisible();
 }
+
 
 bool MonitorPlugin::pluginIsDisable()
 {
@@ -129,12 +127,12 @@ QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
         break;
     }
 
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%   </font>").arg(txtColor).arg(0)
+    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU:%2%&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(0)
                          + QString("<font style='color:red;'>↓</font>")
-                         + QString("<font style='color:%1;'>%2kb/s<br/>\n</font>").arg(txtColor).arg(0)
-                         + QString("<font style='color:%1;'>MEM: %2%   </font>").arg(txtColor).arg(0)
+                         + QString("<font style='color:%1;'>%2kb/s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/></font>").arg(txtColor).arg(0)
+                         + QString("<font style='color:%1;'>MEM: %2%&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(0)
                          + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2kb/s</font>").arg(txtColor).arg(0));
+                         + QString("<font style='color:%1;'>%2kb/s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(0));
 
     return m_tipsLabel;
 }
@@ -197,7 +195,7 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(checked);
     Q_UNUSED(itemKey);
     if (menuId == "openSystemMointor") {
-        QProcess::execute("/usr/bin/deepin-system-monitor");
+        QProcess::startDetached("/usr/bin/deepin-system-monitor");
 //        DDBusSender()
 //            .service("com.deepin.dde.ControlCenter")
 //            .interface("com.deepin.dde.ControlCenter")
@@ -363,20 +361,20 @@ void MonitorPlugin::udpateTipsInfo()
     }
     QString cpStr = QString::number(cp, 'f', 1);
     if (cpStr.length() == 3) {
-        cpStr = QString(" ") + cpStr;
+        cpStr = QString("   ") + cpStr;
     }
 
     QString mpStr = QString::number(mp, 'f', 1);
     if (mpStr.length() == 3) {
-        mpStr = QString(" ") + mpStr;
+        mpStr = QString("   ") + mpStr;
     }
 
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU: %2%   </font>").arg(txtColor).arg(cpStr)
+    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU:&nbsp;&nbsp;%2%</font>").arg(txtColor).arg(cpStr)
                          + QString("<font style='color:red;'>↓</font>")
-                         + QString("<font style='color:%1;'>%2<br/>\n</font>").arg(txtColor).arg(dss)
-                         + QString("<font style='color:%1;'>MEM: %2%   </font>").arg(txtColor).arg(mpStr)
+                         + QString("<font style='color:%1;'>%2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/></font>").arg(txtColor).arg(dss)
+                         + QString("<font style='color:%1;'>MEM:&nbsp;%2%&nbsp;&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(mpStr)
                          + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2</font>").arg(txtColor).arg(uss));
+                         + QString("<font style='color:%1;'>%2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(uss));
 
 }
 
