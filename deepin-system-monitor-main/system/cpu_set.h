@@ -89,7 +89,10 @@ public:
 
 private:
     void read_stats();
-
+    /**
+     * @brief read_lscpu 通过lscpu读取CPU信息
+     */
+    void read_lscpu();
     void read_overall_info();
 
 private:

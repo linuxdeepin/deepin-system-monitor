@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
-project(deepin-system-monitor LANGUAGES CXX)
+project(deepin-system-monitor)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -58,6 +58,10 @@ pkg_search_module(LIB_UDEV REQUIRED libudev)
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libsmartcols/src)
+
 
 set(HPP_GLOBAL
     config.h
@@ -367,6 +371,116 @@ set(CPP_WM
     wm/wm_window_tree.cpp
 )
 
+set(LSCPU
+        3rdparty/libsmartcols/src/calculate.c
+        3rdparty/libsmartcols/src/cell.c
+        3rdparty/libsmartcols/src/column.c
+        3rdparty/libsmartcols/src/grouping.c
+        3rdparty/libsmartcols/src/init.c
+        3rdparty/libsmartcols/src/iter.c
+        3rdparty/libsmartcols/src/line.c
+        3rdparty/libsmartcols/src/print-api.c
+        3rdparty/libsmartcols/src/print.c
+        3rdparty/lscpu.c
+        3rdparty/libsmartcols/src/symbols.c
+        3rdparty/libsmartcols/src/table.c
+        3rdparty/libsmartcols/src/version.c
+        3rdparty/libsmartcols/src/walk.c
+        3rdparty/lscpu-arm.c
+        3rdparty/lscpu-cpu.c
+        3rdparty/lscpu-cputype.c
+        3rdparty/lscpu-dmi.c
+        3rdparty/lscpu-topology.c
+        3rdparty/lscpu-virt.c
+        3rdparty/cpuset.c
+        3rdparty/path.c
+        3rdparty/strutils.c
+        3rdparty/buffer.c
+        3rdparty/mbsalign.c
+        3rdparty/color-names.c
+        3rdparty/jsonwrt.c
+        3rdparty/ttyutils.c
+        3rdparty/c_strtod.c
+        3rdparty/fileutils.c
+)
+set(LSCPU_INCLUDE
+        3rdparty/libsmartcols/src/libsmartcols.h
+        3rdparty/libsmartcols/src/smartcolsP.h
+        3rdparty/include/all-io.h
+        3rdparty/include/encode.h
+        3rdparty/include/minix.h
+        3rdparty/include/pty-session.h
+        3rdparty/include/bitops.h
+        3rdparty/include/env.h
+        3rdparty/include/monotonic.h
+        3rdparty/include/pwdutils.h
+        3rdparty/include/blkdev.h
+        3rdparty/include/exec_shell.h
+        3rdparty/include/namespace.h
+        3rdparty/include/randutils.h
+        3rdparty/include/buffer.h
+        3rdparty/include/exitcodes.h
+        3rdparty/include/nls.h
+        3rdparty/include/rpmatch.h
+        3rdparty/include/canonicalize.h
+        3rdparty/include/fileutils.h
+        3rdparty/include/optutils.h
+        3rdparty/include/selinux-utils.h
+        3rdparty/include/caputils.h
+        3rdparty/include/fuzz.h
+        3rdparty/include/pager.h
+        3rdparty/include/sha1.h
+        3rdparty/include/carefulputc.h
+        3rdparty/include/idcache.h
+        3rdparty/include/partx.h
+        3rdparty/include/signames.h
+        3rdparty/include/cctype.h
+        3rdparty/include/ismounted.h
+        3rdparty/include/path.h
+        3rdparty/include/statfs_magic.h
+        3rdparty/include/c.h
+        3rdparty/include/iso9660.h
+        3rdparty/include/pathnames.h
+        3rdparty/include/strutils.h
+        3rdparty/include/closestream.h
+        3rdparty/include/jsonwrt.h
+        3rdparty/include/pidfd-utils.h
+        3rdparty/include/strv.h
+        3rdparty/include/color-names.h
+        3rdparty/include/linux_version.h
+        3rdparty/include/plymouth-ctrl.h
+        3rdparty/include/swapheader.h
+        3rdparty/include/colors.h
+        3rdparty/include/list.h
+        3rdparty/include/procutils.h
+        3rdparty/include/swapprober.h
+        3rdparty/include/cpuset.h
+        3rdparty/include/loopdev.h
+        3rdparty/include/pt-bsd.h
+        3rdparty/include/sysfs.h
+        3rdparty/include/crc32c.h
+        3rdparty/include/mangle.h
+        3rdparty/include/pt-gpt-partnames.h
+        3rdparty/include/timer.h
+        3rdparty/include/crc32.h
+        3rdparty/include/match.h
+        3rdparty/include/pt-mbr.h
+        3rdparty/include/timeutils.h
+        3rdparty/include/c_strtod.h
+        3rdparty/include/mbsalign.h
+        3rdparty/include/pt-mbr-partnames.h
+        3rdparty/include/ttyutils.h
+        3rdparty/include/debug.h
+        3rdparty/include/mbsedit.h
+        3rdparty/include/pt-sgi.h
+        3rdparty/include/widechar.h
+        3rdparty/include/debugobj.h
+        3rdparty/include/md5.h
+        3rdparty/include/pt-sun.h
+        3rdparty/include/xalloc.h
+        3rdparty/lscpu.h
+        )
+
 set(APP_HPP
     ${HPP_GLOBAL}
     ${HPP_COMMON}
@@ -377,6 +491,7 @@ set(APP_HPP
     ${HPP_SERVICE}
     ${HPP_SYSTEM}
     ${HPP_WM}
+    ${LSCPU_INCLUDE}
 )
 set(APP_CPP
     ${CPP_GLOBAL}
@@ -388,6 +503,7 @@ set(APP_CPP
     ${CPP_SERVICE}
     ${CPP_SYSTEM}
     ${CPP_WM}
+    ${LSCPU}
 )
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
