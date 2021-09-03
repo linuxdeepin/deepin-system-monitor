@@ -272,6 +272,8 @@ QString CPUSet::virtualization() const
 
 QString CPUSet::curFreq() const
 {
+    if(d->m_info.value("CPU MHz") == "-")
+        return "-";
     return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
 }
 
@@ -551,6 +553,10 @@ void CPUSet::read_lscpu()
     cxt->virt = lscpu_read_virtualization(cxt); // 获取CPU的虚拟化信息
     struct lscpu_cputype *ct;
     ct = lscpu_cputype_get_default(cxt); // 获取CPU类型信息
+    if(ct == nullptr) {
+        qWarning() << __FUNCTION__ << "ct init failed!";
+        return;
+    }
     if(cxt->arch)
         d->m_info.insert("Architecture",cxt->arch->name);
     // cpu架构信息
@@ -660,6 +666,9 @@ void CPUSet::read_lscpu()
         QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)),'f',4);
         d->m_info.insert("CPU min MHz",minMHz);
         QString nowMHz =  QString::number(maxMHz.toDouble() * static_cast<double>(scal/100),'f',4);
+        if(scal == 0.0f) {
+            nowMHz = "-";
+        }
         d->m_info.insert("CPU MHz",nowMHz);
     } else {
         d->m_info.insert("CPU MHz","-");

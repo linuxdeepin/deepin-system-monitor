@@ -95,6 +95,9 @@ QString CPUInfo::vendorId() const
 
 QString CPUInfo::cpuFreq() const
 {
+    if( d->m_cpu_freq == "-") {
+        return "-";
+    }
     return d->m_cpu_freq + "MHz";
 }
 
