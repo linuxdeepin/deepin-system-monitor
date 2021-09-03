@@ -75,6 +75,8 @@ private:
     qulonglong m_totalSentBytes {};
 
     ProcessTableView *m_processTableView;
+    DLabel *m_processNameLabel;
+    DLabel *m_processIdLabel;
 
     bool m_isHover = false;
     int m_titleTrans = 0;

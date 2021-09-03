@@ -47,21 +47,46 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &ProcessWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    setFixedSize(280, 245);
+    setFixedSize(280, 330);
 
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &ProcessWidget::changeFont);
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ProcessWidget::changeFont);
 
 
-    m_processTableView = new ProcessTableView;
+//    setFont(m_subContentFont);
+    m_processTableView = new ProcessTableView(this);
+    m_processNameLabel = new DLabel(this);
+    m_processNameLabel->setText(tr("名称"));
+    m_processNameLabel->setAlignment(Qt::AlignLeft);
+    m_processNameLabel->setFixedHeight(30);
+    m_processNameLabel->setWindowOpacity(0.3);
+//    m_processNameLabel->setFont(m_subContentFont);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout();
+    m_processIdLabel = new DLabel(this);
+    m_processIdLabel->setText(tr("处理器"));
+    m_processIdLabel->setAlignment(Qt::AlignRight);
+    m_processIdLabel->setFixedHeight(30);
+
+    QHBoxLayout *headerLayout = new QHBoxLayout(this);
+    headerLayout->addWidget(m_processNameLabel);
+    headerLayout->addWidget(m_processIdLabel);
+    DLabel *headerLabel = new DLabel(this);
+    headerLabel->setLayout(headerLayout);
+    headerLabel->setFixedHeight(30);
+    headerLabel->setContentsMargins(10, 0, 10, 0);
+
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
+//    mainLayout->setMargin(20);
 
-    mainLayout->setMargin(10);
-    mainLayout->addSpacing(18);
+    mainLayout->setMargin(0);
+    mainLayout->addSpacing(35);
+    mainLayout->addWidget(headerLabel);
     mainLayout->addWidget(m_processTableView);
 
     setLayout(mainLayout);
@@ -69,10 +94,9 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     installEventFilter(this);
 
     setAttribute(Qt::WA_TranslucentBackground);
-
 }
-ProcessWidget::~ProcessWidget() {}
 
+ProcessWidget::~ProcessWidget() {}
 
 void ProcessWidget::updateStatus(qreal cpuPercent, const QList<qreal> cPercents)
 {
@@ -130,7 +154,6 @@ void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
 void ProcessWidget::paintEvent(QPaintEvent *e)
 {
-    setFixedWidth(280);
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -148,7 +171,7 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     //标题栏背景
     QRect titleRect(rect().x(), rect().y(), 280, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 209);
+    QRect contentRect(rect().x(), rect().y()+36, 280, 294);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
@@ -163,7 +186,6 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     int iconSize = 20;
     QRect iconRect(titleRect.x()+titleRect.width()/2-netTitleRect.width() -5, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
-
 }
 
 bool ProcessWidget::eventFilter(QObject *target, QEvent *event)
@@ -195,5 +217,5 @@ void ProcessWidget::changeFont(const QFont &font)
 
     m_subContentFont = font;
     m_subContentFont.setWeight(QFont::ExtraLight);
-    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF()-2 );
+    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF() );
 }

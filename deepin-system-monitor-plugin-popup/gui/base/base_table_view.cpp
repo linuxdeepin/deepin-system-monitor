@@ -342,27 +342,7 @@ bool BaseTableView::viewportEvent(QEvent *event)
     case QEvent::MouseButtonRelease:
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress: {
-        auto *mev = dynamic_cast<QMouseEvent *>(event);
-        auto newIndex = indexAt(mev->pos());
-        QRegion region;
-        QRect rect;
-        // update pressed row's region if any
-        if (m_pressed.isValid()) {
-            rect = visualRect(m_pressed);
-            rect.setX(0);
-            rect.setWidth(viewport()->width());
-            region += rect;
-        }
-        if (newIndex.isValid() && newIndex.row() != m_pressed.row()) {
-            rect = visualRect(newIndex);
-            rect.setX(0);
-            rect.setWidth(viewport()->width());
-            region += rect;
-        }
-        // only left mouse button events (click & double click) need refresh
-        m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? newIndex : QModelIndex();
-        viewport()->update(region);
-        break;
+        return false;
     }
     case QEvent::TouchEnd: {
         // when using touch screen, no need any hovered effect...so reset hovered item in case Qt translate touch events into mouse events

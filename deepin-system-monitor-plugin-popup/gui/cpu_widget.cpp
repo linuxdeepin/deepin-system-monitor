@@ -150,7 +150,6 @@ void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
 void CpuWidget::paintEvent(QPaintEvent *e)
 {
-    setFixedWidth(280);
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -210,11 +209,9 @@ void CpuWidget::paintEvent(QPaintEvent *e)
 //    painter.setPen(summaryColor);
     painter.setFont(m_textFont);
     QFontMetrics fmText = painter.fontMetrics();
-    int widthText = fmText.width("总使用率");
-    int heightText = fmText.descent()+fmCpu.ascent();
-    QRect cpuTextRect(contentRect.x()+27, contentRect.y()+13 + heightCpuper+8, widthText, heightText);
-    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,"总使用率");
-
+    QRect cpuTextRect(cpuUsageRect.x(), cpuUsageRect.y()+cpuUsageRect.height(),
+                      fmContent.size(Qt::TextSingleLine, tr("总使用率")).width(), fmTextContent.height());
+    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("总使用率"));
 
     //分隔符
     int sepheight = 50;

@@ -218,8 +218,17 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             return {};
         }
     } else if (role == Qt::TextAlignmentRole) {
+        switch (index.column()) {
+        case kProcessNameColumn:
+            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+        case kProcessCPUColumn:
+            return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+        default:
+            return {};
+        }
+
         // default data alignment
-        return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+//        return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     } else if (role == Qt::UserRole + 2) {
         // text color role based on process's state
         if (index.column() == kProcessNameColumn) {

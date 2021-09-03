@@ -80,6 +80,7 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
+    setHeaderHidden(true);
 }
 
 // destructor
@@ -162,11 +163,11 @@ void ProcessTableView::initUI()
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     // proc name
-    setColumnWidth(ProcessTableModel::kProcessNameColumn, 150);
+    setColumnWidth(ProcessTableModel::kProcessNameColumn, 200);
     setColumnHidden(ProcessTableModel::kProcessNameColumn, false);
 
     // cpu
-    setColumnWidth(ProcessTableModel::kProcessCPUColumn, 150);
+    setColumnWidth(ProcessTableModel::kProcessCPUColumn, 80);
     setColumnHidden(ProcessTableModel::kProcessCPUColumn, false);
 
     // cpu

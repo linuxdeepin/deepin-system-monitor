@@ -159,7 +159,6 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     QRect iconRect(titleRect.x()+titleRect.width()/2-netTitleRect.width() -5, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
-    int spacing = 10;
     int sectionSize = 6;
 
     QString memoryTitleUnit = QString("%1 / %2")
