@@ -182,6 +182,8 @@ private:
     DiskWidget *m_diskWidget {};
     MemoryWidget *m_memoryWidget {};
     ProcessWidget *m_processWidget{};
+
+    QTimer* m_trickTimer; // 防止300ms内重复按键
 };
 
 #endif // MAINWINDOW_H

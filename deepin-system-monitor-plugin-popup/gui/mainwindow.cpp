@@ -59,7 +59,10 @@ MainWindow::MainWindow(QWidget *parent)
     , m_widthAni(new QPropertyAnimation(this))
     , m_aniGroup(new QSequentialAnimationGroup(this))
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_trickTimer(new QTimer(this))
 {
+    m_trickTimer->setInterval(300);
+    m_trickTimer->setSingleShot(true);
     initDBus();
     initUI();
     initAni();
@@ -95,8 +98,8 @@ void MainWindow::geometryChanged()
     setX(Globals::WindowMargin);
 
     //init animation by 'm_rect'
-    m_xAni->setStartValue(getDisplayScreen().x() + Globals::WindowMargin);
-    m_xAni->setEndValue(getDisplayScreen().x());
+    m_xAni->setStartValue(getDisplayScreen().x());
+    m_xAni->setEndValue(getDisplayScreen().x() + Globals::WindowMargin);
 
     m_widthAni->setStartValue(m_rect.width());
     m_widthAni->setEndValue(0);
@@ -104,23 +107,36 @@ void MainWindow::geometryChanged()
 
 void MainWindow::showAni()
 {
-    if (!m_hasComposite) {
-        move(m_rect.x() + Globals::WindowMargin, m_rect.y());
-        setFixedWidth(m_rect.width());
-        show();
+    if (m_trickTimer->isActive()) {
         return;
     }
 
-    move(m_rect.x(), m_rect.y());
+    m_trickTimer->start();
+    if (!m_hasComposite) {
+        setGeometry(QRect(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height()));
+        setFixedWidth(m_rect.width());
+        show();
+        activateWindow();
+
+        return;
+    }
     setFixedWidth(0);
+    move(m_rect.x() + m_rect.width(), m_rect.y());
 
     show();
+    activateWindow();
     m_aniGroup->setDirection(QAbstractAnimation::Backward);
     m_aniGroup->start();
 }
 
 void MainWindow::hideAni()
 {
+    if (m_trickTimer->isActive()) {
+        return;
+    }
+
+    m_trickTimer->start();
+
     if (!m_hasComposite) {
         hide();
         return;
@@ -144,6 +160,12 @@ void MainWindow::startLoader()
 
 void MainWindow::Show()
 {
+    if (m_trickTimer->isActive()) {
+        return;
+    }
+
+    m_trickTimer->start();
+
     if (m_aniGroup->state() == QAbstractAnimation::Running)
         return;
 
@@ -154,6 +176,12 @@ void MainWindow::Show()
 
 void MainWindow::Hide()
 {
+    if (m_trickTimer->isActive()) {
+        return;
+    }
+
+    m_trickTimer->start();
+
     if (m_aniGroup->state() == QAbstractAnimation::Running)
         return;
 
@@ -254,7 +282,7 @@ void MainWindow::initConnect()
 
     connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](QVariant value) {
         int width = value.toInt();
-        m_content->move(width - 300, m_content->pos().y());
+        move(m_rect.x()+ Globals::WindowWidth - width, m_rect.y());
     });
 
     QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
@@ -285,7 +313,6 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
         setAutoFillBackground(false);
         //Dark主题的透明度为204
         palette.setColor(QPalette::Background,QColor(25,25,25,204));
-        qInfo()<<"themeType:"<<themeType;
         break;
     default:
         break;
@@ -307,7 +334,7 @@ void MainWindow::adjustPosition()
     dockRect.setWidth(int(std::round(qreal(dockRect.width()) / scale)));
     dockRect.setHeight(int(std::round(qreal(dockRect.height()) / scale)));
 
-    // 初始化剪切板位置
+    // 初始化弹出框位置
     switch (m_daemonDockInter->position()) {
     case DOCK_TOP:
         rect.moveTop(dockRect.height());
