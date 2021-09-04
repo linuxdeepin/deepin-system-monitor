@@ -196,11 +196,13 @@ SET(CPP_WM
 SET(HPP_DBUS
     dbus/systemmonitordbusadaptor.h
     dbus/dbusdockinterface.h
+    dbus/dbuscallmaininterface.h
 )
 
 SET(CPP_DBUS
     dbus/systemmonitordbusadaptor.cpp
     dbus/dbusdockinterface.cpp
+    dbus/dbuscallmaininterface.cpp
 )
 
 SET(HPP_PROCESS

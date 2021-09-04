@@ -57,6 +57,8 @@ public:
 signals:
     void signalDetailInfoClicked();
 
+    void signalDetailInfoByDbus(QString);
+
 private:
     // Compact cpu view instance
     CompactCpuMonitor *m_cpuMonitor {};

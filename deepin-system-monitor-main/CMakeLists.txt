@@ -79,6 +79,7 @@ set(HPP_GLOBAL
     compact_disk_monitor.h
     smooth_curve_generator.h
     settings.h
+    detailwidgetmanager.h
 )
 set(CPP_GLOBAL
     main.cpp
@@ -92,6 +93,7 @@ set(CPP_GLOBAL
     compact_disk_monitor.cpp
     smooth_curve_generator.cpp
     settings.cpp
+    detailwidgetmanager.cpp
 )
 
 set(HPP_COMMON
@@ -124,6 +126,7 @@ set(HPP_DBUS
     dbus/environment_file.h
     dbus/unit_file_info.h
     dbus/unit_info.h
+    dbus/dbusforsystemomonitorpluginservce.h
 )
 set(CPP_DBUS
     dbus/environment_file.cpp
@@ -133,6 +136,7 @@ set(CPP_DBUS
     dbus/systemd1_service_interface.cpp
     dbus/systemd1_unit_interface.cpp
     dbus/dbus_properties_interface.cpp
+    dbus/dbusforsystemomonitorpluginservce.cpp
 )
 
 set(HPP_MODEL

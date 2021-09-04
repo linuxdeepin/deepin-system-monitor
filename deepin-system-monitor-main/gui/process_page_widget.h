@@ -74,6 +74,8 @@ public:
      */
     bool eventFilter(QObject *obj, QEvent *event);
 
+    void switchProcessPage();
+
 public Q_SLOTS:
     /**
      * @brief Switch performance display mode when required

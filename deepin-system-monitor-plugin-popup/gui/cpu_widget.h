@@ -42,9 +42,15 @@ public slots:
     void updateStatus();
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
-    bool eventFilter(QObject *target, QEvent *event);
+    bool eventFilter(QObject *target, QEvent *event) override;
+
+    //!
+    //! \brief mousePressEvent 鼠标压下事件，唤醒系统监视器主进程，并跳转到CPU详情界面
+    //! \param event
+    //!
+    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     void initConnection();

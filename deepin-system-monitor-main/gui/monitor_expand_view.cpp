@@ -23,6 +23,7 @@
 #include "cpu_monitor.h"
 #include "memory_monitor.h"
 #include "network_monitor.h"
+#include "detailwidgetmanager.h"
 
 #include <DApplicationHelper>
 #include <DPalette>
@@ -63,6 +64,11 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     setLayout(layout);
 
     connect(m_cpuMonitor, &CpuMonitor::signalDetailInfoClicked, this, &MonitorExpandView::signalDetailInfoClicked);
+    // 连接dbus发来的信号
+    connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, [=](QString msgCode) {
+        DetailWidgetManager::getInstance().sigJumpToProcessWidget("MSG_PROCESS1");
+        emit signalDetailInfoByDbus(msgCode);
+    });
 }
 
 void MonitorExpandView::setDetailButtonVisible(bool visible)

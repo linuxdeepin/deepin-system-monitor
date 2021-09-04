@@ -300,9 +300,11 @@ void ProcessPageWidget::onLoadLeftDataWidgetDelay()
     // compact view instance
     m_compactView = new MonitorCompactView(m_views);
     connect(m_compactView, &MonitorCompactView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
+    connect(m_compactView, &MonitorCompactView::signalDetailInfoByDbus, m_rightStackView, &DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget);
     // expand view instance
     m_expandView = new MonitorExpandView(m_views);
     connect(m_expandView, &MonitorExpandView::signalDetailInfoClicked, m_rightStackView, &DetailViewStackedWidget::onDetailInfoClicked);
+    connect(m_expandView, &MonitorExpandView::signalDetailInfoByDbus, m_rightStackView, &DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget);
     m_views->insertWidget(kDisplayModeCompact, m_compactView);
     m_views->insertWidget(kDisplayModeExpand, m_expandView);
     // restore previous backupped display mode if any
@@ -347,6 +349,11 @@ bool ProcessPageWidget::eventFilter(QObject *obj, QEvent *event)
     }
 
     return DFrame::eventFilter(obj, event);
+}
+
+void ProcessPageWidget::switchProcessPage()
+{
+    m_rightStackView->onSwitchProcessPage();
 }
 
 // paint event handler

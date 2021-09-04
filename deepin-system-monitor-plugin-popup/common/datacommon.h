@@ -74,6 +74,8 @@ const static int TitleTransDark = 20;
 const static int contentTransDark = 13;
 const static int hoverTransDark = 38;
 
+const QString DEEPIN_SYSTEM_MONITOR_PATH = "/usr/bin/deepin-system-monitor";
+
 /*!
  * \~chinese \name GetScale
  * \~chinese \brief 获取缩放的比例

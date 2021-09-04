@@ -24,6 +24,7 @@
 #include <DMainWindow>
 #include <DShadowLine>
 #include <DStackedWidget>
+#include "dbus/dbusforsystemomonitorpluginservce.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -83,6 +84,12 @@ public Q_SLOTS:
      */
     void onStartMonitorJob();
 
+    //!
+    //! \brief onDetailInfoByDbus 收到dbus传来的需要切换界面的操作
+    //! \param msgCode
+    //!
+    void onDetailInfoByDbus(QString msgCode);
+
 protected:
     /**
      * @brief Initialize ui components
@@ -128,6 +135,8 @@ private:
     bool m_initLoad = false;
     DShadowLine *m_tbShadow  = nullptr;
     QWidget *m_focusedWidget = nullptr;
+
+    DBusForSystemoMonitorPluginServce *m_pDbusService;
 };
 
 #endif  // MAIN_WINDOW_H

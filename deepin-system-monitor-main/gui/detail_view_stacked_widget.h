@@ -46,6 +46,8 @@ public slots:
     void onSwitchProcessPage();
     void onSwitchPageFinished();
 
+    void onDbusSendMsgChangeDetailInfoWidget(QString msgCode);
+
 private:
     QString m_lastDteailWidgetName;
 

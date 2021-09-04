@@ -20,6 +20,7 @@
 #include "../common/utils.h"
 #include "common/datacommon.h"
 #include "datadealsingleton.h"
+#include "dbus/dbuscallmaininterface.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -34,6 +35,7 @@
 #include <QBrush>
 #include <QPaintEvent>
 #include <QFontMetrics>
+#include <QProcess>
 
 DWIDGET_USE_NAMESPACE
 
@@ -403,6 +405,21 @@ bool NetWidget::eventFilter(QObject *target, QEvent *event)
         }
     }
     return QWidget::eventFilter(target, event);
+}
+
+void NetWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        //1.先唤醒主进程
+        bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);
+        if (true == rt) {
+            //2.跳转DBUS
+            QTimer::singleShot(500, this, [=]() {
+                DbusCallMainInterface::getInstance()->jumpWidget(QString("MSG_NET"));
+            });
+        }
+    }
+    return QWidget::mousePressEvent(event);
 }
 
 void NetWidget::changeFont(const QFont &font)

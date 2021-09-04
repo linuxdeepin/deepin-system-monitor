@@ -71,6 +71,8 @@ public:
         return {};
     }
 
+    void setProcessButtonChecked(bool checked);
+
 public Q_SLOTS:
     /**
      * @brief Handle search process

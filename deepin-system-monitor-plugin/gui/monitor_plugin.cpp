@@ -28,7 +28,7 @@
 #include <DDBusSender>
 #include <QIcon>
 #include <DApplication>
-//#include <QGSettings>
+#include <QGSettings>
 
 namespace constantVal {
     const QString PLUGIN_STATE_KEY = "enable";
@@ -46,6 +46,10 @@ MonitorPlugin::MonitorPlugin(QObject *parent)
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("system-monitor");
 //    m_tipsLabel->setStyleSheet("color:white; padding:0px 3px;");
+
+    if (QGSettings::isSchemaInstalled("com.deepin.system.monitor.plugin")) {
+        m_settings = new QGSettings("com.deepin.system.monitor.plugin", "/com/deepin/system/monitor/plugin/", this);
+    }
 
     m_refershTimer->setInterval(2000);
     m_refershTimer->start();
@@ -79,14 +83,15 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
-    //初始化系统监视器的时候,默认不加载插件
-    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
+//    //初始化系统监视器的时候,默认不加载插件
+//    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
 
-    refreshPluginItemsVisible();
+//    refreshPluginItemsVisible();
     ///////////////
-//    if (!pluginIsDisable()) {
-//        loadPlugin();
-//    }
+
+    if (!pluginIsDisable()) {
+        loadPlugin();
+    }
 }
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
@@ -383,11 +388,24 @@ void MonitorPlugin::loadPlugin()
     if (m_pluginLoaded)
         return;
 
+    initPluginState();
+
     m_pluginLoaded = true;
 
     m_itemWidget = new MonitorPluginButtonWidget;
 
-    m_proxyInter->itemAdded(this, pluginName());
+    if (!m_isFirstInstall) {
+        // 非初始状态
+        if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
+            m_proxyInter->itemAdded(this, pluginName());
+        } else {
+            m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
+            m_proxyInter->itemRemoved(this, pluginName());
+        }
+    } else {
+        m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
+        m_proxyInter->itemRemoved(this, pluginName());
+    }
 
     displayModeChanged(displayMode());
 }
@@ -402,5 +420,17 @@ void MonitorPlugin::refreshPluginItemsVisible()
             return;
         }
         m_proxyInter->itemAdded(this, pluginName());
+    }
+}
+
+void MonitorPlugin::initPluginState()
+{
+    if (m_settings == nullptr)
+        return;
+    if (m_settings->get("isfirstinstall").toBool()) {
+        m_isFirstInstall = true;
+        m_settings->set("isfirstinstall", false);
+    } else {
+        m_isFirstInstall = false;
     }
 }

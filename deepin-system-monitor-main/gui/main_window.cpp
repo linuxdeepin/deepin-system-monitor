@@ -27,18 +27,24 @@
 #include "common/common.h"
 #include "settings.h"
 #include "common/perf.h"
+#include "detailwidgetmanager.h"
 
 #include <DApplicationHelper>
 #include <DTitlebar>
 #include <QKeyEvent>
 #include <QTimer>
 #include <QDesktopWidget>
+#include <QDBusConnection>
 
 const int WINDOW_MIN_HEIGHT = 760;
 const int WINDOW_MIN_WIDTH = 1080;
 
+const QString SERVICE_NAME = "com.deepin.SystemMonitorMain";
+const QString SERVICE_PATH = "/com/deepin/SystemMonitorMain";
+
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
+    , m_pDbusService(new DBusForSystemoMonitorPluginServce)
 {
     m_settings = Settings::instance();
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
@@ -191,6 +197,17 @@ void MainWindow::initConnections()
             }
         }
     });
+
+    // 初始化DBUS
+    if (QDBusConnection::sessionBus().isConnected()) {
+        if (QDBusConnection::sessionBus().registerService(SERVICE_NAME)) {
+            if (!QDBusConnection::sessionBus().registerObject(SERVICE_PATH, m_pDbusService, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
+                qInfo() << "dbus init failed";
+            }
+        }
+    }
+
+    connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToProcessWidget, this, &MainWindow::onDetailInfoByDbus, Qt::QueuedConnection);
 }
 
 // resize event handler
@@ -256,4 +273,23 @@ void MainWindow::onStartMonitorJob()
     gApp->postEvent(gApp, msev);
     auto *netev = new NetifStartEvent();
     gApp->postEvent(gApp, netev);
+}
+
+void MainWindow::onDetailInfoByDbus(QString msgCode)
+{
+    if (msgCode.compare(QString("MSG_PROCESS"), Qt::CaseInsensitive) == 0) {
+        m_toolbar->clearSearchText();
+        m_toolbar->setProcessButtonChecked(true);
+        m_pages->setCurrentWidget(m_procPage);
+        m_procPage->switchProcessPage();
+        m_tbShadow->raise();
+        m_tbShadow->show();
+    } else {
+        m_toolbar->clearSearchText();
+        m_toolbar->setProcessButtonChecked(true);
+        m_pages->setCurrentWidget(m_procPage);
+//        m_procPage->switchProcessPage();
+        m_tbShadow->raise();
+        m_tbShadow->show();
+    }
 }

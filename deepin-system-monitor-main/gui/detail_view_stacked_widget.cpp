@@ -49,6 +49,49 @@ void DetailViewStackedWidget::onSwitchPageFinished()
     }
 }
 
+void DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget(QString msgCode)
+{
+    if (msgCode.compare(QString("MSG_CPU"), Qt::CaseInsensitive) == 0) {
+        if (m_cpudetailWidget == nullptr) {
+            m_cpudetailWidget = new CPUDetailWidget(this);
+            this->insertWidget(1, m_cpudetailWidget);
+        } else {
+            this->setCurrent(m_cpudetailWidget);
+        }
+        return;
+    }
+
+    if (msgCode.compare(QString("MSG_NET"), Qt::CaseInsensitive) == 0) {
+        if (m_netifDetailWidget == nullptr) {
+            m_netifDetailWidget = new NetifDetailViewWidget(this);
+            this->insertWidget(3, m_netifDetailWidget);
+        } else {
+            this->setCurrent(m_netifDetailWidget);
+        }
+        return;
+    }
+
+    if (msgCode.compare(QString("MSG_MEM"), Qt::CaseInsensitive) == 0) {
+        if (m_memDetailWidget == nullptr) {
+            m_memDetailWidget = new MemDetailViewWidget(this);
+            this->insertWidget(2, m_memDetailWidget);
+        } else {
+            this->setCurrent(m_memDetailWidget);
+        }
+        return;
+    }
+
+    if (msgCode.compare(QString("MSG_DISK"), Qt::CaseInsensitive) == 0) {
+        if (m_blockDevDetailWidget == nullptr) {
+            m_blockDevDetailWidget = new BlockDevDetailViewWidget(this);
+            this->insertWidget(4, m_blockDevDetailWidget);
+        } else {
+            this->setCurrent(m_blockDevDetailWidget);
+        }
+        return;
+    }
+}
+
 void DetailViewStackedWidget::onDetailInfoClicked()
 {
     if (m_lastDteailWidgetName == "MemDetailViewWidget") {

@@ -20,6 +20,7 @@
 #include "../common/utils.h"
 #include "common/datacommon.h"
 #include "process_widget.h"
+#include "dbus/dbuscallmaininterface.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -35,6 +36,7 @@
 #include <QPaintEvent>
 #include <QFontMetrics>
 #include <QVBoxLayout>
+#include <QProcess>
 
 DWIDGET_USE_NAMESPACE
 
@@ -203,6 +205,21 @@ bool ProcessWidget::eventFilter(QObject *target, QEvent *event)
         }
     }
     return QWidget::eventFilter(target, event);
+}
+
+void ProcessWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        //1.先唤醒主进程
+        bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);
+        if (true == rt) {
+            //2.跳转DBUS
+            QTimer::singleShot(500, this, [=]() {
+                DbusCallMainInterface::getInstance()->jumpWidget(QString("MSG_PROCESS"));
+            });
+        }
+    }
+    return QWidget::mousePressEvent(event);
 }
 
 void ProcessWidget::changeFont(const QFont &font)

@@ -167,6 +167,11 @@ private:
     //!
     void refreshPluginItemsVisible();
 
+    //!
+    //! \brief initPluginState 初始化插件状态
+    //!
+    void initPluginState();
+
 
     QString KB(long k);
     QString BS(long b);
@@ -183,6 +188,8 @@ private:
     QTimer *m_refershTimer;
 
     QString startup;
+
+    bool m_isFirstInstall = false;//判断插件是否第一次安装
 
 };
 

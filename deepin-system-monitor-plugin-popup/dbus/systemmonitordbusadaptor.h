@@ -19,8 +19,6 @@ public slots:
 
 signals:
     Q_SCRIPTABLE void sigSendShowOrHideSystemMonitorPluginPopupWidget();
-
-
 };
 
 #endif // SYSTEMMONITORDBUSADAPTOR_H

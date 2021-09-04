@@ -24,6 +24,7 @@
 #include "compact_disk_monitor.h"
 #include "compact_memory_monitor.h"
 #include "compact_network_monitor.h"
+#include "detailwidgetmanager.h"
 
 #include <DApplicationHelper>
 #include <DPalette>
@@ -69,6 +70,11 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     setLayout(layout);
 
     connect(m_cpuMonitor, &CompactCpuMonitor::signalDetailInfoClicked, this, &MonitorCompactView::signalDetailInfoClicked);
+    // 连接dbus发来的信号
+    connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, [=](QString msgCode) {
+        DetailWidgetManager::getInstance().sigJumpToProcessWidget("MSG_PROCESS1");
+        emit signalDetailInfoByDbus(msgCode);
+    });
 }
 
 void MonitorCompactView::setDetailButtonVisible(bool visible)

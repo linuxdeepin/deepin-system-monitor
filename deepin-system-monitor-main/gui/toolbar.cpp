@@ -195,3 +195,10 @@ bool Toolbar::isSearchContentEmpty()
     }
     return true;
 }
+
+void Toolbar::setProcessButtonChecked(bool checked)
+{
+    if (checked) {
+        m_procBtn->setChecked(true);
+    }
+}

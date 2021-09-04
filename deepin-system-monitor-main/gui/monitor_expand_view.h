@@ -51,6 +51,9 @@ public:
 signals:
     void signalDetailInfoClicked();
 
+    void signalDetailInfoByDbus(QString);
+
+
 private:
     // Cpu monitor view
     CpuMonitor *m_cpuMonitor {};

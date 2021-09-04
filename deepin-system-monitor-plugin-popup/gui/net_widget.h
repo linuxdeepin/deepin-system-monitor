@@ -40,8 +40,10 @@ public slots:
     void updateStatus();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    bool eventFilter(QObject *target, QEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    bool eventFilter(QObject *target, QEvent *event) override;
+
+    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     void initConnection();
