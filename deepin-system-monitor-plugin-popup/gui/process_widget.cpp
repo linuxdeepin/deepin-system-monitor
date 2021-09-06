@@ -126,13 +126,13 @@ void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/icon_process_light.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_list.png"));
         break;
     case DApplicationHelper::DarkType:
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-//        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_list.png"));
         break;
     default:
         break;
@@ -186,7 +186,7 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
 
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x()+titleRect.width()/2-netTitleRect.width() -5, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
+    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 }
 

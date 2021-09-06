@@ -224,7 +224,7 @@ void MainWindow::initUI()
     setFixedWidth(Globals::WindowWidth);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setContentsMargins(0, 10, 0, 10);
+    mainLayout->setContentsMargins(10, 10, 10, 10);
     mainLayout->setSpacing(0);
 
     m_cpuMonitor = new CpuWidget(this);
@@ -233,7 +233,6 @@ void MainWindow::initUI()
     m_memoryWidget = new MemoryWidget(this);
     m_processWidget = new ProcessWidget(this);
 
-    mainLayout->setMargin(10);
     mainLayout->addWidget(m_cpuMonitor);
     mainLayout->addWidget(m_netWidget);
     mainLayout->addWidget(m_memoryWidget);

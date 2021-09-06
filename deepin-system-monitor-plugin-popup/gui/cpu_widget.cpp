@@ -53,6 +53,7 @@ CpuWidget::CpuWidget(QWidget *parent)
     changeTheme(dAppHelper->themeType());
 
     setFixedSize(280, 111);
+    setContentsMargins(0, 0, 0, 0);
 
     initConnection();
     this->installEventFilter(this);
@@ -125,13 +126,13 @@ void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/icon_network_light.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_cpu.png"));
         break;
     case DApplicationHelper::DarkType:
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-//        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_cpu.png"));
         break;
     default:
         break;
@@ -175,12 +176,6 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     QRect contentRect(rect().x(), rect().y()+36, 280, 75);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
-    //图标
-    m_icon = QIcon(QString(":/icons/icon_cpu_light.png"));
-    int iconSize = 20;
-    QRect iconRect(titleRect.x()+97, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
-    m_icon.paint(&painter, iconRect);
-
     //标题
     painter.setFont(m_TitleFont);
     QFontMetrics fmTitle = painter.fontMetrics();
@@ -189,6 +184,11 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     QRect cpuTitleRect(titleRect.x(), titleRect.y(), widthTitle, heightTitle);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,
                      fmContent.elidedText("处理器", Qt::ElideRight, cpuTitleRect.width()));
+
+    //图标
+    int iconSize = 20;
+    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitle)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
+    m_icon.paint(&painter, iconRect);
 
     //cpu使用率
 //    painter.setPen(ltextColor);

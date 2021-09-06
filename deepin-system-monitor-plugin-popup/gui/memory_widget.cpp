@@ -105,14 +105,14 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
-        m_icon = QIcon(QString(":/icons/icon_memory_light.png"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_memory.png"));
         break;
     case DApplicationHelper::DarkType:
         numberColor.setRgb(192,198,212);
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
-//        m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
+        m_icon = QIcon(QString(":/icons/deepin/builtin/dark/icon_memory.png"));
         break;
     default:
         break;
@@ -158,11 +158,10 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x()+titleRect.width()/2-netTitleRect.width() -5, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
+    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
     int sectionSize = 6;
-
     QString memoryTitleUnit = QString("%1 / %2")
                             .arg(m_memUsageUnit)
                             .arg(m_memTotal);
