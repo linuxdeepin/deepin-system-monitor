@@ -26,6 +26,7 @@
 #include "monitorpluginbuttonwidget.h"
 
 #include "dbus/dbusinterface.h"
+#include "systemmonitortipswidget.h"
 
 // Qt
 #include <QDBusInterface>
@@ -35,6 +36,7 @@
 #include <QVariant>
 #include <QJsonDocument>
 #include <DGuiApplicationHelper>
+#include <QScopedPointer>
 
 #define DOCK_DEFAULT_POS   0
 
@@ -146,10 +148,6 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
 
 private slots:
-    //!
-    //! \brief changeTheme 切换系统主题时，更新插件界面
-    //!
-    void changeTheme(Dtk::Gui::DGuiApplicationHelper::ColorType themeType);
 
     //!
     //! \brief udpateTipsInfo 更新CPU MEM NET信息
@@ -181,10 +179,18 @@ private:
 
     MonitorPluginButtonWidget *m_itemWidget = nullptr;
 
-    QLabel *m_tipsLabel;
+    QScopedPointer<SystemMonitorTipsWidget> m_dataTipsLabel;
+
     QGSettings *m_settings;
 
-    long int i, db, ub, dbt, ubt, dbt1, ubt1, dbt0, ubt0, tt0, idle0;
+    long int m_counter = 0;         //计数器
+    long int m_newRecvBytes = 0;    //新的接收的网络字节数
+    long int m_newSendBytes = 0;    //新的发送的网络字节数
+    long int m_oldRecvBytes = 0;    //旧的接收的网络字节数
+    long int m_oldSendBytes = 0;    //旧的发送的网络字节数
+    long int tt0 = 0;               //total time cpu总时间
+    long int idle0 = 0;             //CPU 空闲时间
+
     QTimer *m_refershTimer;
 
     QString startup;

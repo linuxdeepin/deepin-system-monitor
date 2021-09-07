@@ -296,29 +296,35 @@ void MainWindow::initConnect()
             return;
         disconnect(m_regionMonitor);
     });
+
+
+    // 设置窗口透明度调节
+    connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [=] () {
+        this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
+    });
 }
 
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    // disable auto fill frame background
-    QPalette palette;
-    setAutoFillBackground(true);
+//    // disable auto fill frame background
+//    QPalette palette;
+//    setAutoFillBackground(true);
 
-    switch (themeType) {
-    case DApplicationHelper::LightType:
-        palette.setColor(QPalette::Background,QColor(210,210,210,75));
-        break;
-    case DApplicationHelper::DarkType:
-        setAutoFillBackground(false);
-        //Dark主题的透明度为204
-        palette.setColor(QPalette::Background,QColor(25,25,25,204));
-        break;
-    default:
-        break;
-    }
+//    switch (themeType) {
+//    case DApplicationHelper::LightType:
+//        palette.setColor(QPalette::Background,QColor(210,210,210,75));
+//        break;
+//    case DApplicationHelper::DarkType:
+//        setAutoFillBackground(false);
+//        //Dark主题的透明度为204
+//        palette.setColor(QPalette::Background,QColor(25,25,25,204));
+//        break;
+//    default:
+//        break;
+//    }
 
-    setPalette(palette);
-    setBackgroundRole(DPalette::Window);
+//    setPalette(palette);
+//    setBackgroundRole(DPalette::Window);
 }
 
 void MainWindow::adjustPosition()

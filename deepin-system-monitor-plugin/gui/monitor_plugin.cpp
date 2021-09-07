@@ -39,24 +39,12 @@ DWIDGET_USE_NAMESPACE
 MonitorPlugin::MonitorPlugin(QObject *parent)
     : QObject (parent)
     , m_pluginLoaded(false)
-    , m_tipsLabel(new QLabel)
+    , m_dataTipsLabel(nullptr)
     , m_refershTimer(new QTimer(this))
 {
-    i=db=ub=dbt=ubt=dbt1=ubt1=dbt0=ubt0=0;
-    m_tipsLabel->setVisible(false);
-    m_tipsLabel->setObjectName("system-monitor");
-//    m_tipsLabel->setStyleSheet("color:white; padding:0px 3px;");
-
     if (QGSettings::isSchemaInstalled("com.deepin.system.monitor.plugin")) {
         m_settings = new QGSettings("com.deepin.system.monitor.plugin", "/com/deepin/system/monitor/plugin/", this);
     }
-
-    m_refershTimer->setInterval(2000);
-    m_refershTimer->start();
-
-    changeTheme(DGuiApplicationHelper::instance()->themeType());
-
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MonitorPlugin::changeTheme);
 
     connect(m_refershTimer, &QTimer::timeout, this, &MonitorPlugin::udpateTipsInfo);
 }
@@ -82,12 +70,6 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 //    qApp->setApplicationName(applicationName);
 
     m_proxyInter = proxyInter;
-
-//    //初始化系统监视器的时候,默认不加载插件
-//    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
-
-//    refreshPluginItemsVisible();
-    ///////////////
 
     if (!pluginIsDisable()) {
         loadPlugin();
@@ -118,28 +100,8 @@ bool MonitorPlugin::pluginIsDisable()
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
-    Dtk::Gui::DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
-    QString txtColor;
-    switch (colorType) {
-    case Dtk::Gui::DGuiApplicationHelper::LightType:
-        txtColor = "black";
-        break;
-    case Dtk::Gui::DGuiApplicationHelper::DarkType:
-        txtColor = "white";
-        break;
-    default:
-        txtColor = "white";
-        break;
-    }
-
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU:%2%&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(0)
-                         + QString("<font style='color:red;'>↓</font>")
-                         + QString("<font style='color:%1;'>%2kb/s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/></font>").arg(txtColor).arg(0)
-                         + QString("<font style='color:%1;'>MEM: %2%&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(0)
-                         + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2kb/s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(0));
-
-    return m_tipsLabel;
+    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0kb/s" << "0kb/s");
+    return m_dataTipsLabel.data();
 }
 
 const QString MonitorPlugin::itemCommand(const QString &itemKey)
@@ -212,25 +174,6 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     }
 }
 
-void MonitorPlugin::changeTheme(Dtk::Gui::DGuiApplicationHelper::ColorType themeType)
-{
-    QString txtColor;
-    switch (themeType) {
-    case Dtk::Gui::DGuiApplicationHelper::LightType:
-        txtColor = "black";
-        break;
-    case Dtk::Gui::DGuiApplicationHelper::DarkType:
-        txtColor = "white";
-        break;
-    default:
-        txtColor = "white";
-        break;
-    }
-    QPalette pa = m_tipsLabel->palette();
-    pa.setBrush(QPalette::WindowText, pa.brightText());
-    m_tipsLabel->setPalette(pa);
-}
-
 QString MonitorPlugin::KB(long k)
 {
     QString s = "";
@@ -251,17 +194,17 @@ QString MonitorPlugin::BS(long b)
     QString s = "";
     if(b > 999999999){
         //s = QString("%1").arg(b/(1024*1024*1024.0), 6, 'f', 2, QLatin1Char(' ')) + "GB";
-        s = QString::number(b/(1024*1024*1024.0), 'f', 2) + "gb";
+        s = QString::number(b/(1024*1024*1024.0), 'f', 1) + "gb";
     }else{
         if(b > 999999){
             //s = QString("%1").arg(b/(1024*1024.0), 6, 'f', 2, QLatin1Char(' ')) + "MB";
-            s = QString::number(b/(1024*1024.0), 'f', 2) + "mb";
+            s = QString::number(b/(1024*1024.0), 'f', 1) + "mb";
         }else{
             if(b>999){
                 //s = QString("%1").arg(b/1024.0, 6, 'f', 2, QLatin1Char(' ')) + "KB";
-                s = QString::number(b/(1024.0), 'f',2) + "kb";
+                s = QString::number(b/(1024.0), 'f',1) + "kb";
             }else{
-                s = b + "B";
+                s = QString::number(b / 2.0) + "B";
             }
         }
     }
@@ -283,18 +226,18 @@ void MonitorPlugin::udpateTipsInfo()
 {
     // uptime
     QFile file;
-    QString l;
+    QString strLineContext;
 
     // memory
     file.setFileName("/proc/meminfo");
     file.open(QIODevice::ReadOnly);
-    l = file.readLine();
-    long mt = l.replace("MemTotal:","").replace("kB","").replace(" ","").toLong();
-    l = file.readLine();
-    l = file.readLine();
-    long ma = l.replace("MemAvailable:","").replace("kB","").replace(" ","").toLong();
-    l = file.readLine();
-    l = file.readLine();
+    strLineContext = file.readLine();
+    long mt = strLineContext.replace("MemTotal:","").replace("kB","").replace(" ","").toLong();
+    strLineContext = file.readLine();
+    strLineContext = file.readLine();
+    long ma = strLineContext.replace("MemAvailable:","").replace("kB","").replace(" ","").toLong();
+    strLineContext = file.readLine();
+    strLineContext = file.readLine();
     file.close();
     long mu = mt - ma;
     qreal mp = mu*100.0/mt;
@@ -303,9 +246,9 @@ void MonitorPlugin::udpateTipsInfo()
     // CPU
     file.setFileName("/proc/stat");
     file.open(QIODevice::ReadOnly);
-    l = file.readLine();
+    strLineContext = file.readLine();
     QByteArray ba;
-    ba = l.toLatin1();
+    ba = strLineContext.toLatin1();
     const char *ch;
     ch = ba.constData();
     char cpu[5];
@@ -315,40 +258,48 @@ void MonitorPlugin::udpateTipsInfo()
     file.close();
     QString cusage = "";
     qreal cp = ((tt-tt0)-(idle-idle0))*100.0/(tt-tt0);
-    if(i>0) cusage = "CPU: " + QString::number(cp) + "%";
+    if(m_counter > 0)
+        cusage = "CPU: " + QString::number(cp) + "%";
     idle0 = idle;
     tt0 = tt;
 
     // net
     file.setFileName("/proc/net/dev");
     file.open(QIODevice::ReadOnly);
-    l = file.readLine();
-    l = file.readLine();
-    dbt1 = ubt1 = 0;
+    strLineContext = file.readLine();
+    strLineContext = file.readLine();
+    m_newRecvBytes = m_newSendBytes = 0;
+    long int curRecvBytes = 0;
+    long int curSendBytes = 0;
     while(!file.atEnd()){
-        l = file.readLine();
-        QStringList list = l.split(QRegExp("\\s{1,}"));
-        db = list.at(1).toLong();
-        ub = list.at(9).toLong();
-        dbt1 += db;
-        ubt1 += ub;
+        strLineContext = file.readLine();
+        QStringList list = strLineContext.split(QRegExp("\\s{1,}"));
+
+        curRecvBytes = list.at(2).toLong();
+        curSendBytes = list.at(10).toLong();
+        m_newRecvBytes += curRecvBytes;
+        m_newSendBytes += curSendBytes;
     }
     file.close();
     QString dss = "";
     QString uss = "";
-    if (i > 0) {
-        long ds = dbt1 - dbt0;
-        long us = ubt1 - ubt0;
-        dss = NB(ds) + "/s";
-        uss = NB(us) + "/s";
-        dbt0 = dbt1;
-        ubt0 = ubt1;
+    if (m_counter > 0) {
+        long ds = (m_newRecvBytes - m_oldRecvBytes) / 2;
+        long us = (m_newSendBytes - m_oldSendBytes) / 2;
+        if (m_counter != 1) {
+            dss = BS(ds) + "/s";
+            uss = BS(us) + "/s";
+        } else {
+            dss = BS(0) + "/s";
+            uss = BS(0) + "/s";
+        }
+        m_oldRecvBytes = m_newRecvBytes;
+        m_oldSendBytes = m_newSendBytes;
     }
-    QString netspeed = "↑" + uss + "\n↓" + dss;
-    QString net = "UPB: " + BS(ubt1) + "  " + uss + "\nDNB: " + BS(dbt1) + "  " + dss;
 
-    i++;
-    if (i>2) i = 2;
+    m_counter++;
+    if (m_counter > 2)
+        m_counter = 2;
 
     // draw
     Dtk::Gui::DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
@@ -365,22 +316,11 @@ void MonitorPlugin::udpateTipsInfo()
         break;
     }
     QString cpStr = QString::number(cp, 'f', 1);
-    if (cpStr.length() == 3) {
-        cpStr = QString("   ") + cpStr;
-    }
+
 
     QString mpStr = QString::number(mp, 'f', 1);
-    if (mpStr.length() == 3) {
-        mpStr = QString("   ") + mpStr;
-    }
 
-    m_tipsLabel->setText(QString("<font style='color:%1;'>CPU:&nbsp;&nbsp;%2%</font>").arg(txtColor).arg(cpStr)
-                         + QString("<font style='color:red;'>↓</font>")
-                         + QString("<font style='color:%1;'>%2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/></font>").arg(txtColor).arg(dss)
-                         + QString("<font style='color:%1;'>MEM:&nbsp;%2%&nbsp;&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(mpStr)
-                         + QString("<font style='color:blue;'>↑</font>")
-                         + QString("<font style='color:%1;'>%2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>").arg(txtColor).arg(uss));
-
+    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << cpStr << mpStr << dss << uss);
 }
 
 void MonitorPlugin::loadPlugin()
@@ -391,6 +331,12 @@ void MonitorPlugin::loadPlugin()
     initPluginState();
 
     m_pluginLoaded = true;
+
+    m_dataTipsLabel.reset(new SystemMonitorTipsWidget);
+    m_dataTipsLabel->setObjectName("systemmonitorpluginlabel");
+
+    m_refershTimer->setInterval(2000);
+    m_refershTimer->start();
 
     m_itemWidget = new MonitorPluginButtonWidget;
 
