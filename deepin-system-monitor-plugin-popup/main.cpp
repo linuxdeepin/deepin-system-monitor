@@ -48,15 +48,16 @@ int main(int argc, char *argv[])
     ac.setAutoActivateWindows(true);
 
     app->setOrganizationName("deepin");
-    app->setApplicationName("deepin-system-monitor-pluginpopup");
-    app->setApplicationDisplayName("deepin-system-monitor-pluginpopup");
+    app->setApplicationName("deepin-system-monitor-plugin-popup");
+    app->setApplicationDisplayName("deepin-system-monitor-plugin-popup");
     app->setApplicationVersion("1.0");
-//    app->loadTranslator();
 
-    if (!DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor-pluginpopup_%1").arg(getuid()))) {
+
+    if (!DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor-plugin-popup"))) {
         qDebug() << "set single instance failed!";
         return -1;
     }
+    app->loadTranslator();
 
     MainWindow w;
     gApp->setMainWindow(&w);

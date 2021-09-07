@@ -225,12 +225,13 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
+    QString disksTitle = DApplication::translate("Disk.Widget", "Disks");
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitleTxt = fmTitle.width(tr("磁盘"));
+    int widthTitleTxt = fmTitle.width(disksTitle);
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,tr("磁盘"));
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, disksTitle);
 
     //图标
     int iconSize = 20;
@@ -254,8 +255,8 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     auto spacing = 20;
     auto margin = 10;
 
-    QString recvTitle = DApplication::translate("Process.Graph.View", "磁盘读取");//Download
-    QString sentTitle = DApplication::translate("Process.Graph.View", "磁盘写入");//Upload
+    QString rtagTitle = DApplication::translate("Disk.Widget", "Disk read");
+    QString wtagTitle = DApplication::translate("Disk.Widget", "Disk write");
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmContentUnit(m_contentUnitFont);
@@ -272,7 +273,7 @@ void DiskWidget::paintEvent(QPaintEvent *e)
 
     //磁盘读取标题
     QRect readTitleRect(contentDiskRect.x(), readRect.y() + readRect.height(),
-                        fmContent.size(Qt::TextSingleLine, recvTitle).width(), fmSubContent.height());
+                        fmContent.size(Qt::TextSingleLine, rtagTitle).width(), fmSubContent.height());
 //    //"总计接受"标题
 //    QRect totalReceiveTitleRect(totalReceiveRect.x(), recvTitleRect.y(), totalReceiveRect.width(), recvTitleRect.height());
 
@@ -292,7 +293,7 @@ void DiskWidget::paintEvent(QPaintEvent *e)
 
     //磁盘写入标题writeRect.x(), writeRect.y() + writeRect.height() + 8,
     QRect writeTitleRect(writeRect.x(), writeRect.y() + writeRect.height(),
-                  fmContent.size(Qt::TextSingleLine, recvTitle).width(), fmSubContent.height());
+                  fmContent.size(Qt::TextSingleLine, rtagTitle).width(), fmSubContent.height());
 //    QRect sentTotalTitleRect(totalReceiveRect.x(), sentTitleRect.y(), totalReceiveRect.width(), recvTitleRect.height());
     QRectF r1Ind(contentDiskRect.x() - margin, readTitleRect.y() + qCeil((readTitleRect.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
@@ -320,8 +321,8 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     //标题
 //    painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
-    painter.drawText(readTitleRect, Qt::AlignLeft | Qt::AlignVCenter,recvTitle);
-    painter.drawText(writeTitleRect, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
+    painter.drawText(readTitleRect, Qt::AlignLeft | Qt::AlignVCenter,rtagTitle);
+    painter.drawText(writeTitleRect, Qt::AlignLeft | Qt::AlignVCenter, wtagTitle);
 
     QPainterPath path1, path2;
     path1.addEllipse(r1Ind);
@@ -340,7 +341,8 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     QBrush writeBrush(m_diskWriteColor);
     qreal networkCurveWidth = 1.2;
 
-    painter.setRenderHint(QPainter::Antialiasing, true);//反锯齿
+    //反锯齿
+    painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath clip;
     clip.addRect(chartRect);
     painter.setClipPath(clip);

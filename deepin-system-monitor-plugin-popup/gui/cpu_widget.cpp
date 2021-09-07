@@ -177,13 +177,14 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
+    QString cpuTitle = DApplication::translate("Cpu.Widget", "CPU");
     painter.setFont(m_TitleFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitle = fmTitle.width("处理器");
+    int widthTitle = fmTitle.width(cpuTitle);
     int heightTitle = fmTitle.descent()+fmTitle.ascent();
     QRect cpuTitleRect(titleRect.x(), titleRect.y(), widthTitle, heightTitle);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,
-                     fmContent.elidedText("处理器", Qt::ElideRight, cpuTitleRect.width()));
+                     fmContent.elidedText(cpuTitle, Qt::ElideRight, cpuTitleRect.width()));
 
     //图标
     int iconSize = 20;
@@ -212,8 +213,8 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     painter.setFont(m_textFont);
     QFontMetrics fmText = painter.fontMetrics();
     QRect cpuTextRect(cpuUsageRect.x(), cpuUsageRect.y()+cpuUsageRect.height(),
-                      fmContent.size(Qt::TextSingleLine, tr("总使用率")).width(), fmTextContent.height());
-    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("总使用率"));
+                      fmContent.size(Qt::TextSingleLine, tr("Usage")).width(), fmTextContent.height());
+    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("Usage"));
 
     //分隔符
     int sepheight = 50;

@@ -149,12 +149,13 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
+    QString strMemory = DApplication::translate("Memory.Widget", "Memory");
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitleTxt = fmTitle.width("内存");
+    int widthTitleTxt = fmTitle.width(strMemory);
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,"内存");
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,strMemory);
 
     //图标
     int iconSize = 20;
@@ -167,7 +168,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                             .arg(m_memTotal);
 
     QString memoryContent = QString("%1 (%2%)")
-                          .arg(DApplication::translate("Process.Graph.View", "内存"))//Memory
+                          .arg(strMemory)
                           .arg(m_memPercent);
 
     QString swapTitle = "";
@@ -175,8 +176,8 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     if (m_swapTotal == "") {
         // After the memory and swap space text, add a space before the brackets
         swapTitle = QString("%1 (%2)")
-                    .arg(DApplication::translate("Process.Graph.View", "交换内存"))//Swap
-                    .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
+                    .arg(DApplication::translate("Memory.Widget", "Swap Memory"))
+                    .arg(DApplication::translate("Memory.Widget", "Not enabled"));
         swapContent = "";
     } else {
         swapTitle= QString("%1 / %2")
@@ -184,7 +185,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                                 .arg(m_swapTotal);
 
         swapContent = QString("%1 (%2%)")
-                              .arg(DApplication::translate("Process.Graph.View", "交换内存"))//Memory
+                              .arg(DApplication::translate("Memory.Widget", "Swap Memory"))
                               .arg(m_swapPercent);
     }
 

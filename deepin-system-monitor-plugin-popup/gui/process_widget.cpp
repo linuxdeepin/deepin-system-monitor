@@ -62,14 +62,14 @@ ProcessWidget::ProcessWidget(QWidget *parent)
 //    setFont(m_subContentFont);
     m_processTableView = new ProcessTableView(this);
     m_processNameLabel = new DLabel(this);
-    m_processNameLabel->setText(tr("名称"));
+    m_processNameLabel->setText(tr("Name"));
     m_processNameLabel->setAlignment(Qt::AlignLeft);
     m_processNameLabel->setFixedHeight(30);
     m_processNameLabel->setWindowOpacity(0.3);
 //    m_processNameLabel->setFont(m_subContentFont);
 
     m_processIdLabel = new DLabel(this);
-    m_processIdLabel->setText(tr("处理器"));
+    m_processIdLabel->setText(tr("CPU"));
     m_processIdLabel->setAlignment(Qt::AlignRight);
     m_processIdLabel->setFixedHeight(30);
 
@@ -179,10 +179,10 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     //标题
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitleTxt = fmTitle.width("进程");
+    int widthTitleTxt = fmTitle.width(tr("Process"));
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,"进程");
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Process"));
 
     //图标
     int iconSize = 20;

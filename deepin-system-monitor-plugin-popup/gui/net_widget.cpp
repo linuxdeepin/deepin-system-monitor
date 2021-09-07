@@ -229,10 +229,10 @@ void NetWidget::paintEvent(QPaintEvent *e)
     //标题
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitleTxt = fmTitle.width("网络");
+    int widthTitleTxt = fmTitle.width(tr("Net"));
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,"网络");
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Net"));
 
     //图标
     int iconSize = 20;
@@ -256,10 +256,10 @@ void NetWidget::paintEvent(QPaintEvent *e)
     auto margin = 10;
 
     // Draw network summary.
-    QString recvTitle = DApplication::translate("Process.Graph.View", "正在接受");//Download
-    QString recvTotalTitle = DApplication::translate("Process.Graph.View", "总计接受");//Total Received"
-    QString sentTitle = DApplication::translate("Process.Graph.View", "正在发送");//Upload
-    QString sentTotalTitle = DApplication::translate("Process.Graph.View", "总计发送");//otal Sent
+    QString recvTitle = DApplication::translate("Net.Widget", "Download");
+    QString recvTotalTitle = DApplication::translate("Net.Widget", "Total Received");
+    QString sentTitle = DApplication::translate("Net.Widget", "Upload");
+    QString sentTotalTitle = DApplication::translate("Net.Widget", "Total Sent");
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmContentUnit(m_contentUnitFont);
