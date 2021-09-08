@@ -145,7 +145,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     //标题栏背景
     QRect titleRect(rect().x(), rect().y(), 280, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 167);
+    QRect contentRect(rect().x(), rect().y()+36, 280, 117);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
@@ -196,14 +196,15 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     int letfsize = 36;
     int margin = 10;
+    int fontMargin = 5;
     //内存数字
-    QRect memRect(letfsize, contentRect.y(),// + topsize
+    QRect memRect(letfsize, contentRect.y() + fontMargin,
                   fmMem.size(Qt::TextSingleLine, m_memUsage).width(), fmMem.height());
     //内存单位
-    QRect memRectUnit(memRect.x()+memRect.width()-1, contentRect.y() + 10,
+    QRect memRectUnit(memRect.x()+memRect.width()-1, memRect.y() + margin,
                   fmMemUnit.size(Qt::TextSingleLine, memoryTitleUnit).width(), fmMem.height());
     //内存txt
-    QRect memTxtRect(letfsize, contentRect.y() + memRect.height(),
+    QRect memTxtRect(letfsize, memRect.y() + memRect.height(),
                       fmMemTxt.size(Qt::TextSingleLine, memoryContent).width(),
                       fmMemTxt.height());
     QRectF memIndicatorRect(memTxtRect.x() - margin, memTxtRect.y() + qCeil((memTxtRect.height() - sectionSize) / 2.),
@@ -220,20 +221,13 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                      fmMem.elidedText(m_memUsage, Qt::ElideRight,
                                       rect().width() - memRect.x() - outsideRingRadius));
 
-//    m_memFont.setWeight(QFont::Medium);
     painter.setFont(m_memUnitFont);
-//    painter.setPen(QPen(textColor));
     painter.drawText(memRectUnit, Qt::AlignLeft | Qt::AlignHCenter, memoryTitleUnit);
-
     painter.setFont(m_memTxtFont);
-//    painter.setPen(QPen(summaryColor));
     painter.drawText(memTxtRect, Qt::AlignLeft | Qt::AlignVCenter, memoryContent);
 
-//    qInfo()<<"m_swapUsage: "<<m_swapUsage;
-//    qInfo()<<"swapTitle: "<<swapTitle;
-
     //swap数字
-    QRect swapRect(letfsize, memTxtRect.y() + memTxtRect.height()+margin,
+    QRect swapRect(letfsize, memTxtRect.y() + memTxtRect.height()+fontMargin,
                   fmMem.size(Qt::TextSingleLine, m_swapUsage).width(), fmMem.height());
     //swap单位
     QRect swapRectUnit(swapRect.x()+swapRect.width()-1, swapRect.y()+margin,
@@ -275,7 +269,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                     swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, m_swapPercent.toDouble()/100);
 
     // Draw percent text.
-    painter.setFont(m_memPercentFont);
+    painter.setFont(m_memFont);
     painter.setPen(numberColor);
     painter.drawText(QRect(contentRect.x() + ringCenterPointerX - insideRingRadius,
                            contentRect.y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
@@ -324,13 +318,13 @@ void MemoryWidget::changeFont(const QFont &font)
 
     m_memFont = font;
     m_memFont.setWeight(QFont::Normal);
-    m_memFont.setPointSizeF(m_memFont.pointSizeF()+5);
+    m_memFont.setPointSizeF(Globals::ContentFont);
 
     m_memUnitFont = font;
     m_memUnitFont.setWeight(QFont::Normal);
-    m_memUnitFont.setPointSizeF(m_memUnitFont.pointSizeF());
+    m_memUnitFont.setPointSizeF(Globals::ContentUnitFont);
 
     m_memTxtFont = font;
     m_memTxtFont.setWeight(QFont::ExtraLight);
-    m_memTxtFont.setPointSizeF(m_memTxtFont.pointSizeF()-2 );
+    m_memTxtFont.setPointSizeF(Globals::subContentFont);
 }

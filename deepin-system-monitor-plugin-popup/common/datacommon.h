@@ -74,6 +74,12 @@ const static int TitleTransDark = 20;
 const static int contentTransDark = 13;
 const static int hoverTransDark = 38;
 
+//字体大小
+const static int ContentFont = 14;
+const static int PicFont = 12;
+const static int ContentUnitFont = 9;
+const static int subContentFont = 8;
+
 const QString DEEPIN_SYSTEM_MONITOR_PATH = "/usr/bin/deepin-system-monitor";
 
 /*!

@@ -156,9 +156,10 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    QFontMetrics fmContent(m_TitleFont);
-    QFontMetrics fmSubContent(m_cpuFont);
-    QFontMetrics fmTextContent(m_textFont);
+    QFontMetrics fmTitleContent(m_TitleFont);
+    QFontMetrics fmContent(m_contentFont);
+    QFontMetrics fmContentUnit(m_contentUnitFont);
+    QFontMetrics fmSubContent(m_subContentFont);
 
     //裁剪绘制区域
     QPainterPath path;
@@ -184,7 +185,7 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     int heightTitle = fmTitle.descent()+fmTitle.ascent();
     QRect cpuTitleRect(titleRect.x(), titleRect.y(), widthTitle, heightTitle);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,
-                     fmContent.elidedText(cpuTitle, Qt::ElideRight, cpuTitleRect.width()));
+                     fmTitleContent.elidedText(cpuTitle, Qt::ElideRight, cpuTitleRect.width()));
 
     //图标
     int iconSize = 20;
@@ -193,34 +194,34 @@ void CpuWidget::paintEvent(QPaintEvent *e)
 
     //cpu使用率
 //    painter.setPen(ltextColor);
-    painter.setFont(m_cpuFont);
+    painter.setFont(m_contentFont);
     QFontMetrics fmCpu = painter.fontMetrics();
     QString cpuStatText = QString::number(m_cpuPer, 'f', 1);
     int widthCpu = fmCpu.width(cpuStatText);
     int heightCpu = fmCpu.descent()+fmCpu.ascent();
-    QRect cpuUsageRect(contentRect.x()+27, contentRect.y()+13, widthCpu, heightCpu);
+    QRect cpuUsageRect(contentRect.x()+27, contentRect.y()+10, widthCpu, heightCpu);
     painter.drawText(cpuUsageRect, Qt::AlignLeft | Qt::AlignTop, cpuStatText);
     //cpu使用率百分号
-    painter.setFont(m_TitleFont);
+    painter.setFont(m_contentUnitFont);
     QFontMetrics fmCpuper = painter.fontMetrics();
     int widthCpuper = fmCpuper.width("%");
     int heightCpuper = fmCpuper.descent()+fmCpuper.ascent();
-    QRect cpuperUsageRect(contentRect.x()+27+widthCpu, contentRect.y()+13+ heightCpu/4, widthCpuper, heightCpuper);
+    QRect cpuperUsageRect(contentRect.x()+27+widthCpu, cpuUsageRect.y()+ heightCpu/4, widthCpuper, heightCpuper);
     painter.drawText(cpuperUsageRect, Qt::AlignLeft | Qt::AlignTop, "%");
 
     //总使用率 文本
 //    painter.setPen(summaryColor);
-    painter.setFont(m_textFont);
+    painter.setFont(m_subContentFont);
     QFontMetrics fmText = painter.fontMetrics();
     QRect cpuTextRect(cpuUsageRect.x(), cpuUsageRect.y()+cpuUsageRect.height(),
-                      fmContent.size(Qt::TextSingleLine, tr("Usage")).width(), fmTextContent.height());
+                      fmContent.size(Qt::TextSingleLine, tr("Usage")).width(), fmSubContent.height());
     painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("Usage"));
 
     //分隔符
     int sepheight = 50;
     int sepwidth =(contentRect.width() - 92-10)/2;
     int rightMax = contentRect.x()+contentRect.width()-10;
-    painter.setFont(m_cpuFont);
+    painter.setFont(m_contentFont);
     QRect separatorRect1(contentRect.x()+cpuTxtWidth, contentRect.y()+10, 1, sepheight);
     painter.fillRect(separatorRect1, QBrush(QColor(0, 0, 0,20)));
     QRect separatorRect2(contentRect.x()+cpuTxtWidth+sepwidth, contentRect.y()+10, 1, sepheight);
@@ -241,7 +242,6 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     clip.addRect(chartRect);
     painter.setClipPath(clip);
     painter.setRenderHint(QPainter::Antialiasing, true);//反锯齿
-
 
     painter.translate(chartRect.x() + 2, chartRect.y() + chartRect.height() / 2 - 2);
     painter.scale(1, -1);
@@ -288,11 +288,15 @@ void CpuWidget::changeFont(const QFont &font)
     m_TitleFont.setWeight(QFont::DemiBold);
     m_TitleFont.setPointSizeF(m_TitleFont.pointSizeF());
 
-    m_cpuFont = font;
-    m_cpuFont.setWeight(QFont::Normal);
-    m_cpuFont.setPointSizeF(m_cpuFont.pointSizeF()+8);
+    m_contentFont = font;
+    m_contentFont.setWeight(QFont::Normal);
+    m_contentFont.setPointSizeF(Globals::ContentFont+3);
 
-    m_textFont = font;
-    m_textFont.setWeight(QFont::ExtraLight);
-    m_textFont.setPointSizeF(m_textFont.pointSizeF() - 2);
+    m_contentUnitFont = font;
+    m_contentUnitFont.setWeight(QFont::Normal);
+    m_contentUnitFont.setPointSizeF(Globals::ContentUnitFont+3);
+
+    m_subContentFont = font;
+    m_subContentFont.setWeight(QFont::ExtraLight);
+    m_subContentFont.setPointSizeF(Globals::subContentFont);
 }

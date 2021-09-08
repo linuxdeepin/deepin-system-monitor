@@ -86,7 +86,6 @@ private:
     qreal m_lastMemPercent = 0.;
     qreal m_lastSwapPercent = 0.;
     QPropertyAnimation *m_animation {};
-    QFont m_memPercentFont;
 
 
     QString m_memUsage;

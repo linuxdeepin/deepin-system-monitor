@@ -66,12 +66,13 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     m_processNameLabel->setAlignment(Qt::AlignLeft);
     m_processNameLabel->setFixedHeight(30);
     m_processNameLabel->setWindowOpacity(0.3);
-//    m_processNameLabel->setFont(m_subContentFont);
+    m_processNameLabel->setFont(m_subContentFont);
 
     m_processIdLabel = new DLabel(this);
     m_processIdLabel->setText(tr("CPU"));
     m_processIdLabel->setAlignment(Qt::AlignRight);
     m_processIdLabel->setFixedHeight(30);
+    m_processIdLabel->setFont(m_subContentFont);
 
     QHBoxLayout *headerLayout = new QHBoxLayout(this);
     headerLayout->addWidget(m_processNameLabel);
@@ -81,7 +82,7 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     headerLabel->setFixedHeight(30);
     headerLabel->setContentsMargins(10, 0, 10, 0);
 
-
+;
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 //    mainLayout->setMargin(20);
@@ -230,9 +231,9 @@ void ProcessWidget::changeFont(const QFont &font)
 
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Normal);
-    m_contentFont.setPointSizeF(m_contentFont.pointSizeF()+5);
+    m_contentFont.setPointSizeF(Globals::ContentFont);
 
     m_subContentFont = font;
     m_subContentFont.setWeight(QFont::ExtraLight);
-    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF() );
+    m_subContentFont.setPointSizeF(Globals::subContentFont+1);
 }

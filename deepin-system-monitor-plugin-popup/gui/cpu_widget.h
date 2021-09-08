@@ -83,8 +83,9 @@ private:
     QColor ltextColor;
 
     QFont m_TitleFont;
-    QFont m_cpuFont;
-    QFont m_textFont;
+    QFont m_contentFont;
+    QFont m_contentUnitFont;
+    QFont m_subContentFont;
     QIcon m_icon {};
 
     bool m_isHover = false;

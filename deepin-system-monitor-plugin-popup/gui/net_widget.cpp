@@ -430,13 +430,13 @@ void NetWidget::changeFont(const QFont &font)
 
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Normal);
-    m_contentFont.setPointSizeF(m_contentFont.pointSizeF()+5);
+    m_contentFont.setPointSizeF(Globals::ContentFont);
 
     m_contentUnitFont = font;
     m_contentUnitFont.setWeight(QFont::Normal);
-    m_contentUnitFont.setPointSizeF(m_contentUnitFont.pointSizeF());
+    m_contentUnitFont.setPointSizeF(Globals::ContentUnitFont);
 
     m_subContentFont = font;
     m_subContentFont.setWeight(QFont::ExtraLight);
-    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF()-2 );
+    m_subContentFont.setPointSizeF(Globals::subContentFont);
 }
