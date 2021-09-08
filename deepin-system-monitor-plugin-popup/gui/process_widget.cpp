@@ -180,10 +180,10 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     //标题
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitleTxt = fmTitle.width(tr("Process"));
+    int widthTitleTxt = fmTitle.width(tr("Processes"));
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Process"));
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Processes"));
 
     //图标
     int iconSize = 20;

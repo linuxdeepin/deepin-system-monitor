@@ -176,7 +176,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     if (m_swapTotal == "") {
         // After the memory and swap space text, add a space before the brackets
         swapTitle = QString("%1 (%2)")
-                    .arg(DApplication::translate("Memory.Widget", "Swap Memory"))
+                    .arg(DApplication::translate("Memory.Widget", "Swap"))
                     .arg(DApplication::translate("Memory.Widget", "Not enabled"));
         swapContent = "";
     } else {
@@ -185,7 +185,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                                 .arg(m_swapTotal);
 
         swapContent = QString("%1 (%2%)")
-                              .arg(DApplication::translate("Memory.Widget", "Swap Memory"))
+                              .arg(DApplication::translate("Memory.Widget", "Swap"))
                               .arg(m_swapPercent);
     }
 

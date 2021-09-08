@@ -214,8 +214,8 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     painter.setFont(m_subContentFont);
     QFontMetrics fmText = painter.fontMetrics();
     QRect cpuTextRect(cpuUsageRect.x(), cpuUsageRect.y()+cpuUsageRect.height(),
-                      fmContent.size(Qt::TextSingleLine, tr("Usage")).width(), fmSubContent.height());
-    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("Usage"));
+                      fmSubContent.size(Qt::TextSingleLine, tr("Utilization")).width(), fmSubContent.height());
+    painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("Utilization"));
 
     //分隔符
     int sepheight = 50;

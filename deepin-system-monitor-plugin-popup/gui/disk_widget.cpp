@@ -225,7 +225,7 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
-    QString disksTitle = DApplication::translate("Disk.Widget", "Disks");
+    QString disksTitle = DApplication::translate("Disk.Widget", "Disk");
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
     int widthTitleTxt = fmTitle.width(disksTitle);
@@ -255,8 +255,8 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     auto spacing = 20;
     auto margin = 10;
 
-    QString rtagTitle = DApplication::translate("Disk.Widget", "Disk read");
-    QString wtagTitle = DApplication::translate("Disk.Widget", "Disk write");
+    QString rtagTitle = DApplication::translate("Disk.Widget", "Read");
+    QString wtagTitle = DApplication::translate("Disk.Widget", "Write");
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmContentUnit(m_contentUnitFont);
