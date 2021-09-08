@@ -291,6 +291,16 @@ target_link_libraries(${PROJECT_NAME}
     dframeworkdbus
 )
 
+if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
+
+    # generate qm
+    message(${CMAKE_CURRENT_SOURCE_DIR}/translations)
+    execute_process(COMMAND bash "translate_generation.sh"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
+endif ()
+
+#
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.deepin.SystemMonitorPluginPopup.service DESTINATION /usr/share/dbus-1/services)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/deepin-system-monitor-plugin-popup.desktop DESTINATION /etc/xdg/autostart)
@@ -299,7 +309,6 @@ file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
         DESTINATION "/usr/share/deepin-system-monitor-plugin-popup/translations")
 
-message(${CMAKE_CURRENT_SOURCE_DIR} )
 #install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.deepin.SystemMonitorPluginPopup.conf DESTINATION /etc/dbus-1/system.d)
 
 
