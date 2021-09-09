@@ -247,13 +247,19 @@ void MonitorPlugin::udpateTipsInfo()
     file.setFileName("/proc/stat");
     file.open(QIODevice::ReadOnly);
     strLineContext = file.readLine();
-    QByteArray ba;
-    ba = strLineContext.toLatin1();
-    const char *ch;
-    ch = ba.constData();
-    char cpu[5];
     long user,nice,sys,idle,iowait,irq,softirq,tt;
-    sscanf(ch,"%s%ld%ld%ld%ld%ld%ld%ld",cpu,&user,&nice,&sys,&idle,&iowait,&irq,&softirq);
+//    sscanf(ch,"%s%ld%ld%ld%ld%ld%ld%ld",cpu,&user,&nice,&sys,&idle,&iowait,&irq,&softirq);
+    // 分割行数据
+    QStringList cpuStatus =  QString(strLineContext).split(" ", QString::SkipEmptyParts);
+    user = cpuStatus.at(1).toInt();
+    nice = cpuStatus.at(2).toInt();
+    sys = cpuStatus.at(3).toInt();
+    idle = cpuStatus.at(4).toInt();
+    iowait = cpuStatus.at(5).toInt();
+    irq = cpuStatus.at(6).toInt();
+    softirq = cpuStatus.at(7).toInt();
+
+
     tt = user + nice + sys + idle + iowait + irq + softirq;
     file.close();
     QString cusage = "";

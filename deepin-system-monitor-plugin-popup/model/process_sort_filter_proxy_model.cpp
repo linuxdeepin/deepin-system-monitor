@@ -96,12 +96,7 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
         rc |= pid.data().toString().contains(filterRegExp());
     if (rc) return rc;
 
-//    // user name matches pattern
-//    const QModelIndex &user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
-//    if (user.isValid())
-//        rc |= user.data().toString().contains(filterRegExp());
-
-    return rc;
+    return false;
 }
 
 // compare two items with the specified index

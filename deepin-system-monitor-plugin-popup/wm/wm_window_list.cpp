@@ -147,50 +147,50 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
             return {};
 
         uint *data = reinterpret_cast<uint *>(xcb_get_property_value(reply.get()));
-        if (data == nullptr)
-            return {};
+        if (data)
+        {
+            //get the maximum image from data
+            int max_w = 0;
+            int max_h = 0;
 
-        //get the maximum image from data
-        int max_w = 0;
-        int max_h = 0;
+            uint *max_icon = nullptr;
+            uint *data_end = reinterpret_cast<uint *>(xcb_get_property_value_end(reply.get()).data);
 
-        uint *max_icon = nullptr;
-        uint *data_end = reinterpret_cast<uint *>(xcb_get_property_value_end(reply.get()).data);
+            while ((data + offsetImagePointerWH) < data_end) {
 
-        while ((data + offsetImagePointerWH) < data_end) {
+                int w = static_cast<int>(data[0]);
+                int h = static_cast<int>(data[1]);
+                int size = w * h;
 
-            int w = static_cast<int>(data[0]);
-            int h = static_cast<int>(data[1]);
-            int size = w * h;
+                data += offsetImagePointerWH;
 
-            data += offsetImagePointerWH;
+                if (size <= 0 || w > maxImageW || h > maxImageH) {
+                    break;
+                }
 
-            if (size <= 0 || w > maxImageW || h > maxImageH) {
-                break;
+                if (w > max_w || h > max_h) {
+                    max_icon = data;
+                    max_w = w;
+                    max_h = h;
+                }
+
+                data += size;
             }
 
-            if (w > max_w || h > max_h) {
-                max_icon = data;
-                max_w = w;
-                max_h = h;
+            if (max_icon != nullptr) {
+                if (max_w > maxImageW || max_h > maxImageH) {
+                    return QImage();
+                }
+
+                QImage img(max_w, max_h, QImage::Format_ARGB32);
+                int byteCount = img.byteCount() / 4;
+
+                for (int i = 0; i < byteCount; ++i) {
+                    //Save covert uchar* to uint*
+                    (reinterpret_cast<uint*>(img.bits()))[i] = max_icon[i];
+                }
+                return img;
             }
-
-            data += size;
-        }
-
-        if (max_icon != nullptr) {
-            if (max_w > maxImageW || max_h > maxImageH) {
-                return QImage();
-            }
-
-            QImage img(max_w, max_h, QImage::Format_ARGB32);
-            int byteCount = img.byteCount() / 4;
-
-            for (int i = 0; i < byteCount; ++i) {
-                //Save covert uchar* to uint*
-                (reinterpret_cast<uint*>(img.bits()))[i] = max_icon[i];
-            }
-            return img;
         }
     }
     return {};

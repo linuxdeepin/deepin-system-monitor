@@ -226,12 +226,18 @@ QString getFlatpakAppIcon(QString flatpakAppid)
     const QString dirPath = output.split("Location:")[1].split("\n")[0].simplified();
 
     QDir flatpakDir = QDir(dirPath);
-    flatpakDir.cd("export");
-    flatpakDir.cd("share");
-    flatpakDir.cd("icons");
-    flatpakDir.cd("hicolor");
-    flatpakDir.cd("scalable");
-    flatpakDir.cd("apps");
+    if (!flatpakDir.cd("export"))
+        return {};
+    if (!flatpakDir.cd("share"))
+        return {};
+    if (!flatpakDir.cd("icons"))
+        return {};
+    if (!flatpakDir.cd("hicolor"))
+        return {};
+    if (!flatpakDir.cd("scalable"))
+        return {};
+    if (!flatpakDir.cd("apps"))
+        return {};
 
     const QString appID = flatpakAppid.split("app/")[1].split("/")[0];
     return flatpakDir.filePath(QString("%1.svg").arg(appID));
