@@ -56,7 +56,7 @@ void ProcessSortFilterProxyModel::setFilterType(int type)
 
 int ProcessSortFilterProxyModel::rowCount(const QModelIndex &parent) const
 {
-    return 5;
+    return 7;
 }
 
 // filters the row of specified parent with given pattern
