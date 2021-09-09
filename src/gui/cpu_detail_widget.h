@@ -91,7 +91,7 @@ public:
     explicit CPUDetailWidget(QWidget *parent = nullptr);
 
 private slots:
-    void detailFontChanged(const QFont &font) override;
+    void detailFontChanged(const QFont &font);
 
 private:
     CPUDetailGrapTable *m_graphicsTable = nullptr;

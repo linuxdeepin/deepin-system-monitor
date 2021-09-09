@@ -228,12 +228,12 @@ void ProcessTableView::openExecDirWithFM()
                     QString output(whichProcess.readAllStandardOutput());
 
                     QDir flatpakRootDir(output.split("Location:")[1].split("\n")[0].simplified());
-                    flatpakRootDir.cd("files");
-                    flatpakRootDir.cd("bin");
-
-                    // Need split full path to get last filename.
-                    const QString &path = QString(flatpakRootDir.absoluteFilePath(cmdline.split("/").last())).trimmed();
-                    common::openFilePathItem(path);
+                    if (flatpakRootDir.cd("files") && flatpakRootDir.cd("bin"))
+                    {
+                        // Need split full path to get last filename.
+                        const QString &path = QString(flatpakRootDir.absoluteFilePath(cmdline.split("/").last())).trimmed();
+                        common::openFilePathItem(path);
+                    }
                 }
             }
         } // ::if(cmdline)

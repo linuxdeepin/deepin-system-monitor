@@ -278,20 +278,27 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
     bool b          {false};
 
     fp = fopen(path.toLocal8Bit(), "r");
-    if (!fp)
-        return {};
+    QString descStr;
+    if (fp)
+    {
+        while ((fgets(buf.data(), BLEN, fp))) {
+            descStr = QString("Description=%1").arg(buf.data());
+            QStringList descStrList = descStr.split(QRegExp("[\n]"),QString::SkipEmptyParts);
+            if (descStrList.size() > 0) {
+                descStr = descStrList.at(0);
+                b = true;
+                break;
+            } else {
+                b = false;
+            }
+        }
+        fclose(fp);
 
-    while ((fgets(buf.data(), BLEN, fp))) {
-        if (sscanf(buf.data(), "Description=%[^\n]", desc.data()) == 1) {
-            b = true;
-            break;
+        if (b) {
+            return descStr;
+        } else {
+            return {};
         }
     }
-    fclose(fp);
-
-    if (b) {
-        return desc.data();
-    } else {
-        return {};
-    }
+    return {};
 }

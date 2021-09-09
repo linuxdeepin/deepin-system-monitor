@@ -201,12 +201,13 @@ void DeailTableModelBlock::updateModel()
         m_mapInfo.insert(infoDB[i].deviceName(), infoDB[i]);
     }
 
-    if (currDeciveName == "" && infoDB.size() >= 0) {
+    if (currDeciveName == "" && !infoDB.isEmpty()) {
         currDeciveName = infoDB[0].deviceName();
         m_blockInfo = infoDB[0];
-    } else if (infoDB.size() >= 0) {
+    } else if (!infoDB.isEmpty()) {
         m_blockInfo = m_mapInfo.find(currDeciveName).value();
     }
+
     endResetModel();
 }
 

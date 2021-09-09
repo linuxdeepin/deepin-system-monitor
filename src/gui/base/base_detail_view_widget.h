@@ -50,7 +50,7 @@ public:
     int titleHeight();
 
 public slots:
-    virtual void detailFontChanged(const QFont &font);
+    void detailFontChanged(const QFont &font);
 
 private:
     void updateWidgetGrometry();
