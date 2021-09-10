@@ -39,6 +39,8 @@
 #include <QApplication>
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
+// Test
+#include <QTimer>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -54,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
     , m_dockInter(new DBusDockInterface)
     , m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor)
     , m_regionMonitor(nullptr)
-    , m_content(new DWidget(parent))
     , m_xAni(new QPropertyAnimation(this))
     , m_widthAni(new QPropertyAnimation(this))
     , m_aniGroup(new QSequentialAnimationGroup(this))
@@ -81,21 +82,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::Toggle()
 {
-    if (m_aniGroup->state() == QAbstractAnimation::Running)
-        return;
-
-    if (isVisible()) {
-        hideAni();
+    if (m_hasComposite) {
+        if (m_aniGroup->state() == QAbstractAnimation::Running)
+            return;
+        if (isVisible()) {
+            hideAni();
+        } else {
+            showAni();
+        }
     } else {
-        showAni();
+        if (isVisible()) {
+            hideAni();
+        } else {
+            showAni();
+        }
     }
 }
 
 void MainWindow::geometryChanged()
 {
     adjustPosition();
-
-    setX(Globals::WindowMargin);
 
     //init animation by 'm_rect'
     m_xAni->setStartValue(getDisplayScreen().x());
@@ -113,7 +119,12 @@ void MainWindow::showAni()
 
     m_trickTimer->start();
     if (!m_hasComposite) {
-        setGeometry(QRect(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height()));
+        if (m_daemonDockInter->position() == DOCK_RIGHT) {
+            setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
+        } else {
+            setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
+        }
+
         setFixedWidth(m_rect.width());
         show();
         activateWindow();
@@ -121,7 +132,6 @@ void MainWindow::showAni()
         return;
     }
     setFixedWidth(0);
-    move(m_rect.x() + m_rect.width(), m_rect.y());
 
     show();
     activateWindow();
@@ -192,7 +202,7 @@ void MainWindow::Hide()
 
 void MainWindow::setX(int x)
 {
-    move(m_rect.x() + x, m_rect.y());
+    Q_UNUSED(x)
 }
 
 void MainWindow::CompositeChanged()
@@ -224,7 +234,7 @@ void MainWindow::initUI()
     setFixedWidth(Globals::WindowWidth);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setContentsMargins(10, 10, 10, 10);
+//    mainLayout->setContentsMargins(10, 10, 10, 10);
     mainLayout->setSpacing(0);
 
     m_cpuMonitor = new CpuWidget(this);
@@ -239,11 +249,7 @@ void MainWindow::initUI()
     mainLayout->addWidget(m_diskWidget);
     mainLayout->addWidget(m_processWidget);
 
-    m_content->setLayout(mainLayout);
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    layout->addWidget(m_content);
+    this->setLayout(mainLayout);
 
     setFocusPolicy(Qt::NoFocus);
 }
@@ -279,9 +285,9 @@ void MainWindow::initConnect()
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
 
-    connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](QVariant value) {
+    connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant &value) {
         int width = value.toInt();
-        move(m_rect.x()+ Globals::WindowWidth - width, m_rect.y());
+        move(m_rect.x() + m_rect.width() + Globals::WindowMargin - width, m_rect.y());
     });
 
     QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
@@ -344,32 +350,37 @@ void MainWindow::adjustPosition()
     case DOCK_TOP:
         rect.moveTop(dockRect.height());
         rect.setHeight(rect.height() - dockRect.height());
-        if (getDisplayScreen().x() > 0) {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() + dockRect.width() - rect.width() - Globals::WindowMargin);
+        if (m_daemonDockInter->displayMode() == 0) {
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
         } else {
-            rect.moveLeft(dockRect.width() - rect.width() - Globals::WindowMargin);
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
         }
-
         break;
     case DOCK_BOTTOM:
         rect.setHeight(rect.height() - dockRect.height());
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() + dockRect.width() - rect.width() - Globals::WindowMargin);
-        if (getDisplayScreen().x() > 0) {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() + dockRect.width() - rect.width() - Globals::WindowMargin);
+        if (m_daemonDockInter->displayMode() == 0) {
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
         } else {
-            rect.moveLeft(dockRect.width() - rect.width() - Globals::WindowMargin);
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
         }
+
         break;
     case DOCK_LEFT:
         rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
         break;
     case DOCK_RIGHT:
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - dockRect.width() - Globals::WindowMargin);
+        if (m_daemonDockInter->displayMode() == 0) {
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width() + Globals::WindowMargin + Globals::DockMargin));
+        } else {
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width() + Globals::WindowMargin));
+        }
+
         break;
-    default:;
+    default:
+        break;
     }
 
-    // 左上下部分预留的间隙- dockRect.height()
+    // 右上下部分预留的间隙- dockRect.height()
     rect -= QMargins(0, Globals::WindowMargin, Globals::WindowMargin, Globals::WindowMargin);
 
     // 针对时尚模式的特殊处理
@@ -385,14 +396,14 @@ void MainWindow::adjustPosition()
         case DOCK_LEFT:
             rect -= QMargins(Globals::WindowMargin, 0, 0, 0);
             break;
-        default:;
+        default:
+            break;
         }
     }
 
     setGeometry(rect);
     m_rect = rect;
     setFixedSize(rect.size());
-    m_content->setFixedSize(rect.size().width()+Globals::WindowMargin, rect.size().height()+Globals::WindowMargin);
 }
 
 QRect MainWindow::getDisplayScreen()
@@ -438,6 +449,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
 void MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget()
 {
-    Toggle();
+    QTimer::singleShot(0, this, &MainWindow::Toggle);
 }
 

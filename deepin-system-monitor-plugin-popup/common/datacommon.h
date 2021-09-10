@@ -49,6 +49,7 @@ const QString SERVICE_PATH = "/com/deepin/SystemMonitorPluginPopup";
 
 const static int WindowWidth = 310;
 const static int WindowMargin = 10;             //边距
+const static int DockMargin = 5;   //dock栏边距
 const static int WindowTitleHeight = 56;
 const static int ItemTitleHeight = 36;          //Item标题栏高度
 const static int ItemStatusBarHeight = 30;      //Item状态栏高度

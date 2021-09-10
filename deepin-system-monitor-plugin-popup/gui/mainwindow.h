@@ -65,7 +65,7 @@ class MainWindow : public DBlurEffectWidget
 {
     Q_OBJECT
     Q_PROPERTY(int width READ getWidth WRITE setFixedWidth)
-    Q_PROPERTY(int x READ getX WRITE setX)
+    Q_PROPERTY(int x WRITE setX)
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
@@ -141,7 +141,7 @@ private:
 
 
     int getWidth() const { return this->width(); }
-    int getX() const { return this->pos().x(); }
+//    int getX() const { return this->pos().x(); }
 
 
     bool initDBus();
@@ -163,7 +163,6 @@ private:
     SystemMonitorDBusAdaptor *m_systemMonitorDbusAdaptor;
     DRegionMonitor *m_regionMonitor;
 
-    DWidget *m_content;
 //    IconButton *m_clearButton;
 //    ListView *m_listview;
 //    ClipboardModel *m_model;
