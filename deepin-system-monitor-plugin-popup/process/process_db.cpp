@@ -20,12 +20,12 @@
 #include "process_db.h"
 
 #include "wm/wm_window_list.h"
-#include "desktop_entry_cache.h"
-#include "process_icon.h"
-#include "process_icon_cache.h"
-#include "process_name.h"
-#include "process_name_cache.h"
-#include "process_controller.h"
+#include "process/desktop_entry_cache.h"
+#include "process/process_icon.h"
+#include "process/process_icon_cache.h"
+#include "process/process_name.h"
+#include "process/process_name_cache.h"
+#include "process/process_controller.h"
 
 #include <QReadLocker>
 #include <QWriteLocker>

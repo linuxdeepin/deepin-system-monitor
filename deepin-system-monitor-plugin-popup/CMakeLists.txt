@@ -16,6 +16,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall ")
 set(CMAKE_CXX_FLAGS "-Wl,--as-need -fPIE")
 set(CMAKE_EXE_LINKER_FLAGS "-pie")
 
+set(MAIN_APP_DIR ${CMAKE_SOURCE_DIR}/deepin-system-monitor-main)
+
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_definitions("-DQT_NO_DEBUG_OUTPUT")
 endif()
@@ -64,95 +66,97 @@ include_directories(${LIB_UDEV_INCLUDE_DIRS})
 
 #include_directories(${QGSettings_INCLUDE_DIRS})
 
+include_directories(${MAIN_APP_DIR})
+
 FILE(GLOB_RECURSE SRCS "*.h" "*.cpp")
 
 SET(HPP_MODEL
-    model/cpu_info_model.h
-    model/cpu_stat_model.h
-    model/cpu_list_model.h
-    model/process_sort_filter_proxy_model.h
-    model/process_table_model.h
+    ${MAIN_APP_DIR}/model/cpu_info_model.h
+    ${MAIN_APP_DIR}/model/cpu_stat_model.h
+    ${MAIN_APP_DIR}/model/cpu_list_model.h
+    ${MAIN_APP_DIR}/model/process_sort_filter_proxy_model.h
+    ${MAIN_APP_DIR}/model/process_table_model.h
 )
 
 SET(CPP_MODEL
-    model/cpu_info_model.cpp
-    model/cpu_stat_model.cpp
-    model/cpu_list_model.cpp
-    model/process_sort_filter_proxy_model.cpp
-    model/process_table_model.cpp
+    ${MAIN_APP_DIR}/model/cpu_info_model.cpp
+    ${MAIN_APP_DIR}/model/cpu_stat_model.cpp
+    ${MAIN_APP_DIR}/model/cpu_list_model.cpp
+    ${MAIN_APP_DIR}/model/process_sort_filter_proxy_model.cpp
+    ${MAIN_APP_DIR}/model/process_table_model.cpp
 )
 
 SET(HPP_GLOBAL
     common/datacommon.h
-    common/common.h
+    ${MAIN_APP_DIR}/common/common.h
     common/utils.h
-    common/hash.h
-    common/sample.h
-    common/stack_trace.h
-    common/thread_manager.h
-    common/time_period.h
-    common/base_thread.h
-    common/error_context.h
-    common/han_latin.h
-    common/settings.h
-    common/perf.h
+    ${MAIN_APP_DIR}/common/hash.h
+    ${MAIN_APP_DIR}/common/sample.h
+    ${MAIN_APP_DIR}/stack_trace.h
+    ${MAIN_APP_DIR}/common/thread_manager.h
+    ${MAIN_APP_DIR}/common/time_period.h
+    ${MAIN_APP_DIR}/common/base_thread.h
+    ${MAIN_APP_DIR}/common/error_context.h
+    ${MAIN_APP_DIR}/common/han_latin.h
+    ${MAIN_APP_DIR}/settings.h
+    ${MAIN_APP_DIR}/common/perf.h
 )
 
 SET(CPP_GLOBAL
     common/utils.cpp
-    common/hash.cpp
-    common/common.cpp
-    common/thread_manager.cpp
-    common/time_period.cpp
-    common/error_context.cpp
-    common/han_latin.cpp
-    common/settings.cpp
-    common/perf.cpp
+    ${MAIN_APP_DIR}/common/hash.cpp
+    ${MAIN_APP_DIR}/common/common.cpp
+    ${MAIN_APP_DIR}/common/thread_manager.cpp
+    ${MAIN_APP_DIR}/common/time_period.cpp
+    ${MAIN_APP_DIR}/common/error_context.cpp
+    ${MAIN_APP_DIR}/common/han_latin.cpp
+    ${MAIN_APP_DIR}/settings.cpp
+    ${MAIN_APP_DIR}/common/perf.cpp
 )
 
 SET(HPP_SYSTEM
-    system/private/cpu_p.h
-    system/private/cpu_set_p.h
-    system/private/mem_p.h
-    system/private/sys_info_p.h
-    system/private/block_device_p.h
-    system/diskio_info.h
+    ${MAIN_APP_DIR}/system/private/cpu_p.h
+    ${MAIN_APP_DIR}/system/private/cpu_set_p.h
+    ${MAIN_APP_DIR}/system/private/mem_p.h
+    ${MAIN_APP_DIR}/system/private/sys_info_p.h
+    ${MAIN_APP_DIR}/system/private/block_device_p.h
+    ${MAIN_APP_DIR}/system/diskio_info.h
     system/cpu_set.h
-    system/cpu.h
+    ${MAIN_APP_DIR}/system/cpu.h
     system/device_db.h
-    system/mem.h
-    system/net_info.h
-    system/packet.h
-    system/sys_info.h
+    ${MAIN_APP_DIR}/system/mem.h
+    ${MAIN_APP_DIR}/system/net_info.h
+    ${MAIN_APP_DIR}/system/packet.h
+    ${MAIN_APP_DIR}/system/sys_info.h
 
-    system/system_monitor_thread.h
-    system/system_monitor.h
-    system/block_device_info_db.h
-    system/block_device.h
+    ${MAIN_APP_DIR}/system/system_monitor_thread.h
+    ${MAIN_APP_DIR}/system/system_monitor.h
+    ${MAIN_APP_DIR}/system/block_device_info_db.h
+    ${MAIN_APP_DIR}/system/block_device.h
 )
 
 SET(CPP_SYSTEM
-    system/diskio_info.cpp
+    ${MAIN_APP_DIR}/system/diskio_info.cpp
     system/cpu_set.cpp
-    system/cpu.cpp
+    ${MAIN_APP_DIR}/system/cpu.cpp
     system/device_db.cpp
-    system/mem.cpp
-    system/net_info.cpp
-    system/sys_info.cpp
-    system/system_monitor_thread.cpp
-    system/system_monitor.cpp
-    system/block_device_info_db.cpp
-    system/block_device.cpp
+    ${MAIN_APP_DIR}/system/mem.cpp
+    ${MAIN_APP_DIR}/system/net_info.cpp
+    ${MAIN_APP_DIR}/system/sys_info.cpp
+    ${MAIN_APP_DIR}/system/system_monitor_thread.cpp
+    ${MAIN_APP_DIR}/system/system_monitor.cpp
+    ${MAIN_APP_DIR}/system/block_device_info_db.cpp
+    ${MAIN_APP_DIR}/system/block_device.cpp
 )
 
 SET(HPP_GUI
     gui/base/base_table_view.h
-    gui/base/base_header_view.h
-    gui/base/base_item_delegate.h
+    ${MAIN_APP_DIR}/gui/base/base_header_view.h
+    ${MAIN_APP_DIR}/gui/base/base_item_delegate.h
     gui/mainwindow.h
     gui/datadealsingleton.h
     gui/process_table_view.h
-    gui/ui_common.h
+    ${MAIN_APP_DIR}/gui/ui_common.h
     gui/cpu_widget.h
     gui/disk_widget.h
     gui/memory_widget.h
@@ -163,12 +167,12 @@ SET(HPP_GUI
 
 SET(CPP_GUI
     gui/base/base_table_view.cpp
-    gui/base/base_header_view.cpp
-    gui/base/base_item_delegate.cpp
+    ${MAIN_APP_DIR}/gui/base/base_header_view.cpp
+    ${MAIN_APP_DIR}/gui/base/base_item_delegate.cpp
     gui/mainwindow.cpp
     gui/datadealsingleton.cpp
     gui/process_table_view.cpp
-    gui/ui_common.cpp
+    ${MAIN_APP_DIR}/gui/ui_common.cpp
     gui/cpu_widget.cpp
     gui/disk_widget.cpp
     gui/memory_widget.cpp
@@ -178,19 +182,19 @@ SET(CPP_GUI
 
 
 SET(HPP_WM
-    wm/wm_window_list.h
-    wm/wm_atom.h
-    wm/wm_connection.h
-    wm/wm_info.h
-    wm/wm_window_tree.h
+    ${MAIN_APP_DIR}/wm/wm_window_list.h
+    ${MAIN_APP_DIR}/wm/wm_atom.h
+    ${MAIN_APP_DIR}/wm/wm_connection.h
+    ${MAIN_APP_DIR}/wm/wm_info.h
+    ${MAIN_APP_DIR}/wm/wm_window_tree.h
 )
 
 SET(CPP_WM
-    wm/wm_window_list.cpp
-    wm/wm_atom.cpp
-    wm/wm_connection.cpp
-    wm/wm_info.cpp
-    wm/wm_window_tree.cpp
+    ${MAIN_APP_DIR}/wm/wm_window_list.cpp
+    ${MAIN_APP_DIR}/wm/wm_atom.cpp
+    ${MAIN_APP_DIR}/wm/wm_connection.cpp
+    ${MAIN_APP_DIR}/wm/wm_info.cpp
+    ${MAIN_APP_DIR}/wm/wm_window_tree.cpp
 )
 
 SET(HPP_DBUS
@@ -206,30 +210,30 @@ SET(CPP_DBUS
 )
 
 SET(HPP_PROCESS
-    process/private/process_p.h
-    process/process_icon_cache.h
-    process/process_set.h
+    ${MAIN_APP_DIR}/process/private/process_p.h
+    ${MAIN_APP_DIR}/process/process_icon_cache.h
+    ${MAIN_APP_DIR}/process/process_set.h
     process/process.h
     process/process_db.h
-    process/process_icon.h
-    process/desktop_entry_cache.h
-    process/desktop_entry_cache_updater.h
-    process/process_name.h
-    process/process_name_cache.h
-    process/process_controller.h
+    ${MAIN_APP_DIR}/process/process_icon.h
+    ${MAIN_APP_DIR}/process/desktop_entry_cache.h
+    ${MAIN_APP_DIR}/process/desktop_entry_cache_updater.h
+    ${MAIN_APP_DIR}/process/process_name.h
+    ${MAIN_APP_DIR}/process/process_name_cache.h
+    ${MAIN_APP_DIR}/process/process_controller.h
 )
 
 SET(CPP_PROCESS
-    process/process_icon_cache.cpp
-    process/process_set.cpp
+    ${MAIN_APP_DIR}/process/process_icon_cache.cpp
+    ${MAIN_APP_DIR}/process/process_set.cpp
     process/process.cpp
     process/process_db.cpp
-    process/process_icon.cpp
-    process/desktop_entry_cache.cpp
-    process/desktop_entry_cache_updater.cpp
-    process/process_name.cpp
-    process/process_name_cache.cpp
-    process/process_controller.cpp
+    ${MAIN_APP_DIR}/process/process_icon.cpp
+    ${MAIN_APP_DIR}/process/desktop_entry_cache.cpp
+    ${MAIN_APP_DIR}/process/desktop_entry_cache_updater.cpp
+    ${MAIN_APP_DIR}/process/process_name.cpp
+    ${MAIN_APP_DIR}/process/process_name_cache.cpp
+    ${MAIN_APP_DIR}/process/process_controller.cpp
 )
 set(APP_HPP
     application.h

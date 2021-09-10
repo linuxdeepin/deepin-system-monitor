@@ -34,6 +34,7 @@
 #include <QBrush>
 #include <QPaintEvent>
 #include <QTimer>
+#include <QProcess>
 
 const int cpuTxtWidth = 96;
 

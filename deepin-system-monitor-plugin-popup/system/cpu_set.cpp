@@ -18,14 +18,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "cpu_set.h"
-#include "private/cpu_set_p.h"
+#include "system/private/cpu_set_p.h"
 
 #include "common/common.h"
 #include "common/datacommon.h"
 #include "common/thread_manager.h"
-#include "system_monitor_thread.h"
-#include "system_monitor.h"
-#include "sys_info.h"
+#include "system/system_monitor_thread.h"
+#include "system/system_monitor.h"
+#include "system/sys_info.h"
 
 #include <QMap>
 #include <QByteArray>

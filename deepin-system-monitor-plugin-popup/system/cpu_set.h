@@ -21,7 +21,7 @@
 #ifndef CPUSET_H
 #define CPUSET_H
 
-#include "cpu.h"
+#include "system/cpu.h"
 
 #include <QList>
 #include <QSharedDataPointer>

@@ -19,7 +19,7 @@
 */
 
 #include "process.h"
-#include "private/process_p.h"
+#include "process/private/process_p.h"
 #include "system/device_db.h"
 #include "process/process_db.h"
 #include "system/sys_info.h"

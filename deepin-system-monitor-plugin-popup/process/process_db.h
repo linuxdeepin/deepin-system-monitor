@@ -24,7 +24,7 @@
 #include "common/thread_manager.h"
 #include "system/system_monitor_thread.h"
 #include "system/system_monitor.h"
-#include "process_set.h"
+#include "process/process_set.h"
 
 #include <QReadWriteLock>
 #include <QObject>

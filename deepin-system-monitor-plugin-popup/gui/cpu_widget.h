@@ -24,8 +24,6 @@
 #include <QIcon>
 #include <DApplicationHelper>
 
-#include "cpu_read.h"
-
 DWIDGET_USE_NAMESPACE
 
 class CpuWidget : public QWidget

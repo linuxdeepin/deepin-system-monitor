@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>icons/icon_network_light.png</file>
-        <file>icons/icon_memory_light.png</file>
-        <file>icons/hard-disk_light.png</file>
-        <file>icons/icon_cpu_light.png</file>
-        <file>icons/icon_process_light.png</file>
-    </qresource>
-</RCC>

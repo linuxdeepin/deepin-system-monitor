@@ -22,8 +22,8 @@
 
 #include "application.h"
 
-#include "common/settings.h"
-#include "ui_common.h"
+#include "settings.h"
+#include "gui/ui_common.h"
 #include "common/perf.h"
 #include "common/common.h"
 #include "common/error_context.h"

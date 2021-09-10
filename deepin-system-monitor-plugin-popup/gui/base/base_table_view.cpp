@@ -20,8 +20,8 @@
 
 #include "base_table_view.h"
 
-#include "base_header_view.h"
-#include "base_item_delegate.h"
+#include "gui/base/base_header_view.h"
+#include "gui/base/base_item_delegate.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
