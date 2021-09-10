@@ -74,16 +74,16 @@ SET(HPP_MODEL
     ${MAIN_APP_DIR}/model/cpu_info_model.h
     ${MAIN_APP_DIR}/model/cpu_stat_model.h
     ${MAIN_APP_DIR}/model/cpu_list_model.h
-    ${MAIN_APP_DIR}/model/process_sort_filter_proxy_model.h
-    ${MAIN_APP_DIR}/model/process_table_model.h
+    model/process_sort_filter_proxy_model.h
+    model/process_table_model.h
 )
 
 SET(CPP_MODEL
     ${MAIN_APP_DIR}/model/cpu_info_model.cpp
     ${MAIN_APP_DIR}/model/cpu_stat_model.cpp
     ${MAIN_APP_DIR}/model/cpu_list_model.cpp
-    ${MAIN_APP_DIR}/model/process_sort_filter_proxy_model.cpp
-    ${MAIN_APP_DIR}/model/process_table_model.cpp
+    model/process_sort_filter_proxy_model.cpp
+    model/process_table_model.cpp
 )
 
 SET(HPP_GLOBAL
