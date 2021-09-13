@@ -90,6 +90,11 @@ public Q_SLOTS:
     //!
     void onDetailInfoByDbus(QString msgCode);
 
+    /**
+     * @brief popupSettingsDialog
+     */
+    void popupSettingsDialog();
+
 protected:
     /**
      * @brief Initialize ui components

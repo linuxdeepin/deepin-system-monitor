@@ -1,0 +1,58 @@
+{
+    "groups": [
+        {
+            "key": "setting",
+            "name": "设置",
+            "groups": [
+                {
+                    "key": "systemprotection",
+                    "name": "系统防护",
+                    "options": [
+                        {
+                            "key": "alarm_switch",
+                            "name": "当数值高于以下阈值时自动报警",
+                            "tip": "(阈值可修改)",
+                            "type": "protectionswitch",
+                            "default": false
+                        },
+                        {
+                            "key": "alarm_cpu_usage",
+                            "name": "CPU占用(%)",
+                            "type": "cpualarmcritical",
+                            "default": 90,
+                            "min": 30,
+                            "max": 100
+                        },
+                        {
+                            "key": "alarm_memory_usage",
+                            "name": "内存占用(%)",
+                            "type": "memalarmcritical",
+                            "default": 90,
+                            "min": 30,
+                            "max": 100
+                        },
+                        {
+                            "key": "alarm_interval",
+                            "name": "预警间隔(分钟)",
+                            "type": "intervalalarmcritical",
+                            "default": 10,
+                            "min": 5,
+                            "max": 60
+                        }
+                    ]
+                },
+                {
+                    "key": "messgae",
+                    "name": "消息通知",
+                    "options": [
+                        {
+                            "key": "message_setting",
+                            "name": "消息通知",
+                            "type": "fontcombobox"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

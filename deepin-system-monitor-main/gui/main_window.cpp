@@ -28,7 +28,9 @@
 #include "settings.h"
 #include "common/perf.h"
 #include "detailwidgetmanager.h"
+#include "gui/dialog/systemprotectionsetting.h"
 
+#include <DSettingsWidgetFactory>
 #include <DApplicationHelper>
 #include <DTitlebar>
 #include <QKeyEvent>
@@ -131,9 +133,17 @@ void MainWindow::initUI()
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
 
+    // 构建setting menu Item Action
+    QAction *settingAction(new QAction(tr("设置"), this));
+    connect(settingAction, &QAction::triggered, this, &MainWindow::popupSettingsDialog);
+
     menu->addAction(killAction);
     menu->addSeparator();
     menu->addMenu(modeMenu);
+    // 插入 setting 菜单项
+    menu->addSeparator();
+    menu->addAction(settingAction);
+    menu->addSeparator();
 
     // stacked widget instance to hold process & service pages
     m_pages = new DStackedWidget(this);
@@ -292,4 +302,24 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
         m_tbShadow->raise();
         m_tbShadow->show();
     }
+}
+
+void MainWindow::popupSettingsDialog() {
+    DSettingsDialog *dialog = new DSettingsDialog(this);
+    // 注册自定义Item ， 为实现UI效果
+    dialog->widgetFactory()->registerWidget("settinglinkbutton", SystemProtectionSetting::createSettingLinkButtonHandle);
+    dialog->widgetFactory()->registerWidget("protectionswitch", SystemProtectionSetting::createProtectionSwitchHandle);
+    dialog->widgetFactory()->registerWidget("cpualarmcritical", SystemProtectionSetting::createAlarmUsgaeSettingHandle);
+    dialog->widgetFactory()->registerWidget("memalarmcritical", SystemProtectionSetting::createAlarmUsgaeSettingHandle);
+    dialog->widgetFactory()->registerWidget("intervalalarmcritical", SystemProtectionSetting::createAlarmIntervalSettingHandle);
+
+    // 连接Setting Dialog 和 Setting json 文件（后台根据json格式创建conf文件）
+    SystemProtectionSetting::instance()->onUpdateNewBackend();
+    dialog->updateSettings(SystemProtectionSetting::instance()->getDSettingPointor());
+
+    // 显示Setting Dialog
+    dialog->exec();
+
+    // 销毁窗口
+    dialog->deleteLater();
 }

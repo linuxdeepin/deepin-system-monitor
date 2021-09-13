@@ -80,6 +80,7 @@ set(HPP_GLOBAL
     smooth_curve_generator.h
     settings.h
     detailwidgetmanager.h
+    gui/dialog/systemprotectionsetting.h
 )
 set(CPP_GLOBAL
     main.cpp
@@ -94,6 +95,7 @@ set(CPP_GLOBAL
     smooth_curve_generator.cpp
     settings.cpp
     detailwidgetmanager.cpp
+    gui/dialog/systemprotectionsetting.cpp
 )
 
 set(HPP_COMMON

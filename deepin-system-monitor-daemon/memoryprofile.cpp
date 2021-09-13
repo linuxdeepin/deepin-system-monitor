@@ -1,0 +1,84 @@
+/*
+* Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
+*
+* Author:      wangchao <wangchao@uniontech.com>
+* Maintainer:  wangchao <wangchao@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "memoryprofile.h"
+
+#include <QDebug>
+#include <QFile>
+
+#define PROC_MEM_INFOI_PATH "/proc/meminfo"
+
+MemoryProfile::MemoryProfile(QObject *parent)
+    : QObject(parent)
+    , mMemUsage(0)
+{
+}
+
+double MemoryProfile::updateSystemMemoryUsage() {
+    // 返回值，内存占用率
+    double memUsage = 0;
+
+    QFile file(PROC_MEM_INFOI_PATH);
+    if(file.exists() && file.open(QFile::ReadOnly)) {
+        // 计算总的内存占用率，只需要读取前3行数据
+        QByteArray lineData1 = file.readLine();
+        QByteArray lineData2 = file.readLine();
+        QByteArray lineData3 = file.readLine();
+        file.close();
+        // 数据样例
+        // MemTotal:       16346064 kB
+        // MemFree:         1455488 kB
+        // MemAvailable:    5931304 kB
+        if(lineData1.size() == 0 || lineData2.size() == 0 || lineData3.size() == 0) {
+            qWarning() << QString(" read %1 file fail !").arg(PROC_MEM_INFOI_PATH) << lineData1 << lineData2 << lineData3;
+            return memUsage;
+        }
+
+        // 数据提取
+        QStringList list1 = QString(lineData1).split(" ", QString::SkipEmptyParts);
+        QStringList list2 = QString(lineData2).split(" ", QString::SkipEmptyParts);
+        QStringList list3 = QString(lineData3).split(" ", QString::SkipEmptyParts);
+
+        if(list1.size() < 3 || list2.size() < 3 || list3.size() < 3) {
+            qWarning() << QString(" parse %1 file fail !").arg(PROC_MEM_INFOI_PATH) << list1 << list2 << list3;
+            return memUsage;
+        }
+
+        QMap<QString, int> memDataMap;
+        memDataMap[list1.at(0)] = list1.at(1).toInt();
+        memDataMap[list2.at(0)] = list2.at(1).toInt();
+        memDataMap[list3.at(0)] = list3.at(1).toInt();
+
+        // 为返回值赋值，计算内存占用率
+        if(memDataMap.contains("MemTotal:") && memDataMap.contains("MemAvailable:") && memDataMap["MemTotal:"] != 0)  {
+            memUsage = (memDataMap["MemTotal:"] - memDataMap["MemAvailable:"]) * 100.0 / memDataMap["MemTotal:"];
+            mMemUsage = memUsage;
+        } else {
+            qWarning() << QString(" extract mem data fail !") << memDataMap;
+        }
+    } else {
+        qWarning() << QString(" file %1 open fail !").arg(PROC_MEM_INFOI_PATH);
+    }
+
+    return memUsage;
+}
+
+double MemoryProfile::getMemUsage() {
+    return mMemUsage;
+}
+
