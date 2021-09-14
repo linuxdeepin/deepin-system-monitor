@@ -48,9 +48,10 @@ Ut_MainWindow::Ut_MainWindow()
 
 }
 
-TEST_F(Ut_MainWindow, initUI)
+TEST(UT_MainWindow_initUI, UT_MainWindow_initUI_001)
 {
     MainWindow *mainwindow = new MainWindow;
+    gApp->setMainWindow(mainwindow);
     mainwindow->initUI();
 
     EXPECT_GE(mainwindow->width(), 1080);
@@ -59,9 +60,10 @@ TEST_F(Ut_MainWindow, initUI)
     mainwindow->deleteLater();
 }
 
-TEST_F(Ut_MainWindow, initDisplay)
+TEST(UT_MainWindow_initDisplay, UT_MainWindow_initDisplay_001)
 {
     MainWindow *mainwindow = new MainWindow;
+    gApp->setMainWindow(mainwindow);
     mainwindow->initDisplay();
 
     EXPECT_NE(mainwindow->toolbar(), nullptr);

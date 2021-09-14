@@ -33,11 +33,7 @@
 int main(int argc, char *argv[])
 {
     qputenv("QT_QPA_PLATFORM", "offscreen");
-    // QApplication app(argc, argv);
     Application app(argc, argv);
-    MainWindow mw;
-    gApp->setMainWindow(&mw);
-    mw.initDisplay();
 
     ::testing::InitGoogleTest(&argc, argv);
 
