@@ -25,7 +25,11 @@
 #include "system_monitor_thread.h"
 #include "system_monitor.h"
 #include "sys_info.h"
-
+extern "C" {
+#include "../3rdparty/lscpu.h"
+#include "../3rdparty/include/path.h"
+#include "../3rdparty/include/xalloc.h"
+}
 #include <QMap>
 #include <QByteArray>
 #include <QFile>
@@ -268,6 +272,8 @@ QString CPUSet::virtualization() const
 
 QString CPUSet::curFreq() const
 {
+    if(d->m_info.value("CPU MHz") == "-")
+        return "-";
     return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
 }
 
@@ -487,19 +493,263 @@ void CPUSet::read_overall_info()
         infos.append(info);
     }
 
-    //ls cpu
-    process.start("lscpu");
-    process.waitForFinished(3000);
-    QString lscpu = process.readAllStandardOutput();
-    QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-    d->m_info.clear();
-    for (QString lscpuLine : lscpuList) {
-        QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-        if (keyValue.count() > 1)
-            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
-    }
+    // 不再使用进程执行命令的方式获取CPU信息
+//    process.start("lscpu");
+//    process.waitForFinished(3000);
+//    QString lscpu = process.readAllStandardOutput();
+//    QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+//    d->m_info.clear();
+//    for (QString lscpuLine : lscpuList) {
+//        QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+//        if (keyValue.count() > 1)
+//            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+//    }
+    // 根据lscpu源码实现获取CPU信息
+    read_lscpu();
 
     d->m_infos = infos;
+}
+
+// 获取CPU信息 ut001987
+void CPUSet::read_lscpu()
+{
+    struct lscpu_cxt *cxt; // CPU信息
+    cxt = reinterpret_cast< struct lscpu_cxt *>(xcalloc(1, sizeof(struct lscpu_cxt))); // 初始化信息
+    if(!cxt) {
+        qWarning() <<__FUNCTION__ <<" lscpu_cxt Init Faild!";
+        return;
+    }
+    /* set default cpu display mode if none was specified */
+    if (!cxt->show_online && !cxt->show_offline) {
+        cxt->show_online = 1;
+        cxt->show_offline = cxt->mode == LSCPU_OUTPUT_READABLE ? 1 : 0;
+    }
+
+    cxt->syscpu = ul_new_path(_PATH_SYS_CPU);
+    if (!cxt->syscpu) {
+        qWarning() << __FUNCTION__ <<"failed to initialize CPUs sysfs handler";
+        return;
+    }
+    if (cxt->prefix)
+        ul_path_set_prefix(cxt->syscpu, cxt->prefix);
+    cxt->procfs = ul_new_path("/proc");
+    if (!cxt->procfs) {
+        qWarning() << __FUNCTION__ << "failed to initialize procfs handler!";
+        return;
+    }
+    if (cxt->prefix)
+        ul_path_set_prefix(cxt->procfs, cxt->prefix);
+
+    lscpu_read_cpulists(cxt);
+    lscpu_read_cpuinfo(cxt);
+
+    cxt->arch = lscpu_read_architecture(cxt);
+    // 获取CPU的相关信息
+    lscpu_read_archext(cxt);
+    lscpu_read_vulnerabilities(cxt);
+    lscpu_read_numas(cxt);
+    lscpu_read_topology(cxt);
+    lscpu_decode_arm(cxt);
+    cxt->virt = lscpu_read_virtualization(cxt); // 获取CPU的虚拟化信息
+    struct lscpu_cputype *ct;
+    ct = lscpu_cputype_get_default(cxt); // 获取CPU类型信息
+    if(ct == nullptr) {
+        qWarning() << __FUNCTION__ << "ct init failed!";
+        return;
+    }
+    if(cxt->arch)
+        d->m_info.insert("Architecture",cxt->arch->name);
+    // cpu架构信息
+    if (cxt->arch && (cxt->arch->bit32 || cxt->arch->bit64)) {
+        QString value;
+        if(cxt->arch && (cxt->arch->bit32 || cxt->arch->bit64)) {
+            if (cxt->arch->bit32) {
+                value += "32-bit";
+            }
+            if (cxt->arch->bit64) {
+                value += "64-bit";
+            }
+            d->m_info.insert("CPU op-mode(s)",value);
+        }
+    }
+    if(ct && ct->addrsz) {
+          d->m_info.insert("Address sizes",ct->addrsz);
+    }
+    // 获取CPU的大小端信息
+#if !defined(WORDS_BIGENDIAN)
+    d->m_info.insert("Byte Order","Little Endian");
+#else
+    d->m_info.insert("Byte Order","Big Endian");
+#endif
+    d->m_info.insert("CPU(s)",QString::number(cxt->npresents));
+    if(cxt->online) { // 当前活动CPU信息
+        QString key = cxt->hex ? "On-line CPU(s) mask" : "On-line CPU(s) list";
+        QString value = "";
+        size_t setbuflen = static_cast<size_t>(7 * cxt->maxcpus);
+        char setbuf[setbuflen], *p;
+        if(cxt->hex) {
+           p = cpumask_create(setbuf, setbuflen, cxt->online, cxt->setsize);
+        } else {
+           p = cpulist_create(setbuf, setbuflen, cxt->online, cxt->setsize);
+        }
+        d->m_info.insert(key,p);
+    }
+    if (ct && ct->vendor) { // CPU厂商信息
+        d->m_info.insert("Vendor ID",ct->vendor);
+    }
+    if(ct && ct->bios_vendor) {//  BIOS厂商信息
+        d->m_info.insert("BIOS Vendor ID",ct->bios_vendor);
+    }
+    if (ct->modelname) {// CPU型号名称
+        d->m_info.insert("Model name",ct->modelname);
+    }
+    if (ct->bios_modelname) {// bios 型号名称
+        d->m_info.insert("BIOS Model name",ct->bios_modelname);
+    }
+    if (ct->bios_family) { // bios系列
+        d->m_info.insert("BIOS CPU family",ct->bios_family);
+    }
+    if (ct->machinetype) {//  机器类型
+        d->m_info.insert("Machine type",ct->machinetype);
+    }
+    if(ct->family) {//  CPU系列
+        d->m_info.insert("CPU family",ct->family);
+    }
+    if (ct->model || ct->revision) {
+        d->m_info.insert("Model",ct->revision ? ct->revision : ct->model);
+    }
+    d->m_info.insert("Thread(s) per core",QString::number(ct->nthreads_per_core));// 单核线程数
+    if (cxt->is_cluster) {
+          d->m_info.insert("Core(s) per cluster",QString::number(ct->ncores_per_socket));
+    } else {
+          d->m_info.insert("Core(s) per socket",QString::number(ct->ncores_per_socket));
+    }
+    if(ct->nbooks) {
+        d->m_info.insert("Socket(s) per book",QString::number(ct->nsockets_per_book));
+        if (ct->ndrawers_per_system || ct->ndrawers) {
+            d->m_info.insert("Book(s) per drawer",QString::number(ct->nbooks_per_drawer));
+            d->m_info.insert("Drawer(s)",QString::number(ct->ndrawers_per_system ? 0 : ct->ndrawers));
+        } else {
+            d->m_info.insert("Book(s)",QString::number(ct->nbooks_per_drawer ? 0 : ct->nbooks));
+        }
+    } else {
+        if (cxt->is_cluster) {
+            if (ct->nr_socket_on_cluster > 0) {
+                d->m_info.insert("Core(s) per cluster",QString::number(ct->nr_socket_on_cluster));
+            }
+            else {
+                 d->m_info.insert("Socket(s)","-");
+            }
+            d->m_info.insert("Cluster(s)",QString::number(ct->nsockets_per_book ? 0 : ct->nsockets));
+        } else {
+            d->m_info.insert("Socket(s)",QString::number(ct->nsockets_per_book ? 0 : ct->nsockets));
+        }
+    }
+    if (ct->stepping) {
+        d->m_info.insert("Stepping",ct->stepping);
+    }
+    if (ct->freqboost >= 0) {
+     d->m_info.insert("Frequency boost",ct->freqboost ?
+                          _("enabled") : _("disabled"));
+    }
+
+    if (ct->dynamic_mhz) {
+        d->m_info.insert("CPU dynamic MHz",ct->dynamic_mhz);
+    }
+    if (ct->static_mhz) {
+        d->m_info.insert("CPU static MHz",ct->static_mhz);
+    }
+    if(ct->has_freq) {
+        float scal = lsblk_cputype_get_scalmhz(cxt, ct);
+        QString maxMHz = QString::number(static_cast<double>(lsblk_cputype_get_maxmhz(cxt, ct)),'f',4);
+        d->m_info.insert("CPU max MHz",maxMHz);
+        QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)),'f',4);
+        d->m_info.insert("CPU min MHz",minMHz);
+        QString nowMHz =  QString::number(maxMHz.toDouble() * static_cast<double>(scal/100),'f',4);
+        if(scal == 0.0f) {
+            nowMHz = "-";
+        }
+        d->m_info.insert("CPU MHz",nowMHz);
+    } else {
+        d->m_info.insert("CPU MHz","-");
+    }
+    if (ct->bogomips) {
+        d->m_info.insert("BogoMIPS",ct->bogomips);
+    }
+
+    if (ct->physsockets) {
+         d->m_info.insert("Physical sockets",QString::number(ct->physsockets));
+         d->m_info.insert("Physical chips",QString::number(ct->physchips));
+         d->m_info.insert("Physical cores/chip",QString::number(ct->physcoresperchip));
+    }
+    if (ct->flags){
+        d->m_info.insert("Flags",ct->flags);
+    }
+    // 虚拟化支持
+    if(cxt->virt) {
+        if (cxt->virt->cpuflag && !strcmp(cxt->virt->cpuflag, "svm")) {
+            d->m_info.insert("Virtualization","AMD-V");
+        } else if(cxt->virt->cpuflag && !strcmp(cxt->virt->cpuflag, "vmx")) {
+            d->m_info.insert("Virtualization","VT-x");
+        }
+        if (cxt->virt->hypervisor) {
+             d->m_info.insert("Hypervisor","cxt->virt->hypervisor");
+        }
+    }
+    /* Section: caches */
+   if (cxt->ncaches) {
+        const char *last = nullptr;
+       for (size_t i = 0; i < cxt->ncaches; i++) {
+           const char *name = cxt->caches[i].name;
+           uint64_t sz;
+           int n = 0;
+
+           if (last && strcmp(last, name) == 0) {
+               continue;
+           }
+           sz = lscpu_get_cache_full_size(cxt, name, &n);
+           if (!sz)
+               continue;
+           if(!cxt->bytes) {
+               char *tmp = size_to_human_string( // 获取当前cache的值
+                           SIZE_SUFFIX_3LETTER |
+                           SIZE_SUFFIX_SPACE,
+                           sz);
+               QString value = QString(tmp);//.replace("MiB","MB");
+              // value = QString(value).replace("KiB","KB");
+             //  value = QString(value).replace("GiB","GB");
+               d->m_info.insert(QString(name)+" cache",value);
+           }
+           last = name;
+
+       }
+   }
+   // 某些CPU不带有缓存用‘-’替代
+   if(!d->m_info.contains("L1d cache")) {
+       d->m_info.insert("L1d cache","-");
+   }
+   if(!d->m_info.contains("L1i cache")) {
+        d->m_info.insert("L1i cache","-");
+   }
+   if(!d->m_info.contains("L2 cache")) {
+       d->m_info.insert("L2 cache","-");
+   }
+   if(!d->m_info.contains("L3 cache")) {
+       d->m_info.insert("L3 cache","-");
+   }
+   for (size_t i = 0; i < cxt->necaches; i++) {
+        struct lscpu_cache *ca = &cxt->ecaches[i];
+        if (ca->size == 0)
+              continue;
+        if (!cxt->bytes){
+            char *tmp = size_to_human_string(
+                                SIZE_SUFFIX_3LETTER |
+                                SIZE_SUFFIX_SPACE,
+                                ca->size);
+            d->m_info.insert(ca->name,tmp);
+        }
+   }
+   free(cxt);
 }
 
 qulonglong CPUSet::getUsageTotalDelta() const
