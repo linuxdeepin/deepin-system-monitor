@@ -23,8 +23,8 @@
 #include <thread>
 
 #include "dbus/dbus_common.h"
-
-class ErrorContext;
+#include "common/error_context.h"
+//class ErrorContext;
 class ServiceManager;
 class SystemServiceEntry;
 class ServiceManagerWorker;

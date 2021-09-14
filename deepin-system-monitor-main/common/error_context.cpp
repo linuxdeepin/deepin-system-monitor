@@ -65,14 +65,16 @@ private:
 };
 
 // default constructor
-ErrorContext::ErrorContext()
-    : data(new ErrorContextData())
+ErrorContext::ErrorContext(QObject* parent)
+    : QObject (parent)
+    , data(new ErrorContextData())
 {
 }
 
 // overloaded constructor
-ErrorContext::ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage)
-    : data(new ErrorContextData())
+ErrorContext::ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage, QObject* parent)
+    : QObject (parent)
+    , data(new ErrorContextData())
 {
     // data = new ErrorContextData();
     data->m_code = code;

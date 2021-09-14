@@ -22,6 +22,7 @@
 #define ERROR_CONTEXT_H
 
 #include <QSharedDataPointer>
+#include <QObject>
 
 class QString;
 class ErrorContextData;
@@ -29,19 +30,20 @@ class ErrorContextData;
 /**
 * @brief ErrorContext Error context to keep track of internal error
 */
-class ErrorContext
+class ErrorContext : public QObject
 {
+    Q_OBJECT
 public:
     enum ErrorCode { kErrorTypeNoError = 0, kErrorTypeCommon, kErrorTypeSystem, kErrorTypeDBus };
 
     /**
     * @brief Default constructor
     */
-    ErrorContext();
+    explicit ErrorContext(QObject* parent = nullptr);
     /**
     * @brief Constructor with params
     */
-    ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage);
+    ErrorContext(int code, int subCode, const QString &errName, const QString &errMessage, QObject* parent = nullptr);
     /**
     * @brief Copy constructor
     */
@@ -126,5 +128,8 @@ private:
 * @return true: valid error context (error occured); false: invalid error context (no error)
 */
 bool operator!(const ErrorContext &ec) noexcept;
+
+// 声明类型
+Q_DECLARE_METATYPE(ErrorContext);
 
 #endif  // ERROR_CONTEXT_H
