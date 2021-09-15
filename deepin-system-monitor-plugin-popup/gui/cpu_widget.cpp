@@ -181,40 +181,38 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     //标题
     QString cpuTitle = DApplication::translate("Cpu.Widget", "CPU");
     painter.setFont(m_TitleFont);
-    QFontMetrics fmTitle = painter.fontMetrics();
-    int widthTitle = fmTitle.width(cpuTitle);
-    int heightTitle = fmTitle.descent()+fmTitle.ascent();
+//    QFontMetrics fmTitle = painter.fontMetrics();
+    int widthTitle = fmTitleContent.width(cpuTitle);
+    int heightTitle = fmTitleContent.descent()+fmTitleContent.ascent();
     QRect cpuTitleRect(titleRect.x(), titleRect.y(), widthTitle, heightTitle);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,
-                     fmTitleContent.elidedText(cpuTitle, Qt::ElideRight, cpuTitleRect.width()));
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, cpuTitle);
 
     //图标
     int iconSize = 20;
     QRect iconRect(titleRect.x()+(titleRect.width()-widthTitle)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
-    //cpu使用率
-//    painter.setPen(ltextColor);
+    //cpu使用率长宽
     painter.setFont(m_contentFont);
-    QFontMetrics fmCpu = painter.fontMetrics();
     QString cpuStatText = QString::number(m_cpuPer, 'f', 1);
-    int widthCpu = fmCpu.width(cpuStatText);
-    int heightCpu = fmCpu.descent()+fmCpu.ascent();
-    QRect cpuUsageRect(contentRect.x()+27, contentRect.y()+10, widthCpu, heightCpu);
-    painter.drawText(cpuUsageRect, Qt::AlignLeft | Qt::AlignTop, cpuStatText);
-    //cpu使用率百分号
+    int widthCpu = fmContent.size(Qt::TextSingleLine, cpuStatText).width();
+    int heightCpu = fmContent.descent()+fmContent.ascent();
+    //cpu使用率百分号长宽
+    int widthCpuper = fmContentUnit.size(Qt::TextSingleLine, "%").width();
+    int heightCpuper = fmContentUnit.descent()+fmContentUnit.ascent();
+
+    //写cpu使用率和百分号
+    QRect cpuUsageRect(contentRect.x()+(cpuTxtWidth - widthCpu-widthCpuper)/2, contentRect.y()+10, widthCpu, heightCpu);
+    painter.drawText(cpuUsageRect, Qt::AlignLeft | Qt::AlignBottom, cpuStatText);
+
     painter.setFont(m_contentUnitFont);
-    QFontMetrics fmCpuper = painter.fontMetrics();
-    int widthCpuper = fmCpuper.width("%");
-    int heightCpuper = fmCpuper.descent()+fmCpuper.ascent();
-    QRect cpuperUsageRect(contentRect.x()+27+widthCpu, cpuUsageRect.y()+ heightCpu/4, widthCpuper, heightCpuper);
-    painter.drawText(cpuperUsageRect, Qt::AlignLeft | Qt::AlignTop, "%");
+    QRect cpuperUsageRect(cpuUsageRect.x() + cpuUsageRect.width(), cpuUsageRect.y()+ heightCpu/4, widthCpuper, heightCpuper);
+    painter.drawText(cpuperUsageRect, Qt::AlignLeft | Qt::AlignBottom, "%");
 
     //总使用率 文本
-//    painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
-    QFontMetrics fmText = painter.fontMetrics();
-    QRect cpuTextRect(cpuUsageRect.x(), cpuUsageRect.y()+cpuUsageRect.height(),
+    int widthcpuText = fmSubContent.size(Qt::TextSingleLine, tr("Utilization")).width();
+    QRect cpuTextRect(contentRect.x()+(cpuTxtWidth - widthcpuText)/2, cpuUsageRect.y()+cpuUsageRect.height(),
                       fmSubContent.size(Qt::TextSingleLine, tr("Utilization")).width(), fmSubContent.height());
     painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("Utilization"));
 
