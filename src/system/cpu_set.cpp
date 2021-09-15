@@ -49,6 +49,55 @@ using namespace common::alloc;
 namespace core {
 namespace system {
 
+static void lscpu_free_context(struct lscpu_cxt *cxt)
+{
+    size_t i;
+
+    if (!cxt)
+        return;
+
+    DBG(MISC, ul_debugobj(cxt, "freeing context"));
+
+    DBG(MISC, ul_debugobj(cxt, " de-initialize paths"));
+    ul_unref_path(cxt->syscpu);
+    ul_unref_path(cxt->procfs);
+
+    DBG(MISC, ul_debugobj(cxt, " freeing cpus"));
+    for (i = 0; i < cxt->npossibles; i++) {
+        lscpu_unref_cpu(cxt->cpus[i]);
+        cxt->cpus[i] = nullptr;
+    }
+    DBG(MISC, ul_debugobj(cxt, " freeing types"));
+    for (i = 0; i < cxt->ncputypes; i++) {
+        lscpu_unref_cputype(cxt->cputypes[i]);
+        cxt->cputypes[i] = nullptr;
+    }
+
+    free(cxt->present);
+    free(cxt->online);
+    free(cxt->cputypes);
+    free(cxt->cpus);
+
+    for (i = 0; i < cxt->nvuls; i++) {
+        free(cxt->vuls[i].name);
+        free(cxt->vuls[i].text);
+    }
+    free(cxt->vuls);
+
+    for (i = 0; i < cxt->nnodes; i++)
+        free(cxt->nodemaps[i]);
+
+    free(cxt->nodemaps);
+    free(cxt->idx2nodenum);
+
+    lscpu_free_virtualization(cxt->virt);
+    lscpu_free_architecture(cxt->arch);
+
+    lscpu_free_caches(cxt->ecaches, cxt->necaches);
+    lscpu_free_caches(cxt->caches, cxt->ncaches);
+
+    free(cxt);
+}
 /*
 * borrowed & modified from LINUX bitmap.c
 */
@@ -749,7 +798,7 @@ void CPUSet::read_lscpu()
             d->m_info.insert(ca->name,tmp);
         }
    }
-   free(cxt);
+   lscpu_free_context(cxt);
 }
 
 qulonglong CPUSet::getUsageTotalDelta() const
