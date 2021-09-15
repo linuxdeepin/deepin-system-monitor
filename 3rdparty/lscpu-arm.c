@@ -284,8 +284,12 @@ static int arm_ids_decode(struct lscpu_cputype *ct)
 
 	for (j = 0; parts[j].id != -1; j++) {
 		if (parts[j].id == part) {
-			free(ct->modelname);
-			ct->modelname = xstrdup(parts[j].name);
+            //  当获CPUinfo中获取的modelname为空时，才需要执行下列操作
+            if(ct->modelname && *(ct->modelname) == '\0') {
+                free(ct->modelname);
+                ct->modelname = xstrdup(parts[j].name);
+            }
+
 			break;
 		}
 	}
