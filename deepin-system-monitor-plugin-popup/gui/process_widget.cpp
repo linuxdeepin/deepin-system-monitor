@@ -21,6 +21,7 @@
 #include "common/datacommon.h"
 #include "process_widget.h"
 #include "dbus/dbuscallmaininterface.h"
+#include "datadealsingleton.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -211,13 +212,8 @@ bool ProcessWidget::eventFilter(QObject *target, QEvent *event)
 void ProcessWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        //1.先唤醒主进程
-        bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);
-        if (true == rt) {
-            //2.跳转DBUS
-            QTimer::singleShot(500, this, [=]() {
-                DbusCallMainInterface::getInstance()->jumpWidget(QString("MSG_PROCESS"));
-            });
+        if (event->type() == QEvent::MouseButtonDblClick) {
+            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_PROCESS");
         }
     }
     return QWidget::mousePressEvent(event);

@@ -72,6 +72,13 @@ public:
     //!
     bool readDiskInfo(QString &diskRead, QString &diskTotalSize, QString &diskWrite, QString &diskAvailable);
 
+    //!
+    //! \brief sendJumpWidgetMessage 发送跳转命令消息
+    //! \param dbusMessage 消息名称字符串
+    //! \return 返回dbus信号是否发送成功
+    //!
+    bool sendJumpWidgetMessage(const QString &dbusMessage);
+
 signals:
     void sigDataUpdate();
 

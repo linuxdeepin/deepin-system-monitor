@@ -377,13 +377,8 @@ bool DiskWidget::eventFilter(QObject *target, QEvent *event)
 void DiskWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        //1.先唤醒主进程
-        bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);
-        if (true == rt) {
-            //2.跳转DBUS
-            QTimer::singleShot(500, this, [=]() {
-                DbusCallMainInterface::getInstance()->jumpWidget(QString("MSG_DISK"));
-            });
+        if (event->type() == QMouseEvent::MouseButtonDblClick) {
+            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_DISK");
         }
     }
     return QWidget::mousePressEvent(event);

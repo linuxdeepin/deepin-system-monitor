@@ -18,6 +18,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+// project self
 #include "datadealsingleton.h"
 #include "system/diskio_info.h"
 #include "system/mem.h"
@@ -26,6 +27,12 @@
 #include "system/device_db.h"
 #include "model/cpu_info_model.h"
 #include "system/block_device_info_db.h"
+#include "common/datacommon.h"
+#include "dbus/dbuscallmaininterface.h"
+
+//Qt
+#include <QProcess>
+
 
 QMutex DataDealSingleton::mutex;
 QAtomicPointer<DataDealSingleton> DataDealSingleton::instance;
@@ -99,6 +106,19 @@ bool DataDealSingleton::readDiskInfo(QString &diskRead, QString &diskTotalSize, 
     internalMutex.unlock();
 
     return true;
+}
+
+bool DataDealSingleton::sendJumpWidgetMessage(const QString &dbusMessage)
+{
+    //1.先唤醒主进程
+    bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);
+    if (true == rt) {
+        //2.跳转DBUS
+        QTimer::singleShot(500, this, [=]() {
+            DbusCallMainInterface::getInstance()->jumpWidget(dbusMessage);
+        });
+    }
+    return rt;
 }
 
 DataDealSingleton::DataDealSingleton(QObject *parent)
