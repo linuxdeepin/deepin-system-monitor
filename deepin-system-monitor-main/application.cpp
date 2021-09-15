@@ -43,6 +43,16 @@ Application::Application(int &argc, char **argv)
     ThreadManager::instance()->attach(new NetifMonitorThread);
 }
 
+void Application::setCurrentTaskState(TaskState taskState)
+{
+    m_currentTaskStat = taskState;
+}
+
+Application::TaskState Application::getCurrentTaskState()
+{
+    return m_currentTaskStat;
+}
+
 bool Application::event(QEvent *event)
 {
     if (event && event->type() == kMonitorStartEventType) {

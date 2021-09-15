@@ -206,6 +206,7 @@ void MainWindow::initConnections()
                 m_focusedWidget->setFocus();
             }
         }
+        gApp->setCurrentTaskState(state);
     });
 
     // 初始化DBUS

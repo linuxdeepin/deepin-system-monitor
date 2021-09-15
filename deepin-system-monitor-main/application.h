@@ -70,6 +70,17 @@ public:
 
     void setMainWindow(MainWindow *mw);
     MainWindow *mainWindow();
+    //!
+    //! \brief getCurrentTaskState 获取当前窗口运行状态
+    //! \return 返回当前窗口运行状态
+    //!
+    TaskState getCurrentTaskState();
+
+    //!
+    //! \brief setCurrentTaskState 设置当前窗口运行状态
+    //! \param taskState 运行状态参数
+    //!
+    void setCurrentTaskState(TaskState taskState);
 
 signals:
     void backgroundTaskStateChanged(Application::TaskState state);
@@ -79,6 +90,11 @@ protected:
 
 private:
     MainWindow *m_mainWindow {};
+
+    //!
+    //! \brief m_currentTaskStat 当前窗口运行状态
+    //!
+    TaskState m_currentTaskStat = TaskState::kTaskFinished;
 };
 
 inline void Application::setMainWindow(MainWindow *mw)

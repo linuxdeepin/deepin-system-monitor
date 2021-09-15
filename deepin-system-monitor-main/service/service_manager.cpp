@@ -149,7 +149,7 @@ ErrorContext ServiceManager::startService(const QString &id,
     QDBusObjectPath o = oResult.second;
 
     if (id.endsWith("@"))
-        return {};
+        return ErrorContext();
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
@@ -172,7 +172,7 @@ ErrorContext ServiceManager::startService(const QString &id,
         timer->start(o.path());
     }
 
-    return {};
+    return ErrorContext();
 }
 
 ErrorContext ServiceManager::stopService(const QString &id)
@@ -194,7 +194,7 @@ ErrorContext ServiceManager::stopService(const QString &id)
     QDBusObjectPath o = oResult.second;
 
     if (id.endsWith("@"))
-        return {};
+        return ErrorContext();
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
@@ -217,7 +217,7 @@ ErrorContext ServiceManager::stopService(const QString &id)
         timer->start(o.path());
     }
 
-    return {};
+    return ErrorContext();
 }
 
 ErrorContext ServiceManager::restartService(const QString &id, const QString &param)
@@ -239,7 +239,7 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
     QDBusObjectPath o = oResult.second;
 
     if (id.endsWith("@"))
-        return {};
+        return ErrorContext();
 
     oResult = iface.GetUnit(buf);
     ec = oResult.first;
@@ -262,7 +262,7 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
         timer->start(o.path());
     }
 
-    return {};
+    return ErrorContext();
 }
 
 ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoStart)
@@ -367,7 +367,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
 
             // special case, do nothing there
             if (id.endsWith("@"))
-                return {};
+                return ErrorContext();
 
             Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
                                            kSystemDObjectPath.path(),
@@ -388,7 +388,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         }
     }
 #endif
-    return {};
+    return ErrorContext();
 }
 
 SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)

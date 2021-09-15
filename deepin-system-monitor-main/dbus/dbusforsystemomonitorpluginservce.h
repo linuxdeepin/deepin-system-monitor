@@ -35,10 +35,14 @@ public:
 public slots:
     //!
     //! \brief slotJumpDetailWidget 通过注册的DBUS接口，获取当前消息CODE，判断需要跳转到详情界面的画面
-    //! \param msgCode
+    //! \param msgCode 消息码
     //!
     Q_SCRIPTABLE void slotJumpDetailWidget(const QString &msgCode);
 
+    //!
+    //! \brief slotJumpProcessWidget 通过注册的DBUS接口，获取当前消息CODE，判断需要跳转到详情界面的画面
+    //! \param msgCode 消息码
+    //!
     Q_SCRIPTABLE void slotJumpProcessWidget(const QString &msgCode);
 };
 
