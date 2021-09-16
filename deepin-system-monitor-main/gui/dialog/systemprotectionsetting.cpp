@@ -22,6 +22,8 @@
 #include <DCommandLinkButton>
 #include <DSwitchButton>
 #include <DLineEdit>
+#include <DPalette>
+#include <DApplicationHelper>
 
 #include <QStandardPaths>
 #include <QApplication>
@@ -114,6 +116,12 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
     QWidget* widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(widget);
     QLabel *label = new QLabel(widget);
+    // 设置提示语为DTK提示语颜色
+    DPalette pa = DApplicationHelper::instance()->applicationPalette();
+    QColor colorFont = pa.textTips().color();
+    pa.setColor(DPalette::WindowText, colorFont);
+    label->setPalette(pa);
+    // 设置提示语文本
     label->setText(tr("(阈值可修改)"));
     layout->addWidget(label);
     layout->addStretch();
@@ -169,6 +177,12 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
 
     // 构建提示语
     QLabel *label = new QLabel(widget);
+    // 设置提示语为DTK提示语颜色
+    DPalette pa = DApplicationHelper::instance()->applicationPalette();
+    QColor colorFont = pa.textTips().color();
+    pa.setColor(DPalette::WindowText, colorFont);
+    label->setPalette(pa);
+    // 设置提示语文本
     label->setText(QString(tr("数值范围: %1-%2")).arg(30).arg(100));
     label->setFixedSize(labelWidth, labelHeight);
 
@@ -230,6 +244,12 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
 
     // 构建提示语
     QLabel *label = new QLabel(widget);
+    // 设置提示语为DTK提示语颜色
+    DPalette pa = DApplicationHelper::instance()->applicationPalette();
+    QColor colorFont = pa.textTips().color();
+    pa.setColor(DPalette::WindowText, colorFont);
+    label->setPalette(pa);
+    // 设置提示语文本
     label->setText(QString(tr("数值范围: %1-%2")).arg(5).arg(60));
     label->setFixedSize(labelWidth, labelHeight);
 
