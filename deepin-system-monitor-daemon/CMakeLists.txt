@@ -42,4 +42,5 @@ target_link_libraries(
     )
 
 install(TARGETS ${DAEMON_NAME} DESTINATION bin)
-install(FILES deepin-system-monitor-daemon.service DESTINATION /usr/lib/systemd/user/)
+install(FILES deepin-system-monitor-daemon.desktop DESTINATION /etc/xdg/autostart)
+install(FILES com.deepin.SystemMonitor.Daemon.service DESTINATION /usr/share/dbus-1/services)
