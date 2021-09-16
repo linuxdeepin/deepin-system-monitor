@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ms">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +17,21 @@
     <message>
         <source>No search results</source>
         <translation>Tiada keputusan gelintar</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -190,6 +207,33 @@
     <message>
         <source>auto-restart</source>
         <translation>auto-mula-semula</translation>
+    </message>
+</context>
+<context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">CPU</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Ingatan</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -384,10 +428,6 @@ Anda pasti mahu teruskannya?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Gagal menamatkan proses</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Gagal menjeda proses</translation>
     </message>
@@ -528,17 +568,6 @@ Anda pasti mahu teruskannya?</translation>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Silih</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Tidak dibenarkan</translation>
-    </message>
-</context>
-<context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
@@ -611,12 +640,10 @@ Anda pasti mahu teruskannya?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Keadaan</translation>
     </message>
     <message>
@@ -629,7 +656,6 @@ Anda pasti mahu teruskannya?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Jenis Permulaan</translation>
     </message>
 </context>
@@ -668,6 +694,15 @@ Anda pasti mahu teruskannya?</translation>
     <message>
         <source>Services</source>
         <translation>Perkhidmatan</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

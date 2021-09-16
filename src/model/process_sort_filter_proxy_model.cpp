@@ -8,119 +8,136 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "process_sort_filter_proxy_model.h"
-
+#include "process/process_db.h"
 #include "process_table_model.h"
-
-#include "common/collator.h"
 #include "common/han_latin.h"
+#include "common/common.h"
 
 #include <QCollator>
 #include <QDebug>
 #include <QLocale>
 
+// proxy model constructor
 ProcessSortFilterProxyModel::ProcessSortFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
 }
 
+// set search pattern
 void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
 {
     m_search = search;
 
-    QRegExp expr = filterRegExp();
-
+    // in chinese locale, we convert hanzi to pinyin words to help filter out processes named with pinyin
     if (QLocale::system().language() == QLocale::Chinese) {
-        m_hanwords = uconv::convHanToLatin(search);
-        if (m_hanwords.isEmpty()) {
-            m_capwords = QString {};
-        } else {
-            QStringList wlist = m_hanwords.split(QRegExp("\\s+"));
-
-            for (const QString &w : wlist) {
-                if (w.isEmpty())
-                    continue;
-
-                m_capwords += w[0];
-            }
-        }
+        m_hanwords = util::common::convHanToLatin(search);
     }
 
+    // set search pattern & do the filter
     setFilterRegExp(QRegExp(search, Qt::CaseInsensitive));
 }
 
+void ProcessSortFilterProxyModel::setFilterType(int type)
+{
+    m_fileterType = type;
+    setFilterRegExp(filterRegExp());
+}
+
+// filters the row of specified parent with given pattern
 bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
-    // name, displayName, pid, user, pinyin
-    QModelIndex name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
-    QModelIndex pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
-    QModelIndex user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
+    bool filter = false;
+    const QModelIndex &pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
+    int apptype = pid.data(Qt::UserRole + 3).toInt();
+    if (m_fileterType == kNoFilter)
+        filter = true;
+    else if (m_fileterType == kFilterCurrentUser && (apptype == kFilterApps || apptype == kFilterCurrentUser))
+        filter = true;
+    else if (m_fileterType == kFilterApps && apptype == kFilterApps)
+        filter = true;
+
+    if (!filter) return false;
 
     bool rc = false;
+    const QModelIndex &name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
+    // display name or name matches pattern
     if (name.isValid()) {
-        rc |= sourceModel()->data(name).toString().contains(filterRegExp());
-        rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(filterRegExp());
+        rc |= name.data().toString().contains(filterRegExp());
+        if (rc) return rc;
+
+        rc |= name.data(Qt::UserRole).toString().contains(filterRegExp());
+        if (rc) return rc;
+
         if (QLocale::system().language() == QLocale::Chinese) {
-            rc |= sourceModel()->data(name, Qt::UserRole).toString().contains(m_hanwords);
+            // pinyin matches pattern
+            rc |= name.data(Qt::UserRole).toString().contains(m_hanwords);
+            if (rc) return rc;
         }
-        //        rc |= sourceModel()->data(name).toString().contains(m_capwords);
     }
+
+    // pid matches pattern
     if (pid.isValid())
-        rc |= sourceModel()->data(pid).toString().contains(filterRegExp());
+        rc |= pid.data().toString().contains(filterRegExp());
+    if (rc) return rc;
+
+    // user name matches pattern
+    const QModelIndex &user = sourceModel()->index(row, ProcessTableModel::kProcessUserColumn, parent);
     if (user.isValid())
-        rc |= sourceModel()->data(user).toString().contains(filterRegExp());
+        rc |= user.data().toString().contains(filterRegExp());
 
     return rc;
 }
 
-bool ProcessSortFilterProxyModel::filterAcceptsColumn(int column, const QModelIndex &parent) const
-{
-    return QSortFilterProxyModel::filterAcceptsColumn(column, parent);
-}
-
+// compare two items with the specified index
 bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    switch (sortColumn()) {
+    int sortcolumn = sortColumn();
+    switch (sortcolumn) {
     case ProcessTableModel::kProcessNameColumn: {
-        // sort by name first, then by cpu
-        auto a = left.data(Qt::DisplayRole).toString();
-        auto b = right.data(Qt::DisplayRole).toString();
-        // trick: fix slow sorting issue
-        if (a.length() == 0 || b.length() == 0) {
-            return a < b;
-        }
-        if (a.at(0) == b.at(0) && a == b) {
+        const QString &lhs = left.data(Qt::DisplayRole).toString();
+        const QString &rhs = right.data(Qt::DisplayRole).toString();
+
+        bool lstartHz = common::startWithHanzi(lhs);
+        bool rstartHz = common::startWithHanzi(rhs);
+        if (!lstartHz && rstartHz)
+            return true;
+
+        if (lstartHz && !rstartHz)
+            return false;
+
+        int rc = lhs.localeAwareCompare(rhs);
+
+        if (rc == 0) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole) <
                    right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole);
-        } else {
-            if (a.at(0).isLetterOrNumber() &&
-                    b.at(0).isLetterOrNumber() &&
-                    a.at(0) != b.at(0)) {
-                return a < b;
-            } else {
-                return Collator::instance()->compare(a, b) < 0;
-            }
-        }
+        } else
+            return rc < 0;
     }
     case ProcessTableModel::kProcessUserColumn: {
-        return Collator::instance()->compare(left.data(Qt::DisplayRole).toString(),
-                                             right.data(Qt::DisplayRole).toString()) < 0;
+        const QString &lhs = left.data(Qt::DisplayRole).toString();
+        const QString &rhs = right.data(Qt::DisplayRole).toString();
+        return lhs.localeAwareCompare(rhs) < 0;
     }
-    case ProcessTableModel::kProcessMemoryColumn: {
-        QVariant lmem, rmem;
-        lmem = left.data(Qt::UserRole);
-        rmem = right.data(Qt::UserRole);
+    case ProcessTableModel::kProcessMemoryColumn:
+    case ProcessTableModel::kProcessShareMemoryColumn:
+    case ProcessTableModel::kProcessVTRMemoryColumn: {
+        const QVariant &lmem = left.data(Qt::UserRole);
+        const QVariant &rmem = right.data(Qt::UserRole);
 
+        // compare memory usage first, then by cpu time
         if (lmem == rmem) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
                    .data(Qt::UserRole) <
@@ -131,14 +148,13 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         }
     }
     case ProcessTableModel::kProcessCPUColumn: {
-        QVariant lcpu, rcpu, lmem, rmem;
-        lcpu = left.data(Qt::UserRole);
-        rcpu = right.data(Qt::UserRole);
-        lmem = left.sibling(left.row(), ProcessTableModel::kProcessMemoryColumn)
-               .data(Qt::UserRole);
-        rmem = right.sibling(right.row(), ProcessTableModel::kProcessMemoryColumn)
-               .data(Qt::UserRole);
+        const QVariant &lcpu = left.data(Qt::UserRole);
+        const QVariant &rcpu = right.data(Qt::UserRole);
 
+        const QVariant &lmem = left.sibling(left.row(), ProcessTableModel::kProcessMemoryColumn).data(Qt::UserRole);
+        const QVariant &rmem = right.sibling(right.row(), ProcessTableModel::kProcessMemoryColumn).data(Qt::UserRole);
+
+        // compare cpu time first, then by memory usage
         if (qFuzzyCompare(lcpu.toReal(), rcpu.toReal())) {
             return lmem < rmem;
         } else {
@@ -150,36 +166,34 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         lkbs = left.data(Qt::UserRole).toReal();
         rkbs = right.data(Qt::UserRole).toReal();
 
+        // compare upload speed first, then by total send bytes
         if (qFuzzyCompare(lkbs, rkbs)) {
-            qulonglong lb, rb;
-            lb = left.data(Qt::UserRole + 1).toULongLong();
-            rb = right.data(Qt::UserRole + 1).toULongLong();
-            return lb < rb;
+            return left.data(Qt::UserRole + 1).toULongLong() < right.data(Qt::UserRole + 1).toULongLong();
         } else {
             return lkbs < rkbs;
         }
     }
     case ProcessTableModel::kProcessDownloadColumn: {
-        qreal lkbs, rkbs;
-        lkbs = left.data(Qt::UserRole).toReal();
-        rkbs = right.data(Qt::UserRole).toReal();
+        qreal lkbs = left.data(Qt::UserRole).toReal();
+        qreal rkbs = right.data(Qt::UserRole).toReal();
 
+        // compare download speed first, then by total download bytes
         if (qFuzzyCompare(lkbs, rkbs)) {
-            qulonglong lb, rb;
-            lb = left.data(Qt::UserRole + 1).toULongLong();
-            rb = right.data(Qt::UserRole + 1).toULongLong();
-            return lb < rb;
+            return left.data(Qt::UserRole + 1).toULongLong() < right.data(Qt::UserRole + 1).toULongLong();
         } else {
             return lkbs < rkbs;
         }
     }
     case ProcessTableModel::kProcessPIDColumn: {
+        // compare pid
         return left.data(Qt::UserRole) < right.data(Qt::UserRole);
     }
     case ProcessTableModel::kProcessDiskReadColumn: {
+        // compare disk read speed
         return left.data(Qt::UserRole) < right.data(Qt::UserRole);
     }
     case ProcessTableModel::kProcessDiskWriteColumn: {
+        // compare disk write speed
         return left.data(Qt::UserRole) < right.data(Qt::UserRole);
     }
     case ProcessTableModel::kProcessNiceColumn: {
@@ -187,10 +201,8 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         return !(left.data(Qt::UserRole) < right.data(Qt::UserRole));
     }
     case ProcessTableModel::kProcessPriorityColumn: {
-        return !(
-                   left.sibling(left.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole) <
-                   right.sibling(right.row(), ProcessTableModel::kProcessNiceColumn)
-                   .data(Qt::UserRole));
+        // compare priority with nice value instead of nice display name
+        return !(left.sibling(left.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole) < right.sibling(right.row(), ProcessTableModel::kProcessNiceColumn).data(Qt::UserRole));
     }
     default:
         break;

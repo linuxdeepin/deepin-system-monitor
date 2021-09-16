@@ -1,8 +1,9 @@
-﻿/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -11,20 +12,19 @@
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include "wm_info.h"
 
 #include <QDebug>
 
 #include <memory>
 
-using namespace util::wm;
+using namespace core::wm;
 using namespace std;
 
 enum wm_window_type_t {
@@ -75,7 +75,7 @@ enum wm_window_map_state_t {
     kViewableState                  = XCB_MAP_STATE_VIEWABLE
 };
 
-struct util::wm::wm_request_t {
+struct core::wm::wm_request_t {
     xcb_get_property_cookie_t           netNameCookie;
     xcb_get_property_cookie_t           nameCookie;
     xcb_get_geometry_cookie_t           geomCookie;
@@ -89,14 +89,14 @@ struct util::wm::wm_request_t {
     xcb_query_tree_cookie_t             treeCookie;
 };
 
-struct util::wm::wm_frame_extents_t {
+struct core::wm::wm_frame_extents_t {
     uint left;
     uint right;
     uint top;
     uint bottom;
 };
 
-struct util::wm::wm_window_ext_t {
+struct core::wm::wm_window_ext_t {
     WMWId                           windowId;       // window id
     WMWId                           parent      {}; // window tree schema
     QList<WMWId>                    children    {};
@@ -114,7 +114,7 @@ struct util::wm::wm_window_ext_t {
 };
 
 // tree schema in bottom to top stacking order
-struct util::wm::wm_tree_t {
+struct core::wm::wm_tree_t {
     struct wm_window_ext_t         *root;  // root window
     std::map<WMWId, WMWindowExt>    cache; // [windowId : window extended info] mapping
 };
@@ -144,17 +144,18 @@ using XConnection = std::unique_ptr<xcb_connection_t, XDisconnector>;
 WMInfo::WMInfo()
 {
     buildWindowTreeSchema();
+    findDockWindows();
 }
 
 WMInfo::~WMInfo()
 {
 }
 
-std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos)
+std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 {
     std::list<WMWindowArea> walist;
 
-    std::function<void(const struct wm_window_ext_t *parent)> scan_tree;
+    std::function<void(const struct wm_window_ext_t *)> scan_tree;
     scan_tree = [&](const struct wm_window_ext_t *parent) {
         for (auto &childWindowId : parent->children) {
             auto &child = m_tree->cache[childWindowId];
@@ -171,10 +172,10 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos)
             if (child->wclass != kInputOutputClass)
                 continue;
 
-            // window type
             if (child->pid == -1)
                 continue;
 
+            // window type
             if (child->types.startsWith(kDockWindowType)
                     || child->types.startsWith(kDesktopWindowType))
                 continue;
@@ -218,7 +219,18 @@ WMWId WMInfo::getRootWindow() const
     return 0;
 }
 
-std::list<WMWindowArea> WMInfo::hoveredBy(WMWId wid, QRect &area)
+bool WMInfo::isCursorHoveringDocks(const QPoint &pos) const
+{
+    for (auto &dock : m_dockWindowList) {
+        if (dock->rect.contains(pos)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) const
 {
     std::list<WMWindowArea> list {};
     bool done {false};
@@ -286,12 +298,6 @@ std::list<WMWindowArea> WMInfo::hoveredBy(WMWId wid, QRect &area)
     return list;
 }
 
-std::map<pid_t, WMWindow> WMInfo::updateWindowStackCache()
-{
-    // TODO: redo new fetch window title jobs
-    return {};
-}
-
 void WMInfo::buildWindowTreeSchema()
 {
     int screenNumber {};
@@ -342,6 +348,51 @@ void WMInfo::buildWindowTreeSchema()
     };
 
     build_tree(root);
+}
+
+void WMInfo::findDockWindows()
+{
+    m_dockWindowList.clear();
+
+    std::function<void(const struct wm_window_ext_t *)> scan_tree;
+    scan_tree = [&](const struct wm_window_ext_t *parent) {
+        for (auto &childWindowId : parent->children) {
+            auto &child = m_tree->cache[childWindowId];
+
+            // check child first (top => bottom)
+            if (child->children.length() > 0)
+                scan_tree(child.get());
+
+            // map state
+            if (child->map_state != kViewableState)
+                continue;
+
+            // window class
+            if (child->wclass != kInputOutputClass)
+                continue;
+
+            if (child->pid == -1)
+                continue;
+
+            // window state
+            if (child->states.contains(kHiddenState))
+                continue;
+
+            // window type (dock type should exclude from this)
+            if (!child->types.startsWith(kDockWindowType))
+                continue;
+
+            WMWindowArea warea(new struct wm_window_area_t());
+            warea->rect = child->rect;
+            warea->pid = child->pid;
+            warea->wid = child->windowId;
+
+            m_dockWindowList.push_back(std::move(warea));
+        }
+    };
+
+    Q_ASSERT(m_tree->root != nullptr);
+    scan_tree(m_tree->root);
 }
 
 void WMInfo::initAtomCache(xcb_connection_t *conn)

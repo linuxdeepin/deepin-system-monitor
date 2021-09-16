@@ -11,10 +11,142 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Приховати подробиці</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Читання</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Запис</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 секунд</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 днів %2 годин %3 хвилин</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Вжиток</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Поточна частота</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Виробник</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Сокети</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Логічні процесори</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Віртуалізація</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>Кеш L1i</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>Кеш L1d</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>Кеш L2</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>Кеш L3</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Середнє навантаження</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Дескриптори файлів</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Процеси</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Потоки обробки</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Назва вузла</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Тип ОС</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Версія</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Час роботи</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 секунд</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
         <translation>Нічого не знайдено</translation>
+    </message>
+</context>
+<context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Подробиці</translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Подробиці</translation>
     </message>
 </context>
 <context>
@@ -193,9 +325,124 @@
     </message>
 </context>
 <context>
+    <name>DeailTableModel</name>
+    <message>
+        <source>Used</source>
+        <translation>Використано</translation>
+    </message>
+    <message>
+        <source>Available</source>
+        <translation>Доступно</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation>Спільно</translation>
+    </message>
+    <message>
+        <source>Cached</source>
+        <translation>Кешовано</translation>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation>Буфери</translation>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation>Кешований резерв</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Активний</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Неактивний</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Змінено</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Пов&apos;язано</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Загальний резерв</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Вільний резерв</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Частина</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Модель</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Швидкість читання</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Швидкість запису</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Місткість</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Секторів прочитано</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Читань/с</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Прочитаних секторів/с</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Об&apos;єднаних читань/с</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Записано секторів</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Завершено записів</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Об&apos;єднано записів</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Записів/с</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Записано секторів/с</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Об&apos;єднано записів/с</translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
 </context>
@@ -218,10 +465,6 @@ Are you sure you want to continue?</source>
         <translation>Завершення роботи цього процесу може призвести до втрати даних. Ви справді хочете виконати цю дію?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Скасувати</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Завершити процес</translation>
     </message>
@@ -231,18 +474,142 @@ Are you sure you want to continue?</source>
         <translation>Примусове завершення роботи цього процесу може призвести до втрати даних. Ви справді хочете виконати цю дію?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Завершити</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Примусове припинення роботи цієї програми може призвести до втрати даних.
 Ви впевнені, що хочете продовжити?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Скасувати</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Примусове завершення</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Завершити</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Розмір</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>Адреса IP:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Маска мережі:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Трансляція:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Довж. префікса:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Область:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Тип з&apos;єднання</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Якість зв&apos;язку</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Потужність сигналу</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Рівень шуму</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Ширина каналу</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>Отримано пакетів</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>Отримано байтів</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>Помилки отримання</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>Відкинуто отриманих</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>Переповнень отримання</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>Кадр отримання</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>Переданих пакетів</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>Переданих байтів</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>Помилки передавання</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>Переповнень передавання</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>Носій передавання</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>Відкинуто переданих</translation>
     </message>
 </context>
 <context>
@@ -272,6 +639,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>Пам&apos;ять</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Отримання</translation>
     </message>
 </context>
 <context>
@@ -309,10 +680,6 @@ Are you sure you want to continue?</source>
         <translation>Надсилання</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Мережа</translation>
     </message>
@@ -323,6 +690,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>Загалом надіслано</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Надіслання</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Диски</translation>
     </message>
 </context>
 <context>
@@ -381,10 +756,6 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Process.Signal</name>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Не вдалося завершити роботу процесу</translation>
-    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Не вдалося призупинити роботу процесу</translation>
@@ -466,16 +837,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Нетипова пріоритетність</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Змінити</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Нетипова пріоритетність</translation>
     </message>
 </context>
 <context>
@@ -524,16 +897,20 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>Пріоритетність</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Спільна пам&apos;ять</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Віртуальна пам&apos;ять</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Swap</source>
-        <translation type="vanished">Підкачка</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Не ввімкнено</translation>
+        <source>Not support</source>
+        <translation>Немає підтримки</translation>
     </message>
 </context>
 <context>
@@ -550,16 +927,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Назва екземпляра служби</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Назва екземпляра служби</translation>
     </message>
 </context>
 <context>
@@ -609,12 +988,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Підпрограма</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Стан</translation>
     </message>
     <message>
@@ -627,7 +1004,6 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Тип запуску</translation>
     </message>
 </context>

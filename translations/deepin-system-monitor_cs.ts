@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +17,21 @@
     <message>
         <source>No search results</source>
         <translation>Nic nenalezeno</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -193,6 +210,33 @@
     </message>
 </context>
 <context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">Procesor</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
@@ -220,7 +264,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>End process</source>
@@ -266,7 +310,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klikněte na aplikaci, kterou chcete ukončit</translation>
+        <translation>Klepněte na program, který chcete ukončit</translation>
     </message>
 </context>
 <context>
@@ -384,10 +428,6 @@ Opravdu chcete pokračovat?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Proces se nepodařilo ukončit</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Proces se nepodařilo pozastavit</translation>
     </message>
@@ -469,7 +509,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Change</source>
@@ -528,17 +568,6 @@ Opravdu chcete pokračovat?</translation>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Odkládací prostor (swap)</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Nepovoleno</translation>
-    </message>
-</context>
-<context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
@@ -557,7 +586,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Service instance name</source>
@@ -611,12 +640,10 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Stav chodu</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Status</translation>
     </message>
     <message>
@@ -629,7 +656,6 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Typ spouštění</translation>
     </message>
 </context>
@@ -668,6 +694,17 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Services</source>
         <translation>Služby</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

@@ -20,23 +20,38 @@
 #define COMPACTCPUMONITOR_H
 
 #include <QWidget>
+#include <QPainterPath>
+
+class CPUInfoModel;
+class BaseCommandLinkButton;
 
 class CompactCpuMonitor : public QWidget
 {
     Q_OBJECT
 
 public:
-    CompactCpuMonitor(QWidget *parent = nullptr);
+    explicit CompactCpuMonitor(QWidget *parent = nullptr);
     ~CompactCpuMonitor();
 
+public:
+    void setDetailButtonVisible(bool visible);
+
+signals:
+    void signalDetailInfoClicked();
+
 public slots:
-    void updateStatus(qreal totalCpuPercent, const QList<qreal> cPercents);
+    void updateStatus();
+
+private slots:
+    void onDetailInfoClicked();
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     void changeFont(const QFont &font);
+    void resizeItemRect();
 
 private:
     QList<QList<qreal>> cpuPercents;
@@ -54,6 +69,10 @@ private:
 
     QFont m_cpuFont;
     QFont m_statFont;
+
+    QString m_detailText;
+    CPUInfoModel *m_cpuInfomodel;
+    BaseCommandLinkButton *m_detailButton;
 };
 
 #endif

@@ -19,13 +19,17 @@
 #ifndef COMPACTMEMORYMONITOR_H
 #define COMPACTMEMORYMONITOR_H
 
-#include <DApplicationHelper>
-
 #include <QWidget>
 
-DWIDGET_USE_NAMESPACE
-
 class QPropertyAnimation;
+class MemStatModel;
+class MemInfoModel;
+
+namespace core {
+namespace system {
+class MemInfo;
+}
+}
 
 class CompactMemoryMonitor : public QWidget
 {
@@ -33,28 +37,23 @@ class CompactMemoryMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    CompactMemoryMonitor(QWidget *parent = nullptr);
+    explicit CompactMemoryMonitor(QWidget *parent);
     ~CompactMemoryMonitor();
-
-public slots:
-    void updateStatus(qulonglong uMemory, qulonglong tMemory,
-                      qulonglong uSwap, qulonglong tSwap);
 
 protected:
     void paintEvent(QPaintEvent *event);
 
-    qreal progress() const
-    {
-        return m_progress;
-    }
-    void setProgress(qreal p)
-    {
-        m_progress = p;
-    }
-
 private:
-    void changeTheme(DApplicationHelper::ColorType themeType);
+    void changeTheme(int themeType);
     void changeFont(const QFont &font);
+
+    qreal progress() const;
+    void setProgress(qreal p);
+
+private slots:
+    void onStatInfoUpdated();
+    void animationFinshed();
+    void onValueChanged();
 
 private:
     QColor memoryBackgroundColor;
@@ -79,21 +78,16 @@ private:
     int ringCenterPointerY = 45;
     int ringWidth = 6;
 
-    qulonglong m_prevUsedMemory {};
-    qulonglong m_prevUsedSwap {};
-    qulonglong m_totalMemory {};
-    qulonglong m_totalSwap {};
-    qulonglong m_usedMemory {};
-    qulonglong m_usedSwap {};
+    core::system::MemInfo *m_memInfo {};
 
     qreal m_progress {};
+    qreal m_lastMemPercent = 0.;
+    qreal m_lastSwapPercent = 0.;
     QPropertyAnimation *m_animation {};
 
     QFont m_contentFont;
     QFont m_subContentFont;
     QFont m_memPercentFont;
-
-    DApplicationHelper::ColorType m_themeType;
 };
 
 #endif

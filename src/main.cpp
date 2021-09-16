@@ -16,12 +16,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "gui/main_window.h"
-#include "constant.h"
-#include "settings.h"
-#include "utils.h"
-#include "common/hash.h"
 #include "environments.h"
+#include "accessible.h"
+#include "common/common.h"
+#include "application.h"
+#include "settings.h"
+#include "gui/main_window.h"
+#include "common/perf.h"
 
 #include <DApplication>
 #include <DApplicationSettings>
@@ -32,21 +33,17 @@
 
 #include <QApplication>
 #include <QDateTime>
-
-Q_DECLARE_METATYPE(QList<qreal>)
+#include <QAccessible>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    utils::init_seed();
+    PERF_PRINT_BEGIN("POINT-01", "");
 
-    qRegisterMetaType<QList<qreal>>();
-
-    DApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
-    DApplication app(argc, argv);
+    Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    Application app(argc, argv);
     app.setAutoActivateWindows(true);
 
     if (DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor"),
@@ -71,24 +68,26 @@ int main(int argc, char *argv[])
         app.setApplicationDescription(descriptionText);
         app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-        app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor"));
+        //app.setWindowIcon(QIcon::fromTheme("deepin-system-monitor")); //耗时40ms
+
+        QAccessible::installFactory(accessibleFactory);
 
         DApplicationSettings appSettings;
 
         DLogManager::registerConsoleAppender();
         DLogManager::registerFileAppender();
 
-        MainWindow *window = MainWindow::instance();
-        window->initDisplay();
+        MainWindow mw;
+        gApp->setMainWindow(&mw);
+        mw.initDisplay();
 
-        QObject::connect(&app, &DApplication::newInstanceStarted, window,
+        QObject::connect(&app,
+                         &DApplication::newInstanceStarted,
+                         &mw,
                          &MainWindow::activateWindow);
-        QObject::connect(&app, &QCoreApplication::aboutToQuit, window,
-        [ = ]() { window->deleteLater(); });
 
-        window->setMinimumSize(QSize(Constant::WINDOW_MIN_WIDTH, Constant::WINDOW_MIN_HEIGHT));
-        Dtk::Widget::moveToCenter(window);
-        window->show();
+        Dtk::Widget::moveToCenter(&mw);
+        mw.show();
 
         return app.exec();
     }

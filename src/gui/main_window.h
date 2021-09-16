@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -19,15 +21,9 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#include "ui_common.h"
-
 #include <DMainWindow>
 #include <DShadowLine>
-#include <DSpinner>
 #include <DStackedWidget>
-
-#include <mutex>
-#include <thread>
 
 DWIDGET_USE_NAMESPACE
 
@@ -35,7 +31,6 @@ class Toolbar;
 class SystemServicePageWidget;
 class ProcessPageWidget;
 class Settings;
-class QTimer;
 
 class MainWindow : public DMainWindow
 {
@@ -43,73 +38,96 @@ class MainWindow : public DMainWindow
     Q_DISABLE_COPY(MainWindow)
 
 public:
-    static MainWindow *instance()
-    {
-        MainWindow *sin = m_instance.load();
-        if (!sin) {
-            std::lock_guard<std::mutex> lock(m_mutex);
-            if (!sin) {
-                sin = new MainWindow();
-                m_instance.store(sin);
-            }
-        }
-
-        return sin;
-    }
-
-    inline Toolbar *toolbar() const { return m_toolbar; }
-    inline ProcessPageWidget *processPage() const { return m_procPage; }
-    inline SystemServicePageWidget *systemServicePage() const { return m_svcPage; }
-
-Q_SIGNALS:
-    void killProcessPerformed();
-    void displayModeChanged(DisplayMode mode);
-    void loadingStatusChanged(bool loading);
-    void authProgressStarted();
-    void authProgressEnded();
-
-public Q_SLOTS:
-    inline void initDisplay()
-    {
-        initUI();
-        initConnections();
-    }
-
-    void displayShortcutHelpDialog();
-
-protected:
-    void initUI();
-    void initConnections();
-
-    virtual void resizeEvent(QResizeEvent *event) override;
-    virtual void closeEvent(QCloseEvent *event) override;
-    bool eventFilter(QObject *obj, QEvent *event) override;
-    virtual void showEvent(QShowEvent *event) override;
-
-private:
-    MainWindow(DWidget *parent = nullptr);
+    /**
+     * @brief MainWindow Constructor
+     * @param parent Parent Object
+     */
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
-    Settings *m_settings;
+    /**
+     * @brief toolbar Get toolbar instance
+     * @return Toolbar instance
+     */
+    inline Toolbar *toolbar() const { return m_toolbar; }
 
-    //kill process
-    QAction *m_killAction                       {};
-    DMenu   *m_modeMenu                         {};
+Q_SIGNALS:
+    /**
+     * @brief Kill application operation requested signal
+     */
+    void killProcessPerformed();
+    /**
+     * @brief Display mode changed signal
+     * @param mode Display mode
+     */
+    void displayModeChanged(int mode);
+    /**
+     * @brief Loading status changed signal
+     * @param loading Loading state flag
+     */
+    void loadingStatusChanged(bool loading);
 
-    Toolbar                 *m_toolbar          {};
-    DStackedWidget          *m_pages            {};
-    //程序进程
-    ProcessPageWidget       *m_procPage         {};
-    //系统服务
-    SystemServicePageWidget *m_svcPage          {};
-    DShadowLine             *m_tbShadow         {};
+public Q_SLOTS:
+    /**
+     * @brief Initialize ui components
+     */
+    void initDisplay();
 
-    bool m_loading {true};
-    char __unused__[7];     // ##padding##
-    QTimer *m_timer {nullptr};
+    /**
+     * @brief onLoadStatusChanged
+     */
+    void onLoadStatusChanged(bool loading);
 
-    static std::atomic<MainWindow *> m_instance;
-    static std::mutex m_mutex;
+    /**
+     * @brief onStartMonitorJob
+     */
+    void onStartMonitorJob();
+
+protected:
+    /**
+     * @brief Initialize ui components
+     */
+    void initUI();
+    /**
+     * @brief Initialize connections
+     */
+    void initConnections();
+
+    /**
+     * @brief resizeEvent Resize event handler
+     * @param event Resize event
+     */
+    void resizeEvent(QResizeEvent *event) override;
+    /**
+     * @brief closeEvent Close event handler
+     * @param event Close event
+     */
+    void closeEvent(QCloseEvent *event) override;
+    /**
+     * @brief eventFilter Filters events if this object has been installed as an event filter for the watched object.
+     * @param obj Object being watched
+     * @param event Event to be filtered
+     * @return To filter the event out, return true; otherwise return false
+     */
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
+    /**
+     * @brief showEvent Show event handler
+     * @param event Show event
+     */
+    void showEvent(QShowEvent *event) override;
+
+private:
+    Settings *m_settings = nullptr;
+
+    Toolbar *m_toolbar = nullptr;
+    DStackedWidget *m_pages = nullptr;
+    ProcessPageWidget *m_procPage = nullptr;
+    SystemServicePageWidget *m_svcPage = nullptr;
+
+    bool m_initLoad = false;
+    DShadowLine *m_tbShadow  = nullptr;
+    QWidget *m_focusedWidget = nullptr;
 };
 
 #endif  // MAIN_WINDOW_H

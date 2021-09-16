@@ -42,4 +42,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-Deepin System Monitor is licensed under [GPLv3](LICENSE).
+Deepin System Monitor is licensed under [GPLv3](LICENSE) or any later version.

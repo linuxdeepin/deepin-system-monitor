@@ -18,54 +18,47 @@
 
 #include "compact_disk_monitor.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
-#include "smooth_curve_generator.h"
-#include "utils.h"
-#include "constant.h"
+#include "common/common.h"
+#include "system/system_monitor.h"
+#include "system/device_db.h"
+#include "system/diskio_info.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
-#include <DStyle>
 
-#include <QApplication>
 #include <QDebug>
-#include <QPainter>
 #include <QtMath>
+#include <QPainter>
+#include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace core::system;
+using namespace common;
+using namespace common::format;
 
+const int gridSize = 10;
+const int pointsNumber = 30;
 CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-
     // TODO: use more elegent way to set width
-    int statusBarMaxWidth = 300;
-    setFixedWidth(statusBarMaxWidth - margin * 2);
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(160);
 
-    pointsNumber = int(statusBarMaxWidth / 5.4);
-
     readSpeeds = new QList<qreal>();
-    for (int i = 0; i < pointsNumber; i++) {
+    for (int i = 0; i <= pointsNumber; i++) {
         readSpeeds->append(0);
     }
 
     writeSpeeds = new QList<qreal>();
-    for (int i = 0; i < pointsNumber; i++) {
+    for (int i = 0; i <= pointsNumber; i++) {
         writeSpeeds->append(0);
     }
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::diskStatInfoUpdated,
-            this, &CompactDiskMonitor::updateStatus);
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &CompactDiskMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -78,74 +71,55 @@ CompactDiskMonitor::~CompactDiskMonitor()
     delete writeSpeeds;
 }
 
-void CompactDiskMonitor::updateStatus(qreal readBps, qreal writeBps)
+void CompactDiskMonitor::updateStatus()
 {
-    m_readBps = readBps;
-    m_writeBps = writeBps;
+    m_readBps = DeviceDB::instance()->diskIoInfo()->diskIoReadBps();
+    m_writeBps = DeviceDB::instance()->diskIoInfo()->diskIoWriteBps();
 
     // Init read path.
     readSpeeds->append(m_readBps);
 
-    if (readSpeeds->size() > pointsNumber) {
+    if (readSpeeds->size() > pointsNumber + 1) {
         readSpeeds->pop_front();
     }
+    double readMaxHeight = *std::max_element(readSpeeds->begin(), readSpeeds->end()) * 1.1;
 
-    double readMaxHeight = 0;
-    for (int i = 0; i < readSpeeds->size(); i++) {
-        if (readSpeeds->at(i) > readMaxHeight) {
-            readMaxHeight = readSpeeds->at(i);
-        }
-    }
-
-    // Init write path.
     writeSpeeds->append(m_writeBps);
 
-    if (writeSpeeds->size() > pointsNumber) {
+    if (writeSpeeds->size() > pointsNumber + 1) {
         writeSpeeds->pop_front();
     }
+    double writeMaxHeight = *std::max_element(writeSpeeds->begin(), writeSpeeds->end()) * 1.1;
 
-    double writeMaxHeight = 0;
-    for (int i = 0; i < writeSpeeds->size(); i++) {
-        if (writeSpeeds->at(i) > writeMaxHeight) {
-            writeMaxHeight = writeSpeeds->at(i);
-        }
-    }
+    double maxHeight = qMax(readMaxHeight, writeMaxHeight);
 
-    qreal maxH = std::max(readMaxHeight, writeMaxHeight);
-    int modReadMaxRenderH = readRenderMaxHeight - 2;
-    int modWriteMaxRenderH = writeRenderMaxHeight - 2;
+    QPainterPath tmpReadpath;
+    getPainterPathByData(readSpeeds, tmpReadpath, maxHeight);
+    readPath = tmpReadpath;
 
-    QList<QPointF> readPoints;
-    for (int i = 0; i < readSpeeds->size(); i++) {
-        if (readMaxHeight < modReadMaxRenderH) {
-            readPoints.append(QPointF(i * 5, readSpeeds->at(i)));
-        } else {
-            qreal scale = readSpeeds->at(i) * ulong(modReadMaxRenderH) / maxH;
-            if (scale > 0 && scale < 0.5) {
-                scale = 0.5;
-            }
-            readPoints.append(QPointF(i * 5, scale));
-        }
-    }
-
-    readPath = SmoothCurveGenerator::generateSmoothCurve(readPoints);
-
-    QList<QPointF> writePoints;
-    for (int i = 0; i < writeSpeeds->size(); i++) {
-        if (writeMaxHeight < modWriteMaxRenderH) {
-            writePoints.append(QPointF(i * 5, writeSpeeds->at(i)));
-        } else {
-            qreal scale = writeSpeeds->at(i) * ulong(modWriteMaxRenderH) / maxH;
-            if (scale > 0 && scale < 0.5) {
-                scale = 0.5;
-            }
-            writePoints.append(QPointF(i * 5, scale));
-        }
-    }
-
-    writePath = SmoothCurveGenerator::generateSmoothCurve(writePoints);
+    QPainterPath tmpWritepath;
+    getPainterPathByData(writeSpeeds, tmpWritepath, maxHeight);
+    writePath = tmpWritepath;
 
     update();
+}
+
+void CompactDiskMonitor::getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue)
+{
+    qreal offsetX = 0;
+    qreal distance = (this->width() - 2) * 1.0 / pointsNumber;
+    int dataCount = listData->size();
+
+    for (int i = 0;  i < dataCount - 1; i++) {
+        QPointF sp = QPointF(offsetX, renderMaxHeight * listData->at(i) / maxVlaue);;
+        QPointF ep = QPointF(offsetX + distance, renderMaxHeight * listData->at(i + 1) / maxVlaue);;
+
+        offsetX += distance;
+
+        QPointF c1 = QPointF((sp.x() + ep.x()) / 2.0, sp.y());
+        QPointF c2 = QPointF((sp.x() + ep.x()) / 2.0, ep.y());
+        path.cubicTo(c1, c2, ep);
+    }
 }
 
 void CompactDiskMonitor::paintEvent(QPaintEvent *)
@@ -153,10 +127,7 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = 10;
 
     // init colors
     auto *dAppHelper = DApplicationHelper::instance();
@@ -168,7 +139,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 #endif
 
     QColor statColor = palette.color(DPalette::TextTips);
-    QColor frameColor = palette.color(DPalette::FrameBorder);
+    QColor frameColor  = palette.color(DPalette::TextTips);
+    frameColor.setAlphaF(0.3);
 
     // Draw disk summary.
     QFontMetrics fm(m_tagFont);
@@ -220,9 +192,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 
     int gridX = rect().x() + penSize;
     int gridY = rect().y() + wcol1.y() + wcol1.height() + margin;
-    int gridWidth =
-        rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
-    int gridHeight = readRenderMaxHeight + writeRenderMaxHeight + 4 * penSize;
+    int gridWidth = this->width() - 2 * penSize;
+    int gridHeight = renderMaxHeight + renderMaxHeight + 4 * penSize;
 
     QPainterPath framePath;
     QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
@@ -263,19 +234,19 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(m_diskReadColor, diskCurveWidth));
     painter.drawPath(readPath);
 
-    painter.translate(0, writeWaveformsRenderOffsetY);
+    painter.translate(0, -5);
     painter.scale(1, -1);
     painter.setPen(QPen(m_diskWriteColor, diskCurveWidth));
     painter.drawPath(writePath);
 
-    setFixedHeight(gridFrame.y() + gridFrame.height() + penSize);
+    setFixedHeight(gridFrame.bottom() + 2 * penSize);
 }
 
 void CompactDiskMonitor::changeFont(const QFont &font)
 {
     m_tagFont = font;
-    m_tagFont.setPointSize(m_tagFont.pointSize() - 1);
+    m_tagFont.setPointSizeF(m_tagFont.pointSizeF() - 1);
     m_tagFont.setWeight(QFont::Medium);
     m_statFont = font;
-    m_statFont.setPointSize(m_statFont.pointSize() - 1);
+    m_statFont.setPointSizeF(m_statFont.pointSizeF() - 1);
 }

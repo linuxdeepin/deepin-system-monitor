@@ -19,54 +19,50 @@
 #include "network_monitor.h"
 
 #include "gui/ui_common.h"
-#include "smooth_curve_generator.h"
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
-#include "utils.h"
-#include "constant.h"
+#include "common/common.h"
+#include "system/device_db.h"
+#include "system/net_info.h"
+#include "system/system_monitor.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
-#include <DStyle>
 
-#include <QApplication>
 #include <QDebug>
 #include <QPainter>
 #include <QtMath>
+#include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace core::system;
+using namespace common;
+using namespace common::format;
 
+const int gridSize = 10;
+const int pointsNumber = 30;
 NetworkMonitor::NetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    auto *dAppHelper = DApplicationHelper::instance();
-    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
-
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
-    setFixedWidth(statusBarMaxWidth - margin * 2);
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
+    setFixedWidth(statusBarMaxWidth);
     setFixedHeight(180);
 
-    pointsNumber = int(statusBarMaxWidth / 5.4);
-
     downloadSpeeds = new QList<double>();
-    for (int i = 0; i < pointsNumber; i++) {
+    for (int i = 0; i <= pointsNumber; i++) {
         downloadSpeeds->append(0);
     }
 
     uploadSpeeds = new QList<double>();
-    for (int i = 0; i < pointsNumber; i++) {
+    for (int i = 0; i <= pointsNumber; i++) {
         uploadSpeeds->append(0);
     }
 
+    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::networkStatInfoUpdated,
-            this, &NetworkMonitor::updateStatus);
+    connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetworkMonitor::updateStatus);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -103,82 +99,63 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
-    m_frameColor = palette.color(DPalette::FrameBorder);
+
+    m_frameColor = palette.color(DPalette::TextTips);
+    m_frameColor.setAlphaF(0.3);
 }
 
-void NetworkMonitor::updateStatus(qulonglong tRecvBytes,
-                                  qulonglong tSentBytes,
-                                  qreal recvBps,
-                                  qreal sentBps)
+void NetworkMonitor::getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue)
 {
-    m_totalRecvBytes = tRecvBytes;
-    m_totalSentBytes = tSentBytes;
-    m_recvBps = recvBps;
-    m_sentBps = sentBps;
+    qreal offsetX = 0;
+    qreal distance = (this->width() - 2) * 1.0 / pointsNumber;
+    int dataCount = listData->size();
+
+    for (int i = 0;  i < dataCount - 1; i++) {
+        QPointF sp = QPointF(offsetX, renderMaxHeight * listData->at(i) / maxVlaue);;
+        QPointF ep = QPointF(offsetX + distance, renderMaxHeight * listData->at(i + 1) / maxVlaue);;
+
+        offsetX += distance;
+
+        QPointF c1 = QPointF((sp.x() + ep.x()) / 2.0, sp.y());
+        QPointF c2 = QPointF((sp.x() + ep.x()) / 2.0, ep.y());
+        path.cubicTo(c1, c2, ep);
+    }
+}
+
+void NetworkMonitor::updateStatus()
+{
+    auto netInfo = DeviceDB::instance()->netInfo();
+
+    m_totalRecvBytes = netInfo->totalRecvBytes();
+    m_totalSentBytes = netInfo->totalSentBytes();
+    m_recvBps = netInfo->recvBps();
+    m_sentBps = netInfo->sentBps();
 
     // Init download path.
     downloadSpeeds->append(m_recvBps);
 
-    if (downloadSpeeds->size() > pointsNumber) {
+    if (downloadSpeeds->size() > pointsNumber + 1) {
         downloadSpeeds->pop_front();
     }
-
-    double downloadMaxHeight = 0;
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadSpeeds->at(i) > downloadMaxHeight) {
-            downloadMaxHeight = downloadSpeeds->at(i);
-        }
-    }
+    double downloadMaxHeight = *std::max_element(downloadSpeeds->begin(), downloadSpeeds->end()) * 1.1;
 
     // Init upload path.
     uploadSpeeds->append(m_sentBps);
 
-    if (uploadSpeeds->size() > pointsNumber) {
+    if (uploadSpeeds->size() > pointsNumber + 1) {
         uploadSpeeds->pop_front();
     }
+    double uploadMaxHeight = *std::max_element(uploadSpeeds->begin(), uploadSpeeds->end()) * 1.1;
 
-    QList<QPointF> uploadPoints;
+    double maxHeight = qMax(downloadMaxHeight, uploadMaxHeight);
 
-    double uploadMaxHeight = 0;
-    for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadSpeeds->at(i) > uploadMaxHeight) {
-            uploadMaxHeight = uploadSpeeds->at(i);
-        }
-    }
+    QPainterPath tmpDownloadpath;
+    getPainterPathByData(downloadSpeeds, tmpDownloadpath, maxHeight);
+    downloadPath = tmpDownloadpath;
 
-    qreal maxHeight = std::max(uploadMaxHeight, downloadMaxHeight);
-    // top/bottom margin
-    int modDownloadRenderMaxHeight = downloadRenderMaxHeight - 2;
-    int modUploadRenderMaxHeight = uploadRenderMaxHeight - 2;
-
-    QList<QPointF> downloadPoints;
-    for (int i = 0; i < downloadSpeeds->size(); i++) {
-        if (downloadMaxHeight < modDownloadRenderMaxHeight) {
-            downloadPoints.append(QPointF(i * 5, downloadSpeeds->at(i)));
-        } else {
-            qreal scale = downloadSpeeds->at(i) * modDownloadRenderMaxHeight / maxHeight;
-            if (scale > 0 && scale < 0.5) {
-                scale = 0.5;
-            }
-            downloadPoints.append(QPointF(i * 5, scale));
-        }
-    }
-
-    downloadPath = SmoothCurveGenerator::generateSmoothCurve(downloadPoints);
-
-    for (int i = 0; i < uploadSpeeds->size(); i++) {
-        if (uploadMaxHeight < modUploadRenderMaxHeight) {
-            uploadPoints.append(QPointF(i * 5, uploadSpeeds->at(i)));
-        } else {
-            qreal scale = uploadSpeeds->at(i) * modUploadRenderMaxHeight / maxHeight;
-            if (scale > 0 && scale < 0.5) {
-                scale = 0.5;
-            }
-            uploadPoints.append(QPointF(i * 5, scale));
-        }
-    }
-
-    uploadPath = SmoothCurveGenerator::generateSmoothCurve(uploadPoints);
+    QPainterPath tmpUploadpath;
+    getPainterPathByData(uploadSpeeds, tmpUploadpath, maxHeight);
+    uploadPath = tmpUploadpath;
 
     update();
 }
@@ -189,10 +166,10 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     int bulletSize = 6;
-    int padleft = bulletSize * 2 + 2;
+    int padleft = bulletSize * 2;
 
-    auto spacing = DStyle::pixelMetric(style(), DStyle::PM_ContentsSpacing);
-    auto margin = DStyle::pixelMetric(style(), DStyle::PM_ContentsMargins);
+    auto spacing = 10;
+    auto margin = 10;
 
     QFontMetrics fmSection(m_sectionFont);
     QString sectionTitle = DApplication::translate("Process.Graph.View", "Network");
@@ -225,7 +202,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);
-    QRect contentRect(padleft, titleRect.y() + titleRect.height() + spacing,
+    QRect contentRect(padleft, titleRect.y() + titleRect.height(),
                       rect().x() + rect().width() - padleft, 1);
     QRect crect11(contentRect.x(), contentRect.y(), qCeil((contentRect.width() - spacing) / 2),
                   fmContent.height());
@@ -240,9 +217,9 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QRect crect41(contentRect.x(), crect31.y() + crect31.height(), crect11.width(),
                   crect21.height());
     QRect crect42(crect12.x(), crect41.y(), crect12.width(), crect21.height());
-    QRectF r1Ind(3, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
+    QRectF r1Ind(0, crect11.y() + qCeil((crect11.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
-    QRectF r2Ind(3, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
+    QRectF r2Ind(0, crect31.y() + qCeil((crect31.height() - bulletSize) / 2.), bulletSize,
                  bulletSize);
 
     painter.setPen(ltextColor);
@@ -282,15 +259,14 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     framePen.setWidth(penSize);
     painter.setPen(framePen);
 
-    int gridX = rect().x() + penSize + 3;
-    int gridY = rect().y() + crect42.y() + crect42.height() + margin;
-    int gridWidth =
-        rect().width() - 3 - ((rect().width() - 3 - penSize) % (gridSize + penSize)) - penSize;
-    int gridHeight = downloadRenderMaxHeight + uploadRenderMaxHeight + 4 * penSize;
+    int gridX = rect().x() + penSize;
+    int gridY = rect().y() + crect42.bottom() + margin;
+    int gridWidth = this->width() - 2 * penSize;
+    int gridHeight = renderMaxHeight + renderMaxHeight + 4 * penSize;
 
     QPainterPath framePath;
-    QRect gridFrame(gridX, gridY, gridWidth, gridHeight);
-    framePath.addRect(gridFrame);
+    QRect chartRect(gridX, gridY, gridWidth, gridHeight);
+    framePath.addRect(chartRect);
     painter.drawPath(framePath);
 
     // Draw grid.
@@ -317,7 +293,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     QPainterPath clip;
-    clip.addRect(gridFrame);
+    clip.addRect(chartRect);
     painter.setClipPath(clip);
 
     qreal networkCurveWidth = 1.2;
@@ -329,27 +305,27 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     lgSent.setColorAt(1, sentStartColor);
     QBrush recvBrush(lgRecv), sentBrush(lgSent);
 
-    painter.translate(gridFrame.x() + 2, gridFrame.y() + gridFrame.height() / 2 - 2);
+    painter.translate(chartRect.x() + 2, chartRect.y() + chartRect.height() / 2 - 2);
     painter.scale(1, -1);
     painter.setPen(QPen(recvBrush, networkCurveWidth));
     painter.drawPath(downloadPath);
 
-    painter.translate(0, uploadWaveformsRenderOffsetY);
+    painter.translate(0, -5);
     painter.scale(1, -1);
 
     painter.setPen(QPen(sentBrush, networkCurveWidth));
     painter.drawPath(uploadPath);
 
-    setFixedHeight(gridFrame.y() + gridFrame.height() + 1);
+    setFixedHeight(chartRect.bottom() + 2 * penSize);
 }
 
 void NetworkMonitor::changeFont(const QFont &font)
 {
     m_sectionFont = font;
-    m_sectionFont.setPointSize(m_sectionFont.pointSize() + 12);
+    m_sectionFont.setPointSizeF(m_sectionFont.pointSizeF() + 12);
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
-    m_contentFont.setPointSize(m_contentFont.pointSize() - 1);
+    m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
     m_subContentFont = font;
-    m_subContentFont.setPointSize(m_subContentFont.pointSize() - 1);
+    m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF() - 1);
 }

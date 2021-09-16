@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -19,7 +21,7 @@
 #include "process_attribute_dialog.h"
 
 #include "settings.h"
-#include "utils.h"
+#include "common/common.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -41,11 +43,12 @@
 #include <QtMath>
 #include <QScrollBar>
 
-static const int kPreferedTextWidth = 200;
+// prefered text width
+static const int kPreferedTextWidth = 260;
+// default icon size
 static const int kAppIconSize = 80;
-static const int kIconToNameSpace = 10;
-static const int kNameToGridSpace = 16;
 
+// constructor
 ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid,
                                                const QString &procName,
                                                const QString &displayName,
@@ -61,66 +64,46 @@ ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid,
     , m_icon(icon)
     , m_pid(pid)
 {
+    // get backup settings instance
     m_settings = Settings::instance();
-
     initUI();
 
+    // install event filters for dialog itself & text contents
     installEventFilter(this);
-    if (m_procNameLabel) {
-        m_procNameLabel->installEventFilter(this);
-    }
-    if (m_procNameText) {
-        m_procNameText->installEventFilter(this);
-    }
-    if (m_procCmdLabel) {
-        m_procCmdLabel->installEventFilter(this);
-    }
-    if (m_procCmdText) {
-        m_procCmdText->installEventFilter(this);
-    }
-    if (m_procStartLabel) {
-        m_procStartLabel->installEventFilter(this);
-    }
-    if (m_procStartText) {
-        m_procStartText->installEventFilter(this);
-    }
+    m_procNameText->viewport()->installEventFilter(this);
+    m_procCmdText->viewport()->installEventFilter(this);
+    m_procStartText->viewport()->installEventFilter(this);
 }
 
+// initialize ui components
 void ProcessAttributeDialog::initUI()
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
-    QStyleOption option;
-    option.initFrom(this);
-    m_margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    m_margin = 10;
+    // restore settings from backup config if previous size found, otherwise use default size
+    int width = m_settings->getOption(kSettingKeyProcessAttributeDialogWidth, 600).toInt();
+    int height = m_settings->getOption(kSettingKeyProcessAttributeDialogHeight, 480).toInt();
 
-    int width = 600, height = 480;
-    if (m_settings) {
-        QVariant v;
-        v = m_settings->getOption(kSettingKeyProcessAttributeDialogWidth);
-        if (v.isValid()) {
-            width = v.toInt();
-        }
-        v = m_settings->getOption(kSettingKeyProcessAttributeDialogHeight);
-        if (v.isValid()) {
-            height = v.toInt();
-        }
-    }
-
+    // background frame
     m_frame = new DWidget(this);
+    m_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_frame->setAutoFillBackground(true);
 
+    // resize dialog
     resize(width, height);
+    // set minimum size
     setMinimumSize(600, 480);
+    // set window attributes
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
     setWindowFlags(Qt::Dialog);
+    // hide menu on titlebar
     titlebar()->setQuitMenuDisabled(true);
     titlebar()->setMenuVisible(false);
     setTitlebarShadowEnabled(false);
+    // set dialog title
     titlebar()->setTitle({});
 
+    // shadow bar instance
     m_tbShadow = new DShadowLine(m_frame);
     m_tbShadow->setFixedWidth(m_frame->width());
     m_tbShadow->setFixedHeight(10);
@@ -128,67 +111,74 @@ void ProcessAttributeDialog::initUI()
     m_tbShadow->raise();
     m_tbShadow->show();
 
+    // frame layout
     auto *vlayout = new QVBoxLayout(m_frame);
-    vlayout->setContentsMargins(m_margin, 0, m_margin, 0);
+    vlayout->setMargin(m_margin);
     vlayout->setSpacing(m_margin);
 
     vlayout->addStretch(1);
 
     DLabel *appIcon = new DLabel(this);
-    vlayout->addWidget(appIcon, 0, Qt::AlignVCenter | Qt::AlignHCenter);
+    vlayout->addWidget(appIcon, 0, Qt::AlignCenter);
 
-    // spacing
-    vlayout->addSpacing(kIconToNameSpace);
-
+    // process display name label
     m_appNameLabel = new DLabel(this);
     DFontSizeManager::instance()->bind(m_appNameLabel, DFontSizeManager::T5, QFont::Bold);
+    // elide display name text in the middle
     m_appNameLabel->setElideMode(Qt::ElideMiddle);
     m_appNameLabel->setAlignment(Qt::AlignCenter);
-    vlayout->addWidget(m_appNameLabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    vlayout->addWidget(m_appNameLabel, 0, Qt::AlignCenter);
 
-    // spacing
-    vlayout->addSpacing(kNameToGridSpace);
-
+    // background frame
     auto *wnd = new QWidget(m_frame);
+    wnd->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     wnd->setAutoFillBackground(false);
+    // content grid layout
     auto *grid = new QGridLayout(wnd);
     grid->setHorizontalSpacing(m_margin);
     grid->setVerticalSpacing(0);
+    grid->setMargin(0);
 
     QString buf;
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Name"));
+    // process name label
     m_procNameLabel = new DLabel(wnd);
     m_procNameLabel->setText(buf);
     m_procNameLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Command line"));
+    // process command label
     m_procCmdLabel = new DLabel(wnd);
     m_procCmdLabel->setText(buf);
     m_procCmdLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Start time"));
+    // process start time label
     m_procStartLabel = new DLabel(wnd);
     m_procStartLabel->setText(buf);
     m_procStartLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
+    // process name text
     m_procNameText = new DTextBrowser(wnd);
     m_procNameText->setFrameStyle(QFrame::NoFrame);
-    m_procNameText->setFocusPolicy(Qt::NoFocus);
-    m_procNameText->setFixedWidth(kPreferedTextWidth);
+    m_procNameText->setFocusPolicy(Qt::ClickFocus);
+    m_procNameText->setReadOnly(true);
     m_procNameText->viewport()->setBackgroundRole(QPalette::Window);
     m_procNameText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procNameText->document()->setDocumentMargin(0);
 
+    // process command line text
     m_procCmdText = new DTextBrowser(wnd);
     m_procCmdText->setFrameStyle(QFrame::NoFrame);
-    m_procCmdText->setFocusPolicy(Qt::NoFocus);
-    m_procCmdText->setFixedWidth(kPreferedTextWidth);
+    m_procCmdText->setFocusPolicy(Qt::ClickFocus);
+    m_procCmdText->setReadOnly(true);
     m_procCmdText->viewport()->setBackgroundRole(QPalette::Window);
     m_procCmdText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procCmdText->document()->setDocumentMargin(0);
 
+    // process start time text
     m_procStartText = new DTextBrowser(wnd);
     m_procStartText->setFrameStyle(QFrame::NoFrame);
-    m_procStartText->setFocusPolicy(Qt::NoFocus);
-    m_procStartText->setFixedWidth(kPreferedTextWidth);
+    m_procStartText->setFocusPolicy(Qt::ClickFocus);
+    m_procStartText->setReadOnly(true);
     m_procStartText->viewport()->setBackgroundRole(QPalette::Window);
     m_procStartText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procStartText->document()->setDocumentMargin(0);
@@ -207,132 +197,84 @@ void ProcessAttributeDialog::initUI()
     // spacing
     vlayout->addStretch(1);
 
+    // fill icon & text content
+    appIcon->setFixedSize(kAppIconSize, kAppIconSize);
     appIcon->setPixmap(m_icon.pixmap(kAppIconSize, kAppIconSize));
     m_appNameLabel->setText(m_displayName);
     m_appNameLabel->setToolTip(QString("<div>%1</div>").arg(m_displayName));
     m_procNameText->setText(m_procName);
     m_procCmdText->setText(m_cmdline);
+    // format date time (ISO style)
     m_procStartText->setText(QDateTime::fromSecsSinceEpoch(qint64(m_startTime)).toString("yyyy-MM-dd hh:mm:ss"));
 
     m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
 }
 
+// resize event handler
 void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
 {
     DMainWindow::resizeEvent(event);
-    if (m_settings) {
-        m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
-        m_settings->setOption(kSettingKeyProcessAttributeDialogHeight, height());
-    }
 
+    // raise shadow widget on top
     if (m_frame) {
         m_tbShadow->setFixedWidth(m_frame->size().width());
         m_tbShadow->raise();
         m_tbShadow->show();
     }
 
-    if (m_procCmdText) {
-        QFontMetrics fm(m_procCmdText->font());
-        m_cmdh = m_frame->height()
-                 - (kAppIconSize + kIconToNameSpace + m_appNameLabel->height() + kNameToGridSpace + m_margin * 2)
-                 - m_procNameText->height() - m_procStartText->height();
-        int singleline = fm.size(Qt::TextSingleLine, m_procCmdText->toPlainText()).height();
-        m_cmdh = (qFloor(m_cmdh * 1.0 / singleline) - 1) * singleline;
-
-        if (m_cmdh > m_procCmdText->document()->size().height()) {
-            m_cmdh = int(m_procCmdText->document()->size().height());
-        }
-        m_procCmdText->setFixedHeight(m_cmdh);
-        m_procCmdText->verticalScrollBar()->setValue(0);
-    }
+    resizeItemWidget();
 }
 
+void ProcessAttributeDialog::resizeItemWidget()
+{
+    m_procNameLabel->setFixedSize(m_procNameLabel->fontMetrics().width(m_procNameLabel->text()), m_procNameLabel->fontMetrics().height());
+    m_procCmdLabel->setFixedSize(m_procCmdLabel->fontMetrics().width(m_procCmdLabel->text()), m_procCmdLabel->fontMetrics().height());
+    m_procStartLabel->setFixedSize(m_procStartLabel->fontMetrics().width(m_procStartLabel->text()), m_procStartLabel->fontMetrics().height());
+
+    int procNametextH = qMin(120, int(m_procNameText->document()->size().height()));
+    m_procNameText->setFixedSize(qMin(kPreferedTextWidth, m_procNameText->fontMetrics().size(Qt::TextSingleLine, m_procNameText->toPlainText()).width()), procNametextH);
+    m_procStartText->setFixedSize(qMin(kPreferedTextWidth, m_procStartText->fontMetrics().size(Qt::TextSingleLine, m_procStartText->toPlainText()).width()), m_procStartLabel->fontMetrics().height());
+
+    m_cmdh = m_frame->height() - (kAppIconSize + m_appNameLabel->height() + m_margin * 4) - m_procNameText->height() - m_procStartText->height();
+    if (m_cmdh > m_procCmdText->document()->size().height()) {
+        m_cmdh = int(m_procCmdText->document()->size().height());
+    }
+    m_procCmdText->setFixedSize(qMin(kPreferedTextWidth, m_procCmdText->fontMetrics().size(Qt::TextSingleLine, m_procCmdText->toPlainText()).width()), m_cmdh);
+    m_procCmdText->verticalScrollBar()->setValue(0);
+}
+
+// close event handler
 void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
-
-    if (m_settings) {
-        m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
-        m_settings->setOption(kSettingKeyProcessAttributeDialogHeight, height());
-    }
+    DMainWindow::closeEvent(event);
+    m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
+    m_settings->setOption(kSettingKeyProcessAttributeDialogHeight, height());
 }
 
+// event filters
 bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
 {
-
-    if (event->type() == QEvent::Show) {
-        if (obj == m_procNameLabel || obj == m_procCmdLabel || obj == m_procStartLabel) {
-            auto *ctl = dynamic_cast<DLabel *>(obj);
-            QFontMetrics fm(ctl->font());
-            int max = fm.size(Qt::TextSingleLine, ctl->text()).width();
-            ctl->setFixedWidth(max);
-            ctl->setFixedHeight(ctl->height());
-        } else if (obj == m_procNameText || obj == m_procStartText || obj == m_procCmdText) {
-            auto *ctl = dynamic_cast<DTextBrowser *>(obj);
-            QFontMetrics fm(ctl->font());
-            int max = fm.size(Qt::TextSingleLine, ctl->toPlainText()).width();
-            if (max > kPreferedTextWidth) {
-                max = kPreferedTextWidth;
-            }
-            ctl->setFixedWidth(max);
-            ctl->setMaximumHeight(int(ctl->document()->size().height()));
-            // fix text cursor not at the first line issue
-            auto textCur = ctl->textCursor();
-            textCur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
-            ctl->setTextCursor(textCur);
-        }
-    } else if (event->type() == QEvent::Leave) {
-        if (obj == m_procNameText) {
-            if (m_procNameText->textCursor().hasSelection()) {
-                m_procNameText->setFocus();
-
-                auto cur = m_procCmdText->textCursor();
-                cur.clearSelection();
-                m_procCmdText->setTextCursor(cur);
-
-                cur = m_procStartText->textCursor();
-                cur.clearSelection();
-                m_procStartText->setTextCursor(cur);
-            }
-        } else if (obj == m_procCmdText) {
-            if (m_procCmdText->textCursor().hasSelection()) {
-                m_procCmdText->setFocus();
-
-                auto cur = m_procNameText->textCursor();
-                cur.clearSelection();
-                m_procNameText->setTextCursor(cur);
-
-                cur = m_procStartText->textCursor();
-                cur.clearSelection();
-                m_procStartText->setTextCursor(cur);
-            }
-        } else if (obj == m_procStartText) {
-            if (m_procStartText->textCursor().hasSelection()) {
-                m_procStartText->setFocus();
-
-                auto cur = m_procCmdText->textCursor();
-                cur.clearSelection();
-                m_procCmdText->setTextCursor(cur);
-
-                cur = m_procNameText->textCursor();
-                cur.clearSelection();
-                m_procNameText->setTextCursor(cur);
-            }
-        }
+    if (event->type() == QEvent::Show || event->type() == QEvent::FontChange) {
+        resizeItemWidget();
     } else if (event->type() == QEvent::KeyPress) {
+        // key press event
         if (obj == this) {
             auto *kev = dynamic_cast<QKeyEvent *>(event);
+            // handle ESC key press event
             if (kev->matches(QKeySequence::Cancel)) {
                 close();
                 return true;
-            } else {
-                return false;
             }
         }
     } else if (event->type() == QEvent::MouseButtonPress) {
+        // mouse button press event
         auto *ev = dynamic_cast<QMouseEvent *>(event);
-        if (!(ev->button() & Qt::RightButton)) {
+        if (ev->button() & Qt::LeftButton) {
+            DTextBrowser *textbrowser = dynamic_cast<DTextBrowser *>(obj->parent());
+            if (textbrowser) textbrowser->setFocus();
+
             auto cur = m_procNameText->textCursor();
             cur.clearSelection();
             m_procNameText->setTextCursor(cur);

@@ -11,10 +11,142 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Amaga&apos;n els detalls</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Lectura</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Escriptura</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 segons</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 dies, %2 hores, %3 minuts</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Ús</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Freqüència actual</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Freqüència</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Proveïdor</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Sòcols</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Processadors lògics</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualització</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>Cau L1i</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>Cau L1d</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>Cau L2</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>Cau L3</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Càrrega mitjana</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Descriptors de fitxers</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Processos</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Fils</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Nom d&apos;amfitrió</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Tipus de SO</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versió</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Temps d&apos;activitat</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 segons</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
         <translation>Cap resultat de la cerca</translation>
+    </message>
+</context>
+<context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Detalls</translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Detalls</translation>
     </message>
 </context>
 <context>
@@ -193,9 +325,124 @@
     </message>
 </context>
 <context>
+    <name>DeailTableModel</name>
+    <message>
+        <source>Used</source>
+        <translation>Usat</translation>
+    </message>
+    <message>
+        <source>Available</source>
+        <translation>Disponible</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation>Compartit</translation>
+    </message>
+    <message>
+        <source>Cached</source>
+        <translation>A la cau</translation>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation>Memòries intermèdies</translation>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation>Intercanvi a la cau</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Actiu</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Inactiu</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Brut</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Mapat</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Intercanvi total</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Intercanvi lliure</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Placa</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Velocitat de lectura</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Velocitat d&apos;escriptura</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Capacitat</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Sectors de lectura</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Lectures</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Sectors de lectura</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Lectures fusionades</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Sectors escrits</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Escriptures completades</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Escriptures fusionades</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Escriptures</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Sectors escrits</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Escriptures fusionades</translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>D&apos;acord</translation>
     </message>
 </context>
@@ -219,10 +466,6 @@ Are you sure you want to continue?</source>
 Segur que voleu continuar?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Acaba el procés</translation>
     </message>
@@ -233,18 +476,142 @@ Are you sure you want to continue?</source>
 Segur que voleu continuar?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Acaba</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Forçar l&apos;acabament d&apos;aquesta aplicació pot causar pèrdua de dades.
 Segur que voleu continuar?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Cancel·la</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Força&apos;n l&apos;acabament</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Acaba</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Mida</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>Adreça IP:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Màscara de xarxa:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Difusió:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Llargada de prefix:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Abast:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Tipus de connexió</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>Tipus de connexió:</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Qualitat de l&apos;enllaç</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Potència del senyal</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Nivell de soroll</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Amplada de banda</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>Paquets RX</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>Bytes RX</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>Errors RX</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX caigut/s</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>Excessos RX</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>Marc RX</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>Paquets RX</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>Bytes RX</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>Errors RX</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>Excessos TX</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>Transportista TX</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>TX caigut/s</translation>
     </message>
 </context>
 <context>
@@ -274,6 +641,10 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Memory</source>
         <translation>Memòria</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Rep</translation>
     </message>
 </context>
 <context>
@@ -311,10 +682,6 @@ Segur que voleu continuar?</translation>
         <translation>Carrega</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disc</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Xarxa</translation>
     </message>
@@ -325,6 +692,14 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Enviament total</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Envia</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Discs</translation>
     </message>
 </context>
 <context>
@@ -383,10 +758,6 @@ Segur que voleu continuar?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Ha fallat acabar el procés.</translation>
-    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Ha fallat interrompre el procés.</translation>
@@ -468,16 +839,18 @@ Segur que voleu continuar?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Prioritat personalitzada</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancel·la</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Canvia</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Prioritat personalitzada</translation>
     </message>
 </context>
 <context>
@@ -526,16 +899,20 @@ Segur que voleu continuar?</translation>
         <source>Priority</source>
         <translation>Prioritat</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Memòria compartida</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Memòria virtual</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercanvi</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">No habilitat</translation>
+        <source>Not support</source>
+        <translation>Sense suport</translation>
     </message>
 </context>
 <context>
@@ -552,16 +929,18 @@ Segur que voleu continuar?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Nom de la instància de sistema</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>D&apos;acord</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancel·la</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Nom de la instància de sistema</translation>
     </message>
 </context>
 <context>
@@ -611,12 +990,10 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Estat</translation>
     </message>
     <message>
@@ -629,7 +1006,6 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Tipus d&apos;inici</translation>
     </message>
 </context>

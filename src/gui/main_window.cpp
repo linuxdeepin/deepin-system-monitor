@@ -8,237 +8,114 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "main_window.h"
 
-#include "process/system_monitor.h"
+#include "application.h"
 #include "process_page_widget.h"
 #include "system_service_page_widget.h"
-#include "process/stats_collector.h"
 #include "toolbar.h"
-#include "utils.h"
+#include "common/common.h"
 #include "settings.h"
-#include "constant.h"
+#include "common/perf.h"
 
-#include <DApplication>
 #include <DApplicationHelper>
-#include <DHiDPIHelper>
-#include <DShadowLine>
-#include <DStackedWidget>
 #include <DTitlebar>
-#include <DPalette>
-
-#include <QHBoxLayout>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QProcess>
-#include <QDebug>
+#include <QKeyEvent>
 #include <QTimer>
-#include <QResizeEvent>
+#include <QDesktopWidget>
 
-std::atomic<MainWindow *> MainWindow::m_instance {nullptr};
-std::mutex MainWindow::m_mutex;
+const int WINDOW_MIN_HEIGHT = 760;
+const int WINDOW_MIN_WIDTH = 1080;
 
-DGUI_USE_NAMESPACE
-
-MainWindow::MainWindow(DWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
     m_settings = Settings::instance();
-    if (m_settings)
-        m_settings->init();
-
-    connect(this, &MainWindow::loadingStatusChanged, [ = ](bool loading) {
-        if (loading) {
-            titlebar()->setMenuDisabled(true);
-        } else {
-            titlebar()->setMenuDisabled(false);
-        }
-    });
+    setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
+    setMaximumSize(QApplication::desktop()->size());
+    connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 }
 
-MainWindow::~MainWindow() {}
-
-void MainWindow::displayShortcutHelpDialog()
+MainWindow::~MainWindow()
 {
-    QRect rect = window()->geometry();
-    QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
-
-    QJsonObject shortcutObj;
-    QJsonArray jsonGroups;
-
-    QJsonObject sysObj;
-    sysObj.insert("groupName", DApplication::translate("Help.Shortcut.System", "System"));
-    QJsonArray sysObjArr;
-
-    QJsonObject shortcutItem;
-    shortcutItem.insert("name",
-                        DApplication::translate("Help.Shortcut.System", "Display shortcuts"));
-    shortcutItem.insert("value", "Ctrl+Shift+?");
-    sysObjArr.append(shortcutItem);
-
-    QJsonObject searchItem;
-    searchItem.insert("name", DApplication::translate("Title.Bar.Search", "Search"));
-    searchItem.insert("value", "Ctrl+F");
-    sysObjArr.append(searchItem);
-
-    sysObj.insert("groupItems", sysObjArr);
-    jsonGroups.append(sysObj);
-
-    QJsonObject procObj;
-    procObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Processes"));
-    QJsonArray procObjArr;
-
-    QJsonObject killAppItem;
-    killAppItem.insert("name",
-                       DApplication::translate("Title.Bar.Context.Menu", "Force end application"));
-    killAppItem.insert("value", "Ctrl+Alt+K");
-    procObjArr.append(killAppItem);
-
-    QJsonObject endProcItem;
-    endProcItem.insert("name",
-                       DApplication::translate("Process.Table.Context.Menu", "End process"));
-    endProcItem.insert("value", "Alt+E");
-    procObjArr.append(endProcItem);
-    QJsonObject pauseProcItem;
-    pauseProcItem.insert("name",
-                         DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
-    pauseProcItem.insert("value", "Alt+P");
-    procObjArr.append(pauseProcItem);
-    QJsonObject resumeProcItem;
-    resumeProcItem.insert("name",
-                          DApplication::translate("Process.Table.Context.Menu", "Resume process"));
-    resumeProcItem.insert("value", "Alt+C");
-    procObjArr.append(resumeProcItem);
-    QJsonObject propItem;
-    propItem.insert("name", DApplication::translate("Process.Table.Context.Menu", "Properties"));
-    propItem.insert("value", "Alt+Enter");
-    procObjArr.append(propItem);
-    QJsonObject killProcItem;
-    killProcItem.insert("name",
-                        DApplication::translate("Process.Table.Context.Menu", "Kill process"));
-    killProcItem.insert("value", "Alt+K");
-    procObjArr.append(killProcItem);
-
-    procObj.insert("groupItems", procObjArr);
-    jsonGroups.append(procObj);
-
-    QJsonObject svcObj;
-    svcObj.insert("groupName", DApplication::translate("Title.Bar.Switch", "Services"));
-    QJsonArray svcObjArr;
-
-    QJsonObject startSvcItem;
-    startSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Start"));
-    startSvcItem.insert("value", "Alt+S");
-    svcObjArr.append(startSvcItem);
-    QJsonObject stopSvcItem;
-    stopSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Stop"));
-    stopSvcItem.insert("value", "Alt+T");
-    svcObjArr.append(stopSvcItem);
-    QJsonObject restartSvcItem;
-    restartSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Restart"));
-    restartSvcItem.insert("value", "Alt+R");
-    svcObjArr.append(restartSvcItem);
-    QJsonObject refreshSvcItem;
-    refreshSvcItem.insert("name", DApplication::translate("Service.Table.Context.Menu", "Refresh"));
-    refreshSvcItem.insert("value", "F5");
-    svcObjArr.append(refreshSvcItem);
-
-    svcObj.insert("groupItems", svcObjArr);
-    jsonGroups.append(svcObj);
-
-    shortcutObj.insert("shortcut", jsonGroups);
-
-    QJsonDocument doc(shortcutObj);
-
-    QProcess *shortcutViewProcess = new QProcess();
-    QStringList shortcutString;
-    QString param1 = "-j=" + QString(doc.toJson().data());
-    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-    shortcutString << param1 << param2;
-
-    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
-
-    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    PERF_PRINT_END("POINT-02");
 }
 
+void MainWindow::initDisplay()
+{
+    initUI();
+    initConnections();
+}
+
+void MainWindow::onLoadStatusChanged(bool loading)
+{
+    titlebar()->setMenuDisabled(loading);
+}
+
+// initialize ui components
 void MainWindow::initUI()
 {
-    m_loading = true;
-    Q_EMIT loadingStatusChanged(m_loading);
-
-    // Init window size.
-    int width = Constant::WINDOW_MIN_WIDTH;
-    int height = Constant::WINDOW_MIN_HEIGHT;
-
-    if (m_settings->getOption(kSettingKeyWindowWidth).isValid()) {
-        width = m_settings->getOption(kSettingKeyWindowWidth).toInt();
-    }
-
-    if (m_settings->getOption(kSettingKeyWindowHeight).isValid()) {
-        height = m_settings->getOption(kSettingKeyWindowHeight).toInt();
-    }
-
+    // default window size
+    int width = m_settings->getOption(kSettingKeyWindowWidth, WINDOW_MIN_WIDTH).toInt();
+    int height = m_settings->getOption(kSettingKeyWindowHeight, WINDOW_MIN_HEIGHT).toInt();
     resize(width, height);
 
+    // set titlebar icon
     titlebar()->setIcon(QIcon::fromTheme("deepin-system-monitor"));
-    m_toolbar = new Toolbar(this, this);
+    // new toolbar instance to add custom widgets
+    m_toolbar = new Toolbar(this);
+    // set toolbar focus policy to only accept tab focus
     m_toolbar->setFocusPolicy(Qt::TabFocus);
     titlebar()->setCustomWidget(m_toolbar);
-    titlebar()->setMenuDisabled(true);
 
+    // custom menu to hold custom menu items
     DMenu *menu = new DMenu(this);
     titlebar()->setMenu(menu);
 
+    // adjust toolbar tab order
     setTabOrder(titlebar(), m_toolbar);
 
-    // kill process
-    m_killAction = new QAction(
-        DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
-    m_killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
-    connect(m_killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
+    // kill process menu item
+    QAction *killAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
+    // control + alt + k
+    killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+    // emit process kill requested signal if kill process menu item triggered
+    connect(killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 
-    // display mode
-    m_modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
-    QActionGroup *modeGroup = new QActionGroup(m_modeMenu);
+    // display mode menu item
+    DMenu *modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
+    QActionGroup *modeGroup = new QActionGroup(modeMenu);
+    // set group items auto exclusive
     modeGroup->setExclusive(true);
-    auto *expandModeAction =
-        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Expand"), modeGroup);
+    // expand mode sub menu item
+    auto *expandModeAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Expand"), modeGroup);
     expandModeAction->setCheckable(true);
-    auto *compactModeAction =
-        new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
+    // compact mode sub menu item
+    auto *compactModeAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Compact"), modeGroup);
     compactModeAction->setCheckable(true);
-    //视图-->舒展
-    m_modeMenu->addAction(expandModeAction);
-    //视图-->紧凑
-    m_modeMenu->addAction(compactModeAction);
+    // add compact & expand sub menus into display mode menu as a group
+    modeMenu->addAction(expandModeAction);
+    modeMenu->addAction(compactModeAction);
 
-    QVariant vmode = m_settings->getOption(kSettingKeyDisplayMode);
-    if (vmode.isValid()) {
-        bool ok = false;
-        int mode = vmode.toInt(&ok);
-        if (ok) {
-            if (mode == kDisplayModeExpand) {
-                expandModeAction->setChecked(true);
-            } else if (mode == kDisplayModeCompact) {
-                compactModeAction->setChecked(true);
-            }
-        } else {
-            expandModeAction->setChecked(true);
-            m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
-            Q_EMIT displayModeChanged(kDisplayModeExpand);
-        }
+    // load display mode backup setting
+    int mode = m_settings->getOption(kSettingKeyDisplayMode).toInt();
+    if (mode == kDisplayModeExpand) {
+        expandModeAction->setChecked(true);
+    } else if (mode == kDisplayModeCompact) {
+        compactModeAction->setChecked(true);
     }
 
-    //绑定紧凑/舒展视图的triggered信号
+    // emit display mode changed signal if ether expand or compact menu item triggered
     connect(expandModeAction, &QAction::triggered, this, [ = ]() {
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
         Q_EMIT displayModeChanged(kDisplayModeExpand);
@@ -248,83 +125,87 @@ void MainWindow::initUI()
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
 
-    menu->addAction(m_killAction);
+    menu->addAction(killAction);
     menu->addSeparator();
-    menu->addMenu(m_modeMenu);
+    menu->addMenu(modeMenu);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
-    [ = ]() { m_settings->setOption(kSettingKeyThemeType, DApplicationHelper::LightType); });
-
+    // stacked widget instance to hold process & service pages
     m_pages = new DStackedWidget(this);
     setCentralWidget(m_pages);
     setContentsMargins(0, 0, 0, 0);
 
-    //阴影栏
+    // shadow widget instance under titlebar
     m_tbShadow = new DShadowLine(m_pages);
     m_tbShadow->setFixedWidth(m_pages->width());
     m_tbShadow->setFixedHeight(10);
     m_tbShadow->move(0, 0);
     m_tbShadow->show();
 
-    auto pa = DApplicationHelper::instance()->applicationPalette();
-    QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
-    pa.setColor(DPalette::Highlight, hlBrush.color());
-
-    //程序进程页面
     m_procPage = new ProcessPageWidget(m_pages);
-    //系统服务页面
     m_svcPage = new SystemServicePageWidget(m_pages);
+
     m_pages->setContentsMargins(0, 0, 0, 0);
     m_pages->addWidget(m_procPage);
     m_pages->addWidget(m_svcPage);
 
     m_tbShadow->raise();
 
-    m_loading = false;
-    Q_EMIT loadingStatusChanged(m_loading);
-
     installEventFilter(this);
 }
 
+// initialize connections
 void MainWindow::initConnections()
 {
     connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
+        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Services")).arg(DApplication::translate("Title.Bar.Switch", "Processes")));
         m_toolbar->clearSearchText();
-        m_pages->setCurrentIndex(m_pages->indexOf(m_procPage));
-        m_tbShadow->raise();
-        m_tbShadow->show();
-    });
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
-        m_toolbar->clearSearchText();
-        m_pages->setCurrentIndex(m_pages->indexOf(m_svcPage));
-        m_tbShadow->raise();
-        m_tbShadow->show();
-    });
-    //    connect(m_pages, &DStackedWidget::currentChanged, this,
-    //    [ = ]() { m_toolbar->clearSearchText(); });
+        m_pages->setCurrentWidget(m_procPage);
 
-    connect(this, &MainWindow::authProgressStarted, this, [ = ]() {
-        setEnabled(false);
+        m_tbShadow->raise();
+        m_tbShadow->show();
+        PERF_PRINT_END("POINT-05");
     });
-    connect(this, &MainWindow::authProgressEnded, this, [ = ]() {
-        setEnabled(true);
+
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
+        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
+        m_toolbar->clearSearchText();
+        m_pages->setCurrentWidget(m_svcPage);
+
+        m_tbShadow->raise();
+        m_tbShadow->show();
+        PERF_PRINT_END("POINT-05");
+    });
+
+    connect(gApp, &Application::backgroundTaskStateChanged, this, [ = ](Application::TaskState state) {
+        if (state == Application::kTaskStarted) {
+            // save last focused widget inside main window
+            m_focusedWidget = gApp->mainWindow()->focusWidget();
+            // disable main window (and any children widgets inside) if background process ongoing
+            setEnabled(false);
+        } else if (state == Application::kTaskFinished) {
+            // reenable main window after background process finished
+            setEnabled(true);
+            // restore focus to last focused widget if any
+            if (m_focusedWidget && m_focusedWidget->isEnabled()) {
+                m_focusedWidget->setFocus();
+            }
+        }
     });
 }
 
+// resize event handler
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
+    // propogate resize event to base handler first
     DMainWindow::resizeEvent(event);
-
-    if (m_tbShadow)
-        m_tbShadow->setFixedWidth(event->size().width());
-
-    m_settings->setOption(kSettingKeyWindowWidth, event->size().width());
-    m_settings->setOption(kSettingKeyWindowHeight, event->size().height());
+    m_tbShadow->setFixedWidth(this->width());
 }
 
+// close event handler
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    PERF_PRINT_BEGIN("POINT-02", "");
+    // save new size to backup settings instace
     m_settings->setOption(kSettingKeyWindowWidth, width());
     m_settings->setOption(kSettingKeyWindowHeight, height());
     m_settings->flush();
@@ -332,37 +213,47 @@ void MainWindow::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
-//事件过滤
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
+    // handle key press events
     if (event->type() == QEvent::KeyPress) {
         auto *kev = dynamic_cast<QKeyEvent *>(event);
         if (kev->matches(QKeySequence::Quit)) {
+            // ESC pressed
             DApplication::quit();
             return true;
         } else if (kev->matches(QKeySequence::Find)) {
+            // CTRL + F pressed
             toolbar()->focusInput();
             return true;
         } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) && kev->key() == Qt::Key_K) {
+            // CTRL + ALT + K pressed
             Q_EMIT killProcessPerformed();
             return true;
         } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) && kev->key() == Qt::Key_Question) {
-            displayShortcutHelpDialog();
+            // CTRL + SHIFT + ? pressed
+            common::displayShortcutHelpDialog(this->geometry());
             return true;
-        } else {
-            return false;
         }
-    } else {
-        return DMainWindow::eventFilter(obj, event);
     }
+    return DMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::showEvent(QShowEvent *event)
 {
     DMainWindow::showEvent(event);
 
-    //进程的网络获取
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    smo->startMonitorJob();
+    if (!m_initLoad) {
+        m_initLoad = true;
+        QTimer::singleShot(5, this, SLOT(onStartMonitorJob()));
+        PERF_PRINT_END("POINT-01");
+    }
+}
+
+void MainWindow::onStartMonitorJob()
+{
+    auto *msev = new MonitorStartEvent();
+    gApp->postEvent(gApp, msev);
+    auto *netev = new NetifStartEvent();
+    gApp->postEvent(gApp, netev);
 }

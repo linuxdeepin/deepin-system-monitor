@@ -35,9 +35,8 @@ SystemServiceEntry::SystemServiceEntry(const QString &id,
                                        bool canReload,
                                        bool canStart,
                                        bool canStop)
+    : data(new SystemServiceEntryData)
 {
-    data = new SystemServiceEntryData;
-
     setId(id);
     setSName(sname);
     setLoadState(loadState);

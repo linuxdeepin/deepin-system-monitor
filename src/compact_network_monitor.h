@@ -31,14 +31,11 @@ class CompactNetworkMonitor : public QWidget
     Q_OBJECT
 
 public:
-    CompactNetworkMonitor(QWidget *parent = nullptr);
+    explicit CompactNetworkMonitor(QWidget *parent = nullptr);
     ~CompactNetworkMonitor();
 
 public slots:
-    void updateStatus(qulonglong totalRecvBytes,
-                      qulonglong totalSentBytes,
-                      qreal recvBps,
-                      qreal sentBps);
+    void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -46,6 +43,7 @@ protected:
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
     void changeFont(const QFont &font);
+    void getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue);
 
 private:
     QList<double> *downloadSpeeds;
@@ -65,23 +63,7 @@ private:
     QFont m_contentFont;
     QFont m_subContentFont;
 
-    int downloadRenderMaxHeight = 30;
-    int downloadRenderPaddingX = 13;
-    int downloadRenderPaddingY = 50;
-    int downloadRenderSize = 9;
-    int downloadWaveformsRenderOffsetX = 4;
-    int downloadWaveformsRenderOffsetY = 120;
-    int gridSize = 10;
-    int pointsNumber = 60;
-    int textPadding = 12;
-    int titleRenderOffsetX = 20;
-    int titleRenderSize = 20;
-    int uploadRenderMaxHeight = 30;
-    int uploadRenderPaddingX = 13;
-    int uploadRenderPaddingY = 70;
-    int uploadRenderSize = 9;
-    int uploadWaveformsRenderOffsetY = -5;
-    int waveformRenderPadding = 4;
+    int renderMaxHeight = 20;
 
     qreal m_recvBps {};
     qreal m_sentBps {};

@@ -19,7 +19,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!description" line="0"/>
 			<source>Kill process</source>
-			<translation>Tapa prosessi</translation>
+			<translation>Lopeta prosessi</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.systemctl!message" line="0"/>

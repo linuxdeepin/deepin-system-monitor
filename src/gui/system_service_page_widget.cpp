@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -28,24 +30,30 @@
 #include <QHBoxLayout>
 #include <QPainterPath>
 
+// constructor
 SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     : DFrame(parent)
 {
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    // global app helper instance
+    auto *dAppHelper = DApplicationHelper::instance();
+    // global palette
+    auto palette = dAppHelper->applicationPalette();
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    // content margin
+    int margin = 10;
+
+    // main frame layout
+    auto *layout = new QHBoxLayout(this);
+    // service table view instance
     m_svcTableView = new SystemServiceTableView(this);
     layout->addWidget(m_svcTableView);
     layout->setContentsMargins(margin, margin, margin, margin);
     setLayout(layout);
 }
+// destructor
 SystemServicePageWidget::~SystemServicePageWidget() {}
 
+// paint event handler
 void SystemServicePageWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -54,9 +62,10 @@ void SystemServicePageWidget::paintEvent(QPaintEvent *)
     path.addRect(QRectF(rect()));
     painter.setOpacity(1);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
-    QColor bgColor = palette.color(DPalette::Background);
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    auto bgColor = palette.color(DPalette::Background);
 
+    // paint frame background
     painter.fillPath(path, bgColor);
 }

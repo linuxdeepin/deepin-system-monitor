@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -21,10 +23,20 @@
 
 class QString;
 
-namespace uconv {
+/**
+* @brief namespace util::common
+*/
+namespace util {
+namespace common {
 
+/**
+* @brief convHanToLatin Convert chinese hanzi to ascii pinyin format
+* @param words Chinese hanzi unicode string
+* @return Converted ascii pinyin string
+*/
 QString convHanToLatin(const QString &words);
 
-}  // namespace uconv
+} // namespace common
+} // namespace util
 
 #endif  // HAN_LATIN_H

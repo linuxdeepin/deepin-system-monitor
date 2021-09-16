@@ -28,6 +28,13 @@ DWIDGET_USE_NAMESPACE
 
 class Settings;
 class QPropertyAnimation;
+class MemInfoModel;
+
+namespace core {
+namespace system {
+class MemInfo;
+}
+}
 
 class MemoryMonitor : public QWidget
 {
@@ -35,12 +42,8 @@ class MemoryMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    MemoryMonitor(QWidget *parent = nullptr);
+    explicit MemoryMonitor(QWidget *parent = nullptr);
     ~MemoryMonitor();
-
-public slots:
-    void updateStatus(qulonglong uMemory, qulonglong tMemory,
-                      qulonglong uSwap, qulonglong tSwap);
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);
@@ -53,10 +56,16 @@ protected:
     {
         return m_progress;
     }
+
     void setProgress(qreal p)
     {
         m_progress = p;
     }
+
+private slots:
+    void onStatInfoUpdated();
+    void onAnimationFinished();
+    void onValueChanged();
 
 private:
     QIcon m_icon {};
@@ -86,12 +95,7 @@ private:
     int ringCenterPointerY = 70;
     int ringWidth = 6;
 
-    qulonglong m_prevUsedMemory = 0;
-    qulonglong m_prevUsedSwap = 0;
-    qulonglong m_totalMemory = 0;
-    qulonglong m_totalSwap = 0;
-    qulonglong m_usedMemory = 0;
-    qulonglong m_usedSwap = 0;
+    core::system::MemInfo *m_memInfo {};
 
     QFont m_titleFont;
     QFont m_contentFont;
@@ -99,6 +103,8 @@ private:
     QFont m_memPercentFont;
 
     qreal m_progress {};
+    qreal m_lastMemPercent = 0.;
+    qreal m_lastSwapPercent = 0.;
     QPropertyAnimation *m_animation {};
 
     Settings *m_settings;

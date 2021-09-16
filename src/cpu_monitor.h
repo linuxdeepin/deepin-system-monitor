@@ -25,11 +25,14 @@
 #include <QList>
 #include <QWidget>
 #include <QPainterPath>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
 class Settings;
 class QPropertyAnimation;
+class CPUInfoModel;
+class BaseCommandLinkButton;
 
 class CpuMonitor : public QWidget
 {
@@ -37,18 +40,29 @@ class CpuMonitor : public QWidget
     Q_PROPERTY(qreal progress READ progress WRITE setProgress)
 
 public:
-    CpuMonitor(QWidget *parent = nullptr);
+    explicit CpuMonitor(QWidget *parent = nullptr);
     ~CpuMonitor();
+
+public:
+    void setDetailButtonVisible(bool visible);
+
+signals:
+    void signalDetailInfoClicked();
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
-    void updateStatus(qreal cpuPercent, const QList<qreal> cPercents);
+    void updateStatus();
+    void onDetailInfoClicked();
+
+private:
+    void resizeItemWidgetRect();
 
 private:
     void changeFont(const QFont &font);
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
     qreal progress() const
     {
@@ -72,7 +86,6 @@ private:
     double ringForegroundOpacity = 1;
     int animationIndex = 0;
     int cpuRenderMaxHeight = 45;
-    int paddingRight = 10;
     int percentRenderOffsetY = 131;
     int pointsNumber = 28;
     int ringRadius = 90;
@@ -83,15 +96,17 @@ private:
     int waveformsRenderOffsetX;
     int waveformsRenderOffsetY = 96;
 
-    DApplicationHelper::ColorType m_themeType;
-
     Settings *m_settings;
 
     QFont m_cpuUsageFont;
     QFont m_cpuDisplayFont;
+    QFont m_detailFont;
 
     qreal m_progress {};
     QPropertyAnimation *m_animation {};
+    CPUInfoModel *m_cpuInfomodel;
+
+    BaseCommandLinkButton *m_detailButton;
 };
 
 #endif

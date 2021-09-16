@@ -27,17 +27,18 @@ class CompactDiskMonitor : public QWidget
     Q_OBJECT
 
 public:
-    CompactDiskMonitor(QWidget *parent = nullptr);
+    explicit CompactDiskMonitor(QWidget *parent = nullptr);
     ~CompactDiskMonitor();
 
 public slots:
-    void updateStatus(qreal readBps, qreal writeBps);
+    void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
     void changeFont(const QFont &font);
+    void getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue);
 
 private:
     QList<qreal> *readSpeeds;
@@ -53,11 +54,7 @@ private:
     QPainterPath readPath;
     QPainterPath writePath;
 
-    int gridSize = 10;
-    int pointsNumber = 60;
-    int readRenderMaxHeight = 30;
-    int writeRenderMaxHeight = 30;
-    int writeWaveformsRenderOffsetY = -5;
+    int renderMaxHeight = 30;
 
     QFont m_tagFont;
     QFont m_statFont;

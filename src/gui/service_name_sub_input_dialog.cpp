@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -23,29 +25,34 @@
 #include <QDebug>
 #include <QMessageBox>
 
-#include "utils.h"
-
+// constructor
 ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
     : DDialog(parent)
 {
+    // set dialog icon
     setIcon(QIcon::fromTheme("dialog-question"));
 
     addSpacing(10);
+
+    // service sub name text editor
     m_nameLineEdit = new DLineEdit(this);
     Q_ASSERT(m_nameLineEdit);
     addContent(m_nameLineEdit);
 
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK"), true);
-    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel"));
+    // add ok & cancel button
+    addButton(DApplication::translate("Service.Instance.Name.Dialog", "OK", "button"), true);
+    addButton(DApplication::translate("Service.Instance.Name.Dialog", "Cancel", "button"));
 
-    connect(this, &ServiceNameSubInputDialog::buttonClicked, this,
+    // connect button clicked signal
+    connect(this,
+            &ServiceNameSubInputDialog::buttonClicked,
+            this,
             &ServiceNameSubInputDialog::onButtonClicked);
 }
 
-void ServiceNameSubInputDialog::onButtonClicked(int index, const QString &text)
+// button click event handler
+void ServiceNameSubInputDialog::onButtonClicked(int index, const QString &)
 {
-    Q_UNUSED(text);
-
     if (index == 0) {
         m_name = m_nameLineEdit->text();
         setResult(QMessageBox::Ok);
@@ -54,8 +61,9 @@ void ServiceNameSubInputDialog::onButtonClicked(int index, const QString &text)
     }
 }
 
-void ServiceNameSubInputDialog::showEvent(QShowEvent *event)
+// show event handler
+void ServiceNameSubInputDialog::showEvent(QShowEvent *)
 {
-    Q_UNUSED(event);
+    // focus on text editor when shown
     m_nameLineEdit->lineEdit()->setFocus();
 }

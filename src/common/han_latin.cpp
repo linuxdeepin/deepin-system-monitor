@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -34,8 +36,10 @@
 using namespace std;
 using namespace icu;
 
-namespace uconv {
+namespace util {
+namespace common {
 
+// format icu error
 static QString parseError(const QString &words, UErrorCode &ec, const UParseError &pe)
 {
     QString errbuf {};
@@ -66,7 +70,7 @@ QString convHanToLatin(const QString &words)
                                       TRANSLITERATION_HAN_LATIN, UTransDirection::UTRANS_FORWARD, pe, ec));
 
     UnicodeString ubuf = UnicodeString::fromUTF8(StringPiece(words.toStdString()));
-    // from han to latin
+    // from hanzi to latin
     tr->transliterate(ubuf);
 
     if (U_FAILURE(ec)) {
@@ -92,4 +96,5 @@ QString convHanToLatin(const QString &words)
     return result;
 }
 
-}  // namespace uconv
+} // namespace common
+} // namespace util

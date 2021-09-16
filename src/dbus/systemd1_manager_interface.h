@@ -1,17 +1,20 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -33,15 +36,19 @@
 #include <QVariant>
 #include <QtDBus>
 
-using namespace DBus::Common;
+using namespace dbus::common;
 
-/*
- * Proxy class for interface org.freedesktop.systemd1.Manager
+/**
+ * @brief Proxy class for interface org.freedesktop.systemd1.Manager
  */
 class Systemd1ManagerInterface : public QDBusAbstractInterface
 {
     Q_OBJECT
 public:
+    /**
+     * @brief staticInterfaceName Get interface static name
+     * @return Interface static name
+     */
     static inline const char *staticInterfaceName() { return "org.freedesktop.systemd1.Manager"; }
 
 public:
@@ -51,14 +58,23 @@ public:
     ~Systemd1ManagerInterface();
 
 public Q_SLOTS:  // METHODS
+    /**
+     * @brief ListUnitFiles List installed unit files
+     * @return Error context & installed unit files list pair
+     */
     inline QPair<ErrorContext, UnitFileInfoList> ListUnitFiles()
     {
+        // installed unit files list
         UnitFileInfoList list;
+        // argument list
         QList<QVariant> args;
-        ErrorContext ec;
+        // error context
+        ErrorContext ec {};
 
+        // call dbus interface method: ListUnitFiles
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "ListUnitFiles", args);
 
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -66,6 +82,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "a(ss)") {
                 qvariant_cast<QDBusArgument>(reply.arguments()[0]) >> list;
             }
@@ -74,13 +91,22 @@ public Q_SLOTS:  // METHODS
         return {ec, list};
     }
 
+    /**
+     * @brief ListUnits List units
+     * @return Error context & units list pair
+     */
     inline QPair<ErrorContext, UnitInfoList> ListUnits()
     {
+        // units list
         UnitInfoList list;
+        // argument list
         QList<QVariant> args;
+        // error context
         ErrorContext ec;
 
+        // call dbus interface method: ListUnits
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "ListUnits", args);
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -88,6 +114,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "a(ssssssouso)") {
                 qvariant_cast<QDBusArgument>(reply.arguments()[0]) >> list;
             }
@@ -96,15 +123,24 @@ public Q_SLOTS:  // METHODS
         return {ec, list};
     }
 
+    /**
+     * @brief GetUnit Get unit object path by path
+     * @param path Object path
+     * @return Error context & unit object path pair
+     */
     inline QPair<ErrorContext, QDBusObjectPath> GetUnit(const QString &path)
     {
-        ErrorContext ec;
+        // error context
+        ErrorContext ec {};
+        // object path
         QDBusObjectPath o;
+        // argument list
         QList<QVariant> args;
         args << path;
 
+        // dbus interface method call: GetUnit
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "GetUnit", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -112,6 +148,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "o") {
                 o = qvariant_cast<QDBusObjectPath>(reply.arguments()[0]);
             }
@@ -120,15 +157,25 @@ public Q_SLOTS:  // METHODS
         return {ec, o};
     }
 
+    /**
+     * @brief StartUnit Start unit with specified mode
+     * @param name Unit name
+     * @param mode Unit start mode
+     * @return Error context & started unit object path pair
+     */
     inline QPair<ErrorContext, QDBusObjectPath> StartUnit(const QString &name, const QString &mode)
     {
+        // error context
         ErrorContext ec;
+        // object path
         QDBusObjectPath o;
+        // argument list
         QList<QVariant> args;
         args << name << mode;
 
+        // dbus interface method call: StartUnit
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "StartUnit", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -136,6 +183,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "o") {
                 o = qvariant_cast<QDBusObjectPath>(reply.arguments()[0]);
             }
@@ -144,15 +192,25 @@ public Q_SLOTS:  // METHODS
         return {ec, o};
     }
 
+    /**
+     * @brief StopUnit Stop unit with specified mode
+     * @param name Unit name
+     * @param mode Unit stop mode
+     * @return Error context & stopped unit object path pair
+     */
     inline QPair<ErrorContext, QDBusObjectPath> StopUnit(const QString &name, const QString &mode)
     {
+        // error context
         ErrorContext ec;
+        // object path
         QDBusObjectPath o;
+        // argument list
         QList<QVariant> args;
         args << name << mode;
 
+        // dbus interface method call: StopUnit
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "StopUnit", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -160,6 +218,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "o") {
                 o = qvariant_cast<QDBusObjectPath>(reply.arguments()[0]);
             }
@@ -168,16 +227,26 @@ public Q_SLOTS:  // METHODS
         return {ec, o};
     }
 
+    /**
+     * @brief RestartUnit Restart unit with specified mode
+     * @param name Unit name
+     * @param mode Unit restart mode
+     * @return Error context & restarted unit object path pair
+     */
     inline QPair<ErrorContext, QDBusObjectPath> RestartUnit(const QString &name,
                                                             const QString &mode)
     {
+        // error context
         ErrorContext ec;
+        // object path
         QDBusObjectPath o;
+        // argument list
         QList<QVariant> args;
         args << name << mode;
 
+        // dbus interface method call: RestartUnit
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "RestartUnit", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -185,6 +254,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "o") {
                 o = qvariant_cast<QDBusObjectPath>(reply.arguments()[0]);
             }
@@ -193,15 +263,24 @@ public Q_SLOTS:  // METHODS
         return {ec, o};
     }
 
+    /**
+     * @brief GetUnitFileState Get unit file's state
+     * @param unit Unit name
+     * @return Error context & unit file state pair
+     */
     inline QPair<ErrorContext, QString> GetUnitFileState(const QString &unit)
     {
+        // error context
         ErrorContext ec;
+        // unit file state
         QString state;
+        // argument list
         QList<QVariant> args;
         args << unit;
 
+        // dbus interface method call: GetUnitFileState
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "GetUnitFileState", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -209,6 +288,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "s") {
                 state = qvariant_cast<QString>(reply.arguments()[0]);
             }
@@ -226,19 +306,27 @@ public Q_SLOTS:  // METHODS
     // (e.g. run /lib/systemd/systemd-sysv-install script as root).
     // for simplicity, we use pkexec+systemctl to do the job as now.
     // =========================================================================
-    //
-    // params: asbb
-    // return: ba(sss)
+    /**
+     * @brief EnableUnitFiles Set unit file startup mode as auto
+     * @param nlist Unit file list
+     * @param runtime Runtime only flag
+     * @param force Force restart?
+     * @return Error context & unit file enabled result
+     */
     inline QPair<ErrorContext, EnableUnitFilesResult> EnableUnitFiles(const QStringList &nlist,
                                                                       bool runtime = false, bool force = true)
     {
+        // error context
         ErrorContext ec {};
+        // unit file enabled result
         EnableUnitFilesResult result {};
+        // argument list
         QList<QVariant> args;
         args << nlist << runtime << force;
 
+        // dbus interface method call: EnableUnitFiles
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "EnableUnitFiles", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -246,6 +334,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "ba(sss)") {
                 // unfinished...
             }
@@ -263,19 +352,26 @@ public Q_SLOTS:  // METHODS
     // (e.g. run /lib/systemd/systemd-sysv-install script as root).
     // for simplicity, we use pkexec+systemctl to do the job as now.
     // =========================================================================
-    //
-    // params: asb
-    // return: a(sss)
+    /**
+     * @brief DisableUnitFiles Set unit file startup mode as manual
+     * @param nlist Unit file list
+     * @param runtime Runtime only flag
+     * @return Error context & unit file disabled result
+     */
     inline QPair<ErrorContext, DisableUnitFilesResult> DisableUnitFiles(const QStringList &nlist,
                                                                         bool runtime = false)
     {
+        // error context
         ErrorContext ec;
+        // unit file disabled result
         DisableUnitFilesResult result {};
+        // argument list
         QList<QVariant> args;
         args << nlist << runtime;
 
+        // dbus interface method call: DisableUnitFiles
         QDBusMessage reply = callWithArgumentList(QDBus::Block, "DisableUnitFiles", args);
-
+        // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
             ec.setSubCode(lastError().type());
@@ -283,6 +379,7 @@ public Q_SLOTS:  // METHODS
             ec.setErrorMessage(reply.errorMessage());
         } else {
             Q_ASSERT(reply.type() == QDBusMessage::ReplyMessage);
+            // check signature
             if (reply.signature() == "a(sss)") {
                 // unfinished...
             }

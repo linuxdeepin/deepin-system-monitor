@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>App.About</name>
     <message>
@@ -7,14 +9,29 @@
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Системный монитор - это инструмент для мониторинга загрузки системы в реальном времени, просмотра и управления процессами и службами, работающими в вашей системе.</translation>
+        <translation>Системный монитор - это инструмент для мониторинга загрузки системы в реальном времени, а также просмотра и управления запущенными процессами и службами.</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation>Нет результатов поиска</translation>
+        <translation>Поиск не дал результатов</translation>
+    </message>
+</context>
+<context>
+    <name>Core</name>
+    <message>
+        <source>60 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>15 minutes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -25,7 +42,7 @@
     </message>
     <message>
         <source>reloading</source>
-        <translation>перегрузка</translation>
+        <translation>перезагрузка</translation>
     </message>
     <message>
         <source>inactive</source>
@@ -56,7 +73,7 @@
     </message>
     <message>
         <source>bad-setting</source>
-        <translation>плохая настройка</translation>
+        <translation>несоответствующая настройка</translation>
     </message>
     <message>
         <source>error</source>
@@ -87,7 +104,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ручной</translation>
+        <translation>Вручную</translation>
     </message>
 </context>
 <context>
@@ -129,7 +146,7 @@
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation>неживой</translation>
+        <translation>несуществующий</translation>
     </message>
     <message>
         <source>start-pre</source>
@@ -149,15 +166,15 @@
     </message>
     <message>
         <source>exited</source>
-        <translation>покинуть</translation>
+        <translation>завершенный</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation>перезагружается</translation>
+        <translation>перезагрузить</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation>остановлен</translation>
+        <translation>остановить</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
@@ -193,10 +210,37 @@
     </message>
 </context>
 <context>
+    <name>DetailViewStackedWidget</name>
+    <message>
+        <source>View performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hiding performance parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished">Процессор</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished">Память</translation>
+    </message>
+    <message>
+        <source>Netif</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BlockDev</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
-        <translation>Принимать</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -243,7 +287,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Force End</source>
-        <translation>Заставить закрытие</translation>
+        <translation>Принудительное закрытие</translation>
     </message>
 </context>
 <context>
@@ -383,10 +427,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Не удалось завершить процесс</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>Не удалось приостановить процесс</translation>
     </message>
@@ -404,7 +444,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation>Ошибка при отправке сигнала в процессе</translation>
+        <translation>Ошибка при отправке сигнала процессу</translation>
     </message>
     <message>
         <source>Failed to end process</source>
@@ -430,7 +470,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Лоток</translation>
+        <translation>Панель</translation>
     </message>
 </context>
 <context>
@@ -527,17 +567,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Swap</source>
-        <translation type="vanished">Раздел подкачки</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Не включено</translation>
-    </message>
-</context>
-<context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
@@ -545,7 +574,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Ошибка: не удалось установить тип запуска службы из-за сбоя подпроцесса.</translation>
+        <translation>Ошибка: не удалось установить тип запуска службы из-за сбоя вспомогательного процесса.</translation>
     </message>
 </context>
 <context>
@@ -560,7 +589,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Service instance name</source>
-        <translation>Имя экземпляра службы</translation>
+        <translation>Наименование  службы</translation>
     </message>
 </context>
 <context>
@@ -587,7 +616,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ручной</translation>
+        <translation>Вручную</translation>
     </message>
     <message>
         <source>Startup type</source>
@@ -610,12 +639,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Подчиненный</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Состояние</translation>
     </message>
     <message>
@@ -628,7 +655,6 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Тип Запуска</translation>
     </message>
 </context>
@@ -666,7 +692,18 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Services</source>
-        <translation>Услуги</translation>
+        <translation>Службы</translation>
+    </message>
+</context>
+<context>
+    <name>up %1 days(s)</name>
+    <message numerus="yes">
+        <source>SysInfo.Uptime</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

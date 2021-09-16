@@ -4,22 +4,22 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.renice!message" line="0"/>
 			<source>Authentication is required to change process priority</source>
-			<translation>改變程序優先度需要認證</translation>
+			<translation>改變進程優先度需要認證</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.renice!description" line="0"/>
 			<source>Renice process</source>
-			<translation>更改程序nice值</translation>
+			<translation>更改進程nice值</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!message" line="0"/>
 			<source>Authentication is required to control other users&apos; processes</source>
-			<translation>控制其他使用者的程序需要認證</translation>
+			<translation>控制其他使用者的進程需要認證</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.kill!description" line="0"/>
 			<source>Kill process</source>
-			<translation>強制結束程序</translation>
+			<translation>強制結束進程</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.systemctl!message" line="0"/>

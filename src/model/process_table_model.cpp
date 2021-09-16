@@ -8,85 +8,104 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "process_table_model.h"
-
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
-#include "utils.h"
-
-#include <DApplication>
-#include <DApplicationHelper>
-#include <DPalette>
+#include "process/process_db.h"
+#include "common/common.h"
 
 #include <QDebug>
-#include <QIcon>
-#include <QStyleOption>
+#include <QTimer>
+#include <DApplication>
 
-DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
+using namespace common::format;
 
+// model constructor
 ProcessTableModel::ProcessTableModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::processListUpdated,
-            this, &ProcessTableModel::updateProcessList);
-    connect(smo, &SystemMonitor::processEnded, this, &ProcessTableModel::removeProcessEntry);
-    connect(smo, &SystemMonitor::processPaused, this,
+    //update model's process list cache on process list updated signal
+    auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessTableModel::updateProcessList);
+
+    //remove process entry from model's cache on process ended signal
+    connect(ProcessDB::instance(), &ProcessDB::processEnded, this, &ProcessTableModel::removeProcess);
+    //update process's state in model's cache on process paused signal
+    connect(ProcessDB::instance(), &ProcessDB::processPaused, this,
             &ProcessTableModel::updateProcessState);
-    connect(smo, &SystemMonitor::processResumed, this,
+    //update process's state in model's cache on process resumed signal
+    connect(ProcessDB::instance(), &ProcessDB::processResumed, this,
             &ProcessTableModel::updateProcessState);
-    connect(smo, &SystemMonitor::processKilled, this,
-            &ProcessTableModel::removeProcessEntry);
-    connect(smo, &SystemMonitor::processPriorityChanged, this,
+    //remove process entry from model's cache on process killed signal
+    connect(ProcessDB::instance(), &ProcessDB::processKilled, this,
+            &ProcessTableModel::removeProcess);
+    //update process's priority in model's cache on process priority changed signal
+    connect(ProcessDB::instance(), &ProcessDB::processPriorityChanged, this,
             &ProcessTableModel::updateProcessPriority);
 }
 
-void ProcessTableModel::updateProcessList(const QList<ProcessEntry> list)
+char ProcessTableModel::getProcessState(pid_t pid) const
 {
-    QHash<pid_t, ProcessEntry> hash;
-    int row;
-    for (const auto &entry : list) {
-        if (m_processMap.contains(entry.getPID())) {
+    if (m_procIdList.contains(pid)) {
+        return ProcessDB::instance()->processSet()->getProcessById(pid).state();
+    }
+
+    return 0;
+}
+
+Process ProcessTableModel::getProcess(pid_t pid) const
+{
+    if (m_procIdList.contains(pid)) {
+        return ProcessDB::instance()->processSet()->getProcessById(pid);
+    }
+
+    return Process();
+}
+
+// update process model with the data provided by list
+void ProcessTableModel::updateProcessList()
+{
+    QTimer::singleShot(0, this, SLOT(updateProcessListDelay()));
+}
+
+void ProcessTableModel::updateProcessListDelay()
+{
+    ProcessSet *processSet = ProcessDB::instance()->processSet();
+    const QList<pid_t> &newpidlst = processSet->getPIDList();
+    QList<pid_t> oldpidlst = m_procIdList;
+
+    for (const auto &pid : newpidlst) {
+        int row = m_procIdList.indexOf(pid);
+        if (row >= 0) {
             // update
-            row = m_processMap.value(entry.getPID());
-            m_processList.replace(row, entry);
+            m_processList[row] = processSet->getProcessById(pid);
             Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
         } else {
             // insert
-            row = m_processList.size();
+            row = m_procIdList.size();
             beginInsertRows({}, row, row);
-            m_processList << entry;
-            m_processMap[entry.getPID()] = row;
+            m_procIdList << pid;
+            m_processList << processSet->getProcessById(pid);
             endInsertRows();
         }
-        hash[entry.getPID()] = entry;
     }
+
     // remove
-    QMutableListIterator<ProcessEntry> it(m_processList);
-    while (it.hasNext()) {
-        it.next();
-        if (hash.contains(it.value().getPID())) {
-            continue;
-        } else {
-            pid_t pid = it.value().getPID();
-            row = m_processMap.value(pid);
+    for (const auto &pid : oldpidlst) {
+        if (!newpidlst.contains(pid)) {
+            int row = m_procIdList.indexOf(pid);
             beginRemoveRows({}, row, row);
-            it.remove();
-            m_processMap.remove(pid);
-            for (int &value : m_processMap) {
-                if (value > row)
-                    --value;
-            }
+            m_procIdList.removeAt(row);
+            m_processList.removeAt(row);
             endRemoveRows();
         }
     }
@@ -94,110 +113,150 @@ void ProcessTableModel::updateProcessList(const QList<ProcessEntry> list)
     Q_EMIT modelUpdated();
 }
 
-int ProcessTableModel::rowCount(const QModelIndex &parent) const
+// returns the number of rows under the given parent
+int ProcessTableModel::rowCount(const QModelIndex &) const
 {
-    Q_UNUSED(parent);
-
-    return m_processList.size();
+    return m_procIdList.size();
 }
 
-int ProcessTableModel::columnCount(const QModelIndex &parent) const
+// returns the number of columns for the children of the given parent
+int ProcessTableModel::columnCount(const QModelIndex &) const
 {
-    Q_UNUSED(parent)
-
     return kProcessColumnCount;
 }
 
+// returns the data for the given role and section in the header with the specified orientation
 QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (section) {
         case kProcessNameColumn: {
-            return DApplication::translate("Process.Table.Header", kProcessName);
+            // name column display text
+            return QApplication::translate("Process.Table.Header", kProcessName);
         }
         case kProcessCPUColumn: {
-            return DApplication::translate("Process.Table.Header", kProcessCPU);
+            // cpu column display text
+            return QApplication::translate("Process.Table.Header", kProcessCPU);
         }
         case kProcessUserColumn:
-            return DApplication::translate("Process.Table.Header", kProcessUser);
+            // user column display text
+            return QApplication::translate("Process.Table.Header", kProcessUser);
         case kProcessMemoryColumn:
-            return DApplication::translate("Process.Table.Header", kProcessMemory);
+            // memory column display text
+            return QApplication::translate("Process.Table.Header", kProcessMemory);
+        case kProcessShareMemoryColumn:
+            // memory column display text
+            return QApplication::translate("Process.Table.Header", kProcessShareMemory);
+        case kProcessVTRMemoryColumn:
+            // memory column display text
+            return QApplication::translate("Process.Table.Header", kProcessVtrMemory);
         case kProcessUploadColumn:
-            return DApplication::translate("Process.Table.Header", kProcessUpload);
+            // upload column display text
+            return QApplication::translate("Process.Table.Header", kProcessUpload);
         case kProcessDownloadColumn:
-            return DApplication::translate("Process.Table.Header", kProcessDownload);
+            // download column display text
+            return QApplication::translate("Process.Table.Header", kProcessDownload);
         case kProcessDiskReadColumn:
-            return DApplication::translate("Process.Table.Header", kProcessDiskRead);
+            // disk read column display text
+            return QApplication::translate("Process.Table.Header", kProcessDiskRead);
         case kProcessDiskWriteColumn:
-            return DApplication::translate("Process.Table.Header", kProcessDiskWrite);
+            // disk write column display text
+            return QApplication::translate("Process.Table.Header", kProcessDiskWrite);
         case kProcessPIDColumn:
-            return DApplication::translate("Process.Table.Header", kProcessPID);
+            // pid column display text
+            return QApplication::translate("Process.Table.Header", kProcessPID);
         case kProcessNiceColumn:
-            return DApplication::translate("Process.Table.Header", kProcessNice);
+            // nice column display text
+            return QApplication::translate("Process.Table.Header", kProcessNice);
         case kProcessPriorityColumn:
-            return DApplication::translate("Process.Table.Header", kProcessPriority);
+            // priority column display text
+            return QApplication::translate("Process.Table.Header", kProcessPriority);
         default:
             break;
         }
     } else if (role == Qt::TextAlignmentRole) {
+        // default header section alignment
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     } else if (role == Qt::InitialSortOrderRole) {
+        // sort section descending by default
         return QVariant::fromValue(Qt::DescendingOrder);
     }
     return QAbstractTableModel::headerData(section, orientation, role);
 }
 
+// returns the data stored under the given role for the item referred to by the index
 QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return {};
 
+    // validate index
     if (index.row() < 0 || index.row() >= m_processList.size())
         return {};
 
-    if (role == Qt::DisplayRole) {
+    int row = index.row();
+    const Process &proc = m_processList[row];
+    if (!proc.isValid())
+        return {};
+
+    if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         QString name;
         switch (index.column()) {
         case kProcessNameColumn: {
-            name = m_processList.at(index.row()).getDisplayName();
-            switch (m_processList.at(index.row()).getState()) {
+            // prepended tag based on process state
+            name = proc.displayName();
+            switch (proc.state()) {
             case 'Z':
                 name = QString("(%1) %2")
-                       .arg(DApplication::translate("Process.Table", "No response"))
+                       .arg(QApplication::translate("Process.Table", "No response"))
                        .arg(name);
                 break;
             case 'T':
                 name = QString("(%1) %2")
-                       .arg(DApplication::translate("Process.Table", "Suspend"))
+                       .arg(QApplication::translate("Process.Table", "Suspend"))
                        .arg(name);
                 break;
             }
             return name;
         }
         case kProcessCPUColumn:
-            return QString("%1%").arg(m_processList.at(index.row()).getCPU(), 0, 'f', 1);
+            // formated cpu percent utilization
+            return QString("%1%").arg(proc.cpu(), 0, 'f', 1);
         case kProcessUserColumn:
-            return m_processList.at(index.row()).getUserName();
+            // process's user name
+            return proc.userName();
         case kProcessMemoryColumn:
-            return formatUnit(m_processList.at(index.row()).getMemory(), KB);
+            // formatted memory usage
+            return formatUnit(proc.memory(), KB);
+        case kProcessShareMemoryColumn:
+            // formatted memory usage
+            return formatUnit(proc.sharememory(), KB);
+        case kProcessVTRMemoryColumn:
+            // formatted memory usage
+            return formatUnit(proc.vtrmemory(), KB);
         case kProcessUploadColumn:
-            return formatUnit(m_processList.at(index.row()).getSentBps(), B, 1, true);
+            // formatted upload speed text
+            return formatUnit(proc.sentBps(), B, 1, true);
         case kProcessDownloadColumn:
-            return formatUnit(m_processList.at(index.row()).getRecvBps(), B, 1, true);
+            // formated download speed text
+            return formatUnit(proc.recvBps(), B, 1, true);
         case kProcessDiskReadColumn:
-            return QString("%1").arg(
-                       formatUnit(m_processList.at(index.row()).getReadBps(), B, 1, true));
+            // formatted disk read speed text
+            return formatUnit(proc.readBps(), B, 1, true);
         case kProcessDiskWriteColumn:
-            return QString("%1").arg(
-                       formatUnit(m_processList.at(index.row()).getWriteBps(), B, 1, true));
+            // formatted disk write speed text
+            return formatUnit(proc.writeBps(), B, 1, true);
         case kProcessPIDColumn: {
-            return QString("%1").arg(m_processList.at(index.row()).getPID());
+            // process pid text
+            return QString("%1").arg(proc.pid());
         }
         case kProcessNiceColumn: {
-            return QString("%1").arg(m_processList.at(index.row()).getPriority());
+            // process priority text
+            return QString("%1").arg(proc.priority());
         }
         case kProcessPriorityColumn: {
-            return SystemMonitor::getPriorityName(m_processList.at(index.row()).getPriority());
+            // process priority enum text representation
+            return getPriorityName(proc.priority());
         }
         default:
             break;
@@ -205,56 +264,70 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::DecorationRole) {
         switch (index.column()) {
         case kProcessNameColumn:
-            return QVariant(m_processList.at(index.row()).getIcon());
+            // process icon
+            return proc.icon();
         default:
             return {};
         }
     } else if (role == Qt::UserRole) {
+        // get process's raw data
         switch (index.column()) {
         case kProcessNameColumn:
-            return QVariant(m_processList.at(index.row()).getName());
+            return proc.name();
         case kProcessMemoryColumn:
-            return QVariant(m_processList.at(index.row()).getMemory());
+            return proc.memory();
+        case kProcessShareMemoryColumn:
+            return proc.sharememory();
+        case kProcessVTRMemoryColumn:
+            return proc.vtrmemory();
         case kProcessCPUColumn:
-            return QVariant(m_processList.at(index.row()).getCPU());
+            return proc.cpu();
         case kProcessUploadColumn:
-            return QVariant(m_processList.at(index.row()).getSentBps());
+            return proc.sentBps();
         case kProcessDownloadColumn:
-            return QVariant(m_processList.at(index.row()).getRecvBps());
+            return proc.recvBps();
         case kProcessPIDColumn:
-            return QVariant(m_processList.at(index.row()).getPID());
+            return proc.pid();
         case kProcessDiskReadColumn:
-            return QVariant(m_processList.at(index.row()).getReadBps());
+            return proc.readBps();
         case kProcessDiskWriteColumn:
-            return QVariant(m_processList.at(index.row()).getWriteBps());
+            return proc.writeBps();
         case kProcessNiceColumn:
-            return QVariant(m_processList.at(index.row()).getPriority());
+            return proc.priority();
         default:
             return {};
         }
     } else if (role == (Qt::UserRole + 1)) {
+        // get process's extra data
         switch (index.column()) {
         case kProcessUploadColumn:
-            return QVariant(m_processList.at(index.row()).getSentBytes());
+            return proc.sentBps();
         case kProcessDownloadColumn:
-            return QVariant(m_processList.at(index.row()).getRecvBytes());
+            return proc.recvBps();
         default:
             return {};
         }
     } else if (role == Qt::TextAlignmentRole) {
+        // default data alignment
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     } else if (role == Qt::UserRole + 2) {
+        // text color role based on process's state
         if (index.column() == kProcessNameColumn) {
-            char state = m_processList.at(index.row()).getState();
+            char state = proc.state();
             if (state == 'Z' || state == 'T') {
-                return QVariant(int(DPalette::TextWarning));
+                return QVariant(int(Dtk::Gui::DPalette::TextWarning));
             }
         }
         return {};
+    } else if (role == Qt::UserRole + 3) {
+        return proc.appType();
+    } else if (role == Qt::UserRole + 4) {
+        return QString("%1").arg(proc.pid());
     }
     return {};
 }
 
+// returns the item flags for the given index
 Qt::ItemFlags ProcessTableModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -263,52 +336,46 @@ Qt::ItemFlags ProcessTableModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-char ProcessTableModel::getProcessState(pid_t pid) const
+// get process priority enum type
+ProcessPriority ProcessTableModel::getProcessPriority(pid_t pid) const
 {
-    int row = m_processMap.value(pid);
-    return m_processList.at(row).getState();
+    int row = m_procIdList.indexOf(pid);
+    if (row >= 0) {
+        int prio = ProcessDB::instance()->processSet()->getProcessById(pid).priority();
+        return getProcessPriorityStub(prio);
+    }
+
+    return kInvalidPriority;
 }
 
-SystemMonitor::ProcessPriority ProcessTableModel::getProcessPriorityStub(pid_t pid) const
+// remove process entry from model with specified pid
+void ProcessTableModel::removeProcess(pid_t pid)
 {
-    int row = m_processMap.value(pid);
-    int prio = m_processList.at(row).getPriority();
-    return SystemMonitor::instance()->getProcessPriorityStub(prio);
-}
-
-void ProcessTableModel::removeProcessEntry(pid_t pid)
-{
-    if (m_processMap.contains(pid)) {
-        int row = m_processMap.value(pid);
-        beginRemoveRows({}, row, row);
+    int row = m_procIdList.indexOf(pid);
+    if (row >= 0) {
+        beginRemoveRows(QModelIndex(), row, row);
+        m_procIdList.removeAt(row);
         m_processList.removeAt(row);
-        m_processMap.remove(pid);
-        for (int &value : m_processMap) {
-            if (value > row)
-                --value;
-        }
         endRemoveRows();
     }
 }
 
+// update the state of the process entry with specified pid
 void ProcessTableModel::updateProcessState(pid_t pid, char state)
 {
-    if (m_processMap.contains(pid)) {
-        int row = m_processMap.value(pid);
-        ProcessEntry e = m_processList[row];
-        e.setState(state);
-        m_processList[row] = e;
+    int row = m_procIdList.indexOf(pid);
+    if (row >= 0) {
+        m_processList[row].setState(state);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
 }
 
+// update priority of the process entry with specified pid
 void ProcessTableModel::updateProcessPriority(pid_t pid, int priority)
 {
-    if (m_processMap.contains(pid)) {
-        int row = m_processMap.value(pid);
-        ProcessEntry e = m_processList[row];
-        e.setPriority(priority);
-        m_processList[row] = e;
+    int row = m_procIdList.indexOf(pid);
+    if (row >= 0) {
+        m_processList[row].setPriority(priority);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
 }

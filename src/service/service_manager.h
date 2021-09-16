@@ -15,7 +15,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #ifndef SERVICE_MANAGER_H
 #define SERVICE_MANAGER_H
 
@@ -30,7 +29,7 @@ class ServiceManager;
 class SystemServiceEntry;
 class ServiceManagerWorker;
 
-using namespace DBus::Common;
+using namespace dbus::common;
 
 // temporary solution to fix status column not shown final state after service start/stop/restart
 class CustomTimer : public QObject
@@ -44,7 +43,7 @@ public:
     void start(const QString &path);
 
 private:
-    char __padding__[4];
+    int __padding__ {0};
     int m_cnt {0};
     QTimer *m_timer {};
     ServiceManager *m_mgr {};
@@ -105,7 +104,7 @@ public Q_SLOTS:
     ErrorContext setServiceStartupMode(const QString &id, bool autoStart);
 
 private:
-    ServiceManager(QObject *parent = nullptr);
+    explicit ServiceManager(QObject *parent = nullptr);
     ~ServiceManager();
 
     QThread m_workerThread;

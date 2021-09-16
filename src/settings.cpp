@@ -18,73 +18,43 @@
 
 #include "settings.h"
 
-#include "gui/ui_common.h"
-#include "constant.h"
-
-#include <QApplication>
-#include <QDebug>
-#include <QDir>
 #include <QStandardPaths>
+#include <QApplication>
+#include <QSettings>
 
-std::atomic<Settings *> Settings::m_instance;
-std::mutex Settings::m_mutex;
-
-Settings::Settings(QObject *parent)
-    : QObject(parent)
+Q_GLOBAL_STATIC(Settings, theInstance)
+Settings::Settings()
 {
-    m_settings = new QSettings(QDir(configPath()).filePath("config.conf"), QSettings::IniFormat);
-    m_groupName = "settings";
+    const QString &filepath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/" + qApp->organizationName() + "/" + qApp->applicationName() + "/" + "config.conf";
+    m_settings = new QSettings(filepath, QSettings::IniFormat);
 }
 
 Settings::~Settings()
 {
-    m_settings->sync();
     m_settings->deleteLater();
 }
 
-QString Settings::configPath()
+Settings *Settings::instance()
 {
-    return QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first())
-                .filePath(qApp->organizationName()))
-           .filePath(qApp->applicationName());
+    return theInstance();
 }
 
-QVariant Settings::getOption(const QString &key)
+void Settings::flush()
 {
-    m_settings->beginGroup(m_groupName);
-    QVariant result;
-    if (m_settings->contains(key)) {
-        result = m_settings->value(key);
-    } else {
-        result = QVariant();
-    }
+    m_settings->sync();
+}
+
+QVariant Settings::getOption(const QString &key, const QVariant &defaultValue)
+{
+    m_settings->beginGroup("settings");
+    const QVariant &result = m_settings->value(key, defaultValue);
     m_settings->endGroup();
-
     return result;
-}
-
-void Settings::init()
-{
-    if (getOption("process_tab_index").isNull()) {
-        setOption("process_tab_index", 0);
-    }
-
-    if (getOption("display_mode").isNull()) {
-        setOption("display_mode", kDisplayModeCompact);
-    }
-
-    if (getOption("window_width").isNull()) {
-        setOption("window_width", Constant::WINDOW_MIN_WIDTH);
-    }
-
-    if (getOption("window_height").isNull()) {
-        setOption("window_height", Constant::WINDOW_MIN_HEIGHT);
-    }
 }
 
 void Settings::setOption(const QString &key, const QVariant &value)
 {
-    m_settings->beginGroup(m_groupName);
+    m_settings->beginGroup("settings");
     m_settings->setValue(key, value);
     m_settings->endGroup();
 }

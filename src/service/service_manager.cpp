@@ -1,23 +1,26 @@
 ﻿/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include "service_manager.h"
 
+#include "application.h"
 #include "dbus/dbus_common.h"
 #include "dbus/dbus_properties_interface.h"
 #include "dbus/environment_file.h"
@@ -39,6 +42,8 @@
 #include <QtDBus>
 #include <QTimer>
 
+#include <memory>
+
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -47,7 +52,7 @@
 #define BIN_SYSTEMCTL_PATH "/usr/bin/systemctl"
 
 DCORE_USE_NAMESPACE
-using namespace DBus::Common;
+using namespace dbus::common;
 
 std::atomic<ServiceManager *> ServiceManager::m_instance;
 std::mutex ServiceManager::m_mutex;
@@ -151,8 +156,8 @@ ErrorContext ServiceManager::startService(const QString &id,
     SystemServiceEntry entry;
     if (ec) {
         if (ec.getCode() == 3) {
-            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-            entry = updateServiceEntry(o.path());
+            auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o1.path());
         } else {
             qDebug() << "GetUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
             return ec;
@@ -196,8 +201,8 @@ ErrorContext ServiceManager::stopService(const QString &id)
     SystemServiceEntry entry;
     if (ec) {
         if (ec.getCode() == 3) {
-            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-            entry = updateServiceEntry(o.path());
+            auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o1.path());
         } else {
             qDebug() << "Get Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
@@ -241,8 +246,8 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
     SystemServiceEntry entry;
     if (ec) {
         if (ec.getCode() == 3) {
-            auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-            entry = updateServiceEntry(o.path());
+            auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
+            entry = updateServiceEntry(o1.path());
         } else {
             qDebug() << "Get Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
             return ec;

@@ -11,10 +11,142 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Ayrıntıları gizle</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Oku</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Yaz</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 saniye</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 gün %2 saat %3 dakika</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Kullanım</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Şuanki frekans</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frekans</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Sağlayan</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Soketler</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Mantıksal işlemciler</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Sanallaştırma</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i önbelleği</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d önbelleği</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2 önbelleği</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3 önbelleği</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Ortalama yük</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Dosya tanımlayıcıları</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>İşlemler</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Çekirdekler</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Ana bilgisayar adı</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>OS türü</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Sürüm</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Açık kalma süresi</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 saniye</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
         <translation>Arama sonucu bulunamadı</translation>
+    </message>
+</context>
+<context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Ayrıntılar</translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Ayrıntılar</translation>
     </message>
 </context>
 <context>
@@ -193,9 +325,124 @@
     </message>
 </context>
 <context>
+    <name>DeailTableModel</name>
+    <message>
+        <source>Used</source>
+        <translation>Kullanıldı</translation>
+    </message>
+    <message>
+        <source>Available</source>
+        <translation>Mevcut</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation>Paylaşıldı</translation>
+    </message>
+    <message>
+        <source>Cached</source>
+        <translation>Önbelleklendi</translation>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation>Arabellekler</translation>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation>Önbelleklenen takas</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Aktif</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Etkin değil</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Kirli</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Haritalandı</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Toplam takas </translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Boş takas</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Levha</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Okuma hızı</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Yazma hızı</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Kapasite</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Bölgeler okundu</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Okur/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Bölgeler okundu/s</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Okumalar birleştirildi/s</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Bölgeler yazıldı</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Yazılar tamamlandı</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Yazılar birleştirildi</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Yazar/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Bölgeler yazıldı/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Yazılar birleştirildi/s</translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Tamam</translation>
     </message>
 </context>
@@ -219,10 +466,6 @@ Are you sure you want to continue?</source>
 Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>İptal</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>İşlemi sonlandır</translation>
     </message>
@@ -233,18 +476,142 @@ Are you sure you want to continue?</source>
 Devam etmek istediğinize emin misiniz?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Sonlandır</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Bu uygulamayı sonlandırmaya zorlamak veri kaybına neden olabilir.
 Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>İptal</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Zorla Sonlandır</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Sonlandır</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Boyut</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP adresi:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Ağ maskesi:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Broadcast:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Prefixlen:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Kapsam:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Bağlantı türü</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Bağlantı kalitesi</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Sinyal gücü</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Bozukluk seviyesi</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Bant genişliği</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX paketler</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX bayt</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX hataları</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX düştü</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX aşımı</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX çerçevesi</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX paketler</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX bayt</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX hataları</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX aşımı</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX taşıyıcısı</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>TX düştü</translation>
     </message>
 </context>
 <context>
@@ -274,6 +641,10 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Memory</source>
         <translation>Bellek</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Alınan</translation>
     </message>
 </context>
 <context>
@@ -311,10 +682,6 @@ Devam etmek istediğine emin misin?</translation>
         <translation>Yükleme</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disk</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Ağ</translation>
     </message>
@@ -325,6 +692,14 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Toplam Gönderilen</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Gönderilen</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Diskler</translation>
     </message>
 </context>
 <context>
@@ -383,10 +758,6 @@ Devam etmek istediğine emin misin?</translation>
 </context>
 <context>
     <name>Process.Signal</name>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">İşlem sona erdirilemedi</translation>
-    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>İşlem duraklatılamadı</translation>
@@ -468,16 +839,18 @@ Devam etmek istediğine emin misin?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Özel Öncelik</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Değiştir</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Özel Öncelik</translation>
     </message>
 </context>
 <context>
@@ -526,16 +899,20 @@ Devam etmek istediğine emin misin?</translation>
         <source>Priority</source>
         <translation>Öncelik</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Paylaşılan bellek</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Sanal bellek</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Swap</source>
-        <translation type="vanished">Takas</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Devre dışı</translation>
+        <source>Not support</source>
+        <translation>Desteklenmiyor</translation>
     </message>
 </context>
 <context>
@@ -552,16 +929,18 @@ Devam etmek istediğine emin misin?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Hizmet örneği adı</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Tamam</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>İptal</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Hizmet örneği adı</translation>
     </message>
 </context>
 <context>
@@ -611,12 +990,10 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Alt</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Durum</translation>
     </message>
     <message>
@@ -629,7 +1006,6 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Başlangıç Türü</translation>
     </message>
 </context>

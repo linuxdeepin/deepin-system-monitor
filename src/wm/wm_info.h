@@ -1,8 +1,9 @@
 ﻿/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -11,7 +12,7 @@
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
@@ -26,6 +27,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QSharedPointer>
+#include <QByteArrayList>
 
 #include <xcb/xcb.h>
 #include <xcb/xproto.h>
@@ -35,7 +37,7 @@
 #include <map>
 #include <list>
 
-namespace util {
+namespace core {
 // x11/xcb stuff
 namespace wm {
 
@@ -46,18 +48,17 @@ struct wm_frame_extents_t;
 struct wm_tree_t;
 struct atom_meta;
 
-using WMWindow      = std::shared_ptr<struct wm_window_t>;
-using WMWindowExt   = std::unique_ptr<struct util::wm::wm_window_ext_t>;
+using WMWindow = std::unique_ptr<struct wm_window_t>;
+using WMWindowExt = std::unique_ptr<struct core::wm::wm_window_ext_t>;
 using AtomMeta      = std::unique_ptr<struct atom_meta>;
 using WMWindowArea  = std::unique_ptr<struct wm_window_area_t>;
 using WMWId         = xcb_window_t;
-using WMTree        = std::unique_ptr<struct util::wm::wm_tree_t>;
+using WMTree = std::unique_ptr<struct core::wm::wm_tree_t>;
 
 struct wm_window_t {
-    WMWId   wid;
+    WMWId winId;
     pid_t   pid;      // _NET_WM_PID
     QString title {}; // _NET_WM_NAME && UTF8_STRING || WM_NAME
-    QPixmap icon  {};
 };
 
 struct atom_meta {
@@ -74,8 +75,8 @@ struct wm_window_area_t {
 class WMInfo
 {
     enum intern_atom_type {
-        kOtherAtom              = -1,
-        kNetNameAtom            = 0,
+        kOtherAtom = -1,
+        kNetNameAtom = 0,
         kUTF8StringAtom,
         kNetDesktopAtom,
         kNetWindowTypeAtom,
@@ -83,7 +84,8 @@ class WMInfo
         kNetPIDAtom,
         kNetFrameExtentsAtom,
         kNetVirtualRootsAtom,
-        kStateAtom
+        kStateAtom,
+        kIconAtom
     };
 
 public:
@@ -91,13 +93,14 @@ public:
     ~WMInfo();
 
     // top level window (including wm frame) in top to bottom order that contains cursor
-    std::list<WMWindowArea> selectWindow(const QPoint &pos);
+    std::list<WMWindowArea> selectWindow(const QPoint &pos) const;
     WMWId getRootWindow() const;
-    std::list<WMWindowArea> hoveredBy(WMWId wid, QRect &area);
+    std::list<WMWindowArea> getHoveredByWindowList(WMWId wid, QRect &area) const;
+    bool isCursorHoveringDocks(const QPoint &pos) const;
 
 private:
-    std::map<pid_t, WMWindow> updateWindowStackCache();
     void buildWindowTreeSchema();
+    void findDockWindows();
 
     void initAtomCache(xcb_connection_t *conn);
     inline xcb_atom_t getAtom(xcb_connection_t *conn, xcb_intern_atom_cookie_t &cookie);
@@ -110,8 +113,9 @@ private:
 
     std::map<intern_atom_type, xcb_atom_t>  m_internAtomCache;
     std::map<xcb_atom_t, AtomMeta>          m_atomCache;
+    std::list<WMWindowArea> m_dockWindowList;
 };
 
 } // !wm
-} // !util
+} // namespace core
 #endif // WM_INFO_H

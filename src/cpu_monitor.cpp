@@ -18,32 +18,35 @@
 
 #include "cpu_monitor.h"
 
-#include "process/system_monitor.h"
-#include "process/stats_collector.h"
 #include "smooth_curve_generator.h"
 #include "gui/ui_common.h"
-#include "constant.h"
 #include "settings.h"
-#include "utils.h"
+#include "common/common.h"
+#include "model/cpu_info_model.h"
+#include "model/cpu_stat_model.h"
+#include "base_commandlink_button.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
+#include <DFontSizeManager>
 
 #include <QDebug>
 #include <QIcon>
 #include <QPainter>
 #include <QtMath>
 #include <QPropertyAnimation>
+#include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
-using namespace Utils;
+using namespace common;
 
 CpuMonitor::CpuMonitor(QWidget *parent)
     : QWidget(parent)
 {
-    int statusBarMaxWidth = Utils::getStatusBarMaxWidth();
+    int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedSize(statusBarMaxWidth, 240);
     waveformsRenderOffsetX = (statusBarMaxWidth - 140) / 2;
 
@@ -54,17 +57,10 @@ CpuMonitor::CpuMonitor(QWidget *parent)
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
-    m_themeType = dAppHelper->themeType();
-    changeTheme(m_themeType);
+    changeTheme(dAppHelper->themeType());
 
-    auto *smo = SystemMonitor::instance();
-    Q_ASSERT(smo != nullptr);
-    connect(smo->jobInstance(), &StatsCollector::cpuStatInfoUpdated,
-            this, &CpuMonitor::updateStatus);
-
-    changeFont(DApplication::font());
-    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-            this, &CpuMonitor::changeFont);
+    m_cpuInfomodel = CPUInfoModel::instance();
+    connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CpuMonitor::updateStatus);
 
     m_animation = new QPropertyAnimation(this, "progress", this);
     m_animation->setDuration(250);
@@ -74,6 +70,14 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     connect(m_animation, &QVariantAnimation::valueChanged, [ = ]() {
         update();
     });
+
+    m_detailButton = new BaseCommandLinkButton(tr("Details"), this);
+    DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
+    connect(m_detailButton, &BaseCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
+
+    changeFont(DApplication::font());
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+            this, &CpuMonitor::changeFont);
 }
 
 CpuMonitor::~CpuMonitor()
@@ -81,11 +85,20 @@ CpuMonitor::~CpuMonitor()
     delete cpuPercents;
 }
 
+void CpuMonitor::onDetailInfoClicked()
+{
+    setDetailButtonVisible(false);
+    emit signalDetailInfoClicked();
+}
+
+void CpuMonitor::setDetailButtonVisible(bool visible)
+{
+    m_detailButton->setVisible(visible);
+}
+
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
-    m_themeType = themeType;
-
-    switch (m_themeType) {
+    switch (themeType) {
     case DApplicationHelper::LightType:
         ringBackgroundColor = "#000000";
         m_icon = QIcon(iconPathFromQrc("light/icon_cpu_light.svg"));
@@ -111,9 +124,9 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     update();
 }
 
-void CpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal>)
+void CpuMonitor::updateStatus()
 {
-    cpuPercents->append(cpuPercent);
+    cpuPercents->append(m_cpuInfomodel->cpuAllPercent());
 
     if (cpuPercents->size() > pointsNumber) {
         cpuPercents->pop_front();
@@ -146,9 +159,29 @@ void CpuMonitor::changeFont(const QFont &font)
 {
     m_cpuUsageFont = font;
     m_cpuUsageFont.setBold(true);
-    m_cpuUsageFont.setPointSize(m_cpuUsageFont.pointSize() + 3);
+    m_cpuUsageFont.setPointSizeF(m_cpuUsageFont.pointSizeF() + 3);
+
     m_cpuDisplayFont = font;
-    m_cpuDisplayFont.setPointSize(m_cpuDisplayFont.pointSize() + 12);
+    m_cpuDisplayFont.setPointSizeF(m_cpuDisplayFont.pointSizeF() + 12);
+
+    m_detailFont = font;
+    m_detailFont.setWeight(QFont::Medium);
+    m_detailFont.setPointSizeF(m_detailFont.pointSizeF() - 1);
+
+    resizeItemWidgetRect();
+}
+
+void CpuMonitor::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    resizeItemWidgetRect();
+}
+
+void CpuMonitor::resizeItemWidgetRect()
+{
+    m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
+    const QSize &detailtextSize =  m_detailButton->size();
+    m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - 4, this->height() - detailtextSize.height(), detailtextSize.width(), detailtextSize.height());
 }
 
 void CpuMonitor::paintEvent(QPaintEvent *)
@@ -156,10 +189,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    auto *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    int margin = 10;
 
     QFontMetrics fm(m_cpuDisplayFont);
     int titleWidth =
@@ -169,7 +199,7 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     painter.setFont(m_cpuDisplayFont);
     painter.setPen(QPen(textColor));
-    QRect cpuDisplayRect(((rect().x() + rect().width() - titleWidth) / 2) - paddingRight,
+    QRect cpuDisplayRect(((rect().x() + rect().width() - titleWidth) / 2),
                          rect().y() + titleRenderOffsetY, titleWidth, fm.height());
     painter.drawText(cpuDisplayRect, Qt::AlignCenter,
                      DApplication::translate("Process.Graph.View", "CPU"));
@@ -185,10 +215,10 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.setFont(m_cpuUsageFont);
     painter.setPen(QPen(numberColor));
     painter.drawText(
-        QRect(rect().x() - paddingRight, rect().y() + percentRenderOffsetY, rect().width(), 30),
+        QRect(rect().x(), rect().y() + percentRenderOffsetY, rect().width(), 30),
         Qt::AlignCenter, QString("%1%").arg(QString::number(percent, 'f', 1)));
 
-    int centerX = rect().x() + rect().width() / 2 - paddingRight;
+    int centerX = rect().x() + rect().width() / 2;
     int centerY = rect().y() + ringRenderOffsetY;
     drawLoadingRing(painter, centerX, centerY, ringRadius, ringWidth, 270, 135, ringForegroundColor,
                     ringForegroundOpacity, ringBackgroundColor, ringBackgroundOpacity,
@@ -207,5 +237,5 @@ void CpuMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor("#0081FF"), 1.5));
     painter.drawPath(cpuPath);
 
-    setFixedHeight(cpuDisplayRect.y() + cpuDisplayRect.height() + 1);
+    setFixedHeight(cpuDisplayRect.y() + cpuDisplayRect.height() + 1 + m_detailButton->fontMetrics().height());
 }

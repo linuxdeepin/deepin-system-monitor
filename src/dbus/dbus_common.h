@@ -8,10 +8,12 @@
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -26,8 +28,11 @@
 
 #include <string.h>
 
-namespace DBus {
-namespace Common {
+/**
+* @brief namespace dbus::common
+*/
+namespace dbus {
+namespace common {
 
 #define DBUS_SYSTEMD1_SERVICE "org.freedesktop.systemd1"
 const QDBusObjectPath kSystemDObjectPath {"/org/freedesktop/systemd1"};
@@ -183,6 +188,11 @@ constexpr const char *kUnitActivatingStateText =
 constexpr const char *kUnitDeactivatingStateText =
     QT_TRANSLATE_NOOP("DBus.Unit.Active.State", "deactivating");
 
+/**
+* @brief isFinalState Check if the state string is in final state
+* @param state State text string
+* @return true: state in final state; false: state in non-final state
+*/
 inline bool isFinalState(const char *state)
 {
     bool b = false;
@@ -190,6 +200,12 @@ inline bool isFinalState(const char *state)
     b |= !strcmp(state, kUnitInactiveStateText);
     b |= !strcmp(state, kUnitFailedStateText);
 
+    return b;
+}
+
+inline bool isActiveState(const char *state)
+{
+    bool b = !strcmp(state, "active");
     return b;
 }
 
@@ -295,7 +311,12 @@ constexpr const char *kServiceAutoStartup = QT_TRANSLATE_NOOP("DBus.Unit.Startup
 constexpr const char *kServiceManualStartup = QT_TRANSLATE_NOOP("DBus.Unit.Startup.Mode", "Manual");
 constexpr const char *kServiceNAStartup = QT_TRANSLATE_NOOP("DBus.Unit.Startup.Mode", "N/A");
 
-// is-enabled (from systemctl.c#unit_is_enabled)
+/**
+ * @brief isUnitStateEnabled Check if unit is in enabled/disabled state, is-enabled (from
+ * systemctl.c#unit_is_enabled)
+ * @param state Unit state
+ * @return true: enabled state; false: disabled state
+ */
 inline bool isUnitStateEnabled(const QString &state)
 {
     if (state.isEmpty())
@@ -306,6 +327,11 @@ inline bool isUnitStateEnabled(const QString &state)
            || (s == kUnitStateEnabledRuntime)
            || (s == kUnitStateStatic);
 }
+/**
+ * @brief isUnitNoOp Check if unit is in NoOp state
+ * @param state Unit state
+ * @return true: unit in NoOp state; false: otherwise
+ */
 inline bool isUnitNoOp(const QString &state)
 {
     int s = unitStateMap[state];
@@ -317,6 +343,11 @@ inline bool isUnitNoOp(const QString &state)
            || state.isEmpty();
 }
 #define EXEC_SYSV_CHECK "/lib/systemd/systemd-sysv-install"
+/**
+ * @brief isSysVInitEnabled Check if sysv init script is auto/manual start
+ * @param sname Service name
+ * @return true: auto startup; false: manual startup
+ */
 inline bool isSysVInitEnabled(const QString &sname)
 {
     int rc = QProcess::execute(EXEC_SYSV_CHECK, {"is-enabled", sname});
@@ -327,6 +358,12 @@ inline bool isSysVInitEnabled(const QString &sname)
         return false;
     }
 }
+/**
+ * @brief isServiceAutoStartup Check if service is auto/manual start
+ * @param sname Service name
+ * @param state Service state
+ * @return true: auto startup; false: manual startup
+ */
 inline bool isServiceAutoStartup(const QString &sname, const QString &state)
 {
     if (state == kUnitStateGeneratedRuntimeText || state == kUnitStateIndirectText) {
@@ -363,7 +400,7 @@ const QMap<int, const char *> UnitControlJobModeMap = {
     {kJobModeFlush, kJobModeFlushCMD}
 };
 
-}  // namespace Common
-}  // namespace DBus
+} // namespace common
+} // namespace dbus
 
 #endif  // DBUS_COMMON_H

@@ -11,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Сакриј детаље</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Читање</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Уписивање</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 секунди</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 дана %2 сат. %3 мин.</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Употреба</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Тренутни радни такт</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Радни такт</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Произвиђач</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Лежишта</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Логички процесори</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Виртуелизација</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>L1i кеш</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>L1d кеш</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>L2 кеш</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>L3 кеш</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Просечно оптерећање</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Дескриптори датотека</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Процеси</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Нити</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Име домаћина</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Врста ОС-а</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Верзија</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Време у раду</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 секунди</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -18,10 +136,24 @@
     </message>
 </context>
 <context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Детаљи</translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Детаљи</translation>
+    </message>
+</context>
+<context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation> активно</translation>
+        <translation>активно</translation>
     </message>
     <message>
         <source>reloading</source>
@@ -193,9 +325,124 @@
     </message>
 </context>
 <context>
+    <name>DeailTableModel</name>
+    <message>
+        <source>Used</source>
+        <translation>Заузето</translation>
+    </message>
+    <message>
+        <source>Available</source>
+        <translation>Слободно</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation>Дељено</translation>
+    </message>
+    <message>
+        <source>Cached</source>
+        <translation>Кеширано</translation>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation>Попуне</translation>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation>Кеширана помоћна мем.</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Активно</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Неактивно</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Прљаво</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Пресликано</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Укупна помоћна мем.</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Слободна помоћна мем.</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Плоча</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Модел</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Брзина читања</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Брзина уписивања</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Капацитет</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Читања сектора</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Читања/сек</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Читања сектора/сек</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Читања спојено/сек</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Уписаних сектора</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Завршених уписивања </translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Уписивања спојено </translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Уписивања/сек</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Уписаних сектора/сек</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Читања спојено/сек</translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>У реду</translation>
     </message>
 </context>
@@ -219,10 +466,6 @@ Are you sure you want to continue?</source>
 Заиста желите да наставите?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Откажи</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Окончај процес</translation>
     </message>
@@ -233,18 +476,142 @@ Are you sure you want to continue?</source>
 Заиста желите да наставите?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Окончај</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Принудно окончање овог програма може изазвати губитак података.
 Заиста желите да наставите?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Откажи</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Принудно окончај</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Окончај</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Величина</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>ИП адреса:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Мрежна маска:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Емитовање:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Префикслен:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Опсег:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Врста везе</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ЕССИД</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Квалитет везе</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Јачина сигнала</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Ниво шума</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>МАК</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Пропусни опсег</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>RX пакети</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>RX бајтови</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>RX грешке</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX одбачено</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX прекорачења</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>RX оквир</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>TX пакети</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>TX бајтови</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>TX грешке</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX прекорачења</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX носилац</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>ИПв4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>ИПв6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>TX одбачено</translation>
     </message>
 </context>
 <context>
@@ -274,6 +641,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>Меморија</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Примање</translation>
     </message>
 </context>
 <context>
@@ -311,10 +682,6 @@ Are you sure you want to continue?</source>
         <translation>Отпремање</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Мрежа</translation>
     </message>
@@ -324,7 +691,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Отпремњено</translation>
+        <translation>Отпремљено</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Слање</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Дискови</translation>
     </message>
 </context>
 <context>
@@ -383,10 +758,6 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>Process.Signal</name>
-    <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">Окончавање процеса није успело</translation>
-    </message>
     <message>
         <source>Failed to pause process</source>
         <translation>Неуспешно паузирање процеса</translation>
@@ -468,16 +839,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Прилагођени приоритет</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Откажи</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Промени</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Прилагођени приоритет</translation>
     </message>
 </context>
 <context>
@@ -526,16 +899,20 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>Приоритет</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Дељена меморија</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Виртуелна меморија</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Swap</source>
-        <translation type="vanished">Помоћна</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Није омогућено</translation>
+        <source>Not support</source>
+        <translation>Неподржано</translation>
     </message>
 </context>
 <context>
@@ -552,16 +929,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Назив инстанце услуге</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>У реду</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Откажи</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Назив инстанце услуге</translation>
     </message>
 </context>
 <context>
@@ -607,16 +986,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation> Активност</translation>
+        <translation>Активност</translation>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Подстање</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Стање</translation>
     </message>
     <message>
@@ -629,7 +1006,6 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Режим покретања</translation>
     </message>
 </context>

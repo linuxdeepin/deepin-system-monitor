@@ -1,21 +1,23 @@
 ﻿/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include "service_manager_worker.h"
 
 #include "dbus/dbus_common.h"
@@ -72,7 +74,7 @@ void ServiceManagerWorker::startJob()
         return unit.getName().endsWith(UnitTypeServiceSuffix);
     };
     std::function<SystemServiceEntry(const UnitInfo &) > mapUnit = [&mgrIf](const UnitInfo & unit) {
-        ErrorContext ec{};
+        ErrorContext ec1{};
         SystemServiceEntry entry{};
         // SName
         entry.setSName(unit.getName().left(unit.getName().lastIndexOf('.')));
@@ -91,33 +93,33 @@ void ServiceManagerWorker::startJob()
                                      QDBusConnection::systemBus());
         // Id
         auto id = unitIf.getId();
-        ec = id.first;
-        if (ec) {
-            qDebug() << "call getId failed:" << ec.getErrorName() << ec.getErrorMessage();
+        ec1 = id.first;
+        if (ec1) {
+            qDebug() << "call getId failed:" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setId(id.second);
         }
 
         auto bStart = unitIf.canStart();
-        ec = bStart.first;
-        if (ec) {
-            qDebug() << "call canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
+        ec1 = bStart.first;
+        if (ec1) {
+            qDebug() << "call canStart failed:" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setCanStart(bStart.second);
         }
 
         auto bStop = unitIf.canStop();
-        ec = bStop.first;
-        if (ec) {
-            qDebug() << "call canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
+        ec1 = bStop.first;
+        if (ec1) {
+            qDebug() << "call canStart failed:" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setCanStop(bStop.second);
         }
 
         auto bReload = unitIf.canReload();
-        ec = bReload.first;
-        if (ec) {
-            qDebug() << "call canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
+        ec1 = bReload.first;
+        if (ec1) {
+            qDebug() << "call canStart failed:" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setCanReload(bReload.second);
         }
@@ -127,18 +129,18 @@ void ServiceManagerWorker::startJob()
                                        unit.getUnitObjectPath(),
                                        QDBusConnection::systemBus());
         auto pid = svcIf.getMainPID();
-        ec = pid.first;
-        if (ec) {
-            qDebug() << "getMainPID failed" << ec.getErrorName() << ec.getErrorMessage();
+        ec1 = pid.first;
+        if (ec1) {
+            qDebug() << "getMainPID failed" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setMainPID(pid.second);
         }
 
         // unit state
         auto state = mgrIf.GetUnitFileState(unit.getName());
-        ec = state.first;
-        if (ec) {
-            qDebug() << "getUnitFileState failed" << ec.getErrorName() << ec.getErrorMessage();
+        ec1 = state.first;
+        if (ec1) {
+            qDebug() << "getUnitFileState failed" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setState(state.second);
         }
@@ -179,7 +181,7 @@ void ServiceManagerWorker::startJob()
     std::function<SystemServiceEntry(const UnitFileInfo &) > mapUnitFiles;
     mapUnitFiles = [](const UnitFileInfo & unf) {
         SystemServiceEntry entry{};
-        ErrorContext ec{};
+        ErrorContext ec1{};
 
         auto id = unf.getName().mid(unf.getName().lastIndexOf('/') + 1);
         auto sname = id;
@@ -204,50 +206,50 @@ void ServiceManagerWorker::startJob()
                                            QDBusConnection::systemBus());
 
             // Id
-            auto id = unitIf.getId();
-            ec = id.first;
-            if (ec) {
-                qDebug() << "call getId failed:" << ec.getErrorName() << ec.getErrorMessage();
+            auto id1 = unitIf.getId();
+            ec1 = id1.first;
+            if (ec1) {
+                qDebug() << "call getId failed:" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
-                entry.setId(id.second);
+                entry.setId(id1.second);
             }
 
             auto desc = unitIf.getDescription();
-            ec = desc.first;
-            if (ec) {
-                qDebug() << "getDescription failed:" << ec.getErrorName() << ec.getErrorMessage();
+            ec1 = desc.first;
+            if (ec1) {
+                qDebug() << "getDescription failed:" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setDescription(desc.second);
             }
 
             auto actState = unitIf.getActiveState();
-            ec = actState.first;
-            if (ec) {
-                qDebug() << "getActiveState failed:" << ec.getErrorName() << ec.getErrorMessage();
+            ec1 = actState.first;
+            if (ec1) {
+                qDebug() << "getActiveState failed:" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setActiveState(actState.second);
             }
 
             auto loadState = unitIf.getLoadState();
-            ec = loadState.first;
-            if (ec) {
-                qDebug() << "getLoadState failed:" << ec.getErrorName() << ec.getErrorMessage();
+            ec1 = loadState.first;
+            if (ec1) {
+                qDebug() << "getLoadState failed:" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setLoadState(loadState.second);
             }
 
             auto subState = unitIf.getSubState();
-            ec = subState.first;
-            if (ec) {
-                qDebug() << "getSubState failed:" << ec.getErrorName() << ec.getErrorMessage();
+            ec1 = subState.first;
+            if (ec1) {
+                qDebug() << "getSubState failed:" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setSubState(subState.second);
             }
 
             auto mainPID = svcIf.getMainPID();
-            ec = mainPID.first;
-            if (ec) {
-                qDebug() << "getMainPID failed:" << ec.getErrorName() << ec.getErrorMessage();
+            ec1 = mainPID.first;
+            if (ec1) {
+                qDebug() << "getMainPID failed:" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setMainPID(mainPID.second);
             }

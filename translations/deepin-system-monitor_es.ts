@@ -7,7 +7,125 @@
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Monitor del sistema es una herramienta para monitorear la carga del sistema en tiempo real, ver y controlar los procesos y servicios que se ejecutan en su sistema.</translation>
+        <translation>Monitor del sistema de Deepin es una herramienta para monitorear la carga del sistema en tiempo real, ver y controlar los procesos y servicios que se ejecutan en su sistema.</translation>
+    </message>
+</context>
+<context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Ocultar detalles</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Lectura</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Escritura</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 segundos</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 días %2 horas %3 minutos</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Utilización</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Frecuencia actual</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frecuencia</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Fabricante</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Zócalos</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Procesadores lógicos</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualización</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>Caché L1i</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>Caché L1d</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>Caché L2</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>Caché L3</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Promedio de carga</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Descriptores de archivo</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Procesos</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Hilos</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Nombre de anfitrión</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Tipo de sistema</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versión</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Tiempo de disponibilidad</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 segundos</translation>
     </message>
 </context>
 <context>
@@ -15,6 +133,20 @@
     <message>
         <source>No search results</source>
         <translation>No hay resultados de búsqueda</translation>
+    </message>
+</context>
+<context>
+    <name>CompactCpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Detalles</translation>
+    </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
+    <message>
+        <source>Details</source>
+        <translation>Detalles</translation>
     </message>
 </context>
 <context>
@@ -193,9 +325,124 @@
     </message>
 </context>
 <context>
+    <name>DeailTableModel</name>
+    <message>
+        <source>Used</source>
+        <translation>Usado</translation>
+    </message>
+    <message>
+        <source>Available</source>
+        <translation>Disponible</translation>
+    </message>
+    <message>
+        <source>Shared</source>
+        <translation>Compartido</translation>
+    </message>
+    <message>
+        <source>Cached</source>
+        <translation>En caché</translation>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation>Búferes</translation>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation>Intercambio en caché</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Activo</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Inactivo</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>Sucio</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Mapeado</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Intercambio total</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Intercambio libre</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Losa</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Modelo</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Velocidad de lectura</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Velocidad de escritura</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Capacidad</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Sectores leídos</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Lecturas/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Sectores leídos/s</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Lecturas fusionadas/s</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Sectores escritos</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Escrituras completas</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Escrituras fusionadas</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Escrituras/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Sectores escritos/s</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Escrituras fusionadas/s</translation>
+    </message>
+</context>
+<context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Aceptar</translation>
     </message>
 </context>
@@ -219,10 +466,6 @@ Are you sure you want to continue?</source>
 ¿Está seguro que quiere continuar?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Cancelar</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Terminar proceso</translation>
     </message>
@@ -233,18 +476,142 @@ Are you sure you want to continue?</source>
 ¿Está seguro que quiere continuar?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Finalizar</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Forzar el cierre de la aplicación puede causar perdida de datos.
 ¿Está seguro que quiere continuar?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Forzar cierre</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Finalizar</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Tamaño</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>Dirección IP:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Máscara de red:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Emisión:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Longitud de prefijo:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Alcance:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Tipo de conexión</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Calidad de enlace</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Fuerza de la señal</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Nivel de ruido</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Ancho de banda</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>Paquetes RX</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>Bytes RX</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>Errores RX</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>RX abandonados</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>RX desbordados</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>cuadro RX</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>Paquetes TX</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>Bytes TX</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>Errores TX</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>TX desbordados</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>TX portadora</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>TX cayó</translation>
     </message>
 </context>
 <context>
@@ -274,6 +641,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>Memoria</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Recibido</translation>
     </message>
 </context>
 <context>
@@ -311,10 +682,6 @@ Are you sure you want to continue?</source>
         <translation>Subido</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Disco</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Red</translation>
     </message>
@@ -325,6 +692,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>Total enviado</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Enviado</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Discos</translation>
     </message>
 </context>
 <context>
@@ -384,10 +759,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Signal</name>
     <message>
-        <source>Failed to end proces</source>
-        <translation type="vanished">No se pudo terminar el proceso</translation>
-    </message>
-    <message>
         <source>Failed to pause process</source>
         <translation>No se ha podido detener el proceso</translation>
     </message>
@@ -427,7 +798,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspender</translation>
+        <translation>Suspendido</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -468,16 +839,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Prioridad personalizada</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Cambiar</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Prioridad personalizada</translation>
     </message>
 </context>
 <context>
@@ -526,16 +899,20 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>Prioridad</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Memoria compartida</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Memoria virtual</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Swap</source>
-        <translation type="vanished">Intercambio</translation>
-    </message>
-    <message>
-        <source>Not enabled</source>
-        <translation type="vanished">Inactivo</translation>
+        <source>Not support</source>
+        <translation>No compatible</translation>
     </message>
 </context>
 <context>
@@ -552,16 +929,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Nombre de instancia del servicio</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Aceptar</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancelar</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Nombre de instancia del servicio</translation>
     </message>
 </context>
 <context>
@@ -611,12 +990,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Sub</source>
-        <extracomment>sub state (running status)</extracomment>
         <translation>Ejecución</translation>
     </message>
     <message>
         <source>State</source>
-        <extracomment>state</extracomment>
         <translation>Estado</translation>
     </message>
     <message>
@@ -629,7 +1006,6 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Startup Type</source>
-        <extracomment>service startup mode</extracomment>
         <translation>Tipo de inicio</translation>
     </message>
 </context>
@@ -637,7 +1013,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Forzar cierre de una aplicación</translation>
+        <translation>Forzar cierre de aplicación</translation>
     </message>
     <message>
         <source>Expand</source>

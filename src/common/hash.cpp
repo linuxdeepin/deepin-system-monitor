@@ -1,26 +1,23 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      maojj <maojunjie@uniontech.com>
-* Maintainer:  maojj <maojunjie@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-/*
- * The following hash function is based on MurmurHash3, placed into the public
- * domain by Austin Appleby.  See https://github.com/aappleby/smhasher for
- * details.
- */
 
 #include "config.h"
 
@@ -39,8 +36,10 @@
 #endif
 #include <endian.h>
 
-namespace utils {
+namespace util {
+namespace common {
 
+// global seed
 uint32_t global_seed;
 
 #define FORCE_INLINE inline __attribute__((always_inline))
@@ -332,14 +331,17 @@ void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
     out[1] = h2;
 }
 
+// initialize global seed
 void init_seed()
 {
-    bool ok {false};
-    int cnt {};
+    bool ok = false;
+    int cnt = 0;
+    Q_UNUSED(cnt);
 
 #define MAX_RETRY 6
 #if defined HAVE_SYS_RANDOM_H
     ssize_t nb {};
+    // get random number in non-blocking mode, failure process after 6 retries
     do {
         nb = getrandom(&global_seed, sizeof(uint32_t), GRND_NONBLOCK);
         if (nb == sizeof(uint32_t)) {
@@ -355,6 +357,7 @@ void init_seed()
     }
 #endif
 
+    // read /dev/urandom instead
     if (!ok) {
         int fd = open("/dev/urandom", O_RDONLY);
         if (fd == -1) {
@@ -366,8 +369,9 @@ void init_seed()
             qCritical() << "init seed from /dev/urandom failed";
             abort();
         }
+        close(fd);
     }
 }
 
-} // !namespace
-
+} // namespace common
+} // namespace util
