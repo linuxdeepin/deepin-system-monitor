@@ -172,6 +172,6 @@ void NetifItemViewWidget::updateWidgetGeometry()
     if (m_mode == TITLE_HORIZONTAL) {
         m_ChartWidget->setGeometry(margin, fontHeight / 2, this->width() - 2 * margin, this->height() - fontHeight / 2 - margin);
     } else {
-        m_ChartWidget->setGeometry(margin, int(fontHeight * 2.5), this->width() - 2 * margin, this->height() - int(fontHeight * 2.5) - margin);
+        m_ChartWidget->setGeometry(margin, fontHeight * 4, this->width() - 2 * margin, this->height() - fontHeight * 4 - margin);
     }
 }
