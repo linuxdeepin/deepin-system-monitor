@@ -215,6 +215,21 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
         }
     });
 
+    // 获取setting指针
+    auto settingPtr = SystemProtectionSetting::instance()->getDSettingPointor();
+    if(settingPtr != nullptr) {
+        // 初始当前监控开关状态
+        QVariant swtich_value = settingPtr->getOption(AlarmStatusOptionName);
+        widget->setDisabled(!swtich_value.toBool());
+
+        // 连接监控开关变化信号
+        widget->connect(settingPtr, &DSettings::valueChanged, widget, [=](const QString &key, const QVariant &value) {
+            if(key == AlarmStatusOptionName) {
+                widget->setDisabled(!value.toBool());
+            }
+        } );
+    }
+
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
 
     return optionWidget;
@@ -281,6 +296,21 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
             edit->setText(option->value().toString());
         }
     });
+
+    // 获取setting指针
+    auto settingPtr = SystemProtectionSetting::instance()->getDSettingPointor();
+    if(settingPtr != nullptr) {
+        // 初始当前监控开关状态
+        QVariant swtich_value = settingPtr->getOption(AlarmStatusOptionName);
+        widget->setDisabled(!swtich_value.toBool());
+
+        // 连接监控开关变化信号
+        widget->connect(settingPtr, &DSettings::valueChanged, widget, [=](const QString &key, const QVariant &value) {
+            if(key == AlarmStatusOptionName) {
+                widget->setDisabled(!value.toBool());
+            }
+        } );
+    }
 
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
 
