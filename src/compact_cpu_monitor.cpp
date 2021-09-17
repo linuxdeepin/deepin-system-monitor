@@ -99,6 +99,9 @@ CompactCpuMonitor::~CompactCpuMonitor() {}
 
 void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPercents)
 {
+    // 增加判断，如果返回的值是非数，则不更新界面，也不保存数据
+    if (std::isnan(cpuPercent))
+        return;
     totalCpuPercent = cpuPercent;
 
     for (int i = 0; i < cPercents.size(); i++) {

@@ -117,6 +117,10 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 
 void CpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal>)
 {
+    // 增加判断，如果返回的值是非数，则不更新界面，也不保存数据
+    if (std::isnan(cpuPercent))
+        return;
+
     cpuPercents->append(cpuPercent);
 
     if (cpuPercents->size() > pointsNumber) {
