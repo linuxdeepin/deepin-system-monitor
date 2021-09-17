@@ -49,7 +49,7 @@ void DBusInterface::showOrHideDeepinSystemMonitorPluginPopupWidget()
 void DBusInterface::init()
 {
     // 1. 连接到dbus
-    if (QDBusConnection::sessionBus().isConnected()) {
+    if (!QDBusConnection::sessionBus().isConnected()) {
         fprintf(stderr, "Cannot connect to the D-Bus session bus./n"
                 "To start it, run:/n"
                 "/teval `dbus-launch --auto-syntax`/n");

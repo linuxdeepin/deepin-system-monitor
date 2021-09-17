@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "common/datacommon.h"
 //#include "itemwidget.h"
+#include "dbus/dbusayatanainterface.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -73,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
     CompositeChanged();
     registerMonitor();
     installEventFilter(this);
+
+    DBusAyatanaInterface::getInstance();
 }
 
 MainWindow::~MainWindow()
@@ -308,6 +311,8 @@ void MainWindow::initConnect()
     connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [=] () {
         this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
     });
+
+    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { Toggle(); });
 }
 
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)

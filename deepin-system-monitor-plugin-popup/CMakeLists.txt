@@ -201,12 +201,14 @@ SET(HPP_DBUS
     dbus/systemmonitordbusadaptor.h
     dbus/dbusdockinterface.h
     dbus/dbuscallmaininterface.h
+    dbus/dbusayatanainterface.h
 )
 
 SET(CPP_DBUS
     dbus/systemmonitordbusadaptor.cpp
     dbus/dbusdockinterface.cpp
     dbus/dbuscallmaininterface.cpp
+    dbus/dbusayatanainterface.cpp
 )
 
 SET(HPP_PROCESS
