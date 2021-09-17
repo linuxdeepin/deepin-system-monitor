@@ -75,8 +75,6 @@ private:
 private:
     static std::atomic<DBusAyatanaInterface *> s_Instance;
     static std::mutex m_mutex;
-
-    QDBusInterface       *mp_Iface;
 };
 
 

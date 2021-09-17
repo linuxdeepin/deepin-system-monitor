@@ -22,6 +22,9 @@
 
 #include <QAccessible>
 #include <QPainter>
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
 
 SystemMonitorTipsWidget::SystemMonitorTipsWidget(QWidget *parent)
     : QFrame(parent)
@@ -79,7 +82,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     }
 
     int specialCharaWidth = fontMetrics().boundingRect(QString("↓")).width();
-    painter.drawText(QRectF(0.0, 0.0, rect().width() / 2.0, rect().height() / 2.0), QString("   CPU: %1%").arg(cpu), optionLeft);
+    painter.drawText(QRectF(0.0, 0.0, rect().width() / 2.0, rect().height() / 2.0), QString("   ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": %1%").arg(cpu), optionLeft);
     painter.save();
     painter.setPen(QPen(QColor("red"), 1));
     painter.drawText(QRectF(rect().width() / 2.0, 0.0, specialCharaWidth, rect().height() / 2.0), QString("↓"), optionMid);
@@ -87,7 +90,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     painter.drawText(QRectF(rect().width() / 2.0 + specialCharaWidth, 0, rect().width() / 2.0 - specialCharaWidth, rect().height() / 2.0), downLoad, optionLeft);
 
     specialCharaWidth = fontMetrics().boundingRect(QString("↑")).width();
-    painter.drawText(QRectF(0, rect().height() / 2.0, rect().width() / 2.0, rect().height() / 2.0), QString("   MEM: %1%").arg(mem), optionLeft);
+    painter.drawText(QRectF(0, rect().height() / 2.0, rect().width() / 2.0, rect().height() / 2.0), QString("   ") + DApplication::translate("Plugin.mem", "MEM") + QString(": %1%").arg(mem), optionLeft);
     painter.save();
     painter.setPen(QPen(QColor("blue"), 1));
     painter.drawText(QRectF(rect().width() /  2.0, rect().height() / 2.0, specialCharaWidth, rect().height() / 2.0), QString("↑"), optionMid);

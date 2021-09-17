@@ -57,17 +57,16 @@ const QString MonitorPlugin::pluginName() const
 
 const QString MonitorPlugin::pluginDisplayName() const
 {
-//    return DApplication::translate("Plugin.DisplayName", "System Monitor Plugin");
-    return QString("System Monitor Plugin");
+    return DApplication::translate("Plugin.DisplayName", "System Monitor");
 }
 
 void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 {
     // 第一次是为了正确加载翻译，第二次是为了避免影响dock的accessible
-//    QString applicationName = qApp->applicationName();
-//    qApp->setApplicationName("deepin-system-monitor-plugin");
-//    qApp->loadTranslator();
-//    qApp->setApplicationName(applicationName);
+    QString applicationName = qApp->applicationName();
+    qApp->setApplicationName("deepin-system-monitor-plugin");
+    qApp->loadTranslator();
+    qApp->setApplicationName(applicationName);
 
     m_proxyInter = proxyInter;
 
@@ -145,8 +144,7 @@ const QString MonitorPlugin::itemContextMenu(const QString &itemKey)
     //Add open System monitor mode button
     QMap<QString,QVariant> openSMO;
     openSMO["itemId"] = "openSystemMointor";
-//    openSMO["itemText"] = DApplication::translate("Plugin.OpenSystemMontitor", "open system monitor");
-    openSMO["itemText"] = "openSystemMointor";
+    openSMO["itemText"] = DApplication::translate("Plugin.OpenSystemMontitor", "open system monitor");
     openSMO["isActive"] =true;
     items.push_back(openSMO);
 
@@ -241,7 +239,6 @@ void MonitorPlugin::udpateTipsInfo()
     file.close();
     long mu = mt - ma;
     qreal mp = mu*100.0/mt;
-    QString mem = "MEM: " + QString("%1 / %2 = %3").arg(KB(mu)).arg(KB(mt)).arg(QString::number(mp) + "%");
 
     // CPU
     file.setFileName("/proc/stat");
@@ -262,10 +259,7 @@ void MonitorPlugin::udpateTipsInfo()
 
     tt = user + nice + sys + idle + iowait + irq + softirq;
     file.close();
-    QString cusage = "";
     qreal cp = ((tt-tt0)-(idle-idle0))*100.0/(tt-tt0);
-    if(m_counter > 0)
-        cusage = "CPU: " + QString::number(cp) + "%";
     idle0 = idle;
     tt0 = tt;
 

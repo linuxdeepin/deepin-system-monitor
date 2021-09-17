@@ -38,8 +38,7 @@ const QString SERVICE_SUB_INTERFACE_NAME = "org.ayatana.bamf.matcher";
 const QString DEEPIN_AI_ASSISTANT_PATH = "/usr/share/applications/desktop-ai-assistant.desktop";
 
 DBusAyatanaInterface::DBusAyatanaInterface(QObject *parent)
-    : QObject(parent),
-      mp_Iface(nullptr)
+    : QObject(parent)
 {
     // 初始化dbus
     init();
@@ -49,7 +48,6 @@ void DBusAyatanaInterface::slotActiveApplicationChanged(QString path, QString ap
 {
     //判断路径是否为空
     if (!path.isEmpty()) {
-        qInfo() << path;
         QDBusInterface interface(SERVICE_NAME, path, SERVICE_SUB_NAME, QDBusConnection::sessionBus(), this);
         QString name;
         QDBusReply<QString> reply = interface.call("Name");
