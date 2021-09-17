@@ -207,6 +207,12 @@ void ProcessAttributeDialog::initUI()
     // format date time (ISO style)
     m_procStartText->setText(QDateTime::fromSecsSinceEpoch(qint64(m_startTime)).toString("yyyy-MM-dd hh:mm:ss"));
 
+    //如果命令行无值，隐藏该行
+    if(m_cmdline == "")
+        m_procCmdLabel->hide();
+    else
+        m_procCmdLabel->show();
+
     m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
 }
