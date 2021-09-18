@@ -21,7 +21,7 @@
         <location filename="../gui/cpu_widget.cpp" line="216"/>
         <location filename="../gui/cpu_widget.cpp" line="217"/>
         <source>Utilization</source>
-        <translation>利用率</translation>
+        <translation>总利用率</translation>
     </message>
 </context>
 <context>
@@ -309,7 +309,7 @@
         <location filename="../gui/process_widget.cpp" line="182"/>
         <location filename="../gui/process_widget.cpp" line="185"/>
         <source>Processes</source>
-        <translation>进程数</translation>
+        <translation>进程</translation>
     </message>
 </context>
 <context>

@@ -29,7 +29,7 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="228"/>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>Disk</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="258"/>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="260"/>
         <source>Total received</source>
-        <translation type="unfinished"/>
+        <translation>Ümumi alınan</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="262"/>
         <source>Total sent</source>
-        <translation type="unfinished"/>
+        <translation>Ümumi göndərilən</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>

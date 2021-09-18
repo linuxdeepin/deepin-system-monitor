@@ -84,12 +84,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="260"/>
         <source>Total received</source>
-        <translation type="unfinished"/>
+        <translation>Recepció total</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="262"/>
         <source>Total sent</source>
-        <translation type="unfinished"/>
+        <translation>Enviament total</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>
