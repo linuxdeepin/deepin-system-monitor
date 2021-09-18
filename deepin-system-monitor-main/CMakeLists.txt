@@ -565,3 +565,5 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES ${APP_QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
 install(FILES translations/policy/${POLICY_FILE} DESTINATION share/polkit-1/actions)
 install(FILES translations/desktop/${DESKTOP_FILE} DESTINATION share/applications)
+
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets/deepin-system-monitor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
