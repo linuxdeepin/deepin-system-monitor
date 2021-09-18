@@ -144,7 +144,7 @@ const QString MonitorPlugin::itemContextMenu(const QString &itemKey)
     //Add open System monitor mode button
     QMap<QString,QVariant> openSMO;
     openSMO["itemId"] = "openSystemMointor";
-    openSMO["itemText"] = DApplication::translate("Plugin.OpenSystemMontitor", "open system monitor");
+    openSMO["itemText"] = DApplication::translate("Plugin.OpenSystemMontitor", "Open");
     openSMO["isActive"] =true;
     items.push_back(openSMO);
 
