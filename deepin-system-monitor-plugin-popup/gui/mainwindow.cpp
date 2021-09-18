@@ -312,7 +312,7 @@ void MainWindow::initConnect()
         this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
     });
 
-    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { Toggle(); });
+    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
 }
 
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)

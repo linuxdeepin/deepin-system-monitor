@@ -73,6 +73,9 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
     if (!pluginIsDisable()) {
         loadPlugin();
     }
+
+    calcCpuRate(m_totalCPU, m_availableCPU);
+    calcNetRate(m_down, m_upload);
 }
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
@@ -99,7 +102,7 @@ bool MonitorPlugin::pluginIsDisable()
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
-    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0kb/s" << "0kb/s");
+    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0KB/s" << "0KB/s");
     return m_dataTipsLabel.data();
 }
 
@@ -161,166 +164,45 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(itemKey);
     if (menuId == "openSystemMointor") {
         QProcess::startDetached("/usr/bin/deepin-system-monitor");
-//        DDBusSender()
-//            .service("com.deepin.dde.ControlCenter")
-//            .interface("com.deepin.dde.ControlCenter")
-//            .path("/com/deepin/dde/ControlCenter")
-//            .method("ShowPage")
-//            .arg(QString("notification"))
-//            .arg(QString("System Notification"))
-//            .call();
     }
-}
-
-QString MonitorPlugin::KB(long k)
-{
-    QString s = "";
-    if(k > 999999){
-        s = QString::number(k/(1024*1024.0),'f',2) + "gb";
-    }else{
-        if(k > 999){
-            s = QString::number(k/1024.0,'f',2) + "mb";
-        }else{
-            s = QString::number(k/1.0,'f',2) + "kb";
-        }
-    }
-    return s;
-}
-
-QString MonitorPlugin::BS(long b)
-{
-    QString s = "";
-    if(b > 999999999){
-        //s = QString("%1").arg(b/(1024*1024*1024.0), 6, 'f', 2, QLatin1Char(' ')) + "GB";
-        s = QString::number(b/(1024*1024*1024.0), 'f', 1) + "gb";
-    }else{
-        if(b > 999999){
-            //s = QString("%1").arg(b/(1024*1024.0), 6, 'f', 2, QLatin1Char(' ')) + "MB";
-            s = QString::number(b/(1024*1024.0), 'f', 1) + "mb";
-        }else{
-            if(b>999){
-                //s = QString("%1").arg(b/1024.0, 6, 'f', 2, QLatin1Char(' ')) + "KB";
-                s = QString::number(b/(1024.0), 'f',1) + "kb";
-            }else{
-                s = QString::number(b / 2.0) + "B";
-            }
-        }
-    }
-    return s;
-}
-
-QString MonitorPlugin::NB(long b)
-{
-    QString s = "";
-    if (b>999) {
-        s = QString("%1").arg(b/1024, 5, 'f', 0, QLatin1Char(' ')) + "kb";
-    } else { // <1K => 0
-        s = QString("%1").arg(0, 5, 'f', 0, QLatin1Char(' ')) + "kb";
-    }
-    return s;
 }
 
 void MonitorPlugin::udpateTipsInfo()
 {
-    // uptime
-    QFile file;
-    QString strLineContext;
-
     // memory
-    file.setFileName("/proc/meminfo");
-    file.open(QIODevice::ReadOnly);
-    strLineContext = file.readLine();
-    long mt = strLineContext.replace("MemTotal:","").replace("kB","").replace(" ","").toLong();
-    strLineContext = file.readLine();
-    strLineContext = file.readLine();
-    long ma = strLineContext.replace("MemAvailable:","").replace("kB","").replace(" ","").toLong();
-    strLineContext = file.readLine();
-    strLineContext = file.readLine();
-    file.close();
-    long mu = mt - ma;
-    qreal mp = mu*100.0/mt;
+    qlonglong memory = 0;
+    qlonglong memoryAll = 0;
+    calcMemRate(memory, memoryAll);
+    QString memStr = QString("%1").arg(memory * 100.0 / memoryAll, 1, 'f', 1, QLatin1Char(' '));
 
     // CPU
-    file.setFileName("/proc/stat");
-    file.open(QIODevice::ReadOnly);
-    strLineContext = file.readLine();
-    long user,nice,sys,idle,iowait,irq,softirq,tt;
-//    sscanf(ch,"%s%ld%ld%ld%ld%ld%ld%ld",cpu,&user,&nice,&sys,&idle,&iowait,&irq,&softirq);
-    // 分割行数据
-    QStringList cpuStatus =  QString(strLineContext).split(" ", QString::SkipEmptyParts);
-    user = cpuStatus.at(1).toInt();
-    nice = cpuStatus.at(2).toInt();
-    sys = cpuStatus.at(3).toInt();
-    idle = cpuStatus.at(4).toInt();
-    iowait = cpuStatus.at(5).toInt();
-    irq = cpuStatus.at(6).toInt();
-    softirq = cpuStatus.at(7).toInt();
-
-
-    tt = user + nice + sys + idle + iowait + irq + softirq;
-    file.close();
-    qreal cp = ((tt-tt0)-(idle-idle0))*100.0/(tt-tt0);
-    idle0 = idle;
-    tt0 = tt;
+    qlonglong totalCPU = 0;
+    qlonglong availableCPU = 0;
+    calcCpuRate(totalCPU, availableCPU);
+    QString cpuStr = QString("%1").arg((((totalCPU - m_totalCPU) - (availableCPU - m_availableCPU)) * 100.0 / (totalCPU - m_totalCPU)), 1, 'f', 1, QLatin1Char(' '));
+    m_totalCPU = totalCPU;
+    m_availableCPU = availableCPU;
 
     // net
-    file.setFileName("/proc/net/dev");
-    file.open(QIODevice::ReadOnly);
-    strLineContext = file.readLine();
-    strLineContext = file.readLine();
-    m_newRecvBytes = m_newSendBytes = 0;
-    long int curRecvBytes = 0;
-    long int curSendBytes = 0;
-    while(!file.atEnd()){
-        strLineContext = file.readLine();
-        QStringList list = strLineContext.split(QRegExp("\\s{1,}"));
+    qlonglong netUpload = 0;
+    qlonglong netDownload = 0;
+    double downRate = 0.0;
+    double upRate = 0.0;
 
-        curRecvBytes = list.at(2).toLong();
-        curSendBytes = list.at(10).toLong();
-        m_newRecvBytes += curRecvBytes;
-        m_newSendBytes += curSendBytes;
-    }
-    file.close();
-    QString dss = "";
-    QString uss = "";
-    if (m_counter > 0) {
-        long ds = (m_newRecvBytes - m_oldRecvBytes) / 2;
-        long us = (m_newSendBytes - m_oldSendBytes) / 2;
-        if (m_counter != 1) {
-            dss = BS(ds) + "/s";
-            uss = BS(us) + "/s";
-        } else {
-            dss = BS(0) + "/s";
-            uss = BS(0) + "/s";
-        }
-        m_oldRecvBytes = m_newRecvBytes;
-        m_oldSendBytes = m_newSendBytes;
-    }
+    RateUnit unit = RateByte;
+    calcNetRate(netDownload, netUpload);
+    downRate = autoRateUnits((netDownload - m_down) / (m_refershTimer->interval() / 1000), unit);
+    QString downUnit = setRateUnitSensitive(unit);
+    unit = RateByte;
+    upRate = autoRateUnits((netUpload - m_upload) / (m_refershTimer->interval() /1000), unit);
+    QString uploadUnit = setRateUnitSensitive(unit);
+    QString downloadStr = QString("%1").arg(downRate, 1, 'f', 1, QLatin1Char(' ')) + downUnit;
+    QString uploadStr = QString("%1").arg(upRate, 1, 'f', 1, QLatin1Char(' ')) + uploadUnit;
 
-    m_counter++;
-    if (m_counter > 2)
-        m_counter = 2;
+    m_down = netDownload;
+    m_upload = netUpload;
 
-    // draw
-    Dtk::Gui::DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::instance()->themeType();
-    QString txtColor;
-    switch (colorType) {
-    case Dtk::Gui::DGuiApplicationHelper::LightType:
-        txtColor = "black";
-        break;
-    case Dtk::Gui::DGuiApplicationHelper::DarkType:
-        txtColor = "white";
-        break;
-    default:
-        txtColor = "white";
-        break;
-    }
-    QString cpStr = QString::number(cp, 'f', 1);
-
-
-    QString mpStr = QString::number(mp, 'f', 1);
-
-    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << cpStr << mpStr << dss << uss);
+    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << cpuStr << memStr << downloadStr << uploadStr);
 }
 
 void MonitorPlugin::loadPlugin()
@@ -379,4 +261,138 @@ void MonitorPlugin::initPluginState()
     } else {
         m_isFirstInstall = false;
     }
+}
+
+void MonitorPlugin::calcCpuRate(qlonglong &totalCPU, qlonglong &availableCPU)
+{
+    totalCPU = availableCPU = 0;
+    bool ok = false;
+    QFile file("/proc/stat");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QTextStream stream(&file);
+    QString line = stream.readLine();
+    if (!line.isNull()) {
+        QStringList list = line.split(QRegExp("\\s{1,}"));
+        for (auto v = list.begin()+1; v != list.end(); ++v)
+            totalCPU += (*v).toLongLong(&ok);
+        if (list.size() > 4)
+            availableCPU = list.at(4).toLongLong(&ok);
+    }
+
+    file.close();
+}
+
+void MonitorPlugin::calcMemRate(qlonglong &memory, qlonglong &memoryAll)
+{
+    memory = memoryAll = 0;
+    bool ok = false;
+    QFile file("/proc/meminfo");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QTextStream stream(&file);
+    qlonglong buff[16] = {0};
+    for (int i = 0; i <= 15; ++i) {
+        QString line = stream.readLine();
+        QStringList list = line.split(QRegExp("\\s{1,}"));
+        if (list.size() >= 2) {
+            buff[i] = list.at(1).toLongLong(&ok);
+        }
+    }
+
+    memoryAll = buff[0];
+    memory = buff[0] - buff[2];
+
+    file.close();
+}
+
+void MonitorPlugin::calcNetRate(qlonglong &netDown, qlonglong &netUpload)
+{
+    QFile file("/proc/net/dev");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    qlonglong down = 0;
+    qlonglong upload = 0;
+    QTextStream stream(&file);
+    QString line = stream.readLine();
+    line = stream.readLine();
+    line = stream.readLine();
+    while (!line.isNull()) {
+        line = line.trimmed();
+        QStringList list = line.split(QRegExp("\\s{1,}")); // match number >= 1 space character
+
+        if (!list.isEmpty()) {
+            down = list.at(1).toLongLong();
+            upload = list.at(9).toLongLong();
+        }
+
+        netDown += down;
+        netUpload += upload;
+        line = stream.readLine();
+    }
+
+    file.close();
+}
+
+QString MonitorPlugin::setRateUnitSensitive(MonitorPlugin::RateUnit unit)
+{
+    switch (unit) {
+        case RateUnit::RateBit:
+            return QString("BIT/s");
+        case RateUnit::RateByte:
+            return QString("B/s");
+        case RateUnit::RateKb:
+            return QString("KB/s");
+        case RateUnit::RateMb:
+            return QString("MB/s");
+        case RateUnit::RateGb:
+            return QString("GB/s");
+        case RateUnit::RateTb:
+            return QString("TB/s");
+        default:
+            return QString("");
+    }
+}
+
+double MonitorPlugin::autoRateUnits(qlonglong speed, RateUnit &unit)
+{
+    /* 自动判断合适的速率单位,默认传进来的是 Byte
+     * bit    0 ~ 7 位 (不到 1 字节)
+     * Byte   1    ~ 2^10  Byte
+     * KB     2^10 ~ 2^20  Byte
+     * MB     2^20 ~ 2^30  Byte
+     * GB     2^30 ~ 2^40  Byte
+     * TB     2^40 ~ 2^50  Byte
+     */
+
+    if (unit != RateByte) {
+        return -1;
+    }
+
+    double sp = 0;
+    if (0 <= speed && speed < qPow(2, 10)) {
+        unit = RateByte;
+        sp = speed;
+    } else if (qPow(2, 10) <= speed && speed < qPow(2, 20)) {
+        unit = RateKb;
+        sp = static_cast<double>(speed / qPow(2, 10) * 1.0);
+    } else if (qPow(2, 20) <= speed && speed < qPow(2, 30)) {
+        unit = RateMb;
+        sp = static_cast<double>(speed / qPow(2, 20) * 1.0);
+    } else if (qPow(2, 30) <= speed && speed < qPow(2, 40)) {
+        unit = RateGb;
+        sp = static_cast<double>(speed / qPow(2, 30) * 1.0);
+    } else if (qPow(2, 40) <= speed && speed < qPow(2, 50)) {
+        unit = RateTb;
+        sp = static_cast<double>(speed / qPow(2, 40) * 1.0);
+    } else {
+        unit = RateUnknow;
+        qDebug()<<"本设备网络速率单位传输超过 TB, 或者低于 0 Byte.";
+        sp = -1;
+    }
+
+    return sp;
 }

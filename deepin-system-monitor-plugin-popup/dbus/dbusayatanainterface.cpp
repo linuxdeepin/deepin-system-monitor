@@ -56,12 +56,26 @@ void DBusAyatanaInterface::slotActiveApplicationChanged(QString path, QString ap
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             return;
         }
-        QByteArray fileByteArray = file.readAll();
-        QString displayString(fileByteArray);
+        QTextStream in(&file);
+        QStringList nameList;
+
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList sl = line.split("=");
+            if (sl.size() > 1) {
+                QString text = sl.at(0);
+                if (text.contains("GenericName") || text.contains("Name")) {
+                    nameList.append(sl.at(1));
+                }
+            }
+        }
         file.close();
         // 判断文件是否包含指定字符串
-        if (displayString.contains(reply.value())) {
-            emit sigSendCloseWidget();
+        foreach (QString name, nameList) {
+            if (name == reply.value()) {
+                emit sigSendCloseWidget();
+                break;
+            }
         }
     }
 }

@@ -40,9 +40,6 @@ protected:
     //!
     void paintEvent(QPaintEvent *event) override;
 
-    // 获取字体改变事件
-    bool event(QEvent *event) override;
-
 private:
     QStringList m_textList;
 };

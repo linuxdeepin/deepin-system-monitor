@@ -51,6 +51,17 @@ class MonitorPlugin : public QObject, PluginsItemInterface
     Q_INTERFACES(PluginsItemInterface)
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
 public:
+    enum RateUnit {
+        RateBit,
+        RateByte,
+        RateKb,
+        RateMb,
+        RateGb,
+        RateTb,
+        RateUnknow
+    };
+    Q_ENUM(RateUnit)
+
     //!
     //! \brief MonitorPlugin 构造函数
     //! \param parent 传递的父对象指针
@@ -170,10 +181,44 @@ private:
     //!
     void initPluginState();
 
+    //!
+    //! \brief calcCpuRate 计算CPU占用率
+    //! \param totalCPU 总CPU占用率
+    //! \param availableCPU 可用CPU占用率
+    //!
+    void calcCpuRate(qlonglong &totalCPU, qlonglong &availableCPU);
 
-    QString KB(long k);
-    QString BS(long b);
-    QString NB(long b);
+
+    //!
+    //! \brief calcMemRate 计算内存mem
+    //! \param memory 可用内存
+    //! \param memoryAll 总内存
+    //!
+    void calcMemRate(qlonglong &memory, qlonglong &memoryAll);
+
+    //!
+    //! \brief calcNetRate 计算网络
+    //! \param netDown 网络下载
+    //! \param netUpload 网络上传
+    //!
+    void calcNetRate(qlonglong &netDown, qlonglong &netUpload);
+
+
+    //!
+    //! \brief setRateUnitSensitive 设置速率单位的大小写模式
+    //! \param unit 传入进来的网速单位
+    //! \param sensitive 设置速率单位大小写模式
+    //! \return 速率单位字符串
+    //!
+    QString setRateUnitSensitive(RateUnit unit);
+    //!
+    //! \brief autoRateUnits 自动显示单位
+    //! \param speed 传入的网速
+    //! \param unit 智能调节后的网速的单位
+    //! \return 自动调节单位后的速率
+    //!
+    double autoRateUnits(qlonglong speed, RateUnit &unit);
+
 private:
     bool m_pluginLoaded;
 
@@ -183,13 +228,10 @@ private:
 
     QGSettings *m_settings;
 
-    long int m_counter = 0;         //计数器
-    long int m_newRecvBytes = 0;    //新的接收的网络字节数
-    long int m_newSendBytes = 0;    //新的发送的网络字节数
-    long int m_oldRecvBytes = 0;    //旧的接收的网络字节数
-    long int m_oldSendBytes = 0;    //旧的发送的网络字节数
-    long int tt0 = 0;               //total time cpu总时间
-    long int idle0 = 0;             //CPU 空闲时间
+    qlonglong m_down = 0;
+    qlonglong m_upload = 0;
+    qlonglong m_totalCPU = 0;
+    qlonglong m_availableCPU = 0;
 
     QTimer *m_refershTimer;
 

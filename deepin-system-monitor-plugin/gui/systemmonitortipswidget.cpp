@@ -29,7 +29,6 @@ DWIDGET_USE_NAMESPACE
 SystemMonitorTipsWidget::SystemMonitorTipsWidget(QWidget *parent)
     : QFrame(parent)
 {
-
 }
 
 void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
@@ -37,10 +36,8 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
     m_textList  = strList;
     //  [   CPU: 100.0%    ↓ 1000kb/s  ]
 
-    if (m_textList.size() > 0) {
-        setFixedSize(fontMetrics().boundingRect(m_textList.at(0).at(0)).width() * 25, fontMetrics().boundingRect(m_textList.at(0)).height() * 2);
-        update();
-    }
+    setFixedSize(fontMetrics().width(m_textList.at(0).at(0)) * 25, fontMetrics().boundingRect(m_textList.at(0)).height() * 2);
+    update();
 }
 
 
@@ -48,6 +45,8 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);
 
+    int rectWidth = rect().width();
+    int rectHeight = rect().height();
     QPainter painter(this);
     painter.setPen(QPen(palette().brightText(), 1));
 
@@ -77,34 +76,21 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     if (m_textList.size() == 0) {
         cpu = "0.0";
         mem = "0.0";
-        upLoad = "0kb/s";
-        downLoad = "0kb/s";
+        upLoad = "0KB/s";
+        downLoad = "0KB/s";
     }
 
     int specialCharaWidth = fontMetrics().boundingRect(QString("↓")).width();
-    painter.drawText(QRectF(0.0, 0.0, rect().width() / 2.0, rect().height() / 2.0), QString("   ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": %1%").arg(cpu), optionLeft);
-    painter.save();
+    painter.drawText(QRectF(0.0, 0.0, rectWidth / 2.0, rectHeight / 2.0), QString("    ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%"), optionLeft);
     painter.setPen(QPen(QColor("red"), 1));
-    painter.drawText(QRectF(rect().width() / 2.0, 0.0, specialCharaWidth, rect().height() / 2.0), QString("↓"), optionMid);
-    painter.restore();
-    painter.drawText(QRectF(rect().width() / 2.0 + specialCharaWidth, 0, rect().width() / 2.0 - specialCharaWidth, rect().height() / 2.0), downLoad, optionLeft);
+    painter.drawText(QRectF(rectWidth / 2.0, 0.0, specialCharaWidth, rectHeight / 2.0), QString("↓"), optionMid);
+    painter.setPen(QPen(palette().brightText(), 1));
+    painter.drawText(QRectF(rectWidth / 2.0 + specialCharaWidth, 0, rectWidth / 2.0 - specialCharaWidth, rectHeight / 2.0), downLoad, optionLeft);
 
     specialCharaWidth = fontMetrics().boundingRect(QString("↑")).width();
-    painter.drawText(QRectF(0, rect().height() / 2.0, rect().width() / 2.0, rect().height() / 2.0), QString("   ") + DApplication::translate("Plugin.mem", "MEM") + QString(": %1%").arg(mem), optionLeft);
-    painter.save();
+    painter.drawText(QRectF(0, rectHeight / 2.0, rectWidth / 2.0, rectHeight / 2.0), QString("    ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem + QString("%"), optionLeft);
     painter.setPen(QPen(QColor("blue"), 1));
-    painter.drawText(QRectF(rect().width() /  2.0, rect().height() / 2.0, specialCharaWidth, rect().height() / 2.0), QString("↑"), optionMid);
-    painter.restore();
-    painter.drawText(QRectF(rect().width()  / 2.0 + specialCharaWidth, rect().height() / 2.0, rect().width() / 2.0 - specialCharaWidth, rect().height() / 2.0), upLoad, optionLeft);
-}
-
-bool SystemMonitorTipsWidget::event(QEvent *event)
-{
-    if (event->type() == QEvent::FontChange) {
-        if (m_textList.size() > 0)
-            setSystemMonitorTipsText(m_textList);
-        else
-            setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0kb/s" << "0kb/s");
-    }
-    return QFrame::event(event);
+    painter.drawText(QRectF(rectWidth /  2.0, rectHeight / 2.0, specialCharaWidth, rectHeight / 2.0), QString("↑"), optionMid);
+    painter.setPen(QPen(palette().brightText(), 1));
+    painter.drawText(QRectF(rectWidth  / 2.0 + specialCharaWidth, rectHeight / 2.0, rectWidth / 2.0 - specialCharaWidth, rectHeight / 2.0), upLoad, optionLeft);
 }
