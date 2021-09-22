@@ -25,6 +25,7 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDebug>
+#include <QProcess>
 
 // 以下这个问题可以避免单例的内存泄露问题
 std::atomic<DBusInterface *> DBusInterface::s_Instance;
@@ -32,6 +33,8 @@ std::mutex DBusInterface::m_mutex;
 
 const QString SERVICE_NAME = "com.deepin.SystemMonitorPluginPopup";
 const QString SERVICE_PATH = "/com/deepin/SystemMonitorPluginPopup";
+
+const QString DBUS_COMMAND = "qdbus com.deepin.SystemMonitorPluginPopup /com/deepin/SystemMonitorPluginPopup com.deepin.SystemMonitorPluginPopup.slotShowOrHideSystemMonitorPluginPopupWidget";
 
 DBusInterface::DBusInterface()
     : mp_Iface(nullptr)
@@ -43,7 +46,12 @@ DBusInterface::DBusInterface()
 void DBusInterface::showOrHideDeepinSystemMonitorPluginPopupWidget()
 {
     // 调用dbus接口弹出插件主界面
-    QDBusReply<void> reply = mp_Iface->call("slotShowOrHideSystemMonitorPluginPopupWidget");
+    // 如果无效的话就执行一次唤醒DBUS服务的命令
+    if (!mp_Iface->isValid()) {
+        QProcess::startDetached(DBUS_COMMAND);
+    } else {
+        QDBusReply<void> reply = mp_Iface->call("slotShowOrHideSystemMonitorPluginPopupWidget");
+    }
 }
 
 void DBusInterface::init()
