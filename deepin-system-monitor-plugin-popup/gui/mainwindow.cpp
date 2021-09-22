@@ -57,8 +57,8 @@ MainWindow::MainWindow(QWidget *parent)
     , m_dockInter(new DBusDockInterface)
     , m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor)
     , m_regionMonitor(nullptr)
-    , m_xAni(new QPropertyAnimation(this))
-    , m_widthAni(new QPropertyAnimation(this))
+    , m_xAni(new QPropertyAnimation(this, "x"))
+    , m_widthAni(new QPropertyAnimation(this, "width"))
     , m_aniGroup(new QSequentialAnimationGroup(this))
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_trickTimer(new QTimer(this))
@@ -107,8 +107,8 @@ void MainWindow::geometryChanged()
     adjustPosition();
 
     //init animation by 'm_rect'
-    m_xAni->setStartValue(getDisplayScreen().x());
-    m_xAni->setEndValue(getDisplayScreen().x() + Globals::WindowMargin);
+    m_xAni->setStartValue(m_rect.x());
+    m_xAni->setEndValue(m_rect.x() + Globals::WindowMargin);
 
     m_widthAni->setStartValue(m_rect.width());
     m_widthAni->setEndValue(0);
@@ -123,7 +123,11 @@ void MainWindow::showAni()
     m_trickTimer->start();
     if (!m_hasComposite) {
         if (m_daemonDockInter->position() == DOCK_RIGHT) {
-            setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
+            if (m_daemonDockInter->displayMode() == 0) {
+                setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2*Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
+            } else {
+                setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
+            }
         } else {
             setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
         }
@@ -205,7 +209,7 @@ void MainWindow::Hide()
 
 void MainWindow::setX(int x)
 {
-    Q_UNUSED(x)
+    move(x, m_rect.y());
 }
 
 void MainWindow::CompositeChanged()
@@ -260,13 +264,9 @@ void MainWindow::initUI()
 void MainWindow::initAni()
 {
     m_xAni->setEasingCurve(QEasingCurve::Linear);
-    m_xAni->setPropertyName("x");
-    m_xAni->setTargetObject(this);
     m_xAni->setDuration(Globals::AnimationTime / 2);
 
     m_widthAni->setEasingCurve(QEasingCurve::Linear);
-    m_widthAni->setPropertyName("width");
-    m_widthAni->setTargetObject(this);
     m_widthAni->setDuration(Globals::AnimationTime);
 
     m_aniGroup->addAnimation(m_xAni);
@@ -355,29 +355,21 @@ void MainWindow::adjustPosition()
     case DOCK_TOP:
         rect.moveTop(dockRect.height());
         rect.setHeight(rect.height() - dockRect.height());
-        if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
-        } else {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
-        }
+        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
         break;
     case DOCK_BOTTOM:
         rect.setHeight(rect.height() - dockRect.height());
-        if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
-        } else {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
-        }
+        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
 
         break;
     case DOCK_LEFT:
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width() - Globals::WindowMargin);
+        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
         break;
     case DOCK_RIGHT:
         if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width() + Globals::WindowMargin + Globals::DockMargin));
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width()) - Globals::WindowMargin);
         } else {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width() + Globals::WindowMargin));
+            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width()));
         }
 
         break;
