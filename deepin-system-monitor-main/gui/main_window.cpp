@@ -133,24 +133,20 @@ void MainWindow::initUI()
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
 
-    #if 0
-    // 等保需求，设置入口，将在1050打开
+    // 等保需求，设置入口，1050打开
     // 构建setting menu Item Action
     QAction *settingAction(new QAction(tr("设置"), this));
     connect(settingAction, &QAction::triggered, this, &MainWindow::popupSettingsDialog);
-    #endif
 
     menu->addAction(killAction);
     menu->addSeparator();
     menu->addMenu(modeMenu);
 
-    #if 0
-    // 等保需求，设置入口，将在1050打开
+    // 等保需求，设置入口，1050打开
     // 插入 setting 菜单项
-    // menu->addSeparator();
-    // menu->addAction(settingAction);
-    // menu->addSeparator();
-    #endif
+    menu->addSeparator();
+    menu->addAction(settingAction);
+    menu->addSeparator();
 
     // stacked widget instance to hold process & service pages
     m_pages = new DStackedWidget(this);
