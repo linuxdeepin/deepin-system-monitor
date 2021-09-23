@@ -19,8 +19,8 @@
 */
 
 
-#ifndef UT_MainWindow_H
-#define UT_MainWindow_H
+#ifndef UT_UnitInfo_H
+#define UT_UnitInfo_H
 
 #include "stub.h"
 
@@ -30,11 +30,11 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-class Ut_MainWindow : public QObject, public::testing::Test
+class Ut_UnitInfo : public QObject, public::testing::Test
 {
     Q_OBJECT
 public:
-    Ut_MainWindow();
+    Ut_UnitInfo();
 };
 
-#endif // UT_MainWindow_H
+#endif // UT_UnitInfo_H
