@@ -152,7 +152,7 @@ SET(CPP_SYSTEM
 SET(HPP_GUI
     gui/base/base_table_view.h
     ${MAIN_APP_DIR}/gui/base/base_header_view.h
-    ${MAIN_APP_DIR}/gui/base/base_item_delegate.h
+    gui/base/base_item_delegate.h
     gui/mainwindow.h
     gui/datadealsingleton.h
     gui/process_table_view.h
@@ -168,7 +168,7 @@ SET(HPP_GUI
 SET(CPP_GUI
     gui/base/base_table_view.cpp
     ${MAIN_APP_DIR}/gui/base/base_header_view.cpp
-    ${MAIN_APP_DIR}/gui/base/base_item_delegate.cpp
+    gui/base/base_item_delegate.cpp
     gui/mainwindow.cpp
     gui/datadealsingleton.cpp
     gui/process_table_view.cpp
