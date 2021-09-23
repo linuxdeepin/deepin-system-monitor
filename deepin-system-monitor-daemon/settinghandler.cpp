@@ -63,7 +63,7 @@ SettingHandler::SettingHandler(QObject *parent)
     auto keys = mValueRange.keys();
 
     foreach(auto it, keys) {
-        qDebug() << __FUNCTION__ << __LINE__ << "王超，key: " << it << ", range: " << mValueRange[it];
+        qDebug() << __FUNCTION__ << __LINE__ << "，key: " << it << ", range: " << mValueRange[it];
     }
 
     if(mSettings != nullptr) {

@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
 
     QDBusConnection connection = QDBusConnection::sessionBus();
     if (connection.registerService(DAEMON_DBUS_NAME) == false) {
-        // 如果存在 wc service 运行，注册dbus服务会失败,将退出程序
+        // 如果存在 com.deepin.SystemMonitor.Daemon dbus service 运行，注册dbus服务会失败,将退出程序
         // 保证单例运行
-        qDebug() << __FUNCTION__ << __LINE__ << " , registerService fail. wc service exist. will exit(0).";
+        qDebug() << __FUNCTION__ << __LINE__ << QString(" , register dbus service fail. %1 exist. will exit(0).").arg(DAEMON_DBUS_NAME);
         exit(0);
     }
 
