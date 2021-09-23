@@ -135,7 +135,7 @@ void MainWindow::initUI()
 
     // 等保需求，设置入口，1050打开
     // 构建setting menu Item Action
-    QAction *settingAction(new QAction(tr("设置"), this));
+    QAction *settingAction(new QAction(tr("Settings"), this));
     connect(settingAction, &QAction::triggered, this, &MainWindow::popupSettingsDialog);
 
     menu->addAction(killAction);

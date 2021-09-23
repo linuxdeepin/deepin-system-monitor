@@ -2,52 +2,45 @@
     "groups": [
         {
             "key": "setting",
-            "name": "设置",
+            "name": "Settings",
             "groups": [
                 {
                     "key": "systemprotection",
-                    "name": "系统防护",
+                    "name": "System Protection",
                     "options": [
                         {
                             "key": "alarm_switch",
-                            "name": "当数值高于以下阈值时自动报警",
-                            "tip": "(阈值可修改)",
+                            "name": "Show warnings when the usage exceeds the thresholds",
                             "type": "protectionswitch",
                             "default": false
                         },
                         {
                             "key": "alarm_cpu_usage",
-                            "name": "CPU占用(%)",
+                            "name": "CPU warning threshold(%)",
                             "type": "cpualarmcritical",
-                            "default": 90,
-                            "min": 30,
-                            "max": 100
+                            "default": 90
                         },
                         {
                             "key": "alarm_memory_usage",
-                            "name": "内存占用(%)",
+                            "name": "Memory warning threshold(%)",
                             "type": "memalarmcritical",
-                            "default": 90,
-                            "min": 30,
-                            "max": 100
+                            "default": 90
                         },
                         {
                             "key": "alarm_interval",
-                            "name": "预警间隔(分钟)",
+                            "name": "Warning interval(min)",
                             "type": "intervalalarmcritical",
-                            "default": 10,
-                            "min": 5,
-                            "max": 60
+                            "default": 10
                         }
                     ]
                 },
                 {
                     "key": "messgae",
-                    "name": "消息通知",
+                    "name": "Notifications",
                     "options": [
                         {
                             "key": "message_setting",
-                            "name": "消息通知",
+                            "name": "Notifications",
                             "type": "settinglinkbutton"
                         }
                     ]

@@ -16,17 +16,30 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "systemmonitorservice.h"
+
 #include <QCoreApplication>
 #include <QtDBus/QDBusInterface>
 #include <QDBusConnection>
 #include <QDebug>
+#include <QTranslator>
+#include <QLocale>
+#include <QFile>
 
-#include "systemmonitorservice.h"
+#define QM_PATH "/usr/share/deepin-system-monitor-daemon/translations"
+#define QM_FILE "deepin-system-monitor-daemon_%1.qm"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     qApp->setOrganizationName("deepin");
+
+    // 加载 QM 文件，QCoreApplication 需要使用以下方式加载翻译
+    QLocale local;
+    QString qmFile = QString(QM_FILE).arg(local.name()); 
+    QTranslator trans;
+    trans.load(qmFile, QM_PATH);
+    a.installTranslator(&trans);
 
     SystemMonitorService services(&a);
 

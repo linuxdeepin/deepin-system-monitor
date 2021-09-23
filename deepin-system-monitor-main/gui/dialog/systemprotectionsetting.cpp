@@ -132,7 +132,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createSettingLinkButtonHandle
     QWidget* widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(widget);
     layout->addStretch();
-    DCommandLinkButton* button = new DCommandLinkButton(tr("设置"), widget);
+    DCommandLinkButton* button = new DCommandLinkButton(tr("Settings"), widget);
     // 设置按钮字体大小，比系统标准字体小1.5号
     changeWidgetFontSizeByDiffWithSystem(button, ToolTipFontSizeDiff);
 
@@ -164,7 +164,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
     // 设置提示语字体大小，比系统标准字体小1.5号
     changeWidgetFontSizeByDiffWithSystem(label, ToolTipFontSizeDiff);
     // 设置提示语文本
-    label->setText(tr("(阈值可修改)"));
+    label->setText(tr("(Modifiable)"));
     layout->addWidget(label);
     layout->addStretch();
 
@@ -224,7 +224,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     label->setForegroundRole(DPalette::ColorType::TextTips);
 
     // 设置提示语文本
-    label->setText(QString(tr("数值范围: %1-%2")).arg(30).arg(100));
+    label->setText(QString(tr("Range: %1-%2")).arg(30).arg(100));
     label->setFixedWidth(labelWidth);
 
     // 构建布局
@@ -317,7 +317,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     changeWidgetFontSizeByDiffWithSystem(label, ToolTipFontSizeDiff);
 
     // 设置提示语文本
-    label->setText(QString(tr("数值范围: %1-%2")).arg(5).arg(60));
+    label->setText(QString(tr("Range: %1-%2")).arg(5).arg(60));
     label->setFixedWidth(labelWidth);
 
     // 构建布局

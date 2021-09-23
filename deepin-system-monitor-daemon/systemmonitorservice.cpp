@@ -255,8 +255,8 @@ bool SystemMonitorService::checkCpuAlarm()
 
     if(mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
         // 构造消息内容
-        QString topic(tr("【警告】"));
-        QString msg = QString(tr("请注意！您的设备CPU占用已达%1%！")).arg(mCpuUsage);
+        QString topic(tr("Warning"));
+        QString msg = QString(tr("Your CPU usage is higher than %1%!")).arg(mCpuUsage);
         int timeout = AlarmMessageTimeOut;
         return showAlarmNotify(topic, msg, timeout);
     }
@@ -272,8 +272,8 @@ bool SystemMonitorService::checkMemoryAlarm()
 
     if(mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
         // 构造消息内容
-        QString topic(tr("【警告】"));
-        QString msg = QString(tr("请注意！您的设备内存占用已达%1%！")).arg(mMemoryUsage);
+        QString topic(tr("Warning"));
+        QString msg = QString(tr("Your memory usage is higher than %1%!")).arg(mMemoryUsage);
         int timeout = AlarmMessageTimeOut;
         return showAlarmNotify(topic, msg, timeout);
     }
@@ -288,7 +288,7 @@ bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeo
                                                     "com.deepin.dde.Notification",
                                                     "Notify");
     QStringList action;
-    action << "_open1" << tr("Check"); //添加按钮
+    action << "_open1" << tr("View"); //添加按钮
     QVariantMap inform; //按钮的点击操作
     // 操作打开系统监视器
     QString openSystemMonitor = QString("qdbus,com.deepin.SystemMonitor.Daemon,"

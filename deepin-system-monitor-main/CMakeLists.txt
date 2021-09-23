@@ -80,7 +80,6 @@ set(HPP_GLOBAL
     smooth_curve_generator.h
     settings.h
     detailwidgetmanager.h
-    gui/dialog/systemprotectionsetting.h
 )
 set(CPP_GLOBAL
     main.cpp
@@ -95,7 +94,6 @@ set(CPP_GLOBAL
     smooth_curve_generator.cpp
     settings.cpp
     detailwidgetmanager.cpp
-    gui/dialog/systemprotectionsetting.cpp
 )
 
 set(HPP_COMMON
@@ -217,6 +215,7 @@ set(HPP_GUI
     gui/cpu_detail_widget.h
     gui/cpu_summary_view_widget.h
     gui/block_dev_item_widget.h
+    gui/dialog/systemprotectionsetting.h
 )
 set(CPP_GUI
     gui/base/base_detail_item_delegate.cpp
@@ -257,6 +256,8 @@ set(CPP_GUI
     gui/cpu_summary_view_widget.cpp
     gui/block_dev_item_widget.cpp
     gui/block_dev_stat_view_widget.cpp
+    gui/dialog/systemprotectionsetting.cpp
+    gui/dialog/settingsdialog.cpp
 )
 
 set(HPP_PROCESS
