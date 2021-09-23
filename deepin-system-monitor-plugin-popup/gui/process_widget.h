@@ -38,6 +38,7 @@ public:
 
 public slots:
     void updateStatus(qreal totalCpuPercent, const QList<qreal> cPercents);
+    void autoHeight(int height);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -84,6 +85,7 @@ private:
     int m_titleTrans = 0;
     int m_contentTrans = 0;
     int m_hoverTrans = 0;
+    int m_processWidgetHeight = 255;
 };
 
 #endif

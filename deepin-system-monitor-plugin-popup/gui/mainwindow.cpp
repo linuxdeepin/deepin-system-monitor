@@ -25,6 +25,8 @@
 
 #include <DApplication>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 #include <DPalette>
 #include <DStyleHelper>
 
@@ -38,9 +40,7 @@
 #include <QSequentialAnimationGroup>
 #include <QDesktopWidget>
 #include <QApplication>
-#include <DFontSizeManager>
-#include <DGuiApplicationHelper>
-// Test
+#include <QPalette>
 #include <QTimer>
 
 #define DOCK_TOP        0
@@ -49,6 +49,7 @@
 #define DOCK_LEFT       3
 
 #define MONITOR_SERVICE "com.deepin.api.XEventMonitor"
+#define SCREEN_HEIGHT_MAX 1080
 
 MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
@@ -240,23 +241,48 @@ void MainWindow::initUI()
     setAttribute(Qt::WA_TranslucentBackground);
     setFixedWidth(Globals::WindowWidth);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-//    mainLayout->setContentsMargins(10, 10, 10, 10);
-    mainLayout->setSpacing(0);
-
     m_cpuMonitor = new CpuWidget(this);
     m_netWidget = new NetWidget(this);
     m_diskWidget = new DiskWidget(this);
     m_memoryWidget = new MemoryWidget(this);
     m_processWidget = new ProcessWidget(this);
 
-    mainLayout->addWidget(m_cpuMonitor);
-    mainLayout->addWidget(m_netWidget);
-    mainLayout->addWidget(m_memoryWidget);
-    mainLayout->addWidget(m_diskWidget);
-    mainLayout->addWidget(m_processWidget);
+    QRect rect = getDisplayScreen();
+    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+    qreal displayHeight = std::round(qreal(rect.height()) / scale);
 
-    this->setLayout(mainLayout);
+    QWidget *parentWidget = new QWidget(this);
+    QVBoxLayout *vBoxLayout = new QVBoxLayout(parentWidget);
+    vBoxLayout->addSpacing(5);
+    vBoxLayout->addWidget(m_cpuMonitor);
+    vBoxLayout->addSpacing(5);
+    vBoxLayout->addWidget(m_netWidget);
+    vBoxLayout->addSpacing(5);
+    vBoxLayout->addWidget(m_memoryWidget);
+    vBoxLayout->addSpacing(5);
+    vBoxLayout->addWidget(m_diskWidget);
+    vBoxLayout->addSpacing(5);
+    vBoxLayout->addWidget(m_processWidget);
+    vBoxLayout->addSpacing(5);
+
+    m_scrollArea = new QScrollArea(this);
+    m_scrollArea->horizontalScrollBar()->setEnabled(false);
+    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    auto pal = qApp->palette();
+    pal.setColor(QPalette::Background, QColor(0,0,0,0));
+    m_scrollArea->setPalette(pal);
+
+    m_scrollArea->setWidget(parentWidget);
+    m_scrollArea->setWindowFlags(Qt::FramelessWindowHint);
+    m_scrollArea->setFrameShape(QFrame::NoFrame);
+    m_scrollArea->setWidgetResizable(true);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setMargin(0);
+    mainLayout->addWidget(m_scrollArea);
+    setLayout(mainLayout);
 
     setFocusPolicy(Qt::NoFocus);
 }
@@ -280,11 +306,12 @@ void MainWindow::initAni()
 void MainWindow::initConnect()
 {
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainWindow::geometryChanged, Qt::QueuedConnection);
+    connect(m_dockInter, &DBusDockInterface::geometryChanged, this, &MainWindow::geometryChanged, Qt::UniqueConnection);
+    connect(this, SIGNAL(signal_geometry(int)), m_processWidget, SLOT(autoHeight(int)));
 
     connect(m_systemMonitorDbusAdaptor, &SystemMonitorDBusAdaptor::sigSendShowOrHideSystemMonitorPluginPopupWidget,
             this, &MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget);
 
-    connect(m_dockInter, &DBusDockInterface::geometryChanged, this, &MainWindow::geometryChanged, Qt::UniqueConnection);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
 
@@ -344,7 +371,10 @@ void MainWindow::adjustPosition()
     QRect rect = getDisplayScreen();
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     rect.setWidth(Globals::WindowWidth);
-    rect.setHeight(int(std::round(qreal(rect.height()) / scale)));
+
+    int dockHeight = 0;
+    int displayHeight = int(std::round(qreal(rect.height()) / scale));
+    rect.setHeight(displayHeight);
 
     QRect dockRect = m_dockInter->geometry();
     dockRect.setWidth(int(std::round(qreal(dockRect.width()) / scale)));
@@ -356,14 +386,17 @@ void MainWindow::adjustPosition()
         rect.moveTop(dockRect.height());
         rect.setHeight(rect.height() - dockRect.height());
         rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
+        dockHeight =int(std::round(qreal(dockRect.height()) / scale));
         break;
     case DOCK_BOTTOM:
         rect.setHeight(rect.height() - dockRect.height());
         rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
+        dockHeight =int(std::round(qreal(dockRect.height()) / scale));
 
         break;
     case DOCK_LEFT:
         rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
+        dockHeight = 0;
         break;
     case DOCK_RIGHT:
         if (m_daemonDockInter->displayMode() == 0) {
@@ -371,11 +404,24 @@ void MainWindow::adjustPosition()
         } else {
             rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width()));
         }
-
+        dockHeight = 0;
         break;
     default:
         break;
     }
+
+    int scrollHeight = displayHeight - dockHeight - Globals::WindowMargin*2;
+    emit signal_geometry(scrollHeight);
+
+    m_scrollArea->setFixedHeight(scrollHeight);
+    m_scrollArea->horizontalScrollBar()->setEnabled(false);
+
+    auto pal = qApp->palette();
+    pal.setColor(QPalette::Background, QColor(0,0,0,0));
+    m_scrollArea->setPalette(pal);
+    m_scrollArea->setWindowFlags(Qt::FramelessWindowHint);
+    m_scrollArea->setFrameShape(QFrame::NoFrame);
+
 
     // 右上下部分预留的间隙- dockRect.height()
     rect -= QMargins(0, Globals::WindowMargin, Globals::WindowMargin, Globals::WindowMargin);

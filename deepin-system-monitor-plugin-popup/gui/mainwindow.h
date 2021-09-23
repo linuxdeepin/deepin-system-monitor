@@ -39,6 +39,8 @@
 #include <DRegionMonitor>
 #include <DWidget>
 
+#include <QScrollArea>
+
 // Dtk
 #include <com_deepin_daemon_display_monitor.h>
 #include <com_deepin_dde_daemon_dock.h>
@@ -69,6 +71,9 @@ class MainWindow : public DBlurEffectWidget
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
+
+Q_SIGNALS:
+    void signal_geometry(int height);
 
 public Q_SLOTS:
     /*!
@@ -181,6 +186,7 @@ private:
     DiskWidget *m_diskWidget {};
     MemoryWidget *m_memoryWidget {};
     ProcessWidget *m_processWidget{};
+    QScrollArea *m_scrollArea;
 
     QTimer* m_trickTimer; // 防止300ms内重复按键
 };

@@ -41,6 +41,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+//1080p下，面板总高度
+#define STANDARD_TOTAL_HEIGHT     972
+//1080p下，面板高度-进程框高度
+#define STANDARD_PROCESS_OTHER_HEIGHT     687
+
 using namespace Utils;
 
 ProcessWidget::ProcessWidget(QWidget *parent)
@@ -50,7 +55,7 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &ProcessWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
 
-    setFixedSize(280, 330);
+    setFixedSize(280, m_processWidgetHeight);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -83,10 +88,8 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     headerLabel->setFixedHeight(30);
     headerLabel->setContentsMargins(10, 0, 10, 0);
 
-;
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-//    mainLayout->setMargin(20);
 
     mainLayout->setMargin(0);
     mainLayout->addSpacing(35);
@@ -156,6 +159,17 @@ void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
 }
 
+void ProcessWidget::autoHeight(int height)
+{
+    int standardHeight = STANDARD_TOTAL_HEIGHT;
+    if (height > standardHeight)
+    {
+        m_processWidgetHeight = height - STANDARD_PROCESS_OTHER_HEIGHT;
+        setFixedSize(280, m_processWidgetHeight);
+        update();
+    }
+}
+
 void ProcessWidget::paintEvent(QPaintEvent *e)
 {
     QPainter painter;
@@ -175,7 +189,7 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     //标题栏背景
     QRect titleRect(rect().x(), rect().y(), 280, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 294);
+    QRect contentRect(rect().x(), rect().y()+36, 280, m_processWidgetHeight - 36);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题
