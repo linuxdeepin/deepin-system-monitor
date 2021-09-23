@@ -24,6 +24,7 @@
 #include <DLineEdit>
 #include <DPalette>
 #include <DApplicationHelper>
+#include <DLabel>
 
 #include <QStandardPaths>
 #include <QApplication>
@@ -37,6 +38,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QIntValidator>
+#include <QFont>
 
 #ifndef AlarmStatusOptionName
     #define AlarmStatusOptionName   "setting.systemprotection.alarm_switch"
@@ -45,7 +47,45 @@
     #define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
 #endif
 
+// 与系统字体大小的偏移值，-1.5为小于系统字体大小1.5字号
+static const double ToolTipFontSizeDiff = -1.5;
+
 Q_GLOBAL_STATIC(SystemProtectionSetting, theInstance)
+
+// 修改控件字体大小
+bool changeWidgetFontSizeByDiffWithSystem(QWidget* widget, double diff)
+{
+    // 无效参数, 返回
+    if(widget == nullptr || diff == 0.0) {
+        return false;
+    }
+
+    // 获取系统字体大小设置
+    QDBusInterface interface("com.deepin.daemon.Appearance",
+                             "/com/deepin/daemon/Appearance",
+                             "com.deepin.daemon.Appearance");
+    // 获取失败，返回
+    if(interface.isValid() == false) {
+        return false;
+    }
+
+    // 获取系统字体大小
+    double sysFontSize = interface.property("FontSize").toDouble();
+
+    // 获取系统字体大小非法 或者 调整后值非法， 返回
+    if(sysFontSize == 0.0 || sysFontSize + diff <= 0) {
+        return false;
+    }
+
+    // 获得当前字体
+    QFont font = widget->font();
+    // 重设字体大小
+    font.setPointSizeF(sysFontSize + diff);
+    // 为 widget 设置字体
+    widget->setFont(font);
+
+    return true;
+}
 
 SystemProtectionSetting::SystemProtectionSetting(QObject *parent)
     : QObject(parent)
@@ -93,6 +133,9 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createSettingLinkButtonHandle
     QHBoxLayout* layout = new QHBoxLayout(widget);
     layout->addStretch();
     DCommandLinkButton* button = new DCommandLinkButton(tr("设置"), widget);
+    // 设置按钮字体大小，比系统标准字体小1.5号
+    changeWidgetFontSizeByDiffWithSystem(button, ToolTipFontSizeDiff);
+
     layout->addWidget(button);
     widget->setLayout(layout);
 
@@ -115,12 +158,11 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
     // 构建自定义Item
     QWidget* widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(widget);
-    QLabel *label = new QLabel(widget);
+    DLabel *label = new DLabel(widget);
     // 设置提示语为DTK提示语颜色
-    DPalette pa = DApplicationHelper::instance()->applicationPalette();
-    QColor colorFont = pa.textTips().color();
-    pa.setColor(DPalette::WindowText, colorFont);
-    label->setPalette(pa);
+    label->setForegroundRole(DPalette::ColorType::TextTips);
+    // 设置提示语字体大小，比系统标准字体小1.5号
+    changeWidgetFontSizeByDiffWithSystem(label, ToolTipFontSizeDiff);
     // 设置提示语文本
     label->setText(tr("(阈值可修改)"));
     layout->addWidget(label);
@@ -161,7 +203,6 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     const int lineEditWidth = 60;
     const int lineEditHeight = 36;
     const int labelWidth = 300;
-    const int labelHeight = 17;
     const int widgetSpace = 15;
 
     QWidget *widget = new QWidget;
@@ -176,15 +217,15 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     edit->lineEdit()->setValidator(validator);
 
     // 构建提示语
-    QLabel *label = new QLabel(widget);
+    DLabel *label = new DLabel(widget);
+    // 设置提示语字体大小，比系统标准字体小1.5号
+    changeWidgetFontSizeByDiffWithSystem(label, ToolTipFontSizeDiff);
     // 设置提示语为DTK提示语颜色
-    DPalette pa = DApplicationHelper::instance()->applicationPalette();
-    QColor colorFont = pa.textTips().color();
-    pa.setColor(DPalette::WindowText, colorFont);
-    label->setPalette(pa);
+    label->setForegroundRole(DPalette::ColorType::TextTips);
+
     // 设置提示语文本
     label->setText(QString(tr("数值范围: %1-%2")).arg(30).arg(100));
-    label->setFixedSize(labelWidth, labelHeight);
+    label->setFixedWidth(labelWidth);
 
     // 构建布局
     layout->addWidget(edit);
@@ -215,22 +256,34 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
         }
     });
 
+    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
+    QWidget *leftWidget = optionWidget.first;
+
     // 获取setting指针
     auto settingPtr = SystemProtectionSetting::instance()->getDSettingPointor();
     if(settingPtr != nullptr) {
         // 初始当前监控开关状态
         QVariant swtich_value = settingPtr->getOption(AlarmStatusOptionName);
+        // 初始控件的disable状态
         widget->setDisabled(!swtich_value.toBool());
-
         // 连接监控开关变化信号
         widget->connect(settingPtr, &DSettings::valueChanged, widget, [=](const QString &key, const QVariant &value) {
             if(key == AlarmStatusOptionName) {
                 widget->setDisabled(!value.toBool());
             }
         } );
-    }
 
-    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
+        if(leftWidget != nullptr) {
+            // 初始控件的disable状态
+            leftWidget->setDisabled(!swtich_value.toBool());
+            // 连接监控开关变化信号
+            leftWidget->connect(settingPtr, &DSettings::valueChanged, leftWidget, [=](const QString &key, const QVariant &value) {
+                if(key == AlarmStatusOptionName) {
+                    leftWidget->setDisabled(!value.toBool());
+                }
+            } );
+        }
+    }
 
     return optionWidget;
 }
@@ -243,7 +296,6 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     const int lineEditWidth = 60;
     const int lineEditHeight = 36;
     const int labelWidth = 300;
-    const int labelHeight = 17;
     const int widgetSpace = 15;
 
     QWidget *widget = new QWidget;
@@ -258,15 +310,15 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     edit->lineEdit()->setValidator(validator);
 
     // 构建提示语
-    QLabel *label = new QLabel(widget);
+    DLabel *label = new DLabel(widget);
     // 设置提示语为DTK提示语颜色
-    DPalette pa = DApplicationHelper::instance()->applicationPalette();
-    QColor colorFont = pa.textTips().color();
-    pa.setColor(DPalette::WindowText, colorFont);
-    label->setPalette(pa);
+    label->setForegroundRole(DPalette::ColorType::TextTips);
+    // 设置提示语字体大小，比系统标准字体小1.5号
+    changeWidgetFontSizeByDiffWithSystem(label, ToolTipFontSizeDiff);
+
     // 设置提示语文本
     label->setText(QString(tr("数值范围: %1-%2")).arg(5).arg(60));
-    label->setFixedSize(labelWidth, labelHeight);
+    label->setFixedWidth(labelWidth);
 
     // 构建布局
     layout->addWidget(edit);
@@ -297,22 +349,34 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
         }
     });
 
+    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
+    QWidget *leftWidget = optionWidget.first;
+
     // 获取setting指针
     auto settingPtr = SystemProtectionSetting::instance()->getDSettingPointor();
     if(settingPtr != nullptr) {
         // 初始当前监控开关状态
         QVariant swtich_value = settingPtr->getOption(AlarmStatusOptionName);
+        // 初始控件的disable状态
         widget->setDisabled(!swtich_value.toBool());
-
         // 连接监控开关变化信号
         widget->connect(settingPtr, &DSettings::valueChanged, widget, [=](const QString &key, const QVariant &value) {
             if(key == AlarmStatusOptionName) {
                 widget->setDisabled(!value.toBool());
             }
         } );
-    }
 
-    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
+        if(leftWidget != nullptr) {
+            // 初始控件的disable状态
+            leftWidget->setDisabled(!swtich_value.toBool());
+            // 连接监控开关变化信号
+            leftWidget->connect(settingPtr, &DSettings::valueChanged, leftWidget, [=](const QString &key, const QVariant &value) {
+                if(key == AlarmStatusOptionName) {
+                    leftWidget->setDisabled(!value.toBool());
+                }
+            } );
+        }
+    }
 
     return optionWidget;
 }
