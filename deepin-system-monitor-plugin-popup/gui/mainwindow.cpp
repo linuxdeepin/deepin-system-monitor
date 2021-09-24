@@ -483,6 +483,24 @@ bool MainWindow::initDBus()
     return true;
 }
 
+bool MainWindow::eventFilter(QObject *object, QEvent *event)
+{
+    // 设置滚动区域显示策略
+    if (event->type() == QEvent::MouseMove) {
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
+        if (m_last_time_move == 0) {
+            m_last_time_move = mouseEvent->pos().y();
+        }
+
+        int distance = m_last_time_move - mouseEvent->pos().y();
+        m_scrollArea->verticalScrollBar()->setValue(m_scrollArea->verticalScrollBar()->value() + distance);
+        m_last_time_move = mouseEvent->pos().y();
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        m_last_time_move = 0;
+    }
+    return DBlurEffectWidget::eventFilter(object, event);
+}
+
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
     //禁止窗口被拖动

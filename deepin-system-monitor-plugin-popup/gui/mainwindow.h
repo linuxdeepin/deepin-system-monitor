@@ -158,6 +158,9 @@ protected:
      * \~chinese \brief 重写mouseMoveEvent事件禁止窗口被移动
      */
     virtual void mouseMoveEvent(QMouseEvent *event) override;
+
+    virtual bool eventFilter(QObject *object, QEvent *event) override;
+
 private slots:
     void slotShowOrHideSystemMonitorPluginPopupWidget();
 
@@ -188,7 +191,11 @@ private:
     ProcessWidget *m_processWidget{};
     QScrollArea *m_scrollArea;
 
-    QTimer* m_trickTimer; // 防止300ms内重复按键
+    // 防止300ms内重复按键
+    QTimer* m_trickTimer;
+    //最近一次拖动的距离
+    int m_last_time_move = 0;
+
 };
 
 #endif // MAINWINDOW_H
