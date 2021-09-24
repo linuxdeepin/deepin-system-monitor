@@ -42,6 +42,11 @@
 DWIDGET_USE_NAMESPACE
 using namespace common;
 
+// 通过 UseTotalCpuCurve 宏, 控制绘制CPU曲线方式
+// UseTotalCpuCurve: true , 绘制一条总的CPU占用曲线
+// UseTotalCpuCurve: false, 绘制每个独立CPU的占用曲线
+#define UseTotalCpuCurve true
+
 CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
     : QWidget(parent)
 {
@@ -53,7 +58,9 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
 
     numCPU = int(sysconf(_SC_NPROCESSORS_ONLN));
 
-    for (int i = 0; i < numCPU; i++) {
+    // 使用 cpuPercents[numCPU] 位置存储总的CPU占用率曲线数据
+    // [0, numCPU-1] 存储各独立子CPU曲线数据
+    for (int i = 0; i <= numCPU; i++) {
         QList<qreal> cpuPercent;
         for (int j = 0; j < pointsNumber; j++) {
             cpuPercent.append(0);
@@ -105,6 +112,7 @@ void CompactCpuMonitor::updateStatus()
 {
     totalCpuPercent = m_cpuInfomodel->cpuAllPercent();
 
+    // 更新追加，各个独立CPU占用曲线数据
     const auto &cpulist = m_cpuInfomodel->cpuPercentList();
     for (int i = 0; i < cpulist.size(); i++) {
         QList<qreal> cpuPercent = cpuPercents[i];
@@ -117,6 +125,17 @@ void CompactCpuMonitor::updateStatus()
 
         cpuPercents[i] = cpuPercent;
     }
+
+    // 更新追加，总的CPU占用率数据
+    QList<qreal> calcTotalCpuPercent = cpuPercents[numCPU];
+
+    calcTotalCpuPercent.append(totalCpuPercent / 100.0);
+
+    if (calcTotalCpuPercent.size() > pointsNumber) {
+        calcTotalCpuPercent.pop_front();
+    }
+
+    cpuPercents[numCPU] = calcTotalCpuPercent;
 
     update();
 }
@@ -246,8 +265,19 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     int drawHeight = gridFrame.height() - penSize * 2;  // exclude top/bottom most border
     qreal offsetX = drawWidth + penSize;
     qreal deltaX = drawWidth * 1.0 / (pointsNumber - 3);
+
+// 通过 UseTotalCpuCurve 宏控制绘制哪些CPU曲线
+// 通过 statrpos 和 endpos 实现曲线的选择
+#if UseTotalCpuCurve
+    int statrpos = cpuPercents.size() - 1;
+    int endpos = statrpos;
+#else
+    int statrpos = cpuPercents.size() - 2;
+    int endpos = 0;
+#endif
+
     // enum cpu
-    for (int i = cpuPercents.size() - 1; i >= 0; i--) {
+    for (int i = statrpos; i >= endpos && i >= 0; i--) {
         // set stroke color
         QColor c = cpuColors[i % cpuColors.size()];
         painter.setPen(QPen(c, strokeWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
