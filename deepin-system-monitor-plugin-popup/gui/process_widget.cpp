@@ -78,6 +78,7 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     m_processIdLabel->setText(tr("CPU"));
     m_processIdLabel->setAlignment(Qt::AlignRight);
     m_processIdLabel->setFixedHeight(30);
+    m_processIdLabel->setWindowOpacity(0.3);
     m_processIdLabel->setFont(m_subContentFont);
 
     QHBoxLayout *headerLayout = new QHBoxLayout(this);

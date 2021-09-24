@@ -350,10 +350,12 @@ void NetWidget::paintEvent(QPaintEvent *e)
     //标题
 //    painter.setPen(summaryColor);
     painter.setFont(m_subContentFont);
+    painter.setOpacity(0.6);
     painter.drawText(recvTitleRect, Qt::AlignLeft | Qt::AlignVCenter,recvTitle);
     painter.drawText(sentTitleRect, Qt::AlignLeft | Qt::AlignVCenter, sentTitle);
     painter.drawText(totalReceiveTitleRect, Qt::AlignLeft | Qt::AlignVCenter, recvTotalTitle);
     painter.drawText(sentTotalTitleRect, Qt::AlignLeft | Qt::AlignVCenter,sentTotalTitle);
+    painter.setOpacity(1);
 
     QPainterPath path1, path2;
     path1.addEllipse(r1Ind);

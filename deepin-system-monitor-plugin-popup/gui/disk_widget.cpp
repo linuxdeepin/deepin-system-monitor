@@ -319,10 +319,11 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     painter.drawText(writeUnitRect, Qt::AlignLeft | Qt::AlignHCenter, m_diskWriteUnit);
 
     //标题
-//    painter.setPen(summaryColor);
+    painter.setOpacity(0.6);
     painter.setFont(m_subContentFont);
     painter.drawText(readTitleRect, Qt::AlignLeft | Qt::AlignVCenter,rtagTitle);
     painter.drawText(writeTitleRect, Qt::AlignLeft | Qt::AlignVCenter, wtagTitle);
+    painter.setOpacity(1);
 
     QPainterPath path1, path2;
     path1.addEllipse(r1Ind);

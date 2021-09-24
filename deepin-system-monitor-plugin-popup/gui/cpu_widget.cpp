@@ -210,11 +210,13 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     painter.drawText(cpuperUsageRect, Qt::AlignLeft | Qt::AlignBottom, "%");
 
     //总使用率 文本
+    painter.setOpacity(0.6);
     painter.setFont(m_subContentFont);
     int widthcpuText = fmSubContent.size(Qt::TextSingleLine, tr("Utilization")).width();
     QRect cpuTextRect(contentRect.x()+(cpuTxtWidth - widthcpuText)/2, cpuUsageRect.y()+cpuUsageRect.height(),
                       fmSubContent.size(Qt::TextSingleLine, tr("Utilization")).width(), fmSubContent.height());
     painter.drawText(cpuTextRect, Qt::AlignLeft | Qt::AlignTop,tr("Utilization"));
+    painter.setOpacity(1);
 
     //分隔符
     int sepheight = 50;

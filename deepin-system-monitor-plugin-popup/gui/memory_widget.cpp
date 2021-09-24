@@ -224,7 +224,9 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     painter.setFont(m_memUnitFont);
     painter.drawText(memRectUnit, Qt::AlignLeft | Qt::AlignHCenter, memoryTitleUnit);
     painter.setFont(m_memTxtFont);
+    painter.setOpacity(0.6);
     painter.drawText(memTxtRect, Qt::AlignLeft | Qt::AlignVCenter, memoryContent);
+    painter.setOpacity(1);
 
     //swap数字
     QRect swapRect(letfsize, memTxtRect.y() + memTxtRect.height()+fontMargin,
@@ -245,16 +247,15 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     painter.fillPath(section2, swapColor);
 
     painter.setFont(m_memFont);
-//    painter.setPen(QPen(textColor));
     painter.drawText(swapRect, m_swapUsage);
 
     painter.setFont(m_memUnitFont);
-//    painter.setPen(QPen(textColor));
     painter.drawText(swapRectUnit, swapTitle);
 
     painter.setFont(m_memTxtFont);
-//    painter.setPen(QPen(summaryColor));
+    painter.setOpacity(0.6);
     painter.drawText(swapTxtRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
+    painter.setOpacity(1);
 
     ringCenterPointerX = 200;
     // Draw memory ring.
@@ -268,14 +269,23 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                     insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
                     swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, m_swapPercent.toDouble()/100);
 
+    QString memPerUnitTitle = "%";
+    int memPerUnitTitleWidth = fmMemUnit.size(Qt::TextSingleLine, memPerUnitTitle).width();
+
     // Draw percent text.
     painter.setFont(m_memFont);
     painter.setPen(numberColor);
-    painter.drawText(QRect(contentRect.x() + ringCenterPointerX - insideRingRadius,
-                           contentRect.y() + ringCenterPointerY - insideRingRadius, insideRingRadius * 2,
-                           insideRingRadius * 2),
-                     Qt::AlignHCenter | Qt::AlignVCenter,
-                     QString("%1%").arg(QString::number(m_memPercent.toDouble(), 'f', 1)));
+    QString memPer = QString::number(m_memPercent.toDouble(), 'f', 1);
+    QRect memPerRect(contentRect.x() + ringCenterPointerX - (insideRingRadius + memPerUnitTitleWidth)/2,
+                     contentRect.y() + ringCenterPointerY - (insideRingRadius)/2 + fmMemUnit.height()/4,
+                     fmMem.size(Qt::TextSingleLine, memPer).width(), fmMem.height());
+    painter.drawText(memPerRect, Qt::AlignRight | Qt::AlignVCenter,memPer);
+
+    //Draw %
+    painter.setFont(m_memUnitFont);
+    QRect memPerUnitRect(memPerRect.x() + memPerRect.width(), memPerRect.y() + fmMemUnit.height()/2,
+                         fmMemUnit.size(Qt::TextSingleLine, memPerUnitTitle).width(), fmMemUnit.height());
+    painter.drawText(memPerUnitRect, Qt::AlignHCenter | Qt::AlignVCenter, memPerUnitTitle);
 }
 
 bool MemoryWidget::eventFilter(QObject *target, QEvent *event)
