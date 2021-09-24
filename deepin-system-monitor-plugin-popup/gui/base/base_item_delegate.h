@@ -22,6 +22,9 @@
 #define BASE_ITEM_DELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <DApplicationHelper>
+
+DWIDGET_USE_NAMESPACE
 
 class QModelIndex;
 class QPainter;
@@ -80,6 +83,9 @@ public:
                    QAbstractItemView *view,
                    const QStyleOptionViewItem &option,
                    const QModelIndex &index) override;
+private Q_SLOTS:
+    //切换主题时更改ToolTip背景色
+    void changeTheme(DApplicationHelper::ColorType themeType);
 
 protected:
     /**
@@ -88,6 +94,9 @@ protected:
      * @param index Index to get model data
      */
     void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const override;
+
+    //QToolTip 背景颜色
+    QColor m_tipColor;
 };
 
 #endif  // BASE_ITEM_DELEGATE_H

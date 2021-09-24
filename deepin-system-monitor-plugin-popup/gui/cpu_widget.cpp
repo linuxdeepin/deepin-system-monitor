@@ -103,8 +103,6 @@ void CpuWidget::updateStatus()
     if (!DataDealSingleton::getInstance().readCpuPer(m_cpuPer))
         qInfo()<<"false: "<<m_cpuPer;
 
-//    qInfo()<<"m_cpuPer: "<<m_cpuPer;
-
     // Init download path.
     downloadSpeeds->append(m_cpuPer);
 

@@ -22,7 +22,6 @@
 #include "process/process_icon_cache.h"
 
 #include <DApplication>
-#include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
 #include <DStyleHelper>
@@ -47,7 +46,22 @@ const int spacing = 10;
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseItemDelegate::changeTheme);
+}
 
+//切换主题时更改ToolTip背景色
+void BaseItemDelegate::changeTheme(DApplicationHelper::ColorType themeType)
+{
+    switch (themeType) {
+        case DApplicationHelper::LightType:
+           m_tipColor.setRgb(255,255,255,255);
+            break;
+        case DApplicationHelper::DarkType:
+           m_tipColor.setRgb(0,0,0,200);
+            break;
+        default:
+            break;
+    }
 }
 
 // paint method for this delegate
@@ -277,6 +291,9 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
                 QToolTip::showText(e->globalPos(),
                                    QString("<div>%1</div>").arg(tooltip.toString().toHtmlEscaped()),
                                    view);
+                QPalette palette = QToolTip::palette();
+                palette.setColor(QPalette::ColorRole::Background, m_tipColor);
+                QToolTip::setPalette(palette);
                 return true;
             }
         }
@@ -284,7 +301,6 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
             QToolTip::hideText();
         return true;
     }
-
     return QStyledItemDelegate::helpEvent(e, view, option, index);
 }
 
