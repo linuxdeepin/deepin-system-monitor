@@ -237,7 +237,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
                 background = style->adjustColor(baseColor, 0, 0, -20, 0, 0, 20, 0);
             } else if (m_hover.isValid() && m_hover.row() == index.row()) {
                 // hovered
-                background = style->adjustColor(baseColor, 0, 0, -10);
+                background = QColor(255,255,255,50);
             }
         }
     }

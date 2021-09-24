@@ -64,26 +64,9 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ProcessWidget::changeFont);
 
-
-//    setFont(m_subContentFont);
     m_processTableView = new ProcessTableView(this);
-    m_processNameLabel = new DLabel(this);
-    m_processNameLabel->setText(tr("Name"));
-    m_processNameLabel->setAlignment(Qt::AlignLeft);
-    m_processNameLabel->setFixedHeight(30);
-    m_processNameLabel->setWindowOpacity(0.3);
-    m_processNameLabel->setFont(m_subContentFont);
-
-    m_processIdLabel = new DLabel(this);
-    m_processIdLabel->setText(tr("CPU"));
-    m_processIdLabel->setAlignment(Qt::AlignRight);
-    m_processIdLabel->setFixedHeight(30);
-    m_processIdLabel->setWindowOpacity(0.3);
-    m_processIdLabel->setFont(m_subContentFont);
 
     QHBoxLayout *headerLayout = new QHBoxLayout(this);
-    headerLayout->addWidget(m_processNameLabel);
-    headerLayout->addWidget(m_processIdLabel);
     DLabel *headerLabel = new DLabel(this);
     headerLabel->setLayout(headerLayout);
     headerLabel->setFixedHeight(30);
@@ -205,6 +188,22 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     int iconSize = 20;
     QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
+
+    //表头
+    painter.setOpacity(0.6);
+    QFontMetrics fmSubContent(m_subContentFont);
+    QString strName = tr("Name");
+    painter.setFont(m_subContentFont);
+    QRect NameRect(contentRect.x() + 25, contentRect.y() + 10,
+                   fmSubContent.size(Qt::TextSingleLine, strName).width(), fmSubContent.height());
+    painter.drawText(NameRect, Qt::AlignLeft | Qt::AlignVCenter, strName);
+
+    QString strCPU = tr("CPU");
+    QRect CpuRect(contentRect.x() + contentRect.width()-20 -fmSubContent.size(Qt::TextSingleLine, strCPU).width(),
+                  contentRect.y() + 10,
+                  fmSubContent.size(Qt::TextSingleLine, strCPU).width(),
+                  fmSubContent.height());
+    painter.drawText(CpuRect, Qt::AlignLeft | Qt::AlignVCenter, strCPU);
 }
 
 bool ProcessWidget::eventFilter(QObject *target, QEvent *event)
