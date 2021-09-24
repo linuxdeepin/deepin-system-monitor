@@ -105,34 +105,34 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPerce
     totalCpuPercent = cpuPercent;
 
     // 将cpuPercents 和传过来最新的cPercents做对比，arm开核关核时，对应的系统监视器会出现飞线或波形图不动的情况
+    QList<int> appendIndex;
     if(cPercents.size() < cpuPercents.size()) {
-        QList<qreal> nulllist;
-        for (int i =0; i < pointsNumber; i++) {
-            nulllist.append(0.0);
-        }
-
-        for(int j = cPercents.size(); j < cpuPercents.size(); j++) {
-            cpuPercents[j] = nulllist;
+        for(int i = cPercents.size(); i < cpuPercents.size(); i++) {
+            cpuPercents[i].append(0.0);
+            appendIndex.append(i);
         }
     } else if (cPercents.size() > cpuPercents.size()){
-        QList<qreal> nulllist;
-        for (int i =0; i < pointsNumber; i++) {
-            nulllist.append(0.0);
+        QList<qreal> addPointList;
+        for (int j = 0; j < pointsNumber; j++) {
+            addPointList.append(0);
         }
-
-        for(int j = cpuPercents.size(); j < cPercents.size(); j++) {
-            cpuPercents.append(nulllist);
+        for(int i = cpuPercents.size(); i < cPercents.size(); i++) {
+            cpuPercents.append(addPointList);
+            appendIndex.append(i);
         }
+    } else {
+        appendIndex.append(-1);
     }
 
 
-    for (int i = 0; i < cPercents.size(); i++) {
+    for (int i = 0; i < cpuPercents.size(); i++) {
         //防止QList内存溢出
         //if (i >= cpuPercents.size())
         //    break;
         if (!cpuPercents[i].isEmpty()) {
             QList<qreal> cpuPercent = cpuPercents[i];
-            cpuPercent.append(cPercents[i]);
+            if (!appendIndex.contains(i))
+                cpuPercent.append(cPercents[i]);
 
             if (cpuPercent.size() > pointsNumber) {
                 cpuPercent.pop_front();
