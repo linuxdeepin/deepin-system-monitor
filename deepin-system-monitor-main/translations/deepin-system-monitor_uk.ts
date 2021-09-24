@@ -496,6 +496,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Параметри</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -912,6 +919,34 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>Немає підтримки</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Параметри</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Захист системи</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Показувати попередження, якщо використання перевищує порогове значення</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Сповіщення</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -932,12 +967,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
 </context>
@@ -1005,6 +1038,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Тип запуску</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Параметри</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Можна змінити)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Діапазон: %1-%2</translation>
     </message>
 </context>
 <context>

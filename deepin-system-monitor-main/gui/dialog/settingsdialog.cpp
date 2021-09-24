@@ -24,8 +24,8 @@ void GenerateSettingTranslate()
     auto settingName = QObject::tr("Settings");
     auto systemprotectionName = QObject::tr("System Protection");
     auto alarm_switchName = QObject::tr("Show warnings when the usage exceeds the thresholds");
-    auto alarm_cpu_usageName = QObject::tr("CPU warning threshold(%)");
-    auto alarm_memory_usageName = QObject::tr("Memory warning threshold(%)");
-    auto alarm_intervalName = QObject::tr("Warning interval(min)");
+    auto alarm_cpu_usageName = QObject::tr("CPU warning threshold (%)");
+    auto alarm_memory_usageName = QObject::tr("Memory warning threshold (%)");
+    auto alarm_intervalName = QObject::tr("Warning interval (min)");
     auto messgaeName = QObject::tr("Notifications");
 }

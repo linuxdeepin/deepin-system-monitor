@@ -16,19 +16,19 @@
                         },
                         {
                             "key": "alarm_cpu_usage",
-                            "name": "CPU warning threshold(%)",
+                            "name": "CPU warning threshold (%)",
                             "type": "cpualarmcritical",
                             "default": 90
                         },
                         {
                             "key": "alarm_memory_usage",
-                            "name": "Memory warning threshold(%)",
+                            "name": "Memory warning threshold (%)",
                             "type": "memalarmcritical",
                             "default": 90
                         },
                         {
                             "key": "alarm_interval",
-                            "name": "Warning interval(min)",
+                            "name": "Warning interval (min)",
                             "type": "intervalalarmcritical",
                             "default": 10
                         }

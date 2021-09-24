@@ -498,6 +498,13 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -914,6 +921,34 @@ Weet je zeker dat je door wilt gaan?</translation>
         <source>Not support</source>
         <translation>Niet ondersteund</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Systeembeveiliging</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Waarschuwingen tonen als het gebruik de drempelwaarden overstijgt</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Meldingen</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -934,12 +969,10 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>Oké</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Annuleren</translation>
     </message>
 </context>
@@ -1007,6 +1040,21 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Soort opstart</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(aanpasbaar)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Tussen de %1-%2</translation>
     </message>
 </context>
 <context>

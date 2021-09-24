@@ -74,23 +74,23 @@
     </message>
     <message>
         <source>L1i cache</source>
-        <translation type="unfinished"/>
+        <translation>L1i-Cache</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation type="unfinished"/>
+        <translation>L1d-Cache</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation type="unfinished"/>
+        <translation>L2-Cache</translation>
     </message>
     <message>
         <source>L3 cache</source>
-        <translation type="unfinished"/>
+        <translation>L3-Cache</translation>
     </message>
     <message>
         <source>Load average</source>
-        <translation type="unfinished"/>
+        <translation>Durchschnittliche Last</translation>
     </message>
     <message>
         <source>File descriptors</source>
@@ -336,7 +336,7 @@
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished"/>
+        <translation>Gemeinsam</translation>
     </message>
     <message>
         <source>Cached</source>
@@ -364,7 +364,7 @@
     </message>
     <message>
         <source>Mapped</source>
-        <translation type="unfinished"/>
+        <translation>Zugeordnet</translation>
     </message>
     <message>
         <source>Total swap</source>
@@ -411,7 +411,7 @@
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Zusammengefasste Lesevorgänge/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
@@ -423,7 +423,7 @@
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>Zusammengefasste Schreibvorgänge</translation>
     </message>
     <message>
         <source>Writes/s</source>
@@ -435,7 +435,7 @@
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Zusammengefasste Schreibvorgänge/s</translation>
     </message>
 </context>
 <context>
@@ -498,6 +498,13 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -539,7 +546,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Link quality</source>
-        <translation type="unfinished"/>
+        <translation>Verbindungsqualität</translation>
     </message>
     <message>
         <source>Signal strength</source>
@@ -575,11 +582,11 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>RX-Überläufe</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>RX-Datenübertragungsblock</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -595,11 +602,11 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation>TX-Überläufe</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>TX-Trägerwelle</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -611,7 +618,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX-Verworfen</translation>
     </message>
 </context>
 <context>
@@ -914,6 +921,34 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
         <source>Not support</source>
         <translation>Nicht unterstützt</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Systemschutz</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Warnungen anzeigen, wenn die Auslastung die Schwellenwerte überschreitet</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Benachrichtigungen</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -934,12 +969,10 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Abbrechen</translation>
     </message>
 </context>
@@ -1007,6 +1040,21 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Starttyp</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Veränderbar)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Bereich: %1 - %2</translation>
     </message>
 </context>
 <context>

@@ -94,7 +94,7 @@
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Description du fichier</translation>
+        <translation>Descripteurs de fichier</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -498,6 +498,13 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -865,7 +872,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Mémoire </translation>
+        <translation>Mémoire</translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -901,11 +908,11 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation>Mémoire partagée </translation>
+        <translation>Mémoire partagée</translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation>Mémoire virtuelle </translation>
+        <translation>Mémoire virtuelle</translation>
     </message>
 </context>
 <context>
@@ -913,6 +920,34 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>Not support</source>
         <translation>Pas de support</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -934,12 +969,10 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Annuler</translation>
     </message>
 </context>
@@ -1007,6 +1040,21 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Type de démarrage</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -498,6 +498,13 @@ Segur que voleu continuar?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -914,6 +921,34 @@ Segur que voleu continuar?</translation>
         <source>Not support</source>
         <translation>Sense suport</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -934,12 +969,10 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>D&apos;acord</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Cancel·la</translation>
     </message>
 </context>
@@ -1007,6 +1040,21 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Tipus d&apos;inici</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

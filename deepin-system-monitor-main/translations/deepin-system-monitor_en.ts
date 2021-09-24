@@ -498,6 +498,13 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Settings</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -914,6 +921,34 @@ Are you sure you want to continue?</translation>
         <source>Not support</source>
         <translation>Not support</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Settings</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>System Protection</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Show warnings when the usage exceeds the thresholds</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>CPU warning threshold (%)</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>Memory warning threshold (%)</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>Warning interval (min)</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -934,12 +969,10 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Cancel</translation>
     </message>
 </context>
@@ -1007,6 +1040,21 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Startup Type</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Settings</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Modifiable)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Range: %1-%2</translation>
     </message>
 </context>
 <context>
