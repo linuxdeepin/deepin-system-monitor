@@ -104,10 +104,32 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPerce
         return;
     totalCpuPercent = cpuPercent;
 
+    // 将cpuPercents 和传过来最新的cPercents做对比，arm开核关核时，对应的系统监视器会出现飞线或波形图不动的情况
+    if(cPercents.size() < cpuPercents.size()) {
+        QList<qreal> nulllist;
+        for (int i =0; i < pointsNumber; i++) {
+            nulllist.append(0.0);
+        }
+
+        for(int j = cPercents.size(); j < cpuPercents.size(); j++) {
+            cpuPercents[j] = nulllist;
+        }
+    } else if (cPercents.size() > cpuPercents.size()){
+        QList<qreal> nulllist;
+        for (int i =0; i < pointsNumber; i++) {
+            nulllist.append(0.0);
+        }
+
+        for(int j = cpuPercents.size(); j < cPercents.size(); j++) {
+            cpuPercents.append(nulllist);
+        }
+    }
+
+
     for (int i = 0; i < cPercents.size(); i++) {
         //防止QList内存溢出
-        if (i >= cpuPercents.size())
-            break;
+        //if (i >= cpuPercents.size())
+        //    break;
         if (!cpuPercents[i].isEmpty()) {
             QList<qreal> cpuPercent = cpuPercents[i];
             cpuPercent.append(cPercents[i]);
@@ -119,6 +141,9 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPerce
             cpuPercents[i] = cpuPercent;
         }
     }
+
+
+
 
     update();
 
