@@ -33,12 +33,20 @@ Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor inte
 You can view the detailed processor, memory, network and disk info in the compact and expand view mode.
 
 1. On the System Monitor interface, click the **Details** icon on the left and the detailed CPU info will be displayed on the right by default.
-3. Click the ![down](../common/nextdown.svg) icon besides CPU to expand the drop-down list and view the detailed info on memory, network or disk.
-4. Click **Hide details** to compact the detailed info.
 
-![1|monitor](fig/detail1.png)
+   ![1|monitor](fig/detail1.png)
 
-![1|monitor](fig/detail.png)
+2. Click the ![down](../common/nextdown.svg) icon besides CPU to expand the drop-down list and view the detailed info on memory, network or disk.
+
+   ![1|monitor](fig/detail.png)
+
+3. Click **Hide details** to compact the detailed info.
+
+> ![notes](../common/tips.svg) Tips: You can also view the hardware information of your computer on the desktop as follows:
+>
+> 1. Right-click the Dock, check **System Monitor** in the **Plugins** sub-menu and its icon ![icon](../common/system_monitor.png) will be displayed in plugins area in the Dock.
+> 2. Click the ![icon](../common/system_monitor.png) icon in plugins area and you can view the CPU, network, memory, disk and process information of the computer on the desktop.
+> 3. Double-click the monitored area to view the detailed information of the corresponding module in System Monitor.
 
 ### Process Management
 
