@@ -63,4 +63,4 @@ INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /usr/lib/dde-dock/plugins)
 #国际化翻译文件路径
 file(GLOB QM_FILES "translations/*.qm")
 INSTALL(FILES ${QM_FILES}
-        DESTINATION "/usr/share/deepin-system-monitor-plugin-popup/translations")
+        DESTINATION "/usr/share/deepin-system-monitor-plugin/translations")
