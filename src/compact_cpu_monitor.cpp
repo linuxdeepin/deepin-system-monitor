@@ -131,8 +131,10 @@ void CompactCpuMonitor::updateStatus(qreal cpuPercent, const QList<qreal> cPerce
         //    break;
         if (!cpuPercents[i].isEmpty()) {
             QList<qreal> cpuPercent = cpuPercents[i];
-            if (!appendIndex.contains(i))
-                cpuPercent.append(cPercents[i]);
+            if (!appendIndex.contains(i)) {
+                if (!std::isnan(cPercents[i]))
+                    cpuPercent.append(cPercents[i]);
+            }
 
             if (cpuPercent.size() > pointsNumber) {
                 cpuPercent.pop_front();
