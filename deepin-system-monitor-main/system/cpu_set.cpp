@@ -643,10 +643,15 @@ void CPUSet::read_lscpu()
         }
         d->m_info.insert(key,p);
     }
-    if (ct && ct->vendor) { // CPU厂商信息
-        d->m_info.insert("Vendor ID",ct->vendor);
+
+    if(ct == nullptr) {
+        qWarning() << __FUNCTION__ << "ct is nullptr!";
+        return;
     }
-    if(ct && ct->bios_vendor) {//  BIOS厂商信息
+    if (ct->vendor) { // CPU厂商信息
+        strcmp(ct->vendor, "") == 0 ? d->m_info.insert("Vendor ID", "") : d->m_info.insert("Vendor ID", ct->vendor);
+    }
+    if(ct->bios_vendor) {//  BIOS厂商信息
         d->m_info.insert("BIOS Vendor ID",ct->bios_vendor);
     }
     if (ct->modelname) {// CPU型号名称
@@ -664,6 +669,7 @@ void CPUSet::read_lscpu()
     if(ct->family) {//  CPU系列
         d->m_info.insert("CPU family",ct->family);
     }
+
     if (ct->model || ct->revision) {
         d->m_info.insert("Model",ct->revision ? ct->revision : ct->model);
     }
