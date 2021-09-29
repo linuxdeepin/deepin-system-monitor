@@ -65,7 +65,7 @@ SystemMonitorService::SystemMonitorService(QObject *parent)
     , mCpuUsage(0)
     , mMemoryUsage(0)
     , mMoniterTimer(this)
-    , mLastAlarmTimeStamp(0)
+//    , mLastAlarmTimeStamp(0)
     , mSettings(this)
     , mCpu(this)
     , mMem(this)
@@ -80,13 +80,16 @@ SystemMonitorService::SystemMonitorService(QObject *parent)
         mAlarmCpuUsage = mSettings.getOptionValue(AlarmCpuUsageOptionName).toInt();
         mAlarmMemoryUsage = mSettings.getOptionValue(AlarmMemUsageOptionName).toInt();
         mAlarmInterval = mSettings.getOptionValue(AlarmIntervalOptionName).toInt();
+        mLastAlarmTimeStamp = mSettings.getOptionValue(AlarmLastTimeOptionName).toLongLong();
+
     }
 
     qDebug() << ",初始化的数据："  << endl
              << AlarmStatusOptionName << "=" << mProtectionStatus << endl
              << AlarmCpuUsageOptionName << "=" << mAlarmCpuUsage << endl
              << AlarmMemUsageOptionName << "=" << mAlarmMemoryUsage << endl
-             << AlarmIntervalOptionName << "=" << mAlarmInterval << endl;
+             << AlarmIntervalOptionName << "=" << mAlarmInterval << endl
+             << AlarmLastTimeOptionName << "=" << mLastAlarmTimeStamp << endl;
 
     // 初始化Cpu占用率
     mCpuUsage = static_cast<int>(mCpu.updateSystemCpuUsage());
@@ -161,6 +164,31 @@ void SystemMonitorService::setAlarmMsgInterval(int interval)
         emit alarmItemChanged(AlarmIntervalOptionName, QDBusVariant(mAlarmInterval));
     } else {
         QPair<double, double> range = mSettings.getValueRange(AlarmIntervalOptionName);
+        sendErrorReply(QDBusError::NotSupported, QString("invalid value! value range[%1,%2]").arg(range.first).arg(range.second));
+    }
+}
+
+qint64 SystemMonitorService::getAlaramLastTimeInterval()
+{
+    PrintDBusCaller()
+    qDebug() << __FUNCTION__ << __LINE__ << " Get Alarm Last Time:" << mLastAlarmTimeStamp;
+    return mLastAlarmTimeStamp;
+}
+
+void SystemMonitorService::setAlaramLastTimeInterval(qint64 lastTime)
+{
+    PrintDBusCaller()
+    qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Last Time:" << lastTime;
+
+    // 根据需求
+    if(mSettings.isVaildValue(AlarmLastTimeOptionName, lastTime)) {
+        mLastAlarmTimeStamp = lastTime;
+        // 更改设置文件
+        mSettings.changedOptionValue(AlarmLastTimeOptionName, mLastAlarmTimeStamp);
+        // 监测设置变更，DBus信号
+        emit alarmItemChanged(AlarmLastTimeOptionName, QDBusVariant(mLastAlarmTimeStamp));
+    } else {
+        QPair<double, double> range = mSettings.getValueRange(AlarmLastTimeOptionName);
         sendErrorReply(QDBusError::NotSupported, QString("invalid value! value range[%1,%2]").arg(range.first).arg(range.second));
     }
 }
@@ -317,6 +345,7 @@ bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeo
         return false;
     } else {
         mLastAlarmTimeStamp =  QDateTime::currentDateTime().toMSecsSinceEpoch();
+        setAlaramLastTimeInterval(mLastAlarmTimeStamp);
     }
 
     return true;

@@ -33,6 +33,7 @@ DTK_USE_NAMESPACE
 #define AlarmCpuUsageOptionName "setting.systemprotection.alarm_cpu_usage"
 #define AlarmMemUsageOptionName "setting.systemprotection.alarm_memory_usage"
 #define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
+#define AlarmLastTimeOptionName "setting.systemprotection.alarm_last_time"
 
 class SettingHandler : public QObject
 {

@@ -31,6 +31,12 @@
                             "name": "Warning interval (min)",
                             "type": "intervalalarmcritical",
                             "default": 10
+                        },
+                        {
+                            "key": "alarm_last_time",
+                            "name": "store alarm last time",
+                            "type": "alarmlasttime",
+                            "default": 0
                         }
                     ]
                 },

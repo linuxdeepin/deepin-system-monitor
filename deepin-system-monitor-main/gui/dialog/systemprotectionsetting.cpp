@@ -45,6 +45,7 @@
     #define AlarmCpuUsageOptionName "setting.systemprotection.alarm_cpu_usage"
     #define AlarmMemUsageOptionName "setting.systemprotection.alarm_memory_usage"
     #define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
+    #define AlarmLastTimeOptionName "setting.systemprotection.alarm_last_time"
 #endif
 
 // 与系统字体大小的偏移值，-1.5为小于系统字体大小1.5字号
@@ -469,6 +470,10 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
     } else if (key == AlarmIntervalOptionName) {
         cmd.append("setAlarmMsgInterval "); // Method Name
         cmd.append(value.toString());       // value
+        needCall = true;
+    } else if (key == AlarmLastTimeOptionName) {
+        cmd.append("setAlarmLastTimeInterval "); // Mehthod Name
+        cmd.append(value.toString());
         needCall = true;
     }
 

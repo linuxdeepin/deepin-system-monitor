@@ -69,6 +69,20 @@ public:
      * DBus Adaptor接口: 设置当前报警信息间隔时间(minute)
      */
     void setAlarmMsgInterval(int interval);
+
+
+    /*!
+     * \brief getAlaramLastTimeInterval 获取上次告警时间
+     * \return 上次告警时间
+     */
+    qint64 getAlaramLastTimeInterval();
+    /*!
+     * \brief setAlaramLastTimeInterval 设置上次告警时间
+     * \param lastTime 设置的参数值
+     */
+    void setAlaramLastTimeInterval(qint64 lastTime);
+
+
     /*!
      * DBus Adaptor接口: 获取当前监测报警Cpu占用率(%)
      */
