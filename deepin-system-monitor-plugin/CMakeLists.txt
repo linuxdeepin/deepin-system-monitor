@@ -48,19 +48,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${QGSettings_LIBRARIES}
 )
 
-if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
-
-    # generate qm
-    message(${CMAKE_CURRENT_SOURCE_DIR}/translations)
-    execute_process(COMMAND bash "translate_generation.sh"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
-endif ()
+# generate qm
+message(${CMAKE_CURRENT_SOURCE_DIR}/translations)
+execute_process(COMMAND bash "translate_generation.sh"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
 
 INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
 INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /usr/lib/dde-dock/plugins)
 #国际化翻译文件路径
-file(GLOB QM_FILES "translations/*.qm")
-INSTALL(FILES ${QM_FILES}
+file(GLOB PLUGIN_QM_FILES "translations/*.qm")
+INSTALL(FILES ${PLUGIN_QM_FILES}
         DESTINATION "/usr/share/deepin-system-monitor-plugin/translations")
