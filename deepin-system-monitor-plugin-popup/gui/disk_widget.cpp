@@ -205,6 +205,7 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     setFixedWidth(280);
     QPainter painter;
     painter.begin(this);
+    painter.setPen(textColor);
     painter.setRenderHint(QPainter::Antialiasing);
 
     //裁剪绘制区域

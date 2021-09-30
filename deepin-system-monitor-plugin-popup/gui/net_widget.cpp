@@ -209,6 +209,7 @@ void NetWidget::paintEvent(QPaintEvent *e)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(textColor);
 
     //裁剪绘制区域
     QPainterPath path;

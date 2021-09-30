@@ -154,6 +154,7 @@ void CpuWidget::paintEvent(QPaintEvent *e)
 {
     QPainter painter;
     painter.begin(this);
+    painter.setPen(textColor);
     painter.setRenderHint(QPainter::Antialiasing);
     QFontMetrics fmTitleContent(m_TitleFont);
     QFontMetrics fmContent(m_contentFont);

@@ -131,6 +131,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     setFixedWidth(280);
     QPainter painter;
     painter.begin(this);
+    painter.setPen(textColor);
 
     //裁剪绘制区域
     QPainterPath path;
@@ -214,9 +215,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     section.addEllipse(memIndicatorRect);
     painter.fillPath(section, memoryColor);
 
-//    m_memFont.setWeight(QFont::Medium);
     painter.setFont(m_memFont);
-//    painter.setPen(QPen(textColor));
     painter.drawText(memRect, Qt::AlignLeft | Qt::AlignVCenter,
                      fmMem.elidedText(m_memUsage, Qt::ElideRight,
                                       rect().width() - memRect.x() - outsideRingRadius));
@@ -274,7 +273,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     // Draw percent text.
     painter.setFont(m_memFont);
-    painter.setPen(numberColor);
+    painter.setPen(textColor);
     QString memPer = QString::number(m_memPercent.toDouble(), 'f', 1);
     QRect memPerRect(contentRect.x() + ringCenterPointerX - (insideRingRadius + memPerUnitTitleWidth)/2,
                      contentRect.y() + ringCenterPointerY - (insideRingRadius)/2 + fmMemUnit.height()/4,
