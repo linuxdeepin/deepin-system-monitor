@@ -602,144 +602,142 @@ void CPUSet::read_lscpu()
     cxt->virt = lscpu_read_virtualization(cxt); // 获取CPU的虚拟化信息
     struct lscpu_cputype *ct;
     ct = lscpu_cputype_get_default(cxt); // 获取CPU类型信息
-    if(ct == nullptr) {
+    if(ct) {
+        if(cxt->arch)
+            d->m_info.insert("Architecture",cxt->arch->name);
+        // cpu架构信息
+        if (cxt->arch && (cxt->arch->bit32 || cxt->arch->bit64)) {
+            QString value;
+            if(cxt->arch && (cxt->arch->bit32 || cxt->arch->bit64)) {
+                if (cxt->arch->bit32) {
+                    value += "32-bit";
+                }
+                if (cxt->arch->bit64) {
+                    value += "64-bit";
+                }
+                d->m_info.insert("CPU op-mode(s)",value);
+            }
+        }
+        if(ct && ct->addrsz) {
+              d->m_info.insert("Address sizes",ct->addrsz);
+        }
+        // 获取CPU的大小端信息
+    #if !defined(WORDS_BIGENDIAN)
+        d->m_info.insert("Byte Order","Little Endian");
+    #else
+        d->m_info.insert("Byte Order","Big Endian");
+    #endif
+        d->m_info.insert("CPU(s)",QString::number(cxt->npresents));
+        if(cxt->online) { // 当前活动CPU信息
+            QString key = cxt->hex ? "On-line CPU(s) mask" : "On-line CPU(s) list";
+            QString value = "";
+            size_t setbuflen = static_cast<size_t>(7 * cxt->maxcpus);
+            char setbuf[setbuflen], *p;
+            if(cxt->hex) {
+               p = cpumask_create(setbuf, setbuflen, cxt->online, cxt->setsize);
+            } else {
+               p = cpulist_create(setbuf, setbuflen, cxt->online, cxt->setsize);
+            }
+            d->m_info.insert(key,p);
+        }
+
+        if (ct->vendor) { // CPU厂商信息
+            strcmp(ct->vendor, "") == 0 ? d->m_info.insert("Vendor ID", "-") : d->m_info.insert("Vendor ID", ct->vendor);
+        }
+        if(ct->bios_vendor) {//  BIOS厂商信息
+            d->m_info.insert("BIOS Vendor ID",ct->bios_vendor);
+        }
+        if (ct->modelname) {// CPU型号名称
+            d->m_info.insert("Model name",ct->modelname);
+        }
+        if (ct->bios_modelname) {// bios 型号名称
+            d->m_info.insert("BIOS Model name",ct->bios_modelname);
+        }
+        if (ct->bios_family) { // bios系列
+            d->m_info.insert("BIOS CPU family",ct->bios_family);
+        }
+        if (ct->machinetype) {//  机器类型
+            d->m_info.insert("Machine type",ct->machinetype);
+        }
+        if(ct->family) {//  CPU系列
+            d->m_info.insert("CPU family",ct->family);
+        }
+        if (ct->model || ct->revision) {
+            d->m_info.insert("Model",ct->revision ? ct->revision : ct->model);
+        }
+        d->m_info.insert("Thread(s) per core",QString::number(ct->nthreads_per_core));// 单核线程数
+        if (cxt->is_cluster) {
+              d->m_info.insert("Core(s) per cluster",QString::number(ct->ncores_per_socket));
+        } else {
+              d->m_info.insert("Core(s) per socket",QString::number(ct->ncores_per_socket));
+        }
+        if(ct->nbooks) {
+            d->m_info.insert("Socket(s) per book",QString::number(ct->nsockets_per_book));
+            if (ct->ndrawers_per_system || ct->ndrawers) {
+                d->m_info.insert("Book(s) per drawer",QString::number(ct->nbooks_per_drawer));
+                d->m_info.insert("Drawer(s)",QString::number(ct->ndrawers_per_system ? 0 : ct->ndrawers));
+            } else {
+                d->m_info.insert("Book(s)",QString::number(ct->nbooks_per_drawer ? 0 : ct->nbooks));
+            }
+        } else {
+            if (cxt->is_cluster) {
+                if (ct->nr_socket_on_cluster > 0) {
+                    d->m_info.insert("Core(s) per cluster",QString::number(ct->nr_socket_on_cluster));
+                }
+                else {
+                     d->m_info.insert("Socket(s)","-");
+                }
+                d->m_info.insert("Cluster(s)",QString::number(ct->nsockets_per_book ? 0 : ct->nsockets));
+            } else {
+                d->m_info.insert("Socket(s)",QString::number(ct->nsockets_per_book ? 0 : ct->nsockets));
+            }
+        }
+        if (ct->stepping) {
+            d->m_info.insert("Stepping",ct->stepping);
+        }
+        if (ct->freqboost >= 0) {
+         d->m_info.insert("Frequency boost",ct->freqboost ?
+                              _("enabled") : _("disabled"));
+        }
+
+        if (ct->dynamic_mhz) {
+            d->m_info.insert("CPU dynamic MHz",ct->dynamic_mhz);
+        }
+        if (ct->static_mhz) {
+            d->m_info.insert("CPU static MHz",ct->static_mhz);
+        }
+        if(ct->has_freq) {
+            float scal = lsblk_cputype_get_scalmhz(cxt, ct);
+            QString maxMHz = QString::number(static_cast<double>(lsblk_cputype_get_maxmhz(cxt, ct)),'f',4);
+            d->m_info.insert("CPU max MHz",maxMHz);
+            QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)),'f',4);
+            d->m_info.insert("CPU min MHz",minMHz);
+            QString nowMHz =  QString::number(maxMHz.toDouble() * static_cast<double>(scal/100),'f',4);
+            if(scal == 0.0f) {
+                nowMHz = "-";
+            }
+            d->m_info.insert("CPU MHz",nowMHz);
+        } else {
+            d->m_info.insert("CPU MHz","-");
+        }
+        if (ct->bogomips) {
+            d->m_info.insert("BogoMIPS",ct->bogomips);
+        }
+
+        if (ct->physsockets) {
+             d->m_info.insert("Physical sockets",QString::number(ct->physsockets));
+             d->m_info.insert("Physical chips",QString::number(ct->physchips));
+             d->m_info.insert("Physical cores/chip",QString::number(ct->physcoresperchip));
+        }
+        if (ct->flags){
+            d->m_info.insert("Flags",ct->flags);
+        }
+    }
+    else {
         qWarning() << __FUNCTION__ << "ct init failed!";
         return;
     }
-    if(cxt->arch)
-        d->m_info.insert("Architecture",cxt->arch->name);
-    // cpu架构信息
-    if (cxt->arch && (cxt->arch->bit32 || cxt->arch->bit64)) {
-        QString value;
-        if(cxt->arch && (cxt->arch->bit32 || cxt->arch->bit64)) {
-            if (cxt->arch->bit32) {
-                value += "32-bit";
-            }
-            if (cxt->arch->bit64) {
-                value += "64-bit";
-            }
-            d->m_info.insert("CPU op-mode(s)",value);
-        }
-    }
-    if(ct && ct->addrsz) {
-          d->m_info.insert("Address sizes",ct->addrsz);
-    }
-    // 获取CPU的大小端信息
-#if !defined(WORDS_BIGENDIAN)
-    d->m_info.insert("Byte Order","Little Endian");
-#else
-    d->m_info.insert("Byte Order","Big Endian");
-#endif
-    d->m_info.insert("CPU(s)",QString::number(cxt->npresents));
-    if(cxt->online) { // 当前活动CPU信息
-        QString key = cxt->hex ? "On-line CPU(s) mask" : "On-line CPU(s) list";
-        QString value = "";
-        size_t setbuflen = static_cast<size_t>(7 * cxt->maxcpus);
-        char setbuf[setbuflen], *p;
-        if(cxt->hex) {
-           p = cpumask_create(setbuf, setbuflen, cxt->online, cxt->setsize);
-        } else {
-           p = cpulist_create(setbuf, setbuflen, cxt->online, cxt->setsize);
-        }
-        d->m_info.insert(key,p);
-    }
 
-    if(ct == nullptr) {
-        qWarning() << __FUNCTION__ << "ct is nullptr!";
-        return;
-    }
-    if (ct->vendor) { // CPU厂商信息
-        strcmp(ct->vendor, "") == 0 ? d->m_info.insert("Vendor ID", "") : d->m_info.insert("Vendor ID", ct->vendor);
-    }
-    if(ct->bios_vendor) {//  BIOS厂商信息
-        d->m_info.insert("BIOS Vendor ID",ct->bios_vendor);
-    }
-    if (ct->modelname) {// CPU型号名称
-        d->m_info.insert("Model name",ct->modelname);
-    }
-    if (ct->bios_modelname) {// bios 型号名称
-        d->m_info.insert("BIOS Model name",ct->bios_modelname);
-    }
-    if (ct->bios_family) { // bios系列
-        d->m_info.insert("BIOS CPU family",ct->bios_family);
-    }
-    if (ct->machinetype) {//  机器类型
-        d->m_info.insert("Machine type",ct->machinetype);
-    }
-    if(ct->family) {//  CPU系列
-        d->m_info.insert("CPU family",ct->family);
-    }
-
-    if (ct->model || ct->revision) {
-        d->m_info.insert("Model",ct->revision ? ct->revision : ct->model);
-    }
-    d->m_info.insert("Thread(s) per core",QString::number(ct->nthreads_per_core));// 单核线程数
-    if (cxt->is_cluster) {
-          d->m_info.insert("Core(s) per cluster",QString::number(ct->ncores_per_socket));
-    } else {
-          d->m_info.insert("Core(s) per socket",QString::number(ct->ncores_per_socket));
-    }
-    if(ct->nbooks) {
-        d->m_info.insert("Socket(s) per book",QString::number(ct->nsockets_per_book));
-        if (ct->ndrawers_per_system || ct->ndrawers) {
-            d->m_info.insert("Book(s) per drawer",QString::number(ct->nbooks_per_drawer));
-            d->m_info.insert("Drawer(s)",QString::number(ct->ndrawers_per_system ? 0 : ct->ndrawers));
-        } else {
-            d->m_info.insert("Book(s)",QString::number(ct->nbooks_per_drawer ? 0 : ct->nbooks));
-        }
-    } else {
-        if (cxt->is_cluster) {
-            if (ct->nr_socket_on_cluster > 0) {
-                d->m_info.insert("Core(s) per cluster",QString::number(ct->nr_socket_on_cluster));
-            }
-            else {
-                 d->m_info.insert("Socket(s)","-");
-            }
-            d->m_info.insert("Cluster(s)",QString::number(ct->nsockets_per_book ? 0 : ct->nsockets));
-        } else {
-            d->m_info.insert("Socket(s)",QString::number(ct->nsockets_per_book ? 0 : ct->nsockets));
-        }
-    }
-    if (ct->stepping) {
-        d->m_info.insert("Stepping",ct->stepping);
-    }
-    if (ct->freqboost >= 0) {
-     d->m_info.insert("Frequency boost",ct->freqboost ?
-                          _("enabled") : _("disabled"));
-    }
-
-    if (ct->dynamic_mhz) {
-        d->m_info.insert("CPU dynamic MHz",ct->dynamic_mhz);
-    }
-    if (ct->static_mhz) {
-        d->m_info.insert("CPU static MHz",ct->static_mhz);
-    }
-    if(ct->has_freq) {
-        float scal = lsblk_cputype_get_scalmhz(cxt, ct);
-        QString maxMHz = QString::number(static_cast<double>(lsblk_cputype_get_maxmhz(cxt, ct)),'f',4);
-        d->m_info.insert("CPU max MHz",maxMHz);
-        QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)),'f',4);
-        d->m_info.insert("CPU min MHz",minMHz);
-        QString nowMHz =  QString::number(maxMHz.toDouble() * static_cast<double>(scal/100),'f',4);
-        if(scal == 0.0f) {
-            nowMHz = "-";
-        }
-        d->m_info.insert("CPU MHz",nowMHz);
-    } else {
-        d->m_info.insert("CPU MHz","-");
-    }
-    if (ct->bogomips) {
-        d->m_info.insert("BogoMIPS",ct->bogomips);
-    }
-
-    if (ct->physsockets) {
-         d->m_info.insert("Physical sockets",QString::number(ct->physsockets));
-         d->m_info.insert("Physical chips",QString::number(ct->physchips));
-         d->m_info.insert("Physical cores/chip",QString::number(ct->physcoresperchip));
-    }
-    if (ct->flags){
-        d->m_info.insert("Flags",ct->flags);
-    }
     // 虚拟化支持
     if(cxt->virt) {
         if (cxt->virt->cpuflag && !strcmp(cxt->virt->cpuflag, "svm")) {
