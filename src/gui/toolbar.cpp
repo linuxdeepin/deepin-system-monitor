@@ -37,7 +37,7 @@
 #include "toolbar.h"
 #include "utils.h"
 
-#define MAX_TEXT_LEN 2000
+#define MAX_TEXT_LEN 200
 
 DWIDGET_USE_NAMESPACE
 using namespace Utils;
