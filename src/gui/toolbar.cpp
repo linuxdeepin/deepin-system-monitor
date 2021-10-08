@@ -34,7 +34,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 
-#define MAX_TEXT_LEN 2000
+#define MAX_TEXT_LEN 200
 
 using namespace common;
 
