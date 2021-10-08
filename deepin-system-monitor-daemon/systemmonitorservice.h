@@ -38,7 +38,7 @@
 DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
 
-class SystemMonitorService : public QObject, QDBusContext
+class SystemMonitorService : public QObject, protected QDBusContext
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", DAEMON_DBUS_NAME)
