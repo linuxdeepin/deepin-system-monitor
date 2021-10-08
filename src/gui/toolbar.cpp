@@ -35,6 +35,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 
+#define MAX_TEXT_LEN 200
 using namespace Utils;
 
 // constructor
@@ -82,6 +83,7 @@ Toolbar::Toolbar(QWidget *parent)
     // search text editor instance
     searchEdit = new DSearchEdit(this);
     searchEdit->setFixedWidth(360);
+    searchEdit->lineEdit()->setMaxLength(MAX_TEXT_LEN);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
     searchEdit->setEnabled(false);
 
