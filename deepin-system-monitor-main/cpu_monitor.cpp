@@ -239,3 +239,9 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
     setFixedHeight(cpuDisplayRect.y() + cpuDisplayRect.height() + 1 + m_detailButton->fontMetrics().height());
 }
+
+void CpuMonitor::mouseReleaseEvent(QMouseEvent *ev)
+{
+    Q_UNUSED(ev);
+    emit clicked("MSG_CPU");
+}

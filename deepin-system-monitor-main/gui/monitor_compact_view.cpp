@@ -75,6 +75,12 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
         DetailWidgetManager::getInstance().sigJumpToProcessWidget("MSG_PROCESS1");
         emit signalDetailInfoByDbus(msgCode);
     });
+
+    //点击左侧区域触发跳转
+    connect(m_cpuMonitor, &CompactCpuMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
+    connect(m_memoryMonitor, &CompactMemoryMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
+    connect(m_networkMonitor, &CompactNetworkMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
+    connect(m_diskMonitor, &CompactDiskMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
 }
 
 void MonitorCompactView::setDetailButtonVisible(bool visible)

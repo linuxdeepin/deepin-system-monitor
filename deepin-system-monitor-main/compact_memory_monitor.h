@@ -42,6 +42,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
 
 private:
     void changeTheme(int themeType);
@@ -49,6 +50,9 @@ private:
 
     qreal progress() const;
     void setProgress(qreal p);
+
+signals:
+    void clicked(QString msgCode);
 
 private slots:
     void onStatInfoUpdated();

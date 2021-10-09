@@ -48,6 +48,7 @@ public:
 
 signals:
     void signalDetailInfoClicked();
+    void clicked(QString msgCode);
 
 public slots:
     void changeTheme(DApplicationHelper::ColorType themeType);
@@ -63,6 +64,7 @@ private:
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
 
     qreal progress() const
     {

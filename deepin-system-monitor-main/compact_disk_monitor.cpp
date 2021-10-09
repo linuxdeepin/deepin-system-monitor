@@ -250,3 +250,9 @@ void CompactDiskMonitor::changeFont(const QFont &font)
     m_statFont = font;
     m_statFont.setPointSizeF(m_statFont.pointSizeF() - 1);
 }
+
+void CompactDiskMonitor::mouseReleaseEvent(QMouseEvent *ev)
+{
+    Q_UNUSED(ev);
+    emit clicked("MSG_DISK");
+}

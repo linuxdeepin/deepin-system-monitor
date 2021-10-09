@@ -269,3 +269,9 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     }
     setFixedHeight(memoryFixedHeight + 1);
 }
+
+void MemoryMonitor::mouseReleaseEvent(QMouseEvent *ev)
+{
+    Q_UNUSED(ev);
+    emit clicked("MSG_MEM");
+}

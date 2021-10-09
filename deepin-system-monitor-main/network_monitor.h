@@ -35,11 +35,15 @@ public:
     explicit NetworkMonitor(QWidget *parent = nullptr);
     ~NetworkMonitor();
 
+signals:
+    void clicked(QString msgCode);
+
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
+     virtual void mouseReleaseEvent(QMouseEvent *ev);
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);

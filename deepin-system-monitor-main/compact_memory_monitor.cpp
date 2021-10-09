@@ -259,3 +259,9 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     setFixedHeight(
         std::max(swapStatRect.y() + swapStatRect.height(), rect().y() + ringCenterPointerY * 2));
 }
+
+void CompactMemoryMonitor::mouseReleaseEvent(QMouseEvent *ev)
+{
+    Q_UNUSED(ev);
+    emit clicked("MSG_MEM");
+}

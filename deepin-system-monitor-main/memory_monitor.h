@@ -51,6 +51,7 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *event);
+     virtual void mouseReleaseEvent(QMouseEvent *ev);
 
     qreal progress() const
     {
@@ -61,6 +62,9 @@ protected:
     {
         m_progress = p;
     }
+
+signals:
+    void clicked(QString msgCode);
 
 private slots:
     void onStatInfoUpdated();

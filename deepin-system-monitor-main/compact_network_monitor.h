@@ -34,11 +34,15 @@ public:
     explicit CompactNetworkMonitor(QWidget *parent = nullptr);
     ~CompactNetworkMonitor();
 
+signals:
+    void clicked(QString msgCode);
+
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);

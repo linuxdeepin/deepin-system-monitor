@@ -329,3 +329,9 @@ void NetworkMonitor::changeFont(const QFont &font)
     m_subContentFont = font;
     m_subContentFont.setPointSizeF(m_subContentFont.pointSizeF() - 1);
 }
+
+void NetworkMonitor::mouseReleaseEvent(QMouseEvent *ev)
+{
+    Q_UNUSED(ev);
+    emit clicked("MSG_NET");
+}

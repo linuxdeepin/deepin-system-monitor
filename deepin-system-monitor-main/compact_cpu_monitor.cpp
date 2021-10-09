@@ -316,3 +316,9 @@ void CompactCpuMonitor::changeFont(const QFont &font)
 
     resizeItemRect();
 }
+
+void CompactCpuMonitor::mouseReleaseEvent(QMouseEvent *ev)
+{
+    Q_UNUSED(ev);
+    emit clicked("MSG_CPU");
+}

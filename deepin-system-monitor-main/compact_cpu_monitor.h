@@ -38,6 +38,7 @@ public:
 
 signals:
     void signalDetailInfoClicked();
+    void clicked(QString msgCode);
 
 public slots:
     void updateStatus();
@@ -48,6 +49,7 @@ private slots:
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
 
 private:
     void changeFont(const QFont &font);

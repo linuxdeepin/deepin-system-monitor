@@ -69,6 +69,11 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
         DetailWidgetManager::getInstance().sigJumpToProcessWidget("MSG_PROCESS1");
         emit signalDetailInfoByDbus(msgCode);
     });
+
+    //点击左侧区域触发跳转
+    connect(m_cpuMonitor, &CpuMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
+    connect(m_memoryMonitor, &MemoryMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
+    connect(m_networkMonitor, &NetworkMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
 }
 
 void MonitorExpandView::setDetailButtonVisible(bool visible)

@@ -30,11 +30,15 @@ public:
     explicit CompactDiskMonitor(QWidget *parent = nullptr);
     ~CompactDiskMonitor();
 
+signals:
+    void clicked(QString msgCode);
+
 public slots:
     void updateStatus();
 
 protected:
     void paintEvent(QPaintEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
 
 private:
     void changeFont(const QFont &font);
