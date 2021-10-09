@@ -641,9 +641,19 @@ void CPUSet::read_lscpu()
             d->m_info.insert(key,p);
         }
 
+        // CPU厂商信息
         if (ct->vendor) { // CPU厂商信息
-            strcmp(ct->vendor, "") == 0 ? d->m_info.insert("Vendor ID", "-") : d->m_info.insert("Vendor ID", ct->vendor);
+            QString strVendor = ct->vendor;
+            strVendor = strVendor.simplified();
+            strVendor = strVendor.trimmed();
+            if (strVendor.isEmpty())
+                d->m_info.insert("Vendor ID", "-");
+            else
+                d->m_info.insert("Vendor ID", ct->vendor);
         }
+        else
+            d->m_info.insert("Vendor ID", "-");
+
         if(ct->bios_vendor) {//  BIOS厂商信息
             d->m_info.insert("BIOS Vendor ID",ct->bios_vendor);
         }
