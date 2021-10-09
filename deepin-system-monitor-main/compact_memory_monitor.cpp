@@ -232,9 +232,12 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     painter.setPen(QPen(textColor));
     painter.drawText(swapRect, swapTitle);
 
-    painter.setFont(m_subContentFont);
-    painter.setPen(QPen(summaryColor));
-    painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
+    //未启用交换空间时，不显示交换空间数据
+    if (m_memInfo->swapTotal()){
+        painter.setFont(m_subContentFont);
+        painter.setPen(QPen(summaryColor));
+        painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
+    }
 
     // Draw memory ring.
     drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
@@ -242,10 +245,12 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                     memoryForegroundOpacity, memoryBackgroundColor, memoryBackgroundOpacity,
                     memPercent);
 
+    //未启用交换空间时，不显示交换空间图形
     // Draw swap ring.
-    drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
-                    insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
-                    swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, swapPercent);
+    if (m_memInfo->swapTotal())
+        drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,
+                        insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
+                        swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, swapPercent);
 
     // Draw percent text.
     painter.setFont(m_memPercentFont);
