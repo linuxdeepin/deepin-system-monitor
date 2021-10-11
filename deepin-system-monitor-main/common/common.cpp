@@ -300,6 +300,19 @@ void global_init()
     get_HZ();
     get_kb_shift();
 }
+// support centered display for Wayland
+void WaylandSearchCentered()
+{
+    auto e = QProcessEnvironment::systemEnvironment();
+
+    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
+
+    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
+
+    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)){
+        WaylandCentered = true;
+    }
+}
 } // namespace init
 
 QString format::formatHz(quint32 freq, format::HzUnit base, int prec)

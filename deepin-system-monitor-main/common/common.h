@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <QProcessEnvironment>
 
 class QPainter;
 
@@ -90,6 +91,7 @@ namespace init {
 extern QList<QString> shellList;
 extern QList<QString> scriptList;
 extern QList<QString> pathList;
+static bool WaylandCentered=false;
 
 // disk sector size shift
 #define SECTOR_SHIFT 9
@@ -100,7 +102,7 @@ extern unsigned int kb_shift;
 extern unsigned long HZ;
 
 void global_init();
-
+void WaylandSearchCentered();
 } // namespace init
 
 namespace format {
