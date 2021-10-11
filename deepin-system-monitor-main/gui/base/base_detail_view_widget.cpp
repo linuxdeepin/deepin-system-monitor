@@ -21,12 +21,13 @@
 #include "base_detail_view_widget.h"
 #include "../detail_view_stacked_widget.h"
 #include "base_commandlink_button.h"
+#include "gui/ui_common.h"
 
 #include <QPainter>
 #include <DApplication>
-#include <DApplicationHelper>
 #include <DFontSizeManager>
 #include <QKeyEvent>
+#include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
@@ -40,6 +41,27 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     connect(m_detailButton, &BaseCommandLinkButton::clicked, stackViewWidget, &DetailViewStackedWidget::onSwitchProcessPage);
 
+    m_switchButton = new DIconButton(DStyle::SP_ReduceElement, this);
+    m_switchButton->setIconSize(QSize(12, 12));
+    m_switchButton->setFixedSize(25, 25);
+    m_switchIconDark = new QIcon(iconPathFromQrc("dark/change_dark.svg"));
+    m_switchIconLight = new QIcon(iconPathFromQrc("light/change_light.svg"));
+    if (m_isMultiCoreMode) {
+        m_switchButton->setToolTip(tr("Overall utilization"));
+    } else {
+        m_switchButton->setToolTip(tr("Individual utilization"));
+    }
+
+    connect(m_switchButton, &DIconButton::clicked, [ = ]() {
+        m_isMultiCoreMode = !m_isMultiCoreMode;
+        emit sigClickSwitchMutliCoreButton(m_isMultiCoreMode);
+        if (m_isMultiCoreMode) {
+            m_switchButton->setToolTip(tr("Overall utilization"));
+        } else {
+            m_switchButton->setToolTip(tr("Individual utilization"));
+        }
+    });
+
     m_arrowButton = new DIconButton(DStyle::SP_ReduceElement, this);
     m_arrowButton->setIconSize(QSize(10, 10));
     m_arrowButton->setFixedSize(20, 20);
@@ -47,9 +69,24 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
         stackViewWidget->onShowPerformMenu(m_arrowButton->mapToGlobal(QPoint(0, m_arrowButton->height() + 6)));
     });
 
+    connect(stackViewWidget, &DetailViewStackedWidget::signalIsFinished, this, [ = ]() {
+        QString currentWidgetName = stackViewWidget->currentWidget()->objectName();
+        //CPUDetailWidget MemDetailViewWidget NetifDetailViewWidget BlockDevDetailViewWidget
+        if (currentWidgetName == "CPUDetailWidget") {
+            m_switchButton->setVisible(true);
+        } else {
+            m_switchButton->setVisible(false);
+        }
+
+    });
+
     detailFontChanged(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &BaseDetailViewWidget::detailFontChanged);
+
+    // adjust search result tip label text color dynamically on theme type change
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
 }
 
 void BaseDetailViewWidget::detailFontChanged(const QFont &font)
@@ -99,6 +136,17 @@ void BaseDetailViewWidget::updateWidgetGrometry()
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
     const QSize &detailtextSize =  m_detailButton->size();
     m_detailButton->setGeometry(this->width() - detailtextSize.width() - 6, 10 + titleFont.height() / 2 - detailtextSize.height() / 2, detailtextSize.width(), detailtextSize.height());
+
+    m_switchButton->setGeometry(m_detailButton->x() - 30, 10 + titleFont.height() / 2 - m_switchButton->height() / 2, 25, 25);
+}
+
+void BaseDetailViewWidget::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    if (themeType == DGuiApplicationHelper::DarkType) {
+        m_switchButton->setIcon(*m_switchIconDark);
+    } else if (themeType == DGuiApplicationHelper::LightType) {
+        m_switchButton->setIcon(*m_switchIconLight);
+    }
 }
 
 void BaseDetailViewWidget::resizeEvent(QResizeEvent *event)
@@ -137,5 +185,6 @@ void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
 
 void BaseDetailViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event)
     //not Todo
 }

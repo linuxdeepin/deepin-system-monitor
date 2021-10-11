@@ -87,8 +87,12 @@ void CPUDetailGrapTableItem::setColor(QColor color)
 
 void CPUDetailGrapTableItem::updateStat()
 {
-    m_cpuPercents.insert(0, m_cpuInfomodel->cpuPercentList().value(m_index) / 100.0);
-
+    // 多核模式时保留原来逻辑
+    if (m_isMutliCoreMode) {
+        m_cpuPercents.insert(0, m_cpuInfomodel->cpuPercentList().value(m_index) / 100.0);
+    } else {
+        m_cpuPercents.insert(0, m_cpuInfomodel->cpuAllPercent() / 100.0);
+    }
     while (m_cpuPercents.count() > 31)
         m_cpuPercents.pop_back();
 
@@ -130,7 +134,12 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
     painter.setPen(palette.color(DPalette::TextTips));
     painter.setRenderHints(QPainter::Antialiasing);
 
-    painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignLeft | Qt::AlignTop, "CPU" + QString::number(m_index));
+    if (m_isMutliCoreMode) {
+        painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignLeft | Qt::AlignTop, "CPU" + QString::number(m_index));
+    } else {
+        painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignLeft | Qt::AlignTop, "CPU");
+    }
+
 
     painter.setFont(midFont);
     int midTextHeight = painter.fontMetrics().height();
@@ -214,6 +223,61 @@ void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
     painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(m_index) * 100, 'f', 1) + "%");
 }
 
+void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
+{
+    const int pensize = 1;
+    QFont font = DApplication::font();
+    font.setPointSizeF(font.pointSizeF() - 1);
+    painter.setFont(font);
+
+    QFont midFont = font;
+    midFont.setPointSizeF(font.pointSizeF() - 1);
+
+    int textHeight = painter.fontMetrics().height();
+    //draw background
+    QRect graphicRect = QRect(pensize, textHeight, this->width() - 2 * pensize, this->height() - textHeight - QFontMetrics(midFont).height());
+    drawBackground(painter, graphicRect);
+
+    //draw text
+    auto *dAppHelper = DApplicationHelper::instance();
+    auto palette = dAppHelper->applicationPalette();
+    painter.setPen(palette.color(DPalette::TextTips));
+    painter.setRenderHints(QPainter::Antialiasing);
+
+    painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignLeft | Qt::AlignTop, "CPU" + QString::number(m_index));
+
+    painter.setFont(midFont);
+    int midTextHeight = painter.fontMetrics().height();
+
+    painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignRight | Qt::AlignBottom, "100%");
+    painter.drawText(QRect(pensize, graphicRect.bottom() + pensize, this->width() - 2 * pensize, midTextHeight), Qt::AlignLeft | Qt::AlignVCenter, tr("60 seconds"));
+    painter.drawText(QRect(pensize, graphicRect.bottom() + pensize, this->width() - 2 * pensize, midTextHeight), Qt::AlignRight | Qt::AlignVCenter, "0");
+
+    // draw cpu
+    painter.setClipRect(graphicRect);
+    if (m_cpuPercents.count() > 0) {
+        painter.setPen(QPen(m_color, 1.5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter.setBrush(Qt::NoBrush);
+
+        QPainterPath Painterpath;
+
+        QPointF sp = QPointF(graphicRect.width() + graphicRect.x(), (1.0 - m_cpuPercents.value(0)) * graphicRect.height() + graphicRect.y());
+        Painterpath.moveTo(sp);
+
+        for (int i = 0; i < 30; ++i) {
+            if (m_cpuPercents.count() > 0) {
+                QPointF ep = QPointF((graphicRect.width() - static_cast<double>(graphicRect.width()) / (30.0 / static_cast<double>(1))) + graphicRect.x(), (1.0 - m_cpuPercents.value(1)) * graphicRect.height() + graphicRect.y());
+                QPointF c1 = QPointF((sp.x() + ep.x()) / 2, sp.y());
+                QPointF c2 = QPointF((sp.x() + ep.x()) / 2, ep.y());
+                Painterpath.cubicTo(c1, c2, ep);
+                sp = ep;
+            }
+        }
+
+        painter.drawPath(Painterpath);
+    }
+}
+
 void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &graphicRect)
 {
     // draw frame
@@ -268,6 +332,10 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
     setDetail(cpuInfomodel->cpuSet()->modelName());
 
     detailFontChanged(DApplication::font());
+
+    connect(this, &CPUDetailWidget::sigClickSwitchMutliCoreButton, this, [ = ](bool isMutliCoreMode) {
+        m_graphicsTable->setMutliCoreMode(isMutliCoreMode);
+    });
 }
 
 void CPUDetailWidget::detailFontChanged(const QFont &font)
@@ -277,6 +345,54 @@ void CPUDetailWidget::detailFontChanged(const QFont &font)
 }
 
 CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QWidget(parent)
+{
+    if (m_isMutliCoreMode) {
+        setMultiModeLayout(model);
+    } else {
+        setSingleModeLayout(model);
+    }
+    m_cpuInfoModel = model;
+}
+
+void CPUDetailGrapTable::setMutliCoreMode(bool isMutliCoreMode)
+{
+    m_isMutliCoreMode = isMutliCoreMode;
+    // 获取当前布局所有的子控件，删除子控件
+    QLayout *p = this->layout();
+    while(p->count()){
+        QWidget *pWidget = p->itemAt(0)->widget();
+        pWidget->setParent(nullptr);
+        p->removeWidget(pWidget);
+        delete pWidget;
+    }
+    this->layout()->removeItem(this->layout()->itemAt(0));
+    delete this->layout();
+    if (m_isMutliCoreMode) {
+        setMultiModeLayout(m_cpuInfoModel);
+    } else {
+        setSingleModeLayout(m_cpuInfoModel);
+    }
+}
+
+void CPUDetailGrapTable::setSingleModeLayout(CPUInfoModel *model)
+{
+    QGridLayout  *graphicsLayout = new QGridLayout(this);
+    graphicsLayout->setMargin(0);
+    graphicsLayout->setHorizontalSpacing(10);
+    graphicsLayout->setVerticalSpacing(10);
+
+    QColor cpuColor("#1094D8");
+
+    CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, 0, this);
+    item->setMode(1);
+    item->setMultiCoreMode(false);
+    item->setColor(cpuColor);
+    graphicsLayout->addWidget(item, 0, 0);
+
+    setLayout(graphicsLayout);
+}
+
+void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
 {
     QGridLayout  *graphicsLayout = new QGridLayout(this);
     graphicsLayout->setMargin(0);
@@ -306,6 +422,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
     if (1 == cpuCount) {
         CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, 0, this);
         item->setMode(1);
+        item->setMultiCoreMode(false);
         item->setColor(cpuColors[0]);
         graphicsLayout->addWidget(item, 0, 0);
     } else if (2 == cpuCount) {
@@ -313,6 +430,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(1);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             graphicsLayout->addWidget(item, i / 2, i % 2);
         }
@@ -321,6 +439,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(1);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             graphicsLayout->addWidget(item, i / 2, i % 2);
         }
@@ -330,6 +449,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(1);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             graphicsLayout->addWidget(item, i / 4, i % 4);
         }
@@ -338,6 +458,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(2);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             graphicsLayout->addWidget(item, i / 4, i % 4);
         }
@@ -346,6 +467,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(2);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             graphicsLayout->addWidget(item, i / 8, i % 8);
         }
@@ -357,6 +479,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(3);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             if ((i % 8) == 7)
                 item->sethorizontal(true);
@@ -373,6 +496,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             item->setMode(2);
+            item->setMultiCoreMode(true);
             item->setColor(cpuColors[i % cpuColors.size()]);
             graphicsLayout->addWidget(item, i / 16, i % 16);
         }

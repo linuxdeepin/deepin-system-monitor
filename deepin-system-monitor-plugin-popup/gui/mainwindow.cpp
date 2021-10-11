@@ -436,9 +436,6 @@ void MainWindow::adjustPosition()
         case DOCK_BOTTOM:
             rect -= QMargins(0, 0, 0, Globals::WindowMargin);
             break;
-        case DOCK_LEFT:
-            rect -= QMargins(Globals::WindowMargin, 0, 0, 0);
-            break;
         default:
             break;
         }

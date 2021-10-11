@@ -39,6 +39,8 @@ public:
 
     void setMode(int mode);
 
+    inline void setMultiCoreMode(bool isMutilCoreMode) { m_isMutliCoreMode = isMutilCoreMode; }
+
     void sethorizontal(bool isHorizontalLast);
 
     void setVerticalLast(bool isVerticalLast);
@@ -57,6 +59,12 @@ protected:
 
     void drawTextMode(QPainter &painter);
 
+    //!
+    //! \brief drawSingleCoreMode 绘制单核模式的视图
+    //! \param painter 绘图工具类
+    //!
+    void drawSingleCoreMode(QPainter &painter);
+
     /**
      * @brief drawBackground
      * 绘制边框和表格线
@@ -73,6 +81,7 @@ private:
     int m_index = -1;
     bool m_isHorizontalLast = false;
     bool m_isVerticalLast = false;
+    bool m_isMutliCoreMode = false; // 是否多核显示
 };
 
 class CPUDetailGrapTable : public QWidget
@@ -80,6 +89,28 @@ class CPUDetailGrapTable : public QWidget
     Q_OBJECT
 public:
     CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent);
+
+    //!
+    //! \brief setMutliCoreMode 设置多核单核模式
+    //! \param isMutliCoreMode 参数是否是多核模式
+    //!
+    void setMutliCoreMode(bool isMutliCoreMode);
+
+    //!
+    //! \brief setSingleModeLayout 设置单核模式布局
+    //! \param model
+    //!
+    void setSingleModeLayout(CPUInfoModel *model);
+    //!
+    //! \brief setMultiModeLayout 设置多核模式布局
+    //! \param model
+    //!
+    void setMultiModeLayout(CPUInfoModel *model);
+
+private:
+    bool m_isMutliCoreMode = false;
+
+    CPUInfoModel *m_cpuInfoModel {};
 };
 
 class CPUDetailSummaryTable;
