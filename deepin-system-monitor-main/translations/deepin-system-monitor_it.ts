@@ -17,6 +17,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <source>Hide details</source>
         <translation>Nascondi dettagli</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>

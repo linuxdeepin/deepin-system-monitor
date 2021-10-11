@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Приховати подробиці</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Загальне використання</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Окреме використання</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -937,15 +945,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Поріг попередження для процесора (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Поріг попередження для пам&apos;яті (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Інтервал попередження (хв.)</translation>
     </message>
 </context>
 <context>

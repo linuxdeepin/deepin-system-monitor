@@ -18,8 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
 #include "common/error_context.h"
 #include "dbus/dbus_properties_interface.h"
 
@@ -30,9 +28,6 @@
 #include <QString>
 #include <QVariant>
 #include <QtDBus>
-
-#undef private
-#undef protected
 
 #include "ut_dbus_properties_interface.h"
 

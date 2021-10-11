@@ -18,9 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
-
 #include "dbus/unit_file_info.h"
 
 #include <QString>
@@ -28,9 +25,6 @@
 #include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QtDBus>
-
-#undef private
-#undef protected
 
 #include "ut_unit_file_info.h"
 

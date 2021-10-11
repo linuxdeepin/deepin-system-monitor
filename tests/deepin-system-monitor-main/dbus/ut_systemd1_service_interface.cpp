@@ -18,8 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
 
 #include "dbus/dbus_common.h"
 #include "dbus/dbus_properties_interface.h"
@@ -38,9 +36,6 @@
 #include <QtDBus>
 
 using namespace dbus::common;
-
-#undef private
-#undef protected
 
 #include "ut_systemd1_service_interface.h"
 

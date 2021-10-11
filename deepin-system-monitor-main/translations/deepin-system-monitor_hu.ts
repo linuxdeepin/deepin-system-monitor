@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Részletek elrejtése</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -938,15 +946,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Processzor figyelmeztetési küszöbérték (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Memória figyelmeztetési küszöbérték (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Figyelmeztetési időköz (perc)</translation>
     </message>
 </context>
 <context>

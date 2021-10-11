@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Təfərrüatları gizlətmək</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Ümumi istifadə</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Fərdi istifadə</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ayarlar</translation>
     </message>
 </context>
 <context>
@@ -923,31 +931,31 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Sistemin qorunması</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>İstifadə, göstərilən həddi aşdıqda xəbərdarlıqları göstərmək</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Bildirişlər</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>MP (CPU) xəbərdarlığı həddi (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Yaddaşın xəbərdarlıq həddi (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Xəbərdarlıq aralığı (dəq)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Dəyişdiriləbilən)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Aralıq: %1-%2: </translation>
     </message>
 </context>
 <context>

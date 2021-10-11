@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Informatie verbergen</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Algeheel gebruik</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Individueel gebruik</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -939,15 +947,15 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Waarschuwingsdrempelwaarde cpu-gebruik (in %)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Waarschuwingsdrempelwaarde geheugengebruik (in %)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Waarschuwingtussenpoos (in min.)</translation>
     </message>
 </context>
 <context>

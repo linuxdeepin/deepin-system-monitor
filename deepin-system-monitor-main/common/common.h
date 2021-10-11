@@ -103,6 +103,7 @@ extern unsigned long HZ;
 
 void global_init();
 void WaylandSearchCentered();
+
 } // namespace init
 
 namespace format {

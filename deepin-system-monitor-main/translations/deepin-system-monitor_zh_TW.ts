@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>隱藏詳情</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>總體利用率</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>個體利用率</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>

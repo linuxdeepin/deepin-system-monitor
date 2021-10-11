@@ -18,8 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
 #include "dbus/dbusforsystemomonitorpluginservce.h"
 #include "detailwidgetmanager.h"
 #include "application.h"
@@ -27,9 +25,6 @@
 #include <QApplication>
 #include <QObject>
 #include <QDBusContext>
-
-#undef private
-#undef protected
 
 #include "ut_dbusforsystemomonitorpluginservce.h"
 

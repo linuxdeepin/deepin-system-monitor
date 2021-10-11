@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>ཞིབ་ཕྲའི་གནས་ཚུལ་ཡིབ་པ།</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Are you sure you want to continue?</source>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>སྒྲིག་འགོད།</translation>
     </message>
 </context>
 <context>
@@ -923,31 +931,31 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>སྒྲིག་འགོད།</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>རྒྱུད་ཁོངས་འགོག་སྲུང་།</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>གྲངས་ཚད་གཤམ་གྱི་ཁྱབ་ཁོངས་ལས་མཐོ་བ་ཡོད་སྐབས་རང་འགུལ་ངང་ཉེན་བརྡ་གཏོང་བ།</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>ཆ་འཕྲིན་བརྡ་ཐོ།</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>CPU (%)ཟིན་པ།</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>ནང་གསོག་ (%)ཟིན་པ།</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>ཉེན་བརྡ་གཏོང་བའི་བར་ཐག(min)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Are you sure you want to continue?</source>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>སྒྲིག་འགོད།</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>（གྲངས་ཚད་བཅོས་ཆོག）</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>གྲངས་ཚད་ཀྱི་ཁྱབ་ཁོངས། %1-%2</translation>
     </message>
 </context>
 <context>

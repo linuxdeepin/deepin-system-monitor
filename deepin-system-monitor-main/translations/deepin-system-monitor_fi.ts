@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Piilota tiedot</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Käyttöaste</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Käyttö</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Haluatko varmasti jatkaa?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Asetukset</translation>
     </message>
 </context>
 <context>
@@ -923,31 +931,31 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Asetukset</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Järjestelmän suojaus</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>Näytä varoitukset, kun käyttö ylittää kynnysarvot</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Ilmoitukset</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>CPU varoituskynnys (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Muistin varoituskynnys (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Varoitusväli (min)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Haluatko varmasti jatkaa?</translation>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Asetukset</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Muokattavissa)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Alue: %1-%2</translation>
     </message>
 </context>
 <context>

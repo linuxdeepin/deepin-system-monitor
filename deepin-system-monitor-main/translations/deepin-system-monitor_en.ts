@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -20,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"></translation>
+        <translation>Overall utilization</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"></translation>
+        <translation>Individual utilization</translation>
     </message>
 </context>
 <context>

@@ -18,8 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
 #include "main_window.h"
 #include "application.h"
 #include "process_page_widget.h"
@@ -38,8 +36,6 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QDBusConnection>
-#undef private
-#undef protected
 
 #include "ut_main_window.h"
 

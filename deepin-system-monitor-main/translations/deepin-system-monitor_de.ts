@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Details ausblenden</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Gesamtnutzung</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Individuelle Nutzung</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -376,7 +384,7 @@
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Slab</translation>
     </message>
 </context>
 <context>
@@ -939,15 +947,15 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>CPU-Warnschwellenwert (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Speicher-Warnschwellenwert (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Warnintervall (min)</translation>
     </message>
 </context>
 <context>

@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>تەپسىلاتىنى يوشۇرۇش</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Are you sure you want to continue?</source>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>تەڭشەك</translation>
     </message>
 </context>
 <context>
@@ -923,31 +931,31 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>تەڭشەك</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>سىستېما مۇداپىئەسى</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>سانلىق قىممەت تۆۋەندىكى چەك قىممەتتىن يۇقىرى بولغاندا ئاپتوماتىك سىگنال بەرسۇن</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>ئۇقتۇرۇش</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>CPU نىڭ ئىشلىتىلىشى  (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>ئىچكى ساقلىغۇچنىڭ ئىشلىتىلىشى  (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>سىگنال بېرىش ئارىلىقى (min)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Are you sure you want to continue?</source>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>تەڭشەك</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(چەك قىممەتنى ئۆزگەرتىشكە بولىدۇ)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>قىممەت دائىرىسى: %1-%2</translation>
     </message>
 </context>
 <context>

@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Amaga&apos;n els detalls</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Segur que voleu continuar?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Paràmetres</translation>
     </message>
 </context>
 <context>
@@ -923,31 +931,31 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Paràmetres</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Protecció del sistema</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>Mostra avisos quan l&apos;ús superi els llindars.</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Notificacions</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Llindar d&apos;advertència de la CPU (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Llindar d&apos;advertència de la memòria (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Interval d&apos;advertència (min)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Segur que voleu continuar?</translation>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Paràmetres</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Modificable)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Interval: %1-%2</translation>
     </message>
 </context>
 <context>

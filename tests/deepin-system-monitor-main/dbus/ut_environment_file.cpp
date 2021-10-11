@@ -18,18 +18,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
-
 #include "dbus/environment_file.h"
 
 #include <QList>
 #include <QString>
 #include <QtDBus>
 #include <QDebug>
-
-#undef private
-#undef protected
 
 #include "ut_environment_file.h"
 

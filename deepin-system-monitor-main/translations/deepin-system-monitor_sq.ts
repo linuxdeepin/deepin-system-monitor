@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Fshihi hollësitë</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Përdorim i përgjithshëm</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Përdorim individual</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Rregullime</translation>
     </message>
 </context>
 <context>
@@ -519,7 +527,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Netmask:</source>
-        <translation type="unfinished"/>
+        <translation>Netmask-ë:</translation>
     </message>
     <message>
         <source>Broadcast:</source>
@@ -923,31 +931,31 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Rregullime</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Mbrojtje Sistemi</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>Shfaq sinjalizime, kur përdorimi tejkalon pragjet</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Njoftime</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Prag sinjalizimi për CPU-në (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Prag sinjalizimi për kujtesën (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Interval sinjalizimi (min)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Rregullime</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(I ndryshueshëm)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Interval: %1-%2</translation>
     </message>
 </context>
 <context>

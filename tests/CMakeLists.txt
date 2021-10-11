@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 #set(CMAKE_AUTOUIC ON)
 
-#ADD_COMPILE_OPTIONS(-fno-access-control)
+ADD_COMPILE_OPTIONS(-fno-access-control)
 add_definitions(-DENABLE_AUTO_UNIT_TEST)
 
 set(APP_RES_ROOT assets)

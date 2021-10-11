@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Сакриј детаље</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Are you sure you want to continue?</source>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Подешавање</translation>
     </message>
 </context>
 <context>
@@ -923,11 +931,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Подешавање</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Заштита система</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
@@ -935,7 +943,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Обавештења</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
@@ -1046,7 +1054,7 @@ Are you sure you want to continue?</source>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Подешавање</translation>
     </message>
     <message>
         <source>(Modifiable)</source>

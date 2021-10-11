@@ -18,9 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
-
 #include "dbus/systemd1_manager_interface.h"
 #include "common/error_context.h"
 #include "dbus/dbus_common.h"
@@ -36,9 +33,6 @@
 #include <QVariant>
 #include <QtDBus>
 #include <QDBusConnection>
-
-#undef private
-#undef protected
 
 #include "ut_systemd1_manager_interface.h"
 

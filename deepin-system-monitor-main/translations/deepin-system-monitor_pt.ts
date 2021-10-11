@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Ocultar detalhes</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Utilização geral</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Utilização individual</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -501,7 +509,7 @@ Tem a certeza de que deseja continuar?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Definições</translation>
     </message>
 </context>
 <context>
@@ -923,31 +931,31 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Definições</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Proteção do sistema</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar avisos quando a utilização exceder os limites</translation>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Notificações</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Aviso sobre limite da CPU (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Aviso sobre limite da memória (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Intervalo de avisos (min)</translation>
     </message>
 </context>
 <context>
@@ -1046,15 +1054,15 @@ Tem a certeza de que deseja continuar?</translation>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Definições</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Modificável)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Intervalo: %1-%2</translation>
     </message>
 </context>
 <context>

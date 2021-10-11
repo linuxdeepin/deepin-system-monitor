@@ -18,9 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define private public
-#define protected public
-
 //#include "dbus/unit_file_info.h"
 //#include <QString>
 //#include <QDebug>
@@ -30,9 +27,6 @@
 #include "dbus/unit_info.h"
 
 #include <QDebug>
-
-#undef private
-#undef protected
 
 #include "ut_unit_info.h"
 
