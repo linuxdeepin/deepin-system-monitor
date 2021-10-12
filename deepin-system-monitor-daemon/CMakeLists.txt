@@ -9,6 +9,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(RESOURCES_FILE assets/${DAEMON_NAME}.qrc)
 
+find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -32,17 +34,10 @@ QT5_ADD_DBUS_ADAPTOR(SRC
     SystemMonitorService
     )
 
-if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
-
-    # generate qm
-    message(${CMAKE_CURRENT_SOURCE_DIR}/translations)
-    execute_process(COMMAND bash "translate_generation.sh"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
-endif ()
-
-file(GLOB DAEMON_QM_FILES "translations/*.qm")
-
+#生成qm
+file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
+qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+add_custom_target(DAEMON_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 add_executable(${DAEMON_NAME}
     ${SRC}
@@ -59,4 +54,5 @@ target_link_libraries(
 install(TARGETS ${DAEMON_NAME} DESTINATION bin)
 install(FILES deepin-system-monitor-daemon.desktop DESTINATION /etc/xdg/autostart)
 install(FILES com.deepin.SystemMonitor.Daemon.service DESTINATION /usr/share/dbus-1/services)
-install(FILES ${DAEMON_QM_FILES} DESTINATION share/${DAEMON_NAME}/translations)
+#安装翻译文件
+install(FILES ${APP_QM_FILES} DESTINATION "/usr/share/deepin-system-monitor-daemon/translations")

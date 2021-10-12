@@ -297,21 +297,17 @@ target_link_libraries(${PROJECT_NAME}
     dframeworkdbus
 )
 
-# generate qm
-message(${CMAKE_CURRENT_SOURCE_DIR}/translations)
-execute_process(COMMAND bash "translate_generation.sh"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
+#生成qm
+file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
+qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+add_custom_target(POPUP_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 #
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.deepin.SystemMonitorPluginPopup.service DESTINATION /usr/share/dbus-1/services)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/deepin-system-monitor-plugin-popup.desktop DESTINATION /etc/xdg/autostart)
-#国际化翻译文件路径
-file(GLOB POPUP_QM_FILES "translations/*.qm")
-install(FILES ${POPUP_QM_FILES}
-        DESTINATION "/usr/share/deepin-system-monitor-plugin-popup/translations")
-
-#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.deepin.SystemMonitorPluginPopup.conf DESTINATION /etc/dbus-1/system.d)
+#安装翻译文件
+install(FILES ${APP_QM_FILES} DESTINATION "/usr/share/deepin-system-monitor-plugin-popup/translations")
 
 
 

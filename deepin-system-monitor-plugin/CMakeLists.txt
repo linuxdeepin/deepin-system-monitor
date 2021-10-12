@@ -48,15 +48,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${QGSettings_LIBRARIES}
 )
 
-# generate qm
-message(${CMAKE_CURRENT_SOURCE_DIR}/translations)
-execute_process(COMMAND bash "translate_generation.sh"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/translations)
+#生成qm
+file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
+qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+add_custom_target(PLUGIN_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
 INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /usr/lib/dde-dock/plugins)
-#国际化翻译文件路径
-file(GLOB PLUGIN_QM_FILES "translations/*.qm")
-INSTALL(FILES ${PLUGIN_QM_FILES}
-        DESTINATION "/usr/share/deepin-system-monitor-plugin/translations")
+#安装翻译文件
+install(FILES ${APP_QM_FILES} DESTINATION "/usr/share/deepin-system-monitor-plugin/translations")
+
