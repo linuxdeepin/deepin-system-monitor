@@ -25,7 +25,14 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -Wl,--gc-sections")
 endif()
 
-
+#是否开启Wayland编译
+execute_process(COMMAND echo "$ENV{XDG_SESSION_TYPE}"
+                OUTPUT_VARIABLE XDGTYPE)
+if (${XDGTYPE} MATCHES "wayland")
+    SET(WAYLAND_SESSION_TYPE 1)
+else()
+    SET(WAYLAND_SESSION_TYPE 0)
+endif()
 #系统监视器主应用
 ADD_SUBDIRECTORY(deepin-system-monitor-main)
 #系统监视器插件

@@ -20,8 +20,23 @@
 #ifndef XWIN_KILL_PREVIEW_WIDGET_H
 #define XWIN_KILL_PREVIEW_WIDGET_H
 
+#include "config.h"
 #include <QWidget>
+#ifdef WAYLAND_SESSION_TYPE
+#include <KF5/KWayland/Client/clientmanagement.h>
+#include <KF5/KWayland/Client/registry.h>
+#include <KF5/KWayland/Client/connection_thread.h>
+#include <KF5/KWayland/Client/event_queue.h>
+#include <QObject>
+#include <QGuiApplication>
+#include <QDebug>
+#include <QThread>
+#include <QTime>
+// system
+#include <unistd.h>
 
+using namespace KWayland::Client;
+#endif //WAYLAND_SESSION_TYPE
 namespace core {
 namespace wm {
 class WMInfo;
@@ -45,7 +60,13 @@ public:
      * @brief Destructor
      */
     ~XWinKillPreviewWidget() override;
-
+    #ifdef WAYLAND_SESSION_TYPE
+    /**
+     * @brief Print current window states
+     * @param QVector of window state which contains pid,windowid,resourceName,geometry,etc
+     */
+     void print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates);
+    #endif //WAYLAND_SESSION_TYPE
 signals:
     /**
      * @brief Window clicked signal
@@ -99,6 +120,23 @@ private:
     QCursor m_killCursor;
     // Default cursor style
     QCursor m_defaultCursor;
+#ifdef WAYLAND_SESSION_TYPE
+    //Vector of window states
+    QVector<ClientManagement::WindowState> m_windowStates;
+    //Kwayland Client Management
+    ClientManagement *m_clientManagement = nullptr;
+    //Regist m_clientManagement
+    void setupRegistry(Registry *registry);
+    QThread *m_connectionThread;
+    //Thread connet to wayland
+    ConnectionThread *m_connectionThreadObject;
+     //Event Queue
+    EventQueue *m_eventQueue = nullptr;
+    //wayland compositor
+    Compositor *m_compositor = nullptr;
+    //oringinal Kwayland window management
+    PlasmaWindowManagement *m_windowManagement = nullptr;
+#endif //WAYLAND_SESSION_TYPE
 };
 
 #endif // XWIN_KILL_PREVIEW_WIDGET_H

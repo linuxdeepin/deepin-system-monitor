@@ -34,6 +34,7 @@ check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include(FindPkgConfig)
 
+find_package(KF5Wayland)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
@@ -553,6 +554,8 @@ target_link_libraries(${PROJECT_NAME}
     ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
+    KF5::WaylandClient
+    KF5::WaylandServer
     ${LIB_XCB}
     ${LIB_XEXT}
     ${LIB_ICCCM}

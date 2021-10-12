@@ -38,6 +38,7 @@ check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 configure_file(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include(FindPkgConfig)
 
+find_package(KF5Wayland)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
@@ -590,6 +591,8 @@ target_link_libraries(${PROJECT_NAME_TEST}
     dtkcore
     dtkwidget
     dtkgui
+    KF5::WaylandClient
+    KF5::WaylandServer
     ${LIB_PCAP}
     ${LIB_PROCPS}
     ICU::i18n

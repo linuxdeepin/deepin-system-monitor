@@ -24,6 +24,7 @@
 #include "wm/wm_info.h"
 #include "main_window.h"
 #include "ui_common.h"
+#include "common/common.h"
 
 #include <QDebug>
 #include <QMouseEvent>
@@ -38,15 +39,21 @@
 #include <QRegion>
 
 #include <unistd.h>
+#include <string>
 
 using namespace std;
 using namespace core::wm;
+using namespace common::init;
 
 // constructor
 XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 {
     // new window manager instance
     m_wminfo = new WMInfo();
+#ifdef WAYLAND_SESSION_TYPE
+        m_connectionThread = new QThread(this);
+        m_connectionThreadObject = new ConnectionThread();
+#endif //WAYLAND_SESSION_TYPE
 
     // init ui components & connections
     initUI();
@@ -70,100 +77,190 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
     releaseMouse();
     releaseKeyboard();
     delete m_wminfo;
+    #ifdef WAYLAND_SESSION_TYPE
+        m_connectionThread->quit();
+        m_connectionThread->wait();
+        m_connectionThreadObject->deleteLater();
+    #endif //WAYLAND_SESSION_TYPE
 }
 
 // mouse press event
 void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 {
-    // only accept left mouse button click event
+     // only accept left mouse button click event
     if (event->button() != Qt::LeftButton) {
         return;
     }
-
     // get the list of windows under cursor in stacked order when mouse pressed
     auto pos = QCursor::pos();
-    auto list = m_wminfo->selectWindow(pos);
 
-    // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
-    if (m_wminfo->isCursorHoveringDocks(pos)) {
-        return;
-    }
+    #ifdef WAYLAND_SESSION_TYPE
+        qDebug()<<"press success "<<m_windowStates.size();
 
-    for (auto &select : list) {
-        // if the window is created by ourself, then ignore it
-        if (getpid() == select->pid)
-            continue;
+        for(QVector<ClientManagement::WindowState>::iterator it=m_windowStates.begin();
+            it!=m_windowStates.end();++it) {
+            // if the window is created by ourself, then ignore it
+            qDebug()<<it->pid;
+            if (getpid() == it->pid || QString::fromStdString(it->resourceName)=="dde-desktop" ||
+                    QString::fromStdString(it->resourceName) == "deepin-system-monitor"||
+                    QString::fromStdString(it->resourceName)=="qtcreator")
+                continue;
 
-        // if such window exists, we emit window clicked signal to notify kill application performed action
-        if (select->rect.contains(pos)) {
-            // hide preview & background widgets first
-            hide();
-            for (auto &background : m_backgroundList) {
-                background->hide();
+            // if such window exists, we emit window clicked signal to notify kill application performed action
+            QRect rect;
+            rect.setRect(it->geometry.x,it->geometry.y,it->geometry.width, it->geometry.height);
+            qDebug()<<"rect success "<<rect;
+            if (rect.contains(pos)) {
+                // hide preview & background widgets first
+                hide();
+                for (auto &background : m_backgroundList) {
+                    background->hide();
+                }
+                setMouseTracking(false);
+                releaseMouse();
+                releaseKeyboard();
+                emit windowClicked(it->pid);
+                close();
+                break;
             }
-            setMouseTracking(false);
-            releaseMouse();
-            releaseKeyboard();
-            emit windowClicked(select->pid);
-            close();
-            break;
         }
-    }
+
+    #endif //WAYLAND_SESSION_TYPE
+    #ifndef WAYLAND_SESSION_TYPE
+        auto list = m_wminfo->selectWindow(pos);
+
+        // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
+        if (m_wminfo->isCursorHoveringDocks(pos)) {
+            return;
+        }
+
+        for (auto &select : list) {
+            // if the window is created by ourself, then ignore it
+            if (getpid() == select->pid)
+                continue;
+
+            // if such window exists, we emit window clicked signal to notify kill application performed action
+            if (select->rect.contains(pos)) {
+                // hide preview & background widgets first
+                hide();
+                for (auto &background : m_backgroundList) {
+                    background->hide();
+                }
+                setMouseTracking(false);
+                releaseMouse();
+                releaseKeyboard();
+                emit windowClicked(select->pid);
+                close();
+                break;
+            }
+        }
+
+    #endif //WAYLAND_SESSION_TYPE
+
+
 }
 
 // mouse move event handler
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
-    double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
-    auto pos = QCursor::pos();
-    // get the list of windows under cursor from cache in stacked order
-    auto list = m_wminfo->selectWindow(pos);
-    bool found {false};
+    #ifdef WAYLAND_SESSION_TYPE
+        double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+        auto pos = QCursor::pos();
+        // get the list of windows under cursor from cache in stacked order
+        bool found {false};
+        qDebug()<<"move success ";
 
-    // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
-    if (m_wminfo->isCursorHoveringDocks(pos)) {
-        for (auto &bg : m_backgroundList)
-            bg->clearSelection();
-        emit cursorUpdated(m_defaultCursor);
-        return;
-    }
+        for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.begin();
+             it!=m_windowStates.end();++it) {
+            // if the window is created by ourself, then ignore it
+            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||
+                    QString::fromStdString(it->resourceName) == "deepin-system-monitor"||
+                    QString::fromStdString(it->resourceName)=="qtcreator")
+                continue;
+            auto selRect = QRect(static_cast<int>(it->geometry.x / x), static_cast<int>(it ->geometry.y / x),
+                                 static_cast<int>(it->geometry.width / x), static_cast<int>(it->geometry.height/ x));
+            if (selRect.contains(pos)) {
+                found = true;
 
-    for (auto &select : list) {
-        // if the window is created by ourself, then ignore it
-        if (getpid() == select->pid)
-            continue;
-        auto selRect = QRect(static_cast<int>(select->rect.x() / x), static_cast<int>(select->rect.y() / x), static_cast<int>(select->rect.width() / x), static_cast<int>(select->rect.height() / x));
-        if (selRect.contains(pos)) {
-            found = true;
+                // find all windows hovered above, if any clip out the intersected region
+                auto hoveredBy = m_wminfo->getHoveredByWindowList(it->windowId, selRect);
+                QRegion region {selRect};
 
-            // find all windows hovered above, if any clip out the intersected region
-            auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, selRect);
-            QRegion region {selRect};
-            for (auto &hover : hoveredBy) {
-                auto hoverrect = QRect(static_cast<int>(hover->rect.x() / x), static_cast<int>(hover->rect.y() / x), static_cast<int>(hover->rect.width() / x), static_cast<int>(hover->rect.height() / x));
-                region = region.subtracted(hoverrect);
-            }
-
-            // if current selected window is crossing screens, we need update each sub part on each screen
-            for (auto &bg : m_backgroundList) {
-                if (bg->geometry().intersects(selRect)) {
-                    auto area = region.intersected(bg->geometry());
-                    bg->updateSelection(area);
-                    emit cursorUpdated(m_killCursor);
-                } else {
-                    // if current screen doesn't intersect with the selected window, we need clear any selection left before
-                    bg->clearSelection();
+    //            // if current selected window is crossing screens, we need update each sub part on each screen
+                for (auto &bg : m_backgroundList) {
+                    if (bg->geometry().intersects(selRect)) {
+                        auto area = region.intersected(bg->geometry());
+                        bg->updateSelection(area);
+                        emit cursorUpdated(m_killCursor);
+                    } else {
+                        // if current screen doesn't intersect with the selected window, we need clear any selection left before
+                        bg->clearSelection();
+                    }
                 }
+                break;
             }
-            break;
         }
-    }
-    // if no such window found, we need clear any selection left before, plus restore cursor to its default style (forbit style)
-    if (!found) {
-        for (auto &bg : m_backgroundList)
-            bg->clearSelection();
-        emit cursorUpdated(m_defaultCursor);
-    }
+        // if no such window found, we need clear any selection left before, plus restore cursor to its default style (forbit style)
+        if (!found) {
+            for (auto &bg : m_backgroundList)
+                bg->clearSelection();
+            emit cursorUpdated(m_defaultCursor);
+        }
+    #endif //WAYLAND_SESSION_TYPE
+
+    #ifndef WAYLAND_SESSION_TYPE
+        double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+        auto pos = QCursor::pos();
+        // get the list of windows under cursor from cache in stacked order
+        auto list = m_wminfo->selectWindow(pos);
+        bool found {false};
+
+        // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
+        if (m_wminfo->isCursorHoveringDocks(pos)) {
+            for (auto &bg : m_backgroundList)
+                bg->clearSelection();
+            emit cursorUpdated(m_defaultCursor);
+            return;
+        }
+
+        for (auto &select : list) {
+            // if the window is created by ourself, then ignore it
+            if (getpid() == select->pid)
+                continue;
+            auto selRect = QRect(static_cast<int>(select->rect.x() / x), static_cast<int>(select->rect.y() / x), static_cast<int>(select->rect.width() / x), static_cast<int>(select->rect.height() / x));
+            if (selRect.contains(pos)) {
+                found = true;
+
+                // find all windows hovered above, if any clip out the intersected region
+                auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, selRect);
+                QRegion region {selRect};
+                for (auto &hover : hoveredBy) {
+                    auto hoverrect = QRect(static_cast<int>(hover->rect.x() / x), static_cast<int>(hover->rect.y() / x), static_cast<int>(hover->rect.width() / x), static_cast<int>(hover->rect.height() / x));
+                    region = region.subtracted(hoverrect);
+                }
+
+                // if current selected window is crossing screens, we need update each sub part on each screen
+                for (auto &bg : m_backgroundList) {
+                    if (bg->geometry().intersects(selRect)) {
+                        auto area = region.intersected(bg->geometry());
+                        bg->updateSelection(area);
+                        emit cursorUpdated(m_killCursor);
+                    } else {
+                        // if current screen doesn't intersect with the selected window, we need clear any selection left before
+                        bg->clearSelection();
+                    }
+                }
+                break;
+            }
+        }
+        // if no such window found, we need clear any selection left before, plus restore cursor to its default style (forbit style)
+        if (!found) {
+            for (auto &bg : m_backgroundList)
+                bg->clearSelection();
+            emit cursorUpdated(m_defaultCursor);
+        }
+
+    #endif //WAYLAND_SESSION_TYPE
 }
 
 // key press event handler
@@ -209,7 +306,14 @@ void XWinKillPreviewWidget::initUI()
         // screen geometry
         auto geom = screen->geometry();
         // snapshot current screen
-        auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(), geom.x(), geom.y(), geom.width(), geom.height());
+       #ifndef WAYLAND_SESSION_TYPE
+        auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(),geom.x(), geom.y(), geom.width(), geom.height());
+       #endif //WAYLAND_SESSION_TYPE
+
+       #ifdef WAYLAND_SESSION_TYPE 
+            auto pixmap = screen->grabWindow(m_windowStates.end()->windowId,
+                                      geom.x(), geom.y(), geom.width(), geom.height());
+        #endif //WAYLAND_SESSION_TYPE
 
         // create preview background widget for each screen
         auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
@@ -232,4 +336,73 @@ void XWinKillPreviewWidget::initUI()
 // initialize connections (nothing to do here)
 void XWinKillPreviewWidget::initConnections()
 {
+    #ifdef WAYLAND_SESSION_TYPE
+    connect(m_connectionThreadObject, &ConnectionThread::connected, this,
+        [this] {
+            m_eventQueue = new EventQueue(this);
+            m_eventQueue->setup(m_connectionThreadObject);
+
+            Registry *registry = new Registry(this);
+            setupRegistry(registry);
+        },
+        Qt::QueuedConnection
+    );
+    m_connectionThreadObject->moveToThread(m_connectionThread);
+    m_connectionThread->start();
+
+    m_connectionThreadObject->initConnection();
+    #endif //WAYLAND_SESSION_TYPE
 }
+#ifdef WAYLAND_SESSION_TYPE
+void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates)
+{
+    for (int i = 0; i < m_windowStates.count(); ++i) {
+        qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) \
+                    << "window[" << i << "]" << "pid:" << m_windowStates.at(i).pid \
+                    << "title:" << m_windowStates.at(i).resourceName \
+                    << "windowId:" << m_windowStates.at(i).windowId \
+                    << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y \
+                    << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height \
+                    <<"isMinimized("<<m_windowStates.at(i).isMinimized<<")" \
+                    <<"isFullScreen("<<m_windowStates.at(i).isFullScreen<<")" \
+                    <<"isActive("<<m_windowStates.at(i).isActive<<")";
+    }
+}
+
+void XWinKillPreviewWidget::setupRegistry(Registry *registry)
+{
+    connect(registry, &Registry::compositorAnnounced, this,
+        [this, registry](quint32 name, quint32 version) {
+            m_compositor = registry->createCompositor(name, version, this);
+        }
+    );
+
+    connect(registry, &Registry::clientManagementAnnounced, this,
+        [this, registry] (quint32 name, quint32 version) {
+            m_clientManagement = registry->createClientManagement(name, version, this);
+            qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) << "createClientManagement";
+            connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
+                [this] {
+                    m_windowStates = m_clientManagement->getWindowStates();
+                    qDebug() << "Get new window states";
+                    //print_window_states(m_windowStates);
+                }
+            );
+        }
+    );
+
+    connect(registry, &Registry::interfacesAnnounced, this,
+        [this] {
+            Q_ASSERT(m_compositor);
+            Q_ASSERT(m_clientManagement);
+            qDebug() << "request getWindowStates";
+            m_windowStates = m_clientManagement->getWindowStates();
+           //print_window_states(m_windowStates);
+        }
+    );
+
+    registry->setEventQueue(m_eventQueue);
+    registry->create(m_connectionThreadObject);
+    registry->setup();
+}
+#endif //WAYLAND_SESSION_TYPE
