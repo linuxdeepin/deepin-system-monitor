@@ -24,6 +24,7 @@
 #include <qsettingbackend.h>
 
 #include <QObject>
+#include <DLineEdit>
 #include <QDBusInterface>
 
 DWIDGET_USE_NAMESPACE
@@ -66,6 +67,13 @@ public:
      * 获取DSetting指针
      */
     DSettings *getDSettingPointor();
+
+private:
+    //!
+    //! \brief regularNumber 规范数字信息正确显示
+    //! \param lineEdit 文本内容输入框
+    //!
+    void regularNumber(DLineEdit *lineEdit);
 
 signals:
 

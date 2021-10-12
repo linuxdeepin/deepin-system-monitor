@@ -217,6 +217,9 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     validator->setRange(1,100);
     edit->lineEdit()->setValidator(validator);
 
+    // 规范输入的文字信息（数字）
+    SystemProtectionSetting::instance()->regularNumber(edit);
+
     // 构建提示语
     DLabel *label = new DLabel(widget);
     // 设置提示语字体大小，比系统标准字体小1.5号
@@ -309,6 +312,9 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     QIntValidator *validator = new QIntValidator(edit);
     validator->setRange(1,60);
     edit->lineEdit()->setValidator(validator);
+
+    // 规范输入的文字信息（数字）
+    SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -486,6 +492,27 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
 DSettings *SystemProtectionSetting::getDSettingPointor()
 {
     return mDsettings;
+}
+
+void SystemProtectionSetting::regularNumber(DLineEdit *lineEdit)
+{
+    // 失去焦点时
+    connect(lineEdit, &DLineEdit::focusChanged, SystemProtectionSetting::instance(), [ = ]() {
+        if (lineEdit) {
+            QString text = lineEdit->text();
+            int number = text.toInt();
+            lineEdit->setText(QString::number(number));
+        }
+    });
+
+    // 回车按下时
+    connect(lineEdit, &DLineEdit::returnPressed, SystemProtectionSetting::instance(), [ = ]() {
+        if (lineEdit) {
+            QString text = lineEdit->text();
+            int number = text.toInt();
+            lineEdit->setText(QString::number(number));
+        }
+    });
 }
 
 void SystemProtectionSetting::onUpdateNewBackend()
