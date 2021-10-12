@@ -89,9 +89,15 @@ void CPUDetailGrapTableItem::updateStat()
 {
     // 多核模式时保留原来逻辑
     if (m_isMutliCoreMode) {
-        m_cpuPercents.insert(0, m_cpuInfomodel->cpuPercentList().value(m_index) / 100.0);
+        if (std::isnan(m_cpuInfomodel->cpuPercentList().value(m_index)))
+            m_cpuPercents.insert(0, 0);
+        else
+            m_cpuPercents.insert(0, m_cpuInfomodel->cpuPercentList().value(m_index) / 100.0);
     } else {
-        m_cpuPercents.insert(0, m_cpuInfomodel->cpuAllPercent() / 100.0);
+        if (std::isnan(m_cpuInfomodel->cpuAllPercent()))
+            m_cpuPercents.insert(0, 0);
+        else
+            m_cpuPercents.insert(0, m_cpuInfomodel->cpuAllPercent() / 100.0);
     }
     while (m_cpuPercents.count() > 31)
         m_cpuPercents.pop_back();

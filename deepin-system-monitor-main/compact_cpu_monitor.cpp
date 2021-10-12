@@ -112,18 +112,48 @@ void CompactCpuMonitor::updateStatus()
 {
     totalCpuPercent = m_cpuInfomodel->cpuAllPercent();
 
-    // 更新追加，各个独立CPU占用曲线数据
+    // 增加判断，如果返回的值是非数，则不更新界面，也不保存数据
+    if (std::isnan(totalCpuPercent))
+        return;
+
+    // 将cpuPercents 和传过来最新的cPercents做对比，arm开核关核时，对应的系统监视器会出现飞线或波形图不动的情况
+    QList<int> appendIndex;
     const auto &cpulist = m_cpuInfomodel->cpuPercentList();
-    for (int i = 0; i < cpulist.size(); i++) {
-        QList<qreal> cpuPercent = cpuPercents[i];
 
-        cpuPercent.append(cpulist[i] / 100.0);
-
-        if (cpuPercent.size() > pointsNumber) {
-            cpuPercent.pop_front();
+    // 更新追加，各个独立CPU占用曲线数据
+    if(cpulist.size() < cpuPercents.size() - 1) {
+        for(int i = cpulist.size(); i < cpuPercents.size() - 1; i++) {
+            cpuPercents[i].append(0.0);
+            appendIndex.append(i);
         }
+    } else if (cpulist.size() > cpuPercents.size() - 1){
+        QList<qreal> addPointList;
+        for (int j = 0; j < pointsNumber; j++) {
+            addPointList.append(0);
+        }
+        for(int i = cpuPercents.size() - 1; i < cpulist.size(); i++) {
+            cpuPercents.append(addPointList);
+            appendIndex.append(i);
+        }
+    } else {
+        appendIndex.append(-1);
+    }
 
-        cpuPercents[i] = cpuPercent;
+    for (int i = 0; i < cpulist.size(); i++) {
+        //防止QList内存溢出
+        if (!cpuPercents[i].isEmpty()) {
+            QList<qreal> cpuPercent = cpuPercents[i];
+            if (!appendIndex.contains(i)) {
+                if (!std::isnan(cpulist[i]))
+                    cpuPercent.append(cpulist[i] / 100.0);
+            }
+
+            if (cpuPercent.size() > pointsNumber) {
+                cpuPercent.pop_front();
+            }
+
+            cpuPercents[i] = cpuPercent;
+        }
     }
 
     // 更新追加，总的CPU占用率数据
