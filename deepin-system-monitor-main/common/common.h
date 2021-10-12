@@ -91,7 +91,7 @@ namespace init {
 extern QList<QString> shellList;
 extern QList<QString> scriptList;
 extern QList<QString> pathList;
-static bool WaylandCentered=false;
+extern bool WaylandCentered;
 
 // disk sector size shift
 #define SECTOR_SHIFT 9

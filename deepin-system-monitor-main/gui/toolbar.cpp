@@ -37,7 +37,7 @@
 #define MAX_TEXT_LEN 200
 
 using namespace common;
-using namespace init;
+using namespace common::init;
 
 // constructor
 Toolbar::Toolbar(QWidget *parent)
@@ -90,7 +90,7 @@ Toolbar::Toolbar(QWidget *parent)
     layout->addStretch();
     layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
     layout->addStretch();
-    if (WaylandCentered== true){
+    if (WaylandCentered == true){
         layout->addStretch();
         layout->addStretch();
     }

@@ -38,8 +38,12 @@
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
+using namespace common::init;
+
 int main(int argc, char *argv[])
 {
+    //Judge if Wayland
+    WaylandSearchCentered();
     //
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")){
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
