@@ -36,7 +36,8 @@
                             "key": "alarm_last_time",
                             "name": "store alarm last time",
                             "type": "alarmlasttime",
-                            "default": 0
+                            "default": 0,
+                            "hide": true
                         }
                     ]
                 },

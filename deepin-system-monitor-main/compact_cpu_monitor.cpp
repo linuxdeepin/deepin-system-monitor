@@ -299,7 +299,7 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
 // 通过 UseTotalCpuCurve 宏控制绘制哪些CPU曲线
 // 通过 statrpos 和 endpos 实现曲线的选择
 #if UseTotalCpuCurve
-    int statrpos = cpuPercents.size() - 1;
+    int statrpos = numCPU;
     int endpos = statrpos;
 #else
     int statrpos = cpuPercents.size() - 2;

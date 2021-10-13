@@ -19,7 +19,12 @@ include_directories(
 
 find_package(Qt5 COMPONENTS Core DBus REQUIRED)
 find_package(DtkCore CONFIG REQUIRED)
-
+set(HEADER
+    systemmonitorservice.h
+    settinghandler.h
+    cpuprofile.h
+    memoryprofile.h
+    )
 set(SRC
     systemmonitorservice.cpp
     settinghandler.cpp
@@ -40,6 +45,7 @@ qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
 add_custom_target(DAEMON_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 add_executable(${DAEMON_NAME}
+    ${HEADER}
     ${SRC}
     ${RESOURCES_FILE}
     )

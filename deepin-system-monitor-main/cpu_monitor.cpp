@@ -126,6 +126,9 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 
 void CpuMonitor::updateStatus()
 {
+    // 如果数据无效不更新
+    if (std::isnan(m_cpuInfomodel->cpuAllPercent()))
+        return;
     cpuPercents->append(m_cpuInfomodel->cpuAllPercent());
 
     if (cpuPercents->size() > pointsNumber) {
