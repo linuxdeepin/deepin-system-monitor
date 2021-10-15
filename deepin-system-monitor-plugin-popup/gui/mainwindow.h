@@ -38,8 +38,7 @@
 #include <DWindowManagerHelper>
 #include <DRegionMonitor>
 #include <DWidget>
-
-#include <QScrollArea>
+#include <DScrollArea>
 
 // Dtk
 #include <com_deepin_daemon_display_monitor.h>
@@ -189,7 +188,7 @@ private:
     DiskWidget *m_diskWidget {};
     MemoryWidget *m_memoryWidget {};
     ProcessWidget *m_processWidget{};
-    QScrollArea *m_scrollArea;
+    DScrollArea *m_scrollArea;
 
     // 防止300ms内重复按键
     QTimer* m_trickTimer;

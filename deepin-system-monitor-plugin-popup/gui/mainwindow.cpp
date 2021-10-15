@@ -265,7 +265,7 @@ void MainWindow::initUI()
     vBoxLayout->addWidget(m_processWidget);
     vBoxLayout->addSpacing(5);
 
-    m_scrollArea = new QScrollArea(this);
+    m_scrollArea = new DScrollArea(this);
     m_scrollArea->horizontalScrollBar()->setEnabled(false);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
@@ -351,11 +351,13 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
     switch (themeType) {
     case DApplicationHelper::LightType:
         palette.setColor(QPalette::Background,QColor(210,210,210,75));
+        m_scrollArea->verticalScrollBar()->setStyleSheet("QScrollBar::handle:vertical:hover{background-color:rgb(50,50,50);}");
         break;
     case DApplicationHelper::DarkType:
         setAutoFillBackground(false);
         //Dark主题的透明度为204
         palette.setColor(QPalette::Background,QColor(25,25,25,204));
+        m_scrollArea->verticalScrollBar()->setStyleSheet("QScrollBar::handle:vertical:hover{background-color:rgb(200,200,200);}");
         break;
     default:
         break;
