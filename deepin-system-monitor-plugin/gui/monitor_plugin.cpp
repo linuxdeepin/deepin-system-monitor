@@ -80,9 +80,9 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
-
-    return m_itemWidget;
+    if (itemKey == "system-monitor")
+        return m_itemWidget;
+    return nullptr;
 }
 
 void MonitorPlugin::pluginStateSwitched()
@@ -101,16 +101,16 @@ bool MonitorPlugin::pluginIsDisable()
 
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    m_dataTipsLabel->setObjectName(itemKey);
     m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0KB/s" << "0KB/s");
     return m_dataTipsLabel.data();
 }
 
 const QString MonitorPlugin::itemCommand(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
-
-    DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+    if (itemKey == "system-monitor") {
+        DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+    }
     return "";
 
 //    return "dbus-send --print-reply --dest=com.deepin.SystemMonitorPluginPopup /com/deepin/SystemMonitorPluginPopup com.deepin.SystemMonitorPluginPopup.showOrHideDeepinSystemMonitorPluginPopupWidget";
@@ -140,7 +140,8 @@ void MonitorPlugin::setSortKey(const QString &itemKey, const int order)
 
 const QString MonitorPlugin::itemContextMenu(const QString &itemKey)
 {
-    Q_UNUSED(itemKey)
+    if (itemKey != "system-monitor")
+        return QString();
 
     QList<QVariant> items;
     items.reserve(1);

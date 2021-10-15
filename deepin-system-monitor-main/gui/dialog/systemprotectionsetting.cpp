@@ -485,7 +485,7 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
 
     if(needCall)  {
         qDebug() << __FUNCTION__ << __LINE__ << "，dbus cmd：" << cmd;
-        QProcess::startDetached(cmd);
+        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
     }
 }
 

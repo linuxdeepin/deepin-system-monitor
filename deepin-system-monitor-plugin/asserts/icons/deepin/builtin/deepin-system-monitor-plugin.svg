@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>deepin-system-monitor</title>
+    <defs>
+        <radialGradient cx="38.256%" cy="21.126%" fx="38.256%" fy="21.126%" r="100.21%" id="radialGradient-1">
+            <stop stop-color="#665AFF" offset="0%"></stop>
+            <stop stop-color="#4300D7" offset="100%"></stop>
+        </radialGradient>
+        <radialGradient cx="50%" cy="52.28%" fx="50%" fy="52.28%" r="54.424%" id="radialGradient-2">
+            <stop stop-color="#00D8FF" offset="0%"></stop>
+            <stop stop-color="#3D00B5" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="deepin-system-monitor">
+            <circle id="椭圆形" fill="url(#radialGradient-1)" fill-rule="nonzero" cx="10" cy="10" r="10"></circle>
+            <circle id="椭圆形" fill="url(#radialGradient-2)" fill-rule="nonzero" cx="10" cy="10" r="7.27272727"></circle>
+            <rect id="矩形" fill="#FFFFFF" fill-rule="nonzero" opacity="0.5" x="9.09090909" y="17.2727273" width="1.81818182" height="1"></rect>
+            <path d="M5.45454545,3.86363636 L14.3181818,3.86363636 M2.72727273,12.0454545 L17.0454545,12.0454545 M12.0454545,17.2727273 L12.0454545,2.72727273 M16.1363636,14.0909091 L16.1363636,5.90909091 M7.95454545,17.2727273 L7.95454545,2.27272727 M3.86363636,14.0909091 L3.86363636,5.90909091 M5.45454545,16.1363636 L14.5454545,16.1363636" id="形状" opacity="0.1"></path>
+            <path d="M13.392038,16.9449114 C15.959306,15.6886486 17.7272727,13.0507896 17.7272727,10 C17.7272727,5.73234512 14.2676549,2.27272727 10,2.27272727 C5.73234512,2.27272727 2.27272727,5.73234512 2.27272727,10 C2.27272727,13.0575065 4.04848754,15.7002621 6.62493048,16.9531889" id="路径" stroke="#FFFFFF" opacity="0.5" stroke-linecap="round"></path>
+            <path d="M10,2.27272727 C5.73234512,2.27272727 2.27272727,5.73234512 2.27272727,10 C2.27272727,13.0575065 4.04848754,15.7002621 6.62493048,16.9531889" id="路径" stroke="#FFFFFF" stroke-linecap="round"></path>
+            <path d="M4.09090909,11.2679918 C4.09090909,11.2679918 4.54545455,12.2568385 5.45454545,12.2568385 C7.42424243,12.2568385 6.21212121,6.81818182 8.18181818,6.81818182 C10.1515152,6.81818182 8.93939394,12.2568385 10.9090909,12.2568385 C12.2222222,12.2568385 11.8181818,9.54545455 13.1818182,9.54545455 C14.5454545,9.54545455 13.5016835,12.5040501 15.9090909,12.2568385" id="路径" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>
