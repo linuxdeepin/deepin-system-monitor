@@ -47,7 +47,7 @@ namespace  Globals {
 const QString SERVICE_NAME = "com.deepin.SystemMonitorPluginPopup";
 const QString SERVICE_PATH = "/com/deepin/SystemMonitorPluginPopup";
 
-const static int WindowWidth = 310;
+const static int WindowWidth = 300;
 const static int WindowMargin = 10;             //边距
 const static int DockMargin = 5;   //dock栏边距
 const static int WindowTitleHeight = 56;

@@ -51,11 +51,13 @@ using namespace Utils;
 ProcessWidget::ProcessWidget(QWidget *parent)
     : QWidget(parent)
 {
-     auto *dAppHelper = DApplicationHelper::instance();
+    m_width = parent->width() - 20;
+    setFixedSize(m_width, m_processWidgetHeight);
+    setContentsMargins(0, 0, 0, 0);
+
+    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &ProcessWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
-
-    setFixedSize(280, m_processWidgetHeight);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -140,7 +142,6 @@ void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
     textColor = palette.color(DPalette::Text);
     summaryColor = palette.color(DPalette::TextTips);
-
 }
 
 void ProcessWidget::autoHeight(int height)
@@ -149,7 +150,7 @@ void ProcessWidget::autoHeight(int height)
     if (height > standardHeight)
     {
         m_processWidgetHeight = height - STANDARD_PROCESS_OTHER_HEIGHT;
-        setFixedSize(280, m_processWidgetHeight);
+        setFixedHeight(m_processWidgetHeight);
         update();
     }
 }
@@ -172,9 +173,9 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     }
 
     //标题栏背景
-    QRect titleRect(rect().x(), rect().y(), 280, 36);
+    QRect titleRect(rect().x(), rect().y(), m_width, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, m_processWidgetHeight - 36);
+    QRect contentRect(rect().x(), rect().y()+36, m_width, m_processWidgetHeight - 36);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题

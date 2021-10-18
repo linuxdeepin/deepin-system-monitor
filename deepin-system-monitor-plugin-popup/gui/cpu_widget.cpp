@@ -43,18 +43,18 @@ DWIDGET_USE_NAMESPACE
 CpuWidget::CpuWidget(QWidget *parent)
     : QWidget(parent)
 {
+    m_width = parent->width() - 20;
+    setFixedSize(m_width, 111);
+    setContentsMargins(0, 0, 0, 0);
+
     downloadSpeeds = new QList<double>();
     for (int i = 0; i <= pointsNumber; i++) {
         downloadSpeeds->append(0);
     }
 
-
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
-
-    setFixedSize(280, 111);
-    setContentsMargins(0, 0, 0, 0);
 
     initConnection();
     this->installEventFilter(this);
@@ -172,9 +172,9 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     }
 
     //标题栏背景
-    QRect titleRect(rect().x(), rect().y(), 280, 36);
+    QRect titleRect(rect().x(), rect().y(), m_width, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 75);
+    QRect contentRect(rect().x(), rect().y()+36, m_width, 75);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题

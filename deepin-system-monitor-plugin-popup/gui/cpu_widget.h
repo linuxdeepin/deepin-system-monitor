@@ -56,7 +56,6 @@ private:
     void changeFont(const QFont &font);
     void getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue);
 
-
 private:
     QList<QList<qreal>> cpuPercents;
     QList<QPainterPath> cpuPaths;
@@ -73,6 +72,7 @@ private:
     int numCPU;
     double totalCpuPercent = 0;
     qreal m_cpuPer = 0;
+    int m_width = 0;
 
     int pointerRadius = 6;
 

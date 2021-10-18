@@ -44,17 +44,13 @@ using namespace Utils;
 NetWidget::NetWidget(QWidget *parent)
     : QWidget(parent)
 {
+    m_width = parent->width() - 20;
+    setFixedSize(m_width, 203);
+    setContentsMargins(0, 0, 0, 0);
+
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
-
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
-    QStyleOption option;
-    option.initFrom(this);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
-
-    setFixedSize(280, 203);
-
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -70,9 +66,7 @@ NetWidget::NetWidget(QWidget *parent)
     }
 
     initConnection();
-
     installEventFilter(this);
-
 }
 NetWidget::~NetWidget() {
     delete downloadSpeeds;
@@ -205,7 +199,7 @@ void NetWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
 void NetWidget::paintEvent(QPaintEvent *e)
 {
-    setFixedWidth(280);
+    setFixedWidth(m_width);
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -222,9 +216,9 @@ void NetWidget::paintEvent(QPaintEvent *e)
     }
 
     //标题栏背景
-    QRect titleRect(rect().x(), rect().y(), 280, 36);
+    QRect titleRect(rect().x(), rect().y(), m_width, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 167);
+    QRect contentRect(rect().x(), rect().y()+36, m_width, 167);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题

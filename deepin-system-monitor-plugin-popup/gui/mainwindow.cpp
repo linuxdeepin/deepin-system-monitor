@@ -247,13 +247,10 @@ void MainWindow::initUI()
     m_memoryWidget = new MemoryWidget(this);
     m_processWidget = new ProcessWidget(this);
 
-    QRect rect = getDisplayScreen();
-    qreal scale = qApp->primaryScreen()->devicePixelRatio();
-    qreal displayHeight = std::round(qreal(rect.height()) / scale);
-
     QWidget *parentWidget = new QWidget(this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(parentWidget);
-    vBoxLayout->addSpacing(5);
+    vBoxLayout->setContentsMargins(10, 0, 10, 0);
+
     vBoxLayout->addWidget(m_cpuMonitor);
     vBoxLayout->addSpacing(5);
     vBoxLayout->addWidget(m_netWidget);
@@ -280,7 +277,6 @@ void MainWindow::initUI()
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setMargin(0);
     mainLayout->addWidget(m_scrollArea);
     setLayout(mainLayout);
 
@@ -333,7 +329,6 @@ void MainWindow::initConnect()
         disconnect(m_regionMonitor);
     });
 
-
     // 设置窗口透明度调节
     connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [=] () {
         this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
@@ -372,7 +367,7 @@ void MainWindow::adjustPosition()
     // 屏幕尺寸
     QRect rect = getDisplayScreen();
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
-    rect.setWidth(Globals::WindowWidth);
+    rect.setWidth(Globals::WindowWidth+10);
 
     int dockHeight = 0;
     int displayHeight = int(std::round(qreal(rect.height()) / scale));
@@ -412,7 +407,7 @@ void MainWindow::adjustPosition()
         break;
     }
 
-    int scrollHeight = displayHeight - dockHeight - Globals::WindowMargin*2;
+    int scrollHeight = displayHeight - dockHeight - Globals::WindowMargin*2 - 20;
     emit signal_geometry(scrollHeight);
 
     m_scrollArea->setFixedHeight(scrollHeight);

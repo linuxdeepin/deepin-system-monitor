@@ -44,11 +44,13 @@ using namespace Utils;
 MemoryWidget::MemoryWidget(QWidget *parent)
     : QWidget(parent)
 {
-     auto *dAppHelper = DApplicationHelper::instance();
+    m_width = parent->width() - 20;
+    setFixedSize(m_width, 153);
+    setContentsMargins(0, 0, 0, 0);
+
+    auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MemoryWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
-
-    setFixedSize(280, 153);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -128,7 +130,7 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
 
 void MemoryWidget::paintEvent(QPaintEvent *e)
 {
-    setFixedWidth(280);
+    setFixedWidth(m_width);
     QPainter painter;
     painter.begin(this);
     painter.setPen(textColor);
@@ -144,9 +146,9 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     }
 
     //标题栏背景
-    QRect titleRect(rect().x(), rect().y(), 280, 36);
+    QRect titleRect(rect().x(), rect().y(), m_width, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, 280, 117);
+    QRect contentRect(rect().x(), rect().y()+36, m_width, 117);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题

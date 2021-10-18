@@ -45,6 +45,10 @@ const int pointsNumber = 30;
 DiskWidget::DiskWidget(QWidget *parent)
     : QWidget(parent)
 {
+    m_width = parent->width() - 20;
+    setFixedSize(m_width, 154);
+    setContentsMargins(0, 0, 0, 0);
+
     readSpeeds = new QList<qreal>();
     for (int i = 0; i <= pointsNumber; i++) {
         readSpeeds->append(0);
@@ -55,12 +59,9 @@ DiskWidget::DiskWidget(QWidget *parent)
         writeSpeeds->append(0);
     }
 
-
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskWidget::changeTheme);
     changeTheme(dAppHelper->themeType());
-
-    setFixedSize(280, 154);
 
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -202,7 +203,7 @@ void DiskWidget::getPainterPathByData(QList<double> *listData, QPainterPath &pat
 
 void DiskWidget::paintEvent(QPaintEvent *e)
 {
-    setFixedWidth(280);
+    setFixedWidth(m_width);
     QPainter painter;
     painter.begin(this);
     painter.setPen(textColor);
@@ -219,10 +220,10 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     }
 
     //标题栏背景
-    QRect titleRect(rect().x(), rect().y(), 280, 36);
+    QRect titleRect(rect().x(), rect().y(), m_width, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
 
-    QRect contentRect(rect().x(), rect().y()+36, 280, 118);
+    QRect contentRect(rect().x(), rect().y()+36, m_width, 118);
     painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
 
     //标题

@@ -50,6 +50,7 @@ private:
     void changeFont(const QFont &font);
 
 private:
+    int m_width = 0;
     int pointerRadius = 6;
     QColor summaryColor;
     QColor textColor;

@@ -53,6 +53,7 @@ private:
     void getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue);
 
 private:
+    int m_width = 0;
     QColor m_diskReadColor {"#8F88FF"};
     QColor m_diskWriteColor {"#6AD787"};
 

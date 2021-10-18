@@ -57,6 +57,7 @@ private:
     QPainterPath downloadPath;
     QPainterPath uploadPath;
 
+    int m_width = 0;
     int pointsNumber = 25;
     int pointerRadius = 6;
     int renderMaxHeight = 17;

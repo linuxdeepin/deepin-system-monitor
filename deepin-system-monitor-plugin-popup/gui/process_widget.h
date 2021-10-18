@@ -54,6 +54,7 @@ private:
     QList<QList<qreal>> cpuPercents;
     QList<QPainterPath> cpuPaths;
     QList<QColor> cpuColors;
+    int m_width = 0;
     int cpuRenderMaxHeight = 80;
     int cpuWaveformsRenderOffsetY = 112;
     int gridSize = 10;
