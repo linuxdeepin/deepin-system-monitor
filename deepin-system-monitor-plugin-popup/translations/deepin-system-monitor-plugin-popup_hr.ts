@@ -182,7 +182,7 @@
     <message>
         <location filename="../model/process_table_model.cpp" line="175"/>
         <source>No response</source>
-        <translation type="unfinished"/>
+        <translation>Nema odgovora</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.cpp" line="180"/>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>Nije podržan</translation>
     </message>
 </context>
 <context>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../common/common.cpp" line="108"/>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>Servisi</translation>
     </message>
 </context>
 </TS>
