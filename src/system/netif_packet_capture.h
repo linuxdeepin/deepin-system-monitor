@@ -43,6 +43,21 @@ public:
      */
     void dispatchPackets();
     pcap_t  *getHandle() { return m_handle;}
+    /**
+     * @brief 判断使用网卡是否变更,变更则重启startNetifMonitorJob槽函数;
+     */
+    void whetherDevChanged();
+
+protected:
+
+    /**
+     * @brief 获取当前网卡名
+     */
+    bool getCurrentDevName();
+    /**
+     * @brief 判断当前网卡是否被分配可用网络IP(IPv4)
+     */
+    bool hasDevIP();
 signals:
 
 public slots:
@@ -75,6 +90,15 @@ private:
 
     // packet dispatch timer
     QTimer *m_timer {};
+
+    //是否变更网卡
+    bool m_changedDev {false};
+    //当前使用网卡名
+    char *m_devName {};
+    //当前系统所有网卡设备链表
+    pcap_if_t *m_alldevs {};
+    //判断网卡是否变更定时器
+    QTimer *m_timerChangeDev {};
 
     friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
