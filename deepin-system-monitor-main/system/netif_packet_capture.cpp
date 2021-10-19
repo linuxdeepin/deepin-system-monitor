@@ -25,17 +25,30 @@
 #include "device_db.h"
 #include <net/ethernet.h>
 #include <QDebug>
+#include <iostream>
 
 #include "sys_info.h"
+#include <sys/ioctl.h>
 #include <ifaddrs.h>
+#include <net/if.h>
+#include <QCoreApplication>
 
-#define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
+#ifndef IFNAMESZ
+#define IFNAMESZ 16
+#endif
+
+
+//#define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
+#define PACKET_DISPATCH_IDLE_TIME 5 // pcap dispatch interval
 #define PACKET_DISPATCH_BATCH_COUNT 64 // packets to process in a batch
 #define PACKET_DISPATCH_QUEUE_LWAT 64 // queue low water mark
 #define PACKET_DISPATCH_QUEUE_HWAT 256 // queue high water mark
 
 #define SOCKSTAT_REFRESH_INTERVAL 2 // socket stat refresh interval (2 seconds)
 #define IFADDRS_HASH_CACHE_REFRESH_INTERVAL 10 // socket ifaddrs cache refresh interval (10 seconds)
+#define DEVICE_CHANGE_JUDGEMENT_TIME 5000 //判断网卡是否变更时间间隔
+
+using namespace std;
 
 namespace core {
 namespace system {
@@ -51,29 +64,152 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
     m_timer->setSingleShot(true);
     // dispatch packets on timerout signal
     connect(m_timer, &QTimer::timeout, this, &NetifPacketCapture::dispatchPackets);
+    //设置定时器定时判断是否变更网卡
+    m_timerChangeDev = new QTimer(this);
+    connect(m_timerChangeDev, &QTimer::timeout, this, &NetifPacketCapture::whetherDevChanged);
+    m_timerChangeDev->start(DEVICE_CHANGE_JUDGEMENT_TIME);
 }
 
+
+void NetifPacketCapture::whetherDevChanged()
+{
+    if(!m_devName){
+        m_changedDev = true;
+        startNetifMonitorJob();
+    }
+    //当前网卡关闭
+    if(!hasDevIP()){
+        //标志当前网络设备已经改变
+        m_changedDev = true;
+        if(getCurrentDevName())
+            //重新开始网络监测
+            startNetifMonitorJob();
+        else {
+            //对应系统关闭所有可用网卡的情形
+            m_devName = nullptr;
+            return;
+        }
+    }
+    //新增可用网卡
+    else{
+        char *current_dev = m_devName;
+        getCurrentDevName();
+        //若新增网卡设备优先级高于当前使用网卡设备,则重新开始监测任务
+        if (QString(current_dev).compare(QString(m_devName)) != 0) {
+            m_changedDev = true;
+            startNetifMonitorJob();
+        }
+
+    }
+}
+
+bool NetifPacketCapture::hasDevIP(){
+    if(!m_devName)return false;
+
+    struct sockaddr_in *addr {};
+    struct ifreq ifr {};
+    char* address {};
+    int sockfd;
+    //设备名称过长
+    if( strlen(m_devName) >= IFNAMSIZ){
+       //qDebug()<<"Device name too long! Invalid device Name!";
+       return false;
+    }
+
+    strcpy( ifr.ifr_name, m_devName);
+    //创建socket
+    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+
+    //获取网络IP(IPv4)
+    if( ioctl( sockfd, SIOCGIFADDR, &ifr) == -1){
+        //qDebug()<<"ioctl error!";
+        return false;
+    }
+
+    addr = (struct sockaddr_in *)&(ifr.ifr_addr);
+    address = inet_ntoa(addr->sin_addr);
+    if(address){
+        //cout<<"IP of  "<<m_devName<<" :" <<address;
+        return true;
+    }
+    else {
+        return false;
+    }
+
+
+}
+
+bool NetifPacketCapture::getCurrentDevName(){
+    char errbuf[PCAP_ERRBUF_SIZE] {};
+    char *dev_on_check {};
+    struct ifreq ifr {};//用来保存接口的信息
+    int metric; //用来保存接口的测度
+    int sock = 0;
+    //创建socket
+    sock = socket(AF_INET, SOCK_DGRAM, 0);
+      if (sock == -1) {
+          //qDebug()<<"create socket failed!";
+          return false;
+      }
+    //获取当前所有网络设备
+    int status = pcap_findalldevs(&m_alldevs, errbuf);
+    if(status != 0) {
+        //qDebug()<<"no devices available!";
+        return false;
+    }
+
+    //遍历设备链表，根据metric信息选取最优网卡
+    int temp_metric = 10000000;
+    for(pcap_if_t *d=m_alldevs; d!=nullptr; d=d->next) {
+        for(pcap_addr_t *a=d->addresses; a!=nullptr; a=a->next) {
+            //设备非回环（lo）并且被分配了IP地址
+            if(strcmp(d->name,"lo") != 0 && a->addr->sa_family == AF_INET){
+                   dev_on_check = d->name;
+                memcpy(ifr.ifr_name, dev_on_check, IFNAMESZ);
+                ifr.ifr_name[IFNAMESZ - 1] = '\0';
+                strcpy(ifr.ifr_name, dev_on_check);
+                if (ioctl(sock,  SIOCGIFMETRIC, &ifr) == 0) { //SIOCGIFMETRIC 获取接口测度
+                       metric = ifr.ifr_ifru.ifru_ivalue;
+                       //如果接口测度更小则更新网络设备名m_devName
+                       if(metric < temp_metric){
+                           m_devName = d->name;
+                           temp_metric = metric;
+                       }
+
+                    }
+
+            }
+
+        }
+    }
+    //无可用设备
+    if (!m_devName) {
+        //qInfo()<<"no available net interface!";
+        return false;
+    }
+    return true;
+
+}
 //
 void NetifPacketCapture::startNetifMonitorJob()
-{
-    char errbuf[PCAP_ERRBUF_SIZE] {};
-    char *dev {};
+{ 
     int rc = 0;
+    char errbuf[PCAP_ERRBUF_SIZE] {};
 
-    // create & initialize pcap dev
-    dev = pcap_lookupdev(errbuf);
-    if (!dev) {
+    getCurrentDevName();
+
+    if (!m_devName) {
         qDebug() << "pcap_lookupdev failed: " << errbuf;
         return;
     }
 
-    // create pcap handler安box
-    m_handle = pcap_create(dev, errbuf);
+    // create pcap handler
+    m_handle = pcap_create(m_devName, errbuf);
     if (!m_handle) {
         qDebug() << "pcap_create failed: " << errbuf;
         return;
     }
-    // set non block dispatch mode
+    // setm_timer->start(); non block dispatch mode
     rc = pcap_setnonblock(m_handle, 1, errbuf);
     if (rc == -1) {
         qDebug() << "pcap_setnonblock failed: " << errbuf;
@@ -83,7 +219,7 @@ void NetifPacketCapture::startNetifMonitorJob()
 
     // pcap_compile crashes everytime without any reason, need researching...
 #if 0
-    char pattern[] = "TCP and UDP";
+    char pattern[] =0111 "TCP and UDP";
     struct bpf_program pgm;
 
     rc = pcap_compile(m_handle, &pgm, pattern, 1, PCAP_NETMASK_UNKNOWN);
@@ -190,7 +326,6 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
     fmtbuf = pattern.toLocal8Bit();
     util::common::hash(fmtbuf.constData(), fmtbuf.length(), util::common::global_seed, cchash);
     hash = cchash[0];
-
     // get ino from map
     if (netifMonitorJob->m_sockStats.contains(hash)) {
         QMultiMap<uint64_t, SockStat>::const_iterator it = netifMonitorJob->m_sockStats.find(hash);
@@ -239,6 +374,8 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
 void NetifPacketCapture::dispatchPackets()
 {
     if (!go) return;
+    //无可用设备
+    if (!m_devName) return;
     // check pending packets before dispatching packets
     auto npkts = m_localPendingPackets.size();
     if (npkts > 0) {
@@ -268,6 +405,14 @@ void NetifPacketCapture::dispatchPackets()
     time_t last_ifaddrs_refresh {};
 
     do {
+        //若网络设备改变，结束当前抓包
+        if(m_changedDev){
+            m_changedDev = false;
+            m_timer->stop();
+            QCoreApplication::processEvents();
+            m_timer->start();
+            return;
+        }
         // quit requested, break the loop then
         auto quit = m_quitRequested.load();
         if (quit) {
@@ -308,6 +453,9 @@ void NetifPacketCapture::dispatchPackets()
             m_timer->stop();
             break;
         }
+        QCoreApplication::processEvents();
+
+
     } while (true);
 
     // close pcap handle
