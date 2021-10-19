@@ -44,7 +44,7 @@ DWIDGET_USE_NAMESPACE
 //1080p下，面板总高度
 #define STANDARD_TOTAL_HEIGHT     972
 //1080p下，面板高度-进程框高度
-#define STANDARD_PROCESS_OTHER_HEIGHT     687
+#define STANDARD_PROCESS_OTHER_HEIGHT     662
 
 using namespace Utils;
 

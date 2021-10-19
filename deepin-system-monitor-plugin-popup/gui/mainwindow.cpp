@@ -260,7 +260,6 @@ void MainWindow::initUI()
     vBoxLayout->addWidget(m_diskWidget);
     vBoxLayout->addSpacing(5);
     vBoxLayout->addWidget(m_processWidget);
-    vBoxLayout->addSpacing(5);
 
     m_scrollArea = new DScrollArea(this);
     m_scrollArea->horizontalScrollBar()->setEnabled(false);
