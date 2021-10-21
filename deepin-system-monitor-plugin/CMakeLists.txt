@@ -33,10 +33,10 @@ add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${APP_RESOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PROJECT_NAME} PUBLIC
+  ${DdeDockInterface_INCLUDE_DIRS}
   ${DtkWidget_INCLUDE_DIRS}
   ${DFrameworkDBus_INCLUDE_DIRS}
   ${QGSettings_INCLUDE_DIRS}
-  ${DdeDockInterface_INCLUDE_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

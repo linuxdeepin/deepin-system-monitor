@@ -31,6 +31,7 @@
 //Dtk
 #include <DGuiApplicationHelper>
 #include <DStyle>
+#include <dde-dock/constants.h>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -101,12 +102,12 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
     const auto ratio = devicePixelRatioF();
     painter.setOpacity(1);
 
-    pixmap = QIcon(":/icons/deepin/builtin/" + iconName + ".svg").pixmap(QSize(iconSize, iconSize) * ratio);
+    pixmap = loadSvg(iconName, ":/icons/deepin/builtin/", iconSize, ratio);
 
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());
 
-    painter.drawPixmap(rf.center() - rfp.center() / pixmap.devicePixelRatioF(), pixmap);
+    painter.drawPixmap(rf.center() - rfp.center() / ratio, pixmap);
 }
 
 void MonitorPluginButtonWidget::resizeEvent(QResizeEvent *event)
@@ -116,8 +117,7 @@ void MonitorPluginButtonWidget::resizeEvent(QResizeEvent *event)
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     // 保持横纵比
     if (position == Dock::Bottom || position == Dock::Top) {
-        setMaximumWidth(height());
-        setMaximumHeight(QWIDGETSIZE_MAX);
+        setMinimumWidth(qBound(PLUGIN_BACKGROUND_MIN_SIZE, height(), PLUGIN_BACKGROUND_MAX_SIZE));
     } else {
         setMaximumHeight(width());
         setMaximumWidth(QWIDGETSIZE_MAX);
@@ -169,11 +169,12 @@ void MonitorPluginButtonWidget::leaveEvent(QEvent *event)
 
 const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio)
 {
-    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName).arg((iconName.contains(".svg") ? "" : ".svg"));
     QPixmap pixmap;
-    pixmap = QIcon::fromTheme(iconName, QIcon::fromTheme(localIcon)).pixmap(QSize(size, size) * ratio);
+    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName).arg(iconName.contains(".svg") ? "" : ".svg");
 
+    pixmap = QIcon(localIcon).pixmap(QSize(size, size) * ratio);
     pixmap.setDevicePixelRatio(ratio);
+
     return pixmap;
 }
 

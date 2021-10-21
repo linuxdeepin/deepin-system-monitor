@@ -2,10 +2,22 @@
 #include "ut_animation_stackedwidget.h"
 #include "animation_stackedwidget.h"
 #include <QSignalSpy>
+#include <QPainter>
 
 Ut_AnimationStackedWidget::Ut_AnimationStackedWidget()
 {
 
+}
+
+TEST(Ut_AnimationStackedWidget_AnimationStackedWidget, Ut_AnimationStackedWidget_AnimationStackedWidget_001)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    EXPECT_EQ(pAnimationStackedWidget->m_Duration, 250);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
 }
 
 TEST(Ut_AnimationStackedWidget_setDuration, Ut_AnimationStackedWidget_setDuration_001)
@@ -100,7 +112,7 @@ TEST(Ut_AnimationStackedWidget_animationFinished, Ut_AnimationStackedWidget_anim
     EXPECT_TRUE(signalSpy.count() == 0);
 
     emit pAnimationStackedWidget->signalIsFinished();
-    signalSpy.wait(1000);
+    signalSpy.wait(50);
     EXPECT_TRUE(signalSpy.count() == 1);
     pWidget->deleteLater();
     pAnimationStackedWidget->deleteLater();
@@ -225,6 +237,7 @@ TEST(Ut_AnimationStackedWidget_setCurrentWidget, Ut_AnimationStackedWidget_setCu
 
     int index = 0;
     int beginWidth = 10;
+    pAnimationStackedWidget->m_IsAnimation = false;
     pAnimationStackedWidget->setCurrentWidget(index, beginWidth);
 
     EXPECT_FALSE(pAnimationStackedWidget->m_IsAnimation);
@@ -235,7 +248,7 @@ TEST(Ut_AnimationStackedWidget_setCurrentWidget, Ut_AnimationStackedWidget_setCu
     EXPECT_TRUE(signalSpy.count() == 0);
 
     emit pAnimationStackedWidget->signalIsFinished();
-    signalSpy.wait(1000);
+    signalSpy.wait(50);
     EXPECT_TRUE(signalSpy.count() == 1);
 
     pWidget->deleteLater();
@@ -259,27 +272,403 @@ TEST(Ut_AnimationStackedWidget_setCurrentWidget, Ut_AnimationStackedWidget_setCu
 
     int index = 0;
     int beginWidth = 10;
+    pAnimationStackedWidget->m_IsAnimation = false;
+    pAnimationStackedWidget->setCurrentIndex(2);
     pAnimationStackedWidget->setCurrentWidget(index, beginWidth);
-
-    EXPECT_FALSE(pAnimationStackedWidget->m_IsAnimation);
-
-    pAnimationStackedWidget->setCurrentIndex(1);
 
     EXPECT_NE(pAnimationStackedWidget->currentIndex(), index);
 
-//    EXPECT_TRUE(pAnimationStackedWidget->m_IsAnimation);
+    EXPECT_TRUE(pAnimationStackedWidget->m_IsAnimation);
 
-//    EXPECT_EQ(pAnimationStackedWidget->m_NextIndex, index);
+    EXPECT_EQ(pAnimationStackedWidget->m_NextIndex, index);
 
-//    EXPECT_TRUE(pAnimationStackedWidget->currentWidget()->isHidden());
+    EXPECT_FALSE(pAnimationStackedWidget->isVisible());
 
-//    EXPECT_EQ(pAnimationStackedWidget->m_Animation->startValue(), beginWidth);
+    EXPECT_EQ(pAnimationStackedWidget->m_Animation->startValue(), beginWidth);
 
-//    EXPECT_EQ(pAnimationStackedWidget->m_Animation->endValue(), 0);
+    EXPECT_EQ(pAnimationStackedWidget->m_Animation->endValue(), 0);
 
-//    EXPECT_EQ(pAnimationStackedWidget->m_Animation->duration(), pAnimationStackedWidget->m_Duration);
+    EXPECT_EQ(pAnimationStackedWidget->m_Animation->duration(), pAnimationStackedWidget->m_Duration);
 
-//    EXPECT_TRUE(pAnimationStackedWidget->m_Animation->state() == QAbstractAnimation::State::Running);
+    EXPECT_EQ(pAnimationStackedWidget->m_Animation->state(), QAbstractAnimation::Running);
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_getBeginValue, Ut_AnimationStackedWidget_getBeginValue_001)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    int value = pAnimationStackedWidget->getBeginValue();
+    EXPECT_EQ(pAnimationStackedWidget->rect().width(), value);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_getBeginValue, Ut_AnimationStackedWidget_getBeginValue_002)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::TB, pWidget);
+
+    int value = pAnimationStackedWidget->getBeginValue();
+    EXPECT_EQ(pAnimationStackedWidget->rect().height(), value);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_getMoveOrientation, Ut_AnimationStackedWidget_getMoveOrientation_001)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    // case 1 currIndex < nextIndex
+    int currIndex = 2;
+    int nextIndex = 1;
+    AnimationStackedWidget::MoveOrientation moveOri{AnimationStackedWidget::LeftToRight};
+
+    moveOri = pAnimationStackedWidget->getMoveOrientation(currIndex, nextIndex);
+
+    EXPECT_EQ(pAnimationStackedWidget->m_animationOri, AnimationStackedWidget::AnimationOri::LR);
+
+    EXPECT_EQ(moveOri, AnimationStackedWidget::LeftToRight);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_getMoveOrientation, Ut_AnimationStackedWidget_getMoveOrientation_002)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::TB, pWidget);
+
+    // case 1 currIndex < nextIndex
+    int currIndex = 2;
+    int nextIndex = 1;
+    AnimationStackedWidget::MoveOrientation moveOri{AnimationStackedWidget::LeftToRight};
+
+    moveOri = pAnimationStackedWidget->getMoveOrientation(currIndex, nextIndex);
+
+    EXPECT_EQ(pAnimationStackedWidget->m_animationOri, AnimationStackedWidget::AnimationOri::TB);
+
+    EXPECT_EQ(moveOri, AnimationStackedWidget::TopToBottom);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_getMoveOrientation, Ut_AnimationStackedWidget_getMoveOrientation_003)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    // case 1 currIndex > nextIndex
+    int currIndex = 1;
+    int nextIndex = 2;
+    AnimationStackedWidget::MoveOrientation moveOri{AnimationStackedWidget::LeftToRight};
+
+    moveOri = pAnimationStackedWidget->getMoveOrientation(currIndex, nextIndex);
+
+    EXPECT_EQ(pAnimationStackedWidget->m_animationOri, AnimationStackedWidget::AnimationOri::LR);
+
+    EXPECT_EQ(moveOri, AnimationStackedWidget::RightToLeft);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_getMoveOrientation, Ut_AnimationStackedWidget_getMoveOrientation_004)
+{
+    QWidget *pWidget = new QWidget;
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::TB, pWidget);
+
+    // case 1 currIndex > nextIndex
+    int currIndex = 1;
+    int nextIndex = 2;
+    AnimationStackedWidget::MoveOrientation moveOri{AnimationStackedWidget::LeftToRight};
+
+    moveOri = pAnimationStackedWidget->getMoveOrientation(currIndex, nextIndex);
+
+    EXPECT_EQ(pAnimationStackedWidget->m_animationOri, AnimationStackedWidget::AnimationOri::TB);
+
+    EXPECT_EQ(moveOri, AnimationStackedWidget::BottomToTop);
+
+    pWidget->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_paintCurrentWidget, Ut_AnimationStackedWidget_paintCurrentWidget_001)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::LeftToRight;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintCurrentWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_paintCurrentWidget, Ut_AnimationStackedWidget_paintCurrentWidget_002)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::RightToLeft;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintCurrentWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_paintCurrentWidget, Ut_AnimationStackedWidget_paintCurrentWidget_003)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::TopToBottom;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintCurrentWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+
+TEST(Ut_AnimationStackedWidget_paintCurrentWidget, Ut_AnimationStackedWidget_paintCurrentWidget_004)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::BottomToTop;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintCurrentWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+
+TEST(Ut_AnimationStackedWidget_paintNextWidget, Ut_AnimationStackedWidget_paintNextWidget_001)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::LeftToRight;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintNextWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_paintNextWidget, Ut_AnimationStackedWidget_paintNextWidget_002)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::RightToLeft;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintNextWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_paintNextWidget, Ut_AnimationStackedWidget_paintNextWidget_003)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::TopToBottom;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintNextWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
+
+    pWidget->deleteLater();
+    pWidget1->deleteLater();
+    pWidget2->deleteLater();
+    pWidget3->deleteLater();
+    pAnimationStackedWidget->deleteLater();
+}
+
+TEST(Ut_AnimationStackedWidget_paintNextWidget, Ut_AnimationStackedWidget_paintNextWidget_004)
+{
+    QWidget *pWidget = new QWidget;
+    pWidget->setFixedSize(100, 100);
+    AnimationStackedWidget *pAnimationStackedWidget = new AnimationStackedWidget(AnimationStackedWidget::AnimationOri::LR, pWidget);
+
+    QWidget *pWidget1 = new QWidget;
+    QWidget *pWidget2 = new QWidget;
+    QWidget *pWidget3 = new QWidget;
+    pAnimationStackedWidget->addWidget(pWidget1);
+    pAnimationStackedWidget->addWidget(pWidget2);
+    pAnimationStackedWidget->addWidget(pWidget3);
+
+    QPixmap pix;
+    pix.fill(Qt::red);
+    QPainter painter;
+    painter.drawPixmap(0, 0, pix);
+    int currIndex = 0;
+    pAnimationStackedWidget->m_moveOri = AnimationStackedWidget::BottomToTop;
+    pAnimationStackedWidget->m_offset = 1;
+    pAnimationStackedWidget->widget(currIndex);
+
+    pAnimationStackedWidget->paintNextWidget(painter, currIndex);
+
+    EXPECT_TRUE(pAnimationStackedWidget->widget(currIndex));
+
 
     pWidget->deleteLater();
     pWidget1->deleteLater();
