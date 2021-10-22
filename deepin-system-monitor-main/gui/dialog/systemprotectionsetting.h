@@ -67,6 +67,12 @@ public:
      * 获取DSetting指针
      */
     DSettings *getDSettingPointor();
+    //!
+    //! \brief setLastValidAlarm 如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
+    //! \param lineEdit 文本内容输入框 maxValue 阈值上界 minvalue 阈值下界 num 上次合法值
+    //!
+    static void setLastValidAlarm(DLineEdit *lineEdit,DTK_CORE_NAMESPACE::DSettingsOption *option,int maxValue,int minValue,int num);
+
 
 private:
     //!
@@ -95,6 +101,9 @@ private:
     Dtk::Core::QSettingBackend *mBackend;
     DSettings *mDsettings;
     QDBusInterface mDaemonInterface;
+    //设置静态成员变量 ，保存上次合法设置的CPU、内存阈值以及通知间隔时间
+    static int m_lastValidCPUAndMemValue ;
+    static int m_lastValidInternalValue ;
 };
 
 #endif // SYSTEMPROTECTIONSETTING_H

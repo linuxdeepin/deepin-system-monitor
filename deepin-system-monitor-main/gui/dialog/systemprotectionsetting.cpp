@@ -50,6 +50,10 @@
 
 // 与系统字体大小的偏移值，-1.5为小于系统字体大小1.5字号
 static const double ToolTipFontSizeDiff = -1.5;
+int SystemProtectionSetting::m_lastValidCPUAndMemValue = 0;
+int SystemProtectionSetting::m_lastValidInternalValue = 0;
+
+
 
 Q_GLOBAL_STATIC(SystemProtectionSetting, theInstance)
 
@@ -74,7 +78,7 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget* widget, double diff)
     double sysFontSize = interface.property("FontSize").toDouble();
 
     // 获取系统字体大小非法 或者 调整后值非法， 返回
-    if(sysFontSize == 0.0 || sysFontSize + diff <= 0) {
+    if(sysFontSize == 0.0 || sysFontSize + diff <= 0){
         return false;
     }
 
@@ -136,7 +140,6 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createSettingLinkButtonHandle
     DCommandLinkButton* button = new DCommandLinkButton(tr("Settings"), widget);
     // 设置按钮字体大小，比系统标准字体小1.5号
     changeWidgetFontSizeByDiffWithSystem(button, ToolTipFontSizeDiff);
-
     layout->addWidget(button);
     widget->setLayout(layout);
 
@@ -151,7 +154,6 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createSettingLinkButtonHandle
 
     return optionWidget;
 }
-
 QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(QObject *obj)
 {
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
@@ -177,7 +179,6 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
     button->setChecked(option->value().toBool());
 
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
-
     // Item操作修改Setting值
     option->connect(button, &DSwitchButton::clicked, option, [=](bool checked){
         qDebug() << __FUNCTION__ << __LINE__ << ", new protection swich :" << checked;
@@ -194,6 +195,17 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
     });
 
     return optionWidget;
+}
+
+void SystemProtectionSetting::setLastValidAlarm(DLineEdit *lineEdit,DTK_CORE_NAMESPACE::DSettingsOption *option,int maxValue,int minValue,int num)
+{
+    if (num >= minValue && num <= maxValue){
+        lineEdit->setText(QString::number(num));
+        option->setValue(num);
+    } else {
+        lineEdit->setText(option->defaultValue().toString());
+    }
+
 }
 
 QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
@@ -245,13 +257,15 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     option->connect(edit, &DLineEdit::focusChanged, option, [=] (bool onFocus) {
         if(onFocus == false) {
             if(edit->text().isEmpty() || edit->text().toInt() < 30 || edit->text().toInt() > 100) {
-                 edit->setText(option->defaultValue().toString());
+                //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
+                setLastValidAlarm(edit,option,100,30,m_lastValidCPUAndMemValue);
             }
+            //当前输入合法
+            m_lastValidCPUAndMemValue = edit->text().toInt();
 
-            int newValue = edit->text().toInt();
-            option->setValue(newValue);
+            option->setValue(m_lastValidCPUAndMemValue);
         }
-    } );
+   } );
 
     // 用于恢复默认时，Item的数据更新
     edit->connect(option, &DSettingsOption::valueChanged, edit, [=]() {
@@ -304,7 +318,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
 
     QWidget *widget = new QWidget;
     QHBoxLayout *layout = new QHBoxLayout(widget);
-    // 构建编辑框
+    // 构建编辑框//
     DLineEdit *edit = new DLineEdit(widget);
     edit->setFixedSize(lineEditWidth, lineEditHeight);
     edit->setClearButtonEnabled(false);
@@ -334,18 +348,19 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     layout->addStretch();
     widget->setLayout(layout);
 
-    // 设定Item初始值
+    // 设定Item初始值//
     edit->setText(option->value().toString());
 
     // 修改Item同步修改Setting数据
     option->connect(edit, &DLineEdit::focusChanged, option, [=] (bool onFocus) {
         if(onFocus == false) {
             if(edit->text().isEmpty() || edit->text().toInt() < 5 || edit->text().toInt() > 60) {
-                 edit->setText(option->defaultValue().toString());
+                //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
+                setLastValidAlarm(edit,option,60,5,m_lastValidInternalValue);
             }
-
-            int newValue = edit->text().toInt();
-            option->setValue(newValue);
+            //当前输入合法
+            m_lastValidInternalValue = edit->text().toInt();
+            option->setValue(m_lastValidInternalValue);
         }
     } );
 
