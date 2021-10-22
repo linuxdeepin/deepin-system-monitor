@@ -245,6 +245,6 @@ void CpuMonitor::paintEvent(QPaintEvent *)
 
 void CpuMonitor::mouseReleaseEvent(QMouseEvent *ev)
 {
-    Q_UNUSED(ev);
-    emit clicked("MSG_CPU");
+    if (ev->button() == Qt::LeftButton)
+        emit clicked("MSG_CPU");
 }

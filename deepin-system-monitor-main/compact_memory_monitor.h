@@ -42,7 +42,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *ev);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     void changeTheme(int themeType);

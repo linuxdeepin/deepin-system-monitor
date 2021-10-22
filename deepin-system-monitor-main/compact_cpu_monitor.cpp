@@ -349,6 +349,6 @@ void CompactCpuMonitor::changeFont(const QFont &font)
 
 void CompactCpuMonitor::mouseReleaseEvent(QMouseEvent *ev)
 {
-    Q_UNUSED(ev);
-    emit clicked("MSG_CPU");
+    if (ev->button() == Qt::LeftButton)
+        emit clicked("MSG_CPU");
 }

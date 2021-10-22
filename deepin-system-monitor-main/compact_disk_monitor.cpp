@@ -253,6 +253,6 @@ void CompactDiskMonitor::changeFont(const QFont &font)
 
 void CompactDiskMonitor::mouseReleaseEvent(QMouseEvent *ev)
 {
-    Q_UNUSED(ev);
-    emit clicked("MSG_DISK");
+    if (ev->button() == Qt::LeftButton)
+        emit clicked("MSG_DISK");
 }

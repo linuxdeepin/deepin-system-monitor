@@ -277,6 +277,6 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
 void MemoryMonitor::mouseReleaseEvent(QMouseEvent *ev)
 {
-    Q_UNUSED(ev);
-    emit clicked("MSG_MEM");
+    if (ev->button() == Qt::LeftButton)
+        emit clicked("MSG_MEM");
 }

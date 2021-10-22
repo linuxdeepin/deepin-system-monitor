@@ -300,6 +300,6 @@ void CompactNetworkMonitor::changeFont(const QFont &font)
 
 void CompactNetworkMonitor::mouseReleaseEvent(QMouseEvent *ev)
 {
-    Q_UNUSED(ev);
-    emit clicked("MSG_NET");
+    if (ev->button() == Qt::LeftButton)
+        emit clicked("MSG_NET");
 }

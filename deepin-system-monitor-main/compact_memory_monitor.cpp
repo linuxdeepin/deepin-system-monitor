@@ -265,8 +265,8 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
         std::max(swapStatRect.y() + swapStatRect.height(), rect().y() + ringCenterPointerY * 2));
 }
 
-void CompactMemoryMonitor::mouseReleaseEvent(QMouseEvent *ev)
+void CompactMemoryMonitor::mouseReleaseEvent(QMouseEvent *event)
 {
-    Q_UNUSED(ev);
-    emit clicked("MSG_MEM");
+    if (event->button() == Qt::LeftButton)
+         emit clicked("MSG_MEM");
 }
