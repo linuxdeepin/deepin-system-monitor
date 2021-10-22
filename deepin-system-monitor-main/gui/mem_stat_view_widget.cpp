@@ -105,12 +105,16 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
 
     QString swap = DApplication::translate("Process.Graph.View", "Swap");
     QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y(), painter.fontMetrics().width(swap), painter.fontMetrics().height());
-    painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, swap);
+    if (m_memInfo->swapTotal() > 0)
+    {
+        painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, swap);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(swapColor);
+        painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.y() + qCeil((swaptitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
+    }
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(memoryColor);
     painter.drawEllipse(0, memtitleRect.y() + qCeil((memtitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
 
-    painter.setBrush(swapColor);
-    painter.drawEllipse(memtitleRect.right() + spacing, swaptitleRect.y() + qCeil((swaptitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
-}
+    }
