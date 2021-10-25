@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>སྤྱིའི་བེད་སྤྱོད་བྱེད་ཚད།</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>སྒེར་གྱི་བེད་སྤྱོད་བྱེད་ཚད།</translation>
     </message>
 </context>
 <context>
@@ -955,7 +955,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation>ཉེན་བརྡ་གཏོང་བའི་བར་ཐག(min)</translation>
+        <translation>ཉེན་བརྡ་གཏོང་བའི་བར་ཐག(སྐར་མ)</translation>
     </message>
 </context>
 <context>

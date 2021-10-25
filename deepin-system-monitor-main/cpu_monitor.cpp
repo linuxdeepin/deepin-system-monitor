@@ -248,3 +248,9 @@ void CpuMonitor::mouseReleaseEvent(QMouseEvent *ev)
     if (ev->button() == Qt::LeftButton)
         emit clicked("MSG_CPU");
 }
+
+void CpuMonitor::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    return;
+}

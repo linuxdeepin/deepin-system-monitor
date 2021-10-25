@@ -280,3 +280,9 @@ void MemoryMonitor::mouseReleaseEvent(QMouseEvent *ev)
     if (ev->button() == Qt::LeftButton)
         emit clicked("MSG_MEM");
 }
+
+void MemoryMonitor::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    return;
+}

@@ -210,7 +210,7 @@ void MainWindow::Hide()
 
 void MainWindow::setX(int x)
 {
-    move(x, m_rect.y());
+    move(int(std::round(qreal(x) / qApp->primaryScreen()->devicePixelRatio())) , m_rect.y());
 }
 
 void MainWindow::CompositeChanged()
@@ -312,7 +312,8 @@ void MainWindow::initConnect()
 
     connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant &value) {
         int width = value.toInt();
-        move(m_rect.x() + m_rect.width() + Globals::WindowMargin - width, m_rect.y());
+
+        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
     });
 
     QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
@@ -381,13 +382,13 @@ void MainWindow::adjustPosition()
     case DOCK_TOP:
         rect.moveTop(dockRect.height());
         rect.setHeight(rect.height() - dockRect.height());
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
-        dockHeight =int(std::round(qreal(dockRect.height()) / scale));
+        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - int(std::round(qreal(rect.width()) * scale)));
+        dockHeight = int(std::round(qreal(dockRect.height()) / scale));
         break;
     case DOCK_BOTTOM:
         rect.setHeight(rect.height() - dockRect.height());
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
-        dockHeight =int(std::round(qreal(dockRect.height()) / scale));
+        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - int(std::round(qreal(rect.width()) * scale)));
+        dockHeight = int(std::round(qreal(dockRect.height()) / scale));
 
         break;
     case DOCK_LEFT:
@@ -427,10 +428,10 @@ void MainWindow::adjustPosition()
     if(m_daemonDockInter->displayMode() == 0 && dockRect.width() * dockRect.height() > 0) {
         switch (m_daemonDockInter->position()) {
         case DOCK_TOP:
-            rect -= QMargins(0, Globals::WindowMargin, 0, 0);
+            rect -= QMargins(0, int(std::round(qreal(Globals::WindowMargin)) * scale), 0, 0);
             break;
         case DOCK_BOTTOM:
-            rect -= QMargins(0, 0, 0, Globals::WindowMargin);
+            rect -= QMargins(0, 0, 0, int(std::round(qreal(Globals::WindowMargin)) * scale));
             break;
         default:
             break;

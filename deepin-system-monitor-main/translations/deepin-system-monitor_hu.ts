@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Általános kihasználtság</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Egyéni kihasználtság</translation>
     </message>
 </context>
 <context>

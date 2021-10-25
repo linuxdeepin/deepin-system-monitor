@@ -335,3 +335,9 @@ void NetworkMonitor::mouseReleaseEvent(QMouseEvent *ev)
     if (ev->button() == Qt::LeftButton)
         emit clicked("MSG_NET");
 }
+
+void NetworkMonitor::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    return;
+}

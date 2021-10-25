@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>ئومۇمىي پايدىلىنىش نىسبىتى</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>شەخسىي پايدىلىنىش نىسبىتى</translation>
     </message>
 </context>
 <context>
@@ -955,7 +955,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation>سىگنال بېرىش ئارىلىقى (min)</translation>
+        <translation>سىگنال بېرىش ئارىلىقى (مىنۇت)</translation>
     </message>
 </context>
 <context>

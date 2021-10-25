@@ -955,7 +955,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation>预警间隔 (min)</translation>
+        <translation>预警间隔 (分钟)</translation>
     </message>
 </context>
 <context>

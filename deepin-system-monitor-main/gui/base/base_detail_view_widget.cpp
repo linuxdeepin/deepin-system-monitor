@@ -43,7 +43,8 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
     m_switchButton = new DIconButton(DStyle::SP_ReduceElement, this);
     m_switchButton->setIconSize(QSize(12, 12));
-    m_switchButton->setFixedSize(25, 25);
+    m_switchButton->setFixedSize(30, 30);
+    m_switchButton->setEnabledCircle(true);
     m_switchIconDark = new QIcon(iconPathFromQrc("dark/change_dark.svg"));
     m_switchIconLight = new QIcon(iconPathFromQrc("light/change_light.svg"));
     if (m_isMultiCoreMode) {
@@ -64,7 +65,8 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
     m_arrowButton = new DIconButton(DStyle::SP_ReduceElement, this);
     m_arrowButton->setIconSize(QSize(10, 10));
-    m_arrowButton->setFixedSize(20, 20);
+    m_arrowButton->setFixedSize(24, 24);
+    m_arrowButton->setEnabledCircle(true);
     connect(m_arrowButton, &DIconButton::clicked, [ = ]() {
         stackViewWidget->onShowPerformMenu(m_arrowButton->mapToGlobal(QPoint(0, m_arrowButton->height() + 6)));
     });
@@ -137,7 +139,7 @@ void BaseDetailViewWidget::updateWidgetGrometry()
     const QSize &detailtextSize =  m_detailButton->size();
     m_detailButton->setGeometry(this->width() - detailtextSize.width() - 6, 10 + titleFont.height() / 2 - detailtextSize.height() / 2, detailtextSize.width(), detailtextSize.height());
 
-    m_switchButton->setGeometry(m_detailButton->x() - 30, 10 + titleFont.height() / 2 - m_switchButton->height() / 2, 25, 25);
+    m_switchButton->setGeometry(m_detailButton->x() - 30, 10 + titleFont.height() / 2 - m_switchButton->height() / 2, m_switchButton->width(), m_switchButton->height());
 }
 
 void BaseDetailViewWidget::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)

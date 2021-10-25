@@ -270,3 +270,9 @@ void CompactMemoryMonitor::mouseReleaseEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
          emit clicked("MSG_MEM");
 }
+
+void CompactMemoryMonitor::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    return;
+}

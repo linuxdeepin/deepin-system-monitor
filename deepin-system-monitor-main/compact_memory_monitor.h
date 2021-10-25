@@ -41,8 +41,15 @@ public:
     ~CompactMemoryMonitor();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
+
+    //!
+    //! \brief mouseMoveEvent 鼠标压下事件，唤醒系统监视器主进程，并跳转到CPU详情界面
+    //! \param event
+    //!
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 
 private:
     void changeTheme(int themeType);

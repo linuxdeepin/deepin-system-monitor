@@ -256,3 +256,9 @@ void CompactDiskMonitor::mouseReleaseEvent(QMouseEvent *ev)
     if (ev->button() == Qt::LeftButton)
         emit clicked("MSG_DISK");
 }
+
+void CompactDiskMonitor::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    return;
+}

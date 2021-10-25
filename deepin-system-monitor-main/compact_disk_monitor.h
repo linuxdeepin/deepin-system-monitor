@@ -37,8 +37,15 @@ public slots:
     void updateStatus();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *ev);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
+
+    //!
+    //! \brief mouseMoveEvent 目前的策略是屏蔽鼠标移动拖拽的响应操作
+    //! \param event
+    //!
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 
 private:
     void changeFont(const QFont &font);
