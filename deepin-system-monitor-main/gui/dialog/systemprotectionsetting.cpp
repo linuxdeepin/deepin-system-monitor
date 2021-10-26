@@ -50,7 +50,8 @@
 
 // 与系统字体大小的偏移值，-1.5为小于系统字体大小1.5字号
 static const double ToolTipFontSizeDiff = -1.5;
-int SystemProtectionSetting::m_lastValidCPUAndMemValue = 0;
+int SystemProtectionSetting::m_lastValidCPUValue = 0;
+int SystemProtectionSetting::m_lastValidMemoryValue = 0;
 int SystemProtectionSetting::m_lastValidInternalValue = 0;
 
 
@@ -255,15 +256,26 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
 
     // 修改Item同步修改Setting数据
     option->connect(edit, &DLineEdit::focusChanged, option, [=] (bool onFocus) {
+        QString key = option->key();
         if(onFocus == false) {
             if(edit->text().isEmpty() || edit->text().toInt() < 30 || edit->text().toInt() > 100) {
                 //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
-                setLastValidAlarm(edit,option,100,30,m_lastValidCPUAndMemValue);
+                if(key == AlarmCpuUsageOptionName)
+                    setLastValidAlarm(edit,option,100,30,m_lastValidCPUValue);
+                else if (key == AlarmMemUsageOptionName) {
+                    setLastValidAlarm(edit,option,100,30,m_lastValidMemoryValue);
+                }
             }
             //当前输入合法
-            m_lastValidCPUAndMemValue = edit->text().toInt();
+            if(key == AlarmCpuUsageOptionName) {
+                m_lastValidCPUValue = edit->text().toInt();
+                option->setValue(m_lastValidCPUValue);
+            }
+            else if (key == AlarmMemUsageOptionName) {
+                m_lastValidMemoryValue = edit->text().toInt();
+                option->setValue(m_lastValidMemoryValue);
+            }
 
-            option->setValue(m_lastValidCPUAndMemValue);
         }
    } );
 

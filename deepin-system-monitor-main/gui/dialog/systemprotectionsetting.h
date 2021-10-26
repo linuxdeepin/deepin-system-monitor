@@ -102,7 +102,8 @@ private:
     DSettings *mDsettings;
     QDBusInterface mDaemonInterface;
     //设置静态成员变量 ，保存上次合法设置的CPU、内存阈值以及通知间隔时间
-    static int m_lastValidCPUAndMemValue ;
+    static int m_lastValidCPUValue ;
+    static int m_lastValidMemoryValue ;
     static int m_lastValidInternalValue ;
 };
 
