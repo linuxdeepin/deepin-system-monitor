@@ -165,8 +165,6 @@ bool NetifPacketCapture::getCurrentDevName(){
             //设备非回环（lo）并且被分配了IP地址
             if(strcmp(d->name,"lo") != 0 && a->addr->sa_family == AF_INET){
                    dev_on_check = d->name;
-                memcpy(ifr.ifr_name, dev_on_check, IFNAMESZ);
-                ifr.ifr_name[IFNAMESZ - 1] = '\0';
                 strcpy(ifr.ifr_name, dev_on_check);
                 if (ioctl(sock,  SIOCGIFMETRIC, &ifr) == 0) { //SIOCGIFMETRIC 获取接口测度
                        metric = ifr.ifr_ifru.ifru_ivalue;

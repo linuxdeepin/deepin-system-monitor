@@ -1,3 +1,4 @@
+#include "compact_disk_monitor.h"
 #include "stub.h"
 
 #include <QObject>
@@ -5,8 +6,15 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
-#include "compact_disk_monitor.h"
 static int stub_flag;
+
+//实现内存对齐
+class Ut_compact_disk_monitor : public QObject, public::testing::Test
+{
+public:
+    Ut_compact_disk_monitor() {}
+};
+
 
 TEST(UT_CompactDiskMonitor_CompactDiskMonitor,UT_CompactDiskMonitor_CompactDiskMonitor_001)
 {
@@ -17,6 +25,7 @@ TEST(UT_CompactDiskMonitor_CompactDiskMonitor,UT_CompactDiskMonitor_CompactDiskM
     pCompactDiskMonitor->deleteLater();
 }
 
+//函数打桩
 int stub1_updateStatus(){
     stub_flag = 1;
     return 0;

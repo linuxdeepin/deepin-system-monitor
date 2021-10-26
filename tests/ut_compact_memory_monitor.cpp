@@ -1,3 +1,4 @@
+#include "compact_memory_monitor.h"
 #include "stub.h"
 
 #include <QObject>
@@ -5,9 +6,16 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
-#include "compact_memory_monitor.h"
 static int stub_flag;
 
+//实现内存对齐
+class Ut_compact_memory_monitor : public QObject, public::testing::Test
+{
+public:
+    Ut_compact_memory_monitor() {}
+};
+
+//函数打桩
 int stub1_CpactMemoryMonitor(){
     stub_flag = 1;
     return 0;
