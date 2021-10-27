@@ -51,7 +51,7 @@ Toolbar::Toolbar(QWidget *parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     // tab button group
-    m_switchFuncTabBtnGrp = new DButtonBox(this);
+    m_switchFuncTabBtnGrp = new CustomButtonBox(this);
     m_switchFuncTabBtnGrp->setFixedWidth(240);
     // process tab button instance
     m_procBtn = new DButtonBoxButton(
@@ -69,7 +69,7 @@ Toolbar::Toolbar(QWidget *parent)
     m_switchFuncTabBtnGrp->setButtonList(list, true);
 
     // move focus to process tab button when toolbar got focus
-    setFocusProxy(m_procBtn);
+    setFocusProxy(m_switchFuncTabBtnGrp);
 
     // install event filer for both tab button to handle key press event
     m_procBtn->installEventFilter(this);
@@ -117,6 +117,7 @@ Toolbar::Toolbar(QWidget *parent)
             searchEdit->setEnabled(true);
         }
     });
+    m_switchFuncTabBtnGrp->installEventFilter(this);
 }
 
 // destructor
@@ -155,7 +156,7 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
                 return true;
             }
         }
-    }
+    }  
 
     // propogate other events to base handler
     return DWidget::eventFilter(obj, event);

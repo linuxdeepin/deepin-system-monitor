@@ -356,6 +356,12 @@ void ProcessPageWidget::switchProcessPage()
     m_rightStackView->onSwitchProcessPage();
 }
 
+void ProcessPageWidget::switchCurrentNoFilterPage()
+{
+    m_procTable->switchDisplayMode(kNoFilter);
+    m_allProcButton->setChecked(true);
+}
+
 // paint event handler
 void ProcessPageWidget::paintEvent(QPaintEvent *)
 {

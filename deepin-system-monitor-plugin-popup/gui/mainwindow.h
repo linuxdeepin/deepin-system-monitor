@@ -149,7 +149,7 @@ private:
 
 
     bool initDBus();
-    void changeTheme(DApplicationHelper::ColorType themeType);
+
 
 protected:
     /*!
@@ -162,6 +162,11 @@ protected:
 
 private slots:
     void slotShowOrHideSystemMonitorPluginPopupWidget();
+    //!
+    //! \brief changeTheme 切换系统主题时，改变当前的显示内容
+    //! \param themeType 主题类型
+    //!
+    void changeTheme(DApplicationHelper::ColorType themeType);
 
 private:
     DBusDisplay *m_displayInter;

@@ -76,6 +76,11 @@ public:
 
     void switchProcessPage();
 
+    //!
+    //! \brief switchCurrentNoFilterPage 切换到总进程页面
+    //!
+    void switchCurrentNoFilterPage();
+
 public Q_SLOTS:
     /**
      * @brief Switch performance display mode when required

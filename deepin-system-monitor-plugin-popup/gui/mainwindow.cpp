@@ -109,7 +109,7 @@ void MainWindow::geometryChanged()
 
     //init animation by 'm_rect'
     m_xAni->setStartValue(m_rect.x());
-    m_xAni->setEndValue(m_rect.x() + Globals::WindowMargin);
+    m_xAni->setEndValue(m_rect.x());
 
     m_widthAni->setStartValue(m_rect.width());
     m_widthAni->setEndValue(0);
@@ -120,17 +120,17 @@ void MainWindow::showAni()
     if (m_trickTimer->isActive()) {
         return;
     }
-
+    qreal scale = qApp->primaryScreen()->devicePixelRatio();
     m_trickTimer->start();
     if (!m_hasComposite) {
         if (m_daemonDockInter->position() == DOCK_RIGHT) {
             if (m_daemonDockInter->displayMode() == 0) {
-                setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2*Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
+                setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2*Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
             } else {
-                setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
+                setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
             }
         } else {
-            setGeometry(getDisplayScreen().x() + getDisplayScreen().width() - m_rect.width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
+            setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
         }
 
         setFixedWidth(m_rect.width());
@@ -210,7 +210,7 @@ void MainWindow::Hide()
 
 void MainWindow::setX(int x)
 {
-    move(int(std::round(qreal(x) / qApp->primaryScreen()->devicePixelRatio())) , m_rect.y());
+    move(x, m_rect.y());
 }
 
 void MainWindow::CompositeChanged()
@@ -313,7 +313,8 @@ void MainWindow::initConnect()
     connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant &value) {
         int width = value.toInt();
 
-        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
+//        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
+        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width))),m_rect.y());
     });
 
     QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
@@ -367,39 +368,38 @@ void MainWindow::adjustPosition()
     // 屏幕尺寸
     QRect rect = getDisplayScreen();
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
-    rect.setWidth(Globals::WindowWidth+10);
+    rect.setWidth(Globals::WindowWidth + 10);
 
     int dockHeight = 0;
     int displayHeight = int(std::round(qreal(rect.height()) / scale));
     rect.setHeight(displayHeight);
 
     QRect dockRect = m_dockInter->geometry();
-    dockRect.setWidth(int(std::round(qreal(dockRect.width()) / scale)));
-    dockRect.setHeight(int(std::round(qreal(dockRect.height()) / scale)));
+    dockHeight = dockRect.height();
+
+    // 右上下部分预留的间隙- dockRect.height()
+    rect -= QMargins(0, Globals::WindowMargin, Globals::WindowMargin, Globals::WindowMargin);
 
     // 初始化弹出框位置
     switch (m_daemonDockInter->position()) {
     case DOCK_TOP:
-        rect.moveTop(dockRect.height());
-        rect.setHeight(rect.height() - dockRect.height());
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - int(std::round(qreal(rect.width()) * scale)));
-        dockHeight = int(std::round(qreal(dockRect.height()) / scale));
+        rect.moveTop(dockRect.height() + Globals::WindowMargin);
+        rect.setHeight(rect.height() - dockHeight);
+        rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
         break;
     case DOCK_BOTTOM:
-        rect.setHeight(rect.height() - dockRect.height());
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - int(std::round(qreal(rect.width()) * scale)));
-        dockHeight = int(std::round(qreal(dockRect.height()) / scale));
-
+        rect.setHeight(rect.height() - dockHeight);
+        rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
         break;
     case DOCK_LEFT:
-        rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - rect.width());
+        rect.moveRight(int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
         dockHeight = 0;
         break;
     case DOCK_RIGHT:
         if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width()) - Globals::WindowMargin);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale)- dockRect.width() - 2*Globals::WindowMargin);
         } else {
-            rect.moveLeft(getDisplayScreen().x() + getDisplayScreen().width() - (rect.width() + dockRect.width()));
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale)- dockRect.width() - Globals::WindowMargin);
         }
         dockHeight = 0;
         break;
@@ -407,7 +407,7 @@ void MainWindow::adjustPosition()
         break;
     }
 
-    int scrollHeight = displayHeight - dockHeight - Globals::WindowMargin*2 - 20;
+    int scrollHeight = rect.height() - 20;
     emit signal_geometry(scrollHeight);
 
     m_scrollArea->setFixedHeight(scrollHeight);
@@ -419,19 +419,15 @@ void MainWindow::adjustPosition()
     m_scrollArea->setWindowFlags(Qt::FramelessWindowHint);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
 
-
-    // 右上下部分预留的间隙- dockRect.height()
-    rect -= QMargins(0, Globals::WindowMargin, Globals::WindowMargin, Globals::WindowMargin);
-
     // 针对时尚模式的特殊处理
     // 只有任务栏显示的时候, 才额外偏移
     if(m_daemonDockInter->displayMode() == 0 && dockRect.width() * dockRect.height() > 0) {
         switch (m_daemonDockInter->position()) {
         case DOCK_TOP:
-            rect -= QMargins(0, int(std::round(qreal(Globals::WindowMargin)) * scale), 0, 0);
+            rect -= QMargins(0, Globals::WindowMargin, 0, 0);
             break;
         case DOCK_BOTTOM:
-            rect -= QMargins(0, 0, 0, int(std::round(qreal(Globals::WindowMargin)) * scale));
+            rect -= QMargins(0, 0, 0, Globals::WindowMargin);
             break;
         default:
             break;

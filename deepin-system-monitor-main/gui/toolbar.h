@@ -24,6 +24,7 @@
 #include <DButtonBox>
 #include <DSearchEdit>
 #include <DWidget>
+#include "dialog/custombuttonbox.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -122,7 +123,7 @@ Q_SIGNALS:
 
 private:
     // Button group
-    DButtonBox *m_switchFuncTabBtnGrp {};
+    CustomButtonBox *m_switchFuncTabBtnGrp {};
     // Process tab button
     DButtonBoxButton *m_procBtn {};
     // Service tab button

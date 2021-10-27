@@ -227,6 +227,7 @@ set(HPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/cpu_detail_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/cpu_summary_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_item_widget.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/custombuttonbox.h
 )
 set(CPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/base/base_detail_item_delegate.cpp
@@ -267,6 +268,7 @@ set(CPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/cpu_summary_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_item_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_stat_view_widget.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/custombuttonbox.cpp
 )
 
 set(HPP_PROCESS

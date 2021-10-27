@@ -296,6 +296,7 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
         m_toolbar->setProcessButtonChecked(true);
         m_pages->setCurrentWidget(m_procPage);
         m_procPage->switchProcessPage();
+        m_procPage->switchCurrentNoFilterPage();
         m_tbShadow->raise();
         m_tbShadow->show();
     } else {

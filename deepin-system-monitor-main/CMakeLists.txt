@@ -217,6 +217,7 @@ set(HPP_GUI
     gui/cpu_summary_view_widget.h
     gui/block_dev_item_widget.h
     gui/dialog/systemprotectionsetting.h
+    gui/dialog/custombuttonbox.h
 )
 set(CPP_GUI
     gui/base/base_detail_item_delegate.cpp
@@ -259,6 +260,7 @@ set(CPP_GUI
     gui/block_dev_stat_view_widget.cpp
     gui/dialog/systemprotectionsetting.cpp
     gui/dialog/settingsdialog.cpp
+    gui/dialog/custombuttonbox.cpp
 )
 
 set(HPP_PROCESS

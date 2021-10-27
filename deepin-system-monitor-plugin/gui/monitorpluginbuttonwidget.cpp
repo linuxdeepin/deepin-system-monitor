@@ -114,15 +114,15 @@ void MonitorPluginButtonWidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
 
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    // 保持横纵比
-    if (position == Dock::Bottom || position == Dock::Top) {
-        setMinimumWidth(qBound(PLUGIN_BACKGROUND_MIN_SIZE, height(), PLUGIN_BACKGROUND_MAX_SIZE));
-    } else {
-        setMaximumHeight(width());
-        setMaximumWidth(QWIDGETSIZE_MAX);
-    }
-    update();
+//    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+//    // 保持横纵比
+//    if (position == Dock::Bottom || position == Dock::Top) {
+//        setMinimumWidth(qBound(PLUGIN_BACKGROUND_MIN_SIZE, height(), PLUGIN_BACKGROUND_MAX_SIZE));
+//    } else {
+//        setMaximumHeight(width());
+//        setMaximumWidth(QWIDGETSIZE_MAX);
+//    }
+//    update();
 }
 
 void MonitorPluginButtonWidget::mouseMoveEvent(QMouseEvent *event)
