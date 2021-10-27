@@ -247,6 +247,9 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     scroller->setScrollerProperties(prop);
     // enable touch gesture
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &BlockDevSummaryViewWidget::fontChanged);
 }
 
 void BlockDevSummaryViewWidget::chageSummaryInfo(const QString &deviceName)

@@ -42,6 +42,9 @@ MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
 
     onModelUpdate();
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &MemDetailViewWidget::onModelUpdate);
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &MemDetailViewWidget::detailFontChanged);
 }
 
 void MemDetailViewWidget::onModelUpdate()

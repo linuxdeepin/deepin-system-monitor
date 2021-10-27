@@ -342,6 +342,9 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
     connect(this, &CPUDetailWidget::sigClickSwitchMutliCoreButton, this, [ = ](bool isMutliCoreMode) {
         m_graphicsTable->setMutliCoreMode(isMutliCoreMode);
     });
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &CPUDetailWidget::detailFontChanged);
 }
 
 void CPUDetailWidget::detailFontChanged(const QFont &font)

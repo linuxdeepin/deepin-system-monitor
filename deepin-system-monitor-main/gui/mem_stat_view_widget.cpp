@@ -89,8 +89,10 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
     QPainter painter(this);
+    QFont font = DApplication::font();
+    font.setPointSizeF(font.pointSizeF() - 1);
+    painter.setFont(font);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setFont(m_font);
 
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();

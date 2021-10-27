@@ -35,8 +35,6 @@ TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_updateWidgetGeometry_001)
     itemWidget->updateWidgetGeometry();
 
     EXPECT_EQ(QFontMetrics(itemWidget->m_font).height(), QFontMetrics(font).height());
-    QRect rect(6, fontHeight / 2, itemWidget->width() - 2 * 6, itemWidget->height() - fontHeight / 2 - 6);
-    EXPECT_EQ(itemWidget->m_memChartWidget->geometry(), rect);
 
     itemWidget->deleteLater();
 }
@@ -52,8 +50,6 @@ TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_updateWidgetGeometry_002)
     itemWidget->updateWidgetGeometry();
 
     EXPECT_EQ(QFontMetrics(itemWidget->m_font).height(), QFontMetrics(font).height());
-    QRect rect(6, fontHeight * 2 + fontHeight / 2, itemWidget->width() - 2 * 6, itemWidget->height() - fontHeight * 2 - fontHeight / 2 - 6);
-    EXPECT_EQ(itemWidget->m_memChartWidget->geometry(), rect);
 
     itemWidget->deleteLater();
 }
@@ -87,8 +83,6 @@ TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_resizeEvent_001)
     itemWidget->resizeEvent(&event);
 
     EXPECT_EQ(QFontMetrics(itemWidget->m_font).height(), QFontMetrics(font).height());
-    QRect rect(6, fontHeight * 2 + fontHeight / 2, itemWidget->width() - 2 * 6, itemWidget->height() - fontHeight * 2 - fontHeight / 2 - 6);
-    EXPECT_EQ(itemWidget->m_memChartWidget->geometry(), rect);
 
     itemWidget->deleteLater();
 }

@@ -176,12 +176,12 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     QString swapTitle = "";
     QString swapContent = "";
-    if (m_swapTotal == "") {
+    if (m_swapTotal == "0.0 B") {
         // After the memory and swap space text, add a space before the brackets
-        swapTitle = QString("%1 (%2)")
-                    .arg(DApplication::translate("Memory.Widget", "Swap"))
-                    .arg(DApplication::translate("Memory.Widget", "Not enabled"));
-        swapContent = "";
+        m_swapUsage = "-/-";
+        swapContent = QString("%1 (%2)")
+                .arg(DApplication::translate("Memory.Widget", "Swap"))
+                .arg(DApplication::translate("Memory.Widget", "Not enabled"));
     } else {
         swapTitle= QString("%1 / %2")
                                 .arg(m_swapUnit)
@@ -249,9 +249,11 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     painter.setFont(m_memFont);
     painter.drawText(swapRect, m_swapUsage);
+    if (m_swapTotal != "0.0 B") {
+        painter.setFont(m_memUnitFont);
+        painter.drawText(swapRectUnit, swapTitle);
+    }
 
-    painter.setFont(m_memUnitFont);
-    painter.drawText(swapRectUnit, swapTitle);
 
     painter.setFont(m_memTxtFont);
     painter.setOpacity(0.6);
@@ -266,9 +268,12 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
                     m_memPercent.toDouble()/100);
 
     // Draw swap ring.
-    drawLoadingRing(painter, contentRect.x() + ringCenterPointerX, contentRect.y() + ringCenterPointerY,
-                    insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
-                    swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, m_swapPercent.toDouble()/100);
+    if (m_swapTotal != "0.0 B") {
+        drawLoadingRing(painter, contentRect.x() + ringCenterPointerX, contentRect.y() + ringCenterPointerY,
+                        insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
+                        swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, m_swapPercent.toDouble()/100);
+
+    }
 
     QString memPerUnitTitle = "%";
     int memPerUnitTitleWidth = fmMemUnit.size(Qt::TextSingleLine, memPerUnitTitle).width();
