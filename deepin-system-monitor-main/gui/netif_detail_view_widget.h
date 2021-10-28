@@ -33,6 +33,7 @@ class NetifDetailViewWidget : public BaseDetailViewWidget
 
 public:
     explicit NetifDetailViewWidget(QWidget *parent = nullptr);
+    virtual ~NetifDetailViewWidget();
 
 public slots:
     void detailFontChanged(const QFont &font);

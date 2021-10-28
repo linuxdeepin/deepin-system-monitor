@@ -91,6 +91,19 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
 }
 
+BaseDetailViewWidget::~BaseDetailViewWidget()
+{
+    if (m_switchIconDark) {
+        delete m_switchIconDark;
+        m_switchIconDark = nullptr;
+    }
+
+    if (m_switchIconLight) {
+        delete m_switchIconLight;
+        m_switchIconLight = nullptr;
+    }
+}
+
 void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 {
     m_titleFont = font;

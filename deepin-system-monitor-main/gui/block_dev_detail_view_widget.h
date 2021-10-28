@@ -32,6 +32,7 @@ class BlockDevDetailViewWidget : public BaseDetailViewWidget
     Q_OBJECT
 public:
     explicit BlockDevDetailViewWidget(QWidget *parent = nullptr);
+    virtual ~BlockDevDetailViewWidget();
 
 public slots:
     void detailFontChanged(const QFont &font);

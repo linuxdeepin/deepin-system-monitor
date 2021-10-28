@@ -45,6 +45,11 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     updateData();
 }
 
+NetifDetailViewWidget::~NetifDetailViewWidget()
+{
+
+}
+
 void NetifDetailViewWidget::detailFontChanged(const QFont &font)
 {
     BaseDetailViewWidget::detailFontChanged(font);

@@ -12,7 +12,7 @@ Ut_BlockStatViewWidget::Ut_BlockStatViewWidget()
 void BlockStatViewWidget_showItem()
 {
     BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-    pBlockStatViewWidget->m_listBlockItemWidget.append(new BlockDevItemWidget);
+//    pBlockStatViewWidget->m_listBlockItemWidget.append(new BlockDevItemWidget);
 
     pBlockStatViewWidget->deleteLater();
 }
@@ -20,7 +20,7 @@ void BlockStatViewWidget_showItem()
 void BlockStatViewWidget_showItemLg2()
 {
     BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-    pBlockStatViewWidget->m_listBlockItemWidget.append(new BlockDevItemWidget);
+//    pBlockStatViewWidget->m_listBlockItemWidget.append(new BlockDevItemWidget);
 
     pBlockStatViewWidget->deleteLater();
 }

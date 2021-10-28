@@ -45,6 +45,14 @@ BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
     m_memChartWidget->setData2Color(writeColor);
 }
 
+BlockDevItemWidget::~BlockDevItemWidget()
+{
+    if (m_memChartWidget) {
+        delete m_memChartWidget;
+        m_memChartWidget = nullptr;
+    }
+}
+
 void BlockDevItemWidget::updateWidgetGeometry()
 {
     QFont font = DApplication::font();

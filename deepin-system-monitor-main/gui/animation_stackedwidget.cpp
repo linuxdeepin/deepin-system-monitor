@@ -37,7 +37,10 @@ AnimationStackedWidget::AnimationStackedWidget(const AnimationOri ori, QWidget *
 
 AnimationStackedWidget::~AnimationStackedWidget()
 {
-    delete m_Animation;
+    if (m_Animation) {
+        delete m_Animation;
+        m_Animation = nullptr;
+    }
 }
 
 void AnimationStackedWidget::setDuration(int duration)

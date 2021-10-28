@@ -39,6 +39,8 @@ class BaseDetailViewWidget : public QWidget
 public:
     explicit BaseDetailViewWidget(QWidget *parent = nullptr);
 
+    virtual ~BaseDetailViewWidget();
+
 signals:
     void signalHideDetailClicked();
 

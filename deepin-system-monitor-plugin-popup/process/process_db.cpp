@@ -54,9 +54,18 @@ ProcessDB::ProcessDB(QObject *parent)
 
 ProcessDB::~ProcessDB()
 {
-    delete m_procSet;
-    delete m_windowList;
-    delete m_desktopEntryCache;
+    if (m_procSet) {
+        delete m_procSet;
+        m_procSet = nullptr;
+    }
+    if (m_windowList) {
+        delete m_windowList;
+        m_windowList = nullptr;
+    }
+    if (m_desktopEntryCache) {
+        delete m_desktopEntryCache;
+        m_desktopEntryCache = nullptr;
+    }
 }
 
 ProcessDB *ProcessDB::instance()

@@ -81,6 +81,7 @@ SysInfo &SysInfo::operator=(const SysInfo &rhs)
 }
 SysInfo::~SysInfo()
 {
+
 }
 
 SysInfo *SysInfo::instance()

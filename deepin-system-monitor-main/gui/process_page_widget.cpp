@@ -315,8 +315,10 @@ void ProcessPageWidget::onLoadLeftDataWidgetDelay()
 void ProcessPageWidget::onDetailWidgetChanged(int index)
 {
     QWidget *curDetailWidget = m_rightStackView->widget(index);
-    m_compactView->setDetailButtonVisible(m_processWidget == curDetailWidget);
-    m_expandView->setDetailButtonVisible(m_processWidget == curDetailWidget);
+    if (m_compactView)
+        m_compactView->setDetailButtonVisible(m_processWidget == curDetailWidget);
+    if (m_expandView)
+        m_expandView->setDetailButtonVisible(m_processWidget == curDetailWidget);
 }
 
 // event filter

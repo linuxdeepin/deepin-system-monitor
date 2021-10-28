@@ -60,10 +60,10 @@ TEST(Ut_NetifItemViewWidget_fontChanged,Ut_NetifItemViewWidget_fontChanged_001)
     QWidget *pQWidget = new QWidget;
     NetifItemViewWidget *pNetifItemViewWidget = new NetifItemViewWidget(pQWidget);
 
-    const QFont *pfont = new QFont;
-    pNetifItemViewWidget->fontChanged(*pfont);
+    const QFont pfont;
+    pNetifItemViewWidget->fontChanged(pfont);
 
-    EXPECT_EQ(pNetifItemViewWidget->m_font.key(),pfont->key());
+    EXPECT_EQ(pNetifItemViewWidget->m_font.key(),pfont.key());
 
     pQWidget->deleteLater();
     pNetifItemViewWidget->deleteLater();

@@ -43,6 +43,10 @@ Application::Application(int &argc, char **argv)
     ThreadManager::instance()->attach(new NetifMonitorThread);
 }
 
+Application::~Application()
+{
+}
+
 void Application::setCurrentTaskState(TaskState taskState)
 {
     m_currentTaskStat = taskState;

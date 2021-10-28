@@ -72,7 +72,6 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     connect(m_cpuMonitor, &CompactCpuMonitor::signalDetailInfoClicked, this, &MonitorCompactView::signalDetailInfoClicked);
     // 连接dbus发来的信号
     connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, [=](QString msgCode) {
-        DetailWidgetManager::getInstance().sigJumpToProcessWidget("MSG_PROCESS");
         emit signalDetailInfoByDbus(msgCode);
     });
 

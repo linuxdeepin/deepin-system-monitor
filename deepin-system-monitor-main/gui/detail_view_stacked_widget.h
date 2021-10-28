@@ -36,6 +36,8 @@ class DetailViewStackedWidget : public AnimationStackedWidget
 public:
     explicit DetailViewStackedWidget(QWidget *parent);
 
+    virtual ~DetailViewStackedWidget();
+
     void addProcessWidget(QWidget *processWidget);
 
     void deleteDetailPage();

@@ -34,6 +34,30 @@ DetailViewStackedWidget::DetailViewStackedWidget(QWidget *parent) : AnimationSta
     connect(this, &AnimationStackedWidget::signalIsFinished, this, &DetailViewStackedWidget::onSwitchPageFinished);
 }
 
+DetailViewStackedWidget::~DetailViewStackedWidget()
+{
+    if (m_processWidget) {
+        delete m_processWidget;
+        m_processWidget = nullptr;
+    }
+    if (m_cpudetailWidget) {
+        delete m_cpudetailWidget;
+        m_cpudetailWidget = nullptr;
+    }
+    if (m_memDetailWidget) {
+        delete m_memDetailWidget;
+        m_memDetailWidget = nullptr;
+    }
+    if (m_netifDetailWidget) {
+        delete m_netifDetailWidget;
+        m_netifDetailWidget = nullptr;
+    }
+    if (m_blockDevDetailWidget) {
+        delete m_blockDevDetailWidget;
+        m_blockDevDetailWidget = nullptr;
+    }
+}
+
 void DetailViewStackedWidget::addProcessWidget(QWidget *processWidget)
 {
     m_processWidget = processWidget;

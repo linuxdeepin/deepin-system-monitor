@@ -41,7 +41,7 @@ public:
 
     CPUSet &operator=(const CPUSet &rhs);
 
-    ~CPUSet();
+    virtual ~CPUSet();
 
 public://info
     QString modelName() const;

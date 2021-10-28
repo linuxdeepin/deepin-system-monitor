@@ -24,6 +24,7 @@ TEST(Ut_BlockDevDetailViewWidget, Ut_BlockDevDetailViewWidget_BlockDevDetailView
 
     EXPECT_TRUE(pBlockWidget->m_blocksummaryWidget);
 
+    stackViewWidget->deleteLater();
     pBlockWidget->deleteLater();
 }
 
@@ -41,5 +42,6 @@ TEST(Ut_BlockDevDetailViewWidget, Ut_BlockDevDetailViewWidget_detailFontChanged_
     EXPECT_EQ(pBlockWidget->m_blocksummaryWidget->font().family(), serifFont.family());
     EXPECT_EQ(pBlockWidget->m_blocksummaryWidget->font().bold(), serifFont.bold());
 
+    stackViewWidget->deleteLater();
     pBlockWidget->deleteLater();
 }

@@ -61,6 +61,8 @@ class Application : public DApplication
 public:
     Application(int &argc, char **argv);
 
+    virtual ~Application() override;
+
     enum TaskState {
         kTaskStarted,
         kTaskRunning,

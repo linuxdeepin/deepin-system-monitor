@@ -37,6 +37,11 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
 
     detailFontChanged(DApplication::font());
 }
+
+BlockDevDetailViewWidget::~BlockDevDetailViewWidget()
+{
+
+}
 void BlockDevDetailViewWidget::detailFontChanged(const QFont &font)
 {
     BaseDetailViewWidget::detailFontChanged(font);

@@ -120,7 +120,7 @@ bool DataDealSingleton::sendJumpWidgetMessage(const QString &dbusMessage)
     //1000ms内重复点击,不响应
     if (m_popupTrickTimer->isActive()) {
         return false;
-        }
+    }
     m_popupTrickTimer->start();
     //1.先唤醒主进程
     bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);

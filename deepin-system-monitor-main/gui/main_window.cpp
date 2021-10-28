@@ -57,6 +57,10 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     PERF_PRINT_END("POINT-02");
+    if (m_pDbusService) {
+        delete m_pDbusService;
+        m_pDbusService = nullptr;
+    }
 }
 
 void MainWindow::initDisplay()

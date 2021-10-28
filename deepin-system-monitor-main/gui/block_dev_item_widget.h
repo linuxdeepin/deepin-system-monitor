@@ -39,6 +39,7 @@ public:
     };
 
     explicit BlockDevItemWidget(QWidget *parent = nullptr);
+    virtual ~BlockDevItemWidget() override;
 
 signals:
     void clicked(const QString &deviceName);

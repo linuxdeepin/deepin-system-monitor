@@ -48,12 +48,30 @@ DeviceDB::DeviceDB()
 
 DeviceDB::~DeviceDB()
 {
-    delete m_diskIoInfo;
-    delete m_memInfo;
-    delete m_cpuSet;
-    delete m_blkDevInfoDB;
-    delete m_netifInfoDB;
-    delete m_netInfo;
+    if (m_diskIoInfo) {
+        delete m_diskIoInfo;
+        m_diskIoInfo  = nullptr;
+    }
+    if (m_memInfo) {
+        delete m_memInfo;
+        m_memInfo  = nullptr;
+    }
+    if (m_cpuSet) {
+        delete m_cpuSet;
+        m_cpuSet  = nullptr;
+    }
+    if (m_blkDevInfoDB) {
+        delete m_blkDevInfoDB;
+        m_blkDevInfoDB  = nullptr;
+    }
+    if (m_netifInfoDB) {
+        delete m_netifInfoDB;
+        m_netifInfoDB  = nullptr;
+    }
+    if (m_netInfo) {
+        delete m_netInfo;
+        m_netInfo  = nullptr;
+    }
 }
 
 void DeviceDB::update()

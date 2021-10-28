@@ -43,6 +43,11 @@ DiskIOInfo::DiskIOInfo()
 
 }
 
+DiskIOInfo::~DiskIOInfo()
+{
+
+}
+
 qreal DiskIOInfo::diskIoReadBps()
 {
     return m_readBps;
