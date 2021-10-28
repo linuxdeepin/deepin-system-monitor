@@ -193,9 +193,9 @@ private:
     DiskWidget *m_diskWidget {};
     MemoryWidget *m_memoryWidget {};
     ProcessWidget *m_processWidget{};
-    DScrollArea *m_scrollArea;
+    DScrollArea *m_scrollArea {};       // 滚动区域
 
-    // 防止300ms内重复按键
+    // 防止1000ms内重复按键
     QTimer* m_trickTimer;
     //最近一次拖动的距离
     int m_last_time_move = 0;

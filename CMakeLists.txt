@@ -33,6 +33,16 @@ if (${XDGTYPE} MATCHES "wayland")
 else()
     SET(WAYLAND_SESSION_TYPE 0)
 endif()
+
+#判断龙芯架构
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
+    SET(IS_LOONGARCH_TYPE 1)
+elseif(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "__longarch64")
+    SET(NOT_LOONGARCH_TYPE )
+else()
+    SET(IS_LOONGARCH_TYPE 0)
+endif()
+
 #系统监视器主应用
 ADD_SUBDIRECTORY(deepin-system-monitor-main)
 #系统监视器插件
@@ -44,3 +54,4 @@ ADD_SUBDIRECTORY(deepin-system-monitor-daemon)
 #单元测试
 ADD_SUBDIRECTORY(tests)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)

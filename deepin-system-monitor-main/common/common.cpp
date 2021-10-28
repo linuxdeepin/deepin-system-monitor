@@ -345,11 +345,9 @@ QString format::formatUnit(QVariant size, format::SizeUnit base, int prec, bool 
 
     if (isSpeed) {
         return QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixExt[u]).arg("/s");
-    } else {
-        //return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffix[u]);
-        //统一单位
-        return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixExt[u]);
     }
+    //统一单位
+    return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixExt[u]);
 }
 
 // ::format::formatUnit

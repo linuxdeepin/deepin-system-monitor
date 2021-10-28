@@ -225,14 +225,13 @@ bool ProcessWidget::eventFilter(QObject *target, QEvent *event)
     return QWidget::eventFilter(target, event);
 }
 
-void ProcessWidget::mousePressEvent(QMouseEvent *event)
+void ProcessWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (event->type() == QEvent::MouseButtonDblClick) {
-            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_PROCESS");
-        }
+        DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_PROCESS");
+        return;
     }
-    return QWidget::mousePressEvent(event);
+    return QWidget::mouseDoubleClickEvent(event);
 }
 
 void ProcessWidget::changeFont(const QFont &font)

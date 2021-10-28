@@ -23,6 +23,7 @@
 #include "settings.h"
 #include "gui/main_window.h"
 #include "common/perf.h"
+#include "dbus/dbus_object.h"
 
 #include <DApplication>
 #include <DApplicationSettings>
@@ -42,6 +43,9 @@ using namespace common::init;
 
 int main(int argc, char *argv[])
 {
+    //=======通知已经打开的进程
+    if (!DBusObject::getInstance().registerOrNotify())
+        return 0;
     //Judge if Wayland
     WaylandSearchCentered();
     //

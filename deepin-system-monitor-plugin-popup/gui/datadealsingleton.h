@@ -23,6 +23,7 @@
 #include <QMutex>
 #include <QReadWriteLock>
 #include <QObject>
+#include <QTimer>
 
 class CPUInfoModel;
 
@@ -92,6 +93,9 @@ private:
 
     static QMutex mutex;
     static QAtomicPointer<DataDealSingleton> instance;
+
+    //防止300ms内重复按键
+    QTimer* m_popupTrickTimer;
 };
 
 #endif // DATADEALSINGLETON_H

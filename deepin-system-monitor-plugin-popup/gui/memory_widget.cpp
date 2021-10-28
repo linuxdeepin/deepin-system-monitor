@@ -311,14 +311,13 @@ bool MemoryWidget::eventFilter(QObject *target, QEvent *event)
     return QWidget::eventFilter(target, event);
 }
 
-void MemoryWidget::mousePressEvent(QMouseEvent *event)
+void MemoryWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (event->type() == QMouseEvent::MouseButtonDblClick) {
-            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_MEM");
-        }
+        DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_MEM");
+        return;
     }
-    return QWidget::mousePressEvent(event);
+    return QWidget::mouseDoubleClickEvent(event);
 }
 
 void MemoryWidget::changeFont(const QFont &font)

@@ -404,14 +404,13 @@ bool NetWidget::eventFilter(QObject *target, QEvent *event)
     return QWidget::eventFilter(target, event);
 }
 
-void NetWidget::mousePressEvent(QMouseEvent *event)
+void NetWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (event->type() == QMouseEvent::MouseButtonDblClick) {
-            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_NET");
-        }
+        DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_NET");
+        return;
     }
-    return QWidget::mousePressEvent(event);
+    return QWidget::mouseDoubleClickEvent(event);
 }
 
 void NetWidget::changeFont(const QFont &font)

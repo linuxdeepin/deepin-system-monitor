@@ -35,7 +35,7 @@ check_include_files ("sys/random.h" HAVE_SYS_RANDOM_H)
 include(CheckSymbolExists)
 check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
-configure_file(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+configure_file(${CMAKE_HOME_DIRECTORY}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include(FindPkgConfig)
 
 find_package(KF5Wayland)
@@ -75,7 +75,7 @@ include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/includ
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src)
 
 set(HPP_GLOBAL
-    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/config.h
+    ${CMAKE_HOME_DIRECTORY}/config.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/environments.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/accessible.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/accessibledefine.h
@@ -139,6 +139,7 @@ set(HPP_DBUS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/unit_file_info.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/unit_info.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbusforsystemomonitorpluginservce.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbus_object.h
 )
 set(CPP_DBUS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/environment_file.cpp
@@ -149,6 +150,7 @@ set(CPP_DBUS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/systemd1_unit_interface.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbus_properties_interface.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbusforsystemomonitorpluginservce.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/dbus/dbus_object.cpp
 )
 
 set(HPP_MODEL

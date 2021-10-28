@@ -101,9 +101,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
             it!=m_windowStates.end();++it) {
             // if the window is created by ourself, then ignore it
             qDebug()<<it->pid;
-            if (getpid() == it->pid || QString::fromStdString(it->resourceName)=="dde-desktop" ||
-                    QString::fromStdString(it->resourceName) == "deepin-system-monitor"||
-                    QString::fromStdString(it->resourceName)=="qtcreator")
+            if (getpid() == it->pid || QString::fromStdString(it->resourceName)=="dde-desktop")
                 continue;
 
             // if such window exists, we emit window clicked signal to notify kill application performed action
@@ -173,9 +171,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
         for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.begin();
              it!=m_windowStates.end();++it) {
             // if the window is created by ourself, then ignore it
-            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||
-                    QString::fromStdString(it->resourceName) == "deepin-system-monitor"||
-                    QString::fromStdString(it->resourceName)=="qtcreator")
+            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop")
                 continue;
             auto selRect = QRect(static_cast<int>(it->geometry.x / x), static_cast<int>(it ->geometry.y / x),
                                  static_cast<int>(it->geometry.width / x), static_cast<int>(it->geometry.height/ x));

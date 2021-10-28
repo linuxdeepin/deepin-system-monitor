@@ -267,14 +267,13 @@ bool CpuWidget::eventFilter(QObject *target, QEvent *event)
     return QWidget::eventFilter(target, event);
 }
 
-void CpuWidget::mousePressEvent(QMouseEvent *event)
+void CpuWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (event->type() == QMouseEvent::MouseButtonDblClick) {
-            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_CPU");
-        }
+        DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_CPU");
+        return;
     }
-    return QWidget::mousePressEvent(event);
+    return QWidget::mouseDoubleClickEvent(event);
 }
 
 void CpuWidget::changeFont(const QFont &font)

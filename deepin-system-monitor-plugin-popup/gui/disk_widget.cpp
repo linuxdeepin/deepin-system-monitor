@@ -377,14 +377,13 @@ bool DiskWidget::eventFilter(QObject *target, QEvent *event)
     return QWidget::eventFilter(target, event);
 }
 
-void DiskWidget::mousePressEvent(QMouseEvent *event)
+void DiskWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (event->type() == QMouseEvent::MouseButtonDblClick) {
-            DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_DISK");
-        }
+        DataDealSingleton::getInstance().sendJumpWidgetMessage("MSG_DISK");
+        return;
     }
-    return QWidget::mousePressEvent(event);
+    return QWidget::mouseDoubleClickEvent(event);
 }
 
 void DiskWidget::changeFont(const QFont &font)

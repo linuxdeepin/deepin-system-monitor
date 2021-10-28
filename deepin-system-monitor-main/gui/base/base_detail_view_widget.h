@@ -82,8 +82,8 @@ protected:
     // 切换多核显示或单CPU显示  按钮
     Dtk::Widget::DIconButton *m_switchButton;
     // 切换按钮图片
-    QIcon *m_switchIconLight;
-    QIcon *m_switchIconDark;
+    QIcon *m_switchIconLight {};
+    QIcon *m_switchIconDark {};
 
     // 当前是否为多核模式
     bool m_isMultiCoreMode = false;

@@ -29,7 +29,6 @@ check_include_files("sys/random.h" HAVE_SYS_RANDOM_H)
 include(CheckSymbolExists)
 check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_CALL)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include(FindPkgConfig)
 
 find_package(Qt5 COMPONENTS Core REQUIRED)
@@ -67,6 +66,7 @@ include_directories(${LIB_UDEV_INCLUDE_DIRS})
 #include_directories(${QGSettings_INCLUDE_DIRS})
 
 include_directories(${MAIN_APP_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 FILE(GLOB_RECURSE SRCS "*.h" "*.cpp")
 
@@ -238,6 +238,7 @@ SET(CPP_PROCESS
     ${MAIN_APP_DIR}/process/process_controller.cpp
 )
 set(APP_HPP
+    ${CMAKE_HOME_DIRECTORY}/config.h
     application.h
     ${HPP_MODEL}
     ${HPP_SYSTEM}

@@ -31,7 +31,6 @@ check_include_files ("sys/random.h" HAVE_SYS_RANDOM_H)
 include(CheckSymbolExists)
 check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include(FindPkgConfig)
 
 find_package(KF5Wayland)
@@ -62,10 +61,9 @@ include_directories(${LIB_UDEV_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libsmartcols/src)
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 set(HPP_GLOBAL
-    config.h
     environments.h
     accessible.h
     accessibledefine.h
@@ -128,6 +126,7 @@ set(HPP_DBUS
     dbus/unit_file_info.h
     dbus/unit_info.h
     dbus/dbusforsystemomonitorpluginservce.h
+    dbus/dbus_object.h
 )
 set(CPP_DBUS
     dbus/environment_file.cpp
@@ -138,6 +137,7 @@ set(CPP_DBUS
     dbus/systemd1_unit_interface.cpp
     dbus/dbus_properties_interface.cpp
     dbus/dbusforsystemomonitorpluginservce.cpp
+    dbus/dbus_object.cpp
 )
 
 set(HPP_MODEL
@@ -492,6 +492,7 @@ set(LSCPU_INCLUDE
         )
 
 set(APP_HPP
+    ${CMAKE_HOME_DIRECTORY}/config.h
     ${HPP_GLOBAL}
     ${HPP_COMMON}
     ${HPP_DBUS}

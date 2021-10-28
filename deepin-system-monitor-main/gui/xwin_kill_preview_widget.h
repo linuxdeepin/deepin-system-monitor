@@ -20,7 +20,7 @@
 #ifndef XWIN_KILL_PREVIEW_WIDGET_H
 #define XWIN_KILL_PREVIEW_WIDGET_H
 
-#include "config.h"
+#include "../config.h"
 #include <QWidget>
 #ifdef WAYLAND_SESSION_TYPE
 #include <KF5/KWayland/Client/clientmanagement.h>

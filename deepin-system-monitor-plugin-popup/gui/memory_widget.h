@@ -43,7 +43,11 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     bool eventFilter(QObject *target, QEvent *event) override;
 
-    void mousePressEvent(QMouseEvent *event) override;
+    //!
+    //! \brief mouseDoubleClickEvent 鼠标压下事件，唤醒系统监视器主进程，并跳转到CPU详情界面
+    //! \param event
+    //!
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     void changeTheme(DApplicationHelper::ColorType themeType);

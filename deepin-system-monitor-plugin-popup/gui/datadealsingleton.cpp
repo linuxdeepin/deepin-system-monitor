@@ -29,9 +29,16 @@
 #include "system/block_device_info_db.h"
 #include "common/datacommon.h"
 #include "dbus/dbuscallmaininterface.h"
+#include "config.h"
 
 //Qt
 #include <QProcess>
+
+#ifdef IS_LOONGARCH_TYPE
+#define POPUP_WAITING_TIME 1000
+#else
+#define POPUP_WAITING_TIME 500
+#endif
 
 
 QMutex DataDealSingleton::mutex;
@@ -110,11 +117,16 @@ bool DataDealSingleton::readDiskInfo(QString &diskRead, QString &diskTotalSize, 
 
 bool DataDealSingleton::sendJumpWidgetMessage(const QString &dbusMessage)
 {
+    //1000ms内重复点击,不响应
+    if (m_popupTrickTimer->isActive()) {
+        return false;
+        }
+    m_popupTrickTimer->start();
     //1.先唤醒主进程
     bool rt = QProcess::startDetached(Globals::DEEPIN_SYSTEM_MONITOR_PATH);
     if (true == rt) {
         //2.跳转DBUS
-        QTimer::singleShot(500, this, [=]() {
+        QTimer::singleShot(POPUP_WAITING_TIME, this, [=]() {
             DbusCallMainInterface::getInstance()->jumpWidget(dbusMessage);
         });
     }
@@ -123,7 +135,11 @@ bool DataDealSingleton::sendJumpWidgetMessage(const QString &dbusMessage)
 
 DataDealSingleton::DataDealSingleton(QObject *parent)
     :QObject (parent)
-{
+    , m_popupTrickTimer(new QTimer(this))
+    {
+    m_popupTrickTimer->setInterval(1000);
+    m_popupTrickTimer->setSingleShot(true);
+
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &DataDealSingleton::sigDataUpdate);
 }
 
