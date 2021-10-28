@@ -11,11 +11,9 @@ System Monitor is a system tool monitoring and managing hardware load, program r
 1. Click ![search](../common/search.svg) in the Search box.  
 2. Enter keywords and the search results will be displayed automatically.
 
-![1|search](fig/search.png)
-
 ### Hardware Monitoring
 
-Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor interface, select **Expand** or **Compact** and view the CPU, memory and network status of your system in **Expand** view or **Compact** view.
+Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor interface, select **Expand** or **Compact** and view the CPU, memory and network info of your system in **Expand** view or **Compact** view.
 
 | Name    | Description                                                  |
 | ------- | ------------------------------------------------------------ |
@@ -30,23 +28,15 @@ Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor inte
 
 #### View Hardware info
 
-You can view the detailed processor, memory, network and disk info in the compact and expand view mode.
+You can view the detailed hardware info in one of the following ways:
 
-1. On the System Monitor interface, click the **Details** icon on the left and the detailed CPU info will be displayed on the right by default.
+- In the **Process** tab on the System Monitor interface, click the CPU, Memory, Network or Disk area on the left, the corresponding details will be displayed on the right.
+- In the **Process** tab on the System Monitor interface, click the **Details** icon on the left and the detailed CPU info will be displayed on the right by default. Click the ![down](../common/nextdown.svg) icon besides CPU to expand the drop-down list and view the detailed info on memory, network or disk.
+- Right-click the Dock to check **System Monitor** > **Plugins** and the System Monitor icon ![icon](../common/system_monitor.png) will be displayed in the plugins area in the Dock. Hover the mouse pointer over the icon, CPU, Memory and network upload and download info will be displayed. Click the icon to view the CPU, network, memory, disk and process information of the computer in the pop-up interface. Double-click the monitored area to view the detailed information of the corresponding module in System Monitor.
 
-   ![1|monitor](fig/detail1.png)
+> ![notes](../common/notes.svg) Notes: On the System Monitor interface, click **Details** and then click the ![icon](../common/change.svg) icon to view the individual or overall information of CPU. Click **Hide details** to compact the detailed info.
 
-2. Click the ![down](../common/nextdown.svg) icon besides CPU to expand the drop-down list and view the detailed info on memory, network or disk.
-
-   ![1|monitor](fig/detail.png)
-
-3. Click **Hide details** to compact the detailed info.
-
-> ![notes](../common/tips.svg) Tips: You can also view the hardware information of your computer on the desktop as follows:
->
-> 1. Right-click the Dock, check **System Monitor** in the **Plugins** sub-menu and its icon ![icon](../common/system_monitor.png) will be displayed in plugins area in the Dock.
-> 2. Click the ![icon](../common/system_monitor.png) icon in plugins area and you can view the CPU, network, memory, disk and process information of the computer on the desktop.
-> 3. Double-click the monitored area to view the detailed information of the corresponding module in System Monitor.
+![monitor](fig/detail.png)
 
 ### Process Management
 
@@ -97,7 +87,7 @@ System Monitor can be used to end processes.
 2. Select **Suspend process**. The process will be tagged with **(Suspend)** and turned red in the list. 
 3. Right-click it again and select **Resume process** to resume it.
 
-![1|pause](fig/pause.png)
+![1|pause](fig/suspend.png)
 
 #### Change Process Priority 
 
@@ -128,7 +118,7 @@ In the list of system services, force-ending of application is prohibited.
 
 #### Start system service
 1. Select the **Services** tab on the System Monitor interface.
-2. Select a process that is not started yet, right-click it, and select **Start**. Enter the password if an authentication window pops up.
+2. Right-click a process that is not started yet and select **Start**. Enter the password if an authentication window pops up.
 3. **active** is displayed in the **Active** column.
 4. Right-click the service and select **Startup type**. Select from **Auto** and **Manual** options.
 5. Right-click the service and select **Refresh**.
@@ -136,7 +126,7 @@ In the list of system services, force-ending of application is prohibited.
 #### Stop system service
 
 1. Select the **Services** tab on the System Monitor interface.
-2. Select a process that is started already, right-click it, and select **Stop**. Enter the password if an authentication window pops up.
+2. Right-click a process that is started already and select **Stop**. Enter the password if an authentication window pops up.
 3. **inactive** is displayed in the **Active** column.
 4. Right-click the service and select **Refresh**.
 
@@ -144,15 +134,7 @@ You can also right-click a system process and select **Restart**.
 
 ## Main Menu
 
-In the main menu, you can switch monitoring modes and themes, view help manual, and learn more information of System Monitor.
-
-### Theme
-
-The window theme provides three theme types, namely Light Theme, Dark Theme, and System Theme.
-
-1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
-2. Click **Theme** to select one theme.
-
+In the main menu, you can force ending applications, switch monitoring modes and themes, view help manual, and learn more information of System Monitor.
 ### View
 
 System Monitor offers Expand view and Compact view for your choice.
@@ -162,6 +144,23 @@ System Monitor offers Expand view and Compact view for your choice.
 
 > ![notes](../common/notes.svg) Notes: Compact view and expand view are only available for processes.
 
+### Settings
+On the System Monitor interface, Click ![icon_menu](../common/icon_menu.svg) > **Settings**  and you are able make relative settings on system protection and notifications.
+
+- **System Protection**: Turned off by default. You are able to set a threshold for **CPU**,  **Memory**  and **Warning interval** respectively and there will be warnings displayed when the monitored values detected are higher than the thresholds.
+
+   > ![notes](../common/notes.svg) Notes:  If **Security Level** in **Security Center > Tools** are set as high, the system protection will be enabled automatically. Otherwise, it will be disabled automatically.
+
+- **Notifications**: Turned on by default. You are able to click **Settings** to turn on or off notifications in Control Center.
+
+![pic](fig/settings.png)
+
+### Theme
+
+There are three window themes, namely Light Theme, Dark Theme, and System Theme.
+
+1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+2. Click **Theme** to select one theme.
 
 ### Help
 
@@ -177,3 +176,4 @@ System Monitor offers Expand view and Compact view for your choice.
 
 1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
 2. Click **Exit** to exit System Monitor.
+
