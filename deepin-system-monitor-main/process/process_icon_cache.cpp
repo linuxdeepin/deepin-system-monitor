@@ -18,7 +18,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "process_icon_cache.h"
-
+#include <DApplication>
+DWIDGET_USE_NAMESPACE
 namespace core {
 namespace process {
 
@@ -27,7 +28,13 @@ ProcessIconCache *ProcessIconCache::m_instance = nullptr;
 ProcessIconCache::ProcessIconCache(QObject *parent)
     : QObject(parent)
 {
-
+    DApplication *app = qobject_cast<DApplication *>(qApp);
+    if (qApp)  {
+        connect(app, &DApplication::iconThemeChanged, this, [=]() {
+            clear();
+            iconPixmapCache.clear();
+        });
+    }
 }
 
 } // namespace process

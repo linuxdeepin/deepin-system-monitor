@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/deepin/builtin/deepin-system-monitor-plugin.svg</file>
+        <file>icons/deepin/builtin/deepin-system-monitor.svg</file>
     </qresource>
 </RCC>

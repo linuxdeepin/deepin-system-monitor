@@ -53,7 +53,7 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
 
-    QString iconName = "deepin-system-monitor-plugin";
+    QString iconName = "deepin-system-monitor";
     QPixmap pixmap;
     int iconSize = PLUGIN_ICON_MAX_SIZE;
 
@@ -169,10 +169,22 @@ void MonitorPluginButtonWidget::leaveEvent(QEvent *event)
 
 const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio)
 {
-    QPixmap pixmap;
-    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName).arg(iconName.contains(".svg") ? "" : ".svg");
+    QIcon icon = QIcon::fromTheme(iconName);
+    if (!icon.isNull()) {
+        QPixmap pixmap = icon.pixmap(int(size * ratio));
+        pixmap.setDevicePixelRatio(ratio);
+        return pixmap;
+    }
 
-    pixmap = QIcon(localIcon).pixmap(QSize(size, size) * ratio);
+    QPixmap pixmap(int(size * ratio), int(size * ratio));
+    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName).arg(iconName.contains(".svg") ? "" : ".svg");
+    QSvgRenderer renderer(localIcon);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pixmap);
+    renderer.render(&painter);
+    painter.end();
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
