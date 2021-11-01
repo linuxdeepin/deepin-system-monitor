@@ -242,18 +242,22 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     QRectF swapIndicatorRect(swapTxtRect.x() - margin, swapTxtRect.y() + qCeil((swapTxtRect.height() - sectionSize) / 2.),
                              sectionSize, sectionSize);
 
-
     QPainterPath section2;
     section2.addEllipse(swapIndicatorRect);
     painter.fillPath(section2, swapColor);
 
-    painter.setFont(m_memFont);
-    painter.drawText(swapRect, m_swapUsage);
-    if (m_swapTotal != "0.0 B") {
+    //关闭交换空间时，显示-/-
+    if (m_swapTotal == "0.0 B") {
+         painter.setFont(m_memUnitFont);
+         painter.drawText(swapRect, m_swapUsage);
+    }
+    else
+    {
+        painter.setFont(m_memFont);
+        painter.drawText(swapRect, m_swapUsage);
         painter.setFont(m_memUnitFont);
         painter.drawText(swapRectUnit, swapTitle);
     }
-
 
     painter.setFont(m_memTxtFont);
     painter.setOpacity(0.6);
