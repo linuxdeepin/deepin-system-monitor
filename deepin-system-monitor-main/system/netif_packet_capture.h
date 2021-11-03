@@ -24,6 +24,7 @@
 #include "packet.h"
 #include <QTimer>
 #include <QMap>
+#include <unistd.h>
 
 
 namespace core {

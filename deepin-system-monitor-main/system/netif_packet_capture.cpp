@@ -122,6 +122,7 @@ bool NetifPacketCapture::hasDevIP(){
 
     //获取网络IP(IPv4)
     if( ioctl( sockfd, SIOCGIFADDR, &ifr) == -1){
+        close(sockfd);
         //qDebug()<<"ioctl error!";
         return false;
     }
@@ -129,10 +130,12 @@ bool NetifPacketCapture::hasDevIP(){
     addr = (struct sockaddr_in *)&(ifr.ifr_addr);
     address = inet_ntoa(addr->sin_addr);
     if(address){
+        close(sockfd);
         //cout<<"IP of  "<<m_devName<<" :" <<address;
         return true;
     }
     else {
+        close(sockfd);
         return false;
     }
 
@@ -148,12 +151,14 @@ bool NetifPacketCapture::getCurrentDevName(){
     //创建socket
     sock = socket(AF_INET, SOCK_DGRAM, 0);
       if (sock == -1) {
+          close(sock);
           //qDebug()<<"create socket failed!";
           return false;
       }
     //获取当前所有网络设备
     int status = pcap_findalldevs(&m_alldevs, errbuf);
     if(status != 0) {
+        close(sock);
         //qDebug()<<"no devices available!";
         return false;
     }
@@ -180,6 +185,7 @@ bool NetifPacketCapture::getCurrentDevName(){
 
         }
     }
+    close(sock);
     //无可用设备
     if (!m_devName) {
         //qInfo()<<"no available net interface!";
@@ -417,7 +423,6 @@ void NetifPacketCapture::dispatchPackets()
             m_timer->stop();
             break;
         }
-
         // refresh m_sockStat cache every 2 seconds
         time_t now = time(nullptr);
         if (!last_sockstat || (now - last_sockstat) >= SOCKSTAT_REFRESH_INTERVAL) {
