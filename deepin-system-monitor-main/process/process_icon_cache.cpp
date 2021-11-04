@@ -31,7 +31,6 @@ ProcessIconCache::ProcessIconCache(QObject *parent)
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (qApp)  {
         connect(app, &DApplication::iconThemeChanged, this, [=]() {
-            clear();
             iconPixmapCache.clear();
         });
     }

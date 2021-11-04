@@ -95,19 +95,16 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     auto pos = QCursor::pos();
 
     #ifdef WAYLAND_SESSION_TYPE
-        qDebug()<<"press success "<<m_windowStates.size();
 
-        for(QVector<ClientManagement::WindowState>::iterator it=m_windowStates.begin();
-            it!=m_windowStates.end();++it) {
+        for(QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
+           it!=m_windowStates.begin();--it) {
             // if the window is created by ourself, then ignore it
-            qDebug()<<it->pid;
-            if (getpid() == it->pid || QString::fromStdString(it->resourceName)=="dde-desktop")
+            if (getpid() == it->pid || QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized)
                 continue;
 
             // if such window exists, we emit window clicked signal to notify kill application performed action
             QRect rect;
             rect.setRect(it->geometry.x,it->geometry.y,it->geometry.width, it->geometry.height);
-            qDebug()<<"rect success "<<rect;
             if (rect.contains(pos)) {
                 // hide preview & background widgets first
                 hide();
@@ -166,12 +163,11 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
         auto pos = QCursor::pos();
         // get the list of windows under cursor from cache in stacked order
         bool found {false};
-        qDebug()<<"move success ";
 
-        for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.begin();
-             it!=m_windowStates.end();++it) {
+        for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
+             it!=m_windowStates.begin();--it) {
             // if the window is created by ourself, then ignore it
-            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop")
+            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized)
                 continue;
             auto selRect = QRect(static_cast<int>(it->geometry.x / x), static_cast<int>(it ->geometry.y / x),
                                  static_cast<int>(it->geometry.width / x), static_cast<int>(it->geometry.height/ x));
@@ -182,7 +178,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 auto hoveredBy = m_wminfo->getHoveredByWindowList(it->windowId, selRect);
                 QRegion region {selRect};
 
-    //            // if current selected window is crossing screens, we need update each sub part on each screen
+                // if current selected window is crossing screens, we need update each sub part on each screen
                 for (auto &bg : m_backgroundList) {
                     if (bg->geometry().intersects(selRect)) {
                         auto area = region.intersected(bg->geometry());
@@ -376,12 +372,9 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
     connect(registry, &Registry::clientManagementAnnounced, this,
         [this, registry] (quint32 name, quint32 version) {
             m_clientManagement = registry->createClientManagement(name, version, this);
-            qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) << "createClientManagement";
             connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
                 [this] {
                     m_windowStates = m_clientManagement->getWindowStates();
-                    qDebug() << "Get new window states";
-                    //print_window_states(m_windowStates);
                 }
             );
         }
@@ -391,9 +384,7 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
         [this] {
             Q_ASSERT(m_compositor);
             Q_ASSERT(m_clientManagement);
-            qDebug() << "request getWindowStates";
             m_windowStates = m_clientManagement->getWindowStates();
-           //print_window_states(m_windowStates);
         }
     );
 
