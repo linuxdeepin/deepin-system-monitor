@@ -102,7 +102,7 @@ bool MonitorPlugin::pluginIsDisable()
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     m_dataTipsLabel->setObjectName(itemKey);
-    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0KB/s" << "0KB/s");
+    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << m_cpuStr << m_memStr << m_downloadStr << m_uploadStr);
     return m_dataTipsLabel.data();
 }
 
@@ -174,13 +174,13 @@ void MonitorPlugin::udpateTipsInfo()
     qlonglong memory = 0;
     qlonglong memoryAll = 0;
     calcMemRate(memory, memoryAll);
-    QString memStr = QString("%1").arg(memory * 100.0 / memoryAll, 1, 'f', 1, QLatin1Char(' '));
+    m_memStr = QString("%1").arg(memory * 100.0 / memoryAll, 1, 'f', 1, QLatin1Char(' '));
 
     // CPU
     qlonglong totalCPU = 0;
     qlonglong availableCPU = 0;
     calcCpuRate(totalCPU, availableCPU);
-    QString cpuStr = QString("%1").arg((((totalCPU - m_totalCPU) - (availableCPU - m_availableCPU)) * 100.0 / (totalCPU - m_totalCPU)), 1, 'f', 1, QLatin1Char(' '));
+    m_cpuStr = QString("%1").arg((((totalCPU - m_totalCPU) - (availableCPU - m_availableCPU)) * 100.0 / (totalCPU - m_totalCPU)), 1, 'f', 1, QLatin1Char(' '));
     m_totalCPU = totalCPU;
     m_availableCPU = availableCPU;
 
@@ -197,13 +197,13 @@ void MonitorPlugin::udpateTipsInfo()
     unit = RateByte;
     upRate = autoRateUnits((netUpload - m_upload) / (m_refershTimer->interval() /1000), unit);
     QString uploadUnit = setRateUnitSensitive(unit);
-    QString downloadStr = QString("%1").arg(downRate, 1, 'f', 1, QLatin1Char(' ')) + downUnit;
-    QString uploadStr = QString("%1").arg(upRate, 1, 'f', 1, QLatin1Char(' ')) + uploadUnit;
+    m_downloadStr = QString("%1").arg(downRate, 1, 'f', 1, QLatin1Char(' ')) + downUnit;
+    m_uploadStr = QString("%1").arg(upRate, 1, 'f', 1, QLatin1Char(' ')) + uploadUnit;
 
     m_down = netDownload;
     m_upload = netUpload;
 
-    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << cpuStr << memStr << downloadStr << uploadStr);
+    m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << m_cpuStr << m_memStr << m_downloadStr << m_uploadStr);
 }
 
 void MonitorPlugin::loadPlugin()

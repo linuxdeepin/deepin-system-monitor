@@ -239,6 +239,11 @@ private:
 
     bool m_isFirstInstall = false;//判断插件是否第一次安装
 
+    QString m_cpuStr{"0.0"};       //转换后的cpu数据
+    QString m_memStr{"0.0"};       //转换后的mem数据
+    QString m_downloadStr{"0KB/s"};  //转换后的下载数据
+    QString m_uploadStr{"0KB/s"};    //转换后的上传数据
+
 };
 
 #endif // MONITORPLUGIN_H
