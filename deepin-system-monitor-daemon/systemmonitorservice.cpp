@@ -20,6 +20,7 @@
 #include "daemonadaptor.h"
 
 #include <DSettingsOption>
+#include <QDBusInterface>
 
 #include <QDebug>
 #include <QProcess>
@@ -248,6 +249,8 @@ void SystemMonitorService::showDeepinSystemMoniter()
     PrintDBusCaller()
     // 显示系统监视器
     QProcess::startDetached("/usr/bin/deepin-system-monitor");
+    QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
+    QTimer::singleShot(100, this, [=] () { QProcess::startDetached(cmd); });
 }
 
 void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVariant &value)

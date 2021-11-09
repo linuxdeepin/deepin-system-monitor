@@ -52,6 +52,11 @@ public:
      */
     inline Toolbar *toolbar() const { return m_toolbar; }
 
+    //!
+    //! \brief raiseWindow 窗口置顶显示
+    //!
+    void raiseWindow();
+
 Q_SIGNALS:
     /**
      * @brief Kill application operation requested signal

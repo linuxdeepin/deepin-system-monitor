@@ -44,6 +44,11 @@ public slots:
     //! \param msgCode 消息码
     //!
     Q_SCRIPTABLE void slotJumpProcessWidget(const QString &msgCode);
+
+    //!
+    //! \brief slotRaiseWindow 窗口置顶显示
+    //!
+    Q_SCRIPTABLE void slotRaiseWindow();
 };
 
 #endif // DBUSFORSYSTEMOMONITORPLUGINSERVCE_H

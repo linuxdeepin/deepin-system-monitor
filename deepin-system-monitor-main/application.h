@@ -22,6 +22,8 @@
 
 #include <DApplication>
 
+#include "gui/main_window.h"
+
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
@@ -71,6 +73,11 @@ public:
     Q_ENUM(Application::TaskState)
 
     void setMainWindow(MainWindow *mw);
+    //!
+    //! \brief raiseWindow 窗口置顶显示
+    //!
+    void raiseWindow();
+
     MainWindow *mainWindow();
     //!
     //! \brief getCurrentTaskState 获取当前窗口运行状态
@@ -102,6 +109,11 @@ private:
 inline void Application::setMainWindow(MainWindow *mw)
 {
     m_mainWindow = mw;
+}
+
+inline void Application::raiseWindow()
+{
+    m_mainWindow->raiseWindow();
 }
 
 inline MainWindow *Application::mainWindow()
