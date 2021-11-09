@@ -73,6 +73,16 @@ public:
     //!
     static void setLastValidAlarm(DLineEdit *lineEdit,DTK_CORE_NAMESPACE::DSettingsOption *option,int maxValue,int minValue,int num);
 
+    //!
+    //! \brief lineEditChanged 文字输入框焦点改变及回车事件处理函数
+    //! \param focus 焦点改变
+    //! \param edit 文字输出框对象
+    //! \param option dialog句柄
+    //! \param maxValue 最大值
+    //! \param minValue 最小值
+    //!
+    static void lineEditChanged(bool focus, DLineEdit *edit, DTK_CORE_NAMESPACE::DSettingsOption *option, int maxValue, int minValue);
+
 
 private:
     //!

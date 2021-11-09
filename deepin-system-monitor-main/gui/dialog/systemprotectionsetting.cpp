@@ -41,11 +41,11 @@
 #include <QFont>
 
 #ifndef AlarmStatusOptionName
-    #define AlarmStatusOptionName   "setting.systemprotection.alarm_switch"
-    #define AlarmCpuUsageOptionName "setting.systemprotection.alarm_cpu_usage"
-    #define AlarmMemUsageOptionName "setting.systemprotection.alarm_memory_usage"
-    #define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
-    #define AlarmLastTimeOptionName "setting.systemprotection.alarm_last_time"
+#define AlarmStatusOptionName   "setting.systemprotection.alarm_switch"
+#define AlarmCpuUsageOptionName "setting.systemprotection.alarm_cpu_usage"
+#define AlarmMemUsageOptionName "setting.systemprotection.alarm_memory_usage"
+#define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
+#define AlarmLastTimeOptionName "setting.systemprotection.alarm_last_time"
 #endif
 
 // 与系统字体大小的偏移值，-1.5为小于系统字体大小1.5字号
@@ -204,9 +204,44 @@ void SystemProtectionSetting::setLastValidAlarm(DLineEdit *lineEdit,DTK_CORE_NAM
         lineEdit->setText(QString::number(num));
         option->setValue(num);
     } else {
-        lineEdit->setText(option->defaultValue().toString());
+        //用上次的合法值设置
+        if (option->key() == AlarmCpuUsageOptionName)
+            lineEdit->setText(QString::number(m_lastValidCPUValue));
+        else if (option->key() == AlarmMemUsageOptionName)
+            lineEdit->setText(QString::number(m_lastValidMemoryValue));
+        else if (option->key() == AlarmIntervalOptionName)
+            lineEdit->setText(QString::number(m_lastValidInternalValue));
     }
 
+}
+
+void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSettingsOption *option, int maxValue, int minValue)
+{
+    QString key = option->key();
+    if(focus == false) {
+        if(edit->text().isEmpty() || edit->text().toInt() < minValue || edit->text().toInt() > maxValue) {
+            //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
+            if(key == AlarmCpuUsageOptionName)
+                setLastValidAlarm(edit,option,maxValue,minValue,m_lastValidCPUValue);
+            else if (key == AlarmMemUsageOptionName) {
+                setLastValidAlarm(edit,option,maxValue,minValue,m_lastValidMemoryValue);
+            }
+            else if (key == AlarmIntervalOptionName) {
+                setLastValidAlarm(edit,option,maxValue,minValue, m_lastValidInternalValue);
+            }
+        }
+        //当前输入合法
+        if(key == AlarmCpuUsageOptionName) {
+            m_lastValidCPUValue = edit->text().toInt();
+            option->setValue(m_lastValidCPUValue);
+        } else if (key == AlarmMemUsageOptionName) {
+            m_lastValidMemoryValue = edit->text().toInt();
+            option->setValue(m_lastValidMemoryValue);
+        } else if (key == AlarmIntervalOptionName) {
+            m_lastValidInternalValue = edit->text().toInt();
+            option->setValue(m_lastValidInternalValue);
+        }
+    }
 }
 
 QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
@@ -231,7 +266,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     edit->lineEdit()->setValidator(validator);
 
     // 规范输入的文字信息（数字）
-    SystemProtectionSetting::instance()->regularNumber(edit);
+    //SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -253,31 +288,20 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
 
     // 获取初始值
     edit->setText(option->value().toString());
+    // 获取初始值时同步更新静态变量
+    if (option->key() == AlarmCpuUsageOptionName)
+        m_lastValidCPUValue = option->value().toInt();
+    else if (option->key() == AlarmMemUsageOptionName)
+        m_lastValidMemoryValue = option->value().toInt();
 
     // 修改Item同步修改Setting数据
     option->connect(edit, &DLineEdit::focusChanged, option, [=] (bool onFocus) {
-        QString key = option->key();
-        if(onFocus == false) {
-            if(edit->text().isEmpty() || edit->text().toInt() < 30 || edit->text().toInt() > 100) {
-                //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
-                if(key == AlarmCpuUsageOptionName)
-                    setLastValidAlarm(edit,option,100,30,m_lastValidCPUValue);
-                else if (key == AlarmMemUsageOptionName) {
-                    setLastValidAlarm(edit,option,100,30,m_lastValidMemoryValue);
-                }
-            }
-            //当前输入合法
-            if(key == AlarmCpuUsageOptionName) {
-                m_lastValidCPUValue = edit->text().toInt();
-                option->setValue(m_lastValidCPUValue);
-            }
-            else if (key == AlarmMemUsageOptionName) {
-                m_lastValidMemoryValue = edit->text().toInt();
-                option->setValue(m_lastValidMemoryValue);
-            }
+        lineEditChanged(onFocus, edit, option, 100, 30);
+    } );
 
-        }
-   } );
+    option->connect(edit, &DLineEdit::returnPressed, option, [=] () {
+        lineEditChanged(false, edit, option, 100, 30);
+    } );
 
     // 用于恢复默认时，Item的数据更新
     edit->connect(option, &DSettingsOption::valueChanged, edit, [=]() {
@@ -340,7 +364,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     edit->lineEdit()->setValidator(validator);
 
     // 规范输入的文字信息（数字）
-    SystemProtectionSetting::instance()->regularNumber(edit);
+    //SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -363,17 +387,15 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     // 设定Item初始值//
     edit->setText(option->value().toString());
 
+    // 获取初始值时同步更新静态变量
+    m_lastValidInternalValue = option->value().toInt();
     // 修改Item同步修改Setting数据
     option->connect(edit, &DLineEdit::focusChanged, option, [=] (bool onFocus) {
-        if(onFocus == false) {
-            if(edit->text().isEmpty() || edit->text().toInt() < 5 || edit->text().toInt() > 60) {
-                //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
-                setLastValidAlarm(edit,option,60,5,m_lastValidInternalValue);
-            }
-            //当前输入合法
-            m_lastValidInternalValue = edit->text().toInt();
-            option->setValue(m_lastValidInternalValue);
-        }
+        lineEditChanged(onFocus, edit, option, 60, 5);
+    } );
+
+    option->connect(edit, &DLineEdit::returnPressed, option, [=] () {
+        lineEditChanged(false, edit, option, 60, 5);
     } );
 
     // 用于恢复默认时，Item的数据更新
@@ -441,9 +463,9 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
     if(genericName.isEmpty() == false) {
         // 跳转到设置页并指定Item
         QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall("com.deepin.dde.ControlCenter",
-                                                        "/com/deepin/dde/ControlCenter",
-                                                        "com.deepin.dde.ControlCenter",
-                                                        "ShowPage");
+                                                                               "/com/deepin/dde/ControlCenter",
+                                                                               "com.deepin.dde.ControlCenter",
+                                                                               "ShowPage");
         QList<QVariant> args;
         args.append("notification");
         args.append(genericName);
@@ -460,9 +482,9 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         // 跳转到设置页
         // qdbus com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule notification
         QDBusMessage showDDEControlCenter = QDBusMessage::createMethodCall("com.deepin.dde.ControlCenter",
-                                                        "/com/deepin/dde/ControlCenter",
-                                                        "com.deepin.dde.ControlCenter",
-                                                        "ShowModule");
+                                                                           "/com/deepin/dde/ControlCenter",
+                                                                           "com.deepin.dde.ControlCenter",
+                                                                           "ShowModule");
         QList<QVariant> args;
         args << "notification";
         showDDEControlCenter.setArguments(args);
@@ -546,9 +568,9 @@ void SystemProtectionSetting::onUpdateNewBackend()
 {
     // 创建新的数据后端，应对可能的设置数据变化
     QString strConfigPath = QString("%1/%2/%3/protection.conf")
-                            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-                            .arg(qApp->organizationName())
-                            .arg(qApp->applicationName());
+            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+            .arg(qApp->organizationName())
+            .arg(qApp->applicationName());
 
     Dtk::Core::QSettingBackend *newBackend = new QSettingBackend(strConfigPath);
     // 为DSetting更新数据后端
