@@ -66,7 +66,6 @@ MainWindow::~MainWindow()
 void MainWindow::raiseWindow()
 {
     raise();
-    setWindowState(Qt::WindowActive);
 }
 
 void MainWindow::initDisplay()
