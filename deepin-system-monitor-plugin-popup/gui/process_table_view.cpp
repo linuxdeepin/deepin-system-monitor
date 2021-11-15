@@ -160,8 +160,8 @@ void ProcessTableView::initUI()
 
     // table options
     setSortingEnabled(true);
-    // only single row selection allowed
-    setSelectionMode(QAbstractItemView::SingleSelection);
+    // no allowed selection
+    setSelectionMode(QAbstractItemView::NoSelection);
     // can only select whole row
     setSelectionBehavior(QAbstractItemView::SelectRows);
     // table view context menu policy
