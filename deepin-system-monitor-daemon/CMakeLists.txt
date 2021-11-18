@@ -57,6 +57,12 @@ target_link_libraries(
     ${DtkCore_LIBRARIES}
     )
 
+#安全测试加固编译参数
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -z relro -z now -z noexecstack -pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
+
 install(TARGETS ${DAEMON_NAME} DESTINATION bin)
 install(FILES deepin-system-monitor-daemon.desktop DESTINATION /etc/xdg/autostart)
 install(FILES com.deepin.SystemMonitor.Daemon.service DESTINATION /usr/share/dbus-1/services)
