@@ -643,7 +643,7 @@ int lscpu_read_topology(struct lscpu_cxt *cxt)
 	for (i = 0; rc == 0 && i < cxt->npossibles; i++) {
 		struct lscpu_cpu *cpu = cxt->cpus[i];
 
-		if (!cpu || !cpu->type)
+        if (!cpu || !cpu->type || !cpu->type->modelname)
 			continue;
 
 		DBG(CPU, ul_debugobj(cpu, "#%d reading topology", cpu->logical_id));
