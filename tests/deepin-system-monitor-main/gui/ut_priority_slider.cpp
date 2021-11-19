@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "priority_slider.h"
 
 //gtest
 #include "stub.h"
@@ -29,21 +29,23 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QResizeEvent>
 
 /***************************************STUB begin*********************************************/
 
+
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_PrioritySlider : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_PrioritySlider() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget wid;
+        m_tester = new PrioritySlider(Qt::Horizontal, &wid);
     }
 
     virtual void TearDown()
@@ -52,22 +54,16 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    PrioritySlider *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_PrioritySlider, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_PrioritySlider, test_resizeEvent_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
-}
-
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
-{
-    m_tester->updateData();
+    QResizeEvent ev(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&ev);
 }

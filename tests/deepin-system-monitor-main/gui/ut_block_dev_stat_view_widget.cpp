@@ -1,183 +1,304 @@
-#include "ut_block_dev_stat_view_widget.h"
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     yukuan  <yukuan@uniontech.com>
+*
+* Maintainer: yukuan  <yukuan@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+//Self
 #include "block_dev_stat_view_widget.h"
+#include "system/block_device_info_db.h"
 #include "block_dev_item_widget.h"
 
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+#include "addr_pri.h"
+
+//Qt
 #include <QSignalSpy>
+#include <QResizeEvent>
 
-Ut_BlockStatViewWidget::Ut_BlockStatViewWidget()
+
+/***************************************STUB begin*********************************************/
+
+void stub_updateWidgetGeometry_showItem1()
 {
-
+    return;
 }
 
-void BlockStatViewWidget_showItem()
+void stub_updateWidgetGeometry_showItem2()
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-//    pBlockStatViewWidget->m_listBlockItemWidget.append(new BlockDevItemWidget);
-
-    pBlockStatViewWidget->deleteLater();
+    return;
 }
 
-void BlockStatViewWidget_showItemLg2()
+void stub_updateWidgetGeometry_showItemLg2()
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-//    pBlockStatViewWidget->m_listBlockItemWidget.append(new BlockDevItemWidget);
-
-    pBlockStatViewWidget->deleteLater();
+    return;
 }
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_BlockStatViewWidget_001)
+QList<BlockDevice> stub_onUpdateData_deviceList()
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-
-    EXPECT_TRUE(pBlockStatViewWidget->m_centralWidget);
-
-    EXPECT_EQ(pBlockStatViewWidget->widget(), pBlockStatViewWidget->m_centralWidget);
-
-    EXPECT_EQ(pBlockStatViewWidget->frameShape(), QFrame::NoFrame);
-
-    pBlockStatViewWidget->deleteLater();
+    QList<BlockDevice> listDB;
+    BlockDevice db1;
+    BlockDevice db2;
+    listDB.append(db1);
+    listDB.append(db2);
+    return  listDB;
 }
 
+/***************************************STUB end**********************************************/
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_resizeEvent_001)
+class UT_BlockStatViewWidget : public ::testing::Test
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
+public:
+    UT_BlockStatViewWidget() : m_tester(nullptr) {}
 
-    pBlockStatViewWidget->resize(20, 20);
-
-    EXPECT_EQ(pBlockStatViewWidget->width(), 20);
-    EXPECT_EQ(pBlockStatViewWidget->height(), 20);
-
-    pBlockStatViewWidget->deleteLater();
-}
-
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_fontChanged_001)
-{
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-
-    QFont font("Times", 20, 10, false);
-    pBlockStatViewWidget->fontChanged(font);
-    for (int i = 0; i < pBlockStatViewWidget->m_listBlockItemWidget.size(); ++i) {
-        EXPECT_EQ(pBlockStatViewWidget->m_listBlockItemWidget[i]->m_font.family(), font.family());
-        EXPECT_EQ(pBlockStatViewWidget->m_listBlockItemWidget[i]->m_font.pointSize(), font.pointSize());
-        EXPECT_EQ(pBlockStatViewWidget->m_listBlockItemWidget[i]->m_font.italic(), font.italic());
-        EXPECT_EQ(pBlockStatViewWidget->m_listBlockItemWidget[i]->m_font.bold(), font.bold());
+public:
+    virtual void SetUp()
+    {
+        m_tester = new BlockStatViewWidget();
     }
 
-    pBlockStatViewWidget->deleteLater();
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    BlockStatViewWidget *m_tester;
+};
+
+TEST_F(UT_BlockStatViewWidget, initTest)
+{
+
 }
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_updateWidgetGeometry_001)
+TEST_F(UT_BlockStatViewWidget, test_resizeEvent_01)
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-
-    pBlockStatViewWidget->updateWidgetGeometry();
-
-    EXPECT_LE(pBlockStatViewWidget->m_listDevice.size(), 0);
-
-    pBlockStatViewWidget->deleteLater();
+    static QResizeEvent re(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&re);
 }
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_onSetItemStatus_001)
+TEST_F(UT_BlockStatViewWidget, test_updateWidgetGeometry_01)
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
+    BlockDevice blockDev1;
+    m_tester->m_listDevice.append(blockDev1);
 
-    QString devicename = "dev1";
-    pBlockStatViewWidget->onSetItemStatus(devicename);
-
-    QSignalSpy signalSpy(pBlockStatViewWidget, &BlockStatViewWidget::changeInfo);
-    EXPECT_TRUE(signalSpy.count() == 0);
-
-    emit pBlockStatViewWidget->changeInfo(devicename);
-    signalSpy.wait(50);
-    EXPECT_TRUE(signalSpy.count() == 1);
-
-    pBlockStatViewWidget->deleteLater();
-}
-
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_showItem1_001)
-{
     Stub stub;
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-    stub.set(ADDR(BlockStatViewWidget, showItem1), BlockStatViewWidget_showItem);
-
-//    BlockDevItemWidget *item2 = new BlockDevItemWidget(pBlockStatViewWidget->m_centralWidget);
-//    pBlockStatViewWidget->m_listBlockItemWidget.append(item2);
-//    BlockDevItemWidget *item3 = new BlockDevItemWidget(pBlockStatViewWidget->m_centralWidget);
-//    pBlockStatViewWidget->m_listBlockItemWidget.append(item3);
-    pBlockStatViewWidget->showItem1();
-//    EXPECT_TRUE(pBlockStatViewWidget->m_listBlockItemWidget.at(0));
-//    EXPECT_TRUE(pBlockStatViewWidget->m_listBlockItemWidget.at(1));
-
-    QString devicename = "dev1";
-    QSignalSpy signalSpy(pBlockStatViewWidget, &BlockStatViewWidget::changeInfo);
-    EXPECT_TRUE(signalSpy.count() == 0);
-
-    emit pBlockStatViewWidget->changeInfo(devicename);
-    signalSpy.wait(50);
-    EXPECT_TRUE(signalSpy.count() == 1);
-
-    pBlockStatViewWidget->deleteLater();
+    stub.set(ADDR(BlockStatViewWidget, showItem1), stub_updateWidgetGeometry_showItem1);
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->m_listDevice.size(), 1);
 }
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_showItem2_001)
+
+TEST_F(UT_BlockStatViewWidget, test_updateWidgetGeometry_02)
 {
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
+
     Stub stub;
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-    stub.set(ADDR(BlockStatViewWidget, showItem2), BlockStatViewWidget_showItem);
-    pBlockStatViewWidget->showItem2();
-
-    QString devicename = "dev1";
-    QSignalSpy signalSpy(pBlockStatViewWidget, &BlockStatViewWidget::changeInfo);
-    EXPECT_TRUE(signalSpy.count() == 0);
-
-    emit pBlockStatViewWidget->changeInfo(devicename);
-    signalSpy.wait(50);
-    EXPECT_TRUE(signalSpy.count() == 1);
-
-    pBlockStatViewWidget->deleteLater();
+    stub.set(ADDR(BlockStatViewWidget, showItem2), stub_updateWidgetGeometry_showItem2);
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->m_listDevice.size(), 2);
 }
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_showItemLg2_001)
+TEST_F(UT_BlockStatViewWidget, test_updateWidgetGeometry_03)
 {
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    BlockDevice blockDev3;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
+    m_tester->m_listDevice.append(blockDev3);
+
     Stub stub;
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
-    stub.set(ADDR(BlockStatViewWidget, showItemLg2), BlockStatViewWidget_showItemLg2);
+    stub.set(ADDR(BlockStatViewWidget, showItemLg2), stub_updateWidgetGeometry_showItemLg2);
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->m_listDevice.size(), 3);
+}
 
+TEST_F(UT_BlockStatViewWidget, test_onUpdateData_01)
+{
 
-    pBlockStatViewWidget->showItemLg2(10);
+    Stub stub;
+    stub.set(ADDR(BlockDeviceInfoDB, deviceList), stub_onUpdateData_deviceList);
+    m_tester->onUpdateData();
+}
 
-    QString devicename = "dev1";
-    QSignalSpy signalSpy(pBlockStatViewWidget, &BlockStatViewWidget::changeInfo);
+TEST_F(UT_BlockStatViewWidget, test_fontChanged_01)
+{
+    QFont font;
+    font.setBold(true);
+    BlockDevItemWidget widget;
+    m_tester->m_listBlockItemWidget.append(&widget);
+
+    m_tester->fontChanged(font);
+
+    if (m_tester->m_listBlockItemWidget.size() > 0)
+        EXPECT_EQ(m_tester->m_listBlockItemWidget[0]->m_font.bold(), font.bold());
+}
+
+TEST_F(UT_BlockStatViewWidget, test_onSetItemStatus_01)
+{
+    BlockDevItemWidget widget1;
+    BlockDevItemWidget widget2;
+    m_tester->m_mapDeviceItemWidget.insert(QString("item1"), &widget1);
+    m_tester->m_mapDeviceItemWidget.insert(QString("item2"), &widget2);
+    m_tester->onSetItemStatus(QString("item1"));
+
+    QSignalSpy signalSpy(m_tester, &BlockStatViewWidget::changeInfo);
     EXPECT_TRUE(signalSpy.count() == 0);
 
-    emit pBlockStatViewWidget->changeInfo(devicename);
+    emit m_tester->changeInfo("item1");
     signalSpy.wait(50);
     EXPECT_TRUE(signalSpy.count() == 1);
-
-    pBlockStatViewWidget->deleteLater();
 }
 
-TEST(Ut_BlockStatViewWidget, Ut_BlockStatViewWidget_onUpdateData_001)
+TEST_F(UT_BlockStatViewWidget, test_showItem1_01)
 {
-    BlockStatViewWidget *pBlockStatViewWidget = new BlockStatViewWidget;
+    BlockDevItemWidget widget;
+    m_tester->m_listBlockItemWidget.append(&widget);
 
-    pBlockStatViewWidget->onUpdateData();
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
+    m_tester->showItem1();
 
-    EXPECT_EQ(pBlockStatViewWidget->m_mapDeviceItemWidget.size(), 0);
+    QSignalSpy signalSpy(m_tester, &BlockStatViewWidget::changeInfo);
+    EXPECT_TRUE(signalSpy.count() == 0);
 
-    pBlockStatViewWidget->deleteLater();
+    emit m_tester->changeInfo("item1");
+    signalSpy.wait(50);
+    EXPECT_TRUE(signalSpy.count() == 1);
 }
 
+TEST_F(UT_BlockStatViewWidget, test_showItem2_01)
+{
+    BlockDevItemWidget widget1;
+    BlockDevItemWidget widget2;
+    m_tester->m_listBlockItemWidget.append(&widget1);
+    m_tester->m_listBlockItemWidget.append(&widget2);
 
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
 
+    m_tester->showItem2();
 
+    QSignalSpy signalSpy(m_tester, &BlockStatViewWidget::changeInfo);
+    EXPECT_TRUE(signalSpy.count() == 0);
 
+    emit m_tester->changeInfo("item1");
+    signalSpy.wait(50);
+    EXPECT_TRUE(signalSpy.count() == 1);
+}
 
+TEST_F(UT_BlockStatViewWidget, test_showItemLg2_01)
+{
+    BlockDevItemWidget widget1;
+    BlockDevItemWidget widget2;
+    BlockDevItemWidget widget3;
+    BlockDevItemWidget widget4;
+    m_tester->m_listBlockItemWidget.append(&widget1);
+    m_tester->m_listBlockItemWidget.append(&widget2);
+    m_tester->m_listBlockItemWidget.append(&widget3);
+    m_tester->m_listBlockItemWidget.append(&widget4);
 
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    BlockDevice blockDev3;
+    BlockDevice blockDev4;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
+    m_tester->m_listDevice.append(blockDev3);
+    m_tester->m_listDevice.append(blockDev4);
 
+    m_tester->showItemLg2(4);
 
+    QSignalSpy signalSpy(m_tester, &BlockStatViewWidget::changeInfo);
+    EXPECT_TRUE(signalSpy.count() == 0);
 
+    emit m_tester->changeInfo("item1");
+    signalSpy.wait(50);
+    EXPECT_TRUE(signalSpy.count() == 1);
+}
 
+TEST_F(UT_BlockStatViewWidget, test_showItemLg2_02)
+{
+    BlockDevItemWidget widget1;
+    BlockDevItemWidget widget2;
+    BlockDevItemWidget widget3;
+    BlockDevItemWidget widget4;
+    widget4.activeItemWidget(true);
+    m_tester->m_listBlockItemWidget.append(&widget1);
+    m_tester->m_listBlockItemWidget.append(&widget2);
+    m_tester->m_listBlockItemWidget.append(&widget3);
+    m_tester->m_listBlockItemWidget.append(&widget4);
 
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    BlockDevice blockDev3;
+    BlockDevice blockDev4;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
+    m_tester->m_listDevice.append(blockDev3);
+    m_tester->m_listDevice.append(blockDev4);
 
+    m_tester->showItemLg2(4);
+
+    QSignalSpy signalSpy(m_tester, &BlockStatViewWidget::changeInfo);
+    EXPECT_TRUE(signalSpy.count() == 0);
+
+    emit m_tester->changeInfo("item1");
+    signalSpy.wait(50);
+    EXPECT_TRUE(signalSpy.count() == 1);
+}
+
+TEST_F(UT_BlockStatViewWidget, test_showItemLg2_03)
+{
+    BlockDevItemWidget widget1;
+    BlockDevItemWidget widget2;
+    BlockDevItemWidget widget3;
+    BlockDevItemWidget widget4;
+    m_tester->m_listBlockItemWidget.append(&widget1);
+    m_tester->m_listBlockItemWidget.append(&widget2);
+    m_tester->m_listBlockItemWidget.append(&widget3);
+    m_tester->m_listBlockItemWidget.append(&widget4);
+
+    BlockDevice blockDev1;
+    BlockDevice blockDev2;
+    BlockDevice blockDev3;
+    BlockDevice blockDev4;
+    m_tester->m_listDevice.append(blockDev1);
+    m_tester->m_listDevice.append(blockDev2);
+    m_tester->m_listDevice.append(blockDev3);
+    m_tester->m_listDevice.append(blockDev4);
+
+    m_tester->showItemLg2(3);
+
+    QSignalSpy signalSpy(m_tester, &BlockStatViewWidget::changeInfo);
+    EXPECT_TRUE(signalSpy.count() == 0);
+
+    emit m_tester->changeInfo("item1");
+    signalSpy.wait(50);
+    EXPECT_TRUE(signalSpy.count() == 1);
+}

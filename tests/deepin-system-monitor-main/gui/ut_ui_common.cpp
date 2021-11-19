@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "ui_common.h"
 
 //gtest
 #include "stub.h"
@@ -30,44 +30,28 @@
 //Qt
 #include <QSignalSpy>
 
+
+
+
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+TEST(UT_UICOMMON, formatColor)
 {
-public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    QColor color(10, 10, 10);
+    QString colorStr = formatColor(QColor(10, 10, 10), 10);
 
-public:
-    virtual void SetUp()
-    {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
-    }
-
-    virtual void TearDown()
-    {
-        delete m_tester;
-    }
-
-protected:
-    NetifDetailViewWidget *m_tester;
-};
-
-TEST_F(UT_NetifDetailViewWidget, initTest)
-{
-
+    EXPECT_EQ(colorStr, QString("A:%1 R:%2 G:%3 B:%4")
+              .arg(color.alpha())
+              .arg(color.red())
+              .arg(color.green())
+              .arg(color.blue()));
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST(UT_UICOMMON, iconPathFromQrc)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
-}
+    QString iconPath = iconPathFromQrc(QString("11"));
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
-{
-    m_tester->updateData();
+    EXPECT_EQ(iconPath, QString(":/icons/deepin/builtin/11"));
 }

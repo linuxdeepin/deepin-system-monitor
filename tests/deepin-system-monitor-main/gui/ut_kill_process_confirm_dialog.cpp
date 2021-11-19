@@ -20,7 +20,8 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "kill_process_confirm_dialog.h"
+#include "model/cpu_info_model.h"
 
 //gtest
 #include "stub.h"
@@ -29,21 +30,21 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QMessageBox>
 
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_KillProcessConfirmDialog : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_KillProcessConfirmDialog() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        m_tester = new KillProcessConfirmDialog();
     }
 
     virtual void TearDown()
@@ -52,22 +53,44 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    KillProcessConfirmDialog *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_KillProcessConfirmDialog, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_KillProcessConfirmDialog, test_result_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
+    m_tester->m_result = false;
+    m_tester->result();
+    EXPECT_FALSE(m_tester->m_result);
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_KillProcessConfirmDialog, test_setResult_01)
 {
-    m_tester->updateData();
+    m_tester->setResult(true);
+
+    EXPECT_TRUE(m_tester->m_result);
 }
+
+TEST_F(UT_KillProcessConfirmDialog, test_onButtonClicked_01)
+{
+    m_tester->onButtonClicked(0, "1");
+
+    EXPECT_EQ(m_tester->m_result, QMessageBox::Cancel);
+}
+
+TEST_F(UT_KillProcessConfirmDialog, test_onButtonClicked_02)
+{
+    m_tester->onButtonClicked(1, "1");
+
+    EXPECT_EQ(m_tester->m_result, QMessageBox::Ok);
+}
+
+
+
+
+
+

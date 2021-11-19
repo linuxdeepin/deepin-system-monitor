@@ -1,152 +1,163 @@
-//#include "ut_block_dev_item_widget.h"
-//#include "block_dev_item_widget.h"
-//#include "chart_view_widget.h"
-//#include <QSignalSpy>
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     yukuan  <yukuan@uniontech.com>
+*
+* Maintainer: yukuan  <yukuan@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-//Ut_BlockDevItemWidget::Ut_BlockDevItemWidget()
-//{
+//Self
+#include "block_dev_item_widget.h"
 
-//}
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+#include "addr_pri.h"
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_BlockDevItemWidget_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
+//Qt
+#include <QSignalSpy>
+#include <QPainter>
+#include <QResizeEvent>
 
-//    QColor readColor {"#8F88FF"};
-//    QColor writeColor {"#6AD787"};
-//    EXPECT_TRUE(itemWidget);
+/***************************************STUB begin*********************************************/
 
-//    EXPECT_TRUE(itemWidget->m_memChartWidget);
-//    EXPECT_TRUE(itemWidget->m_memChartWidget->m_speedAxis);
-//    EXPECT_EQ(itemWidget->m_memChartWidget->m_data1Color, readColor);
-//    EXPECT_EQ(itemWidget->m_memChartWidget->m_data2Color, writeColor);
+/***************************************STUB end**********************************************/
 
-//    itemWidget->deleteLater();
-//}
+class UT_BlockDevItemWidget : public ::testing::Test
+{
+public:
+    UT_BlockDevItemWidget() : m_tester(nullptr) {}
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_updateWidgetGeometry_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
+public:
+    virtual void SetUp()
+    {
+        m_tester = new BlockDevItemWidget();
+    }
 
-//    QFont font("Times");
-//    itemWidget->m_font = font;
-//    itemWidget->m_mode = BlockDevItemWidget::TITLE_HORIZONTAL;
-//    int fontHeight = QFontMetrics(itemWidget->m_font).height();
-//    itemWidget->updateWidgetGeometry();
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
 
-//    EXPECT_EQ(QFontMetrics(itemWidget->m_font).height(), QFontMetrics(font).height());
+protected:
+    BlockDevItemWidget *m_tester;
+};
 
-//    itemWidget->deleteLater();
-//}
+TEST_F(UT_BlockDevItemWidget, initTest)
+{
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_updateWidgetGeometry_002)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
+}
 
-//    QFont font("Times");
-//    itemWidget->m_font = font;
-//    itemWidget->m_mode = BlockDevItemWidget::TITLE_VERTICAL;
-//    int fontHeight = QFontMetrics(itemWidget->m_font).height();
-//    itemWidget->updateWidgetGeometry();
+TEST_F(UT_BlockDevItemWidget, test_paintEvent_01)
+{
+    m_tester->m_isActive = true;
+    m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_VERTICAL;
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
 
-//    EXPECT_EQ(QFontMetrics(itemWidget->m_font).height(), QFontMetrics(font).height());
+TEST_F(UT_BlockDevItemWidget, test_paintEvent_02)
+{
+    m_tester->m_isActive = false;
+    m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_VERTICAL;
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
 
-//    itemWidget->deleteLater();
-//}
+TEST_F(UT_BlockDevItemWidget, test_paintEvent_03)
+{
+    m_tester->m_isActive = true;
+    m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL;
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_fontChanged_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-//    QFont font("Times");
+TEST_F(UT_BlockDevItemWidget, test_paintEvent_04)
+{
+    m_tester->m_isActive = false;
+    m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL;
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
 
-//    itemWidget->fontChanged(font);
+TEST_F(UT_BlockDevItemWidget, test_resizeEvent_01)
+{
+    static QResizeEvent re(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&re);
+}
 
-//    EXPECT_EQ(itemWidget->m_font, font);
+TEST_F(UT_BlockDevItemWidget, test_mousePressEvent_01)
+{
+    static QMouseEvent me(QEvent::MouseButtonPress, QPointF(1.0, 1.0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mousePressEvent(&me);
 
-//    itemWidget->deleteLater();
-//}
+    QSignalSpy signalSpy(m_tester, &BlockDevItemWidget::clicked);
+    EXPECT_TRUE(signalSpy.count() == 0);
 
-//void BlockDevItemWidget_reszieEvent(QResizeEvent *event)
-//{
+    emit m_tester->clicked(m_tester->m_blokeDeviceInfo.deviceName());
+    signalSpy.wait(50);
+    EXPECT_TRUE(signalSpy.count() == 1);
+}
 
-//}
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_resizeEvent_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-//    QResizeEvent event(QSize(10, 10), QSize(20, 20));
-//    QFont font("Times");
-//    itemWidget->m_font = font;
-//    itemWidget->m_mode = BlockDevItemWidget::TITLE_VERTICAL;
-//    int fontHeight = QFontMetrics(itemWidget->m_font).height();
+TEST_F(UT_BlockDevItemWidget, test_fontChanged_01)
+{
+    QFont font;
+    font.setBold(true);
+    m_tester->fontChanged(font);
+    EXPECT_EQ(m_tester->m_font.bold(), font.bold());
+}
 
-//    itemWidget->resizeEvent(&event);
+TEST_F(UT_BlockDevItemWidget, test_activeItemWidget_01)
+{
+    m_tester->activeItemWidget(false);
 
-//    EXPECT_EQ(QFontMetrics(itemWidget->m_font).height(), QFontMetrics(font).height());
+    EXPECT_EQ(m_tester->m_isActive, false);
+}
 
-//    itemWidget->deleteLater();
-//}
+TEST_F(UT_BlockDevItemWidget, test_updateData_01)
+{
+    BlockDevice info;
+    m_tester->updateData(info);
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_updateData_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-//    BlockDevice info;
-//    itemWidget->updateData(info);
+    EXPECT_EQ(m_tester->m_blokeDeviceInfo.readSpeed(), info.readSpeed());
+}
 
-//    EXPECT_EQ(info.deviceName(), itemWidget->m_blokeDeviceInfo.deviceName());
+TEST_F(UT_BlockDevItemWidget, test_setMode_01)
+{
+    int mode = 1;
+    m_tester->setMode(mode);
 
-//    itemWidget->deleteLater();
-//}
+    EXPECT_EQ(m_tester->m_mode, mode);
+}
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_activeItemWidget_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
+TEST_F(UT_BlockDevItemWidget, test_isActiveItem_01)
+{
+    m_tester->m_isActive = false;
+    EXPECT_FALSE(m_tester->isActiveItem());
+}
 
-//    itemWidget->activeItemWidget(true);
+TEST_F(UT_BlockDevItemWidget, test_updateWidgetGeometry_01)
+{
+    m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL;
+    m_tester->updateWidgetGeometry();
 
-//    EXPECT_TRUE(itemWidget->m_isActive);
+    EXPECT_EQ(m_tester->m_mode, BlockDevItemWidget::TitleStyle::TITLE_HORIZONTAL);
+}
 
-//    itemWidget->deleteLater();
-//}
+TEST_F(UT_BlockDevItemWidget, test_updateWidgetGeometry_02)
+{
+    m_tester->m_mode = BlockDevItemWidget::TitleStyle::TITLE_VERTICAL;
+    m_tester->updateWidgetGeometry();
 
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_activeItemWidget_002)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-
-//    itemWidget->activeItemWidget(false);
-
-//    EXPECT_FALSE(itemWidget->m_isActive);
-
-//    itemWidget->deleteLater();
-//}
-
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_mousePressEvent_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-//    itemWidget->grabMouse();
-
-//    QSignalSpy signalSpy(itemWidget, &BlockDevItemWidget::clicked);
-//    EXPECT_TRUE(signalSpy.count() == 0);
-
-//    emit itemWidget->clicked(itemWidget->m_blokeDeviceInfo.deviceName());
-//    signalSpy.wait(50);
-//    EXPECT_TRUE(signalSpy.count() == 1);
-
-//    itemWidget->deleteLater();
-//}
-
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_paintEvent_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-//    EXPECT_TRUE(!itemWidget->grab().isNull());
-//    itemWidget->deleteLater();
-//}
-
-//TEST(Ut_BlockDevItemWidget, Ut_BlockDevItemWidget_setMode_001)
-//{
-//    BlockDevItemWidget *itemWidget = new BlockDevItemWidget;
-//    int mode = 1;
-//    itemWidget->setMode(mode);
-//    EXPECT_EQ(mode, itemWidget->m_mode);
-//    itemWidget->deleteLater();
-//}
+    EXPECT_EQ(m_tester->m_mode, BlockDevItemWidget::TitleStyle::TITLE_VERTICAL);
+}

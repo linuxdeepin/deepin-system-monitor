@@ -20,8 +20,9 @@
 */
 
 //Self
-#include "netif_item_view_widget.h"
-#include "system/netif.h"
+#include "mem_stat_view_widget.h"
+#include "system/mem.h"
+#include "chart_view_widget.h"
 
 //gtest
 #include "stub.h"
@@ -31,74 +32,55 @@
 //Qt
 #include <QSignalSpy>
 #include <QResizeEvent>
-#include <QMouseEvent>
 
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifItemViewWidget : public ::testing::Test
+class UT_MemStatViewWidget : public ::testing::Test
 {
 public:
-    UT_NetifItemViewWidget() : m_tester(nullptr), m_netInfo(nullptr) {}
+    UT_MemStatViewWidget() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        m_netInfo = new core::system::NetifInfo;
         static QWidget parent;
-        m_tester = new NetifItemViewWidget(&parent);
+        m_tester = new MemStatViewWidget(&parent);
     }
 
     virtual void TearDown()
     {
-        delete m_netInfo;
         delete m_tester;
     }
 
 protected:
-    NetifItemViewWidget *m_tester;
-
-    core::system::NetifInfo *m_netInfo;
+    MemStatViewWidget *m_tester;
 };
 
-TEST_F(UT_NetifItemViewWidget, initTest)
+TEST_F(UT_MemStatViewWidget, initTest)
 {
 
 }
 
-TEST_F(UT_NetifItemViewWidget, test_updateActiveStatus_01)
-{
-    m_tester->updateActiveStatus(true);
-
-    EXPECT_TRUE(m_tester->m_isActive);
-}
-
-TEST_F(UT_NetifItemViewWidget, test_setMode_01)
-{
-    m_tester->setMode(0);
-
-    EXPECT_EQ(m_tester->m_mode, 0);
-}
-
-TEST_F(UT_NetifItemViewWidget, test_paintEvent_01)
+TEST_F(UT_MemStatViewWidget, test_paintEvent_01)
 {
     EXPECT_TRUE(!m_tester->grab().isNull());
 }
 
-TEST_F(UT_NetifItemViewWidget, test_resizeEvent_01)
+TEST_F(UT_MemStatViewWidget, test_paintEvent_02)
 {
-    QResizeEvent ev(QSize(10, 10), QSize(20, 20));
-    m_tester->resizeEvent(&ev);
+    m_tester->m_memInfo->readMemInfo();
+    EXPECT_TRUE(!m_tester->grab().isNull());
 }
 
-TEST_F(UT_NetifItemViewWidget, test_mousePressEvent_01)
+TEST_F(UT_MemStatViewWidget, test_resizeEvent_01)
 {
-    static QMouseEvent ev(QEvent::MouseButtonPress, QPointF(1.0, 1.0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mousePressEvent(&ev);
+    QResizeEvent event(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&event);
 }
 
-TEST_F(UT_NetifItemViewWidget, test_fontChanged_01)
+TEST_F(UT_MemStatViewWidget, test_fontChanged_01)
 {
     QFont font;
     font.setItalic(true);
@@ -107,15 +89,16 @@ TEST_F(UT_NetifItemViewWidget, test_fontChanged_01)
     EXPECT_TRUE(m_tester->m_font.italic());
 }
 
-TEST_F(UT_NetifItemViewWidget, test_updateData_01)
+TEST_F(UT_MemStatViewWidget, test_onModelUpdate_01)
 {
-
-    std::shared_ptr<class core::system::NetifInfo> netifInfo = std::make_shared<class core::system::NetifInfo>();
-
-    m_tester->updateData(netifInfo);
+    m_tester->onModelUpdate();
 }
 
-TEST_F(UT_NetifItemViewWidget, test_updateWidgetGeometry_01)
+TEST_F(UT_MemStatViewWidget, test_updateWidgetGeometry_01)
 {
+
     m_tester->updateWidgetGeometry();
+
+    EXPECT_FALSE(m_tester->m_swapChartWidget->isHidden());
 }
+

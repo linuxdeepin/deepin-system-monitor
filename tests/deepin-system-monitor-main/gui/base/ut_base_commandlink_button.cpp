@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "base/base_commandlink_button.h"
 
 //gtest
 #include "stub.h"
@@ -29,21 +29,24 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+
+class UT_BaseCommandLinkButton : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_BaseCommandLinkButton() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget wid;
+        m_tester = new BaseCommandLinkButton("1", &wid);
     }
 
     virtual void TearDown()
@@ -52,22 +55,26 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    BaseCommandLinkButton *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_BaseCommandLinkButton, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_BaseCommandLinkButton, test_eventFilter_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+
+
+    EXPECT_TRUE(m_tester->eventFilter(m_tester, &ev));
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_BaseCommandLinkButton, test_eventFilter_02)
 {
-    m_tester->updateData();
+    static QMouseEvent ev(QEvent::MouseButtonPress, QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+
+    EXPECT_FALSE(m_tester->eventFilter(m_tester, &ev));
 }

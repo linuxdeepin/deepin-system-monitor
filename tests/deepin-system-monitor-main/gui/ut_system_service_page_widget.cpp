@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "system_service_page_widget.h"
 
 //gtest
 #include "stub.h"
@@ -30,20 +30,21 @@
 //Qt
 #include <QSignalSpy>
 
+
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_SystemServicePageWidget : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_SystemServicePageWidget() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget wid;
+        m_tester = new SystemServicePageWidget(&wid);
     }
 
     virtual void TearDown()
@@ -52,22 +53,16 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    SystemServicePageWidget *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_SystemServicePageWidget, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_SystemServicePageWidget, test_paintEvent_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
+    EXPECT_TRUE(!m_tester->grab().isNull());
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
-{
-    m_tester->updateData();
-}

@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "mem_detail_view_widget.h"
 
 //gtest
 #include "stub.h"
@@ -34,16 +34,16 @@
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_MemDetailViewWidget : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_MemDetailViewWidget() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget widget;
+        m_tester = new MemDetailViewWidget(&widget);
     }
 
     virtual void TearDown()
@@ -52,22 +52,22 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    MemDetailViewWidget *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_MemDetailViewWidget, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_MemDetailViewWidget, test_detailFontChanged_01)
 {
     QFont font;
-    font.setBold(true);
     m_tester->detailFontChanged(font);
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+
+TEST_F(UT_MemDetailViewWidget, test_onModelUpdate_01)
 {
-    m_tester->updateData();
+    m_tester->onModelUpdate();
 }

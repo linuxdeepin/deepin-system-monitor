@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "netif_summary_view_widget.h"
 
 //gtest
 #include "stub.h"
@@ -32,18 +32,19 @@
 
 /***************************************STUB begin*********************************************/
 
+
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_NetifSummaryViewWidget : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_NetifSummaryViewWidget() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
         static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        m_tester = new NetifSummaryViewWidget(&parent);
     }
 
     virtual void TearDown()
@@ -52,22 +53,38 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    NetifSummaryViewWidget *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_NetifSummaryViewWidget, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_NetifSummaryViewWidget, test_paintEvent_01)
+{
+    EXPECT_TRUE(!m_tester->grab().isNull());
+}
+
+TEST_F(UT_NetifSummaryViewWidget, test_fontChanged_01)
 {
     QFont font;
     font.setBold(true);
-    m_tester->detailFontChanged(font);
+    m_tester->fontChanged(font);
+
+    EXPECT_TRUE(m_tester->m_font.bold());
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_NetifSummaryViewWidget, test_onModelUpdate_01)
 {
-    m_tester->updateData();
+    m_tester->onModelUpdate();
 }
+
+TEST_F(UT_NetifSummaryViewWidget, test_onNetifItemClicked_01)
+{
+    QString mac = "1";
+    m_tester->onNetifItemClicked(mac);
+
+    EXPECT_EQ(m_tester->m_strCurrentKey, mac);
+}
+

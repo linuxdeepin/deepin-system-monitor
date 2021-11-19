@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "dialog/error_dialog.h"
 
 //gtest
 #include "stub.h"
@@ -29,21 +29,28 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QFocusEvent>
+#include <QPushButton>
 
 /***************************************STUB begin*********************************************/
+void stub_show_exec(void* object)
+{
+    return;
+}
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+
+class UT_ErrorDialog : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_ErrorDialog() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget wid;
+        m_tester = new ErrorDialog("1", "1", &wid);
     }
 
     virtual void TearDown()
@@ -52,22 +59,25 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    ErrorDialog *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_ErrorDialog, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_ErrorDialog, test_show_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
+    typedef int (*fptr)(DDialog*);
+    fptr DDialog_exec = (fptr)(&DDialog::exec);   //obtaining an address
+    Stub stub;
+    stub.set(DDialog_exec, stub_show_exec);
+    static QWidget wid;
+    m_tester->show(&wid, "1", "1");
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_ErrorDialog, test_initUI_01)
 {
-    m_tester->updateData();
+    m_tester->initUI();
 }

@@ -20,7 +20,8 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "cpu_summary_view_widget.h"
+#include "model/cpu_info_model.h"
 
 //gtest
 #include "stub.h"
@@ -34,16 +35,16 @@
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_CPUDetailSummaryTable : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_CPUDetailSummaryTable() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static CPUInfoModel model;
+        m_tester = new CPUDetailSummaryTable(&model, nullptr);
     }
 
     virtual void TearDown()
@@ -52,22 +53,29 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    CPUDetailSummaryTable *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_CPUDetailSummaryTable, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_CPUDetailSummaryTable, test_fontChanged_01)
 {
     QFont font;
     font.setBold(true);
-    m_tester->detailFontChanged(font);
+    m_tester->fontChanged(font);
+
+    EXPECT_EQ(m_tester->m_font.bold(), font.bold());
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_CPUDetailSummaryTable, test_onModelUpdate_01)
 {
-    m_tester->updateData();
+    m_tester->onModelUpdate();
+}
+
+TEST_F(UT_CPUDetailSummaryTable, test_paintEvent_01)
+{
+    EXPECT_FALSE(m_tester->grab().isNull());
 }

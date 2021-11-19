@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "monitor_expand_view.h"
 
 //gtest
 #include "stub.h"
@@ -34,16 +34,16 @@
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_MonitorExpandView : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_MonitorExpandView() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
         static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        m_tester = new MonitorExpandView(&parent);
     }
 
     virtual void TearDown()
@@ -52,22 +52,15 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    MonitorExpandView *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_MonitorExpandView, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_MonitorExpandView, test_setDetailButtonVisible_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
-}
-
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
-{
-    m_tester->updateData();
+    m_tester->setDetailButtonVisible(true);
 }

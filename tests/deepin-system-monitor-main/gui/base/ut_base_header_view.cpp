@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "base/base_header_view.h"
 
 //gtest
 #include "stub.h"
@@ -29,21 +29,25 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QResizeEvent>
+#include <QKeyEvent>
+
 
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+
+class UT_BaseHeaderView : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_BaseHeaderView() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget obj;
+        m_tester = new BaseHeaderView(Qt::Horizontal, &obj);
     }
 
     virtual void TearDown()
@@ -52,22 +56,43 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    BaseHeaderView *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_BaseHeaderView, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_BaseHeaderView, test_sizeHint_01)
 {
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
+    EXPECT_EQ(m_tester->sizeHint().height(), 37);
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_BaseHeaderView, test_paintEvent_01)
 {
-    m_tester->updateData();
+    EXPECT_TRUE(!m_tester->grab().isNull());
 }
+
+TEST_F(UT_BaseHeaderView, test_eventFilter_01)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+
+    EXPECT_TRUE(m_tester->eventFilter(m_tester, &ev));
+}
+
+TEST_F(UT_BaseHeaderView, test_eventFilter_02)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_M, Qt::NoModifier);
+
+    EXPECT_FALSE(m_tester->eventFilter(m_tester, &ev));
+}
+
+TEST_F(UT_BaseHeaderView, test_focusInEvent_01)
+{
+    static QFocusEvent ev(QEvent::FocusIn, Qt::OtherFocusReason);
+    m_tester->focusInEvent(&ev);
+
+    EXPECT_EQ(m_tester->m_focusReason, Qt::OtherFocusReason);
+}
+

@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "dialog/custombuttonbox.h"
 
 //gtest
 #include "stub.h"
@@ -29,21 +29,30 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QFocusEvent>
+#include <QPushButton>
 
 /***************************************STUB begin*********************************************/
 
+QPushButton* stub_focusInEvent_button()
+{
+    static QPushButton btn;
+    return &btn;
+}
+
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+
+class UT_CustomButtonBox : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_CustomButtonBox() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        static QWidget wid;
+        m_tester = new CustomButtonBox(&wid);
     }
 
     virtual void TearDown()
@@ -52,22 +61,20 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    CustomButtonBox *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_CustomButtonBox, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
-{
-    QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
-}
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_CustomButtonBox, test_focusInEvent_01)
 {
-    m_tester->updateData();
+    Stub stub;
+    stub.set(ADDR(DButtonBox, button), stub_focusInEvent_button);
+    static QFocusEvent ev(QEvent::FocusIn);
+
+    m_tester->focusInEvent(&ev);
 }

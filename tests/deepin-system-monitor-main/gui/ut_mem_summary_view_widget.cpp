@@ -20,7 +20,7 @@
 */
 
 //Self
-#include "netif_detail_view_widget.h"
+#include "mem_summary_view_widget.h"
 
 //gtest
 #include "stub.h"
@@ -34,16 +34,16 @@
 
 /***************************************STUB end**********************************************/
 
-class UT_NetifDetailViewWidget : public ::testing::Test
+class UT_MemSummaryViewWidget : public ::testing::Test
 {
 public:
-    UT_NetifDetailViewWidget() : m_tester(nullptr) {}
+    UT_MemSummaryViewWidget() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
         static QWidget parent;
-        m_tester = new NetifDetailViewWidget(&parent);
+        m_tester = new MemSummaryViewWidget(&parent);
     }
 
     virtual void TearDown()
@@ -52,22 +52,30 @@ public:
     }
 
 protected:
-    NetifDetailViewWidget *m_tester;
+    MemSummaryViewWidget *m_tester;
 };
 
-TEST_F(UT_NetifDetailViewWidget, initTest)
+TEST_F(UT_MemSummaryViewWidget, initTest)
 {
 
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_detailFontChanged_01)
+TEST_F(UT_MemSummaryViewWidget, test_fontChanged_01)
 {
     QFont font;
-    font.setBold(true);
-    m_tester->detailFontChanged(font);
+    font.setItalic(true);
+    m_tester->fontChanged(font);
+
+    EXPECT_TRUE(m_tester->m_font.italic());
 }
 
-TEST_F(UT_NetifDetailViewWidget, test_updateData_01)
+TEST_F(UT_MemSummaryViewWidget, test_onModelUpdate_01)
 {
-    m_tester->updateData();
+    m_tester->onModelUpdate();
 }
+
+TEST_F(UT_MemSummaryViewWidget, test_paintEvent_01)
+{
+    EXPECT_TRUE(!m_tester->grab().isNull());
+}
+

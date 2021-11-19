@@ -1,47 +1,70 @@
-#include "ut_block_dev_detail_view_widget.h"
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     yukuan  <yukuan@uniontech.com>
+*
+* Maintainer: yukuan  <yukuan@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+//Self
 #include "block_dev_detail_view_widget.h"
-#include "block_dev_stat_view_widget.h"
-#include "block_dev_summary_view_widget.h"
-#include "block_dev_item_widget.h"
-#include "detail_view_stacked_widget.h"
+
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+#include "addr_pri.h"
+
+//Qt
 #include <QSignalSpy>
+#include <QPainter>
 
-Ut_BlockDevDetailViewWidget::Ut_BlockDevDetailViewWidget()
+/***************************************STUB begin*********************************************/
+
+/***************************************STUB end**********************************************/
+
+class UT_BlockDevDetailViewWidget : public ::testing::Test
 {
+public:
+    UT_BlockDevDetailViewWidget() : m_tester(nullptr) {}
 
-}
-
-TEST(Ut_BlockDevDetailViewWidget, Ut_BlockDevDetailViewWidget_BlockDevDetailViewWidget_001)
-{
-    DetailViewStackedWidget *stackViewWidget = new DetailViewStackedWidget(nullptr);
-    BlockDevDetailViewWidget *pBlockWidget = new BlockDevDetailViewWidget(stackViewWidget);
-
-    EXPECT_STREQ(pBlockWidget->objectName().toLocal8Bit(), "BlockDevDetailViewWidget");
-
-    EXPECT_STREQ(pBlockWidget->title().toLocal8Bit(), "Disks");
-
-    EXPECT_TRUE(pBlockWidget->m_blockStatWidget);
-
-    EXPECT_TRUE(pBlockWidget->m_blocksummaryWidget);
-
-    stackViewWidget->deleteLater();
-    pBlockWidget->deleteLater();
-}
-
-TEST(Ut_BlockDevDetailViewWidget, Ut_BlockDevDetailViewWidget_detailFontChanged_001)
-{
-    DetailViewStackedWidget *stackViewWidget = new DetailViewStackedWidget(nullptr);
-    BlockDevDetailViewWidget *pBlockWidget = new BlockDevDetailViewWidget(stackViewWidget);
-    QFont serifFont("Times", 10, QFont::Bold);
-    pBlockWidget->detailFontChanged(serifFont);
-
-    foreach (auto widget, pBlockWidget->m_blockStatWidget->m_listBlockItemWidget) {
-        EXPECT_EQ(widget->font().family(), serifFont.family());
-        EXPECT_EQ(widget->font().bold(), serifFont.bold());
+public:
+    virtual void SetUp()
+    {
+        static QWidget widget;
+        m_tester = new BlockDevDetailViewWidget(&widget);
     }
-    EXPECT_EQ(pBlockWidget->m_blocksummaryWidget->font().family(), serifFont.family());
-    EXPECT_EQ(pBlockWidget->m_blocksummaryWidget->font().bold(), serifFont.bold());
 
-    stackViewWidget->deleteLater();
-    pBlockWidget->deleteLater();
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    BlockDevDetailViewWidget *m_tester;
+};
+
+TEST_F(UT_BlockDevDetailViewWidget, initTest)
+{
+
 }
+
+TEST_F(UT_BlockDevDetailViewWidget, test_detailFontChanged_01)
+{
+    QFont font;
+    font.setWeight(18);
+    m_tester->detailFontChanged(font);
+}
+
