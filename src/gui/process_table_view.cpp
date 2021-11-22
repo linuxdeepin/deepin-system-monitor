@@ -468,18 +468,24 @@ void ProcessTableView::initConnections(bool settingsLoaded)
                               DApplication::translate("Process.Table.Context.Menu", "End process"));
     // ALT + E
     endProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_E));
+    //不显示快捷键文本
+    endProcAction->setShortcutVisibleInContextMenu(false);
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
     // pause process
     auto *pauseProcAction = m_contextMenu->addAction(
                                 DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
     // ALT + P
     pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
+    //不显示快捷键文本
+    pauseProcAction->setShortcutVisibleInContextMenu(false);
     connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
     // resume process
     auto *resumeProcAction = m_contextMenu->addAction(
                                  DApplication::translate("Process.Table.Context.Menu", "Resume process"));
     // ALT + C
     resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
+    //不显示快捷键文本
+    resumeProcAction->setShortcutVisibleInContextMenu(false);
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
 
     // change priority dialog
@@ -544,6 +550,8 @@ void ProcessTableView::initConnections(bool settingsLoaded)
                                DApplication::translate("Process.Table.Context.Menu", "Properties"));
     // ALt + ENTER
     showAttrAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Enter));
+    //不显示快捷键文本
+    showAttrAction->setShortcutVisibleInContextMenu(false);
     connect(showAttrAction, &QAction::triggered, this, &ProcessTableView::showProperties);
     m_contextMenu->addSeparator();
     // kill process
@@ -551,6 +559,8 @@ void ProcessTableView::initConnections(bool settingsLoaded)
                                DApplication::translate("Process.Table.Context.Menu", "Kill process"));
     // ALT + K
     killProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_K));
+    //不显示快捷键文本
+    killProcAction->setShortcutVisibleInContextMenu(false);
     connect(killProcAction, &QAction::triggered, this, &ProcessTableView::killProcess);
 
     // change menu item checkable state before context menu popup

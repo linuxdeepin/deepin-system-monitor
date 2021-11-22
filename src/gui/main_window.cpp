@@ -89,6 +89,8 @@ void MainWindow::initUI()
     QAction *killAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
     // control + alt + k
     killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+    //不显示快捷键文本
+    killAction->setShortcutVisibleInContextMenu(false);
     // emit process kill requested signal if kill process menu item triggered
     connect(killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
 

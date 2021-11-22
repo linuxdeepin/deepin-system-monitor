@@ -485,16 +485,22 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
     // ALT + S
     m_startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
+    //不显示快捷键文本
+    m_startServiceAction->setShortcutVisibleInContextMenu(false);
     // stop service action
     m_stopServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
     // ALT + T
     m_stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
+    //不显示快捷键文本
+    m_stopServiceAction->setShortcutVisibleInContextMenu(false);
     // restart service action
     m_restartServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
     // ALT + R
     m_restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
+    //不显示快捷键文本
+    m_restartServiceAction->setShortcutVisibleInContextMenu(false);
     // service startup mode action
     m_setServiceStartupModeMenu =
         m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Startup type"));
@@ -505,6 +511,8 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
     // F5
     m_refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
+    //不显示快捷键文本
+    m_refreshAction->setShortcutVisibleInContextMenu(false);
 
     // >>> header context menu instance
     m_headerContextMenu = new DMenu(this);
