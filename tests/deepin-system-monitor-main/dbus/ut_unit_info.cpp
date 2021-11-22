@@ -1,8 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     xuezifan<xuezifan@uniontech.com>
+*
+* Maintainer: xuezifan<xuezifan@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,284 +19,284 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include "dbus/unit_file_info.h"
-//#include <QString>
-//#include <QDebug>
-//#include <QExplicitlySharedDataPointer>
-//#include <QList>
-//#include <QtDBus>
+//self
 #include "dbus/unit_info.h"
 
-#include <QDebug>
+//gtest
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 
-#include "ut_unit_info.h"
+/***************************************STUB begin*********************************************/
 
-Ut_UnitInfo::Ut_UnitInfo()
+/***************************************STUB end**********************************************/
+
+class UT_UnitInfo : public ::testing::Test
 {
+public:
+    UT_UnitInfo() : m_tester(nullptr), m_tester1(nullptr), m_tester2(nullptr), m_tester3(nullptr), m_tester4(nullptr)
+    , m_tester5(nullptr), m_tester6(nullptr), m_tester7(nullptr), m_tester8(nullptr), m_tester9(nullptr)
+    , m_tester10(nullptr), m_tester11(nullptr){}
+
+public:
+    virtual void SetUp()
+    {
+        const QString name("ABC");
+        const QString desp("ABC");
+        const QString loadState("loadStateTest");
+        const QString activeState("activeStateTest");
+        const QString testStr("subStateTest");
+        const QString testStr1("followedByTest");
+        const QString testStr2("unitObjectPathTest");
+        const quint32 testInt = 456;
+        const QString testStr3("jobTypeTest");
+        const QString testStr4("jobObjectPathTest");
+        m_tester = new UnitInfo();
+        m_tester1 = new UnitInfo(name, "", "", "", "", "", "", 0, "", "");
+        m_tester2 = new UnitInfo("", desp, "", "", "", "", "", 0, "", "");
+        m_tester3 = new UnitInfo("name", "description", "loadState", "activeState",
+                                 "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
+        m_tester4 = new UnitInfo("name", "description", loadState, "activeState",
+                                 "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
+        m_tester5 = new UnitInfo("name", "description", "loadState", activeState,
+                                 "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
+        m_tester6 = new UnitInfo("name", "description", "loadState", "activeState",
+                                   testStr, "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
+        m_tester7 = new UnitInfo("name", "description", "loadState", "activeState",
+                                   "subState", testStr1, "unitObjectPath", 123, "jobType", "jobObjectPath");
+        m_tester8 = new UnitInfo("name", "description", "loadState", "activeState",
+                                 "subState", "followedBy", testStr2, 123, "jobType", "jobObjectPath");
+        m_tester9 = new UnitInfo("name", "description", "loadState", "activeState",
+                                 "subState", "followedBy", "unitObjectPath", testInt, "jobType", "jobObjectPath");
+        m_tester10 = new UnitInfo("name", "description", "loadState", "activeState",
+                                  "subState", "followedBy", "unitObjectPath", 123, testStr3, "jobObjectPath");
+        m_tester11 = new UnitInfo("name", "description", "loadState", "activeState",
+                                   "subState", "followedBy", "unitObjectPath", 123, "jobType", testStr4);
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+        delete m_tester1;
+        delete m_tester2;
+        delete m_tester3;
+        delete m_tester4;
+        delete m_tester5;
+        delete m_tester6;
+        delete m_tester7;
+        delete m_tester8;
+        delete m_tester9;
+        delete m_tester10;
+        delete m_tester11;
+    }
+
+protected:
+    UnitInfo *m_tester;
+    UnitInfo *m_tester1;
+    UnitInfo *m_tester2;
+    UnitInfo *m_tester3;
+    UnitInfo *m_tester4;
+    UnitInfo *m_tester5;
+    UnitInfo *m_tester6;
+    UnitInfo *m_tester7;
+    UnitInfo *m_tester8;
+    UnitInfo *m_tester9;
+    UnitInfo *m_tester10;
+    UnitInfo *m_tester11;
+};
+
+TEST_F(UT_UnitInfo, initTest)
+{
+
 }
 
-TEST(UT_UnitInfo_getName, UT_UnitInfo_getName_001)
+TEST_F(UT_UnitInfo, test_getName_01)
 {
     const QString name("ABC");
-    UnitInfo* info = new UnitInfo(name, "", "", "", "", "", "", 0, "", "");
 
-    QString retName = info->getName();
+    QString retName = m_tester1->getName();
 
     EXPECT_EQ(name, retName);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setName, UT_UnitInfo_setName_001)
+TEST_F(UT_UnitInfo, test_setName_01)
 {
     const QString name("ABC");
-    UnitInfo* info = new UnitInfo();
-    info->setName(name);
 
-    QString retName = info->getName();
+    m_tester->setName(name);
+
+    QString retName = m_tester->getName();
 
     EXPECT_EQ(name, retName);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getDescription, UT_UnitInfo_getDescription_001)
+TEST_F(UT_UnitInfo, test_getDescription_01)
 {
     const QString desp("ABC");
-    UnitInfo* info = new UnitInfo("", desp, "", "", "", "", "", 0, "", "");
 
-    QString retDesp = info->getDescription();
+    QString retDesp = m_tester2->getDescription();
 
     EXPECT_EQ(desp, retDesp);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setDescription, UT_UnitInfo_setDescription_001)
+TEST_F(UT_UnitInfo, test_setDescription_01)
 {
     const QString desp("ABC");
-    UnitInfo* info = new UnitInfo();
-    info->setDescription(desp);
 
-    QString retDesp = info->getDescription();
+    m_tester->setDescription(desp);
+
+    QString retDesp = m_tester->getDescription();
 
     EXPECT_EQ(desp, retDesp);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getLoadState, UT_UnitInfo_getLoadState_001)
+TEST_F(UT_UnitInfo, test_getLoadState_01)
 {
     const QString loadState("loadStateTest");
-    UnitInfo* info = new UnitInfo("name", "description", loadState, "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    QString retLoadState = info->getLoadState();
+    QString retLoadState = m_tester4->getLoadState();
 
     EXPECT_EQ(loadState, retLoadState);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setLoadState, UT_UnitInfo_setLoadState_001)
+TEST_F(UT_UnitInfo, test_setLoadState_01)
 {
     const QString loadState("loadStateTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setLoadState(loadState);
-    QString retLoadState = info->getLoadState();
+    m_tester3->setLoadState(loadState);
+    QString retLoadState = m_tester3->getLoadState();
 
     EXPECT_EQ(loadState, retLoadState);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getActiveState, UT_UnitInfo_getActiveState_001)
+TEST_F(UT_UnitInfo, test_getActiveState_01)
 {
     const QString activeState("activeStateTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", activeState,
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    QString retActiveState = info->getActiveState();
+    QString retActiveState = m_tester5->getActiveState();
 
     EXPECT_EQ(activeState, retActiveState);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setActiveState, UT_UnitInfo_setActiveState_001)
+TEST_F(UT_UnitInfo, test_setActiveState_01)
 {
     const QString activeState("activeStateTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setActiveState(activeState);
-    QString ret = info->getActiveState();
+    m_tester3->setActiveState(activeState);
+    QString ret = m_tester3->getActiveState();
 
     EXPECT_EQ(activeState, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getSubState, UT_UnitInfo_getSubState_001)
+TEST_F(UT_UnitInfo, test_getSubState_01)
 {
     const QString testStr("subStateTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  testStr, "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    QString ret = info->getSubState();
+    QString ret = m_tester6->getSubState();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setSubState, UT_UnitInfo_setSubState_001)
+TEST_F(UT_UnitInfo, test_setSubState_01)
 {
     const QString testStr("activeStateTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setSubState(testStr);
-    QString ret = info->getSubState();
+    m_tester3->setSubState(testStr);
+    QString ret = m_tester3->getSubState();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getFollowedBy, UT_UnitInfo_getFollowedBy_001)
+TEST_F(UT_UnitInfo, test_getFollowedBy_01)
 {
     const QString testStr("followedByTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", testStr, "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    QString ret = info->getFollowedBy();
+    QString ret = m_tester7->getFollowedBy();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setFollowedBy, UT_UnitInfo_setFollowedBy_001)
+TEST_F(UT_UnitInfo, test_setFollowedBy_01)
 {
     const QString testStr("followedByTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setFollowedBy(testStr);
-    QString ret = info->getFollowedBy();
+    m_tester3->setFollowedBy(testStr);
+    QString ret = m_tester3->getFollowedBy();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getUnitObjectPath, UT_UnitInfo_getUnitObjectPath_001)
+TEST_F(UT_UnitInfo, test_getUnitObjectPath_01)
 {
     const QString testStr("unitObjectPathTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", testStr, 123, "jobType", "jobObjectPath");
 
-    QString ret = info->getUnitObjectPath();
+    QString ret = m_tester8->getUnitObjectPath();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setUnitObjectPath, UT_UnitInfo_setUnitObjectPath_001)
+TEST_F(UT_UnitInfo, test_setUnitObjectPath_01)
 {
     const QString testStr("unitObjectPathTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setUnitObjectPath(testStr);
-    QString ret = info->getUnitObjectPath();
+    m_tester3->setUnitObjectPath(testStr);
+    QString ret = m_tester3->getUnitObjectPath();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getJobId, UT_UnitInfo_getJobId_001)
+TEST_F(UT_UnitInfo, test_getJobId_01)
 {
     const quint32 testInt = 456;
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", testInt, "jobType", "jobObjectPath");
 
-    quint32 ret = info->getJobId();
+    quint32 ret = m_tester9->getJobId();
 
     EXPECT_EQ(testInt, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setJobId, UT_UnitInfo_setJobId_001)
+TEST_F(UT_UnitInfo, test_setJobId_01)
 {
     const quint32 testInt = 456;
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setJobId(testInt);
-    quint32 ret = info->getJobId();
+    m_tester3->setJobId(testInt);
+    quint32 ret = m_tester3->getJobId();
 
     EXPECT_EQ(testInt, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getJobType, UT_UnitInfo_getJobType_001)
+TEST_F(UT_UnitInfo, test_getJobType_01)
 {
     const QString testStr("jobTypeTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, testStr, "jobObjectPath");
 
-    QString ret = info->getJobType();
+    QString ret = m_tester10->getJobType();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setJobType, UT_UnitInfo_setJobType_001)
+TEST_F(UT_UnitInfo, test_setJobType_01)
 {
     const QString testStr("jobTypeTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setJobType(testStr);
-    QString ret = info->getJobType();
+    m_tester3->setJobType(testStr);
+    QString ret = m_tester3->getJobType();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_getJobObjectPath, UT_UnitInfo_getJobObjectPath_001)
+TEST_F(UT_UnitInfo, test_getJobObjectPath_01)
 {
     const QString testStr("jobObjectPathTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", testStr);
 
-    QString ret = info->getJobObjectPath();
+    QString ret = m_tester11->getJobObjectPath();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }
 
-TEST(UT_UnitInfo_setJobObjectPath, UT_UnitInfo_setJobObjectPath_001)
+TEST_F(UT_UnitInfo, test_setJobObjectPath_01)
 {
     const QString testStr("jobObjectPathTest");
-    UnitInfo* info = new UnitInfo("name", "description", "loadState", "activeState",
-                                  "subState", "followedBy", "unitObjectPath", 123, "jobType", "jobObjectPath");
 
-    info->setJobObjectPath(testStr);
-    QString ret = info->getJobObjectPath();
+    m_tester3->setJobObjectPath(testStr);
+    QString ret = m_tester3->getJobObjectPath();
 
     EXPECT_EQ(testStr, ret);
-
-    delete info;
 }

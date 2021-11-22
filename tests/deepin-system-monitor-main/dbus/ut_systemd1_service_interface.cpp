@@ -1,8 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     xuezifan<xuezifan@uniontech.com>
+*
+* Maintainer: xuezifan<xuezifan@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,12 +19,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+//self
 #include "dbus/dbus_common.h"
 #include "dbus/dbus_properties_interface.h"
 #include "dbus/environment_file.h"
 #include "dbus/systemd1_service_interface.h"
 
+//qt
 #include <QVariant>
 #include <QDBusInterface>
 #include <QByteArray>
@@ -34,67 +36,61 @@
 #include <QStringList>
 #include <QVariant>
 #include <QtDBus>
+#include <QObject>
+#include <QTest>
 
-using namespace dbus::common;
+//gtest
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 
-#include "ut_systemd1_service_interface.h"
+/***************************************STUB begin*********************************************/
 
-Ut_Systemd1ServiceInterface::Ut_Systemd1ServiceInterface()
+/***************************************STUB end**********************************************/
+
+class UT_Systemd1ServiceInterface : public ::testing::Test
 {
+public:
+    UT_Systemd1ServiceInterface() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new Systemd1ServiceInterface("org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
+                                                QDBusConnection::sessionBus());
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    Systemd1ServiceInterface *m_tester;
+};
+
+TEST_F(UT_Systemd1ServiceInterface, initTest)
+{
+
 }
 
-TEST(UT_Systemd1ServiceInterface_getMainPID, UT_Systemd1ServiceInterface_getMainPID_001)
+TEST_F(UT_Systemd1ServiceInterface, test_getMainPID_01)
 {
-    Systemd1ServiceInterface *interface = new Systemd1ServiceInterface(
-                "org.freedesktop.systemd1","/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
+    QPair<ErrorContext, quint32> reply = m_tester->getMainPID();
 
-    QPair<ErrorContext, quint32> reply = interface->getMainPID();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
 }
 
-TEST(UT_Systemd1ServiceInterface_getMemoryCurrent, UT_Systemd1ServiceInterface_getMemoryCurrent_001)
+TEST_F(UT_Systemd1ServiceInterface, test_getMemoryCurrent_01)
 {
-    Systemd1ServiceInterface *interface = new Systemd1ServiceInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, quint64> reply = interface->getMemoryCurrent();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, quint64> reply = m_tester->getMemoryCurrent();
 }
 
-TEST(UT_Systemd1ServiceInterface_getControlGroup, UT_Systemd1ServiceInterface_getControlGroup_001)
+TEST_F(UT_Systemd1ServiceInterface, test_getControlGroup_01)
 {
-    Systemd1ServiceInterface *interface = new Systemd1ServiceInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
+    QPair<ErrorContext, QString> reply = m_tester->getControlGroup();
 
-    QPair<ErrorContext, QString> reply = interface->getControlGroup();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
 }
 
-TEST(UT_Systemd1ServiceInterface_getEnvironmentFiles, UT_Systemd1ServiceInterface_getEnvironmentFiles_001)
+TEST_F(UT_Systemd1ServiceInterface, test_getEnvironmentFiles_01)
 {
-    Systemd1ServiceInterface *interface = new Systemd1ServiceInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, EnvironmentFileList> reply = interface->getEnvironmentFiles();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, EnvironmentFileList> reply = m_tester->getEnvironmentFiles();
 }

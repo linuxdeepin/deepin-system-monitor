@@ -1,8 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     xuezifan<xuezifan@uniontech.com>
+*
+* Maintainer: xuezifan<xuezifan@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,24 +19,55 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//self
 #include "dbus/environment_file.h"
 
+//qt
 #include <QList>
 #include <QString>
 #include <QtDBus>
 #include <QDebug>
 
-#include "ut_environment_file.h"
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
 
-Ut_EnvironmentFile::Ut_EnvironmentFile()
+/***************************************STUB begin*********************************************/
+
+/***************************************STUB end**********************************************/
+
+class UT_EnvironmentFile : public ::testing::Test
 {
+public:
+    UT_EnvironmentFile() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new EnvironmentFile();
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    EnvironmentFile *m_tester;
+};
+
+TEST_F(UT_EnvironmentFile, initTest)
+{
+
 }
 
-TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_001)
+
+TEST_F(UT_EnvironmentFile, test_Operator_01)
 {
     EnvironmentFile aFile;
     aFile.envFile = "a";
     aFile.flag = 0;
+    m_tester->envFile = "a";
 
     EnvironmentFile bFile;
     bFile.envFile = "a";
@@ -44,7 +76,7 @@ TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_001)
     EXPECT_EQ(aFile == bFile, true);
 }
 
-TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_002)
+TEST_F(UT_EnvironmentFile, test_Operator_02)
 {
     EnvironmentFile aFile;
     aFile.envFile = "a";
@@ -57,7 +89,7 @@ TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_002)
     EXPECT_EQ(aFile == bFile, false);
 }
 
-TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_003)
+TEST_F(UT_EnvironmentFile, test_Operator_03)
 {
     EnvironmentFile aFile;
     aFile.envFile = "a";
@@ -70,7 +102,7 @@ TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_003)
     EXPECT_EQ(aFile == bFile, false);
 }
 
-TEST(UT_EnvironmentFile_OperationEquel, UT_EnvironmentFile_OperationEquel_004)
+TEST_F(UT_EnvironmentFile, test_Operator_04)
 {
     EnvironmentFile aFile;
     aFile.envFile = "a";

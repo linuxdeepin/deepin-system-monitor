@@ -1,8 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     xuezifan<xuezifan@uniontech.com>
+*
+* Maintainer: xuezifan<xuezifan@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,67 +19,92 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//self
 #include "dbus/unit_file_info.h"
 
+//qt
 #include <QString>
 #include <QDebug>
 #include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QtDBus>
 
-#include "ut_unit_file_info.h"
+//gtest
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 
-Ut_UnitFileInfo::Ut_UnitFileInfo()
+/***************************************STUB begin*********************************************/
+
+/***************************************STUB end**********************************************/
+
+class UT_UnitFileInfo : public ::testing::Test
 {
+public:
+    UT_UnitFileInfo() : m_tester(nullptr), m_tester1(nullptr), m_tester2(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        const QString name1("DEF");
+        const QString status("GHI");
+        m_tester = new UnitFileInfo();
+        m_tester1 = new UnitFileInfo(name1,"");
+        m_tester2 = new UnitFileInfo(name1,status);
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+        delete m_tester1;
+        delete m_tester2;
+    }
+
+
+protected:
+    UnitFileInfo *m_tester;
+    UnitFileInfo *m_tester1;
+    UnitFileInfo *m_tester2;
+};
+
+TEST_F(UT_UnitFileInfo, initTest)
+{
+
 }
 
-TEST(UT_UnitFileInfo_setName, UT_UnitFileInfo_setName_001)
+TEST_F(UT_UnitFileInfo, test_setName_01)
 {
-    UnitFileInfo* info = new UnitFileInfo();
-
     const QString name("ABC");
 
-    info->setName(name);
-    QString retName = info->getName();
+    m_tester->setName(name);
+
+    QString retName = m_tester->getName();
 
     EXPECT_EQ(name, retName);
-
-    delete info;
 }
 
-TEST(UT_UnitFileInfo_getName, UT_UnitFileInfo_getName_001)
+TEST_F(UT_UnitFileInfo, test_getName_01)
 {
     const QString name("DEF");
-    UnitFileInfo* info = new UnitFileInfo(name, "");
-    QString retName = info->getName();
+    QString retName = m_tester1->getName();
 
     EXPECT_EQ(name, retName);
-
-    delete info;
 }
 
-TEST(UT_UnitFileInfo_getStatus, UT_UnitFileInfo_getStatus_001)
+TEST_F(UT_UnitFileInfo, test_getStatus_01)
 {
-    const QString name("DEF");
-    const QString status("XYZ");
-    UnitFileInfo* info = new UnitFileInfo(name, status);
-    QString retStatus = info->getStatus();
+    const QString status("GHI");
+
+    QString retStatus = m_tester2->getStatus();
 
     EXPECT_EQ(status, retStatus);
-
-    delete info;
 }
 
-TEST(UT_UnitFileInfo_setStatus, UT_UnitFileInfo_setStatus_001)
+TEST_F(UT_UnitFileInfo, test_setStatus_001)
 {
-    UnitFileInfo* info = new UnitFileInfo();
-
     const QString status("ABC");
-    info->setStatus(status);
+    m_tester->setStatus(status);
 
-    QString retStatus = info->getStatus();
+    QString retStatus = m_tester->getStatus();
 
     EXPECT_EQ(status, retStatus);
-
-    delete info;
 }

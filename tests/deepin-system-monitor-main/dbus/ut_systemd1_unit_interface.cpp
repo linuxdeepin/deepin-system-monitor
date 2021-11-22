@@ -1,8 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     xuezifan<xuezifan@uniontech.com>
+*
+* Maintainer: xuezifan<xuezifan@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,11 +19,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//self
 #include "dbus/systemd1_unit_interface.h"
 #include "dbus/dbus_properties_interface.h"
 #include "dbus/systemd1_unit_interface.h"
 #include "dbus/dbus_common.h"
+using namespace dbus::common;
 
+//qt
 #include <QByteArray>
 #include <QList>
 #include <QMap>
@@ -32,123 +36,76 @@
 #include <QVariant>
 #include <QtDBus>
 
-using namespace dbus::common;
+//gtest
+#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
 
-#include "ut_systemd1_unit_interface.h"
+/***************************************STUB begin*********************************************/
 
-Ut_Systemd1UnitInterface::Ut_Systemd1UnitInterface()
+/***************************************STUB end**********************************************/
+
+class UT_Systemd1UnitInterface : public ::testing::Test
 {
+public:
+    UT_Systemd1UnitInterface() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new Systemd1UnitInterface("org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
+                                             QDBusConnection::sessionBus());
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    Systemd1UnitInterface *m_tester;
+};
+
+TEST_F(UT_Systemd1UnitInterface, initTest)
+{
+
 }
 
-TEST(UT_Systemd1UnitInterface_getId, UT_Systemd1UnitInterface_getId_001)
+TEST_F(UT_Systemd1UnitInterface, test_getId_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, QString> reply = interface->getId();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, QString> reply = m_tester->getId();
 }
 
-TEST(UT_Systemd1UnitInterface_getLoadState, UT_Systemd1UnitInterface_getLoadState_001)
+TEST_F(UT_Systemd1UnitInterface, test_getLoadState_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, QString> reply = interface->getLoadState();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, QString> reply = m_tester->getLoadState();
 }
 
-TEST(UT_Systemd1UnitInterface_getActiveState, UT_Systemd1UnitInterface_getActiveState_001)
+TEST_F(UT_Systemd1UnitInterface, test_getActiveState_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, QString> reply = interface->getActiveState();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, QString> reply = m_tester->getActiveState();
 }
 
-TEST(UT_Systemd1UnitInterface_getSubState, UT_Systemd1UnitInterface_getSubState_001)
+TEST_F(UT_Systemd1UnitInterface, test_getSubState_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, QString> reply = interface->getSubState();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, QString> reply = m_tester->getSubState();
 }
 
-TEST(UT_Systemd1UnitInterface_getDescription, UT_Systemd1UnitInterface_getDescription_001)
+TEST_F(UT_Systemd1UnitInterface, test_getDescription_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, QString> reply = interface->getDescription();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, QString> reply = m_tester->getDescription();
 }
 
-TEST(UT_Systemd1UnitInterface_canReload, UT_Systemd1UnitInterface_canReload_001)
+TEST_F(UT_Systemd1UnitInterface, test_canReload_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, bool> reply = interface->canReload();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, bool> reply = m_tester->canReload();
 }
 
-TEST(UT_Systemd1UnitInterface_canStart, UT_Systemd1UnitInterface_canStart_001)
+TEST_F(UT_Systemd1UnitInterface, test_canStart_001)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, bool> reply = interface->canStart();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, bool> reply = m_tester->canStart();
 }
 
-TEST(UT_Systemd1UnitInterface_canStop, UT_Systemd1UnitInterface_canStop_001)
+TEST_F(UT_Systemd1UnitInterface, test_canStop_01)
 {
-    Systemd1UnitInterface* interface = new Systemd1UnitInterface(
-                "org.freedesktop.systemd1", "/org/freedesktop/systemd1/unit/virtlogd_2eservice",
-                QDBusConnection::sessionBus());
-
-    QPair<ErrorContext, bool> reply = interface->canStop();
-
-    // root 用户下编译执行失败
-    // EXPECT_EQ(reply.first.getCode(), ErrorContext::kErrorTypeNoError);
-
-    interface->deleteLater();
+    QPair<ErrorContext, bool> reply = m_tester->canStop();
 }
-
