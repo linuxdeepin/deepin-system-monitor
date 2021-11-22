@@ -1,8 +1,9 @@
 /*
-* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     lishiqi <lishiqi@uniontech.com>
+*
+* Maintainer: lishiqi  <lishiqi@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -11,45 +12,49 @@
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+//self
 #include "process/desktop_entry_cache.h"
 #include "process/desktop_entry_cache_updater.h"
-
-#include <DDesktopEntry>
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+//Qt
 #include <QFileInfo>
-#include <QDir>
-#include <DDesktopEntry>
-#include <QDebug>
-#include <QHash>
-#include <QFile>
-#include <memory>
+using namespace core::process;
 
-DCORE_USE_NAMESPACE
-
-#include "ut_desktop_entry_cache_updater.h"
-
-Ut_DesktopEntryCacheUpdater::Ut_DesktopEntryCacheUpdater()
+class UT_DesktopEntryCacheUpdater : public ::testing::Test
 {
+public:
+    UT_DesktopEntryCacheUpdater() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new DesktopEntryCacheUpdater();
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    DesktopEntryCacheUpdater *m_tester;
+};
+
+TEST_F(UT_DesktopEntryCacheUpdater, initTest)
+{
+
 }
 
-TEST(UT_DesktopEntryCacheUpdater_DesktopEntryCacheUpdater, UT_DesktopEntryCacheUpdater_DesktopEntryCacheUpdater_001)
+TEST_F(UT_DesktopEntryCacheUpdater, test_createEntry_001)
 {
-    using namespace core::process;
-    DesktopEntryCacheUpdater* updater = new DesktopEntryCacheUpdater();
-    EXPECT_NE(updater, nullptr);
-    updater->deleteLater();
-}
-
-TEST(UT_DesktopEntryCacheUpdater_createEntry, UT_DesktopEntryCacheUpdater_createEntry_001)
-{
-    using namespace core::process;
-
     const QString filePath("test.desktop");
     const QString name = "test1";
     const QString displayName = "DisplayTest1";
@@ -74,7 +79,7 @@ TEST(UT_DesktopEntryCacheUpdater_createEntry, UT_DesktopEntryCacheUpdater_create
     }
 
     QFileInfo info(filePath);
-    DesktopEntry entry = DesktopEntryCacheUpdater::createEntry(info);
+    DesktopEntry entry = m_tester->createEntry(info);
 
     EXPECT_EQ(entry->name, name);
     EXPECT_EQ(entry->displayName, name);
@@ -85,4 +90,5 @@ TEST(UT_DesktopEntryCacheUpdater_createEntry, UT_DesktopEntryCacheUpdater_create
     if(file.exists()) {
         file.remove();
     }
+
 }

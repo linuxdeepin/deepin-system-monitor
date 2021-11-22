@@ -1,8 +1,9 @@
 /*
-* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     lishiqi <lishiqi@uniontech.com>
+*
+* Maintainer: lishiqi  <lishiqi@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -11,56 +12,60 @@
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+//self
 #include "process/desktop_entry_cache.h"
 #include "process/desktop_entry_cache_updater.h"
-
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+//Qt
 #include <QFileInfo>
-#include <QDir>
-#include <DDesktopEntry>
-#include <QDebug>
-#include <QHash>
-#include <memory>
 
-DCORE_USE_NAMESPACE
+using namespace core::process;
 
-#include "ut_desktop_entry_cache.h"
-
-Ut_DesktopEntryCache::Ut_DesktopEntryCache()
+class UT_DesktopEntryCache : public ::testing::Test
 {
+public:
+    UT_DesktopEntryCache() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new DesktopEntryCache();
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    DesktopEntryCache *m_tester;
+};
+
+TEST_F(UT_DesktopEntryCache, initTest)
+{
+
 }
 
-TEST(UT_DesktopEntryCache_DesktopEntryCache, UT_DesktopEntryCache_DesktopEntryCache_001)
+TEST_F(UT_DesktopEntryCache, test_contains_001)
 {
-    using namespace core::process;
-    DesktopEntryCache *cache = new DesktopEntryCache();
-    EXPECT_NE(cache, nullptr);
-    delete cache;
-}
-
-TEST(UT_DesktopEntryCache_contains, UT_DesktopEntryCache_contains_001)
-{
-    using namespace core::process;
-    DesktopEntryCache *cache = new DesktopEntryCache();
     DesktopEntry entry;
     QString key("test");
 
-    cache->m_cache.insert(key, entry);
+    m_tester->m_cache.insert(key, entry);
 
-    EXPECT_EQ(cache->contains(key), true);
-    delete cache;
+    EXPECT_EQ(m_tester->contains(key), true);
 }
 
-TEST(UT_DesktopEntryCache_entry, UT_DesktopEntryCache_entry_001)
+TEST_F(UT_DesktopEntryCache, test_entry_001)
 {
-    using namespace core::process;
-    DesktopEntryCache *cache = new DesktopEntryCache();
     QString key("test");
 
     const QString filePath("test.desktop");
@@ -89,20 +94,17 @@ TEST(UT_DesktopEntryCache_entry, UT_DesktopEntryCache_entry_001)
     QFileInfo info(filePath);
     DesktopEntry entry = DesktopEntryCacheUpdater::createEntry(info);
 
-    cache->m_cache.insert(key, entry);
+    m_tester->m_cache.insert(key, entry);
 
-    EXPECT_EQ(cache->entry(key)->name, name);
-    delete cache;
+    EXPECT_EQ(m_tester->entry(key)->name, name);
 
     if(file.exists()) {
         file.remove();
     }
 }
 
-TEST(UT_DesktopEntryCache_entryWithDesktopFile, UT_DesktopEntryCache_entryWithDesktopFile_001)
+TEST_F(UT_DesktopEntryCache, test_entryWithDesktopFile_001)
 {
-    using namespace core::process;
-    DesktopEntryCache *cache = new DesktopEntryCache();
     QString key("test");
 
     const QString filePath("test.desktop");
@@ -131,20 +133,17 @@ TEST(UT_DesktopEntryCache_entryWithDesktopFile, UT_DesktopEntryCache_entryWithDe
     QFileInfo info(filePath);
     DesktopEntry entry = DesktopEntryCacheUpdater::createEntry(info);
 
-    cache->m_cache.insert(key, entry);
+    m_tester->m_cache.insert(key, entry);
 
-    EXPECT_EQ(cache->entryWithDesktopFile(filePath)->name, name);
-    delete cache;
+    EXPECT_EQ(m_tester->entryWithDesktopFile(filePath)->name, name);
 
     if(file.exists()) {
         file.remove();
     }
 }
 
-TEST(UT_DesktopEntryCache_entryWithSubName, UT_DesktopEntryCache_entryWithSubName_001)
+TEST_F(UT_DesktopEntryCache, test_entryWithSubName_001)
 {
-    using namespace core::process;
-    DesktopEntryCache *cache = new DesktopEntryCache();
     QString key("test");
 
     const QString filePath("test.desktop");
@@ -173,22 +172,18 @@ TEST(UT_DesktopEntryCache_entryWithSubName, UT_DesktopEntryCache_entryWithSubNam
     QFileInfo info(filePath);
     DesktopEntry entry = DesktopEntryCacheUpdater::createEntry(info);
 
-    cache->m_cache.insert(key, entry);
+    m_tester->m_cache.insert(key, entry);
 
-    EXPECT_EQ(cache->entryWithSubName(key)->name, name);
-    delete cache;
+    EXPECT_EQ(m_tester->entryWithSubName(key)->name, name);
 
     if(file.exists()) {
         file.remove();
     }
 }
 
-TEST(UT_DesktopEntryCache_updateCache, UT_DesktopEntryCache_updateCache_001)
+TEST_F(UT_DesktopEntryCache, test_updateCache_001)
 {
-    using namespace core::process;
-    DesktopEntryCache *cache = new DesktopEntryCache();
+    m_tester->updateCache();
+    EXPECT_GT(m_tester->m_cache.size(), 0);
 
-    cache->updateCache();
-    EXPECT_GT(cache->m_cache.size(), 0);
-    delete cache;
 }

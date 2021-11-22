@@ -19,37 +19,24 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //self
-#include "process/process_controller.h"
+#include "process/process_icon_cache.h"
+#include "process/process_icon.h"
+#include "process/process.h"
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
-//Qt
-#include <QProcess>
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
 
-static QString m_Sresult;
-/***************************************STUB begin*********************************************/
+using namespace core::process;
 
-void stub_prio_execute_start(){
-    m_Sresult = "start";
-    return;
-}
-
-/***************************************STUB end**********************************************/
-
-class UT_ProcessController : public ::testing::Test
+class UT_ProcessIconCache : public ::testing::Test
 {
 public:
-    UT_ProcessController() : m_tester(nullptr) {}
+    UT_ProcessIconCache() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        pid_t pid = 1000;
-        int signal = SIGTERM;
-        m_tester = new ProcessController(pid,signal);
+        m_tester = new ProcessIconCache(nullptr);
     }
 
     virtual void TearDown()
@@ -58,15 +45,32 @@ public:
     }
 
 protected:
-    ProcessController *m_tester;
+    ProcessIconCache *m_tester;
 };
 
-TEST_F(UT_ProcessController, initTest)
+TEST_F(UT_ProcessIconCache, initTest)
 {
+
 
 }
 
-TEST_F(UT_ProcessController, test_execute_001)
+TEST_F(UT_ProcessIconCache, test_instance_001)
 {
-    
+    m_tester->instance();
+
+}
+
+TEST_F(UT_ProcessIconCache, test_getProcessIcon_001)
+{
+    pid_t pid =1000;
+    m_tester->getProcessIcon(pid);
+
+}
+
+TEST_F(UT_ProcessIconCache, test_addProcessIcon_001)
+{
+    pid_t pid =1000;
+    ProcessIcon *icon = new ProcessIcon();
+    m_tester->addProcessIcon(pid,icon);
+
 }

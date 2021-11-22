@@ -1,8 +1,9 @@
 /*
-* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:      wangchao <wangchao@uniontech.com>
-* Maintainer:  wangchao <wangchao@uniontech.com>
+* Author:     lishiqi <lishiqi@uniontech.com>
+*
+* Maintainer: lishiqi  <lishiqi@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -11,35 +12,50 @@
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include "common/error_context.h"
+//self
 #include "process/priority_controller.h"
-#include "application.h"
-
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+//Qt
 #include <QProcess>
-#include <QFile>
-#include <QObject>
-
-#include "ut_priority_controller.h"
-
-Ut_PriorityController::Ut_PriorityController()
+static QString m_Sresult;
+/***************************************STUB begin*********************************************/
+void stub_execute_start(){
+    m_Sresult = "Process start";
+    return;
+}
+/***************************************STUB end**********************************************/
+class UT_PriorityController : public ::testing::Test
 {
+public:
+    UT_PriorityController() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        pid_t pid = 1000;
+        int priority = 10;
+        m_tester = new PriorityController(pid,priority);
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    PriorityController *m_tester;
+};
+
+TEST_F(UT_PriorityController, initTest)
+{
+
 }
 
-TEST(UT_PriorityController_PriorityController, UT_PriorityController_PriorityController_001)
-{
-    pid_t testpid = 123;
-    int testpriority = 1;
-
-    PriorityController* ctrl = new PriorityController(testpid, testpriority, nullptr);
-
-    EXPECT_NE(ctrl, nullptr);
-
-    ctrl->deleteLater();
-}
