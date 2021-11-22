@@ -40,14 +40,17 @@ public:
 public:
     virtual void SetUp()
     {
-        pid_t pid = 1000;
+        pid_t pid = getpid();
         int priority = 10;
         m_tester = new PriorityController(pid,priority);
     }
 
     virtual void TearDown()
     {
-        delete m_tester;
+        if(m_tester){
+            delete m_tester;
+            m_tester = nullptr;
+        }
     }
 
 protected:

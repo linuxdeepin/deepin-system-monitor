@@ -47,14 +47,17 @@ public:
 public:
     virtual void SetUp()
     {
-        pid_t pid = 1000;
-        int signal = SIGTERM;
+        pid_t pid = getpid();
+        int signal = SIGCONT;
         m_tester = new ProcessController(pid,signal);
     }
 
     virtual void TearDown()
     {
-        delete m_tester;
+        if(m_tester){
+            delete m_tester;
+            m_tester = nullptr;
+        }
     }
 
 protected:

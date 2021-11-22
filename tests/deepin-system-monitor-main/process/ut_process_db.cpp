@@ -33,7 +33,7 @@ using namespace core::process;
 static QString m_Sresult;
 /***************************************STUB begin*********************************************/
 pid_t stub_isCurrentProcess_getpid(){
-    return 1000;
+    return 50000;
 }
 
 void stub_endProcess_sendSignalToProcess(){
@@ -104,7 +104,10 @@ public:
 
     virtual void TearDown()
     {
-        delete m_tester;
+        if(m_tester){
+            delete m_tester;
+            m_tester = nullptr;
+        }
     }
 
 protected:
@@ -136,7 +139,7 @@ TEST_F(UT_ProcessDB, test_processSet_001)
 
 TEST_F(UT_ProcessDB, test_isCurrentProcess_001)
 {
-    pid_t pid = 1000;
+    pid_t pid = 50000;
     Stub b;
     b.set(getpid,stub_isCurrentProcess_getpid);
     bool isCurrentProcess = m_tester->isCurrentProcess(pid);
@@ -146,7 +149,7 @@ TEST_F(UT_ProcessDB, test_isCurrentProcess_001)
 
 TEST_F(UT_ProcessDB, test_endProcess_001)
 {
-    pid_t pid = 1000;
+    pid_t pid = 50000;
     Stub stub;
     stub.set(ADDR(ProcessDB,sendSignalToProcess), stub_endProcess_sendSignalToProcess);
 
@@ -156,7 +159,7 @@ TEST_F(UT_ProcessDB, test_endProcess_001)
 
 TEST_F(UT_ProcessDB, test_pauseProcess_001)
 {
-    pid_t pid = 1000;
+    pid_t pid = 50000;
     Stub stub;
     stub.set(ADDR(ProcessDB,sendSignalToProcess), stub_pauseProcess_sendSignalToProcess);
 
@@ -166,7 +169,7 @@ TEST_F(UT_ProcessDB, test_pauseProcess_001)
 
 TEST_F(UT_ProcessDB, test_resumeProcess_001)
 {
-    pid_t pid = 1000;
+    pid_t pid = 50000;
     Stub stub;
     stub.set(ADDR(ProcessDB,sendSignalToProcess), stub_resumeProcess_sendSignalToProcess);
 
@@ -176,7 +179,7 @@ TEST_F(UT_ProcessDB, test_resumeProcess_001)
 
 TEST_F(UT_ProcessDB, test_killProcess_001)
 {
-    pid_t pid = 1000;
+    pid_t pid = 50000;
     Stub stub;
     stub.set(ADDR(ProcessDB,sendSignalToProcess), stub_killProcess_sendSignalToProcess);
 
@@ -201,7 +204,7 @@ TEST_F(UT_ProcessDB, test_setProcessPriority_001)
 {
     Stub b1;
     b1.set(ADDR(ProcessDB,signalProcessPrioritysetChanged), stub_setProcessPriority_signalProcessPrioritysetChangede);
-    m_tester->setProcessPriority(1000,20);
+    m_tester->setProcessPriority(50000,20);
 }
 
 TEST_F(UT_ProcessDB, test_onProcessPrioritysetChanged_001)
@@ -215,11 +218,11 @@ TEST_F(UT_ProcessDB, test_onProcessPrioritysetChanged_001)
     Stub b4;
     b4.set(ADDR(PriorityController,execute),stub_onProcessPrioritysetChanged_execute);
 
-    m_tester->onProcessPrioritysetChanged(1000,20);
+    m_tester->onProcessPrioritysetChanged(50000,20);
 }
 
 TEST_F(UT_ProcessDB, test_sendSignalToProcess_001)
 {
-    m_tester->sendSignalToProcess(1000,SIGTERM);
+    m_tester->sendSignalToProcess(50000,SIGCONT);
 }
 
