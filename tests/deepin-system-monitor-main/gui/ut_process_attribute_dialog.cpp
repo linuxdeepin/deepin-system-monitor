@@ -54,8 +54,14 @@ public:
 
     virtual void TearDown()
     {
-        delete m_tester1;
-        delete m_tester2;
+        if (m_tester1) {
+            delete m_tester1;
+            m_tester1 = nullptr;
+        }
+        if (m_tester2) {
+            delete m_tester2;
+            m_tester2 = nullptr;
+        }
     }
 
 protected:

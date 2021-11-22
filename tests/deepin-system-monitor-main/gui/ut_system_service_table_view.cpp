@@ -86,7 +86,10 @@ public:
 
     virtual void TearDown()
     {
-        delete m_tester;
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
     }
 
 protected:

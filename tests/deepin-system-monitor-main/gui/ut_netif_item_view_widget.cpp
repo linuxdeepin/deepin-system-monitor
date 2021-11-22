@@ -52,8 +52,14 @@ public:
 
     virtual void TearDown()
     {
-        delete m_netInfo;
-        delete m_tester;
+        if (m_netInfo) {
+            delete m_netInfo;
+            m_netInfo = nullptr;
+        }
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
     }
 
 protected:

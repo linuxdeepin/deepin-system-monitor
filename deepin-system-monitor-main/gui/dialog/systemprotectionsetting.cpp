@@ -135,7 +135,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createSettingLinkButtonHandle
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     // 构建自定义Item
-    QWidget* widget = new QWidget;
+    QWidget* widget = new QWidget();
     QHBoxLayout* layout = new QHBoxLayout(widget);
     layout->addStretch();
     DCommandLinkButton* button = new DCommandLinkButton(tr("Settings"), widget);
@@ -152,7 +152,8 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createSettingLinkButtonHandle
         qDebug() << __FUNCTION__ << __LINE__ << "，will jump to dde setting center notification page!";
         SystemProtectionSetting::instance()->onMessgaeSetting("");
     });
-
+    if (widget != nullptr)
+        widget->deleteLater();
     return optionWidget;
 }
 QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(QObject *obj)
@@ -160,7 +161,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     // 构建自定义Item
-    QWidget* widget = new QWidget;
+    QWidget* widget = new QWidget();
     QHBoxLayout* layout = new QHBoxLayout(widget);
     DLabel *label = new DLabel(widget);
     // 设置提示语为DTK提示语颜色
@@ -195,6 +196,8 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createProtectionSwitchHandle(
         }
     });
 
+    if (widget != nullptr)
+        widget->deleteLater();
     return optionWidget;
 }
 
@@ -339,6 +342,8 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
         }
     }
 
+    if (widget != nullptr)
+        widget->deleteLater();
     return optionWidget;
 }
 
@@ -434,6 +439,8 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
         }
     }
 
+    if (widget != nullptr)
+        widget->deleteLater();
     return optionWidget;
 }
 

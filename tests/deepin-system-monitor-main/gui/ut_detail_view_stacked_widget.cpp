@@ -73,9 +73,10 @@ public:
         m_netWidget->deleteLater();
         m_memWidget->deleteLater();
         m_diskWidget->deleteLater();
-        delete m_tester;
-
-
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
     }
 
 
