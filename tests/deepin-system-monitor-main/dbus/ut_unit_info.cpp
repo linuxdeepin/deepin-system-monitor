@@ -75,18 +75,54 @@ public:
 
     virtual void TearDown()
     {
-        delete m_tester;
-        delete m_tester1;
-        delete m_tester2;
-        delete m_tester3;
-        delete m_tester4;
-        delete m_tester5;
-        delete m_tester6;
-        delete m_tester7;
-        delete m_tester8;
-        delete m_tester9;
-        delete m_tester10;
-        delete m_tester11;
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
+        if (m_tester1) {
+            delete m_tester1;
+            m_tester1 = nullptr;
+        }
+        if (m_tester2) {
+            delete m_tester2;
+            m_tester2 = nullptr;
+        }
+        if (m_tester3) {
+            delete m_tester3;
+            m_tester3 = nullptr;
+        }
+        if (m_tester4) {
+            delete m_tester4;
+            m_tester4 = nullptr;
+        }
+        if (m_tester5) {
+            delete m_tester5;
+            m_tester5 = nullptr;
+        }
+        if (m_tester6) {
+            delete m_tester6;
+            m_tester6 = nullptr;
+        }
+        if (m_tester7) {
+            delete m_tester7;
+            m_tester7 = nullptr;
+        }
+        if (m_tester8) {
+            delete m_tester8;
+            m_tester8 = nullptr;
+        }
+        if (m_tester9) {
+            delete m_tester9;
+            m_tester9 = nullptr;
+        }
+        if (m_tester10) {
+            delete m_tester10;
+            m_tester10 = nullptr;
+        }
+        if (m_tester11) {
+            delete m_tester11;
+            m_tester11 = nullptr;
+        }
     }
 
 protected:
