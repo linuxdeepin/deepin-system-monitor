@@ -106,7 +106,55 @@ void WMWindowList::addDesktopEntryApp(Process *proc)
 
 int WMWindowList::getAppCount()
 {
-    return static_cast<int>(m_trayAppcache.size() + m_guiAppcache.size()) + m_desktopEntryCache.size();
+    //Judge whether the current user is root
+    Process proc(static_cast<int>(qApp->applicationPid()));
+    //read Process Info
+    proc.readProcessInfo();
+    bool isRootUser = false;
+    //Compare with Root UID 0
+    if (0 == proc.userName().compare("root", Qt::CaseInsensitive)) {
+        isRootUser = true;
+    } else {
+        isRootUser = false;
+    }
+    int trayAppNum = 0;
+    std::map<pid_t, WMWindow>::iterator itTray;
+    //if uid = 0,read tray apps number
+    for(itTray=m_trayAppcache.begin();itTray!=m_trayAppcache.end();++itTray) {
+        Process proc(itTray->first);
+        proc.readProcessInfo();
+        uid_t  procUid = proc.uid();
+        if (procUid == 0) {
+            trayAppNum++;
+        }
+    }
+    int guiAppNum = 0;
+    std::map<pid_t, WMWindow>::iterator itGui;
+    //if uid = 0,read gui apps number
+    for(itGui=m_guiAppcache.begin();itGui!=m_guiAppcache.end();++itGui) {
+        Process proc(itGui->first);
+        proc.readProcessInfo();
+        uid_t  procUid = proc.uid();
+        if (procUid == 0) {
+            guiAppNum++;
+        }
+    }
+    //if uid = 0, read desktop apps number
+    int desktopAppNum = 0;
+    for (int i = 0; i < m_desktopEntryCache.size(); i++) {
+        Process proc(m_desktopEntryCache.at(i));
+        proc.readProcessInfo();
+        uid_t  procUid = proc.uid();
+        if (procUid == 0) {
+            desktopAppNum++;
+        }
+    }
+    //if user is root,add all numbers of app, otherwise, minuse root user's apps
+    if (isRootUser) {
+        return trayAppNum + guiAppNum + desktopAppNum;
+        } else {
+        return static_cast<int>(m_trayAppcache.size() + m_guiAppcache.size()) + m_desktopEntryCache.size() - trayAppNum - guiAppNum - desktopAppNum;
+    }
 }
 
 bool WMWindowList::isTrayApp(pid_t pid) const
