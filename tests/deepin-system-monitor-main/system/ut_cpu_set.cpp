@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
 * Author:      baohaifeng <baohaifeng@uniontech.com>
 * Maintainer:  baohaifeng <baohaifeng@uniontech.com>
@@ -17,253 +17,212 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+//self
 #include "system/cpu_set.h"
 #include "system/cpu.h"
+
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+
+//qt
 #include <QString>
+using namespace core::system;
 
-#include "ut_cpu_set.h"
+class UT_CPUSet : public ::testing::Test
+{
+public:
+    UT_CPUSet() : m_tester(nullptr) {}
 
-Ut_CPUSet::Ut_CPUSet()
+public:
+    virtual void SetUp()
+    {
+        m_tester = new CPUSet();
+    }
+
+    virtual void TearDown()
+    {
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
+    }
+
+protected:
+    CPUSet *m_tester;
+};
+
+TEST_F(UT_CPUSet, initTest)
 {
 }
 
-TEST(UT_CPUSet_modelName, UT_CPUSet_modelName_001)
+TEST_F(UT_CPUSet, test_modelName)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->modelName();
+    m_tester->update();
+    QString retString = m_tester->modelName();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_vendor, UT_CPUSet_vendor_001)
+TEST_F(UT_CPUSet, test_vendor)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->vendor();
+    m_tester->update();
+    QString retString = m_tester->vendor();
     EXPECT_NE(retString, "");
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_cpuCount, UT_CPUSet_cpuCount_001)
+TEST_F(UT_CPUSet, test_cpuCount)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    int iCpuCount = cpuSet->cpuCount();
+    m_tester->update();
+    int iCpuCount = m_tester->cpuCount();
     EXPECT_NE(iCpuCount, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_socketCount, UT_CPUSet_socketCount_001)
+TEST_F(UT_CPUSet, test_socketCount)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    int iSocketCount = cpuSet->socketCount();
+    m_tester->update();
+    int iSocketCount = m_tester->socketCount();
     EXPECT_NE(iSocketCount, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_virtualization, UT_CPUSet_virtualization_001)
+TEST_F(UT_CPUSet, test_virtualization)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->virtualization();
+    m_tester->update();
+    QString retString = m_tester->virtualization();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_curFreq, UT_CPUSet_curFreq_001)
+TEST_F(UT_CPUSet, test_curFreq)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->curFreq();
+    m_tester->update();
+    QString retString = m_tester->curFreq();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_minFreq, UT_CPUSet_minFreq_001)
+TEST_F(UT_CPUSet, test_minFreq)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->minFreq();
+    m_tester->update();
+    QString retString = m_tester->minFreq();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_maxFreq, UT_CPUSet_maxFreq_001)
+TEST_F(UT_CPUSet, test_maxFreq)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->maxFreq();
+    m_tester->update();
+    QString retString = m_tester->maxFreq();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_l1dCache, UT_CPUSet_l1dCache_001)
+TEST_F(UT_CPUSet, test_l1dCache)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->l1dCache();
+    m_tester->update();
+    QString retString = m_tester->l1dCache();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
 
-TEST(UT_CPUSet_l1iCache, UT_CPUSet_l1iCache_001)
+TEST_F(UT_CPUSet, test_l1iCache)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->l1iCache();
+    m_tester->update();
+    QString retString = m_tester->l1iCache();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_l2Cache, UT_CPUSet_l2Cache_001)
+TEST_F(UT_CPUSet, test_l2Cache)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->l2Cache();
+    m_tester->update();
+    QString retString = m_tester->l2Cache();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_l3Cache, UT_CPUSet_l3Cache_001)
+TEST_F(UT_CPUSet, test_l3Cache)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->l3Cache();
+    m_tester->update();
+    QString retString = m_tester->l3Cache();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_coreId, UT_CPUSet_coreId_001)
+TEST_F(UT_CPUSet, test_coreId)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QString retString = cpuSet->coreId(1);
+    m_tester->update();
+    QString retString = m_tester->coreId(1);
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_usage, UT_CPUSet_usage_001)
+TEST_F(UT_CPUSet, test_usage)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    core::system::CPUUsage Usage = cpuSet->usage();
+    m_tester->update();
+    core::system::CPUUsage Usage = m_tester->usage();
     EXPECT_NE(Usage->total, 1);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_stat, UT_CPUSet_stat_001)
+TEST_F(UT_CPUSet, test_stat)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    core::system::CPUStat stat = cpuSet->stat();
+    m_tester->update();
+    core::system::CPUStat stat = m_tester->stat();
     EXPECT_NE(stat->idle, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_cpuLogicName, UT_CPUSet_cpuLogicName_001)
+TEST_F(UT_CPUSet, test_cpuLogicName)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    for (auto &cpuname : cpuSet->cpuLogicName())
+    m_tester->update();
+    for (auto &cpuname : m_tester->cpuLogicName())
     {
         //cpu逻辑名不能为空
 //        qInfo()<<"cpuname:"<<cpuname;
         EXPECT_NE(cpuname, "");
     }
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_statDB, UT_CPUSet_statDB_001)
+TEST_F(UT_CPUSet, test_statDB)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QByteArray  test = "cpu0";
-    core::system::CPUStat stat = cpuSet->statDB(test);
+    m_tester->update();
+    QByteArray  TEST_F = "cpu0";
+    core::system::CPUStat stat = m_tester->statDB(TEST_F);
     qInfo()<<"stat->user:"<<stat->user;
     EXPECT_NE(stat->user, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_usageDB, UT_CPUSet_usageDB_001)
+TEST_F(UT_CPUSet, test_usageDB)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    QByteArray  test = "cpu0";
-    core::system::CPUUsage cPUUsage = cpuSet->usageDB(test);
+    m_tester->update();
+    QByteArray  TEST_F = "cpu0";
+    core::system::CPUUsage cPUUsage = m_tester->usageDB(TEST_F);
     qInfo()<<"cPUUsage->total:"<<cPUUsage->total;
     EXPECT_NE(cPUUsage->total, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_update, UT_CPUSet_update_001)
+TEST_F(UT_CPUSet, test_update)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->update();
-    core::system::CPUStat stat = cpuSet->stat();
+    m_tester->update();
+    core::system::CPUStat stat = m_tester->stat();
     EXPECT_NE(stat->idle, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_read_stats, UT_CPUSet_read_stats_001)
+TEST_F(UT_CPUSet, test_read_stats)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->read_stats();
-
-    core::system::CPUStat stat = cpuSet->stat();
+    m_tester->read_stats();
+    core::system::CPUStat stat = m_tester->stat();
     EXPECT_NE(stat->idle, 0);
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_read_overall_info, UT_CPUSet_read_overall_info_001)
+TEST_F(UT_CPUSet, test_read_overall_info)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->read_overall_info();
-
-    QString retString = cpuSet->l1iCache();
+    m_tester->read_overall_info();
+    QString retString = m_tester->l1iCache();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
 
-TEST(UT_CPUSet_read_lscpu, UT_CPUSet_read_lscpu_001)
+TEST_F(UT_CPUSet, test_read_lscpu)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    cpuSet->read_lscpu();
-
-    QString retString = cpuSet->vendor();
+    m_tester->read_lscpu();
+    QString retString = m_tester->vendor();
     EXPECT_NE(retString, "");
-
-    delete cpuSet;
 }
 
-TEST(UT_CPUSet_getUsageTotalDelta, UT_CPUSet_getUsageTotalDelta_001)
+TEST_F(UT_CPUSet, test_getUsageTotalDelta)
 {
-    core::system::CPUSet *cpuSet = new core::system::CPUSet();
-    qulonglong totalDelta = cpuSet->getUsageTotalDelta();
+    qulonglong totalDelta = m_tester->getUsageTotalDelta();
     EXPECT_NE(totalDelta, 0);
-
-    delete cpuSet;
 }

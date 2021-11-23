@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
 * Author:      baohaifeng <baohaifeng@uniontech.com>
 * Maintainer:  baohaifeng <baohaifeng@uniontech.com>
@@ -17,20 +17,50 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+//self
 #include "system/cpu.h"
+
+//gtest
+#include "stub.h"
+#include <gtest/gtest.h>
+
+//qt
 #include <QString>
 #include <QProcess>
+using namespace core::system;
 
-#include "ut_cpu.h"
+class UT_CPU: public ::testing::Test
+{
+public:
+    UT_CPU() : m_tester(nullptr) {}
 
-Ut_CPU::Ut_CPU()
+public:
+    virtual void SetUp()
+    {
+        m_tester = new CPUInfo();
+    }
+
+    virtual void TearDown()
+    {
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
+    }
+
+protected:
+    CPUInfo *m_tester;
+};
+
+TEST_F(UT_CPU, initTest)
 {
 }
 
-
-TEST(UT_CPU_logicalIndex, UT_CPU_logicalIndex_001)
+TEST_F(UT_CPU, test_logicalIndex)
 {
-    QList<core::system::CPUInfo> infos;
+    QList<CPUInfo> infos;
+
     QProcess process;
     process.start("cat /proc/cpuinfo");
     process.waitForFinished(3000);
@@ -63,87 +93,76 @@ TEST(UT_CPU_logicalIndex, UT_CPU_logicalIndex_001)
     }
 }
 
-TEST(UT_CPU_coreID, UT_CPU_coreID)
+TEST_F(UT_CPU, test_coreID)
 {
-    core::system::CPUInfo info;
-    info.setCoreId(10);
-    qInfo()<<"coreID:"<<info.coreID();
-    EXPECT_EQ("10", info.coreID());
+    m_tester->setCoreId(10);
+    qInfo()<<"coreID:"<<m_tester->coreID();
+    EXPECT_EQ("10", m_tester->coreID());
 }
 
-TEST(UT_CPU_modelName, UT_CPU_modelName)
+TEST_F(UT_CPU, test_modelName)
 {
-    core::system::CPUInfo info;
-    info.setModelName("abc");
-    EXPECT_EQ("abc", info.modelName());
+    m_tester->setModelName("abc");
+    EXPECT_EQ("abc", m_tester->modelName());
 }
 
-TEST(UT_CPU_vendorId, UT_CPU_vendorId)
+TEST_F(UT_CPU, test_vendorId)
 {
-    core::system::CPUInfo info;
-    info.setVendorId("abc");
-    EXPECT_EQ("abc", info.vendorId());
+    m_tester->setVendorId("abc");
+    EXPECT_EQ("abc", m_tester->vendorId());
 }
 
 
-TEST(UT_CPU_cpuFreq, UT_CPU_cpuFreq_001)
+TEST_F(UT_CPU, test_cpuFreq)
 {
-    core::system::CPUInfo info;
-    info.setCpuFreq("abc");
-    QString retString =  info.cpuFreq();
+    m_tester->setCpuFreq("abc");
+    QString retString =  m_tester->cpuFreq();
 //    qInfo()<<"cpuFreq:"<<retString.length();
     EXPECT_NE(3, retString.length());
 }
 
-TEST(UT_CPU_cacheSize, UT_CPU_cacheSize)
+TEST_F(UT_CPU, test_cacheSize)
 {
-    core::system::CPUInfo info;
-    info.setCacheSize("10");
-    qInfo()<<"cacheSize:"<<info.cacheSize();
-    EXPECT_EQ("10", info.cacheSize());
+    m_tester->setCacheSize("10");
+    qInfo()<<"cacheSize:"<<m_tester->cacheSize();
+    EXPECT_EQ("10", m_tester->cacheSize());
 }
 
-TEST(UT_CPU_setIndex, UT_CPU_setIndex)
+TEST_F(UT_CPU, test_setIndex)
 {
-    core::system::CPUInfo info;
-    info.setIndex(10);
-    EXPECT_EQ(10, info.logicalIndex());
+    m_tester->setIndex(10);
+    EXPECT_EQ(10, m_tester->logicalIndex());
 }
 
-TEST(UT_CPU_setCoreId, UT_CPU_setCoreId)
+TEST_F(UT_CPU, test_setCoreId)
 {
-    core::system::CPUInfo info;
-    info.setCoreId(10);
-    EXPECT_EQ("10", info.coreID());
+    m_tester->setCoreId(10);
+    EXPECT_EQ("10", m_tester->coreID());
 }
 
-TEST(UT_CPU_setModelName, UT_CPU_setModelName)
+TEST_F(UT_CPU, test_setModelName)
 {
-    core::system::CPUInfo info;
-    info.setModelName("abc");
-    EXPECT_EQ("abc", info.modelName());
+    m_tester->setModelName("abc");
+    EXPECT_EQ("abc", m_tester->modelName());
 }
 
-TEST(UT_CPU_setVendorId, UT_CPU_setVendorId)
+TEST_F(UT_CPU, test_setVendorId)
 {
-    core::system::CPUInfo info;
-    info.setVendorId("abc");
-    EXPECT_EQ("abc", info.vendorId());
+    m_tester->setVendorId("abc");
+    EXPECT_EQ("abc", m_tester->vendorId());
 }
 
-TEST(UT_CPU_setCpuFreq, UT_CPU_setCpuFreq)
+TEST_F(UT_CPU, test_setCpuFreq)
 {
-    core::system::CPUInfo info;
-    info.setCpuFreq("abcde");
-    QString retString =  info.cpuFreq();
+    m_tester->setCpuFreq("abcde");
+    QString retString =  m_tester->cpuFreq();
     EXPECT_NE(5, retString.length());
 }
 
-TEST(UT_CPU_setCacheSize, UT_CPU_setCacheSize)
+TEST_F(UT_CPU, test_setCacheSize)
 {
-    core::system::CPUInfo info;
-    info.setCacheSize("10");
-    qInfo()<<"cacheSize:"<<info.cacheSize();
-    EXPECT_EQ("10", info.cacheSize());
+    m_tester->setCacheSize("10");
+    qInfo()<<"cacheSize:"<<m_tester->cacheSize();
+    EXPECT_EQ("10", m_tester->cacheSize());
 }
 
