@@ -513,6 +513,8 @@ void CPUSet::read_overall_info()
 {
     //proc/cpuinfo
     QList<CPUInfo> infos;
+    //取不到ModelName时，走命令通道。true:直接读取;false：命令通道
+    bool modelNameFlag = true;
 
     QProcess process;
     process.start("cat /proc/cpuinfo");
@@ -534,29 +536,40 @@ void CPUSet::read_overall_info()
                 info.setCoreId(text.split(":").value(1).toUInt());
             } else if (text.startsWith("model name")) {
                 info.setModelName(text.split(":").value(1));
+                QString strModelName = text.split(":").value(1);
+                if (text.split(":").value(1).isEmpty())
+                {
+                    modelNameFlag = false;
+                    break;
+                }
+
             } else if (text.startsWith("cache size")) {
                 info.setCacheSize(text.split(":").value(1));
             }
         }
-
+        if (modelNameFlag == false)
+            break;
         infos.append(info);
     }
 
-    // 不再使用进程执行命令的方式获取CPU信息
-//    process.start("lscpu");
-//    process.waitForFinished(3000);
-//    QString lscpu = process.readAllStandardOutput();
-//    QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-//    d->m_info.clear();
-//    for (QString lscpuLine : lscpuList) {
-//        QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-//        if (keyValue.count() > 1)
-//            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
-//    }
     // 根据lscpu源码实现获取CPU信息
-    read_lscpu();
-
-    d->m_infos = infos;
+    if (modelNameFlag == false){
+        //使用进程执行命令的方式获取CPU信息
+        process.start("lscpu");
+        process.waitForFinished(3000);
+        QString lscpu = process.readAllStandardOutput();
+        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+        d->m_info.clear();
+        for (QString lscpuLine : lscpuList) {
+            QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+            if (keyValue.count() > 1)
+                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+        }
+    }
+    else {
+        read_lscpu();
+        d->m_infos = infos;
+    }
 }
 
 // 获取CPU信息 ut001987
