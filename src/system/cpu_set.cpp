@@ -536,39 +536,26 @@ void CPUSet::read_overall_info()
                 info.setCoreId(text.split(":").value(1).toUInt());
             } else if (text.startsWith("model name")) {
                 info.setModelName(text.split(":").value(1));
-                QString strModelName = text.split(":").value(1);
-                strModelName = strModelName.trimmed();
-                strModelName = strModelName.simplified();
-                qDebug()<<"modelName:"<<strModelName;
-                if (strModelName.isEmpty())
-                {
-                    qInfo()<<"ModelName is empty";
-                    modelNameFlag = false;
-                    break;
-                }
-
             } else if (text.startsWith("cache size")) {
                 info.setCacheSize(text.split(":").value(1));
             }
         }
-        if (modelNameFlag == false)
-            break;
         infos.append(info);
     }
 
-    // 根据lscpu源码实现获取CPU信息
-    if (modelNameFlag == false){
-        qDebug()<<"使用进程执行命令的方式获取CPU信息";
-        process.start("lscpu");
-        process.waitForFinished(3000);
-        QString lscpu = process.readAllStandardOutput();
-        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-        d->m_info.clear();
-        for (QString lscpuLine : lscpuList) {
-            QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-            if (keyValue.count() > 1)
-                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
-        }
+    if (!cpuinfo.contains("model name")) {
+        infos.clear();
+        // 根据lscpu源码实现获取CPU信息
+            process.start("lscpu");
+            process.waitForFinished(3000);
+            QString lscpu = process.readAllStandardOutput();
+            QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+            d->m_info.clear();
+            for (QString lscpuLine : lscpuList) {
+                QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+                if (keyValue.count() > 1)
+                    d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+            }
     }
     else {
         read_lscpu();
