@@ -336,3 +336,15 @@ TEST_F(UT_UnitInfo, test_setJobObjectPath_01)
 
     EXPECT_EQ(testStr, ret);
 }
+
+TEST_F(UT_UnitInfo, test_operator_01)
+{
+    const UnitInfo rhs;
+    m_tester->operator=(rhs);
+}
+
+TEST_F(UT_UnitInfo, test_operator_02)
+{
+    const UnitInfo other;
+    m_tester->operator==(other);
+}

@@ -117,3 +117,27 @@ TEST_F(UT_EnvironmentFile, test_Operator_04)
 
     EXPECT_EQ(aFile == bFile, false);
 }
+
+TEST_F(UT_EnvironmentFile, test_Operator_05)
+{
+    const EnvironmentFile rhs;
+    m_tester->operator=(rhs);
+}
+
+
+TEST_F(UT_EnvironmentFile, test_Operator_06)
+{
+   QDBusArgument argument;
+   const EnvironmentFile file;
+   argument << file.envFile << file.flag;
+   m_tester->operator==(file);
+}
+
+
+TEST_F(UT_EnvironmentFile, test_Operator_07)
+{
+    QDataStream stream;
+    const EnvironmentFile file;
+    stream << file.envFile << file.flag;
+    m_tester->operator==(file);
+}

@@ -117,3 +117,15 @@ TEST_F(UT_UnitFileInfo, test_setStatus_001)
 
     EXPECT_EQ(status, retStatus);
 }
+
+TEST_F(UT_UnitFileInfo, test_Operator_01)
+{
+   const UnitFileInfo rhs;
+   m_tester->operator=(rhs);
+}
+
+TEST_F(UT_UnitFileInfo, test_Operator_02)
+{
+   const UnitFileInfo other;
+   m_tester->operator==(other);
+}

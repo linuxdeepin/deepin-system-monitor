@@ -117,3 +117,9 @@ TEST_F(UT_SystemServiceEntryData, test_operator_12)
 {
     EXPECT_EQ(m_tester->m_canStop, false);
 }
+
+TEST_F(UT_SystemServiceEntryData, test_operator_13)
+{
+    const SystemServiceEntryData rhs;
+    m_tester->operator=(rhs);
+}

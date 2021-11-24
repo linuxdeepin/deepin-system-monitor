@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd
 *
 * Author:     xuezifan<xuezifan@uniontech.com>
 *
@@ -12,7 +12,7 @@
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
@@ -20,27 +20,34 @@
 */
 
 //self
-#include "common/time_period.h"
+#include "dbus/dbus_object.h"
+#include "gui/main_window.h"
+#include "application.h"
+
+//qt
+#include <QDBusConnection>
+#include <QDebug>
+
+#define DBUS_SERVER             "com.deepin.systemMonitor"
+#define DBUS_SERVER_PATH        "/com/deepin/systemMonitor"
 
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
 
-using namespace common;
-using namespace core;
 /***************************************STUB begin*********************************************/
 
 /***************************************STUB end**********************************************/
 
-class UT_TimePeriod : public ::testing::Test
+class UT_DbusObject : public ::testing::Test
 {
 public:
-    UT_TimePeriod() : m_tester(nullptr) {}
+    UT_DbusObject() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        m_tester = new TimePeriod();
+        m_tester = new DBusObject();
     }
 
     virtual void TearDown()
@@ -52,33 +59,30 @@ public:
     }
 
 protected:
-    TimePeriod *m_tester;
+    DBusObject *m_tester;
 };
 
-TEST_F(UT_TimePeriod, initTest)
+TEST_F(UT_DbusObject, initTest)
 {
 
 }
 
-TEST_F(UT_TimePeriod, test_registerMetaType_01)
+TEST_F(UT_DbusObject, test_getInstance_01)
 {
-    EXPECT_TRUE(qRegisterMetaType<TimePeriod>("TimePeriod"));
+    m_tester->getInstance();
 }
 
-TEST_F(UT_TimePeriod, test_ticks_01)
+TEST_F(UT_DbusObject, test_registerOrNotify_01)
 {
-    size_t TimePeriod = m_tester->m_period;
-    EXPECT_EQ(TimePeriod,m_tester->m_period);
+    m_tester->registerOrNotify();
 }
 
-TEST_F(UT_TimePeriod, test_operator_01)
+TEST_F(UT_DbusObject, test_unRegister_01)
 {
-    const TimePeriod rhs;
-    m_tester->operator==(rhs);
+    m_tester->unRegister();
 }
 
-TEST_F(UT_TimePeriod, test_operator_02)
-{
-    const TimePeriod rhs;
-    m_tester->operator!=(rhs);
-}
+
+
+
+

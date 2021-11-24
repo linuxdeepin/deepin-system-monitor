@@ -58,6 +58,11 @@ TEST_F(UT_ErrorContext, initTest)
 
 }
 
+TEST_F(UT_ErrorContext, test_ErrorContext_01)
+{
+    ErrorContext();
+}
+
 TEST_F(UT_ErrorContext, test_getCode_01)
 {
     m_tester->getCode();
@@ -96,5 +101,11 @@ TEST_F(UT_ErrorContext, test_getErrorMessage_01)
 TEST_F(UT_ErrorContext, test_setErrorMessage_01)
 {
     m_tester->setErrorMessage("1");
+}
+
+TEST_F(UT_ErrorContext, test_operator_01)
+{
+    const ErrorContext other;
+    m_tester->operator==(other);
 }
 
