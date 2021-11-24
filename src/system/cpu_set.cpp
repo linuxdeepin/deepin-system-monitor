@@ -537,8 +537,12 @@ void CPUSet::read_overall_info()
             } else if (text.startsWith("model name")) {
                 info.setModelName(text.split(":").value(1));
                 QString strModelName = text.split(":").value(1);
-                if (text.split(":").value(1).isEmpty())
+                strModelName = strModelName.trimmed();
+                strModelName = strModelName.simplified();
+                qDebug()<<"modelName:"<<strModelName;
+                if (strModelName.isEmpty())
                 {
+                    qInfo()<<"ModelName is empty";
                     modelNameFlag = false;
                     break;
                 }
@@ -554,7 +558,7 @@ void CPUSet::read_overall_info()
 
     // 根据lscpu源码实现获取CPU信息
     if (modelNameFlag == false){
-        //使用进程执行命令的方式获取CPU信息
+        qDebug()<<"使用进程执行命令的方式获取CPU信息";
         process.start("lscpu");
         process.waitForFinished(3000);
         QString lscpu = process.readAllStandardOutput();
