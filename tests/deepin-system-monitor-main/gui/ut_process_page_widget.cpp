@@ -188,6 +188,8 @@ TEST_F(UT_ProcessPageWidget, test_switchDisplayMode_01)
 
 TEST_F(UT_ProcessPageWidget, test_paintEvent_01)
 {
+    static Toolbar toolbar;
+    gApp->mainWindow()->m_toolbar = &toolbar;
     Stub stub;
     stub.set(ADDR(Toolbar, isSearchContentEmpty), stub_paintEvent_isSearchContentEmpty);
     EXPECT_TRUE(!m_tester->grab().isNull());

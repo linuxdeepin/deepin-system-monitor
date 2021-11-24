@@ -230,15 +230,6 @@ TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_02)
     EXPECT_EQ(ok, false);
 }
 
-TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_03)
-{
-    Stub stub;
-    stub.set(ADDR(NetifPacketCapture, whetherDevChanged), stub_whetherDevChanged);
-    stub.set(pcap_findalldevs, stub_pcap_findalldevs);
-    auto ok = m_tester->getCurrentDevName();
-    EXPECT_EQ(ok, false);
-}
-
 TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_06)
 {
     Stub stub;

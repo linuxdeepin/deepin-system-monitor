@@ -45,8 +45,11 @@ using namespace common;
 TEST(UT_Hash, test_hash_x86_32_01)
 {
     uint32_t out1 = 4;
-    uint8_t value = 5;
-    uint8_t *key = &value;
+    uint8_t value[10] {};
+    for (int i = 0; i < 10; i++) {
+        value[i] = uint8_t(i);
+    }
+    uint8_t *key = value;
     int len = 4;
     uint32_t seed = 5;
     uint32_t *out = &out1;
@@ -55,8 +58,11 @@ TEST(UT_Hash, test_hash_x86_32_01)
 
 TEST(UT_Hash, test_hash_x86_128_01)
 {
-    uint8_t value = 5;
-    uint8_t *key = &value;
+    uint8_t value[10] {};
+    for (int i = 0; i < 10; i++) {
+        value[i] = uint8_t(i);
+    }
+    uint8_t *key = value;
     int len = 4;
     uint32_t seed = 5;
     uint64_t out[2];
@@ -65,8 +71,11 @@ TEST(UT_Hash, test_hash_x86_128_01)
 
 TEST(UT_Hash, test_hash_x64_128_01)
 {
-    uint8_t value = 5;
-    uint8_t *key = &value;
+    uint8_t value[10] {};
+    for (int i = 0; i < 10; i++) {
+        value[i] = uint8_t(i);
+    }
+    uint8_t *key = value;
     int len = 4;
     uint32_t seed = 5;
     uint64_t out[2];
