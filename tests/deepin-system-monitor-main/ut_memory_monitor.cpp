@@ -115,8 +115,6 @@ TEST_F(UT_MemoryMonitor, test_changeFont)
 
 TEST_F(UT_MemoryMonitor, test_paintEvent)
 {
-    QPaintEvent event(QRegion(0, 0, 10, 10));
-    m_tester->paintEvent(&event);
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 

@@ -130,8 +130,6 @@ TEST_F(UT_CompactCpuMonitor, test_resizeItemRect)
 
 TEST_F(UT_CompactCpuMonitor, test_paintEvent)
 {
-    QPaintEvent event(QRegion(0, 0, 10, 10));
-    m_tester->paintEvent(&event);
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 

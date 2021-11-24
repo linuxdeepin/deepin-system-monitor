@@ -28,6 +28,7 @@
 #include "kill_process_confirm_dialog.h"
 #include "monitor_compact_view.h"
 #include "monitor_expand_view.h"
+#include "toolbar.h"
 
 //gtest
 #include "stub.h"
@@ -64,6 +65,11 @@ int stub_popupKillConfirmDialog_exec(void* object)
 }
 
 void stub_showWindowKiller_showMinimized()
+{
+    return;
+}
+
+void stub_paintEvent_isSearchContentEmpty()
 {
     return;
 }
@@ -182,8 +188,9 @@ TEST_F(UT_ProcessPageWidget, test_switchDisplayMode_01)
 
 TEST_F(UT_ProcessPageWidget, test_paintEvent_01)
 {
-    static QPaintEvent paintev(QRegion(0, 0, 10, 10));
-    m_tester->paintEvent(&paintev);
+    Stub stub;
+    stub.set(ADDR(Toolbar, isSearchContentEmpty), stub_paintEvent_isSearchContentEmpty);
+    EXPECT_TRUE(!m_tester->grab().isNull());
 }
 
 TEST_F(UT_ProcessPageWidget, test_popupKillConfirmDialog_01)

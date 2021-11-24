@@ -41,12 +41,17 @@ using namespace common;
 using namespace init;
 
 /***************************************STUB begin*********************************************/
-
+void stub_Common_startDetached(void* obj, qint64*)
+{
+    return;
+}
 /***************************************STUB end**********************************************/
 
 TEST(UT_Common, test_displayShortcutHlepDialog_01)
 {
     QRect rect;
+    Stub stub;
+    stub.set((bool(QProcess::*)(qint64*))ADDR(QProcess, startDetached), stub_Common_startDetached);
     displayShortcutHelpDialog(rect);
 }
 
@@ -57,11 +62,19 @@ TEST(UT_Common, test_getStatusBarMaxWidth_01)
 
 TEST(UT_Common, test_drawLoadingRing_01)
 {
-    QPainter painter;
-    int centerX; int centerY; int radius; int penWidth;
-    int loadingAngle; int rotationAngle; QColor foregroundColor;
-    double foregroundOpacity; QColor backgroundColor; double backgroundOpacity;
-    double percent;
+    QPixmap pixmap;
+    QPainter painter(&pixmap);
+    int centerX = 0;
+    int centerY = 0;
+    int radius = 0;
+    int penWidth = 0;
+    int loadingAngle = 0;
+    int rotationAngle = 0;
+    QColor foregroundColor;
+    double foregroundOpacity = 0.0;
+    QColor backgroundColor;
+    double backgroundOpacity = 0.0;
+    double percent = 0.0;
     drawLoadingRing(painter, centerX, centerY, radius, penWidth,
                     loadingAngle, rotationAngle, foregroundColor,
                     foregroundOpacity, backgroundColor, backgroundOpacity,
@@ -70,9 +83,16 @@ TEST(UT_Common, test_drawLoadingRing_01)
 
 TEST(UT_Common, test_drawRing_01)
 {
-    QPainter painter;
-    int centerX; int centerY; int radius; int penWidth;
-    int loadingAngle; int rotationAngle; QColor color; double opacity;
+    QPixmap pixmap;
+    QPainter painter(&pixmap);
+    int centerX = 0;
+    int centerY = 0;
+    int radius = 0;
+    int penWidth = 0;
+    int loadingAngle = 0;
+    int rotationAngle = 0;
+    QColor color;
+    double opacity = 0.0;
     drawRing(painter, centerX, centerY, radius, penWidth,
              loadingAngle, rotationAngle, color, opacity);
 
@@ -87,6 +107,8 @@ TEST(UT_Common, test_startWithhanzi_01)
 
 TEST(UT_Common, test_openFilePathItem_01)
 {
+    Stub stub;
+    stub.set((bool(QProcess::*)(qint64*))ADDR(QProcess, startDetached), stub_Common_startDetached);
     QString path;
 
     openFilePathItem(path);

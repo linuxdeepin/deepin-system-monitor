@@ -103,8 +103,6 @@ TEST_F(UT_CompactDiskMonitor, test_getPainterPathByData)
 
 TEST_F(UT_CompactDiskMonitor, test_paintEvent)
 {
-    QPaintEvent event(QRegion(0, 0, 10, 10));
-    m_tester->paintEvent(&event);
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 

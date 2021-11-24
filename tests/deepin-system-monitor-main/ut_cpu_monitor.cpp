@@ -117,10 +117,7 @@ TEST_F(UT_CpuMonitor, test_resizeEvent)
 
 TEST_F(UT_CpuMonitor, test_paintEvent)
 {
-    QPaintEvent *event = nullptr;
-    m_tester->paintEvent(event);
     EXPECT_FALSE(m_tester->grab().isNull());
-    delete event;
 }
 
 TEST_F(UT_CpuMonitor, test_changeFont)

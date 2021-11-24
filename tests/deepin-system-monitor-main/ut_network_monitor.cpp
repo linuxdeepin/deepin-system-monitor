@@ -88,8 +88,6 @@ TEST_F(UT_NetworkMonitor, test_updateStatus_01)
 
 TEST_F(UT_NetworkMonitor, test_paintEvent)
 {
-    QPaintEvent event(QRegion(0, 0, 10, 10));
-    m_tester->paintEvent(&event);
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 
