@@ -20,6 +20,7 @@
 */
 //self
 #include "wm/wm_window_list.h"
+#include "wm/wm_info.h"
 #include "process/process_db.h"
 //gtest
 #include "stub.h"
@@ -28,6 +29,8 @@
 using namespace core::process;
 using namespace core::wm;
 
+/***********************************************************Stub bdgin**************************************************/
+/***********************************************************Stub end**************************************************/
 class UT_WMWindowList: public ::testing::Test
 {
 public:
@@ -65,10 +68,22 @@ TEST_F(UT_WMWindowList, test_addDesktopEntryApp_001)
 
 TEST_F(UT_WMWindowList, test_getAppCount_001)
 {
+
     m_tester->getAppCount();
 }
 
-TEST_F(UT_WMWindowList, test_isTrayApp_001)
+TEST_F(UT_WMWindowList, test_removeDesktopEntryApp_001)
 {
-    m_tester->getAppCount();
+
+    m_tester->removeDesktopEntryApp(100000);
+}
+
+TEST_F(UT_WMWindowList, test_getWindowIcon_001)
+{
+    m_tester->getWindowIcon(100000);
+}
+
+TEST_F(UT_WMWindowList, test_getWindowPid_001)
+{
+    m_tester->getWindowPid(1000);
 }

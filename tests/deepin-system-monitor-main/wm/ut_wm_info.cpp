@@ -126,11 +126,8 @@ struct core::wm::wm_tree_t {
 //*******************************tpye definition**********************************************//
 
 //*******************************stub begin**********************************************//
-ACCESS_PRIVATE_FUN(WMInfo, void(void), buildWindowTreeSchema);
 ACCESS_PRIVATE_FUN(WMInfo, void(void), findDockWindows);
-void stub_WMInfo_buildWindowTreeSchema(){
-    return;
-}
+
 void stub_WMInfo_findDockWindows(){
     return;
 }
@@ -143,13 +140,9 @@ public:
 public:
     virtual void SetUp()
     {
-        auto WMInfo_buildWindowTreeSchema = get_private_fun::WMInfobuildWindowTreeSchema();
-        Stub b1;
-        b1.set(WMInfo_buildWindowTreeSchema,stub_WMInfo_buildWindowTreeSchema);
-
         auto WMInfo_findDockWindows= get_private_fun::WMInfofindDockWindows();
-        Stub b2;
-        b2.set(WMInfo_findDockWindows,stub_WMInfo_findDockWindows);
+        Stub b;
+        b.set(WMInfo_findDockWindows,stub_WMInfo_findDockWindows);
         m_tester = new WMInfo();
     }
 
@@ -189,6 +182,7 @@ TEST_F(UT_WMInfo, test_isCursorHoveringDocks_001)
 
 TEST_F(UT_WMInfo, test_getHoveredByWindowList_001)
 {
+
 
 }
 

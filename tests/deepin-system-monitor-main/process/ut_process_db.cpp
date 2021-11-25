@@ -223,6 +223,6 @@ TEST_F(UT_ProcessDB, test_onProcessPrioritysetChanged_001)
 
 TEST_F(UT_ProcessDB, test_sendSignalToProcess_001)
 {
-    m_tester->sendSignalToProcess(50000,SIGCONT);
+    m_tester->sendSignalToProcess(100000,SIGCONT);
 }
 

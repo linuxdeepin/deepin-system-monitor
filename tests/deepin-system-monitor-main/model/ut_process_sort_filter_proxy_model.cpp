@@ -83,6 +83,10 @@ int stub_proclessThan_sortColumn13(){
     return ProcessTableModel::kProcessPriorityColumn;
 }
 
+int stub_proclessThan_sortColumn14(){
+    return 1000;
+}
+
 /***************************************STUB end**********************************************/
 class UT_ProcessSortFilterProxyModel: public ::testing::Test
 {
@@ -118,6 +122,11 @@ TEST_F(UT_ProcessSortFilterProxyModel, test_setSortFilterString_001)
 }
 
 TEST_F(UT_ProcessSortFilterProxyModel, test_setFilterType_001)
+{
+
+}
+
+TEST_F(UT_ProcessSortFilterProxyModel, test_filterAcceptsRow_001)
 {
     m_tester->setFilterType(0);
 }
@@ -282,6 +291,19 @@ TEST_F(UT_ProcessSortFilterProxyModel, test_lessThan_013)
 {
     Stub b;
     b.set(ADDR(QSortFilterProxyModel,sortColumn),stub_proclessThan_sortColumn13);
+    QModelIndex *lindex = new QModelIndex;
+    QModelIndex *rindex = new QModelIndex;
+
+    m_tester->lessThan(*lindex,*rindex);
+
+    delete rindex;
+    delete lindex;
+}
+
+TEST_F(UT_ProcessSortFilterProxyModel, test_lessThan_014)
+{
+    Stub b;
+    b.set(ADDR(QSortFilterProxyModel,sortColumn),stub_proclessThan_sortColumn14);
     QModelIndex *lindex = new QModelIndex;
     QModelIndex *rindex = new QModelIndex;
 

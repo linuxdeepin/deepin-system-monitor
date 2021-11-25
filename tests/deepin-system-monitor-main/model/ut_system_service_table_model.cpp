@@ -111,6 +111,30 @@ TEST_F(UT_SystemServiceTableModel, initTest)
 
 }
 
+TEST_F(UT_SystemServiceTableModel, test_getUnitFileName_001)
+{
+    QModelIndex *index = new QModelIndex;
+    m_tester->getUnitFileName(*index);
+    delete index;
+
+}
+
+TEST_F(UT_SystemServiceTableModel, test_getUnitActiveState_001)
+{
+    QModelIndex *index = new QModelIndex;
+    m_tester->getUnitActiveState(*index);
+    delete index;
+
+}
+
+TEST_F(UT_SystemServiceTableModel, test_getUnitFileState_001)
+{
+    QModelIndex *index = new QModelIndex;
+    m_tester->getUnitFileState(*index);
+    delete index;
+
+}
+
 TEST_F(UT_SystemServiceTableModel, test_updateServiceEntry_001)
 {
     SystemServiceEntry *entry = new SystemServiceEntry();

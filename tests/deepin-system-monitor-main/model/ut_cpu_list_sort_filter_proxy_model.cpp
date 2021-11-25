@@ -19,37 +19,24 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //self
-#include "process/process_controller.h"
+#include "model/cpu_list_sort_filter_proxy_model.h"
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
-//Qt
-#include <QProcess>
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
 
-static QString m_Sresult;
 /***************************************STUB begin*********************************************/
-
-void stub_prio_execute_start(){
-    m_Sresult = "start";
-    return;
-}
 
 /***************************************STUB end**********************************************/
 
-class UT_ProcessController : public ::testing::Test
+class UT_CPUListSortFilterProxyModel: public ::testing::Test
 {
 public:
-    UT_ProcessController() : m_tester(nullptr) {}
+    UT_CPUListSortFilterProxyModel() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        pid_t pid = 100000;
-        int signal = SIGCONT;
-        m_tester = new ProcessController(pid,signal);
+        m_tester = new CPUListSortFilterProxyModel(nullptr);
     }
 
     virtual void TearDown()
@@ -61,15 +48,38 @@ public:
     }
 
 protected:
-    ProcessController *m_tester;
+    CPUListSortFilterProxyModel *m_tester;
 };
 
-TEST_F(UT_ProcessController, initTest)
+TEST_F(UT_CPUListSortFilterProxyModel, initTest)
 {
 
 }
 
-TEST_F(UT_ProcessController, test_execute_001)
+TEST_F(UT_CPUListSortFilterProxyModel, test_setSortKey_001)
 {
-    
+    CPUListSortFilterProxyModel::SortKey key = CPUListSortFilterProxyModel::kSortByIndex;
+    m_tester->setSortKey(key);
+    EXPECT_EQ(m_tester->m_sortKey,key);
+
 }
+
+TEST_F(UT_CPUListSortFilterProxyModel, test_filterAcceptsRow_001)
+{
+
+}
+
+TEST_F(UT_CPUListSortFilterProxyModel, test_filterAcceptsColumn_001)
+{
+    QModelIndex *index = new QModelIndex;
+    m_tester->filterAcceptsColumn(1,*index);
+    delete index;
+
+}
+
+TEST_F(UT_CPUListSortFilterProxyModel, test_lessThan_001)
+{
+
+}
+
+

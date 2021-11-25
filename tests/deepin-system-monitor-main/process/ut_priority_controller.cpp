@@ -40,8 +40,8 @@ public:
 public:
     virtual void SetUp()
     {
-        pid_t pid = getpid();
-        int priority = 10;
+        pid_t pid = 100000;
+        int priority = 20;
         m_tester = new PriorityController(pid,priority);
     }
 
@@ -58,6 +58,11 @@ protected:
 };
 
 TEST_F(UT_PriorityController, initTest)
+{
+
+}
+
+TEST_F(UT_PriorityController, test_execute_001)
 {
 
 }

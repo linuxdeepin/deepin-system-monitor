@@ -49,6 +49,17 @@ int stub_net_data_column3()
     m_Sresult = "index column kOtherAddr";
     return NetifAddrModel::kOtherAddr;
 }
+
+int stub_net_data_column4()
+{
+
+    return 1000;
+}
+
+int stub_net_data_row(){
+
+    return 1000;
+}
 /***************************************STUB end**********************************************/
 
 class UT_NetifAddrModel: public ::testing::Test
@@ -99,7 +110,12 @@ TEST_F(UT_NetifAddrModel, test_data_001)
 TEST_F(UT_NetifAddrModel, test_data_002)
 {
     Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_net_data_column1);
+    b1.set(ADDR(QModelIndex,column),stub_net_data_column1);
+    Stub b2;
+    b1.set(ADDR(QModelIndex,isValid),stub_net_data_isValid);
+    Stub b3;
+    b1.set(ADDR(QModelIndex,row),stub_net_data_row);
+
     QModelIndex *index = new QModelIndex();
     m_tester->data(*index,Qt::DisplayRole);
     delete index;
@@ -108,7 +124,11 @@ TEST_F(UT_NetifAddrModel, test_data_002)
 TEST_F(UT_NetifAddrModel, test_data_003)
 {
     Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_net_data_column2);
+    b1.set(ADDR(QModelIndex,column),stub_net_data_column2);
+    Stub b2;
+    b1.set(ADDR(QModelIndex,isValid),stub_net_data_isValid);
+    Stub b3;
+    b1.set(ADDR(QModelIndex,row),stub_net_data_row);
     QModelIndex *index = new QModelIndex();
     m_tester->data(*index,Qt::DisplayRole);
     delete index;
@@ -117,7 +137,24 @@ TEST_F(UT_NetifAddrModel, test_data_003)
 TEST_F(UT_NetifAddrModel, test_data_004)
 {
     Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_net_data_column3);
+    b1.set(ADDR(QModelIndex,column),stub_net_data_column3);
+    Stub b2;
+    b1.set(ADDR(QModelIndex,isValid),stub_net_data_isValid);
+    Stub b3;
+    b1.set(ADDR(QModelIndex,row),stub_net_data_row);
+    QModelIndex *index = new QModelIndex();
+    m_tester->data(*index,Qt::DisplayRole);
+    delete index;
+}
+
+TEST_F(UT_NetifAddrModel, test_data_005)
+{
+    Stub b1;
+    b1.set(ADDR(QModelIndex,column),stub_net_data_column4);
+    Stub b2;
+    b1.set(ADDR(QModelIndex,isValid),stub_net_data_isValid);
+    Stub b3;
+    b1.set(ADDR(QModelIndex,row),stub_net_data_row);
     QModelIndex *index = new QModelIndex();
     m_tester->data(*index,Qt::DisplayRole);
     delete index;

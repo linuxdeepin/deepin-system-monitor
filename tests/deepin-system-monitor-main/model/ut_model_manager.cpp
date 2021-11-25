@@ -19,37 +19,23 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //self
-#include "process/process_controller.h"
+#include "model/model_manager.h"
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
-//Qt
-#include <QProcess>
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
 
-static QString m_Sresult;
 /***************************************STUB begin*********************************************/
 
-void stub_prio_execute_start(){
-    m_Sresult = "start";
-    return;
-}
-
 /***************************************STUB end**********************************************/
-
-class UT_ProcessController : public ::testing::Test
+class UT_ModelManager: public ::testing::Test
 {
 public:
-    UT_ProcessController() : m_tester(nullptr) {}
+    UT_ModelManager() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        pid_t pid = 100000;
-        int signal = SIGCONT;
-        m_tester = new ProcessController(pid,signal);
+        m_tester = new ModelManager(nullptr);
     }
 
     virtual void TearDown()
@@ -61,15 +47,17 @@ public:
     }
 
 protected:
-    ProcessController *m_tester;
+    ModelManager *m_tester;
 };
 
-TEST_F(UT_ProcessController, initTest)
+TEST_F(UT_ModelManager, initTest)
 {
 
 }
 
-TEST_F(UT_ProcessController, test_execute_001)
+
+TEST_F(UT_ModelManager, test_instance_001)
 {
-    
+    m_tester->instance();
+
 }

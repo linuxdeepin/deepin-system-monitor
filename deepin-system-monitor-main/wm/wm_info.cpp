@@ -153,59 +153,63 @@ WMInfo::~WMInfo()
 
 std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 {
+    qInfo()<<"111111111111";
     std::list<WMWindowArea> walist;
 
     std::function<void(const struct wm_window_ext_t *)> scan_tree;
     scan_tree = [&](const struct wm_window_ext_t *parent) {
+        qInfo()<<"333333333333333";
         for (auto &childWindowId : parent->children) {
             auto &child = m_tree->cache[childWindowId];
-
+            qInfo()<<"444444444444444";
             // check child first (top => bottom)
             if (child->children.length() > 0)
                 scan_tree(child.get());
-
+            qInfo()<<"5555555555555555";
             // map state
             if (child->map_state != kViewableState)
                 continue;
-
+            qInfo()<<"6666666666666666";
             // window class
             if (child->wclass != kInputOutputClass)
                 continue;
-
+            qInfo()<<"777777777777777777";
             if (child->pid == -1)
                 continue;
-
+            qInfo()<<"8888888888888888888";
             // window type
             if (child->types.startsWith(kDockWindowType)
                     || child->types.startsWith(kDesktopWindowType))
                 continue;
-
+            qInfo()<<"777777777777777777777";
             // window state
             if (child->states.contains(kHiddenState))
                 continue;
-
+            qInfo()<<"88888888888888888888888";
             WMWindowArea warea(new struct wm_window_area_t());
-
+            qInfo()<<"9999999999999999999";
             // rect & extents
             QRect rect{child->rect};
             rect = rect.marginsAdded({int(child->extents.left),
                                       int(child->extents.top),
                                       int(child->extents.right),
                                       int(child->extents.bottom)});
+            qInfo()<<"1010101010101010";
             if (!rect.contains(pos))
                 continue;
-
+            qInfo()<<"12121212121212121212";
             // window adjusted rect (including bounding frame)
             warea->rect = rect;
             // pid
             warea->pid = child->pid;
             // window Id
             warea->wid = child->windowId;
-
+            qInfo()<<"13131313131313131313113";
             walist.push_back(std::move(warea));
+            qInfo()<<"141414141414141414141441141";
         }
     };
-
+     qInfo()<<"22222222222";
     scan_tree(m_tree->root);
 
     return walist;
