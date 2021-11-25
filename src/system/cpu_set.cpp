@@ -580,16 +580,23 @@ void CPUSet::read_overall_info()
         mIsEmptyModelName = true;
         infos.clear();
         // 根据lscpu源码实现获取CPU信息
-            process.start("lscpu");
-            process.waitForFinished(3000);
-            QString lscpu = process.readAllStandardOutput();
-            QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-            d->m_info.clear();
-            for (QString lscpuLine : lscpuList) {
-                QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-                if (keyValue.count() > 1)
-                    d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+        process.start("lscpu");
+        process.waitForFinished(3000);
+        QString lscpu = process.readAllStandardOutput();
+
+        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+        d->m_info.clear();
+        for (QString lscpuLine : lscpuList) {
+            QStringList keyValue {};
+            if (lscpuLine.contains("：")){
+                keyValue = lscpuLine.split("：", QString::SkipEmptyParts);
+            } else if (lscpuLine.contains(":")) {
+                keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
             }
+
+            if (keyValue.count() > 1)
+                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+        }
     }
     else {
         mIsEmptyModelName = false;
