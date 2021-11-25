@@ -297,10 +297,7 @@ CPUSet::~CPUSet()
 QString CPUSet::modelName() const
 {
     if (mIsEmptyModelName == true)
-    {
-        qInfo()<<"型号名称: "<<d->m_info.value(QStringLiteral("型号名称"));
         return d->m_info.value(QStringLiteral("型号名称"));
-    }
     else
         return d->m_info.value("Model name");
 }
@@ -308,10 +305,7 @@ QString CPUSet::modelName() const
 QString CPUSet::vendor() const
 {
     if (mIsEmptyModelName == true)
-    {
-        qInfo()<<"厂商 ID: "<<d->m_info.value(QStringLiteral("厂商 ID"));
         return d->m_info.value(QStringLiteral("厂商 ID"));
-    }
     else
         return d->m_info.value("Vendor ID");
 }
@@ -341,10 +335,7 @@ QString CPUSet::curFreq() const
 QString CPUSet::minFreq() const
 {
     if (mIsEmptyModelName == true)
-    {
-        qInfo()<<"CPU 最小 MHz:"<<common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
         return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
-    }
     else
         return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
 }
@@ -360,10 +351,7 @@ QString CPUSet::maxFreq() const
 QString CPUSet::l1dCache() const
 {
     if (mIsEmptyModelName == true)
-    {
-        qInfo()<<"L1d 缓存:"<<d->m_info.value(QStringLiteral("L1d 缓存"));
         return d->m_info.value(QStringLiteral("L1d 缓存"));
-    }
     else
         return d->m_info.value("L1d cache");
 }
