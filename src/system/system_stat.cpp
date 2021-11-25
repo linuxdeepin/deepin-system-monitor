@@ -30,6 +30,7 @@
 #include <QMap>
 #include <QScopedArrayPointer>
 #include <QDebug>
+#include <QProcess>
 
 #include "system_stat.h"
 #include "common/hash.h"
@@ -196,6 +197,27 @@ bool SystemStat::readMemStats(MemStat &memStat)
     }
     memset(memStat.data(), 0, sizeof(struct mem_stat));
 
+    QProcess process;
+    process.start("swapon -s");
+    process.waitForFinished(100);
+    QString swapInfo = process.readAllStandardOutput();
+    QStringList swapInfoList = swapInfo.split("\n", QString::SkipEmptyParts);
+    bool isCmdAvailable = false;
+    if (swapInfoList.size() == 2) {
+        QStringList list = swapInfoList[1].split("\t", QString::SkipEmptyParts);
+        if (list.size() == 5) {
+            QString swapTotal = list[2];
+            QString swapUsed = list[3];
+            memStat->swap_total_kb = swapTotal.toULongLong();
+            memStat->swap_free_kb = memStat->swap_total_kb - swapUsed.toULongLong();
+            isCmdAvailable = true;
+        } else {
+            isCmdAvailable = false;
+        }
+    } else {
+        isCmdAvailable = false;
+    }
+
     while (fgets(line.data(), bsiz, fp)) {
         if (!strncmp(line.data(), "MemTotal:", 9)) {
             rc = sscanf(line.data() + 9, "%llu", &memStat->mem_total_kb);
@@ -222,9 +244,13 @@ bool SystemStat::readMemStats(MemStat &memStat)
             rc = sscanf(line.data() + 9, "%llu", &memStat->inactive_kb);
             b = (rc == 1);
         } else if (!strncmp(line.data(), "SwapTotal:", 10)) {
+            if (isCmdAvailable)
+                continue;
             rc = sscanf(line.data() + 10, "%llu", &memStat->swap_total_kb);
             b = (rc == 1);
         } else if (!strncmp(line.data(), "SwapFree:", 9)) {
+            if (isCmdAvailable)
+                continue;
             rc = sscanf(line.data() + 9, "%llu", &memStat->swap_free_kb);
             b = (rc == 1);
         } else if (!strncmp(line.data(), "Dirty:", 6)) {
