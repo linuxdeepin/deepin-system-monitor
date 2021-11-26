@@ -34,7 +34,16 @@
 
 
 /***************************************STUB begin*********************************************/
+bool stub_BaseHeaderView_hasFocus()
+{
+    return true;
+}
 
+QWidget* stub_BaseHeaderView_viewport()
+{
+    static QWidget widgetViewport;
+    return &widgetViewport;
+}
 /***************************************STUB end**********************************************/
 
 
@@ -76,6 +85,15 @@ TEST_F(UT_BaseHeaderView, test_paintEvent_01)
 {
     EXPECT_TRUE(!m_tester->grab().isNull());
 }
+
+//TEST_F(UT_BaseHeaderView, test_paintEvent_02)
+//{
+//    m_tester->m_focusReason = Qt::TabFocusReason;
+//    Stub stub;
+//    stub.set(ADDR(QWidget, hasFocus), stub_BaseHeaderView_hasFocus);
+//    stub.set(ADDR(QAbstractScrollArea, viewport), stub_BaseHeaderView_viewport);
+//    EXPECT_TRUE(!m_tester->grab().isNull());
+//}
 
 TEST_F(UT_BaseHeaderView, test_eventFilter_01)
 {

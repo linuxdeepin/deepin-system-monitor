@@ -161,7 +161,13 @@ TEST_F(UT_SystemProtectionSetting, test_onUpdateNewBackend_01)
     m_tester->onUpdateNewBackend();
 }
 
+TEST_F(UT_SystemProtectionSetting, test_lineEditChanged_01)
+{
+    static DLineEdit lineEdit;
+    static DSettingsOption option;
 
+    m_tester->lineEditChanged(false, &lineEdit, &option, 100, 30);
+}
 
 
 

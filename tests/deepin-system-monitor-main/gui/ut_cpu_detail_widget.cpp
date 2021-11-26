@@ -170,6 +170,19 @@ TEST_F(UT_CPUDetailGrapTableItem, test_updateStat_03)
 
 TEST_F(UT_CPUDetailGrapTableItem, test_paintEvent_01)
 {
+    m_tester->m_mode = 1;
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
+
+TEST_F(UT_CPUDetailGrapTableItem, test_paintEvent_02)
+{
+    m_tester->m_mode = 2;
+    EXPECT_FALSE(m_tester->grab().isNull());
+}
+
+TEST_F(UT_CPUDetailGrapTableItem, test_paintEvent_03)
+{
+    m_tester->m_mode = 3;
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 
@@ -180,8 +193,25 @@ TEST_F(UT_CPUDetailGrapTableItem, test_drawNormalMode_01)
     m_tester->drawNormalMode(painter);
 }
 
+TEST_F(UT_CPUDetailGrapTableItem, test_drawNormalMode_02)
+{
+    m_tester->m_isMutliCoreMode = true;
+
+    m_tester->m_cpuPercents.append(0.1);
+    m_tester->m_cpuPercents.append(0.2);
+    m_tester->m_cpuPercents.append(0.3);
+
+    QPixmap pixmap(100, 100);
+    QPainter painter(&pixmap);
+    m_tester->drawNormalMode(painter);
+}
+
 TEST_F(UT_CPUDetailGrapTableItem, test_drawSimpleMode_01)
 {
+    m_tester->m_cpuPercents.append(0.1);
+    m_tester->m_cpuPercents.append(0.2);
+    m_tester->m_cpuPercents.append(0.3);
+
     QPixmap pixmap(100, 100);
     QPainter painter(&pixmap);
     m_tester->drawSimpleMode(painter);
@@ -196,6 +226,10 @@ TEST_F(UT_CPUDetailGrapTableItem, test_drawTextMode_01)
 
 TEST_F(UT_CPUDetailGrapTableItem, test_drawSingleCoreMode_01)
 {
+    m_tester->m_cpuPercents.append(0.1);
+    m_tester->m_cpuPercents.append(0.2);
+    m_tester->m_cpuPercents.append(0.3);
+
     QPixmap pixmap(100, 100);
     QPainter painter(&pixmap);
     m_tester->drawSingleCoreMode(painter);

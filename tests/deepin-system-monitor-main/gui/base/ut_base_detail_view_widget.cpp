@@ -133,6 +133,7 @@ TEST_F(UT_BaseDetailViewWidget, test_resizeEvent_01)
 
 TEST_F(UT_BaseDetailViewWidget, test_paintEvent_01)
 {
+    m_tester->m_detailText = QString("1111");
     EXPECT_TRUE(!m_tester->grab().isNull());
 }
 

@@ -49,6 +49,17 @@ DStyle* stub_drawRow_style()
     static DStyle style;
     return  &style;
 }
+
+QItemSelectionModel* stub_drawRow_selectionModel()
+{
+    static QItemSelectionModel model;
+    return &model;
+}
+
+bool stub_drawRow_isSelected_true()
+{
+    return true;
+}
 /***************************************STUB end**********************************************/
 
 
@@ -89,7 +100,10 @@ TEST_F(UT_BaseTableView, test_setModel_01)
 
 TEST_F(UT_BaseTableView, test_paintEvent_01)
 {
-    EXPECT_TRUE(!m_tester->grab().isNull());
+//    static QPaintEvent event(QRect(0, 0, 100, 100));
+//    m_tester->paintEvent(&event);
+
+    EXPECT_FALSE(m_tester->grab().isNull());
 }
 
 TEST_F(UT_BaseTableView, test_drawRow_01)
@@ -107,6 +121,27 @@ TEST_F(UT_BaseTableView, test_drawRow_01)
     DApplication::style();
     Stub stub;
     stub.set(ADDR(DApplication, style), stub_drawRow_style);
+    m_tester->drawRow(&painter, view, index);
+}
+
+TEST_F(UT_BaseTableView, test_drawRow_02)
+{
+    static QPixmap pix(100, 100);
+    static QPainter painter(&pix);
+    static QStyleOptionViewItem view;
+    view.state = DStyle::State_Enabled;
+    static QWidget widget;
+    view.widget = &widget;
+    static QModelIndex index;
+    AddrAny any;
+    std::map<std::string,void*> result;
+    any.get_local_func_addr_symtab("^style()$", result);
+
+    DApplication::style();
+    Stub stub;
+    stub.set(ADDR(DApplication, style), stub_drawRow_style);
+    stub.set(ADDR(QAbstractItemView, selectionModel), stub_drawRow_selectionModel);
+    stub.set(ADDR(QItemSelectionModel, isSelected), stub_drawRow_isSelected_true);
     m_tester->drawRow(&painter, view, index);
 }
 

@@ -25,6 +25,7 @@
 #include "system/netif.h"
 #include "system/netif_info_db.h"
 #include "netif_item_view_widget.h"
+#include "system/net_info.h"
 
 //gtest
 #include "stub.h"
@@ -33,9 +34,13 @@
 
 //Qt
 #include <QSignalSpy>
+#include <QResizeEvent>
 
 /***************************************STUB begin*********************************************/
-
+void stub_onModelUpdate_updateData()
+{
+    return;
+}
 const QMap<QByteArray, NetifInfoPtr> stub_updateWidgetGeometry_infoDB_1()
 {
     QMap<QByteArray, NetifInfoPtr> map;
@@ -72,6 +77,26 @@ const QMap<QByteArray, NetifInfoPtr> stub_updateWidgetGeometry_infoDB_4()
     map.insert("2", ptr);
     map.insert("3", ptr);
     map.insert("4", ptr);
+    return map;
+}
+
+QMap<QByteArray, NetifInfoPtr> stub_onModelUpdate_infoDB()
+{
+    QMap<QByteArray, NetifInfoPtr> map;
+
+    std::shared_ptr<core::system::NetifInfo> ptr(new core::system::NetifInfo, [](core::system::NetifInfo *p){delete p;});
+    map.insert("1", ptr);
+    return map;
+}
+
+QMap<QByteArray, NetifInfoPtr> stub_onModelUpdate_infoDB_plus()
+{
+    QMap<QByteArray, NetifInfoPtr> map;
+
+    std::shared_ptr<core::system::NetifInfo> ptr(new core::system::NetifInfo, [](core::system::NetifInfo *p){delete p;});
+    std::shared_ptr<core::system::NetifInfo> ptr2(new core::system::NetifInfo, [](core::system::NetifInfo *p){delete p;});
+    map.insert("1", ptr);
+    map.insert("2", ptr2);
     return map;
 }
 
@@ -125,6 +150,64 @@ TEST_F(UT_NetifStatViewWidget, test_updateWidgetGeometry_03)
     Stub stub;
     stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_updateWidgetGeometry_infoDB_3);
     m_tester->updateWidgetGeometry();
+}
+
+TEST_F(UT_NetifStatViewWidget, test_resizeEvent_01)
+{
+    static QResizeEvent event(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&event);
+}
+
+TEST_F(UT_NetifStatViewWidget, test_onSetItemActiveStatus_01)
+{
+    std::shared_ptr<NetifItemViewWidget> ptr(new NetifItemViewWidget, [](NetifItemViewWidget *p){delete p;});
+    m_tester->m_mapItemView.insert("1", ptr.get());
+    Stub stub;
+    stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_onModelUpdate_infoDB);
+    m_tester->onSetItemActiveStatus("1");
+}
+
+TEST_F(UT_NetifStatViewWidget, test_onSetItemActiveStatus_02)
+{
+    std::shared_ptr<NetifItemViewWidget> ptr(new NetifItemViewWidget, [](NetifItemViewWidget *p){delete p;});
+    m_tester->m_mapItemView.insert("1", ptr.get());
+    Stub stub;
+    stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_onModelUpdate_infoDB_plus);
+    m_tester->onSetItemActiveStatus("1");
+}
+
+
+TEST_F(UT_NetifStatViewWidget, test_fontChanged_01)
+{
+    static NetifItemViewWidget view1;
+    static NetifItemViewWidget view2;
+    static NetifItemViewWidget view3;
+    m_tester->m_mapItemView.insert("11", &view1);
+    m_tester->m_mapItemView.insert("22", &view2);
+    m_tester->m_mapItemView.insert("33", &view3);
+
+    QFont font;
+    m_tester->fontChanged(font);
+}
+
+TEST_F(UT_NetifStatViewWidget, test_onModelUpdate_01)
+{
+    std::shared_ptr<NetifItemViewWidget> ptr(new NetifItemViewWidget, [](NetifItemViewWidget *p){delete p;});
+    m_tester->m_mapItemView.insert("1", ptr.get());
+    Stub stub;
+    stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_onModelUpdate_infoDB);
+//    stub.set(ADDR(NetifItemViewWidget, updateData), stub_onModelUpdate_updateData);
+    m_tester->onModelUpdate();
+}
+
+TEST_F(UT_NetifStatViewWidget, test_onModelUpdate_02)
+{
+    std::shared_ptr<NetifItemViewWidget> ptr(new NetifItemViewWidget, [](NetifItemViewWidget *p){delete p;});
+    m_tester->m_mapItemView.insert("2", ptr.get());
+    Stub stub;
+    stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_onModelUpdate_infoDB);
+//    stub.set(ADDR(NetifItemViewWidget, updateData), stub_onModelUpdate_updateData);
+    m_tester->onModelUpdate();
 }
 
 TEST_F(UT_NetifStatViewWidget, test_showItemOnlyeOne_01)
