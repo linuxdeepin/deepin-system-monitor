@@ -39,17 +39,20 @@
 
 /***************************************STUB begin*********************************************/
 
+
 /***************************************STUB end**********************************************/
 
 class UT_ServiceManager : public ::testing::Test
 {
 public:
-    UT_ServiceManager() : m_tester(nullptr) {}
+    UT_ServiceManager() : m_tester(nullptr) , m_tester1(nullptr) {}
 
 public:
     virtual void SetUp()
     {
+
         m_tester = new ServiceManager();
+        m_tester1 = new CustomTimer(m_tester,nullptr);
     }
 
     virtual void TearDown()
@@ -58,15 +61,27 @@ public:
             delete m_tester;
             m_tester = nullptr;
         }
+        if (m_tester1) {
+            delete m_tester1;
+            m_tester = nullptr;
+        }
     }
 
 protected:
     ServiceManager *m_tester;
+    CustomTimer *m_tester1;
+
 };
 
 TEST_F(UT_ServiceManager, initTest)
 {
 
+}
+
+TEST_F(UT_ServiceManager, test_Customer_01)
+{
+    QString path;
+    m_tester1->start(path);
 }
 
 TEST_F(UT_ServiceManager, test_updateServiceList_01)
