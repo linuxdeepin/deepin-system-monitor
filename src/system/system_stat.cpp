@@ -203,19 +203,21 @@ bool SystemStat::readMemStats(MemStat &memStat)
     QString swapInfo = process.readAllStandardOutput();
     QStringList swapInfoList = swapInfo.split("\n", QString::SkipEmptyParts);
     bool isCmdAvailable = false;
-    if (swapInfoList.size() == 2) {
-        QStringList list = swapInfoList[1].split("\t", QString::SkipEmptyParts);
-        if (list.size() == 5) {
-            QString swapTotal = list[2];
-            QString swapUsed = list[3];
-            memStat->swap_total_kb = swapTotal.toULongLong();
-            memStat->swap_free_kb = memStat->swap_total_kb - swapUsed.toULongLong();
-            isCmdAvailable = true;
-        } else {
-            isCmdAvailable = false;
+    if (swapInfoList.size() >= 2) {
+        QStringList list {};
+        foreach (QString line, swapInfoList) {
+            if (line.contains("swap", Qt::CaseInsensitive)) {
+                list = line.split("\t", QString::SkipEmptyParts);
+                if (list.size() >= 4) {
+                    QString swapTotal = list[2];
+                    QString swapUsed = list[3];
+                    memStat->swap_total_kb = swapTotal.toULongLong();
+                    memStat->swap_free_kb = memStat->swap_total_kb - swapUsed.toULongLong();
+                    isCmdAvailable = true;
+                }
+                break;
+            }
         }
-    } else {
-        isCmdAvailable = false;
     }
 
     while (fgets(line.data(), bsiz, fp)) {
@@ -472,14 +474,14 @@ bool SystemStat::readSockStat(SockStatMap &statMap)
             if (family == AF_INET6) {
                 sscanf(s_addr, "%08x%08x%08x%08x",
                        &stat->s_addr.in6.s6_addr32[0],
-                       &stat->s_addr.in6.s6_addr32[1],
-                       &stat->s_addr.in6.s6_addr32[2],
-                       &stat->s_addr.in6.s6_addr32[3]);
+                        &stat->s_addr.in6.s6_addr32[1],
+                        &stat->s_addr.in6.s6_addr32[2],
+                        &stat->s_addr.in6.s6_addr32[3]);
                 sscanf(d_addr, "%08x%08x%08x%08x",
                        &stat->d_addr.in6.s6_addr32[0],
-                       &stat->d_addr.in6.s6_addr32[1],
-                       &stat->d_addr.in6.s6_addr32[2],
-                       &stat->d_addr.in6.s6_addr32[3]);
+                        &stat->d_addr.in6.s6_addr32[1],
+                        &stat->d_addr.in6.s6_addr32[2],
+                        &stat->d_addr.in6.s6_addr32[3]);
                 // convert ipv4 mapped ipv6 address to ipv4
                 if (stat->s_addr.in6.s6_addr32[0] == 0x0 &&
                         stat->s_addr.in6.s6_addr32[1] == 0x0 &&
