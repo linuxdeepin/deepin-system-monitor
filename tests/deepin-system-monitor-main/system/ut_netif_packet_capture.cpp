@@ -53,19 +53,6 @@ void stub_whetherDevChanged()
 
 int stub_ioctl (int num, unsigned long int __request, ...)
 {
-    va_list valist;
-    double sum = 0.0;
-    int i;
-
-    va_start(valist, num);
-
-    for (i = 0; i < num; i++)
-    {
-       sum += va_arg(valist, int);
-    }
-    va_end(valist);
-//    return  sum/num;
-
     return -1;
 }
 
@@ -305,27 +292,46 @@ TEST_F(UT_NetifPacketCapture, test_startNetifMonitorJob_03)
 
 TEST_F(UT_NetifPacketCapture, test_dispatchPackets_01)
 {
+    m_tester->go = true;
     m_tester->m_devName = nullptr;
     m_tester->dispatchPackets();
 }
 
 TEST_F(UT_NetifPacketCapture, test_dispatchPackets_02)
 {
-    m_tester->m_devName = "abc";
+    m_tester->go = true;
+    m_tester->m_devName = nullptr;
     m_tester->dispatchPackets();
 }
 
 TEST_F(UT_NetifPacketCapture, test_dispatchPackets_03)
 {
+    m_tester->go = true;
+    m_tester->m_devName = nullptr;
+    Stub stub;
+    stub.set(ADDR(PacketPayloadQueue, size), stub_localPendingPackets_64);
+    m_tester->dispatchPackets();
+}
+TEST_F(UT_NetifPacketCapture, test_dispatchPackets_04)
+{
+    m_tester->go = true;
     Stub stub;
     stub.set(ADDR(PacketPayloadQueue, size), stub_localPendingPackets_64);
     m_tester->dispatchPackets();
 }
 
-TEST_F(UT_NetifPacketCapture, test_dispatchPackets_04)
+TEST_F(UT_NetifPacketCapture, test_dispatchPackets_05)
 {
+    m_tester->go = true;
     Stub stub;
     stub.set(ADDR(PacketPayloadQueue, size), stub_localPendingPackets_255);
+    m_tester->dispatchPackets();
+}
+
+
+TEST_F(UT_NetifPacketCapture, test_dispatchPackets_06)
+{
+    m_tester->go = false;
     m_tester->dispatchPackets();
 }
 

@@ -67,3 +67,44 @@ TEST(UT_Application_event,UT_Application_event_003)
     EXPECT_TRUE(kNetifStartEventType);
     pApplication->deleteLater();
 }
+
+TEST(UT_Application_event,UT_Application_event_004)
+{
+    QEvent::Type kOtherEventType = static_cast<QEvent::Type>(QEvent::User + 1);
+
+    int argc = 1;
+    char *argv[2] = {"one", "two"};
+    Application *pApplication = new Application(argc,argv);
+//    pApplication->raiseWindow();
+    EXPECT_TRUE(kOtherEventType);
+    pApplication->deleteLater();
+}
+
+
+class UT_MonitorStartEvent: public ::testing::Test
+{
+public:
+    UT_MonitorStartEvent() : m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new MonitorStartEvent();
+    }
+
+    virtual void TearDown()
+    {
+        if (m_tester) {
+            delete m_tester;
+            m_tester = nullptr;
+        }
+    }
+
+protected:
+    MonitorStartEvent *m_tester;
+};
+
+TEST_F(UT_MonitorStartEvent, initTest)
+{
+}
+

@@ -26,7 +26,6 @@
 #include "stub.h"
 #include <gtest/gtest.h>
 
-
 class UT_NLHWAddr: public ::testing::Test
 {
 public:

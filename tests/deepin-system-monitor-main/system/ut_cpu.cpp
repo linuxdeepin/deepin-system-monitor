@@ -64,7 +64,13 @@ TEST_F(UT_CPU, test_copy_01)
 
 TEST_F(UT_CPU, test_copy_02)
 {
-    CPUInfo *copy = m_tester;
+    CPUInfo copy1;
+    CPUInfo copy2 = copy1;
+}
+
+TEST_F(UT_CPU, test_copy_03)
+{
+    CPUInfo copy(1);
 }
 
 TEST_F(UT_CPU, test_logicalIndex)

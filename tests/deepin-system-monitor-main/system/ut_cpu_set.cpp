@@ -76,6 +76,12 @@ TEST_F(UT_CPUSet, test_copy)
     CPUSet copy(*m_tester);
 }
 
+TEST_F(UT_CPUSet, test_copy_02)
+{
+    CPUSet copy1;
+    CPUSet copy2 = copy1;
+}
+
 TEST_F(UT_CPUSet, test_modelName)
 {
     m_tester->update();

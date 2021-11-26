@@ -197,3 +197,73 @@ TEST_F(UT_NetifInfo, test_noiseLevel_02)
     m_tester->d->iw_info = nullptr;
     m_tester->noiseLevel();
 }
+
+TEST_F(UT_NetifInfo, test_speed)
+{
+    m_tester->speed();
+}
+
+TEST_F(UT_NetifInfo, test_connectionType)
+{
+    m_tester->connectionType();
+}
+
+TEST_F(UT_NetifInfo, test_linkAddress)
+{
+    m_tester->linkAddress();
+}
+
+TEST_F(UT_NetifInfo, test_rxPackets)
+{
+    m_tester->rxPackets();
+}
+
+TEST_F(UT_NetifInfo, test_rxErrors)
+{
+    m_tester->rxErrors();
+}
+
+TEST_F(UT_NetifInfo, test_rxFIFO)
+{
+    m_tester->rxFIFO();
+}
+
+TEST_F(UT_NetifInfo, test_rxFrame)
+{
+    m_tester->rxFrame();
+}
+
+TEST_F(UT_NetifInfo, test_txPackets)
+{
+    m_tester->txPackets();
+}
+
+TEST_F(UT_NetifInfo, test_txErrors)
+{
+    m_tester->txErrors();
+}
+
+TEST_F(UT_NetifInfo, test_txDropped)
+{
+    m_tester->txDropped();
+}
+
+TEST_F(UT_NetifInfo, test_txFIFO)
+{
+    m_tester->txFIFO();
+}
+
+TEST_F(UT_NetifInfo, test_txCarrier)
+{
+    m_tester->txCarrier();
+}
+
+TEST_F(UT_NetifInfo, test_addr4InfoList)
+{
+    m_tester->addr4InfoList();
+}
+
+TEST_F(UT_NetifInfo, test_addr6InfoList)
+{
+    m_tester->addr6InfoList();
+}

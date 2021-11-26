@@ -20,12 +20,26 @@
 
 //self
 #include "system/wireless.h"
+#include<sys/ioctl.h>
 
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
 
 using namespace core::system;
+
+/***************************************STUB begin*********************************************/
+
+int stub_socket_wireless (int __domain, int __type, int __protocol)
+{
+    return -1;
+}
+int stub_ioctl_sock (int num, unsigned long int __request, ...)
+{
+    return -1;
+}
+
+/***************************************STUB end**********************************************/
 
 class UT_wireless: public ::testing::Test
 {
@@ -80,7 +94,21 @@ TEST_F(UT_wireless, test_is_wireless)
     EXPECT_EQ(m_tester->is_wireless(), true);
 }
 
-TEST_F(UT_wireless, test_read_wireless_info)
+TEST_F(UT_wireless, test_read_wireless_info_01)
 {
+    m_tester->read_wireless_info();
+}
+
+TEST_F(UT_wireless, test_read_wireless_info_02)
+{
+    Stub stub;
+    stub.set(socket, stub_socket_wireless);
+    m_tester->read_wireless_info();
+}
+
+TEST_F(UT_wireless, test_read_wireless_info_03)
+{
+    Stub stub;
+    stub.set(ioctl, stub_ioctl_sock);
     m_tester->read_wireless_info();
 }
