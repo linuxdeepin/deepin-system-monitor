@@ -620,7 +620,7 @@ void StatsCollector::updateStatus()
         } else if (m_filterType == SystemMonitor::OnlyMe && m_euid == uid) {
             need = true;
         } else if (m_filterType == SystemMonitor::OnlyGUI
-                   //                   && m_euid == uid
+                                      && m_euid == uid
                    && (m_trayPIDToWndMap.contains(pid)
                        || m_guiPIDList.contains(pid)
                        || filteredAppList.contains(pid))) {
@@ -676,8 +676,82 @@ void StatsCollector::updateStatus()
         Q_EMIT processListUpdated(filteredList);
     }
     if (m_procEntryMap.size() > 0) {
-        m_napps = m_guiPIDList.size() + filteredAppList.size() + m_trayPIDToWndMap.size();
+        // 判断当前用户是否为root用户，并判断当前的用户进程和其他用户进程
+        //Judge whether the current user is root
+        ProcessEntry entry = m_procEntryMap.value(static_cast<int>(qApp->applicationPid()));
+        bool isRootUser = false;
+        if (0 == entry.getUserName().compare("root", Qt::CaseInsensitive)) {
+            isRootUser = true;
+        } else {
+            isRootUser = false;
+        }
+
+        // root用户的托盘进程数量
+        int trayAppNum = 0;
+        // 非root用户的托盘进程数量
+        int otherTrayAppNum = 0;
+        QMap<pid_t, xcb_window_t>::const_iterator trayIter = m_trayPIDToWndMap.constBegin();
+        while (trayIter != m_trayPIDToWndMap.constEnd()) {
+            ProcessEntry entry = m_procEntryMap.value(trayIter.key());
+            // 获取root用户下托盘进程数量
+            if (entry.getUID() == 0)
+                trayAppNum++;
+            // 获取当前用户下托盘进程数量 通过进程的Uid和m_euid做比较
+            if (entry.getUID() == m_euid)
+                otherTrayAppNum++;
+            ++trayIter;
+        }
+
+        // root用户的gui进程数量
+        int guiAppNum = 0;
+        // 非root用户的gui进程数量
+        int otherGuiAppNum = 0;
+        QList<pid_t>::const_iterator guiIter = m_guiPIDList.constBegin();
+        while (guiIter != m_guiPIDList.constEnd()) {
+            ProcessEntry entry = m_procEntryMap.value(*guiIter);
+            // 获取root用户下gui进程数量
+            if (entry.getUID() == 0) {
+                guiAppNum++;
+            }
+            // 获取当前用户下gui进程数量 通过进程的Uid和m_euid做比较
+            if (entry.getUID() == m_euid)
+                otherGuiAppNum++;
+            ++guiIter;
+        }
+
+        // root用户的桌面进程数量
+        int desktopAppNum = 0;
+        // 非root用户的桌面进程数量
+        int otherDesktopAppNum = 0;
+        QList<pid_t>::const_iterator filteredAppIter = filteredAppList.constBegin();
+        while (filteredAppIter != filteredAppList.constEnd()) {
+            ProcessEntry entry = m_procEntryMap.value(*filteredAppIter);
+            // 获取root用户下桌面进程数量
+            if (entry.getUID() == 0) {
+                desktopAppNum++;
+            }
+            // 获取当前用户下桌面进程数量 通过进程的Uid和m_euid做比较
+            if (entry.getUID() == m_euid)
+                otherDesktopAppNum++;
+            ++filteredAppIter;
+        }
+
+        //if user is root,add all numbers of app, otherwise, minuse root user's apps
+        int sumApp;
+        if (isRootUser) {
+            // root用户下总的app数量
+            sumApp =  trayAppNum + guiAppNum + desktopAppNum;
+            } else {
+            // 当前用户下总的app数量
+            sumApp =  static_cast<int>(otherTrayAppNum + otherGuiAppNum + otherDesktopAppNum);
+        }
+
+
+//        m_napps = m_guiPIDList.size() + filteredAppList.size() + m_trayPIDToWndMap.size();
+        m_napps = sumApp;
         // emit process summary update signal
+//        Q_EMIT processSummaryUpdated(m_napps, m_nprocs - m_napps);
+        // m_napps为当前用户桌面加托盘进程数量的总和， m_nprocs - m_napps为总的app数量
         Q_EMIT processSummaryUpdated(m_napps, m_nprocs - m_napps);
     }
 }
