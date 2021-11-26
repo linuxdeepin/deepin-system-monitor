@@ -97,6 +97,10 @@ private:
 
 private:
     QSharedDataPointer<CPUSetPrivate> d;
+
+    //true:modelName为空; false:modelName非空
+    bool mIsEmptyModelName = false;
+
 };
 
 } // namespace system

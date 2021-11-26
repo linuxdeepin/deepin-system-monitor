@@ -296,12 +296,18 @@ CPUSet::~CPUSet()
 
 QString CPUSet::modelName() const
 {
-    return d->m_info.value("Model name");
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("型号名称"));
+    else
+        return d->m_info.value("Model name");
 }
 
 QString CPUSet::vendor() const
 {
-    return d->m_info.value("Vendor ID");
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("厂商 ID"));
+    else
+        return d->m_info.value("Vendor ID");
 }
 
 int CPUSet::cpuCount() const
@@ -328,32 +334,50 @@ QString CPUSet::curFreq() const
 
 QString CPUSet::minFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
+    if (mIsEmptyModelName == true)
+        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
+    else
+        return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
 }
 
 QString CPUSet::maxFreq() const
 {
-    return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
+    if (mIsEmptyModelName == true)
+        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble(), common::format::MHz);
+    else
+        return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
 }
 
 QString CPUSet::l1dCache() const
 {
-    return d->m_info.value("L1d cache");
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("L1d 缓存"));
+    else
+        return d->m_info.value("L1d cache");
 }
 
 QString CPUSet::l1iCache() const
 {
-    return d->m_info.value("L1i cache");
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("L1i 缓存"));
+    else
+        return d->m_info.value("L1i cache");
 }
 
 QString CPUSet::l2Cache() const
 {
-    return d->m_info.value("L2 cache");
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("L2 缓存"));
+    else
+        return d->m_info.value("L2 cache");
 }
 
 QString CPUSet::l3Cache() const
 {
-    return d->m_info.value("L3 cache");
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("L3 缓存"));
+    else
+        return d->m_info.value("L3 cache");
 }
 
 QString CPUSet::coreId(int index) const
@@ -513,7 +537,6 @@ void CPUSet::read_overall_info()
 {
     //proc/cpuinfo
     QList<CPUInfo> infos;
-
     QProcess process;
     process.start("cat /proc/cpuinfo");
     process.waitForFinished(3000);
@@ -538,25 +561,36 @@ void CPUSet::read_overall_info()
                 info.setCacheSize(text.split(":").value(1));
             }
         }
-
         infos.append(info);
     }
 
-    // 不再使用进程执行命令的方式获取CPU信息
-//    process.start("lscpu");
-//    process.waitForFinished(3000);
-//    QString lscpu = process.readAllStandardOutput();
-//    QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-//    d->m_info.clear();
-//    for (QString lscpuLine : lscpuList) {
-//        QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-//        if (keyValue.count() > 1)
-//            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
-//    }
-    // 根据lscpu源码实现获取CPU信息
-    read_lscpu();
+    if (!cpuinfo.contains("model name")) {
+        mIsEmptyModelName = true;
+        infos.clear();
+        // 根据lscpu源码实现获取CPU信息
+        process.start("lscpu");
+        process.waitForFinished(3000);
+        QString lscpu = process.readAllStandardOutput();
 
-    d->m_infos = infos;
+        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+        d->m_info.clear();
+        for (QString lscpuLine : lscpuList) {
+            QStringList keyValue {};
+            if (lscpuLine.contains("：")){
+                keyValue = lscpuLine.split("：", QString::SkipEmptyParts);
+            } else if (lscpuLine.contains(":")) {
+                keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+            }
+
+            if (keyValue.count() > 1)
+                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+        }
+    }
+    else {
+        mIsEmptyModelName = false;
+        read_lscpu();
+        d->m_infos = infos;
+    }
 }
 
 // 获取CPU信息 ut001987
@@ -654,7 +688,7 @@ void CPUSet::read_lscpu()
         else
             d->m_info.insert("Vendor ID", "-");
 
-        if(ct->bios_vendor) {//  BIOS厂商信息
+        if(ct && ct->bios_vendor) {//  BIOS厂商信息
             d->m_info.insert("BIOS Vendor ID",ct->bios_vendor);
         }
         if (ct->modelname) {// CPU型号名称
