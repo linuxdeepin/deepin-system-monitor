@@ -62,3 +62,8 @@ TEST_F(UT_SystemServiceEntry, test_operator_01)
 {
     EXPECT_EQ(m_tester->data,true);
 }
+
+TEST_F(UT_SystemServiceEntry, test_operator_02)
+{
+    SystemServiceEntry copy(*m_tester);
+}

@@ -109,3 +109,7 @@ TEST_F(UT_ErrorContext, test_operator_01)
     m_tester->operator==(other);
 }
 
+TEST_F(UT_ErrorContext, test_operator_02)
+{
+    ErrorContext copy(*m_tester);
+}

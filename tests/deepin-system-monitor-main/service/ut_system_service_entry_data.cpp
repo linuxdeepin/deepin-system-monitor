@@ -123,3 +123,8 @@ TEST_F(UT_SystemServiceEntryData, test_operator_13)
     const SystemServiceEntryData rhs;
     m_tester->operator=(rhs);
 }
+
+TEST_F(UT_SystemServiceEntryData, test_operator_14)
+{
+    SystemServiceEntryData copy(*m_tester);
+}
