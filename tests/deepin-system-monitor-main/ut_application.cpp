@@ -56,3 +56,14 @@ TEST(UT_Application_event,UT_Application_event_002)
     EXPECT_TRUE(kNetifStartEventType);
     pApplication->deleteLater();
 }
+
+
+TEST(UT_Application_event,UT_Application_event_003)
+{
+    int argc = 1;
+    char *argv[2] = {"one", "two"};
+    Application *pApplication = new Application(argc,argv);
+//    pApplication->raiseWindow();
+    EXPECT_TRUE(kNetifStartEventType);
+    pApplication->deleteLater();
+}

@@ -19,8 +19,7 @@
 */
 
 //self
-#include "system/udev_device.h"
-#include "system/udev.h"
+#include "system/private/sys_info_p.h"
 
 //gtest
 #include "stub.h"
@@ -28,17 +27,15 @@
 
 using namespace core::system;
 
-class UT_UDevDevice: public ::testing::Test
+class UT_SysInfoPrivate: public ::testing::Test
 {
 public:
-    UT_UDevDevice() : m_tester(nullptr) {}
+    UT_SysInfoPrivate() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        using HANDLE = struct udev_device *;
-        HANDLE udevice = nullptr;
-        m_tester = new UDevDevice(udevice);
+        m_tester = new SysInfoPrivate();
     }
 
     virtual void TearDown()
@@ -50,19 +47,15 @@ public:
     }
 
 protected:
-    UDevDevice *m_tester;
+    SysInfoPrivate *m_tester;
 };
 
-TEST_F(UT_UDevDevice, initTest)
+TEST_F(UT_SysInfoPrivate, initTest)
 {
-
 }
 
-TEST_F(UT_UDevDevice, test_UDevDevice)
+TEST_F(UT_SysInfoPrivate, test_cpoy)
 {
-    UDev *udev = new UDev;
-    char *path = nullptr;
-    UDevDevice *m_tester2 = new UDevDevice(udev, path);
-    delete udev;
-    delete m_tester2;
+    SysInfoPrivate copy(*m_tester);
 }
+

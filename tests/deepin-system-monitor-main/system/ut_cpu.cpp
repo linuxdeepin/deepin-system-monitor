@@ -57,6 +57,16 @@ TEST_F(UT_CPU, initTest)
 {
 }
 
+TEST_F(UT_CPU, test_copy_01)
+{
+    CPUInfo copy(*m_tester);
+}
+
+TEST_F(UT_CPU, test_copy_02)
+{
+    CPUInfo *copy = m_tester;
+}
+
 TEST_F(UT_CPU, test_logicalIndex)
 {
     QList<CPUInfo> infos;
@@ -93,6 +103,11 @@ TEST_F(UT_CPU, test_logicalIndex)
     }
 }
 
+TEST_F(UT_CPU, test_logicalName)
+{
+    m_tester->logicalName();
+}
+
 TEST_F(UT_CPU, test_coreID)
 {
     m_tester->setCoreId(10);
@@ -126,6 +141,26 @@ TEST_F(UT_CPU, test_cacheSize)
     m_tester->setCacheSize("10");
     qInfo()<<"cacheSize:"<<m_tester->cacheSize();
     EXPECT_EQ("10", m_tester->cacheSize());
+}
+
+TEST_F(UT_CPU, test_l1iCache)
+{
+    m_tester->l1iCache();
+}
+
+TEST_F(UT_CPU, test_l1dCache)
+{
+    m_tester->l1dCache();
+}
+
+TEST_F(UT_CPU, test_l3Cache)
+{
+    m_tester->l3Cache();
+}
+
+TEST_F(UT_CPU, test_l2Cache)
+{
+    m_tester->l2Cache();
 }
 
 TEST_F(UT_CPU, test_setIndex)

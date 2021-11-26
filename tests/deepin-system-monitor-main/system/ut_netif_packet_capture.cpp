@@ -31,6 +31,7 @@
 #include <sys/socket.h>
 #include "system/netif_packet_parser.h"
 #include <pcap/pcap.h>
+
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
@@ -222,6 +223,15 @@ TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_01)
 }
 
 TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_02)
+{
+    Stub stub;
+    stub.set(ADDR(NetifPacketCapture, whetherDevChanged), stub_whetherDevChanged);
+    stub.set(pcap_findalldevs, stub_pcap_findalldevs);
+    auto ok = m_tester->getCurrentDevName();
+    EXPECT_EQ(ok, false);
+}
+
+TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_03)
 {
     Stub stub;
     stub.set(ADDR(NetifPacketCapture, whetherDevChanged), stub_whetherDevChanged);

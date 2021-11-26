@@ -28,7 +28,21 @@
 
 //qt
 #include <QString>
+#include <QFile>
+#include <QMap>
+
 using namespace core::system;
+
+/***************************************STUB begin*********************************************/
+
+FILE *stub_fopen (const char *__restrict __filename,
+ const char *__restrict __modes)
+{
+    return nullptr;
+}
+
+/***************************************STUB end**********************************************/
+
 
 class UT_CPUSet : public ::testing::Test
 {
@@ -55,6 +69,11 @@ protected:
 
 TEST_F(UT_CPUSet, initTest)
 {
+}
+
+TEST_F(UT_CPUSet, test_copy)
+{
+    CPUSet copy(*m_tester);
 }
 
 TEST_F(UT_CPUSet, test_modelName)
@@ -206,6 +225,15 @@ TEST_F(UT_CPUSet, test_read_stats)
     EXPECT_NE(stat->idle, 0);
 }
 
+TEST_F(UT_CPUSet, test_read_stats_02)
+{
+    Stub stub;
+    stub.set(fopen, stub_fopen);
+    m_tester->read_stats();
+    core::system::CPUStat stat = m_tester->stat();
+    EXPECT_NE(stat->idle, -1);
+}
+
 TEST_F(UT_CPUSet, test_read_overall_info)
 {
     m_tester->read_overall_info();
@@ -214,11 +242,39 @@ TEST_F(UT_CPUSet, test_read_overall_info)
 }
 
 
-TEST_F(UT_CPUSet, test_read_lscpu)
+TEST_F(UT_CPUSet, test_read_lscpu_01)
 {
     m_tester->read_lscpu();
     QString retString = m_tester->vendor();
     EXPECT_NE(retString, "");
+}
+
+ bool stub_isEmpty()
+ {
+     return true;
+ }
+
+TEST_F(UT_CPUSet, test_read_lscpu_02)
+{
+    Stub stub;
+    stub.set(ADDR(QString, isEmpty), stub_isEmpty);
+    m_tester->read_lscpu();
+    QString retString = m_tester->vendor();
+    EXPECT_NE(retString, "");
+}
+
+bool stub_contains()
+{
+    return false;
+}
+
+TEST_F(UT_CPUSet, test_read_lscpu_03)
+{
+//   Stub stub;
+//   stub.set(ADDR(QMap, contains), stub_contains);
+//   m_tester->read_lscpu();
+//   QString retString = m_tester->vendor();
+//   EXPECT_NE(retString, "");
 }
 
 TEST_F(UT_CPUSet, test_getUsageTotalDelta)

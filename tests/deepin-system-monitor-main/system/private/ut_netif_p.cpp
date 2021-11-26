@@ -19,8 +19,7 @@
 */
 
 //self
-#include "system/udev_device.h"
-#include "system/udev.h"
+#include "system/private/netif_p.h"
 
 //gtest
 #include "stub.h"
@@ -28,17 +27,15 @@
 
 using namespace core::system;
 
-class UT_UDevDevice: public ::testing::Test
+class UT_NetifInfoPrivate: public ::testing::Test
 {
 public:
-    UT_UDevDevice() : m_tester(nullptr) {}
+    UT_NetifInfoPrivate() : m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        using HANDLE = struct udev_device *;
-        HANDLE udevice = nullptr;
-        m_tester = new UDevDevice(udevice);
+        m_tester = new NetifInfoPrivate();
     }
 
     virtual void TearDown()
@@ -50,19 +47,15 @@ public:
     }
 
 protected:
-    UDevDevice *m_tester;
+    NetifInfoPrivate *m_tester;
 };
 
-TEST_F(UT_UDevDevice, initTest)
+TEST_F(UT_NetifInfoPrivate, initTest)
 {
-
 }
 
-TEST_F(UT_UDevDevice, test_UDevDevice)
+TEST_F(UT_NetifInfoPrivate, test_cpoy)
 {
-    UDev *udev = new UDev;
-    char *path = nullptr;
-    UDevDevice *m_tester2 = new UDevDevice(udev, path);
-    delete udev;
-    delete m_tester2;
+    NetifInfoPrivate copy(*m_tester);
 }
+
