@@ -28,6 +28,7 @@
 #include "addr_pri.h"
 //Qt
 #include <QPoint>
+#include <QList>
 #include <QDebug>
 using namespace core::wm;
 
@@ -143,7 +144,26 @@ public:
         auto WMInfo_findDockWindows= get_private_fun::WMInfofindDockWindows();
         Stub b;
         b.set(WMInfo_findDockWindows,stub_WMInfo_findDockWindows);
+
         m_tester = new WMInfo();
+
+        WMTree tree(new struct wm_tree_t());
+        m_tester->m_tree = std::move(tree);
+
+
+        struct wm_window_ext_t *wmExt = new struct wm_window_ext_t();
+        wmExt->pid = 100000;
+        wmExt->rect = QRect(0,0,0,0);
+        wmExt->windowId = 1000;
+        wmExt->parent = 500;
+        wmExt->children << 2000;
+
+
+        m_rootWinExtInfo.reset(wmExt);
+        m_tester->m_tree->root = m_rootWinExtInfo.get();
+        m_tester->m_tree->cache[m_rootWinExtInfo->windowId] = std::move(m_rootWinExtInfo);
+
+
     }
 
     virtual void TearDown()
@@ -152,10 +172,20 @@ public:
             delete m_tester;
             m_tester=nullptr;
         }
+        if(m_rootWinExtInfo){
+            m_rootWinExtInfo.reset();
+            m_rootWinExtInfo.reset(nullptr);
+        }
+        if(m_childRootWinExtInfo){
+            m_childRootWinExtInfo.reset();
+            m_childRootWinExtInfo.reset(nullptr);
+        }
     }
 
 protected:
     WMInfo *m_tester;
+    WMWindowExt m_rootWinExtInfo;
+    WMWindowExt m_childRootWinExtInfo;
 };
 
 TEST_F(UT_WMInfo, initTest)
@@ -165,8 +195,91 @@ TEST_F(UT_WMInfo, initTest)
 
 TEST_F(UT_WMInfo, test_selectWindow_001)
 {
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
 
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->selectWindow(QPoint(0,0));
+
+    m_childRootWinExtInfo.reset();
 }
+
+TEST_F(UT_WMInfo, test_selectWindow_002)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = -1;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->selectWindow(QPoint(0,0));
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_selectWindow_003)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    wmExtchild->types << kDockWindowType;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->selectWindow(QPoint(0,0));
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_selectWindow_004)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    wmExtchild->states << kHiddenState;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->selectWindow(QPoint(0,0));
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_selectWindow_005)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->selectWindow(QPoint(0,0));
+
+    m_childRootWinExtInfo.reset();
+}
+
 
 TEST_F(UT_WMInfo, test_getRootWindow_001)
 {
@@ -182,19 +295,239 @@ TEST_F(UT_WMInfo, test_isCursorHoveringDocks_001)
 
 TEST_F(UT_WMInfo, test_getHoveredByWindowList_001)
 {
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
 
+    m_childRootWinExtInfo.reset(wmExtchild);
 
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(2000,rect);
+
+    m_childRootWinExtInfo.reset();
 }
 
-TEST_F(UT_WMInfo, test_buildWindowTreeSchema_001)
+TEST_F(UT_WMInfo, test_getHoveredByWindowList_002)
 {
-    m_tester->buildWindowTreeSchema();
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(1000,rect);
+
+    m_childRootWinExtInfo.reset();
 }
+
+TEST_F(UT_WMInfo, test_getHoveredByWindowList_003)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(1000,rect);
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_getHoveredByWindowList_004)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = -1;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(1000,rect);
+
+    m_childRootWinExtInfo.reset();
+}
+
+
+TEST_F(UT_WMInfo, test_getHoveredByWindowList_005)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    wmExtchild->types << kDesktopWindowType;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(1000,rect);
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_getHoveredByWindowList_006)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    wmExtchild->states << kHiddenState;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(1000,rect);
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_getHoveredByWindowList_007)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    QRect rect(0,0,0,0);
+    m_tester->getHoveredByWindowList(1000,rect);
+
+    m_childRootWinExtInfo.reset();
+}
+
 
 TEST_F(UT_WMInfo, test_findDockWindows_001)
 {
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
 
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->findDockWindows();
+
+    m_childRootWinExtInfo.reset();
 }
+
+TEST_F(UT_WMInfo, test_findDockWindows_002)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->findDockWindows();
+
+    m_childRootWinExtInfo.reset();
+}
+
+
+TEST_F(UT_WMInfo, test_findDockWindows_003)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = -1;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->findDockWindows();
+
+    m_childRootWinExtInfo.reset();
+}
+
+
+TEST_F(UT_WMInfo, test_findDockWindows_004)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 10001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->findDockWindows();
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_findDockWindows_005)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    wmExtchild->states << kHiddenState;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->findDockWindows();
+
+    m_childRootWinExtInfo.reset();
+}
+
+TEST_F(UT_WMInfo, test_findDockWindows_006)
+{
+    struct wm_window_ext_t *wmExtchild = new struct wm_window_ext_t();
+    wmExtchild->pid = 100001;
+    wmExtchild->rect = QRect(0,0,0,0);
+    wmExtchild->windowId = 2000;
+    wmExtchild->parent = 1000;
+    wmExtchild->map_state = kViewableState;
+    wmExtchild->wclass = kInputOutputClass;
+    wmExtchild->types << kDockWindowType;
+    m_childRootWinExtInfo.reset(wmExtchild);
+
+    m_tester->m_tree->cache[2000] = std::move(m_childRootWinExtInfo);
+    m_tester->findDockWindows();
+
+    m_childRootWinExtInfo.reset();
+}
+
 
 TEST_F(UT_WMInfo, test_initAtomCache_001)
 {
@@ -204,10 +537,6 @@ TEST_F(UT_WMInfo, test_initAtomCache_001)
     delete connection;
 }
 
-TEST_F(UT_WMInfo, test_getAtom_001)
-{
-
-}
 
 TEST_F(UT_WMInfo, test_getAtomName_001)
 {
