@@ -33,12 +33,27 @@
 class UT_SystemServiceEntry : public ::testing::Test
 {
 public:
-    UT_SystemServiceEntry() : m_tester(nullptr) {}
+    UT_SystemServiceEntry() : m_tester(nullptr) , m_tester1(nullptr) {}
 
 public:
     virtual void SetUp()
     {
+        QString id("1");
+        QString sname("1");
+        QString loadState("1");
+        QString activeState("1");
+        QString subState("1");
+        QString state("1");
+        QString startupType("1");
+        QString unitObjectPath("1");
+        QString description("1");
+        quint32 mainPID = 1;
+        bool canReload {true};
+        bool canStart {true};
+        bool canStop {true};
         m_tester = new SystemServiceEntry();
+        m_tester1 = new SystemServiceEntry(id, sname, loadState, activeState, subState, state,
+                                           startupType, unitObjectPath, description, mainPID, canReload, canStart, canStop);
     }
 
     virtual void TearDown()
@@ -51,6 +66,7 @@ public:
 
 protected:
     SystemServiceEntry *m_tester;
+    SystemServiceEntry *m_tester1;
 };
 
 TEST_F(UT_SystemServiceEntry, initTest)
@@ -67,3 +83,4 @@ TEST_F(UT_SystemServiceEntry, test_operator_02)
 {
     SystemServiceEntry copy(*m_tester);
 }
+
