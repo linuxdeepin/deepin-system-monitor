@@ -19,7 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "gui/mainwindow.h"
-#include "constants.h"
+#include "dde-dock/constants.h"
 #include "application.h"
 
 //#include "clipboard_adaptor.h"

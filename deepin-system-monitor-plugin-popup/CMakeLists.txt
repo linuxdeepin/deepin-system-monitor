@@ -57,7 +57,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 #pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
-pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
+#pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 

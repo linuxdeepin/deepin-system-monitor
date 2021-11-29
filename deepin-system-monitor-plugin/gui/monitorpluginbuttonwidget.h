@@ -22,7 +22,6 @@
 #define MONITORPLUGINBUTTONWIDGET_H
 
 // smo-plugin
-//#include "/usr/include/dde-dock/constants.h"
 
 // Qt
 #include <QWidget>
