@@ -67,6 +67,7 @@ find_package(ICU COMPONENTS i18n uc REQUIRED)
 # For UT Test
 find_package(GTest REQUIRED)
 find_package(Qt5Test REQUIRED)
+find_package(Threads REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
