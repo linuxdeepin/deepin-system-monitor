@@ -200,7 +200,8 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 
             // window adjusted rect (including bounding frame)
             warea->rect = rect;
-            // pid            warea->pid = child->pid;
+            // pid            
+	     warea->pid = child->pid;
 
             warea->wid = child->windowId;
 
