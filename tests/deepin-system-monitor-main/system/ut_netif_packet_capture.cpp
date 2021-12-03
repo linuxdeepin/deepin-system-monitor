@@ -192,14 +192,6 @@ TEST_F(UT_NetifPacketCapture, test_hasDevIP_05)
     EXPECT_EQ(ok, false);
 }
 
-TEST_F(UT_NetifPacketCapture, test_hasDevIP_06)
-{
-    Stub stub;
-    m_tester->whetherDevChanged();
-    auto ok = m_tester->hasDevIP();
-    EXPECT_EQ(ok, true);
-}
-
 TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_01)
 {
     Stub stub;
