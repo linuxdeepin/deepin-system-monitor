@@ -36,10 +36,10 @@
 // Qt
 #include <QListView>
 #include <DBlurEffectWidget>
-#include <DWindowManagerHelper>
 #include <DRegionMonitor>
 #include <DWidget>
 #include <DScrollArea>
+#include <DtkGuis>
 
 // Dtk
 #include <com_deepin_daemon_display_monitor.h>
@@ -185,7 +185,6 @@ private:
     QPropertyAnimation *m_widthAni;
     QSequentialAnimationGroup *m_aniGroup;
     QRect m_rect;
-    DWindowManagerHelper *m_wmHelper;
     bool m_hasComposite = false;
 
 

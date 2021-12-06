@@ -219,12 +219,12 @@ TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_03)
     EXPECT_EQ(ok, false);
 }
 
-TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_06)
-{
-    Stub stub;
-    auto ok = m_tester->getCurrentDevName();
-    EXPECT_EQ(ok, true);
-}
+//TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_06)
+//{
+//    Stub stub;
+//    auto ok = m_tester->getCurrentDevName();
+//    EXPECT_EQ(ok, true);
+//}
 
 TEST_F(UT_NetifPacketCapture, test_whetherDevChanged_01)
 {

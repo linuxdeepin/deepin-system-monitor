@@ -61,7 +61,6 @@ MainWindow::MainWindow(QWidget *parent)
     , m_xAni(new QPropertyAnimation(this, "x"))
     , m_widthAni(new QPropertyAnimation(this, "width"))
     , m_aniGroup(new QSequentialAnimationGroup(this))
-    , m_wmHelper(DWindowManagerHelper::instance())
     , m_trickTimer(new QTimer(this))
 {
     m_trickTimer->setInterval(300);
@@ -215,7 +214,7 @@ void MainWindow::setX(int x)
 
 void MainWindow::CompositeChanged()
 {
-    m_hasComposite = m_wmHelper->hasComposite();
+    m_hasComposite = DWindowManagerHelper::instance()->hasComposite();
 }
 
 void MainWindow::registerMonitor()
@@ -307,8 +306,7 @@ void MainWindow::initConnect()
     connect(m_systemMonitorDbusAdaptor, &SystemMonitorDBusAdaptor::sigSendShowOrHideSystemMonitorPluginPopupWidget,
             this, &MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget);
 
-
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
+    connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
 
     connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant &value) {
         int width = value.toInt();
