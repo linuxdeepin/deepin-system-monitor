@@ -245,6 +245,7 @@ void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSett
             option->setValue(m_lastValidInternalValue);
         }
     }
+    SystemProtectionSetting::instance()->regularNumber(edit);
 }
 
 QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
@@ -269,7 +270,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     edit->lineEdit()->setValidator(validator);
 
     // 规范输入的文字信息（数字）
-    //SystemProtectionSetting::instance()->regularNumber(edit);
+//    SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -369,7 +370,7 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     edit->lineEdit()->setValidator(validator);
 
     // 规范输入的文字信息（数字）
-    //SystemProtectionSetting::instance()->regularNumber(edit);
+//    SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
