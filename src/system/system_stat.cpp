@@ -199,7 +199,8 @@ bool SystemStat::readMemStats(MemStat &memStat)
 
     QProcess process;
     process.start("swapon -s");
-    process.waitForFinished(100);
+    //如果设置为-1则表示,等待获取结束才执行完成
+    process.waitForFinished(-1);
     QString swapInfo = process.readAllStandardOutput();
     QStringList swapInfoList = swapInfo.split("\n", QString::SkipEmptyParts);
     bool isCmdAvailable = false;
