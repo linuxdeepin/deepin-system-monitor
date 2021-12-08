@@ -48,7 +48,7 @@ private:
 protected:
     int rowCount(const QModelIndex &) const
     {
-        return 10;
+        return 9;
     }
 
     int columnCount(const QModelIndex &) const
@@ -77,7 +77,7 @@ protected:
                 if (column == 0)    //m_model->cpuSet()->modelName()); //CPU属于的名字及其编号、标称主频；
                     return QApplication::translate("CPUSummaryTableModel", "Frequency");//最小频率  ~ 最大频率；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Vendor");//显示制造商名称。格式：字串
+                    return QApplication::translate("CPUSummaryTableModel", "Up time");//最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
                 break;
             case 2:
                 if (column == 0)    //m_model->cpuSet()->coreId(0));   //处理器ID
@@ -121,10 +121,6 @@ protected:
                 else if (column == 1)
                     return QApplication::translate("CPUSummaryTableModel", "Version"); //版本号
                 break;
-            case 9:
-                if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "Up time");//最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
-                break;
             default:
                 break;
             }
@@ -140,7 +136,7 @@ protected:
                 if (column == 0)
                     return m_model->cpuSet()->minFreq() + " ~ " + m_model->cpuSet()->maxFreq();
                 else if (column == 1)
-                    return m_model->cpuSet()->vendor();
+                    return m_model->uptime();
                 break;
             case 2:
                 if (column == 0)
@@ -183,10 +179,6 @@ protected:
                     return m_model->osType();
                 else if (column == 1)
                     return m_model->osVersion();
-                break;
-            case 9:
-                if (column == 0)
-                    return m_model->uptime();
                 break;
             default:
                 break;
