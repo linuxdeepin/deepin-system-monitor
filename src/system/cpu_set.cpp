@@ -275,12 +275,10 @@ static void lscpu_free_context(struct lscpu_cxt *cxt)
 CPUSet::CPUSet()
     : d(new CPUSetPrivate())
 {
-    m_lscpu = QSharedPointer<DLscpu>(new DLscpu());
 }
 CPUSet::CPUSet(const CPUSet &other)
     : d(other.d)
 {
-    m_lscpu = QSharedPointer<DLscpu>(new DLscpu());
 }
 CPUSet &CPUSet::operator=(const CPUSet &rhs)
 {
@@ -296,151 +294,114 @@ CPUSet::~CPUSet()
 
 }
 
-//QString CPUSet::modelName() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return d->m_info.value(QStringLiteral("型号名称"));
-//    else
-//        return d->m_info.value("Model name");
-//}
-
 QString CPUSet::modelName() const
 {
-    return m_lscpu->modelName();
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("型号名称"));
+    else
+        return d->m_info.value("Model name");
 }
-
-//QString CPUSet::vendor() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return d->m_info.value(QStringLiteral("厂商 ID"));
-//    else
-//        return d->m_info.value("Vendor ID");
-//}
 
 QString CPUSet::vendor() const
 {
-    return m_lscpu->vendorId();
+    if (mIsEmptyModelName == true)
+        return d->m_info.value(QStringLiteral("厂商 ID"));
+    else
+        return d->m_info.value("Vendor ID");
 }
-
-//int CPUSet::cpuCount() const
-//{
-//    return d->m_info.value("CPU(s)").toInt();
-//}
 
 int CPUSet::cpuCount() const
 {
-   return m_lscpu->cpuCount();
+    return d->m_info.value("CPU(s)").toInt();
 }
-
-//int CPUSet::socketCount() const
-//{
-//    return d->m_info.value("Socket(s)").toInt();
-//}
 
 int CPUSet::socketCount() const
 {
-    return m_lscpu->socketCount();
+    return d->m_info.value("Socket(s)").toInt();
 }
-
-//QString CPUSet::virtualization() const
-//{
-//    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("Not support") : d->m_info.value("Virtualization");
-//}
 
 QString CPUSet::virtualization() const
 {
-    const QString& virtualization = m_lscpu->virtualization();
-    return virtualization.isEmpty() ? QObject::tr("Not support") : virtualization;
+    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("Not support") : d->m_info.value("Virtualization");
 }
-
-//QString CPUSet::curFreq() const
-//{
-//    if(d->m_info.value("CPU MHz") == "-")
-//        return "-";
-//    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
-//}
 
 QString CPUSet::curFreq() const
 {
-    return common::format::formatHz(m_lscpu->curFreq().toDouble(), common::format::MHz);
+    if(d->m_info.value("CPU MHz") == "-")
+        return "-";
+    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
 }
-
-//QString CPUSet::minFreq() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
-//    else
-//        return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
-//}
 
 QString CPUSet::minFreq() const
 {
-    return common::format::formatHz(m_lscpu->minFreq(), common::format::MHz);
+    if (mIsEmptyModelName == true)
+        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
+    else
+        return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
 }
-
-//QString CPUSet::maxFreq() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble(), common::format::MHz);
-//    else
-//        return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
-//}
 
 QString CPUSet::maxFreq() const
 {
-    return common::format::formatHz(m_lscpu->maxFreq(), common::format::MHz);
+    if (mIsEmptyModelName == true)
+        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble(), common::format::MHz);
+    else
+        return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
 }
-
-//QString CPUSet::l1dCache() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return d->m_info.value(QStringLiteral("L1d 缓存"));
-//    else
-//        return d->m_info.value("L1d cache");
-//}
 
 QString CPUSet::l1dCache() const
 {
-    return m_lscpu->l1dCache();
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L1d")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
-
-//QString CPUSet::l1iCache() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return d->m_info.value(QStringLiteral("L1i 缓存"));
-//    else
-//        return d->m_info.value("L1i cache");
-//}
 
 QString CPUSet::l1iCache() const
 {
-    return m_lscpu->l1iCache();
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L1i")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
-
-//QString CPUSet::l2Cache() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return d->m_info.value(QStringLiteral("L2 缓存"));
-//    else
-//        return d->m_info.value("L2 cache");
-//}
 
 QString CPUSet::l2Cache() const
 {
-    return m_lscpu->l2Cache();
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L2")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
-
-//QString CPUSet::l3Cache() const
-//{
-//    if (mIsEmptyModelName == true)
-//        return d->m_info.value(QStringLiteral("L3 缓存"));
-//    else
-//        return d->m_info.value("L3 cache");
-//}
 
 QString CPUSet::l3Cache() const
 {
-    return m_lscpu->l3Cache();
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L3")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
 
 QString CPUSet::coreId(int index) const
