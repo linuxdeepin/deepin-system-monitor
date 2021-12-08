@@ -22,6 +22,7 @@
 #define CPUSET_H
 
 #include "cpu.h"
+#include "dlscpu.h"
 
 #include <QList>
 #include <QSharedDataPointer>
@@ -41,7 +42,7 @@ public:
 
     CPUSet &operator=(const CPUSet &rhs);
 
-    ~CPUSet();
+    virtual ~CPUSet();
 
 public://info
     QString modelName() const;
@@ -98,8 +99,14 @@ private:
 private:
     QSharedDataPointer<CPUSetPrivate> d;
 
+    //!
+    //! \brief m_lscpu lscpu的智能指针对象，通过该对象可以获取到不同语言下的CPU信息
+    //!
+    QSharedPointer<DLscpu> m_lscpu;
+
     //true:modelName为空; false:modelName非空
     bool mIsEmptyModelName = false;
+
 };
 
 } // namespace system

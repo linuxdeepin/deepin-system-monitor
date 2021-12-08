@@ -314,6 +314,7 @@ set(HPP_SYSTEM
     system/wireless.h
     system/diskio_info.h
     system/net_info.h
+    system/dlscpu.h
 )
 set(CPP_SYSTEM
     system/system_monitor.cpp
@@ -341,6 +342,7 @@ set(CPP_SYSTEM
     system/wireless.cpp
     system/diskio_info.cpp
     system/net_info.cpp
+    system/dlscpu.cpp
 )
 
 set(HPP_WM

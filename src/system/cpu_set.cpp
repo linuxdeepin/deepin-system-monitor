@@ -275,10 +275,12 @@ static void lscpu_free_context(struct lscpu_cxt *cxt)
 CPUSet::CPUSet()
     : d(new CPUSetPrivate())
 {
+    m_lscpu = QSharedPointer<DLscpu>(new DLscpu());
 }
 CPUSet::CPUSet(const CPUSet &other)
     : d(other.d)
 {
+    m_lscpu = QSharedPointer<DLscpu>(new DLscpu());
 }
 CPUSet &CPUSet::operator=(const CPUSet &rhs)
 {
@@ -294,90 +296,151 @@ CPUSet::~CPUSet()
 
 }
 
+//QString CPUSet::modelName() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return d->m_info.value(QStringLiteral("型号名称"));
+//    else
+//        return d->m_info.value("Model name");
+//}
+
 QString CPUSet::modelName() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("型号名称"));
-    else
-        return d->m_info.value("Model name");
+    return m_lscpu->modelName();
 }
+
+//QString CPUSet::vendor() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return d->m_info.value(QStringLiteral("厂商 ID"));
+//    else
+//        return d->m_info.value("Vendor ID");
+//}
 
 QString CPUSet::vendor() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("厂商 ID"));
-    else
-        return d->m_info.value("Vendor ID");
+    return m_lscpu->vendorId();
 }
+
+//int CPUSet::cpuCount() const
+//{
+//    return d->m_info.value("CPU(s)").toInt();
+//}
 
 int CPUSet::cpuCount() const
 {
-    return d->m_info.value("CPU(s)").toInt();
+   return m_lscpu->cpuCount();
 }
+
+//int CPUSet::socketCount() const
+//{
+//    return d->m_info.value("Socket(s)").toInt();
+//}
 
 int CPUSet::socketCount() const
 {
-    return d->m_info.value("Socket(s)").toInt();
+    return m_lscpu->socketCount();
 }
+
+//QString CPUSet::virtualization() const
+//{
+//    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("Not support") : d->m_info.value("Virtualization");
+//}
 
 QString CPUSet::virtualization() const
 {
-    return d->m_info.value("Virtualization").isEmpty() ? QObject::tr("Not support") : d->m_info.value("Virtualization");
+    const QString& virtualization = m_lscpu->virtualization();
+    return virtualization.isEmpty() ? QObject::tr("Not support") : virtualization;
 }
+
+//QString CPUSet::curFreq() const
+//{
+//    if(d->m_info.value("CPU MHz") == "-")
+//        return "-";
+//    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
+//}
 
 QString CPUSet::curFreq() const
 {
-    if(d->m_info.value("CPU MHz") == "-")
-        return "-";
-    return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
+    return common::format::formatHz(m_lscpu->curFreq().toDouble(), common::format::MHz);
 }
+
+//QString CPUSet::minFreq() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
+//    else
+//        return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
+//}
 
 QString CPUSet::minFreq() const
 {
-    if (mIsEmptyModelName == true)
-        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最小 MHz")).toDouble(), common::format::MHz);
-    else
-        return common::format::formatHz(d->m_info.value("CPU min MHz").toDouble(), common::format::MHz);
+    return common::format::formatHz(m_lscpu->minFreq(), common::format::MHz);
 }
+
+//QString CPUSet::maxFreq() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble(), common::format::MHz);
+//    else
+//        return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
+//}
 
 QString CPUSet::maxFreq() const
 {
-    if (mIsEmptyModelName == true)
-        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble(), common::format::MHz);
-    else
-        return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
+    return common::format::formatHz(m_lscpu->maxFreq(), common::format::MHz);
 }
+
+//QString CPUSet::l1dCache() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return d->m_info.value(QStringLiteral("L1d 缓存"));
+//    else
+//        return d->m_info.value("L1d cache");
+//}
 
 QString CPUSet::l1dCache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L1d 缓存"));
-    else
-        return d->m_info.value("L1d cache");
+    return m_lscpu->l1dCache();
 }
+
+//QString CPUSet::l1iCache() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return d->m_info.value(QStringLiteral("L1i 缓存"));
+//    else
+//        return d->m_info.value("L1i cache");
+//}
 
 QString CPUSet::l1iCache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L1i 缓存"));
-    else
-        return d->m_info.value("L1i cache");
+    return m_lscpu->l1iCache();
 }
+
+//QString CPUSet::l2Cache() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return d->m_info.value(QStringLiteral("L2 缓存"));
+//    else
+//        return d->m_info.value("L2 cache");
+//}
 
 QString CPUSet::l2Cache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L2 缓存"));
-    else
-        return d->m_info.value("L2 cache");
+    return m_lscpu->l2Cache();
 }
+
+//QString CPUSet::l3Cache() const
+//{
+//    if (mIsEmptyModelName == true)
+//        return d->m_info.value(QStringLiteral("L3 缓存"));
+//    else
+//        return d->m_info.value("L3 cache");
+//}
 
 QString CPUSet::l3Cache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L3 缓存"));
-    else
-        return d->m_info.value("L3 cache");
+    return m_lscpu->l3Cache();
 }
 
 QString CPUSet::coreId(int index) const
@@ -564,33 +627,35 @@ void CPUSet::read_overall_info()
         infos.append(info);
     }
 
-    if (!cpuinfo.contains("model name")) {
-        mIsEmptyModelName = true;
-        infos.clear();
-        // 根据lscpu源码实现获取CPU信息
-        process.start("lscpu");
-        process.waitForFinished(3000);
-        QString lscpu = process.readAllStandardOutput();
+//    if (!cpuinfo.contains("model name")) {
+//        mIsEmptyModelName = true;
+//        infos.clear();
+//        // 根据lscpu源码实现获取CPU信息
+//        process.start("lscpu");
+//        process.waitForFinished(3000);
+//        QString lscpu = process.readAllStandardOutput();
 
-        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-        d->m_info.clear();
-        for (QString lscpuLine : lscpuList) {
-            QStringList keyValue {};
-            if (lscpuLine.contains("：")){
-                keyValue = lscpuLine.split("：", QString::SkipEmptyParts);
-            } else if (lscpuLine.contains(":")) {
-                keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-            }
+//        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+//        d->m_info.clear();
+//        for (QString lscpuLine : lscpuList) {
+//            QStringList keyValue {};
+//            if (lscpuLine.contains("：")){
+//                keyValue = lscpuLine.split("：", QString::SkipEmptyParts);
+//            } else if (lscpuLine.contains(":")) {
+//                keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+//            }
 
-            if (keyValue.count() > 1)
-                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
-        }
-    }
-    else {
-        mIsEmptyModelName = false;
-        read_lscpu();
-        d->m_infos = infos;
-    }
+//            if (keyValue.count() > 1)
+//                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+//        }
+//    }
+//    else {
+//        mIsEmptyModelName = false;
+//        read_lscpu();
+//        d->m_infos = infos;
+//    }
+    read_lscpu();
+    d->m_infos = infos;
 }
 
 // 获取CPU信息 ut001987

@@ -325,6 +325,16 @@ struct dmi_info {
 	char *part_num;
 };
 
+//!
+//! \brief initCpuInfo 获取cpu信息
+//! \return 返回ctx结构体
+//!
+struct lscpu_cxt *initCpuInfo();
+//!
+//! \brief freeCpuInfo 释放cpu结构体
+//! \param cxt 已构建的cpu结构体
+//!
+void freeCpuInfo(struct lscpu_cxt *cxt);
 
 void to_dmi_header(struct lscpu_dmi_header *h, uint8_t *data);
 char *dmi_string(const struct lscpu_dmi_header *dm, uint8_t s);
