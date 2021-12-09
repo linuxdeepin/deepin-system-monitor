@@ -79,7 +79,12 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     onThemeTypeChanged();
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
 
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
+    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        setAttribute(Qt::WA_NativeWindow);
+    } else {
+        this->setAttribute(Qt::WA_TranslucentBackground, true);
+    }
+
     setHeaderHidden(true);
 }
 
@@ -98,7 +103,12 @@ void ProcessTableView::onThemeTypeChanged()
     palette.setColor(DPalette::Button, palette.color(DPalette::Base));
     header()->setPalette(palette);
 
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
+    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        setAttribute(Qt::WA_NativeWindow);
+    } else {
+        this->setAttribute(Qt::WA_TranslucentBackground, true);
+    }
+
 }
 
 // event filter
@@ -156,7 +166,12 @@ void ProcessTableView::initUI()
     header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     // header section context menu policy
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    header()->setAttribute(Qt::WA_TranslucentBackground, true);
+    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        setAttribute(Qt::WA_NativeWindow);
+    } else {
+        header()->setAttribute(Qt::WA_TranslucentBackground, true);
+    }
+
 
     // table options
     setSortingEnabled(true);

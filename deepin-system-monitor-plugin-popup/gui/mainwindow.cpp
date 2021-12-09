@@ -237,7 +237,13 @@ void MainWindow::registerMonitor()
 void MainWindow::initUI()
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool  | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowStaysOnTopHint);
-    setAttribute(Qt::WA_TranslucentBackground);
+    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        setAttribute(Qt::WA_NativeWindow);
+        windowHandle()->setProperty("_d_dwayland_window-type", "tooltip");
+    } else {
+        setAttribute(Qt::WA_TranslucentBackground);
+    }
+
     setFixedWidth(Globals::WindowWidth);
 
     m_cpuMonitor = new CpuWidget(this);

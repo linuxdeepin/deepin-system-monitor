@@ -86,7 +86,12 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
     installEventFilter(this);
 
-    setAttribute(Qt::WA_TranslucentBackground);
+    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        setAttribute(Qt::WA_NativeWindow);
+    } else {
+        setAttribute(Qt::WA_TranslucentBackground);
+    }
+
 }
 
 ProcessWidget::~ProcessWidget() {}
