@@ -242,14 +242,6 @@ TEST_F(UT_SystemServiceTableView, test_loadSettings_01)
     EXPECT_TRUE(m_tester->loadSettings());
 }
 
-TEST_F(UT_SystemServiceTableView, test_loadSettings_02)
-{
-    Stub stub;
-    stub.set(ADDR(Settings, instance), stub_loadSettings_instance);
-
-    EXPECT_FALSE(m_tester->loadSettings());
-}
-
 TEST_F(UT_SystemServiceTableView, test_saveSettings_01)
 {
     m_tester->saveSettings();
