@@ -240,9 +240,8 @@ void MainWindow::initUI()
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
         setAttribute(Qt::WA_NativeWindow);
         windowHandle()->setProperty("_d_dwayland_window-type", "tooltip");
-    } else {
-        setAttribute(Qt::WA_TranslucentBackground);
     }
+    setAttribute(Qt::WA_TranslucentBackground);
 
     setFixedWidth(Globals::WindowWidth);
 

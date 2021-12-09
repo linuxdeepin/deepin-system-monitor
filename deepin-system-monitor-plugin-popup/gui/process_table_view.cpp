@@ -105,9 +105,8 @@ void ProcessTableView::onThemeTypeChanged()
 
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
         setAttribute(Qt::WA_NativeWindow);
-    } else {
-        this->setAttribute(Qt::WA_TranslucentBackground, true);
     }
+    this->setAttribute(Qt::WA_TranslucentBackground, true);
 
 }
 
@@ -168,9 +167,8 @@ void ProcessTableView::initUI()
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
         setAttribute(Qt::WA_NativeWindow);
-    } else {
-        header()->setAttribute(Qt::WA_TranslucentBackground, true);
     }
+    header()->setAttribute(Qt::WA_TranslucentBackground, true);
 
 
     // table options

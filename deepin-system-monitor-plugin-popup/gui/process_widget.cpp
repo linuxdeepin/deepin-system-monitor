@@ -88,9 +88,8 @@ ProcessWidget::ProcessWidget(QWidget *parent)
 
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
         setAttribute(Qt::WA_NativeWindow);
-    } else {
-        setAttribute(Qt::WA_TranslucentBackground);
     }
+    setAttribute(Qt::WA_TranslucentBackground);
 
 }
 

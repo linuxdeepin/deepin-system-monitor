@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 {
     // 前置wayland环境变量
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        qInfo() << "it is wayland session";
+        qputenv("QT_QPA_PLATFORM", "wayland");
         qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     }
 
