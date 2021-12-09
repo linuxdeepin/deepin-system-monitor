@@ -350,34 +350,58 @@ QString CPUSet::maxFreq() const
 
 QString CPUSet::l1dCache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L1d 缓存"));
-    else
-        return d->m_info.value("L1d cache");
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L1d")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
 
 QString CPUSet::l1iCache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L1i 缓存"));
-    else
-        return d->m_info.value("L1i cache");
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L1i")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
 
 QString CPUSet::l2Cache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L2 缓存"));
-    else
-        return d->m_info.value("L2 cache");
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L2")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
 
 QString CPUSet::l3Cache() const
 {
-    if (mIsEmptyModelName == true)
-        return d->m_info.value(QStringLiteral("L3 缓存"));
-    else
-        return d->m_info.value("L3 cache");
+    auto list = d->m_info.keys();
+    QString key = "";
+    foreach (QString tmpKey, list) {
+        if (tmpKey.contains("L3")) {
+            key = tmpKey;
+            break;
+        }
+    }
+    QString value = d->m_info.value(key);
+    return value.isNull() ? "-" : value;
 }
 
 QString CPUSet::coreId(int index) const
@@ -564,33 +588,35 @@ void CPUSet::read_overall_info()
         infos.append(info);
     }
 
-    if (!cpuinfo.contains("model name")) {
-        mIsEmptyModelName = true;
-        infos.clear();
-        // 根据lscpu源码实现获取CPU信息
-        process.start("lscpu");
-        process.waitForFinished(3000);
-        QString lscpu = process.readAllStandardOutput();
+//    if (!cpuinfo.contains("model name")) {
+//        mIsEmptyModelName = true;
+//        infos.clear();
+//        // 根据lscpu源码实现获取CPU信息
+//        process.start("lscpu");
+//        process.waitForFinished(3000);
+//        QString lscpu = process.readAllStandardOutput();
 
-        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
-        d->m_info.clear();
-        for (QString lscpuLine : lscpuList) {
-            QStringList keyValue {};
-            if (lscpuLine.contains("：")){
-                keyValue = lscpuLine.split("：", QString::SkipEmptyParts);
-            } else if (lscpuLine.contains(":")) {
-                keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
-            }
+//        QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+//        d->m_info.clear();
+//        for (QString lscpuLine : lscpuList) {
+//            QStringList keyValue {};
+//            if (lscpuLine.contains("：")){
+//                keyValue = lscpuLine.split("：", QString::SkipEmptyParts);
+//            } else if (lscpuLine.contains(":")) {
+//                keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+//            }
 
-            if (keyValue.count() > 1)
-                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
-        }
-    }
-    else {
-        mIsEmptyModelName = false;
-        read_lscpu();
-        d->m_infos = infos;
-    }
+//            if (keyValue.count() > 1)
+//                d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+//        }
+//    }
+//    else {
+//        mIsEmptyModelName = false;
+//        read_lscpu();
+//        d->m_infos = infos;
+//    }
+    read_lscpu();
+    d->m_infos = infos;
 }
 
 // 获取CPU信息 ut001987
