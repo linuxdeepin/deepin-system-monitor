@@ -38,6 +38,11 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    // 前置wayland环境变量
+    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    }
+
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DGuiApplicationHelper::setColorCompositingEnabled(true);
 
@@ -57,6 +62,7 @@ int main(int argc, char *argv[])
         qDebug() << "set single instance failed!";
         return -1;
     }
+
     app->loadTranslator();
 
     MainWindow w;
