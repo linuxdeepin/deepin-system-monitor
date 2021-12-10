@@ -36,6 +36,7 @@
 #include <DPalette>
 #include <QPainter>
 #include <QApplication>
+#include <QPainterPath>
 #define LEFTMARGIN  15  // 左边距
 #define TOPMARGIN   10  // 上边距
 #define TEXTSPACING 30  // 内容文字间距
@@ -128,7 +129,7 @@ public:
 
         painter->save();
         QPainterPath clipPath;
-        clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
+       clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);
         painter->setClipPath(clipPath);
 
         painter->setPen(Qt::NoPen);
