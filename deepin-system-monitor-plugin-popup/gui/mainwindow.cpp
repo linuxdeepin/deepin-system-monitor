@@ -237,10 +237,6 @@ void MainWindow::registerMonitor()
 void MainWindow::initUI()
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool  | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowStaysOnTopHint);
-    if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
-        setAttribute(Qt::WA_NativeWindow);
-        windowHandle()->setProperty("_d_dwayland_window-type", "tooltip");
-    }
     setAttribute(Qt::WA_TranslucentBackground);
 
     setFixedWidth(Globals::WindowWidth);

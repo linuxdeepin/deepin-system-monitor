@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
 {
     // 前置wayland环境变量
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
-        qInfo() << "it is wayland session";
         qputenv("QT_QPA_PLATFORM", "wayland");
         qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     }
@@ -48,16 +47,16 @@ int main(int argc, char *argv[])
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DGuiApplicationHelper::setColorCompositingEnabled(true);
 
-    DApplication *app = DApplication::globalApplication(argc, argv);
+//    DApplication *app = DApplication::globalApplication(argc, argv);
 
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     Application ac(argc, argv);
     ac.setAutoActivateWindows(true);
 
-    app->setOrganizationName("deepin");
-    app->setApplicationName("deepin-system-monitor-plugin-popup");
-    app->setApplicationDisplayName("deepin-system-monitor-plugin-popup");
-    app->setApplicationVersion("1.0");
+    ac.setOrganizationName("deepin");
+    ac.setApplicationName("deepin-system-monitor-plugin-popup");
+    ac.setApplicationDisplayName("deepin-system-monitor-plugin-popup");
+    ac.setApplicationVersion("1.0");
 
 
     if (!DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor-plugin-popup"))) {
@@ -65,7 +64,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    app->loadTranslator();
+    ac.loadTranslator();
 
     MainWindow w;
     gApp->setMainWindow(&w);
@@ -80,5 +79,5 @@ int main(int argc, char *argv[])
 #ifdef QT_DEBUG
     w.showAni();
 #endif
-    return app->exec();
+    return ac.exec();
 }
