@@ -449,6 +449,7 @@ void NetifPacketCapture::dispatchPackets()
         } else if (nr == -1) {
             // error occurred while processing packets
             qDebug() << "pcap_dispatch failed: " << pcap_geterr(m_handle);
+            memset(static_cast<void*>(m_devName), 0, sizeof(m_devName));
             m_timer->stop();
             break;
         } else if (nr == -2) {
