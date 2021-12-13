@@ -167,7 +167,9 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
         for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
              it!=m_windowStates.begin();--it) {
             // if the window is created by ourself, then ignore it
-            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized)
+	    // wayland环境下增加桌面窗口和dock栏的屏蔽
+            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized || QString::fromStdString(it->resourceName)=="deepin-deepinid-client"
+                    || QString::fromStdString(it->resourceName)=="dde-dock" )
                 continue;
             auto selRect = QRect(static_cast<int>(it->geometry.x / x), static_cast<int>(it ->geometry.y / x),
                                  static_cast<int>(it->geometry.width / x), static_cast<int>(it->geometry.height/ x));
@@ -175,8 +177,25 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 found = true;
 
                 // find all windows hovered above, if any clip out the intersected region
-                auto hoveredBy = m_wminfo->getHoveredByWindowList(it->windowId, selRect);
+
                 QRegion region {selRect};
+		//对于所选窗口上方存在堆叠的窗口情况，对所选窗口进行区域裁剪。
+                for (QVector<ClientManagement::WindowState>::iterator iter=m_windowStates.end()-1;
+                     iter!=it;--iter) {
+                    if (  QString::fromStdString(iter->resourceName)=="dde-desktop" ||iter->isMinimized || QString::fromStdString(iter->resourceName)=="deepin-deepinid-client"
+                          || QString::fromStdString(iter->resourceName)=="dde-dock" || getpid() == iter->pid)
+                        continue;
+
+                    else{
+		         //上方的堆叠窗口区域
+                        auto upRegion = QRect(static_cast<int>(iter->geometry.x / x), static_cast<int>(iter ->geometry.y / x),
+                                              static_cast<int>(iter->geometry.width / x), static_cast<int>(iter->geometry.height/ x));
+
+                        region = region.subtracted(upRegion);
+                    }
+
+                }
+
 
                 // if current selected window is crossing screens, we need update each sub part on each screen
                 for (auto &bg : m_backgroundList) {
