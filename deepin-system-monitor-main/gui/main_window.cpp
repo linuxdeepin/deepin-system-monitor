@@ -66,6 +66,7 @@ MainWindow::~MainWindow()
 void MainWindow::raiseWindow()
 {
     raise();
+    activateWindow();
 }
 
 void MainWindow::initDisplay()
