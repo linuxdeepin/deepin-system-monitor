@@ -50,10 +50,12 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 {
     // new window manager instance
     m_wminfo = new WMInfo();
-#ifdef WAYLAND_SESSION_TYPE
+//不再使用CMakeList开关宏的方式，改用全局变量运行时控制
+//WaylandCentered定义在common/common.h中，在main函数开头进行初始化判断
+    if (WaylandCentered) {
         m_connectionThread = new QThread(this);
         m_connectionThreadObject = new ConnectionThread();
-#endif //WAYLAND_SESSION_TYPE
+    }
 
     // init ui components & connections
     initUI();
@@ -77,11 +79,11 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
     releaseMouse();
     releaseKeyboard();
     delete m_wminfo;
-    #ifdef WAYLAND_SESSION_TYPE
+    if (WaylandCentered) {
         m_connectionThread->quit();
         m_connectionThread->wait();
         m_connectionThreadObject->deleteLater();
-    #endif //WAYLAND_SESSION_TYPE
+    }
 }
 
 // mouse press event
@@ -93,9 +95,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     }
     // get the list of windows under cursor in stacked order when mouse pressed
     auto pos = QCursor::pos();
-
-    #ifdef WAYLAND_SESSION_TYPE
-
+    if (WaylandCentered) {
         for(QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
            it!=m_windowStates.begin();--it) {
             // if the window is created by ourself, then ignore it
@@ -119,9 +119,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
                 break;
             }
         }
-
-    #endif //WAYLAND_SESSION_TYPE
-    #ifndef WAYLAND_SESSION_TYPE
+    } else {
         auto list = m_wminfo->selectWindow(pos);
 
         // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
@@ -149,16 +147,13 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
                 break;
             }
         }
-
-    #endif //WAYLAND_SESSION_TYPE
-
-
+    }
 }
 
 // mouse move event handler
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
-    #ifdef WAYLAND_SESSION_TYPE
+    if (WaylandCentered) {
         double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
         auto pos = QCursor::pos();
         // get the list of windows under cursor from cache in stacked order
@@ -167,7 +162,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
         for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
              it!=m_windowStates.begin();--it) {
             // if the window is created by ourself, then ignore it
-	    // wayland环境下增加桌面窗口和dock栏的屏蔽
+        // wayland环境下增加桌面窗口和dock栏的屏蔽
             if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized || QString::fromStdString(it->resourceName)=="deepin-deepinid-client"
                     || QString::fromStdString(it->resourceName)=="dde-dock" )
                 continue;
@@ -179,7 +174,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 // find all windows hovered above, if any clip out the intersected region
 
                 QRegion region {selRect};
-		//对于所选窗口上方存在堆叠的窗口情况，对所选窗口进行区域裁剪。
+        //对于所选窗口上方存在堆叠的窗口情况，对所选窗口进行区域裁剪。
                 for (QVector<ClientManagement::WindowState>::iterator iter=m_windowStates.end()-1;
                      iter!=it;--iter) {
                     if (  QString::fromStdString(iter->resourceName)=="dde-desktop" ||iter->isMinimized || QString::fromStdString(iter->resourceName)=="deepin-deepinid-client"
@@ -187,7 +182,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                         continue;
 
                     else{
-		         //上方的堆叠窗口区域
+                 //上方的堆叠窗口区域
                         auto upRegion = QRect(static_cast<int>(iter->geometry.x / x), static_cast<int>(iter ->geometry.y / x),
                                               static_cast<int>(iter->geometry.width / x), static_cast<int>(iter->geometry.height/ x));
 
@@ -217,9 +212,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 bg->clearSelection();
             emit cursorUpdated(m_defaultCursor);
         }
-    #endif //WAYLAND_SESSION_TYPE
-
-    #ifndef WAYLAND_SESSION_TYPE
+    } else {
         double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
         auto pos = QCursor::pos();
         // get the list of windows under cursor from cache in stacked order
@@ -270,8 +263,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 bg->clearSelection();
             emit cursorUpdated(m_defaultCursor);
         }
-
-    #endif //WAYLAND_SESSION_TYPE
+    }
 }
 
 // key press event handler
@@ -316,15 +308,12 @@ void XWinKillPreviewWidget::initUI()
     for (auto screen : QApplication::screens()) {
         // screen geometry
         auto geom = screen->geometry();
-        // snapshot current screen
-       #ifndef WAYLAND_SESSION_TYPE
+        // snapshot current scree
         auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(),geom.x(), geom.y(), geom.width(), geom.height());
-       #endif //WAYLAND_SESSION_TYPE
 
-       #ifdef WAYLAND_SESSION_TYPE 
-            auto pixmap = screen->grabWindow(m_windowStates.end()->windowId,
-                                      geom.x(), geom.y(), geom.width(), geom.height());
-        #endif //WAYLAND_SESSION_TYPE
+        if (WaylandCentered)
+            pixmap = screen->grabWindow(m_windowStates.end()->windowId,
+                                         geom.x(), geom.y(), geom.width(), geom.height());
 
         // create preview background widget for each screen
         auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
@@ -345,70 +334,75 @@ void XWinKillPreviewWidget::initUI()
 }
 
 // initialize connections (nothing to do here)
+// wayland协议下建立连接
 void XWinKillPreviewWidget::initConnections()
 {
-    #ifdef WAYLAND_SESSION_TYPE
-    connect(m_connectionThreadObject, &ConnectionThread::connected, this,
-        [this] {
-            m_eventQueue = new EventQueue(this);
-            m_eventQueue->setup(m_connectionThreadObject);
+    if (WaylandCentered) {
+        connect(m_connectionThreadObject, &ConnectionThread::connected, this,
+            [this] {
+                m_eventQueue = new EventQueue(this);
+                m_eventQueue->setup(m_connectionThreadObject);
 
-            Registry *registry = new Registry(this);
-            setupRegistry(registry);
-        },
-        Qt::QueuedConnection
-    );
-    m_connectionThreadObject->moveToThread(m_connectionThread);
-    m_connectionThread->start();
+                Registry *registry = new Registry(this);
+                setupRegistry(registry);
+            },
+            Qt::QueuedConnection
+        );
+        m_connectionThreadObject->moveToThread(m_connectionThread);
+        m_connectionThread->start();
 
-    m_connectionThreadObject->initConnection();
-    #endif //WAYLAND_SESSION_TYPE
-}
-#ifdef WAYLAND_SESSION_TYPE
-void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates)
-{
-    for (int i = 0; i < m_windowStates.count(); ++i) {
-        qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) \
-                    << "window[" << i << "]" << "pid:" << m_windowStates.at(i).pid \
-                    << "title:" << m_windowStates.at(i).resourceName \
-                    << "windowId:" << m_windowStates.at(i).windowId \
-                    << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y \
-                    << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height \
-                    <<"isMinimized("<<m_windowStates.at(i).isMinimized<<")" \
-                    <<"isFullScreen("<<m_windowStates.at(i).isFullScreen<<")" \
-                    <<"isActive("<<m_windowStates.at(i).isActive<<")";
+        m_connectionThreadObject->initConnection();
     }
 }
-
+//打印当前窗口信息接口
+void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates)
+{
+    if (WaylandCentered) {
+        for (int i = 0; i < m_windowStates.count(); ++i) {
+            qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) \
+                        << "window[" << i << "]" << "pid:" << m_windowStates.at(i).pid \
+                        << "title:" << m_windowStates.at(i).resourceName \
+                        << "windowId:" << m_windowStates.at(i).windowId \
+                        << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y \
+                        << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height \
+                        <<"isMinimized("<<m_windowStates.at(i).isMinimized<<")" \
+                        <<"isFullScreen("<<m_windowStates.at(i).isFullScreen<<")" \
+                        <<"isActive("<<m_windowStates.at(i).isActive<<")";
+        }
+    }
+}
+//wayland 注册
 void XWinKillPreviewWidget::setupRegistry(Registry *registry)
 {
-    connect(registry, &Registry::compositorAnnounced, this,
-        [this, registry](quint32 name, quint32 version) {
-            m_compositor = registry->createCompositor(name, version, this);
-        }
-    );
+    if (WaylandCentered) {
+        connect(registry, &Registry::compositorAnnounced, this,
+            [this, registry](quint32 name, quint32 version) {
+                m_compositor = registry->createCompositor(name, version, this);
+            }
+        );
 
-    connect(registry, &Registry::clientManagementAnnounced, this,
-        [this, registry] (quint32 name, quint32 version) {
-            m_clientManagement = registry->createClientManagement(name, version, this);
-            connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
-                [this] {
-                    m_windowStates = m_clientManagement->getWindowStates();
-                }
-            );
-        }
-    );
+        connect(registry, &Registry::clientManagementAnnounced, this,
+            [this, registry] (quint32 name, quint32 version) {
+                m_clientManagement = registry->createClientManagement(name, version, this);
+                connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
+                    [this] {
+                        m_windowStates = m_clientManagement->getWindowStates();
+                    }
+                );
+            }
+        );
 
-    connect(registry, &Registry::interfacesAnnounced, this,
-        [this] {
-            Q_ASSERT(m_compositor);
-            Q_ASSERT(m_clientManagement);
-            m_windowStates = m_clientManagement->getWindowStates();
-        }
-    );
+        connect(registry, &Registry::interfacesAnnounced, this,
+            [this] {
+                Q_ASSERT(m_compositor);
+                Q_ASSERT(m_clientManagement);
+                m_windowStates = m_clientManagement->getWindowStates();
+            }
+        );
 
-    registry->setEventQueue(m_eventQueue);
-    registry->create(m_connectionThreadObject);
-    registry->setup();
+        registry->setEventQueue(m_eventQueue);
+        registry->create(m_connectionThreadObject);
+        registry->setup();
+    }
+
 }
-#endif //WAYLAND_SESSION_TYPE
