@@ -22,7 +22,7 @@
 #define MONITORPLUGIN_H
 
 //  smo-plugin
-#include <dde-dock/pluginsiteminterface.h>
+#include "/usr/include/dde-dock/pluginsiteminterface.h"
 #include "monitorpluginbuttonwidget.h"
 
 #include "dbus/dbusinterface.h"

@@ -28,6 +28,7 @@
 #include <DFontSizeManager>
 #include <QKeyEvent>
 #include <DPushButton>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
@@ -118,6 +119,13 @@ void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 int BaseDetailViewWidget::titleHeight()
 {
     return QFontMetrics(m_titleFont).height();
+}
+
+void BaseDetailViewWidget::clearButtonFocus()
+{
+    if (m_detailButton) {
+        QTimer::singleShot(600, this, [=]() {m_detailButton->clearFocus();});
+    }
 }
 
 void BaseDetailViewWidget::setTitle(const QString &text)
