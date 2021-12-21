@@ -741,7 +741,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Custom</translation>
+        <translation>بەلگىلەش</translation>
     </message>
     <message>
         <source>Invalid</source>

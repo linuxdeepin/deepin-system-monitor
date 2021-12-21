@@ -18,7 +18,29 @@ type = QT
 [deepin-system-monitor.deepin-system-monitor-policy]
 file_filter = deepin-system-monitor-main/translations/policy/policy_<lang>.ts
 source_file = deepin-system-monitor-main/translations/policy/policy.ts
-preTranlate_file = deepin-system-monitor-main/translations/policy/com.deepin.pkexec.deepin-system-monitor.policy
+preTranlate_file = deepin-system-monitor-main/translations/policy/policy.policy
+source_lang = en_US
+type = QT
+
+#popup
+[deepin-system-monitor.deepin-system-monitor-plugin-popup]
+file_filter = deepin-system-monitor-plugin-popup/translations/deepin-system-monitor-plugin-popup_<lang>.ts
+source_file = deepin-system-monitor-plugin-popup/translations/deepin-system-monitor-plugin-popup.ts
+source_lang = en_US
+type = QT
+
+
+#daemon
+[deepin-system-monitor.deepin-system-monitor-daemon]
+file_filter = deepin-system-monitor-daemon/translations/deepin-system-monitor-daemon_<lang>.ts
+source_file = deepin-system-monitor-daemon/translations/deepin-system-monitor-daemon.ts
+source_lang = en_US
+type = QT
+
+#plugin
+[deepin-system-monitor.deepin-system-monitor-plugin]
+file_filter = deepin-system-monitor-plugin/translations/deepin-system-monitor-plugin_<lang>.ts
+source_file = deepin-system-monitor-plugin/translations/deepin-system-monitor-plugin.ts
 source_lang = en_US
 type = QT
 
