@@ -136,6 +136,8 @@ private:
 
     // Searched content cache
     QString searchTextCache;
+
+    QWidget *m_spaceItem {};
 };
 
 #endif
