@@ -334,7 +334,8 @@ void MainWindow::initConnect()
         this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
     });
 
-    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
+    // 去除通过智能语音助手唤醒时关闭系统监视器窗口
+//    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
 }
 
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)

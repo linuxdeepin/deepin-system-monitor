@@ -28,7 +28,6 @@
 #include <DFontSizeManager>
 #include <QKeyEvent>
 #include <DPushButton>
-#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
@@ -90,6 +89,9 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     // adjust search result tip label text color dynamically on theme type change
     onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
+    // 当前的策略是为了解决页面切换时，焦点停留在按钮上，这样设置不会影响代码的逻辑
+    if (stackViewWidget)
+        stackViewWidget->setFocus();
 }
 
 BaseDetailViewWidget::~BaseDetailViewWidget()
@@ -119,13 +121,6 @@ void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 int BaseDetailViewWidget::titleHeight()
 {
     return QFontMetrics(m_titleFont).height();
-}
-
-void BaseDetailViewWidget::clearButtonFocus()
-{
-    if (m_detailButton) {
-        QTimer::singleShot(600, this, [=]() {m_detailButton->clearFocus();});
-    }
 }
 
 void BaseDetailViewWidget::setTitle(const QString &text)

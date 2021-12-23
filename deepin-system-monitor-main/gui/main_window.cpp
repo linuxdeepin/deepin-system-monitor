@@ -232,6 +232,7 @@ void MainWindow::initConnections()
     }
 
     connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToProcessWidget, this, &MainWindow::onDetailInfoByDbus, Qt::QueuedConnection);
+    connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, &MainWindow::onDetailInfoByDbus, Qt::QueuedConnection);
 }
 
 // resize event handler
@@ -317,6 +318,7 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
         m_tbShadow->raise();
         m_tbShadow->show();
     }
+
 }
 
 void MainWindow::popupSettingsDialog() {

@@ -213,7 +213,9 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         iconRect.adjust(0, diff, 0, -diff);
 
         const QString &procPid = index.data(Qt::UserRole + 4).toString();
-        if (QPixmap *iconPixmap = core::process::ProcessIconCache::instance()->iconPixmapCache.find(procPid)) {
+        QPixmap  *iconPixmap = nullptr;
+        core::process::ProcessIconCache::instance()->iconPixmapCache.find(procPid, iconPixmap);
+        if (iconPixmap) {
             painter->drawPixmap(iconRect, *iconPixmap);
         } else {
             const QPixmap &iconPix = icon.pixmap(iconRect.size());

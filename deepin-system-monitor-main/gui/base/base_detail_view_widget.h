@@ -55,11 +55,6 @@ public:
 
     int titleHeight();
 
-    //!
-    //! \brief clearButtonFocus 用于删除按钮焦点
-    //!
-    virtual void clearButtonFocus();
-
 public slots:
     void detailFontChanged(const QFont &font);
 

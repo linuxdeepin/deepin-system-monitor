@@ -82,10 +82,6 @@ void DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget(QString msgCod
         } else {
             this->setCurrent(m_cpudetailWidget);
         }
-        CPUDetailWidget *wid = dynamic_cast<CPUDetailWidget*>(m_cpudetailWidget);
-        if (wid) {
-            wid->clearButtonFocus();
-        }
         return;
     }
 
@@ -95,10 +91,6 @@ void DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget(QString msgCod
             this->insertWidget(3, m_netifDetailWidget);
         } else {
             this->setCurrent(m_netifDetailWidget);
-        }
-        NetifDetailViewWidget *wid = dynamic_cast<NetifDetailViewWidget*>(m_netifDetailWidget);
-        if (wid) {
-            wid->clearButtonFocus();
         }
         return;
     }
@@ -110,10 +102,6 @@ void DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget(QString msgCod
         } else {
             this->setCurrent(m_memDetailWidget);
         }
-        MemDetailViewWidget *wid = dynamic_cast<MemDetailViewWidget*>(m_memDetailWidget);
-        if (wid) {
-            wid->clearButtonFocus();
-        }
         return;
     }
 
@@ -123,10 +111,6 @@ void DetailViewStackedWidget::onDbusSendMsgChangeDetailInfoWidget(QString msgCod
             this->insertWidget(4, m_blockDevDetailWidget);
         } else {
             this->setCurrent(m_blockDevDetailWidget);
-        }
-        BlockDevDetailViewWidget *wid = dynamic_cast<BlockDevDetailViewWidget*>(m_blockDevDetailWidget);
-        if (wid) {
-            wid->clearButtonFocus();
         }
         return;
     }
