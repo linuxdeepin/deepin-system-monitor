@@ -27,6 +27,22 @@
 
 using namespace core::system;
 
+/***************************************STUB begin*********************************************/
+
+int stub_sscanf (const char *__restrict __s, const char *__restrict __format, ...)
+{
+    return 0;
+}
+
+FILE *stub_fopen_mem (const char *__restrict __filename,
+ const char *__restrict __modes)
+{
+    return nullptr;
+}
+
+/***************************************STUB end**********************************************/
+
+
 class UT_MemInfo: public ::testing::Test
 {
 public:
@@ -52,6 +68,23 @@ protected:
 
 TEST_F(UT_MemInfo, initTest)
 {
+}
+
+TEST_F(UT_MemInfo, test_copy_01)
+{
+    MemInfo copy(*m_tester);
+}
+
+TEST_F(UT_MemInfo, test_copy_02)
+{
+    const MemInfo rhs;
+    m_tester->operator=(rhs);
+}
+
+TEST_F(UT_MemInfo, test_copy_03)
+{
+    MemInfo* rhs = m_tester;
+    m_tester->operator= (*rhs);
 }
 
 TEST_F(UT_MemInfo, test_memTotal)
@@ -131,8 +164,23 @@ TEST_F(UT_MemInfo, test_mapped)
     EXPECT_NE(m_tester->mapped(), 0);
 }
 
-TEST_F(UT_MemInfo, test_readMemInfo)
+TEST_F(UT_MemInfo, test_readMemInfo_01)
 {
     m_tester->readMemInfo();
     EXPECT_NE(m_tester->memTotal(), 0);
+}
+
+TEST_F(UT_MemInfo, test_readMemInfo_02)
+{
+    Stub stub;
+    stub.set(sscanf, stub_sscanf);
+
+    m_tester->readMemInfo();
+}
+
+TEST_F(UT_MemInfo, test_readMemInfo_03)
+{
+    Stub stub;
+    stub.set(fopen, stub_fopen_mem);
+    m_tester->readMemInfo();
 }

@@ -34,10 +34,16 @@ int stub_socket_wireless (int __domain, int __type, int __protocol)
 {
     return -1;
 }
-int stub_ioctl_sock (int num, unsigned long int __request, ...)
+int stub_ioctl_01 (int num, unsigned long int __request, ...)
 {
     return -1;
 }
+
+int stub_ioctl_02 (int num, unsigned long int __request, ...)
+{
+    return 0;
+}
+
 
 /***************************************STUB end**********************************************/
 
@@ -103,12 +109,22 @@ TEST_F(UT_wireless, test_read_wireless_info_02)
 {
     Stub stub;
     stub.set(socket, stub_socket_wireless);
+    m_tester->m_ifname = "enp3s0";
     m_tester->read_wireless_info();
 }
 
 TEST_F(UT_wireless, test_read_wireless_info_03)
 {
     Stub stub;
-    stub.set(ioctl, stub_ioctl_sock);
+    stub.set(ioctl, stub_ioctl_01);
+    m_tester->m_ifname = "enp3s0";
+    m_tester->read_wireless_info();
+}
+
+TEST_F(UT_wireless, test_read_wireless_info_04)
+{
+    Stub stub;
+    stub.set(ioctl, stub_ioctl_02);
+    m_tester->m_ifname = "enp3s0";
     m_tester->read_wireless_info();
 }

@@ -46,6 +46,11 @@ bool stub_modPath_readDeviceSize(void*, QFile::OpenMode)
     return false;
 }
 
+bool stub_contains(const QStringRef &s, Qt::CaseSensitivity cs)
+{
+    return true;
+}
+
 /***************************************STUB end**********************************************/
 
 class UT_BlockDevice: public ::testing::Test
@@ -75,6 +80,11 @@ TEST_F(UT_BlockDevice, initTest)
 {
 }
 
+TEST_F(UT_BlockDevice, test_copy)
+{
+    BlockDevice* rhs = m_tester;
+    m_tester->operator= (*rhs);
+}
 
 TEST_F(UT_BlockDevice, test_setDeviceName)
 {
@@ -85,11 +95,19 @@ TEST_F(UT_BlockDevice, test_setDeviceName)
     EXPECT_EQ("abc", retName);
 }
 
-TEST_F(UT_BlockDevice, test_readDeviceInfo_01)
+TEST_F(UT_BlockDevice, test_readDeviceInfo)
 {
     m_tester->readDeviceInfo();
     EXPECT_TRUE((m_tester->capacity() > 0) || (m_tester->d->_time_Sec>0));
 }
+
+//TEST_F(UT_BlockDevice, test_readDeviceInfo_02)
+//{
+//    Stub stub;
+//    stub.set((bool(QString::*)(QStringRef &))ADDR(QString, contains), stub_contains);
+//    m_tester->readDeviceInfo();
+//    EXPECT_TRUE((m_tester->capacity() > 0) || (m_tester->d->_time_Sec>0));
+//}
 
 TEST_F(UT_BlockDevice, test_readDeviceModel)
 {

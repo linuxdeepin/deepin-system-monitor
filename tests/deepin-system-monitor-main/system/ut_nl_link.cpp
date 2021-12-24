@@ -21,6 +21,7 @@
 //self
 #include "system/nl_link.h"
 #include <netlink/route/link.h>
+#include <libnl3/netlink/route/link.h>
 
 //gtest
 #include "stub.h"
@@ -55,3 +56,10 @@ protected:
 TEST_F(UT_NLLink, initTest)
 {
 }
+
+//TEST_F(UT_NLLink, test_link)
+//{
+//    rtnl_link *link = nullptr;
+//    bool hold = true;
+//    NLLink NLLink(link,hold);
+//}

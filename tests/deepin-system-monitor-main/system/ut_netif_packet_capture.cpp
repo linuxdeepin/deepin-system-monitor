@@ -192,6 +192,17 @@ TEST_F(UT_NetifPacketCapture, test_hasDevIP_05)
     EXPECT_EQ(ok, false);
 }
 
+TEST_F(UT_NetifPacketCapture, test_hasDevIP_06)
+{
+    Stub stub;
+    stub.set(ADDR(NetifPacketCapture, whetherDevChanged), stub_whetherDevChanged);
+
+    stub.set(inet_ntoa, stub_inet_ntoa);
+    m_tester->m_devName = "12345678901234567";
+    auto ok = m_tester->hasDevIP();
+    EXPECT_EQ(ok, false);
+}
+
 TEST_F(UT_NetifPacketCapture, test_getCurrentDevName_01)
 {
     Stub stub;
@@ -279,6 +290,13 @@ TEST_F(UT_NetifPacketCapture, test_startNetifMonitorJob_02)
 TEST_F(UT_NetifPacketCapture, test_startNetifMonitorJob_03)
 {
     Stub stub;
+    m_tester->startNetifMonitorJob();
+}
+
+TEST_F(UT_NetifPacketCapture, test_startNetifMonitorJob_04)
+{
+    Stub stub;
+    stub.set(pcap_create, stub_pcap_create);
     m_tester->startNetifMonitorJob();
 }
 

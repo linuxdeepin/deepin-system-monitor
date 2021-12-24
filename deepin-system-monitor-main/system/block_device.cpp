@@ -54,8 +54,6 @@ void BlockDevice::setDeviceName(const QByteArray &deviceName)
     readDeviceInfo();
 }
 
-
-
 void BlockDevice::readDeviceInfo()
 {
 

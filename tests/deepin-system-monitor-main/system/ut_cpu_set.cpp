@@ -21,6 +21,7 @@
 //self
 #include "system/cpu_set.h"
 #include "system/cpu.h"
+#include "system/private/cpu_set_p.h"
 
 //gtest
 #include "stub.h"
@@ -41,8 +42,13 @@ FILE *stub_fopen (const char *__restrict __filename,
     return nullptr;
 }
 
-/***************************************STUB end**********************************************/
+int stub_sscanf_stats(const char *__restrict __s, const char *__restrict __format, ...)
+{
+    return 1;
+}
 
+
+/***************************************STUB end**********************************************/
 
 class UT_CPUSet : public ::testing::Test
 {
@@ -82,6 +88,18 @@ TEST_F(UT_CPUSet, test_copy_02)
     CPUSet copy2 = copy1;
 }
 
+TEST_F(UT_CPUSet, test_copy_03)
+{
+    const CPUSet rhs;
+    m_tester->operator=(rhs);
+}
+
+TEST_F(UT_CPUSet, test_copy_04)
+{
+    CPUSet* rhs = m_tester;
+    m_tester->operator= (*rhs);
+}
+
 TEST_F(UT_CPUSet, test_modelName)
 {
     m_tester->update();
@@ -89,11 +107,18 @@ TEST_F(UT_CPUSet, test_modelName)
     EXPECT_NE(retString, "");
 }
 
-TEST_F(UT_CPUSet, test_vendor)
+TEST_F(UT_CPUSet, test_vendor_01)
 {
     m_tester->update();
     QString retString = m_tester->vendor();
     EXPECT_NE(retString, "");
+}
+
+TEST_F(UT_CPUSet, test_vendor_02)
+{
+    m_tester->update();
+    m_tester->mIsEmptyModelName = true;
+    QString retString = m_tester->vendor();
 }
 
 TEST_F(UT_CPUSet, test_cpuCount)
@@ -124,19 +149,36 @@ TEST_F(UT_CPUSet, test_curFreq)
     EXPECT_NE(retString, "");
 }
 
-TEST_F(UT_CPUSet, test_minFreq)
+TEST_F(UT_CPUSet, test_minFreq_01)
 {
     m_tester->update();
     QString retString = m_tester->minFreq();
     EXPECT_NE(retString, "");
 }
 
-TEST_F(UT_CPUSet, test_maxFreq)
+TEST_F(UT_CPUSet, test_minFreq_02)
+{
+    m_tester->update();
+    m_tester->mIsEmptyModelName = true;
+    QString retString = m_tester->minFreq();
+    EXPECT_NE(retString, "");
+}
+
+TEST_F(UT_CPUSet, test_maxFreq_01)
 {
     m_tester->update();
     QString retString = m_tester->maxFreq();
     EXPECT_NE(retString, "");
 }
+
+TEST_F(UT_CPUSet, test_maxFreq_02)
+{
+    m_tester->update();
+    m_tester->mIsEmptyModelName = true;
+    QString retString = m_tester->maxFreq();
+    EXPECT_NE(retString, "");
+}
+
 
 TEST_F(UT_CPUSet, test_l1dCache)
 {
@@ -240,6 +282,15 @@ TEST_F(UT_CPUSet, test_read_stats_02)
     EXPECT_NE(stat->idle, -1);
 }
 
+TEST_F(UT_CPUSet, test_read_stats_03)
+{
+    Stub stub;
+    stub.set(sscanf, stub_sscanf_stats);
+    m_tester->read_stats();
+    core::system::CPUStat stat = m_tester->stat();
+    EXPECT_NE(stat->idle, -1);
+}
+
 TEST_F(UT_CPUSet, test_read_overall_info)
 {
     m_tester->read_overall_info();
@@ -283,8 +334,9 @@ TEST_F(UT_CPUSet, test_read_lscpu_03)
 //   EXPECT_NE(retString, "");
 }
 
-TEST_F(UT_CPUSet, test_getUsageTotalDelta)
+TEST_F(UT_CPUSet, test_getUsageTotalDelta_02)
 {
+    m_tester->d->cpusageTotal[kCurrentStat] = 0;
     qulonglong totalDelta = m_tester->getUsageTotalDelta();
     EXPECT_NE(totalDelta, 0);
 }

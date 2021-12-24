@@ -55,6 +55,12 @@ TEST_F(UT_SysInfo, initTest)
 {
 }
 
+TEST_F(UT_SysInfo, test_copy)
+{
+    const SysInfo rhs;
+    m_tester->operator=(rhs);
+}
+
 TEST_F(UT_SysInfo, test_instance)
 {
     EXPECT_TRUE(m_tester->instance() != nullptr);
@@ -114,6 +120,16 @@ TEST_F(UT_SysInfo, test_read_btime)
 {
     m_tester->read_btime(m_tester->d->uptime);
 //    EXPECT_TRUE(m_tester->d->uptime.tv_sec  != 0 || m_tester->d->uptime.tv_usec  != 0);
+}
+
+TEST_F(UT_SysInfo, test_btime)
+{
+    m_tester->btime();
+}
+
+TEST_F(UT_SysInfo, test_hostname)
+{
+    m_tester->hostname();
 }
 
 TEST_F(UT_SysInfo, test_read_loadavg)

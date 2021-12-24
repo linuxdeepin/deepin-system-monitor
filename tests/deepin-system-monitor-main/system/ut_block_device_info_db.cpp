@@ -68,6 +68,8 @@ TEST_F(UT_BlockDeviceInfoDB, initTest)
 
 TEST_F(UT_BlockDeviceInfoDB, test_readDiskInfo)
 {
+    BlockDevice block{};
+    m_tester->m_deviceList.append(block);
     m_tester->readDiskInfo();
     EXPECT_NE(m_tester->m_deviceList.size(), 0);
 }

@@ -82,6 +82,13 @@ TEST_F(UT_NetifInfo, test_copy_02)
     NetifInfo *copy = m_tester;
 }
 
+TEST_F(UT_NetifInfo, test_copy)
+{
+    const NetifInfo rhs;
+    m_tester->operator=(rhs);
+}
+
+
 TEST_F(UT_NetifInfo, test_set_recv_bps)
 {
     m_tester->set_recv_bps(10);
@@ -222,6 +229,12 @@ TEST_F(UT_NetifInfo, test_rxErrors)
 {
     m_tester->rxErrors();
 }
+
+TEST_F(UT_NetifInfo, test_rxDropped)
+{
+    m_tester->rxDropped();
+}
+
 
 TEST_F(UT_NetifInfo, test_rxFIFO)
 {

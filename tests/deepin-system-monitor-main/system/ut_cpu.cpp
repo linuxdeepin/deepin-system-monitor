@@ -20,6 +20,7 @@
 
 //self
 #include "system/cpu.h"
+#include "system/private/cpu_p.h"
 
 //gtest
 #include "stub.h"
@@ -64,14 +65,21 @@ TEST_F(UT_CPU, test_copy_01)
 
 TEST_F(UT_CPU, test_copy_02)
 {
-    CPUInfo copy1;
-    CPUInfo copy2 = copy1;
+    CPUInfo copy(1);
 }
 
 TEST_F(UT_CPU, test_copy_03)
 {
-    CPUInfo copy(1);
+    const CPUInfo rhs;
+    m_tester->operator=(rhs);
 }
+
+TEST_F(UT_CPU, test_copy_04)
+{
+    CPUInfo* rhs = m_tester;
+    m_tester->operator= (*rhs);
+}
+
 
 TEST_F(UT_CPU, test_logicalIndex)
 {
@@ -134,12 +142,19 @@ TEST_F(UT_CPU, test_vendorId)
 }
 
 
-TEST_F(UT_CPU, test_cpuFreq)
+TEST_F(UT_CPU, test_cpuFreq_01)
 {
     m_tester->setCpuFreq("abc");
     QString retString =  m_tester->cpuFreq();
 //    qInfo()<<"cpuFreq:"<<retString.length();
     EXPECT_NE(3, retString.length());
+}
+
+TEST_F(UT_CPU, test_cpuFreq_02)
+{
+    m_tester->setCpuFreq("-");
+    QString retString =  m_tester->cpuFreq();
+    EXPECT_NE(0, retString.length());
 }
 
 TEST_F(UT_CPU, test_cacheSize)

@@ -21,10 +21,20 @@
 //self
 #include "system/nl_hwaddr.h"
 #include <net/if_arp.h>
+#include <sys/ioctl.h>
 
 //gtest
 #include "stub.h"
 #include <gtest/gtest.h>
+
+/***************************************STUB end**********************************************/
+
+int stub_ioctl_hwaddr(int __fd, unsigned long int __request, ...)
+{
+    return 0;
+}
+
+/***************************************STUB end**********************************************/
 
 class UT_NLHWAddr: public ::testing::Test
 {
@@ -54,8 +64,9 @@ TEST_F(UT_NLHWAddr, initTest)
 {
 }
 
-TEST_F(UT_NLHWAddr, test_initData)
+TEST_F(UT_NLHWAddr, test_initData_01)
 {
     m_tester->initData();
 //    EXPECT_NE(m_tester->m_sa_family, 0);
 }
+
