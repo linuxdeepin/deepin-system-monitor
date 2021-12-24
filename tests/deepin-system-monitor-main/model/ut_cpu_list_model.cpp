@@ -37,7 +37,7 @@ bool stub_cpudata_isValid(){
 
 int stub_cpudata_row(){
 
-    return 0;
+    return 1;
 }
 
 int stub_cpudata_column1()
@@ -109,17 +109,6 @@ TEST_F(UT_CPUListModel, test_data_002)
 {
     Stub b1;
     b1.set(ADDR(QModelIndex,isValid),stub_cpudata_isValid);
-    QModelIndex *index = new QModelIndex();
-    m_tester->data(*index,Qt::DisplayRole);
-    delete index;
-}
-
-TEST_F(UT_CPUListModel, test_data_003)
-{
-    Stub b1;
-    b1.set(ADDR(QModelIndex,isValid),stub_cpudata_isValid);
-    Stub b2;
-    b2.set(ADDR(QModelIndex,row),stub_cpudata_row);
     QModelIndex *index = new QModelIndex();
     m_tester->data(*index,Qt::DisplayRole);
     delete index;

@@ -64,6 +64,12 @@ TEST_F(UT_EnvironmentFile, initTest)
 
 }
 
+TEST_F(UT_EnvironmentFile, test_copyContruct_01)
+{
+    EnvironmentFile file1;
+    EnvironmentFile file2(file1);
+}
+
 
 TEST_F(UT_EnvironmentFile, test_Operator_01)
 {

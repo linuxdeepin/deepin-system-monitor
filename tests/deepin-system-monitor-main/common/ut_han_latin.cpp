@@ -41,7 +41,10 @@ using namespace icu;
 #define TRANSLITERATION_LATIN_ASCII "Latin-ASCII"
 
 /***************************************STUB begin*********************************************/
-
+bool stub_convHanToLatin_ufailure(int)
+{
+    return true;
+}
 /***************************************STUB end**********************************************/
 
 

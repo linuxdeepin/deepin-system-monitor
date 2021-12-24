@@ -40,11 +40,20 @@
 #include <QTest>
 
 //gtest
+#include "stub.h"
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
 /***************************************STUB begin*********************************************/
+QDBusMessage::MessageType stub_getEnvironmentFiles_reply()
+{
+    return QDBusMessage::ReplyMessage;
+}
 
+QString stub_reply_signature_asb()
+{
+    return "a(sb)";
+}
 /***************************************STUB end**********************************************/
 
 class UT_Systemd1ServiceInterface : public ::testing::Test
@@ -97,3 +106,12 @@ TEST_F(UT_Systemd1ServiceInterface, test_getEnvironmentFiles_01)
 {
     QPair<ErrorContext, EnvironmentFileList> reply = m_tester->getEnvironmentFiles();
 }
+
+TEST_F(UT_Systemd1ServiceInterface, test_getEnvironmentFiles_02)
+{
+    Stub stub;
+    stub.set(ADDR(QDBusMessage, type), stub_getEnvironmentFiles_reply);
+    stub.set(ADDR(QDBusMessage, signature), stub_reply_signature_asb);
+    QPair<ErrorContext, EnvironmentFileList> reply = m_tester->getEnvironmentFiles();
+}
+

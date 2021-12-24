@@ -65,10 +65,30 @@ TEST_F(UT_TimePeriod, test_registerMetaType_01)
     EXPECT_TRUE(qRegisterMetaType<TimePeriod>("TimePeriod"));
 }
 
+TEST_F(UT_TimePeriod, test_registerMetaType_02)
+{
+    m_tester->registerMetaType();
+}
+
 TEST_F(UT_TimePeriod, test_ticks_01)
 {
     size_t TimePeriod = m_tester->m_period;
     EXPECT_EQ(TimePeriod,m_tester->m_period);
+}
+
+TEST_F(UT_TimePeriod, test_ticks_02)
+{
+    m_tester->m_interval.tv_sec= 0;
+    m_tester->m_interval.tv_usec = 0;
+    EXPECT_EQ(m_tester->ticks(), 0);
+}
+
+TEST_F(UT_TimePeriod, test_ticks_03)
+{
+    m_tester->m_interval.tv_sec= 1;
+    m_tester->m_interval.tv_usec = 0;
+    m_tester->m_period = TimePeriod::time_period_t::k5Min;
+    m_tester->ticks();
 }
 
 TEST_F(UT_TimePeriod, test_operator_01)

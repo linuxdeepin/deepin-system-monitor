@@ -25,7 +25,11 @@
 #include <gtest/gtest.h>
 
 /***************************************STUB begin*********************************************/
-
+QModelIndex* stub_sourceModel()
+{
+    static QModelIndex index;
+    return &index;
+}
 /***************************************STUB end**********************************************/
 
 class UT_CPUListSortFilterProxyModel: public ::testing::Test
@@ -66,7 +70,10 @@ TEST_F(UT_CPUListSortFilterProxyModel, test_setSortKey_001)
 
 TEST_F(UT_CPUListSortFilterProxyModel, test_filterAcceptsRow_001)
 {
-
+    static QModelIndex index;
+    static QSortFilterProxyModel model;
+    m_tester->setSourceModel(&model);
+    m_tester->filterAcceptsRow(0, index);
 }
 
 TEST_F(UT_CPUListSortFilterProxyModel, test_filterAcceptsColumn_001)
@@ -79,7 +86,34 @@ TEST_F(UT_CPUListSortFilterProxyModel, test_filterAcceptsColumn_001)
 
 TEST_F(UT_CPUListSortFilterProxyModel, test_lessThan_001)
 {
-
+    static QModelIndex index1;
+    static QModelIndex index2;
+    static QSortFilterProxyModel model;
+    m_tester->setSourceModel(&model);
+    m_tester->m_sortKey = CPUListSortFilterProxyModel::SortKey::kSortByIndex;
+    m_tester->lessThan(index1, index2);
 }
+
+TEST_F(UT_CPUListSortFilterProxyModel, test_lessThan_002)
+{
+    static QModelIndex index1;
+    static QModelIndex index2;
+    static QSortFilterProxyModel model;
+    m_tester->setSourceModel(&model);
+    m_tester->m_sortKey = CPUListSortFilterProxyModel::SortKey::kSortByUsage;
+    m_tester->lessThan(index1, index2);
+}
+
+TEST_F(UT_CPUListSortFilterProxyModel, test_lessThan_003)
+{
+    static QModelIndex index1;
+    static QModelIndex index2;
+    static QSortFilterProxyModel model;
+    m_tester->setSourceModel(&model);
+    m_tester->m_sortKey = CPUListSortFilterProxyModel::SortKey::kSortKeyMax;
+    m_tester->lessThan(index1, index2);
+}
+
+
 
 

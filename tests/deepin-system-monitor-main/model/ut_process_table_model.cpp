@@ -31,6 +31,17 @@
 
 static QString m_Sresult;
 /***************************************STUB begin*********************************************/
+QList<pid_t> stub_getPIDList()
+{
+    QList<pid_t> list;
+    list.append(1);
+    list.append(2);
+    list.append(3);
+    list.append(4);
+    list.append(5);
+    list.append(6);
+    return list;
+}
 bool stub_process_data_isValid(){
     m_Sresult = "index is valid";
     return true;
@@ -176,8 +187,26 @@ TEST_F(UT_ProcessTableModel, test_updateProcessList_001)
     m_tester->updateProcessList();
 }
 
+
 TEST_F(UT_ProcessTableModel, test_updateProcessListDelay_001)
 {
+    m_tester->updateProcessListDelay();
+}
+
+TEST_F(UT_ProcessTableModel, test_updateProcessListDelay_002)
+{
+    Stub stub;
+    stub.set(ADDR(ProcessSet, getPIDList), stub_getPIDList);
+    m_tester->updateProcessListDelay();
+}
+
+TEST_F(UT_ProcessTableModel, test_updateProcessListDelay_003)
+{
+    Stub stub;
+    stub.set(ADDR(ProcessSet, getPIDList), stub_getPIDList);
+    m_tester->m_procIdList.append(1);
+    Process proc;
+    m_tester->m_processList.append(proc);
     m_tester->updateProcessListDelay();
 }
 

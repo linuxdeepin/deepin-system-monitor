@@ -58,6 +58,11 @@ bool stub_eventFilter_hasFocus_false()
     return false;
 }
 
+QByteArray stub_openExecDirWithFM_readAllStandardOutput()
+{
+    return QString("Location:BB\nBBLocation:CC\nCCLocation:DD").toLocal8Bit();
+}
+
 QModelIndexList stub_eventFilter_selectedIndexes(void* object)
 {
     QModelIndexList list;
@@ -298,6 +303,22 @@ TEST_F(UT_ProcessTableView, test_openExecDirWithFM_02)
 
     EXPECT_TRUE(s_openFilePathItem);
 }
+
+TEST_F(UT_ProcessTableView, test_openExecDirWithFM_03)
+{
+    m_tester->m_selectedPID = QVariant(100000000);
+
+    Stub stub;
+    stub.set(ADDR(Process, cmdlineString), stub_openExecDirWithFM_cmdlineString);
+    stub.set(common::openFilePathItem, stub_openExecDirWithFM_openFilePathItem);
+    stub.set(ADDR(Process, environ), stub_openExecDirWithFM_environ);
+    stub.set(ADDR(QProcess, readAllStandardOutput), stub_openExecDirWithFM_readAllStandardOutput);
+
+    m_tester->openExecDirWithFM();
+
+    EXPECT_TRUE(s_openFilePathItem);
+}
+
 
 TEST_F(UT_ProcessTableView, test_showProperties_01)
 {

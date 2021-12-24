@@ -98,14 +98,6 @@ TEST_F(UT_BaseTableView, test_setModel_01)
     m_tester->setModel(&model);
 }
 
-TEST_F(UT_BaseTableView, test_paintEvent_01)
-{
-//    static QPaintEvent event(QRect(0, 0, 100, 100));
-//    m_tester->paintEvent(&event);
-
-    EXPECT_FALSE(m_tester->grab().isNull());
-}
-
 TEST_F(UT_BaseTableView, test_drawRow_01)
 {
     static QPixmap pix(100, 100);
