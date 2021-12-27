@@ -726,7 +726,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Custom</translation>
+        <translation>بەلگىلەش</translation>
     </message>
     <message>
         <source>Invalid</source>
@@ -840,7 +840,7 @@ Are you sure you want to continue?</source>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Custom Priority</source>
-        <translation>Custom Priority</translation>
+        <translation>ئالدىنلىق دەرىجىسىنى بەلگىلەش</translation>
     </message>
     <message>
         <source>Cancel</source>
