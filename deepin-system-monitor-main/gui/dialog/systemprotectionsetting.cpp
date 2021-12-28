@@ -245,7 +245,7 @@ void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSett
             option->setValue(m_lastValidInternalValue);
         }
     }
-    SystemProtectionSetting::instance()->regularNumber(edit);
+//    SystemProtectionSetting::instance()->regularNumber(edit);
 }
 
 QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
