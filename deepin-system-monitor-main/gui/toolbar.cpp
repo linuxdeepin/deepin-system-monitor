@@ -91,9 +91,8 @@ Toolbar::Toolbar(QWidget *parent)
         m_spaceItem = new QWidget(this);
         layout->addWidget(m_spaceItem);
     }
-    else
-    {
-        // add widgets into layout
+    else{
+	// add widgets into layout
         layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
         layout->addStretch();
         layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
