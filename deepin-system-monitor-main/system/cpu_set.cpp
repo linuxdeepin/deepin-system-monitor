@@ -839,6 +839,10 @@ void CPUSet::read_lscpu()
                            SIZE_SUFFIX_SPACE,
                            sz);
                QString value = QString(tmp);//.replace("MiB","MB");
+               if (tmp){
+                   free(tmp);
+                   tmp = nullptr;
+               }
               // value = QString(value).replace("KiB","KB");
              //  value = QString(value).replace("GiB","GB");
                d->m_info.insert(QString(name)+" cache",value);
@@ -870,6 +874,10 @@ void CPUSet::read_lscpu()
                                 SIZE_SUFFIX_SPACE,
                                 ca->size);
             d->m_info.insert(ca->name,tmp);
+            if (tmp){
+                free(tmp);
+                tmp = nullptr;
+            }
         }
    }
    lscpu_free_context(cxt);
