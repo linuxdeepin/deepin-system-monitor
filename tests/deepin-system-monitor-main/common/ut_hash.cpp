@@ -101,12 +101,12 @@ TEST(UT_Hash, test_hash_x86_32_04)
 
 TEST(UT_Hash, test_hash_x86_128_01)
 {
-    uint8_t value[10] {};
-    for (int i = 0; i < 10; i++) {
+    uint8_t value[100] {};
+    for (int i = 0; i < 100; i++) {
         value[i] = uint8_t(i);
     }
     uint8_t *key = value;
-    int len = 4;
+    int len = 100;
     uint32_t seed = 5;
     uint64_t out[2];
     hash_x86_128(key,len,seed,out);
