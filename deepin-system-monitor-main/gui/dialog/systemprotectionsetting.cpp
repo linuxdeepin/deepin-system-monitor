@@ -317,6 +317,11 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
     edit->connect(option, &DSettingsOption::valueChanged, edit, [=]() {
         if(option->value().toInt() != edit->text().toInt()) {
             edit->setText(option->value().toString());
+            // 恢复默认时，需要更新默认设置值
+            if (option->key() == AlarmCpuUsageOptionName)
+                m_lastValidCPUValue  = option->value().toInt();
+            if (option->key() == AlarmMemUsageOptionName)
+                m_lastValidMemoryValue  = option->value().toInt();
         }
     });
 
@@ -414,6 +419,8 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     edit->connect(option, &DSettingsOption::valueChanged, edit, [=]() {
         if(option->value().toInt() != edit->text().toInt()) {
             edit->setText(option->value().toString());
+            if (option->key() == AlarmIntervalOptionName)
+                m_lastValidInternalValue  = option->value().toInt();
         }
     });
 
