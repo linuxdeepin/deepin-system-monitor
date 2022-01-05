@@ -32,6 +32,7 @@
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <QCoreApplication>
+#include <QProcess>
 
 #ifndef IFNAMESZ
 #define IFNAMESZ 16
@@ -73,50 +74,36 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
 
 void NetifPacketCapture::whetherDevChanged()
 {
-    if(!m_devName){
+    if(m_devName.isEmpty()){
         m_changedDev = true;
         startNetifMonitorJob();
-    }
-    //当前网卡关闭
-    if(!hasDevIP()){
-        //标志当前网络设备已经改变
-        m_changedDev = true;
-        if(getCurrentDevName())
-            //重新开始网络监测
-            startNetifMonitorJob();
-        else {
-            //对应系统关闭所有可用网卡的情形
-            m_devName = nullptr;
-            return;
-        }
-    }
-    //新增可用网卡
-    else{
-        char *current_dev = m_devName;
+    } else {
+        QString current_dev = m_devName;
         getCurrentDevName();
         //若新增网卡设备优先级高于当前使用网卡设备,则重新开始监测任务
-        if (QString(current_dev).compare(QString(m_devName)) != 0) {
+        if (current_dev.compare(m_devName) != 0) {
             m_changedDev = true;
             startNetifMonitorJob();
         }
-
     }
 }
 
 bool NetifPacketCapture::hasDevIP(){
-    if(!m_devName)return false;
+    if(!m_devName.isEmpty()) {
+        return false;
+    }
 
     struct sockaddr_in *addr {};
     struct ifreq ifr {};
     char* address {};
     int sockfd;
     //设备名称过长
-    if( strlen(m_devName) >= IFNAMSIZ){
+    if( m_devName.size() >= IFNAMSIZ){
        //qDebug()<<"Device name too long! Invalid device Name!";
        return false;
     }
 
-    strcpy( ifr.ifr_name, m_devName);
+    strcpy( ifr.ifr_name, m_devName.toLocal8Bit().data());
     //创建socket
     sockfd = socket(AF_INET,SOCK_DGRAM,0);
 
@@ -142,53 +129,64 @@ bool NetifPacketCapture::hasDevIP(){
 
 }
 
-bool NetifPacketCapture::getCurrentDevName(){
-    char errbuf[PCAP_ERRBUF_SIZE] {};
-    char *dev_on_check {};
-    struct ifreq ifr {};//用来保存接口的信息
-    int metric; //用来保存接口的测度
-    int sock = 0;
-    //创建socket
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
-      if (sock == -1) {
-          close(sock);
-          //qDebug()<<"create socket failed!";
-          return false;
-      }
-    //获取当前所有网络设备
-    int status = pcap_findalldevs(&m_alldevs, errbuf);
-    if(status != 0) {
-        close(sock);
-        //qDebug()<<"no devices available!";
-        return false;
+bool NetifPacketCapture::getCurrentDevName()
+{
+    QProcess process;
+    process.start("route", QStringList() << "-n");
+    process.waitForFinished(-1);
+    QString output = QString(process.readAllStandardOutput());
+    // 先区分换行符号
+    QStringList outputList = output.split("\n");
+    if (outputList.size() > 0)
+        outputList.removeFirst();
+    QList<QStringList> totalList;
+    foreach(QString tmpList, outputList) {
+        QStringList lineList = tmpList.split(QRegExp("\\s{1,}"));
+        totalList.append(lineList);
     }
-
-    //遍历设备链表，根据metric信息选取最优网卡
-    int temp_metric = 10000000;
-    for(pcap_if_t *d=m_alldevs; d!=nullptr; d=d->next) {
-        for(pcap_addr_t *a=d->addresses; a!=nullptr; a=a->next) {
-            //设备非回环（lo）并且被分配了IP地址
-            if(strcmp(d->name,"lo") != 0 && a->addr->sa_family == AF_INET){
-                   dev_on_check = d->name;
-                strcpy(ifr.ifr_name, dev_on_check);
-                if (ioctl(sock,  SIOCGIFMETRIC, &ifr) == 0) { //SIOCGIFMETRIC 获取接口测度
-                       metric = ifr.ifr_ifru.ifru_ivalue;
-                       //如果接口测度更小则更新网络设备名m_devName
-                       if(metric < temp_metric){
-                           m_devName = d->name;
-                           temp_metric = metric;
-                       }
-
-                    }
-
+    // 设备和优先级列编号
+    int metricColNum = 0;
+    int devColNum = 0;
+    QList<QPair<QString, int> > metricList = {};
+    QString devName = "";
+    if (totalList.size() > 0) {
+        QStringList firstLine = totalList[0];
+        for (int j = 0; j < firstLine.size(); j++) {
+            if (firstLine[j].compare("Metric", Qt::CaseInsensitive) == 0) {
+                metricColNum = j;
             }
-
+            if (firstLine[j].compare("Iface", Qt::CaseInsensitive) == 0) {
+                devColNum = j;
+            }
         }
     }
-    close(sock);
+
+    if (totalList.size() > 0)
+        totalList.removeFirst();
+
+    for (int i = 0; i < totalList.size(); i++) {
+        auto list = totalList[i];
+        if (list.size() > devColNum && list.size() > metricColNum)
+            metricList.append(QPair<QString, int>(list[devColNum], list[metricColNum].toInt()));
+    }
+    int minMetric = 0;
+    QString perfectDev = "";
+    for (int i = 0; i < metricList.size(); i++) {
+        QPair<QString, int> pair = metricList[i];
+        if (i == 0) {
+            minMetric = pair.second;
+            perfectDev = pair.first;
+        } else {
+            if (minMetric > pair.second) {
+                minMetric = pair.second;
+                perfectDev = pair.first;
+            }
+        }
+    }
+    m_devName = perfectDev;
+
     //无可用设备
-    if (!m_devName) {
-        //qInfo()<<"no available net interface!";
+    if (m_devName.isEmpty()) {
         return false;
     }
     return true;
@@ -201,23 +199,14 @@ void NetifPacketCapture::startNetifMonitorJob()
     char errbuf[PCAP_ERRBUF_SIZE] {};
 
     getCurrentDevName();
-
-    if (!m_devName) {
-        qDebug() << "pcap_lookupdev failed: " << errbuf;
+    if (m_devName.isEmpty()) {
         return;
     }
 
     // create pcap handler
-    m_handle = pcap_create(m_devName, errbuf);
+    m_handle = pcap_create(m_devName.toLocal8Bit().data(), errbuf);
     if (!m_handle) {
         qDebug() << "pcap_create failed: " << errbuf;
-        return;
-    }
-    // setm_timer->start(); non block dispatch mode
-    rc = pcap_setnonblock(m_handle, 1, errbuf);
-    if (rc == -1) {
-        qDebug() << "pcap_setnonblock failed: " << errbuf;
-        pcap_close(m_handle);
         return;
     }
 
@@ -246,6 +235,13 @@ void NetifPacketCapture::startNetifMonitorJob()
         qDebug() << "pcap_activate warning: " << pcap_statustostr(rc);
     } else if (rc < 0) {
         qDebug() << "pcap_setnonblock failed: " << pcap_statustostr(rc);
+        pcap_close(m_handle);
+        return;
+    }
+
+    // setm_timer->start(); non block dispatch mode
+    rc = pcap_setnonblock(m_handle, 1, errbuf);
+    if (rc == -1) {
         pcap_close(m_handle);
         return;
     }
@@ -379,7 +375,7 @@ void NetifPacketCapture::dispatchPackets()
 {
     if (!go) return;
     //无可用设备
-    if (!m_devName) return;
+    if (m_devName.isEmpty()) return;
     // check pending packets before dispatching packets
     auto npkts = m_localPendingPackets.size();
     if (npkts > 0) {
@@ -449,11 +445,12 @@ void NetifPacketCapture::dispatchPackets()
         } else if (nr == -1) {
             // error occurred while processing packets
             qDebug() << "pcap_dispatch failed: " << pcap_geterr(m_handle);
-            memset(static_cast<void*>(m_devName), 0, sizeof(m_devName));
+            m_devName = "";
             m_timer->stop();
             break;
         } else if (nr == -2) {
             // breakloop requested (can only happen inside the callbackm_localPendingPackets function)
+            m_devName = "";
             m_timer->stop();
             break;
         }

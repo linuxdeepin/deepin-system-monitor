@@ -44,10 +44,7 @@ public:
      */
     void dispatchPackets();
     pcap_t  *getHandle() { return m_handle;}
-    /**
-     * @brief 判断使用网卡是否变更,变更则重启startNetifMonitorJob槽函数;
-     */
-    void whetherDevChanged();
+
 
 protected:
 
@@ -66,6 +63,11 @@ public slots:
      * @brief Start monitor job
      */
     void startNetifMonitorJob();
+
+    /**
+     * @brief 判断使用网卡是否变更,变更则重启startNetifMonitorJob槽函数;
+     */
+    void whetherDevChanged();
 
 private:
 
@@ -97,7 +99,7 @@ private:
     //是否变更网卡
     bool m_changedDev {false}; 
     //当前使用网卡名
-    char *m_devName {};
+    QString m_devName {};
     //当前系统所有网卡设备链表
     pcap_if_t *m_alldevs {};
     //判断网卡是否变更定时器

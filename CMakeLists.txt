@@ -17,6 +17,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
   # Enable Qt builtin debug mode
   add_definitions("-DQT_MESSAGELOGCONTEXT")
+  add_definitions("-DQT_NO_WARNING_OUTPUT")
 else()
   # -Wl, -O2 Enable linker optimizations
   # -Wl, --gc-sections Remove unused code resulting from -fdsta-sections and

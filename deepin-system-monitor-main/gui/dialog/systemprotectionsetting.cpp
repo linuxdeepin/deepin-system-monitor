@@ -303,6 +303,12 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmUsgaeSettingHandle
         lineEditChanged(onFocus, edit, option, 100, 30);
     } );
 
+    option->connect(edit, &DLineEdit::textChanged, option, [=] () {
+        QString text = edit->text();
+        int number = text.toInt();
+        edit->setText(QString::number(number));
+    });
+
     option->connect(edit, &DLineEdit::returnPressed, option, [=] () {
         lineEditChanged(false, edit, option, 100, 30);
     } );
