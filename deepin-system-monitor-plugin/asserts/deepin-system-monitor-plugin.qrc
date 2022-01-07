@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/deepin/builtin/deepin-system-monitor.svg</file>
+        <file>icons/deepin/builtin/actions/dsm_pluginicon_20px.svg</file>
     </qresource>
 </RCC>

@@ -53,7 +53,7 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
 
-    QString iconName = "deepin-system-monitor";
+    QString iconName = "dsm_pluginicon";
     QPixmap pixmap;
     int iconSize = PLUGIN_ICON_MAX_SIZE;
 
@@ -102,7 +102,7 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
     const auto ratio = devicePixelRatioF();
     painter.setOpacity(1);
 
-    pixmap = loadSvg(iconName, ":/icons/deepin/builtin/", iconSize, ratio);
+    pixmap = loadSvg(iconName, ":/icons/deepin/builtin/actions/", iconSize, ratio);
 
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());
@@ -177,7 +177,7 @@ const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const 
     }
 
     QPixmap pixmap(int(size * ratio), int(size * ratio));
-    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName).arg(iconName.contains(".svg") ? "" : ".svg");
+    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName+"_20px").arg(iconName.contains(".svg") ? "" : ".svg");
     QSvgRenderer renderer(localIcon);
     pixmap.fill(Qt::transparent);
 

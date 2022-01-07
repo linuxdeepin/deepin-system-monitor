@@ -23,6 +23,7 @@
 #include <QAccessible>
 #include <QPainter>
 #include <DApplication>
+#include <QLineF>
 
 DWIDGET_USE_NAMESPACE
 
@@ -60,8 +61,8 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
     } else {
         m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%") + QString(" "));
     }
-    // 左侧宽度预留10个像素
-    m_leftWidth += 10;
+    // 左侧宽度预留20个像素
+    m_leftWidth += 20;
 
     // 设置右侧字符串宽度
     if (downLoad.length() == 3) {
@@ -73,12 +74,12 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
     } else {
         m_rightWidth = fontMetrics().width(QString("↓") + downLoad + QString(" "));
     }
-    // 设置右侧字符串宽度预留15个像素
-    m_rightWidth += 15;
+    // 设置右侧字符串宽度预留20个像素
+    m_rightWidth += 20;
 
 
     // 设置当前窗体固定大小
-    setFixedSize(m_leftWidth + m_rightWidth, fontMetrics().boundingRect(m_textList.at(0)).height() * 2);
+    setFixedSize(5 + 5 + m_leftWidth + m_rightWidth, fontMetrics().boundingRect(m_textList.at(0)).height() * 2 + 20);
     update();
 }
 
@@ -124,19 +125,63 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
         downLoad = "0KB/s";
     }
 
-    int specialCharaWidth = fontMetrics().width(QString("↓"));
-    painter.drawText(QRectF(0.0, 0.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%"), optionLeft);
-    painter.setPen(QPen(QColor("red"), 1));
-    painter.drawText(QRectF(m_leftWidth, 0.0, specialCharaWidth, rectHeight / 2.0), QString("↓"), optionMid);
-    painter.setPen(QPen(palette().brightText(), 1));
-    painter.drawText(QRectF(m_leftWidth + specialCharaWidth, 0, m_rightWidth, rectHeight / 2.0), downLoad, optionLeft);
+//    int specialCharaWidth = fontMetrics().width(QString("↓"));
+    int specialCharaWidth = 10;
 
-    specialCharaWidth = fontMetrics().width(QString("↑"));
-    painter.drawText(QRectF(0, rectHeight / 2.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem + QString("%"), optionLeft);
-    painter.setPen(QPen(QColor("blue"), 1));
-    painter.drawText(QRectF(m_leftWidth, rectHeight / 2.0, specialCharaWidth, rectHeight / 2.0), QString("↑"), optionMid);
+    int specialCharaHeight = fontMetrics().width(QString("1")) + 5;
+    // 左侧空白区域
+    int leftMargin = 10;
+
+    // 绘制左侧空白矩形区域
+    painter.save();
+    painter.setPen(QColor(Qt::transparent));
+    painter.drawRect(QRectF(0.0, 0.0, leftMargin, rectHeight / 2.0));
+    painter.restore();
+
     painter.setPen(QPen(palette().brightText(), 1));
-    painter.drawText(QRectF(m_leftWidth + specialCharaWidth, rectHeight / 2.0, m_rightWidth, rectHeight / 2.0), upLoad, optionLeft);
+    // 绘制CPU文字信息
+    painter.drawText(QRectF(leftMargin, 0.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%"), optionLeft);
+
+
+    // 绘制下箭头
+    painter.save();
+    painter.setPen(QPen(palette().brightText(), 2));
+    painter.setRenderHints(QPainter::Antialiasing);
+    QVector<QLineF> vecDown;
+    vecDown.append(QLineF(QPointF(m_leftWidth + leftMargin, rectHeight / 2.0 - rectHeight / 4.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 - rectHeight / 4.0 + specialCharaHeight / 2.0)));
+    vecDown.append(QLineF(QPointF(m_leftWidth + leftMargin + specialCharaWidth / 2, rectHeight / 2.0 - rectHeight / 4.0 + specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth, rectHeight / 2.0 - rectHeight / 4.0)));
+    vecDown.append(QLineF(QPointF(m_leftWidth + leftMargin + specialCharaWidth / 2, rectHeight / 2.0 - rectHeight / 4.0 + specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 - rectHeight / 4.0 - specialCharaHeight / 2.0)));
+    painter.drawLines(vecDown);
+    painter.restore();
+
+//    painter.drawText(QRectF(m_leftWidth, 0.0, specialCharaWidth, rectHeight / 2.0), QString("↓"), optionMid);
+    // 绘值下载文字信息
+    painter.drawText(QRectF(leftMargin + m_leftWidth + specialCharaWidth + 5, 0, m_rightWidth, rectHeight / 2.0), downLoad, optionLeft);
+
+//    specialCharaWidth = fontMetrics().width(QString("↑"));
+    // 绘制左侧空白矩形区域
+    painter.save();
+    painter.setPen(QColor(Qt::transparent));
+    painter.drawRect(QRectF(0, 0, leftMargin, rectHeight / 2.0));
+    painter.restore();
+
+    // 绘制内存文字信息
+    painter.drawText(QRectF(leftMargin, rectHeight / 2.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem + QString("%"), optionLeft);
+    painter.save();
+    painter.setPen(QPen(palette().brightText(), 2));
+    painter.setRenderHints(QPainter::Antialiasing);
+    // 绘制上箭头
+    QVector<QLineF> vecUp;
+    vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth, rectHeight / 2.0 + rectHeight / 4.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0)));
+    vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth, rectHeight / 2.0 + rectHeight / 4.0)));
+    vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2,rectHeight / 2.0 + rectHeight / 4.0 + specialCharaHeight / 2.0)));
+    painter.drawLines(vecUp);
+    painter.restore();
+//    painter.drawText(QRectF(m_leftWidth, rectHeight / 2.0, specialCharaWidth, rectHeight / 2.0), QString("↑"), optionMid);
+
+    // 绘制上传文字信息
+    painter.setPen(QPen(palette().brightText(), 1));
+    painter.drawText(QRectF(leftMargin + m_leftWidth + specialCharaWidth + 5, rectHeight / 2.0, m_rightWidth, rectHeight / 2.0), upLoad, optionLeft);
 }
 
 bool SystemMonitorTipsWidget::event(QEvent *event)
