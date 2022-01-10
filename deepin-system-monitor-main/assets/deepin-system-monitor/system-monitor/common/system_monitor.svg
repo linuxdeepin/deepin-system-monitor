@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <filter id="deepin-system-monitor-a" width="129.5%" height="129.5%" x="-14.8%" y="-14.8%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0"/>
+      <feMerge>
+        <feMergeNode in="shadowMatrixOuter1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="deepin-system-monitor-b" cx="38.256%" cy="21.126%" r="100.21%" fx="38.256%" fy="21.126%">
+      <stop offset="0%" stop-color="#665AFF"/>
+      <stop offset="100%" stop-color="#4300D7"/>
+    </radialGradient>
+    <radialGradient id="deepin-system-monitor-c" cx="50%" cy="52.28%" r="54.424%" fx="50%" fy="52.28%">
+      <stop offset="0%" stop-color="#00D8FF"/>
+      <stop offset="100%" stop-color="#3D00B5"/>
+    </radialGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd" filter="url(#deepin-system-monitor-a)" transform="translate(2 2)">
+    <circle cx="22" cy="22" r="22" fill="url(#deepin-system-monitor-b)"/>
+    <circle cx="22" cy="22" r="16.5" fill="url(#deepin-system-monitor-c)"/>
+    <path fill="#FFF" fill-opacity=".2" fill-rule="nonzero" d="M9,31 L8,31 L7.999,27 L6,27 L6,26 L7.999,26 L7.999,18 L6,18 L6,17 L7.999,17 L8,13 L9,13 L8.999,17 L17,17 L17,9 L12,9 L12,8 L17,8 L17,5 L18,5 L18,8 L26,8 L26,6 L27,6 L27,8 L31.5,8 L31.5,9 L27,9 L27,17 L35,17 L35,13 L36,13 L36,17 L37.5,17 L37.5,18 L36,18 L36,26 L37.5,26 L37.5,27 L36,27 L36,31 L35,31 L35,27 L27,27 L27,38 L26,38 L26,27 L18,27 L18,38 L17,38 L17,27 L8.999,27 L9,31 Z M8.999,26 L17,26 L17,18 L8.999,18 L8.999,26 Z M26,18 L18,18 L18,26 L26,26 L26,18 Z M35,18 L27,18 L27,26 L35,26 L35,18 Z M26,9 L18,9 L18,17 L26,17 L26,9 Z"/>
+    <path stroke="#FFF" stroke-linecap="round" stroke-width="2" d="M32.9357479,35.6631533 C36.9375255,32.4560479 39.5,27.527273 39.5,22 C39.5,12.3350169 31.6649831,4.5 22,4.5 C12.3350169,4.5 4.5,12.3350169 4.5,22 C4.5,27.416008 6.96034686,32.2573713 10.8243416,35.4673908" opacity=".5"/>
+    <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22,4.5 C12.3350169,4.5 4.5,12.3350169 4.5,22 C4.5,27.416008 6.96034686,32.2573713 10.8243416,35.4673908"/>
+    <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.5,24.5 C8.5,24.5 9.5,26.5 11.5,26.5 C16,26.5 14.5,15.5 19,15.5 C23.5,15.5 21,26.5 25.5,26.5 C28.5,26.5 27,21.5 29.5,21.5 C32,21.5 30,27 35.5,26.5"/>
+    <rect width="18" height="9" x="13" y="31" fill="#0A8BFF" rx="4.5"/>
+    <path fill="#FFF" d="M18.094,37.632 C18.676,37.632 19.174,37.41 19.552,36.972 L18.988,36.3 C18.778,36.528 18.49,36.708 18.136,36.708 C17.506,36.708 17.098,36.192 17.098,35.304 C17.098,34.434 17.572,33.918 18.148,33.918 C18.466,33.918 18.7,34.062 18.922,34.266 L19.486,33.582 C19.18,33.27 18.712,33 18.13,33 C16.996,33 16,33.852 16,35.34 C16,36.852 16.96,37.632 18.094,37.632 Z M20.206,37.548 L20.206,33.084 L21.772,33.084 C22.756,33.084 23.566,33.432 23.566,34.536 C23.566,35.598 22.744,36.066 21.802,36.066 L21.28,36.066 L21.28,37.548 L20.206,37.548 Z M21.28,35.22 L21.748,35.22 C22.27,35.22 22.522,34.974 22.522,34.536 C22.522,34.086 22.234,33.93 21.718,33.93 L21.28,33.93 L21.28,35.22 Z M26.116,37.632 C27.304,37.632 27.904,36.954 27.904,35.448 L27.904,33.084 L26.872,33.084 L26.872,35.562 C26.872,36.408 26.602,36.708 26.116,36.708 C25.624,36.708 25.372,36.408 25.372,35.562 L25.372,33.084 L24.304,33.084 L24.304,35.448 C24.304,36.954 24.922,37.632 26.116,37.632 Z"/>
+  </g>
+</svg>
