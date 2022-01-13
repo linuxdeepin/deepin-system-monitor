@@ -40,7 +40,7 @@
 
 
 //#define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
-#define PACKET_DISPATCH_IDLE_TIME 5 // pcap dispatch interval
+#define PACKET_DISPATCH_IDLE_TIME 50 // pcap dispatch interval
 #define PACKET_DISPATCH_BATCH_COUNT 64 // packets to process in a batch
 #define PACKET_DISPATCH_QUEUE_LWAT 64 // queue low water mark
 #define PACKET_DISPATCH_QUEUE_HWAT 256 // queue high water mark
@@ -373,6 +373,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
 // dispatch packet handler
 void NetifPacketCapture::dispatchPackets()
 {
+    usleep(20000);
     if (!go) return;
     //无可用设备
     if (m_devName.isEmpty()) return;
@@ -405,14 +406,7 @@ void NetifPacketCapture::dispatchPackets()
     time_t last_ifaddrs_refresh {};
 
     do {
-        //若网络设备改变，结束当前抓包
-        if(m_changedDev){
-            m_changedDev = false;
-            m_timer->stop();
-            QCoreApplication::processEvents();
-            m_timer->start();
-            return;
-        }
+        usleep(20000);
         // quit requested, break the loop then
         auto quit = m_quitRequested.load();
         if (quit) {
@@ -445,18 +439,13 @@ void NetifPacketCapture::dispatchPackets()
         } else if (nr == -1) {
             // error occurred while processing packets
             qDebug() << "pcap_dispatch failed: " << pcap_geterr(m_handle);
-            m_devName = "";
             m_timer->stop();
             break;
         } else if (nr == -2) {
             // breakloop requested (can only happen inside the callbackm_localPendingPackets function)
-            m_devName = "";
             m_timer->stop();
             break;
         }
-        QCoreApplication::processEvents();
-
-
     } while (true);
 
     // close pcap handle

@@ -89,7 +89,7 @@ void NetifMonitor::handleNetData()
                     hist->rx_bytes += payload->payload;
                     hist->rx_packets++;
                 } else if (payload->direction == kOutboundPacket) {
-                    hist->tx_bytes += payload->payload;
+                    hist->tx_bytes += (payload->payload * 2);
                     hist->tx_packets++;
                 }
             } else {
