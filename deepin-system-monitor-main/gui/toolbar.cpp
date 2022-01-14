@@ -85,19 +85,13 @@ Toolbar::Toolbar(QWidget *parent)
     searchEdit->lineEdit()->setMaxLength(MAX_TEXT_LEN);
     searchEdit->setFixedWidth(360);
     searchEdit->setPlaceHolder(DApplication::translate("Title.Bar.Search", "Search"));
-    if (WaylandCentered == true){
-        layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
-        layout->addWidget(searchEdit, 0 ,Qt::AlignCenter);
-        m_spaceItem = new QWidget(this);
-        layout->addWidget(m_spaceItem);
-    }
-    else{
-	// add widgets into layout
-        layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
-        layout->addStretch();
-        layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
-        layout->addStretch();
-    }
+
+    // add widgets into layout
+    layout->addWidget(m_switchFuncTabBtnGrp, 0, Qt::AlignLeft);
+    layout->addStretch();
+    layout->addWidget(searchEdit, 0, Qt::AlignHCenter);
+    layout->addStretch();
+
 
     // timer instance, handle search process only after timed out
     searchTimer = new QTimer(this);
