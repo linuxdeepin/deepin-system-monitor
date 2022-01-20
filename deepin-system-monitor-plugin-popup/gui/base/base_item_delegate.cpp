@@ -46,6 +46,8 @@ const int spacing = 10;
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    changeTheme(dAppHelper->themeType());
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseItemDelegate::changeTheme);
 }
 
