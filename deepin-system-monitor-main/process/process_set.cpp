@@ -212,7 +212,19 @@ const Process ProcessSet::getProcessById(pid_t pid) const
 
 QList<pid_t> ProcessSet::getPIDList() const
 {
-    return m_set.keys();
+    // 当系统读取到的m_set为空时,通过keys()函数返回会造成段错误 原因是keys函数效率低下,会造成大量的内存拷贝
+    // 替换方案是
+    QList<pid_t> pidList {};
+    pidList.clear();
+    int size = m_set.size();
+    QMap<pid_t, Process>::key_iterator iterBegin = m_set.keyBegin();
+    for (;iterBegin != m_set.keyEnd(); ++iterBegin) {
+        pid_t tmpKey = *iterBegin;
+        pidList.append(tmpKey);
+        if (size != m_set.size())
+            break;
+    }
+    return pidList;
 }
 
 void ProcessSet::removeProcess(pid_t pid)
