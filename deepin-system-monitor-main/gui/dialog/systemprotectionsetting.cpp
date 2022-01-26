@@ -221,7 +221,7 @@ void SystemProtectionSetting::setLastValidAlarm(DLineEdit *lineEdit,DTK_CORE_NAM
 void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSettingsOption *option, int maxValue, int minValue)
 {
     QString key = option->key();
-    if(focus == false) {
+    if(focus == false && edit->lineEdit()->selectedText().isEmpty()) {
         if(edit->text().isEmpty() || edit->text().toInt() < minValue || edit->text().toInt() > maxValue) {
             //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
             if(key == AlarmCpuUsageOptionName)
@@ -410,6 +410,12 @@ QPair<QWidget*, QWidget*> SystemProtectionSetting::createAlarmIntervalSettingHan
     option->connect(edit, &DLineEdit::focusChanged, option, [=] (bool onFocus) {
         lineEditChanged(onFocus, edit, option, 60, 5);
     } );
+
+    option->connect(edit, &DLineEdit::textChanged, option, [=] () {
+        QString text = edit->text();
+        int number = text.toInt();
+        edit->setText(QString::number(number));
+    });
 
     option->connect(edit, &DLineEdit::returnPressed, option, [=] () {
         lineEditChanged(false, edit, option, 60, 5);
