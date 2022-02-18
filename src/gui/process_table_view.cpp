@@ -60,9 +60,11 @@
 #include <QKeyEvent>
 #include <QShortcut>
 
+#define HUAWEI_CLOLD_ENV "/usr/local/vdi/base.env"
 // process table view backup setting key
 const QByteArray header_version = "_1.0.0";
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
+
 ProcessTableView::ProcessTableView(DWidget *parent)
     : BaseTableView(parent)
 {
@@ -471,22 +473,30 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     //不显示快捷键文本
     endProcAction->setShortcutVisibleInContextMenu(false);
     connect(endProcAction, &QAction::triggered, this, &ProcessTableView::endProcess);
+
     // pause process
-    auto *pauseProcAction = m_contextMenu->addAction(
-                                DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
-    // ALT + P
-    pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
-    //不显示快捷键文本
-    pauseProcAction->setShortcutVisibleInContextMenu(false);
-    connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
+    QAction *pauseProcAction = nullptr;
     // resume process
-    auto *resumeProcAction = m_contextMenu->addAction(
-                                 DApplication::translate("Process.Table.Context.Menu", "Resume process"));
-    // ALT + C
-    resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
-    //不显示快捷键文本
-    resumeProcAction->setShortcutVisibleInContextMenu(false);
-    connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
+    QAction *resumeProcAction = nullptr;
+    bool bHuaweiCloud = isHuaweiCloud();
+    if (!bHuaweiCloud)
+    {
+        pauseProcAction = m_contextMenu->addAction(
+                                    DApplication::translate("Process.Table.Context.Menu", "Suspend process"));
+        resumeProcAction= m_contextMenu->addAction(
+                                     DApplication::translate("Process.Table.Context.Menu", "Resume process"));
+        // ALT + P
+        pauseProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_P));
+        //不显示快捷键文本
+        pauseProcAction->setShortcutVisibleInContextMenu(false);
+        connect(pauseProcAction, &QAction::triggered, this, &ProcessTableView::pauseProcess);
+
+        // ALT + C
+        resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
+        //不显示快捷键文本
+        resumeProcAction->setShortcutVisibleInContextMenu(false);
+        connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
+    }
 
     // change priority dialog
     auto *chgProcPrioMenu = m_contextMenu->addMenu(
@@ -580,8 +590,11 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             }
             // monitor process itself cant be stopped, so we need a second modified running flag
             bool modRunning = running;
-            pauseProcAction->setEnabled(modRunning);
-            resumeProcAction->setEnabled(!running);
+            if (!bHuaweiCloud)
+            {
+                pauseProcAction->setEnabled(modRunning);
+                resumeProcAction->setEnabled(!running);
+            }
 
             // change priority menu item checkable state
             auto prio = m_model->getProcessPriority(pid);
@@ -923,4 +936,24 @@ void ProcessTableView::customizeProcessPriority()
         }
     });
     prioDialog->exec();
+}
+
+bool ProcessTableView::isHuaweiCloud()
+{
+    QFile file(HUAWEI_CLOLD_ENV);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    QTextStream in(&file);
+    QString line;
+    do{
+        line = in.readLine();
+        if (line.contains("SW_HARDWARE_MODEL=\"HT3300\"")){
+            file.close();
+            return true;
+        }
+    }while (!line.isNull());
+    file.close();
+    return false;
 }

@@ -174,6 +174,11 @@ private:
      * @brief Customize process priority handler
      */
     void customizeProcessPriority();
+    /**
+     * @brief Is huawei cloud system
+     * @return yes or no
+     */
+    bool isHuaweiCloud();
 
 private:
     // Process model for process table view
