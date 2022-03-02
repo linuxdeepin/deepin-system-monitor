@@ -1026,16 +1026,16 @@ Are you sure you want to continue?</translation>
         <translation>Load</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>Active</translation>
+        <source>Start state</source>
+        <translation>Start state</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>Sub</translation>
     </message>
     <message>
-        <source>State</source>
-        <translation>State</translation>
+        <source>Start tactic</source>
+        <translation>Start tactic</translation>
     </message>
     <message>
         <source>Description</source>

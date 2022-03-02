@@ -1026,16 +1026,16 @@ Are you sure you want to continue?</source>
         <translation>記憶體載入</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>活動</translation>
+        <source>Start state</source>
+        <translation>啟動狀態</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>執行狀態</translation>
     </message>
     <message>
-        <source>State</source>
-        <translation>狀態</translation>
+        <source>Start tactic</source>
+        <translation>啟用策略</translation>
     </message>
     <message>
         <source>Description</source>
