@@ -46,7 +46,7 @@
     <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
-        <translation>利用率</translation>
+        <translation>總利用率</translation>
     </message>
     <message>
         <source>Current frequency</source>
@@ -985,16 +985,16 @@ Are you sure you want to continue?</source>
         <translation>內存加載</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>活動</translation>
+        <source>Start state</source>
+        <translation>啟動狀態</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>運行狀態</translation>
     </message>
     <message>
-        <source>State</source>
-        <translation>狀態</translation>
+        <source>Start tactic</source>
+        <translation>啟用策略</translation>
     </message>
     <message>
         <source>Description</source>
