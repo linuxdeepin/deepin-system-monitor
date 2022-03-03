@@ -73,7 +73,7 @@ System Monitor can be used to end processes.
 
 #### End Application
 
-1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+1. Click ![icon_menu](../common/icon_menu.svg) on the System Monitor interface..
 2. Select **Force end application** ( available for graphical processes only).
 3. Click the window of application you want to close according to the prompt.
 4. Click **Force End** in the pop-up window to confirm.
@@ -119,7 +119,7 @@ In the list of system services, force-ending of application is prohibited.
 #### Start system service
 1. Select the **Services** tab on the System Monitor interface.
 2. Right-click a process that is not started yet and select **Start**. Enter the password if an authentication window pops up.
-3. **active** is displayed in the **Active** column.
+3. **active** is displayed in the **Start State** column.
 4. Right-click the service and select **Startup type**. Select from **Auto** and **Manual** options.
 5. Right-click the service and select **Refresh**.
 
@@ -127,7 +127,7 @@ In the list of system services, force-ending of application is prohibited.
 
 1. Select the **Services** tab on the System Monitor interface.
 2. Right-click a process that is started already and select **Stop**. Enter the password if an authentication window pops up.
-3. **inactive** is displayed in the **Active** column.
+3. **inactive** is displayed in the **Start State** column.
 4. Right-click the service and select **Refresh**.
 
 You can also right-click a system process and select **Restart**. 
@@ -139,7 +139,7 @@ In the main menu, you can force ending applications, switch monitoring modes and
 
 System Monitor offers Expand view and Compact view for your choice.
 
-1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+1. Click ![icon_menu](../common/icon_menu.svg) on the System Monitor interface.
 2. Click **View** to select one mode.
 
 > ![notes](../common/notes.svg) Notes: Compact view and expand view are only available for processes.
@@ -159,21 +159,21 @@ On the System Monitor interface, Click ![icon_menu](../common/icon_menu.svg) > *
 
 There are three window themes, namely Light Theme, Dark Theme, and System Theme.
 
-1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+1. Click ![icon_menu](../common/icon_menu.svg) on the System Monitor interface.
 2. Click **Theme** to select one theme.
 
 ### Help
 
-1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+1. Click ![icon_menu](../common/icon_menu.svg) on the System Monitor interface.
 2. Click **Help** to view the manual of System Monitor.
 
 ### About
 
-1.  On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+1.  Click ![icon_menu](../common/icon_menu.svg) on the System Monitor interface.
 2.  Click **About** to view the version and introduction of System Monitor.
 
 ### Exit
 
-1. On the System Monitor interface, click ![icon_menu](../common/icon_menu.svg).
+1. Click ![icon_menu](../common/icon_menu.svg) on the System Monitor interface.
 2. Click **Exit** to exit System Monitor.
 
