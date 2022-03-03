@@ -1026,7 +1026,7 @@ Are you sure you want to continue?</source>
         <translation>内存加载</translation>
     </message>
     <message>
-        <source>Start state</source>
+        <source>Start State</source>
         <translation>启动状态</translation>
     </message>
     <message>
@@ -1034,7 +1034,7 @@ Are you sure you want to continue?</source>
         <translation>运行状态</translation>
     </message>
     <message>
-        <source>Start tactic</source>
+        <source>Start Tactic</source>
         <translation>启用策略</translation>
     </message>
     <message>
