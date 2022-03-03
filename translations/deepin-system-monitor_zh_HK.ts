@@ -985,7 +985,7 @@ Are you sure you want to continue?</source>
         <translation>內存加載</translation>
     </message>
     <message>
-        <source>Start state</source>
+        <source>Start State</source>
         <translation>啟動狀態</translation>
     </message>
     <message>
@@ -993,7 +993,7 @@ Are you sure you want to continue?</source>
         <translation>運行狀態</translation>
     </message>
     <message>
-        <source>Start tactic</source>
+        <source>Start Tactic</source>
         <translation>啟用策略</translation>
     </message>
     <message>

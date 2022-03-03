@@ -33,11 +33,11 @@ constexpr const char *kSystemServiceName = QT_TRANSLATE_NOOP("Service.Table.Head
 constexpr const char *kSystemServiceLoadState = QT_TRANSLATE_NOOP("Service.Table.Header", "Load");
 // Service active state text
 constexpr const char *kSystemServiceActiveState =
-    QT_TRANSLATE_NOOP("Service.Table.Header", "Start state");
+    QT_TRANSLATE_NOOP("Service.Table.Header", "Start State");
 // Service sub state (running status) text
 constexpr const char *kSystemServiceSubState = QT_TRANSLATE_NOOP("Service.Table.Header", "Sub");
 // Service state text
-constexpr const char *kSystemServiceState = QT_TRANSLATE_NOOP("Service.Table.Header", "Start tactic");
+constexpr const char *kSystemServiceState = QT_TRANSLATE_NOOP("Service.Table.Header", "Start Tactic");
 // Service startup mode text
 constexpr const char *kSystemServiceStartupMode = QT_TRANSLATE_NOOP("Service.Table.Header", "Startup Type");
 // Service description text

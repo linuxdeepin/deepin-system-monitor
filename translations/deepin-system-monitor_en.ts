@@ -985,16 +985,16 @@ Are you sure you want to continue?</translation>
         <translation>Load</translation>
     </message>
     <message>
-        <source>Start state</source>
-        <translation>Start state</translation>
+        <source>Start State</source>
+        <translation>Start State</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>Sub</translation>
     </message>
     <message>
-        <source>Start tactic</source>
-        <translation>Start tactic</translation>
+        <source>Start Tactic</source>
+        <translation>Start Tactic</translation>
     </message>
     <message>
         <source>Description</source>
