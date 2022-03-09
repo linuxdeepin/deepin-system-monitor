@@ -287,6 +287,35 @@ public:
                 stInfo.strKey = QApplication::translate("NetInfoModel", "Noise level");
                 stInfo.strValue = QString("%1 dB").arg(stNetifInfo->noiseLevel());
                 m_listInfo << stInfo;
+
+                // 速率
+                //无线网速率ioctl没有提供相关接口，目前采用调用iwlist命令的方式获取 #bug 111694
+                QProcess process(this);
+                QString name = QString::fromLocal8Bit(stNetifInfo->ifname());
+                QString cmd = QString("iwlist ") + name + QString(" rate");
+                process.start(cmd);
+                process.waitForFinished();
+                //获取输出
+                QString data = process.readAllStandardOutput();
+                QStringList datalist = data.trimmed().split(":");
+                uint speed = 0;
+                if(datalist.size() > 0)
+                {
+                    QString speedString = datalist[datalist.size()-1];
+                    float fspeed = 0;
+                    QStringList  list = speedString.split(" ");
+                    if(list.size() > 0){
+                        fspeed = list[0].toFloat();
+                    }
+                    speed = static_cast<uint>(fspeed);
+
+                }
+
+                stInfo.strKey = QApplication::translate("NetInfoModel", "Bandwidth");
+                stInfo.strValue = formatUnit(speed, MB, 0, true);
+                m_listInfo << stInfo;
+
+
             }
 
             // Mac地址
