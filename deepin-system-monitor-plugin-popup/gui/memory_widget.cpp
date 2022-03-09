@@ -84,6 +84,14 @@ void MemoryWidget::updateStatus()
         return;
 
     m_memTotal = memTotal;
+    //去除字符串空格 bug #111050
+    m_memTotal = memTotal;
+    QStringList memList = m_memTotal.split(' ');
+    m_memTotal = "";
+    for (auto str : memList) {
+        m_memTotal += str;
+    }
+
 
     QStringList strsSwapUsage = swapUsage.split(" ");
     if (strsSwapUsage.size() == 2)
@@ -95,6 +103,12 @@ void MemoryWidget::updateStatus()
         return;
 
     m_swapTotal = swapTotal;
+     //去除字符串空格 bug #111050
+    QStringList Swaplist = m_swapTotal.split(' ');
+    m_swapTotal = "";
+    for (auto str : Swaplist) {
+        m_swapTotal += str;
+    }
 
     update();
 }
