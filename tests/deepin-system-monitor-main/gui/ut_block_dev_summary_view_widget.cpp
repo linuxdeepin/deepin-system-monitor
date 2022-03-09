@@ -239,13 +239,13 @@ protected:
                 if (column == 0)
                     return m_blockInfo.model();
                 else if (column == 1)
-                    return formatUnit(m_blockInfo.readSpeed(), B, 1);
+                    return formatUnit_memory_disk(m_blockInfo.readSpeed(), B, 1);
                 break;
             case 1:
                 if (column == 0)
-                    return formatUnit(m_blockInfo.writeSpeed(), B, 1);
+                    return formatUnit_memory_disk(m_blockInfo.writeSpeed(), B, 1);
                 else if (column == 1)
-                    return formatUnit(m_blockInfo.capacity(), B, 1);
+                    return formatUnit_memory_disk(m_blockInfo.capacity(), B, 1);
                 break;
             case  2:
                 if (column == 0)

@@ -39,7 +39,7 @@ const int sectionSize = 6;
 
 BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
 {
-    m_memChartWidget = new ChartViewWidget(this);
+    m_memChartWidget = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, this);
     m_memChartWidget->setSpeedAxis(true);
     m_memChartWidget->setData1Color(readColor);
     m_memChartWidget->setData2Color(writeColor);
@@ -136,11 +136,11 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
 
     QString readTitle = QString("%1 %2")
                         .arg(tr("Read"))
-                        .arg(formatUnit(m_blokeDeviceInfo.readSpeed(), B, 1, true));
+                        .arg(formatUnit_memory_disk(m_blokeDeviceInfo.readSpeed(), B, 1, true));
 
     QString writeTitle = QString("%1 %2")
                          .arg(tr("Write"))
-                         .arg(formatUnit(m_blokeDeviceInfo.writeSpeed(), B, 1, true));
+                         .arg(formatUnit_memory_disk(m_blokeDeviceInfo.writeSpeed(), B, 1, true));
     int readTitleWidth = painter.fontMetrics().width(readTitle);
     int readTitleHeight = painter.fontMetrics().height();
     if (m_mode == TITLE_HORIZONTAL) {

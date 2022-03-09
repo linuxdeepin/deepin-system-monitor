@@ -110,7 +110,7 @@ QString CPUInfo::l1iCache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 1 && ce->type == "Instruction")
-            return common::format::formatUnit({ce->size}, common::format::B, 0);
+            return common::format::formatUnit_memory_disk({ce->size}, common::format::B, 0);
     }
 
     return "";
@@ -120,7 +120,7 @@ QString CPUInfo::l1dCache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 1 && ce->type == "Data")
-            return common::format::formatUnit({ce->size}, common::format::B, 0);
+            return common::format::formatUnit_memory_disk({ce->size}, common::format::B, 0);
     }
 
     return "";
@@ -130,7 +130,7 @@ QString CPUInfo::l2Cache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 2)
-            return common::format::formatUnit({ce->size}, common::format::B, 0);
+            return common::format::formatUnit_memory_disk({ce->size}, common::format::B, 0);
     }
 
     return "";
@@ -140,7 +140,7 @@ QString CPUInfo::l3Cache() const
 {
     for (auto &ce : d->cache) {
         if (ce->level == 3)
-            return common::format::formatUnit({ce->size}, common::format::B, 0);
+            return common::format::formatUnit_memory_disk({ce->size}, common::format::B, 0);
     }
 
     return "";

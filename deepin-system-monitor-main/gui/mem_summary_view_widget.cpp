@@ -112,43 +112,43 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return formatUnit((m_memInfo->memTotal() - m_memInfo->memAvailable())  << 10, B, 1);
+                    return formatUnit_memory_disk((m_memInfo->memTotal() - m_memInfo->memAvailable())  << 10, B, 1);
                 else if (column == 1)
-                    return formatUnit(m_memInfo->memAvailable() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->memAvailable() << 10, B, 1);
                 break;
             case 1:
                 if (column == 0)
-                    return formatUnit(m_memInfo->shmem() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->shmem() << 10, B, 1);
                 else if (column == 1)
-                    return formatUnit(m_memInfo->cached() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->cached() << 10, B, 1);
                 break;
             case 2:
                 if (column == 0)
-                    return formatUnit(m_memInfo->buffers() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->buffers() << 10, B, 1);
                 else if (column == 1)
-                    return formatUnit(m_memInfo->swapCached() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->swapCached() << 10, B, 1);
                 break;
             case 3:
                 if (column == 0)
-                    return formatUnit(m_memInfo->active() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->active() << 10, B, 1);
                 else if (column == 1)
-                    return formatUnit(m_memInfo->inactive() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->inactive() << 10, B, 1);
                 break;
             case 4:
                 if (column == 0)
-                    return formatUnit(m_memInfo->dirty() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->dirty() << 10, B, 1);
                 else if (column == 1)
-                    return formatUnit(m_memInfo->mapped() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->mapped() << 10, B, 1);
                 break;
             case 5:
                 if (column == 0)
-                    return formatUnit(m_memInfo->swapTotal() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->swapTotal() << 10, B, 1);
                 else if (column == 1)
-                    return formatUnit(m_memInfo->swapFree() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->swapFree() << 10, B, 1);
                 break;
             case 6:
                 if (column == 0)
-                    return formatUnit(m_memInfo->slab() << 10, B, 1);
+                    return formatUnit_memory_disk(m_memInfo->slab() << 10, B, 1);
                 break;
             default:
                 break;

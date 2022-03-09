@@ -191,14 +191,14 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
 
     // Draw network summary.
     QString recvTitle = DApplication::translate("Process.Graph.View", "Download");
-    QString recvContent = formatUnit(m_recvBps, B, 1, true);
+    QString recvContent = formatUnit_net(m_recvBps * 8, B, 1, true);
     QString recvTotalTitle = DApplication::translate("Process.Graph.View", "Total Received");
-    QString recvTotalContent = formatUnit(m_totalRecvBytes, B, 1);
+    QString recvTotalContent = formatUnit_net(m_totalRecvBytes * 8, B, 1);
 
     QString sentTitle = DApplication::translate("Process.Graph.View", "Upload");
-    QString sentContent = formatUnit(m_sentBps, B, 1, true);
+    QString sentContent = formatUnit_net(m_sentBps * 8, B, 1, true);
     QString sentTotalTitle = DApplication::translate("Process.Graph.View", "Total Sent");
-    QString sentTotalContent = formatUnit(m_totalSentBytes, B, 1);
+    QString sentTotalContent = formatUnit_net(m_totalSentBytes * 8, B, 1);
 
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);

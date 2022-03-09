@@ -148,8 +148,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
 
     QString rtag = DApplication::translate("Process.Graph.View", "Disk read");
     QString wtag = DApplication::translate("Process.Graph.View", "Disk write");
-    QString rstat = QString("%1").arg(formatUnit(m_readBps, B, 1, true));
-    QString wstat = QString("%1").arg(formatUnit(m_writeBps, B, 1, true));
+    QString rstat = QString("%1").arg(formatUnit_memory_disk(m_readBps, B, 1, true));
+    QString wstat = QString("%1").arg(formatUnit_memory_disk(m_writeBps, B, 1, true));
 
     auto rtagWidth = fm.size(Qt::TextSingleLine, rtag).width();
     auto wtagWidth = fm.size(Qt::TextSingleLine, wtag).width();

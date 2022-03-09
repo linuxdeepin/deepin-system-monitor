@@ -312,7 +312,7 @@ public:
                 }
 
                 stInfo.strKey = QApplication::translate("NetInfoModel", "Bandwidth");
-                stInfo.strValue = formatUnit(speed, MB, 0, true);
+                stInfo.strValue = formatUnit_net(speed, MB, 0, true);
                 m_listInfo << stInfo;
 
 
@@ -325,7 +325,7 @@ public:
 
             // 速率
             stInfo.strKey = QApplication::translate("NetInfoModel", "Bandwidth");
-            stInfo.strValue = formatUnit(stNetifInfo->speed(), MB, 0, true);
+            stInfo.strValue = formatUnit_net(stNetifInfo->speed(), MB, 0, true);
             m_listInfo << stInfo;
 
             // 接收包数量
@@ -335,7 +335,7 @@ public:
 
             // 总计接收
             stInfo.strKey = QApplication::translate("NetInfoModel", "RX bytes");
-            stInfo.strValue = formatUnit(stNetifInfo->rxBytes(), B, 1);
+            stInfo.strValue = formatUnit_net(stNetifInfo->rxBytes() * 8, B, 1);
             m_listInfo << stInfo;
 
             // 接收错误包
@@ -365,7 +365,7 @@ public:
 
             // 总计发送
             stInfo.strKey = QApplication::translate("NetInfoModel", "TX bytes");
-            stInfo.strValue = formatUnit(stNetifInfo->txBytes(), B, 1);
+            stInfo.strValue = formatUnit_net(stNetifInfo->txBytes() * 8, B, 1);
             m_listInfo << stInfo;
 
             // 发送错误包

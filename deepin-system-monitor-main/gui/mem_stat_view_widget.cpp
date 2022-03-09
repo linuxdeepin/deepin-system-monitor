@@ -37,8 +37,8 @@ MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    m_memChartWidget = new ChartViewWidget(this);
-    m_swapChartWidget = new ChartViewWidget(this);
+    m_memChartWidget = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, this);
+    m_swapChartWidget = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, this);
 
     m_memChartWidget->setData1Color(memoryColor);
     m_swapChartWidget->setData1Color(swapColor);
@@ -56,7 +56,7 @@ void MemStatViewWidget::onModelUpdate()
     // After memory size text, add a space before the brackets
     QString memoryDetail = QString("%1 (%2)")
                            .arg(tr("Size"))
-                           .arg(formatUnit(m_memInfo->memTotal() << 10, B, 1));
+                           .arg(formatUnit_memory_disk(m_memInfo->memTotal() << 10, B, 1));
     parent()->setProperty("detail", memoryDetail);
 
     m_memChartWidget->addData1((m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1.0 / m_memInfo->memTotal());

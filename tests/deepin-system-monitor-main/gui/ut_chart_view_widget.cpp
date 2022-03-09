@@ -44,7 +44,7 @@ public:
 public:
     virtual void SetUp()
     {
-        m_tester = new ChartViewWidget();
+        m_tester = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, nullptr);
     }
 
     virtual void TearDown()

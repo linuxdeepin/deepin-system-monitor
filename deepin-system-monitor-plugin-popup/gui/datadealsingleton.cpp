@@ -67,12 +67,12 @@ bool DataDealSingleton::readMemInfo(QString &memUsage, QString &memTotal, QStrin
 {
     internalMutex.lockForRead();
     MemInfo *curMemInfo = core::system::DeviceDB::instance()->memInfo();
-    memUsage = formatUnit((curMemInfo->memTotal() - curMemInfo->memAvailable()) << 10, B, 1);
-    memTotal = formatUnit(curMemInfo->memTotal() << 10, B, 1);
+    memUsage = formatUnit_memory_disk((curMemInfo->memTotal() - curMemInfo->memAvailable()) << 10, B, 1);
+    memTotal = formatUnit_memory_disk(curMemInfo->memTotal() << 10, B, 1);
     memPercent = QString::number((curMemInfo->memTotal() - curMemInfo->memAvailable()) * 1. / curMemInfo->memTotal() * 100, 'f', 1);
 
-    swapUsage = formatUnit((curMemInfo->swapTotal() - curMemInfo->swapFree()) << 10, B, 1);
-    swapTotal = formatUnit(curMemInfo->swapTotal() << 10, B, 1);
+    swapUsage = formatUnit_memory_disk((curMemInfo->swapTotal() - curMemInfo->swapFree()) << 10, B, 1);
+    swapTotal = formatUnit_memory_disk(curMemInfo->swapTotal() << 10, B, 1);
     swapPercent = QString::number((curMemInfo->swapTotal() - curMemInfo->swapFree()) * 1. / curMemInfo->swapTotal() * 100, 'f', 1);
     internalMutex.unlock();
 
@@ -83,10 +83,10 @@ bool DataDealSingleton::readNetInfo(QString &netReceive, QString &netTotalReceiv
 {
     internalMutex.lockForRead();
     NetInfo *netInfo = core::system::DeviceDB::instance()->netInfo();
-    netReceive = formatUnit(netInfo->recvBps(), B, 1, true);
-    netSend = formatUnit(netInfo->sentBps(), B, 1, true);
-    netTotalReceive = formatUnit(netInfo->totalRecvBytes(), B, 1);
-    totalSend = formatUnit(netInfo->totalSentBytes(), B, 1);
+    netReceive = formatUnit_net(netInfo->recvBps() * 8, B, 1, true);
+    netSend = formatUnit_net(netInfo->sentBps() * 8, B, 1, true);
+    netTotalReceive = formatUnit_net(netInfo->totalRecvBytes() * 8, B, 1);
+    totalSend = formatUnit_net(netInfo->totalSentBytes() * 8, B, 1);
     internalMutex.unlock();
 
     return true;
@@ -97,8 +97,8 @@ bool DataDealSingleton::readDiskInfo(QString &diskRead, QString &diskTotalSize, 
     internalMutex.lockForRead();
     core::system::DiskIOInfo *diskIOInfo = core::system::DeviceDB::instance()->diskIoInfo();
 
-    diskRead = formatUnit(diskIOInfo->diskIoReadBps(), B, 1, true);
-    diskWrite = formatUnit(diskIOInfo->diskIoWriteBps(), B, 1, true);
+    diskRead = formatUnit_memory_disk(diskIOInfo->diskIoReadBps(), B, 1, true);
+    diskWrite = formatUnit_memory_disk(diskIOInfo->diskIoWriteBps(), B, 1, true);
 
     const QList<BlockDevice> &infoDB = DeviceDB::instance()->blockDeviceInfoDB()->deviceList();
     QMap<QString, BlockDevice> mapInfo;
@@ -109,7 +109,7 @@ bool DataDealSingleton::readDiskInfo(QString &diskRead, QString &diskTotalSize, 
         totalDiskAva += infoDB[i].capacity();
     }
 
-    diskTotalSize = formatUnit(totalDiskAva, B, 1);
+    diskTotalSize = formatUnit_memory_disk(totalDiskAva, B, 1);
     internalMutex.unlock();
 
     return true;

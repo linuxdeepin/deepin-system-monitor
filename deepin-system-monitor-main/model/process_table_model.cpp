@@ -239,25 +239,25 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             return proc.userName();
         case kProcessMemoryColumn:
             // formatted memory usage
-            return formatUnit(proc.memory(), KB);
+            return formatUnit_memory_disk(proc.memory(), KB);
         case kProcessShareMemoryColumn:
             // formatted memory usage
-            return formatUnit(proc.sharememory(), KB);
+            return formatUnit_memory_disk(proc.sharememory(), KB);
         case kProcessVTRMemoryColumn:
             // formatted memory usage
-            return formatUnit(proc.vtrmemory(), KB);
+            return formatUnit_memory_disk(proc.vtrmemory(), KB);
         case kProcessUploadColumn:
             // formatted upload speed text
-            return formatUnit(proc.sentBps(), B, 1, true);
+            return formatUnit_memory_disk(proc.sentBps(), B, 1, true);
         case kProcessDownloadColumn:
             // formated download speed text
-            return formatUnit(proc.recvBps(), B, 1, true);
+            return formatUnit_memory_disk(proc.recvBps(), B, 1, true);
         case kProcessDiskReadColumn:
             // formatted disk read speed text
-            return formatUnit(proc.readBps(), B, 1, true);
+            return formatUnit_memory_disk(proc.readBps(), B, 1, true);
         case kProcessDiskWriteColumn:
             // formatted disk write speed text
-            return formatUnit(proc.writeBps(), B, 1, true);
+            return formatUnit_memory_disk(proc.writeBps(), B, 1, true);
         case kProcessPIDColumn: {
             // process pid text
             return QString("%1").arg(proc.pid());

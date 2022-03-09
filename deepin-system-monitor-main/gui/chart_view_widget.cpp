@@ -29,7 +29,7 @@ using namespace common::format;
 
 DWIDGET_USE_NAMESPACE
 const int allDatacount = 30;
-ChartViewWidget::ChartViewWidget(QWidget *parent) : QWidget(parent)
+ChartViewWidget::ChartViewWidget(ChartViewTypes types, QWidget *parent) : QWidget(parent), m_viewType(types)
 {
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -47,7 +47,10 @@ void ChartViewWidget::changeTheme()
 void ChartViewWidget::setSpeedAxis(bool speed)
 {
     m_speedAxis = speed;
-    setAxisTitle(formatUnit(qMax(m_maxData1, m_maxData2), B, 1, true));
+    if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
+        setAxisTitle(formatUnit_memory_disk(qMax(m_maxData1, m_maxData2), B, 1, true));
+    else
+        setAxisTitle(formatUnit_net(qMax(m_maxData1, m_maxData2), B, 1, true));
 }
 
 void ChartViewWidget::setData1Color(const QColor &color)
@@ -67,12 +70,22 @@ void ChartViewWidget::addData1(const QVariant &data)
         m_maxData1 = QVariant(maxdata.toLongLong() * 1.1);
         m_maxData = qMax(m_maxData1, m_maxData2);
 
-        if (m_speedAxis)
-            setAxisTitle(formatUnit(m_maxData, B, 1, true));
+        // 这边需要通过当前的图标界面类型去区分, 内存和磁盘统一处理
+        if (m_speedAxis) {
+            if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
+                setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
+            else
+                setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
+        }
+
     } else {
         // when the data hold the zero num,we should set the chart max value as 0
-        if (m_speedAxis)
-            setAxisTitle(formatUnit(0, B, 1, true));
+        if (m_speedAxis) {
+            if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
+                setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
+            else
+                setAxisTitle(formatUnit_net(0, B, 1, true));
+        }
     }
 }
 
@@ -93,12 +106,21 @@ void ChartViewWidget::addData2(const QVariant &data)
         m_maxData2 = QVariant(maxdata.toLongLong() * 1.1);
         m_maxData = qMax(m_maxData1, m_maxData2);
 
-        if (m_speedAxis)
-            setAxisTitle(formatUnit(m_maxData, B, 1, true));
+        if (m_speedAxis) {
+            if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
+                setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
+            else
+                setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
     } else {
         // when the data hold the zero num,we should set the chart max value as 0
-        if (m_speedAxis)
-            setAxisTitle(formatUnit(0, B, 1, true));
+            if (m_speedAxis) {
+                if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
+                    setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
+                else
+                    setAxisTitle(formatUnit_net(0, B, 1, true));
+            }
+        }
+
     }
 }
 
