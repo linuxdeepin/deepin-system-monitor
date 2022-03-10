@@ -29,7 +29,12 @@ class ChartViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ChartViewWidget(QWidget *parent = nullptr);
+    enum ChartViewTypes {
+        MEM_CHART,      //内存
+        NET_CHART,      //网络
+        BLOCK_CHART     //磁盘
+    };
+    explicit ChartViewWidget(ChartViewWidget::ChartViewTypes types, QWidget *parent = nullptr);
 
 public:
     void setData1Color(const QColor &color);
@@ -77,6 +82,8 @@ private:
 
     QList<QVariant> m_listData1;
     QList<QVariant> m_listData2;
+
+    ChartViewTypes m_viewType = ChartViewTypes::MEM_CHART;  // 图表界面类型
 };
 
 #endif // CHART_VIEW_WIDGET_H

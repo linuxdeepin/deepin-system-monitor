@@ -42,7 +42,7 @@ NetifItemViewWidget::NetifItemViewWidget(QWidget *parent, const QByteArray &mac)
     m_mac = mac;
     m_ifname = "Ethernet";
 
-    m_ChartWidget = new ChartViewWidget(this);
+    m_ChartWidget = new ChartViewWidget(ChartViewWidget::ChartViewTypes::NET_CHART, this);
     m_ChartWidget->setData1Color(m_recvColor);
     m_ChartWidget->setData2Color(m_sentColor);
     m_ChartWidget->setSpeedAxis(true);
@@ -154,8 +154,8 @@ void NetifItemViewWidget::updateData(const std::shared_ptr<class core::system::N
 
     if (!netifInfo->ifname().isNull()) {m_ifname = netifInfo->ifname();}
 
-    m_recv_bps = formatUnit(netifInfo->recv_bps(), B, 1, true);
-    m_sent_bps = formatUnit(netifInfo->sent_bps(), B, 1, true);
+    m_recv_bps = formatUnit_net(netifInfo->recv_bps() * 8, B, 1, true);
+    m_sent_bps = formatUnit_net(netifInfo->sent_bps() * 8, B, 1, true);
 
     this->update();
 }

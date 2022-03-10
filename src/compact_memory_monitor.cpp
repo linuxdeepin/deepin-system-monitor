@@ -165,8 +165,8 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                           .arg(DApplication::translate("Process.Graph.View", "Memory"))
                           .arg(QString::number(memPercent * 100, 'f', 1));
     QString memoryContent = QString("%1 / %2")
-                            .arg(formatUnit((m_memInfo->memTotal() - m_memInfo->memAvailable()) << 10, B, 1))
-                            .arg(formatUnit(m_memInfo->memTotal() << 10, B, 1));
+                          .arg(formatUnit_memory_disk((m_memInfo->memTotal() - m_memInfo->memAvailable()) << 10, B, 1))
+                          .arg(formatUnit_memory_disk(m_memInfo->memTotal() << 10, B, 1));
 
     QString swapTitle = "";
     QString swapContent = "";
@@ -182,8 +182,8 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(QString::number(swapPercent * 100, 'f', 1));
         swapContent = QString("%1 / %2")
-                      .arg(formatUnit((m_memInfo->swapTotal() - m_memInfo->swapFree()) << 10, B, 1))
-                      .arg(formatUnit(m_memInfo->swapTotal() << 10, B, 1));
+                    .arg(formatUnit_memory_disk((m_memInfo->swapTotal() - m_memInfo->swapFree()) << 10, B, 1))
+                    .arg(formatUnit_memory_disk(m_memInfo->swapTotal() << 10, B, 1));
     }
 
     QFontMetrics fmMem(m_contentFont);

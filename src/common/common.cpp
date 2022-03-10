@@ -315,7 +315,8 @@ QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
     return QString("%1%2").arg(v, 0, 'f', prec).arg(HzUnitSuffix[u]);
 } // ::format::formatHz
 
-QString format::formatUnit(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
+//内存、磁盘统一单位
+QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
 {
     int u = base;
     if (!size.canConvert(QMetaType::Double))
@@ -328,10 +329,29 @@ QString format::formatUnit(QVariant size, format::SizeUnit base, int prec, bool 
     }
 
     if (isSpeed) {
-        return QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixExt[u]).arg("/s");
-    } else {
-        return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffix[u]);
+        return QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixother[u]).arg("/s");
     }
+    return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixother[u]);
+}
+
+//网络统一单位
+QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
+{
+    int u = base;
+    if (!size.canConvert(QMetaType::Double))
+        return {};
+    qreal v = size.toReal();
+
+    while (v > 1024. && u <= EB) {
+        v /= 1024;
+        u++;
+    }
+
+    if (isSpeed) {
+        return QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixnet[u]).arg("/s");
+    }
+    //统一单位
+    return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixnet[u]);
 }
 
 // ::format::formatUnit

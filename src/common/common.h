@@ -116,9 +116,15 @@ enum SizeUnit {
 };
 
 const char *const UnitSuffix[] = {"B", "K", "M", "G", "T", "P", "E"};
-const char *const UnitSuffixExt[] = {"B", "KB", "MB", "GB", "TB", "PB", "EB"};
+//网络使用单位bite
+const char *const UnitSuffixnet[] = {"b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb"};
+//内存、磁盘使用单位Byte
+const char *const UnitSuffixother[] = {"B", "KB", "MB", "GB", "TB", "PB", "EB"};
 
-QString formatUnit(QVariant size, SizeUnit base = B, int prec = 1, bool isSpeed = false);
+//内存、磁盘统一单位
+QString formatUnit_memory_disk(QVariant size, SizeUnit base = B, int prec = 1, bool isSpeed = false);
+//网络统一单位
+QString formatUnit_net(QVariant size, SizeUnit base = B, int prec = 1, bool isSpeed = false);
 
 enum HzUnit {
     KHz, // 10 ^ 3

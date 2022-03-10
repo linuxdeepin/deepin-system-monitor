@@ -60,25 +60,25 @@ QVariant BlockDevStatModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case kStatTotalRead: {
             if (io)
-                return formatUnit(io->data.inBytes);
+                return formatUnit_memory_disk(io->data.inBytes);
 
             break;
         }
         case kStatTotalWrite: {
             if (io)
-                return formatUnit(io->data.outBytes);
+                return formatUnit_memory_disk(io->data.outBytes);
 
             break;
         }
         case kStatReadSpeed: {
             if (iops)
-                return formatUnit(iops->data.inBps, B, 1, true);
+                return formatUnit_memory_disk(iops->data.inBps, B, 1, true);
 
             break;
         }
         case kStatWriteSpeed: {
             if (iops)
-                return formatUnit(iops->data.outBps, B, 1, true);
+                return formatUnit_memory_disk(iops->data.outBps, B, 1, true);
 
             break;
         }
