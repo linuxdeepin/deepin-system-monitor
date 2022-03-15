@@ -216,13 +216,16 @@ void WaylandSearchCentered(){
         QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
 
         QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
-
+#ifdef WAYLAND_SESSION_SUPPORT
         if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)){
             WaylandCentered = true;
         }
         else {
             WaylandCentered = false;
         }
+#else
+        WaylandCentered = false;
+#endif //WAYLAND_SESSION_SUPPORT
 }
 
 static void init_shell_list()

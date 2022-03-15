@@ -71,6 +71,11 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wl,-Map=deepin-system-monitor-main.map")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-main.map")
 
+option(WAYLAND_SESSION_SUPPORT "option for kwayland support" ON)
+if (WAYLAND_SESSION_SUPPORT)
+    add_definitions(-DWAYLAND_SESSION_SUPPORT)
+endif()
+
 set(HPP_GLOBAL
     environments.h
     accessible.h
