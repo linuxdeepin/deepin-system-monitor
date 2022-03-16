@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_trickTimer->setInterval(300);
     m_trickTimer->setSingleShot(true);
+    //在构造函数中存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
+    m_dbusPathList = m_displayInter->monitors();
     initDBus();
     initUI();
     initAni();
@@ -442,7 +444,7 @@ void MainWindow::adjustPosition()
 QRect MainWindow::getDisplayScreen()
 {
     QRect dockRect = m_dockInter->geometry();
-    for (const auto& monitorPath : m_displayInter->monitors()) {
+    for (const auto &monitorPath : m_dbusPathList) {
         DisplayMonitor monitor("com.deepin.daemon.Display", monitorPath.path(), QDBusConnection::sessionBus());
         QRect screenRect(monitor.x(), monitor.y(), monitor.width(), monitor.height());
         if (screenRect.contains(dockRect))

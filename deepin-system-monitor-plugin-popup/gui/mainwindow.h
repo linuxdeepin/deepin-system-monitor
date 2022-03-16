@@ -171,6 +171,8 @@ private slots:
 
 private:
     DBusDisplay *m_displayInter;
+    //用于存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
+    QList<QDBusObjectPath> m_dbusPathList     {};
     DBusDaemonDock *m_daemonDockInter;
     DBusDockInterface *m_dockInter;
     SystemMonitorDBusAdaptor *m_systemMonitorDbusAdaptor;

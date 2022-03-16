@@ -2,7 +2,7 @@ Source: deepin-system-monitor
 Section: utils
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
-Build-Depends: debhelper (>= 11), cmake, pkg-config, qtbase5-dev, qttools5-dev, libdtkwidget-dev, libxcb1-dev, libqt5x11extras5-dev, libprocps-dev, libxext-dev, libpcap-dev, qttools5-dev-tools, libicu-dev, deepin-gettext-tools, libxcb-util0-dev, libxcb-icccm4-dev, libnl-3-dev, libnl-route-3-dev, libudev-dev, libdframeworkdbus-dev, libgsettings-qt-dev, dde-dock-dev, libgtest-dev, libgmock-dev, libkf5wayland-dev
+Build-Depends: debhelper (>= 11), cmake, pkg-config, qtbase5-dev, qttools5-dev, libdtkwidget-dev, libxcb1-dev, libqt5x11extras5-dev, libprocps-dev, libxext-dev, libpcap-dev, qttools5-dev-tools, libicu-dev, deepin-gettext-tools, libxcb-util0-dev, libxcb-icccm4-dev, libnl-3-dev, libnl-route-3-dev, libudev-dev, libdframeworkdbus-dev, libgsettings-qt-dev, dde-dock-dev, libgtest-dev, libgmock-dev, libkf5wayland-dev, libwayland-dev
 Standards-Version: 3.9.8
 Homepage: https://github.com/manateelazycat/deepin-system-monitor
 
