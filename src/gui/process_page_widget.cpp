@@ -252,7 +252,8 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(kFilterApps);
+	//尝试解决切换卡顿
+        QTimer::singleShot(0, this, [ = ]() {m_procTable->switchDisplayMode(kFilterApps);});
         m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
         PERF_PRINT_END("POINT-04");
     });
@@ -261,7 +262,8 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(kFilterCurrentUser);
+	//尝试解决切换卡顿
+        QTimer::singleShot(0, this, [ = ]() {m_procTable->switchDisplayMode(kFilterCurrentUser);});
         m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
         PERF_PRINT_END("POINT-04");
     });
@@ -270,7 +272,8 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(kNoFilter);
+	//尝试解决切换卡顿;
+        QTimer::singleShot(0, this, [ = ]() {m_procTable->switchDisplayMode(kNoFilter);});
         m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
         PERF_PRINT_END("POINT-04");
     });
