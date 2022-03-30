@@ -74,6 +74,8 @@ ProcessPageWidget::ProcessPageWidget(DWidget *parent)
     m_settings = Settings::instance();
     // initialize ui components
     initUI();
+    //初始化界面刷新
+    update();
     initConnections();
 }
 
@@ -213,21 +215,28 @@ void ProcessPageWidget::initUI()
     case kFilterCurrentUser: {
         // show my process view
         m_myProcButton->setChecked(true);
-        m_procTable->switchDisplayMode(kFilterCurrentUser);
+        QTimer::singleShot(0, this, [ = ]() {
+            m_procTable->switchDisplayMode(kFilterCurrentUser);
+        });
+
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", myProcText));  // default text
     } break;
     case kNoFilter: {
         // show all process view
         m_allProcButton->setChecked(true);
-        m_procTable->switchDisplayMode(kNoFilter);
+        QTimer::singleShot(0, this, [ = ]() {
+            m_procTable->switchDisplayMode(kNoFilter);
+        });
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", allProcText));  // default text
     } break;
     default: {
         // show my application view by default
         m_appButton->setChecked(true);
-        m_procTable->switchDisplayMode(kFilterApps);
+        QTimer::singleShot(0, this, [ = ]() {
+            m_procTable->switchDisplayMode(kFilterApps);
+        });
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", appText));  // default text
     }
@@ -252,8 +261,10 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
-	//尝试解决切换卡顿
-        QTimer::singleShot(0, this, [ = ]() {m_procTable->switchDisplayMode(kFilterApps);});
+        //尝试解决切换卡顿
+        QTimer::singleShot(0, this, [ = ]() {
+            m_procTable->switchDisplayMode(kFilterApps);
+        });
         m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
         PERF_PRINT_END("POINT-04");
     });
@@ -262,8 +273,10 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
-	//尝试解决切换卡顿
-        QTimer::singleShot(0, this, [ = ]() {m_procTable->switchDisplayMode(kFilterCurrentUser);});
+        //尝试解决切换卡顿
+        QTimer::singleShot(0, this, [ = ]() {
+            m_procTable->switchDisplayMode(kFilterCurrentUser);
+        });
         m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
         PERF_PRINT_END("POINT-04");
     });
@@ -272,8 +285,10 @@ void ProcessPageWidget::initConnections()
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
-	//尝试解决切换卡顿;
-        QTimer::singleShot(0, this, [ = ]() {m_procTable->switchDisplayMode(kNoFilter);});
+        //尝试解决切换卡顿;
+        QTimer::singleShot(0, this, [ = ]() {
+            m_procTable->switchDisplayMode(kNoFilter);
+        });
         m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
         PERF_PRINT_END("POINT-04");
     });

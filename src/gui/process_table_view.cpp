@@ -302,6 +302,8 @@ void ProcessTableView::search(const QString &text)
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
     m_proxyModel->setFilterType(type);
+    update();
+    QApplication::processEvents();
 }
 
 // change process priority
