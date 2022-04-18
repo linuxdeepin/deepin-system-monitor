@@ -208,6 +208,7 @@ namespace init {
 QList<QString> shellList;
 QList<QString> scriptList;
 QList<QString> pathList;
+CPUMaxFreq CPUPerformance = CPUMaxFreq::High;
 bool WaylandCentered;
 
 void WaylandSearchCentered(){

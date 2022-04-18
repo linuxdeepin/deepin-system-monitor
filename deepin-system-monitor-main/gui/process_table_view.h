@@ -26,6 +26,9 @@
 
 #include <DLabel>
 #include <DTreeView>
+#include <DSpinner>
+
+
 
 DWIDGET_USE_NAMESPACE
 using namespace core::process;
@@ -205,6 +208,11 @@ private:
     QShortcut *m_viewPropKP {};
     // Kill process shortcut
     QShortcut *m_killProcKP {};
+
+
+    //loading spinner
+    DSpinner *m_spinner = nullptr;
+
 };
 
 #endif  // PROCESS_TABLE_VIEW_H

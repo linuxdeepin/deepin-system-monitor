@@ -101,6 +101,16 @@ extern bool WaylandCentered;
 extern unsigned int kb_shift;
 extern unsigned long HZ;
 
+// CPU Perfarmance reference(MHz)
+#define CPU_AVERAGE_MAX_FREQUENCY 2300
+//CPU最大主频
+enum CPUMaxFreq {
+    High, //>=2.3GHz
+    Low  //>=2.3GHz
+};
+
+extern CPUMaxFreq CPUPerformance;
+
 void global_init();
 void WaylandSearchCentered();
 

@@ -45,6 +45,7 @@ extern "C" {
 
 using namespace common::error;
 using namespace common::alloc;
+using namespace common::init;
 
 namespace core {
 namespace system {
@@ -342,10 +343,17 @@ QString CPUSet::minFreq() const
 
 QString CPUSet::maxFreq() const
 {
-    if (mIsEmptyModelName == true)
-        return common::format::formatHz(d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble(), common::format::MHz);
-    else
-        return common::format::formatHz(d->m_info.value("CPU max MHz").toDouble(), common::format::MHz);
+    //获取最大CPU频率数值，单位MHz
+    qreal MaxFreq = mIsEmptyModelName ?
+                    d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble() :
+                    d->m_info.value("CPU max MHz").toDouble();
+    //单核最大CPU频率小于2.3GHz
+    if (MaxFreq > 0 && MaxFreq < CPU_AVERAGE_MAX_FREQUENCY) {
+        //设置全局变量的值为Low
+        CPUPerformance = CPUMaxFreq::Low;
+    }
+    return common::format::formatHz(static_cast<uint>(MaxFreq), common::format::MHz);
+
 }
 
 QString CPUSet::l1dCache() const
@@ -437,6 +445,7 @@ const CPUUsage CPUSet::usageDB(const QByteArray &cpu) const
 
 void CPUSet::update()
 {
+    maxFreq();
     read_stats();
     read_overall_info();
 

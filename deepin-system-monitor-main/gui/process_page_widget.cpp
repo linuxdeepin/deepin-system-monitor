@@ -54,7 +54,7 @@
 
 DWIDGET_USE_NAMESPACE
 using namespace core::process;
-
+using namespace common::init;
 // process context summary text
 static const char *kProcSummaryTemplateText =
     QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)");
@@ -262,7 +262,12 @@ void ProcessPageWidget::initConnections()
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(kFilterCurrentUser);
-        m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
+        if (CPUPerformance == CPUMaxFreq::High) {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
+        } else {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
+        }
+
         PERF_PRINT_END("POINT-04");
     });
     // show all application when all application button toggled
@@ -271,7 +276,11 @@ void ProcessPageWidget::initConnections()
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(kNoFilter);
-        m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
+        if (CPUPerformance == CPUMaxFreq::High) {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
+        } else {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
+        }
         PERF_PRINT_END("POINT-04");
     });
 

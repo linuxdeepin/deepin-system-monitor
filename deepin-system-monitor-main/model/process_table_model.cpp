@@ -248,10 +248,10 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             return formatUnit_memory_disk(proc.vtrmemory(), KB);
         case kProcessUploadColumn:
             // formatted upload speed text
-            return formatUnit_net(proc.sentBps(), B, 1, true);
+            return formatUnit_net(8 * proc.sentBps(), B, 1, true);
         case kProcessDownloadColumn:
             // formated download speed text
-            return formatUnit_net(proc.recvBps(), B, 1, true);
+            return formatUnit_net(8 * proc.recvBps(), B, 1, true);
         case kProcessDiskReadColumn:
             // formatted disk read speed text
             return formatUnit_memory_disk(proc.readBps(), B, 1, true);
