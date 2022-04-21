@@ -26,7 +26,7 @@
 
 #include <DLabel>
 #include <DTreeView>
-#include <DSpinner>
+
 
 
 
@@ -210,8 +210,7 @@ private:
     QShortcut *m_killProcKP {};
 
 
-    //loading spinner
-    DSpinner *m_spinner = nullptr;
+
 
 };
 

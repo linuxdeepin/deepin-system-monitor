@@ -302,21 +302,8 @@ void ProcessTableView::search(const QString &text)
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
-    //切换到所有进程时，显示loading图标
-    if (type == kNoFilter) {
-        m_spinner->start();
-        m_spinner->setVisible(true);
-    }
-
 
     m_proxyModel->setFilterType(type);
-
-    //完成数据加载，停止显示loading，最少显示200ms
-    QTimer::singleShot(200, this, [ = ]() {
-        m_spinner->setVisible(false);
-        m_spinner->stop();
-    }
-                      );
 
 }
 
@@ -371,16 +358,6 @@ void ProcessTableView::saveSettings()
 // initialize ui components
 void ProcessTableView::initUI(bool settingsLoaded)
 {
-
-    //Spinner
-    m_spinner = new DSpinner(this);
-    m_spinner->setFixedSize(32, 32);
-    m_spinner->setVisible(false);
-
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addWidget(m_spinner, Qt::AlignVCenter);
-    setLayout(layout);
-
 
     setAccessibleName("ProcessTableView");
 
