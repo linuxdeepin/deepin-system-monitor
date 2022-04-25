@@ -18,8 +18,9 @@
 
 #include "desktop_entry_stat.h"
 
-#include <DDesktopEntry>
+#include "../common/logger.hpp"
 
+#include <DDesktopEntry>
 #include <QDebug>
 #include <QTimer>
 #include <QFileInfo>
@@ -33,11 +34,6 @@
 DCORE_USE_NAMESPACE
 
 static const int kUpdateInterval = 1000 * 300; // 5 minutes interval
-
-auto print_err_desktop = [](decltype(errno) e, const QString &msg)
-{
-    qDebug() << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
-};
 
 DesktopEntryStat::DesktopEntryStat(QObject *parent) : QObject(parent)
 {
@@ -97,7 +93,7 @@ void DesktopEntryStat::refresh()
     errno = 0;
     dir = opendir(DESKTOP_ENTRY_PATH);
     if (!dir) {
-        print_err_desktop(errno, QString("open %1 failed").arg(DESKTOP_ENTRY_PATH));
+        print_err(errno, QString("open %1 failed").arg(DESKTOP_ENTRY_PATH));
         return;
     }
 
@@ -120,7 +116,7 @@ void DesktopEntryStat::refresh()
         }
     }
     if (errno && !cache.size()) {
-        print_err_desktop(errno, QString("read %1 failed").arg(DESKTOP_ENTRY_PATH));
+        print_err(errno, QString("read %1 failed").arg(DESKTOP_ENTRY_PATH));
     }
     closedir(dir);
 

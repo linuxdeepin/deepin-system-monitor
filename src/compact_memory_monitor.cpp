@@ -31,6 +31,7 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <QtMath>
 #include <QPropertyAnimation>
 #include <QMap>

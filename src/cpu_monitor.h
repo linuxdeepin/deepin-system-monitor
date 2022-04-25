@@ -24,6 +24,7 @@
 #include <QIcon>
 #include <QList>
 #include <QWidget>
+#include <QPropertyAnimation>
 #include <QPainterPath>
 #include <DCommandLinkButton>
 
