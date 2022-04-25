@@ -208,7 +208,8 @@ namespace init {
 QList<QString> shellList;
 QList<QString> scriptList;
 QList<QString> pathList;
-
+//默认为低性能，防止在获取CPU性能之前就卡死
+CPUMaxFreq CPUPerformance = CPUMaxFreq::Low;
 static void init_shell_list()
 {
     FILE *fp;
