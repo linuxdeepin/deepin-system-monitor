@@ -437,6 +437,7 @@ const CPUUsage CPUSet::usageDB(const QByteArray &cpu) const
 
 void CPUSet::update()
 {
+    maxFreq();
     read_stats();
     read_overall_info();
 
