@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>App.About</name>
     <message>
@@ -74,23 +74,23 @@
     </message>
     <message>
         <source>L1i cache</source>
-        <translation type="unfinished"/>
+        <translation>L1i-Cache</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation type="unfinished"/>
+        <translation>L1d-Cache</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation type="unfinished"/>
+        <translation>L2-Cache</translation>
     </message>
     <message>
         <source>L3 cache</source>
-        <translation type="unfinished"/>
+        <translation>L3-Cache</translation>
     </message>
     <message>
         <source>Load average</source>
-        <translation type="unfinished"/>
+        <translation>Durchschnittliche Last</translation>
     </message>
     <message>
         <source>File descriptors</source>
@@ -336,7 +336,7 @@
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished"/>
+        <translation>Gemeinsam</translation>
     </message>
     <message>
         <source>Cached</source>
@@ -364,7 +364,7 @@
     </message>
     <message>
         <source>Mapped</source>
-        <translation type="unfinished"/>
+        <translation>Zugeordnet</translation>
     </message>
     <message>
         <source>Total swap</source>
@@ -376,7 +376,7 @@
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Slab</translation>
     </message>
 </context>
 <context>
@@ -411,7 +411,7 @@
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Zusammengefasste Lesevorgänge/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
@@ -423,7 +423,7 @@
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>Zusammengefasste Schreibvorgänge</translation>
     </message>
     <message>
         <source>Writes/s</source>
@@ -435,7 +435,7 @@
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Zusammengefasste Schreibvorgänge/s</translation>
     </message>
 </context>
 <context>
@@ -462,7 +462,7 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Beenden des Prozesses kann zu Datenverlust führen.
+        <translation>Das Beenden des Prozesses kann zu Datenverlust führen.
 Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
@@ -472,7 +472,7 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Erzwingtes Beenden des Prozesses kann zu Datenverlust führen.
+        <translation>Das erzwungene Beenden des Prozesses kann zu Datenverlust führen.
 Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
@@ -489,12 +489,12 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Ende erzwingen</translation>
+        <translation>Beenden erzwingen</translation>
     </message>
     <message>
         <source>End</source>
         <comment>button</comment>
-        <translation>Ende</translation>
+        <translation>Beenden</translation>
     </message>
 </context>
 <context>
@@ -539,7 +539,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Link quality</source>
-        <translation type="unfinished"/>
+        <translation>Verbindungsqualität</translation>
     </message>
     <message>
         <source>Signal strength</source>
@@ -575,11 +575,11 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>RX-Überläufe</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>RX-Datenübertragungsblock</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -595,11 +595,11 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation>TX-Überläufe</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>TX-Trägerwelle</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -611,7 +611,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX-Verworfen</translation>
     </message>
 </context>
 <context>
@@ -757,6 +757,13 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -802,7 +809,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation>Infobereich</translation>
     </message>
 </context>
 <context>

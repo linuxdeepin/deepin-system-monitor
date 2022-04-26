@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>App.About</name>
     <message>
@@ -512,7 +512,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Netmask:</source>
-        <translation type="unfinished"/>
+        <translation>Netmask-ë:</translation>
     </message>
     <message>
         <source>Broadcast:</source>
@@ -754,6 +754,13 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>All processes</source>
         <translation>Krejt proceset</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
