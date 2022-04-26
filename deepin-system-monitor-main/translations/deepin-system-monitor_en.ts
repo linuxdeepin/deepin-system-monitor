@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="en">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Hide details</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>Overall utilization</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>Individual utilization</translation>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Settings</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Loading</translation>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Are you sure you want to continue?</translation>
         <source>Not support</source>
         <translation>Not support</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Settings</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>System Protection</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Show warnings when the usage exceeds the thresholds</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Notifications</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>CPU warning threshold (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>Memory warning threshold (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>Warning interval (min)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancel</translation>
     </message>
 </context>
@@ -1026,16 +992,16 @@ Are you sure you want to continue?</translation>
         <translation>Load</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>Start State</translation>
+        <source>Active</source>
+        <translation>Active</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>Sub</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>Start Tactic</translation>
+        <source>State</source>
+        <translation>State</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1048,21 +1014,6 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Startup Type</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Settings</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(Modifiable)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Range: %1-%2</translation>
     </message>
 </context>
 <context>

@@ -329,8 +329,10 @@ QString SysInfo::read_arch()
 QString SysInfo::read_version()
 {
     auto ver = QString("%1 %2")
-               .arg(DSysInfo::deepinVersion())
-               .arg(DSysInfo::deepinTypeDisplayName());
+               //etc/os-version 下 MajorVersion
+               .arg(DSysInfo::majorVersion())
+               //etc/os-version 下 EditionName
+               .arg(DSysInfo::uosEditionName());
     return ver;
 }
 

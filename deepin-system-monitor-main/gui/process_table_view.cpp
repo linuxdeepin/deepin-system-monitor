@@ -60,6 +60,9 @@
 #include <QKeyEvent>
 #include <QShortcut>
 
+
+using namespace common::init;
+
 // process table view backup setting key
 const QByteArray header_version = "_1.0.0";
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
@@ -299,7 +302,9 @@ void ProcessTableView::search(const QString &text)
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
+
     m_proxyModel->setFilterType(type);
+
 }
 
 // change process priority
@@ -353,6 +358,7 @@ void ProcessTableView::saveSettings()
 // initialize ui components
 void ProcessTableView::initUI(bool settingsLoaded)
 {
+
     setAccessibleName("ProcessTableView");
 
     // search result not found tip label instance

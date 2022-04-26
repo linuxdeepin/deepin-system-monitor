@@ -28,7 +28,7 @@
 #include <DFrame>
 #include <DStackedWidget>
 #include <DLabel>
-
+#include <DSpinner>
 DWIDGET_USE_NAMESPACE
 
 class MainWindow;
@@ -45,7 +45,12 @@ class DetailViewStackedWidget;
 class ProcessPageWidget : public DFrame
 {
     Q_OBJECT
-
+    //记录进程列表按钮选中状态
+    typedef enum _ProcessButtonCheckedType {
+        MY_APPS = 0,
+        USER_PROCESS = 1,
+        ALL_PROCESSS = 2
+    } ProcessButtonCheckedType;
 public:
     /**
      * @brief Default constructor
@@ -130,6 +135,18 @@ private Q_SLOTS:
      */
     void onLoadLeftDataWidgetDelay();
 
+    /**
+     * @brief 应用程序视图响应槽函数
+     */
+    void onAppButtonClicked();
+    /**
+     * @brief 我的进程视图响应槽函数
+     */
+    void onUserProcButtonClicked();
+    /**
+     * @brief 所有进程视图响应槽函数
+     */
+    void onAllProcButtonClicked();
 private:
     // global setttings instance
     Settings *m_settings = nullptr;
@@ -157,6 +174,18 @@ private:
     // process table view
     ProcessTableView *m_procTable = nullptr;
     QWidget *m_processWidget = nullptr;
+
+    //loading spinner
+    DSpinner *m_spinner = nullptr;
+    DLabel *m_loadingLabel = nullptr;
+    QWidget *m_spinnerWidget = nullptr;
+
+    DStackedWidget *m_loadingAndProcessTB = nullptr;
+    ProcessButtonCheckedType m_procBtnCheckedType;
+    //paint event 计数
+    int m_ipaintDelayTimes = 0;
+    //所有进程数量
+    int m_iallProcNum = 0;
 
     // kill process by window selection preview widget
     XWinKillPreviewWidget *m_xwkillPreview = nullptr;

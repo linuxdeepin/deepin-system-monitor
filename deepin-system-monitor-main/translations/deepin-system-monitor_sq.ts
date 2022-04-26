@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Fshihi hollësitë</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>Përdorim i përgjithshëm</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>Përdorim individual</translation>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Rregullime</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
         <source>Not support</source>
         <translation>Pa mbulim</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Rregullime</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>Mbrojtje Sistemi</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Shfaq sinjalizime, kur përdorimi tejkalon pragjet</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Njoftime</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>Prag sinjalizimi për CPU-në (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>Prag sinjalizimi për kujtesën (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>Interval sinjalizimi (min)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Anuloje</translation>
     </message>
 </context>
@@ -1048,21 +1014,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Lloj Nisjeje</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Rregullime</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(I ndryshueshëm)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Interval: %1-%2</translation>
     </message>
 </context>
 <context>

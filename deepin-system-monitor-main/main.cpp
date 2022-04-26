@@ -57,7 +57,8 @@ int main(int argc, char *argv[])
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     Application app(argc, argv);
     app.setAutoActivateWindows(true);
-
+    //设置单例
+    DGuiApplicationHelper::setSingleInstanceInterval(-1);
     if (DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor"),
                                                  DGuiApplicationHelper::UserScope)) {
         app.loadTranslator();

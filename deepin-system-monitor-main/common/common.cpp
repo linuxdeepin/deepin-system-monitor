@@ -208,21 +208,23 @@ namespace init {
 QList<QString> shellList;
 QList<QString> scriptList;
 QList<QString> pathList;
+//默认为低性能，防止在获取CPU性能之前就卡死
+CPUMaxFreq CPUPerformance = CPUMaxFreq::Low;
 bool WaylandCentered;
 
-void WaylandSearchCentered(){
-        auto e = QProcessEnvironment::systemEnvironment();
+void WaylandSearchCentered()
+{
+    auto e = QProcessEnvironment::systemEnvironment();
 
-        QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
+    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
 
-        QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
+    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
 
-        if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)){
-            WaylandCentered = true;
-        }
-        else {
-            WaylandCentered = false;
-        }
+    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
+        WaylandCentered = true;
+    } else {
+        WaylandCentered = false;
+    }
 }
 
 static void init_shell_list()

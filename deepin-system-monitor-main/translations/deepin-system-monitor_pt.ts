@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Ocultar detalhes</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>Utilização geral</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>Utilização individual</translation>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Definições</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Tem a certeza de que deseja continuar?</translation>
         <source>Not support</source>
         <translation>Não suportado</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Definições</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>Proteção do sistema</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Mostrar avisos quando a utilização exceder os limites</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Notificações</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>Aviso sobre limite da CPU (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>Aviso sobre limite da memória (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>Intervalo de avisos (min)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Aceitar</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
 </context>
@@ -1048,21 +1014,6 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Tipo de arranque</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Definições</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(Modificável)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Intervalo: %1-%2</translation>
     </message>
 </context>
 <context>

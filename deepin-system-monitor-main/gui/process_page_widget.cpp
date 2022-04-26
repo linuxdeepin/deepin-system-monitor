@@ -51,10 +51,16 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QPainterPath>
+//进程数大于800时，loading图标延长显示时间
+#define PROCESS_DELAY_PAINTING_NUM 800
+//paintEvent调用次数
+#define LOW_PERFORMANCE_CPU_RECOVER_TIMES 200
+//通常情形下的loading显示时间（ms）
+#define NORMAL_PERFORMANCE_CPU_LOADING_TIME 100
 
 DWIDGET_USE_NAMESPACE
 using namespace core::process;
-
+using namespace common::init;
 // process context summary text
 static const char *kProcSummaryTemplateText =
     QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)");
@@ -65,6 +71,8 @@ static const char *appText = QT_TRANSLATE_NOOP("Process.Show.Mode", "Application
 static const char *myProcText = QT_TRANSLATE_NOOP("Process.Show.Mode", "My processes");
 // all process context mode text
 static const char *allProcText = QT_TRANSLATE_NOOP("Process.Show.Mode", "All processes");
+// process loading text
+static const char *loadingText = QT_TRANSLATE_NOOP("Process.Loading", "Loading");
 
 // constructor
 ProcessPageWidget::ProcessPageWidget(DWidget *parent)
@@ -190,10 +198,33 @@ void ProcessPageWidget::initUI()
 
     tw->setLayout(toolsLayout);
 
+    //Spinner
+    m_spinner = new DSpinner(this);
+    m_spinner->setFixedSize(32, 32);
+    m_spinner->setVisible(true);
+    m_spinnerWidget = new QWidget(this);
+    m_loadingLabel = new DLabel(this);
+    m_loadingLabel->setText(DApplication::translate("Process.Laoding", loadingText));
+    m_loadingLabel->setFixedWidth(60);
+    QHBoxLayout *loadingLayout = new QHBoxLayout(this);
+    loadingLayout->addStretch();
+    loadingLayout->addWidget(m_spinner, Qt::AlignCenter);
+    loadingLayout->addWidget(m_loadingLabel,  Qt::AlignCenter);
+    loadingLayout->addStretch();
+    m_spinnerWidget->setLayout(loadingLayout);
+    //loading 和 进程列表
+    m_loadingAndProcessTB = new DStackedWidget(this);
+    m_loadingAndProcessTB->setAutoFillBackground(false);
+    m_loadingAndProcessTB->setContentsMargins(0, 0, 0, 0);
+
     // process table view instance
     m_procTable = new ProcessTableView(m_processWidget);
+
+    m_loadingAndProcessTB->addWidget(m_procTable);
+    m_loadingAndProcessTB->addWidget(m_spinnerWidget);
+
     contentlayout->addWidget(tw);
-    contentlayout->addWidget(m_procTable, 1);
+    contentlayout->addWidget(m_loadingAndProcessTB, 1);
     m_processWidget->setLayout(contentlayout);
 
     // fill left side bar & main content area
@@ -211,25 +242,37 @@ void ProcessPageWidget::initUI()
     int index = vindex.toInt();
     switch (index) {
     case kFilterCurrentUser: {
+        //打开时也显示loading
+        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show my process view
         m_myProcButton->setChecked(true);
         m_procTable->switchDisplayMode(kFilterCurrentUser);
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", myProcText));  // default text
+        //记录当前选中按钮
+        m_procBtnCheckedType = USER_PROCESS;
     } break;
     case kNoFilter: {
+        //打开时也显示loading
+        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show all process view
         m_allProcButton->setChecked(true);
         m_procTable->switchDisplayMode(kNoFilter);
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", allProcText));  // default text
+        //记录当前选中按钮
+        m_procBtnCheckedType = ALL_PROCESSS;
     } break;
     default: {
+        //打开时也显示loading
+        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show my application view by default
         m_appButton->setChecked(true);
         m_procTable->switchDisplayMode(kFilterApps);
         m_procViewMode->setText(
             DApplication::translate("Process.Show.Mode", appText));  // default text
+        //记录当前选中按钮
+        m_procBtnCheckedType = MY_APPS;
     }
     } // ::switch(index)
 
@@ -248,36 +291,17 @@ void ProcessPageWidget::initConnections()
             &ProcessPageWidget::switchDisplayMode);
 
     // show my application when my application button toggled
-    connect(m_appButton, &DButtonBoxButton::clicked, this, [ = ](bool) {
-        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
-        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
-        m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(kFilterApps);
-        m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
-        PERF_PRINT_END("POINT-04");
-    });
+    connect(m_appButton, &DButtonBoxButton::clicked, this, &ProcessPageWidget::onAppButtonClicked);
+
     // show my process when my process button toggled
-    connect(m_myProcButton, &DButtonBoxButton::clicked, this, [ = ](bool) {
-        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
-        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
-        m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(kFilterCurrentUser);
-        m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
-        PERF_PRINT_END("POINT-04");
-    });
+    connect(m_myProcButton, &DButtonBoxButton::clicked, this, &ProcessPageWidget::onUserProcButtonClicked);
+
     // show all application when all application button toggled
-    connect(m_allProcButton, &DButtonBoxButton::clicked, this, [ = ](bool) {
-        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
-        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
-        m_procViewMode->adjustSize();
-        m_procTable->switchDisplayMode(kNoFilter);
-        m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
-        PERF_PRINT_END("POINT-04");
-    });
+    connect(m_allProcButton, &DButtonBoxButton::clicked, this, &ProcessPageWidget::onAllProcButtonClicked);
 
     // update process summary text when process summary info updated background
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessPageWidget::onStatInfoUpdated);
+    connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessPageWidget::onStatInfoUpdated, Qt::DirectConnection);
 
     auto *dAppHelper = DApplicationHelper::instance();
     // change text color dynamically on theme type change, if not do this way, text color wont synchronize with theme type
@@ -379,6 +403,19 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
 
     // paint frame backgroud with current themed background color
     painter.fillPath(path, bgColor);
+    //当所有进程被按下，CPU性能较差或是系统进程过多时，延长显示loading的时间
+    if ((m_allProcButton->isChecked() || m_myProcButton->isChecked()) && (m_iallProcNum > PROCESS_DELAY_PAINTING_NUM || CPUPerformance == Low)) {
+        m_ipaintDelayTimes ++;
+        if (m_ipaintDelayTimes > LOW_PERFORMANCE_CPU_RECOVER_TIMES) {
+            m_spinner->stop();
+            m_loadingAndProcessTB->setCurrentWidget(m_procTable);
+            m_ipaintDelayTimes = 0;
+        }
+    } else {
+        // 一般情形下，显示0.1s
+        QTimer::singleShot(NORMAL_PERFORMANCE_CPU_LOADING_TIME, this, [ = ]() {m_loadingAndProcessTB->setCurrentWidget(m_procTable);});
+    }
+
 }
 
 // create application kill preview widget
@@ -395,13 +432,16 @@ void ProcessPageWidget::createWindowKiller()
 
 void ProcessPageWidget::onStatInfoUpdated()
 {
+    QApplication::processEvents();
     const QString &buf = DApplication::translate("Process.Summary", kProcSummaryTemplateText);
 
     ProcessSet *processSet = ProcessDB::instance()->processSet();
+    //记录所有进程数量
     const QList<pid_t> &newpidlst = processSet->getPIDList();
-
+    m_iallProcNum = newpidlst.size();
     WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
-    m_procViewModeSummary->setText(buf.arg(wmwindowList->getAppCount()).arg(newpidlst.size()));
+
+    m_procViewModeSummary->setText(buf.arg(wmwindowList->getAppCount()).arg(m_iallProcNum));
 }
 
 // change icon theme when theme changed
@@ -476,3 +516,58 @@ void ProcessPageWidget::switchDisplayMode(int mode)
     m_views->setCurrentIndex(mode);
 }
 
+void ProcessPageWidget::onAllProcButtonClicked()
+{
+    //若已选中，再次点击不会加载数据
+    if (m_procBtnCheckedType != ALL_PROCESSS) {
+        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
+        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
+        m_procViewMode->adjustSize();
+        m_procTable->switchDisplayMode(kNoFilter);
+        if (CPUPerformance == CPUMaxFreq::High) {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
+        } else {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
+        }
+        PERF_PRINT_END("POINT-04");
+    }
+    //记录当前按钮为已选中
+    m_procBtnCheckedType = ALL_PROCESSS;
+}
+
+void ProcessPageWidget::onUserProcButtonClicked()
+{
+    //若已选中，再次点击不会加载数据
+    if (m_procBtnCheckedType != USER_PROCESS) {
+        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
+        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
+        m_procViewMode->adjustSize();
+        m_procTable->switchDisplayMode(kFilterCurrentUser);
+        if (CPUPerformance == CPUMaxFreq::High) {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterCurrentUser);
+        } else {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
+        }
+        PERF_PRINT_END("POINT-04");
+    };
+    //记录当前按钮为已选中
+    m_procBtnCheckedType = USER_PROCESS;
+}
+
+void ProcessPageWidget::onAppButtonClicked()
+{
+    //若已选中，再次点击不会加载数据
+    if (m_procBtnCheckedType != MY_APPS) {
+        PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
+        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
+        m_procViewMode->adjustSize();
+        m_procTable->switchDisplayMode(kFilterApps);
+        m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
+        PERF_PRINT_END("POINT-04");
+    }
+    //记录当前按钮为已选中
+    m_procBtnCheckedType = MY_APPS;
+}

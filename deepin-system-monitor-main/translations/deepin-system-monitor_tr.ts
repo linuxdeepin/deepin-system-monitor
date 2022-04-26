@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Ayrıntıları gizle</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Devam etmek istediğine emin misin?</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Ayarlar</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Devam etmek istediğine emin misin?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Devam etmek istediğine emin misin?</translation>
         <source>Not support</source>
         <translation>Desteklenmiyor</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Ayarlar</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>Sistem Koruması</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Kullanım eşikleri aşıldığında uyarı göster</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Bildirimler</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>CPU uyarı eşiği (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>Bellek uyarı eşiği (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>Uyarı aralığı (dk)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Tamam</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>İptal</translation>
     </message>
 </context>
@@ -1048,21 +1014,6 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Başlangıç Türü</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Ayarlar</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(Değiştirilebilir)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Aralık: %1-%2</translation>
     </message>
 </context>
 <context>
