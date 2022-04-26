@@ -72,6 +72,9 @@ static const char *appText = QT_TRANSLATE_NOOP("Process.Show.Mode", "Application
 static const char *myProcText = QT_TRANSLATE_NOOP("Process.Show.Mode", "My processes");
 // all process context mode text
 static const char *allProcText = QT_TRANSLATE_NOOP("Process.Show.Mode", "All processes");
+// process loading text
+static const char *loadingText = QT_TRANSLATE_NOOP("Process.Loading", "Loading");
+
 
 // constructor
 ProcessPageWidget::ProcessPageWidget(DWidget *parent)
@@ -203,10 +206,15 @@ void ProcessPageWidget::initUI()
     m_spinner = new DSpinner(this);
     m_spinner->setFixedSize(32, 32);
     m_spinner->setVisible(true);
-    m_spinner->start();
     m_spinnerWidget = new QWidget(this);
+    m_loadingLabel = new DLabel(this);
+    m_loadingLabel->setText(DApplication::translate("Process.Laoding", loadingText));
+    m_loadingLabel->setFixedWidth(60);
     QHBoxLayout *loadingLayout = new QHBoxLayout(this);
+    loadingLayout->addStretch();
     loadingLayout->addWidget(m_spinner, Qt::AlignCenter);
+    loadingLayout->addWidget(m_loadingLabel,  Qt::AlignCenter);
+    loadingLayout->addStretch();
     m_spinnerWidget->setLayout(loadingLayout);
     //loading 和 进程列表
     m_loadingAndProcessTB = new DStackedWidget(this);
@@ -239,7 +247,6 @@ void ProcessPageWidget::initUI()
     switch (index) {
     case kFilterCurrentUser: {
         //打开时也显示loading
-        m_spinner->start();
         m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show my process view
         m_myProcButton->setChecked(true);
@@ -254,7 +261,6 @@ void ProcessPageWidget::initUI()
     } break;
     case kNoFilter: {
         //打开时也显示loading
-        m_spinner->start();
         m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show all process view
         m_allProcButton->setChecked(true);
@@ -269,7 +275,6 @@ void ProcessPageWidget::initUI()
     } break;
     default: {
         //打开时也显示loading
-        m_spinner->start();
         m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show my application view by default
         m_appButton->setChecked(true);
@@ -400,7 +405,6 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
     if ((m_allProcButton->isChecked() || m_myProcButton->isChecked()) && (m_iallProcNum > PROCESS_DELAY_PAINTING_NUM || CPUPerformance == Low)) {
         m_ipaintDelayTimes ++;
         if (m_ipaintDelayTimes > LOW_PERFORMANCE_CPU_RECOVER_TIMES) {
-            m_spinner->stop();
             m_loadingAndProcessTB->setCurrentWidget(m_procTable);
             m_ipaintDelayTimes = 0;
         }
@@ -512,7 +516,6 @@ void ProcessPageWidget::onAllProcButtonClicked()
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != ALL_PROCESSS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
-        m_spinner->start();
         m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
@@ -533,7 +536,6 @@ void ProcessPageWidget::onUserProcButtonClicked()
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != USER_PROCESS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
-        m_spinner->start();
         m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
@@ -554,7 +556,6 @@ void ProcessPageWidget::onAppButtonClicked()
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != MY_APPS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
-        m_spinner->start();
         m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
