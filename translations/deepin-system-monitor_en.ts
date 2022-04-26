@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="en">
 <context>
     <name>App.About</name>
     <message>
@@ -757,6 +757,13 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Loading</translation>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -985,16 +992,16 @@ Are you sure you want to continue?</translation>
         <translation>Load</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>Start State</translation>
+        <source>Active</source>
+        <translation>Active</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>Sub</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>Start Tactic</translation>
+        <source>State</source>
+        <translation>State</translation>
     </message>
     <message>
         <source>Description</source>

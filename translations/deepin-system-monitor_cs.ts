@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,124 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>Skrýt podrobnosti</translation>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>Čtení</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>Zápis</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 sekund</translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation>%1 dnů %2 hodin %3 minut</translation>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation>Vytížení</translation>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>Stávající frekvence</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>Frekvence</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Výrobce</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation>Patice</translation>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation>Logických procesorů</translation>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation>Virtualizace</translation>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation>Mezipaměť 1. úrovně (instrukční)</translation>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation>Mezipaměť 1. úrovně (datová)</translation>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation>Mezipaměť 2. úrovně</translation>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation>Mezipaměť 3. úrovně</translation>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation>Průměrné vytížení</translation>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation>Popisovače souborů</translation>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>Procesy</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation>Vlákna</translation>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation>Název stroje</translation>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>Typ operačního systému</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Verze</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>Doba chodu od minulého zapnutí</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 sekund</translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +136,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Podrobnosti</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>Podrobnosti</translation>
     </message>
 </context>
 <context>
@@ -210,36 +325,124 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DeailTableModel</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Used</source>
+        <translation>Využito</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>K dispozici</translation>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">Procesor</translation>
+        <source>Shared</source>
+        <translation>Sdíleno</translation>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <source>Cached</source>
+        <translation>Ve vyrovnávací paměti</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Buffers</source>
+        <translation>Vyrovnávací paměti</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Cached swap</source>
+        <translation>Odkládací prostor v mezipaměti</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Aktivita</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation>Neaktivní</translation>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation>„Špinavé“</translation>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation>Mapováno</translation>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation>Celkem mezipaměti</translation>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation>Volný odkládací prostor</translation>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation>Slab</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>Rychlost čtení</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>Rychlost zapisování</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>Kapacita</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation>Načteno sektorů</translation>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation>Čtení/s</translation>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation>Čtení sektorů / sek</translation>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation>Sloučených čtení / sek</translation>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation>Zapsáno sektorů</translation>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation>Dokončeno zápisů</translation>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation>Sloučeno zápisů</translation>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation>Zápisů/s</translation>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation>Zapsáno sektorů / sek</translation>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation>Sloučeno zápisů / sek</translation>
     </message>
 </context>
 <context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
 </context>
@@ -263,10 +466,6 @@ Are you sure you want to continue?</source>
 Opravdu chcete pokračovat?</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>Zrušit</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>Ukončit proces</translation>
     </message>
@@ -277,18 +476,142 @@ Are you sure you want to continue?</source>
 Opravdu chcete pokračovat?</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>Ukončit</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Vynucení ukončení této aplikace může vést ke ztrátě dat.
 Opravdu chcete pokračovat?</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Zrušit</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>Vynutit ukončení</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>Ukončit</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Velikost</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>IP adresa:</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation>Maska sítě:</translation>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation>Všesměrové vysílání:</translation>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation>Délka předpony:</translation>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation>Rozsah:</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>Typ připojení</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation>ESSID</translation>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>Kvalita linky</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>Síla signálu</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation>Úroveň šumu</translation>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation>MAC</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>Šíře pásma</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation>Přijato paketů</translation>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation>Přijato bajtů</translation>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation>Chyb příjmu</translation>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation>Příjem zahozeno</translation>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation>Přij. přetečení</translation>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation>Přij. rámec</translation>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation>Odesl. paketů</translation>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation>Odesl. bajtů</translation>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation>Chyb odesíl.</translation>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation>Odesl. přetečení</translation>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation>Nosná odesíl.</translation>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation>Zahozeno odeslání</translation>
     </message>
 </context>
 <context>
@@ -310,7 +633,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klepněte na program, který chcete ukončit</translation>
+        <translation>Klikněte na aplikaci, kterou chcete ukončit</translation>
     </message>
 </context>
 <context>
@@ -318,6 +641,10 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Memory</source>
         <translation>Operační paměť </translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>Obdržet</translation>
     </message>
 </context>
 <context>
@@ -355,10 +682,6 @@ Opravdu chcete pokračovat?</translation>
         <translation>Odesílání</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>Úložiště</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>Síť</translation>
     </message>
@@ -369,6 +692,14 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Total Sent</source>
         <translation>Celkem odesl.</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Odesláno</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>Disky</translation>
     </message>
 </context>
 <context>
@@ -423,6 +754,13 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>All processes</source>
         <translation>Všechny procesy</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -508,16 +846,18 @@ Opravdu chcete pokračovat?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>Uživatelsky určená priorita</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Zrušit</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>Změnit</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>Uživatelsky určená priorita</translation>
     </message>
 </context>
 <context>
@@ -566,6 +906,21 @@ Opravdu chcete pokračovat?</translation>
         <source>Priority</source>
         <translation>Priorita</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>Sdílená paměť</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>Virtuální paměť</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>Nepodporováno</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -581,16 +936,18 @@ Opravdu chcete pokračovat?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>Název instance služby</translation>
+    </message>
+    <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Zrušit</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>Název instance služby</translation>
     </message>
 </context>
 <context>
@@ -694,17 +1051,6 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Services</source>
         <translation>Služby</translation>
-    </message>
-</context>
-<context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 </TS>

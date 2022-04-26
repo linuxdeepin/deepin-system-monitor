@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fr">
 <context>
     <name>App.About</name>
     <message>
@@ -94,7 +94,7 @@
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Description du fichier</translation>
+        <translation>Descripteurs de fichier</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -757,6 +757,13 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -865,7 +872,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Mémoire </translation>
+        <translation>Mémoire</translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -901,11 +908,11 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation>Mémoire partagée </translation>
+        <translation>Mémoire partagée</translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation>Mémoire virtuelle </translation>
+        <translation>Mémoire virtuelle</translation>
     </message>
 </context>
 <context>

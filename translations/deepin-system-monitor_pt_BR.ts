@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt_BR">
 <context>
     <name>App.About</name>
     <message>
@@ -489,7 +489,7 @@ Continuar?</translation>
     <message>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Forçar Encerramento</translation>
+        <translation>Forçar encerrar</translation>
     </message>
     <message>
         <source>End</source>
@@ -671,7 +671,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>não ativada</translation>
+        <translation>Inativa</translation>
     </message>
     <message>
         <source>Download</source>
@@ -754,6 +754,13 @@ Continuar?</translation>
     <message>
         <source>All processes</source>
         <translation>Todos os processos</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

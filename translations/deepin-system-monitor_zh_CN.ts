@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>App.About</name>
     <message>
@@ -757,6 +757,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>正在加载</translation>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -985,16 +992,16 @@ Are you sure you want to continue?</source>
         <translation>内存加载</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>启动状态</translation>
+        <source>Active</source>
+        <translation>活动</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>运行状态</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>启用策略</translation>
+        <source>State</source>
+        <translation>状态</translation>
     </message>
     <message>
         <source>Description</source>
