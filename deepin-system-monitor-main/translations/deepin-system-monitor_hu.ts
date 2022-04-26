@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hu">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Részletek elrejtése</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>Általános kihasználtság</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>Egyéni kihasználtság</translation>
     </message>
 </context>
 <context>
@@ -505,13 +497,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Beállítások</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -771,6 +756,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Betöltés</translation>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -928,34 +920,6 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>Nem támogatott</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Beállítások</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>Rendszervédelem</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Figyelmeztetések megjelenítése, ha a használat meghaladja a küszöbértékeket</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Értesítések</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>Processzor figyelmeztetési küszöbérték (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>Memória figyelmeztetési küszöbérték (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>Figyelmeztetési időköz (perc)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -976,10 +940,12 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Mégsem</translation>
     </message>
 </context>
@@ -1047,21 +1013,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Indítási típus</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Beállítások</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(Módosítható)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Tartomány: %1-%2</translation>
     </message>
 </context>
 <context>

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ug">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>تەپسىلاتىنى يوشۇرۇش</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>ئومۇمىي پايدىلىنىش نىسبىتى</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>شەخسىي پايدىلىنىش نىسبىتى</translation>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>تەڭشەك</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>قوللىمايدۇ</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>تەڭشەك</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>سىستېما مۇداپىئەسى</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>سانلىق قىممەت تۆۋەندىكى چەك قىممەتتىن يۇقىرى بولغاندا ئاپتوماتىك سىگنال بەرسۇن</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>ئۇقتۇرۇش</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>CPU نىڭ ئىشلىتىلىشى  (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>ئىچكى ساقلىغۇچنىڭ ئىشلىتىلىشى  (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>سىگنال بېرىش ئارىلىقى (مىنۇت)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>ماقۇل</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>بىكار قىلىش</translation>
     </message>
 </context>
@@ -1048,21 +1014,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>باشلاش تىپى</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>تەڭشەك</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(چەك قىممەتنى ئۆزگەرتىشكە بولىدۇ)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>قىممەت دائىرىسى: %1-%2</translation>
     </message>
 </context>
 <context>

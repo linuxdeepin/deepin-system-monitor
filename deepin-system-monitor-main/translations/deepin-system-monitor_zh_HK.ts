@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_HK">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>隱藏詳情</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>總體利用率</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>個體利用率</translation>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>設置</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>正在加載</translation>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>不支持</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>設置</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>系統防護</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>當數值高於以下閾值時自動報警</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>消息通知</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>CPU佔用 (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>內存佔用 (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>預警間隔 (分鐘)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>取 消</translation>
     </message>
 </context>
@@ -1026,16 +992,16 @@ Are you sure you want to continue?</source>
         <translation>內存加載</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>啟動狀態</translation>
+        <source>Active</source>
+        <translation>活動</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>運行狀態</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>啟用策略</translation>
+        <source>State</source>
+        <translation>狀態</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1048,21 +1014,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>啟動方式</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>設置</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>（閾值可修改）</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>數值範圍：%1-%2</translation>
     </message>
 </context>
 <context>

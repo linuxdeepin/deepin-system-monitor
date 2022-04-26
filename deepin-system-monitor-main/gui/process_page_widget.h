@@ -177,6 +177,7 @@ private:
 
     //loading spinner
     DSpinner *m_spinner = nullptr;
+    DLabel *m_loadingLabel = nullptr;
     QWidget *m_spinnerWidget = nullptr;
 
     DStackedWidget *m_loadingAndProcessTB = nullptr;

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Details ausblenden</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation>Gesamtnutzung</translation>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation>Individuelle Nutzung</translation>
     </message>
 </context>
 <context>
@@ -470,7 +462,7 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Beenden des Prozesses kann zu Datenverlust führen.
+        <translation>Das Beenden des Prozesses kann zu Datenverlust führen.
 Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
@@ -480,7 +472,7 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Erzwingtes Beenden des Prozesses kann zu Datenverlust führen.
+        <translation>Das erzwungene Beenden des Prozesses kann zu Datenverlust führen.
 Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
@@ -497,19 +489,12 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Ende erzwingen</translation>
+        <translation>Beenden erzwingen</translation>
     </message>
     <message>
         <source>End</source>
         <comment>button</comment>
-        <translation>Ende</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <translation>Beenden</translation>
     </message>
 </context>
 <context>
@@ -772,6 +757,13 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -817,7 +809,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation>Infobereich</translation>
     </message>
 </context>
 <context>
@@ -929,34 +921,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
         <source>Not support</source>
         <translation>Nicht unterstützt</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>Systemschutz</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Warnungen anzeigen, wenn die Auslastung die Schwellenwerte überschreitet</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Benachrichtigungen</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation>CPU-Warnschwellenwert (%)</translation>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation>Speicher-Warnschwellenwert (%)</translation>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation>Warnintervall (min)</translation>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Abbrechen</translation>
     </message>
 </context>
@@ -1048,21 +1014,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Starttyp</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(Veränderbar)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Bereich: %1 - %2</translation>
     </message>
 </context>
 <context>

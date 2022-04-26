@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
 <context>
     <name>App.About</name>
     <message>
@@ -15,14 +15,6 @@
     <message>
         <source>Hide details</source>
         <translation>Ocultar detalles</translation>
-    </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -506,13 +498,6 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -772,6 +757,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -929,34 +921,6 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>No compatible</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -977,10 +941,12 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Aceptar</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
 </context>
@@ -1048,21 +1014,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Tipo de inicio</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
