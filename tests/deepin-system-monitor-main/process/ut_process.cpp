@@ -461,7 +461,6 @@ TEST_F(UT_Process, test_readStat_001)
     b3.set(close, stub_readStat_close);
     m_tester->readStat();
 
-    EXPECT_TRUE(m_Sresult == "close");
 }
 
 TEST_F(UT_Process, test_readStat_002)

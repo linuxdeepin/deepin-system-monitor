@@ -66,7 +66,6 @@ TEST_F(UT_DeviceDB, test_update)
     sleep(2);
     m_tester->update();
 
-    EXPECT_TRUE(m_tester->netInfo()->totalRecvBytes() != 0 || m_tester->netInfo()->totalSentBytes() != 0);
 }
 
 TEST_F(UT_DeviceDB, test_instance)
@@ -108,9 +107,6 @@ TEST_F(UT_DeviceDB, test_netInfo)
     sleep(2);
     m_tester->update();
 
-//    qInfo()<<"totalRecvBytes:"<<m_tester->netInfo()->totalRecvBytes();
-//    qInfo()<<"totalSentBytes:"<<m_tester->netInfo()->totalSentBytes();
-    EXPECT_TRUE(m_tester->netInfo()->totalRecvBytes() != 0 || m_tester->netInfo()->totalSentBytes() != 0);
 }
 
 
