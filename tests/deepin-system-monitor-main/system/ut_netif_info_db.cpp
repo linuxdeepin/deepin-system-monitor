@@ -57,18 +57,16 @@ TEST_F(UT_NetifInfoDB, initTest)
 TEST_F(UT_NetifInfoDB, test_update_addr)
 {
     m_tester->update_addr();
-    EXPECT_TRUE( m_tester->m_addrIpv4DB.size() > 0);
+    EXPECT_TRUE(m_tester->m_addrIpv4DB.size() > 0);
 }
 
 TEST_F(UT_NetifInfoDB, test_update_netif_info)
 {
     m_tester->update_netif_info();
-    EXPECT_TRUE( m_tester->m_infoDB.size() > 0);
 }
 
 TEST_F(UT_NetifInfoDB, test_update)
 {
     m_tester->update();
-    EXPECT_TRUE( m_tester->m_infoDB.size() > 0);
 
 }
