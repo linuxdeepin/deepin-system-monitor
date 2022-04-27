@@ -25,7 +25,7 @@
 const QString kSettingKeyDisplayMode = {"display_mode"};
 const QString kSettingKeyWindowWidth = {"window_width"};
 const QString kSettingKeyWindowHeight = {"window_height"};
-const QString kSettingKeyProcessTabIndex = {"process_tab_index"};
+const QString kSettingKeyProcessTabIndex = {"process_tab_index_new"};
 const QString kSettingKeyProcessAttributeDialogWidth = {"process_attribute_dialog_width"};
 const QString kSettingKeyProcessAttributeDialogHeight = {"process_attribute_dialog_height"};
 const QString kSettingKeyTimePeriod = {"time_period"};
