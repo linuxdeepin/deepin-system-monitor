@@ -522,6 +522,24 @@ set(LSCPU_INCLUDE
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/lscpu.h
 )
 
+
+set(DMIDECODE_HEADS
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmidecode.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioem.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmiopt.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioutput.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/types.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/util.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/version.h
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/vpdopt.h
+       )
+set(DMIDECODE
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmidecode.c
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioem.c
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmiopt.c
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/dmioutput.c
+            ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/dmidecode/util.c
+       )
 set(APP_HPP
     ${HPP_GLOBAL}
     ${HPP_COMMON}
@@ -533,6 +551,7 @@ set(APP_HPP
     ${HPP_SYSTEM}
     ${HPP_WM}
     ${LSCPU_INCLUDE}
+    ${DMIDECODE_HEADS}
 )
 
 set(APP_CPP
@@ -546,6 +565,7 @@ set(APP_CPP
     ${CPP_SYSTEM}
     ${CPP_WM}
     ${LSCPU}
+    ${DMIDECODE}
 )
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/translations/*.ts)

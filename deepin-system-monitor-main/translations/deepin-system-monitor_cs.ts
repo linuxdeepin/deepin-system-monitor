@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Skrýt podrobnosti</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -340,7 +348,7 @@
     </message>
     <message>
         <source>Cached</source>
-        <translation>Ve vyrovnávací paměti</translation>
+        <translation>V mezipaměti</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -360,7 +368,7 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation>„Špinavé“</translation>
+        <translation>„Špinavé</translation>
     </message>
     <message>
         <source>Mapped</source>
@@ -484,7 +492,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Force End</source>
@@ -495,6 +503,13 @@ Opravdu chcete pokračovat?</translation>
         <source>End</source>
         <comment>button</comment>
         <translation>Ukončit</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Nastavení</translation>
     </message>
 </context>
 <context>
@@ -531,7 +546,7 @@ Opravdu chcete pokračovat?</translation>
     <name>NetInfoModel</name>
     <message>
         <source>Connection type</source>
-        <translation>Typ připojení</translation>
+        <translation>Typ připojen</translation>
     </message>
     <message>
         <source>ESSID</source>
@@ -633,7 +648,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klikněte na aplikaci, kterou chcete ukončit</translation>
+        <translation>Klepněte na program, který chcete ukončit</translation>
     </message>
 </context>
 <context>
@@ -852,7 +867,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Change</source>
@@ -921,6 +936,34 @@ Opravdu chcete pokračovat?</translation>
         <source>Not support</source>
         <translation>Nepodporováno</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Nastavení</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Ochrana systému</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Zobrazit varování, pokud využití přesáhne nastavenou hranici</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Upozornění</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>Práh varování ohledně procesoru (%)</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>Práh varování ohledně paměti (%)</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>Interval varování (min)</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,13 +984,11 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
 </context>
 <context>
@@ -1014,6 +1055,21 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Typ spouštění</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Nastavení</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Lze změnit)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Rozsah: %1-%2</translation>
     </message>
 </context>
 <context>

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Cacher les détails</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -498,6 +506,13 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -921,6 +936,34 @@ Es-tu sûr de vouloir continuer ?</translation>
         <source>Not support</source>
         <translation>Pas de support</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,12 +984,10 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Annuler</translation>
     </message>
 </context>
@@ -1014,6 +1055,21 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Type de démarrage</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

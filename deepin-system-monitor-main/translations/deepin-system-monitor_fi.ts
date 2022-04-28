@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Piilota tiedot</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Käyttöaste</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Käyttö</translation>
     </message>
 </context>
 <context>
@@ -498,6 +506,13 @@ Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Asetukset</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -921,6 +936,34 @@ Haluatko varmasti jatkaa?</translation>
         <source>Not support</source>
         <translation>Ei tukea</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Asetukset</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Järjestelmän suojaus</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Näytä varoitukset, kun käyttö ylittää kynnysarvot</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Ilmoitukset</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>CPU varoituskynnys (%)</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>Muistin varoituskynnys (%)</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>Varoitusväli (min)</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,12 +984,10 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Peru</translation>
     </message>
 </context>
@@ -1014,6 +1055,21 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Käynnistyksen tyyppi</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Asetukset</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Muokattavissa)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Alue: %1-%2</translation>
     </message>
 </context>
 <context>

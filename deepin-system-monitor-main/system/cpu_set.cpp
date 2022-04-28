@@ -30,6 +30,8 @@ extern "C" {
 #include "../3rdparty/include/path.h"
 #include "../3rdparty/include/xalloc.h"
 }
+
+
 #include <QMap>
 #include <QByteArray>
 #include <QFile>
@@ -328,7 +330,7 @@ QString CPUSet::virtualization() const
 
 QString CPUSet::curFreq() const
 {
-    if(d->m_info.value("CPU MHz") == "-")
+    if (d->m_info.value("CPU MHz") == "-")
         return "-";
     return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
 }
@@ -795,7 +797,12 @@ void CPUSet::read_lscpu()
             }
             d->m_info.insert("CPU MHz", nowMHz);
         } else {
-            d->m_info.insert("CPU MHz", "-");
+            if (CurrentCPUFreq > 0) {
+                d->m_info.insert("CPU MHz", QString::number(CurrentCPUFreq));
+                d->m_info.insert("CPU max MHz", QString::number(MaxCPUFreq));
+            } else {
+                d->m_info.insert("CPU MHz", "-");
+            }
         }
         if (ct->bogomips) {
             d->m_info.insert("BogoMIPS", ct->bogomips);

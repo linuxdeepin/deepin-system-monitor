@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Amaga&apos;n els detalls</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Ús general</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Ús individual</translation>
     </message>
 </context>
 <context>
@@ -498,6 +506,13 @@ Segur que voleu continuar?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Paràmetres</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -760,7 +775,7 @@ Segur que voleu continuar?</translation>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Es carrega</translation>
     </message>
 </context>
 <context>
@@ -921,6 +936,34 @@ Segur que voleu continuar?</translation>
         <source>Not support</source>
         <translation>Sense suport</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Paràmetres</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Protecció del sistema</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Mostra avisos quan l&apos;ús superi els llindars.</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notificacions</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>Llindar d&apos;advertència de la CPU (%)</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>Llindar d&apos;advertència de la memòria (%)</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>Interval d&apos;advertència (min)</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,12 +984,10 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>D&apos;acord</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Cancel·la</translation>
     </message>
 </context>
@@ -1014,6 +1055,21 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Tipus d&apos;inici</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Paràmetres</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Modificable)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Interval: %1-%2</translation>
     </message>
 </context>
 <context>

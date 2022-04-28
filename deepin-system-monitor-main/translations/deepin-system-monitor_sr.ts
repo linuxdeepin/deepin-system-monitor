@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Сакриј детаље</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -498,6 +506,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Подешавање</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -921,6 +936,34 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>Неподржано</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Подешавање</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Заштита система</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Обавештења</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,12 +984,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>У реду</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Откажи</translation>
     </message>
 </context>
@@ -1014,6 +1055,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Режим покретања</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Подешавање</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

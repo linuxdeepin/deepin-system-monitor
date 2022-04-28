@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bo">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>ཞིབ་ཕྲའི་གནས་ཚུལ་ཡིབ་པ།</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>སྤྱིའི་བེད་སྤྱོད་བྱེད་ཚད།</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>སྒེར་གྱི་བེད་སྤྱོད་བྱེད་ཚད།</translation>
     </message>
 </context>
 <context>
@@ -498,6 +506,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>སྒྲིག་འགོད།</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -921,6 +936,34 @@ Are you sure you want to continue?</source>
         <source>Not support</source>
         <translation>རྒྱབ་སྐྱོར་མེད་པ།</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>སྒྲིག་འགོད།</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>རྒྱུད་ཁོངས་འགོག་སྲུང་།</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>གྲངས་ཚད་གཤམ་གྱི་ཁྱབ་ཁོངས་ལས་མཐོ་བ་ཡོད་སྐབས་རང་འགུལ་ངང་ཉེན་བརྡ་གཏོང་བ།</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>ཆ་འཕྲིན་བརྡ་ཐོ།</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>CPU (%)ཟིན་པ།</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>ནང་གསོག་ (%)ཟིན་པ།</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>ཉེན་བརྡ་གཏོང་བའི་བར་ཐག(སྐར་མ)</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,12 +984,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>ཆོག</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>འདོར་བ།</translation>
     </message>
 </context>
@@ -1014,6 +1055,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>འགོ་སློང་ཐབས།</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>སྒྲིག་འགོད།</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>（གྲངས་ཚད་བཅོས་ཆོག）</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>གྲངས་ཚད་ཀྱི་ཁྱབ་ཁོངས། %1-%2</translation>
     </message>
 </context>
 <context>
