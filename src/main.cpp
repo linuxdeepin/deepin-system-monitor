@@ -23,6 +23,7 @@
 #include "settings.h"
 #include "gui/main_window.h"
 #include "common/perf.h"
+#include "../3rdparty/dmidecode/dmidecode.h"
 
 #include <DApplication>
 #include <DApplicationSettings>
@@ -38,10 +39,14 @@
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
+
+
 int main(int argc, char *argv[])
 {
-    //
-    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")){
+    char *const cmd[] = {"dmidecode", "-t", "4"};
+    get_cpuinfo_from_dmi(3, cmd);
+
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
     PERF_PRINT_BEGIN("POINT-01", "");

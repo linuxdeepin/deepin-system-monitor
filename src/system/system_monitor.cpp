@@ -44,9 +44,18 @@ SystemMonitor::SystemMonitor(QObject *parent)
 SystemMonitor::~SystemMonitor()
 {
     m_basictimer.stop();
-    delete m_sysInfo;
-    delete m_deviceDB;
-    delete m_processDB;
+    if (m_sysInfo) {
+        delete m_sysInfo;
+        m_sysInfo = nullptr;
+    }
+    if (m_deviceDB) {
+        delete m_deviceDB;
+        m_deviceDB = nullptr;
+    }
+    if (m_processDB) {
+        delete m_processDB;
+        m_processDB = nullptr;
+    }
 }
 
 SystemMonitor *SystemMonitor::instance()

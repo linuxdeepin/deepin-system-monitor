@@ -38,7 +38,7 @@ public:
     BlockDevice();
     BlockDevice(const BlockDevice &other);
     BlockDevice &operator=(const BlockDevice &rhs);
-    ~BlockDevice();
+    virtual ~BlockDevice();
 
     QByteArray deviceName() const;
     QString model() const;

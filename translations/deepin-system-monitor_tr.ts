@@ -356,7 +356,7 @@
     </message>
     <message>
         <source>Inactive</source>
-        <translation>Etkin değil</translation>
+        <translation>Pasif</translation>
     </message>
     <message>
         <source>Dirty</source>
@@ -760,7 +760,7 @@ Devam etmek istediğine emin misin?</translation>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Yükleniyor</translation>
     </message>
 </context>
 <context>

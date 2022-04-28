@@ -32,7 +32,7 @@ public:
     explicit MemInfo();
     MemInfo(const MemInfo &other);
     MemInfo &operator=(const MemInfo &rhs);
-    ~MemInfo();
+    virtual ~MemInfo();
 
     qulonglong memTotal() const;
     qulonglong memAvailable() const;

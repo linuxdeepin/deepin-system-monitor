@@ -43,6 +43,7 @@ class DiskIOInfo
 
 public:
     explicit DiskIOInfo();
+    virtual ~DiskIOInfo();
 
     void update();
     qreal diskIoReadBps();

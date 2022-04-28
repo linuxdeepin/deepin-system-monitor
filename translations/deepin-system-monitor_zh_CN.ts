@@ -667,7 +667,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Swap</source>
-        <translation>交换空间</translation>
+        <translation>交换空间傻逼</translation>
     </message>
     <message>
         <source>Not enabled</source>

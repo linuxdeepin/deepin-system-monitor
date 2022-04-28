@@ -36,6 +36,11 @@ NetInfo::NetInfo()
 
 }
 
+NetInfo::~NetInfo()
+{
+
+}
+
 qreal NetInfo::recvBps()
 {
     return m_recvBps;

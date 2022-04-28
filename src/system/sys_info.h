@@ -62,7 +62,7 @@ public:
     SysInfo();
     SysInfo(const SysInfo &other);
     SysInfo &operator=(const SysInfo &rhs);
-    ~SysInfo();
+    virtual ~SysInfo();
 
     static SysInfo *instance();
 

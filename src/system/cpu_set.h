@@ -22,7 +22,7 @@
 #define CPUSET_H
 
 #include "cpu.h"
-
+#include "../3rdparty/dmidecode/dmidecode.h"
 #include <QList>
 #include <QSharedDataPointer>
 
@@ -41,7 +41,7 @@ public:
 
     CPUSet &operator=(const CPUSet &rhs);
 
-    ~CPUSet();
+    virtual ~CPUSet();
 
 public://info
     QString modelName() const;
@@ -93,6 +93,14 @@ private:
      * @brief read_lscpu 通过lscpu读取CPU信息
      */
     void read_lscpu();
+    /**
+     * @brief read_dmidecode 通过read_dmidecode读取CPU信息
+     */
+    u8 *read_file(off_t base, size_t *max_len, const char *filename);
+
+    int myread(int fd, u8 *buf, size_t count, const char *prefix);
+
+    int smbios3_decode(u8 *buf, const char *devmem, u32 flags);
     void read_overall_info();
 
 private:

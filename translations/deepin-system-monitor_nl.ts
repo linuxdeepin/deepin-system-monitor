@@ -760,7 +760,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Bezig met laden…</translation>
     </message>
 </context>
 <context>

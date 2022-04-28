@@ -40,7 +40,7 @@ class SystemMonitorThread : public BaseThread
 
 public:
     explicit SystemMonitorThread(QObject *parent = nullptr);
-    ~SystemMonitorThread();
+    virtual ~SystemMonitorThread();
 
     int threadKey() const final;
 
