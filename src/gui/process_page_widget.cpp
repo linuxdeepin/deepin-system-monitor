@@ -208,8 +208,10 @@ void ProcessPageWidget::initUI()
     m_spinner->setVisible(true);
     m_spinnerWidget = new QWidget(this);
     m_loadingLabel = new DLabel(this);
+
     m_loadingLabel->setText(DApplication::translate("Process.Loading", loadingText));
     m_loadingLabel->setFixedWidth(120);
+
     QHBoxLayout *loadingLayout = new QHBoxLayout(this);
     loadingLayout->addStretch();
     loadingLayout->addWidget(m_spinner, Qt::AlignCenter);
