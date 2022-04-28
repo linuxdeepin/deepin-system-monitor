@@ -29,7 +29,9 @@ extern "C" {
 #include "../3rdparty/lscpu.h"
 #include "../3rdparty/include/path.h"
 #include "../3rdparty/include/xalloc.h"
+
 }
+
 #include <QMap>
 #include <QByteArray>
 #include <QFile>
@@ -43,11 +45,22 @@ extern "C" {
 #define PROC_PATH_STAT "/proc/stat"
 #define PROC_PATH_CPUINFO "/proc/cpuinfo"
 
+
+
+#define SUPPORTED_SMBIOS_VER 0x030300
+
+#define FLAG_NO_FILE_OFFSET     (1 << 0)
+#define FLAG_STOP_AT_EOT        (1 << 1)
+#define SYS_FIRMWARE_DIR "/sys/firmware/dmi/tables"
+#define SYS_ENTRY_FILE SYS_FIRMWARE_DIR "/smbios_entry_point"
+#define SYS_TABLE_FILE SYS_FIRMWARE_DIR "/DMI"
 using namespace common::error;
 using namespace common::alloc;
 using namespace common::init;
 namespace core {
 namespace system {
+
+
 
 static void lscpu_free_context(struct lscpu_cxt *cxt)
 {
@@ -327,8 +340,11 @@ QString CPUSet::virtualization() const
 
 QString CPUSet::curFreq() const
 {
-    if (d->m_info.value("CPU MHz") == "-")
+
+    if (d->m_info.value("CPU MHz") == "-") {
         return "-";
+    }
+
     return common::format::formatHz(d->m_info.value("CPU MHz").toDouble(), common::format::MHz);
 }
 
@@ -346,11 +362,13 @@ QString CPUSet::maxFreq() const
     qreal MaxFreq = mIsEmptyModelName ?
                     d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble() :
                     d->m_info.value("CPU max MHz").toDouble();
+
     //单核最大CPU频率大于2.3GHz
     if (MaxFreq > 0 && MaxFreq > CPU_AVERAGE_MAX_FREQUENCY) {
         //设置全局变量的值为High
         CPUPerformance = CPUMaxFreq::High;
     }
+
     return common::format::formatHz(static_cast<uint>(MaxFreq), common::format::MHz);
 }
 
@@ -793,7 +811,16 @@ void CPUSet::read_lscpu()
             }
             d->m_info.insert("CPU MHz", nowMHz);
         } else {
-            d->m_info.insert("CPU MHz", "-");
+            if (CurrentCPUFreq > 0) {
+                d->m_info.insert("CPU MHz", QString::number(CurrentCPUFreq));
+                d->m_info.insert("CPU max MHz", QString::number(MaxCPUFreq));
+            } else {
+                d->m_info.insert("CPU MHz", "-");
+            }
+
+
+
+
         }
         if (ct->bogomips) {
             d->m_info.insert("BogoMIPS", ct->bogomips);
@@ -843,6 +870,10 @@ void CPUSet::read_lscpu()
                                 SIZE_SUFFIX_SPACE,
                                 sz);
                 QString value = QString(tmp);//.replace("MiB","MB");
+                if (tmp) {
+                    free(tmp);
+                    tmp = nullptr;
+                }
                 // value = QString(value).replace("KiB","KB");
                 //  value = QString(value).replace("GiB","GB");
                 d->m_info.insert(QString(name) + " cache", value);
@@ -874,9 +905,16 @@ void CPUSet::read_lscpu()
                             SIZE_SUFFIX_SPACE,
                             ca->size);
             d->m_info.insert(ca->name, tmp);
+            if (tmp) {
+                free(tmp);
+                tmp = nullptr;
+            }
         }
     }
     lscpu_free_context(cxt);
+
+
+
 }
 
 qulonglong CPUSet::getUsageTotalDelta() const
@@ -885,6 +923,7 @@ qulonglong CPUSet::getUsageTotalDelta() const
         return 1;
 
     return d->cpusageTotal[kCurrentStat] - d->cpusageTotal[kLastStat];
+
 }
 
 } // namespace system

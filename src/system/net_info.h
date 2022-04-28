@@ -42,6 +42,7 @@ class NetInfo
 
 public:
     explicit NetInfo();
+    virtual ~NetInfo();
 
     void update();
 

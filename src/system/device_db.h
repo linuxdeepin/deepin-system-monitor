@@ -38,7 +38,7 @@ class DeviceDB
 {
 public:
     explicit DeviceDB();
-    ~DeviceDB();
+    virtual ~DeviceDB();
 
     static DeviceDB *instance();
 

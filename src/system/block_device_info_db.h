@@ -38,7 +38,7 @@ class BlockDeviceInfoDB
 {
 public:
     explicit BlockDeviceInfoDB();
-    ~BlockDeviceInfoDB();
+    virtual ~BlockDeviceInfoDB();
 
     QList<BlockDevice> deviceList();
 

@@ -759,7 +759,7 @@ Are you sure you want to continue?</source>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Betöltés</translation>
     </message>
 </context>
 <context>

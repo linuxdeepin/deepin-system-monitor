@@ -24,6 +24,8 @@
 #include "wireless.h"
 #include "nl_hwaddr.h"
 
+#include <QProcess>
+
 #include <netlink/route/link.h>
 #include <netlink/addr.h>
 #include <linux/sockios.h>
@@ -127,6 +129,24 @@ void NetifInfo::updateWirelessInfo()
         d->iw_info->qual.qual = wireless1.link_quality();
         d->iw_info->qual.level = wireless1.signal_levle();
         d->iw_info->qual.noise = wireless1.noise_level();
+        // 速率
+        //无线网速率ioctl没有提供相关接口，目前采用调用iwlist命令的方式获取 #bug 111694
+        QProcess process;
+        QString cmd = QString("iwlist ") + d.data()->ifname + QString(" rate");
+        process.start(cmd);
+        process.waitForFinished(-1);
+        //获取输出
+        QString data = process.readAllStandardOutput();
+        QStringList datalist = data.trimmed().split(":");
+        if (datalist.size() > 0) {
+            QString speedString = datalist[datalist.size() - 1];
+            float fspeed = 0;
+            QStringList  list = speedString.split(" ");
+            if (list.size() > 0) {
+                fspeed = list[0].toFloat();
+            }
+            d->speed = static_cast<uint>(fspeed);
+        }
     } else {
         d->isWireless = false;
     }
