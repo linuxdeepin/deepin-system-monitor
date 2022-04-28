@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="id">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Sembunyikan detail</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -102,7 +110,7 @@
     </message>
     <message>
         <source>Threads</source>
-        <translation>Utas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Host name</source>
@@ -427,7 +435,7 @@
     </message>
     <message>
         <source>Writes/s</source>
-        <translation>Tulis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sectors written/s</source>
@@ -478,8 +486,7 @@ Anda yakin akan melanjutkannya?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Memaksa mengakhiri aplikasi ini dapat menyebabkan kehilangan data. 
-Apakah anda yakin ingin melanjutkan?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
@@ -495,6 +502,13 @@ Apakah anda yakin ingin melanjutkan?</translation>
         <source>End</source>
         <comment>button</comment>
         <translation>Akhiri</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -599,7 +613,7 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation>Pembawa TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>IPv4</source>
@@ -655,11 +669,11 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Baca diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Tulis diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Memory</source>
@@ -876,11 +890,11 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Tulis diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Baca diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Download</source>
@@ -912,14 +926,42 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation>Memori virtual</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Not support</source>
-        <translation>Tidak didukung</translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -937,16 +979,14 @@ Apakah anda yakin ingin melanjutkan?</translation>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>Service instance name</source>
-        <translation>Nama model layanan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Batalkan</translation>
     </message>
 </context>
@@ -989,7 +1029,7 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Muat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Active</source>
@@ -997,11 +1037,11 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <translation>Sub</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>State</source>
-        <translation>Status</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Description</source>
@@ -1017,29 +1057,44 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
 </context>
 <context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Paksa akhiri aplikasi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Luaskan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Ringkas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>View</source>
-        <translation>Lihat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation>Cari</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1050,7 +1105,7 @@ Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation>Layanan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

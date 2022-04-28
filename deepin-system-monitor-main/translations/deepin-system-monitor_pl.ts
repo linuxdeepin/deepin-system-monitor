@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -16,16 +16,24 @@
         <source>Hide details</source>
         <translation>Ukryj szczegóły</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
     <message>
         <source>Read</source>
-        <translation>Odczyt</translation>
+        <translation>Odczytywanie</translation>
     </message>
     <message>
         <source>Write</source>
-        <translation>Zapis</translation>
+        <translation>Zapisywanie</translation>
     </message>
 </context>
 <context>
@@ -50,7 +58,7 @@
     </message>
     <message>
         <source>Current frequency</source>
-        <translation>Aktualna częstotliwość</translation>
+        <translation>Obecne zegary</translation>
     </message>
     <message>
         <source>Frequency</source>
@@ -58,15 +66,15 @@
     </message>
     <message>
         <source>Vendor</source>
-        <translation>Producent</translation>
+        <translation>Sprzedawca</translation>
     </message>
     <message>
         <source>Sockets</source>
-        <translation>Gniazd</translation>
+        <translation>Sockety</translation>
     </message>
     <message>
         <source>Logical processors</source>
-        <translation>Procesorów logicznych</translation>
+        <translation>Procesory logiczne</translation>
     </message>
     <message>
         <source>Virtualization</source>
@@ -90,27 +98,27 @@
     </message>
     <message>
         <source>Load average</source>
-        <translation>Średnie obciążenie</translation>
+        <translation>Średnia wczytywania</translation>
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Deskryptorów pliku</translation>
+        <translation>Opis pliku</translation>
     </message>
     <message>
         <source>Processes</source>
-        <translation>Procesów</translation>
+        <translation>Procesy</translation>
     </message>
     <message>
         <source>Threads</source>
-        <translation>Wątków</translation>
+        <translation>Wątki</translation>
     </message>
     <message>
         <source>Host name</source>
-        <translation>Nazwa hosta</translation>
+        <translation>Nazwa gospodarza</translation>
     </message>
     <message>
         <source>OS type</source>
-        <translation>Zestaw instrukcji</translation>
+        <translation>Rodzaj OS-u</translation>
     </message>
     <message>
         <source>Version</source>
@@ -118,7 +126,7 @@
     </message>
     <message>
         <source>Up time</source>
-        <translation>Czas działania</translation>
+        <translation>Czas uruchomienia</translation>
     </message>
 </context>
 <context>
@@ -169,7 +177,7 @@
     </message>
     <message>
         <source>activating</source>
-        <translation>aktywowanie</translation>
+        <translation>aktywacja</translation>
     </message>
     <message>
         <source>deactivating</source>
@@ -188,7 +196,7 @@
     </message>
     <message>
         <source>bad-setting</source>
-        <translation>złe-ustawienie</translation>
+        <translation>złe ustawienie</translation>
     </message>
     <message>
         <source>error</source>
@@ -211,26 +219,26 @@
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>Nie dotyczy</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Automatycznie</translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ręcznie</translation>
+        <translation>Podręcznik</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation>włączony</translation>
+        <translation>włączone</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>wyłączony</translation>
+        <translation>wyłączone</translation>
     </message>
     <message>
         <source>static</source>
@@ -269,19 +277,19 @@
     </message>
     <message>
         <source>start</source>
-        <translation>start</translation>
+        <translation>uruchom</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation>start-post</translation>
+        <translation>uruchom-po</translation>
     </message>
     <message>
         <source>running</source>
-        <translation>pracuje</translation>
+        <translation>pracujący</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation>zakończony</translation>
+        <translation>opuścił</translation>
     </message>
     <message>
         <source>reload</source>
@@ -289,11 +297,11 @@
     </message>
     <message>
         <source>stop</source>
-        <translation>stop</translation>
+        <translation>zatrzymaj</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation>stop-watchdog</translation>
+        <translation>zatrzymaj-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
@@ -317,11 +325,11 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>niepowodzenie</translation>
+        <translation>nie powiodło się</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation>auto-restart</translation>
+        <translation>auto-uruchomienie ponowne</translation>
     </message>
 </context>
 <context>
@@ -336,15 +344,15 @@
     </message>
     <message>
         <source>Shared</source>
-        <translation>Współdzielone</translation>
+        <translation>Dzielone</translation>
     </message>
     <message>
         <source>Cached</source>
-        <translation>W pamięci podręcznej</translation>
+        <translation>W pamięci cache</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation>Buforów</translation>
+        <translation>Bufory</translation>
     </message>
     <message>
         <source>Cached swap</source>
@@ -352,11 +360,11 @@
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktywne</translation>
+        <translation>Aktywny</translation>
     </message>
     <message>
         <source>Inactive</source>
-        <translation>Nieaktywne</translation>
+        <translation>Nieaktywny</translation>
     </message>
     <message>
         <source>Dirty</source>
@@ -364,7 +372,7 @@
     </message>
     <message>
         <source>Mapped</source>
-        <translation>Mapowane </translation>
+        <translation>Mapowany</translation>
     </message>
     <message>
         <source>Total swap</source>
@@ -399,43 +407,43 @@
     </message>
     <message>
         <source>Sectors read</source>
-        <translation>Sektorów odczytanych</translation>
+        <translation>Przeczytane sektory</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation>Odczytów/s</translation>
+        <translation>Czytanie/s</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation>Sektorów odczytanych/s</translation>
+        <translation>Czytane sektory/s</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation>Odczytów połączonych/s</translation>
+        <translation>Połączone czytanie/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation>Sektorów zapisanych</translation>
+        <translation>Sektory zapisane</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation>Zapisów ukończonych</translation>
+        <translation>Zapis ukończony</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation>Zapisów połączonych</translation>
+        <translation>Zapisy połączone</translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation>Zapisów/s</translation>
+        <translation>Zapisy/s</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation>Sektorów zapisanych/s</translation>
+        <translation>Zapisane sektory/s</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation>Zapisów połączonych/s</translation>
+        <translation>Zapisy połączone/s</translation>
     </message>
 </context>
 <context>
@@ -463,23 +471,23 @@
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Zakończenie tego procesu może spowodować utratę danych.
-Czy jesteś pewien, że chcesz kontynuować?</translation>
+Jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Zakończ proces</translation>
+        <translation>Koniec procesu</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Wymuszenie zakończenia tego procesu może spowodować utratę danych.
-Czy jesteś pewien, że chcesz kontynuować?</translation>
+Jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Wymuszenie zakończenia tej aplikacji może spowodować utratę danych.
-Czy jesteś pewien, że chcesz kontynuować?</translation>
+Jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -489,12 +497,19 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     <message>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Wymuś zakończenie</translation>
+        <translation>Wymuś koniec</translation>
     </message>
     <message>
         <source>End</source>
         <comment>button</comment>
-        <translation>Zakończ</translation>
+        <translation>Koniec</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
     </message>
 </context>
 <context>
@@ -516,7 +531,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation>Broadcast:</translation>
+        <translation>Transmisja:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
@@ -531,7 +546,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     <name>NetInfoModel</name>
     <message>
         <source>Connection type</source>
-        <translation>Typ połączenia</translation>
+        <translation>Rodzaj połączenia</translation>
     </message>
     <message>
         <source>ESSID</source>
@@ -579,7 +594,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation>Rama RX</translation>
+        <translation>Ramy RX</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -622,7 +637,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Data rozpoczęcia</translation>
+        <translation>Czas rozpoczęcia</translation>
     </message>
     <message>
         <source>Name</source>
@@ -633,7 +648,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Kliknij aplikację, którą chcesz zabić</translation>
+        <translation>Kliknij aplikację, którą chcesz zakończyć</translation>
     </message>
 </context>
 <context>
@@ -644,7 +659,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Receive</source>
-        <translation>Pobieranie</translation>
+        <translation>Otrzymaj</translation>
     </message>
 </context>
 <context>
@@ -655,11 +670,11 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Prędkość odczytu dysku</translation>
+        <translation>Dysk odczytany</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Prędkość zapisu dysku</translation>
+        <translation>Zapis na dysku</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -679,7 +694,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Wysyłanie</translation>
+        <translation>Prześlij</translation>
     </message>
     <message>
         <source>Network</source>
@@ -695,7 +710,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Wysyłanie</translation>
+        <translation>Wyślij</translation>
     </message>
     <message>
         <source>Disks</source>
@@ -706,31 +721,31 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Bardzo wysoki</translation>
+        <translation>Bardzo wysoko</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Wysoki</translation>
+        <translation>Wysoko</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normalny</translation>
+        <translation>Normalnie</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Niski</translation>
+        <translation>Nisko</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation>Bardzo niski</translation>
+        <translation>Bardzo nisko</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Niestandardowy</translation>
+        <translation>Własne</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>Nieprawidłowy</translation>
+        <translation>Nieważny</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
@@ -753,25 +768,18 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Wszystkie procesy</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Wczytywanie</translation>
+        <translation>All processes</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
-        <translation>Nie udało się wstrzymać procesu</translation>
+        <translation>Nie można wstrzymać procesu</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation>Nie udało się wznowić procesu</translation>
+        <translation>Nie można wznowić procesu</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
@@ -824,15 +832,15 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Zakończ proces</translation>
+        <translation>Koniec procesu</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Wznów</translation>
+        <translation>Wznów proces</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>Zabij</translation>
+        <translation>Zamknij proces</translation>
     </message>
     <message>
         <source>Change priority</source>
@@ -840,7 +848,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Wstrzymaj</translation>
+        <translation>Zawieś proces</translation>
     </message>
 </context>
 <context>
@@ -876,11 +884,11 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Zapis dysku</translation>
+        <translation>Zapis na dysku</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Odczyt dysku</translation>
+        <translation>Dysk odczytany</translation>
     </message>
     <message>
         <source>Download</source>
@@ -888,7 +896,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Wysyłanie</translation>
+        <translation>Prześlij</translation>
     </message>
     <message>
         <source>PID</source>
@@ -900,7 +908,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation>Poziom priorytetu(NI)</translation>
+        <translation>Miły</translation>
     </message>
     <message>
         <source>Priority</source>
@@ -908,7 +916,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation>Pamięć współdzielona</translation>
+        <translation>Pamięć dzielona</translation>
     </message>
     <message>
         <source>Virtual memory</source>
@@ -921,6 +929,34 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
         <source>Not support</source>
         <translation>Brak wsparcia</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Ochrona systemu</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Wyświetlaj ostrzeżenia, gdy użycie przekracza progi</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Powiadomienia</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -930,7 +966,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Błąd: Nie można ustawić typu uruchomienia usługi z powodu awarii pod-procesu.</translation>
+        <translation>Błąd: Nie można ustawić typu uruchomienia usługi z powodu awarii podprocesu.</translation>
     </message>
 </context>
 <context>
@@ -941,12 +977,10 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>Anuluj</translation>
     </message>
 </context>
@@ -962,19 +996,19 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Zatrzymaj</translation>
+        <translation>Zatrzynaj</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Restart</translation>
+        <translation>Restartuj</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Automatycznie</translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ręcznie</translation>
+        <translation>Podręcznik</translation>
     </message>
     <message>
         <source>Startup type</source>
@@ -989,7 +1023,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Wczytany</translation>
+        <translation>Załaduj</translation>
     </message>
     <message>
         <source>Active</source>
@@ -997,7 +1031,7 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Sub</source>
-        <translation>Pod-proces</translation>
+        <translation>Pod</translation>
     </message>
     <message>
         <source>State</source>
@@ -1017,6 +1051,21 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
 </context>
 <context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Modyfikowalny)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Zakres: %1-%2</translation>
+    </message>
+</context>
+<context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
@@ -1024,11 +1073,11 @@ Czy jesteś pewien, że chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Rozszerzony</translation>
+        <translation>Rozwiń</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Kompaktowy</translation>
+        <translation>Zwarty</translation>
     </message>
     <message>
         <source>View</source>

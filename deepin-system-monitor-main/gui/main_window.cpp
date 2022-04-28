@@ -29,6 +29,7 @@
 #include "common/perf.h"
 #include "detailwidgetmanager.h"
 #include "gui/dialog/systemprotectionsetting.h"
+#include "process/process_set.h"
 
 #include <DSettingsWidgetFactory>
 #include <DApplicationHelper>
@@ -38,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QDBusConnection>
 
+using namespace core::process;
 const int WINDOW_MIN_HEIGHT = 760;
 const int WINDOW_MIN_WIDTH = 1080;
 
@@ -310,6 +312,7 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
         m_procPage->switchCurrentNoFilterPage();
         m_tbShadow->raise();
         m_tbShadow->show();
+        m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
     } else {
         m_toolbar->clearSearchText();
         m_toolbar->setProcessButtonChecked(true);
@@ -321,7 +324,8 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
 
 }
 
-void MainWindow::popupSettingsDialog() {
+void MainWindow::popupSettingsDialog()
+{
     DSettingsDialog *dialog = new DSettingsDialog(this);
     // 注册自定义Item ， 为实现UI效果
     dialog->widgetFactory()->registerWidget("settinglinkbutton", SystemProtectionSetting::createSettingLinkButtonHandle);

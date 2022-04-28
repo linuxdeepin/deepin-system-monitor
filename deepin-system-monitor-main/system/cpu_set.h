@@ -22,7 +22,7 @@
 #define CPUSET_H
 
 #include "cpu.h"
-
+#include "3rdparty/dmidecode/dmidecode.h"
 #include <QList>
 #include <QSharedDataPointer>
 

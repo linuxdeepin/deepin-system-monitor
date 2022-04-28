@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="az">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.1">
 <context>
     <name>App.About</name>
     <message>
@@ -15,6 +15,14 @@
     <message>
         <source>Hide details</source>
         <translation>Təfərrüatları gizlətmək</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Ümumi istifadə</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Fərdi istifadə</translation>
     </message>
 </context>
 <context>
@@ -498,6 +506,13 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Ayarlar</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -921,6 +936,34 @@ Davam etmək istədiyinizə əminsiniz?</translation>
         <source>Not support</source>
         <translation>Dəstəklənmir</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ayarlar</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Sistemin qorunması</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>İstifadə, göstərilən həddi aşdıqda xəbərdarlıqları göstərmək</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Bildirişlər</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>MP (CPU) xəbərdarlığı həddi (%)</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>Yaddaşın xəbərdarlıq həddi (%)</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>Xəbərdarlıq aralığı (dəq)</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -941,12 +984,10 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>OLDU</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>İmtina</translation>
     </message>
 </context>
@@ -1014,6 +1055,21 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Başladılma növü</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Ayarlar</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Dəyişdiriləbilən)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Aralıq: %1-%2: </translation>
     </message>
 </context>
 <context>

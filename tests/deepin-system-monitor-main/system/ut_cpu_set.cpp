@@ -36,8 +36,8 @@ using namespace core::system;
 
 /***************************************STUB begin*********************************************/
 
-FILE *stub_fopen (const char *__restrict __filename,
- const char *__restrict __modes)
+FILE *stub_fopen(const char *__restrict __filename,
+                 const char *__restrict __modes)
 {
     return nullptr;
 }
@@ -96,7 +96,7 @@ TEST_F(UT_CPUSet, test_copy_03)
 
 TEST_F(UT_CPUSet, test_copy_04)
 {
-    CPUSet* rhs = m_tester;
+    CPUSet *rhs = m_tester;
     m_tester->operator= (*rhs);
 }
 
@@ -233,8 +233,7 @@ TEST_F(UT_CPUSet, test_stat)
 TEST_F(UT_CPUSet, test_cpuLogicName)
 {
     m_tester->update();
-    for (auto &cpuname : m_tester->cpuLogicName())
-    {
+    for (auto &cpuname : m_tester->cpuLogicName()) {
         //cpu逻辑名不能为空
 //        qInfo()<<"cpuname:"<<cpuname;
         EXPECT_NE(cpuname, "");
@@ -246,7 +245,7 @@ TEST_F(UT_CPUSet, test_statDB)
     m_tester->update();
     QByteArray  TEST_F = "cpu0";
     core::system::CPUStat stat = m_tester->statDB(TEST_F);
-    qInfo()<<"stat->user:"<<stat->user;
+    qInfo() << "stat->user:" << stat->user;
     EXPECT_NE(stat->user, 0);
 }
 
@@ -255,7 +254,7 @@ TEST_F(UT_CPUSet, test_usageDB)
     m_tester->update();
     QByteArray  TEST_F = "cpu0";
     core::system::CPUUsage cPUUsage = m_tester->usageDB(TEST_F);
-    qInfo()<<"cPUUsage->total:"<<cPUUsage->total;
+    qInfo() << "cPUUsage->total:" << cPUUsage->total;
     EXPECT_NE(cPUUsage->total, 0);
 }
 
@@ -306,10 +305,10 @@ TEST_F(UT_CPUSet, test_read_lscpu_01)
     EXPECT_NE(retString, "");
 }
 
- bool stub_isEmpty()
- {
-     return true;
- }
+bool stub_isEmpty()
+{
+    return true;
+}
 
 TEST_F(UT_CPUSet, test_read_lscpu_02)
 {
