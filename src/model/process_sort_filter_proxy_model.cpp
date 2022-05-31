@@ -102,6 +102,7 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
 // compare two items with the specified index
 bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+    return false;
     int sortcolumn = sortColumn();
     switch (sortcolumn) {
     case ProcessTableModel::kProcessNameColumn: {
