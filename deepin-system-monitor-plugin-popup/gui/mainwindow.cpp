@@ -126,7 +126,7 @@ void MainWindow::showAni()
     if (!m_hasComposite) {
         if (m_daemonDockInter->position() == DOCK_RIGHT) {
             if (m_daemonDockInter->displayMode() == 0) {
-                setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2*Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
+                setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2 * Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
             } else {
                 setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
             }
@@ -227,7 +227,7 @@ void MainWindow::registerMonitor()
     }
     m_regionMonitor = new DRegionMonitor(this);
     m_regionMonitor->registerRegion(QRegion(QRect()));
-    connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &p, const int flag) {
+    connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [ = ](const QPoint & p, const int flag) {
         Q_UNUSED(flag);
         if (!geometry().contains(p))
             if (!isHidden()) {
@@ -268,9 +268,9 @@ void MainWindow::initUI()
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     auto pal = qApp->palette();
-    pal.setColor(QPalette::Background, QColor(0,0,0,0));
+    pal.setColor(QPalette::Background, QColor(0, 0, 0, 0));
     m_scrollArea->setPalette(pal);
-
+    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollArea->setWidget(parentWidget);
     m_scrollArea->setWindowFlags(Qt::FramelessWindowHint);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
@@ -311,28 +311,28 @@ void MainWindow::initConnect()
 
     connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
 
-    connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant &value) {
+    connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant & value) {
         int width = value.toInt();
 
 //        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
-        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width))),m_rect.y());
+        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width))), m_rect.y());
     });
 
     QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
-    connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, [ = ](const QString &service){
+    connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, [ = ](const QString & service) {
         if (MONITOR_SERVICE != service)
             return;
         registerMonitor();
     });
 
-    connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, [ = ](const QString &service){
+    connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, [ = ](const QString & service) {
         if (MONITOR_SERVICE != service)
             return;
         disconnect(m_regionMonitor);
     });
 
     // 设置窗口透明度调节
-    connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [=] () {
+    connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [ = ]() {
         this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
     });
 
@@ -348,13 +348,13 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
 
     switch (themeType) {
     case DApplicationHelper::LightType:
-        palette.setColor(QPalette::Background,QColor(210,210,210,75));
+        palette.setColor(QPalette::Background, QColor(210, 210, 210, 75));
         m_scrollArea->verticalScrollBar()->setStyleSheet("QScrollBar::handle:vertical:hover{background-color:rgb(50,50,50);}");
         break;
     case DApplicationHelper::DarkType:
         setAutoFillBackground(false);
         //Dark主题的透明度为204
-        palette.setColor(QPalette::Background,QColor(25,25,25,204));
+        palette.setColor(QPalette::Background, QColor(25, 25, 25, 204));
         m_scrollArea->verticalScrollBar()->setStyleSheet("QScrollBar::handle:vertical:hover{background-color:rgb(200,200,200);}");
         break;
     default:
@@ -399,9 +399,9 @@ void MainWindow::adjustPosition()
         break;
     case DOCK_RIGHT:
         if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale)- dockRect.width() - 2*Globals::WindowMargin);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - 2 * Globals::WindowMargin);
         } else {
-            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale)- dockRect.width() - Globals::WindowMargin);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - Globals::WindowMargin);
         }
         dockHeight = 0;
         break;
@@ -416,14 +416,14 @@ void MainWindow::adjustPosition()
     m_scrollArea->horizontalScrollBar()->setEnabled(false);
 
     auto pal = qApp->palette();
-    pal.setColor(QPalette::Background, QColor(0,0,0,0));
+    pal.setColor(QPalette::Background, QColor(0, 0, 0, 0));
     m_scrollArea->setPalette(pal);
     m_scrollArea->setWindowFlags(Qt::FramelessWindowHint);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
 
     // 针对时尚模式的特殊处理
     // 只有任务栏显示的时候, 才额外偏移
-    if(m_daemonDockInter->displayMode() == 0 && dockRect.width() * dockRect.height() > 0) {
+    if (m_daemonDockInter->displayMode() == 0 && dockRect.width() * dockRect.height() > 0) {
         switch (m_daemonDockInter->position()) {
         case DOCK_TOP:
             rect -= QMargins(0, Globals::WindowMargin, 0, 0);
@@ -467,7 +467,7 @@ bool MainWindow::initDBus()
 
     // 在挂载的服务上注册一个执行服务的对象
     if (!QDBusConnection::sessionBus().registerObject(Globals::SERVICE_PATH, m_systemMonitorDbusAdaptor, QDBusConnection::ExportAllSlots |
-                                                     QDBusConnection::ExportAllSignals)) {
+                                                      QDBusConnection::ExportAllSignals)) {
         qInfo() << QDBusConnection::sessionBus().lastError();
         return false;
     }

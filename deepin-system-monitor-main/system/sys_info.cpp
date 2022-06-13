@@ -255,7 +255,7 @@ quint32 SysInfo::read_file_nr()
     unsigned int file_nr = 0;
 
     errno = 0;
-    if ((fp = fopen(PROC_PATH_UPTIME, "r"))) {
+    if ((fp = fopen(PROC_PATH_FILE_NR, "r"))) {
         uFile fPtr;
         fPtr.reset(fp);
 
