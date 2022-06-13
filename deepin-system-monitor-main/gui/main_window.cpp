@@ -40,6 +40,7 @@
 #include <QDBusConnection>
 
 using namespace core::process;
+using namespace common::init;
 const int WINDOW_MIN_HEIGHT = 760;
 const int WINDOW_MIN_WIDTH = 1080;
 
@@ -312,7 +313,11 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
         m_procPage->switchCurrentNoFilterPage();
         m_tbShadow->raise();
         m_tbShadow->show();
-        m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
+        if (CPUPerformance == CPUMaxFreq::High) {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kNoFilter);
+        } else {
+            m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
+        }
     } else {
         m_toolbar->clearSearchText();
         m_toolbar->setProcessButtonChecked(true);

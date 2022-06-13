@@ -35,7 +35,7 @@
 #include "process/process_db.h"
 #include "wm/wm_window_list.h"
 #include "detail_view_stacked_widget.h"
-
+#include "system/cpu_set.h"
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
@@ -54,6 +54,8 @@
 
 //loading显示时间（ms）
 #define NORMAL_PERFORMANCE_CPU_LOADING_TIME 100
+#define CPU_FREQUENCY_STANDARD "2.30GHz"
+
 
 DWIDGET_USE_NAMESPACE
 using namespace core::process;
@@ -428,6 +430,11 @@ void ProcessPageWidget::onStatInfoUpdated()
     WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
 
     m_procViewModeSummary->setText(buf.arg(wmwindowList->getAppCount()).arg(m_iallProcNum));
+    m_model = CPUInfoModel::instance();
+
+    CPUPerformance = (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) ? High : Low;
+    //qInfo() << m_model->cpuSet()->maxFreq()  << (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) << CPUPerformance;
+
 }
 
 // change icon theme when theme changed
@@ -524,6 +531,7 @@ void ProcessPageWidget::onAllProcButtonClicked()
 
 void ProcessPageWidget::onUserProcButtonClicked()
 {
+//   qInfo() << CPUPerformance << "CPUPerformance";
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != USER_PROCESS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));

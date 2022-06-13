@@ -22,6 +22,7 @@
 #define PROCESS_PAGE_WIDGET_H
 
 #include "ui_common.h"
+#include "model/cpu_info_model.h"
 
 #include <DApplicationHelper>
 #include <DButtonBox>
@@ -189,6 +190,7 @@ private:
 
     // kill process by window selection preview widget
     XWinKillPreviewWidget *m_xwkillPreview = nullptr;
+    CPUInfoModel *m_model;
 };
 
 #endif  // PROCESS_PAGE_WIDGET_H

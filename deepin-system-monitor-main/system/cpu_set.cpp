@@ -349,11 +349,6 @@ QString CPUSet::maxFreq() const
     qreal MaxFreq = mIsEmptyModelName ?
                     d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble() :
                     d->m_info.value("CPU max MHz").toDouble();
-    //单核最大CPU频率大于2.3GHz
-    if (MaxFreq > 0 && MaxFreq > CPU_AVERAGE_MAX_FREQUENCY) {
-        //设置全局变量的值为High
-        CPUPerformance = CPUMaxFreq::High;
-    }
     return common::format::formatHz(static_cast<uint>(MaxFreq), common::format::MHz);
 
 }
@@ -447,7 +442,6 @@ const CPUUsage CPUSet::usageDB(const QByteArray &cpu) const
 
 void CPUSet::update()
 {
-    maxFreq();
     read_stats();
     read_overall_info();
 
