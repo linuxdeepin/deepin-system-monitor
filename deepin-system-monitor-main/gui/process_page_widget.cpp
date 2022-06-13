@@ -385,6 +385,8 @@ void ProcessPageWidget::switchCurrentNoFilterPage()
 {
     m_procTable->switchDisplayMode(kNoFilter);
     m_allProcButton->setChecked(true);
+    m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
+    m_procBtnCheckedType = ALL_PROCESSS;
 }
 
 // paint event handler
