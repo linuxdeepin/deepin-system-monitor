@@ -51,11 +51,8 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QPainterPath>
-//进程数大于800时，loading图标延长显示时间
-#define PROCESS_DELAY_PAINTING_NUM 800
-//paintEvent调用次数
-#define LOW_PERFORMANCE_CPU_RECOVER_TIMES 200
-//通常情形下的loading显示时间（ms）
+
+//loading显示时间（ms）
 #define NORMAL_PERFORMANCE_CPU_LOADING_TIME 100
 
 DWIDGET_USE_NAMESPACE
@@ -401,20 +398,9 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
     DPalette palette = dAppHelper->applicationPalette();
     QColor bgColor = palette.color(DPalette::Background);
 
-    // paint frame backgroud with current themed background color
-    painter.fillPath(path, bgColor);
-    //当所有进程被按下，CPU性能较差或是系统进程过多时，延长显示loading的时间
-    if ((m_allProcButton->isChecked() || m_myProcButton->isChecked()) && (m_iallProcNum > PROCESS_DELAY_PAINTING_NUM || CPUPerformance == Low)) {
-        m_ipaintDelayTimes ++;
-        if (m_ipaintDelayTimes > LOW_PERFORMANCE_CPU_RECOVER_TIMES) {
-            m_spinner->stop();
-            m_loadingAndProcessTB->setCurrentWidget(m_procTable);
-            m_ipaintDelayTimes = 0;
-        }
-    } else {
-        // 一般情形下，显示0.1s
-        QTimer::singleShot(NORMAL_PERFORMANCE_CPU_LOADING_TIME, this, [ = ]() {m_loadingAndProcessTB->setCurrentWidget(m_procTable);});
-    }
+    // 显示0.1s
+    QTimer::singleShot(NORMAL_PERFORMANCE_CPU_LOADING_TIME, this, [ = ]() {m_loadingAndProcessTB->setCurrentWidget(m_procTable);});
+
 
 }
 

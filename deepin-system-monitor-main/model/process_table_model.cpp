@@ -59,7 +59,7 @@ ProcessTableModel::ProcessTableModel(QObject *parent)
 
     if (!theme) {
         theme = DGuiApplicationHelper::instance()->applicationTheme();
-        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [=]() {
+        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [ = ]() {
             updateProcessList();
         });
     }
@@ -345,7 +345,7 @@ Qt::ItemFlags ProcessTableModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::NoItemFlags;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
 }
 
 // get process priority enum type
