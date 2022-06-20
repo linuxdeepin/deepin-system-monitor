@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl">
 <context>
     <name>App.About</name>
     <message>
@@ -506,13 +506,6 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Instellingen</translation>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -984,10 +977,12 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Oké</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annuleren</translation>
     </message>
 </context>

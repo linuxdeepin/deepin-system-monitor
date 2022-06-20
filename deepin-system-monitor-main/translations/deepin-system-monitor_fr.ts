@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fr">
 <context>
     <name>App.About</name>
     <message>
@@ -775,7 +775,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Chargement</translation>
     </message>
 </context>
 <context>
@@ -984,10 +984,12 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annuler</translation>
     </message>
 </context>

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>App.About</name>
     <message>
@@ -364,7 +364,7 @@
     </message>
     <message>
         <source>Inactive</source>
-        <translation>Etkin değil</translation>
+        <translation>Pasif</translation>
     </message>
     <message>
         <source>Dirty</source>
@@ -984,10 +984,12 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Tamam</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>İptal</translation>
     </message>
 </context>

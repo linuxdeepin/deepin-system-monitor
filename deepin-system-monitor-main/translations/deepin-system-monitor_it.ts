@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="it">
 <context>
     <name>App.About</name>
     <message>
@@ -507,13 +507,6 @@ Sicuro di voler terminarla?</translation>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -776,7 +769,7 @@ Sicuro di voler terminarla?</translation>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Caricamento</translation>
     </message>
 </context>
 <context>
@@ -985,10 +978,12 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Annulla</translation>
     </message>
 </context>

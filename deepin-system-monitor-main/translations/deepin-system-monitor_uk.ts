@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="uk">
 <context>
     <name>App.About</name>
     <message>
@@ -982,10 +982,12 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
 </context>

@@ -98,7 +98,7 @@
     </message>
     <message>
         <source>Load average</source>
-        <translation>負載均衡</translation>
+        <translation>平均負載</translation>
     </message>
     <message>
         <source>File descriptors</source>
@@ -984,10 +984,12 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>取 消</translation>
     </message>
 </context>

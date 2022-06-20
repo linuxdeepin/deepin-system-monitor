@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fi">
 <context>
     <name>App.About</name>
     <message>
@@ -775,7 +775,7 @@ Haluatko varmasti jatkaa?</translation>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>Ladataan</translation>
     </message>
 </context>
 <context>
@@ -984,10 +984,12 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Peru</translation>
     </message>
 </context>

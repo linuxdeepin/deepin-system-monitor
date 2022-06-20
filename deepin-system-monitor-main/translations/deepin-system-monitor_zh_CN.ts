@@ -98,7 +98,7 @@
     </message>
     <message>
         <source>Load average</source>
-        <translation>负载均衡</translation>
+        <translation>平均负载</translation>
     </message>
     <message>
         <source>File descriptors</source>

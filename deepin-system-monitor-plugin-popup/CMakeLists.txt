@@ -313,7 +313,7 @@ add_custom_target(POPUP_QMFILES ALL DEPENDS ${APP_QM_FILES})
 #
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.deepin.SystemMonitorPluginPopup.service DESTINATION /usr/share/dbus-1/services)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/deepin-system-monitor-plugin-popup.desktop DESTINATION /etc/xdg/autostart)
+#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/deepin-system-monitor-plugin-popup.desktop DESTINATION /etc/xdg/autostart)
 #安装翻译文件
 install(FILES ${APP_QM_FILES} DESTINATION "/usr/share/deepin-system-monitor-plugin-popup/translations")
 
