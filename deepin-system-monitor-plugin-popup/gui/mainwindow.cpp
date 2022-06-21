@@ -50,6 +50,11 @@
 
 #define MONITOR_SERVICE "com.deepin.api.XEventMonitor"
 #define SCREEN_HEIGHT_MAX 1080
+#define NOT_USE_QUIT_TIME_INTERVAL 5*60*1000
+
+const QString KILL_DBUS_COMMAND = "killall deepin-system-monitor-plugin-popup";
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
@@ -62,9 +67,15 @@ MainWindow::MainWindow(QWidget *parent)
     , m_widthAni(new QPropertyAnimation(this, "width"))
     , m_aniGroup(new QSequentialAnimationGroup(this))
     , m_trickTimer(new QTimer(this))
+    , m_processEndTimer(new QTimer(this))
 {
     m_trickTimer->setInterval(300);
     m_trickTimer->setSingleShot(true);
+
+    m_processEndTimer->setInterval(NOT_USE_QUIT_TIME_INTERVAL);
+
+
+
     //在构造函数中存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
     m_dbusPathList = m_displayInter->monitors();
     initDBus();
@@ -121,6 +132,8 @@ void MainWindow::showAni()
     if (m_trickTimer->isActive()) {
         return;
     }
+    //停止计时
+    m_processEndTimer->stop();
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     m_trickTimer->start();
     if (!m_hasComposite) {
@@ -155,6 +168,8 @@ void MainWindow::hideAni()
     }
 
     m_trickTimer->start();
+    //不再使用开始计时
+    m_processEndTimer->start();
 
     if (!m_hasComposite) {
         hide();
@@ -338,6 +353,13 @@ void MainWindow::initConnect()
 
     // 去除通过智能语音助手唤醒时关闭系统监视器窗口
 //    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
+
+    //5分钟没人使用，结束popup进程
+    connect(m_processEndTimer, &QTimer::timeout, this, []() {
+        qInfo() << "time is up! end process!";
+        QProcess::startDetached(KILL_DBUS_COMMAND);
+    });
+
 }
 
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)

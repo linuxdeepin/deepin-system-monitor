@@ -198,9 +198,14 @@ private:
     DScrollArea *m_scrollArea {};       // 滚动区域
 
     // 防止1000ms内重复按键
-    QTimer* m_trickTimer;
+    QTimer *m_trickTimer;
     //最近一次拖动的距离
     int m_last_time_move = 0;
+
+
+    // 5分钟计时，自动结束进程
+    QTimer *m_processEndTimer;
+
 
 };
 
