@@ -122,6 +122,32 @@ void BlockDeviceInfoDB::readDiskInfo()
     }
 
     QFileInfoList list = dir.entryInfoList();
+    //获取实体磁盘
+    for (int i = 0; i < list.size(); ++i) {
+        QString t_link = list.at(i).readLink();
+        if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("loop")&&!t_link.contains("virtual")) {
+            int index = -1;
+            //  查找当前的device是否存在
+            for (int si = 0; si < m_deviceList.size(); ++si) {
+                if (m_deviceList[si].deviceName() == list[i].fileName().toLocal8Bit()) { // 存在
+                    index = si;
+                    break;
+                }
+            }
+            if (index == -1) { // 不存在的话将该disk存储起来
+                BlockDevice bd;
+                if (bd.readDeviceSize(list[i].fileName()) > 0) {
+                    bd.setDeviceName(list[i].fileName().toLocal8Bit());
+                    m_deviceList << bd;
+                }
+            } else {
+                m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit()); // 更新disk数据
+            }
+
+        }
+    }
+
+    //获取虚拟磁盘
     for (int i = 0; i < list.size(); ++i) {
         if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("loop")) {
             int index = -1;
