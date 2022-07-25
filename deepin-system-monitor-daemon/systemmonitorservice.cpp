@@ -322,9 +322,7 @@ bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeo
     action << "_open1" << tr("View"); //添加按钮
     QVariantMap inform; //按钮的点击操作
     // 操作打开系统监视器
-    QString openSystemMonitor = QString("qdbus,com.deepin.SystemMonitor.Daemon,"
-                                           "/com/deepin/SystemMonitor,"
-                                           "com.deepin.SystemMonitor.Daemon.showDeepinSystemMoniter");
+    QString openSystemMonitor = QString("qdbus com.deepin.SystemMonitor.Daemon /com/deepin/SystemMonitor com.deepin.SystemMonitor.Daemon.showDeepinSystemMoniter");
 
     inform.insert(QString("x-deepin-action-_open1"), openSystemMonitor);
 

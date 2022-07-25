@@ -9,7 +9,7 @@ project(deepin_system_monitor_proj)
 option(DOTEST "option for test" OFF)
 
 # 是否开启单元测试编译
-set(DOTEST ON)
+#set(DOTEST ON)
 
 #compile flags
 if (CMAKE_BUILD_TYPE MATCHES Debug)
@@ -53,6 +53,8 @@ ADD_SUBDIRECTORY(deepin-system-monitor-plugin-popup)
 #系统监视器安全等级保护守护应用
 ADD_SUBDIRECTORY(deepin-system-monitor-daemon)
 #单元测试
-ADD_SUBDIRECTORY(tests)
+if(DOTEST)
+    ADD_SUBDIRECTORY(tests)
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)

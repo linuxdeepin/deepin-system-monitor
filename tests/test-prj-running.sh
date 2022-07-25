@@ -9,7 +9,7 @@ mkdir ../$builddir
 mkdir ../$reportdir
 cd ../$builddir
 #编译
-cmake -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" ..
+cmake -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" -DDOTEST=ON ..
 make -j8
 #生成asan日志和ut测试xml结果
 ./tests/deepin-system-monitor-test --gtest_output=xml:./report/report_deepin-system-monitor.xml
