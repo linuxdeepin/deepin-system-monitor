@@ -23,10 +23,10 @@
 #include "../config.h"
 #include <QWidget>
 //不再使用CMakeList开关宏的方式，改用全局变量运行时控制
-#include <KF5/KWayland/Client/clientmanagement.h>
-#include <KF5/KWayland/Client/registry.h>
-#include <KF5/KWayland/Client/connection_thread.h>
-#include <KF5/KWayland/Client/event_queue.h>
+#include <KWayland/Client/clientmanagement.h>
+#include <KWayland/Client/registry.h>
+#include <KWayland/Client/connection_thread.h>
+#include <KWayland/Client/event_queue.h>
 #include <QObject>
 #include <QGuiApplication>
 #include <QDebug>
