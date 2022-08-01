@@ -49,6 +49,8 @@ using namespace common::error;
 using namespace common::alloc;
 using namespace common::init;
 
+static bool read_dmi_cache = false;
+
 namespace core {
 namespace system {
 
@@ -439,7 +441,6 @@ const CPUUsage CPUSet::usageDB(const QByteArray &cpu) const
     return d->m_usageDB[cpu];
 }
 
-
 void CPUSet::update()
 {
     read_stats();
@@ -622,6 +623,93 @@ void CPUSet::read_overall_info()
 //    }
     read_lscpu();
     d->m_infos = infos;
+}
+
+void CPUSet::read_dmi_cache_info()
+{
+    if (read_dmi_cache || (d->m_info.contains("L1d cache") && d->m_info.contains("L1i cache")
+                           && d->m_info.contains("L2 cache") && d->m_info.contains("L3 cache"))) {
+        read_dmi_cache = true;
+        return;
+    }
+
+    read_dmi_cache = true;
+    QProcess process;
+    process.start("dmidecode", QStringList() << "-s" << "system-product-name");
+    process.waitForFinished(-1);
+    QString spnInfo = process.readAllStandardOutput();
+    if (!spnInfo.contains("KLVV") && !spnInfo.contains("KLVU") && !spnInfo.contains("PGUV") && !spnInfo.contains("PGUW")) {
+        process.close();
+        return;
+    }
+
+    process.start("dmidecode", QStringList() << "-t" << "cache");
+    process.waitForFinished(-1);
+    QString cacheinfo = process.readAllStandardOutput();
+    QStringList caches = cacheinfo.split("\n\n", QString::SkipEmptyParts);
+    process.close();
+
+    QList<QMap<QString, QString> > mapInfos;
+    foreach (const QString &item, caches) {
+        if (item.isEmpty())
+            continue;
+        QMap<QString, QString> mapInfo;
+
+        QStringList lines = item.split("\n");
+        QString lasKey;
+        foreach (const QString &line, lines) {
+            if (line.isEmpty())
+                continue;
+
+            QStringList words = line.split(": ");
+            if (1 ==  words.size() && words[0].endsWith(":")) {
+                lasKey = words[0].replace(QRegExp(":$"), "");
+                mapInfo.insert(lasKey.trimmed(), " ");
+            } else if (1 ==  words.size() && !lasKey.isEmpty()) {
+                mapInfo[lasKey.trimmed()] += words[0];
+                mapInfo[lasKey.trimmed()] += "  /  ";
+            } else if (2 ==  words.size()) {
+                lasKey = "";
+                mapInfo.insert(words[0].trimmed(), words[1].trimmed());
+            }
+        }
+        mapInfos.append(mapInfo);
+    }
+
+    for (auto &item : mapInfos) {
+        if (!item.contains("Socket Designation") || !item.contains("Maximum Size"))
+            continue;
+        QStringList strList = item["Maximum Size"].split(" ", QString::SkipEmptyParts);
+        if (strList.size() != 2)
+            continue;
+
+        QString typeStr = strList.last();
+        if (typeStr.compare("KB", Qt::CaseInsensitive) == 0)
+            typeStr = "KiB";
+        else if (typeStr.compare("MB", Qt::CaseInsensitive) == 0) {
+            typeStr = "MiB";
+        }
+        int size = strList.first().toInt();
+        if (item["Socket Designation"].contains("L1")) {
+            int l1Size = size / 2;
+            if (l1Size >= 1024 && typeStr == "KiB") {
+                l1Size /= 1024;
+                typeStr = "MiB";
+            }
+            d->m_info.insert("L1d cache", QString::number(l1Size) + " " + typeStr);
+            d->m_info.insert("L1i cache", QString::number(l1Size) + " " + typeStr);
+        } else {
+            if (size >= 1024 && typeStr == "KiB") {
+                size /= 1024;
+                typeStr = "MiB";
+            }
+            if (item["Socket Designation"].contains("L2")) {
+                d->m_info.insert("L2 cache", QString::number(size) + " " + typeStr);
+            } else if (item["Socket Designation"].contains("L3")) {
+                d->m_info.insert("L3 cache", QString::number(size) + " " + typeStr);
+            }
+        }
+    }
 }
 
 // 获取CPU信息 ut001987
@@ -858,6 +946,7 @@ void CPUSet::read_lscpu()
 
         }
     }
+    read_dmi_cache_info();
     // 某些CPU不带有缓存用‘-’替代
     if (!d->m_info.contains("L1d cache")) {
         d->m_info.insert("L1d cache", "-");

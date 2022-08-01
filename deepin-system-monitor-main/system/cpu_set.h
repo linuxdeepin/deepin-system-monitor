@@ -90,6 +90,10 @@ public:
 private:
     void read_stats();
     /**
+     * @brief read_dmidecode 通过dmidecod读取CPU的cache信息
+     */
+    void read_dmi_cache_info();
+    /**
      * @brief read_lscpu 通过lscpu读取CPU信息
      */
     void read_lscpu();
