@@ -45,7 +45,7 @@ EventLogUtils::EventLogUtils()
     if (init == nullptr)
         return;
 
-    init("deepin-music", true);
+    init("deepin-system-monitor", true);
 }
 
 void EventLogUtils::writeLogs(QJsonObject &data)
