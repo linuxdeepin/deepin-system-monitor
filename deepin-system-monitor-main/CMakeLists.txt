@@ -113,6 +113,7 @@ set(HPP_COMMON
     common/thread_manager.h
     common/time_period.h
     common/sample.h
+    common/eventlogutils.h
 )
 set(CPP_COMMON
     common/common.cpp
@@ -122,6 +123,7 @@ set(CPP_COMMON
     common/perf.cpp
     common/thread_manager.cpp
     common/time_period.cpp
+    common/eventlogutils.cpp
 )
 
 set(HPP_DBUS
