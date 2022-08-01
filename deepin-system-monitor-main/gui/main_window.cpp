@@ -30,6 +30,7 @@
 #include "detailwidgetmanager.h"
 #include "gui/dialog/systemprotectionsetting.h"
 #include "process/process_set.h"
+#include "common/eventlogutils.h"
 
 #include <DSettingsWidgetFactory>
 #include <DApplicationHelper>
@@ -38,6 +39,7 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QDBusConnection>
+#include <QJsonObject>
 
 using namespace core::process;
 using namespace common::init;
@@ -74,6 +76,13 @@ void MainWindow::raiseWindow()
 
 void MainWindow::initDisplay()
 {
+    QJsonObject obj{
+        {"tid", EventLogUtils::Start},
+        {"version", QCoreApplication::applicationVersion()},
+        {"mode", 1}
+    };
+    EventLogUtils::get().writeLogs(obj);
+
     initUI();
     initConnections();
 }
