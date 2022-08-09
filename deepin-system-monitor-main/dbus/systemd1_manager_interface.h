@@ -72,7 +72,7 @@ public Q_SLOTS:  // METHODS
         ErrorContext ec {};
 
         // call dbus interface method: ListUnitFiles
-        QDBusMessage reply = callWithArgumentList(QDBus::Block, "ListUnitFiles", args);
+        QDBusMessage reply = callWithArgumentList(QDBus::BlockWithGui, "ListUnitFiles", args);
 
         // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
@@ -105,7 +105,7 @@ public Q_SLOTS:  // METHODS
         ErrorContext ec;
 
         // call dbus interface method: ListUnits
-        QDBusMessage reply = callWithArgumentList(QDBus::Block, "ListUnits", args);
+        QDBusMessage reply = callWithArgumentList(QDBus::BlockWithGui, "ListUnits", args);
         // check dbus reply
         if (reply.type() == QDBusMessage::ErrorMessage) {
             ec.setCode(ErrorContext::kErrorTypeDBus);
