@@ -40,15 +40,22 @@ DBusInterface::DBusInterface()
     : mp_Iface(nullptr)
 {
     // 初始化dbus
-    init();
+//    init();
 }
 
 void DBusInterface::showOrHideDeepinSystemMonitorPluginPopupWidget()
 {
     // 调用dbus接口弹出插件主界面
     // 如果无效的话就执行一次唤醒DBUS服务的命令
-    if (!mp_Iface->isValid()) {
-        QProcess::startDetached(DBUS_COMMAND);
+    if (mp_Iface == nullptr || !mp_Iface->isValid()) {
+        if (!QProcess::startDetached(DBUS_COMMAND)) {
+            if (mp_Iface == nullptr) {
+                init();
+                if (!mp_Iface->isValid()) {
+                    QDBusReply<void> reply = mp_Iface->call("slotShowOrHideSystemMonitorPluginPopupWidget");
+                }
+            }
+        }
     } else {
         QDBusReply<void> reply = mp_Iface->call("slotShowOrHideSystemMonitorPluginPopupWidget");
     }
