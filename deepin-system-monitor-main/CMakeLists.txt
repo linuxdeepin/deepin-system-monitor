@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project(deepin-system-monitor)
 
+option(USE_DEEPIN_WAYLAND "option for wayland support" ON)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -23,6 +25,9 @@ endif ()
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
   add_definitions("-DQT_NO_DEBUG_OUTPUT")
 endif()
+if (USE_DEEPIN_WAYLAND)
+  add_definitions("-DUSE_DEEPIN_WAYLAND")
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/environments.h.in ${CMAKE_CURRENT_BINARY_DIR}/environments.h @ONLY)
 
@@ -32,8 +37,9 @@ include(CheckSymbolExists)
 check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 include(FindPkgConfig)
-
-find_package(KF5Wayland)
+if (USE_DEEPIN_WAYLAND)
+    find_package(KF5Wayland)
+endif()
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
@@ -545,6 +551,30 @@ set(APP_CPP
     ${LSCPU}
     ${DMIDECODE}
 )
+set(LIBS
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Gui
+    Qt5::DBus
+    Qt5::Concurrent
+    Qt5::X11Extras
+    dtkcore
+    dtkwidget
+    dtkgui
+    ${LIB_PCAP}
+    ${LIB_PROCPS}
+    ICU::i18n
+    ICU::uc
+    ${LIB_XCB}
+    ${LIB_XEXT}
+    ${LIB_ICCCM}
+    ${LIB_NL3_LIBRARIES}
+    ${LIB_NL3_ROUTE_LIBRARIES}
+    ${LIB_UDEV_LIBRARIES}
+)
+if (USE_DEEPIN_WAYLAND)
+    list(APPEND LIBS KF5::WaylandClient KF5::WaylandServer)
+endif()
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
 qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
@@ -564,38 +594,13 @@ add_custom_target(APP_DESKTOP_FILE
     COMMAND mv ${DESKTOP_FILE}.tmp ${DESKTOP_FILE}
 )
 
-
-
 add_executable(${PROJECT_NAME}
     ${APP_HPP}
     ${APP_CPP}
     ${APP_RESOURCES}
 )
 
-target_link_libraries(${PROJECT_NAME}
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::DBus
-    Qt5::Concurrent
-    Qt5::X11Extras
-    dtkcore
-    dtkwidget
-    dtkgui
-    ${LIB_PCAP}
-    ${LIB_PROCPS}
-    ICU::i18n
-    ICU::uc
-    KF5::WaylandClient
-    KF5::WaylandServer
-    ${LIB_XCB}
-    ${LIB_XEXT}
-    ${LIB_ICCCM}
-    ${LIB_NL3_LIBRARIES}
-    ${LIB_NL3_ROUTE_LIBRARIES}
-    ${LIB_UDEV_LIBRARIES}
-)
-
+target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES ${APP_QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
