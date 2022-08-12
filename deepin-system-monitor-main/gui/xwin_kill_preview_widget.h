@@ -22,11 +22,6 @@
 
 #include "../config.h"
 #include <QWidget>
-//不再使用CMakeList开关宏的方式，改用全局变量运行时控制
-#include <KF5/KWayland/Client/clientmanagement.h>
-#include <KF5/KWayland/Client/registry.h>
-#include <KF5/KWayland/Client/connection_thread.h>
-#include <KF5/KWayland/Client/event_queue.h>
 #include <QObject>
 #include <QGuiApplication>
 #include <QDebug>
@@ -35,7 +30,16 @@
 // system
 #include <unistd.h>
 
+// 使用 USE_DEEPIN_WAYLAND 宏决定编译时是否支持 wayland
+// 如果支持，用全局变量 WaylandCentered 运行时控制
+#ifdef USE_DEEPIN_WAYLAND
+#include <KF5/KWayland/Client/clientmanagement.h>
+#include <KF5/KWayland/Client/registry.h>
+#include <KF5/KWayland/Client/connection_thread.h>
+#include <KF5/KWayland/Client/event_queue.h>
+
 using namespace KWayland::Client;
+#endif // USE_DEEPIN_WAYLAND
 
 namespace core {
 namespace wm {
@@ -61,11 +65,13 @@ public:
      */
     ~XWinKillPreviewWidget() override;
 
+#ifdef USE_DEEPIN_WAYLAND
     /**
      * @brief Print current window states
      * @param QVector of window state which contains pid,windowid,resourceName,geometry,etc
      */
      void print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates);
+#endif // USE_DEEPIN_WAYLAND
 
 signals:
     /**
@@ -121,6 +127,7 @@ private:
     // Default cursor style
     QCursor m_defaultCursor;
 
+#ifdef USE_DEEPIN_WAYLAND
     //Vector of window states
     QVector<ClientManagement::WindowState> m_windowStates;
     //Kwayland Client Management
@@ -136,7 +143,7 @@ private:
     Compositor *m_compositor = nullptr;
     //oringinal Kwayland window management
     PlasmaWindowManagement *m_windowManagement = nullptr;
-
+#endif // USE_DEEPIN_WAYLAND
 };
 
 #endif // XWIN_KILL_PREVIEW_WIDGET_H
