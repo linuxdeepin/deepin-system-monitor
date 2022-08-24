@@ -602,9 +602,9 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-install(FILES ${APP_QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
-install(FILES translations/policy/${POLICY_FILE} DESTINATION share/polkit-1/actions)
-install(FILES translations/desktop/${DESKTOP_FILE} DESTINATION share/applications)
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/translations)
+install(FILES translations/policy/${POLICY_FILE} DESTINATION ${CMAKE_INSTALL_DATADIR}/polkit-1/actions)
+install(FILES translations/desktop/${DESKTOP_FILE} DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets/deepin-system-monitor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets/deepin-system-monitor DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application/)
