@@ -61,9 +61,9 @@ file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
 qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
 add_custom_target(PLUGIN_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
-INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
-INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION /usr/share/glib-2.0/schemas)
-INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /usr/lib/dde-dock/plugins)
+INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
+INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
+INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 #安装翻译文件
-install(FILES ${APP_QM_FILES} DESTINATION "/usr/share/deepin-system-monitor-plugin/translations")
+install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-system-monitor-plugin/translations)
 

@@ -65,8 +65,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wl,-Map=deepin-system-monitor-daemon.map")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-daemon.map")
 
-install(TARGETS ${DAEMON_NAME} DESTINATION bin)
-install(FILES deepin-system-monitor-daemon.desktop DESTINATION /etc/xdg/autostart)
-install(FILES com.deepin.SystemMonitor.Daemon.service DESTINATION /usr/share/dbus-1/services)
+install(TARGETS ${DAEMON_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES deepin-system-monitor-daemon.desktop DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/xdg/autostart)
+install(FILES com.deepin.SystemMonitor.Daemon.service DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/services)
 #安装翻译文件
-install(FILES ${APP_QM_FILES} DESTINATION "/usr/share/deepin-system-monitor-daemon/translations")
+install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-system-monitor-daemon/translations)
