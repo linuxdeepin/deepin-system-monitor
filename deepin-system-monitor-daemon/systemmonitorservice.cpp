@@ -57,7 +57,7 @@ QString getNameByPid(pid_t pid)
 #define AlarmMessageTimeOut 10000
 
 SystemMonitorService::SystemMonitorService(QObject *parent)
-    : QObject (parent)
+    : QObject(parent)
     , mAdaptor(new DaemonAdaptor(this))
     , mProtectionStatus(InitAlarmOn)
     , mAlarmInterval(InitAlarmInterval)
@@ -71,12 +71,12 @@ SystemMonitorService::SystemMonitorService(QObject *parent)
     , mCpu(this)
     , mMem(this)
 {
-    if(mAdaptor == nullptr) {
+    if (mAdaptor == nullptr) {
         qWarning() << __FUNCTION__ << __LINE__ << " DaemonAdaptor create fail!";
         exit(1);
     }
 
-    if(mSettings.isCompelted()) {
+    if (mSettings.isCompelted()) {
         mProtectionStatus = mSettings.getOptionValue(AlarmStatusOptionName).toBool();
         mAlarmCpuUsage = mSettings.getOptionValue(AlarmCpuUsageOptionName).toInt();
         mAlarmMemoryUsage = mSettings.getOptionValue(AlarmMemUsageOptionName).toInt();
@@ -121,7 +121,7 @@ void SystemMonitorService::setSystemProtectionStatus(bool status)
     PrintDBusCaller()
     qDebug() << __FUNCTION__ << __LINE__ << " Set Protection Status:" << status;
 
-    if(mProtectionStatus != status) {
+    if (mProtectionStatus != status) {
         mProtectionStatus = status;
         // 更改设置文件
         mSettings.changedOptionValue(AlarmStatusOptionName, mProtectionStatus);
@@ -157,7 +157,7 @@ void SystemMonitorService::setAlarmMsgInterval(int interval)
     qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Msg Interval:" << interval;
 
     // 根据需求
-    if(mSettings.isVaildValue(AlarmIntervalOptionName, interval)) {
+    if (mSettings.isVaildValue(AlarmIntervalOptionName, interval)) {
         mAlarmInterval = interval;
         // 更改设置文件
         mSettings.changedOptionValue(AlarmIntervalOptionName, mAlarmInterval);
@@ -182,7 +182,7 @@ void SystemMonitorService::setAlaramLastTimeInterval(qint64 lastTime)
     qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Last Time:" << lastTime;
 
     // 根据需求
-    if(mSettings.isVaildValue(AlarmLastTimeOptionName, lastTime)) {
+    if (mSettings.isVaildValue(AlarmLastTimeOptionName, lastTime)) {
         mLastAlarmTimeStamp = lastTime;
         // 更改设置文件
         mSettings.changedOptionValue(AlarmLastTimeOptionName, mLastAlarmTimeStamp);
@@ -207,7 +207,7 @@ void SystemMonitorService::setAlarmUsageOfCpu(int usage)
     qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Usage Of Cpu:" << usage;
 
     // 根据需求
-    if(mSettings.isVaildValue(AlarmCpuUsageOptionName, usage)) {
+    if (mSettings.isVaildValue(AlarmCpuUsageOptionName, usage)) {
         mAlarmCpuUsage = usage;
         // 更改设置文件
         mSettings.changedOptionValue(AlarmCpuUsageOptionName, mAlarmCpuUsage);
@@ -232,7 +232,7 @@ void SystemMonitorService::setAlarmUsageOfMemory(int usage)
     qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Usage Of Memory:" << usage;
 
     // 根据需求
-    if(mSettings.isVaildValue(AlarmMemUsageOptionName, usage)) {
+    if (mSettings.isVaildValue(AlarmMemUsageOptionName, usage)) {
         mAlarmMemoryUsage = usage;
         // 更改设置文件
         mSettings.changedOptionValue(AlarmMemUsageOptionName, mAlarmMemoryUsage);
@@ -250,15 +250,15 @@ void SystemMonitorService::showDeepinSystemMoniter()
     // 显示系统监视器
     QProcess::startDetached("/usr/bin/deepin-system-monitor");
     QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
-    QTimer::singleShot(100, this, [=] () { QProcess::startDetached(cmd); });
+    QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
 }
 
 void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVariant &value)
 {
     qDebug() << __FUNCTION__ << __LINE__ << ", item:" << item << ", value:" << value.variant();
-    if(mSettings.itemKeys().contains(item) && mSettings.isVaildValue(item, value.variant())) {
-        if(mSettings.isVaildValue(item, value.variant())) {
-            if(item == AlarmStatusOptionName) {
+    if (mSettings.itemKeys().contains(item) && mSettings.isVaildValue(item, value.variant())) {
+        if (mSettings.isVaildValue(item, value.variant())) {
+            if (item == AlarmStatusOptionName) {
                 mProtectionStatus = value.variant().toBool();
             } else if (item == AlarmCpuUsageOptionName) {
                 mAlarmCpuUsage = value.variant().toInt();
@@ -284,7 +284,7 @@ bool SystemMonitorService::checkCpuAlarm()
     qint64 diffTime = curTimeStamp - mLastAlarmTimeStamp;
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
 
-    if(mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
+    if (mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
         // 构造消息内容
         QString topic(tr("Warning"));
         QString msg = QString(tr("Your CPU usage is higher than %1%!")).arg(mCpuUsage);
@@ -301,7 +301,7 @@ bool SystemMonitorService::checkMemoryAlarm()
     qint64 diffTime = curTimeStamp - mLastAlarmTimeStamp;
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
 
-    if(mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
+    if (mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
         // 构造消息内容
         QString topic(tr("Warning"));
         QString msg = QString(tr("Your memory usage is higher than %1%!")).arg(mMemoryUsage);
@@ -315,14 +315,16 @@ bool SystemMonitorService::checkMemoryAlarm()
 bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeout)
 {
     QDBusMessage ddeNotify = QDBusMessage::createMethodCall("com.deepin.dde.Notification",
-                                                    "/com/deepin/dde/Notification",
-                                                    "com.deepin.dde.Notification",
-                                                    "Notify");
+                                                            "/com/deepin/dde/Notification",
+                                                            "com.deepin.dde.Notification",
+                                                            "Notify");
     QStringList action;
     action << "_open1" << tr("View"); //添加按钮
     QVariantMap inform; //按钮的点击操作
     // 操作打开系统监视器
-    QString openSystemMonitor = QString("qdbus com.deepin.SystemMonitor.Daemon /com/deepin/SystemMonitor com.deepin.SystemMonitor.Daemon.showDeepinSystemMoniter");
+    QString openSystemMonitor = QString("qdbus,com.deepin.SystemMonitor.Daemon,"
+                                        "/com/deepin/SystemMonitor,"
+                                        "com.deepin.SystemMonitor.Daemon.showDeepinSystemMoniter");
 
     inform.insert(QString("x-deepin-action-_open1"), openSystemMonitor);
 
@@ -340,7 +342,7 @@ bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeo
 
     QDBusMessage replyMsg = QDBusConnection::sessionBus().call(ddeNotify);
 
-    if(replyMsg.type() == QDBusMessage::ErrorMessage) {
+    if (replyMsg.type() == QDBusMessage::ErrorMessage) {
         qWarning() << __FUNCTION__ << __LINE__ << ", dde notify dbus method call fail , error name :"
                    << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
         return false;
@@ -359,7 +361,7 @@ void SystemMonitorService::onMonitorTimeout()
     mMemoryUsage = static_cast<int>(mMem.updateSystemMemoryUsage());
 
     // 进行警报检测
-    if(mProtectionStatus) {
+    if (mProtectionStatus) {
         checkCpuAlarm();
         checkMemoryAlarm();
     }
