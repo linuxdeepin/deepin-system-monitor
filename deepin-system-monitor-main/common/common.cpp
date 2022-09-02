@@ -227,7 +227,7 @@ void WaylandSearchCentered()
     }
 #else
     WaylandCentered = false;
-#endif //WAYLAND_SESSION_SUPPORT
+#endif //USE_DEEPIN_WAYLAND
 
 }
 

@@ -420,4 +420,4 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
     }
 
 }
-#endif //WAYLAND_SESSION_SUPPORT
+#endif //USE_DEEPIN_WAYLAND
