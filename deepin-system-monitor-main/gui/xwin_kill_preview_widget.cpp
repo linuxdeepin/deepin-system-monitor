@@ -50,12 +50,14 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 {
     // new window manager instance
     m_wminfo = new WMInfo();
-//不再使用CMakeList开关宏的方式，改用全局变量运行时控制
-//WaylandCentered定义在common/common.h中，在main函数开头进行初始化判断
+// 如果在编译时选择支持 Wayland，运行时会由全局变量 WaylandCentered 控制
+// WaylandCentered 定义在 common/common.h 中，在 main 函数开头进行初始化判断
+#ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         m_connectionThread = new QThread(this);
         m_connectionThreadObject = new ConnectionThread();
     }
+#endif // USE_DEEPIN_WAYLAND
 
     // init ui components & connections
     initUI();
@@ -79,11 +81,13 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
     releaseMouse();
     releaseKeyboard();
     delete m_wminfo;
+#ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         m_connectionThread->quit();
         m_connectionThread->wait();
         m_connectionThreadObject->deleteLater();
     }
+#endif // USE_DEEPIN_WAYLAND
 }
 
 // mouse press event
@@ -95,6 +99,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     }
     // get the list of windows under cursor in stacked order when mouse pressed
     auto pos = QCursor::pos();
+#ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         for(QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
            it!=m_windowStates.begin();--it) {
@@ -119,7 +124,9 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
                 break;
             }
         }
-    } else {
+    }
+#endif // USE_DEEPIN_WAYLAND
+    if (!WaylandCentered) {
         auto list = m_wminfo->selectWindow(pos);
 
         // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
@@ -153,6 +160,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 // mouse move event handler
 void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
+#ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
         auto pos = QCursor::pos();
@@ -212,7 +220,9 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 bg->clearSelection();
             emit cursorUpdated(m_defaultCursor);
         }
-    } else {
+    }
+#endif // USE_DEEPIN_WAYLAND
+    if (!WaylandCentered) {
         double x = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
         auto pos = QCursor::pos();
         // get the list of windows under cursor from cache in stacked order
@@ -310,11 +320,11 @@ void XWinKillPreviewWidget::initUI()
         auto geom = screen->geometry();
         // snapshot current scree
         auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(),geom.x(), geom.y(), geom.width(), geom.height());
-
+#ifdef USE_DEEPIN_WAYLAND
         if (WaylandCentered)
             pixmap = screen->grabWindow(m_windowStates.end()->windowId,
                                          geom.x(), geom.y(), geom.width(), geom.height());
-
+#endif // USE_DEEPIN_WAYLAND
         // create preview background widget for each screen
         auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
         // update cursor on cursor updated signal
@@ -337,6 +347,7 @@ void XWinKillPreviewWidget::initUI()
 // wayland协议下建立连接
 void XWinKillPreviewWidget::initConnections()
 {
+#ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         connect(m_connectionThreadObject, &ConnectionThread::connected, this,
             [this] {
@@ -353,7 +364,10 @@ void XWinKillPreviewWidget::initConnections()
 
         m_connectionThreadObject->initConnection();
     }
+#endif // USE_DEEPIN_WAYLAND
 }
+
+#ifdef USE_DEEPIN_WAYLAND
 //打印当前窗口信息接口
 void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates)
 {
@@ -406,3 +420,4 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
     }
 
 }
+#endif //WAYLAND_SESSION_SUPPORT
