@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 <schemalist>
   
  <schema path="/com/deepin/system/monitor/plugin/" id="com.deepin.system.monitor.plugin" gettext-domain="SystemMonitorPlugin">

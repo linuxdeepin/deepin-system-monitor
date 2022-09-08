@@ -1,61 +1,8 @@
-/*
- * BIOS Decode
- *
- *   Copyright (C) 2000-2002 Alan Cox <alan@redhat.com>
- *   Copyright (C) 2002-2017 Jean Delvare <jdelvare@suse.de>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- *
- *   For the avoidance of doubt the "preferred form" of this code is one which
- *   is in an open unpatent encumbered format. Where cryptographic key signing
- *   forms part of the process of creating an executable the information
- *   including keys needed to generate an equivalently functional executable
- *   are deemed to be part of the source code.
- *
- * References:
- *  - DMTF "System Management BIOS (SMBIOS) Reference Specification"
- *    Version 3.0.0
- *    http://www.dmtf.org/standards/smbios
- *  - Intel "Preboot Execution Environment (PXE) Specification"
- *    Version 2.1
- *    http://www.intel.com/labs/manage/wfm/wfmspecs.htm
- *  - ACPI "Advanced Configuration and Power Interface Specification"
- *    Revision 2.0
- *    http://www.acpi.info/spec20.htm
- *  - Phoenix "BIOS32 Service Directory"
- *    Revision 0.4
- *    http://www.phoenix.com/en/support/white+papers-specs/
- *  - Microsoft "Plug and Play BIOS Specification"
- *    Version 1.0A
- *    http://www.microsoft.com/hwdev/tech/PnP/
- *  - Microsoft "PCI IRQ Routing Table Specification"
- *    Version 1.0
- *    http://www.microsoft.com/hwdev/archive/BUSBIOS/pciirq.asp
- *  - Compaq "Technical Reference Guide for Compaq Deskpro 4000 and 6000"
- *    First Edition
- *    http://h18000.www1.hp.com/support/techpubs/technical_reference_guides/113a1097.html
- *  - IBM "Using the BIOS Build ID to identify Thinkpad systems"
- *    Revision 2005-09-19
- *    http://www-307.ibm.com/pc/support/site.wss/MIGR-45120.html
- *  - Fujitsu application panel technical details
- *    As of July 23rd, 2004
- *    http://apanel.sourceforge.net/tech.php
- *  - Intel Multiprocessor Specification
- *    Version 1.4
- *    http://www.intel.com/design/archives/processors/pro/docs/242016.htm
- */
+// Copyright (C) 2000-2002 Alan Cox <alan@redhat.com>
+// Copyright (C) 2002-2017 Jean Delvare <jdelvare@suse.de>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <stdio.h>
 #include <string.h>

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /*
  * No copyright is claimed.  This code is in the public domain; do with

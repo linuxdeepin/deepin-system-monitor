@@ -1,4 +1,8 @@
- /* print.c - functions to print table
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+/* print.c - functions to print table
  *
  * Copyright (C) 2010-2014 Karel Zak <kzak@redhat.com>
  * Copyright (C) 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com>

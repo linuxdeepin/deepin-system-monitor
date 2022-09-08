@@ -1,10 +1,7 @@
-/*
- * version.c - Return the version of the library
- *
- * Copyright (C) 2014 Karel Zak <kzak@redhat.com>
- *
- * See COPYING.libmount for the License of this software.
- */
+// Copyright (C) 2014 Karel Zak <kzak@redhat.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * SECTION: version-utils

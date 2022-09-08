@@ -1,10 +1,8 @@
-/*
- * Copyright (C) 2009-2014 Karel Zak <kzak@redhat.com>
- * Copyright (C) 2014 Ondrej Oprala <ooprala@redhat.com>
- *
- * This file may be redistributed under the terms of the
- * GNU Lesser General Public License.
- */
+// Copyright (C) 2009-2014 Karel Zak <kzak@redhat.com>
+// Copyright (C) 2014 Ondrej Oprala <ooprala@redhat.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * SECTION: iter

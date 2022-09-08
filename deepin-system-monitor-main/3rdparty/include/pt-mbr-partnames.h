@@ -1,4 +1,8 @@
-	{0x00, N_("Empty")},
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+{0x00, N_("Empty")},
 	{0x01, N_("FAT12")},
 	{0x02, N_("XENIX root")},
 	{0x03, N_("XENIX usr")},
