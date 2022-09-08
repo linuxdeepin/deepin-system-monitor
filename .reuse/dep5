@@ -48,6 +48,26 @@ Files: translations/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
+# 3rdparty/dmidecode
+Files: 3rdparty/dmidecode/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
+# 3rdparty/include
+Files: 3rdparty/include/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
+# include
+Files: include/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
+# 3rdparty/libsmartcols
+Files: 3rdparty/libsmartcols/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # src
 Files: src/*
 Copyright: UnionTech Software Technology Co., Ltd.
