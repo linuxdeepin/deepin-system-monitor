@@ -1,4 +1,4 @@
-﻿/*
+﻿
 
 // Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
