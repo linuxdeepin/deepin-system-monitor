@@ -1,9 +1,8 @@
-/*
- * Copyright (C) 2012-2015 Karel Zak <kzak@redhat.com>
- *
- * This file may be distributed under the terms of the
- * GNU Lesser General Public License.
- */
+// Copyright (C) 2012-2015 Karel Zak <kzak@redhat.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef UTIL_LINUX_COLOR_NAMES_H
 #define UTIL_LINUX_COLOR_NAMES_H
 

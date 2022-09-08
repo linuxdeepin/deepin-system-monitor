@@ -1,9 +1,9 @@
-/*
- * This code is in the public domain; do with it what you wish.
- *
- * Copyright (C) 2012 Sami Kerola <kerolasa@iki.fi>
- * Copyright (C) 2012-2020 Karel Zak <kzak@redhat.com>
- */
+// Copyright (C) 2012 Sami Kerola <kerolasa@iki.fi>
+// Copyright (C) 2012-2020 Karel Zak <kzak@redhat.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

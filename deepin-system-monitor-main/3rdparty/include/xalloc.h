@@ -1,11 +1,7 @@
-/*
- * Copyright (C) 2010 Davidlohr Bueso <dave@gnu.org>
- *
- * This file may be redistributed under the terms of the
- * GNU Lesser General Public License.
- *
- * General memory allocation wrappers for malloc, realloc, calloc and strdup
- */
+// Copyright (C) 2010 Davidlohr Bueso <dave@gnu.org>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef UTIL_LINUX_XALLOC_H
 #define UTIL_LINUX_XALLOC_H

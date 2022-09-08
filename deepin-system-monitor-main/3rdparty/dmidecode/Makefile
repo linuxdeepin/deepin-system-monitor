@@ -1,16 +1,8 @@
+# Copyright (C) 2000-2002 Alan Cox <alan@redhat.com>
+# Copyright (C) 2002-2020 Jean Delvare <jdelvare@suse.de>
+# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 #
-#   DMI Decode
-#   BIOS Decode
-#   VPD Decode
-#
-#   Copyright (C) 2000-2002 Alan Cox <alan@redhat.com>
-#   Copyright (C) 2002-2020 Jean Delvare <jdelvare@suse.de>
-#
-#   This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
-#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 CC     ?= gcc
 # Base CFLAGS can be overridden by environment

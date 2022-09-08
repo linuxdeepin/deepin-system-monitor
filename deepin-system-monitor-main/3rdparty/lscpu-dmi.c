@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
 // SPDX-License-Identifier: GPL-2.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 /*
  * Copyright (C) 2020 FUJITSU LIMITED.  All rights reserved.
  */

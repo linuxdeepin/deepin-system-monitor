@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 /* Declarations for wide characters */
 /* This file must be included last because the redefinition of wchar_t may
    cause conflicts when system include files were included after it. */

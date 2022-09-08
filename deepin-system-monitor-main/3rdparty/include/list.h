@@ -1,13 +1,8 @@
-/*
- * Copyright (C) 2008 Karel Zak <kzak@redhat.com>
- * Copyright (C) 1999-2008 by Theodore Ts'o
- *
- * This file may be redistributed under the terms of the
- * GNU Lesser General Public License.
- *
- * (based on list.h from e2fsprogs)
- * Merge sort based on kernel's implementation.
- */
+// Copyright (C) 1999-2008 by Theodore Ts'o
+// Copyright (C) 2008 Karel Zak <kzak@redhat.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef UTIL_LINUX_LIST_H
 #define UTIL_LINUX_LIST_H

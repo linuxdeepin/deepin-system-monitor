@@ -1,12 +1,8 @@
-/*
- * symbols.c - routines for symbol handling
- *
- * Copyright (C) 2014 Ondrej Oprala <ooprala@redhat.com>
- * Copyright (C) 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com>
- *
- * This file may be redistributed under the terms of the
- * GNU Lesser General Public License.
- */
+// Copyright (C) 2014 Ondrej Oprala <ooprala@redhat.com>
+// Copyright (C) 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * SECTION: symbols

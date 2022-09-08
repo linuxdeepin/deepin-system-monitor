@@ -1,17 +1,7 @@
-/*
- * Terminology:
- *
- *	cpuset	- (libc) cpu_set_t data structure represents set of CPUs
- *	cpumask	- string with hex mask (e.g. "0x00000001")
- *	cpulist - string with CPU ranges (e.g. "0-3,5,7,8")
- *
- * Based on code from taskset.c and Linux kernel.
- *
- * This file may be redistributed under the terms of the
- * GNU Lesser General Public License.
- *
- * Copyright (C) 2010 Karel Zak <kzak@redhat.com>
- */
+// Copyright (C) 2010 Karel Zak <kzak@redhat.com>
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <stdio.h>
 #include <stdlib.h>
