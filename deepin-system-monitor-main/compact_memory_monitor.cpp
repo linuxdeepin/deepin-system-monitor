@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-﻿/*
+/*
 * Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
 *
 * Author:      Wang Yong <wangyong@deepin.com>
