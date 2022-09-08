@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # 系统监视器|deepin-system-monitor|
 
 ## 概述
