@@ -18,7 +18,7 @@ std::mutex DBusInterface::m_mutex;
 const QString SERVICE_NAME = "com.deepin.SystemMonitorPluginPopup";
 const QString SERVICE_PATH = "/com/deepin/SystemMonitorPluginPopup";
 
-const QString DBUS_COMMAND = "qdbus com.deepin.SystemMonitorPluginPopup /com/deepin/SystemMonitorPluginPopup com.deepin.SystemMonitorPluginPopup.slotShowOrHideSystemMonitorPluginPopupWidget";
+const QString DBUS_COMMAND = "gdbus call -e -d com.deepin.SystemMonitorPluginPopup -o /com/deepin/SystemMonitorPluginPopup -m  com.deepin.SystemMonitorPluginPopup.slotShowOrHideSystemMonitorPluginPopupWidget";
 
 DBusInterface::DBusInterface()
     : mp_Iface(nullptr)
