@@ -723,7 +723,7 @@ void SystemServiceTableView::initConnections()
     connect(mgr, &ServiceManager::beginUpdateList, this, [ = ]() {
         m_loading = true;
 
-        setEnabled(false);
+        header()->setEnabled(false);
 
         m_noMatchingResultLabel->hide();
         m_spinner->start();
@@ -731,7 +731,7 @@ void SystemServiceTableView::initConnections()
     });
     // hide tip label & spinner & reset loading state after service list updated
     connect(m_model, &SystemServiceTableModel::modelReset, this, [ = ]() {
-        setEnabled(true);
+        header()->setEnabled(true);
 
         m_noMatchingResultLabel->hide();
         m_spinner->hide();
