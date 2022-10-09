@@ -164,7 +164,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     int iconSize = 24;
 
     // Draw title.
-    QRect titleRect(rect().x() + iconSize + 4, rect().y(),
+    QRect titleRect(rect().x() + iconSize, rect().y(),
                     fmSection.size(Qt::TextSingleLine, sectionTitle).width(), fmSection.height());
 
     painter.setFont(m_sectionFont);
@@ -172,7 +172,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignTop, sectionTitle);
 
     // Draw icon.
-    QRect iconRect(rect().x(), titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,
+    QRect iconRect(rect().x() - 4, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,
                    iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
@@ -187,6 +187,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     QString sentTotalTitle = DApplication::translate("Process.Graph.View", "Total Sent");
     QString sentTotalContent = formatUnit_net(m_totalSentBytes * 8, B, 1);
 
+    titleRect.translate(0, 7);
     QFontMetrics fmContent(m_contentFont);
     QFontMetrics fmSubContent(m_subContentFont);
     QRect contentRect(padleft, titleRect.y() + titleRect.height(),
