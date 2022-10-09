@@ -213,7 +213,7 @@ void ProcessPageWidget::initUI()
 
     // fill left side bar & main content area
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(16);
+    layout->setContentsMargins(10, 10, 9, 9);
     layout->setSpacing(16);
     layout->addWidget(m_views);
     layout->addWidget(m_rightStackView);
@@ -262,8 +262,8 @@ void ProcessPageWidget::initUI()
 
     connect(m_rightStackView, &DetailViewStackedWidget::currentChanged, this, &ProcessPageWidget::onDetailWidgetChanged);
     QTimer::singleShot(5, this, SLOT(onLoadLeftDataWidgetDelay()));
-   // this->layout()->setSizeConstraint(QLayout::SetMinAndMaxSize);
- //   m_loadingAndProcessTB->setCurrentWidget(m_procTable);
+    // this->layout()->setSizeConstraint(QLayout::SetMinAndMaxSize);
+//   m_loadingAndProcessTB->setCurrentWidget(m_procTable);
 }
 
 void ProcessPageWidget::initConnections()

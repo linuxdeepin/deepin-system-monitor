@@ -134,11 +134,11 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
 
     QString title = DApplication::translate("Process.Graph.Title", "Memory");
     QFontMetrics fm(m_titleFont);
-    QRect titleRect(rect().x() + iconSize + 4, rect().y(),
+    QRect titleRect(rect().x() + iconSize, rect().y(),
                     fm.size(Qt::TextSingleLine, title).width(), fm.height());
 
     // Draw icon.
-    QRect iconRect(rect().x(), titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,
+    QRect iconRect(rect().x() - 4, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,
                    iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
@@ -181,6 +181,7 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
                       .arg(formatUnit_memory_disk(m_memInfo->swapTotal() << 10, B, 1));
     }
 
+    titleRect.translate(0, 7);
     QFontMetrics fmMem(m_contentFont);
     QFontMetrics fmMemStat(m_subContentFont);
     QRect memRect(sectionSize * 2, titleRect.y() + titleRect.height(),
@@ -227,11 +228,11 @@ void MemoryMonitor::paintEvent(QPaintEvent *)
     painter.drawText(swapRect, swapTitle);
 
     //未启用交换空间时，不显示交换空间数据
-    if (m_memInfo->swapTotal()){
-            painter.setFont(m_subContentFont);
-            painter.setPen(QPen(summaryColor));
-            painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
-        }
+    if (m_memInfo->swapTotal()) {
+        painter.setFont(m_subContentFont);
+        painter.setPen(QPen(summaryColor));
+        painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);
+    }
 
     // Draw memory ring.
     drawLoadingRing(painter, rect().x() + ringCenterPointerX, rect().y() + ringCenterPointerY,

@@ -89,7 +89,7 @@ private:
     int pointerRenderPaddingX = 4;
     int pointerRenderPaddingY = 9;
     int ringCenterPointerX;
-    int ringCenterPointerY = 70;
+    int ringCenterPointerY = 77;
     int ringWidth = 6;
 
     core::system::MemInfo *m_memInfo {};
