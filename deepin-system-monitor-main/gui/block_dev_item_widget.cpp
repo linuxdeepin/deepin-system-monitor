@@ -21,6 +21,7 @@ using namespace common::format;
 const int margin = 6;
 const int spacing = 6;
 const int sectionSize = 6;
+const int TextSpacing = 12;
 
 BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
 {
@@ -41,12 +42,13 @@ BlockDevItemWidget::~BlockDevItemWidget()
 void BlockDevItemWidget::updateWidgetGeometry()
 {
     QFont font = DApplication::font();
-    font.setPointSizeF(font.pointSizeF() -1);
+    font.setPointSizeF(font.pointSizeF() - 1);
     int fontHeight = QFontMetrics(font).height();
+    int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
     if (m_mode == TITLE_HORIZONTAL) {
-        m_memChartWidget->setGeometry(margin, fontHeight / 2, this->width() - 2 * margin, this->height() - fontHeight / 2 - margin);
+        m_memChartWidget->setGeometry(curXMargin, TextSpacing, this->width() - 2 * curXMargin, this->height() - TextSpacing - margin);
     } else {
-        m_memChartWidget->setGeometry(margin, fontHeight * 2 + fontHeight / 2, this->width() - 2 * margin, this->height() - fontHeight * 2 - fontHeight / 2 - margin);
+        m_memChartWidget->setGeometry(curXMargin, fontHeight * 2 + TextSpacing, this->width() - 2 * curXMargin, this->height() - fontHeight * 2 - TextSpacing - margin);
     }
 }
 
@@ -88,6 +90,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
 
+    int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
     QPainter painter(this);
     QFont font = DApplication::font();
     font.setPointSizeF(font.pointSizeF() - 1);
@@ -101,7 +104,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
 
     int deviceNameWidth = painter.fontMetrics().width(deviceName);
     int deviceNameHeight = painter.fontMetrics().height();
-    QRect devtitleRect(margin, margin, deviceNameWidth, deviceNameHeight);
+    QRect devtitleRect(curXMargin, margin, deviceNameWidth, deviceNameHeight);
 
     const QColor &textColor = palette.color(DPalette::TextTips);
     if (m_isActive && m_mode == TITLE_VERTICAL) {

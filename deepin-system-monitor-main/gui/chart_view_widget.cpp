@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <DApplicationHelper>
 #include <DApplication>
+#include <DFontSizeManager>
 
 using namespace common::format;
 
@@ -96,8 +97,8 @@ void ChartViewWidget::addData2(const QVariant &data)
                 setAxisTitle(formatUnit_memory_disk(m_maxData, B, 1, true));
             else
                 setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
-    } else {
-        // when the data hold the zero num,we should set the chart max value as 0
+        } else {
+            // when the data hold the zero num,we should set the chart max value as 0
             if (m_speedAxis) {
                 if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
                     setAxisTitle(formatUnit_memory_disk(0, B, 1, true));
@@ -117,8 +118,8 @@ void ChartViewWidget::setAxisTitle(const QString &text)
 
 void ChartViewWidget::changeFont(const QFont &font)
 {
-    m_textfont = font;
-    m_textfont.setPointSizeF(m_textfont.pointSizeF() - 2);
+    Q_UNUSED(font)
+    m_textfont = DFontSizeManager::instance()->get(DFontSizeManager::T8);
 }
 
 void ChartViewWidget::resizeEvent(QResizeEvent *event)
@@ -255,7 +256,9 @@ void ChartViewWidget::drawAxisText(QPainter *painter)
 {
     auto *dAppHelper = DApplicationHelper::instance();
     auto palette = dAppHelper->applicationPalette();
-    painter->setPen(palette.color(DPalette::TextTips));
+    QColor color = palette.color(DPalette::ToolTipText);
+    color.setAlphaF(0.3);
+    painter->setPen(color);
     painter->setFont(m_textfont);
     painter->drawText(0, 0, this->width(), painter->fontMetrics().height(), Qt::AlignRight | Qt::AlignVCenter, m_axisTitle);
 

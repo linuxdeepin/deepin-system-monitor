@@ -20,6 +20,7 @@ using namespace core::system;
 const int margin = 6;
 const int spacing = 6;
 const int sectionSize = 6;
+const int TextSpacing = 12;
 
 DWIDGET_USE_NAMESPACE
 NetifItemViewWidget::NetifItemViewWidget(QWidget *parent, const QByteArray &mac) : QWidget(parent)
@@ -38,6 +39,7 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
 
+    int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setFont(m_font);
@@ -60,7 +62,7 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
     }
 
 
-    QRect ifnameRect(margin, margin / 2, painter.fontMetrics().width(m_ifname), painter.fontMetrics().height());
+    QRect ifnameRect(curXMargin, margin / 2, painter.fontMetrics().width(m_ifname), painter.fontMetrics().height());
     painter.drawText(ifnameRect, Qt::AlignLeft | Qt::AlignVCenter, m_ifname);
 
     painter.setPen(textColor);
@@ -154,9 +156,10 @@ void NetifItemViewWidget::updateActiveStatus(bool active)
 void NetifItemViewWidget::updateWidgetGeometry()
 {
     int fontHeight = QFontMetrics(m_font).height();
+    int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
     if (m_mode == TITLE_HORIZONTAL) {
-        m_ChartWidget->setGeometry(margin, fontHeight / 2, this->width() - 2 * margin, this->height() - fontHeight / 2 - margin);
+        m_ChartWidget->setGeometry(curXMargin, TextSpacing, this->width() - 2 * curXMargin, this->height() - TextSpacing - margin);
     } else {
-        m_ChartWidget->setGeometry(margin, fontHeight * 4, this->width() - 2 * margin, this->height() - fontHeight * 4 - margin);
+        m_ChartWidget->setGeometry(curXMargin, fontHeight * 2 + TextSpacing, this->width() - 2 * curXMargin, this->height() - fontHeight * 2 - TextSpacing - margin);
     }
 }

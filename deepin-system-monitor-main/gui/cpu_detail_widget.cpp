@@ -136,9 +136,16 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
     painter.setFont(midFont);
     int midTextHeight = painter.fontMetrics().height();
 
+    painter.save();
+    QColor midTextColor(palette.color(DPalette::ToolTipText));
+    midTextColor.setAlphaF(0.3);
+    QPen midTextPen = painter.pen();
+    midTextPen.setColor(midTextColor);
+    painter.setPen(midTextPen);
     painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignRight | Qt::AlignBottom, "100%");
     painter.drawText(QRect(pensize, graphicRect.bottom() + pensize, this->width() - 2 * pensize, midTextHeight), Qt::AlignLeft | Qt::AlignVCenter, tr("60 seconds"));
     painter.drawText(QRect(pensize, graphicRect.bottom() + pensize, this->width() - 2 * pensize, midTextHeight), Qt::AlignRight | Qt::AlignVCenter, "0");
+    painter.restore();
 
     // draw cpu
     painter.setClipRect(graphicRect);
@@ -330,7 +337,7 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
     });
 
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-                this, &CPUDetailWidget::detailFontChanged);
+            this, &CPUDetailWidget::detailFontChanged);
 }
 
 void CPUDetailWidget::detailFontChanged(const QFont &font)
@@ -354,7 +361,7 @@ void CPUDetailGrapTable::setMutliCoreMode(bool isMutliCoreMode)
     m_isMutliCoreMode = isMutliCoreMode;
     // 获取当前布局所有的子控件，删除子控件
     QLayout *p = this->layout();
-    while(p->count()){
+    while (p->count()) {
         QWidget *pWidget = p->itemAt(0)->widget();
         pWidget->setParent(nullptr);
         p->removeWidget(pWidget);
