@@ -490,7 +490,7 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
 void ProcessPageWidget::showWindowKiller()
 {
     gApp->mainWindow()->showMinimized();
-    QTimer::singleShot(500, this, SLOT(createWindowKiller()));
+    createWindowKiller();
 }
 
 void ProcessPageWidget::switchDisplayMode(int mode)
