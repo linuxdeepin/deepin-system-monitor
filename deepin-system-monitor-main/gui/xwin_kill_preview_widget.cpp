@@ -79,7 +79,7 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
 // mouse press event
 void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
 {
-     // only accept left mouse button click event
+    // only accept left mouse button click event
     if (event->button() != Qt::LeftButton) {
         return;
     }
@@ -87,15 +87,15 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     auto pos = QCursor::pos();
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
-        for(QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
-           it!=m_windowStates.begin();--it) {
+        for (QVector<ClientManagement::WindowState>::iterator it = m_windowStates.end() - 1;
+                it != m_windowStates.begin(); --it) {
             // if the window is created by ourself, then ignore it
-            if (getpid() == it->pid || QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized)
+            if (getpid() == it->pid || QString::fromStdString(it->resourceName) == "dde-desktop" || it->isMinimized)
                 continue;
 
             // if such window exists, we emit window clicked signal to notify kill application performed action
             QRect rect;
-            rect.setRect(it->geometry.x,it->geometry.y,it->geometry.width, it->geometry.height);
+            rect.setRect(it->geometry.x, it->geometry.y, it->geometry.width, it->geometry.height);
             if (rect.contains(pos)) {
                 // hide preview & background widgets first
                 hide();
@@ -153,32 +153,32 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
         // get the list of windows under cursor from cache in stacked order
         bool found {false};
 
-        for (QVector<ClientManagement::WindowState>::iterator it=m_windowStates.end()-1;
-             it!=m_windowStates.begin();--it) {
+        for (QVector<ClientManagement::WindowState>::iterator it = m_windowStates.end() - 1;
+                it != m_windowStates.begin(); --it) {
             // if the window is created by ourself, then ignore it
-        // wayland环境下增加桌面窗口和dock栏的屏蔽
-            if (getpid() == it->pid|| QString::fromStdString(it->resourceName)=="dde-desktop" ||it->isMinimized || QString::fromStdString(it->resourceName)=="deepin-deepinid-client"
-                    || QString::fromStdString(it->resourceName)=="dde-dock" )
+            // wayland环境下增加桌面窗口和dock栏的屏蔽
+            if (getpid() == it->pid || QString::fromStdString(it->resourceName) == "dde-desktop" || it->isMinimized || QString::fromStdString(it->resourceName) == "deepin-deepinid-client"
+                    || QString::fromStdString(it->resourceName) == "dde-dock")
                 continue;
             auto selRect = QRect(static_cast<int>(it->geometry.x / x), static_cast<int>(it ->geometry.y / x),
-                                 static_cast<int>(it->geometry.width / x), static_cast<int>(it->geometry.height/ x));
+                                 static_cast<int>(it->geometry.width / x), static_cast<int>(it->geometry.height / x));
             if (selRect.contains(pos)) {
                 found = true;
 
                 // find all windows hovered above, if any clip out the intersected region
 
                 QRegion region {selRect};
-        //对于所选窗口上方存在堆叠的窗口情况，对所选窗口进行区域裁剪。
-                for (QVector<ClientManagement::WindowState>::iterator iter=m_windowStates.end()-1;
-                     iter!=it;--iter) {
-                    if (  QString::fromStdString(iter->resourceName)=="dde-desktop" ||iter->isMinimized || QString::fromStdString(iter->resourceName)=="deepin-deepinid-client"
-                          || QString::fromStdString(iter->resourceName)=="dde-dock" || getpid() == iter->pid)
+                //对于所选窗口上方存在堆叠的窗口情况，对所选窗口进行区域裁剪。
+                for (QVector<ClientManagement::WindowState>::iterator iter = m_windowStates.end() - 1;
+                        iter != it; --iter) {
+                    if (QString::fromStdString(iter->resourceName) == "dde-desktop" || iter->isMinimized || QString::fromStdString(iter->resourceName) == "deepin-deepinid-client"
+                            || QString::fromStdString(iter->resourceName) == "dde-dock" || getpid() == iter->pid)
                         continue;
 
-                    else{
-                 //上方的堆叠窗口区域
+                    else {
+                        //上方的堆叠窗口区域
                         auto upRegion = QRect(static_cast<int>(iter->geometry.x / x), static_cast<int>(iter ->geometry.y / x),
-                                              static_cast<int>(iter->geometry.width / x), static_cast<int>(iter->geometry.height/ x));
+                                              static_cast<int>(iter->geometry.width / x), static_cast<int>(iter->geometry.height / x));
 
                         region = region.subtracted(upRegion);
                     }
@@ -274,7 +274,7 @@ void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
         close();
     }
 }
-
+#include <QTimer>
 // initialize ui components
 void XWinKillPreviewWidget::initUI()
 {
@@ -300,33 +300,36 @@ void XWinKillPreviewWidget::initUI()
     // default forbid style cursor
     m_defaultCursor = QCursor(Qt::ForbiddenCursor);
 
-    // show background window in all screens
-    for (auto screen : QApplication::screens()) {
-        // screen geometry
-        auto geom = screen->geometry();
-        // snapshot current scree
-        auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(),geom.x(), geom.y(), geom.width(), geom.height());
+    QTimer::singleShot(500, this, [ = ] {
+        // show background window in all screens
+        for (auto screen : QApplication::screens())
+        {
+            // screen geometry
+            auto geom = screen->geometry();
+            // snapshot current scree
+            auto pixmap = screen->grabWindow(m_wminfo->getRootWindow(), geom.x(), geom.y(), geom.width(), geom.height());
 #ifdef USE_DEEPIN_WAYLAND
-        if (WaylandCentered)
-            pixmap = screen->grabWindow(m_windowStates.end()->windowId,
-                                         geom.x(), geom.y(), geom.width(), geom.height());
+            if (WaylandCentered)
+                pixmap = screen->grabWindow(m_windowStates.end()->windowId,
+                                            geom.x(), geom.y(), geom.width(), geom.height());
 #endif // USE_DEEPIN_WAYLAND
-        // create preview background widget for each screen
-        auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
-        // update cursor on cursor updated signal
-        connect(this, &XWinKillPreviewWidget::cursorUpdated, background, &XWinKillPreviewBackgroundWidget::setCursor);
-        // resize background widget to current screen size
-        background->resize(geom.size());
-        // move background widget to current screen position
-        background->move(geom.x(), geom.y());
+            // create preview background widget for each screen
+            auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
+            // update cursor on cursor updated signal
+            connect(this, &XWinKillPreviewWidget::cursorUpdated, background, &XWinKillPreviewBackgroundWidget::setCursor);
+            // resize background widget to current screen size
+            background->resize(geom.size());
+            // move background widget to current screen position
+            background->move(geom.x(), geom.y());
 
-        // keep a list of each background widget & screen
-        m_backgroundList << background;
-        m_screens << screen;
+            // keep a list of each background widget & screen
+            m_backgroundList << background;
+            m_screens << screen;
 
-        // show background preview widget on each screen
-        background->show();
-    }
+            // show background preview widget on each screen
+            background->show();
+        }
+    });
 }
 
 // initialize connections (nothing to do here)
@@ -336,15 +339,15 @@ void XWinKillPreviewWidget::initConnections()
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         connect(m_connectionThreadObject, &ConnectionThread::connected, this,
-            [this] {
-                m_eventQueue = new EventQueue(this);
-                m_eventQueue->setup(m_connectionThreadObject);
+        [this] {
+            m_eventQueue = new EventQueue(this);
+            m_eventQueue->setup(m_connectionThreadObject);
 
-                Registry *registry = new Registry(this);
-                setupRegistry(registry);
-            },
-            Qt::QueuedConnection
-        );
+            Registry *registry = new Registry(this);
+            setupRegistry(registry);
+        },
+        Qt::QueuedConnection
+               );
         m_connectionThreadObject->moveToThread(m_connectionThread);
         m_connectionThread->start();
 
@@ -360,14 +363,14 @@ void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::
     if (WaylandCentered) {
         for (int i = 0; i < m_windowStates.count(); ++i) {
             qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) \
-                        << "window[" << i << "]" << "pid:" << m_windowStates.at(i).pid \
-                        << "title:" << m_windowStates.at(i).resourceName \
-                        << "windowId:" << m_windowStates.at(i).windowId \
-                        << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y \
-                        << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height \
-                        <<"isMinimized("<<m_windowStates.at(i).isMinimized<<")" \
-                        <<"isFullScreen("<<m_windowStates.at(i).isFullScreen<<")" \
-                        <<"isActive("<<m_windowStates.at(i).isActive<<")";
+                     << "window[" << i << "]" << "pid:" << m_windowStates.at(i).pid \
+                     << "title:" << m_windowStates.at(i).resourceName \
+                     << "windowId:" << m_windowStates.at(i).windowId \
+                     << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y \
+                     << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height \
+                     << "isMinimized(" << m_windowStates.at(i).isMinimized << ")" \
+                     << "isFullScreen(" << m_windowStates.at(i).isFullScreen << ")" \
+                     << "isActive(" << m_windowStates.at(i).isActive << ")";
         }
     }
 }
@@ -376,29 +379,29 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
 {
     if (WaylandCentered) {
         connect(registry, &Registry::compositorAnnounced, this,
-            [this, registry](quint32 name, quint32 version) {
-                m_compositor = registry->createCompositor(name, version, this);
-            }
-        );
+        [this, registry](quint32 name, quint32 version) {
+            m_compositor = registry->createCompositor(name, version, this);
+        }
+               );
 
         connect(registry, &Registry::clientManagementAnnounced, this,
-            [this, registry] (quint32 name, quint32 version) {
-                m_clientManagement = registry->createClientManagement(name, version, this);
-                connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
-                    [this] {
-                        m_windowStates = m_clientManagement->getWindowStates();
-                    }
-                );
-            }
-        );
-
-        connect(registry, &Registry::interfacesAnnounced, this,
+        [this, registry](quint32 name, quint32 version) {
+            m_clientManagement = registry->createClientManagement(name, version, this);
+            connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
             [this] {
-                Q_ASSERT(m_compositor);
-                Q_ASSERT(m_clientManagement);
                 m_windowStates = m_clientManagement->getWindowStates();
             }
-        );
+                   );
+        }
+               );
+
+        connect(registry, &Registry::interfacesAnnounced, this,
+        [this] {
+            Q_ASSERT(m_compositor);
+            Q_ASSERT(m_clientManagement);
+            m_windowStates = m_clientManagement->getWindowStates();
+        }
+               );
 
         registry->setEventQueue(m_eventQueue);
         registry->create(m_connectionThreadObject);
