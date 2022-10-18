@@ -70,7 +70,7 @@ License: GPL-3.0-or-later
 
 # deepin-system-monitor-main/dbus
 Files: deepin-system-monitor-main/dbus/*
-Copyright: UnionTech Software Technology Co., Ltd.
+Copyright: 2019 ~ 2021 UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
 # deepin-system-monitor-main/gui
@@ -120,7 +120,7 @@ License: GPL-3.0-or-later
 
 # deepin-system-monitor-plugin-popup/dbus
 Files: deepin-system-monitor-plugin-popup/dbus/*
-Copyright: UnionTech Software Technology Co., Ltd.
+Copyright: 2019 ~ 2020 UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
 # deepin-system-monitor-plugin-popup/gui
