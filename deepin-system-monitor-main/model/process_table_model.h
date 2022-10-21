@@ -120,12 +120,20 @@ public:
      * @return Process state string
      */
     char getProcessState(pid_t pid) const;
+
     /**
      * @brief Get process priority enum type
      * @param pid Id of the process to get priority stub for
      * @return Process priority enum type
      */
     ProcessPriority getProcessPriority(pid_t pid) const;
+
+    /**
+     * @brief Get process priority enum type
+     * @param pid Id of the process to get priority stub for
+     * @return Process priority enum type
+     */
+    int getProcessPriorityValue(pid_t pid) const;
 
     /**
      * @brief Get process entry from list with specified pid
