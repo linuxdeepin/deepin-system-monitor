@@ -345,6 +345,12 @@ ProcessPriority ProcessTableModel::getProcessPriority(pid_t pid) const
     return kInvalidPriority;
 }
 
+int ProcessTableModel::getProcessPriorityValue(pid_t pid) const
+{
+    int row = m_procIdList.indexOf(pid);
+    return row >= 0 ? ProcessDB::instance()->processSet()->getProcessById(pid).priority() : kNormalPriority;
+}
+
 // remove process entry from model with specified pid
 void ProcessTableModel::removeProcess(pid_t pid)
 {
