@@ -151,7 +151,8 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     if (menuId == "openSystemMointor") {
         QProcess::startDetached("/usr/bin/deepin-system-monitor");
 
-        QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
+        //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
+        QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
         QTimer::singleShot(200, this, [=] () { QProcess::startDetached(cmd); });
     }
 }

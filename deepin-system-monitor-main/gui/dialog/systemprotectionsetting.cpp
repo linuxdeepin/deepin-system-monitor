@@ -520,7 +520,9 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
     // 错误提示 org.freedesktop.DBus.Error.UnknownMethod
     // 采用QProcess执行dbus操作，不会发生此项报错，dbus调用正常
 
-    QString cmd("qdbus com.deepin.SystemMonitor.Daemon /com/deepin/SystemMonitor com.deepin.SystemMonitor.Daemon.");
+    //QString cmd("qdbus com.deepin.SystemMonitor.Daemon /com/deepin/SystemMonitor com.deepin.SystemMonitor.Daemon.");
+    //qdbus 改为gdbus
+    QString cmd("gdbus call -e -d  com.deepin.SystemMonitor.Daemon -o /com/deepin/SystemMonitor -m com.deepin.SystemMonitor.Daemon.");
     bool needCall = false;
 
     // 拼接dbus调用命令字串
