@@ -22,7 +22,7 @@ ProcessIconCache::ProcessIconCache(QObject *parent)
 
     if (!theme) {
         theme = DGuiApplicationHelper::instance()->applicationTheme();
-        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [=]() {
+        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [ = ]() {
             iconPixmapCache.clear();
         });
     }

@@ -166,7 +166,9 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
             }
         }
 
-        if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE") && proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && proc->environ()["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == proc->pid()) {
+        QHash<QString, QString> allEnviron = proc->environ();
+        if (allEnviron.contains("GIO_LAUNCHED_DESKTOP_FILE") && ((allEnviron.contains("XDG_DATA_DIRS") && !allEnviron["XDG_DATA_DIRS"].isEmpty())
+                                                                 || (allEnviron.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && allEnviron["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == proc->pid()))) {
             auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
             auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
             if (entry && !entry->icon.isEmpty()) {

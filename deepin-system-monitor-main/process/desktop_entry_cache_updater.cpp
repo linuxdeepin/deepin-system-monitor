@@ -38,7 +38,10 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
 
     // exec & name
     auto tryExec = dde.stringValue("TryExec");
-    auto exec = dde.stringValue("Exec");
+    auto execStr = dde.stringValue("Exec");
+    QStringList execList = execStr.split("exec", QString::SkipEmptyParts, Qt::CaseInsensitive);
+    QString exec = execList.size() > 1 ? execList.last().trimmed() : execStr.trimmed();
+    exec = exec.remove("\"");
     if (!tryExec.isEmpty()) {
         entry->exec = tryExec.split(' ');
         entry->name = QFileInfo(entry->exec[0]).baseName();

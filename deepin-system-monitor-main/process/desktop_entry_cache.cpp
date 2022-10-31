@@ -43,15 +43,19 @@ void DesktopEntryCache::updateCache()
 {
     m_cache.clear();
 
-    auto fileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
-    for (auto &fileInfo : fileInfoList) {
-        if (!fileInfo.fileName().endsWith(DESKTOP_ENTRY_SUFFIX))
-            continue;
-
-        auto entry = DesktopEntryCacheUpdater::createEntry(fileInfo);
-        if (entry) {
-            m_cache[fileInfo.fileName()] = entry;
-            m_cache[entry->name] = entry;
+    QString xdgDataDirPath(getenv("XDG_DATA_DIRS"));
+    if (xdgDataDirPath.isEmpty()) {
+        auto fileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
+        for (auto &fileInfo : fileInfoList) {
+            entryWithDesktopFile(fileInfo.filePath());
+        }
+    } else {
+        QStringList xdgDataDirPaths = xdgDataDirPath.split(":", QString::SkipEmptyParts);
+        for (auto path : xdgDataDirPaths) {
+            auto fileInfoList = QDir(path.trimmed() + "/applications").entryInfoList(QDir::Files);
+            for (auto &fileInfo : fileInfoList) {
+                entryWithDesktopFile(fileInfo.filePath());
+            }
         }
     }
 }
