@@ -416,9 +416,13 @@ void ProcessPageWidget::onStatInfoUpdated()
     //记录所有进程数量
     const QList<pid_t> &newpidlst = processSet->getPIDList();
     m_iallProcNum = newpidlst.size();
-    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
-
-    m_procViewModeSummary->setText(buf.arg(wmwindowList->getAppCount()).arg(m_iallProcNum));
+    int appCount = 0;
+    for (const auto &pid : newpidlst) {
+        auto process = processSet->getProcessById(pid);
+        if (process.appType() == kFilterApps)
+            appCount++;
+    }
+    m_procViewModeSummary->setText(buf.arg(appCount).arg(m_iallProcNum));
     m_model = CPUInfoModel::instance();
 
 //    CPUPerformance = (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) ? High : Low;
