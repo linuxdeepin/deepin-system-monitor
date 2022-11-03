@@ -23,6 +23,7 @@
 #include <QCursor>
 #include <QDebug>
 #include <QRegion>
+#include <QTimer>
 
 #include <unistd.h>
 #include <string>
@@ -341,33 +342,36 @@ void XWinKillPreviewWidget::initUI()
     // default forbid style cursor
     m_defaultCursor = QCursor(Qt::ForbiddenCursor);
 
-    // show background window in all screens
-    for (auto screen : QApplication::screens()) {
-        // screen geometry
-        auto geom = screen->geometry();
-        // snapshot current scree
-        auto pixmap = screen->grabWindow(m_wminfo->getRootWindow());
+    QTimer::singleShot(500, this, [ = ] {
+        // show background window in all screens
+        for (auto screen : QApplication::screens())
+        {
+            // screen geometry
+            auto geom = screen->geometry();
+            // snapshot current scree
+            auto pixmap = screen->grabWindow(m_wminfo->getRootWindow());
 
-        if (WaylandCentered)
-            pixmap = screen->grabWindow(m_windowStates.end()->windowId);
+            if (WaylandCentered)
+                pixmap = screen->grabWindow(m_windowStates.end()->windowId);
 
-        pixmap = pixmap.copy(geom.x(), geom.y(), static_cast<int>(geom.width() * devicePixelRatioF()), static_cast<int>(geom.height() * devicePixelRatioF()));
-        // create preview background widget for each screen
-        auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
-        // update cursor on cursor updated signal
-        connect(this, &XWinKillPreviewWidget::cursorUpdated, background, &XWinKillPreviewBackgroundWidget::setCursor);
-        // resize background widget to current screen size
-        background->resize(geom.size());
-        // move background widget to current screen position
-        background->move(geom.x(), geom.y());
+            pixmap = pixmap.copy(geom.x(), geom.y(), static_cast<int>(geom.width() * devicePixelRatioF()), static_cast<int>(geom.height() * devicePixelRatioF()));
+            // create preview background widget for each screen
+            auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
+            // update cursor on cursor updated signal
+            connect(this, &XWinKillPreviewWidget::cursorUpdated, background, &XWinKillPreviewBackgroundWidget::setCursor);
+            // resize background widget to current screen size
+            background->resize(geom.size());
+            // move background widget to current screen position
+            background->move(geom.x(), geom.y());
 
-        // keep a list of each background widget & screen
-        m_backgroundList << background;
-        m_screens << screen;
+            // keep a list of each background widget & screen
+            m_backgroundList << background;
+            m_screens << screen;
 
-        // show background preview widget on each screen
-        background->show();
-    }
+            // show background preview widget on each screen
+            background->show();
+        }
+    });
 }
 
 // initialize connections (nothing to do here)
