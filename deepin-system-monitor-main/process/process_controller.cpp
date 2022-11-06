@@ -9,9 +9,10 @@
 
 #include <QFile>
 #include <QProcess>
+#include <QStandardPaths>
 
-#define CMD_PKEXEC "/usr/bin/pkexec"
-#define CMD_KILL "/usr/bin/kill"
+const QString CMD_PKEXEC = QStandardPaths::findExecutable("pkexec");
+const QString CMD_KILL = QStandardPaths::findExecutable("kill");
 
 // constructor
 ProcessController::ProcessController(pid_t pid, int signal, QObject *parent)
@@ -49,21 +50,21 @@ void ProcessController::execute()
     QStringList params;
 
     // check pkexec existance
-    if (!QFile::exists({CMD_PKEXEC})) {
+    if (CMD_PKEXEC.isEmpty()) {
         Q_EMIT resultReady(ENOENT);
         exit(ENOENT);
     }
     // check kill existance
-    if (!QFile::exists({CMD_KILL})) {
+    if (CMD_KILL.isEmpty()) {
         Q_EMIT resultReady(ENOENT);
         exit(ENOENT);
     }
 
     // format: kill -{signal} {pid}
-    params << QString(CMD_KILL) << QString("-%1").arg(m_signal) << QString("%1").arg(m_pid);
+    params << CMD_KILL << QString("-%1").arg(m_signal) << QString("%1").arg(m_pid);
 
     // EINVAL, EPERM, ESRCH
     // -2: cant not be started; -1: crashed; other: exit code of pkexec
     // pkexec: 127: not auth/cant auth/error; 126: dialog dismiss
-    m_proc->start({CMD_PKEXEC}, params);
+    m_proc->start(CMD_PKEXEC, params);
 }
