@@ -10,8 +10,8 @@
 #include <QProcess>
 #include <QFile>
 
-#define CMD_PKEXEC "/usr/bin/pkexec"
-#define CMD_RENICE "/usr/bin/renice"
+const QString CMD_PKEXEC = QStandardPaths::findExecutable("pkexec");
+const QString CMD_RENICE = QStandardPaths::findExecutable("renice");
 
 // constructor
 PriorityController::PriorityController(pid_t pid, int priority, QObject *parent)
@@ -57,20 +57,20 @@ void PriorityController::execute()
     QStringList params;
 
     // check pkexec existance
-    if (!QFile::exists({CMD_PKEXEC})) {
+    if (CMD_PKEXEC.isEmpty()) {
         Q_EMIT resultReady(ENOENT);
         exit(ENOENT);
     }
     // check renice existance
-    if (!QFile::exists({CMD_RENICE})) {
+    if (CMD_RENICE.isEmpty()) {
         Q_EMIT resultReady(ENOENT);
         exit(ENOENT);
     }
 
     // format: renice {priority} {pid}
-    params << QString(CMD_RENICE) << QString("%1").arg(m_priority) << QString("%1").arg(m_pid);
+    params << CMD_RENICE << QString("%1").arg(m_priority) << QString("%1").arg(m_pid);
 
     // -2: cant not be started; -1: crashed; other: exit code of pkexec
     // pkexec: 127: not auth/cant auth/error; 126: dialog dismiss
-    m_proc->start({CMD_PKEXEC}, params);
+    m_proc->start(CMD_PKEXEC, params);
 }
