@@ -9,6 +9,7 @@
 
 #include <QFile>
 #include <QProcess>
+#include <QStandardPaths>
 
 const QString CMD_PKEXEC = QStandardPaths::findExecutable("pkexec");
 const QString CMD_KILL = QStandardPaths::findExecutable("kill");

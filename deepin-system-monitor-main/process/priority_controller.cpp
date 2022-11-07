@@ -9,6 +9,7 @@
 
 #include <QProcess>
 #include <QFile>
+#include <QStandardPaths>
 
 const QString CMD_PKEXEC = QStandardPaths::findExecutable("pkexec");
 const QString CMD_RENICE = QStandardPaths::findExecutable("renice");
