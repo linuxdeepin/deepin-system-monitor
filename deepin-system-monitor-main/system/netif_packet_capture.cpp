@@ -60,7 +60,7 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
 
 void NetifPacketCapture::whetherDevChanged()
 {
-    if(m_devName.isEmpty()){
+    if (m_devName.isEmpty()) {
         m_changedDev = true;
         startNetifMonitorJob();
     } else {
@@ -74,40 +74,40 @@ void NetifPacketCapture::whetherDevChanged()
     }
 }
 
-bool NetifPacketCapture::hasDevIP(){
-    if(!m_devName.isEmpty()) {
+bool NetifPacketCapture::hasDevIP()
+{
+    if (!m_devName.isEmpty()) {
         return false;
     }
 
     struct sockaddr_in *addr {};
     struct ifreq ifr {};
-    char* address {};
+    char *address {};
     int sockfd;
     //设备名称过长
-    if( m_devName.size() >= IFNAMSIZ){
-       //qDebug()<<"Device name too long! Invalid device Name!";
-       return false;
+    if (m_devName.size() >= IFNAMSIZ) {
+        //qDebug()<<"Device name too long! Invalid device Name!";
+        return false;
     }
 
-    strcpy( ifr.ifr_name, m_devName.toLocal8Bit().data());
+    strcpy(ifr.ifr_name, m_devName.toLocal8Bit().data());
     //创建socket
-    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
     //获取网络IP(IPv4)
-    if( ioctl( sockfd, SIOCGIFADDR, &ifr) == -1){
+    if (ioctl(sockfd, SIOCGIFADDR, &ifr) == -1) {
         close(sockfd);
         //qDebug()<<"ioctl error!";
         return false;
     }
 
-    addr = (struct sockaddr_in *)&(ifr.ifr_addr);
+    addr = (struct sockaddr_in *) & (ifr.ifr_addr);
     address = inet_ntoa(addr->sin_addr);
-    if(address){
+    if (address) {
         close(sockfd);
         //cout<<"IP of  "<<m_devName<<" :" <<address;
         return true;
-    }
-    else {
+    } else {
         close(sockfd);
         return false;
     }
@@ -126,7 +126,7 @@ bool NetifPacketCapture::getCurrentDevName()
     if (outputList.size() > 0)
         outputList.removeFirst();
     QList<QStringList> totalList;
-    foreach(QString tmpList, outputList) {
+    foreach (QString tmpList, outputList) {
         QStringList lineList = tmpList.split(QRegExp("\\s{1,}"));
         totalList.append(lineList);
     }
@@ -152,8 +152,16 @@ bool NetifPacketCapture::getCurrentDevName()
 
     for (int i = 0; i < totalList.size(); i++) {
         auto list = totalList[i];
-        if (list.size() > devColNum && list.size() > metricColNum)
-            metricList.append(QPair<QString, int>(list[devColNum], list[metricColNum].toInt()));
+        if (list.size() > devColNum && list.size() > metricColNum) {
+            // 默认网卡
+            if (!list.isEmpty() && list.first() == "0.0.0.0") {
+                metricList.clear();
+                metricList.append(QPair<QString, int>(list[devColNum], list[metricColNum].toInt()));
+                break;
+            } else {
+                metricList.append(QPair<QString, int>(list[devColNum], list[metricColNum].toInt()));
+            }
+        }
     }
     int minMetric = 0;
     QString perfectDev = "";
@@ -180,7 +188,7 @@ bool NetifPacketCapture::getCurrentDevName()
 }
 //
 void NetifPacketCapture::startNetifMonitorJob()
-{ 
+{
     int rc = 0;
     char errbuf[PCAP_ERRBUF_SIZE] {};
 
@@ -198,7 +206,7 @@ void NetifPacketCapture::startNetifMonitorJob()
 
     // pcap_compile crashes everytime without any reason, need researching...
 #if 0
-    char pattern[] =0111 "TCP and UDP";
+    char pattern[] = 0111 "TCP and UDP";
     struct bpf_program pgm;
 
     rc = pcap_compile(m_handle, &pgm, pattern, 1, PCAP_NETMASK_UNKNOWN);
