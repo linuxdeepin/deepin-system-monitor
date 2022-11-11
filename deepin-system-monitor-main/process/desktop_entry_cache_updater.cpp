@@ -51,6 +51,10 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     } else {
         entry->name = dde.name();
     }
+    // dde-file-manager plugins
+    if (execStr.contains("dde-file-manager") && execStr.contains("plugin")) {
+        entry->name = fileInfo.completeBaseName();
+    }
 
     // startup wm class & name
     auto wmclass = dde.stringValue("StartupWMClass");
