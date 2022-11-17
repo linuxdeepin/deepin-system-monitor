@@ -6,5 +6,4 @@
 #cmakedefine HAVE_SYS_RANDOM_H 1
 #cmakedefine HAVE_SYS_CALL 1
 #cmakedefine HAVE_SYS_GETRANDOM 1
-#cmakedefine WAYLAND_SESSION_TYPE
 #cmakedefine IS_LOONGARCH_TYPE
