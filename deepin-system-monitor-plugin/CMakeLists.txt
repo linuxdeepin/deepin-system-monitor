@@ -28,6 +28,7 @@ find_package(DtkWidget REQUIRED)
 
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
+pkg_check_modules(DdeDockInterface REQUIRED dde-dock) 
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${APP_RESOURCES})

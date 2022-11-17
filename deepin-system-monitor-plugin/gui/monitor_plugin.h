@@ -7,7 +7,7 @@
 #define MONITORPLUGIN_H
 
 //  smo-plugin
-#include "/usr/include/dde-dock/pluginsiteminterface.h"
+#include <pluginsiteminterface.h>
 #include "monitorpluginbuttonwidget.h"
 
 #include "dbus/dbusinterface.h"
