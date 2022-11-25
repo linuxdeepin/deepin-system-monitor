@@ -882,6 +882,12 @@ void ProcessTableView::customizeProcessPriority()
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
         slider->setValue(m_model->getProcessPriorityValue(pid));
+        Process selectedProcess = m_model->getProcess(pid);
+        int selectedPriority = kNormalPriority;
+        if (selectedProcess.isValid()) {
+            selectedPriority = ProcessDB::instance()->processSet()->getProcessById(pid).priority();
+        }
+        slider->setValue(selectedPriority);
         prio = QString("%1").arg(slider->value());
         slider->setTipValue(prio);
     }
