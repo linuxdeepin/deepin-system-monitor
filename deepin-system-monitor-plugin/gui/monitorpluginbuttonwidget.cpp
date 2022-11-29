@@ -22,14 +22,14 @@ DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 MonitorPluginButtonWidget::MonitorPluginButtonWidget(QWidget *parent)
-    : QWidget (parent)
+    : QWidget(parent)
     , m_hover(false)
     , m_pressed(false)
 {
     setMouseTracking(true);
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [=] {
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
 }
@@ -38,7 +38,7 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
 
-    QString iconName = "dsm_pluginicon";
+    QString iconName = "dsm_pluginicon_light";
     QPixmap pixmap;
     int iconSize = PLUGIN_ICON_MAX_SIZE;
 
@@ -82,6 +82,9 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
 
         path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
+    } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        // 最小尺寸时，不画背景，采用深色图标
+        iconName = "dsm_pluginicon_dark";
     }
 
     const auto ratio = devicePixelRatioF();
@@ -162,7 +165,7 @@ const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const 
     }
 
     QPixmap pixmap(int(size * ratio), int(size * ratio));
-    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName+"_20px").arg(iconName.contains(".svg") ? "" : ".svg");
+    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName + "_20px").arg(iconName.contains(".svg") ? "" : ".svg");
     QSvgRenderer renderer(localIcon);
     pixmap.fill(Qt::transparent);
 
