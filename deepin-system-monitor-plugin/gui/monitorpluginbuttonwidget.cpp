@@ -158,13 +158,14 @@ void MonitorPluginButtonWidget::leaveEvent(QEvent *event)
 const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio)
 {
     QIcon icon = QIcon::fromTheme(iconName);
+    int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
     if (!icon.isNull()) {
-        QPixmap pixmap = icon.pixmap(int(size * ratio));
+        QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
         return pixmap;
     }
 
-    QPixmap pixmap(int(size * ratio), int(size * ratio));
+    QPixmap pixmap(pixmapSize, pixmapSize);
     QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName + "_20px").arg(iconName.contains(".svg") ? "" : ".svg");
     QSvgRenderer renderer(localIcon);
     pixmap.fill(Qt::transparent);
