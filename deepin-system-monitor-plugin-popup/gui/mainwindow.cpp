@@ -58,8 +58,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_trickTimer->setSingleShot(true);
 
     m_processEndTimer->setInterval(NOT_USE_QUIT_TIME_INTERVAL);
-
-
+    m_processEndTimer->start();
 
     //在构造函数中存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
     m_dbusPathList = m_displayInter->monitors();
