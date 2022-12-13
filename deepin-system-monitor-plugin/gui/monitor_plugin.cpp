@@ -16,13 +16,13 @@
 #include <QGSettings>
 
 namespace constantVal {
-    const QString PLUGIN_STATE_KEY = "enable";
+const QString PLUGIN_STATE_KEY = "enable";
 }
 
 DWIDGET_USE_NAMESPACE
 
 MonitorPlugin::MonitorPlugin(QObject *parent)
-    : QObject (parent)
+    : QObject(parent)
     , m_pluginLoaded(false)
     , m_dataTipsLabel(nullptr)
     , m_refershTimer(new QTimer(this))
@@ -72,7 +72,7 @@ QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 
 void MonitorPlugin::pluginStateSwitched()
 {
-    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool();
+    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
     m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
 
     refreshPluginItemsVisible();
@@ -81,7 +81,7 @@ void MonitorPlugin::pluginStateSwitched()
 
 bool MonitorPlugin::pluginIsDisable()
 {
-    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
 }
 
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
@@ -131,10 +131,10 @@ const QString MonitorPlugin::itemContextMenu(const QString &itemKey)
     QList<QVariant> items;
     items.reserve(1);
     //Add open System monitor mode button
-    QMap<QString,QVariant> openSMO;
+    QMap<QString, QVariant> openSMO;
     openSMO["itemId"] = "openSystemMointor";
     openSMO["itemText"] = DApplication::translate("Plugin.OpenSystemMontitor", "Open");
-    openSMO["isActive"] =true;
+    openSMO["isActive"] = true;
     items.push_back(openSMO);
 
     QMap<QString, QVariant> menu;
@@ -153,7 +153,7 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
 
         //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
         QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
-        QTimer::singleShot(200, this, [=] () { QProcess::startDetached(cmd); });
+        QTimer::singleShot(200, this, [ = ]() { QProcess::startDetached(cmd); });
     }
 }
 
@@ -184,7 +184,7 @@ void MonitorPlugin::udpateTipsInfo()
     downRate = autoRateUnits((netDownload - m_down) / (m_refershTimer->interval() / 1000), unit);
     QString downUnit = setRateUnitSensitive(unit);
     unit = RateByte;
-    upRate = autoRateUnits((netUpload - m_upload) / (m_refershTimer->interval() /1000), unit);
+    upRate = autoRateUnits((netUpload - m_upload) / (m_refershTimer->interval() / 1000), unit);
     QString uploadUnit = setRateUnitSensitive(unit);
     m_downloadStr = QString("%1").arg(downRate, 1, 'f', 1, QLatin1Char(' ')) + downUnit;
     m_uploadStr = QString("%1").arg(upRate, 1, 'f', 1, QLatin1Char(' ')) + uploadUnit;
@@ -265,7 +265,7 @@ void MonitorPlugin::calcCpuRate(qlonglong &totalCPU, qlonglong &availableCPU)
     QString line = stream.readLine();
     if (!line.isNull()) {
         QStringList list = line.split(QRegExp("\\s{1,}"));
-        for (auto v = list.begin()+1; v != list.end(); ++v)
+        for (auto v = list.begin() + 1; v != list.end(); ++v)
             totalCPU += (*v).toLongLong(&ok);
         if (list.size() > 4)
             availableCPU = list.at(4).toLongLong(&ok);
@@ -330,20 +330,20 @@ void MonitorPlugin::calcNetRate(qlonglong &netDown, qlonglong &netUpload)
 QString MonitorPlugin::setRateUnitSensitive(MonitorPlugin::RateUnit unit)
 {
     switch (unit) {
-        case RateUnit::RateBit:
-            return QString("BIT/s");
-        case RateUnit::RateByte:
-            return QString("B/s");
-        case RateUnit::RateKb:
-            return QString("KB/s");
-        case RateUnit::RateMb:
-            return QString("MB/s");
-        case RateUnit::RateGb:
-            return QString("GB/s");
-        case RateUnit::RateTb:
-            return QString("TB/s");
-        default:
-            return QString("");
+    case RateUnit::RateBit:
+        return QString("BIT/s");
+    case RateUnit::RateByte:
+        return QString("B/s");
+    case RateUnit::RateKb:
+        return QString("KB/s");
+    case RateUnit::RateMb:
+        return QString("MB/s");
+    case RateUnit::RateGb:
+        return QString("GB/s");
+    case RateUnit::RateTb:
+        return QString("TB/s");
+    default:
+        return QString("");
     }
 }
 
@@ -380,7 +380,7 @@ double MonitorPlugin::autoRateUnits(qlonglong speed, RateUnit &unit)
         sp = static_cast<double>(speed / qPow(2, 40) * 1.0);
     } else {
         unit = RateUnknow;
-        qDebug()<<"本设备网络速率单位传输超过 TB, 或者低于 0 Byte.";
+        qDebug() << "本设备网络速率单位传输超过 TB, 或者低于 0 Byte.";
         sp = -1;
     }
 
