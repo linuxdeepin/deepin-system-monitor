@@ -314,11 +314,21 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         return ec;
     }
 
+    QFile file("/var/lib/deepin/developer-mode/enabled");
+    bool developerMode = false;
+    if (file.open(QIODevice::ReadOnly)) {
+        QString lineStr = file.readLine();
+        developerMode = (!lineStr.isEmpty() && lineStr.trimmed() == "1");
+    }
     QProcess proc;
     proc.setProcessChannelMode(QProcess::MergedChannels);
     // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
     QString action = autoStart ? "enable" : "disable";
-    proc.start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, id});
+    if (developerMode) {
+        proc.start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, id});
+    } else {
+        proc.start(BIN_SYSTEMCTL_PATH, {action, id});
+    }
     proc.waitForFinished(-1);
     auto exitStatus = proc.exitStatus();
     ErrorContext le {};
