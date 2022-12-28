@@ -240,10 +240,10 @@ static void init_shell_list()
 static void init_script_list()
 {
     // fill scripting lang list (!!far from complete)
-    scriptList << "/usr/bin/python";
-    scriptList << "/usr/bin/perl";
-    scriptList << "/usr/bin/php";
-    scriptList << "/usr/bin/ruby";
+    scriptList << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "python");
+    scriptList << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "perl");
+    scriptList << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "php");
+    scriptList << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "ruby");
 }
 
 static void init_path_list()
