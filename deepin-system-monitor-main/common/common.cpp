@@ -207,6 +207,7 @@ void WaylandSearchCentered()
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
         WaylandCentered = true;
+        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     } else {
         WaylandCentered = false;
     }

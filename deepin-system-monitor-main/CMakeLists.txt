@@ -38,7 +38,7 @@ check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 include(FindPkgConfig)
 if (USE_DEEPIN_WAYLAND)
-    find_package(KF5Wayland)
+    find_package(DWayland)
 endif()
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
@@ -573,7 +573,7 @@ set(LIBS
     ${LIB_UDEV_LIBRARIES}
 )
 if (USE_DEEPIN_WAYLAND)
-    list(APPEND LIBS KF5::WaylandClient KF5::WaylandServer)
+    list(APPEND LIBS DWaylandClient DWaylandServer)
 endif()
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)

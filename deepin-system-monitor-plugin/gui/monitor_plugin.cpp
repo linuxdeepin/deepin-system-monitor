@@ -70,20 +70,6 @@ QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
     return nullptr;
 }
 
-void MonitorPlugin::pluginStateSwitched()
-{
-    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
-    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
-
-    refreshPluginItemsVisible();
-}
-
-
-bool MonitorPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
-}
-
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     m_dataTipsLabel->setObjectName(itemKey);
@@ -226,19 +212,6 @@ void MonitorPlugin::loadPlugin()
     }
 
     displayModeChanged(displayMode());
-}
-
-void MonitorPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        m_proxyInter->itemAdded(this, pluginName());
-    }
 }
 
 void MonitorPlugin::initPluginState()
