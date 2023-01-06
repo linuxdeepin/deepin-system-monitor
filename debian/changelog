@@ -1,3 +1,21 @@
+deepin-system-monitor (6.0.3) unstable; urgency=medium
+
+  * New version 6.0.3
+
+ -- wangyu <wangyu@uniontech.com>  Fri, 6 Jan 2023 10:52:18 +0800
+
+deepin-system-monitor (6.0.2) unstable; urgency=medium
+
+  * New version 6.0.2
+
+ -- wangyu <wangyu@uniontech.com>  Tue, 6 Dec 2022 11:22:18 +0800
+
+deepin-system-monitor (6.0.1) unstable; urgency=medium
+
+  * New version 6.0.1
+
+ -- wangyu <wangyu@uniontech.com>  Wed, 9 Nov 2022 10:03:18 +0800
+
 deepin-system-monitor (1.0.0) unstable; urgency=medium
 
   * Initial release 
