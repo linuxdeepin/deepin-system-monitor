@@ -267,9 +267,9 @@ QString WMWindowList::getWindowTitle(pid_t pid) const
 
 QList<WMWId> WMWindowList::getTrayWindows() const
 {
-    QDBusInterface busInterface("com.deepin.dde.TrayManager1", "/com/deepin/dde/TrayManager1",
+    QDBusInterface busInterface("org.deepin.dde.TrayManager1", "/org/deepin/dde/TrayManager1",
                                 "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-    QDBusMessage reply = busInterface.call("Get", "com.deepin.dde.TrayManager1", "TrayIcons");
+    QDBusMessage reply = busInterface.call("Get", "org.deepin.dde.TrayManager1", "TrayIcons");
     QVariant v = reply.arguments().first();
     const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 
