@@ -624,7 +624,8 @@ void CPUSet::read_dmi_cache_info()
     process.start("dmidecode", QStringList() << "-s" << "system-product-name");
     process.waitForFinished(-1);
     QString spnInfo = process.readAllStandardOutput();
-    if (!spnInfo.contains("KLVV") && !spnInfo.contains("KLVU") && !spnInfo.contains("PGUV") && !spnInfo.contains("PGUW")) {
+    if (!spnInfo.contains("KLVV", Qt::CaseInsensitive) && !spnInfo.contains("L540", Qt::CaseInsensitive) && !spnInfo.contains("KLVU", Qt::CaseInsensitive)
+            && !spnInfo.contains("PGUV", Qt::CaseInsensitive) && !spnInfo.contains("PGUW", Qt::CaseInsensitive)) {
         process.close();
         return;
     }
