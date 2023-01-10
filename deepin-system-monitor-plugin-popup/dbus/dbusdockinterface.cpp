@@ -10,7 +10,7 @@
  */
 
 DBusDockInterface::DBusDockInterface(QObject *parent)
-    : QDBusAbstractInterface("com.deepin.dde.Dock", "/com/deepin/dde/Dock", staticInterfaceName(), QDBusConnection::sessionBus(), parent)
+    : QDBusAbstractInterface("org.deepin.dde.Dock1", "/org/deepin/dde/Dock1", staticInterfaceName(), QDBusConnection::sessionBus(), parent)
 {
     QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(QDBusMessage)));
 }

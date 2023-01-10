@@ -303,9 +303,9 @@ bool SystemMonitorService::checkMemoryAlarm()
 
 bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeout)
 {
-    QDBusMessage ddeNotify = QDBusMessage::createMethodCall("com.deepin.dde.Notification",
-                                                            "/com/deepin/dde/Notification",
-                                                            "com.deepin.dde.Notification",
+    QDBusMessage ddeNotify = QDBusMessage::createMethodCall("org.deepin.dde.Notification1",
+                                                            "/org/deepin/dde/Notification1",
+                                                            "org.deepin.dde.Notification1",
                                                             "Notify");
     QStringList action;
     action << "_open1" << tr("View"); //添加按钮
