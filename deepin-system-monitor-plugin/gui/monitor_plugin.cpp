@@ -70,6 +70,11 @@ QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
     return nullptr;
 }
 
+void MonitorPlugin::pluginStateSwitched()
+{
+
+}
+
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     m_dataTipsLabel->setObjectName(itemKey);
