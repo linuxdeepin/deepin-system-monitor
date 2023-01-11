@@ -14,6 +14,8 @@
 #include <QIcon>
 #include <DApplication>
 #include <QGSettings>
+#include <QPainter>
+#include <QFile>
 
 namespace constantVal {
 const QString PLUGIN_STATE_KEY = "enable";
@@ -148,6 +150,37 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     }
 }
 
+QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
+{
+    QString iconName = "dsm_pluginicon_light";
+    if (themeType == DGuiApplicationHelper::LightType) {
+        // 最小尺寸时，不画背景，采用深色图标
+        iconName = "dsm_pluginicon_dark";
+    }
+    int pixmapSize = 16;
+    if (dockPart == DockPart::DCCSetting) {
+        pixmapSize = 20;
+    } else if (dockPart == DockPart::QuickPanel) {
+        pixmapSize = 24;
+    }
+    QIcon icon = QIcon::fromTheme(iconName);
+    if (!icon.isNull()) {
+        QPixmap pixmap = icon.pixmap(pixmapSize);
+        if (dockPart == DockPart::QuickShow) {
+            QPixmap curPixmap(18, 18);
+            curPixmap.fill(Qt::transparent);
+            QPainter painter;
+            painter.begin(&curPixmap);
+            painter.drawPixmap(QRect(1, 1, 16, 16), pixmap);
+            painter.end();
+            return QIcon(curPixmap);
+        } else {
+            return QIcon(pixmap);
+        }
+    }
+    return icon;
+}
+
 void MonitorPlugin::udpateTipsInfo()
 {
     // memory
@@ -204,13 +237,7 @@ void MonitorPlugin::loadPlugin()
     m_itemWidget = new MonitorPluginButtonWidget;
 
     if (!m_isFirstInstall) {
-        // 非初始状态
-        if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
-            m_proxyInter->itemAdded(this, pluginName());
-        } else {
-            m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
-            m_proxyInter->itemRemoved(this, pluginName());
-        }
+        m_proxyInter->itemAdded(this, pluginName());
     } else {
         m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
         m_proxyInter->itemRemoved(this, pluginName());
