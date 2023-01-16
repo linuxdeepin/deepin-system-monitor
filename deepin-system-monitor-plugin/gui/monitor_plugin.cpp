@@ -67,8 +67,8 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
-    if (itemKey == "system-monitor")
-        return m_itemWidget;
+//    if (itemKey == "system-monitor")
+//        return m_itemWidget;
     return nullptr;
 }
 
@@ -157,21 +157,27 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
         // 最小尺寸时，不画背景，采用深色图标
         iconName = "dsm_pluginicon_dark";
     }
-    int pixmapSize = 16;
+    QSize size = QSize(18,16);
     if (dockPart == DockPart::DCCSetting) {
-        pixmapSize = 20;
+        size = QSize(20,20);
     } else if (dockPart == DockPart::QuickPanel) {
-        pixmapSize = 24;
+        size = QSize(24,24);
     }
     QIcon icon = QIcon::fromTheme(iconName);
     if (!icon.isNull()) {
+        const qreal ratio = m_itemWidget->devicePixelRatioF();
+        QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : size * ratio;
         QPixmap pixmap = icon.pixmap(pixmapSize);
+        pixmap.setDevicePixelRatio(ratio);
         if (dockPart == DockPart::QuickShow) {
-            QPixmap curPixmap(18, 18);
+            QPixmap curPixmap(size*ratio);
+            pixmap.setDevicePixelRatio(ratio);
             curPixmap.fill(Qt::transparent);
             QPainter painter;
             painter.begin(&curPixmap);
-            painter.drawPixmap(QRect(1, 1, 16, 16), pixmap);
+            painter.setRenderHint(QPainter::SmoothPixmapTransform);
+            int pixmapMargin = ceil(1*ratio);
+            painter.drawPixmap(QRect(pixmapMargin, pixmapMargin, curPixmap.width()-pixmapMargin, curPixmap.height()-pixmapMargin), pixmap);
             painter.end();
             return QIcon(curPixmap);
         } else {

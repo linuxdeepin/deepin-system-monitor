@@ -33,6 +33,9 @@ pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${APP_RESOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+
+include_directories(${DtkCore_INCLUDE_DIRS})
+
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${DdeDockInterface_INCLUDE_DIRS}
   ${DtkWidget_INCLUDE_DIRS}

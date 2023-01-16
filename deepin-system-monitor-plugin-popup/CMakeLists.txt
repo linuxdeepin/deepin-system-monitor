@@ -72,6 +72,8 @@ include_directories(${LIB_UDEV_INCLUDE_DIRS})
 
 #include_directories(${QGSettings_INCLUDE_DIRS})
 
+include_directories(${DtkGui_INCLUDE_DIRS})
+include_directories(${DtkCore_INCLUDE_DIRS})
 include_directories(${MAIN_APP_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
