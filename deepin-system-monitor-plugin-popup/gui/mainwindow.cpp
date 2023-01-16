@@ -43,8 +43,8 @@ const QString KILL_DBUS_COMMAND = "killall deepin-system-monitor-plugin-popup";
 
 MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
-    , m_displayInter(new DBusDisplay("org.deepin.dde.Display1", "/org/deepin/dde/Display1", QDBusConnection::sessionBus(), this))
-    , m_daemonDockInter(new DBusDaemonDock("org.deepin.dde.Dock1", "/org/deepin/dde/Dock1", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new DBusDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
+    , m_daemonDockInter(new DBusDaemonDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusDockInterface)
     , m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor)
     , m_regionMonitor(nullptr)
@@ -451,7 +451,7 @@ QRect MainWindow::getDisplayScreen()
 {
     QRect dockRect = m_dockInter->geometry();
     for (const auto &monitorPath : m_dbusPathList) {
-        DisplayMonitor monitor("org.deepin.dde.Display1", monitorPath.path(), QDBusConnection::sessionBus());
+        DisplayMonitor monitor("com.deepin.daemon.Display", monitorPath.path(), QDBusConnection::sessionBus());
         QRect screenRect(monitor.x(), monitor.y(), monitor.width(), monitor.height());
         if (screenRect.contains(dockRect))
             return screenRect;
