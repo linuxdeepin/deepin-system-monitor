@@ -43,8 +43,8 @@ const QString KILL_DBUS_COMMAND = "killall deepin-system-monitor-plugin-popup";
 
 MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
-    , m_displayInter(new DBusDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
-    , m_daemonDockInter(new DBusDaemonDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new QDBusInterface("org.deepin.dde.Display1", "/org/deepin/dde/Display1","org.deepin.dde.Display1", QDBusConnection::sessionBus(), this))
+    , m_daemonDockInter(new QDBusInterface("org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", "org.deepin.dde.daemon.Dock1",QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusDockInterface)
     , m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor)
     , m_regionMonitor(nullptr)
@@ -61,7 +61,18 @@ MainWindow::MainWindow(QWidget *parent)
     m_processEndTimer->start();
 
     //在构造函数中存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
-    m_dbusPathList = m_displayInter->monitors();
+    if(m_displayInter->isValid()){
+        auto ss = m_displayInter->property("Monitors");
+
+        QDBusInterface busInterface("org.deepin.dde.Display1", "/org/deepin/dde/Display1",
+                                    "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
+        QDBusMessage reply = busInterface.call("Get", "org.deepin.dde.Display1", "Monitors");
+        QVariant v = reply.arguments().first();
+        const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+        while (!argument.atEnd()) {
+            argument >> m_dbusPathList;
+        }
+    }
     initDBus();
     initUI();
     initAni();
@@ -121,8 +132,14 @@ void MainWindow::showAni()
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     m_trickTimer->start();
     if (!m_hasComposite) {
-        if (m_daemonDockInter->position() == DOCK_RIGHT) {
-            if (m_daemonDockInter->displayMode() == 0) {
+        int dockPos = DOCK_TOP;
+        int displayMode = 0;
+        if(m_daemonDockInter->isValid()){
+            dockPos = m_daemonDockInter->property("Position").toInt();
+            displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        }
+        if (m_daemonDockInter->isValid() && dockPos == DOCK_RIGHT) {
+            if (displayMode == 0) {
                 setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2 * Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
             } else {
                 setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
@@ -301,7 +318,7 @@ void MainWindow::initAni()
 
 void MainWindow::initConnect()
 {
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainWindow::geometryChanged, Qt::QueuedConnection);
+    QDBusConnection::sessionBus().connect(m_displayInter->service(),m_displayInter->path(),"org.freedesktop.DBus.Properties","PropertiesChanged",this,SLOT(dbusPropertiesChanged(QString,QVariantMap,QStringList)));
     connect(m_dockInter, &DBusDockInterface::geometryChanged, this, &MainWindow::geometryChanged, Qt::UniqueConnection);
     connect(this, SIGNAL(signal_geometry(int)), m_processWidget, SLOT(autoHeight(int)));
 
@@ -331,9 +348,7 @@ void MainWindow::initConnect()
     });
 
     // 设置窗口透明度调节
-    connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [ = ]() {
-        this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
-    });
+    QDBusConnection::sessionBus().connect(m_daemonDockInter->service(),m_daemonDockInter->path(),"org.freedesktop.DBus.Properties","PropertiesChanged",this,SLOT(dbusPropertiesChanged(QString,QVariantMap,QStringList)));
 
     // 去除通过智能语音助手唤醒时关闭系统监视器窗口
 //    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
@@ -371,6 +386,15 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
     setBackgroundRole(DPalette::Window);
 }
 
+void MainWindow::dbusPropertiesChanged(QString interface, QVariantMap maps, QStringList strs)
+{
+    if((interface == "org.deepin.dde.Display1" && maps.contains("PrimaryRect")) || (interface == "org.deepin.dde.daemon.Dock1" && (maps.contains("Position") || maps.contains("DisplayMode")))){
+        geometryChanged();
+    } else if(m_daemonDockInter->isValid() && interface == "org.deepin.dde.daemon.Dock1" && maps.contains("Opacity")){
+        this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->property("Opacity").toDouble() * 255));
+    }
+}
+
 void MainWindow::adjustPosition()
 {
     // 屏幕尺寸
@@ -389,30 +413,34 @@ void MainWindow::adjustPosition()
     rect -= QMargins(0, Globals::WindowMargin, Globals::WindowMargin, Globals::WindowMargin);
 
     // 初始化弹出框位置
-    switch (m_daemonDockInter->position()) {
-    case DOCK_TOP:
-        rect.moveTop(dockRect.height() + Globals::WindowMargin);
-        rect.setHeight(rect.height() - dockHeight);
-        rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
-        break;
-    case DOCK_BOTTOM:
-        rect.setHeight(rect.height() - dockHeight);
-        rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
-        break;
-    case DOCK_LEFT:
-        rect.moveRight(int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
-        dockHeight = 0;
-        break;
-    case DOCK_RIGHT:
-        if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - 2 * Globals::WindowMargin);
-        } else {
-            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - Globals::WindowMargin);
+    if(m_daemonDockInter->isValid()){
+        int dockPos = m_daemonDockInter->property("Position").toInt();
+        int displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        switch (dockPos) {
+        case DOCK_TOP:
+            rect.moveTop(dockRect.height() + Globals::WindowMargin);
+            rect.setHeight(rect.height() - dockHeight);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
+            break;
+        case DOCK_BOTTOM:
+            rect.setHeight(rect.height() - dockHeight);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
+            break;
+        case DOCK_LEFT:
+            rect.moveRight(int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
+            dockHeight = 0;
+            break;
+        case DOCK_RIGHT:
+            if (displayMode == 0) {
+                rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - 2 * Globals::WindowMargin);
+            } else {
+                rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - Globals::WindowMargin);
+            }
+            dockHeight = 0;
+            break;
+        default:
+            break;
         }
-        dockHeight = 0;
-        break;
-    default:
-        break;
     }
 
     int scrollHeight = rect.height() - 20;
@@ -429,16 +457,20 @@ void MainWindow::adjustPosition()
 
     // 针对时尚模式的特殊处理
     // 只有任务栏显示的时候, 才额外偏移
-    if (m_daemonDockInter->displayMode() == 0 && dockRect.width() * dockRect.height() > 0) {
-        switch (m_daemonDockInter->position()) {
-        case DOCK_TOP:
-            rect -= QMargins(0, Globals::WindowMargin, 0, 0);
-            break;
-        case DOCK_BOTTOM:
-            rect -= QMargins(0, 0, 0, Globals::WindowMargin);
-            break;
-        default:
-            break;
+    if(m_daemonDockInter->isValid()){
+        int dockPos = m_daemonDockInter->property("Position").toInt();
+        int displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        if (displayMode == 0 && dockRect.width() * dockRect.height() > 0) {
+            switch (dockPos) {
+            case DOCK_TOP:
+                rect -= QMargins(0, Globals::WindowMargin, 0, 0);
+                break;
+            case DOCK_BOTTOM:
+                rect -= QMargins(0, 0, 0, Globals::WindowMargin);
+                break;
+            default:
+                break;
+            }
         }
     }
 
@@ -447,16 +479,54 @@ void MainWindow::adjustPosition()
     setFixedSize(rect.size());
 }
 
+struct PrimaryRect
+{
+    qint16 x;
+    qint16 y;
+    qint16 width;
+    qint16 height;
+};
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, PrimaryRect &rect)
+{
+    argument.beginStructure();
+    argument >> rect.x;
+    argument >> rect.y;
+    argument >> rect.width;
+    argument >> rect.height;
+    argument.endStructure();
+    return argument;
+}
+
 QRect MainWindow::getDisplayScreen()
 {
     QRect dockRect = m_dockInter->geometry();
     for (const auto &monitorPath : m_dbusPathList) {
-        DisplayMonitor monitor("com.deepin.daemon.Display", monitorPath.path(), QDBusConnection::sessionBus());
-        QRect screenRect(monitor.x(), monitor.y(), monitor.width(), monitor.height());
-        if (screenRect.contains(dockRect))
-            return screenRect;
+        QDBusInterface monitor("org.deepin.dde.Display1", monitorPath.path(), "org.deepin.dde.Display1.Monitor",QDBusConnection::sessionBus());
+        if(monitor.isValid()){
+            int curX = m_displayInter->property("X").toInt();
+            int curY = m_displayInter->property("X").toInt();
+            int curWidth = m_displayInter->property("X").toInt();
+            int curHeight = m_displayInter->property("X").toInt();
+            QRect screenRect(curX, curY, curWidth, curHeight);
+            if (screenRect.contains(dockRect))
+                return screenRect;
+        }
     }
-    return m_displayInter->primaryRect();
+    if(m_displayInter->isValid()){
+        QDBusInterface busInterface("org.deepin.dde.Display1", "/org/deepin/dde/Display1",
+                                    "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
+        QDBusMessage reply = busInterface.call("Get", "org.deepin.dde.Display1", "PrimaryRect");
+        QVariant v = reply.arguments().first();
+        const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+
+        PrimaryRect primaryRect;
+        while (!argument.atEnd()) {
+            argument >> primaryRect;
+        }
+        return QRect(primaryRect.x,primaryRect.y,primaryRect.width,primaryRect.height);
+    }
+    return dockRect;
 }
 
 bool MainWindow::initDBus()
