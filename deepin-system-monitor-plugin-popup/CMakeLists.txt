@@ -48,7 +48,6 @@ find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
-find_package(DFrameworkdbus REQUIRED)
 
 #安全测试加固编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
@@ -302,9 +301,7 @@ target_link_libraries(${PROJECT_NAME}
     ${LIB_NL3_ROUTE_LIBRAIES}
     ${LIB_UDEV_LIBRARIES}
     ${LIB_DDEDOCK}
-    ${LIB_DFRAMEWORKDBUS}
 #    gsettings-qt
-    dframeworkdbus
 )
 
 #生成qm

@@ -26,7 +26,6 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DdeDockInterface REQUIRED dde-dock) 
 
@@ -39,7 +38,6 @@ include_directories(${DtkCore_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${DdeDockInterface_INCLUDE_DIRS}
   ${DtkWidget_INCLUDE_DIRS}
-  ${DFrameworkDBus_INCLUDE_DIRS}
   ${QGSettings_INCLUDE_DIRS}
 )
 
@@ -48,7 +46,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${DtkWidget_LIBRARIES}
   ${Qt5Widgets_LIBRARIES}
   ${Qt5Svg_LIBRARIES}
-  ${DFrameworkDBus_LIBRARIES}
   ${QGSettings_LIBRARIES}
 )
 
