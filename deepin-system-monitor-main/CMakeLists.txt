@@ -63,6 +63,8 @@ pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
 include_directories(${DtkCore_INCLUDE_DIRS})
 include_directories(${DtkGui_INCLUDE_DIRS})
+include_directories(${DtkWidget_INCLUDE_DIRS})
+
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})

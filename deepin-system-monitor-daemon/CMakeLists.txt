@@ -15,8 +15,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${SYSTEMMONITORDATA}
+    ${DtkCore_INCLUDE_DIRS}
     )
-
 find_package(Qt5 COMPONENTS Core DBus REQUIRED)
 find_package(DtkCore CONFIG REQUIRED)
 set(HEADER
