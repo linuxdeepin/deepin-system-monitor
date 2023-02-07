@@ -201,7 +201,50 @@ void ProcessTableView::openExecDirWithFM()
                     whichProcess.waitForFinished();
                     QString output(whichProcess.readAllStandardOutput());
 
-                    const QString &path = QString(output.split("\n")[0]).trimmed();
+                    QString path = QString(output.split("\n")[0]).trimmed();
+                    // 读取persistent目录
+                    if (path.isEmpty()) {
+                        char nsPath[PATH_MAX] = {0}, nsSelfPath[PATH_MAX] = {0};
+                        auto nsSize = readlink(QString("/proc/%1/ns/pid").arg(pid).toStdString().c_str(), nsPath, PATH_MAX);
+                        auto nsSelfSize = readlink(QString("/proc/self/ns/pid").toStdString().c_str(), nsSelfPath, PATH_MAX);
+                        if (nsSize > 0 && nsSelfSize > 0) {
+                            QString nsPathStr(nsPath), nsSelfPathStr(nsSelfPath);
+                            if (nsPathStr != nsSelfPathStr) {
+                                Process preProc = proc, curProc = proc;
+                                int count = 0;
+                                // 100次循环
+                                while (curProc.name() != "ll-box" && curProc.pid() != 0 && count != 100) {
+                                    preProc = curProc;
+                                    curProc = ProcessDB::instance()->processSet()->getProcessById(preProc.ppid());
+                                    count++;
+                                }
+                                if (curProc.pid() != 0 || count != 100) {
+                                    pid = preProc.pid();
+                                }
+                                char exePath[PATH_MAX] = {0};
+                                auto exeSize = readlink(QString("/proc/%1/exe").arg(pid).toStdString().c_str(), exePath, PATH_MAX);
+                                if (exeSize > 0) {
+                                    QString exeStr(exePath);
+                                    QFile file(QString("/proc/%1/mountinfo").arg(pid));
+                                    if (file.open(QIODevice::ReadOnly)) {
+                                        QString devStr;
+                                        do {
+                                            QString line = file.readLine();
+                                            auto works = line.split(" ", QString::SkipEmptyParts);
+                                            if (works.size() > 9 && exeStr.startsWith(works[4]) && works[9].startsWith("/dev")) {
+                                                devStr = works[9];
+                                                if (!devStr.isEmpty()) {
+                                                    path = "/persistent" + works[3] + exeStr.right(exeStr.size() - works[4].size());
+                                                }
+                                                break;
+                                            }
+                                        } while (!file.atEnd());
+                                        file.close();
+                                    }
+                                }
+                            }
+                        }
+                    }
                     common::openFilePathItem(path);
                 }
                 // Find flatpak application location.
