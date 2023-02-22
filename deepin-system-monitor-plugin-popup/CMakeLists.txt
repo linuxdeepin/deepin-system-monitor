@@ -276,7 +276,9 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PUBLIC
 #    ${Qt5Widgets_INCLUDE_DIRS}
-#    ${DtkWidget_INCLUDE_DIRS}
+    ${DtkWidget_INCLUDE_DIRS}
+    ${DtkCore_INCLUDE_DIRS}
+    ${DtkGui_INCLUDE_DIRS}
     ${DdeDockInterface_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME}
