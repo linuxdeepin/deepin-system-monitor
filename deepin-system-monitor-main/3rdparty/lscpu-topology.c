@@ -546,7 +546,7 @@ static int read_mhz(struct lscpu_cxt *cxt, struct lscpu_cpu *cpu)
 
 	DBG(CPU, ul_debugobj(cpu, "#%d reading mhz", num));
 
-    if (strstr(cpu->type->modelname, "Kunpeng") != NULL)
+    if (cpu->type && cpu->type->modelname && strstr(cpu->type->modelname, "Kunpeng") != NULL)
     {
         if (ul_path_readf_s32(sys, &mhz, "cpu%d/acpi_cppc/highest_perf", num) == 0)
             cpu->mhz_max_freq = (float) mhz / 1000;
@@ -642,7 +642,7 @@ int lscpu_read_topology(struct lscpu_cxt *cxt)
 	for (i = 0; rc == 0 && i < cxt->npossibles; i++) {
 		struct lscpu_cpu *cpu = cxt->cpus[i];
 
-        if (!cpu || !cpu->type || !cpu->type->modelname)
+        if (!cpu || !cpu->type)
 			continue;
 
 		DBG(CPU, ul_debugobj(cpu, "#%d reading topology", cpu->logical_id));
