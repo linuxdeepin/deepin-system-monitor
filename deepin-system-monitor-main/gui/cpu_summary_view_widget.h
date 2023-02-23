@@ -156,7 +156,7 @@ protected:
                 break;
             case 2:
                 if (column == 0)
-                    return QString::number(m_model->cpuSet()->socketCount());
+                    return m_model->cpuSet()->socketCount() == 0 ? "-" : QString::number(m_model->cpuSet()->socketCount());
                 else if (column == 1)
                     return QString::number(m_model->cpuSet()->cpuCount());
                 break;
