@@ -157,7 +157,7 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
         // 最小尺寸时，不画背景，采用深色图标
         iconName = "dsm_pluginicon_dark";
     }
-    QSize size = QSize(18,16);
+    QSize size = QSize(16,16);
     if (dockPart == DockPart::DCCSetting) {
         size = QSize(20,20);
     } else if (dockPart == DockPart::QuickPanel) {
