@@ -21,6 +21,8 @@
 #include "wm/wm_window_list.h"
 #include "detail_view_stacked_widget.h"
 #include "system/cpu_set.h"
+#include "common/eventlogutils.h"
+
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
@@ -486,6 +488,14 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
+        QString name = m_procTable->getProcessName(pid);
+        QJsonObject obj{
+            {"tid", EventLogUtils::ProcessKilled},
+            {"version", QCoreApplication::applicationVersion()},
+            {"process_name", name}
+        };
+        EventLogUtils::get().writeLogs(obj);
+
         ProcessDB::instance()->killProcess(pid);
     }
 }

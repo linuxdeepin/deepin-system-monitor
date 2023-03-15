@@ -20,6 +20,7 @@
 #include "model/process_sort_filter_proxy_model.h"
 #include "model/process_table_model.h"
 #include "process/process_db.h"
+#include "common/eventlogutils.h"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -93,6 +94,11 @@ void ProcessTableView::onThemeTypeChanged()
     header()->setPalette(palette);
 }
 
+QString ProcessTableView::getProcessName(int pid)
+{
+    return m_model->getProcess(qvariant_cast<pid_t>(pid)).name();
+}
+
 // event filter
 bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 {
@@ -143,6 +149,14 @@ void ProcessTableView::endProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
+        Process proc = m_model->getProcess(qvariant_cast<pid_t>(m_selectedPID));
+        QJsonObject obj{
+            {"tid", EventLogUtils::ProcessKilled},
+            {"version", QCoreApplication::applicationVersion()},
+            {"process_name", proc.name()}
+        };
+        EventLogUtils::get().writeLogs(obj);
+
         ProcessDB::instance()->endProcess(qvariant_cast<pid_t>(m_selectedPID));
     } else {
         return;
@@ -268,6 +282,13 @@ void ProcessTableView::killProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
+        Process proc = m_model->getProcess(qvariant_cast<pid_t>(m_selectedPID));
+        QJsonObject obj{
+            {"tid", EventLogUtils::ProcessKilled},
+            {"version", QCoreApplication::applicationVersion()},
+            {"process_name", proc.name()}
+        };
+        EventLogUtils::get().writeLogs(obj);
         ProcessDB::instance()->killProcess(qvariant_cast<pid_t>(m_selectedPID));
     } else {
         return;
