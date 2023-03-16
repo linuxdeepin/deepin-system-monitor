@@ -1,5 +1,4 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -31,10 +30,10 @@ public:
     /*!
      * 获取当前CPU状态
      */
-    QMap<QString,int> cpuStat();
+    QMap<QString, int> cpuStat();
 
 private:
-    QMap<QString,int> mLastCpuStat;
+    QMap<QString, int> mLastCpuStat;
     double mCpuUsage;
 };
 

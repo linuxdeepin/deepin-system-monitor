@@ -1,5 +1,4 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -52,13 +51,13 @@ public:
     /*!
      * 获取有效值范围
      */
-    QPair<double,double> getValueRange(const QString key);
+    QPair<double, double> getValueRange(const QString key);
     QList<QString> itemKeys();
 
 private:
     DSettings *mSettings;
     Dtk::Core::QSettingBackend *mBackend;
-    QMap<QString, QPair<double,double>> mValueRange;
+    QMap<QString, QPair<double, double>> mValueRange;
 };
 
 #endif // SETTINGHANDLER_H

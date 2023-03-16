@@ -1,5 +1,4 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -34,12 +33,13 @@ CpuProfile::CpuProfile(QObject *parent)
     updateSystemCpuUsage();
 }
 
-double CpuProfile::updateSystemCpuUsage() {
+double CpuProfile::updateSystemCpuUsage()
+{
     // 返回值，Cpu占用率
     double cpuUsage = 0.0;
 
     QFile file(PROC_CPU_STAT_PATH);
-    if(file.exists() && file.open(QFile::ReadOnly)) {
+    if (file.exists() && file.open(QFile::ReadOnly)) {
         // 计算总的Cpu占用率，只需要读取第一行数据
         QByteArray lineData = file.readLine();
         file.close();
@@ -50,12 +50,12 @@ double CpuProfile::updateSystemCpuUsage() {
         QStringList cpuStatus =  QString(lineData).split(" ", QString::SkipEmptyParts);
 
         // CPU状态应包含10个数据片段，有效数据 1-10，位置0不使用
-        if(cpuStatus.size() < 11) {
+        if (cpuStatus.size() < 11) {
             return cpuUsage;
         }
 
         // 构建数据map，便于后期数据计算方式需求变更
-        QMap<QString,int> curCpuStat;
+        QMap<QString, int> curCpuStat;
         {
             curCpuStat["user"] = cpuStatus.at(1).toInt();
             curCpuStat["nice"] = cpuStatus.at(2).toInt();
@@ -71,7 +71,7 @@ double CpuProfile::updateSystemCpuUsage() {
 
         // 计算当前总的Cpu时间片
         int curTotalCpu = 0;
-        for(int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             curTotalCpu = curTotalCpu + cpuStatus.at(i).toInt();
         }
         curCpuStat["total"] = curTotalCpu;
@@ -80,9 +80,9 @@ double CpuProfile::updateSystemCpuUsage() {
         // 通过对当前系统Cpu时间片使用情况和上一次获取的系统Cpu时间片使用情况，来计算上一个时间段内的Cpu使用情况
         double calcCpuTotal = curCpuStat["total"] - mLastCpuStat["total"];
         double calcCpuIdle =
-                (curCpuStat["idle"] + curCpuStat["iowait"]) - (mLastCpuStat["idle"] + mLastCpuStat["iowait"]);
+            (curCpuStat["idle"] + curCpuStat["iowait"]) - (mLastCpuStat["idle"] + mLastCpuStat["iowait"]);
 
-        if(calcCpuTotal == 0.0) {
+        if (calcCpuTotal == 0.0) {
             qWarning() << " cpu total usage calc result equal 0 ! cpu stat [" << curCpuStat << "]";
             return cpuUsage;
         }
@@ -101,10 +101,12 @@ double CpuProfile::updateSystemCpuUsage() {
     return cpuUsage;
 }
 
-QMap<QString,int> CpuProfile::cpuStat(){
+QMap<QString, int> CpuProfile::cpuStat()
+{
     return mLastCpuStat;
 }
 
-double CpuProfile::getCpuUsage(){
+double CpuProfile::getCpuUsage()
+{
     return mCpuUsage;
 }
