@@ -1,5 +1,4 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,81 +18,73 @@
 #include <QDBusAbstractAdaptor>
 #include <QTimer>
 
-#define DAEMON_DBUS_NAME "com.deepin.SystemMonitor.Daemon"
-#define DAEMON_DBUS_PATH "/com/deepin/SystemMonitor"
-
 DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
 
 class SystemMonitorService : public QObject, protected QDBusContext
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", DAEMON_DBUS_NAME)
+    Q_CLASSINFO("D-Bus Interface", "org.deepin.SystemMonitorDaemon")
 public:
-    explicit SystemMonitorService(QObject *parent = nullptr);
+    explicit SystemMonitorService(const char *name, QObject *parent = nullptr);
     ~SystemMonitorService();
+
+public slots:
     /*!
      * DBus Adaptor接口: 获取检测开关状态
      */
-    bool getSystemProtectionStatus();
+    Q_SCRIPTABLE bool getSystemProtectionStatus();
     /*!
      * DBus Adaptor接口: 设置检测开关状态
      */
-    void setSystemProtectionStatus(bool status);
+    Q_SCRIPTABLE void setSystemProtectionStatus(bool status);
     /*!
      * DBus Adaptor接口: 获取当前Cpu占用率
      */
-    int getCpuUsage();
+    Q_SCRIPTABLE int getCpuUsage();
     /*!
      * DBus Adaptor接口: 获取当前Memory占用率
      */
-    int getMemoryUsage();
+    Q_SCRIPTABLE int getMemoryUsage();
     /*!
      * DBus Adaptor接口: 获取当前报警信息间隔时间(minute)
      */
-    int getAlarmMsgInterval();
+    Q_SCRIPTABLE int getAlarmMsgInterval();
     /*!
      * DBus Adaptor接口: 设置当前报警信息间隔时间(minute)
      */
-    void setAlarmMsgInterval(int interval);
-
-
+    Q_SCRIPTABLE void setAlarmMsgInterval(int interval);
     /*!
-     * \brief getAlaramLastTimeInterval 获取上次告警时间
-     * \return 上次告警时间
+     * DBus Adaptor接口: 获取当前监测报警Cpu占用率(%)
      */
-    qint64 getAlaramLastTimeInterval();
+    Q_SCRIPTABLE int getAlarmUsageOfCpu();
+    /*!
+     * DBus Adaptor接口: 设置当前监测报警Cpu占用率(%)
+     */
+    Q_SCRIPTABLE void setAlarmUsageOfCpu(int usage);
+    /*!
+     * DBus Adaptor接口: 获取当前监测报警Memory占用率(%)
+     */
+    Q_SCRIPTABLE int getAlarmUsageOfMemory();
+    /*!
+     * DBus Adaptor接口: 设置当前监测报警Memory占用率(%)
+     */
+    Q_SCRIPTABLE void setAlarmUsageOfMemory(int usage);
+    /*!
+     * DBus Adaptor接口: 显示系统监视器主页面
+     */
+    Q_SCRIPTABLE void showDeepinSystemMoniter();
+    /*!
+     * DBus Adaptor接口: 修改监控设置
+     */
+    Q_SCRIPTABLE void changeAlarmItem(const QString &item, const QDBusVariant &value);
     /*!
      * \brief setAlaramLastTimeInterval 设置上次告警时间
      * \param lastTime 设置的参数值
      */
-    void setAlaramLastTimeInterval(qint64 lastTime);
+    Q_SCRIPTABLE void setAlaramLastTimeInterval(qint64 lastTime);
 
-
-    /*!
-     * DBus Adaptor接口: 获取当前监测报警Cpu占用率(%)
-     */
-    int getAlarmUsageOfCpu();
-    /*!
-     * DBus Adaptor接口: 设置当前监测报警Cpu占用率(%)
-     */
-    void setAlarmUsageOfCpu(int usage);
-    /*!
-     * DBus Adaptor接口: 获取当前监测报警Memory占用率(%)
-     */
-    int getAlarmUsageOfMemory();
-    /*!
-     * DBus Adaptor接口: 设置当前监测报警Memory占用率(%)
-     */
-    void setAlarmUsageOfMemory(int usage);
-    /*!
-     * DBus Adaptor接口: 显示系统监视器主页面
-     */
-    void showDeepinSystemMoniter();
-    /*!
-     * DBus Adaptor接口: 修改监控设置
-     */
-    void changeAlarmItem(const QString &item, const QDBusVariant &value);
+private:
     /*!
      * 检查是否触发Cpu报警
      */
@@ -102,10 +93,12 @@ public:
      * 检查是否触发Memory报警
      */
     bool checkMemoryAlarm();
+
     /*!
-     * 显示系统通知
+     * \brief getAlaramLastTimeInterval 获取上次告警时间
+     * \return 上次告警时间
      */
-    bool showAlarmNotify(QString topic, QString msg, int timeout = 0);
+    qint64 getAlaramLastTimeInterval();
 
 signals:
     /*!
@@ -120,10 +113,6 @@ public slots:
     void onMonitorTimeout();
 
 private:
-    /*!
-     * DBbus Adaptor
-     */
-    QDBusAbstractAdaptor *mAdaptor;
     /*!
      * setting值的副本
      */

@@ -54,6 +54,7 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
     }
 
     // 获取系统字体大小设置
+
     QDBusInterface interface("org.deepin.dde.Appearance1",
                                  "/org/deepin/dde/Appearance1",
                                  "org.deepin.dde.Appearance1");
@@ -84,9 +85,9 @@ SystemProtectionSetting::SystemProtectionSetting(QObject *parent)
     : QObject(parent)
     , mBackend(nullptr)
     , mDsettings(nullptr)
-    , mDaemonInterface("com.deepin.SystemMonitor.Daemon",
-                       "/com/deepin/SystemMonitor",
-                       "com.deepin.SystemMonitor.Daemon")
+    , mDaemonInterface("org.deepin.SystemMonitorDaemon",
+                       "/org/deepin/SystemMonitorDaemon",
+                       "org.deepin.SystemMonitorDaemon")
 {
     mDaemonInterface.setParent(this);
     // json文件加载setting基本结构
@@ -473,7 +474,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         desktopFile.close();
     }
 
-    if (!genericName.isEmpty()) {
+    if (genericName.isEmpty() == false) {
         // 跳转到设置页并指定Item
         QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall("org.deepin.dde.ControlCenter1",
                                                                                "/org/deepin/dde/ControlCenter1",
@@ -520,9 +521,9 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
     // 错误提示 org.freedesktop.DBus.Error.UnknownMethod
     // 采用QProcess执行dbus操作，不会发生此项报错，dbus调用正常
 
-    //QString cmd("qdbus com.deepin.SystemMonitor.Daemon /com/deepin/SystemMonitor com.deepin.SystemMonitor.Daemon.");
+    //QString cmd("qdbus org.deepin.SystemMonitorDaemon /org/deepin/SystemMonitorDaemon org.deepin.SystemMonitorDaemon.");
     //qdbus 改为gdbus
-    QString cmd("gdbus call -e -d  com.deepin.SystemMonitor.Daemon -o /com/deepin/SystemMonitor -m com.deepin.SystemMonitor.Daemon.");
+    QString cmd("gdbus call -e -d  org.deepin.SystemMonitorDaemon -o /org/deepin/SystemMonitorDaemon -m org.deepin.SystemMonitorDaemon.");
     bool needCall = false;
 
     // 拼接dbus调用命令字串

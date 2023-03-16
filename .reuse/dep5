@@ -44,12 +44,12 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
 # translations
-Files: deepin-system-monitor-daemon/translations/* deepin-system-monitor-main/translations/* deepin-system-monitor-plugin/translations/* deepin-system-monitor-plugin-popup/translations/*
+Files: deepin-system-monitor-main/translations/* deepin-system-monitor-plugin/translations/* deepin-system-monitor-plugin-popup/translations/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
 # deepin-system-monitor-daemon
-Files: deepin-system-monitor-daemon/*.h deepin-system-monitor-daemon/*.cpp
+Files: deepin-system-monitor-daemon/src/*.h deepin-system-monitor-daemon/src/*.cpp
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 

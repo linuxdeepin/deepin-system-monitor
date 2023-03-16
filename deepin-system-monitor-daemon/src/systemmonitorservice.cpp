@@ -1,10 +1,8 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "systemmonitorservice.h"
-#include "daemonadaptor.h"
 
 #include <DSettingsOption>
 #include <QDBusInterface>
@@ -12,6 +10,9 @@
 #include <QDebug>
 #include <QProcess>
 #include <QDBusVariant>
+#include <QFile>
+#include <QDBusConnectionInterface>
+#include <QDateTime>
 
 // 打印DBus调用者信息
 #define PrintDBusCaller() { \
@@ -19,10 +20,10 @@
             QDBusConnection conn = connection(); \
             QDBusMessage msg = message(); \
             pid_t callerPid = static_cast<pid_t>(conn.interface()->servicePid(msg.service()).value()); \
-            qDebug() << "调用者DBus服务:" << conn.interface()->serviceOwner(msg.service()).value() \
+            qDebug() << "DBus service caller:" << conn.interface()->serviceOwner(msg.service()).value() \
                      << ",Uid:" << conn.interface()->serviceUid(msg.service()).value() \
                      << ",Pid:" << callerPid \
-                     << ",进程名:" << getNameByPid(callerPid); } }
+                     << ",Process name:" << getNameByPid(callerPid); } }
 
 // 通过PID获取进程名称
 QString getNameByPid(pid_t pid)
@@ -43,9 +44,8 @@ QString getNameByPid(pid_t pid)
 #define MonitorTimeOut 1000
 #define AlarmMessageTimeOut 10000
 
-SystemMonitorService::SystemMonitorService(QObject *parent)
+SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
     : QObject(parent)
-    , mAdaptor(new DaemonAdaptor(this))
     , mProtectionStatus(InitAlarmOn)
     , mAlarmInterval(InitAlarmInterval)
     , mAlarmCpuUsage(InitAlarmCpuUsage)
@@ -58,11 +58,6 @@ SystemMonitorService::SystemMonitorService(QObject *parent)
     , mCpu(this)
     , mMem(this)
 {
-    if (mAdaptor == nullptr) {
-        qWarning() << __FUNCTION__ << __LINE__ << " DaemonAdaptor create fail!";
-        exit(1);
-    }
-
     if (mSettings.isCompelted()) {
         mProtectionStatus = mSettings.getOptionValue(AlarmStatusOptionName).toBool();
         mAlarmCpuUsage = mSettings.getOptionValue(AlarmCpuUsageOptionName).toInt();
@@ -71,13 +66,6 @@ SystemMonitorService::SystemMonitorService(QObject *parent)
         mLastAlarmTimeStamp = mSettings.getOptionValue(AlarmLastTimeOptionName).toLongLong();
 
     }
-
-    qDebug() << ",初始化的数据："  << endl
-             << AlarmStatusOptionName << "=" << mProtectionStatus << endl
-             << AlarmCpuUsageOptionName << "=" << mAlarmCpuUsage << endl
-             << AlarmMemUsageOptionName << "=" << mAlarmMemoryUsage << endl
-             << AlarmIntervalOptionName << "=" << mAlarmInterval << endl
-             << AlarmLastTimeOptionName << "=" << mLastAlarmTimeStamp << endl;
 
     // 初始化Cpu占用率
     mCpuUsage = static_cast<int>(mCpu.updateSystemCpuUsage());
@@ -90,6 +78,13 @@ SystemMonitorService::SystemMonitorService(QObject *parent)
 
     // 启动监测定时器
     mMoniterTimer.start();
+
+    QDBusConnection::RegisterOptions opts =
+        QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals |
+        QDBusConnection::ExportAllProperties;
+
+    QDBusConnection::connectToBus(QDBusConnection::SystemBus, QString(name))
+    .registerObject("/org/deepin/SystemMonitorDaemon", this, opts);
 }
 
 SystemMonitorService::~SystemMonitorService()
@@ -237,7 +232,7 @@ void SystemMonitorService::showDeepinSystemMoniter()
     // 显示系统监视器
     QProcess::startDetached("/usr/bin/deepin-system-monitor");
 
-   // QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
+    // QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
     QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
     QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
 }
@@ -274,11 +269,8 @@ bool SystemMonitorService::checkCpuAlarm()
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
 
     if (mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
-        // 构造消息内容
-        QString topic(tr("Warning"));
-        QString msg = QString(tr("Your CPU usage is higher than %1%!")).arg(mCpuUsage);
-        int timeout = AlarmMessageTimeOut;
-        return showAlarmNotify(topic, msg, timeout);
+        mLastAlarmTimeStamp = curTimeStamp;
+        QProcess::startDetached("/usr/bin/deepin-system-monitor", QStringList() << "alarm" << "cpu" << QString::number(mCpuUsage));
     }
 
     return false;
@@ -291,56 +283,11 @@ bool SystemMonitorService::checkMemoryAlarm()
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
 
     if (mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
-        // 构造消息内容
-        QString topic(tr("Warning"));
-        QString msg = QString(tr("Your memory usage is higher than %1%!")).arg(mMemoryUsage);
-        int timeout = AlarmMessageTimeOut;
-        return showAlarmNotify(topic, msg, timeout);
+        mLastAlarmTimeStamp = curTimeStamp;
+        QProcess::startDetached("/usr/bin/deepin-system-monitor", QStringList() << "alarm" << "memory" << QString::number(mMemoryUsage));
     }
 
     return false;
-}
-
-bool SystemMonitorService::showAlarmNotify(QString topic, QString msg, int timeout)
-{
-    QDBusMessage ddeNotify = QDBusMessage::createMethodCall("org.deepin.dde.Notification1",
-                                                            "/org/deepin/dde/Notification1",
-                                                            "org.deepin.dde.Notification1",
-                                                            "Notify");
-    QStringList action;
-    action << "_open1" << tr("View"); //添加按钮
-    QVariantMap inform; //按钮的点击操作
-    // 操作打开系统监视器
-    QString openSystemMonitor = QString("qdbus,com.deepin.SystemMonitor.Daemon,"
-                                        "/com/deepin/SystemMonitor,"
-                                        "com.deepin.SystemMonitor.Daemon.showDeepinSystemMoniter");
-
-    inform.insert(QString("x-deepin-action-_open1"), openSystemMonitor);
-
-    QList<QVariant> ddeArgs;
-    ddeArgs << QString("deepin-system-monitor"); // app name
-    ddeArgs << uint(0);                          // id = 0 不指定窗口 id
-    ddeArgs << QString("deepin-system-monitor"); // icon
-    ddeArgs << topic;                            // notify topic
-    ddeArgs << msg;                              // notify msg body
-    ddeArgs << action;                           // button
-    ddeArgs << inform;                           // button operation
-    ddeArgs << timeout;                          // notify timeout
-
-    ddeNotify.setArguments(ddeArgs);
-
-    QDBusMessage replyMsg = QDBusConnection::sessionBus().call(ddeNotify);
-
-    if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-        qWarning() << __FUNCTION__ << __LINE__ << ", dde notify dbus method call fail , error name :"
-                   << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
-        return false;
-    } else {
-        mLastAlarmTimeStamp =  QDateTime::currentDateTime().toMSecsSinceEpoch();
-        setAlaramLastTimeInterval(mLastAlarmTimeStamp);
-    }
-
-    return true;
 }
 
 void SystemMonitorService::onMonitorTimeout()
