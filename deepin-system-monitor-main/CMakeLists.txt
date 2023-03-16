@@ -146,6 +146,7 @@ set(HPP_DBUS
     dbus/unit_info.h
     dbus/dbusforsystemomonitorpluginservce.h
     dbus/dbus_object.h
+    dbus/dbusalarmnotify.h
 )
 set(CPP_DBUS
     dbus/environment_file.cpp
@@ -157,6 +158,7 @@ set(CPP_DBUS
     dbus/dbus_properties_interface.cpp
     dbus/dbusforsystemomonitorpluginservce.cpp
     dbus/dbus_object.cpp
+    dbus/dbusalarmnotify.cpp
 )
 
 set(HPP_MODEL

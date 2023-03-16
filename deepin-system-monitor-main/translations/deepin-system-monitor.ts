@@ -18,6 +18,14 @@
         <source>Hide details</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -56,10 +64,6 @@
     </message>
     <message>
         <source>Frequency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Vendor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -327,6 +331,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">View</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -497,6 +520,13 @@ Are you sure you want to continue?</translation>
         <source>End</source>
         <comment>button</comment>
         <translation type="unfinished">End</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -705,6 +735,13 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Loading</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -756,13 +793,6 @@ Are you sure you want to continue?</translation>
     <message>
         <source>All processes</source>
         <translation>All processes</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Loading</translation>
     </message>
 </context>
 <context>
@@ -923,6 +953,34 @@ Are you sure you want to continue?</translation>
         <source>Not support</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -944,11 +1002,19 @@ Are you sure you want to continue?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="obsolete">Cancel</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>
 </context>
@@ -995,7 +1061,7 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Active</translation>
+        <translation type="vanished">Active</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1003,7 +1069,7 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>State</translation>
+        <translation type="vanished">State</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1016,6 +1082,29 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Startup Type</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

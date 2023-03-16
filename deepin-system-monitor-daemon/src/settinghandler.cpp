@@ -1,5 +1,4 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -28,7 +27,7 @@ SettingHandler::SettingHandler(QObject *parent)
     , mBackend(nullptr)
 {
     QString orgName = qApp->organizationName();
-    if(orgName.isEmpty()) {
+    if (orgName.isEmpty()) {
         orgName = "deepin";
     }
 
@@ -43,37 +42,40 @@ SettingHandler::SettingHandler(QObject *parent)
 
     auto opt = mSettings->option(AlarmCpuUsageOptionName);
     // 初始化有效值范围
-    mValueRange[AlarmCpuUsageOptionName] = QPair<double,double>(MinAlarmCpuUsage, MaxAlarmCpuUsage);
-    mValueRange[AlarmMemUsageOptionName] = QPair<double,double>(MinAlarmMemUsage, MaxAlarmMemUsage);
-    mValueRange[AlarmIntervalOptionName] = QPair<double,double>(MinAlarmInterval, MaxAlarmInterval);
+    mValueRange[AlarmCpuUsageOptionName] = QPair<double, double>(MinAlarmCpuUsage, MaxAlarmCpuUsage);
+    mValueRange[AlarmMemUsageOptionName] = QPair<double, double>(MinAlarmMemUsage, MaxAlarmMemUsage);
+    mValueRange[AlarmIntervalOptionName] = QPair<double, double>(MinAlarmInterval, MaxAlarmInterval);
 
     auto keys = mValueRange.keys();
 
-    foreach(auto it, keys) {
+    foreach (auto it, keys) {
         qDebug() << __FUNCTION__ << __LINE__ << "，key: " << it << ", range: " << mValueRange[it];
     }
 
-    if(mSettings != nullptr) {
+    if (mSettings != nullptr) {
         mSettings->setBackend(mBackend);
     }
 }
 
-SettingHandler::~SettingHandler() {
-    if(mSettings != nullptr) {
+SettingHandler::~SettingHandler()
+{
+    if (mSettings != nullptr) {
         mSettings->deleteLater();
     }
 
-    if(mBackend != nullptr) {
+    if (mBackend != nullptr) {
         mBackend->deleteLater();
     }
 }
 
-bool SettingHandler::isCompelted() {
+bool SettingHandler::isCompelted()
+{
     return (mBackend != nullptr && mSettings != nullptr);
 }
 
-QVariant SettingHandler::getOptionValue(const QString key) {
-    if(isCompelted() && mSettings->keys().contains(key)) {
+QVariant SettingHandler::getOptionValue(const QString key)
+{
+    if (isCompelted() && mSettings->keys().contains(key)) {
         return mSettings->getOption(key);
     } else {
         qWarning() << __FUNCTION__ << __LINE__ << QString("can not find conf[%1]!").arg(key)
@@ -84,10 +86,12 @@ QVariant SettingHandler::getOptionValue(const QString key) {
     return QVariant();
 }
 
-bool SettingHandler::changedOptionValue(const QString key, const QVariant value) {
-    if(isCompelted() && mSettings->keys().contains(key)) {
+bool SettingHandler::changedOptionValue(const QString key, const QVariant value)
+{
+    if (isCompelted() && mSettings->keys().contains(key)) {
         auto opt = mSettings->option(key);
         opt->setValue(value);
+        mSettings->sync();
         return true;
     } else {
         qWarning() << __FUNCTION__ << __LINE__ << QString("change conf[%1,%2] fail !").arg(key).arg(value.toString())
@@ -98,11 +102,12 @@ bool SettingHandler::changedOptionValue(const QString key, const QVariant value)
     return false;
 }
 
-bool SettingHandler::isVaildValue(const QString key, const QVariant value) {
-    if(mValueRange.contains(key) && value.type() >= QVariant::Bool && value.type() <= QVariant::Double) {
-        QPair<double,double> range = mValueRange[key];
+bool SettingHandler::isVaildValue(const QString key, const QVariant value)
+{
+    if (mValueRange.contains(key) && value.type() >= QVariant::Bool && value.type() <= QVariant::Double) {
+        QPair<double, double> range = mValueRange[key];
         double valueD = value.toDouble();
-        if(valueD < range.first || valueD > range.second) {
+        if (valueD < range.first || valueD > range.second) {
             return false;
         } else {
             return true;
@@ -111,14 +116,16 @@ bool SettingHandler::isVaildValue(const QString key, const QVariant value) {
     return true;
 }
 
-QPair<double,double> SettingHandler::getValueRange(const QString key){
-    QPair<double,double> range(0,0);
-    if(mValueRange.contains(key)){
+QPair<double, double> SettingHandler::getValueRange(const QString key)
+{
+    QPair<double, double> range(0, 0);
+    if (mValueRange.contains(key)) {
         range = mValueRange[key];
     }
     return  range;
 }
 
-QList<QString> SettingHandler::itemKeys(){
+QList<QString> SettingHandler::itemKeys()
+{
     return mSettings->keys();
 }

@@ -1,5 +1,4 @@
-// Copyright (C) 2011 ~ 2021 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,12 +15,13 @@ MemoryProfile::MemoryProfile(QObject *parent)
 {
 }
 
-double MemoryProfile::updateSystemMemoryUsage() {
+double MemoryProfile::updateSystemMemoryUsage()
+{
     // 返回值，内存占用率
     double memUsage = 0;
 
     QFile file(PROC_MEM_INFOI_PATH);
-    if(file.exists() && file.open(QFile::ReadOnly)) {
+    if (file.exists() && file.open(QFile::ReadOnly)) {
         // 计算总的内存占用率，只需要读取前3行数据
         QByteArray lineData1 = file.readLine();
         QByteArray lineData2 = file.readLine();
@@ -31,7 +31,7 @@ double MemoryProfile::updateSystemMemoryUsage() {
         // MemTotal:       16346064 kB
         // MemFree:         1455488 kB
         // MemAvailable:    5931304 kB
-        if(lineData1.size() == 0 || lineData2.size() == 0 || lineData3.size() == 0) {
+        if (lineData1.size() == 0 || lineData2.size() == 0 || lineData3.size() == 0) {
             qWarning() << QString(" read %1 file fail !").arg(PROC_MEM_INFOI_PATH) << lineData1 << lineData2 << lineData3;
             return memUsage;
         }
@@ -41,7 +41,7 @@ double MemoryProfile::updateSystemMemoryUsage() {
         QStringList list2 = QString(lineData2).split(" ", QString::SkipEmptyParts);
         QStringList list3 = QString(lineData3).split(" ", QString::SkipEmptyParts);
 
-        if(list1.size() < 3 || list2.size() < 3 || list3.size() < 3) {
+        if (list1.size() < 3 || list2.size() < 3 || list3.size() < 3) {
             qWarning() << QString(" parse %1 file fail !").arg(PROC_MEM_INFOI_PATH) << list1 << list2 << list3;
             return memUsage;
         }
@@ -52,7 +52,7 @@ double MemoryProfile::updateSystemMemoryUsage() {
         memDataMap[list3.at(0)] = list3.at(1).toInt();
 
         // 为返回值赋值，计算内存占用率
-        if(memDataMap.contains("MemTotal:") && memDataMap.contains("MemAvailable:") && memDataMap["MemTotal:"] != 0)  {
+        if (memDataMap.contains("MemTotal:") && memDataMap.contains("MemAvailable:") && memDataMap["MemTotal:"] != 0)  {
             memUsage = (memDataMap["MemTotal:"] - memDataMap["MemAvailable:"]) * 100.0 / memDataMap["MemTotal:"];
             mMemUsage = memUsage;
         } else {
@@ -65,7 +65,8 @@ double MemoryProfile::updateSystemMemoryUsage() {
     return memUsage;
 }
 
-double MemoryProfile::getMemUsage() {
+double MemoryProfile::getMemUsage()
+{
     return mMemUsage;
 }
 
