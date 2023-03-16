@@ -11,6 +11,7 @@
 #include "gui/main_window.h"
 #include "common/perf.h"
 #include "dbus/dbus_object.h"
+#include "dbus/dbusalarmnotify.h"
 #include "3rdparty/dmidecode/dmidecode.h"
 
 #include <DApplication>
@@ -31,25 +32,32 @@ using namespace common::init;
 
 int main(int argc, char *argv[])
 {
+    //Judge if Wayland
+    WaylandSearchCentered();
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
+    }
 
+    Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    Application app(argc, argv);
+    QCommandLineParser parser;
+    parser.process(app);
+    QStringList allArguments = parser.positionalArguments();
+    if (allArguments.size() == 3 && allArguments.first().compare("alarm", Qt::CaseInsensitive) == 0) {
+        app.loadTranslator();
+        DBusAlarmNotify::getInstance().showAlarmNotify(allArguments);
+        return 0;
+    }
 
     //=======通知已经打开的进程
     if (!DBusObject::getInstance().registerOrNotify())
         return 0;
+
     //获取dmidecode中CPU频率信息
     char *const cmd[] = {"dmidecode", "-t", "4"};
     get_cpuinfo_from_dmi(3, cmd);
-
-    //Judge if Wayland
-    WaylandSearchCentered();
-    //
-    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
-        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
-    }
     PERF_PRINT_BEGIN("POINT-01", "");
 
-    Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-    Application app(argc, argv);
     app.setAutoActivateWindows(true);
     //设置单例
     DGuiApplicationHelper::setSingleInstanceInterval(-1);

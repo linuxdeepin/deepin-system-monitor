@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +65,6 @@
     <message>
         <source>Frequency</source>
         <translation>频率</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>制造商</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -330,6 +328,25 @@
     <message>
         <source>auto-restart</source>
         <translation>自动重启</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>请注意！您的设备CPU占用已达%1%！</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>请注意！您的设备内存占用已达%1%！</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>查看</translation>
     </message>
 </context>
 <context>
@@ -718,6 +735,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>正在加载</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +793,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>所有进程</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>正在加载</translation>
     </message>
 </context>
 <context>
@@ -984,12 +1001,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>确 定</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>取 消</translation>
     </message>
 </context>
