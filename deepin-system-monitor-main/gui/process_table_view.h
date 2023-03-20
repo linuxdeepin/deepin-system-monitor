@@ -43,6 +43,13 @@ public:
     ~ProcessTableView() override;
 
     /**
+     * @brief get the process name through the process ID
+     * @param pid process ID
+     * @return process name of pid
+     */
+    QString getProcessName(int pid);
+
+    /**
      * @brief eventFilter Filters events if this object has been installed as an event filter for the watched object
      * @param obj Object being watched
      * @param event Event to be filterted

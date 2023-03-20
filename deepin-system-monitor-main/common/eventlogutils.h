@@ -16,7 +16,8 @@ public:
         OpeningTime     = 1000000000,
         ClosingTime     = 1000000001,
         Start           = 1000000003,
-        Quit            = 1000000004
+        Quit            = 1000000004,
+        ProcessKilled   = 1000200061
     };
 
     static EventLogUtils &get();
