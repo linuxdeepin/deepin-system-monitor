@@ -53,6 +53,11 @@ Files: deepin-system-monitor-daemon/src/*.h deepin-system-monitor-daemon/src/*.c
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
+# deepin-system-monitor-server
+Files: deepin-system-monitor-server/src/*.h deepin-system-monitor-server/src/*.cpp
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # deepin-system-monitor-main
 Files: deepin-system-monitor-main/*.h deepin-system-monitor-main/*.cpp
 Copyright: UnionTech Software Technology Co., Ltd.
