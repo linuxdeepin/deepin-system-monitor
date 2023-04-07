@@ -83,7 +83,7 @@ SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
         QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals |
         QDBusConnection::ExportAllProperties;
 
-    QDBusConnection::connectToBus(QDBusConnection::SystemBus, QString(name))
+    QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString(name))
     .registerObject("/org/deepin/SystemMonitorDaemon", this, opts);
 }
 
@@ -229,11 +229,8 @@ void SystemMonitorService::setAlarmUsageOfMemory(int usage)
 void SystemMonitorService::showDeepinSystemMoniter()
 {
     PrintDBusCaller()
-    // 显示系统监视器
-    QProcess::startDetached("/usr/bin/deepin-system-monitor");
 
-    // QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
-    QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
+    QString cmd("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showDeepinSystemMoniter");
     QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
 }
 
@@ -270,7 +267,8 @@ bool SystemMonitorService::checkCpuAlarm()
 
     if (mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
         mLastAlarmTimeStamp = curTimeStamp;
-        QProcess::startDetached("/usr/bin/deepin-system-monitor", QStringList() << "alarm" << "cpu" << QString::number(mCpuUsage));
+        QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showCpuAlarmNotify \"%1\" ").arg(QString::number(mCpuUsage));
+        QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
     }
 
     return false;
@@ -284,7 +282,8 @@ bool SystemMonitorService::checkMemoryAlarm()
 
     if (mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
         mLastAlarmTimeStamp = curTimeStamp;
-        QProcess::startDetached("/usr/bin/deepin-system-monitor", QStringList() << "alarm" << "memory" << QString::number(mMemoryUsage));
+        QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showMemoryAlarmNotify \"%1\" ").arg(QString::number(mMemoryUsage));
+        QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
     }
 
     return false;

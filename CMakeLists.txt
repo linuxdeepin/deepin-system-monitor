@@ -48,6 +48,8 @@ ADD_SUBDIRECTORY(deepin-system-monitor-plugin)
 ADD_SUBDIRECTORY(deepin-system-monitor-plugin-popup)
 #系统监视器安全等级保护守护应用
 ADD_SUBDIRECTORY(deepin-system-monitor-daemon)
+#系统监视器提示
+ADD_SUBDIRECTORY(deepin-system-monitor-server)
 #单元测试
 if(DOTEST)
     ADD_SUBDIRECTORY(tests)
