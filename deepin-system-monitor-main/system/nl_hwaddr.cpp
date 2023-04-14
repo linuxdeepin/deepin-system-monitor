@@ -122,7 +122,7 @@ void NLHWAddr::initData()
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(ifr));
     //设备名称长度检查
-    if (m_devName.size() < IFNAMSIZ)
+    if (m_ifname.size() < IFNAMSIZ)
         strcpy(ifr.ifr_name, m_ifname);
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
     if (ioctl(fd, SIOCGIFHWADDR, &ifr) == 0) {
