@@ -121,6 +121,10 @@ void NLHWAddr::initData()
 {
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(ifr));
+    if (m_ifname.size() >= IFNAMSIZ) {
+        qDebug()<<"Device name too long! Invalid device Name!";
+        return false;
+    }
     strcpy(ifr.ifr_name, m_ifname);
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
     if (ioctl(fd, SIOCGIFHWADDR, &ifr) == 0) {
