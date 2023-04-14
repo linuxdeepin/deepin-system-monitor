@@ -121,7 +121,9 @@ void NLHWAddr::initData()
 {
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(ifr));
-    strcpy(ifr.ifr_name, m_ifname);
+    // 根据 /usr/include/net/if.h 得知 ifr.ifr_name 长度为 16
+    // 此处使用 strcpy 未检查 m_ifname 的长度，存在溢出风险，建议使用更安全的 strcpy_s 函数
+    strcpy_s(ifr.ifr_name, m_ifname);
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
     if (ioctl(fd, SIOCGIFHWADDR, &ifr) == 0) {
         string hwaddr = getmac(reinterpret_cast<unsigned char *>(ifr.ifr_hwaddr.sa_data), ifr.ifr_hwaddr.sa_family);
