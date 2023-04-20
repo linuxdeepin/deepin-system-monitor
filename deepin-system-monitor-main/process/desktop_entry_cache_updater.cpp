@@ -49,7 +49,7 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
         entry->exec = exec.split(' ');
         entry->name = QFileInfo(entry->exec[0]).baseName();
     } else {
-        entry->name = dde.name();
+        entry->name = dde.name().toLower();
     }
     // dde-file-manager plugins
     if (execStr.contains("dde-file-manager") && execStr.contains("plugin")) {
@@ -65,7 +65,7 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     }
 
     // startup wm class & name
-    auto wmclass = dde.stringValue("StartupWMClass");
+    auto wmclass = dde.stringValue("StartupWMClass").toLower();;
     if (!wmclass.isEmpty()) {
         entry->startup_wm_class = wmclass;
         entry->name = wmclass;
