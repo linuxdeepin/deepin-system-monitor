@@ -11,6 +11,14 @@
 #include <QDebug>
 #include <QDateTime>
 
+const QString NotificationService = "org.deepin.dde.Notification1";
+const QString NotificationPath = "/org/deepin/dde/Notification1";
+const QString NotificationInterface = "org.deepin.dde.Notification1";
+
+//const QString NotificationService = "com.deepin.dde.Notification";
+//const QString NotificationPath = "/com/deepin/dde/Notification";
+//const QString NotificationInterface = "com.deepin.dde.Notification";
+
 #define AlarmMessageTimeOut 10000
 QMutex DBusAlarmNotify::mutex;
 QAtomicPointer<DBusAlarmNotify> DBusAlarmNotify::instance = nullptr;
@@ -51,9 +59,9 @@ void DBusAlarmNotify::showAlarmNotify(const QStringList &allArguments)
 
 void DBusAlarmNotify::showAlarmNotify(QString topic, QString msg, int timeout)
 {
-    QDBusMessage ddeNotify = QDBusMessage::createMethodCall("com.deepin.dde.Notification",
-                                                            "/com/deepin/dde/Notification",
-                                                            "com.deepin.dde.Notification",
+    QDBusMessage ddeNotify = QDBusMessage::createMethodCall(NotificationService,
+                                                            NotificationPath,
+                                                            NotificationInterface,
                                                             "Notify");
     QStringList action;
     action << "_open1" << tr("View"); //添加按钮
