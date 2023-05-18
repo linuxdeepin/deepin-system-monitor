@@ -129,13 +129,13 @@ void BlockDeviceInfoDB::readDiskInfo()
             } else {
                 m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit()); // 更新disk数据
             }
-
         }
     }
 
     //获取虚拟磁盘
     for (int i = 0; i < list.size(); ++i) {
-        if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("ram") && !list[i].fileName().contains("loop")) {
+        QString t_link = list.at(i).readLink();
+        if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("ram") && !list[i].fileName().contains("loop") && t_link.contains("virtual")) {
             int index = -1;
             //  查找当前的device是否存在
             for (int si = 0; si < m_deviceList.size(); ++si) {
@@ -169,7 +169,6 @@ void BlockDeviceInfoDB::readDiskInfo()
             m_deviceList.removeAt(i);
         }
     }
-
 }
 
 
