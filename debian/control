@@ -10,11 +10,13 @@ Package: deepin-system-monitor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin, libkf5waylandclient5, libkf5waylandserver5, deepin-system-monitor-plugin
 Recommends: uos-reporter, deepin-event-log
+Conflicts: deepin-system-monitor (< 5.9.37)
 Description: A system monitor tool.
  System Monitor is a system tool monitoring and managing hardware load, program running and system services. It's capable to real-time monitor CPU status, memory footprint, and upload/download speed, manage system and application processes, search and force end processes as well.
 
 Package: deepin-system-monitor-plugin
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Replaces: deepin-system-monitor (< 5.9.37)
 Description: A dde dock tool.
  System Monitor Plugin is a dde dock tool.
