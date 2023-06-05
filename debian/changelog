@@ -1,3 +1,9 @@
+deepin-system-monitor (5.10.1) unstable; urgency=medium
+
+  * New version 5.10.1
+
+ -- shuaijie <shuaijie@uniontech.com>  Mon, 5 Jun 2023 16:35:01 +0800
+
 deepin-system-monitor (5.9.37) unstable; urgency=medium
 
   * Graded control 5.9.37.
