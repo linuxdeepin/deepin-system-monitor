@@ -8,7 +8,7 @@ Homepage: https://github.com/linuxdeepin/deepin-system-monitor
 
 Package: deepin-system-monitor
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin, libkf5waylandclient5, libkf5waylandserver5, deepin-system-monitor-plugin
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin, libkf5waylandclient5, libkf5waylandserver5, deepin-system-monitor-plugin,deepin-service-manager
 Recommends: uos-reporter, deepin-event-log
 Conflicts: deepin-system-monitor (< 5.9.37)
 Description: A system monitor tool.
