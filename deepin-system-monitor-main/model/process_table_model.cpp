@@ -15,6 +15,7 @@
 #include <QPointer>
 using namespace common;
 using namespace common::format;
+DGUI_USE_NAMESPACE // using namespace Dtk::Gui;
 
 // model constructor
 ProcessTableModel::ProcessTableModel(QObject *parent)
