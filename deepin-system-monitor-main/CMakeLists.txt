@@ -52,7 +52,6 @@ find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
-find_library(LIB_PROCPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
@@ -568,7 +567,6 @@ set(LIBS
     dtkwidget
     dtkgui
     ${LIB_PCAP}
-    ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
     ${LIB_XCB}
