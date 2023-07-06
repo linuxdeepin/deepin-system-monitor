@@ -196,6 +196,7 @@ QList<QString> pathList;
 //默认为低性能，防止在获取CPU性能之前就卡死
 CPUMaxFreq CPUPerformance = CPUMaxFreq::High;
 bool WaylandCentered;
+int specialComType = -1;
 
 void WaylandSearchCentered()
 {
