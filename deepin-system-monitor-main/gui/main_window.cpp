@@ -19,6 +19,9 @@
 #include <DSettingsWidgetFactory>
 #include <DApplicationHelper>
 #include <DTitlebar>
+#ifdef DTKCORE_CLASS_DConfigFile
+#include <DConfig>
+#endif
 #include <QKeyEvent>
 #include <QTimer>
 #include <QDesktopWidget>
@@ -41,6 +44,14 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
     setMaximumSize(QApplication::desktop()->size());
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
+#ifdef DTKCORE_CLASS_DConfigFile
+    //需要查询是否支持特殊机型静音恢复，例如hw机型
+    DConfig *dconfig = DConfig::create("org.deepin.monitor-main","org.deepin.monitor-main");
+    //需要判断Dconfig文件是否合法
+    if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialComType")){
+        specialComType = dconfig->value("specialComType").toInt();
+    }
+#endif
 }
 
 MainWindow::~MainWindow()
