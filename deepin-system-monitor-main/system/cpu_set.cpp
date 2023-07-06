@@ -621,21 +621,31 @@ void CPUSet::read_dmi_cache_info()
 
     read_dmi_cache = true;
     QProcess process;
-    process.start("dmidecode", QStringList() << "-s" << "system-product-name");
-    process.waitForFinished(-1);
-    QString spnInfo = process.readAllStandardOutput();
-    if (!spnInfo.contains("KLVV", Qt::CaseInsensitive) && !spnInfo.contains("L540", Qt::CaseInsensitive) && !spnInfo.contains("KLVU", Qt::CaseInsensitive)
-            && !spnInfo.contains("PGUV", Qt::CaseInsensitive) && !spnInfo.contains("PGUW", Qt::CaseInsensitive) && !spnInfo.contains("W585", Qt::CaseInsensitive)) {
+    //(specialComType=0)如果不是特殊机型直接返回;
+    //(specialComType<=-1)如果是未知类型，则使用之前的判断;
+    //(specialComType>=1)如果是hw机型,略过之前的判断
+    qInfo() << "common::specialComType value is:" << specialComType;
+    if(specialComType == 0){
+        return;
+    }else if(specialComType <= -1){
+        qInfo() << "use dmidecode check board type!";
+        process.start("dmidecode", QStringList() << "-s" << "system-product-name");
+        process.waitForFinished(-1);
+        QString spnInfo = process.readAllStandardOutput();
+        if (!spnInfo.contains("KLVV", Qt::CaseInsensitive) && !spnInfo.contains("L540", Qt::CaseInsensitive) && !spnInfo.contains("KLVU", Qt::CaseInsensitive)
+                && !spnInfo.contains("PGUV", Qt::CaseInsensitive) && !spnInfo.contains("PGUW", Qt::CaseInsensitive) && !spnInfo.contains("W585", Qt::CaseInsensitive)) {
 
-        process.start("bash", QStringList() << "-c" << "dmidecode | grep -i \"String 4\"");
-        process.waitForStarted();
-        process.waitForFinished();
-        QString result = process.readAll();
-        if(!result.contains("PWC30", Qt::CaseInsensitive)){  //w525
-            process.close();
-            return;
+            process.start("bash", QStringList() << "-c" << "dmidecode | grep -i \"String 4\"");
+            process.waitForStarted();
+            process.waitForFinished();
+            QString result = process.readAll();
+            if(!result.contains("PWC30", Qt::CaseInsensitive)){  //w525
+                process.close();
+                return;
+            }
         }
     }
+    qInfo() << "Current is special computer type!";
 
     process.start("dmidecode", QStringList() << "-t" << "cache");
     process.waitForFinished(-1);
