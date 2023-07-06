@@ -5,3 +5,4 @@ usr/share/dbus-1/services/*.service
 usr/share/polkit-1/actions/com.deepin.pkexec.deepin-system-monitor.policy
 usr/share/deepin-system-monitor-plugin-popup/translations/*.qm
 usr/share/deepin-system-monitor/translations/*.qm
+usr/share/dsg/configs/org.deepin.system-monitor/*

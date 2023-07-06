@@ -77,6 +77,8 @@ extern QList<QString> shellList;
 extern QList<QString> scriptList;
 extern QList<QString> pathList;
 extern bool WaylandCentered;
+//specialComType 的取值有3种（-1(默认值，未知类型）,0（不是hw相关机型）,1（hw相关机型））
+extern int specialComType;
 
 // disk sector size shift
 #define SECTOR_SHIFT 9
