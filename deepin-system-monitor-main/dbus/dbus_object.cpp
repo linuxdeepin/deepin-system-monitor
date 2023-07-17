@@ -56,7 +56,9 @@ void DBusObject::handleWindow()
 {
     internalMutex.lockForRead();
     MainWindow *mw = gApp->mainWindow();
-    mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    mw->setWindowState(mw->windowState() & ~Qt::WindowMinimized);
+    mw->raise();
+    mw->activateWindow();
     internalMutex.unlock();
 }
 
