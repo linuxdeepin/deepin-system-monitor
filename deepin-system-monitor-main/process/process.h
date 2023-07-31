@@ -115,6 +115,8 @@ public:
     qulonglong sentBytes() const;
 
     void readProcessInfo();
+    void readProcessSimpleInfo();
+    void readProcessVariableInfo();
 
 private:
     /**

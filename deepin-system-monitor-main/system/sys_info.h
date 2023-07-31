@@ -76,6 +76,7 @@ public:
     static QByteArray groupName(gid_t gid);
 
     void readSysInfo();
+    void readSysInfoStatic();
     static bool readSockStat(SockStatMap &statMap);
 
 private:
