@@ -24,6 +24,7 @@ SystemMonitor::SystemMonitor(QObject *parent)
     , m_deviceDB(new DeviceDB())
     , m_processDB(new ProcessDB(this))
 {
+    m_sysInfo->readSysInfoStatic();
 
 }
 
@@ -69,15 +70,24 @@ void SystemMonitor::startMonitorJob()
     common::init::global_init();
 
     m_basictimer.stop();
-    m_basictimer.start(2000, Qt::VeryCoarseTimer, this);
+    m_basictimer.start(1000, Qt::VeryCoarseTimer, this);
     updateSystemMonitorInfo();
 }
-
+static uint cnt = 0 ;
 void SystemMonitor::timerEvent(QTimerEvent *event)
 {
+
     QObject::timerEvent(event);
     if (event->timerId() == m_basictimer.timerId()) {
-        updateSystemMonitorInfo();
+        if(cnt & 0x0001){
+            m_sysInfo->readSysInfo();
+            m_deviceDB->update();
+            m_processDB->update();
+        } else {
+            emit statInfoUpdated();
+        }
+        if(cnt++ >250)
+            cnt = 0;
     }
 }
 

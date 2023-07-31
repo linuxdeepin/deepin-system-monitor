@@ -45,7 +45,7 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     changeTheme(dAppHelper->themeType());
 
     m_animation = new QPropertyAnimation(this, "progress", this);
-    m_animation->setDuration(250);
+    m_animation->setDuration(10);
     m_animation->setEasingCurve(QEasingCurve::OutQuad);
     m_animation->setStartValue(0);
     m_animation->setEndValue(1.0);
