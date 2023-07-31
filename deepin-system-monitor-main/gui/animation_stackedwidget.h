@@ -23,7 +23,7 @@ public:
      * @brief setDuration   设置动画持续时间
      * @param duration  动画时间
      */
-    void setDuration(int duration = 500);
+    void setDuration(int duration = 10);
     /**
      * @brief IsRunning 动画是否正在运行
      * @return  动画师傅正在运行

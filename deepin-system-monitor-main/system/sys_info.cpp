@@ -209,6 +209,17 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
 
 void SysInfo::readSysInfo()
 {
+    d->nfds = read_file_nr();
+    d->nprocs = read_processes();
+    d->nthrs = read_threads();
+    
+    read_uptime(d->uptime);
+    read_btime(d->btime);
+    read_loadavg(d->loadAvg);
+}
+
+void SysInfo::readSysInfoStatic()
+{
     d->uid = getuid();
     d->euid = geteuid();
     d->gid = getgid();
@@ -223,16 +234,9 @@ void SysInfo::readSysInfo()
     d->effective_group_name = groupName(d->egid);
     if (d->effective_group_name.isEmpty())
         d->effective_group_name = QByteArray(getenv("GROUP"));
-
-    d->nfds = read_file_nr();
-    d->nprocs = read_processes();
-    d->nthrs = read_threads();
     d->hostname = read_hostname();
     d->arch = read_arch();
     d->version = read_version();
-    read_uptime(d->uptime);
-    read_btime(d->btime);
-    read_loadavg(d->loadAvg);
 }
 
 quint32 SysInfo::read_file_nr()
