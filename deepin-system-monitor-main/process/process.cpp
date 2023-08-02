@@ -119,6 +119,92 @@ timeval Process::procuptime() const
     return d->uptime;
 }
 
+void Process::readProcessVariableInfo()
+{
+    d->valid = true;
+
+    bool ok = true;
+    ok = ok && readStat();
+//    readEnviron();
+    readSchedStat();
+    ok = ok && readStatm();
+
+    readIO();
+    readSockInodes();
+
+    d->proc_name.refreashProcessName(this);
+    d->uptime = SysInfo::instance()->uptime();
+
+    CPUSet *cpuset = DeviceDB::instance()->cpuSet();
+    ProcessSet *procset =  ProcessDB::instance()->processSet();
+
+    auto recentProcptr = procset->getRecentProcStage(d->pid);
+    auto validrecentPtr = recentProcptr.lock();
+    qreal timedelta = d->stime + d->utime;
+    if (validrecentPtr) {
+        timedelta = timedelta - validrecentPtr->ptime;
+        struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
+        d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
+
+        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {0, 0}));
+    }
+    d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
+
+    struct DiskIO io = {d->read_bytes, d->write_bytes, d->cancelled_write_bytes};
+    d->diskIOSample->addSample(new DISKIOSampleFrame(d->uptime, io));
+
+    auto pair = d->diskIOSample->recentSamplePair();
+    struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
+    d->diskIOSpeedSample->addSample(new IOPSSampleFrame(iops));
+
+    qulonglong sum_recv = 0;
+    qulonglong sum_send = 0;
+
+    for (int i = 0; i < d->sockInodes.size(); ++i) {
+        SockIOStat sockIOStat;
+        bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
+        if (result) {
+            sum_recv += sockIOStat->rx_bytes;
+            sum_send += sockIOStat->tx_bytes;
+        }
+    }
+    d->networkIOSample->addSample(new IOSampleFrame(d->uptime, {sum_recv, sum_send}));
+
+    auto netpair = d->networkIOSample->recentSamplePair();
+    struct IOPS netiops = IOSampleFrame::iops(netpair.first, netpair.second);
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
+
+    d->valid = d->valid && ok;
+}
+
+void Process::readProcessSimpleInfo()
+{
+    d->valid = true;
+    bool ok = true;
+    readEnviron();
+    ok = ok && readStat();
+    ok = ok && readStatus();
+    ok = ok && readCmdline();
+
+    d->usrerName = SysInfo::userName(d->uid);
+    d->proc_name.refreashProcessName(this);
+    d->proc_icon.refreashProcessIcon(this);
+
+    d->apptype = kNoFilter;
+    const QVariant &euid = ProcessDB::instance()->processEuid();
+    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
+
+    if (euid == d->uid && (wmwindowList->isGuiApp(d->pid)
+                           || wmwindowList->isTrayApp(d->pid)
+                           || wmwindowList->isDesktopEntryApp(d->pid))) {
+        d->apptype = kFilterApps;
+    } else if (euid == d->uid) {
+        d->apptype = kFilterCurrentUser;
+    }
+
+    d->valid = d->valid && ok;
+}
+
 void Process::readProcessInfo()
 {
     d->valid = true;
@@ -207,6 +293,8 @@ bool Process::readStat()
 
     errno = 0;
     sprintf(path, PROC_STAT_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
+        
     // open /proc/[pid]/stat
     if ((fd = open(path, O_RDONLY)) < 0) {
         print_errno(errno, QString("open %1 failed").arg(path));
@@ -281,6 +369,7 @@ bool Process::readCmdline()
     char *begin, *cur, *end;
 
     sprintf(path, PROC_CMDLINE_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
 
     errno = 0;
     // open /proc/[pid]/cmdline
@@ -328,6 +417,7 @@ void Process::readEnviron()
     int fd;
 
     sprintf(path, PROC_ENVIRON_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
 
     errno = 0;
     // open /proc/[pid]/environ
@@ -372,6 +462,7 @@ void Process::readSchedStat()
 
     buf.reserve(bsiz);
     sprintf(path, PROC_SCHEDSTAT_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
 
     errno = 0;
     // open /proc/[pid]/schedstat
@@ -405,6 +496,7 @@ bool Process::readStatus()
 
     buf.reserve(bsiz);
     sprintf(path, PROC_STATUS_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
 
     errno = 0;
     uFile fp(fopen(path, "r"));
@@ -453,6 +545,7 @@ bool Process::readStatm()
     ssize_t nr;
 
     sprintf(path, PROC_STATM_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
 
     errno = 0;
     // open /proc/[pid]/statm
@@ -492,6 +585,7 @@ void Process::readIO()
     char path[128], buf[bsiz];
 
     sprintf(path, PROC_IO_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
 
     errno = 0;
     // open /proc/[pid]/io
@@ -524,6 +618,7 @@ void Process::readSockInodes()
     struct stat sbuf;
 
     sprintf(path, PROC_FD_PATH, d->pid);
+    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
 
     errno = 0;
     // open /proc/[pid]/fd dir
@@ -548,9 +643,9 @@ void Process::readSockInodes()
             } // ::if(stat)
         } // ::if(isdigit)
     } // ::while(readdir)
-    if (errno) {
-        print_errno(errno, QString("read %1 failed").arg(path));
-    }
+    // if (errno) {
+    //     print_errno(errno, QString("read %1 failed").arg(path));
+    // }
 }
 
 bool Process::isValid() const

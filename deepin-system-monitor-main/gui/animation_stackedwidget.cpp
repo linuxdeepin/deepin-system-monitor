@@ -11,7 +11,7 @@ AnimationStackedWidget::AnimationStackedWidget(const AnimationOri ori, QWidget *
     , m_animationOri(ori)
     , m_Animation(new QPropertyAnimation(this, "offset"))
 {
-    setDuration(250);
+    setDuration(20);
     connect(m_Animation
             , &QPropertyAnimation::finished
             , this
