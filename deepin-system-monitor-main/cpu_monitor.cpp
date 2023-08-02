@@ -50,7 +50,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CpuMonitor::updateStatus);
 
     m_animation = new QPropertyAnimation(this, "progress", this);
-    m_animation->setDuration(250);
+    m_animation->setDuration(20);
     m_animation->setStartValue(0.0);
     m_animation->setEndValue(1.0);
     m_animation->setEasingCurve(QEasingCurve::OutQuad);
