@@ -10,5 +10,6 @@ Package: deepin-system-monitor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcap2-bin, libdwaylandclient5, libdwaylandserver5,deepin-service-manager
 Recommends: uos-reporter, deepin-event-log
+Replaces: deepin-system-monitor-plugin
 Description: A system monitor tool.
  System Monitor is a system tool monitoring and managing hardware load, program running and system services. It's capable to real-time monitor CPU status, memory footprint, and upload/download speed, manage system and application processes, search and force end processes as well.
