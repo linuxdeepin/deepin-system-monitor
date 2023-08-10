@@ -72,7 +72,7 @@ public:
      * @brief Model constructor
      * @param parent Parent object
      */
-    explicit ProcessTableModel(QObject *parent = nullptr);
+    explicit ProcessTableModel(QObject *parent = nullptr, const QString &username = nullptr);
 
     /**
      * @brief Update process model with the data provided by list
@@ -141,6 +141,15 @@ public:
      * @return Process entry item
      */
     Process getProcess(pid_t pid) const;
+   void setUserModeName(const QString &userName);
+    qreal getTotalCPUUsage();
+    qreal getTotalMemoryUsage();
+    qreal getTotalDownload();
+    qreal getTotalUpload();
+    qreal getTotalVirtualMemoryUsage();
+    qreal getTotalSharedMemoryUsage();
+    qreal getTotalDiskRead();
+    qreal getTotalDiskWrite();
 
 Q_SIGNALS:
     /**
@@ -169,9 +178,12 @@ private Q_SLOTS:
 
     void updateProcessListDelay();
 
+    void updateProcessListWithUserSpecified();
 private:
     QList<pid_t> m_procIdList; // pid list
     QList<Process> m_processList; // pid list
+
+    QString m_userModeName {};
 };
 
 #endif  // PROCESS_TABLE_MODEL_H

@@ -5,7 +5,7 @@
 
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
-
+#include "user_page_widget.h"
 #include <DMainWindow>
 #include <DShadowLine>
 #include <DStackedWidget>
@@ -17,7 +17,7 @@ class Toolbar;
 class SystemServicePageWidget;
 class ProcessPageWidget;
 class Settings;
-
+class UserPageWidget;
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
@@ -126,7 +126,7 @@ private:
     DStackedWidget *m_pages = nullptr;
     ProcessPageWidget *m_procPage = nullptr;
     SystemServicePageWidget *m_svcPage = nullptr;
-
+    UserPageWidget *m_accountProcPage = nullptr;
     bool m_initLoad = false;
     DShadowLine *m_tbShadow  = nullptr;
     QWidget *m_focusedWidget = nullptr;

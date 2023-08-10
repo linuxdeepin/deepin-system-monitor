@@ -1110,5 +1110,27 @@ Haluatko varmasti jatkaa?</translation>
         <source>Services</source>
         <translation>Palvelut</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>Käyttäjät</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Järjestelmänvalvoja</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Tavallinen käyttäjä</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Muokkaa tilitietoja</translation>
+    </message>
 </context>
 </TS>

@@ -57,6 +57,7 @@ find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
+pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)  # chinalife
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
@@ -71,6 +72,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libsmartcols/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+include_directories(${DFrameworkDBus_INCLUDE_DIRS})  # chinalife
 
 #安全测试加固编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
@@ -178,6 +180,9 @@ set(HPP_MODEL
     model/block_dev_info_model.h
     model/block_dev_info_sort_filter_proxy_model.h
     model/model_manager.h
+    model/accounts_info_model.h
+    model/user.h
+
 )
 set(CPP_MODEL
     model/system_service_table_model.cpp
@@ -196,6 +201,8 @@ set(CPP_MODEL
     model/block_dev_stat_model.cpp
     model/block_dev_info_sort_filter_proxy_model.cpp
     model/model_manager.cpp
+    model/accounts_info_model.cpp
+    model/user.cpp
 )
 
 set(HPP_GUI
@@ -239,6 +246,10 @@ set(HPP_GUI
     gui/block_dev_item_widget.h
     gui/dialog/systemprotectionsetting.h
     gui/dialog/custombuttonbox.h
+    gui/user_page_widget.h
+    gui/accounts_widget.h
+    gui/onlineicon.h
+    gui/user_list_view.h
 )
 set(CPP_GUI
     gui/base/base_detail_item_delegate.cpp
@@ -282,6 +293,10 @@ set(CPP_GUI
     gui/dialog/systemprotectionsetting.cpp
     gui/dialog/settingsdialog.cpp
     gui/dialog/custombuttonbox.cpp
+    gui/user_page_widget.cpp
+    gui/accounts_widget.cpp
+    gui/onlineicon.cpp
+    gui/user_list_view.cpp
 )
 
 set(HPP_PROCESS
@@ -575,6 +590,7 @@ set(LIBS
     ${LIB_NL3_LIBRARIES}
     ${LIB_NL3_ROUTE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
+    ${DFrameworkDBus_LIBRARIES}   # chinalife
 )
 if (USE_DEEPIN_WAYLAND)
     list(APPEND LIBS DWaylandClient DWaylandServer)
