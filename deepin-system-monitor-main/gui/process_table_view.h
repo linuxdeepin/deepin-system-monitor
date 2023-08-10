@@ -36,7 +36,7 @@ public:
      * @brief Process table view constructor
      * @param parent Parent object
      */
-    explicit ProcessTableView(DWidget *parent = nullptr);
+        explicit ProcessTableView(DWidget *parent = nullptr, QString userName = nullptr);
     /**
      * @brief Destructor
      */
@@ -56,6 +56,15 @@ public:
      * @return To filter this event out, return true; otherwise return false
      */
     bool eventFilter(QObject *obj, QEvent *event) override;
+    void setUserModeName(const QString &userName);
+    inline qreal getUserCPUUsage() {return m_cpuUsage;}
+    inline qreal getUserMemUsage() {return m_memUsage;}
+    inline qreal getUserDownload() {return m_download;}
+    inline qreal getUserUpload() {return m_upload;}
+    inline qreal getUserSMemUsage() {return m_smemUsage;}
+    inline qreal getUserVMemUsage() {return m_vmemUsage;}
+    inline qreal getUserDiskRead() {return m_diskread;}
+    inline qreal getUserDiskWrite() {return m_diskwrite;}
 
 public Q_SLOTS:
     /**
@@ -102,13 +111,16 @@ public Q_SLOTS:
      * @brief onThemeTypeChanged
      */
     void onThemeTypeChanged();
+Q_SIGNALS:
+    void signalModelUpdated();
+    void signalHeadchanged();
 
 protected:
     /**
      * @brief Load process table view backup settings
      * @return Settings load success or not
      */
-    bool loadSettings();
+    bool loadSettings(const QString &flag);
     /**
      * @brief Backup process table view settings
      */
@@ -201,9 +213,16 @@ private:
     // Kill process shortcut
     QShortcut *m_killProcKP {};
 
-
-
-
+    //User mode User Name
+    QString m_useModeName {};
+    qreal m_cpuUsage {};
+    qreal m_memUsage {};
+    qreal m_download {};
+    qreal m_upload {};
+    qreal m_smemUsage {};
+    qreal m_vmemUsage {};
+    qreal m_diskread {};
+    qreal m_diskwrite {};
 };
 
 #endif  // PROCESS_TABLE_VIEW_H

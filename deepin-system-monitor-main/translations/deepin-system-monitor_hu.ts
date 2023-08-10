@@ -1109,5 +1109,27 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>Szolgáltatások</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>Felhasználók</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Rendszergazda</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Alap Felhasználó</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Felhasználói fiók adatainak szerkesztése</translation>
+    </message>
 </context>
 </TS>

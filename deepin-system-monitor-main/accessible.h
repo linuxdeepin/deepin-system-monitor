@@ -97,6 +97,7 @@ SET_FORM_ACCESSIBLE(CompactNetworkMonitor, "CompactNetworkMonitor")
 SET_FORM_ACCESSIBLE(CpuMonitor, "CpuMonitor")
 SET_FORM_ACCESSIBLE(MemoryMonitor, "MemoryMonitor")
 SET_FORM_ACCESSIBLE(NetworkMonitor, "NetworkMonitor")
+SET_FORM_ACCESSIBLE(UserPageWidget, "UserPageWidget")
 
 // Qt控件
 SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())
@@ -156,6 +157,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CpuMonitor);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MemoryMonitor);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), NetworkMonitor);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), UserPageWidget);
 
     //  Qt 控件
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);

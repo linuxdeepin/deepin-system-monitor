@@ -7,7 +7,6 @@
 #include "process/process_db.h"
 #include "common/common.h"
 #include "wm/wm_window_list.h"
-#include "settings.h"
 
 #include <QDebug>
 
@@ -26,11 +25,6 @@ ProcessSet::ProcessSet()
     , m_pidCtoPMapping {}
     , m_pidPtoCMapping {}
 {
-    m_prePid.clear();
-    m_curPid.clear();
-    m_pidMyApps.clear();
-    m_simpleSet.clear();
-    m_settings = Settings::instance();
 }
 
 ProcessSet::ProcessSet(const ProcessSet &other)
@@ -82,7 +76,7 @@ void ProcessSet::scanProcess()
         procstage->uptime = iter->procuptime();
         m_recentProcStage[iter->pid()] = procstage;
     }
-    m_curPid.clear();
+
     m_set.clear();
     m_pidPtoCMapping.clear();
     m_pidCtoPMapping.clear();
@@ -92,53 +86,15 @@ void ProcessSet::scanProcess()
     QList<pid_t> appLst;
     while (iter.hasNext()) {
         Process proc = iter.next();
+        if (!proc.isValid())
+            continue;
 
-        if(!m_curPid.contains(proc.pid()))
-            m_curPid.append(proc.pid());
+        m_set.insert(proc.pid(), proc);
+        m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
+        m_pidCtoPMapping.insert(proc.pid(), proc.ppid());
 
-    }
-
-    if(m_prePid != m_curPid) {
-        for (const pid_t &pid : m_prePid) {
-            if(!m_curPid.contains(pid)){
-                m_prePid.removeAt(pid);  //remove disappear process pid
-                if(m_simpleSet.contains(pid))
-                    m_simpleSet.remove(pid);
-                if(m_pidMyApps.contains(pid))
-                    m_pidMyApps.removeAt(pid);
-            }
-        }
-
-        for (const pid_t &pid : m_curPid) {
-            if(!m_prePid.contains(pid)){ //add  new process pid
-                Process *proc = new Process(pid);
-                proc->readProcessSimpleInfo();
-                if(!m_simpleSet.contains(pid))
-                     m_simpleSet.insert(proc->pid(), *proc);
-
-                if (proc->appType() == kFilterApps && !wmwindowList->isTrayApp(proc->pid())) {
-                     m_pidMyApps << proc->pid();
-                }
-            }
-        }
-        m_prePid = m_curPid;
-    }
-
-    const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, kFilterApps);
-    int index = vindex.toInt();
-
-    for (const pid_t &pid : m_prePid) {
-        Process proc = m_simpleSet[pid];
-        if( ((kFilterApps == index) && (proc.appType()<= kFilterApps)) ||
-            ((kFilterCurrentUser == index) && (proc.appType() <= kFilterCurrentUser)) ||
-                (kNoFilter == index)) {
-             proc.readProcessVariableInfo();  //
-               if (!proc.isValid())
-                     continue;
-
-               m_set.insert(proc.pid(), proc);
-               m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
-               m_pidCtoPMapping.insert(proc.pid(), proc.ppid());
+        if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
+            appLst << proc.pid();
         }
     }
 
@@ -154,7 +110,7 @@ void ProcessSet::scanProcess()
         return b;
     };
 
-    for (const pid_t &pid : m_pidMyApps) {
+    for (const pid_t &pid : appLst) {
         qreal recvBps = 0;
         qreal sendBps = 0;
         mergeSubProcNetIO(pid, recvBps, sendBps);
@@ -164,8 +120,7 @@ void ProcessSet::scanProcess()
         mergeSubProcCpu(pid, ptotalCpu);
         m_set[pid].setCpu(ptotalCpu);
 
-        if (!wmwindowList->isGuiApp(pid))
-        {
+        if (!wmwindowList->isGuiApp(pid)) {
             // only if no ancestor process is gui app we keep this process
             if (m_pidCtoPMapping.contains(pid) &&
                     anyRootIsGuiProc(m_pidCtoPMapping[pid])) {
@@ -209,9 +164,11 @@ Process ProcessSet::Iterator::next()
     if (m_dirent && isdigit(m_dirent->d_name[0])) {
         auto pid = pid_t(atoi(m_dirent->d_name));
         Process proc(pid);
+        proc.readProcessInfo();
 
         advance();
 
+        if (proc.isValid())
             return proc;
     }
 
@@ -224,8 +181,8 @@ void ProcessSet::Iterator::advance()
         if (isdigit(m_dirent->d_name[0]))
         if(pid_t(atoi(m_dirent->d_name)) < 10)
                 continue;
-        else
-                break;
+        else 
+            break;
     }
     if (!m_dirent && errno) {
         print_errno(errno, "read /proc failed");
@@ -244,8 +201,6 @@ const Process ProcessSet::getProcessById(pid_t pid) const
 
 QList<pid_t> ProcessSet::getPIDList() const
 {
-    const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, kFilterApps);
-    int index = vindex.toInt();
     // 当系统读取到的m_set为空时,通过keys()函数返回会造成段错误 原因是keys函数效率低下,会造成大量的内存拷贝
     // 替换方案是
     QList<pid_t> pidList {};
@@ -254,11 +209,7 @@ QList<pid_t> ProcessSet::getPIDList() const
     QMap<pid_t, Process>::key_iterator iterBegin = m_set.keyBegin();
     for (;iterBegin != m_set.keyEnd(); ++iterBegin) {
         pid_t tmpKey = *iterBegin;
-        Process proc = m_set[tmpKey];
-        if( ((kFilterApps == index) && (proc.appType()<= kFilterApps)) ||
-            ((kFilterCurrentUser == index) && (proc.appType() <= kFilterCurrentUser)) ||
-                (kNoFilter == index))
-            pidList.append(tmpKey);
+        pidList.append(tmpKey);
         if (size != m_set.size())
             break;
     }
