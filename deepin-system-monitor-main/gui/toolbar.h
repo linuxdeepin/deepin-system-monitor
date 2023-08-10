@@ -105,16 +105,22 @@ Q_SIGNALS:
      * @brief Sevice tab button triggered signal
      */
     void serviceTabButtonClicked();
+    /**
+     * @brief User Procss tab button triggered signal
+     */
+    void accountProcTabButtonClicked();
 
 private:
     // Button group
-    CustomButtonBox *m_switchFuncTabBtnGrp {};
+    CustomButtonBox *m_switchFuncTabBtnGrp {nullptr};
     // Process tab button
-    DButtonBoxButton *m_procBtn {};
+    DButtonBoxButton *m_procBtn {nullptr};
     // Service tab button
-    DButtonBoxButton *m_svcBtn {};
+    DButtonBoxButton *m_svcBtn {nullptr};
+    // User Process tab button
+    DButtonBoxButton *m_accountProcBtn {nullptr};
     // Search text input
-    DSearchEdit *searchEdit {};
+    DSearchEdit *searchEdit {nullptr};
 
     // Start timer when search content changed, do the actual search only when timer timed out
     QTimer *searchTimer;
@@ -122,7 +128,7 @@ private:
     // Searched content cache
     QString searchTextCache;
 
-    QWidget *m_spaceItem {};
+    QWidget *m_spaceItem {nullptr};
 };
 
 #endif

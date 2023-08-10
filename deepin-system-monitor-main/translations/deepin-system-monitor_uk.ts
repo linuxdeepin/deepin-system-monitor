@@ -1108,5 +1108,27 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>Служби</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>Користувачі</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Адміністратор</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Стандартний користувач</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Редагувати дані облікового запису</translation>
+    </message>
 </context>
 </TS>

@@ -1110,5 +1110,27 @@ Are you sure you want to continue?</translation>
         <source>Services</source>
         <translation>Services</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>Users</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Administrator</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Standard User</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Edit account information</translation>
+    </message>
 </context>
 </TS>

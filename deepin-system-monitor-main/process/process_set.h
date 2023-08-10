@@ -15,7 +15,6 @@
 
 using namespace common::alloc;
 
-class Settings;
 namespace core {
 namespace process {
 
@@ -69,16 +68,11 @@ private:
     };
 
 private:
-     Settings *m_settings = nullptr;
-    QMap<pid_t, Process> m_simpleSet;
     QMap<pid_t, Process> m_set;
     QMap<pid_t, std::shared_ptr<RecentProcStage>> m_recentProcStage {};
 
     QMap<pid_t, pid_t> m_pidCtoPMapping {}; // child to parent pid mapping
     QMultiMap<pid_t, pid_t> m_pidPtoCMapping {}; // parent to child pid mapping
-    QList<pid_t> m_prePid;
-    QList<pid_t> m_curPid;
-    QList<pid_t> m_pidMyApps;
 
     friend class Iterator;
 };

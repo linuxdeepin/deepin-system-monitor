@@ -132,6 +132,16 @@ In the list of system services, force-ending of application is prohibited.
 
 You can also right-click a system process and select **Restart**. 
 
+
+
+### User Management
+
+On the "Users" tab, you can view the names and types of logged-in user accounts. After selecting an account, you can:
+- Right-click and select **Edit account information** to modify the account info in the Accounts window of Control Center.
+- View all processes under the account on the right, and right-click a process to end or suspend it, change its priority, etc.
+
+![user](fig/user.png)
+
 ## Main Menu
 
 In the main menu, you can force ending applications, switch monitoring modes and themes, view help manual, and learn more information of System Monitor.
