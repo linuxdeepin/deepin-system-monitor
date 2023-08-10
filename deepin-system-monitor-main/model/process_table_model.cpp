@@ -17,9 +17,11 @@ using namespace common;
 using namespace common::format;
 
 // model constructor
-ProcessTableModel::ProcessTableModel(QObject *parent)
+ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
     : QAbstractTableModel(parent)
 {
+    setUserModeName(username);
+    qInfo() << "ProcessTableModel Constructor line 41:" << "new model with name" << username;
     //update model's process list cache on process list updated signal
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessTableModel::updateProcessList);
@@ -71,7 +73,36 @@ Process ProcessTableModel::getProcess(pid_t pid) const
 // update process model with the data provided by list
 void ProcessTableModel::updateProcessList()
 {
-    QTimer::singleShot(0, this, SLOT(updateProcessListDelay()));
+    if (m_userModeName.isNull()) {
+        QTimer::singleShot(0, this, SLOT(updateProcessListDelay()));
+    } else {
+        QTimer::singleShot(0, this, SLOT(updateProcessListWithUserSpecified()));
+    }
+}
+
+void ProcessTableModel::updateProcessListWithUserSpecified()
+{
+
+    ProcessSet *processSet = ProcessDB::instance()->processSet();
+    const QList<pid_t> &newpidlst = processSet->getPIDList();
+
+    beginRemoveRows({}, 0, m_procIdList.size());
+    endRemoveRows();
+    m_procIdList.clear();
+    m_processList.clear();
+    int raw;
+    for (const auto &pid : newpidlst) {
+        Process changedProc = processSet->getProcessById(pid);
+        if (changedProc.userName() == m_userModeName) {
+            raw = m_procIdList.size();
+            beginInsertRows({}, raw, raw);
+            m_procIdList << pid;
+            m_processList << changedProc;
+            endInsertRows();
+        }
+    }
+
+    Q_EMIT modelUpdated();
 }
 
 void ProcessTableModel::updateProcessListDelay()
@@ -381,4 +412,81 @@ void ProcessTableModel::updateProcessPriority(pid_t pid, int priority)
         m_processList[row].setPriority(priority);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
+}
+
+
+void ProcessTableModel::setUserModeName(const QString &userName)
+{
+    if (userName != m_userModeName) {
+        m_userModeName = userName;
+        updateProcessListWithUserSpecified();
+    }
+}
+
+qreal ProcessTableModel::getTotalCPUUsage()
+{
+    qreal cpuUsage = 0;
+    for (const auto &proc : m_processList) {
+        cpuUsage += proc.cpu();
+    }
+    return cpuUsage;
+}
+qreal ProcessTableModel::getTotalMemoryUsage()
+{
+    qreal memUsage = 0;
+    for (const auto &proc : m_processList) {
+        memUsage += proc.memory();
+    }
+    return memUsage;
+}
+qreal ProcessTableModel::getTotalDownload()
+{
+    qreal download = 0;
+    for (const auto &proc : m_processList) {
+        download += proc.recvBps();
+    }
+    return download;
+}
+qreal ProcessTableModel::getTotalUpload()
+{
+    qlonglong upload = 0;
+    for (const auto &proc : m_processList) {
+        upload += proc.sentBps();
+    }
+    return upload;
+}
+
+
+
+qreal ProcessTableModel::getTotalVirtualMemoryUsage()
+{
+    qlonglong vtmem = 0;
+    for (const auto &proc : m_processList) {
+        vtmem += proc.vtrmemory();
+    }
+    return vtmem;
+}
+qreal ProcessTableModel::getTotalSharedMemoryUsage()
+{
+    qlonglong smem = 0;
+    for (const auto &proc : m_processList) {
+        smem += proc.sharememory();
+    }
+    return smem;
+}
+qreal ProcessTableModel::getTotalDiskRead()
+{
+    qlonglong diskread = 0;
+    for (const auto &proc : m_processList) {
+        diskread += proc.readBps();
+    }
+    return diskread;
+}
+qreal ProcessTableModel::getTotalDiskWrite()
+{
+    qlonglong diskwrite = 0;
+    for (const auto &proc : m_processList) {
+        diskwrite += proc.writeBps();
+    }
+    return diskwrite;
 }
