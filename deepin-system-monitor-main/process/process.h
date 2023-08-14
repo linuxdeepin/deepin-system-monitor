@@ -159,7 +159,8 @@ private:
     void readSockInodes();
 
 private:
-    QSharedDataPointer<ProcessPrivate> d;
+//    QSharedDataPointer<ProcessPrivate> d;
+    QExplicitlySharedDataPointer<ProcessPrivate> d;
 };
 
 } // namespace process
