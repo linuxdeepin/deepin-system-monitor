@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project(deepin-system-monitor)
 
-option(USE_DEEPIN_WAYLAND "option for wayland support" ON)
+option(USE_DEEPIN_WAYLAND "option for wayland support" OFF)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
