@@ -228,6 +228,7 @@ void ProcessTableView::openExecDirWithFM()
                     whichProcess.waitForFinished();
                     QString output(whichProcess.readAllStandardOutput());
 
+#ifdef OS_BUILD_V23
                     QString path = QString(output.split("\n")[0]).trimmed();
                     // 读取persistent目录
                     if (path.isEmpty()) {
@@ -272,6 +273,9 @@ void ProcessTableView::openExecDirWithFM()
                             }
                         }
                     }
+#else
+                    const QString &path = QString(output.split("\n")[0]).trimmed();
+#endif
                     common::openFilePathItem(path);
                 }
                 // Find flatpak application location.
@@ -345,7 +349,6 @@ void ProcessTableView::killProcess()
             {"process_name", proc.name()}
         };
         EventLogUtils::get().writeLogs(obj);
-
         ProcessDB::instance()->killProcess(qvariant_cast<pid_t>(m_selectedPID));
     } else {
         return;

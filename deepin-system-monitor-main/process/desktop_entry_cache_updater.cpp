@@ -65,7 +65,7 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     }
 
     // startup wm class & name
-    auto wmclass = dde.stringValue("StartupWMClass").toLower();;
+    auto wmclass = dde.stringValue("StartupWMClass").toLower();
     if (!wmclass.isEmpty()) {
         entry->startup_wm_class = wmclass;
         entry->name = wmclass;

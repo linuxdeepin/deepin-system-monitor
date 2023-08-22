@@ -39,7 +39,16 @@ check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 include(FindPkgConfig)
 if (USE_DEEPIN_WAYLAND)
     find_package(DWayland)
+    find_package(KF5Wayland)
+    if (DWayland_FOUND)
+        message("DWayland founded.")
+        add_definitions(-DDWAYLAND)
+    elseif(KF5Wayland_FOUND)
+        message("KF5Wayland founded.")
+        add_definitions(-DKF5WAYLAND)
+    endif()
 endif()
+
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
@@ -57,7 +66,7 @@ find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
-pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)  # chinalife
+#pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)  # chinalife
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
@@ -72,7 +81,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libsmartcols/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
-include_directories(${DFrameworkDBus_INCLUDE_DIRS})  # chinalife
+#include_directories(${DFrameworkDBus_INCLUDE_DIRS})  # chinalife
 
 #安全测试加固编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
@@ -590,10 +599,16 @@ set(LIBS
     ${LIB_NL3_LIBRARIES}
     ${LIB_NL3_ROUTE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
-    ${DFrameworkDBus_LIBRARIES}   # chinalife
+#    ${DFrameworkDBus_LIBRARIES}   # chinalife
 )
+
 if (USE_DEEPIN_WAYLAND)
-    list(APPEND LIBS DWaylandClient DWaylandServer)
+    message("................................link wayland: ${OS_BUILD_V23}")
+    if (OS_BUILD_V23)
+        list(APPEND LIBS DWaylandClient DWaylandServer)
+    else()
+        list(APPEND LIBS KF5::WaylandClient KF5::WaylandServer)
+    endif()
 endif()
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)

@@ -16,14 +16,6 @@
         <source>Hide details</source>
         <translation>Ukryj szczegóły</translation>
     </message>
-    <message>
-        <source>Overall utilization</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Individual utilization</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -372,7 +364,7 @@
     </message>
     <message>
         <source>Mapped</source>
-        <translation>Mapowane </translation>
+        <translation>Mapowane</translation>
     </message>
     <message>
         <source>Total swap</source>
@@ -419,7 +411,7 @@
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation>Odczytów połączonych/s</translation>
+        <translation>Odczytów scalonych/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
@@ -431,7 +423,7 @@
     </message>
     <message>
         <source>Writes merged</source>
-        <translation>Zapisów połączonych</translation>
+        <translation>Zapisów scalonych</translation>
     </message>
     <message>
         <source>Writes/s</source>
@@ -443,7 +435,7 @@
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation>Zapisów połączonych/s</translation>
+        <translation>Zapisów scalonych/s</translation>
     </message>
 </context>
 <context>
@@ -502,14 +494,7 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <source>End</source>
         <comment>button</comment>
-        <translation>Koniec</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Settings</source>
-        <translation>Ustawienia</translation>
+        <translation>Zakończ</translation>
     </message>
 </context>
 <context>
@@ -574,7 +559,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>RX packets</source>
-        <translation>Paczki RX</translation>
+        <translation>Pakiety RX</translation>
     </message>
     <message>
         <source>RX bytes</source>
@@ -590,7 +575,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation>Nadpisane RX</translation>
+        <translation>Przekroczenia RX</translation>
     </message>
     <message>
         <source>RX frame</source>
@@ -598,7 +583,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>TX packets</source>
-        <translation>Paczki TX</translation>
+        <translation>Pakiety TX</translation>
     </message>
     <message>
         <source>TX bytes</source>
@@ -610,7 +595,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation>Nadpisane TX</translation>
+        <translation>Przekroczenia TX</translation>
     </message>
     <message>
         <source>TX carrier</source>
@@ -936,34 +921,6 @@ Czy na pewno chcesz kontynuować?</translation>
         <source>Not support</source>
         <translation>Brak wsparcia</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Ustawienia</translation>
-    </message>
-    <message>
-        <source>System Protection</source>
-        <translation>Ochrona systemu</translation>
-    </message>
-    <message>
-        <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Wyświetlaj ostrzeżenia, gdy użycie przekracza progi</translation>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation>Powiadomienia</translation>
-    </message>
-    <message>
-        <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -1057,21 +1014,6 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Typ uruchomienia</translation>
-    </message>
-</context>
-<context>
-    <name>SystemProtectionSetting</name>
-    <message>
-        <source>Settings</source>
-        <translation>Ustawienia</translation>
-    </message>
-    <message>
-        <source>(Modifiable)</source>
-        <translation>(Modyfikowalny)</translation>
-    </message>
-    <message>
-        <source>Range: %1-%2</source>
-        <translation>Zakres: %1-%2</translation>
     </message>
 </context>
 <context>

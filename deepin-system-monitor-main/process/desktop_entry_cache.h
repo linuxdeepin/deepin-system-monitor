@@ -53,7 +53,7 @@ inline const DesktopEntry DesktopEntryCache::entry(const QString &name) const
 inline const DesktopEntry DesktopEntryCache::entryWithSubName(const QString &subName) const
 {
     for (auto &key : m_cache.keys()) {
-         if (key.toLower().compare(subName) == 0)
+        if (key.toLower().compare(subName) == 0)
             return m_cache[key];
     }
     for (auto &key : m_cache.keys()) {
