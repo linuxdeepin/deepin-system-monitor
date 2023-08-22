@@ -11,13 +11,15 @@
 #include <QDebug>
 #include <QDateTime>
 
+#ifdef OS_BUILD_V23
 const QString NotificationService = "org.deepin.dde.Notification1";
 const QString NotificationPath = "/org/deepin/dde/Notification1";
 const QString NotificationInterface = "org.deepin.dde.Notification1";
-
-//const QString NotificationService = "com.deepin.dde.Notification";
-//const QString NotificationPath = "/com/deepin/dde/Notification";
-//const QString NotificationInterface = "com.deepin.dde.Notification";
+#else
+const QString NotificationService = "com.deepin.dde.Notification";
+const QString NotificationPath = "/com/deepin/dde/Notification";
+const QString NotificationInterface = "com.deepin.dde.Notification";
+#endif
 
 #define AlarmMessageTimeOut 10000
 QMutex DBusAlarmNotify::mutex;

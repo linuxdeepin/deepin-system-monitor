@@ -304,6 +304,7 @@ target_link_libraries(${PROJECT_NAME}
 #    gsettings-qt
 )
 
+
 #生成qm
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
 qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
