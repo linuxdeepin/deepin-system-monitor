@@ -603,8 +603,7 @@ set(LIBS
 )
 
 if (USE_DEEPIN_WAYLAND)
-    message("................................link wayland: ${OS_BUILD_V23}")
-    if (OS_BUILD_V23)
+    if (DWayland_FOUND)
         list(APPEND LIBS DWaylandClient DWaylandServer)
     else()
         list(APPEND LIBS KF5::WaylandClient KF5::WaylandServer)
