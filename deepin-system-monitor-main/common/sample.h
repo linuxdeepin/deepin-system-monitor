@@ -223,7 +223,7 @@ public:
         auto cwdiff = (ccwb < pcwb) ? 0 : (ccwb - pcwb);
         // calculate read/write speed
         rdio = qreal(rdiff) / interval;
-        wrio = qreal(wdiff - cwdiff) / interval;
+        wrio = (wdiff < cwdiff) ? 0 : qreal(wdiff - cwdiff) / interval;
 
         return {rdio, wrio};
     }
