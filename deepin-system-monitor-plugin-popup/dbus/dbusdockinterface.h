@@ -6,6 +6,8 @@
 #ifndef DBUSDOCK_H
 #define DBUSDOCK_H
 
+#include "helper.hpp"
+
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
@@ -14,16 +16,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
-
-#ifdef OS_BUILD_V23
-const QString DockService = "org.deepin.dde.Dock1";
-const QString DockPath = "/org/deepin/dde/Dock1";
-const QString DockInterface = "org.freedesktop.DBus.Properties";
-#else
-const QString DockService = "com.deepin.dde.Dock";
-const QString DockPath = "/com/deepin/dde/Dock";
-const QString DockInterface = "org.freedesktop.DBus.Properties";
-#endif
 
 /*
  * Proxy class for interface local.MainWindow
@@ -38,7 +30,7 @@ class DBusDockInterface: public QDBusAbstractInterface
         if (3 != arguments.count())
             return;
         QString interfaceName = msg.arguments().at(0).toString();
-        if (interfaceName != DockService)
+        if (interfaceName != common::systemInfo().DockService)
             return;
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
         foreach(const QString &prop, changedProps.keys()) {
@@ -53,7 +45,7 @@ class DBusDockInterface: public QDBusAbstractInterface
    }
 public:
     static inline const char *staticInterfaceName()
-    { return DockService.toStdString().c_str(); }
+    { return common::systemInfo().DockService.toStdString().c_str(); }
 
 public:
     explicit DBusDockInterface( QObject *parent = nullptr);

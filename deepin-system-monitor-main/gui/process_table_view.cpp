@@ -21,6 +21,7 @@
 #include "model/process_table_model.h"
 #include "process/process_db.h"
 #include "common/eventlogutils.h"
+#include "helper.hpp"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -228,8 +229,9 @@ void ProcessTableView::openExecDirWithFM()
                     whichProcess.waitForFinished();
                     QString output(whichProcess.readAllStandardOutput());
 
-#ifdef OS_BUILD_V23
-                    QString path = QString(output.split("\n")[0]).trimmed();
+                    QString path;
+                    if (!common::systemInfo().isOldVersion()) {
+                    path = QString(output.split("\n")[0]).trimmed();
                     // 读取persistent目录
                     if (path.isEmpty()) {
                         char nsPath[PATH_MAX] = {0}, nsSelfPath[PATH_MAX] = {0};
@@ -273,9 +275,9 @@ void ProcessTableView::openExecDirWithFM()
                             }
                         }
                     }
-#else
-                    const QString &path = QString(output.split("\n")[0]).trimmed();
-#endif
+                    } else {
+                        path = QString(output.split("\n")[0]).trimmed();
+                    }
                     common::openFilePathItem(path);
                 }
                 // Find flatpak application location.

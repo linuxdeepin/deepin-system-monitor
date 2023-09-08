@@ -4,22 +4,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dbusalarmnotify.h"
+#include "helper.hpp"
 
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QProcess>
 #include <QDebug>
 #include <QDateTime>
-
-#ifdef OS_BUILD_V23
-const QString NotificationService = "org.deepin.dde.Notification1";
-const QString NotificationPath = "/org/deepin/dde/Notification1";
-const QString NotificationInterface = "org.deepin.dde.Notification1";
-#else
-const QString NotificationService = "com.deepin.dde.Notification";
-const QString NotificationPath = "/com/deepin/dde/Notification";
-const QString NotificationInterface = "com.deepin.dde.Notification";
-#endif
 
 #define AlarmMessageTimeOut 10000
 QMutex DBusAlarmNotify::mutex;
@@ -61,9 +52,9 @@ void DBusAlarmNotify::showAlarmNotify(const QStringList &allArguments)
 
 void DBusAlarmNotify::showAlarmNotify(QString topic, QString msg, int timeout)
 {
-    QDBusMessage ddeNotify = QDBusMessage::createMethodCall(NotificationService,
-                                                            NotificationPath,
-                                                            NotificationInterface,
+    QDBusMessage ddeNotify = QDBusMessage::createMethodCall(common::systemInfo().NotificationService,
+                                                            common::systemInfo().NotificationPath,
+                                                            common::systemInfo().NotificationInterface,
                                                             "Notify");
     QStringList action;
     action << "_open1" << tr("View"); //添加按钮

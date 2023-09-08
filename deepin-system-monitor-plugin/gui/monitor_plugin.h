@@ -81,9 +81,7 @@ public:
     //! \brief pluginStateSwitched 当插件的禁用状态被用户改变时此接口被调用
     //!
     void pluginStateSwitched() Q_DECL_OVERRIDE;
-#ifdef OS_BUILD_V23
 
-#else
     //!
     //! \brief pluginIsAllowDisable 返回插件是否允许被禁用（默认不允许被禁用)
     //! \return
@@ -95,7 +93,6 @@ public:
     //! \return
     //!
     bool pluginIsDisable() Q_DECL_OVERRIDE;
-#endif
 
     //!
     //! \brief itemTipsWidget 返回鼠标悬浮在插件主控件上时显示的提示框控件
@@ -146,13 +143,11 @@ public:
     //!
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
 
-#ifdef OS_BUILD_V23
     ///
     /// the icon for the plugin
     /// themeType {0:UnknownType 1:LightType 2:DarkType}
     ///
     QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) Q_DECL_OVERRIDE;
-#endif
 
 private slots:
 
@@ -166,14 +161,11 @@ private:
     //! \brief loadPlugin 加载插件
     //!
     void loadPlugin();
-#ifdef OS_BUILD_V23
 
-#else
     //!
     //! \brief refreshPluginItemsVisible 刷新插件项显示隐藏
     //!
     void refreshPluginItemsVisible();
-#endif
     //!
     //! \brief initPluginState 初始化插件状态
     //!

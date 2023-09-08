@@ -6,6 +6,7 @@
 #include "common.h"
 #include "stack_trace.h"
 #include "hash.h"
+#include "helper.hpp"
 
 #include <QPainter>
 #include <QString>
@@ -208,9 +209,8 @@ void WaylandSearchCentered()
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
         WaylandCentered = true;
-#ifdef OS_BUILD_V23
-        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
-#endif
+        if (!common::systemInfo().isOldVersion())
+            qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     } else {
         WaylandCentered = false;
     }
