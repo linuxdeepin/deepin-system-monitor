@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "monitor_plugin.h"
+#include "helper.hpp"
 
 // Qt
 #include <QDBusConnectionInterface>
@@ -67,36 +68,34 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
-#ifdef OS_BUILD_V23
+    if (!common::systemInfo().isOldVersion()) {
 //    if (itemKey == "system-monitor")
 //        return m_itemWidget;
-#else
-    if (itemKey == "system-monitor")
-        return m_itemWidget;
-#endif
+    } else {
+        if (itemKey == "system-monitor")
+            return m_itemWidget;
+    }
     return nullptr;
 }
 
 void MonitorPlugin::pluginStateSwitched()
 {
-#ifdef OS_BUILD_V23
+    if (common::systemInfo().isOldVersion()) {
+        bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+        m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
 
-#else
-    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
-    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
-
-    refreshPluginItemsVisible();
-#endif
+        refreshPluginItemsVisible();
+    }
 }
 
-#ifdef OS_BUILD_V23
-
-#else
 bool MonitorPlugin::pluginIsDisable()
 {
-    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    if (!common::systemInfo().isOldVersion()) {
+        return PluginsItemInterface::pluginIsDisable();
+    } else {
+        return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    }
 }
-#endif
 
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
@@ -171,9 +170,11 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     }
 }
 
-#ifdef OS_BUILD_V23
 QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
+    if (common::systemInfo().isOldVersion()) {
+        return PluginsItemInterface::icon(dockPart, themeType);
+    }
     QString iconName = "dsm_pluginicon_light";
     if (themeType == DGuiApplicationHelper::LightType) {
         // 最小尺寸时，不画背景，采用深色图标
@@ -208,7 +209,6 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
     }
     return icon;
 }
-#endif
 
 void MonitorPlugin::udpateTipsInfo()
 {
@@ -266,17 +266,17 @@ void MonitorPlugin::loadPlugin()
     m_itemWidget = new MonitorPluginButtonWidget;
 
     if (!m_isFirstInstall) {
-#ifdef OS_BUILD_V23
-        m_proxyInter->itemAdded(this, pluginName());
-#else
-        // 非初始状态
-        if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
+        if (!common::systemInfo().isOldVersion()) {
             m_proxyInter->itemAdded(this, pluginName());
         } else {
-            m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
-            m_proxyInter->itemRemoved(this, pluginName());
+            // 非初始状态
+            if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
+                m_proxyInter->itemAdded(this, pluginName());
+            } else {
+                m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
+                m_proxyInter->itemRemoved(this, pluginName());
+            }
         }
-#endif
     } else {
         m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
         m_proxyInter->itemRemoved(this, pluginName());
@@ -284,9 +284,7 @@ void MonitorPlugin::loadPlugin()
 
     displayModeChanged(displayMode());
 }
-#ifdef OS_BUILD_V23
 
-#else
 void MonitorPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {
@@ -299,7 +297,6 @@ void MonitorPlugin::refreshPluginItemsVisible()
         m_proxyInter->itemAdded(this, pluginName());
     }
 }
-#endif
 
 void MonitorPlugin::initPluginState()
 {

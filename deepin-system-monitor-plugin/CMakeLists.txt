@@ -34,6 +34,7 @@ add_library(${PROJECT_NAME} SHARED ${SRCS} ${APP_RESOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 
 include_directories(${DtkCore_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${DdeDockInterface_INCLUDE_DIRS}

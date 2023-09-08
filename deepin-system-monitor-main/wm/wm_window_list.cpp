@@ -10,6 +10,7 @@
 #include "system/system_monitor_thread.h"
 #include "process/process_db.h"
 #include "common/common.h"
+#include "helper.hpp"
 
 #include <QtDBus>
 
@@ -35,16 +36,6 @@ using XGetAtomNameReply = std::unique_ptr<xcb_get_atom_name_reply_t, XReplyDelet
 const int maxImageW = 1024;
 const int maxImageH = 1024;
 const int offsetImagePointerWH = 2;
-
-#ifdef OS_BUILD_V23
-const QString TrayManagerService = "org.deepin.dde.TrayManager1";
-const QString TrayManagerPath = "/org/deepin/dde/TrayManager1";
-const QString TrayManagerInterface = "org.freedesktop.DBus.Properties";
-#else
-const QString TrayManagerService = "com.deepin.dde.TrayManager";
-const QString TrayManagerPath = "/com/deepin/dde/TrayManager";
-const QString TrayManagerInterface = "org.freedesktop.DBus.Properties";
-#endif
 
 WMWindowList::WMWindowList(QObject *parent)
     : QObject(parent)
@@ -277,9 +268,9 @@ QString WMWindowList::getWindowTitle(pid_t pid) const
 
 QList<WMWId> WMWindowList::getTrayWindows() const
 {
-    QDBusInterface busInterface(TrayManagerService, TrayManagerPath,
-                                TrayManagerInterface, QDBusConnection::sessionBus());
-    QDBusMessage reply = busInterface.call("Get", TrayManagerService, "TrayIcons");
+    QDBusInterface busInterface(common::systemInfo().TrayManagerService, common::systemInfo().TrayManagerPath,
+                                common::systemInfo().TrayManagerInterface, QDBusConnection::sessionBus());
+    QDBusMessage reply = busInterface.call("Get", common::systemInfo().TrayManagerService, "TrayIcons");
     QVariant v = reply.arguments().first();
     const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 

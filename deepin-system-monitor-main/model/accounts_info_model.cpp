@@ -1,4 +1,5 @@
 #include "accounts_info_model.h"
+#include "helper.hpp"
 #include <QDBusReply>
 #include <QDBusPendingReply>
 #include <QDebug>
@@ -10,34 +11,14 @@
 #define PKEXEC_PATH "/usr/bin/pkexec"
 #define PKILL_PATH "/usr/bin/pkill"
 
-#ifdef OS_BUILD_V23
-const QString AccountsService = "org.deepin.dde.Accounts1";
-const QString AccountsPath = "/org/deepin/dde/Accounts1";
-const QString AccountsInterface = "org.deepin.dde.Accounts1";
-const QString UserInterface = "org.deepin.dde.Accounts1.User";
-
-const QString ControlCenterService = "org.deepin.dde.ControlCenter1";
-const QString ControlCenterPath = "/org/deepin/dde/ControlCenter1";
-const QString ControlCenterInterface = "org.deepin.dde.ControlCenter1";
-#else
-const QString AccountsService = "com.deepin.daemon.Accounts";
-const QString AccountsPath = "/com/deepin/daemon/Accounts";
-const QString AccountsInterface = "com.deepin.daemon.Accounts";
-const QString UserInterface = "com.deepin.daemon.Accounts.User";
-
-const QString ControlCenterService = "com.deepin.dde.ControlCenter";
-const QString ControlCenterPath = "/com/deepin/dde/ControlCenter";
-const QString ControlCenterInterface = "com.deepin.dde.ControlCenter";
-#endif
-
 const QString LoginService = "org.freedesktop.login1";
 const QString LoginPath = "/org/freedesktop/login1";
 const QString LoginInterface = "org.freedesktop.login1.Manager";
 
 AccountsInfoModel::AccountsInfoModel(QObject *parent): QObject(parent)
-    , m_accountsInter(new QDBusInterface(AccountsService, AccountsPath, AccountsInterface, QDBusConnection::systemBus(), this))
+    , m_accountsInter(new QDBusInterface(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, QDBusConnection::systemBus(), this))
     , m_LoginInter(new QDBusInterface(LoginService, LoginPath, LoginInterface, QDBusConnection::systemBus(), this))
-    , m_controlInter(new QDBusInterface(ControlCenterService, ControlCenterPath, ControlCenterInterface, QDBusConnection::sessionBus(), this))
+    , m_controlInter(new QDBusInterface(common::systemInfo().ControlCenterService, common::systemInfo().ControlCenterPath, common::systemInfo().ControlCenterInterface, QDBusConnection::sessionBus(), this))
     , m_currentUserType(-1)
 {
     qDBusRegisterMetaType<SessionInfo>();
@@ -54,7 +35,7 @@ AccountsInfoModel::AccountsInfoModel(QObject *parent): QObject(parent)
     updateUserList(userList);
     qInfo() << "AccountsInfoModel constructor line 31" << "Accounts user list:" << userList;
 
-    QDBusConnection::systemBus().connect(AccountsService, AccountsPath, AccountsInterface, "UserListChanged",
+    QDBusConnection::systemBus().connect(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, "UserListChanged",
                                          this, SLOT(onUserListChanged(QStringList)));
     QDBusConnection::systemBus().connect(LoginService, LoginPath, LoginInterface, "SessionNew",
                                          this, SLOT(onSessionNew(QString, QDBusObjectPath)));
@@ -87,7 +68,7 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
     qInfo() << "AccountsInfoModel updateUserList line 61" << "updateUserList begins!" ;
     m_userMap.clear();
     for (QString userPath : userPathList) {
-        QDBusInterface *userDBus = new QDBusInterface(AccountsService, userPath, UserInterface, QDBusConnection::systemBus(), this);
+        QDBusInterface *userDBus = new QDBusInterface(common::systemInfo().AccountsService, userPath, common::systemInfo().UserInterface, QDBusConnection::systemBus(), this);
         User *newUser = new User;
 
         newUser->setName(userDBus->property("UserName").toString());

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "systemprotectionsetting.h"
+#include "helper.hpp"
 
 #include <DSettingsWidgetFactory>
 #include <DCommandLinkButton>
@@ -41,24 +42,6 @@ int SystemProtectionSetting::m_lastValidCPUValue = 0;
 int SystemProtectionSetting::m_lastValidMemoryValue = 0;
 int SystemProtectionSetting::m_lastValidInternalValue = 0;
 
-#ifdef OS_BUILD_V23
-const QString AppearanceService = "org.deepin.dde.Appearance1";
-const QString AppearancePath = "/org/deepin/dde/Appearance1";
-const QString AppearanceInterface = "org.deepin.dde.Appearance1";
-
-const QString ControlCenterService = "org.deepin.dde.ControlCenter1";
-const QString ControlCenterPath = "/org/deepin/dde/ControlCenter1";
-const QString ControlCenterInterface = "org.deepin.dde.ControlCenter1";
-#else
-const QString AppearanceService = "com.deepin.daemon.Appearance";
-const QString AppearancePath = "/com/deepin/daemon/Appearance";
-const QString AppearanceInterface = "com.deepin.daemon.Appearance";
-
-const QString ControlCenterService = "com.deepin.dde.ControlCenter";
-const QString ControlCenterPath = "/com/deepin/dde/ControlCenter";
-const QString ControlCenterInterface = "com.deepin.dde.ControlCenter";
-#endif
-
 Q_GLOBAL_STATIC(SystemProtectionSetting, theInstance)
 
 // 修改控件字体大小
@@ -71,9 +54,9 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 
     // 获取系统字体大小设置
 
-    QDBusInterface interface(AppearanceService,
-                             AppearancePath,
-                             AppearanceInterface);
+    QDBusInterface interface(common::systemInfo().AppearanceService,
+                             common::systemInfo().AppearancePath,
+                             common::systemInfo().AppearanceInterface);
     // 获取失败，返回
     if (interface.isValid() == false) {
         return false;
@@ -492,17 +475,18 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
 
     if (genericName.isEmpty() == false) {
         // 跳转到设置页并指定Item
-        QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall(ControlCenterService,
-                                                                               ControlCenterPath,
-                                                                               ControlCenterInterface,
+        QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
+                                                                               common::systemInfo().ControlCenterPath,
+                                                                               common::systemInfo().ControlCenterInterface,
                                                                                "ShowPage");
         QList<QVariant> args;
-#ifdef OS_BUILD_V23
-        args << QString("notification/%1").append(genericName);
-#else
-        args.append("notification");
-        args.append(genericName);
-#endif
+        if (!common::systemInfo().isOldVersion()) {
+            args << QString("notification/%1").append(genericName);
+        } else {
+            args.append("notification");
+            args.append(genericName);
+        }
+
         showDDEControlCenterPage.setArguments(args);
 
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenterPage);
@@ -515,17 +499,20 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
     } else {
         // 跳转到设置页
         // qdbus org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowModule notification
-#ifdef OS_BUILD_V23
-        QDBusMessage showDDEControlCenter = QDBusMessage::createMethodCall(ControlCenterService,
-                                                                           ControlCenterPath,
-                                                                           ControlCenterInterface,
+
+        QDBusMessage showDDEControlCenter;
+        if (!common::systemInfo().isOldVersion()) {
+            showDDEControlCenter = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
+                                                                           common::systemInfo().ControlCenterPath,
+                                                                           common::systemInfo().ControlCenterInterface,
                                                                            "ShowPage");
-#else
-        QDBusMessage showDDEControlCenter = QDBusMessage::createMethodCall("com.deepin.dde.ControlCenter",
+        } else {
+            showDDEControlCenter = QDBusMessage::createMethodCall("com.deepin.dde.ControlCenter",
                                                                            "/com/deepin/dde/ControlCenter",
                                                                            "com.deepin.dde.ControlCenter",
                                                                            "ShowModule");
-#endif
+        }
+
 
         QList<QVariant> args;
         args << "notification";
