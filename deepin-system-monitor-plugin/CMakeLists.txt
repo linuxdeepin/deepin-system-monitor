@@ -27,7 +27,15 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
-pkg_check_modules(DdeDockInterface REQUIRED dde-dock) 
+pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
+
+if (DdeDockInterface_FOUND)
+    message("dde-dock founded: ${VERSION_MAJOR}")
+    string(REGEX MATCH "^[0-9]" VERSION_MAJOR ${DdeDockInterface_VERSION})
+    if (VERSION_MAJOR STREQUAL "6" OR VERSION_MAJOR STRGREATER "6")
+        add_definitions(-DDDE_DOCK_NEW_VERSION)
+    endif()
+endif()
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${APP_RESOURCES})
