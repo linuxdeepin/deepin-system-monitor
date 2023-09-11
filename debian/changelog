@@ -1,8 +1,8 @@
-deepin-system-monitor (6.0.7) UNRELEASED; urgency=medium
+deepin-system-monitor (6.0.7) unstable; urgency=medium
 
-  * new version.
+  * new version 6.0.7
 
- -- shuaijie <shuaijie@uniontech.com>  Fri, 12 May 2023 11:19:12 +0800
+ -- shuaijie <shuaijie@uniontech.com>  Mon, 11 Sep 2023 14:48:41 +0800
 
 deepin-system-monitor (6.0.6) unstable; urgency=medium
 
