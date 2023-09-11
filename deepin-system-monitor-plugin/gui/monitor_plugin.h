@@ -143,11 +143,13 @@ public:
     //!
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
 
+#ifdef DDE_DOCK_NEW_VERSION
     ///
     /// the icon for the plugin
     /// themeType {0:UnknownType 1:LightType 2:DarkType}
     ///
     QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) Q_DECL_OVERRIDE;
+#endif
 
 private slots:
 

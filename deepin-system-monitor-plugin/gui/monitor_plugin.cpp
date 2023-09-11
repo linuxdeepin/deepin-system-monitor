@@ -170,11 +170,9 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     }
 }
 
+#ifdef DDE_DOCK_NEW_VERSION
 QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    if (common::systemInfo().isOldVersion()) {
-        return PluginsItemInterface::icon(dockPart, themeType);
-    }
     QString iconName = "dsm_pluginicon_light";
     if (themeType == DGuiApplicationHelper::LightType) {
         // 最小尺寸时，不画背景，采用深色图标
@@ -209,6 +207,7 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
     }
     return icon;
 }
+#endif
 
 void MonitorPlugin::udpateTipsInfo()
 {

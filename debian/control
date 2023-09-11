@@ -25,7 +25,8 @@ Build-Depends:
  dde-dock-dev, 
  libgtest-dev, 
  libgmock-dev, 
- libdwayland-dev | libkf5wayland-dev
+ libdwayland-dev | libkf5wayland-dev,
+ libwayland-dev
 Standards-Version: 3.9.8
 Homepage: https://github.com/linuxdeepin/deepin-system-monitor
 
