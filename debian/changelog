@@ -1,3 +1,28 @@
+deepin-system-monitor (6.0.8) unstable; urgency=medium
+
+  * feat: 改造系统监视器服务
+  * fix: 资源占用达到报警阈值时未弹出消息通知(Bug: 194991)
+  * fix: dde接口适配
+  * fix: 修复传输文件时，系统监视器不显示传速度(Bug: 163561)
+  * fix: 修复1060末启动server
+  * feat: 新增pgw判断
+  * chore: Sync by https://github.com/linuxdeepin/.github/commit/559e91167d4919644f37bbcf123eb0651c1528ea(Influence: none)
+  * fix: 修复在dde-dock中右键菜单系统监视器图标无法激活系统监视器窗口到顶层(Bug: 191373)
+  * feat: hw机型判断适配dconfig(Task: 276433)
+  * feat: hw机型判断适配dconfig(Task: 276433)
+  * fix: 系统监视器占用资源过高优化
+  * feat: merge branch chinalife
+  * feat: 优化底层数据读取
+  * fix: 插件功能回退
+  * fix: V20、V23接口兼容
+  * fix: 修改为通过QtDBus调用dde接口并兼容V20与V23接口变化
+  * fix: 火狐浏览器进程的磁盘写入速率达到8EB/s(Bug: 212249)
+  * fix: Can't pack v23 in obs
+  * fix: deepin-system-monitor crashed(Issue: https://github.com/linuxdeepin/developer-center/issues/5592)
+  * fix: 判断dde-dock版本，区分V23与V20插件实现
+
+ -- YeShanShan <yeshanshan@deepin.org>  Mon, 11 Sep 2023 15:48:23 +0800
+
 deepin-system-monitor (6.0.7) UNRELEASED; urgency=medium
 
   * new version.
