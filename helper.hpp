@@ -76,6 +76,10 @@ public:
         AccountsInterface = "org.deepin.dde.Accounts1";
         UserInterface = "org.deepin.dde.Accounts1.User";
 
+        TrayManagerService = "org.deepin.dde.TrayManager1";
+        TrayManagerPath = "/org/deepin/dde/TrayManager1";
+        TrayManagerInterface = "org.freedesktop.DBus.Properties";
+
         DockService = "org.deepin.dde.Dock1";
         DockPath = "/org/deepin/dde/Dock1";
         DockInterface = "org.freedesktop.DBus.Properties";
@@ -114,6 +118,10 @@ public:
         AccountsInterface = "com.deepin.daemon.Accounts";
         UserInterface = "com.deepin.daemon.Accounts.User";
 
+        TrayManagerService = "com.deepin.dde.TrayManager";
+        TrayManagerPath = "/com/deepin/dde/TrayManager";
+        TrayManagerInterface = "org.freedesktop.DBus.Properties";
+
         DockService = "com.deepin.dde.Dock";
         DockPath = "/com/deepin/dde/Dock";
         DockInterface = "org.freedesktop.DBus.Properties";
@@ -141,7 +149,7 @@ static inline const SystemState &systemInfo()
     if (!state) {
         const auto version = DTK_CORE_NAMESPACE::DSysInfo::majorVersion();
         qInfo() << "Running desktop environment version is:" << version << ", versionNumber:" << version.toLong();
-        if (version.toLong() <= 20) {
+        if (!version.isEmpty() && version.toLong() <= 20) {
             state = new V20SystemState();
             state->updateVersion(true);
         } else {
