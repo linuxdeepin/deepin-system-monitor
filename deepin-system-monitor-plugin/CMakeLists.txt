@@ -30,7 +30,7 @@ pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
 
 if (DdeDockInterface_FOUND)
-    message("dde-dock founded: ${VERSION_MAJOR}")
+    message("dde-dock founded: ${DdeDockInterface_VERSION}")
     string(REGEX MATCH "^[0-9]" VERSION_MAJOR ${DdeDockInterface_VERSION})
     if (VERSION_MAJOR STREQUAL "6" OR VERSION_MAJOR STRGREATER "6")
         add_definitions(-DDDE_DOCK_NEW_VERSION)
