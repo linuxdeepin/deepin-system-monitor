@@ -82,6 +82,7 @@ public:
     //!
     void pluginStateSwitched() Q_DECL_OVERRIDE;
 
+#ifndef DDE_DOCK_NEW_VERSION
     //!
     //! \brief pluginIsAllowDisable 返回插件是否允许被禁用（默认不允许被禁用)
     //! \return
@@ -93,7 +94,7 @@ public:
     //! \return
     //!
     bool pluginIsDisable() Q_DECL_OVERRIDE;
-
+#endif
     //!
     //! \brief itemTipsWidget 返回鼠标悬浮在插件主控件上时显示的提示框控件
     //! \param itemKey
@@ -164,10 +165,13 @@ private:
     //!
     void loadPlugin();
 
+#ifndef DDE_DOCK_NEW_VERSION
     //!
     //! \brief refreshPluginItemsVisible 刷新插件项显示隐藏
     //!
     void refreshPluginItemsVisible();
+#endif
+
     //!
     //! \brief initPluginState 初始化插件状态
     //!

@@ -68,34 +68,32 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
-    if (!common::systemInfo().isOldVersion()) {
+#ifdef DDE_DOCK_NEW_VERSION
 //    if (itemKey == "system-monitor")
 //        return m_itemWidget;
-    } else {
+#else
         if (itemKey == "system-monitor")
             return m_itemWidget;
-    }
+#endif
     return nullptr;
 }
 
 void MonitorPlugin::pluginStateSwitched()
 {
-    if (common::systemInfo().isOldVersion()) {
-        bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
-        m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
+#ifndef DDE_DOCK_NEW_VERSION
+    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
 
-        refreshPluginItemsVisible();
-    }
+    refreshPluginItemsVisible();
+#endif
 }
 
+#ifndef DDE_DOCK_NEW_VERSION
 bool MonitorPlugin::pluginIsDisable()
 {
-    if (!common::systemInfo().isOldVersion()) {
-        return PluginsItemInterface::pluginIsDisable();
-    } else {
-        return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
-    }
+    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
 }
+#endif
 
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
@@ -264,26 +262,28 @@ void MonitorPlugin::loadPlugin()
 
     m_itemWidget = new MonitorPluginButtonWidget;
 
+#ifdef DDE_DOCK_NEW_VERSION
+    // 新版本dde-dock不需要应用自己判断是否显示插件，只添加即可
+    m_proxyInter->itemAdded(this, pluginName());
+#else
     if (!m_isFirstInstall) {
-        if (!common::systemInfo().isOldVersion()) {
+        // 非初始状态
+        if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
             m_proxyInter->itemAdded(this, pluginName());
         } else {
-            // 非初始状态
-            if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
-                m_proxyInter->itemAdded(this, pluginName());
-            } else {
-                m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
-                m_proxyInter->itemRemoved(this, pluginName());
-            }
+            m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
+            m_proxyInter->itemRemoved(this, pluginName());
         }
     } else {
         m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
         m_proxyInter->itemRemoved(this, pluginName());
     }
+#endif
 
     displayModeChanged(displayMode());
 }
 
+#ifndef DDE_DOCK_NEW_VERSION
 void MonitorPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {
@@ -296,6 +296,7 @@ void MonitorPlugin::refreshPluginItemsVisible()
         m_proxyInter->itemAdded(this, pluginName());
     }
 }
+#endif
 
 void MonitorPlugin::initPluginState()
 {
