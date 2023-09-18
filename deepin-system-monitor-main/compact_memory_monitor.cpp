@@ -121,6 +121,7 @@ void CompactMemoryMonitor::changeTheme(int themeType)
 void CompactMemoryMonitor::changeFont(const QFont &font)
 {
     m_contentFont = font;
+    m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
     m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
     m_subContentFont = font;
