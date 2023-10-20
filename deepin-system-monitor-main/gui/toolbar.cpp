@@ -44,13 +44,24 @@ Toolbar::Toolbar(QWidget *parent)
     m_procBtn->setCheckable(true);
     m_procBtn->setChecked(true);
     m_procBtn->setFocusPolicy(Qt::TabFocus);
+
+    DFontSizeManager::instance()->bind(m_procBtn, DFontSizeManager::T7, QFont::Medium);
     // service tab button instance
     m_svcBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Services"), m_switchFuncTabBtnGrp);
     m_svcBtn->setCheckable(true);
     m_svcBtn->setFocusPolicy(Qt::TabFocus);
+
+    DFontSizeManager::instance()->bind(m_svcBtn, DFontSizeManager::T7, QFont::Medium);
+    // user process tab button instance
+    m_accountProcBtn = new DButtonBoxButton(
+        DApplication::translate("Title.Bar.Switch", "Users"), m_switchFuncTabBtnGrp);
+    m_accountProcBtn->setCheckable(true);
+    m_accountProcBtn->setFocusPolicy(Qt::TabFocus);
+
+    DFontSizeManager::instance()->bind(m_accountProcBtn, DFontSizeManager::T7, QFont::Medium);
     QList<DButtonBoxButton *> list;
-    list << m_procBtn << m_svcBtn;
+    list << m_procBtn << m_svcBtn << m_accountProcBtn;
     m_switchFuncTabBtnGrp->setButtonList(list, true);
 
     // move focus to process tab button when toolbar got focus
@@ -59,11 +70,12 @@ Toolbar::Toolbar(QWidget *parent)
     // install event filer for both tab button to handle key press event
     m_procBtn->installEventFilter(this);
     m_svcBtn->installEventFilter(this);
+    m_accountProcBtn->installEventFilter(this);
 
     // emit button clicked signal when process or service tab button toggled
     connect(m_procBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT procTabButtonClicked(); });
     connect(m_svcBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT serviceTabButtonClicked(); });
-
+    connect(m_accountProcBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT accountProcTabButtonClicked(); });
     // search text editor instance
     searchEdit = new DSearchEdit(this);
     // set the search edit text max length
@@ -91,12 +103,12 @@ Toolbar::Toolbar(QWidget *parent)
         if (loading) {
             m_procBtn->setEnabled(false);
             m_svcBtn->setEnabled(false);
-
+            m_accountProcBtn->setEnabled(false);
             searchEdit->setEnabled(false);
         } else {
             m_procBtn->setEnabled(true);
             m_svcBtn->setEnabled(true);
-
+            m_accountProcBtn->setEnabled(true);
             searchEdit->setEnabled(true);
         }
     });
@@ -136,6 +148,13 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
             auto *kev = dynamic_cast<QKeyEvent *>(event);
             if (kev->key() == Qt::Key_Left) {
                 m_procBtn->setFocus();
+                return true;
+            }
+        } else if (obj == m_accountProcBtn) {
+            // set focus to process tab button when left key pressed
+            auto *kev = dynamic_cast<QKeyEvent *>(event);
+            if (kev->key() == Qt::Key_Left) {
+                m_accountProcBtn->setFocus();
                 return true;
             }
         }

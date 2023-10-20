@@ -115,6 +115,8 @@ public:
     qulonglong sentBytes() const;
 
     void readProcessInfo();
+    void readProcessSimpleInfo();
+    void readProcessVariableInfo();
 
 private:
     /**
@@ -157,7 +159,8 @@ private:
     void readSockInodes();
 
 private:
-    QSharedDataPointer<ProcessPrivate> d;
+//    QSharedDataPointer<ProcessPrivate> d;
+    QExplicitlySharedDataPointer<ProcessPrivate> d;
 };
 
 } // namespace process

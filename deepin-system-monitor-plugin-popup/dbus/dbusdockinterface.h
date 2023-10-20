@@ -6,6 +6,8 @@
 #ifndef DBUSDOCK_H
 #define DBUSDOCK_H
 
+#include "helper.hpp"
+
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
@@ -14,6 +16,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
+
 /*
  * Proxy class for interface local.MainWindow
  */
@@ -27,7 +30,7 @@ class DBusDockInterface: public QDBusAbstractInterface
         if (3 != arguments.count())
             return;
         QString interfaceName = msg.arguments().at(0).toString();
-        if (interfaceName != "org.deepin.dde.Dock1")
+        if (interfaceName != common::systemInfo().DockService)
             return;
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
         foreach(const QString &prop, changedProps.keys()) {
@@ -42,7 +45,7 @@ class DBusDockInterface: public QDBusAbstractInterface
    }
 public:
     static inline const char *staticInterfaceName()
-    { return "org.deepin.dde.Dock1"; }
+    { return common::systemInfo().DockService.toStdString().c_str(); }
 
 public:
     explicit DBusDockInterface( QObject *parent = nullptr);

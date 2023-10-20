@@ -10,6 +10,7 @@
 #include "system/system_monitor_thread.h"
 #include "process/process_db.h"
 #include "common/common.h"
+#include "helper.hpp"
 
 #include <QtDBus>
 
@@ -267,9 +268,9 @@ QString WMWindowList::getWindowTitle(pid_t pid) const
 
 QList<WMWId> WMWindowList::getTrayWindows() const
 {
-    QDBusInterface busInterface("org.deepin.dde.TrayManager1", "/org/deepin/dde/TrayManager1",
-                                "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-    QDBusMessage reply = busInterface.call("Get", "org.deepin.dde.TrayManager1", "TrayIcons");
+    QDBusInterface busInterface(common::systemInfo().TrayManagerService, common::systemInfo().TrayManagerPath,
+                                common::systemInfo().TrayManagerInterface, QDBusConnection::sessionBus());
+    QDBusMessage reply = busInterface.call("Get", common::systemInfo().TrayManagerService, "TrayIcons");
     QVariant v = reply.arguments().first();
     const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 

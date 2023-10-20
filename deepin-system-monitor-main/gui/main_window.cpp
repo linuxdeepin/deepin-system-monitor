@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "main_window.h"
-
+#include "user_page_widget.h"
 #include "application.h"
 #include "process_page_widget.h"
 #include "system_service_page_widget.h"
@@ -19,6 +19,9 @@
 #include <DSettingsWidgetFactory>
 #include <DApplicationHelper>
 #include <DTitlebar>
+#ifdef DTKCORE_CLASS_DConfigFile
+#include <DConfig>
+#endif
 #include <QKeyEvent>
 #include <QTimer>
 #include <QDesktopWidget>
@@ -41,6 +44,14 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
     setMaximumSize(QApplication::desktop()->size());
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
+#ifdef DTKCORE_CLASS_DConfigFile
+    //需要查询是否支持特殊机型静音恢复，例如hw机型
+    DConfig *dconfig = DConfig::create("org.deepin.system-monitor","org.deepin.system-monitor.main");
+    //需要判断Dconfig文件是否合法
+    if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialComType")){
+        specialComType = dconfig->value("specialComType").toInt();
+    }
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -168,11 +179,12 @@ void MainWindow::initUI()
 
     m_procPage = new ProcessPageWidget(m_pages);
     m_svcPage = new SystemServicePageWidget(m_pages);
+    m_accountProcPage = new UserPageWidget(m_pages);
 
     m_pages->setContentsMargins(0, 0, 0, 0);
     m_pages->addWidget(m_procPage);
     m_pages->addWidget(m_svcPage);
-
+    m_pages->addWidget(m_accountProcPage);
     m_tbShadow->raise();
 
     installEventFilter(this);
@@ -200,7 +212,15 @@ void MainWindow::initConnections()
         m_tbShadow->show();
         PERF_PRINT_END("POINT-05");
     });
-
+    connect(m_toolbar, &Toolbar::accountProcTabButtonClicked, this, [ = ]() {
+        PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Users")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
+        m_toolbar->clearSearchText();
+        m_pages->setCurrentWidget(m_accountProcPage);
+        m_accountProcPage->onUserChanged();
+        m_tbShadow->raise();
+        m_tbShadow->show();
+        PERF_PRINT_END("POINT-05");
+    });
     connect(gApp, &Application::backgroundTaskStateChanged, this, [ = ](Application::TaskState state) {
         if (state == Application::kTaskStarted) {
             // save last focused widget inside main window

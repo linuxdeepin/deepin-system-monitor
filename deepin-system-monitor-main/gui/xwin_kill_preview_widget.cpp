@@ -353,7 +353,7 @@ void XWinKillPreviewWidget::initUI()
     // default forbid style cursor
     m_defaultCursor = QCursor(Qt::ForbiddenCursor);
 
-    QTimer::singleShot(800, this, [ = ] {
+    QTimer::singleShot(500, this, [ = ] {
         // show background window in all screens
         for (auto screen : QApplication::screens())
         {

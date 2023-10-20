@@ -39,7 +39,16 @@ check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 include(FindPkgConfig)
 if (USE_DEEPIN_WAYLAND)
     find_package(DWayland)
+    find_package(KF5Wayland)
+    if (DWayland_FOUND)
+        message("DWayland founded.")
+        add_definitions(-DDWAYLAND)
+    elseif(KF5Wayland_FOUND)
+        message("KF5Wayland founded.")
+        add_definitions(-DKF5WAYLAND)
+    endif()
 endif()
+
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
@@ -52,12 +61,12 @@ find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
-find_library(LIB_PROCPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
+#pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)  # chinalife
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
@@ -72,6 +81,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libsmartcols/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+#include_directories(${DFrameworkDBus_INCLUDE_DIRS})  # chinalife
 
 #安全测试加固编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
@@ -179,6 +189,9 @@ set(HPP_MODEL
     model/block_dev_info_model.h
     model/block_dev_info_sort_filter_proxy_model.h
     model/model_manager.h
+    model/accounts_info_model.h
+    model/user.h
+
 )
 set(CPP_MODEL
     model/system_service_table_model.cpp
@@ -197,6 +210,8 @@ set(CPP_MODEL
     model/block_dev_stat_model.cpp
     model/block_dev_info_sort_filter_proxy_model.cpp
     model/model_manager.cpp
+    model/accounts_info_model.cpp
+    model/user.cpp
 )
 
 set(HPP_GUI
@@ -240,6 +255,10 @@ set(HPP_GUI
     gui/block_dev_item_widget.h
     gui/dialog/systemprotectionsetting.h
     gui/dialog/custombuttonbox.h
+    gui/user_page_widget.h
+    gui/accounts_widget.h
+    gui/onlineicon.h
+    gui/user_list_view.h
 )
 set(CPP_GUI
     gui/base/base_detail_item_delegate.cpp
@@ -283,6 +302,10 @@ set(CPP_GUI
     gui/dialog/systemprotectionsetting.cpp
     gui/dialog/settingsdialog.cpp
     gui/dialog/custombuttonbox.cpp
+    gui/user_page_widget.cpp
+    gui/accounts_widget.cpp
+    gui/onlineicon.cpp
+    gui/user_list_view.cpp
 )
 
 set(HPP_PROCESS
@@ -568,7 +591,6 @@ set(LIBS
     dtkwidget
     dtkgui
     ${LIB_PCAP}
-    ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
     ${LIB_XCB}
@@ -577,9 +599,15 @@ set(LIBS
     ${LIB_NL3_LIBRARIES}
     ${LIB_NL3_ROUTE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
+#    ${DFrameworkDBus_LIBRARIES}   # chinalife
 )
+
 if (USE_DEEPIN_WAYLAND)
-    list(APPEND LIBS DWaylandClient DWaylandServer)
+    if (DWayland_FOUND)
+        list(APPEND LIBS DWaylandClient DWaylandServer)
+    else()
+        list(APPEND LIBS KF5::WaylandClient KF5::WaylandServer)
+    endif()
 endif()
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
@@ -614,3 +642,12 @@ install(FILES translations/policy/${POLICY_FILE} DESTINATION ${CMAKE_INSTALL_DAT
 install(FILES translations/desktop/${DESKTOP_FILE} DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets/deepin-system-monitor DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application/)
+
+#hw机型增加DConfig配置
+set(APPID org.deepin.system-monitor)
+message("-- DConfig is supported by DTK ${PROJECT_SOURCE_DIR}")
+set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.system-monitor.main.json)
+if (DEFINED DSG_DATA_DIR)
+    message("-- DConfig is supported by DTK")
+    dconfig_meta_files(APPID ${APPID} FILES ${configFile})
+endif()

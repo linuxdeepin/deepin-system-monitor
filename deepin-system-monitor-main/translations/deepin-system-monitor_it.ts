@@ -1104,5 +1104,27 @@ Sicuro di voler terminarla?</translation>
         <source>Services</source>
         <translation>Servizi</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>Utenti</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Amministratore</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Utente standard</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Modifica info account</translation>
+    </message>
 </context>
 </TS>

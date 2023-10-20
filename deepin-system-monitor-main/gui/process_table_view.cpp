@@ -21,6 +21,7 @@
 #include "model/process_table_model.h"
 #include "process/process_db.h"
 #include "common/eventlogutils.h"
+#include "helper.hpp"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -52,22 +53,24 @@ using namespace common::init;
 // process table view backup setting key
 const QByteArray header_version = "_1.0.0";
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
-ProcessTableView::ProcessTableView(DWidget *parent)
+static const char *kSettingsOption_ProcessTableHeaderStateOfUserMode = "process_table_header_state_user";
+ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
     : BaseTableView(parent)
+    , m_useModeName(userName)
 {
     // install event filter for table view to handle key events
     installEventFilter(this);
 
     // model & sort filter proxy model instance
-    m_model = new ProcessTableModel(this);
+    m_model = new ProcessTableModel(this, userName);
     m_proxyModel = new ProcessSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
     // setModel must be called before calling loadSettings();
     setModel(m_proxyModel);
 
     // load process table view backup settings
-    bool settingsLoaded = loadSettings();
-
+    bool settingsLoaded = userName.isNull() ? loadSettings(kSettingsOption_ProcessTableHeaderState) :
+                          loadSettings(kSettingsOption_ProcessTableHeaderStateOfUserMode);
     // initialize ui components & connections
     initUI(settingsLoaded);
     initConnections(settingsLoaded);
@@ -75,6 +78,17 @@ ProcessTableView::ProcessTableView(DWidget *parent)
     // adjust search result tip label text color dynamically on theme type change
     onThemeTypeChanged();
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
+    if (!userName.isNull()) {
+        m_cpuUsage = m_model->getTotalCPUUsage();
+        m_memUsage = m_model->getTotalMemoryUsage();
+        m_download = m_model->getTotalDownload();
+        m_upload = m_model->getTotalUpload();
+        m_smemUsage = m_model->getTotalSharedMemoryUsage();
+        m_vmemUsage = m_model->getTotalVirtualMemoryUsage();
+        m_diskread = m_model->getTotalDiskRead();
+        m_diskwrite = m_model->getTotalDiskWrite();
+    }
+
 }
 
 // destructor
@@ -215,7 +229,9 @@ void ProcessTableView::openExecDirWithFM()
                     whichProcess.waitForFinished();
                     QString output(whichProcess.readAllStandardOutput());
 
-                    QString path = QString(output.split("\n")[0]).trimmed();
+                    QString path;
+                    if (!common::systemInfo().isOldVersion()) {
+                    path = QString(output.split("\n")[0]).trimmed();
                     // 读取persistent目录
                     if (path.isEmpty()) {
                         char nsPath[PATH_MAX] = {0}, nsSelfPath[PATH_MAX] = {0};
@@ -258,6 +274,9 @@ void ProcessTableView::openExecDirWithFM()
                                 }
                             }
                         }
+                    }
+                    } else {
+                        path = QString(output.split("\n")[0]).trimmed();
                     }
                     common::openFilePathItem(path);
                 }
@@ -332,7 +351,6 @@ void ProcessTableView::killProcess()
             {"process_name", proc.name()}
         };
         EventLogUtils::get().writeLogs(obj);
-
         ProcessDB::instance()->killProcess(qvariant_cast<pid_t>(m_selectedPID));
     } else {
         return;
@@ -373,11 +391,12 @@ void ProcessTableView::changeProcessPriority(int priority)
 }
 
 // load & restore table view settings from backup storage
-bool ProcessTableView::loadSettings()
+bool ProcessTableView::loadSettings(const QString &flag)
 {
     Settings *s = Settings::instance();
     if (s) {
-        const QVariant &opt = s->getOption(kSettingsOption_ProcessTableHeaderState);
+        const QVariant &opt = s->getOption(flag);
+
         if (opt.isValid()) {
             const QByteArray &buf = QByteArray::fromBase64(opt.toByteArray());
             if (buf.endsWith(header_version)) {
@@ -399,7 +418,12 @@ void ProcessTableView::saveSettings()
         QByteArray buf = header()->saveState();
         buf += header_version;
 
-        s->setOption(kSettingsOption_ProcessTableHeaderState, buf.toBase64());
+        if (m_useModeName.isNull()) {
+            s->setOption(kSettingsOption_ProcessTableHeaderState, buf.toBase64());
+        } else {
+            s->setOption(kSettingsOption_ProcessTableHeaderStateOfUserMode, buf.toBase64());
+        }
+
         s->flush();
     }
 }
@@ -672,6 +696,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(cpuHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessCPUColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // process user action
     auto *userHeaderAction = m_headerContextMenu->addAction(
@@ -688,6 +713,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(memHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessMemoryColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // share memory action
     auto *sharememHeaderAction = m_headerContextMenu->addAction(
@@ -696,6 +722,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(sharememHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessShareMemoryColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     //vtr memory action
     auto *vtrmemHeaderAction = m_headerContextMenu->addAction(
@@ -704,6 +731,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(vtrmemHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessVTRMemoryColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // upload rate action
     auto *uploadHeaderAction = m_headerContextMenu->addAction(
@@ -712,6 +740,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(uploadHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessUploadColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // download rate action
     auto *downloadHeaderAction = m_headerContextMenu->addAction(
@@ -720,6 +749,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(downloadHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessDownloadColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // disk read rate action
     auto *dreadHeaderAction = m_headerContextMenu->addAction(
@@ -728,6 +758,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(dreadHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessDiskReadColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // disk write rate action
     auto *dwriteHeaderAction = m_headerContextMenu->addAction(
@@ -736,6 +767,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(dwriteHeaderAction, &QAction::triggered, this, [this](bool b) {
         header()->setSectionHidden(ProcessTableModel::kProcessDiskWriteColumn, !b);
         saveSettings();
+        Q_EMIT signalHeadchanged();
     });
     // pid action
     auto *pidHeaderAction = m_headerContextMenu->addAction(
@@ -815,6 +847,17 @@ void ProcessTableView::initConnections(bool settingsLoaded)
                     this->setCurrentIndex(m_proxyModel->index(i, 0));
             }
         }
+        if (!m_useModeName.isNull()) {
+            m_cpuUsage = m_model->getTotalCPUUsage();
+            m_memUsage = m_model->getTotalMemoryUsage();
+            m_download = m_model->getTotalDownload();
+            m_upload = m_model->getTotalUpload();
+            m_smemUsage = m_model->getTotalSharedMemoryUsage();
+            m_vmemUsage = m_model->getTotalVirtualMemoryUsage();
+            m_diskread = m_model->getTotalDiskRead();
+            m_diskwrite = m_model->getTotalDiskWrite();
+        }
+        Q_EMIT signalModelUpdated();
     });
 
     // end process shortcut
@@ -974,4 +1017,13 @@ void ProcessTableView::customizeProcessPriority()
         }
     });
     prioDialog->exec();
+}
+
+void ProcessTableView::setUserModeName(const QString &userName)
+{
+    if (userName != m_useModeName) {
+        m_useModeName = userName;
+        m_model->setUserModeName(m_useModeName);
+    }
+
 }

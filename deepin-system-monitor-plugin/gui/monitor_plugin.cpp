@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "monitor_plugin.h"
+#include "helper.hpp"
 
 // Qt
 #include <QDBusConnectionInterface>
@@ -67,15 +68,32 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
+#ifdef DDE_DOCK_NEW_VERSION
 //    if (itemKey == "system-monitor")
 //        return m_itemWidget;
+#else
+        if (itemKey == "system-monitor")
+            return m_itemWidget;
+#endif
     return nullptr;
 }
 
 void MonitorPlugin::pluginStateSwitched()
 {
+#ifndef DDE_DOCK_NEW_VERSION
+    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
 
+    refreshPluginItemsVisible();
+#endif
 }
+
+#ifndef DDE_DOCK_NEW_VERSION
+bool MonitorPlugin::pluginIsDisable()
+{
+    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+}
+#endif
 
 QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
@@ -150,6 +168,7 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     }
 }
 
+#ifdef DDE_DOCK_NEW_VERSION
 QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     QString iconName = "dsm_pluginicon_light";
@@ -186,6 +205,7 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
     }
     return icon;
 }
+#endif
 
 void MonitorPlugin::udpateTipsInfo()
 {
@@ -242,15 +262,41 @@ void MonitorPlugin::loadPlugin()
 
     m_itemWidget = new MonitorPluginButtonWidget;
 
+#ifdef DDE_DOCK_NEW_VERSION
+    // 新版本dde-dock不需要应用自己判断是否显示插件，只添加即可
+    m_proxyInter->itemAdded(this, pluginName());
+#else
     if (!m_isFirstInstall) {
-        m_proxyInter->itemAdded(this, pluginName());
+        // 非初始状态
+        if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
+            m_proxyInter->itemAdded(this, pluginName());
+        } else {
+            m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
+            m_proxyInter->itemRemoved(this, pluginName());
+        }
     } else {
         m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
         m_proxyInter->itemRemoved(this, pluginName());
     }
+#endif
 
     displayModeChanged(displayMode());
 }
+
+#ifndef DDE_DOCK_NEW_VERSION
+void MonitorPlugin::refreshPluginItemsVisible()
+{
+    if (pluginIsDisable()) {
+        m_proxyInter->itemRemoved(this, pluginName());
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        m_proxyInter->itemAdded(this, pluginName());
+    }
+}
+#endif
 
 void MonitorPlugin::initPluginState()
 {

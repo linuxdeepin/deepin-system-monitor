@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "systemprotectionsetting.h"
+#include "helper.hpp"
 
 #include <DSettingsWidgetFactory>
 #include <DCommandLinkButton>
@@ -41,8 +42,6 @@ int SystemProtectionSetting::m_lastValidCPUValue = 0;
 int SystemProtectionSetting::m_lastValidMemoryValue = 0;
 int SystemProtectionSetting::m_lastValidInternalValue = 0;
 
-
-
 Q_GLOBAL_STATIC(SystemProtectionSetting, theInstance)
 
 // 修改控件字体大小
@@ -55,9 +54,9 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 
     // 获取系统字体大小设置
 
-    QDBusInterface interface("org.deepin.dde.Appearance1",
-                                 "/org/deepin/dde/Appearance1",
-                                 "org.deepin.dde.Appearance1");
+    QDBusInterface interface(common::systemInfo().AppearanceService,
+                             common::systemInfo().AppearancePath,
+                             common::systemInfo().AppearanceInterface);
     // 获取失败，返回
     if (interface.isValid() == false) {
         return false;
@@ -476,14 +475,18 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
 
     if (genericName.isEmpty() == false) {
         // 跳转到设置页并指定Item
-        QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall("org.deepin.dde.ControlCenter1",
-                                                                               "/org/deepin/dde/ControlCenter1",
-                                                                               "org.deepin.dde.ControlCenter1",
+        QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
+                                                                               common::systemInfo().ControlCenterPath,
+                                                                               common::systemInfo().ControlCenterInterface,
                                                                                "ShowPage");
         QList<QVariant> args;
-        args << QString("notification/%1").append(genericName);
-//        args.append("notification");
-//        args.append(genericName);
+        if (!common::systemInfo().isOldVersion()) {
+            args << QString("notification/%1").append(genericName);
+        } else {
+            args.append("notification");
+            args.append(genericName);
+        }
+
         showDDEControlCenterPage.setArguments(args);
 
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenterPage);
@@ -496,10 +499,21 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
     } else {
         // 跳转到设置页
         // qdbus org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowModule notification
-        QDBusMessage showDDEControlCenter = QDBusMessage::createMethodCall("org.deepin.dde.ControlCenter1",
-                                                                           "/org/deepin/dde/ControlCenter1",
-                                                                           "org.deepin.dde.ControlCenter1",
+
+        QDBusMessage showDDEControlCenter;
+        if (!common::systemInfo().isOldVersion()) {
+            showDDEControlCenter = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
+                                                                           common::systemInfo().ControlCenterPath,
+                                                                           common::systemInfo().ControlCenterInterface,
                                                                            "ShowPage");
+        } else {
+            showDDEControlCenter = QDBusMessage::createMethodCall("com.deepin.dde.ControlCenter",
+                                                                           "/com/deepin/dde/ControlCenter",
+                                                                           "com.deepin.dde.ControlCenter",
+                                                                           "ShowModule");
+        }
+
+
         QList<QVariant> args;
         args << "notification";
         showDDEControlCenter.setArguments(args);
@@ -585,9 +599,9 @@ void SystemProtectionSetting::onUpdateNewBackend()
 {
     // 创建新的数据后端，应对可能的设置数据变化
     QString strConfigPath = QString("%1/%2/%3/protection.conf")
-                            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-                            .arg(qApp->organizationName())
-                            .arg(qApp->applicationName());
+            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+            .arg(qApp->organizationName())
+            .arg(qApp->applicationName());
 
     Dtk::Core::QSettingBackend *newBackend = new QSettingBackend(strConfigPath);
     // 为DSetting更新数据后端

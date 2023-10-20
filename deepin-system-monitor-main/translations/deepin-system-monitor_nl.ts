@@ -1103,5 +1103,27 @@ Weet je zeker dat je door wilt gaan?</translation>
         <source>Services</source>
         <translation>Diensten</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>Gebruikers</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Beheerder</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Standaardgebruiker</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Accountinformatie bewerken</translation>
+    </message>
 </context>
 </TS>

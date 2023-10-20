@@ -119,6 +119,16 @@ timeval Process::procuptime() const
     return d->uptime;
 }
 
+void Process::readProcessVariableInfo()
+{
+    readProcessInfo();
+}
+
+void Process::readProcessSimpleInfo()
+{
+    readProcessInfo();
+}
+
 void Process::readProcessInfo()
 {
     d->valid = true;

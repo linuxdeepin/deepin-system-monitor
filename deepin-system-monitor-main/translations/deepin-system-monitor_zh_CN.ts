@@ -1125,5 +1125,27 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>系统服务</translation>
     </message>
+   <message>
+        <source>Users</source>
+        <translation>用户</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>管理员</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>标准用户</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>修改帐户信息</translation>
+    </message>
 </context>
 </TS>

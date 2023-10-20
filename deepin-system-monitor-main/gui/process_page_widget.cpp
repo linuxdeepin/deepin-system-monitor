@@ -97,7 +97,6 @@ void ProcessPageWidget::initUI()
     m_views = new DStackedWidget(this);
     m_views->setAutoFillBackground(false);
     m_views->setContentsMargins(0, 0, 0, 0);
-    m_views->setAutoFillBackground(false);
     m_views->setFixedWidth(common::getStatusBarMaxWidth());
 
     // right ====> tab button + process table

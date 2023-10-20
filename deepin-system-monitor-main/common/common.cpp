@@ -6,6 +6,7 @@
 #include "common.h"
 #include "stack_trace.h"
 #include "hash.h"
+#include "helper.hpp"
 
 #include <QPainter>
 #include <QString>
@@ -196,6 +197,7 @@ QList<QString> pathList;
 //默认为低性能，防止在获取CPU性能之前就卡死
 CPUMaxFreq CPUPerformance = CPUMaxFreq::High;
 bool WaylandCentered;
+int specialComType = -1;
 
 void WaylandSearchCentered()
 {
@@ -207,7 +209,8 @@ void WaylandSearchCentered()
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
         WaylandCentered = true;
-        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+        if (!common::systemInfo().isOldVersion())
+            qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     } else {
         WaylandCentered = false;
     }

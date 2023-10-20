@@ -43,7 +43,6 @@ find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
-find_library(LIB_PROPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
@@ -293,7 +292,6 @@ target_link_libraries(${PROJECT_NAME}
     dtkcore
     dtkwidget
     dtkgui
-    ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
     ${LIB_XCB}
@@ -305,6 +303,7 @@ target_link_libraries(${PROJECT_NAME}
     ${LIB_DDEDOCK}
 #    gsettings-qt
 )
+
 
 #生成qm
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)

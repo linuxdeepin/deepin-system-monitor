@@ -7,6 +7,7 @@
 #include "common/datacommon.h"
 //#include "itemwidget.h"
 #include "dbus/dbusayatanainterface.h"
+#include "helper.hpp"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -33,7 +34,6 @@
 #define DOCK_BOTTOM     2
 #define DOCK_LEFT       3
 
-#define MONITOR_SERVICE "org.deepin.dde.XEventMonitor1"
 #define SCREEN_HEIGHT_MAX 1080
 #define NOT_USE_QUIT_TIME_INTERVAL 5*60*1000
 
@@ -43,8 +43,14 @@ const QString KILL_DBUS_COMMAND = "killall deepin-system-monitor-plugin-popup";
 
 MainWindow::MainWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
-    , m_displayInter(new QDBusInterface("org.deepin.dde.Display1", "/org/deepin/dde/Display1","org.deepin.dde.Display1", QDBusConnection::sessionBus(), this))
-    , m_daemonDockInter(new QDBusInterface("org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", "org.deepin.dde.daemon.Dock1",QDBusConnection::sessionBus(), this))
+    , m_displayInter(new QDBusInterface(common::systemInfo().DISPLAY_SERVICE,
+                                        common::systemInfo().DISPLAY_PATH,
+                                        common::systemInfo().DISPLAY_INTERFACE,
+                                        QDBusConnection::sessionBus(), this))
+    , m_daemonDockInter(new QDBusInterface(common::systemInfo().DOCK_SERVICE,
+                                           common::systemInfo().DOCK_PATH,
+                                           common::systemInfo().DOCK_INTERFACE,
+                                           QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusDockInterface)
     , m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor)
     , m_regionMonitor(nullptr)
@@ -64,9 +70,10 @@ MainWindow::MainWindow(QWidget *parent)
     if(m_displayInter->isValid()){
         auto ss = m_displayInter->property("Monitors");
 
-        QDBusInterface busInterface("org.deepin.dde.Display1", "/org/deepin/dde/Display1",
+        QDBusInterface busInterface(common::systemInfo().DISPLAY_SERVICE,
+                                    common::systemInfo().DISPLAY_PATH,
                                     "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-        QDBusMessage reply = busInterface.call("Get", "org.deepin.dde.Display1", "Monitors");
+        QDBusMessage reply = busInterface.call("Get", common::systemInfo().DISPLAY_INTERFACE, "Monitors");
         QVariant v = reply.arguments().first();
         const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
         while (!argument.atEnd()) {
@@ -334,15 +341,15 @@ void MainWindow::initConnect()
         move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width))), m_rect.y());
     });
 
-    QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
+    QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(common::systemInfo().MONITOR_SERVICE, QDBusConnection::sessionBus());
     connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, [ = ](const QString & service) {
-        if (MONITOR_SERVICE != service)
+        if (common::systemInfo().MONITOR_SERVICE != service)
             return;
         registerMonitor();
     });
 
     connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, [ = ](const QString & service) {
-        if (MONITOR_SERVICE != service)
+        if (common::systemInfo().MONITOR_SERVICE != service)
             return;
         disconnect(m_regionMonitor);
     });
@@ -388,9 +395,10 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
 
 void MainWindow::dbusPropertiesChanged(QString interface, QVariantMap maps, QStringList strs)
 {
-    if((interface == "org.deepin.dde.Display1" && maps.contains("PrimaryRect")) || (interface == "org.deepin.dde.daemon.Dock1" && (maps.contains("Position") || maps.contains("DisplayMode")))){
+    if((interface == common::systemInfo().DISPLAY_INTERFACE && maps.contains("PrimaryRect")) ||
+            (interface == common::systemInfo().DOCK_INTERFACE && (maps.contains("Position") || maps.contains("DisplayMode")))){
         geometryChanged();
-    } else if(m_daemonDockInter->isValid() && interface == "org.deepin.dde.daemon.Dock1" && maps.contains("Opacity")){
+    } else if(m_daemonDockInter->isValid() && interface == common::systemInfo().DOCK_INTERFACE && maps.contains("Opacity")){
         this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->property("Opacity").toDouble() * 255));
     }
 }
@@ -502,7 +510,7 @@ QRect MainWindow::getDisplayScreen()
 {
     QRect dockRect = m_dockInter->geometry();
     for (const auto &monitorPath : m_dbusPathList) {
-        QDBusInterface monitor("org.deepin.dde.Display1", monitorPath.path(), "org.deepin.dde.Display1.Monitor",QDBusConnection::sessionBus());
+        QDBusInterface monitor(common::systemInfo().DISPLAY_INTERFACE, monitorPath.path(), common::systemInfo().DISPLAYMONITOR_INTERFACE,QDBusConnection::sessionBus());
         if(monitor.isValid()){
             int curX = m_displayInter->property("X").toInt();
             int curY = m_displayInter->property("X").toInt();
@@ -514,9 +522,9 @@ QRect MainWindow::getDisplayScreen()
         }
     }
     if(m_displayInter->isValid()){
-        QDBusInterface busInterface("org.deepin.dde.Display1", "/org/deepin/dde/Display1",
+        QDBusInterface busInterface(common::systemInfo().DISPLAY_SERVICE, common::systemInfo().DISPLAY_PATH,
                                     "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-        QDBusMessage reply = busInterface.call("Get", "org.deepin.dde.Display1", "PrimaryRect");
+        QDBusMessage reply = busInterface.call("Get", common::systemInfo().DISPLAY_INTERFACE, "PrimaryRect");
         QVariant v = reply.arguments().first();
         const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 
