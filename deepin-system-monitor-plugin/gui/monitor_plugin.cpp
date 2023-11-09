@@ -29,12 +29,16 @@ MonitorPlugin::MonitorPlugin(QObject *parent)
     , m_pluginLoaded(false)
     , m_dataTipsLabel(nullptr)
     , m_refershTimer(new QTimer(this))
+#ifdef USE_API_QUICKPANEL20
+    , m_quickPanelWidget(new QuickPanelWidget)
+#endif
 {
     if (QGSettings::isSchemaInstalled("com.deepin.system.monitor.plugin")) {
         m_settings = new QGSettings("com.deepin.system.monitor.plugin", "/com/deepin/system/monitor/plugin/", this);
     }
 
     connect(m_refershTimer, &QTimer::timeout, this, &MonitorPlugin::udpateTipsInfo);
+    qInfo() <<__FUNCTION__ << __LINE__ << "[-MonitorPlugin-]" ;
 }
 
 const QString MonitorPlugin::pluginName() const
@@ -62,16 +66,33 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
         loadPlugin();
     }
 
+#ifdef USE_API_QUICKPANEL20
+    m_proxyInter->itemAdded(this, pluginName());
+    m_quickPanelWidget->setDescription(pluginDisplayName());
+    QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light";
+    m_quickPanelWidget->setIcon(QIcon::fromTheme(plugIcon));
+    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] QUICKPANEL20";
+#endif
+
     calcCpuRate(m_totalCPU, m_availableCPU);
     calcNetRate(m_down, m_upload);
+#ifdef DDE_DOCK_NEW_VERSION
+    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] V23";
+#endif
 }
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
+    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-]" << itemKey;
 #ifdef DDE_DOCK_NEW_VERSION
 //    if (itemKey == "system-monitor")
 //        return m_itemWidget;
 #else
+#ifdef USE_API_QUICKPANEL20
+    if (itemKey == Dock::QUICK_ITEM_KEY) {
+        return m_quickPanelWidget;
+    }
+#endif
         if (itemKey == "system-monitor")
             return m_itemWidget;
 #endif
@@ -91,7 +112,11 @@ void MonitorPlugin::pluginStateSwitched()
 #ifndef DDE_DOCK_NEW_VERSION
 bool MonitorPlugin::pluginIsDisable()
 {
+#ifdef USE_API_QUICKPANEL20
+    return false;
+#else
     return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+#endif
 }
 #endif
 
@@ -118,6 +143,9 @@ void MonitorPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 
     if (!pluginIsDisable()) {
         m_itemWidget->update();
+#ifdef USE_API_QUICKPANEL20
+        m_quickPanelWidget->update();
+#endif
     }
 }
 
@@ -443,3 +471,18 @@ double MonitorPlugin::autoRateUnits(qlonglong speed, RateUnit &unit)
 
     return sp;
 }
+
+#ifdef USE_API_QUICKPANEL20
+MonitorPlugin::~MonitorPlugin()
+{
+    if (m_quickPanelWidget) {
+        delete m_quickPanelWidget;
+        m_quickPanelWidget = nullptr;
+    }
+}
+
+QIcon MonitorPlugin::icon(Dock::IconType iconType, Dock::ThemeType) const
+{
+    return( (iconType == Dock::IconType_DCC_Settings) ? QIcon(":/deepin-system-monitor.svg") : QIcon());
+}
+#endif
