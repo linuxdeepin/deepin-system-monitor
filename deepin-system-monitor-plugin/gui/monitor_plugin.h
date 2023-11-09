@@ -7,7 +7,26 @@
 #define MONITORPLUGIN_H
 
 //  smo-plugin
+#include <dde-dock/constants.h>
+/* to void  //1070  and V23 exist same time */
+#ifdef DOCK_API_VERSION
+#if (DOCK_API_VERSION >= DOCK_API_VERSION_CHECK(2, 0, 0))
+    #define  USE_API_QUICKPANEL20   //1070
+#endif
+#endif
+
+#ifndef USE_API_QUICKPANEL20
+#ifdef  DDE_DOCK_MAJORV6
+    #define  DDE_DOCK_NEW_VERSION
+#endif
+#endif
+
+#ifdef USE_API_QUICKPANEL20
+#include <dde-dock/pluginsiteminterface_v2.h>
+#include "quickpanelwidget.h"
+#else
 #include <pluginsiteminterface.h>
+#endif
 #include "monitorpluginbuttonwidget.h"
 
 #include "dbus/dbusinterface.h"
@@ -23,18 +42,28 @@
 #include <DGuiApplicationHelper>
 #include <QScopedPointer>
 
+#ifdef USE_API_QUICKPANEL20
+using namespace Dock;
+#define DOCK_DEFAULT_POS   -1
+#define PLUGIN_INTERDACE  PluginsItemInterfaceV2
+#define PLUGIN_METADATA()  Q_PLUGIN_METADATA(IID ModuleInterface_iid_V2 FILE "system-monitor_20.json")
+#else
 #define DOCK_DEFAULT_POS   0
+#define PLUGIN_INTERDACE  PluginsItemInterface
+#define PLUGIN_METADATA()  Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
+#endif
 
 class QGSettings;
 //!
 //! \brief The MonitorPlugin class
 //! 实现插件接口对象的类
 //!
-class MonitorPlugin : public QObject, PluginsItemInterface
+class MonitorPlugin : public QObject, PLUGIN_INTERDACE
 {
     Q_OBJECT
-    Q_INTERFACES(PluginsItemInterface)
-    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
+    Q_INTERFACES(PLUGIN_INTERDACE)
+    PLUGIN_METADATA();
+
 public:
     enum RateUnit {
         RateBit,
@@ -52,7 +81,10 @@ public:
     //! \param parent 传递的父对象指针
     //!
     explicit MonitorPlugin(QObject *parent = Q_NULLPTR);
-
+#ifdef USE_API_QUICKPANEL20
+    //! \brief ~MonitorPlugin 析构函数
+    ~MonitorPlugin();
+#endif
     // 以下是必须要实现的PluginsItemInterface接口
     //!
     //! \brief pluginName 返回插件名称，用于在dde-dock内部管理插件时使用
@@ -151,6 +183,17 @@ public:
     ///
     QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) Q_DECL_OVERRIDE;
 #endif
+#ifdef USE_API_QUICKPANEL20
+    //!
+    //! the flags for the plugin
+    //!
+    Dock::PluginFlags flags() const  { return Dock::Type_Quick | Dock::Quick_Panel_Single | Dock::Attribute_Normal; }
+    //!
+    //! the icon for the plugin
+    //! themeType {0:UnknownType 1:LightType 2:DarkType}
+    //!
+    virtual QIcon icon(Dock::IconType, Dock::ThemeType) const ;
+#endif
 
 private slots:
 
@@ -216,12 +259,13 @@ private:
     double autoRateUnits(qlonglong speed, RateUnit &unit);
 
 private:
+#ifdef USE_API_QUICKPANEL20
+    QuickPanelWidget *m_quickPanelWidget;
+#endif
+
     bool m_pluginLoaded;
-
     MonitorPluginButtonWidget *m_itemWidget = nullptr;
-
     QScopedPointer<SystemMonitorTipsWidget> m_dataTipsLabel;
-
     QGSettings *m_settings;
 
     qlonglong m_down = 0;
