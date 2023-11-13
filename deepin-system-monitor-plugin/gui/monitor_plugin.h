@@ -202,6 +202,13 @@ private slots:
     //!
     void udpateTipsInfo();
 
+#ifdef USE_API_QUICKPANEL20
+    //!
+    //! \brief onClickQuickPanel mouse event active
+    //!
+    void onClickQuickPanel();
+#endif
+
 private:
     //!
     //! \brief loadPlugin 加载插件
