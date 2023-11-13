@@ -71,6 +71,7 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
     m_quickPanelWidget->setDescription(pluginDisplayName());
     QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light";
     m_quickPanelWidget->setIcon(QIcon::fromTheme(plugIcon));
+    connect(m_quickPanelWidget,&QuickPanelWidget::clicked,this,&MonitorPlugin::onClickQuickPanel);
     qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] QUICKPANEL20";
 #endif
 
@@ -193,6 +194,10 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
         //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
         QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
         QTimer::singleShot(200, this, [ = ]() { QProcess::startDetached(cmd); });
+#ifdef USE_API_QUICKPANEL20
+        qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] right ClickQuickPanel";
+        m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
+#endif
     }
 }
 
@@ -484,5 +489,12 @@ MonitorPlugin::~MonitorPlugin()
 QIcon MonitorPlugin::icon(Dock::IconType iconType, Dock::ThemeType) const
 {
     return( (iconType == Dock::IconType_DCC_Settings) ? QIcon(":/deepin-system-monitor.svg") : QIcon());
+}
+
+void MonitorPlugin::onClickQuickPanel()
+{
+    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] ClickQuickPanel";
+    m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
+    DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
 }
 #endif

@@ -40,7 +40,7 @@ private:
 
 private slots:
     void refreshBg();
-    void onClickQuickPanel();
+
 private:
     CommonIconButton *m_icon;
     DLabel *m_description;
