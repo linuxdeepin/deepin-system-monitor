@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "quickpanelwidget.h"
-#include "dbus/dbusinterface.h"
 
 #include <QVBoxLayout>
 
@@ -19,13 +18,12 @@ QuickPanelWidget::QuickPanelWidget(QWidget* parent)
 {
     initUI();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &QuickPanelWidget::refreshBg);
-    connect(this,&QuickPanelWidget::clicked,this,&QuickPanelWidget::onClickQuickPanel);
 }
 
 QuickPanelWidget::~QuickPanelWidget()
 {
-}
 
+}
 
 void QuickPanelWidget::initUI()
 {
@@ -89,11 +87,10 @@ void QuickPanelWidget::paintEvent(QPaintEvent *event)
 
 void QuickPanelWidget::refreshBg()
 {
+    QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light";
+    setIcon(QIcon::fromTheme(plugIcon));
+
     m_description->setForegroundRole(m_icon->activeState() && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType ? QPalette::Highlight : QPalette::NoRole);
     update();
 }
 
-void QuickPanelWidget::onClickQuickPanel()
-{
-    DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
-}
