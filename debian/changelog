@@ -1,3 +1,9 @@
+deepin-system-monitor (6.0.9) unstable; urgency=medium
+
+  * new version.
+
+ -- shuaijie <shuaijie@uniontech.com>  Thu, 14 Nov 2023 10:08:10 +0800
+
 deepin-system-monitor (6.0.8) unstable; urgency=medium
 
   * feat: 改造系统监视器服务
@@ -23,7 +29,7 @@ deepin-system-monitor (6.0.8) unstable; urgency=medium
 
  -- YeShanShan <yeshanshan@deepin.org>  Mon, 11 Sep 2023 15:48:23 +0800
 
-deepin-system-monitor (6.0.7) UNRELEASED; urgency=medium
+deepin-system-monitor (6.0.7) unstable; urgency=medium
 
   * new version.
 
