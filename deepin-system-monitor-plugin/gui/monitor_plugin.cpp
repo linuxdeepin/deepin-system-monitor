@@ -33,10 +33,6 @@ MonitorPlugin::MonitorPlugin(QObject *parent)
     , m_quickPanelWidget(new QuickPanelWidget)
 #endif
 {
-    if (QGSettings::isSchemaInstalled("com.deepin.system.monitor.plugin")) {
-        m_settings = new QGSettings("com.deepin.system.monitor.plugin", "/com/deepin/system/monitor/plugin/", this);
-    }
-
     connect(m_refershTimer, &QTimer::timeout, this, &MonitorPlugin::udpateTipsInfo);
     qInfo() <<__FUNCTION__ << __LINE__ << "[-MonitorPlugin-]" ;
 }
@@ -94,8 +90,8 @@ QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
         return m_quickPanelWidget;
     }
 #endif
-        if (itemKey == "system-monitor")
-            return m_itemWidget;
+    if (itemKey == "system-monitor")
+        return m_itemWidget;
 #endif
     return nullptr;
 }
@@ -103,10 +99,17 @@ QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 void MonitorPlugin::pluginStateSwitched()
 {
 #ifndef DDE_DOCK_NEW_VERSION
-    bool pluginState = !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
-    m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, pluginState);
-
-    refreshPluginItemsVisible();
+    const bool disabledNew = !pluginIsDisable();
+    m_proxyInter->saveValue(this, "disabled", disabledNew);
+    if (disabledNew) {
+        m_proxyInter->itemRemoved(this, pluginName());
+    } else {
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
+        m_proxyInter->itemAdded(this, pluginName());
+    }
 #endif
 }
 
@@ -116,7 +119,7 @@ bool MonitorPlugin::pluginIsDisable()
 #ifdef USE_API_QUICKPANEL20
     return false;
 #else
-    return !m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, false).toBool();
+    return m_proxyInter->getValue(this, "disabled", true).toBool();
 #endif
 }
 #endif
@@ -283,8 +286,6 @@ void MonitorPlugin::loadPlugin()
     if (m_pluginLoaded)
         return;
 
-    initPluginState();
-
     m_pluginLoaded = true;
 
     m_dataTipsLabel.reset(new SystemMonitorTipsWidget);
@@ -295,52 +296,9 @@ void MonitorPlugin::loadPlugin()
 
     m_itemWidget = new MonitorPluginButtonWidget;
 
-#ifdef DDE_DOCK_NEW_VERSION
-    // 新版本dde-dock不需要应用自己判断是否显示插件，只添加即可
     m_proxyInter->itemAdded(this, pluginName());
-#else
-    if (!m_isFirstInstall) {
-        // 非初始状态
-        if (m_proxyInter->getValue(this, constantVal::PLUGIN_STATE_KEY, true).toBool()) {
-            m_proxyInter->itemAdded(this, pluginName());
-        } else {
-            m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
-            m_proxyInter->itemRemoved(this, pluginName());
-        }
-    } else {
-        m_proxyInter->saveValue(this, constantVal::PLUGIN_STATE_KEY, false);
-        m_proxyInter->itemRemoved(this, pluginName());
-    }
-#endif
 
     displayModeChanged(displayMode());
-}
-
-#ifndef DDE_DOCK_NEW_VERSION
-void MonitorPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        m_proxyInter->itemAdded(this, pluginName());
-    }
-}
-#endif
-
-void MonitorPlugin::initPluginState()
-{
-    if (m_settings == nullptr)
-        return;
-    if (m_settings->get("isfirstinstall").toBool()) {
-        m_isFirstInstall = true;
-        m_settings->set("isfirstinstall", false);
-    } else {
-        m_isFirstInstall = false;
-    }
 }
 
 void MonitorPlugin::calcCpuRate(qlonglong &totalCPU, qlonglong &availableCPU)

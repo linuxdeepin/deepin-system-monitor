@@ -215,18 +215,6 @@ private:
     //!
     void loadPlugin();
 
-#ifndef DDE_DOCK_NEW_VERSION
-    //!
-    //! \brief refreshPluginItemsVisible 刷新插件项显示隐藏
-    //!
-    void refreshPluginItemsVisible();
-#endif
-
-    //!
-    //! \brief initPluginState 初始化插件状态
-    //!
-    void initPluginState();
-
     //!
     //! \brief calcCpuRate 计算CPU占用率
     //! \param totalCPU 总CPU占用率
@@ -273,7 +261,6 @@ private:
     bool m_pluginLoaded;
     MonitorPluginButtonWidget *m_itemWidget = nullptr;
     QScopedPointer<SystemMonitorTipsWidget> m_dataTipsLabel;
-    QGSettings *m_settings;
 
     qlonglong m_down = 0;
     qlonglong m_upload = 0;
@@ -283,8 +270,6 @@ private:
     QTimer *m_refershTimer;
 
     QString startup;
-
-    bool m_isFirstInstall = false;//判断插件是否第一次安装
 
     QString m_cpuStr{"0.0"};       //转换后的cpu数据
     QString m_memStr{"0.0"};       //转换后的mem数据
