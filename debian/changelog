@@ -1,3 +1,9 @@
+deepin-system-monitor (6.0.10) unstable; urgency=medium
+
+  * fix: 控制中心任务栏首次设置系统监视器展示，需要点击2次，系统监视器图标才会在任务栏中显示
+
+ -- fengli <fengli@uniontech.com>  Fri, 22 Dec 2023 15:20:59 +0800
+
 deepin-system-monitor (6.0.9) unstable; urgency=medium
 
   * new version.
