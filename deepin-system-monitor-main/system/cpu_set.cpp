@@ -639,7 +639,8 @@ void CPUSet::read_dmi_cache_info()
             process.waitForStarted();
             process.waitForFinished();
             QString result = process.readAll();
-            if(!result.contains("PWC30", Qt::CaseInsensitive)){  //w525
+            if(!result.contains("PWC30", Qt::CaseInsensitive)   //w525
+                    && !result.contains("PGUX", Qt::CaseInsensitive)){
                 process.close();
                 return;
             }
