@@ -87,8 +87,9 @@ void QuickPanelWidget::paintEvent(QPaintEvent *event)
 
 void QuickPanelWidget::refreshBg()
 {
-    QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light";
-    setIcon(QIcon::fromTheme(plugIcon));
+    QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "status-system-monitor-dark" : "status-system-monitor";
+    QIcon fallbackIcon = QIcon::fromTheme(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "dsm_pluginicon_dark" : "dsm_pluginicon_light");
+    setIcon(QIcon::fromTheme(plugIcon, fallbackIcon));
 
     m_description->setForegroundRole(m_icon->activeState() && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType ? QPalette::Highlight : QPalette::NoRole);
     update();
