@@ -65,8 +65,9 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
 #ifdef USE_API_QUICKPANEL20
     m_proxyInter->itemAdded(this, pluginName());
     m_quickPanelWidget->setDescription(pluginDisplayName());
-    QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light";
-    m_quickPanelWidget->setIcon(QIcon::fromTheme(plugIcon));
+    QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "status-system-monitor-dark" : "status-system-monitor";
+    QIcon fallbackIcon = QIcon::fromTheme(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light");
+    m_quickPanelWidget->setIcon(QIcon::fromTheme(plugIcon, fallbackIcon));
     connect(m_quickPanelWidget,&QuickPanelWidget::clicked,this,&MonitorPlugin::onClickQuickPanel);
     qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] QUICKPANEL20";
 #endif
@@ -446,7 +447,10 @@ MonitorPlugin::~MonitorPlugin()
 
 QIcon MonitorPlugin::icon(Dock::IconType iconType, Dock::ThemeType) const
 {
-    return( (iconType == Dock::IconType_DCC_Settings) ? QIcon(":/deepin-system-monitor.svg") : QIcon());
+    QIcon fallbackIcon = QIcon(":/deepin-system-monitor.svg");
+    QString iconName = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "status-system-monitor-dark" : "status-system-monitor";
+
+    return( (iconType == Dock::IconType_DCC_Settings) ? QIcon::fromTheme(iconName, fallbackIcon) : QIcon());
 }
 
 void MonitorPlugin::onClickQuickPanel()

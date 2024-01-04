@@ -38,7 +38,8 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
 
-    QString iconName = "dsm_pluginicon_light";
+    QString iconName = "status-system-monitor";
+    QString fallbackIconName = "dsm_pluginicon_light";
     QPixmap pixmap;
     int iconSize = PLUGIN_ICON_MAX_SIZE;
 
@@ -84,13 +85,14 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
         painter.fillPath(path, color);
     } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
         // 最小尺寸时，不画背景，采用深色图标
-        iconName = "dsm_pluginicon_dark";
+        iconName = "status-system-monitor-dark";
+        fallbackIconName = "dsm_pluginicon_dark";
     }
 
     const auto ratio = devicePixelRatioF();
     painter.setOpacity(1);
 
-    pixmap = loadSvg(iconName, ":/icons/deepin/builtin/actions/", iconSize, ratio);
+    pixmap = loadSvg(iconName, fallbackIconName, ":/icons/deepin/builtin/actions/", iconSize, ratio);
 
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());
@@ -155,9 +157,10 @@ void MonitorPluginButtonWidget::leaveEvent(QEvent *event)
     QWidget::leaveEvent(event);
 }
 
-const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio)
+const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const QString &fallbackIconName, const QString &localPath, const int size, const qreal ratio)
 {
-    QIcon icon = QIcon::fromTheme(iconName);
+    QIcon fallbackIcon = QIcon::fromTheme(fallbackIconName);
+    QIcon icon = QIcon::fromTheme(iconName, fallbackIcon);
     int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
     if (!icon.isNull()) {
         QPixmap pixmap = icon.pixmap(pixmapSize);
@@ -166,7 +169,7 @@ const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const 
     }
 
     QPixmap pixmap(pixmapSize, pixmapSize);
-    QString localIcon = QString("%1%2%3").arg(localPath).arg(iconName + "_20px").arg(iconName.contains(".svg") ? "" : ".svg");
+    QString localIcon = QString("%1%2%3").arg(localPath).arg(fallbackIconName + "_20px").arg(fallbackIconName.contains(".svg") ? "" : ".svg");
     QSvgRenderer renderer(localIcon);
     pixmap.fill(Qt::transparent);
 
