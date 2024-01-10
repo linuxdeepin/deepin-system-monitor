@@ -12,6 +12,10 @@
 #include "ui_common.h"
 #include "common/common.h"
 
+#ifdef USE_DEEPIN_WAYLAND
+#include "3rdparty/displayjack/wayland_client.h"
+#endif
+
 #include <QDebug>
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -32,6 +36,15 @@ using namespace std;
 using namespace core::wm;
 using namespace common::init;
 
+typedef int (*InitDtkWmDisplayPtr)();
+typedef void (*DestoryDtkWmDisplayPtr)();
+typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
+
+// displayjack库接口
+static InitDtkWmDisplayPtr InitDtkWmDisplay = nullptr;
+static DestoryDtkWmDisplayPtr DestoryDtkWmDisplay = nullptr;
+static GetAllWindowStatesListPtr GetAllWindowStatesList = nullptr;
+
 // constructor
 XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
 {
@@ -43,6 +56,14 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
     if (WaylandCentered) {
         m_connectionThread = new QThread(this);
         m_connectionThreadObject = new ConnectionThread();
+
+        QLibrary library("libdtkwmjack.so");
+        InitDtkWmDisplay = reinterpret_cast<int (*)()>(library.resolve("InitDtkWmDisplay"));
+        DestoryDtkWmDisplay = reinterpret_cast<void (*)()>(library.resolve("DestoryDtkWmDisplay"));
+        GetAllWindowStatesList = reinterpret_cast<int (*)(WindowState **)>(library.resolve("GetAllWindowStatesList"));
+
+        if (InitDtkWmDisplay)
+            InitDtkWmDisplay();
     }
 #endif // USE_DEEPIN_WAYLAND
 
@@ -68,11 +89,15 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
     releaseMouse();
     releaseKeyboard();
     delete m_wminfo;
+
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         m_connectionThread->quit();
         m_connectionThread->wait();
         m_connectionThreadObject->deleteLater();
+
+        if (DestoryDtkWmDisplay)
+            DestoryDtkWmDisplay();
     }
 #endif // USE_DEEPIN_WAYLAND
 }
@@ -408,6 +433,7 @@ void XWinKillPreviewWidget::initConnections()
     }
 #endif // USE_DEEPIN_WAYLAND
 }
+
 //打印当前窗口信息接口
 #ifdef USE_DEEPIN_WAYLAND
 void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::WindowState> &m_windowStates)
@@ -445,7 +471,7 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
             m_clientManagement = registry->createClientManagement(name, version, this);
             connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
             [this] {
-                m_windowStates = m_clientManagement->getWindowStates();
+                m_windowStates = getAllWindowStates();
             }
                    );
         }
@@ -455,7 +481,7 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
         [this] {
             Q_ASSERT(m_compositor);
             Q_ASSERT(m_clientManagement);
-            m_windowStates = m_clientManagement->getWindowStates();
+            m_windowStates = getAllWindowStates();
         }
                );
 
@@ -464,5 +490,45 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
         registry->setup();
     }
 }
+
+QVector<ClientManagement::WindowState> XWinKillPreviewWidget::getAllWindowStates()
+{
+    QVector<ClientManagement::WindowState> vWindowStates;
+
+    // 能解析到displayjack的接口，优先使用dispalayjack接口获取窗口状态
+    if (GetAllWindowStatesList) {
+        // 使用displayjack库接口获取窗口状态
+        WindowState * pStates = nullptr;
+        int nCount = GetAllWindowStatesList(&pStates);
+        if (nCount <= 0)
+            return vWindowStates;
+
+        for (int i = 0; i < nCount; i++)
+        {
+            WindowState *p = &pStates[i];
+            ClientManagement::WindowState windowState;
+            windowState.pid = p->pid;
+            windowState.windowId = p->windowId;
+            memcpy(windowState.resourceName, p->resourceName, sizeof(p->resourceName));
+            windowState.geometry.x = p->geometry.x;
+            windowState.geometry.y = p->geometry.y;
+            windowState.geometry.width = p->geometry.width;
+            windowState.geometry.height = p->geometry.height;
+            windowState.isMinimized = p->isMinimized;
+            windowState.isFullScreen = p->isFullScreen;
+            windowState.isActive = p->isActive;
+
+            vWindowStates.push_back(windowState);
+        }
+        free(pStates);
+    } else {
+        // 使用kde接口获取窗口状态
+        Q_ASSERT(m_clientManagement);
+        return m_clientManagement->getWindowStates();
+    }
+
+    return vWindowStates;
+}
+
 #endif // USE_DEEPIN_WAYLAND
 
