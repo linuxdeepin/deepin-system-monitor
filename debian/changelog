@@ -1,6 +1,13 @@
+deepin-system-monitor (6.0.11) unstable; urgency=medium
+
+  * feat: replace the plugin icon with the system icon
+  * feat: adapt to new models
+
+ -- fengli <fengli@uniontech.com>  Wed, 10 Jan 2024 11:47:17 +0800
+
 deepin-system-monitor (6.0.10) unstable; urgency=medium
 
-  * fix: 控制中心任务栏首次设置系统监视器展示，需要点击2次，系统监视器图标才会在任务栏中显示
+  * fix: The first time the system monitor display is set up in the control center taskbar, it needs to be clicked twice before the system monitor icon will be displayed in the taskbar
 
  -- fengli <fengli@uniontech.com>  Fri, 22 Dec 2023 15:20:59 +0800
 
