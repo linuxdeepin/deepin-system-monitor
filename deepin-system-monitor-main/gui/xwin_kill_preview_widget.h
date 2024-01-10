@@ -107,6 +107,10 @@ private:
      */
     void initConnections();
 
+#ifdef USE_DEEPIN_WAYLAND
+    QVector<ClientManagement::WindowState> getAllWindowStates();
+#endif
+
 private:
     // Window manager (x11) instance
     core::wm::WMInfo *m_wminfo;
