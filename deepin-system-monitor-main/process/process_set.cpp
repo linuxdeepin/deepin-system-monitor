@@ -111,13 +111,13 @@ void ProcessSet::scanProcess()
 
         for (const pid_t &pid : m_curPid) {
             if(!m_prePid.contains(pid)){ //add  new process pid
-                Process *proc = new Process(pid);
-                proc->readProcessSimpleInfo();
+                Process proc(pid);
+                proc.readProcessSimpleInfo();
                 if(!m_simpleSet.contains(pid))
-                     m_simpleSet.insert(proc->pid(), *proc);
+                     m_simpleSet.insert(proc.pid(), proc);
 
-                if (proc->appType() == kFilterApps && !wmwindowList->isTrayApp(proc->pid())) {
-                     m_pidMyApps << proc->pid();
+                if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
+                     m_pidMyApps << proc.pid();
                 }
             }
         }

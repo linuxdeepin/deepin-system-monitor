@@ -62,6 +62,7 @@ class AccountsInfoModel : public QObject
 
 public:
     explicit AccountsInfoModel(QObject *parent = nullptr);
+    virtual ~AccountsInfoModel();
     void updateUserList(const QStringList &userPathList);
     QList<User *> userList() const;
     User::UserType getCurrentUserType() const;
