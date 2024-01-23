@@ -43,6 +43,12 @@ AccountsInfoModel::AccountsInfoModel(QObject *parent): QObject(parent)
                                          this, SLOT(onSessionNew(QString, QDBusObjectPath)));
 }
 
+AccountsInfoModel::~AccountsInfoModel()
+{
+    qDeleteAll(m_userMap.values());
+    m_userMap.clear();
+}
+
 void AccountsInfoModel::onUserListChanged(const QStringList &userPathList)
 {
     updateUserList(userPathList);
