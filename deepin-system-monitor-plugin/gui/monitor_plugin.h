@@ -188,11 +188,6 @@ public:
     //! the flags for the plugin
     //!
     Dock::PluginFlags flags() const  { return Dock::Type_Quick | Dock::Quick_Panel_Single | Dock::Attribute_Normal; }
-    //!
-    //! the icon for the plugin
-    //! themeType {0:UnknownType 1:LightType 2:DarkType}
-    //!
-    virtual QIcon icon(Dock::IconType, Dock::ThemeType) const ;
 #endif
 
 private slots:
