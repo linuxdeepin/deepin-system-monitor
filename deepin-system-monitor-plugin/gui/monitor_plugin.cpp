@@ -445,14 +445,6 @@ MonitorPlugin::~MonitorPlugin()
     }
 }
 
-QIcon MonitorPlugin::icon(Dock::IconType iconType, Dock::ThemeType) const
-{
-    QIcon fallbackIcon = QIcon(":/deepin-system-monitor.svg");
-    QString iconName = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "status-system-monitor-dark" : "status-system-monitor";
-
-    return( (iconType == Dock::IconType_DCC_Settings) ? QIcon::fromTheme(iconName, fallbackIcon) : QIcon());
-}
-
 void MonitorPlugin::onClickQuickPanel()
 {
     qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] ClickQuickPanel";
