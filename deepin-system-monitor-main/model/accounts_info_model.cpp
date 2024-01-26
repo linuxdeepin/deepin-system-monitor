@@ -72,7 +72,10 @@ void AccountsInfoModel::onSessionRemoved(const QString &in0, const QDBusObjectPa
 void AccountsInfoModel::updateUserList(const QStringList &userPathList)
 {
     qInfo() << "AccountsInfoModel updateUserList line 61" << "updateUserList begins!" ;
+    // 释放构造对象
+    qDeleteAll(m_userMap.values());
     m_userMap.clear();
+
     for (QString userPath : userPathList) {
         QDBusInterface *userDBus = new QDBusInterface(common::systemInfo().AccountsService, userPath, common::systemInfo().UserInterface, QDBusConnection::systemBus(), this);
         User *newUser = new User;
@@ -90,9 +93,10 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
         }
         qInfo() << "AccountsInfoModel updateUserList line 78" << "get user info of :" << newUser->name();
         m_userMap.insert(newUser->name(), newUser);
+
+        delete userDBus;
     }
 }
-
 
 void AccountsInfoModel::updateUserOnlineStatus()
 {
