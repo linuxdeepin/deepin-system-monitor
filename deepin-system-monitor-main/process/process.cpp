@@ -638,7 +638,10 @@ void Process::readSockInodes()
             if (!stat(fdp, &sbuf)) {
                 // get inode if it's a socket descriptor
                 if (S_ISSOCK(sbuf.st_mode)) {
-                    d->sockInodes << sbuf.st_ino;
+                    // not append repeat data, may memory leak.
+                    if (!d->sockInodes.contains(sbuf.st_ino)) {
+                        d->sockInodes << sbuf.st_ino;
+                    }
                 }
             } // ::if(stat)
         } // ::if(isdigit)
