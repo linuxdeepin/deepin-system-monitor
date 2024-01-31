@@ -351,7 +351,11 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 3) {
         return proc.appType();
     } else if (role == Qt::UserRole + 4) {
-        return QString("%1").arg(proc.pid());
+        QString cmdlineStr = proc.cmdlineString();
+        if (!cmdlineStr.isEmpty())
+            return cmdlineStr;
+        else
+            return QString("%1").arg(proc.name());
     }
     return {};
 }

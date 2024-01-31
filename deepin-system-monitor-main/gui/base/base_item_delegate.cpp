@@ -183,15 +183,18 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         auto diff = (iconRect.height() - iconSize) / 2;
         iconRect.adjust(0, diff, 0, -diff);
 
-        const QString &procPid = index.data(Qt::UserRole + 4).toString();
+        // Qt的QIcon::pixmap()接口返回QPixmap对象的内存不会回收，此处使用QPixmapCache类来管理进程图标内存资源
+        // 原有QPixmapCache::find接口返回的pixmap指针为空，改为返回pixmap引用对象，保证能根据进程名从缓存中获取到图标资源
+        // https://pms.uniontech.com/bug-view-239575.html
+        const QString &procName = index.data(Qt::UserRole + 4).toString();
 
-        QPixmap  *iconPixmap = nullptr;
-        core::process::ProcessIconCache::instance()->iconPixmapCache.find(procPid, iconPixmap);
-        if (iconPixmap) {
-            painter->drawPixmap(iconRect, *iconPixmap);
+        QPixmap  iconPixmap;
+        core::process::ProcessIconCache::instance()->iconPixmapCache.find(procName, iconPixmap);
+        if (!iconPixmap.isNull()) {
+            painter->drawPixmap(iconRect, iconPixmap);
         } else {
             const QPixmap &iconPix = icon.pixmap(iconRect.size());
-            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procPid, iconPix);
+            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procName, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
     }
