@@ -45,7 +45,7 @@ class DBusDockInterface: public QDBusAbstractInterface
    }
 public:
     static inline const char *staticInterfaceName()
-    { return common::systemInfo().DockService.toStdString().c_str(); }
+    { return (common::systemInfo().isOldVersion() ? "com.deepin.dde.Dock": "org.deepin.dde.Dock1"); }
 
 public:
     explicit DBusDockInterface( QObject *parent = nullptr);
