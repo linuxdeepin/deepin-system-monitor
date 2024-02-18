@@ -412,8 +412,8 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
 
-    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-    header()->setPalette(palette);
+//    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+//    header()->setPalette(palette);
 
     // header view instance
     auto *hdr = header();
@@ -566,8 +566,8 @@ void SystemServiceTableView::initConnections()
             m_noMatchingResultLabel->setPalette(palette);
         }
 
-        palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-        header()->setPalette(palette);
+//        palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+//        header()->setPalette(palette);
 
         auto pa = DApplicationHelper::instance()->applicationPalette();
         // set spinner color

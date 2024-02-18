@@ -104,8 +104,8 @@ void ProcessTableView::onThemeTypeChanged()
     palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
     m_notFoundLabel->setPalette(palette);
 
-    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-    header()->setPalette(palette);
+//    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
+//    header()->setPalette(palette);
 }
 
 QString ProcessTableView::getProcessName(int pid)
@@ -443,23 +443,23 @@ void ProcessTableView::initUI(bool settingsLoaded)
     palette.setColor(DPalette::Text, labelColor);
     m_notFoundLabel->setPalette(palette);
     m_notFoundLabel->setVisible(false);
-
     // header view options
+    // header view instance
+    auto *hdr = header();
     // header section movable
-    header()->setSectionsMovable(true);
+    hdr->setSectionsMovable(true);
     // header section clickable
-    header()->setSectionsClickable(true);
+    hdr->setSectionsClickable(true);
     // header section resizable
-    header()->setSectionResizeMode(DHeaderView::Interactive);
+    hdr->setSectionResizeMode(DHeaderView::Interactive);
     // stretch last header section
-    header()->setStretchLastSection(true);
+    hdr->setStretchLastSection(true);
     // show sort indicator on sort column
-    header()->setSortIndicatorShown(true);
+    hdr->setSortIndicatorShown(true);
     // header section default alignment
-    header()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    hdr->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     // header section context menu policy
-    header()->setContextMenuPolicy(Qt::CustomContextMenu);
-
+    hdr->setContextMenuPolicy(Qt::CustomContextMenu);
     // table options
     setSortingEnabled(true);
     // only single row selection allowed

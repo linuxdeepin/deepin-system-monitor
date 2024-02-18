@@ -35,7 +35,11 @@ QSize BaseHeaderView::sizeHint() const
 void BaseHeaderView::paintEvent(QPaintEvent *event)
 {
     DHeaderView::paintEvent(event);
-
+    if(DApplicationHelper::instance()->themeType()==Dtk::Gui::DGuiApplicationHelper::ColorType::LightType){
+         setStyleSheet("border-radius: 8px;border: 1px solid white;");
+    }else{
+        setStyleSheet("border-radius: 8px;border: 1px solid rgba(0,0,0,12);");
+    }
     // draw focus
     if (hasFocus() && m_focusReason == Qt::TabFocusReason) {
         QPainter painter(viewport());

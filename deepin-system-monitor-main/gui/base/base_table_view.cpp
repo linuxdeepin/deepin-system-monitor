@@ -54,7 +54,8 @@ BaseTableView::BaseTableView(DWidget *parent)
     m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
     // header view focus policy
     m_headerView->setFocusPolicy(Qt::StrongFocus);
-
+    // header section context min width
+    m_headerView->setMinimumSectionSize(120);
     // not allowing expanding/collpasing top-level items
     setRootIsDecorated(false);
     // items are not expandable
