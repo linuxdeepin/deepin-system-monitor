@@ -171,7 +171,10 @@ void CompactCpuMonitor::resizeItemRect()
 {
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 12, m_detailButton->fontMetrics().height() + 4);
     const QSize &detailtextSize =  m_detailButton->size();
-    m_detailButton->setGeometry(this->width() - detailtextSize.width(), 0, detailtextSize.width(), detailtextSize.height());
+    //additonPoses to align with the cpu text
+    int additionPosX=3;
+    int additionPoxY=3;
+    m_detailButton->setGeometry(this->width() - detailtextSize.width() + additionPosX, additionPoxY, detailtextSize.width(), detailtextSize.height());
 }
 
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
