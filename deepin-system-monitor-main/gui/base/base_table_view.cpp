@@ -34,7 +34,6 @@ BaseTableView::BaseTableView(DWidget *parent)
     // set delegate instance
     m_itemDelegate = new BaseItemDelegate(this);
     setItemDelegate(m_itemDelegate);
-
     // set header view instance
     m_headerView = new BaseHeaderView(Qt::Horizontal, this);
     setHeader(m_headerView);
@@ -84,6 +83,8 @@ BaseTableView::BaseTableView(DWidget *parent)
     scroller->setScrollerProperties(prop);
     // enable touch gesture
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
+    //set horizontalScrollbar always visible
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
 // set view model
