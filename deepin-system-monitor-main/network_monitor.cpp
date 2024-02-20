@@ -263,7 +263,7 @@ void NetworkMonitor::paintEvent(QPaintEvent *)
     qreal space = 2;
     dashes << 2 << space;
     gridPen.setColor(m_frameColor);
-    gridPen.setWidth(penSize);
+    gridPen.setWidth(0);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 
