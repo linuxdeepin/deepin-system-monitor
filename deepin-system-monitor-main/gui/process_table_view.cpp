@@ -67,14 +67,12 @@ ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
     m_proxyModel->setSourceModel(m_model);
     // setModel must be called before calling loadSettings();
     setModel(m_proxyModel);
-
     // load process table view backup settings
     bool settingsLoaded = userName.isNull() ? loadSettings(kSettingsOption_ProcessTableHeaderState) :
                           loadSettings(kSettingsOption_ProcessTableHeaderStateOfUserMode);
     // initialize ui components & connections
     initUI(settingsLoaded);
     initConnections(settingsLoaded);
-
     // adjust search result tip label text color dynamically on theme type change
     onThemeTypeChanged();
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
@@ -103,9 +101,6 @@ void ProcessTableView::onThemeTypeChanged()
     auto palette = DApplicationHelper::instance()->applicationPalette();
     palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
     m_notFoundLabel->setPalette(palette);
-
-//    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-//    header()->setPalette(palette);
 }
 
 QString ProcessTableView::getProcessName(int pid)

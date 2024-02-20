@@ -5,6 +5,7 @@
 
 #include "cpu_summary_view_widget.h"
 
+#define SUMMARY_CHART_LINE_ALPH 0.13
 
 CPUSummaryTableModel::CPUSummaryTableModel(CPUInfoModel *model, QObject *parent): QAbstractTableModel(parent), m_model(model)
 {
@@ -74,7 +75,7 @@ void CPUDetailSummaryTable::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
-    frameColor.setAlphaF(0.13);
+    frameColor.setAlphaF(SUMMARY_CHART_LINE_ALPH);
 
     painter.setPen(QPen(frameColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setBrush(Qt::NoBrush);

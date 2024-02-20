@@ -17,6 +17,8 @@
 
 DWIDGET_USE_NAMESPACE
 
+#define SUMARY_ROW_BG_ALPH 0.03
+
 const int space = 10;
 const int margin = 10;
 BaseDetailItemDelegate::BaseDetailItemDelegate(QObject *parent)
@@ -36,14 +38,19 @@ void BaseDetailItemDelegate::paint(QPainter *painter,
 {
     QBrush background;
     QColor backgroundColor;
-    if(DApplicationHelper::instance()->themeType()==Dtk::Gui::DGuiApplicationHelper::ColorType::LightType){
-        backgroundColor=QColor(0,0,0);
+    if (DApplicationHelper::instance()->themeType() == Dtk::Gui::DGuiApplicationHelper::ColorType::LightType)
+    {
+        backgroundColor = QColor(0, 0, 0);
         backgroundColor.setAlphaF(0);
-        if (!(index.row() & 1)) backgroundColor.setAlphaF(0.03);
-    }else{
-        backgroundColor=QColor(255,255,255);
+        if (!(index.row() & 1))
+            backgroundColor.setAlphaF(SUMARY_ROW_BG_ALPH);
+    }
+    else
+    {
+        backgroundColor = QColor(255, 255, 255);
         backgroundColor.setAlphaF(0);
-        if (!(index.row() & 1)) backgroundColor.setAlphaF(0.03);
+        if (!(index.row() & 1))
+            backgroundColor.setAlphaF(SUMARY_ROW_BG_ALPH);
     }
     background = backgroundColor;
     painter->save();
@@ -55,7 +62,8 @@ void BaseDetailItemDelegate::paint(QPainter *painter,
     painter->setBrush(background);
     painter->drawRect(option.rect);
 
-    if (index.isValid()) {
+    if (index.isValid())
+    {
         const auto &ltextpalette = index.data(Qt::TextColorRole).value<QColor>();
         painter->setPen(ltextpalette);
 

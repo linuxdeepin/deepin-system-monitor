@@ -296,6 +296,8 @@ void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &grap
     dashes << space << space;
     gridPen.setDashPattern(dashes);
     gridPen.setColor(frameColor);
+    //set to 0 lead to line with always 1px
+    gridPen.setWidth(0);
     painter.setPen(gridPen);
     int section = 10;
 

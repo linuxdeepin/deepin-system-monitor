@@ -238,6 +238,8 @@ void ChartViewWidget::drawBackPixmap()
     dashes << space << space;
     gridPen.setDashPattern(dashes);
     gridPen.setColor(frameColor);
+    //set to 0 lead to line with always 1px
+    gridPen.setWidth(0);
     painter.setPen(gridPen);
 
     int gridLineX = gridX;

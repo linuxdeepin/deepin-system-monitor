@@ -86,7 +86,6 @@ void ProcessTableModel::updateProcessListWithUserSpecified()
 
     ProcessSet *processSet = ProcessDB::instance()->processSet();
     const QList<pid_t> &newpidlst = processSet->getPIDList();
-
     beginRemoveRows({}, 0, m_procIdList.size());
     endRemoveRows();
     m_procIdList.clear();
@@ -390,6 +389,7 @@ int ProcessTableModel::getProcessPriorityValue(pid_t pid) const
 // remove process entry from model with specified pid
 void ProcessTableModel::removeProcess(pid_t pid)
 {
+    qWarning()<<m_procIdList.count()<<"1";
     int row = m_procIdList.indexOf(pid);
     if (row >= 0) {
         beginRemoveRows(QModelIndex(), row, row);

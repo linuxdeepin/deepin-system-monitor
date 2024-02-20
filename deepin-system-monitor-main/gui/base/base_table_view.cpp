@@ -24,6 +24,8 @@
 #include <QScrollBar>
 #include <QFocusEvent>
 
+#define HEADER_MIN_SECTION_SIZE 120
+
 // default constructor
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -54,7 +56,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     // header view focus policy
     m_headerView->setFocusPolicy(Qt::StrongFocus);
     // header section context min width
-    m_headerView->setMinimumSectionSize(120);
+    m_headerView->setMinimumSectionSize(HEADER_MIN_SECTION_SIZE);
     // not allowing expanding/collpasing top-level items
     setRootIsDecorated(false);
     // items are not expandable
@@ -91,13 +93,15 @@ BaseTableView::BaseTableView(DWidget *parent)
 void BaseTableView::setModel(QAbstractItemModel *model)
 {
     DTreeView::setModel(model);
-
     // listen on modelReset signal, reset any hovered or pressed index
     if (model) {
         connect(model, &QAbstractItemModel::modelReset, this, [ = ]() {
             m_hover = {};
             m_pressed = {};
         });
+//        connect(model, &QAbstractItemModel::rowsRemoved, this, [ = ]() {
+//        qWarning()<<(model->rowCount()==0);
+//        });
     }
 }
 
@@ -162,7 +166,6 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 {
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
-
 #ifdef ENABLE_INACTIVE_DISPLAY
     QWidget *wnd = DApplication::activeWindow();
 #endif
@@ -184,7 +187,6 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
         cg = DPalette::Active;
 #endif
     }
-
     // DStyle instance
     auto *style = dynamic_cast<DStyle *>(DApplication::style());
 
