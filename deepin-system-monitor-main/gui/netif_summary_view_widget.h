@@ -36,6 +36,7 @@ using namespace common::core;
 #define TEXTSPACING 30  // 内容文字间距
 DWIDGET_USE_NAMESPACE
 
+#define SUMARY_ROW_BG_ALPH 0.03
 
 /**
  * @brief Network interface summary view widget
@@ -95,14 +96,24 @@ public:
                const QStyleOptionViewItem &option,
                const QModelIndex &index) const
     {
-        const auto &palette =DApplicationHelper::instance()->applicationPalette();
-        QColor backgroundColor = palette.color(DPalette::Active,DPalette::Background);
-        QBrush background = backgroundColor;
-
-        if (!(index.row() & 1)){
-            QColor backgroundObviousColor = palette.color(DPalette::Active,DPalette::ItemBackground);
-            background = backgroundObviousColor;
+        const auto &palette = DApplicationHelper::instance()->applicationPalette();
+        QBrush background;
+        QColor backgroundColor;
+        if (DApplicationHelper::instance()->themeType() == Dtk::Gui::DGuiApplicationHelper::ColorType::LightType)
+        {
+            backgroundColor = QColor(0, 0, 0);
+            backgroundColor.setAlphaF(0);
+            if (!(index.row() & 1))
+                backgroundColor.setAlphaF(SUMARY_ROW_BG_ALPH);
         }
+        else
+        {
+            backgroundColor = QColor(255, 255, 255);
+            backgroundColor.setAlphaF(0);
+            if (!(index.row() & 1))
+                backgroundColor.setAlphaF(SUMARY_ROW_BG_ALPH);
+        }
+        background = backgroundColor;
 
         painter->save();
         QPainterPath clipPath;
@@ -163,7 +174,6 @@ public:
                         painter->drawText(valueRect, Qt::AlignLeft | Qt::AlignVCenter, listValue[i]);
                     }
                 }
-
             } else if (index.column() == 0 && stInfo.eType != ShowInfo::Normal) {
                 // 绘制第1列IPV
                 textRect.setY(textRect.y() + TOPMARGIN);
@@ -172,7 +182,6 @@ public:
                 // 其余左对齐、垂直居中
                 painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::DisplayRole).toString());
             }
-
         }
         painter->restore();
     }

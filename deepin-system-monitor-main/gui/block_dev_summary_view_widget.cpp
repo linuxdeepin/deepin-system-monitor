@@ -28,6 +28,8 @@
 using namespace core::system;
 using namespace common::format;
 
+#define SUMMARY_CHART_LINE_ALPH 0.13
+
 class DeailTableModelBlock : public QAbstractTableModel
 {
 public:
@@ -256,7 +258,7 @@ void BlockDevSummaryViewWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
-    frameColor.setAlphaF(0.13);
+    frameColor.setAlphaF(SUMMARY_CHART_LINE_ALPH);
     painter.setPen(QPen(frameColor, 1));
     painter.setBrush(Qt::NoBrush);
     painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);
