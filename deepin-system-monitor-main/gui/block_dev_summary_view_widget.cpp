@@ -252,12 +252,11 @@ void BlockDevSummaryViewWidget::fontChanged(const QFont &font)
 void BlockDevSummaryViewWidget::paintEvent(QPaintEvent *event)
 {
     DTableView::paintEvent(event);
-
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
-    QColor frameColor = palette.color(DPalette::TextTips);
-    frameColor.setAlphaF(0.3);
+    QColor frameColor = palette.color(DPalette::FrameBorder);
+    frameColor.setAlphaF(0.13);
     painter.setPen(QPen(frameColor, 1));
     painter.setBrush(Qt::NoBrush);
     painter.drawLine(this->horizontalHeader()->sectionSize(0) - 1, 2, this->horizontalHeader()->sectionSize(0) - 1, this->viewport()->height() - 2);

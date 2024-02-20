@@ -34,10 +34,18 @@ void BaseDetailItemDelegate::paint(QPainter *painter,
                                    const QStyleOptionViewItem &option,
                                    const QModelIndex &index) const
 {
-    auto palette = option.palette;
-    QBrush background = palette.color(DPalette::Active, DPalette::Base);
-    if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
-
+    QBrush background;
+    QColor backgroundColor;
+    if(DApplicationHelper::instance()->themeType()==Dtk::Gui::DGuiApplicationHelper::ColorType::LightType){
+        backgroundColor=QColor(0,0,0);
+        backgroundColor.setAlphaF(0);
+        if (!(index.row() & 1)) backgroundColor.setAlphaF(0.03);
+    }else{
+        backgroundColor=QColor(255,255,255);
+        backgroundColor.setAlphaF(0);
+        if (!(index.row() & 1)) backgroundColor.setAlphaF(0.03);
+    }
+    background = backgroundColor;
     painter->save();
     QPainterPath clipPath;
     clipPath.addRoundedRect(option.widget->rect().adjusted(1, 1, -1, -1), 6, 6);

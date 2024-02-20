@@ -95,9 +95,14 @@ public:
                const QStyleOptionViewItem &option,
                const QModelIndex &index) const
     {
-        auto palette = option.palette;
-        QBrush background = palette.color(DPalette::Active, DPalette::Base);
-        if (!(index.row() & 1)) background = palette.color(DPalette::Active, DPalette::AlternateBase);
+        const auto &palette =DApplicationHelper::instance()->applicationPalette();
+        QColor backgroundColor = palette.color(DPalette::Active,DPalette::Background);
+        QBrush background = backgroundColor;
+
+        if (!(index.row() & 1)){
+            QColor backgroundObviousColor = palette.color(DPalette::Active,DPalette::ItemBackground);
+            background = backgroundObviousColor;
+        }
 
         painter->save();
         QPainterPath clipPath;
@@ -114,6 +119,7 @@ public:
 
             QPen forground;
             forground.setColor(palette.color(DPalette::Active, DPalette::Text));
+
             painter->setPen(forground);
 
             ShowInfo stInfo = index.data(Qt::UserRole).value<ShowInfo>();
