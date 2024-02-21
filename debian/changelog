@@ -1,3 +1,9 @@
+deepin-system-monitor (6.0.13) unstable; urgency=medium
+
+  * fix some bugs.
+
+ -- fengli <fengli@uniontech.com>  Wed, 21 Feb 2024 17:01:03 +0800
+
 deepin-system-monitor (6.0.12) unstable; urgency=medium
 
   * fix: Adapt getWindowStates() interface(Bug: 235483)
