@@ -87,8 +87,10 @@ void ProcessTableModel::updateProcessListWithUserSpecified()
     ProcessSet *processSet = ProcessDB::instance()->processSet();
     const QList<pid_t> &newpidlst = processSet->getPIDList();
 
-    beginRemoveRows({}, 0, m_procIdList.size());
-    endRemoveRows();
+    if (rowCount() > 0) {
+        beginRemoveRows({}, 0, rowCount() - 1);
+        endRemoveRows();
+    }
     m_procIdList.clear();
     m_processList.clear();
     int raw;
