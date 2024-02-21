@@ -244,8 +244,6 @@ const Process ProcessSet::getProcessById(pid_t pid) const
 
 QList<pid_t> ProcessSet::getPIDList() const
 {
-    const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, kFilterApps);
-    int index = vindex.toInt();
     // 当系统读取到的m_set为空时,通过keys()函数返回会造成段错误 原因是keys函数效率低下,会造成大量的内存拷贝
     // 替换方案是
     QList<pid_t> pidList {};
@@ -254,11 +252,7 @@ QList<pid_t> ProcessSet::getPIDList() const
     QMap<pid_t, Process>::key_iterator iterBegin = m_set.keyBegin();
     for (;iterBegin != m_set.keyEnd(); ++iterBegin) {
         pid_t tmpKey = *iterBegin;
-        Process proc = m_set[tmpKey];
-        if( ((kFilterApps == index) && (proc.appType()<= kFilterApps)) ||
-            ((kFilterCurrentUser == index) && (proc.appType() <= kFilterCurrentUser)) ||
-                (kNoFilter == index))
-            pidList.append(tmpKey);
+        pidList.append(tmpKey);
         if (size != m_set.size())
             break;
     }
