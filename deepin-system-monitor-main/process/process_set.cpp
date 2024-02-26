@@ -104,8 +104,9 @@ void ProcessSet::scanProcess()
                 m_prePid.removeAt(pid);  //remove disappear process pid
                 if(m_simpleSet.contains(pid))
                     m_simpleSet.remove(pid);
+                //for each pid,only one process reflected.So "removeOne()"func replied.
                 if(m_pidMyApps.contains(pid))
-                    m_pidMyApps.removeAt(pid);
+                    m_pidMyApps.removeOne(pid);
             }
         }
 
