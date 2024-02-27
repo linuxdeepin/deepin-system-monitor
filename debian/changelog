@@ -1,3 +1,9 @@
+deepin-system-monitor (6.0.14) unstable; urgency=medium
+
+  * New version 6.0.14.
+
+ -- fengli <fengli@uniontech.com>  Tue, 27 Feb 2024 15:55:47 +0800
+
 deepin-system-monitor (6.0.13) unstable; urgency=medium
 
   * fix some bugs.
