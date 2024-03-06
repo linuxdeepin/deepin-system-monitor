@@ -54,6 +54,10 @@ using namespace common::init;
 const QByteArray header_version = "_1.0.0";
 static const char *kSettingsOption_ProcessTableHeaderState = "process_table_header_state";
 static const char *kSettingsOption_ProcessTableHeaderStateOfUserMode = "process_table_header_state_user";
+/**
+ * @brief m_pControlConnection 单例对象的信号连接之后，需要保持只连接一次，避免多次触发信号槽
+ */
+static QMetaObject::Connection m_pControlConnection = QMetaObject::Connection();
 ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
     : BaseTableView(parent)
     , m_useModeName(userName)
@@ -878,11 +882,15 @@ void ProcessTableView::initConnections(bool settingsLoaded)
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
         }
     });
+    qInfo() << "'processControlResultReady' signal is connect?" << m_pControlConnection;
+    //The singleton object only needs to connect to the signal slot once.
     //show error dialog if sending signals to process failed
-    connect(ProcessDB::instance(), &ProcessDB::processControlResultReady, this,
+    if(!m_pControlConnection)
+    m_pControlConnection = connect(ProcessDB::instance(), &ProcessDB::processControlResultReady, this,
     [ = ](const ErrorContext & ec) {
         if (ec) {
             ErrorDialog::show(this, ec.getErrorName(), ec.getErrorMessage());
+            qWarning() << "ErrorName: " << ec.getErrorName() << ",ErrorMessage: " << ec.getErrorMessage();
         }
     });
 }
