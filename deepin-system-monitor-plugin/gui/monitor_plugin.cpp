@@ -244,19 +244,23 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
 }
 #endif
 
-void MonitorPlugin::udpateTipsInfo()
+void MonitorPlugin::udpateInfo()
 {
     // memory
     qlonglong memory = 0;
     qlonglong memoryAll = 0;
     calcMemRate(memory, memoryAll);
-    m_memStr = QString("%1").arg(memory * 100.0 / memoryAll, 1, 'f', 1, QLatin1Char(' '));
+    m_memStr = QString("%1").arg(memory * 100.0 / memoryAll, 1, 'f', 1, QLatin1Char(' ')) + QString("%");
 
     // CPU
     qlonglong totalCPU = 0;
     qlonglong availableCPU = 0;
     calcCpuRate(totalCPU, availableCPU);
-    m_cpuStr = QString("%1").arg((((totalCPU - m_totalCPU) - (availableCPU - m_availableCPU)) * 100.0 / (totalCPU - m_totalCPU)), 1, 'f', 1, QLatin1Char(' '));
+    double cpuPercent = 0.0;
+    if (totalCPU != m_totalCPU) {
+        cpuPercent = ((totalCPU - m_totalCPU) - (availableCPU - m_availableCPU)) * 100.0 / (totalCPU - m_totalCPU);
+    }
+    m_cpuStr = QString("%1").arg(cpuPercent, 1, 'f', 1, QLatin1Char(' ')) + QString("%");
     m_totalCPU = totalCPU;
     m_availableCPU = availableCPU;
 
@@ -278,7 +282,11 @@ void MonitorPlugin::udpateTipsInfo()
 
     m_down = netDownload;
     m_upload = netUpload;
+}
 
+void MonitorPlugin::udpateTipsInfo()
+{
+    udpateInfo();
     m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << m_cpuStr << m_memStr << m_downloadStr << m_uploadStr);
 }
 
@@ -292,8 +300,18 @@ void MonitorPlugin::loadPlugin()
     m_dataTipsLabel.reset(new SystemMonitorTipsWidget);
     m_dataTipsLabel->setObjectName("systemmonitorpluginlabel");
 
-    m_refershTimer->setInterval(2000);
-    m_refershTimer->start();
+    m_refershTimer->setInterval(1000);
+//    m_refershTimer->start();
+
+    connect(m_dataTipsLabel.get(),&SystemMonitorTipsWidget::visibleChanged,this,[=](bool visible){
+        if (!visible) {
+            m_refershTimer->stop();
+        } else {
+            udpateInfo();
+            m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "..." << "..." << "..." << "...");
+            m_refershTimer->start();
+        }
+    });
 
     m_itemWidget = new MonitorPluginButtonWidget;
 

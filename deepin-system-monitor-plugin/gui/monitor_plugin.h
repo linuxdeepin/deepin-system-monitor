@@ -191,6 +191,10 @@ public:
 #endif
 
 private slots:
+    //!
+    //! \brief udpateInfo 更新CPU MEM NET信息
+    //!
+    void udpateInfo();
 
     //!
     //! \brief udpateTipsInfo 更新CPU MEM NET信息

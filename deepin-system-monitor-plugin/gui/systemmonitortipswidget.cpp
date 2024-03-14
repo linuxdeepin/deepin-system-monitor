@@ -42,9 +42,9 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
 
     // 设置左侧字符串宽度
     if (cpu.length() == 3) {
-        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": 0") + cpu + QString("%") + QString(" "));
+        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": 0") + cpu + QString(" "));
     } else {
-        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%") + QString(" "));
+        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString(" "));
     }
     // 左侧宽度预留20个像素
     m_leftWidth += 20;
@@ -125,7 +125,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
 
     painter.setPen(QPen(palette().brightText(), 1));
     // 绘制CPU文字信息
-    painter.drawText(QRectF(leftMargin, 0.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%"), optionLeft);
+    painter.drawText(QRectF(leftMargin, 0.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu, optionLeft);
 
 
     // 绘制下箭头
@@ -151,7 +151,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     painter.restore();
 
     // 绘制内存文字信息
-    painter.drawText(QRectF(leftMargin, rectHeight / 2.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem + QString("%"), optionLeft);
+    painter.drawText(QRectF(leftMargin, rectHeight / 2.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem, optionLeft);
     painter.save();
     painter.setPen(QPen(palette().brightText(), 2));
     painter.setRenderHints(QPainter::Antialiasing);
@@ -177,6 +177,11 @@ bool SystemMonitorTipsWidget::event(QEvent *event)
             setSystemMonitorTipsText(m_textList);
         else
             setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0KB/s" << "0KB/s");
+    } else if (event->type() == QEvent::Hide) {
+        Q_EMIT visibleChanged(false);
+    } else if (event->type() == QEvent::Show) {
+        Q_EMIT visibleChanged(true);
     }
+
     return QFrame::event(event);
 }
