@@ -42,7 +42,11 @@ const QString KILL_DBUS_COMMAND = "killall deepin-system-monitor-plugin-popup";
 
 
 MainWindow::MainWindow(QWidget *parent)
+#ifdef DTKWIDGET_CLASS_DBlurEffectWithBorderWidget
+    : DBlurEffectWithBorderWidget(parent)
+#else
     : DBlurEffectWidget(parent)
+#endif
     , m_displayInter(new QDBusInterface(common::systemInfo().DISPLAY_SERVICE,
                                         common::systemInfo().DISPLAY_PATH,
                                         common::systemInfo().DISPLAY_INTERFACE,
