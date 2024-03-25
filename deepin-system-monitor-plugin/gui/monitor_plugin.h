@@ -188,6 +188,8 @@ public:
     //! the flags for the plugin
     //!
     Dock::PluginFlags flags() const  { return Dock::Type_Quick | Dock::Quick_Panel_Single | Dock::Attribute_Normal; }
+    //此接口只有在PluginsItemInterfaceV2下才可用
+    virtual void setMessageCallback(MessageCallbackFunc cb) override { m_messageCallback = cb; }
 #endif
 
 private slots:
@@ -206,6 +208,11 @@ private slots:
     //! \brief onClickQuickPanel mouse event active
     //!
     void onClickQuickPanel();
+
+    //!
+    //! \brief onSysMonPopVisibleChanged 系统监视器弹窗显示状态改变
+    //!
+    void onSysMonPopVisibleChanged(bool);
 #endif
 
 private:
@@ -255,6 +262,8 @@ private:
 private:
 #ifdef USE_API_QUICKPANEL20
     QuickPanelWidget *m_quickPanelWidget;
+    //此类型(MessageCallbackFunc)属于PluginsItemInterfaceV2
+    MessageCallbackFunc m_messageCallback;
 #endif
 
     bool m_pluginLoaded;

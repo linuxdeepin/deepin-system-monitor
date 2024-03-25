@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QPalette>
 #include <QTimer>
+#include <QShowEvent>
+#include <QHideEvent>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -336,6 +338,10 @@ void MainWindow::initConnect()
     connect(m_systemMonitorDbusAdaptor, &SystemMonitorDBusAdaptor::sigSendShowOrHideSystemMonitorPluginPopupWidget,
             this, &MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget);
 
+    //系统监视器弹窗显示状态改变
+    connect(this, &MainWindow::sysMonPopVisibleChanged,
+            m_systemMonitorDbusAdaptor, &SystemMonitorDBusAdaptor::sysMonPopVisibleChanged);
+
     connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
 
     connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant & value) {
@@ -591,5 +597,17 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 void MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget()
 {
     QTimer::singleShot(0, this, &MainWindow::Toggle);
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    Q_EMIT sysMonPopVisibleChanged(true);
+    QWidget::showEvent(event);
+}
+
+void MainWindow::hideEvent(QHideEvent *event)
+{
+    Q_EMIT sysMonPopVisibleChanged(false);
+    QWidget::hideEvent(event);
 }
 

@@ -24,6 +24,10 @@ public slots:
 
 signals:
     Q_SCRIPTABLE void sigSendShowOrHideSystemMonitorPluginPopupWidget();
+    //!
+    //! \brief sysMonPopVisibleChanged 系统监视器弹窗显示状态改变
+    //!
+    Q_SCRIPTABLE void sysMonPopVisibleChanged(bool);
 };
 
 #endif // SYSTEMMONITORDBUSADAPTOR_H
