@@ -31,6 +31,7 @@ MonitorPlugin::MonitorPlugin(QObject *parent)
     , m_refershTimer(new QTimer(this))
 #ifdef USE_API_QUICKPANEL20
     , m_quickPanelWidget(new QuickPanelWidget)
+    ,m_messageCallback(nullptr)
 #endif
 {
     connect(m_refershTimer, &QTimer::timeout, this, &MonitorPlugin::udpateTipsInfo);
@@ -70,6 +71,7 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
     m_quickPanelWidget->setIcon(QIcon::fromTheme(plugIcon, fallbackIcon));
     connect(m_quickPanelWidget,&QuickPanelWidget::clicked,this,&MonitorPlugin::onClickQuickPanel);
     qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] QUICKPANEL20";
+    QDBusConnection::sessionBus().connect("com.deepin.SystemMonitorPluginPopup", "/com/deepin/SystemMonitorPluginPopup", "com.deepin.SystemMonitorPluginPopup", "sysMonPopVisibleChanged", this, SLOT(onSysMonPopVisibleChanged(bool)));
 #endif
 
     calcCpuRate(m_totalCPU, m_availableCPU);
@@ -468,5 +470,18 @@ void MonitorPlugin::onClickQuickPanel()
     qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] ClickQuickPanel";
     m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
     DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+}
+//系统监视器弹窗显示状态改变
+void MonitorPlugin::onSysMonPopVisibleChanged(bool visible){
+    if (!m_messageCallback) {
+            qWarning() << "Message callback function is nullptr";
+            return;
+        }
+        QJsonObject msg;
+        msg[Dock::MSG_TYPE] = Dock::MSG_ITEM_ACTIVE_STATE;
+        msg[Dock::MSG_DATA] = visible;
+        QJsonDocument doc;
+        doc.setObject(msg);
+        m_messageCallback(this, doc.toJson());
 }
 #endif

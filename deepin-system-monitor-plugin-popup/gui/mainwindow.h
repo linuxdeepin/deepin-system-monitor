@@ -50,12 +50,19 @@ class MainWindow : public DBlurEffectWidget
     Q_OBJECT
     Q_PROPERTY(int width READ getWidth WRITE setFixedWidth)
     Q_PROPERTY(int x WRITE setX)
+    Q_PROPERTY(bool sysMonPopVisible READ sysMonPopVisible NOTIFY sysMonPopVisibleChanged)
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
 Q_SIGNALS:
     void signal_geometry(int height);
+    /*!
+     * \brief sysMonPopVisibleChanged 系统监视器弹窗显示状态改变
+     * \param visible
+     */
+    void sysMonPopVisibleChanged(bool visible);
 
 public Q_SLOTS:
     /*!
@@ -98,6 +105,12 @@ private Q_SLOTS:
     void CompositeChanged();
 
     void registerMonitor();
+
+    /*!
+     * \brief sysMonPopVisible 系统监视器弹窗显示状态
+     * \return
+     */
+    bool sysMonPopVisible() const{ return isVisible();}
 
 private:
     /*!
@@ -143,6 +156,8 @@ protected:
 
     virtual bool eventFilter(QObject *object, QEvent *event) override;
 
+    virtual void showEvent(QShowEvent *event) override;
+    virtual void hideEvent(QHideEvent *event) override;
 private slots:
     void slotShowOrHideSystemMonitorPluginPopupWidget();
     //!
