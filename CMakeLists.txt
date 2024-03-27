@@ -40,6 +40,25 @@ else()
     SET(IS_LOONGARCH_TYPE 0)
 endif()
 
+# For vasprintf in deepin-system-monitor-main/3rdparty/include/xalloc.h.
+# Also needed by the tests subdirectory.
+add_definitions("-D_GNU_SOURCE")
+
+# HAVE_CLOSE_RANGE is used by
+# deepin-system-monitor-main/3rdparty/include/fileutils.h to define
+# close_range if needed.
+try_compile(CLOSE_RANGE_RESULT "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+  "${PROJECT_SOURCE_DIR}/cmake/check-close_range.c")
+if(CLOSE_RANGE_RESULT)
+  add_definitions("-DHAVE_CLOSE_RANGE")
+endif()
+
+# Likewise, HAVE_DECL_CPU_ALLOC is used in
+# deepin-system-monitor-main/3rdparty/include/cpuset.h.  Support for
+# the <sched.h> macros was added in glibc 2.7, so define it
+# unconditionally.
+add_definitions("-DHAVE_DECL_CPU_ALLOC")
+
 #系统监视器主应用
 ADD_SUBDIRECTORY(deepin-system-monitor-main)
 #系统监视器插件
