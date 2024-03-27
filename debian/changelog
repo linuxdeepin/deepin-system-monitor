@@ -1,3 +1,11 @@
+deepin-system-monitor (6.0.17) unstable; urgency=medium
+
+  * fix: delay in reading system information in the plug-in (#325)
+  * chore: Adapt blurEffectWidget with inner and outer borders
+  * feat: Adapt taskbar icon activation status (#327) (Task: 331683)
+
+ -- renbin <renbin@uniontech.com>  Wed, 27 Mar 2024 15:23:42 +0800
+
 deepin-system-monitor (6.0.16) unstable; urgency=medium
 
   * New version 6.0.16.
