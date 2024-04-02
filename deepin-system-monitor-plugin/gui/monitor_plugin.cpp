@@ -137,7 +137,9 @@ QWidget *MonitorPlugin::itemTipsWidget(const QString &itemKey)
 const QString MonitorPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == "system-monitor") {
-        DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+        // Task 30767: 暂时调整为打开系统监视器，隐藏系统监视器插件
+        // DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+        openSystemMonitor();
     }
     return "";
 
@@ -195,15 +197,7 @@ void MonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(checked);
     Q_UNUSED(itemKey);
     if (menuId == "openSystemMointor") {
-        QProcess::startDetached("/usr/bin/deepin-system-monitor");
-
-        //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
-        QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
-        QTimer::singleShot(200, this, [ = ]() { QProcess::startDetached(cmd); });
-#ifdef USE_API_QUICKPANEL20
-        qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] right ClickQuickPanel";
-        m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
-#endif
+        openSystemMonitor();
     }
 }
 
@@ -456,6 +450,19 @@ double MonitorPlugin::autoRateUnits(qlonglong speed, RateUnit &unit)
     return sp;
 }
 
+void MonitorPlugin::openSystemMonitor()
+{
+    QProcess::startDetached("/usr/bin/deepin-system-monitor");
+
+    //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
+    QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
+    QTimer::singleShot(200, this, [ = ]() { QProcess::startDetached(cmd); });
+#ifdef USE_API_QUICKPANEL20
+    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] right ClickQuickPanel";
+    m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
+#endif
+}
+
 #ifdef USE_API_QUICKPANEL20
 MonitorPlugin::~MonitorPlugin()
 {
@@ -469,19 +476,23 @@ void MonitorPlugin::onClickQuickPanel()
 {
     qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] ClickQuickPanel";
     m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
-    DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+
+    // Task 30767: 暂时调整为打开系统监视器，隐藏系统监视器插件
+    // DBusInterface::getInstance()->showOrHideDeepinSystemMonitorPluginPopupWidget();
+    openSystemMonitor();
 }
+
 //系统监视器弹窗显示状态改变
 void MonitorPlugin::onSysMonPopVisibleChanged(bool visible){
     if (!m_messageCallback) {
-            qWarning() << "Message callback function is nullptr";
-            return;
-        }
-        QJsonObject msg;
-        msg[Dock::MSG_TYPE] = Dock::MSG_ITEM_ACTIVE_STATE;
-        msg[Dock::MSG_DATA] = visible;
-        QJsonDocument doc;
-        doc.setObject(msg);
-        m_messageCallback(this, doc.toJson());
+        qWarning() << "Message callback function is nullptr";
+        return;
+    }
+    QJsonObject msg;
+    msg[Dock::MSG_TYPE] = Dock::MSG_ITEM_ACTIVE_STATE;
+    msg[Dock::MSG_DATA] = visible;
+    QJsonDocument doc;
+    doc.setObject(msg);
+    m_messageCallback(this, doc.toJson());
 }
 #endif

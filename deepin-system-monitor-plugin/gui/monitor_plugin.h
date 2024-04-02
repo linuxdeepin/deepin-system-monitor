@@ -259,6 +259,11 @@ private:
     //!
     double autoRateUnits(qlonglong speed, RateUnit &unit);
 
+    //!
+    //! \brief openSystemMonitor 打开系统监视器主界面
+    //!
+    void openSystemMonitor();
+
 private:
 #ifdef USE_API_QUICKPANEL20
     QuickPanelWidget *m_quickPanelWidget;
