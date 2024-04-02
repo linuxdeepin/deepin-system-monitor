@@ -33,8 +33,11 @@ void QuickPanelWidget::initUI()
     m_icon->setFixedSize(QSize(24, 24));
 
     m_description->setElideMode(Qt::ElideRight);
-#ifdef  DTKWIDGET_CLASS_DToolTip
+#ifdef DTKWIDGET_CLASS_DToolTip
+    #if DTK_VERSION >= DTK_VERSION_CHECK(5, 6, 4, 0)
+    // 此接口和枚举在5.6.4及之后提供 
     DToolTip::setToolTipShowMode(m_description, DToolTip::ShowWhenElided);
+    #endif
 #endif
     DFontSizeManager::instance()->bind(m_description, DFontSizeManager::T10);
 
