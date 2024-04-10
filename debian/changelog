@@ -1,3 +1,9 @@
+deepin-system-monitor (6.0.18) unstable; urgency=medium
+
+  * feat: Block the system monitor plugin.(Task: 30767)
+
+ -- renbin <renbin@uniontech.com>  Wed, 10 Apr 2024 15:56:41 +0800
+
 deepin-system-monitor (6.0.17) unstable; urgency=medium
 
   * fix: delay in reading system information in the plug-in (#325)
