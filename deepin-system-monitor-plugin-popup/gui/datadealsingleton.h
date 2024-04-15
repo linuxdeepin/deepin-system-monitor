@@ -73,6 +73,7 @@ private:
     ~DataDealSingleton();
     DataDealSingleton(const DataDealSingleton &) = delete;
     DataDealSingleton &operator=(const DataDealSingleton &) = delete;
+    bool launchMainProcessByAM() const;
 
     QReadWriteLock internalMutex;
 
