@@ -2,8 +2,8 @@
 set -e
 
 if [ "$1" = configure ]; then
-	if command -v setcap > /dev/null; then
-		if setcap cap_net_raw,cap_dac_read_search+ep /usr/bin/deepin-system-monitor;then
+	if command -v setcap >/dev/null; then
+		if setcap cap_net_raw,cap_dac_read_search+ep /usr/bin/deepin-system-monitor; then
 			chmod u-s /usr/bin/deepin-system-monitor
 		else
 			echo "Setcap failed, falling back to setuid" >&2
@@ -12,7 +12,14 @@ if [ "$1" = configure ]; then
 	else
 		echo "Setcap is not installed, falling back to setuid" >&2
 		chmod u+s /usr/bin/deepin-system-monitor
-	fi  
+	fi
+fi
+
+# Restart service
+if [ "$1" = "configure" ]; then
+	if [ -d /run/systemd/system ]; then
+		deb-systemd-invoke restart 'deepin-service-manager.service' >/dev/null || true
+	fi
 fi
 
 exit 0

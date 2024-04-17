@@ -50,6 +50,9 @@ ADD_SUBDIRECTORY(deepin-system-monitor-plugin-popup)
 ADD_SUBDIRECTORY(deepin-system-monitor-daemon)
 #系统监视器提示
 ADD_SUBDIRECTORY(deepin-system-monitor-server)
+#系统监视器后端提权处理服务
+ADD_SUBDIRECTORY(deepin-system-monitor-system-server)
+
 #单元测试
 if(DOTEST)
     ADD_SUBDIRECTORY(tests)
