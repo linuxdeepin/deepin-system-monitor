@@ -25,6 +25,8 @@
 #include <QString>
 #include <QtDBus>
 #include <QTimer>
+#include <QDBusConnection>
+#include <QDBusInterface>
 
 #include <memory>
 
@@ -40,6 +42,32 @@ using namespace dbus::common;
 
 std::atomic<ServiceManager *> ServiceManager::m_instance;
 std::mutex ServiceManager::m_mutex;
+
+/**
+   @brief 非开发者模式下，使用后端 DBus 服务设置 systemd 服务 \a serviceName 的启动模式
+ */
+static bool setServiceEnable(const QString &servieName, bool enable, QString &errorString)
+{
+    QDBusInterface interface("org.deepin.SystemMonitorSystemServer",
+                             "/org/deepin/SystemMonitorSystemServer",
+                             "org.deepin.SystemMonitorSystemServer",
+                             QDBusConnection::systemBus());
+    QDBusReply<QString> retMsg = interface.call("setServiceEnable", servieName, enable);
+    errorString.clear();
+    if (!retMsg.isValid()) {
+        errorString = retMsg.error().message();
+    } else if (!retMsg.value().isEmpty()) {
+        errorString = retMsg.value();
+    }
+
+    if (!errorString.isEmpty()) {
+        qWarning() << QString("Set service %1 failed, error %1").arg(enable ? "enable" : "disable").arg(errorString);
+        return false;
+    } else {
+        qDebug() << QString("Set service %1 ret: %2").arg(enable ? "enable" : "disable").arg(retMsg.value());
+        return true;
+    }
+}
 
 CustomTimer::CustomTimer(ServiceManager *mgr, QObject *parent)
     : QObject(parent), m_mgr(mgr)
@@ -324,61 +352,81 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
     proc.setProcessChannelMode(QProcess::MergedChannels);
     // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
     QString action = autoStart ? "enable" : "disable";
+    bool useProcess = true;
     if (developerMode) {
         proc.start(BIN_PKEXEC_PATH, {BIN_SYSTEMCTL_PATH, action, id});
     } else {
+        // Bug 241793 非开发者模式，使用后端DBus服务设置启动方式
+#if 0
         proc.start(BIN_SYSTEMCTL_PATH, {action, id});
-    }
-    proc.waitForFinished(-1);
-    auto exitStatus = proc.exitStatus();
-    ErrorContext le {};
-    // exitStatus:
-    //      crashed
-    //
-    // exitCode:
-    //      127 (pkexec) - not auth/cant auth/error
-    //      126 (pkexec) - auth dialog dismissed
-    //      0 (systemctl) - ok
-    //      !0 (systemctl) - systemctl error, read stdout from child process
-    if (exitStatus == QProcess::CrashExit) {
-        errno = 0;
-        le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
-                                                              "Error: Failed to set service startup type due to the crashed sub process."));
-        return le;
-    } else {
-        auto exitCode = proc.exitCode();
-        if (exitCode == 127 || exitCode == 126) {
-            errno = EPERM;
-            le = errfmt(le, errno, title);
-            return le;
-        } else if (exitCode != 0) {
-            auto buf = proc.readAllStandardOutput();
+#else
+        useProcess = false;
+        QString errorString;
+        bool dbusRet = setServiceEnable(id, autoStart, errorString);
+        if (!dbusRet) {
             errno = 0;
-            le = errfmt(le, errno, title, buf);
+            ErrorContext errCtx {};
+            errCtx = errfmt(errCtx, errno, title, errorString);
+            return errCtx;
+        }
+#endif
+    }
+
+    ErrorContext le {};
+    if (useProcess) {
+        proc.waitForFinished(-1);
+        auto exitStatus = proc.exitStatus();
+
+        // exitStatus:
+        //      crashed
+        //
+        // exitCode:
+        //      127 (pkexec) - not auth/cant auth/error
+        //      126 (pkexec) - auth dialog dismissed
+        //      0 (systemctl) - ok
+        //      !0 (systemctl) - systemctl error, read stdout from child process
+        if (exitStatus == QProcess::CrashExit) {
+            errno = 0;
+            le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode",
+                                                                  "Error: Failed to set service startup type due to the crashed sub process."));
             return le;
         } else {
-            // success - refresh service stat -send signal
-
-            // special case, do nothing there
-            if (id.endsWith("@"))
-                return ErrorContext();
-
-            Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
-                                           kSystemDObjectPath.path(),
-                                           QDBusConnection::systemBus());
-            auto buf = normalizeServiceId(id, {});
-            auto re = mgrIf.GetUnit(buf);
-            le = re.first;
-            if (le) {
-                if (le.getCode() == 3) {
-                    auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
-                    updateServiceEntry(o.path());
-                } else {
-                    return le;
-                }
-            } else {
-                updateServiceEntry(re.second.path());
+            auto exitCode = proc.exitCode();
+            if (exitCode == 127 || exitCode == 126) {
+                errno = EPERM;
+                le = errfmt(le, errno, title);
+                return le;
+            } else if (exitCode != 0) {
+                auto buf = proc.readAllStandardOutput();
+                errno = 0;
+                le = errfmt(le, errno, title, buf);
+                return le;
             }
+        }
+    }
+
+    {
+        // success - refresh service stat -send signal
+
+        // special case, do nothing there
+        if (id.endsWith("@"))
+            return ErrorContext();
+
+        Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
+                                       kSystemDObjectPath.path(),
+                                       QDBusConnection::systemBus());
+        auto buf = normalizeServiceId(id, {});
+        auto re = mgrIf.GetUnit(buf);
+        le = re.first;
+        if (le) {
+            if (le.getCode() == 3) {
+                auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+                updateServiceEntry(o.path());
+            } else {
+                return le;
+            }
+        } else {
+            updateServiceEntry(re.second.path());
         }
     }
 #endif

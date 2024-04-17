@@ -3,19 +3,19 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[deepin-system-monitor.deepin-system-monitor]
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor]
 file_filter = deepin-system-monitor-main/translations/deepin-system-monitor_<lang>.ts
 source_file = deepin-system-monitor-main/translations/deepin-system-monitor.ts
 source_lang = en_US
 type = QT
 
-[deepin-system-monitor.deepin-system-monitor-desktop]
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor-desktop]
 file_filter = deepin-system-monitor-main/translations/desktop/desktop_<lang>.ts
 source_file = deepin-system-monitor-main/translations/desktop/desktop.ts
 source_lang = en_US
 type = QT
 
-[deepin-system-monitor.deepin-system-monitor-policy]
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor-policy]
 file_filter = deepin-system-monitor-main/translations/policy/policy_<lang>.ts
 source_file = deepin-system-monitor-main/translations/policy/policy.ts
 preTranlate_file = deepin-system-monitor-main/translations/policy/policy.policy
@@ -23,16 +23,23 @@ source_lang = en_US
 type = QT
 
 #popup
-[deepin-system-monitor.deepin-system-monitor-plugin-popup]
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor-plugin-popup]
 file_filter = deepin-system-monitor-plugin-popup/translations/deepin-system-monitor-plugin-popup_<lang>.ts
 source_file = deepin-system-monitor-plugin-popup/translations/deepin-system-monitor-plugin-popup.ts
 source_lang = en_US
 type = QT
 
 #plugin
-[deepin-system-monitor.deepin-system-monitor-plugin]
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor-plugin]
 file_filter = deepin-system-monitor-plugin/translations/deepin-system-monitor-plugin_<lang>.ts
 source_file = deepin-system-monitor-plugin/translations/deepin-system-monitor-plugin.ts
 source_lang = en_US
 type = QT
 
+#system-server
+[o:linuxdeepin:p:deepin-system-monitor:r:deepin-system-monitor-system-server-policy]
+file_filter = deepin-system-monitor-system-server/translations/policy/policy_<lang>.ts
+source_file = deepin-system-monitor-system-server/translations/policy/policy.ts
+preTranlate_file = deepin-system-monitor-system-server/misc/com.deepin.deepin-system-monitor-system-server.policy
+source_lang = en_US
+type = QT
