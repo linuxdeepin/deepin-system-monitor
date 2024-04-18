@@ -26,6 +26,9 @@
 
 #define HEADER_MIN_SECTION_SIZE 120
 
+// Force repaint update interval 1000ms/60
+constexpr int s_RepaintInterval = 16;
+
 // default constructor
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
@@ -278,7 +281,8 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
         previousRect.adjust(-1, -1, 1, 1);
-        viewport()->update(previousRect);
+        // viewport()->update(previousRect);
+        delayRepaint();
     }
     // update current item's paint region
     if (current.isValid()) {
@@ -286,7 +290,8 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         currentRect.setX(0);
         currentRect.setWidth(viewport()->width());
         currentRect.adjust(-1, -1, 1, 1);
-        viewport()->update(currentRect);
+        // viewport()->update(currentRect);
+        delayRepaint();
     }
 }
 
@@ -301,7 +306,8 @@ bool BaseTableView::viewportEvent(QEvent *event)
             rect.setX(0);
             rect.setWidth(viewport()->width());
             m_hover = QModelIndex();
-            viewport()->update(rect);
+            // viewport()->update(rect);
+            delayRepaint();
         }
         break;
     }
@@ -316,14 +322,16 @@ bool BaseTableView::viewportEvent(QEvent *event)
                 auto rect = visualRect(oldHover);
                 rect.setX(0);
                 rect.setWidth(viewport()->width());
-                viewport()->update(rect);
+                // viewport()->update(rect);
+                delayRepaint();
             }
         }
         if (m_hover.isValid()) {
             auto rect = visualRect(m_hover);
             rect.setX(0);
             rect.setWidth(viewport()->width());
-            viewport()->update(rect);
+            // viewport()->update(rect);
+            delayRepaint();
         }
         break;
     }
@@ -350,7 +358,8 @@ bool BaseTableView::viewportEvent(QEvent *event)
         }
         // only left mouse button events (click & double click) need refresh
         m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? newIndex : QModelIndex();
-        viewport()->update(region);
+//        viewport()->update(region);
+        delayRepaint();
         break;
     }
     case QEvent::TouchEnd: {
@@ -390,6 +399,7 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
                                   indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
                                   viewport()->width(),
                                   indexRowSizeHint(index)});
+        delayRepaint();
         // nothing to do
     } else {
         // current item above viewport rect
@@ -410,5 +420,21 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
             verticalValue += rect.top() - ((area.height() - rect.height()) / 2);
         // adjust scroll bar to a new position to ensure item visible
         verticalScrollBar()->setValue(verticalValue);
+    }
+}
+
+void BaseTableView::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_updataTimer.timerId()) {
+        // Force repaint!
+        repaint();
+        m_updataTimer.stop();
+    }
+}
+
+void BaseTableView::delayRepaint()
+{
+    if (!m_updataTimer.isActive()) {
+        m_updataTimer.start(s_RepaintInterval, this);
     }
 }

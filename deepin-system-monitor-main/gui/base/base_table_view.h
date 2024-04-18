@@ -7,6 +7,7 @@
 #define BASE_TABLE_VIEW_H
 
 #include <DTreeView>
+#include <QBasicTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -72,6 +73,14 @@ protected:
      */
     void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
 
+    void timerEvent(QTimerEvent *event) override;
+
+private:
+    /**
+       @brief Delay force repaint widget
+     */
+    void delayRepaint();
+
 private:
     // Common styled item delegate for this table view
     BaseItemDelegate *m_itemDelegate {nullptr};
@@ -84,6 +93,8 @@ private:
     QModelIndex m_pressed;
 
     int m_focusReason = Qt::TabFocusReason;
+
+    QBasicTimer m_updataTimer;  // 延迟刷新定时器
 };
 
 #endif  // BASE_TABLE_VIEW_H
