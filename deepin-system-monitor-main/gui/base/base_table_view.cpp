@@ -23,11 +23,12 @@
 #include <QScrollerProperties>
 #include <QScrollBar>
 #include <QFocusEvent>
+#include <QTimer>
 
 #define HEADER_MIN_SECTION_SIZE 120
 
 // Force repaint update interval 1000ms/60
-constexpr int s_RepaintInterval = 16;
+constexpr int s_RepaintInterval = 600000;
 
 // default constructor
 BaseTableView::BaseTableView(DWidget *parent)
@@ -90,6 +91,7 @@ BaseTableView::BaseTableView(DWidget *parent)
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
     //set horizontalScrollbar always visible
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_currtDataTime = QDateTime::currentDateTime();
 }
 
 // set view model
@@ -281,8 +283,11 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
         previousRect.adjust(-1, -1, 1, 1);
-        // viewport()->update(previousRect);
-        delayRepaint();
+        if (delayRepaint()) {
+            QTimer::singleShot(0, this, [this] {repaint();});
+        } else {
+            viewport()->update(previousRect);
+        }
     }
     // update current item's paint region
     if (current.isValid()) {
@@ -290,8 +295,11 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
         currentRect.setX(0);
         currentRect.setWidth(viewport()->width());
         currentRect.adjust(-1, -1, 1, 1);
-        // viewport()->update(currentRect);
-        delayRepaint();
+        if (delayRepaint()) {
+            QTimer::singleShot(0, this, [this] {repaint();});
+        } else {
+            viewport()->update(currentRect);
+        }
     }
 }
 
@@ -306,8 +314,11 @@ bool BaseTableView::viewportEvent(QEvent *event)
             rect.setX(0);
             rect.setWidth(viewport()->width());
             m_hover = QModelIndex();
-            // viewport()->update(rect);
-            delayRepaint();
+            if (delayRepaint()) {
+                QTimer::singleShot(0, this, [this] {repaint();});
+            } else {
+                viewport()->update(rect);
+            }
         }
         break;
     }
@@ -322,16 +333,22 @@ bool BaseTableView::viewportEvent(QEvent *event)
                 auto rect = visualRect(oldHover);
                 rect.setX(0);
                 rect.setWidth(viewport()->width());
-                // viewport()->update(rect);
-                delayRepaint();
+                if (delayRepaint()) {
+                    QTimer::singleShot(0, this, [this] {repaint();});
+                } else {
+                    viewport()->update(rect);
+                }
             }
         }
         if (m_hover.isValid()) {
             auto rect = visualRect(m_hover);
             rect.setX(0);
             rect.setWidth(viewport()->width());
-            // viewport()->update(rect);
-            delayRepaint();
+            if (delayRepaint()) {
+                QTimer::singleShot(0, this, [this] {repaint();});
+            } else {
+                viewport()->update(rect);
+            }
         }
         break;
     }
@@ -358,8 +375,11 @@ bool BaseTableView::viewportEvent(QEvent *event)
         }
         // only left mouse button events (click & double click) need refresh
         m_pressed = (mev->button() == Qt::LeftButton && (mev->type() == QEvent::MouseButtonPress || mev->type() == QEvent::MouseButtonDblClick)) ? newIndex : QModelIndex();
-//        viewport()->update(region);
-        delayRepaint();
+        if (delayRepaint()) {
+            QTimer::singleShot(0, this, [this] {repaint();});
+        } else {
+            viewport()->update(region);
+        }
         break;
     }
     case QEvent::TouchEnd: {
@@ -399,7 +419,9 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
                                   indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
                                   viewport()->width(),
                                   indexRowSizeHint(index)});
-        delayRepaint();
+        if (delayRepaint()) {
+            QTimer::singleShot(0, this, [this] {repaint();});
+        }
         // nothing to do
     } else {
         // current item above viewport rect
@@ -423,18 +445,13 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
     }
 }
 
-void BaseTableView::timerEvent(QTimerEvent *event)
+bool BaseTableView::delayRepaint()
 {
-    if (event->timerId() == m_updataTimer.timerId()) {
-        // Force repaint!
-        repaint();
-        m_updataTimer.stop();
+    qint64 currentMS = m_currtDataTime.msecsTo(QDateTime::currentDateTime());
+    if (currentMS >= s_RepaintInterval) {
+        m_currtDataTime = QDateTime::currentDateTime();
+        return true;
     }
+    return false;
 }
 
-void BaseTableView::delayRepaint()
-{
-    if (!m_updataTimer.isActive()) {
-        m_updataTimer.start(s_RepaintInterval, this);
-    }
-}
