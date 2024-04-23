@@ -32,9 +32,9 @@ namespace core {
 namespace system {
 
 struct load_avg_t {
-    ulong lavg_1m {0};
-    ulong lavg_5m {0};
-    ulong lavg_15m {0};
+    float lavg_1m {0};
+    float lavg_5m {0};
+    float lavg_15m {0};
 };
 using LoadAvg = std::shared_ptr<struct load_avg_t>;
 
@@ -222,9 +222,9 @@ inline void SysInfo::set_btime(timeval &btime)
 inline QString &operator<<(QString &buffer, const load_avg_t &rhs)
 {
     return buffer.append(QString("%1 %2 %3")
-                         .arg(rhs.lavg_1m / 100, 0, 'f', 2, QLatin1Char(' '))
-                         .arg(rhs.lavg_5m / 100, 0, 'f', 2, QLatin1Char(' '))
-                         .arg(rhs.lavg_15m / 100, 0, 'f', 2, QLatin1Char(' ')));
+                         .arg(rhs.lavg_1m , 0, 'f', 2, QLatin1Char(' '))
+                         .arg(rhs.lavg_5m , 0, 'f', 2, QLatin1Char(' '))
+                         .arg(rhs.lavg_15m , 0, 'f', 2, QLatin1Char(' ')));
 }
 
 } // namespace system
