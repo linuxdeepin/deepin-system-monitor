@@ -23,7 +23,6 @@
 #include <QScrollerProperties>
 #include <QScrollBar>
 #include <QFocusEvent>
-#include <QTimer>
 
 #define HEADER_MIN_SECTION_SIZE 120
 
@@ -88,7 +87,6 @@ BaseTableView::BaseTableView(DWidget *parent)
     QScroller::grabGesture(viewport(), QScroller::TouchGesture);
     //set horizontalScrollbar always visible
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    m_currtDataTime = QDateTime::currentDateTime();
 }
 
 // set view model
