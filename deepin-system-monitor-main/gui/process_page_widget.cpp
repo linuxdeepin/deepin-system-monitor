@@ -289,7 +289,8 @@ void ProcessPageWidget::initConnections()
 
     // update process summary text when process summary info updated background
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessPageWidget::onStatInfoUpdated, Qt::DirectConnection);
+    // Note: do not update on non-GUI thread.
+    connect(monitor, &SystemMonitor::appAndProcCountUpdate, this, &ProcessPageWidget::onAppAndProcCountUpdated);
 
     auto *dAppHelper = DApplicationHelper::instance();
     // change text color dynamically on theme type change, if not do this way, text color wont synchronize with theme type
@@ -409,27 +410,10 @@ void ProcessPageWidget::createWindowKiller()
             &ProcessPageWidget::popupKillConfirmDialog);
 }
 
-void ProcessPageWidget::onStatInfoUpdated()
+void ProcessPageWidget::onAppAndProcCountUpdated(int appCount, int procCount)
 {
-    QApplication::processEvents();
     const QString &buf = DApplication::translate("Process.Summary", kProcSummaryTemplateText);
-
-    ProcessSet *processSet = ProcessDB::instance()->processSet();
-    //记录所有进程数量
-    const QList<pid_t> &newpidlst = processSet->getPIDList();
-    m_iallProcNum = newpidlst.size();
-    int appCount = 0;
-    for (const auto &pid : newpidlst) {
-        auto process = processSet->getProcessById(pid);
-        if (process.appType() == kFilterApps)
-            appCount++;
-    }
-    m_procViewModeSummary->setText(buf.arg(appCount).arg(m_iallProcNum));
-    m_model = CPUInfoModel::instance();
-
-//    CPUPerformance = (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) ? High : Low;
-    //qInfo() << m_model->cpuSet()->maxFreq()  << (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) << CPUPerformance;
-
+    m_procViewModeSummary->setText(buf.arg(appCount).arg(procCount));
 }
 
 // change icon theme when theme changed
