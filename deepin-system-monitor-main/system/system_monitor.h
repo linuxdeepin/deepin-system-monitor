@@ -30,6 +30,7 @@ class SystemMonitor : public QObject
 
 signals:
     void statInfoUpdated();
+    void appAndProcCountUpdate(int appCount, int procCount);
 
 public:
     explicit SystemMonitor(QObject *parent = nullptr);
@@ -48,6 +49,7 @@ protected:
 
 private:
     void updateSystemMonitorInfo();
+    void recountAppAndProcess();
 
 private:
     SysInfo      *m_sysInfo;

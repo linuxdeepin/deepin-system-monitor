@@ -107,9 +107,9 @@ private Q_SLOTS:
     void changeIconTheme(DApplicationHelper::ColorType themeType);
 
     /**
-     * @brief 列表数据刷新
+     * @brief 列表数据刷新，更新应用和进程统计
      */
-    void onStatInfoUpdated();
+    void onAppAndProcCountUpdated(int appCount, int procCount);
 
     /**
      * @brief 详情页切换
