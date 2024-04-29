@@ -40,6 +40,34 @@ static bool read_dmi_cache = false;
 namespace core {
 namespace system {
 
+/**
+   @brief 获取首个有效CPU的当前频率，参考 util-linux 中 lscpu 读取 /proc/cpuinfo 的首个 cpu 的 mhz 信息。
+   @note 1. 参考 lsblk_cputype_get_scalmhz 函数，过滤无效cpu
+         2. 上游的 lscpu 不再提供 'CPU MHz' 而是 'CPU(s) scaling MHz' ，因为各个核心的频率不定，单纯取平均也存在出入；
+            此处的实现参考 util-linux 2.33.1.20-1+dde 版本，取首个有效值，和 lscpu 指令保持一致。
+ */
+static float first_avaliable_cur_freq(struct lscpu_cxt *cxt, const struct lscpu_cputype *ct)
+{
+    if (!cxt)
+        return 0.0f;
+
+    size_t i;
+
+    for (i = 0; i < cxt->npossibles; i++) {
+        struct lscpu_cpu *cpu = cxt->cpus[i];
+
+        if (!cpu || cpu->type != ct || !is_cpu_present(cxt, cpu))
+            continue;
+        if (cpu->mhz_max_freq <= 0.0f || cpu->mhz_cur_freq <= 0.0f)
+            continue;
+        if (cpu->mhz_cur_freq <= 0.0f)
+            continue;
+        return cpu->mhz_cur_freq;
+    }
+
+    return 0.0f;
+}
+
 static void lscpu_free_context(struct lscpu_cxt *cxt)
 {
     size_t i;
@@ -878,7 +906,8 @@ void CPUSet::read_lscpu()
             d->m_info.insert("CPU max MHz", maxMHz);
             QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)), 'f', 4);
             d->m_info.insert("CPU min MHz", minMHz);
-            QString nowMHz =  QString::number(maxMHz.toDouble() * static_cast<double>(scal / 100), 'f', 4);
+            // 取首个CPU频率有效值
+            QString nowMHz =  QString::number(static_cast<double>(first_avaliable_cur_freq(cxt, ct)), 'f', 4);
             if (scal == 0.0f) {
                 nowMHz = "-";
             }
