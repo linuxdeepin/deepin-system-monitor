@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
-
+#include "ddlog.h"
 #include "netif_packet_capture.h"
 #include "netif_packet_parser.h"
 #include "common/hash.h"
@@ -21,31 +21,26 @@
 #include <QProcess>
 
 #ifndef IFNAMESZ
-#define IFNAMESZ 16
+#    define IFNAMESZ 16
 #endif
 
-
 //#define PACKET_DISPATCH_IDLE_TIME 200 // pcap dispatch interval
-#define PACKET_DISPATCH_IDLE_TIME 50 // pcap dispatch interval
-#define PACKET_DISPATCH_BATCH_COUNT 64 // packets to process in a batch
-#define PACKET_DISPATCH_QUEUE_LWAT 64 // queue low water mark
-#define PACKET_DISPATCH_QUEUE_HWAT 256 // queue high water mark
+#define PACKET_DISPATCH_IDLE_TIME 50   // pcap dispatch interval
+#define PACKET_DISPATCH_BATCH_COUNT 64   // packets to process in a batch
+#define PACKET_DISPATCH_QUEUE_LWAT 64   // queue low water mark
+#define PACKET_DISPATCH_QUEUE_HWAT 256   // queue high water mark
 
-#define SOCKSTAT_REFRESH_INTERVAL 2 // socket stat refresh interval (2 seconds)
-#define IFADDRS_HASH_CACHE_REFRESH_INTERVAL 10 // socket ifaddrs cache refresh interval (10 seconds)
-#define DEVICE_CHANGE_JUDGEMENT_TIME 5000 //判断网卡是否变更时间间隔
+#define SOCKSTAT_REFRESH_INTERVAL 2   // socket stat refresh interval (2 seconds)
+#define IFADDRS_HASH_CACHE_REFRESH_INTERVAL 10   // socket ifaddrs cache refresh interval (10 seconds)
+#define DEVICE_CHANGE_JUDGEMENT_TIME 5000   //判断网卡是否变更时间间隔
 
 using namespace std;
-
+using namespace DDLog;
 namespace core {
 namespace system {
 
-
-
-
 NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *parent)
-    : QObject(parent)
-    , m_netifMonitor(netIfmontor)
+    : QObject(parent), m_netifMonitor(netIfmontor)
 {
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
@@ -56,7 +51,6 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
     connect(m_timerChangeDev, &QTimer::timeout, this, &NetifPacketCapture::whetherDevChanged);
     m_timerChangeDev->start(DEVICE_CHANGE_JUDGEMENT_TIME);
 }
-
 
 void NetifPacketCapture::whetherDevChanged()
 {
@@ -81,12 +75,14 @@ bool NetifPacketCapture::hasDevIP()
     }
 
     struct sockaddr_in *addr {};
-    struct ifreq ifr {};
+    struct ifreq ifr
+    {
+    };
     char *address {};
     int sockfd;
     //设备名称过长
     if (m_devName.size() >= IFNAMSIZ) {
-        //qDebug()<<"Device name too long! Invalid device Name!";
+        //qCDebug(app)<<"Device name too long! Invalid device Name!";
         return false;
     }
 
@@ -97,11 +93,11 @@ bool NetifPacketCapture::hasDevIP()
     //获取网络IP(IPv4)
     if (ioctl(sockfd, SIOCGIFADDR, &ifr) == -1) {
         close(sockfd);
-        //qDebug()<<"ioctl error!";
+        //qCDebug(app)<<"ioctl error!";
         return false;
     }
 
-    addr = (struct sockaddr_in *) & (ifr.ifr_addr);
+    addr = (struct sockaddr_in *)&(ifr.ifr_addr);
     address = inet_ntoa(addr->sin_addr);
     if (address) {
         close(sockfd);
@@ -111,8 +107,6 @@ bool NetifPacketCapture::hasDevIP()
         close(sockfd);
         return false;
     }
-
-
 }
 
 bool NetifPacketCapture::getCurrentDevName()
@@ -133,7 +127,7 @@ bool NetifPacketCapture::getCurrentDevName()
     // 设备和优先级列编号
     int metricColNum = 0;
     int devColNum = 0;
-    QList<QPair<QString, int> > metricList = {};
+    QList<QPair<QString, int>> metricList = {};
     QString devName = "";
     if (totalList.size() > 0) {
         QStringList firstLine = totalList[0];
@@ -184,7 +178,6 @@ bool NetifPacketCapture::getCurrentDevName()
         return false;
     }
     return true;
-
 }
 //
 void NetifPacketCapture::startNetifMonitorJob()
@@ -200,7 +193,7 @@ void NetifPacketCapture::startNetifMonitorJob()
     // create pcap handler
     m_handle = pcap_create(m_devName.toLocal8Bit().data(), errbuf);
     if (!m_handle) {
-        qDebug() << "pcap_create failed: " << errbuf;
+        qCDebug(app) << "pcap_create failed: " << errbuf;
         return;
     }
 
@@ -211,13 +204,13 @@ void NetifPacketCapture::startNetifMonitorJob()
 
     rc = pcap_compile(m_handle, &pgm, pattern, 1, PCAP_NETMASK_UNKNOWN);
     if (rc == -1) {
-        qDebug() << "pcap_compile failed: " << pcap_geterr(m_handle);
+        qCDebug(app) << "pcap_compile failed: " << pcap_geterr(m_handle);
         pcap_close(m_handle);
         return;
     }
     rc = pcap_setfilter(m_handle, &pgm);
     if (rc == -1) {
-        qDebug() << "pcap_setfilter failed: " << pcap_geterr(m_handle);
+        qCDebug(app) << "pcap_setfilter failed: " << pcap_geterr(m_handle);
         pcap_close(m_handle);
         return;
     }
@@ -226,9 +219,9 @@ void NetifPacketCapture::startNetifMonitorJob()
     // activate pcap handler
     rc = pcap_activate(m_handle);
     if (rc > 0) {
-        qDebug() << "pcap_activate warning: " << pcap_statustostr(rc);
+        qCDebug(app) << "pcap_activate warning: " << pcap_statustostr(rc);
     } else if (rc < 0) {
-        qDebug() << "pcap_setnonblock failed: " << pcap_statustostr(rc);
+        qCDebug(app) << "pcap_setnonblock failed: " << pcap_statustostr(rc);
         pcap_close(m_handle);
         return;
     }
@@ -432,7 +425,7 @@ void NetifPacketCapture::dispatchPackets()
             return;
         } else if (nr == -1) {
             // error occurred while processing packets
-            qDebug() << "pcap_dispatch failed: " << pcap_geterr(m_handle);
+            qCDebug(app) << "pcap_dispatch failed: " << pcap_geterr(m_handle);
             m_timer->stop();
             break;
         } else if (nr == -2) {
@@ -452,7 +445,7 @@ bool readNetIfAddrs(NetIFAddrsMap &addrsMap)
 
     errno = 0;
     if (getifaddrs(&addr_hdr) == -1) {
-        qWarning() << QString("getifaddrs failed: [%1] %2").arg(errno).arg(strerror(errno));
+        qCWarning(app) << QString("getifaddrs failed: [%1] %2").arg(errno).arg(strerror(errno));
         return false;
     }
 
@@ -519,7 +512,5 @@ void NetifPacketCapture::refreshIfAddrsHashCache()
     }
 }
 
-
-
-} // namespace system
-} // namespace core
+}   // namespace system
+}   // namespace core

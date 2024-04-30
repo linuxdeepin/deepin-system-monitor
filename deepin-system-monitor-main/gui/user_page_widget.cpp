@@ -17,7 +17,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "ddlog.h"
 #include "user_page_widget.h"
 #include "process_table_view.h"
 #include "model/process_table_model.h"
@@ -28,17 +28,17 @@
 
 DWIDGET_USE_NAMESPACE
 using namespace common::format;
-
+using namespace DDLog;
 UserPageWidget::UserPageWidget(DWidget *parent)
     : DFrame(parent)
 {
     struct passwd *pws;
     pws = getpwuid(getuid());
     m_currentUser = QString(pws->pw_name);
-    qInfo() << "UserPageWidget Construction:" << "currentuser:" << m_currentUser;
+    qCInfo(app) << "UserPageWidget Construction:"
+                << "currentuser:" << m_currentUser;
     initUI();
     initConnections();
-
 }
 
 // destructor
@@ -98,7 +98,6 @@ void UserPageWidget::initUI()
     m_DiskReadLabel->setToolTip(QApplication::translate("Process.Table.Header", kProcessDiskRead));
     m_DiskWriteLabel->setToolTip(QApplication::translate("Process.Table.Header", kProcessDiskWrite));
 
-
     m_CPUUsageSummary = new DLabel(usageSummaryWidget);
     m_MemeryUsageSummary = new DLabel(usageSummaryWidget);
     m_SMemUsageSummary = new DLabel(usageSummaryWidget);
@@ -152,7 +151,6 @@ void UserPageWidget::initUI()
     usageSummaryWidget->setLayout(usageLayout);
     /***********************************************usage Labels**************************************************/
 
-
     QWidget *userInfoWideget = new QWidget(this);
 
     auto *contentlayout = new QVBoxLayout(userInfoWideget);
@@ -175,7 +173,7 @@ void UserPageWidget::initConnections()
 {
     connect(m_accountListWidget, &AccountsWidget::signalCurrentChanged, this, &UserPageWidget::onUserChanged);
     connect(m_procTable, &ProcessTableView::signalModelUpdated, this, &UserPageWidget::onTextContentChanged);
-    connect(m_dAppHelper, &DApplicationHelper::themeTypeChanged, this,  &UserPageWidget::onThemeChanged);
+    connect(m_dAppHelper, &DApplicationHelper::themeTypeChanged, this, &UserPageWidget::onThemeChanged);
     connect(m_procTable, &ProcessTableView::signalHeadchanged, this, &UserPageWidget::onHeaderChanged);
 }
 
@@ -191,19 +189,15 @@ void UserPageWidget::paintEvent(QPaintEvent *)
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
     QColor bgColor = palette.color(DPalette::Background);
-
-
-
 }
 void UserPageWidget::onUserChanged()
 {
     QString userName = m_accountListWidget->getCurrentItemUserName();
-    qInfo() << userName << "user changed";
+    qCInfo(app) << userName << "user changed";
     m_procTable->setUserModeName(userName);
     onTextContentChanged();
     update();
 }
-
 
 void UserPageWidget::onTextContentChanged()
 {
@@ -331,7 +325,6 @@ void UserPageWidget::onThemeChanged()
         m_DiskWriteLabel->setPalette(palette);
     }
 
-
     if (m_CPUUsageSummary) {
         auto palette = DApplicationHelper::instance()->applicationPalette();
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
@@ -372,6 +365,4 @@ void UserPageWidget::onThemeChanged()
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_DiskWriteSummary->setPalette(palette);
     }
-
-
 }
