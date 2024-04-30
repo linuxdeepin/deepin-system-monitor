@@ -5,7 +5,7 @@
 
 #include "block_device_info_db.h"
 #include "block_device.h"
-
+#include "ddlog.h"
 #include <QReadLocker>
 #include <QWriteLocker>
 #include <QDebug>
@@ -19,6 +19,8 @@
 #include <sched.h>
 
 #include <libudev.h>
+
+using namespace DDLog;
 
 #define SYSFS_PATH_VIRTUAL_BLOCK "/sys/devices/virtual/block"
 
@@ -97,7 +99,6 @@ BlockDeviceInfoDB::BlockDeviceInfoDB()
 
 BlockDeviceInfoDB::~BlockDeviceInfoDB()
 {
-
 }
 
 void BlockDeviceInfoDB::readDiskInfo()
@@ -115,21 +116,20 @@ void BlockDeviceInfoDB::readDiskInfo()
             int index = -1;
             //  查找当前的device是否存在
             for (int si = 0; si < m_deviceList.size(); ++si) {
-                if (m_deviceList[si].deviceName() == list[i].fileName().toLocal8Bit()) { // 存在
+                if (m_deviceList[si].deviceName() == list[i].fileName().toLocal8Bit()) {   // 存在
                     index = si;
                     break;
                 }
             }
-            if (index == -1) { // 不存在的话将该disk存储起来
+            if (index == -1) {   // 不存在的话将该disk存储起来
                 BlockDevice bd;
                 if (bd.readDeviceSize(list[i].fileName()) > 0) {
                     bd.setDeviceName(list[i].fileName().toLocal8Bit());
                     m_deviceList << bd;
                 }
             } else {
-                m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit()); // 更新disk数据
+                m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit());   // 更新disk数据
             }
-
         }
     }
 
@@ -140,21 +140,20 @@ void BlockDeviceInfoDB::readDiskInfo()
             int index = -1;
             //  查找当前的device是否存在
             for (int si = 0; si < m_deviceList.size(); ++si) {
-                if (m_deviceList[si].deviceName() == list[i].fileName().toLocal8Bit()) { // 存在
+                if (m_deviceList[si].deviceName() == list[i].fileName().toLocal8Bit()) {   // 存在
                     index = si;
                     break;
                 }
             }
-            if (index == -1) { // 不存在的话将该disk存储起来
+            if (index == -1) {   // 不存在的话将该disk存储起来
                 BlockDevice bd;
                 if (bd.readDeviceSize(list[i].fileName()) > 0) {
                     bd.setDeviceName(list[i].fileName().toLocal8Bit());
                     m_deviceList << bd;
                 }
             } else {
-                m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit()); // 更新disk数据
+                m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit());   // 更新disk数据
             }
-
         }
     }
 
@@ -170,9 +169,7 @@ void BlockDeviceInfoDB::readDiskInfo()
             m_deviceList.removeAt(i);
         }
     }
-
 }
-
 
 //static void enum_block()
 //{
@@ -213,18 +210,18 @@ void BlockDeviceInfoDB::readDiskInfo()
 //        path = udev_list_entry_get_name(dev_list_entry);
 //        dev = udev_device_new_from_syspath(udev, path);
 
-////        qDebug() << "devNode" << udev_device_get_devnode(dev);
-////        qDebug() << "devType" << udev_device_get_devtype(dev);
-////        qDebug() << "sysName" << udev_device_get_sysname(dev);
-////        qDebug() << "devPath" << udev_device_get_devpath(dev);
-////        qDebug() << "sysPath" << udev_device_get_syspath(dev);
-////        qDebug() << "sysnum" << udev_device_get_sysnum(dev);
-////        qDebug() << "subsystem" << udev_device_get_subsystem(dev);
+////        qCDebug(app) << "devNode" << udev_device_get_devnode(dev);
+////        qCDebug(app) << "devType" << udev_device_get_devtype(dev);
+////        qCDebug(app) << "sysName" << udev_device_get_sysname(dev);
+////        qCDebug(app) << "devPath" << udev_device_get_devpath(dev);
+////        qCDebug(app) << "sysPath" << udev_device_get_syspath(dev);
+////        qCDebug(app) << "sysnum" << udev_device_get_sysnum(dev);
+////        qCDebug(app) << "subsystem" << udev_device_get_subsystem(dev);
 
 ////        auto *parent = udev_device_get_parent(dev);
-////        qDebug() << "parent sysname: " << udev_device_get_sysname(parent);
-////        qDebug() << "parent devpath: " << udev_device_get_devpath(parent);
-////        qDebug() << "parent syspath: " << udev_device_get_syspath(parent);
+////        qCDebug(app) << "parent sysname: " << udev_device_get_sysname(parent);
+////        qCDebug(app) << "parent devpath: " << udev_device_get_devpath(parent);
+////        qCDebug(app) << "parent syspath: " << udev_device_get_syspath(parent);
 
 //        //        /* skip if device/disk is a partition or loop device */
 //        //        if (strncmp(udev_device_get_devtype(dev), "partition", 9) != 0 &&
@@ -266,18 +263,18 @@ void BlockDeviceInfoDB::update()
     // TODO: enum device in /sys/block => phy & virtual
 
     // TEST begin (move udev logic to udev & udevice)
-//    enum_block();
+    //    enum_block();
 
-//    struct udev *udev = udev_new();
+    //    struct udev *udev = udev_new();
 
-//    enumerate_usb_mass_storage(udev);
+    //    enumerate_usb_mass_storage(udev);
 
-//    udev_unref(udev);
-//    // TEST end
+    //    udev_unref(udev);
+    //    // TEST end
 
-//    QWriteLocker lock(&m_rwlock);
+    //    QWriteLocker lock(&m_rwlock);
     // update device list
 }
 
-} // namespace system
-} // namespace core
+}   // namespace system
+}   // namespace core

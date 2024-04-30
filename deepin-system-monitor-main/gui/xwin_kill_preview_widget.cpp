@@ -11,9 +11,9 @@
 #include "main_window.h"
 #include "ui_common.h"
 #include "common/common.h"
-
+#include "ddlog.h"
 #ifdef USE_DEEPIN_WAYLAND
-#include "3rdparty/displayjack/wayland_client.h"
+#    include "3rdparty/displayjack/wayland_client.h"
 #endif
 
 #include <QDebug>
@@ -35,6 +35,7 @@
 using namespace std;
 using namespace core::wm;
 using namespace common::init;
+using namespace DDLog;
 
 typedef int (*InitDtkWmDisplayPtr)();
 typedef void (*DestoryDtkWmDisplayPtr)();
@@ -46,7 +47,8 @@ static DestoryDtkWmDisplayPtr DestoryDtkWmDisplay = nullptr;
 static GetAllWindowStatesListPtr GetAllWindowStatesList = nullptr;
 
 // constructor
-XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
+XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent)
+    : QWidget(parent)
 {
     // new window manager instance
     m_wminfo = new WMInfo();
@@ -65,7 +67,7 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent) : QWidget(parent)
         if (InitDtkWmDisplay)
             InitDtkWmDisplay();
     }
-#endif // USE_DEEPIN_WAYLAND
+#endif   // USE_DEEPIN_WAYLAND
 
     // init ui components & connections
     initUI();
@@ -99,7 +101,7 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
         if (DestoryDtkWmDisplay)
             DestoryDtkWmDisplay();
     }
-#endif // USE_DEEPIN_WAYLAND
+#endif   // USE_DEEPIN_WAYLAND
 }
 
 // mouse press event
@@ -113,7 +115,7 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
     auto pos = QCursor::pos();
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
-        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio();   // 获得当前的缩放比例
         QRect screenRect;
         for (auto screen : QApplication::screens()) {
             // screen geometry
@@ -124,11 +126,11 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
             }
         }
         for (QVector<ClientManagement::WindowState>::iterator it = m_windowStates.end() - 1;
-                it != m_windowStates.begin(); --it) {
+             it != m_windowStates.begin(); --it) {
             // if the window is created by ourself, then ignore it
             if (getpid() == it->pid || QString::fromStdString(it->resourceName) == "dde-desktop" || it->isMinimized
-                    || QString::fromStdString(it->resourceName) == "deepin-deepinid-client"
-                    || QString::fromStdString(it->resourceName) == "dde-dock")
+                || QString::fromStdString(it->resourceName) == "deepin-deepinid-client"
+                || QString::fromStdString(it->resourceName) == "dde-dock")
                 continue;
 
             // if such window exists, we emit window clicked signal to notify kill application performed action
@@ -150,10 +152,10 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
             }
         }
     }
-#endif // USE_DEEPIN_WAYLAND
+#endif   // USE_DEEPIN_WAYLAND
 
     if (!WaylandCentered) {
-        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio();   // 获得当前的缩放比例
         QRect screenRect;
         for (auto screen : QApplication::screens()) {
             // screen geometry
@@ -163,8 +165,8 @@ void XWinKillPreviewWidget::mousePressEvent(QMouseEvent *event)
                 break;
             }
         }
-        QPoint windowPos(static_cast<int>(screenRect.x() + (pos.x() - screenRect.x())*ratio),
-                         static_cast<int>(screenRect.y() + (pos.y() - screenRect.y())*ratio));
+        QPoint windowPos(static_cast<int>(screenRect.x() + (pos.x() - screenRect.x()) * ratio),
+                         static_cast<int>(screenRect.y() + (pos.y() - screenRect.y()) * ratio));
         auto list = m_wminfo->selectWindow(windowPos);
 
         // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
@@ -200,7 +202,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 {
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
-        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio();   // 获得当前的缩放比例
         auto pos = QCursor::pos();
         QRect screenRect;
         for (auto screen : QApplication::screens()) {
@@ -212,15 +214,15 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
             }
         }
         // get the list of windows under cursor from cache in stacked order
-        bool found {false};
+        bool found { false };
 
         for (QVector<ClientManagement::WindowState>::iterator it = m_windowStates.end() - 1;
-                it != m_windowStates.begin(); --it) {
+             it != m_windowStates.begin(); --it) {
             // if the window is created by ourself, then ignore it
             // wayland环境下增加桌面窗口和dock栏的屏蔽
             if (getpid() == it->pid || QString::fromStdString(it->resourceName) == "dde-desktop" || it->isMinimized
-                    || QString::fromStdString(it->resourceName) == "deepin-deepinid-client"
-                    || QString::fromStdString(it->resourceName) == "dde-dock")
+                || QString::fromStdString(it->resourceName) == "deepin-deepinid-client"
+                || QString::fromStdString(it->resourceName) == "dde-dock")
                 continue;
             auto selRect = QRect(static_cast<int>(screenRect.x() + (it->geometry.x - screenRect.x()) / ratio),
                                  static_cast<int>(screenRect.y() + (it->geometry.y - screenRect.y()) / ratio),
@@ -230,12 +232,12 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 
                 // find all windows hovered above, if any clip out the intersected region
 
-                QRegion region {selRect};
+                QRegion region { selRect };
                 //对于所选窗口上方存在堆叠的窗口情况，对所选窗口进行区域裁剪。
                 for (QVector<ClientManagement::WindowState>::iterator iter = m_windowStates.end() - 1;
-                        iter != it; --iter) {
+                     iter != it; --iter) {
                     if (QString::fromStdString(iter->resourceName) == "dde-desktop" || iter->isMinimized || QString::fromStdString(iter->resourceName) == "deepin-deepinid-client"
-                            || QString::fromStdString(iter->resourceName) == "dde-dock" || getpid() == iter->pid)
+                        || QString::fromStdString(iter->resourceName) == "dde-dock" || getpid() == iter->pid)
                         continue;
 
                     else {
@@ -246,9 +248,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 
                         region = region.subtracted(upRegion);
                     }
-
                 }
-
 
                 // if current selected window is crossing screens, we need update each sub part on each screen
                 for (auto &bg : m_backgroundList) {
@@ -271,9 +271,9 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
             emit cursorUpdated(m_defaultCursor);
         }
     }
-#endif // USE_DEEPIN_WAYLAND
+#endif   // USE_DEEPIN_WAYLAND
     if (!WaylandCentered) {
-        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio(); // 获得当前的缩放比例
+        double ratio = QGuiApplication::primaryScreen()->devicePixelRatio();   // 获得当前的缩放比例
         auto pos = QCursor::pos();
         QRect screenRect;
         for (auto screen : QApplication::screens()) {
@@ -284,11 +284,11 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
                 break;
             }
         }
-        QPoint windowPos(static_cast<int>(screenRect.x() + (pos.x() - screenRect.x())*ratio),
-                         static_cast<int>(screenRect.y() + (pos.y() - screenRect.y())*ratio));
+        QPoint windowPos(static_cast<int>(screenRect.x() + (pos.x() - screenRect.x()) * ratio),
+                         static_cast<int>(screenRect.y() + (pos.y() - screenRect.y()) * ratio));
         // get the list of windows under cursor from cache in stacked order
         auto list = m_wminfo->selectWindow(windowPos);
-        bool found {false};
+        bool found { false };
 
         // fix cursor not update issue while moved to areas covered by intersected area of dock & normal windows
         if (m_wminfo->isCursorHoveringDocks(windowPos)) {
@@ -309,7 +309,7 @@ void XWinKillPreviewWidget::mouseMoveEvent(QMouseEvent *)
 
                 // find all windows hovered above, if any clip out the intersected region
                 auto hoveredBy = m_wminfo->getHoveredByWindowList(select->wid, select->rect);
-                QRegion region {selRect};
+                QRegion region { selRect };
                 for (auto &hover : hoveredBy) {
                     QRect hoverrect(static_cast<int>(screenRect.x() + (hover->rect.x() - screenRect.x()) / ratio),
                                     static_cast<int>(screenRect.y() + (hover->rect.y() - screenRect.y()) / ratio),
@@ -378,10 +378,9 @@ void XWinKillPreviewWidget::initUI()
     // default forbid style cursor
     m_defaultCursor = QCursor(Qt::ForbiddenCursor);
 
-    QTimer::singleShot(500, this, [ = ] {
+    QTimer::singleShot(500, this, [=] {
         // show background window in all screens
-        for (auto screen : QApplication::screens())
-        {
+        for (auto screen : QApplication::screens()) {
             // screen geometry
             auto geom = screen->geometry();
             // snapshot current scree
@@ -389,7 +388,7 @@ void XWinKillPreviewWidget::initUI()
 #ifdef USE_DEEPIN_WAYLAND
             if (WaylandCentered)
                 pixmap = screen->grabWindow(m_windowStates.end()->windowId);
-#endif // USE_DEEPIN_WAYLAND
+#endif   // USE_DEEPIN_WAYLAND
             pixmap = pixmap.copy(geom.x(), geom.y(), static_cast<int>(geom.width() * devicePixelRatioF()), static_cast<int>(geom.height() * devicePixelRatioF()));
             // create preview background widget for each screen
             auto *background = new XWinKillPreviewBackgroundWidget(pixmap, this);
@@ -417,21 +416,20 @@ void XWinKillPreviewWidget::initConnections()
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
         connect(m_connectionThreadObject, &ConnectionThread::connected, this,
-        [this] {
-            m_eventQueue = new EventQueue(this);
-            m_eventQueue->setup(m_connectionThreadObject);
+                [this] {
+                    m_eventQueue = new EventQueue(this);
+                    m_eventQueue->setup(m_connectionThreadObject);
 
-            Registry *registry = new Registry(this);
-            setupRegistry(registry);
-        },
-        Qt::QueuedConnection
-               );
+                    Registry *registry = new Registry(this);
+                    setupRegistry(registry);
+                },
+                Qt::QueuedConnection);
         m_connectionThreadObject->moveToThread(m_connectionThread);
         m_connectionThread->start();
 
         m_connectionThreadObject->initConnection();
     }
-#endif // USE_DEEPIN_WAYLAND
+#endif   // USE_DEEPIN_WAYLAND
 }
 
 //打印当前窗口信息接口
@@ -440,20 +438,20 @@ void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::
 {
     if (WaylandCentered) {
         for (int i = 0; i < m_windowStates.count(); ++i) {
-            qDebug() << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz ")) \
-                     << "window[" << i << "]" << "pid:" << m_windowStates.at(i).pid \
-                     << "title:" << m_windowStates.at(i).resourceName \
-                     << "windowId:" << m_windowStates.at(i).windowId \
-                     << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y \
-                     << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height \
-                     << "isMinimized(" << m_windowStates.at(i).isMinimized << ")" \
-                     << "isFullScreen(" << m_windowStates.at(i).isFullScreen << ")" \
-                     << "isActive(" << m_windowStates.at(i).isActive << ")";
+            qCDebug(app) << QDateTime::currentDateTime().toString(QLatin1String("hh:mm:ss.zzz "))
+                         << "window[" << i << "]"
+                         << "pid:" << m_windowStates.at(i).pid
+                         << "title:" << m_windowStates.at(i).resourceName
+                         << "windowId:" << m_windowStates.at(i).windowId
+                         << "geometry:" << m_windowStates.at(i).geometry.x << m_windowStates.at(i).geometry.y
+                         << m_windowStates.at(i).geometry.width << m_windowStates.at(i).geometry.height
+                         << "isMinimized(" << m_windowStates.at(i).isMinimized << ")"
+                         << "isFullScreen(" << m_windowStates.at(i).isFullScreen << ")"
+                         << "isActive(" << m_windowStates.at(i).isActive << ")";
         }
     }
 }
-#endif // USE_DEEPIN_WAYLAND
-
+#endif   // USE_DEEPIN_WAYLAND
 
 //wayland 注册
 #ifdef USE_DEEPIN_WAYLAND
@@ -461,29 +459,25 @@ void XWinKillPreviewWidget::setupRegistry(Registry *registry)
 {
     if (WaylandCentered) {
         connect(registry, &Registry::compositorAnnounced, this,
-        [this, registry](quint32 name, quint32 version) {
-            m_compositor = registry->createCompositor(name, version, this);
-        }
-               );
+                [this, registry](quint32 name, quint32 version) {
+                    m_compositor = registry->createCompositor(name, version, this);
+                });
 
         connect(registry, &Registry::clientManagementAnnounced, this,
-        [this, registry](quint32 name, quint32 version) {
-            m_clientManagement = registry->createClientManagement(name, version, this);
-            connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
-            [this] {
-                m_windowStates = getAllWindowStates();
-            }
-                   );
-        }
-               );
+                [this, registry](quint32 name, quint32 version) {
+                    m_clientManagement = registry->createClientManagement(name, version, this);
+                    connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
+                            [this] {
+                                m_windowStates = getAllWindowStates();
+                            });
+                });
 
         connect(registry, &Registry::interfacesAnnounced, this,
-        [this] {
-            Q_ASSERT(m_compositor);
-            Q_ASSERT(m_clientManagement);
-            m_windowStates = getAllWindowStates();
-        }
-               );
+                [this] {
+                    Q_ASSERT(m_compositor);
+                    Q_ASSERT(m_clientManagement);
+                    m_windowStates = getAllWindowStates();
+                });
 
         registry->setEventQueue(m_eventQueue);
         registry->create(m_connectionThreadObject);
@@ -498,13 +492,12 @@ QVector<ClientManagement::WindowState> XWinKillPreviewWidget::getAllWindowStates
     // 能解析到displayjack的接口，优先使用dispalayjack接口获取窗口状态
     if (GetAllWindowStatesList) {
         // 使用displayjack库接口获取窗口状态
-        WindowState * pStates = nullptr;
+        WindowState *pStates = nullptr;
         int nCount = GetAllWindowStatesList(&pStates);
         if (nCount <= 0)
             return vWindowStates;
 
-        for (int i = 0; i < nCount; i++)
-        {
+        for (int i = 0; i < nCount; i++) {
             WindowState *p = &pStates[i];
             ClientManagement::WindowState windowState;
             windowState.pid = p->pid;
@@ -530,5 +523,4 @@ QVector<ClientManagement::WindowState> XWinKillPreviewWidget::getAllWindowStates
     return vWindowStates;
 }
 
-#endif // USE_DEEPIN_WAYLAND
-
+#endif   // USE_DEEPIN_WAYLAND
