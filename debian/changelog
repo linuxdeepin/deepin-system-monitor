@@ -1,3 +1,9 @@
+deepin-system-monitor (6.0.19) unstable; urgency=medium
+
+  * New version 6.0.19.
+
+ -- shuaijie <shuaijie@uniontech.com>  Tue, 30 Apr 2024 10:44:12 +0800
+
 deepin-system-monitor (6.0.18) unstable; urgency=medium
 
   * feat: Block the system monitor plugin.(Task: 30767)
