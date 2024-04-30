@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "netlink.h"
-
+#include "ddlog.h"
 #include "nl_addr.h"
 #include "nl_link.h"
 
@@ -14,7 +14,7 @@
 #include <netlink/route/link.h>
 #include <netlink/route/addr.h>
 #include <netlink/cache.h>
-
+using namespace DDLog;
 namespace core {
 namespace system {
 
@@ -23,25 +23,25 @@ Netlink::Netlink()
     int rc = 0;
     m_sock = nl_socket_alloc();
     if (!m_sock) {
-        qWarning() << "Error: nl_socket_alloc failed";
+        qCWarning(app) << "Error: nl_socket_alloc failed";
         return;
     }
 
     rc = nl_connect(m_sock, NETLINK_ROUTE);
     if (rc) {
-        qWarning() << "Error: nl_connect failed";
+        qCWarning(app) << "Error: nl_connect failed";
         return;
     }
 
     rc = rtnl_link_alloc_cache(m_sock, AF_UNSPEC, &m_linkCache);
     if (rc) {
-        qWarning() << "Error: rtnl_link_alloc_cache failed";
+        qCWarning(app) << "Error: rtnl_link_alloc_cache failed";
         return;
     }
 
     rc = rtnl_addr_alloc_cache(m_sock, &m_addrCache);
     if (rc) {
-        qWarning() << "Error: rtnl_addr_alloc_cache failed";
+        qCWarning(app) << "Error: rtnl_addr_alloc_cache failed";
     }
 }
 
@@ -64,5 +64,5 @@ AddrIterator Netlink::addrIterator()
     return it;
 }
 
-} // namespace system
-} // namespace core
+}   // namespace system
+}   // namespace core

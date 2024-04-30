@@ -247,6 +247,8 @@ SET(CPP_PROCESS
 set(APP_HPP
     ${CMAKE_HOME_DIRECTORY}/config.h
     application.h
+    ddlog.h
+    logger.h
     ${HPP_MODEL}
     ${HPP_SYSTEM}
     ${HPP_GLOBAL}
@@ -259,6 +261,7 @@ set(APP_HPP
 set(APP_CPP
     application.cpp
     main.cpp
+    logger.cpp
     ${CPP_MODEL}
     ${CPP_SYSTEM}
     ${CPP_GLOBAL}
@@ -271,7 +274,7 @@ set(APP_CPP
 add_executable(${PROJECT_NAME}
     ${APP_HPP}
     ${APP_CPP}
-    ${PROJECT_SOURCE_DIR}/${APP_RESOURCES}
+    ${PROJECT_SOURCE_DIR}/${APP_RESOURCES}    
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -280,6 +283,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${DtkCore_INCLUDE_DIRS}
     ${DtkGui_INCLUDE_DIRS}
     ${DdeDockInterface_INCLUDE_DIRS}
+    Dtk::Core
 )
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
@@ -302,6 +306,7 @@ target_link_libraries(${PROJECT_NAME}
     ${LIB_UDEV_LIBRARIES}
     ${LIB_DDEDOCK}
 #    gsettings-qt
+    Dtk::Core
 )
 
 

@@ -76,4 +76,3 @@ INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION 
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 #安装翻译文件
 install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-system-monitor-plugin/translations)
-
