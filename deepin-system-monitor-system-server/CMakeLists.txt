@@ -33,6 +33,7 @@ file(GLOB_RECURSE SRC_H ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
 
 find_package(Qt5 COMPONENTS Core DBus REQUIRED)
 find_package(PolkitQt5-1 REQUIRED)
+find_package(Dtk REQUIRED COMPONENTS Core)
 
 add_executable(${BIN_NAME}
     ${SRC_CPP}
@@ -43,12 +44,14 @@ target_include_directories(${BIN_NAME} PUBLIC
   Qt5::Core
   Qt5::DBus
   PolkitQt5-1::Agent
+  Dtk::Core
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
   Qt5::Core
   Qt5::DBus
   PolkitQt5-1::Agent
+  Dtk::Core
 )
 
 # Use deepin-service-manager mange DBus servicde

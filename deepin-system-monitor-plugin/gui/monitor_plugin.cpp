@@ -5,7 +5,7 @@
 
 #include "monitor_plugin.h"
 #include "helper.hpp"
-
+#include "ddlog.h"
 // Qt
 #include <QDBusConnectionInterface>
 #include <DGuiApplicationHelper>
@@ -23,19 +23,17 @@ const QString PLUGIN_STATE_KEY = "enable";
 }
 
 DWIDGET_USE_NAMESPACE
-
+using namespace DDLog;
 MonitorPlugin::MonitorPlugin(QObject *parent)
-    : QObject(parent)
-    , m_pluginLoaded(false)
-    , m_dataTipsLabel(nullptr)
-    , m_refershTimer(new QTimer(this))
+    : QObject(parent), m_pluginLoaded(false), m_dataTipsLabel(nullptr), m_refershTimer(new QTimer(this))
 #ifdef USE_API_QUICKPANEL20
-    , m_quickPanelWidget(new QuickPanelWidget)
-    ,m_messageCallback(nullptr)
+      ,
+      m_quickPanelWidget(new QuickPanelWidget),
+      m_messageCallback(nullptr)
 #endif
 {
     connect(m_refershTimer, &QTimer::timeout, this, &MonitorPlugin::udpateTipsInfo);
-    qInfo() <<__FUNCTION__ << __LINE__ << "[-MonitorPlugin-]" ;
+    qCInfo(app) << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-]";
 }
 
 const QString MonitorPlugin::pluginName() const
@@ -67,32 +65,32 @@ void MonitorPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter->itemAdded(this, pluginName());
     m_quickPanelWidget->setDescription(pluginDisplayName());
     QString plugIcon = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "status-system-monitor-dark" : "status-system-monitor";
-    QIcon fallbackIcon = QIcon::fromTheme(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType? "dsm_pluginicon_dark" : "dsm_pluginicon_light");
+    QIcon fallbackIcon = QIcon::fromTheme(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType ? "dsm_pluginicon_dark" : "dsm_pluginicon_light");
     m_quickPanelWidget->setIcon(QIcon::fromTheme(plugIcon, fallbackIcon));
-    connect(m_quickPanelWidget,&QuickPanelWidget::clicked,this,&MonitorPlugin::onClickQuickPanel);
-    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] QUICKPANEL20";
+    connect(m_quickPanelWidget, &QuickPanelWidget::clicked, this, &MonitorPlugin::onClickQuickPanel);
+    qCInfo(app) << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] QUICKPANEL20";
     QDBusConnection::sessionBus().connect("com.deepin.SystemMonitorPluginPopup", "/com/deepin/SystemMonitorPluginPopup", "com.deepin.SystemMonitorPluginPopup", "sysMonPopVisibleChanged", this, SLOT(onSysMonPopVisibleChanged(bool)));
 #endif
 
     calcCpuRate(m_totalCPU, m_availableCPU);
     calcNetRate(m_down, m_upload);
 #ifdef DDE_DOCK_NEW_VERSION
-    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] V23";
+    qCInfo(app) << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] V23";
 #endif
 }
 
 QWidget *MonitorPlugin::itemWidget(const QString &itemKey)
 {
-    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-]" << itemKey;
+    qCInfo(app) << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-]" << itemKey;
 #ifdef DDE_DOCK_NEW_VERSION
 //    if (itemKey == "system-monitor")
 //        return m_itemWidget;
 #else
-#ifdef USE_API_QUICKPANEL20
+#    ifdef USE_API_QUICKPANEL20
     if (itemKey == Dock::QUICK_ITEM_KEY) {
         return m_quickPanelWidget;
     }
-#endif
+#    endif
     if (itemKey == "system-monitor")
         return m_itemWidget;
 #endif
@@ -119,11 +117,11 @@ void MonitorPlugin::pluginStateSwitched()
 #ifndef DDE_DOCK_NEW_VERSION
 bool MonitorPlugin::pluginIsDisable()
 {
-#ifdef USE_API_QUICKPANEL20
+#    ifdef USE_API_QUICKPANEL20
     return false;
-#else
+#    else
     return m_proxyInter->getValue(this, "disabled", true).toBool();
-#endif
+#    endif
 }
 #endif
 
@@ -143,7 +141,7 @@ const QString MonitorPlugin::itemCommand(const QString &itemKey)
     }
     return "";
 
-//    return "dbus-send --print-reply --dest=com.deepin.SystemMonitorPluginPopup /com/deepin/SystemMonitorPluginPopup com.deepin.SystemMonitorPluginPopup.showOrHideDeepinSystemMonitorPluginPopupWidget";
+    //    return "dbus-send --print-reply --dest=com.deepin.SystemMonitorPluginPopup /com/deepin/SystemMonitorPluginPopup com.deepin.SystemMonitorPluginPopup.showOrHideDeepinSystemMonitorPluginPopupWidget";
 }
 
 void MonitorPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
@@ -209,11 +207,11 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
         // 最小尺寸时，不画背景，采用深色图标
         iconName = "dsm_pluginicon_dark";
     }
-    QSize size = QSize(16,16);
+    QSize size = QSize(16, 16);
     if (dockPart == DockPart::DCCSetting) {
-        size = QSize(20,20);
+        size = QSize(20, 20);
     } else if (dockPart == DockPart::QuickPanel) {
-        size = QSize(24,24);
+        size = QSize(24, 24);
     }
     QIcon icon = QIcon::fromTheme(iconName);
     if (!icon.isNull()) {
@@ -222,14 +220,14 @@ QIcon MonitorPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
         QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
         if (dockPart == DockPart::QuickShow) {
-            QPixmap curPixmap(size*ratio);
+            QPixmap curPixmap(size * ratio);
             pixmap.setDevicePixelRatio(ratio);
             curPixmap.fill(Qt::transparent);
             QPainter painter;
             painter.begin(&curPixmap);
             painter.setRenderHint(QPainter::SmoothPixmapTransform);
-            int pixmapMargin = ceil(1*ratio);
-            painter.drawPixmap(QRect(pixmapMargin, pixmapMargin, curPixmap.width()-pixmapMargin, curPixmap.height()-pixmapMargin), pixmap);
+            int pixmapMargin = ceil(1 * ratio);
+            painter.drawPixmap(QRect(pixmapMargin, pixmapMargin, curPixmap.width() - pixmapMargin, curPixmap.height() - pixmapMargin), pixmap);
             painter.end();
             return QIcon(curPixmap);
         } else {
@@ -297,14 +295,17 @@ void MonitorPlugin::loadPlugin()
     m_dataTipsLabel->setObjectName("systemmonitorpluginlabel");
 
     m_refershTimer->setInterval(1000);
-//    m_refershTimer->start();
+    //    m_refershTimer->start();
 
-    connect(m_dataTipsLabel.get(),&SystemMonitorTipsWidget::visibleChanged,this,[=](bool visible){
+    connect(m_dataTipsLabel.get(), &SystemMonitorTipsWidget::visibleChanged, this, [=](bool visible) {
         if (!visible) {
             m_refershTimer->stop();
         } else {
             udpateInfo();
-            m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "..." << "..." << "..." << "...");
+            m_dataTipsLabel->setSystemMonitorTipsText(QStringList() << "..."
+                                                                    << "..."
+                                                                    << "..."
+                                                                    << "...");
             m_refershTimer->start();
         }
     });
@@ -346,7 +347,7 @@ void MonitorPlugin::calcMemRate(qlonglong &memory, qlonglong &memoryAll)
         return;
 
     QTextStream stream(&file);
-    qlonglong buff[16] = {0};
+    qlonglong buff[16] = { 0 };
     for (int i = 0; i <= 15; ++i) {
         QString line = stream.readLine();
         QStringList list = line.split(QRegExp("\\s{1,}"));
@@ -375,7 +376,7 @@ void MonitorPlugin::calcNetRate(qlonglong &netDown, qlonglong &netUpload)
     line = stream.readLine();
     while (!line.isNull()) {
         line = line.trimmed();
-        QStringList list = line.split(QRegExp("\\s{1,}")); // match number >= 1 space character
+        QStringList list = line.split(QRegExp("\\s{1,}"));   // match number >= 1 space character
 
         if (!list.isEmpty()) {
             down = list.at(1).toLongLong();
@@ -443,7 +444,7 @@ double MonitorPlugin::autoRateUnits(qlonglong speed, RateUnit &unit)
         sp = static_cast<double>(speed / qPow(2, 40) * 1.0);
     } else {
         unit = RateUnknow;
-        qDebug() << "本设备网络速率单位传输超过 TB, 或者低于 0 Byte.";
+        qCDebug(app) << "本设备网络速率单位传输超过 TB, 或者低于 0 Byte.";
         sp = -1;
     }
 
@@ -456,9 +457,9 @@ void MonitorPlugin::openSystemMonitor()
 
     //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
     QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
-    QTimer::singleShot(200, this, [ = ]() { QProcess::startDetached(cmd); });
+    QTimer::singleShot(200, this, [=]() { QProcess::startDetached(cmd); });
 #ifdef USE_API_QUICKPANEL20
-    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] right ClickQuickPanel";
+    qCInfo(app) << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] right ClickQuickPanel";
     m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
 #endif
 }
@@ -474,7 +475,7 @@ MonitorPlugin::~MonitorPlugin()
 
 void MonitorPlugin::onClickQuickPanel()
 {
-    qInfo() << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] ClickQuickPanel";
+    qCInfo(app) << __FUNCTION__ << __LINE__ << "[-MonitorPlugin-] ClickQuickPanel";
     m_proxyInter->requestSetAppletVisible(this, pluginName(), false);
 
     // Task 30767: 暂时调整为打开系统监视器，隐藏系统监视器插件
@@ -483,9 +484,10 @@ void MonitorPlugin::onClickQuickPanel()
 }
 
 //系统监视器弹窗显示状态改变
-void MonitorPlugin::onSysMonPopVisibleChanged(bool visible){
+void MonitorPlugin::onSysMonPopVisibleChanged(bool visible)
+{
     if (!m_messageCallback) {
-        qWarning() << "Message callback function is nullptr";
+        qCWarning(app) << "Message callback function is nullptr";
         return;
     }
     QJsonObject msg;

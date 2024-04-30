@@ -32,20 +32,24 @@ file(GLOB_RECURSE SRC_CPP ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
 file(GLOB_RECURSE SRC_H ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
 
 find_package(Qt5 COMPONENTS Core DBus REQUIRED)
+find_package(Dtk REQUIRED COMPONENTS Core)
 
 add_executable(${BIN_NAME}
     ${SRC_CPP}
     ${SRC_H}
+    src
 )
 
 target_include_directories(${BIN_NAME} PUBLIC
   Qt5::Core
   Qt5::DBus
+  Dtk::Core
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
   Qt5::Core
   Qt5::DBus
+  Dtk::Core
 )
 
 install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
