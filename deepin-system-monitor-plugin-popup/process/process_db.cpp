@@ -148,7 +148,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
         } else if (signal == SIGKILL) {
             Q_EMIT processKilled(pid);
         } else {
-            qWarning() << "Unexpected signal in this case:" << signal;
+            qCWarning(app) << "Unexpected signal in this case:" << signal;
         }
     };
     auto fmsg = [ = ](int signal) -> QString {

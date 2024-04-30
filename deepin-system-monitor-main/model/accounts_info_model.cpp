@@ -1,5 +1,6 @@
 #include "accounts_info_model.h"
 #include "helper.hpp"
+#include "ddlog.h"
 #include <QDBusReply>
 #include <QDBusPendingReply>
 #include <QDebug>
@@ -8,6 +9,8 @@
 #include <pwd.h>
 #include <unistd.h>
 
+using namespace DDLog;
+
 #define PKEXEC_PATH "/usr/bin/pkexec"
 #define PKILL_PATH "/usr/bin/pkill"
 
@@ -15,25 +18,25 @@ const QString LoginService = "org.freedesktop.login1";
 const QString LoginPath = "/org/freedesktop/login1";
 const QString LoginInterface = "org.freedesktop.login1.Manager";
 
-AccountsInfoModel::AccountsInfoModel(QObject *parent): QObject(parent)
-    , m_accountsInter(new QDBusInterface(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, QDBusConnection::systemBus(), this))
-    , m_LoginInter(new QDBusInterface(LoginService, LoginPath, LoginInterface, QDBusConnection::systemBus(), this))
-    , m_controlInter(new QDBusInterface(common::systemInfo().ControlCenterService, common::systemInfo().ControlCenterPath, common::systemInfo().ControlCenterInterface, QDBusConnection::sessionBus(), this))
-    , m_currentUserType(-1)
+AccountsInfoModel::AccountsInfoModel(QObject *parent)
+    : QObject(parent), m_accountsInter(new QDBusInterface(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, QDBusConnection::systemBus(), this)), m_LoginInter(new QDBusInterface(LoginService, LoginPath, LoginInterface, QDBusConnection::systemBus(), this)), m_controlInter(new QDBusInterface(common::systemInfo().ControlCenterService, common::systemInfo().ControlCenterPath, common::systemInfo().ControlCenterInterface, QDBusConnection::sessionBus(), this)), m_currentUserType(-1)
 {
     qDBusRegisterMetaType<SessionInfo>();
     qDBusRegisterMetaType<SessionInfoList>();
     struct passwd *pws;
     pws = getpwuid(getuid());
     m_currentUserName = QString(pws->pw_name);
-    qInfo() << "AccountsInfoModel constructor line 26" << "m_currentUserName:" << m_currentUserName;
+    qCInfo(app) << "AccountsInfoModel constructor line 26"
+            << "m_currentUserName:" << m_currentUserName;
     //获取online userList
     updateUserOnlineStatus();
-    qInfo() << "AccountsInfoModel constructor line 29" << "online user list:" << m_onlineUsers;
+    qCInfo(app) << "AccountsInfoModel constructor line 29"
+            << "online user list:" << m_onlineUsers;
 
     QStringList userList = m_accountsInter->property("UserList").toStringList();
     updateUserList(userList);
-    qInfo() << "AccountsInfoModel constructor line 31" << "Accounts user list:" << userList;
+    qCInfo(app) << "AccountsInfoModel constructor line 31"
+            << "Accounts user list:" << userList;
 
     QDBusConnection::systemBus().connect(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, "UserListChanged",
                                          this, SLOT(onUserListChanged(QStringList)));
@@ -52,7 +55,7 @@ AccountsInfoModel::~AccountsInfoModel()
 void AccountsInfoModel::onUserListChanged(const QStringList &userPathList)
 {
     updateUserList(userPathList);
-    qInfo() << "get update:" << userPathList;
+    qCInfo(app) << "get update:" << userPathList;
 }
 
 void AccountsInfoModel::onSessionNew(const QString &in0, const QDBusObjectPath &in1)
@@ -71,7 +74,8 @@ void AccountsInfoModel::onSessionRemoved(const QString &in0, const QDBusObjectPa
 
 void AccountsInfoModel::updateUserList(const QStringList &userPathList)
 {
-    qInfo() << "AccountsInfoModel updateUserList line 61" << "updateUserList begins!" ;
+    qCInfo(app) << "AccountsInfoModel updateUserList line 61"
+            << "updateUserList begins!";
     // 释放构造对象
     qDeleteAll(m_userMap.values());
     m_userMap.clear();
@@ -91,7 +95,8 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
             newUser->setIsCurrentUser(true);
             m_currentUserType = newUser->userType();
         }
-        qInfo() << "AccountsInfoModel updateUserList line 78" << "get user info of :" << newUser->name();
+        qCInfo(app) << "AccountsInfoModel updateUserList line 78"
+                << "get user info of :" << newUser->name();
         m_userMap.insert(newUser->name(), newUser);
 
         delete userDBus;
@@ -100,11 +105,12 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
 
 void AccountsInfoModel::updateUserOnlineStatus()
 {
-    qInfo() << "AccountsInfoModel updateUserOnlineStatus line 88" << "updateUserOnlineStatus begins!" ;
+    qCInfo(app) << "AccountsInfoModel updateUserOnlineStatus line 88"
+            << "updateUserOnlineStatus begins!";
     m_onlineUsers.clear();
 
     //异步获取SessionList
-    QDBusMessage message =  m_LoginInter->call("ListSessions");
+    QDBusMessage message = m_LoginInter->call("ListSessions");
     QDBusPendingReply<SessionInfoList> reply = m_LoginInter->asyncCall(QStringLiteral("ListSessions"));
     reply.waitForFinished();
     if (reply.isValid()) {
@@ -118,7 +124,6 @@ void AccountsInfoModel::updateUserOnlineStatus()
     Q_EMIT signalUserOnlineStatusUpdated();
 }
 
-
 QList<User *> AccountsInfoModel::userList() const
 {
     QList<User *> onlineUsers;
@@ -129,7 +134,8 @@ QList<User *> AccountsInfoModel::userList() const
             onlineUsers << user;
         }
     }
-    qInfo() << "AccountsInfoModel userList" << "get online users:" << m_onlineUsers;
+    qCInfo(app) << "AccountsInfoModel userList"
+            << "get online users:" << m_onlineUsers;
 
     return onlineUsers;
 }
@@ -154,15 +160,13 @@ bool AccountsInfoModel::lockSessionByUserName(const QString &userName)
                 return true;
             }
         }
-        qDebug() << "cannot find session with this username!";
+        qCDebug(app) << "cannot find session with this username!";
         return false;
     } else {
-        qDebug() << "no session found!";
+        qCDebug(app) << "no session found!";
         return false;
     }
-
 }
-
 
 bool AccountsInfoModel::activateSessionByUserName(const QString &userName)
 {
@@ -175,45 +179,41 @@ bool AccountsInfoModel::activateSessionByUserName(const QString &userName)
                 m_LoginInter->call("ActivateSession", si.sessionId);
                 return true;
             }
-
         }
-        qDebug() << "cannot find session with this username!";
+        qCDebug(app) << "cannot find session with this username!";
         return false;
     } else {
-        qDebug() << "no session found!";
+        qCDebug(app) << "no session found!";
         return false;
     }
-
 }
 bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 {
     if (userName == m_currentUserName) {
         if (m_sessionList.size() > 0) {
-            qInfo() << "m_sessionList is OK";
+            qCInfo(app) << "m_sessionList is OK";
             for (SessionInfo si : m_sessionList) {
                 if (si.userName == userName) {
-                    qInfo() << "found" << userName << si.sessionId;
-//                    qInfo() << m_LoginInter->TerminateSession(si.sessionId).error();
+                    qCInfo(app) << "found" << userName << si.sessionId;
+                    //                    qCInfo(app) << m_LoginInter->TerminateSession(si.sessionId).error();
                     return true;
                 }
-
             }
-            qDebug() << "cannot find session with current username!";
+            qCDebug(app) << "cannot find session with current username!";
 
         } else {
-            qDebug() << "no session found!";
-
+            qCDebug(app) << "no session found!";
         }
     } else {
         QStringList params;
 
         // check pkexec existance
-        if (!QFile::exists({PKEXEC_PATH})) {
+        if (!QFile::exists({ PKEXEC_PATH })) {
             return false;
         }
 
         // check kill existance
-        if (!QFile::exists({PKILL_PATH})) {
+        if (!QFile::exists({ PKILL_PATH })) {
             return false;
         }
 
@@ -221,20 +221,15 @@ bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 
         QProcess proc;
 
-        proc.start({PKEXEC_PATH}, params);
+        proc.start({ PKEXEC_PATH }, params);
         proc.waitForFinished();
         return true;
     }
     return false;
-
 }
 
 void AccountsInfoModel::EditAccount()
 {
     if (m_controlInter)
         m_controlInter->call("ShowPage", "accounts", "Accounts Detail");
-
 }
-
-
-

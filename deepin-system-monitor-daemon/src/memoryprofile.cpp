@@ -3,15 +3,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "memoryprofile.h"
-
+#include "ddlog.h"
 #include <QDebug>
 #include <QFile>
 
 #define PROC_MEM_INFOI_PATH "/proc/meminfo"
-
+using namespace DDLog;
 MemoryProfile::MemoryProfile(QObject *parent)
-    : QObject(parent)
-    , mMemUsage(0)
+    : QObject(parent), mMemUsage(0)
 {
 }
 
@@ -32,7 +31,7 @@ double MemoryProfile::updateSystemMemoryUsage()
         // MemFree:         1455488 kB
         // MemAvailable:    5931304 kB
         if (lineData1.size() == 0 || lineData2.size() == 0 || lineData3.size() == 0) {
-            qWarning() << QString(" read %1 file fail !").arg(PROC_MEM_INFOI_PATH) << lineData1 << lineData2 << lineData3;
+            qCWarning(app) << QString(" read %1 file fail !").arg(PROC_MEM_INFOI_PATH) << lineData1 << lineData2 << lineData3;
             return memUsage;
         }
 
@@ -42,7 +41,7 @@ double MemoryProfile::updateSystemMemoryUsage()
         QStringList list3 = QString(lineData3).split(" ", QString::SkipEmptyParts);
 
         if (list1.size() < 3 || list2.size() < 3 || list3.size() < 3) {
-            qWarning() << QString(" parse %1 file fail !").arg(PROC_MEM_INFOI_PATH) << list1 << list2 << list3;
+            qCWarning(app) << QString(" parse %1 file fail !").arg(PROC_MEM_INFOI_PATH) << list1 << list2 << list3;
             return memUsage;
         }
 
@@ -52,14 +51,14 @@ double MemoryProfile::updateSystemMemoryUsage()
         memDataMap[list3.at(0)] = list3.at(1).toInt();
 
         // 为返回值赋值，计算内存占用率
-        if (memDataMap.contains("MemTotal:") && memDataMap.contains("MemAvailable:") && memDataMap["MemTotal:"] != 0)  {
+        if (memDataMap.contains("MemTotal:") && memDataMap.contains("MemAvailable:") && memDataMap["MemTotal:"] != 0) {
             memUsage = (memDataMap["MemTotal:"] - memDataMap["MemAvailable:"]) * 100.0 / memDataMap["MemTotal:"];
             mMemUsage = memUsage;
         } else {
-            qWarning() << QString(" extract mem data fail !") << memDataMap;
+            qCWarning(app) << QString(" extract mem data fail !") << memDataMap;
         }
     } else {
-        qWarning() << QString(" file %1 open fail !").arg(PROC_MEM_INFOI_PATH);
+        qCWarning(app) << QString(" file %1 open fail !").arg(PROC_MEM_INFOI_PATH);
     }
 
     return memUsage;
@@ -69,4 +68,3 @@ double MemoryProfile::getMemUsage()
 {
     return mMemUsage;
 }
-

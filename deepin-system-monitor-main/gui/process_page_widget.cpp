@@ -43,13 +43,12 @@
 #define NORMAL_PERFORMANCE_CPU_LOADING_TIME 100
 #define CPU_FREQUENCY_STANDARD "2.30GHz"
 
-
 DWIDGET_USE_NAMESPACE
 using namespace core::process;
 using namespace common::init;
 // process context summary text
 static const char *kProcSummaryTemplateText =
-    QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)");
+        QT_TRANSLATE_NOOP("Process.Summary", "(%1 applications and %2 processes are running)");
 
 // application context text
 static const char *appText = QT_TRANSLATE_NOOP("Process.Show.Mode", "Applications");
@@ -111,7 +110,7 @@ void ProcessPageWidget::initUI()
 
     // process context instance
     m_procViewMode = new DLabel(tw);
-    m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));  // default text
+    m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));   // default text
     DFontSizeManager::instance()->bind(m_procViewMode, DFontSizeManager::T7, QFont::Medium);
     // text aligment
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -194,7 +193,7 @@ void ProcessPageWidget::initUI()
     QHBoxLayout *loadingLayout = new QHBoxLayout(this);
     loadingLayout->addStretch();
     loadingLayout->addWidget(m_spinner, Qt::AlignCenter);
-    loadingLayout->addWidget(m_loadingLabel,  Qt::AlignCenter);
+    loadingLayout->addWidget(m_loadingLabel, Qt::AlignCenter);
     loadingLayout->addStretch();
     m_spinnerWidget->setLayout(loadingLayout);
     //loading 和 进程列表
@@ -227,44 +226,44 @@ void ProcessPageWidget::initUI()
     int index = vindex.toInt();
     switch (index) {
     case kFilterCurrentUser: {
-//        //打开时也显示loading
-//        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        //        //打开时也显示loading
+        //        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show my process view
         m_myProcButton->setChecked(true);
         m_procTable->switchDisplayMode(kFilterCurrentUser);
         m_procViewMode->setText(
-            DApplication::translate("Process.Show.Mode", myProcText));  // default text
+                DApplication::translate("Process.Show.Mode", myProcText));   // default text
         //记录当前选中按钮
         m_procBtnCheckedType = USER_PROCESS;
     } break;
     case kNoFilter: {
-//        //打开时也显示loading
-//        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        //        //打开时也显示loading
+        //        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show all process view
         m_allProcButton->setChecked(true);
         m_procTable->switchDisplayMode(kNoFilter);
         m_procViewMode->setText(
-            DApplication::translate("Process.Show.Mode", allProcText));  // default text
+                DApplication::translate("Process.Show.Mode", allProcText));   // default text
         //记录当前选中按钮
         m_procBtnCheckedType = ALL_PROCESSS;
     } break;
     default: {
-//        //打开时也显示loading
-//        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        //        //打开时也显示loading
+        //        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         // show my application view by default
         m_appButton->setChecked(true);
         m_procTable->switchDisplayMode(kFilterApps);
         m_procViewMode->setText(
-            DApplication::translate("Process.Show.Mode", appText));  // default text
+                DApplication::translate("Process.Show.Mode", appText));   // default text
         //记录当前选中按钮
         m_procBtnCheckedType = MY_APPS;
     }
-    } // ::switch(index)
+    }   // ::switch(index)
 
     connect(m_rightStackView, &DetailViewStackedWidget::currentChanged, this, &ProcessPageWidget::onDetailWidgetChanged);
     QTimer::singleShot(5, this, SLOT(onLoadLeftDataWidgetDelay()));
     // this->layout()->setSizeConstraint(QLayout::SetMinAndMaxSize);
-//   m_loadingAndProcessTB->setCurrentWidget(m_procTable);
+    //   m_loadingAndProcessTB->setCurrentWidget(m_procTable);
 }
 
 void ProcessPageWidget::initConnections()
@@ -293,7 +292,7 @@ void ProcessPageWidget::initConnections()
 
     auto *dAppHelper = DApplicationHelper::instance();
     // change text color dynamically on theme type change, if not do this way, text color wont synchronize with theme type
-    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
+    connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
         if (m_procViewMode) {
             auto palette = DApplicationHelper::instance()->applicationPalette();
             palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
@@ -391,10 +390,8 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
     DPalette palette = dAppHelper->applicationPalette();
     QColor bgColor = palette.color(DPalette::Background);
 
-//    // 显示0.1s
-//    QTimer::singleShot(NORMAL_PERFORMANCE_CPU_LOADING_TIME, this, [ = ]() {m_loadingAndProcessTB->setCurrentWidget(m_procTable);});
-
-
+    //    // 显示0.1s
+    //    QTimer::singleShot(NORMAL_PERFORMANCE_CPU_LOADING_TIME, this, [ = ]() {m_loadingAndProcessTB->setCurrentWidget(m_procTable);});
 }
 
 // create application kill preview widget
@@ -472,10 +469,10 @@ void ProcessPageWidget::popupKillConfirmDialog(pid_t pid)
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
         QString name = m_procTable->getProcessName(pid);
-        QJsonObject obj{
-            {"tid", EventLogUtils::ProcessKilled},
-            {"version", QCoreApplication::applicationVersion()},
-            {"process_name", name}
+        QJsonObject obj {
+            { "tid", EventLogUtils::ProcessKilled },
+            { "version", QCoreApplication::applicationVersion() },
+            { "process_name", name }
         };
         EventLogUtils::get().writeLogs(obj);
 
@@ -500,7 +497,7 @@ void ProcessPageWidget::onAllProcButtonClicked()
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != ALL_PROCESSS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", allProcText)));
-//        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        //        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", allProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(kNoFilter);
@@ -517,11 +514,11 @@ void ProcessPageWidget::onAllProcButtonClicked()
 
 void ProcessPageWidget::onUserProcButtonClicked()
 {
-//   qInfo() << CPUPerformance << "CPUPerformance";
+    //   qCInfo(app) << CPUPerformance << "CPUPerformance";
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != USER_PROCESS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
-//        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        //        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", myProcText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(kFilterCurrentUser);
@@ -541,7 +538,7 @@ void ProcessPageWidget::onAppButtonClicked()
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != MY_APPS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", appText)));
-//        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
+        //        m_loadingAndProcessTB->setCurrentWidget(m_spinnerWidget);
         m_procViewMode->setText(DApplication::translate("Process.Show.Mode", appText));
         m_procViewMode->adjustSize();
         m_procTable->switchDisplayMode(kFilterApps);

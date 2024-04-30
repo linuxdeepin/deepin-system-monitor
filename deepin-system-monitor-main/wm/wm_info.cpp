@@ -4,17 +4,18 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "wm_info.h"
-
+#include "ddlog.h"
 #include <QDebug>
 
 #include <memory>
 
 using namespace core::wm;
 using namespace std;
+using namespace DDLog;
 
 enum wm_window_type_t {
-    kUnknownWindowType              = -1,
-    kNormalWindowType               = 0,
+    kUnknownWindowType = -1,
+    kNormalWindowType = 0,
     kDesktopWindowType,
     kDockWindowType,
     kToolbarWindowType,
@@ -31,8 +32,8 @@ enum wm_window_type_t {
 };
 
 enum wm_state_t {
-    kUnknownState                   = -1,
-    kModalState                     = 0,
+    kUnknownState = -1,
+    kModalState = 0,
     kStickyState,
     kMaximizedVertState,
     kMaximizedHorzState,
@@ -48,77 +49,85 @@ enum wm_state_t {
 };
 
 enum wm_window_class_t {
-    kUnknownClass                   = -1,
-    kInputOutputClass               = XCB_WINDOW_CLASS_INPUT_OUTPUT,
-    kInputOnlyClass                 = XCB_WINDOW_CLASS_INPUT_ONLY
+    kUnknownClass = -1,
+    kInputOutputClass = XCB_WINDOW_CLASS_INPUT_OUTPUT,
+    kInputOnlyClass = XCB_WINDOW_CLASS_INPUT_ONLY
 };
 
 enum wm_window_map_state_t {
-    kUnknownMapState                = -1,
-    kUnMappedState                  = XCB_MAP_STATE_UNMAPPED,
-    kUnViewableState                = XCB_MAP_STATE_UNVIEWABLE,
-    kViewableState                  = XCB_MAP_STATE_VIEWABLE
+    kUnknownMapState = -1,
+    kUnMappedState = XCB_MAP_STATE_UNMAPPED,
+    kUnViewableState = XCB_MAP_STATE_UNVIEWABLE,
+    kViewableState = XCB_MAP_STATE_VIEWABLE
 };
 
-struct core::wm::wm_request_t {
-    xcb_get_property_cookie_t           netNameCookie;
-    xcb_get_property_cookie_t           nameCookie;
-    xcb_get_geometry_cookie_t           geomCookie;
-    xcb_translate_coordinates_cookie_t  transCoordsCookie;
-    xcb_get_window_attributes_cookie_t  attrCookie;
-    xcb_get_property_cookie_t           desktopCookie;
-    xcb_get_property_cookie_t           windowTypeCookie;
-    xcb_get_property_cookie_t           stateCookie;
-    xcb_get_property_cookie_t           pidCookie;
-    xcb_get_property_cookie_t           frameExtentsCookie;
-    xcb_query_tree_cookie_t             treeCookie;
+struct core::wm::wm_request_t
+{
+    xcb_get_property_cookie_t netNameCookie;
+    xcb_get_property_cookie_t nameCookie;
+    xcb_get_geometry_cookie_t geomCookie;
+    xcb_translate_coordinates_cookie_t transCoordsCookie;
+    xcb_get_window_attributes_cookie_t attrCookie;
+    xcb_get_property_cookie_t desktopCookie;
+    xcb_get_property_cookie_t windowTypeCookie;
+    xcb_get_property_cookie_t stateCookie;
+    xcb_get_property_cookie_t pidCookie;
+    xcb_get_property_cookie_t frameExtentsCookie;
+    xcb_query_tree_cookie_t treeCookie;
 };
 
-struct core::wm::wm_frame_extents_t {
+struct core::wm::wm_frame_extents_t
+{
     uint left;
     uint right;
     uint top;
     uint bottom;
 };
 
-struct core::wm::wm_window_ext_t {
-    WMWId                           windowId;       // window id
-    WMWId                           parent      {}; // window tree schema
-    QList<WMWId>                    children    {};
+struct core::wm::wm_window_ext_t
+{
+    WMWId windowId;   // window id
+    WMWId parent {};   // window tree schema
+    QList<WMWId> children {};
 
-    pid_t                           pid;            // _NET_WM_PID
-    int                             desktop     {}; // desktop
-    enum wm_window_class_t          wclass      {}; // class: InputOutput || InputOnly && win attrs: XCB_WINDOW_CLASS_INPUT_OUTPUT || XCB_WINDOW_CLASS_INPUT_ONLY
-    enum wm_window_map_state_t      map_state   {}; // map state: unmapped || unviewable || viewable && win attrs: XCB_MAP_STATE_UNMAPPED || XCB_MAP_STATE_UNVIEWABLE || XCB_MAP_STATE_VIEWABLE
-    QList<enum wm_state_t>          states      {}; // window states && // _NET_WM_STATE
-    QList<enum wm_window_type_t>    types       {}; // window types (in order of preference) && _NET_WM_WINDOW_TYPE
-    struct wm_frame_extents_t       extents     {}; // window extents && //_NET_FRAME_EXTENTS
-    QRect                           rect        {}; // geometry
+    pid_t pid;   // _NET_WM_PID
+    int desktop {};   // desktop
+    enum wm_window_class_t wclass {};   // class: InputOutput || InputOnly && win attrs: XCB_WINDOW_CLASS_INPUT_OUTPUT || XCB_WINDOW_CLASS_INPUT_ONLY
+    enum wm_window_map_state_t map_state {};   // map state: unmapped || unviewable || viewable && win attrs: XCB_MAP_STATE_UNMAPPED || XCB_MAP_STATE_UNVIEWABLE || XCB_MAP_STATE_VIEWABLE
+    QList<enum wm_state_t> states {};   // window states && // _NET_WM_STATE
+    QList<enum wm_window_type_t> types {};   // window types (in order of preference) && _NET_WM_WINDOW_TYPE
+    struct wm_frame_extents_t extents
+    {
+    };   // window extents && //_NET_FRAME_EXTENTS
+    QRect rect {};   // geometry
 
-    std::unique_ptr<wm_request_t>   request;
+    std::unique_ptr<wm_request_t> request;
 };
 
 // tree schema in bottom to top stacking order
-struct core::wm::wm_tree_t {
-    struct wm_window_ext_t         *root;  // root window
-    std::map<WMWId, WMWindowExt>    cache; // [windowId : window extended info] mapping
+struct core::wm::wm_tree_t
+{
+    struct wm_window_ext_t *root;   // root window
+    std::map<WMWId, WMWindowExt> cache;   // [windowId : window extended info] mapping
 };
 
-struct XReplyDeleter {
+struct XReplyDeleter
+{
     void operator()(void *p)
     {
         free(p);
     }
 };
-using XGetPropertyReply         = std::unique_ptr<xcb_get_property_reply_t, XReplyDeleter>;
-using XGetGeometryReply         = std::unique_ptr<xcb_get_geometry_reply_t, XReplyDeleter>;
-using XGetWindowAttributeReply  = std::unique_ptr<xcb_get_window_attributes_reply_t, XReplyDeleter>;
-using XQueryTreeReply           = std::unique_ptr<xcb_query_tree_reply_t, XReplyDeleter>;
-using XTransCoordsReply         = std::unique_ptr<xcb_translate_coordinates_reply_t, XReplyDeleter>;
-using XGetAtomNameReply         = std::unique_ptr<xcb_get_atom_name_reply_t, XReplyDeleter>;
-using XInternAtomReply          = std::unique_ptr<xcb_intern_atom_reply_t, XReplyDeleter>;
+using XGetPropertyReply = std::unique_ptr<xcb_get_property_reply_t, XReplyDeleter>;
+using XGetGeometryReply = std::unique_ptr<xcb_get_geometry_reply_t, XReplyDeleter>;
+using XGetWindowAttributeReply = std::unique_ptr<xcb_get_window_attributes_reply_t, XReplyDeleter>;
+using XQueryTreeReply = std::unique_ptr<xcb_query_tree_reply_t, XReplyDeleter>;
+using XTransCoordsReply = std::unique_ptr<xcb_translate_coordinates_reply_t, XReplyDeleter>;
+using XGetAtomNameReply = std::unique_ptr<xcb_get_atom_name_reply_t, XReplyDeleter>;
+using XInternAtomReply = std::unique_ptr<xcb_intern_atom_reply_t, XReplyDeleter>;
 
-struct XDisconnector {
+struct XDisconnector
+{
     void operator()(xcb_connection_t *c)
     {
         xcb_disconnect(c);
@@ -143,7 +152,6 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 
     std::function<void(const struct wm_window_ext_t *)> scan_tree;
     scan_tree = [&](const struct wm_window_ext_t *parent) {
-
         for (auto &childWindowId : parent->children) {
             auto &child = m_tree->cache[childWindowId];
 
@@ -164,7 +172,7 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 
             // window type
             if (child->types.startsWith(kDockWindowType)
-                    || child->types.startsWith(kDesktopWindowType))
+                || child->types.startsWith(kDesktopWindowType))
                 continue;
 
             // window state
@@ -174,24 +182,23 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
             WMWindowArea warea(new struct wm_window_area_t());
 
             // rect & extents
-            QRect rect{child->rect};
-            rect = rect.marginsAdded({int(child->extents.left),
-                                      int(child->extents.top),
-                                      int(child->extents.right),
-                                      int(child->extents.bottom)});
+            QRect rect { child->rect };
+            rect = rect.marginsAdded({ int(child->extents.left),
+                                       int(child->extents.top),
+                                       int(child->extents.right),
+                                       int(child->extents.bottom) });
 
             if (!rect.contains(pos))
                 continue;
 
             // window adjusted rect (including bounding frame)
             warea->rect = rect;
-            // pid            
-	     warea->pid = child->pid;
+            // pid
+            warea->pid = child->pid;
 
             warea->wid = child->windowId;
 
             walist.push_back(std::move(warea));
-
         }
     };
 
@@ -222,10 +229,10 @@ bool WMInfo::isCursorHoveringDocks(const QPoint &pos) const
 std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) const
 {
     std::list<WMWindowArea> list {};
-    bool done {false};
+    bool done { false };
 
     std::function<void(const struct wm_window_ext_t *, const QRect &)> scan_tree;
-    scan_tree = [&](const struct wm_window_ext_t *parent, const QRect & area) {
+    scan_tree = [&](const struct wm_window_ext_t *parent, const QRect &area) {
         for (auto &childWindowId : parent->children) {
             if (childWindowId == wid) {
                 done = true;
@@ -262,11 +269,11 @@ std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) c
 
             // adjust child rect with frame extents
             auto adjusted = child->rect;
-            adjusted = adjusted.marginsAdded(QMargins{
-                int(child->extents.left),
-                int(child->extents.top),
-                int(child->extents.right),
-                int(child->extents.bottom)});
+            adjusted = adjusted.marginsAdded(QMargins {
+                    int(child->extents.left),
+                    int(child->extents.top),
+                    int(child->extents.right),
+                    int(child->extents.bottom) });
 
             // translate child geom
             if (!adjusted.intersects(area))
@@ -296,7 +303,7 @@ void WMInfo::buildWindowTreeSchema()
     auto *conn = connection.get();
     err = xcb_connection_has_error(conn);
     if (err) {
-        qDebug() << "Unable to connect to X server";
+        qCDebug(app) << "Unable to connect to X server";
         return;
     }
 
@@ -307,7 +314,7 @@ void WMInfo::buildWindowTreeSchema()
     xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
     int screenCount = xcb_setup_roots_length(setup);
     if (screenCount < screenNumber) {
-        qDebug() << QString("Unable to access to screen %1, max is %2").arg(screenNumber).arg(screenCount - 1);
+        qCDebug(app) << QString("Unable to access to screen %1, max is %2").arg(screenNumber).arg(screenCount - 1);
         return;
     }
     // get the screen we want from a list of screens in linked list structure
@@ -430,35 +437,35 @@ void WMInfo::initAtomCache(xcb_connection_t *conn)
     buffer = frameExtentsAtomMeta->name;
     auto frameExtentsAtomCookie = xcb_intern_atom(conn, false, uint16_t(buffer.length()), buffer.data());
 
-    auto nameAtom               = getAtom(conn, nameAtomCookie);
-    nameAtomMeta->atom          = nameAtom;
-    auto utf8StringAtom         = getAtom(conn, utf8StringAtomCookie);
-    utf8StringAtomMeta->atom    = utf8StringAtom;
-    auto desktopAtom            = getAtom(conn, desktopAtomCookie);
-    desktopAtomMeta->atom       = desktopAtom;
-    auto windowTypeAtom         = getAtom(conn, windowTypeAtomCookie);
-    windowTypeAtomMeta->atom    = windowTypeAtom;
-    auto stateAtom              = getAtom(conn, stateAtomCookie);
-    stateAtomMeta->atom         = stateAtom;
-    auto pidAtom                = getAtom(conn, pidAtomCookie);
-    pidAtomMeta->atom           = pidAtom;
-    auto frameExtentsAtom       = getAtom(conn, frameExtentsAtomCookie);
-    frameExtentsAtomMeta->atom  = frameExtentsAtom;
+    auto nameAtom = getAtom(conn, nameAtomCookie);
+    nameAtomMeta->atom = nameAtom;
+    auto utf8StringAtom = getAtom(conn, utf8StringAtomCookie);
+    utf8StringAtomMeta->atom = utf8StringAtom;
+    auto desktopAtom = getAtom(conn, desktopAtomCookie);
+    desktopAtomMeta->atom = desktopAtom;
+    auto windowTypeAtom = getAtom(conn, windowTypeAtomCookie);
+    windowTypeAtomMeta->atom = windowTypeAtom;
+    auto stateAtom = getAtom(conn, stateAtomCookie);
+    stateAtomMeta->atom = stateAtom;
+    auto pidAtom = getAtom(conn, pidAtomCookie);
+    pidAtomMeta->atom = pidAtom;
+    auto frameExtentsAtom = getAtom(conn, frameExtentsAtomCookie);
+    frameExtentsAtomMeta->atom = frameExtentsAtom;
 
-    m_internAtomCache[kNetNameAtom]         = nameAtom;
-    m_internAtomCache[kUTF8StringAtom]      = utf8StringAtom;
-    m_internAtomCache[kNetDesktopAtom]      = desktopAtom;
-    m_internAtomCache[kNetWindowTypeAtom]   = windowTypeAtom;
-    m_internAtomCache[kNetStateAtom]        = stateAtom;
-    m_internAtomCache[kNetPIDAtom]          = pidAtom;
+    m_internAtomCache[kNetNameAtom] = nameAtom;
+    m_internAtomCache[kUTF8StringAtom] = utf8StringAtom;
+    m_internAtomCache[kNetDesktopAtom] = desktopAtom;
+    m_internAtomCache[kNetWindowTypeAtom] = windowTypeAtom;
+    m_internAtomCache[kNetStateAtom] = stateAtom;
+    m_internAtomCache[kNetPIDAtom] = pidAtom;
     m_internAtomCache[kNetFrameExtentsAtom] = frameExtentsAtom;
 
-    m_atomCache[nameAtom]         = std::move(nameAtomMeta);
-    m_atomCache[utf8StringAtom]   = std::move(utf8StringAtomMeta);
-    m_atomCache[desktopAtom]      = std::move(desktopAtomMeta);
-    m_atomCache[windowTypeAtom]   = std::move(windowTypeAtomMeta);
-    m_atomCache[stateAtom]        = std::move(stateAtomMeta);
-    m_atomCache[pidAtom]          = std::move(pidAtomMeta);
+    m_atomCache[nameAtom] = std::move(nameAtomMeta);
+    m_atomCache[utf8StringAtom] = std::move(utf8StringAtomMeta);
+    m_atomCache[desktopAtom] = std::move(desktopAtomMeta);
+    m_atomCache[windowTypeAtom] = std::move(windowTypeAtomMeta);
+    m_atomCache[stateAtom] = std::move(stateAtomMeta);
+    m_atomCache[pidAtom] = std::move(pidAtomMeta);
     m_atomCache[frameExtentsAtom] = std::move(frameExtentsAtomMeta);
 }
 
@@ -483,7 +490,7 @@ QByteArray WMInfo::getAtomName(xcb_connection_t *conn, xcb_atom_t atom)
         if (reply) {
             auto len = xcb_get_atom_name_name_length(reply.get());
             auto name = xcb_get_atom_name_name(reply.get());
-            meta->name = QByteArray{name, len};
+            meta->name = QByteArray { name, len };
         }
         m_atomCache[atom] = std::move(meta);
     }
@@ -493,7 +500,7 @@ QByteArray WMInfo::getAtomName(xcb_connection_t *conn, xcb_atom_t atom)
 
 WMWindowExt WMInfo::requestWindowExtInfo(xcb_connection_t *conn, xcb_window_t window)
 {
-    WMWindowExt winfo(new wm_window_ext_t{});
+    WMWindowExt winfo(new wm_window_ext_t {});
     std::unique_ptr<struct wm_request_t> req(new wm_request_t {});
     winfo->request = std::move(req);
 
@@ -690,8 +697,8 @@ WMWindowExt WMInfo::requestWindowExtInfo(xcb_connection_t *conn, xcb_window_t wi
                 winfo->types << kDNDWindowType;
             } else {
                 winfo->types << kUnknownWindowType;
-            } // !if
-        } // !for
+            }   // !if
+        }   // !for
     }
     // state
     XGetPropertyReply stateReply(xcb_get_property_reply(conn, stateCookie, nullptr));
@@ -726,8 +733,8 @@ WMWindowExt WMInfo::requestWindowExtInfo(xcb_connection_t *conn, xcb_window_t wi
                 winfo->states << kDemandsAttentionState;
             } else {
                 winfo->states << kUnknownState;
-            } // !if
-        } // !for
+            }   // !if
+        }   // !for
     }
     // PID
     XGetPropertyReply pidReply(xcb_get_property_reply(conn, pidCookie, nullptr));
@@ -741,9 +748,9 @@ WMWindowExt WMInfo::requestWindowExtInfo(xcb_connection_t *conn, xcb_window_t wi
     XGetPropertyReply frameExtentsReply(xcb_get_property_reply(conn, frameExtentsCookie, nullptr));
     if (frameExtentsReply && frameExtentsReply->type == XCB_ATOM_CARDINAL && frameExtentsReply->value_len == 4) {
         auto *frameExtents = reinterpret_cast<uint *>(xcb_get_property_value(frameExtentsReply.get()));
-        winfo->extents.left   = frameExtents[0];
-        winfo->extents.right  = frameExtents[1];
-        winfo->extents.top    = frameExtents[2];
+        winfo->extents.left = frameExtents[0];
+        winfo->extents.right = frameExtents[1];
+        winfo->extents.top = frameExtents[2];
         winfo->extents.bottom = frameExtents[3];
     } else {
         winfo->extents = {};
