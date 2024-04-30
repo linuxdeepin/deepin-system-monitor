@@ -1,0 +1,43 @@
+{
+  "name": "deepin-system-monitor",
+  "group": "",
+  "submodules": [
+    {
+      "name": "deepin-system-monitor-daemon",
+      "filter": "",
+      "exec": "/usr/lib/x86_64-linux-gnu/deepin-service-manager/libdeepin-system-monitor-daemon.so",
+      "logType": "journal",
+      "logPath": ""
+    },
+    {
+      "name": "deepin-system-monitor",
+      "filter": "",
+      "exec": "/usr/bin/deepin-system-monitor",
+      "logType": "journal",
+      "logPath": ""
+    },
+    {
+      "name": "deepin-system-monitor-plugin",
+      "filter": "",
+      "exec": "/usr/lib/dde-dock/plugins/libdeepin-system-monitor-plugin.so",
+      "logType": "journal",
+      "logPath": ""
+    },
+    {
+      "name": "deepin-system-monitor-plugin-popup",
+      "filter": "",
+      "exec": "/usr/bin/deepin-system-monitor-plugin-popup",
+      "logType": "journal",
+      "logPath": ""
+    },
+    {
+      "name": "deepin-system-monitor-server",
+      "filter": "",
+      "exec": "/usr/bin/deepin-system-monitor-server",
+      "logType": "journal",
+      "logPath": ""
+    }
+  ],
+  "visible": true,
+  "version": "V1.0"
+}

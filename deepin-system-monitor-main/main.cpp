@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QAccessible>
-
+#include "logger.h"
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
@@ -32,6 +32,22 @@ using namespace common::init;
 
 int main(int argc, char *argv[])
 {
+    MLogger();   // 日志处理要放在app之前，否则QApplication
+            // 内部可能进行了日志打印，导致环境变量设置不生效
+// 为了兼容性
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 6, 8, 0))
+    Dtk::Core::DLogManager::registerJournalAppender();
+#else
+    Dtk::Core::DLogManager::registerFileAppender();
+#endif
+#ifdef QT_DEBUG
+    Dtk::Core::DLogManager::registerConsoleAppender();
+#endif
+
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 6, 8, 7))
+    DLogManager::registerLoggingRulesWatcher("org.deepin.system-monitor");
+#endif
+
     //Judge if Wayland
     WaylandSearchCentered();
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
@@ -54,7 +70,7 @@ int main(int argc, char *argv[])
         return 0;
 
     //获取dmidecode中CPU频率信息
-    char *const cmd[] = {"dmidecode", "-t", "4"};
+    char *const cmd[] = { "dmidecode", "-t", "4" };
     get_cpuinfo_from_dmi(3, cmd);
     PERF_PRINT_BEGIN("POINT-01", "");
 
@@ -66,12 +82,12 @@ int main(int argc, char *argv[])
         app.loadTranslator();
 
         const QString descriptionText = DApplication::translate(
-                                            "App.About",
-                                            "System Monitor is a tool to monitor realtime system load, "
-                                            "view and control processes and services running on your system.");
+                "App.About",
+                "System Monitor is a tool to monitor realtime system load, "
+                "view and control processes and services running on your system.");
 
         const QString acknowledgementLink =
-            "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
+                "https://www.deepin.org/acknowledgments/deepin-system-monitor#thanks";
 
         app.setOrganizationName("deepin");
         app.setApplicationName("deepin-system-monitor");

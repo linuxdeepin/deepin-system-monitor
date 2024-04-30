@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
-
+#include "ddlog.h"
 #include "memory_widget.h"
 #include "../common/utils.h"
 #include "common/datacommon.h"
@@ -27,7 +27,7 @@
 DWIDGET_USE_NAMESPACE
 
 using namespace Utils;
-
+using namespace DDLog;
 MemoryWidget::MemoryWidget(QWidget *parent)
     : QWidget(parent)
 {
@@ -49,25 +49,22 @@ MemoryWidget::MemoryWidget(QWidget *parent)
 }
 MemoryWidget::~MemoryWidget() {}
 
-
 void MemoryWidget::updateStatus()
 {
     QString memUsage, memTotal, memPercent, swapUsage, swapTotal, swapPercent;
     if (!DataDealSingleton::getInstance().readMemInfo(memUsage, memTotal, memPercent, swapUsage, swapTotal, swapPercent))
-        qInfo()<<"failed";
-//    qInfo()<<"swapUsage: "<<swapUsage;
-//    qInfo()<<"swapTotal: "<<swapTotal;
+        qCInfo(app) << "failed";
+    //    qCInfo(app)<<"swapUsage: "<<swapUsage;
+    //    qCInfo(app)<<"swapTotal: "<<swapTotal;
 
     m_memPercent = memPercent;
     m_swapPercent = swapPercent;
 
     QStringList strsMemUsage = memUsage.split(" ");
-    if (strsMemUsage.size() == 2)
-    {
+    if (strsMemUsage.size() == 2) {
         m_memUsage = strsMemUsage.at(0);
         m_memUsageUnit = strsMemUsage.at(1);
-    }
-    else
+    } else
         return;
 
     m_memTotal = memTotal;
@@ -79,18 +76,15 @@ void MemoryWidget::updateStatus()
         m_memTotal += str;
     }
 
-
     QStringList strsSwapUsage = swapUsage.split(" ");
-    if (strsSwapUsage.size() == 2)
-    {
+    if (strsSwapUsage.size() == 2) {
         m_swapUsage = strsSwapUsage.at(0);
         m_swapUnit = strsSwapUsage.at(1);
-    }
-    else
+    } else
         return;
 
     m_swapTotal = swapTotal;
-     //去除字符串空格 bug #111050
+    //去除字符串空格 bug #111050
     QStringList Swaplist = m_swapTotal.split(' ');
     m_swapTotal = "";
     for (auto str : Swaplist) {
@@ -104,14 +98,14 @@ void MemoryWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
     switch (themeType) {
     case DApplicationHelper::LightType:
-        numberColor.setRgb(0,26,46);
+        numberColor.setRgb(0, 26, 46);
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_memory.png"));
         break;
     case DApplicationHelper::DarkType:
-        numberColor.setRgb(192,198,212);
+        numberColor.setRgb(192, 198, 212);
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
@@ -149,31 +143,31 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     //标题栏背景
     QRect titleRect(rect().x(), rect().y(), m_width, 36);
     painter.fillRect(titleRect, QBrush(QColor(255, 255, 255, m_titleTrans)));
-    QRect contentRect(rect().x(), rect().y()+36, m_width, 117);
-    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255,m_contentTrans)));
+    QRect contentRect(rect().x(), rect().y() + 36, m_width, 117);
+    painter.fillRect(contentRect, QBrush(QColor(255, 255, 255, m_contentTrans)));
 
     //标题
     QString strMemory = DApplication::translate("Memory.Widget", "Memory");
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
     int widthTitleTxt = fmTitle.width(strMemory);
-    int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
+    int heightTitleTxt = fmTitle.descent() + fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
-    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter,strMemory);
+    painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, strMemory);
 
     //图标
     int iconSize = 20;
-    QRect iconRect(titleRect.x()+(titleRect.width()-widthTitleTxt)/2-iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2,iconSize, iconSize);
+    QRect iconRect(titleRect.x() + (titleRect.width() - widthTitleTxt) / 2 - iconSize, titleRect.y() + qCeil((titleRect.height() - iconSize) / 2.) + 2, iconSize, iconSize);
     m_icon.paint(&painter, iconRect);
 
     int sectionSize = 6;
     QString memoryTitleUnit = QString("%1 / %2")
-                            .arg(m_memUsageUnit)
-                            .arg(m_memTotal);
+                                      .arg(m_memUsageUnit)
+                                      .arg(m_memTotal);
 
     QString memoryContent = QString("%1 (%2%)")
-                          .arg(strMemory)
-                          .arg(m_memPercent);
+                                    .arg(strMemory)
+                                    .arg(m_memPercent);
 
     QString swapTitle = "";
     QString swapContent = "";
@@ -181,12 +175,12 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
         // After the memory and swap space text, add a space before the brackets
         m_swapUsage = "-/-";
         swapContent = QString("%1 (%2)")
-                .arg(DApplication::translate("Memory.Widget", "Swap"))
-                .arg(DApplication::translate("Memory.Widget", "Not enabled"));
+                              .arg(DApplication::translate("Memory.Widget", "Swap"))
+                              .arg(DApplication::translate("Memory.Widget", "Not enabled"));
     } else {
-        swapTitle= QString("%1 / %2")
-                                .arg(m_swapUnit)
-                                .arg(m_swapTotal);
+        swapTitle = QString("%1 / %2")
+                            .arg(m_swapUnit)
+                            .arg(m_swapTotal);
 
         swapContent = QString("%1 (%2%)")
                               .arg(DApplication::translate("Memory.Widget", "Swap"))
@@ -196,7 +190,7 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     QFontMetrics fmMem(m_memFont);
     QFontMetrics fmMemUnit(m_memUnitFont);
     QFontMetrics fmMemTxt(m_memTxtFont);
-//    QFontMetrics fmMemTxt(m_memTxtFont);
+    //    QFontMetrics fmMemTxt(m_memTxtFont);
 
     int letfsize = 36;
     int margin = 10;
@@ -205,12 +199,12 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     QRect memRect(letfsize, contentRect.y() + fontMargin,
                   fmMem.size(Qt::TextSingleLine, m_memUsage).width(), fmMem.height());
     //内存单位
-    QRect memRectUnit(memRect.x()+memRect.width()-1, memRect.y() + margin,
-                  fmMemUnit.size(Qt::TextSingleLine, memoryTitleUnit).width(), fmMem.height());
+    QRect memRectUnit(memRect.x() + memRect.width() - 1, memRect.y() + margin,
+                      fmMemUnit.size(Qt::TextSingleLine, memoryTitleUnit).width(), fmMem.height());
     //内存txt
     QRect memTxtRect(letfsize, memRect.y() + memRect.height(),
-                      fmMemTxt.size(Qt::TextSingleLine, memoryContent).width(),
-                      fmMemTxt.height());
+                     fmMemTxt.size(Qt::TextSingleLine, memoryContent).width(),
+                     fmMemTxt.height());
     QRectF memIndicatorRect(memTxtRect.x() - margin, memTxtRect.y() + qCeil((memTxtRect.height() - sectionSize) / 2.),
                             sectionSize, sectionSize);
 
@@ -231,13 +225,13 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     painter.setOpacity(1);
 
     //swap数字
-    QRect swapRect(letfsize, memTxtRect.y() + memTxtRect.height()+fontMargin,
-                  fmMem.size(Qt::TextSingleLine, m_swapUsage).width(), fmMem.height());
+    QRect swapRect(letfsize, memTxtRect.y() + memTxtRect.height() + fontMargin,
+                   fmMem.size(Qt::TextSingleLine, m_swapUsage).width(), fmMem.height());
     //swap单位
-    QRect swapRectUnit(swapRect.x()+swapRect.width()-1, swapRect.y()+margin,
-                  fmMemUnit.size(Qt::TextSingleLine, swapTitle).width(), fmMem.height());
+    QRect swapRectUnit(swapRect.x() + swapRect.width() - 1, swapRect.y() + margin,
+                       fmMemUnit.size(Qt::TextSingleLine, swapTitle).width(), fmMem.height());
 
-    QRect swapTxtRect(letfsize, swapRect.y() + swapRect.height(),//+ topsize
+    QRect swapTxtRect(letfsize, swapRect.y() + swapRect.height(),   //+ topsize
                       fmMemTxt.size(Qt::TextSingleLine, swapContent).width(),
                       fmMemTxt.height());
     QRectF swapIndicatorRect(swapTxtRect.x() - margin, swapTxtRect.y() + qCeil((swapTxtRect.height() - sectionSize) / 2.),
@@ -249,11 +243,9 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
 
     //关闭交换空间时，显示-/-
     if (m_swapTotal == "0.0 B") {
-         painter.setFont(m_memUnitFont);
-         painter.drawText(swapRect, m_swapUsage);
-    }
-    else
-    {
+        painter.setFont(m_memUnitFont);
+        painter.drawText(swapRect, m_swapUsage);
+    } else {
         painter.setFont(m_memFont);
         painter.drawText(swapRect, m_swapUsage);
         painter.setFont(m_memUnitFont);
@@ -270,14 +262,13 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     drawLoadingRing(painter, contentRect.x() + ringCenterPointerX, contentRect.y() + ringCenterPointerY,
                     outsideRingRadius, ringWidth, 270, 270, memoryForegroundColor,
                     memoryForegroundOpacity, memoryBackgroundColor, memoryBackgroundOpacity,
-                    m_memPercent.toDouble()/100);
+                    m_memPercent.toDouble() / 100);
 
     // Draw swap ring.
     if (m_swapTotal != "0.0 B") {
         drawLoadingRing(painter, contentRect.x() + ringCenterPointerX, contentRect.y() + ringCenterPointerY,
                         insideRingRadius, ringWidth, 270, 270, swapForegroundColor,
-                        swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, m_swapPercent.toDouble()/100);
-
+                        swapForegroundOpacity, swapBackgroundColor, swapBackgroundOpacity, m_swapPercent.toDouble() / 100);
     }
 
     QString memPerUnitTitle = "%";
@@ -287,14 +278,14 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     painter.setFont(m_memFont);
     painter.setPen(textColor);
     QString memPer = QString::number(m_memPercent.toDouble(), 'f', 1);
-    QRect memPerRect(contentRect.x() + ringCenterPointerX - (insideRingRadius + memPerUnitTitleWidth)/2,
-                     contentRect.y() + ringCenterPointerY - (insideRingRadius)/2 + fmMemUnit.height()/4,
+    QRect memPerRect(contentRect.x() + ringCenterPointerX - (insideRingRadius + memPerUnitTitleWidth) / 2,
+                     contentRect.y() + ringCenterPointerY - (insideRingRadius) / 2 + fmMemUnit.height() / 4,
                      fmMem.size(Qt::TextSingleLine, memPer).width(), fmMem.height());
-    painter.drawText(memPerRect, Qt::AlignRight | Qt::AlignVCenter,memPer);
+    painter.drawText(memPerRect, Qt::AlignRight | Qt::AlignVCenter, memPer);
 
     //Draw %
     painter.setFont(m_memUnitFont);
-    QRect memPerUnitRect(memPerRect.x() + memPerRect.width(), memPerRect.y() + fmMemUnit.height()/2,
+    QRect memPerUnitRect(memPerRect.x() + memPerRect.width(), memPerRect.y() + fmMemUnit.height() / 2,
                          fmMemUnit.size(Qt::TextSingleLine, memPerUnitTitle).width(), fmMemUnit.height());
     painter.drawText(memPerUnitRect, Qt::AlignHCenter | Qt::AlignVCenter, memPerUnitTitle);
 }

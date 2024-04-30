@@ -5,7 +5,7 @@
 
 #include "systemprotectionsetting.h"
 #include "helper.hpp"
-
+#include "ddlog.h"
 #include <DSettingsWidgetFactory>
 #include <DCommandLinkButton>
 #include <DSwitchButton>
@@ -29,11 +29,11 @@
 #include <QFont>
 
 #ifndef AlarmStatusOptionName
-#define AlarmStatusOptionName   "setting.systemprotection.alarm_switch"
-#define AlarmCpuUsageOptionName "setting.systemprotection.alarm_cpu_usage"
-#define AlarmMemUsageOptionName "setting.systemprotection.alarm_memory_usage"
-#define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
-#define AlarmLastTimeOptionName "setting.systemprotection.alarm_last_time"
+#    define AlarmStatusOptionName "setting.systemprotection.alarm_switch"
+#    define AlarmCpuUsageOptionName "setting.systemprotection.alarm_cpu_usage"
+#    define AlarmMemUsageOptionName "setting.systemprotection.alarm_memory_usage"
+#    define AlarmIntervalOptionName "setting.systemprotection.alarm_interval"
+#    define AlarmLastTimeOptionName "setting.systemprotection.alarm_last_time"
 #endif
 
 // 与系统字体大小的偏移值，-1.5为小于系统字体大小1.5字号
@@ -43,7 +43,7 @@ int SystemProtectionSetting::m_lastValidMemoryValue = 0;
 int SystemProtectionSetting::m_lastValidInternalValue = 0;
 
 Q_GLOBAL_STATIC(SystemProtectionSetting, theInstance)
-
+using namespace DDLog;
 // 修改控件字体大小
 bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 {
@@ -81,12 +81,7 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 }
 
 SystemProtectionSetting::SystemProtectionSetting(QObject *parent)
-    : QObject(parent)
-    , mBackend(nullptr)
-    , mDsettings(nullptr)
-    , mDaemonInterface("org.deepin.SystemMonitorDaemon",
-                       "/org/deepin/SystemMonitorDaemon",
-                       "org.deepin.SystemMonitorDaemon")
+    : QObject(parent), mBackend(nullptr), mDsettings(nullptr), mDaemonInterface("org.deepin.SystemMonitorDaemon", "/org/deepin/SystemMonitorDaemon", "org.deepin.SystemMonitorDaemon")
 {
     mDaemonInterface.setParent(this);
     // json文件加载setting基本结构
@@ -135,8 +130,8 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createSettingLinkButtonHand
     // 获取初始值
     option->setValue(option->defaultValue());
 
-    option->connect(button, &DCommandLinkButton::clicked, option, [ = ]() {
-        qDebug() << __FUNCTION__ << __LINE__ << "，will jump to dde setting center notification page!";
+    option->connect(button, &DCommandLinkButton::clicked, option, [=]() {
+        qCDebug(app) << __FUNCTION__ << __LINE__ << "，will jump to dde setting center notification page!";
         SystemProtectionSetting::instance()->onMessgaeSetting("");
     });
     if (widget != nullptr)
@@ -169,15 +164,15 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createProtectionSwitchHandl
 
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
     // Item操作修改Setting值
-    option->connect(button, &DSwitchButton::clicked, option, [ = ](bool checked) {
-        qDebug() << __FUNCTION__ << __LINE__ << ", new protection swich :" << checked;
+    option->connect(button, &DSwitchButton::clicked, option, [=](bool checked) {
+        qCDebug(app) << __FUNCTION__ << __LINE__ << ", new protection swich :" << checked;
         if (checked != option->value().toBool()) {
             option->setValue(checked);
         }
     });
 
     // 用于恢复默认时，Item的数据更新
-    button->connect(option, &DSettingsOption::valueChanged, button, [ = ]() {
+    button->connect(option, &DSettingsOption::valueChanged, button, [=]() {
         if (option->value().toBool() != button->isChecked()) {
             button->setChecked(option->value().toBool());
         }
@@ -202,7 +197,6 @@ void SystemProtectionSetting::setLastValidAlarm(DLineEdit *lineEdit, DTK_CORE_NA
         else if (option->key() == AlarmIntervalOptionName)
             lineEdit->setText(QString::number(m_lastValidInternalValue));
     }
-
 }
 
 void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSettingsOption *option, int maxValue, int minValue)
@@ -231,7 +225,7 @@ void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSett
             option->setValue(m_lastValidInternalValue);
         }
     }
-//    SystemProtectionSetting::instance()->regularNumber(edit);
+    //    SystemProtectionSetting::instance()->regularNumber(edit);
 }
 
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
@@ -256,7 +250,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHand
     edit->lineEdit()->setValidator(validator);
 
     // 规范输入的文字信息（数字）
-//    SystemProtectionSetting::instance()->regularNumber(edit);
+    //    SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -285,29 +279,29 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHand
         m_lastValidMemoryValue = option->value().toInt();
 
     // 修改Item同步修改Setting数据
-    option->connect(edit, &DLineEdit::focusChanged, option, [ = ](bool onFocus) {
+    option->connect(edit, &DLineEdit::focusChanged, option, [=](bool onFocus) {
         lineEditChanged(onFocus, edit, option, 100, 30);
     });
 
-    option->connect(edit, &DLineEdit::textChanged, option, [ = ]() {
+    option->connect(edit, &DLineEdit::textChanged, option, [=]() {
         QString text = edit->text();
         int number = text.toInt();
         edit->setText(QString::number(number));
     });
 
-    option->connect(edit, &DLineEdit::returnPressed, option, [ = ]() {
+    option->connect(edit, &DLineEdit::returnPressed, option, [=]() {
         lineEditChanged(false, edit, option, 100, 30);
     });
 
     // 用于恢复默认时，Item的数据更新
-    edit->connect(option, &DSettingsOption::valueChanged, edit, [ = ]() {
+    edit->connect(option, &DSettingsOption::valueChanged, edit, [=]() {
         if (option->value().toInt() != edit->text().toInt()) {
             edit->setText(option->value().toString());
             // 恢复默认时，需要更新默认设置值
             if (option->key() == AlarmCpuUsageOptionName)
-                m_lastValidCPUValue  = option->value().toInt();
+                m_lastValidCPUValue = option->value().toInt();
             if (option->key() == AlarmMemUsageOptionName)
-                m_lastValidMemoryValue  = option->value().toInt();
+                m_lastValidMemoryValue = option->value().toInt();
         }
     });
 
@@ -322,7 +316,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHand
         // 初始控件的disable状态
         widget->setDisabled(!swtich_value.toBool());
         // 连接监控开关变化信号
-        widget->connect(settingPtr, &DSettings::valueChanged, widget, [ = ](const QString & key, const QVariant & value) {
+        widget->connect(settingPtr, &DSettings::valueChanged, widget, [=](const QString &key, const QVariant &value) {
             if (key == AlarmStatusOptionName) {
                 widget->setDisabled(!value.toBool());
             }
@@ -332,7 +326,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHand
             // 初始控件的disable状态
             leftWidget->setDisabled(!swtich_value.toBool());
             // 连接监控开关变化信号
-            leftWidget->connect(settingPtr, &DSettings::valueChanged, leftWidget, [ = ](const QString & key, const QVariant & value) {
+            leftWidget->connect(settingPtr, &DSettings::valueChanged, leftWidget, [=](const QString &key, const QVariant &value) {
                 if (key == AlarmStatusOptionName) {
                     leftWidget->setDisabled(!value.toBool());
                 }
@@ -367,7 +361,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingH
     edit->lineEdit()->setValidator(validator);
 
     // 规范输入的文字信息（数字）
-//    SystemProtectionSetting::instance()->regularNumber(edit);
+    //    SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -393,26 +387,26 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingH
     // 获取初始值时同步更新静态变量
     m_lastValidInternalValue = option->value().toInt();
     // 修改Item同步修改Setting数据
-    option->connect(edit, &DLineEdit::focusChanged, option, [ = ](bool onFocus) {
+    option->connect(edit, &DLineEdit::focusChanged, option, [=](bool onFocus) {
         lineEditChanged(onFocus, edit, option, 60, 5);
     });
 
-    option->connect(edit, &DLineEdit::textChanged, option, [ = ]() {
+    option->connect(edit, &DLineEdit::textChanged, option, [=]() {
         QString text = edit->text();
         int number = text.toInt();
         edit->setText(QString::number(number));
     });
 
-    option->connect(edit, &DLineEdit::returnPressed, option, [ = ]() {
+    option->connect(edit, &DLineEdit::returnPressed, option, [=]() {
         lineEditChanged(false, edit, option, 60, 5);
     });
 
     // 用于恢复默认时，Item的数据更新
-    edit->connect(option, &DSettingsOption::valueChanged, edit, [ = ]() {
+    edit->connect(option, &DSettingsOption::valueChanged, edit, [=]() {
         if (option->value().toInt() != edit->text().toInt()) {
             edit->setText(option->value().toString());
             if (option->key() == AlarmIntervalOptionName)
-                m_lastValidInternalValue  = option->value().toInt();
+                m_lastValidInternalValue = option->value().toInt();
         }
     });
 
@@ -427,7 +421,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingH
         // 初始控件的disable状态
         widget->setDisabled(!swtich_value.toBool());
         // 连接监控开关变化信号
-        widget->connect(settingPtr, &DSettings::valueChanged, widget, [ = ](const QString & key, const QVariant & value) {
+        widget->connect(settingPtr, &DSettings::valueChanged, widget, [=](const QString &key, const QVariant &value) {
             if (key == AlarmStatusOptionName) {
                 widget->setDisabled(!value.toBool());
             }
@@ -437,7 +431,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingH
             // 初始控件的disable状态
             leftWidget->setDisabled(!swtich_value.toBool());
             // 连接监控开关变化信号
-            leftWidget->connect(settingPtr, &DSettings::valueChanged, leftWidget, [ = ](const QString & key, const QVariant & value) {
+            leftWidget->connect(settingPtr, &DSettings::valueChanged, leftWidget, [=](const QString &key, const QVariant &value) {
                 if (key == AlarmStatusOptionName) {
                     leftWidget->setDisabled(!value.toBool());
                 }
@@ -492,7 +486,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenterPage);
 
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
+            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
                        << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
         }
 
@@ -503,16 +497,15 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage showDDEControlCenter;
         if (!common::systemInfo().isOldVersion()) {
             showDDEControlCenter = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
-                                                                           common::systemInfo().ControlCenterPath,
-                                                                           common::systemInfo().ControlCenterInterface,
-                                                                           "ShowPage");
+                                                                  common::systemInfo().ControlCenterPath,
+                                                                  common::systemInfo().ControlCenterInterface,
+                                                                  "ShowPage");
         } else {
             showDDEControlCenter = QDBusMessage::createMethodCall("com.deepin.dde.ControlCenter",
-                                                                           "/com/deepin/dde/ControlCenter",
-                                                                           "com.deepin.dde.ControlCenter",
-                                                                           "ShowModule");
+                                                                  "/com/deepin/dde/ControlCenter",
+                                                                  "com.deepin.dde.ControlCenter",
+                                                                  "ShowModule");
         }
-
 
         QList<QVariant> args;
         args << "notification";
@@ -521,7 +514,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenter);
 
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-            qWarning() << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
+            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
                        << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
         }
     }
@@ -529,7 +522,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
 
 void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVariant &value)
 {
-    qDebug() << __FUNCTION__ << __LINE__ << ", key:" << key << ", value:" << value;
+    qCDebug(app) << __FUNCTION__ << __LINE__ << ", key:" << key << ", value:" << value;
     // 使用QProcess执行dbus操作， 此操作是为了通知daemon进程，监测功能设置数据更改
     // 在执行 DSettingsDialog "恢复默认"按钮操作时，QDBusInterFace QDBusConnection 等操作会发生调用错误
     // 错误提示 org.freedesktop.DBus.Error.UnknownMethod
@@ -542,30 +535,30 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
 
     // 拼接dbus调用命令字串
     if (key == AlarmStatusOptionName) {
-        cmd.append("setSystemProtectionStatus "); // Method Name
-        cmd.append(value.toString());             // value
+        cmd.append("setSystemProtectionStatus ");   // Method Name
+        cmd.append(value.toString());   // value
         needCall = true;
     } else if (key == AlarmCpuUsageOptionName) {
-        cmd.append("setAlarmUsageOfCpu "); // Method Name
-        cmd.append(value.toString());      // value
+        cmd.append("setAlarmUsageOfCpu ");   // Method Name
+        cmd.append(value.toString());   // value
         needCall = true;
     } else if (key == AlarmMemUsageOptionName) {
-        cmd.append("setAlarmUsageOfMemory "); // Method Name
-        cmd.append(value.toString());         // value
+        cmd.append("setAlarmUsageOfMemory ");   // Method Name
+        cmd.append(value.toString());   // value
         needCall = true;
     } else if (key == AlarmIntervalOptionName) {
-        cmd.append("setAlarmMsgInterval "); // Method Name
-        cmd.append(value.toString());       // value
+        cmd.append("setAlarmMsgInterval ");   // Method Name
+        cmd.append(value.toString());   // value
         needCall = true;
     } else if (key == AlarmLastTimeOptionName) {
-        cmd.append("setAlarmLastTimeInterval "); // Mehthod Name
+        cmd.append("setAlarmLastTimeInterval ");   // Mehthod Name
         cmd.append(value.toString());
         needCall = true;
     }
 
-    if (needCall)  {
-        qDebug() << __FUNCTION__ << __LINE__ << "，dbus cmd：" << cmd;
-        QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
+    if (needCall) {
+        qCDebug(app) << __FUNCTION__ << __LINE__ << "，dbus cmd：" << cmd;
+        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
     }
 }
 
@@ -577,7 +570,7 @@ DSettings *SystemProtectionSetting::getDSettingPointor()
 void SystemProtectionSetting::regularNumber(DLineEdit *lineEdit)
 {
     // 失去焦点时
-    connect(lineEdit, &DLineEdit::focusChanged, SystemProtectionSetting::instance(), [ = ]() {
+    connect(lineEdit, &DLineEdit::focusChanged, SystemProtectionSetting::instance(), [=]() {
         if (lineEdit) {
             QString text = lineEdit->text();
             int number = text.toInt();
@@ -586,7 +579,7 @@ void SystemProtectionSetting::regularNumber(DLineEdit *lineEdit)
     });
 
     // 回车按下时
-    connect(lineEdit, &DLineEdit::returnPressed, SystemProtectionSetting::instance(), [ = ]() {
+    connect(lineEdit, &DLineEdit::returnPressed, SystemProtectionSetting::instance(), [=]() {
         if (lineEdit) {
             QString text = lineEdit->text();
             int number = text.toInt();
@@ -599,9 +592,9 @@ void SystemProtectionSetting::onUpdateNewBackend()
 {
     // 创建新的数据后端，应对可能的设置数据变化
     QString strConfigPath = QString("%1/%2/%3/protection.conf")
-            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-            .arg(qApp->organizationName())
-            .arg(qApp->applicationName());
+                                    .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+                                    .arg(qApp->organizationName())
+                                    .arg(qApp->applicationName());
 
     Dtk::Core::QSettingBackend *newBackend = new QSettingBackend(strConfigPath);
     // 为DSetting更新数据后端

@@ -105,7 +105,7 @@ void BaseTableView::setModel(QAbstractItemModel *model)
             m_pressed = {};
         });
 //        connect(model, &QAbstractItemModel::rowsRemoved, this, [ = ]() {
-//        qWarning()<<(model->rowCount()==0);
+//        qCWarning(app)<<(model->rowCount()==0);
 //        });
     }
 }

@@ -427,7 +427,7 @@ void ProcessPageWidget::onStatInfoUpdated()
     m_model = CPUInfoModel::instance();
 
 //    CPUPerformance = (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) ? High : Low;
-    //qInfo() << m_model->cpuSet()->maxFreq()  << (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) << CPUPerformance;
+    //qCInfo(app) << m_model->cpuSet()->maxFreq()  << (m_model->cpuSet()->maxFreq() > CPU_FREQUENCY_STANDARD) << CPUPerformance;
 
 }
 
@@ -533,7 +533,7 @@ void ProcessPageWidget::onAllProcButtonClicked()
 
 void ProcessPageWidget::onUserProcButtonClicked()
 {
-//   qInfo() << CPUPerformance << "CPUPerformance";
+//   qCInfo(app) << CPUPerformance << "CPUPerformance";
     //若已选中，再次点击不会加载数据
     if (m_procBtnCheckedType != USER_PROCESS) {
         PERF_PRINT_BEGIN("POINT-04", QString("switch(%1->%2)").arg(m_procViewMode->text()).arg(DApplication::translate("Process.Show.Mode", myProcText)));
