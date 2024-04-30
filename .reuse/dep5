@@ -18,6 +18,11 @@ Files:  *.toml *.json *conf *.yaml *.sh *.xml *.pc.in
 Copyright: None
 License: CC0-1.0
 
+# assets
+Files: assets/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # debian
 Files: debian/*
 Copyright: None

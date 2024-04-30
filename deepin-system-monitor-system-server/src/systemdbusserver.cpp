@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "systemdbusserver.h"
+#include "ddlog.h"
 
 #include <QCoreApplication>
 #include <QDBusMessage>
@@ -16,6 +17,8 @@
 #include <polkit-qt5-1/PolkitQt1/Authority>
 #include <polkit-qt5-1/PolkitQt1/Subject>
 
+using namespace DDLog;
+
 const QString s_PolkitActionSet = "org.deepin.systemmonitor.systemserver.set";
 
 /**
@@ -24,7 +27,7 @@ const QString s_PolkitActionSet = "org.deepin.systemmonitor.systemserver.set";
 bool checkAuthorization(qint64 pid, const QString &action)
 {
     PolkitQt1::Authority::Result ret = PolkitQt1::Authority::instance()->checkAuthorizationSync(
-        action, PolkitQt1::UnixProcessSubject(pid), PolkitQt1::Authority::AllowUserInteraction);
+            action, PolkitQt1::UnixProcessSubject(pid), PolkitQt1::Authority::AllowUserInteraction);
     if (PolkitQt1::Authority::Yes == ret) {
         return true;
     } else {
@@ -55,7 +58,7 @@ SystemDBusServer::SystemDBusServer(QObject *parent)
     QDBusConnection dbus = QDBusConnection::systemBus();
     if (dbus.registerService("org.deepin.SystemMonitorSystemServer")) {
         QDBusConnection::RegisterOptions opts =
-            QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals | QDBusConnection::ExportAllProperties;
+                QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals | QDBusConnection::ExportAllProperties;
         if (!dbus.registerObject("/org/deepin/SystemMonitorSystemServer", this, opts)) {
             qWarning() << qPrintable("Register dbus object failed") << dbus.lastError().message();
         }
@@ -104,7 +107,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 
     // 判断服务是否存在
     QProcess listPorcess;
-    listPorcess.start("systemctl", {"list-unit-files", "--type=service", "--no-pager"});
+    listPorcess.start("systemctl", { "list-unit-files", "--type=service", "--no-pager" });
     listPorcess.waitForFinished();
     QByteArray serviceList = listPorcess.readAll();
     if (!serviceList.contains(serviceName.toUtf8())) {
@@ -120,12 +123,12 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 
     // 执行设置
     QProcess process;
-    process.start("systemctl", {enable ? "enable" : "disable", serviceName});
+    process.start("systemctl", { enable ? "enable" : "disable", serviceName });
     process.waitForFinished();
     QString errorRet = process.readAll();
 
     // 检测是否执行成功
-    process.start("systemctl", {"is-enabled", serviceName});
+    process.start("systemctl", { "is-enabled", serviceName });
     process.waitForFinished();
     QString checkRet = process.readAll();
     if (enable && ("enabled" == checkRet)) {
@@ -166,14 +169,14 @@ bool SystemDBusServer::checkCaller() const
 
     qint64 callerPid = dbusCallerPid();
     QString callerExe = getProcIdExe(callerPid);
-    QString dbmExe = QStandardPaths::findExecutable("deepin-system-monitor", {"/usr/bin"});
+    QString dbmExe = QStandardPaths::findExecutable("deepin-system-monitor", { "/usr/bin" });
 
-    qDebug() << qPrintable("callerPid is: ") << callerPid << qPrintable("callerExe is:") << callerExe;
+    qCDebug(app) << qPrintable("callerPid is: ") << callerPid << qPrintable("callerExe is:") << callerExe;
     if (callerExe != dbmExe) {
-        qDebug() << qPrintable("caller not authorized");
+        qCDebug(app) << qPrintable("caller not authorized");
         return false;
     }
 
-    qDebug() << qPrintable("caller authorized");
+    qCDebug(app) << qPrintable("caller authorized");
     return true;
 }

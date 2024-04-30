@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "settinghandler.h"
-
+#include "ddlog.h"
 #include <DSettingsOption>
 
 #include <QFile>
@@ -12,6 +12,8 @@
 #include <QCoreApplication>
 #include <QVariant>
 #include <QString>
+
+using namespace DDLog;
 
 // 警报数据，由产品定义
 const static int MinAlarmCpuUsage = 30;
@@ -22,9 +24,7 @@ const static int MinAlarmInterval = 5;
 const static int MaxAlarmInterval = 60;
 
 SettingHandler::SettingHandler(QObject *parent)
-    : QObject(parent)
-    , mSettings(nullptr)
-    , mBackend(nullptr)
+    : QObject(parent), mSettings(nullptr), mBackend(nullptr)
 {
     QString orgName = qApp->organizationName();
     if (orgName.isEmpty()) {
@@ -33,9 +33,9 @@ SettingHandler::SettingHandler(QObject *parent)
 
     //配置文件路径: ~/.config/deepin/deepin-system-monitor/protection.conf
     QString strConfigPath = QString("%1/%2/%3/protection.conf")
-                            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-                            .arg(orgName)
-                            .arg("deepin-system-monitor");
+                                    .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+                                    .arg(orgName)
+                                    .arg("deepin-system-monitor");
 
     mBackend = new Dtk::Core::QSettingBackend(strConfigPath);
     mSettings = DSettings::fromJsonFile(":/resources/settings.json");
@@ -49,7 +49,7 @@ SettingHandler::SettingHandler(QObject *parent)
     auto keys = mValueRange.keys();
 
     foreach (auto it, keys) {
-        qDebug() << __FUNCTION__ << __LINE__ << "，key: " << it << ", range: " << mValueRange[it];
+        qCDebug(app) << __FUNCTION__ << __LINE__ << "，key: " << it << ", range: " << mValueRange[it];
     }
 
     if (mSettings != nullptr) {
@@ -78,7 +78,7 @@ QVariant SettingHandler::getOptionValue(const QString key)
     if (isCompelted() && mSettings->keys().contains(key)) {
         return mSettings->getOption(key);
     } else {
-        qWarning() << __FUNCTION__ << __LINE__ << QString("can not find conf[%1]!").arg(key)
+        qCWarning(app) << __FUNCTION__ << __LINE__ << QString("can not find conf[%1]!").arg(key)
                    << ", compeletd:" << isCompelted()
                    << ", avalid keys:" << mSettings->keys();
     }
@@ -94,7 +94,7 @@ bool SettingHandler::changedOptionValue(const QString key, const QVariant value)
         mSettings->sync();
         return true;
     } else {
-        qWarning() << __FUNCTION__ << __LINE__ << QString("change conf[%1,%2] fail !").arg(key).arg(value.toString())
+        qCWarning(app) << __FUNCTION__ << __LINE__ << QString("change conf[%1,%2] fail !").arg(key).arg(value.toString())
                    << ", compeletd:" << isCompelted()
                    << ", avalid keys:" << mSettings->keys();
     }
@@ -122,7 +122,7 @@ QPair<double, double> SettingHandler::getValueRange(const QString key)
     if (mValueRange.contains(key)) {
         range = mValueRange[key];
     }
-    return  range;
+    return range;
 }
 
 QList<QString> SettingHandler::itemKeys()

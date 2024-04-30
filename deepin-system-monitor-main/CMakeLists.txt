@@ -107,6 +107,8 @@ set(HPP_GLOBAL
     smooth_curve_generator.h
     settings.h
     detailwidgetmanager.h
+    logger.h
+    ddlog.h
 )
 set(CPP_GLOBAL
     main.cpp
@@ -121,6 +123,7 @@ set(CPP_GLOBAL
     smooth_curve_generator.cpp
     settings.cpp
     detailwidgetmanager.cpp
+    logger.cpp
 )
 
 set(HPP_COMMON
@@ -604,6 +607,7 @@ set(LIBS
     ${LIB_NL3_ROUTE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
 #    ${DFrameworkDBus_LIBRARIES}   # chinalife
+    Dtk::Core
 )
 
 if (USE_DEEPIN_WAYLAND)
