@@ -39,6 +39,11 @@ const DesktopEntry DesktopEntryCache::entryWithDesktopFile(const QString &deskto
     return entry;
 }
 
+QHash<QString, DesktopEntry> DesktopEntryCache::getCache()
+{
+    return m_cache;
+}
+
 void DesktopEntryCache::updateCache()
 {
     m_cache.clear();
