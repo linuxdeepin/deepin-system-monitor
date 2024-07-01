@@ -230,6 +230,14 @@ bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 
 void AccountsInfoModel::EditAccount()
 {
-    if (m_controlInter)
-        m_controlInter->call("ShowPage", "accounts", "Accounts Detail");
+    if (m_controlInter) {
+        bool version = common::systemInfo().isOldVersion();
+        if (version) {
+            //专业版v20接口：ShowPage(String module, String page)
+            m_controlInter->call("ShowPage", "accounts", "Accounts Detail");
+        } else if (!version) {
+            //社区版V23接口：ShowPage(String url)
+            m_controlInter->call("ShowPage", "accounts");
+        }
+    }
 }
