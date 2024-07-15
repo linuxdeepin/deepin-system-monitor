@@ -20,17 +20,15 @@
 
 // Qt
 #include <QListView>
+#ifdef DTKWIDGET_CLASS_DBlurEffectWithBorderWidget
+#include <DBlurEffectWithBorderWidget>
+#else
 #include <DBlurEffectWidget>
+#endif
 #include <DRegionMonitor>
 #include <DWidget>
 #include <DScrollArea>
 #include <DtkGuis>
-
-// Dtk
-#include <com_deepin_daemon_display_monitor.h>
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_daemon_display.h>
-
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -39,26 +37,32 @@ QT_FORWARD_DECLARE_CLASS(QPushButton)
 QT_FORWARD_DECLARE_CLASS(QPropertyAnimation)
 QT_FORWARD_DECLARE_CLASS(QSequentialAnimationGroup)
 
-
-using DBusDisplay = com::deepin::daemon::Display;
-using DisplayMonitor = com::deepin::daemon::display::Monitor;
-using DBusDaemonDock = com::deepin::dde::daemon::Dock;
-
 /*!
  * \~chinese \class MainWindow
  * \~chinese \brief 主窗口类
  */
+#ifdef DTKWIDGET_CLASS_DBlurEffectWithBorderWidget
+class MainWindow : public DBlurEffectWithBorderWidget
+#else
 class MainWindow : public DBlurEffectWidget
+#endif
 {
     Q_OBJECT
     Q_PROPERTY(int width READ getWidth WRITE setFixedWidth)
     Q_PROPERTY(int x WRITE setX)
+    Q_PROPERTY(bool sysMonPopVisible READ sysMonPopVisible NOTIFY sysMonPopVisibleChanged)
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
 Q_SIGNALS:
     void signal_geometry(int height);
+    /*!
+     * \brief sysMonPopVisibleChanged 系统监视器弹窗显示状态改变
+     * \param visible
+     */
+    void sysMonPopVisibleChanged(bool visible);
 
 public Q_SLOTS:
     /*!
@@ -101,6 +105,12 @@ private Q_SLOTS:
     void CompositeChanged();
 
     void registerMonitor();
+
+    /*!
+     * \brief sysMonPopVisible 系统监视器弹窗显示状态
+     * \return
+     */
+    bool sysMonPopVisible() const{ return isVisible();}
 
 private:
     /*!
@@ -146,6 +156,8 @@ protected:
 
     virtual bool eventFilter(QObject *object, QEvent *event) override;
 
+    virtual void showEvent(QShowEvent *event) override;
+    virtual void hideEvent(QHideEvent *event) override;
 private slots:
     void slotShowOrHideSystemMonitorPluginPopupWidget();
     //!
@@ -153,12 +165,17 @@ private slots:
     //! \param themeType 主题类型
     //!
     void changeTheme(DApplicationHelper::ColorType themeType);
+    //!
+    //! \brief dbusPropertiesChanged 获取属性变化信号
+    //! \param interface 接口，maps 数据，strs 名称
+    //!
+    void dbusPropertiesChanged(QString interface,QVariantMap maps,QStringList strs);
 
 private:
-    DBusDisplay *m_displayInter;
+    QDBusInterface *m_displayInter;
     //用于存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
     QList<QDBusObjectPath> m_dbusPathList     {};
-    DBusDaemonDock *m_daemonDockInter;
+    QDBusInterface *m_daemonDockInter;
     DBusDockInterface *m_dockInter;
     SystemMonitorDBusAdaptor *m_systemMonitorDbusAdaptor;
     DRegionMonitor *m_regionMonitor;

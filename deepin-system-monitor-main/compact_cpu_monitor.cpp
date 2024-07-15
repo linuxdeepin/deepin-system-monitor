@@ -29,6 +29,10 @@
 DWIDGET_USE_NAMESPACE
 using namespace common;
 
+// additonPoses to align with the cpu text
+const int additionCPUPosX = 3;
+const int additionCPUPoxY = 3;
+
 // 通过 UseTotalCpuCurve 宏, 控制绘制CPU曲线方式
 // UseTotalCpuCurve: true , 绘制一条总的CPU占用曲线
 // UseTotalCpuCurve: false, 绘制每个独立CPU的占用曲线
@@ -170,8 +174,8 @@ void CompactCpuMonitor::resizeEvent(QResizeEvent *event)
 void CompactCpuMonitor::resizeItemRect()
 {
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 12, m_detailButton->fontMetrics().height() + 4);
-    const QSize &detailtextSize =  m_detailButton->size();
-    m_detailButton->setGeometry(this->width() - detailtextSize.width(), 0, detailtextSize.width(), detailtextSize.height());
+    const QSize &detailtextSize = m_detailButton->size();
+    m_detailButton->setGeometry(this->width() - detailtextSize.width() + additionCPUPosX, additionCPUPoxY, detailtextSize.width(), detailtextSize.height());
 }
 
 void CompactCpuMonitor::paintEvent(QPaintEvent *)
@@ -255,6 +259,8 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     dashes << 2 << space;
     gridPen.setDashPattern(dashes);
     gridPen.setColor(frameColor);
+    //set to 0 lead to line with always 1px
+    gridPen.setWidth(0);
     painter.setPen(gridPen);
 
     int gridLineX = gridX;

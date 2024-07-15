@@ -6,20 +6,19 @@
 #include "dbus_object.h"
 #include "gui/main_window.h"
 #include "application.h"
-
+#include "ddlog.h"
 #include <QDBusConnection>
 #include <QDebug>
 
-#define DBUS_SERVER             "com.deepin.systemMonitor"
-#define DBUS_SERVER_PATH        "/com/deepin/systemMonitor"
-
+#define DBUS_SERVER "com.deepin.systemMonitor"
+#define DBUS_SERVER_PATH "/com/deepin/systemMonitor"
+using namespace DDLog;
 QMutex DBusObject::mutex;
 QAtomicPointer<DBusObject> DBusObject::instance;
 
 DBusObject &DBusObject::getInstance()
 {
-    if (instance.testAndSetOrdered(nullptr, nullptr))
-    {
+    if (instance.testAndSetOrdered(nullptr, nullptr)) {
         QMutexLocker locker(&mutex);
 
         instance.testAndSetOrdered(nullptr, new DBusObject);
@@ -35,7 +34,7 @@ bool DBusObject::registerOrNotify()
         QList<QVariant> args;
         QString error = notification.callWithArgumentList(QDBus::Block, "handleWindow", args).errorMessage();
         if (!error.isEmpty())
-            qInfo() << error;
+            qCInfo(app) << error;
         return false;
     }
 
@@ -62,12 +61,11 @@ void DBusObject::handleWindow()
     internalMutex.unlock();
 }
 
-DBusObject::DBusObject(QObject *parent) : QObject(parent)
+DBusObject::DBusObject(QObject *parent)
+    : QObject(parent)
 {
-
 }
 
 DBusObject::~DBusObject()
 {
-
 }

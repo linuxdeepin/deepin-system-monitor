@@ -8,7 +8,8 @@
 
 #include <sys/types.h>
 #include <cstdint>
-
+#include "ddlog.h"
+using namespace DDLog;
 namespace util {
 namespace common {
 
@@ -46,7 +47,7 @@ inline void hash(const void *key, int len, uint32_t seed, uint64_t out[2])
 #endif
 }
 
-} // namespace common
-} // namespace util
+}   // namespace common
+}   // namespace util
 
-#endif // HASH_H
+#endif   // HASH_H

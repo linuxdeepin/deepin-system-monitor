@@ -25,7 +25,6 @@ SystemMonitor::SystemMonitor(QObject *parent)
     , m_processDB(new ProcessDB(this))
 {
     m_sysInfo->readSysInfoStatic();
-
 }
 
 SystemMonitor::~SystemMonitor()
@@ -85,6 +84,7 @@ void SystemMonitor::timerEvent(QTimerEvent *event)
             m_processDB->update();
         } else {
             emit statInfoUpdated();
+            recountAppAndProcess();
         }
         if(cnt++ >250)
             cnt = 0;
@@ -98,6 +98,25 @@ void SystemMonitor::updateSystemMonitorInfo()
     m_processDB->update();
 
     emit statInfoUpdated();
+    recountAppAndProcess();
+}
+
+/**
+   @brief Count current apps and processes on SystemMonitor child thread.
+ */
+void SystemMonitor::recountAppAndProcess()
+{
+    ProcessSet *processSet = m_processDB->processSet();
+    // count all app
+    const QList<pid_t> &newpidlst = processSet->getPIDList();
+    int appCount = 0;
+    for (const auto &pid : newpidlst) {
+        auto process = processSet->getProcessById(pid);
+        if (process.appType() == kFilterApps)
+            appCount++;
+    }
+
+    emit appAndProcCountUpdate(appCount, newpidlst.size());
 }
 
 } // namespace system

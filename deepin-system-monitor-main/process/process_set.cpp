@@ -104,20 +104,21 @@ void ProcessSet::scanProcess()
                 m_prePid.removeAt(pid);  //remove disappear process pid
                 if(m_simpleSet.contains(pid))
                     m_simpleSet.remove(pid);
+                //for each pid,only one process reflected.So "removeOne()"func replied.
                 if(m_pidMyApps.contains(pid))
-                    m_pidMyApps.removeAt(pid);
+                    m_pidMyApps.removeOne(pid);
             }
         }
 
         for (const pid_t &pid : m_curPid) {
             if(!m_prePid.contains(pid)){ //add  new process pid
-                Process *proc = new Process(pid);
-                proc->readProcessSimpleInfo();
+                Process proc(pid);
+                proc.readProcessSimpleInfo();
                 if(!m_simpleSet.contains(pid))
-                     m_simpleSet.insert(proc->pid(), *proc);
+                     m_simpleSet.insert(proc.pid(), proc);
 
-                if (proc->appType() == kFilterApps && !wmwindowList->isTrayApp(proc->pid())) {
-                     m_pidMyApps << proc->pid();
+                if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
+                     m_pidMyApps << proc.pid();
                 }
             }
         }

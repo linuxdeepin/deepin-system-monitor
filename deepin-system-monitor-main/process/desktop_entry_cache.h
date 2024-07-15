@@ -32,6 +32,7 @@ public:
     const DesktopEntry entry(const QString &name) const;
     const DesktopEntry entryWithDesktopFile(const QString &desktopFile);
     const DesktopEntry entryWithSubName(const QString &subName) const;
+    QHash<QString, DesktopEntry> getCache();
 
     void updateCache();
 

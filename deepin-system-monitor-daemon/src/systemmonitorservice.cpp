@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "systemmonitorservice.h"
-
+#include "ddlog.h"
 #include <DSettingsOption>
 #include <QDBusInterface>
 
@@ -14,16 +14,21 @@
 #include <QDBusConnectionInterface>
 #include <QDateTime>
 
+using namespace DDLog;
+
 // 打印DBus调用者信息
-#define PrintDBusCaller() { \
-        if(calledFromDBus()) { \
-            QDBusConnection conn = connection(); \
-            QDBusMessage msg = message(); \
-            pid_t callerPid = static_cast<pid_t>(conn.interface()->servicePid(msg.service()).value()); \
-            qDebug() << "DBus service caller:" << conn.interface()->serviceOwner(msg.service()).value() \
-                     << ",Uid:" << conn.interface()->serviceUid(msg.service()).value() \
-                     << ",Pid:" << callerPid \
-                     << ",Process name:" << getNameByPid(callerPid); } }
+#define PrintDBusCaller()                                                                                   \
+    {                                                                                                       \
+        if (calledFromDBus()) {                                                                             \
+            QDBusConnection conn = connection();                                                            \
+            QDBusMessage msg = message();                                                                   \
+            pid_t callerPid = static_cast<pid_t>(conn.interface()->servicePid(msg.service()).value());      \
+            qCDebug(app) << "DBus service caller:" << conn.interface()->serviceOwner(msg.service()).value() \
+                         << ",Uid:" << conn.interface()->serviceUid(msg.service()).value()                  \
+                         << ",Pid:" << callerPid                                                            \
+                         << ",Process name:" << getNameByPid(callerPid);                                    \
+        }                                                                                                   \
+    }
 
 // 通过PID获取进程名称
 QString getNameByPid(pid_t pid)
@@ -45,18 +50,12 @@ QString getNameByPid(pid_t pid)
 #define AlarmMessageTimeOut 10000
 
 SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
-    : QObject(parent)
-    , mProtectionStatus(InitAlarmOn)
-    , mAlarmInterval(InitAlarmInterval)
-    , mAlarmCpuUsage(InitAlarmCpuUsage)
-    , mAlarmMemoryUsage(InitAlarmMemUsage)
-    , mCpuUsage(0)
-    , mMemoryUsage(0)
-    , mMoniterTimer(this)
-//    , mLastAlarmTimeStamp(0)
-    , mSettings(this)
-    , mCpu(this)
-    , mMem(this)
+    : QObject(parent), mProtectionStatus(InitAlarmOn), mAlarmInterval(InitAlarmInterval), mAlarmCpuUsage(InitAlarmCpuUsage), mAlarmMemoryUsage(InitAlarmMemUsage), mCpuUsage(0), mMemoryUsage(0), mMoniterTimer(this)
+      //    , mLastAlarmTimeStamp(0)
+      ,
+      mSettings(this),
+      mCpu(this),
+      mMem(this)
 {
     if (mSettings.isCompelted()) {
         mProtectionStatus = mSettings.getOptionValue(AlarmStatusOptionName).toBool();
@@ -64,7 +63,6 @@ SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
         mAlarmMemoryUsage = mSettings.getOptionValue(AlarmMemUsageOptionName).toInt();
         mAlarmInterval = mSettings.getOptionValue(AlarmIntervalOptionName).toInt();
         mLastAlarmTimeStamp = mSettings.getOptionValue(AlarmLastTimeOptionName).toLongLong();
-
     }
 
     // 初始化Cpu占用率
@@ -80,11 +78,10 @@ SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
     mMoniterTimer.start();
 
     QDBusConnection::RegisterOptions opts =
-        QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals |
-        QDBusConnection::ExportAllProperties;
+            QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals | QDBusConnection::ExportAllProperties;
 
     QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString(name))
-    .registerObject("/org/deepin/SystemMonitorDaemon", this, opts);
+            .registerObject("/org/deepin/SystemMonitorDaemon", this, opts);
 }
 
 SystemMonitorService::~SystemMonitorService()
@@ -94,14 +91,16 @@ SystemMonitorService::~SystemMonitorService()
 bool SystemMonitorService::getSystemProtectionStatus()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Protection Status:" << mProtectionStatus;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Protection Status:" << mProtectionStatus;
     return mProtectionStatus;
 }
 
 void SystemMonitorService::setSystemProtectionStatus(bool status)
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Set Protection Status:" << status;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Set Protection Status:" << status;
 
     if (mProtectionStatus != status) {
         mProtectionStatus = status;
@@ -115,28 +114,32 @@ void SystemMonitorService::setSystemProtectionStatus(bool status)
 int SystemMonitorService::getCpuUsage()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Cpu Usage:" << mCpuUsage;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Cpu Usage:" << mCpuUsage;
     return mCpuUsage;
 }
 
 int SystemMonitorService::getMemoryUsage()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Memory Usage:" << mMemoryUsage;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Memory Usage:" << mMemoryUsage;
     return mMemoryUsage;
 }
 
 int SystemMonitorService::getAlarmMsgInterval()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Alarm Msg Interval:" << mAlarmInterval;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Alarm Msg Interval:" << mAlarmInterval;
     return mAlarmInterval;
 }
 
 void SystemMonitorService::setAlarmMsgInterval(int interval)
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Msg Interval:" << interval;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Set Alarm Msg Interval:" << interval;
 
     // 根据需求
     if (mSettings.isVaildValue(AlarmIntervalOptionName, interval)) {
@@ -154,14 +157,16 @@ void SystemMonitorService::setAlarmMsgInterval(int interval)
 qint64 SystemMonitorService::getAlaramLastTimeInterval()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Alarm Last Time:" << mLastAlarmTimeStamp;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Alarm Last Time:" << mLastAlarmTimeStamp;
     return mLastAlarmTimeStamp;
 }
 
 void SystemMonitorService::setAlaramLastTimeInterval(qint64 lastTime)
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Last Time:" << lastTime;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Set Alarm Last Time:" << lastTime;
 
     // 根据需求
     if (mSettings.isVaildValue(AlarmLastTimeOptionName, lastTime)) {
@@ -179,14 +184,16 @@ void SystemMonitorService::setAlaramLastTimeInterval(qint64 lastTime)
 int SystemMonitorService::getAlarmUsageOfCpu()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Alarm Usage Of Cpu:" << mAlarmCpuUsage;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Alarm Usage Of Cpu:" << mAlarmCpuUsage;
     return mAlarmCpuUsage;
 }
 
 void SystemMonitorService::setAlarmUsageOfCpu(int usage)
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Usage Of Cpu:" << usage;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Set Alarm Usage Of Cpu:" << usage;
 
     // 根据需求
     if (mSettings.isVaildValue(AlarmCpuUsageOptionName, usage)) {
@@ -204,14 +211,16 @@ void SystemMonitorService::setAlarmUsageOfCpu(int usage)
 int SystemMonitorService::getAlarmUsageOfMemory()
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Get Alarm Usage Of Memory:" << mAlarmMemoryUsage;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Get Alarm Usage Of Memory:" << mAlarmMemoryUsage;
     return mAlarmMemoryUsage;
 }
 
 void SystemMonitorService::setAlarmUsageOfMemory(int usage)
 {
     PrintDBusCaller()
-    qDebug() << __FUNCTION__ << __LINE__ << " Set Alarm Usage Of Memory:" << usage;
+                    qCDebug(app)
+            << __FUNCTION__ << __LINE__ << " Set Alarm Usage Of Memory:" << usage;
 
     // 根据需求
     if (mSettings.isVaildValue(AlarmMemUsageOptionName, usage)) {
@@ -230,13 +239,13 @@ void SystemMonitorService::showDeepinSystemMoniter()
 {
     PrintDBusCaller()
 
-    QString cmd("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showDeepinSystemMoniter");
-    QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
+            QString cmd("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showDeepinSystemMoniter");
+    QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
 }
 
 void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVariant &value)
 {
-    qDebug() << __FUNCTION__ << __LINE__ << ", item:" << item << ", value:" << value.variant();
+    qCDebug(app) << __FUNCTION__ << __LINE__ << ", item:" << item << ", value:" << value.variant();
     if (mSettings.itemKeys().contains(item) && mSettings.isVaildValue(item, value.variant())) {
         if (mSettings.isVaildValue(item, value.variant())) {
             if (item == AlarmStatusOptionName) {
@@ -268,7 +277,7 @@ bool SystemMonitorService::checkCpuAlarm()
     if (mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
         mLastAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showCpuAlarmNotify \"%1\" ").arg(QString::number(mCpuUsage));
-        QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
+        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
     }
 
     return false;
@@ -283,7 +292,7 @@ bool SystemMonitorService::checkMemoryAlarm()
     if (mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
         mLastAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showMemoryAlarmNotify \"%1\" ").arg(QString::number(mMemoryUsage));
-        QTimer::singleShot(100, this, [ = ]() { QProcess::startDetached(cmd); });
+        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
     }
 
     return false;

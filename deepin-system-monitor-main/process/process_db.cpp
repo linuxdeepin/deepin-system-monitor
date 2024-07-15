@@ -220,7 +220,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
         } else if (signal == SIGKILL) {
             Q_EMIT processKilled(pid);
         } else {
-            qWarning() << "Unexpected signal in this case:" << signal;
+            qCWarning(app) << "Unexpected signal in this case:" << signal;
         }
     };
     auto fmsg = [ = ](int signal) -> QString {
@@ -290,6 +290,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
                          errno,
                          QApplication::translate("Process.Signal", "Failed in sending signal to process"),
                          pid, SIGCONT, ec);
+                qCWarning(app) << "Failed in sending signal to process! process id:" << pid;
                 Q_EMIT processControlResultReady(ec);
                 return;
             }

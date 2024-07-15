@@ -385,15 +385,26 @@ void SysInfo::read_btime(struct timeval &btime)
 
 void SysInfo::read_loadavg(LoadAvg &loadAvg)
 {
-    struct sysinfo info {
-    };
-    int rc = sysinfo(&info);
-    if (!rc) {
-        loadAvg->lavg_1m = info.loads[0];
-        loadAvg->lavg_5m = info.loads[1];
-        loadAvg->lavg_15m = info.loads[2];
+    QFile file("/proc/loadavg");
+    if (file.exists() && file.open(QFile::ReadOnly)) {
+        // 只需要读取第一行数据
+        QByteArray lineData = file.readLine();
+        file.close();
+        /*样例数据:
+            $ cat /proc/loadavg
+            0.41 0.46 0.36 2/2646 20183
+        */
 
-        return;
+        // 分割数据 取前3
+        QStringList cpuStatus =  QString(lineData).split(" ", QString::SkipEmptyParts);
+
+        if (cpuStatus.size() > 3) {
+            loadAvg->lavg_1m = cpuStatus[0].toFloat();
+            loadAvg->lavg_5m = cpuStatus[1].toFloat();
+            loadAvg->lavg_15m = cpuStatus[2].toFloat();
+
+            return ;
+        }
     }
 
     print_errno(errno, QString("call sysinfo failed"));

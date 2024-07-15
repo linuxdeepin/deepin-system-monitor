@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
-
+#include "ddlog.h"
 #include "main_window.h"
 #include "user_page_widget.h"
 #include "application.h"
@@ -20,7 +20,7 @@
 #include <DApplicationHelper>
 #include <DTitlebar>
 #ifdef DTKCORE_CLASS_DConfigFile
-#include <DConfig>
+#    include <DConfig>
 #endif
 #include <QKeyEvent>
 #include <QTimer>
@@ -30,6 +30,7 @@
 
 using namespace core::process;
 using namespace common::init;
+using namespace DDLog;
 const int WINDOW_MIN_HEIGHT = 760;
 const int WINDOW_MIN_WIDTH = 1080;
 
@@ -37,8 +38,7 @@ const QString SERVICE_NAME = "com.deepin.SystemMonitorMain";
 const QString SERVICE_PATH = "/com/deepin/SystemMonitorMain";
 
 MainWindow::MainWindow(QWidget *parent)
-    : DMainWindow(parent)
-    , m_pDbusService(new DBusForSystemoMonitorPluginServce)
+    : DMainWindow(parent), m_pDbusService(new DBusForSystemoMonitorPluginServce)
 {
     m_settings = Settings::instance();
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
@@ -46,9 +46,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 #ifdef DTKCORE_CLASS_DConfigFile
     //需要查询是否支持特殊机型静音恢复，例如hw机型
-    DConfig *dconfig = DConfig::create("org.deepin.system-monitor","org.deepin.system-monitor.main");
+    DConfig *dconfig = DConfig::create("org.deepin.system-monitor", "org.deepin.system-monitor.main");
     //需要判断Dconfig文件是否合法
-    if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialComType")){
+    if (dconfig && dconfig->isValid() && dconfig->keyList().contains("specialComType")) {
         specialComType = dconfig->value("specialComType").toInt();
     }
 #endif
@@ -71,10 +71,10 @@ void MainWindow::raiseWindow()
 
 void MainWindow::initDisplay()
 {
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
+    QJsonObject obj {
+        { "tid", EventLogUtils::Start },
+        { "version", QCoreApplication::applicationVersion() },
+        { "mode", 1 }
     };
     EventLogUtils::get().writeLogs(obj);
 
@@ -115,7 +115,7 @@ void MainWindow::initUI()
     // control + alt + k
     killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
     // emit process kill requested signal if kill process menu item triggered
-    connect(killAction, &QAction::triggered, this, [ = ]() { Q_EMIT killProcessPerformed(); });
+    connect(killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
 
     // display mode menu item
     DMenu *modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
@@ -141,11 +141,11 @@ void MainWindow::initUI()
     }
 
     // emit display mode changed signal if ether expand or compact menu item triggered
-    connect(expandModeAction, &QAction::triggered, this, [ = ]() {
+    connect(expandModeAction, &QAction::triggered, this, [=]() {
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
         Q_EMIT displayModeChanged(kDisplayModeExpand);
     });
-    connect(compactModeAction, &QAction::triggered, this, [ = ]() {
+    connect(compactModeAction, &QAction::triggered, this, [=]() {
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeCompact);
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
@@ -193,7 +193,7 @@ void MainWindow::initUI()
 // initialize connections
 void MainWindow::initConnections()
 {
-    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [ = ]() {
+    connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Services")).arg(DApplication::translate("Title.Bar.Switch", "Processes")));
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_procPage);
@@ -203,7 +203,7 @@ void MainWindow::initConnections()
         PERF_PRINT_END("POINT-05");
     });
 
-    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [ = ]() {
+    connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_svcPage);
@@ -212,7 +212,7 @@ void MainWindow::initConnections()
         m_tbShadow->show();
         PERF_PRINT_END("POINT-05");
     });
-    connect(m_toolbar, &Toolbar::accountProcTabButtonClicked, this, [ = ]() {
+    connect(m_toolbar, &Toolbar::accountProcTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Users")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_accountProcPage);
@@ -221,7 +221,7 @@ void MainWindow::initConnections()
         m_tbShadow->show();
         PERF_PRINT_END("POINT-05");
     });
-    connect(gApp, &Application::backgroundTaskStateChanged, this, [ = ](Application::TaskState state) {
+    connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
         if (state == Application::kTaskStarted) {
             // save last focused widget inside main window
             m_focusedWidget = gApp->mainWindow()->focusWidget();
@@ -242,7 +242,7 @@ void MainWindow::initConnections()
     if (QDBusConnection::sessionBus().isConnected()) {
         if (QDBusConnection::sessionBus().registerService(SERVICE_NAME)) {
             if (!QDBusConnection::sessionBus().registerObject(SERVICE_PATH, m_pDbusService, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
-                qInfo() << "dbus init failed";
+                qCInfo(app) << "dbus init failed";
             }
         }
     }
@@ -335,11 +335,10 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
         m_toolbar->clearSearchText();
         m_toolbar->setProcessButtonChecked(true);
         m_pages->setCurrentWidget(m_procPage);
-//        m_procPage->switchProcessPage();
+        //        m_procPage->switchProcessPage();
         m_tbShadow->raise();
         m_tbShadow->show();
     }
-
 }
 
 void MainWindow::popupSettingsDialog()

@@ -193,7 +193,8 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     qreal space = 2;
     dashes << 2 << space;
     gridPen.setColor(frameColor);
-    gridPen.setWidth(penSize);
+    //set to 0 lead to line with always 1px
+    gridPen.setWidth(0);
     gridPen.setDashPattern(dashes);
     painter.setPen(gridPen);
 

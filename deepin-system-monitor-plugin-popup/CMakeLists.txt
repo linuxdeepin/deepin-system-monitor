@@ -43,12 +43,10 @@ find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
-find_library(LIB_PROPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
-find_package(DFrameworkdbus REQUIRED)
 
 #安全测试加固编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
@@ -72,6 +70,8 @@ include_directories(${LIB_UDEV_INCLUDE_DIRS})
 
 #include_directories(${QGSettings_INCLUDE_DIRS})
 
+include_directories(${DtkGui_INCLUDE_DIRS})
+include_directories(${DtkCore_INCLUDE_DIRS})
 include_directories(${MAIN_APP_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
@@ -247,6 +247,8 @@ SET(CPP_PROCESS
 set(APP_HPP
     ${CMAKE_HOME_DIRECTORY}/config.h
     application.h
+    ddlog.h
+    logger.h
     ${HPP_MODEL}
     ${HPP_SYSTEM}
     ${HPP_GLOBAL}
@@ -259,6 +261,7 @@ set(APP_HPP
 set(APP_CPP
     application.cpp
     main.cpp
+    logger.cpp
     ${CPP_MODEL}
     ${CPP_SYSTEM}
     ${CPP_GLOBAL}
@@ -271,7 +274,7 @@ set(APP_CPP
 add_executable(${PROJECT_NAME}
     ${APP_HPP}
     ${APP_CPP}
-    ${PROJECT_SOURCE_DIR}/${APP_RESOURCES}
+    ${PROJECT_SOURCE_DIR}/${APP_RESOURCES}    
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -280,6 +283,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${DtkCore_INCLUDE_DIRS}
     ${DtkGui_INCLUDE_DIRS}
     ${DdeDockInterface_INCLUDE_DIRS}
+    Dtk::Core
 )
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
@@ -292,7 +296,6 @@ target_link_libraries(${PROJECT_NAME}
     dtkcore
     dtkwidget
     dtkgui
-    ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
     ${LIB_XCB}
@@ -302,10 +305,10 @@ target_link_libraries(${PROJECT_NAME}
     ${LIB_NL3_ROUTE_LIBRAIES}
     ${LIB_UDEV_LIBRARIES}
     ${LIB_DDEDOCK}
-    ${LIB_DFRAMEWORKDBUS}
 #    gsettings-qt
-    dframeworkdbus
+    Dtk::Core
 )
+
 
 #生成qm
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)

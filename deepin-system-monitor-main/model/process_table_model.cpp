@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
-
+#include "ddlog.h"
 #include "process_table_model.h"
 #include "process/process_db.h"
 #include "common/common.h"
@@ -15,13 +15,16 @@
 #include <QPointer>
 using namespace common;
 using namespace common::format;
+using namespace DDLog;
+DGUI_USE_NAMESPACE   // using namespace Dtk::Gui;
 
 // model constructor
 ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
     : QAbstractTableModel(parent)
 {
     setUserModeName(username);
-    qInfo() << "ProcessTableModel Constructor line 41:" << "new model with name" << username;
+    qCInfo(app) << "ProcessTableModel Constructor line 41:"
+                << "new model with name" << username;
     //update model's process list cache on process list updated signal
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessTableModel::updateProcessList);
@@ -46,7 +49,7 @@ ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
 
     if (!theme) {
         theme = DGuiApplicationHelper::instance()->applicationTheme();
-        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [ = ]() {
+        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [=]() {
             updateProcessList();
         });
     }
@@ -85,7 +88,6 @@ void ProcessTableModel::updateProcessListWithUserSpecified()
 
     ProcessSet *processSet = ProcessDB::instance()->processSet();
     const QList<pid_t> &newpidlst = processSet->getPIDList();
-
     beginRemoveRows({}, 0, m_procIdList.size());
     endRemoveRows();
     m_procIdList.clear();
@@ -236,13 +238,13 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             switch (proc.state()) {
             case 'Z':
                 name = QString("(%1) %2")
-                       .arg(QApplication::translate("Process.Table", "No response"))
-                       .arg(name);
+                               .arg(QApplication::translate("Process.Table", "No response"))
+                               .arg(name);
                 break;
             case 'T':
                 name = QString("(%1) %2")
-                       .arg(QApplication::translate("Process.Table", "Suspend"))
-                       .arg(name);
+                               .arg(QApplication::translate("Process.Table", "Suspend"))
+                               .arg(name);
                 break;
             }
             return name;
@@ -350,7 +352,11 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 3) {
         return proc.appType();
     } else if (role == Qt::UserRole + 4) {
-        return QString("%1").arg(proc.pid());
+        QString cmdlineStr = proc.cmdlineString();
+        if (!cmdlineStr.isEmpty())
+            return cmdlineStr;
+        else
+            return QString("%1").arg(proc.name());
     }
     return {};
 }
@@ -385,6 +391,7 @@ int ProcessTableModel::getProcessPriorityValue(pid_t pid) const
 // remove process entry from model with specified pid
 void ProcessTableModel::removeProcess(pid_t pid)
 {
+    qCWarning(app) << m_procIdList.count() << "1";
     int row = m_procIdList.indexOf(pid);
     if (row >= 0) {
         beginRemoveRows(QModelIndex(), row, row);
@@ -413,7 +420,6 @@ void ProcessTableModel::updateProcessPriority(pid_t pid, int priority)
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
     }
 }
-
 
 void ProcessTableModel::setUserModeName(const QString &userName)
 {
@@ -455,8 +461,6 @@ qreal ProcessTableModel::getTotalUpload()
     }
     return upload;
 }
-
-
 
 qreal ProcessTableModel::getTotalVirtualMemoryUsage()
 {

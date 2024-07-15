@@ -121,7 +121,9 @@ void NLHWAddr::initData()
 {
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(ifr));
-    strcpy(ifr.ifr_name, m_ifname);
+    //设备名称长度检查
+    if (m_ifname.size() < IFNAMSIZ)
+        strcpy(ifr.ifr_name, m_ifname);
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
     if (ioctl(fd, SIOCGIFHWADDR, &ifr) == 0) {
         string hwaddr = getmac(reinterpret_cast<unsigned char *>(ifr.ifr_hwaddr.sa_data), ifr.ifr_hwaddr.sa_family);

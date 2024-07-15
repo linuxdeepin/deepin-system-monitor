@@ -115,10 +115,21 @@ struct icon_data_t *ProcessIcon::terminalIconData(const QString &procname) const
     return iconData;
 }
 
+QString ProcessIcon::getFileManagerString()
+{
+    DesktopEntryCache *desktopEntryCache = ProcessDB::instance()->desktopEntryCache();
+    QList<QString> desktopEntryKeys = desktopEntryCache->getCache().keys();
+    for (auto it = desktopEntryKeys.begin(); it != desktopEntryKeys.end(); it++) {
+        if ((*it).contains("dde-file-manager") && desktopEntryCache->getCache().value((*it))->icon.contains("dde-file-manager")) {
+            return (*it);
+        }
+    }
+    return "";
+}
+
 std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
 {
     std::shared_ptr<icon_data_t> iconDataPtr;
-
     auto processDB = ProcessDB::instance();
     WMWindowList *windowList = processDB->windowList();
     DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
@@ -159,7 +170,14 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
                 iconData->desktopentry = true;
                 iconData->type = kIconDataNameType;
                 iconData->proc_name = proc->name();
-                iconData->icon_name = entry->icon;
+                //由于文件管理器和主目录在desktopEntryCache的m_cache中的key都包含"dde-file-manager"
+                //且value中的结构体里的name都是"dde-file-manager"，所以在这里对于文件管理器的图标要多做判断
+                QString tempString = getFileManagerString();
+                if (tempString.contains(proc->name())) {
+                    iconData->icon_name = desktopEntryCache->getCache().value(tempString)->icon;
+                } else {
+                    iconData->icon_name = entry->icon;
+                }
                 iconDataPtr.reset(iconData);
                 windowList->addDesktopEntryApp(proc);
                 return iconDataPtr;
