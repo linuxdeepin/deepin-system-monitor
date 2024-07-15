@@ -13,7 +13,7 @@ using namespace common::format;
 
 using namespace common::core;
 
-
+#define SUMMARY_CHART_LINE_ALPH 0.13
 
 
 
@@ -103,8 +103,8 @@ void NetifSummaryViewWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this->viewport());
     painter.setRenderHint(QPainter::Antialiasing, true);
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
-    QColor frameColor = palette.color(DPalette::TextTips);
-    frameColor.setAlphaF(0.3);
+    QColor frameColor = palette.color(DPalette::FrameBorder);
+    frameColor.setAlphaF(SUMMARY_CHART_LINE_ALPH);
 
     painter.setPen(QPen(frameColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.setBrush(Qt::NoBrush);

@@ -9,6 +9,7 @@
 #include <QFrame>
 class SystemMonitorTipsWidget : public QFrame
 {
+    Q_OBJECT
 public:
     explicit SystemMonitorTipsWidget(QWidget *parent = nullptr);
 
@@ -17,6 +18,9 @@ public:
     //! \param strList
     //!
     void setSystemMonitorTipsText(QStringList strList);
+
+Q_SIGNALS:
+    void visibleChanged(bool visible);
 
 protected:
     //!

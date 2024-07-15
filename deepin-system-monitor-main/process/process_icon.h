@@ -29,6 +29,7 @@ private:
     std::shared_ptr<struct icon_data_t> getIcon(Process *proc);
     struct icon_data_t *defaultIconData(const QString &procname) const;
     struct icon_data_t *terminalIconData(const QString &procname) const;
+    QString getFileManagerString();
 
 private:
     std::shared_ptr<struct icon_data_t> m_data;

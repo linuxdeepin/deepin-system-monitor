@@ -1,17 +1,17 @@
 // SPDX-FileCopyrightText: 2011 ~ 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
-
+#include "ddlog.h"
 #include "cpuprofile.h"
 #include <QFile>
 #include <QDebug>
+using namespace DDLog;
 
 #define PROC_CPU_STAT_PATH "/proc/stat"
 #define PROC_CPU_INFO_PATH "/proc/cpuinfo"
 
 CpuProfile::CpuProfile(QObject *parent)
-    : QObject(parent)
-    , mCpuUsage(0.0)
+    : QObject(parent), mCpuUsage(0.0)
 {
     // mLastCpuStat用于记录Cpu状态
     // 各项数值是开机后各项工作的时间片总数
@@ -47,7 +47,7 @@ double CpuProfile::updateSystemCpuUsage()
         //         |user|nice|sys|idle|iowait|hardqirq|softirq|steal|guest|guest_nice|
 
         // 分割行数据
-        QStringList cpuStatus =  QString(lineData).split(" ", QString::SkipEmptyParts);
+        QStringList cpuStatus = QString(lineData).split(" ", QString::SkipEmptyParts);
 
         // CPU状态应包含10个数据片段，有效数据 1-10，位置0不使用
         if (cpuStatus.size() < 11) {
@@ -83,7 +83,7 @@ double CpuProfile::updateSystemCpuUsage()
             (curCpuStat["idle"] + curCpuStat["iowait"]) - (mLastCpuStat["idle"] + mLastCpuStat["iowait"]);
 
         if (calcCpuTotal == 0.0) {
-            qWarning() << " cpu total usage calc result equal 0 ! cpu stat [" << curCpuStat << "]";
+            qCWarning(app) << " cpu total usage calc result equal 0 ! cpu stat [" << curCpuStat << "]";
             return cpuUsage;
         }
         // 上一个时间段内的Cpu使用情况
@@ -95,7 +95,7 @@ double CpuProfile::updateSystemCpuUsage()
         // 更新上一次CPU状态
         mLastCpuStat = curCpuStat;
     } else {
-        qWarning() << QString(" file %1 open fail !").arg(PROC_CPU_STAT_PATH);
+        qCWarning(app) << QString(" file %1 open fail !").arg(PROC_CPU_STAT_PATH);
     }
 
     return cpuUsage;

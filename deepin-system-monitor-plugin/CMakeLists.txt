@@ -26,17 +26,27 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
-pkg_check_modules(DdeDockInterface REQUIRED dde-dock) 
+pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
+
+if (DdeDockInterface_FOUND)
+    message("dde-dock founded: ${DdeDockInterface_VERSION}")
+    string(REGEX MATCH "^[0-9]" VERSION_MAJOR ${DdeDockInterface_VERSION})
+    if (VERSION_MAJOR STREQUAL "6" OR VERSION_MAJOR STRGREATER "6")
+        add_definitions(-DDDE_DOCK_MAJORV6)
+    endif()
+endif()
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${APP_RESOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+
+include_directories(${DtkCore_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${DdeDockInterface_INCLUDE_DIRS}
   ${DtkWidget_INCLUDE_DIRS}
-  ${DFrameworkDBus_INCLUDE_DIRS}
   ${QGSettings_INCLUDE_DIRS}
 )
 
@@ -45,7 +55,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${DtkWidget_LIBRARIES}
   ${Qt5Widgets_LIBRARIES}
   ${Qt5Svg_LIBRARIES}
-  ${DFrameworkDBus_LIBRARIES}
   ${QGSettings_LIBRARIES}
 )
 
@@ -63,8 +72,7 @@ qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
 add_custom_target(PLUGIN_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
-INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
+#INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 #安装翻译文件
 install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-system-monitor-plugin/translations)
-

@@ -4,14 +4,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "systemmonitortipswidget.h"
-
+#include "ddlog.h"
 #include <QAccessible>
 #include <QPainter>
 #include <DApplication>
 #include <QLineF>
 
 DWIDGET_USE_NAMESPACE
-
+using namespace DDLog;
 SystemMonitorTipsWidget::SystemMonitorTipsWidget(QWidget *parent)
     : QFrame(parent)
 {
@@ -19,7 +19,7 @@ SystemMonitorTipsWidget::SystemMonitorTipsWidget(QWidget *parent)
 
 void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
 {
-    m_textList  = strList;
+    m_textList = strList;
 
     //  [   CPU: 100.0%    ↓ 1000kb/s  ]
     // 获取strList字符串，并存入cpu,mem,upLoad,download中
@@ -37,14 +37,14 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
         else if (i == 3)
             upLoad = m_textList.at(i);
         else
-            qDebug() << "do not set the text";
+            qCDebug(app) << "do not set the text";
     }
 
     // 设置左侧字符串宽度
     if (cpu.length() == 3) {
-        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": 0") + cpu + QString("%") + QString(" "));
+        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": 0") + cpu + QString(" "));
     } else {
-        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%") + QString(" "));
+        m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString(" "));
     }
     // 左侧宽度预留20个像素
     m_leftWidth += 20;
@@ -62,12 +62,10 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
     // 设置右侧字符串宽度预留20个像素
     m_rightWidth += 20;
 
-
     // 设置当前窗体固定大小
     setFixedSize(5 + 5 + m_leftWidth + m_rightWidth, fontMetrics().boundingRect(m_textList.at(0)).height() * 2 + 20);
     update();
 }
-
 
 void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
 {
@@ -99,7 +97,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
         else if (i == 3)
             upLoad = m_textList.at(i);
         else
-            qDebug() << "do not set the text";
+            qCDebug(app) << "do not set the text";
     }
 
     // 当没有数据更新时，设置默认的悬浮框内容
@@ -110,7 +108,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
         downLoad = "0KB/s";
     }
 
-//    int specialCharaWidth = fontMetrics().width(QString("↓"));
+    //    int specialCharaWidth = fontMetrics().width(QString("↓"));
     int specialCharaWidth = 10;
 
     int specialCharaHeight = fontMetrics().width(QString("1")) + 5;
@@ -125,8 +123,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
 
     painter.setPen(QPen(palette().brightText(), 1));
     // 绘制CPU文字信息
-    painter.drawText(QRectF(leftMargin, 0.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString("%"), optionLeft);
-
+    painter.drawText(QRectF(leftMargin, 0.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu, optionLeft);
 
     // 绘制下箭头
     painter.save();
@@ -139,11 +136,11 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     painter.drawLines(vecDown);
     painter.restore();
 
-//    painter.drawText(QRectF(m_leftWidth, 0.0, specialCharaWidth, rectHeight / 2.0), QString("↓"), optionMid);
+    //    painter.drawText(QRectF(m_leftWidth, 0.0, specialCharaWidth, rectHeight / 2.0), QString("↓"), optionMid);
     // 绘值下载文字信息
     painter.drawText(QRectF(leftMargin + m_leftWidth + specialCharaWidth + 5, 0, m_rightWidth, rectHeight / 2.0), downLoad, optionLeft);
 
-//    specialCharaWidth = fontMetrics().width(QString("↑"));
+    //    specialCharaWidth = fontMetrics().width(QString("↑"));
     // 绘制左侧空白矩形区域
     painter.save();
     painter.setPen(QColor(Qt::transparent));
@@ -151,7 +148,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     painter.restore();
 
     // 绘制内存文字信息
-    painter.drawText(QRectF(leftMargin, rectHeight / 2.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem + QString("%"), optionLeft);
+    painter.drawText(QRectF(leftMargin, rectHeight / 2.0, m_leftWidth, rectHeight / 2.0), QString(" ") + DApplication::translate("Plugin.mem", "MEM") + QString(": ") + mem, optionLeft);
     painter.save();
     painter.setPen(QPen(palette().brightText(), 2));
     painter.setRenderHints(QPainter::Antialiasing);
@@ -159,10 +156,10 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     QVector<QLineF> vecUp;
     vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth, rectHeight / 2.0 + rectHeight / 4.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0)));
     vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth, rectHeight / 2.0 + rectHeight / 4.0)));
-    vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2,rectHeight / 2.0 + rectHeight / 4.0 + specialCharaHeight / 2.0)));
+    vecUp.append(QLineF(QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 - specialCharaHeight / 2.0), QPointF(leftMargin + m_leftWidth + specialCharaWidth / 2, rectHeight / 2.0 + rectHeight / 4.0 + specialCharaHeight / 2.0)));
     painter.drawLines(vecUp);
     painter.restore();
-//    painter.drawText(QRectF(m_leftWidth, rectHeight / 2.0, specialCharaWidth, rectHeight / 2.0), QString("↑"), optionMid);
+    //    painter.drawText(QRectF(m_leftWidth, rectHeight / 2.0, specialCharaWidth, rectHeight / 2.0), QString("↑"), optionMid);
 
     // 绘制上传文字信息
     painter.setPen(QPen(palette().brightText(), 1));
@@ -176,7 +173,15 @@ bool SystemMonitorTipsWidget::event(QEvent *event)
         if (m_textList.size() > 0)
             setSystemMonitorTipsText(m_textList);
         else
-            setSystemMonitorTipsText(QStringList() << "0.0" << "0.0" << "0KB/s" << "0KB/s");
+            setSystemMonitorTipsText(QStringList() << "0.0"
+                                                   << "0.0"
+                                                   << "0KB/s"
+                                                   << "0KB/s");
+    } else if (event->type() == QEvent::Hide) {
+        Q_EMIT visibleChanged(false);
+    } else if (event->type() == QEvent::Show) {
+        Q_EMIT visibleChanged(true);
     }
+
     return QFrame::event(event);
 }

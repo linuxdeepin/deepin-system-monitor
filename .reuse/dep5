@@ -4,7 +4,7 @@ Upstream-Contact: UnionTech Software Technology Co., Ltd. <>
 Source: https://github.com/linuxdeepin/deepin-system-monitor
 
 # ci
-Files: .github/*
+Files: .github/* .obs/workflows.yml
 Copyright: None
 License: CC0-1.0
 
@@ -17,6 +17,11 @@ License: CC0-1.0
 Files:  *.toml *.json *conf *.yaml *.sh *.xml *.pc.in
 Copyright: None
 License: CC0-1.0
+
+# assets
+Files: assets/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
 
 # debian
 Files: debian/*
@@ -44,7 +49,7 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
 # translations
-Files: deepin-system-monitor-main/translations/* deepin-system-monitor-plugin/translations/* deepin-system-monitor-plugin-popup/translations/*
+Files: deepin-system-monitor-main/translations/* deepin-system-monitor-plugin/translations/* deepin-system-monitor-plugin-popup/translations/* deepin-system-monitor-system-server/translations/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
@@ -145,6 +150,11 @@ License: GPL-3.0-or-later
 
 # deepin-system-monitor-plugin-popup/system
 Files: deepin-system-monitor-plugin-popup/system/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
+# deepin-system-monitor-system-server
+Files: deepin-system-monitor-system-server/misc/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 

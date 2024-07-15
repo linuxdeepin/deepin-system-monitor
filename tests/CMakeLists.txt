@@ -70,7 +70,6 @@ find_package(DtkCore REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
-find_library(LIB_PROCPS NAMES procps REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
 find_library(LIB_ICCCM NAMES xcb-icccm REQUIRED)
@@ -85,6 +84,8 @@ include_directories(${GTEST_INCLUDE_DIRS})
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
+include_directories(${DtkGui_INCLUDE_DIRS})
+include_directories(${DtkCore_INCLUDE_DIRS})
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
@@ -640,7 +641,6 @@ target_link_libraries(${PROJECT_NAME_TEST}
     KF5::WaylandClient
     KF5::WaylandServer
     ${LIB_PCAP}
-    ${LIB_PROCPS}
     ICU::i18n
     ICU::uc
     ${LIB_XCB}

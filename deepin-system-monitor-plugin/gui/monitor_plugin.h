@@ -7,7 +7,26 @@
 #define MONITORPLUGIN_H
 
 //  smo-plugin
+#include <dde-dock/constants.h>
+/* to void  //1070  and V23 exist same time */
+#ifdef DOCK_API_VERSION
+#if (DOCK_API_VERSION >= DOCK_API_VERSION_CHECK(2, 0, 0))
+    #define  USE_API_QUICKPANEL20   //1070
+#endif
+#endif
+
+#ifndef USE_API_QUICKPANEL20
+#ifdef  DDE_DOCK_MAJORV6
+    #define  DDE_DOCK_NEW_VERSION
+#endif
+#endif
+
+#ifdef USE_API_QUICKPANEL20
+#include <dde-dock/pluginsiteminterface_v2.h>
+#include "quickpanelwidget.h"
+#else
 #include <pluginsiteminterface.h>
+#endif
 #include "monitorpluginbuttonwidget.h"
 
 #include "dbus/dbusinterface.h"
@@ -23,18 +42,28 @@
 #include <DGuiApplicationHelper>
 #include <QScopedPointer>
 
+#ifdef USE_API_QUICKPANEL20
+using namespace Dock;
+#define DOCK_DEFAULT_POS   -1
+#define PLUGIN_INTERDACE  PluginsItemInterfaceV2
+#define PLUGIN_METADATA()  Q_PLUGIN_METADATA(IID ModuleInterface_iid_V2 FILE "system-monitor_20.json")
+#else
 #define DOCK_DEFAULT_POS   0
+#define PLUGIN_INTERDACE  PluginsItemInterface
+#define PLUGIN_METADATA()  Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
+#endif
 
 class QGSettings;
 //!
 //! \brief The MonitorPlugin class
 //! 实现插件接口对象的类
 //!
-class MonitorPlugin : public QObject, PluginsItemInterface
+class MonitorPlugin : public QObject, PLUGIN_INTERDACE
 {
     Q_OBJECT
-    Q_INTERFACES(PluginsItemInterface)
-    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
+    Q_INTERFACES(PLUGIN_INTERDACE)
+    PLUGIN_METADATA();
+
 public:
     enum RateUnit {
         RateBit,
@@ -52,7 +81,10 @@ public:
     //! \param parent 传递的父对象指针
     //!
     explicit MonitorPlugin(QObject *parent = Q_NULLPTR);
-
+#ifdef USE_API_QUICKPANEL20
+    //! \brief ~MonitorPlugin 析构函数
+    ~MonitorPlugin();
+#endif
     // 以下是必须要实现的PluginsItemInterface接口
     //!
     //! \brief pluginName 返回插件名称，用于在dde-dock内部管理插件时使用
@@ -82,6 +114,7 @@ public:
     //!
     void pluginStateSwitched() Q_DECL_OVERRIDE;
 
+#ifndef DDE_DOCK_NEW_VERSION
     //!
     //! \brief pluginIsAllowDisable 返回插件是否允许被禁用（默认不允许被禁用)
     //! \return
@@ -93,7 +126,7 @@ public:
     //! \return
     //!
     bool pluginIsDisable() Q_DECL_OVERRIDE;
-
+#endif
     //!
     //! \brief itemTipsWidget 返回鼠标悬浮在插件主控件上时显示的提示框控件
     //! \param itemKey
@@ -143,28 +176,50 @@ public:
     //!
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) Q_DECL_OVERRIDE;
 
+#ifdef DDE_DOCK_NEW_VERSION
+    ///
+    /// the icon for the plugin
+    /// themeType {0:UnknownType 1:LightType 2:DarkType}
+    ///
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) Q_DECL_OVERRIDE;
+#endif
+#ifdef USE_API_QUICKPANEL20
+    //!
+    //! the flags for the plugin
+    //!
+    Dock::PluginFlags flags() const  { return Dock::Type_Quick | Dock::Quick_Panel_Single | Dock::Attribute_Normal; }
+    //此接口只有在PluginsItemInterfaceV2下才可用
+    virtual void setMessageCallback(MessageCallbackFunc cb) override { m_messageCallback = cb; }
+#endif
+
 private slots:
+    //!
+    //! \brief udpateInfo 更新CPU MEM NET信息
+    //!
+    void udpateInfo();
 
     //!
     //! \brief udpateTipsInfo 更新CPU MEM NET信息
     //!
     void udpateTipsInfo();
 
+#ifdef USE_API_QUICKPANEL20
+    //!
+    //! \brief onClickQuickPanel mouse event active
+    //!
+    void onClickQuickPanel();
+
+    //!
+    //! \brief onSysMonPopVisibleChanged 系统监视器弹窗显示状态改变
+    //!
+    void onSysMonPopVisibleChanged(bool);
+#endif
+
 private:
     //!
     //! \brief loadPlugin 加载插件
     //!
     void loadPlugin();
-
-    //!
-    //! \brief refreshPluginItemsVisible 刷新插件项显示隐藏
-    //!
-    void refreshPluginItemsVisible();
-
-    //!
-    //! \brief initPluginState 初始化插件状态
-    //!
-    void initPluginState();
 
     //!
     //! \brief calcCpuRate 计算CPU占用率
@@ -204,14 +259,21 @@ private:
     //!
     double autoRateUnits(qlonglong speed, RateUnit &unit);
 
+    //!
+    //! \brief openSystemMonitor 打开系统监视器主界面
+    //!
+    void openSystemMonitor();
+
 private:
+#ifdef USE_API_QUICKPANEL20
+    QuickPanelWidget *m_quickPanelWidget;
+    //此类型(MessageCallbackFunc)属于PluginsItemInterfaceV2
+    MessageCallbackFunc m_messageCallback;
+#endif
+
     bool m_pluginLoaded;
-
     MonitorPluginButtonWidget *m_itemWidget = nullptr;
-
     QScopedPointer<SystemMonitorTipsWidget> m_dataTipsLabel;
-
-    QGSettings *m_settings;
 
     qlonglong m_down = 0;
     qlonglong m_upload = 0;
@@ -221,8 +283,6 @@ private:
     QTimer *m_refershTimer;
 
     QString startup;
-
-    bool m_isFirstInstall = false;//判断插件是否第一次安装
 
     QString m_cpuStr{"0.0"};       //转换后的cpu数据
     QString m_memStr{"0.0"};       //转换后的mem数据

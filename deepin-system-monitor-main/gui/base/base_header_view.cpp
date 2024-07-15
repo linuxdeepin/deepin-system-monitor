@@ -34,10 +34,10 @@ QSize BaseHeaderView::sizeHint() const
 // Paint event handler
 void BaseHeaderView::paintEvent(QPaintEvent *event)
 {
-    DHeaderView::paintEvent(event);
-
     // draw focus
-    if (hasFocus() && m_focusReason == Qt::TabFocusReason) {
+    DHeaderView::paintEvent(event);
+    if (hasFocus() && m_focusReason == Qt::TabFocusReason)
+    {
         QPainter painter(viewport());
         painter.setRenderHint(QPainter::Antialiasing);
 
@@ -49,10 +49,16 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(option);
         // need take scroll offset into consideration
-        QRect focusRect {rect.x() - offset(), rect.y(), length() - sectionPosition(0), rect.height()};
+        QRect focusRect{rect.x() - offset(), rect.y(), length() - sectionPosition(0), rect.height()};
         o.rect = style->visualRect(layoutDirection(), rect, focusRect);
         style->drawPrimitive(DStyle::PE_FrameFocusRect, &o, &painter);
     }
+    QPainter painter(viewport());
+    QPainterPath innerPath,outPath;
+    innerPath.addRoundedRect(viewport()->rect(),8,8);
+    outPath.addRect(viewport()->rect());
+    outPath=outPath.subtracted(innerPath);
+    painter.fillPath(outPath,DApplicationHelper::instance()->applicationPalette().color(DPalette::Active,DPalette::AlternateBase));
 }
 
 void BaseHeaderView::focusInEvent(QFocusEvent *event)

@@ -50,9 +50,41 @@ ADD_SUBDIRECTORY(deepin-system-monitor-plugin-popup)
 ADD_SUBDIRECTORY(deepin-system-monitor-daemon)
 #系统监视器提示
 ADD_SUBDIRECTORY(deepin-system-monitor-server)
+#系统监视器后端提权处理服务
+ADD_SUBDIRECTORY(deepin-system-monitor-system-server)
+
 #单元测试
 if(DOTEST)
     ADD_SUBDIRECTORY(tests)
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+
+#安装日志收集工具配置
+set(journel_system_monitor_main assets/logconfig/org.deepin.system-monitor.json)
+install(FILES ${journel_system_monitor_main} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-log-viewer/deepin-log.conf.d/)
+
+#安装DConfig配置
+set(APPID org.deepin.system-monitor)
+set(system_monitor_main assets/configs/org.deepin.system-monitor.json)
+set(system_monitor_daemon assets/configs/org.deepin.system-monitor.daemon.json)
+set(system_monitor_plugin assets/configs/org.deepin.system-monitor.plugin.json)
+set(system_monitor_plugin_popup assets/configs/org.deepin.system-monitor.plugin.popup.json)
+set(system_monitor_plugin_server assets/configs/org.deepin.system-monitor.server.json)
+
+if (DEFINED DSG_DATA_DIR)
+    dconfig_meta_files(APPID ${APPID} FILES ${system_monitor_main})
+    dconfig_meta_files(APPID ${APPID} FILES ${system_monitor_daemon})
+    dconfig_meta_files(APPID ${APPID} FILES ${system_monitor_plugin})
+    dconfig_meta_files(APPID ${APPID} FILES ${system_monitor_plugin_popup})
+    dconfig_meta_files(APPID ${APPID} FILES ${system_monitor_plugin_server})
+    message("-- DConfig is supported by DTK")
+else()
+    install(FILES ${system_monitor_main} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
+    install(FILES ${system_monitor_daemon} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
+    install(FILES ${system_monitor_plugin} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
+    install(FILES ${system_monitor_plugin_popup} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
+    install(FILES ${system_monitor_plugin_server} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
+
+    message("-- DConfig is not supported by DTK")
+endif()

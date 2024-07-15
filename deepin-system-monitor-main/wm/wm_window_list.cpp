@@ -10,6 +10,7 @@
 #include "system/system_monitor_thread.h"
 #include "process/process_db.h"
 #include "common/common.h"
+#include "helper.hpp"
 
 #include <QtDBus>
 
@@ -92,67 +93,67 @@ void WMWindowList::addDesktopEntryApp(Process *proc)
 
 int WMWindowList::getAppCount()
 {
-     //Judge whether the current user is root
-     Process proc(static_cast<int>(qApp->applicationPid()));
-     //read Process Info
-     proc.readProcessInfo();
-     bool isRootUser = false;
-     //Compare with Root UID 0
-     if (0 == proc.userName().compare("root", Qt::CaseInsensitive)) {
-         isRootUser = true;
-     } else {
-         isRootUser = false;
-     }
-     int trayAppNum = 0;
-     unsigned long traySize = m_trayAppcache.size();
-     std::map<pid_t, WMWindow>::iterator itTray;
-     //if uid = 0,read tray apps number
-     for(itTray=m_trayAppcache.begin();itTray!=m_trayAppcache.end();++itTray) {
-         Process proc(itTray->first);
-         proc.readProcessInfo();
-         uid_t  procUid = proc.uid();
-         if (procUid == 0) {
-             trayAppNum++;
-         }
-         // 判断托盘应用缓存大小 如果不想等则退出当前循环
-         if (traySize != m_trayAppcache.size())
-             break;
-     }
-     int guiAppNum = 0;
-     std::map<pid_t, WMWindow>::iterator itGui;
-     unsigned long  guiSize = m_guiAppcache.size();
-     //if uid = 0,read gui apps number
-     for(itGui=m_guiAppcache.begin();itGui!=m_guiAppcache.end();++itGui) {
-         Process proc(itGui->first);
-         proc.readProcessInfo();
-         uid_t  procUid = proc.uid();
-         if (procUid == 0) {
-             guiAppNum++;
-         }
-         // 判断gui应用缓存大小 如果不想等则退出当前循环
-         if (guiSize != m_guiAppcache.size())
-             break;
-     }
-     //if uid = 0, read desktop apps number
-     int desktopAppNum = 0;
-     int desktopSize = m_desktopEntryCache.size();
-     for (int i = 0; i < m_desktopEntryCache.size(); i++) {
-         Process proc(m_desktopEntryCache.at(i));
-         proc.readProcessInfo();
-         uid_t  procUid = proc.uid();
-         if (procUid == 0) {
-             desktopAppNum++;
-         }
-         // 判断桌面应用缓存大小 如果不想等则退出当前循环
-         if (desktopSize != m_desktopEntryCache.size())
-             break;
-     }
-     //if user is root,add all numbers of app, otherwise, minuse root user's apps
-     if (isRootUser) {
-         return trayAppNum + guiAppNum + desktopAppNum;
-         } else {
-         return static_cast<int>(m_trayAppcache.size() + m_guiAppcache.size()) + m_desktopEntryCache.size() - trayAppNum - guiAppNum - desktopAppNum;
-     }
+    //Judge whether the current user is root
+    Process proc(static_cast<int>(qApp->applicationPid()));
+    //read Process Info
+    proc.readProcessInfo();
+    bool isRootUser = false;
+    //Compare with Root UID 0
+    if (0 == proc.userName().compare("root", Qt::CaseInsensitive)) {
+        isRootUser = true;
+    } else {
+        isRootUser = false;
+    }
+    int trayAppNum = 0;
+    unsigned long traySize = m_trayAppcache.size();
+    std::map<pid_t, WMWindow>::iterator itTray;
+    //if uid = 0,read tray apps number
+    for (itTray = m_trayAppcache.begin(); itTray != m_trayAppcache.end(); ++itTray) {
+        Process proc(itTray->first);
+        proc.readProcessInfo();
+        uid_t  procUid = proc.uid();
+        if (procUid == 0) {
+            trayAppNum++;
+        }
+        // 判断托盘应用缓存大小 如果不想等则退出当前循环
+        if (traySize != m_trayAppcache.size())
+            break;
+    }
+    int guiAppNum = 0;
+    std::map<pid_t, WMWindow>::iterator itGui;
+    unsigned long  guiSize = m_guiAppcache.size();
+    //if uid = 0,read gui apps number
+    for (itGui = m_guiAppcache.begin(); itGui != m_guiAppcache.end(); ++itGui) {
+        Process proc(itGui->first);
+        proc.readProcessInfo();
+        uid_t  procUid = proc.uid();
+        if (procUid == 0) {
+            guiAppNum++;
+        }
+        // 判断gui应用缓存大小 如果不想等则退出当前循环
+        if (guiSize != m_guiAppcache.size())
+            break;
+    }
+    //if uid = 0, read desktop apps number
+    int desktopAppNum = 0;
+    int desktopSize = m_desktopEntryCache.size();
+    for (int i = 0; i < m_desktopEntryCache.size(); i++) {
+        Process proc(m_desktopEntryCache.at(i));
+        proc.readProcessInfo();
+        uid_t  procUid = proc.uid();
+        if (procUid == 0) {
+            desktopAppNum++;
+        }
+        // 判断桌面应用缓存大小 如果不想等则退出当前循环
+        if (desktopSize != m_desktopEntryCache.size())
+            break;
+    }
+    //if user is root,add all numbers of app, otherwise, minuse root user's apps
+    if (isRootUser) {
+        return trayAppNum + guiAppNum + desktopAppNum;
+    } else {
+        return static_cast<int>(m_trayAppcache.size() + m_guiAppcache.size()) + m_desktopEntryCache.size() - trayAppNum - guiAppNum - desktopAppNum;
+    }
 }
 
 bool WMWindowList::isTrayApp(pid_t pid) const
@@ -193,8 +194,7 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
             return {};
 
         uint *data = reinterpret_cast<uint *>(xcb_get_property_value(reply.get()));
-        if (data)
-        {
+        if (data) {
             //get the maximum image from data
             int max_w = 0;
             int max_h = 0;
@@ -233,7 +233,7 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
 
                 for (int i = 0; i < byteCount; ++i) {
                     //Save covert uchar* to uint*
-                    (reinterpret_cast<uint*>(img.bits()))[i] = max_icon[i];
+                    (reinterpret_cast<uint *>(img.bits()))[i] = max_icon[i];
                 }
                 return img;
             }
@@ -268,9 +268,9 @@ QString WMWindowList::getWindowTitle(pid_t pid) const
 
 QList<WMWId> WMWindowList::getTrayWindows() const
 {
-    QDBusInterface busInterface("com.deepin.dde.TrayManager", "/com/deepin/dde/TrayManager",
-                                "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-    QDBusMessage reply = busInterface.call("Get", "com.deepin.dde.TrayManager", "TrayIcons");
+    QDBusInterface busInterface(common::systemInfo().TrayManagerService, common::systemInfo().TrayManagerPath,
+                                common::systemInfo().TrayManagerInterface, QDBusConnection::sessionBus());
+    QDBusMessage reply = busInterface.call("Get", common::systemInfo().TrayManagerService, "TrayIcons");
     QVariant v = reply.arguments().first();
     const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
 

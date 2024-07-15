@@ -58,12 +58,13 @@ private:
 
     //! \brief loadSvg 加载SVG图标
     //! \param iconName 图标名称
+    //! \param fallbackIconName 备用图标名称，没有系统图标，就使用资源文件的图标
     //! \param localPath 图标路径
     //! \param size 图标大小
     //! \param ratio 缩放比例
     //! \return
     //!
-    const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
+    const QPixmap loadSvg(const QString &iconName, const QString &fallbackIconName, const QString &localPath, const int size, const qreal ratio);
     //!
     //! \brief containCursorPos 是否鼠标在界面上
     //! \return

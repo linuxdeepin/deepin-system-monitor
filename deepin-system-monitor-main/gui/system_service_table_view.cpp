@@ -411,10 +411,6 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     palette.setColor(DPalette::Text, labelColor);
     m_noMatchingResultLabel->setPalette(palette);
     m_noMatchingResultLabel->setVisible(false);
-
-    palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-    header()->setPalette(palette);
-
     // header view instance
     auto *hdr = header();
     // header section movable
@@ -443,7 +439,8 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     // set service table default style when backup settings can not be loaded
-    if (!settingsLoaded) {
+    if (!settingsLoaded)
+    {
         setColumnWidth(SystemServiceTableModel::kSystemServiceNameColumn, 200);
         setColumnHidden(SystemServiceTableModel::kSystemServiceNameColumn, false);
         setColumnWidth(SystemServiceTableModel::kSystemServiceLoadStateColumn, 100);
@@ -495,7 +492,7 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     m_headerContextMenu = new DMenu(this);
     // load state column action
     m_loadStateHeaderAction = m_headerContextMenu->addAction(
-                                  DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
+                                    DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
     m_loadStateHeaderAction->setCheckable(true);
     // active state column action
     m_activeStateHeaderAction = m_headerContextMenu->addAction(
@@ -503,11 +500,11 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     m_activeStateHeaderAction->setCheckable(true);
     // sub state column action
     m_subStateHeaderAction = m_headerContextMenu->addAction(
-                                 DApplication::translate("Service.Table.Header", kSystemServiceSubState));
+                                    DApplication::translate("Service.Table.Header", kSystemServiceSubState));
     m_subStateHeaderAction->setCheckable(true);
     // state column action
     m_stateHeaderAction = m_headerContextMenu->addAction(
-                              DApplication::translate("Service.Table.Header", kSystemServiceState));
+                                    DApplication::translate("Service.Table.Header", kSystemServiceState));
     m_stateHeaderAction->setCheckable(true);
     // description column action
     m_descriptionHeaderAction = m_headerContextMenu->addAction(
@@ -515,7 +512,7 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
     m_descriptionHeaderAction->setCheckable(true);
     // pid column
     m_pidHeaderAction = m_headerContextMenu->addAction(
-                            DApplication::translate("Service.Table.Header", kSystemServicePID));
+                                    DApplication::translate("Service.Table.Header", kSystemServicePID));
     m_pidHeaderAction->setCheckable(true);
     // startup mode column
     m_startupModeHeaderAction = m_headerContextMenu->addAction(
@@ -565,10 +562,6 @@ void SystemServiceTableView::initConnections()
             palette.setColor(DPalette::Text, labelColor);
             m_noMatchingResultLabel->setPalette(palette);
         }
-
-        palette.setColor(DPalette::Button, palette.color(DPalette::Base));
-        header()->setPalette(palette);
-
         auto pa = DApplicationHelper::instance()->applicationPalette();
         // set spinner color
         QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);

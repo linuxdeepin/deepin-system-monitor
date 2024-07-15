@@ -2,11 +2,12 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
-
+#include "ddlog.h"
 #include "mainwindow.h"
 #include "common/datacommon.h"
 //#include "itemwidget.h"
 #include "dbus/dbusayatanainterface.h"
+#include "helper.hpp"
 
 #include <DApplication>
 #include <DApplicationHelper>
@@ -27,32 +28,44 @@
 #include <QApplication>
 #include <QPalette>
 #include <QTimer>
+#include <QShowEvent>
+#include <QHideEvent>
 
-#define DOCK_TOP        0
-#define DOCK_RIGHT      1
-#define DOCK_BOTTOM     2
-#define DOCK_LEFT       3
+#define DOCK_TOP 0
+#define DOCK_RIGHT 1
+#define DOCK_BOTTOM 2
+#define DOCK_LEFT 3
 
-#define MONITOR_SERVICE "com.deepin.api.XEventMonitor"
 #define SCREEN_HEIGHT_MAX 1080
-#define NOT_USE_QUIT_TIME_INTERVAL 5*60*1000
+#define NOT_USE_QUIT_TIME_INTERVAL 5 * 60 * 1000
 
 const QString KILL_DBUS_COMMAND = "killall deepin-system-monitor-plugin-popup";
 
-
+using namespace DDLog;
 
 MainWindow::MainWindow(QWidget *parent)
+#ifdef DTKWIDGET_CLASS_DBlurEffectWithBorderWidget
+    : DBlurEffectWithBorderWidget(parent)
+#else
     : DBlurEffectWidget(parent)
-    , m_displayInter(new DBusDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
-    , m_daemonDockInter(new DBusDaemonDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
-    , m_dockInter(new DBusDockInterface)
-    , m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor)
-    , m_regionMonitor(nullptr)
-    , m_xAni(new QPropertyAnimation(this, "x"))
-    , m_widthAni(new QPropertyAnimation(this, "width"))
-    , m_aniGroup(new QSequentialAnimationGroup(this))
-    , m_trickTimer(new QTimer(this))
-    , m_processEndTimer(new QTimer(this))
+#endif
+      ,
+      m_displayInter(new QDBusInterface(common::systemInfo().DISPLAY_SERVICE,
+                                        common::systemInfo().DISPLAY_PATH,
+                                        common::systemInfo().DISPLAY_INTERFACE,
+                                        QDBusConnection::sessionBus(), this)),
+      m_daemonDockInter(new QDBusInterface(common::systemInfo().DOCK_SERVICE,
+                                           common::systemInfo().DOCK_PATH,
+                                           common::systemInfo().DOCK_INTERFACE,
+                                           QDBusConnection::sessionBus(), this)),
+      m_dockInter(new DBusDockInterface),
+      m_systemMonitorDbusAdaptor(new SystemMonitorDBusAdaptor),
+      m_regionMonitor(nullptr),
+      m_xAni(new QPropertyAnimation(this, "x")),
+      m_widthAni(new QPropertyAnimation(this, "width")),
+      m_aniGroup(new QSequentialAnimationGroup(this)),
+      m_trickTimer(new QTimer(this)),
+      m_processEndTimer(new QTimer(this))
 {
     m_trickTimer->setInterval(300);
     m_trickTimer->setSingleShot(true);
@@ -61,7 +74,19 @@ MainWindow::MainWindow(QWidget *parent)
     m_processEndTimer->start();
 
     //在构造函数中存储m_displayInter->monitor()中的内容，解决内存泄漏的问题
-    m_dbusPathList = m_displayInter->monitors();
+    if (m_displayInter->isValid()) {
+        auto ss = m_displayInter->property("Monitors");
+
+        QDBusInterface busInterface(common::systemInfo().DISPLAY_SERVICE,
+                                    common::systemInfo().DISPLAY_PATH,
+                                    "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
+        QDBusMessage reply = busInterface.call("Get", common::systemInfo().DISPLAY_INTERFACE, "Monitors");
+        QVariant v = reply.arguments().first();
+        const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+        while (!argument.atEnd()) {
+            argument >> m_dbusPathList;
+        }
+    }
     initDBus();
     initUI();
     initAni();
@@ -77,7 +102,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
 }
 
 void MainWindow::Toggle()
@@ -121,8 +145,14 @@ void MainWindow::showAni()
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     m_trickTimer->start();
     if (!m_hasComposite) {
-        if (m_daemonDockInter->position() == DOCK_RIGHT) {
-            if (m_daemonDockInter->displayMode() == 0) {
+        int dockPos = DOCK_TOP;
+        int displayMode = 0;
+        if (m_daemonDockInter->isValid()) {
+            dockPos = m_daemonDockInter->property("Position").toInt();
+            displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        }
+        if (m_daemonDockInter->isValid() && dockPos == DOCK_RIGHT) {
+            if (displayMode == 0) {
                 setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2 * Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
             } else {
                 setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin, m_rect.y(), m_rect.width(), m_rect.height());
@@ -163,7 +193,7 @@ void MainWindow::hideAni()
     m_aniGroup->setDirection(QAbstractAnimation::Forward);
     m_aniGroup->start();
 
-    QTimer::singleShot(m_aniGroup->duration(), this, [ = ] {setVisible(false);});
+    QTimer::singleShot(m_aniGroup->duration(), this, [=] { setVisible(false); });
 }
 
 void MainWindow::startLoader()
@@ -226,7 +256,7 @@ void MainWindow::registerMonitor()
     }
     m_regionMonitor = new DRegionMonitor(this);
     m_regionMonitor->registerRegion(QRegion(QRect()));
-    connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [ = ](const QPoint & p, const int flag) {
+    connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=](const QPoint &p, const int flag) {
         Q_UNUSED(flag);
         if (!geometry().contains(p))
             if (!isHidden()) {
@@ -237,7 +267,7 @@ void MainWindow::registerMonitor()
 
 void MainWindow::initUI()
 {
-    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool  | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
     setFixedWidth(Globals::WindowWidth);
@@ -301,49 +331,50 @@ void MainWindow::initAni()
 
 void MainWindow::initConnect()
 {
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainWindow::geometryChanged, Qt::QueuedConnection);
+    QDBusConnection::sessionBus().connect(m_displayInter->service(), m_displayInter->path(), "org.freedesktop.DBus.Properties", "PropertiesChanged", this, SLOT(dbusPropertiesChanged(QString, QVariantMap, QStringList)));
     connect(m_dockInter, &DBusDockInterface::geometryChanged, this, &MainWindow::geometryChanged, Qt::UniqueConnection);
     connect(this, SIGNAL(signal_geometry(int)), m_processWidget, SLOT(autoHeight(int)));
 
     connect(m_systemMonitorDbusAdaptor, &SystemMonitorDBusAdaptor::sigSendShowOrHideSystemMonitorPluginPopupWidget,
             this, &MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget);
 
+    //系统监视器弹窗显示状态改变
+    connect(this, &MainWindow::sysMonPopVisibleChanged,
+            m_systemMonitorDbusAdaptor, &SystemMonitorDBusAdaptor::sysMonPopVisibleChanged);
+
     connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::CompositeChanged, Qt::QueuedConnection);
 
-    connect(m_widthAni, &QVariantAnimation::valueChanged, this, [ = ](const QVariant & value) {
+    connect(m_widthAni, &QVariantAnimation::valueChanged, this, [=](const QVariant &value) {
         int width = value.toInt();
 
-//        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
-        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width))), m_rect.y());
+        //        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
+        move(int(std::round(qreal(m_rect.x() + m_rect.width() + Globals::WindowMargin - width))), m_rect.y());
     });
 
-    QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(MONITOR_SERVICE, QDBusConnection::sessionBus());
-    connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, [ = ](const QString & service) {
-        if (MONITOR_SERVICE != service)
+    QDBusServiceWatcher *m_watcher = new QDBusServiceWatcher(common::systemInfo().MONITOR_SERVICE, QDBusConnection::sessionBus());
+    connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, [=](const QString &service) {
+        if (common::systemInfo().MONITOR_SERVICE != service)
             return;
         registerMonitor();
     });
 
-    connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, [ = ](const QString & service) {
-        if (MONITOR_SERVICE != service)
+    connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, [=](const QString &service) {
+        if (common::systemInfo().MONITOR_SERVICE != service)
             return;
         disconnect(m_regionMonitor);
     });
 
     // 设置窗口透明度调节
-    connect(m_daemonDockInter, &DBusDaemonDock::OpacityChanged, this, [ = ]() {
-        this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->opacity() * 255));
-    });
+    QDBusConnection::sessionBus().connect(m_daemonDockInter->service(), m_daemonDockInter->path(), "org.freedesktop.DBus.Properties", "PropertiesChanged", this, SLOT(dbusPropertiesChanged(QString, QVariantMap, QStringList)));
 
     // 去除通过智能语音助手唤醒时关闭系统监视器窗口
-//    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
+    //    connect(DBusAyatanaInterface::getInstance(), &DBusAyatanaInterface::sigSendCloseWidget, this, [=]() { QTimer::singleShot(0, this, &MainWindow::hideAni); });
 
     //5分钟没人使用，结束popup进程
     connect(m_processEndTimer, &QTimer::timeout, this, []() {
-        qInfo() << "time is up! end process!";
+        qCInfo(app) << "time is up! end process!";
         QProcess::startDetached(KILL_DBUS_COMMAND);
     });
-
 }
 
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
@@ -371,6 +402,15 @@ void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
     setBackgroundRole(DPalette::Window);
 }
 
+void MainWindow::dbusPropertiesChanged(QString interface, QVariantMap maps, QStringList strs)
+{
+    if ((interface == common::systemInfo().DISPLAY_INTERFACE && maps.contains("PrimaryRect")) || (interface == common::systemInfo().DOCK_INTERFACE && (maps.contains("Position") || maps.contains("DisplayMode")))) {
+        geometryChanged();
+    } else if (m_daemonDockInter->isValid() && interface == common::systemInfo().DOCK_INTERFACE && maps.contains("Opacity")) {
+        this->setMaskAlpha(static_cast<quint8>(m_daemonDockInter->property("Opacity").toDouble() * 255));
+    }
+}
+
 void MainWindow::adjustPosition()
 {
     // 屏幕尺寸
@@ -389,30 +429,34 @@ void MainWindow::adjustPosition()
     rect -= QMargins(0, Globals::WindowMargin, Globals::WindowMargin, Globals::WindowMargin);
 
     // 初始化弹出框位置
-    switch (m_daemonDockInter->position()) {
-    case DOCK_TOP:
-        rect.moveTop(dockRect.height() + Globals::WindowMargin);
-        rect.setHeight(rect.height() - dockHeight);
-        rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
-        break;
-    case DOCK_BOTTOM:
-        rect.setHeight(rect.height() - dockHeight);
-        rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
-        break;
-    case DOCK_LEFT:
-        rect.moveRight(int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
-        dockHeight = 0;
-        break;
-    case DOCK_RIGHT:
-        if (m_daemonDockInter->displayMode() == 0) {
-            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - 2 * Globals::WindowMargin);
-        } else {
-            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - Globals::WindowMargin);
+    if (m_daemonDockInter->isValid()) {
+        int dockPos = m_daemonDockInter->property("Position").toInt();
+        int displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        switch (dockPos) {
+        case DOCK_TOP:
+            rect.moveTop(dockRect.height() + Globals::WindowMargin);
+            rect.setHeight(rect.height() - dockHeight);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
+            break;
+        case DOCK_BOTTOM:
+            rect.setHeight(rect.height() - dockHeight);
+            rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
+            break;
+        case DOCK_LEFT:
+            rect.moveRight(int(std::round(qreal(getDisplayScreen().width())) / scale) - Globals::WindowMargin);
+            dockHeight = 0;
+            break;
+        case DOCK_RIGHT:
+            if (displayMode == 0) {
+                rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - 2 * Globals::WindowMargin);
+            } else {
+                rect.moveRight(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - dockRect.width() - Globals::WindowMargin);
+            }
+            dockHeight = 0;
+            break;
+        default:
+            break;
         }
-        dockHeight = 0;
-        break;
-    default:
-        break;
     }
 
     int scrollHeight = rect.height() - 20;
@@ -429,16 +473,20 @@ void MainWindow::adjustPosition()
 
     // 针对时尚模式的特殊处理
     // 只有任务栏显示的时候, 才额外偏移
-    if (m_daemonDockInter->displayMode() == 0 && dockRect.width() * dockRect.height() > 0) {
-        switch (m_daemonDockInter->position()) {
-        case DOCK_TOP:
-            rect -= QMargins(0, Globals::WindowMargin, 0, 0);
-            break;
-        case DOCK_BOTTOM:
-            rect -= QMargins(0, 0, 0, Globals::WindowMargin);
-            break;
-        default:
-            break;
+    if (m_daemonDockInter->isValid()) {
+        int dockPos = m_daemonDockInter->property("Position").toInt();
+        int displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        if (displayMode == 0 && dockRect.width() * dockRect.height() > 0) {
+            switch (dockPos) {
+            case DOCK_TOP:
+                rect -= QMargins(0, Globals::WindowMargin, 0, 0);
+                break;
+            case DOCK_BOTTOM:
+                rect -= QMargins(0, 0, 0, Globals::WindowMargin);
+                break;
+            default:
+                break;
+            }
         }
     }
 
@@ -447,16 +495,54 @@ void MainWindow::adjustPosition()
     setFixedSize(rect.size());
 }
 
+struct PrimaryRect
+{
+    qint16 x;
+    qint16 y;
+    qint16 width;
+    qint16 height;
+};
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, PrimaryRect &rect)
+{
+    argument.beginStructure();
+    argument >> rect.x;
+    argument >> rect.y;
+    argument >> rect.width;
+    argument >> rect.height;
+    argument.endStructure();
+    return argument;
+}
+
 QRect MainWindow::getDisplayScreen()
 {
     QRect dockRect = m_dockInter->geometry();
     for (const auto &monitorPath : m_dbusPathList) {
-        DisplayMonitor monitor("com.deepin.daemon.Display", monitorPath.path(), QDBusConnection::sessionBus());
-        QRect screenRect(monitor.x(), monitor.y(), monitor.width(), monitor.height());
-        if (screenRect.contains(dockRect))
-            return screenRect;
+        QDBusInterface monitor(common::systemInfo().DISPLAY_INTERFACE, monitorPath.path(), common::systemInfo().DISPLAYMONITOR_INTERFACE, QDBusConnection::sessionBus());
+        if (monitor.isValid()) {
+            int curX = m_displayInter->property("X").toInt();
+            int curY = m_displayInter->property("X").toInt();
+            int curWidth = m_displayInter->property("X").toInt();
+            int curHeight = m_displayInter->property("X").toInt();
+            QRect screenRect(curX, curY, curWidth, curHeight);
+            if (screenRect.contains(dockRect))
+                return screenRect;
+        }
     }
-    return m_displayInter->primaryRect();
+    if (m_displayInter->isValid()) {
+        QDBusInterface busInterface(common::systemInfo().DISPLAY_SERVICE, common::systemInfo().DISPLAY_PATH,
+                                    "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
+        QDBusMessage reply = busInterface.call("Get", common::systemInfo().DISPLAY_INTERFACE, "PrimaryRect");
+        QVariant v = reply.arguments().first();
+        const QDBusArgument &argument = v.value<QDBusVariant>().variant().value<QDBusArgument>();
+
+        PrimaryRect primaryRect;
+        while (!argument.atEnd()) {
+            argument >> primaryRect;
+        }
+        return QRect(primaryRect.x, primaryRect.y, primaryRect.width, primaryRect.height);
+    }
+    return dockRect;
 }
 
 bool MainWindow::initDBus()
@@ -472,9 +558,8 @@ bool MainWindow::initDBus()
     }
 
     // 在挂载的服务上注册一个执行服务的对象
-    if (!QDBusConnection::sessionBus().registerObject(Globals::SERVICE_PATH, m_systemMonitorDbusAdaptor, QDBusConnection::ExportAllSlots |
-                                                      QDBusConnection::ExportAllSignals)) {
-        qInfo() << QDBusConnection::sessionBus().lastError();
+    if (!QDBusConnection::sessionBus().registerObject(Globals::SERVICE_PATH, m_systemMonitorDbusAdaptor, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
+        qCInfo(app) << QDBusConnection::sessionBus().lastError();
         return false;
     }
 
@@ -511,3 +596,14 @@ void MainWindow::slotShowOrHideSystemMonitorPluginPopupWidget()
     QTimer::singleShot(0, this, &MainWindow::Toggle);
 }
 
+void MainWindow::showEvent(QShowEvent *event)
+{
+    Q_EMIT sysMonPopVisibleChanged(true);
+    QWidget::showEvent(event);
+}
+
+void MainWindow::hideEvent(QHideEvent *event)
+{
+    Q_EMIT sysMonPopVisibleChanged(false);
+    QWidget::hideEvent(event);
+}

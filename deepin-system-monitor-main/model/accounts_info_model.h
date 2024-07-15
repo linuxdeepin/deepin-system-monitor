@@ -1,17 +1,19 @@
 #ifndef ACCOUNTS_INFO_MODEL_H
 #define ACCOUNTS_INFO_MODEL_H
 #include "user.h"
-#include <com_deepin_daemon_accounts.h>
-#include <com_deepin_daemon_accounts_user.h>
-#include <org_freedesktop_login1.h>
-#include <com_deepin_dde_controlcenter.h>
+//#include <com_deepin_daemon_accounts.h>
+//#include <com_deepin_daemon_accounts_user.h>
+//#include <org_freedesktop_login1.h>
+//#include <com_deepin_dde_controlcenter.h>
 #include <QMetaType>
+#include <QtDBus>
+#include <QDBusInterface>
 
 
-using Accounts = com::deepin::daemon::Accounts;
-using AccountsUser = com::deepin::daemon::accounts::User;
-using LoginManager = org::freedesktop::login1::Manager;
-using ControlCenter = com::deepin::dde::ControlCenter;
+//using Accounts = com::deepin::daemon::Accounts;
+//using AccountsUser = com::deepin::daemon::accounts::User;
+//using LoginManager = org::freedesktop::login1::Manager;
+//using ControlCenter = com::deepin::dde::ControlCenter;
 
 typedef struct _SessionInfo {
     QString sessionId;
@@ -60,6 +62,7 @@ class AccountsInfoModel : public QObject
 
 public:
     explicit AccountsInfoModel(QObject *parent = nullptr);
+    virtual ~AccountsInfoModel();
     void updateUserList(const QStringList &userPathList);
     QList<User *> userList() const;
     User::UserType getCurrentUserType() const;
@@ -80,11 +83,11 @@ public Q_SLOTS:
 
 
 private:
-    Accounts *m_accountsInter;
+    QDBusInterface *m_accountsInter;
     QMap<QString, User * > m_userMap ;
     QStringList m_onlineUsers;
-    LoginManager *m_LoginInter;
-    ControlCenter *m_controlInter;
+    QDBusInterface *m_LoginInter;
+    QDBusInterface *m_controlInter;
     QString m_currentUserName;
     int m_currentUserType;
     SessionInfoList m_sessionList {};

@@ -1,49 +1,62 @@
 #include "accounts_info_model.h"
+#include "helper.hpp"
+#include "ddlog.h"
 #include <QDBusReply>
 #include <QDBusPendingReply>
+#include <QDebug>
+#include <QFile>
+#include <QProcess>
 #include <pwd.h>
 #include <unistd.h>
+
+using namespace DDLog;
 
 #define PKEXEC_PATH "/usr/bin/pkexec"
 #define PKILL_PATH "/usr/bin/pkill"
 
-const QString AccountsService("com.deepin.daemon.Accounts");
-const QString LoginService("org.freedesktop.login1");
-const QString ControlCenterService("com.deepin.dde.ControlCenter");
+const QString LoginService = "org.freedesktop.login1";
+const QString LoginPath = "/org/freedesktop/login1";
+const QString LoginInterface = "org.freedesktop.login1.Manager";
 
-AccountsInfoModel::AccountsInfoModel(QObject *parent): QObject(parent)
-    , m_accountsInter(new Accounts(AccountsService, "/com/deepin/daemon/Accounts", QDBusConnection::systemBus(), this))
-    , m_LoginInter(new LoginManager(LoginService, "/org/freedesktop/login1", QDBusConnection::systemBus(), this))
-    , m_controlInter(new ControlCenter(ControlCenterService, "/com/deepin/dde/ControlCenter", QDBusConnection::sessionBus(), this))
-    , m_currentUserType(-1)
+AccountsInfoModel::AccountsInfoModel(QObject *parent)
+    : QObject(parent), m_accountsInter(new QDBusInterface(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, QDBusConnection::systemBus(), this)), m_LoginInter(new QDBusInterface(LoginService, LoginPath, LoginInterface, QDBusConnection::systemBus(), this)), m_controlInter(new QDBusInterface(common::systemInfo().ControlCenterService, common::systemInfo().ControlCenterPath, common::systemInfo().ControlCenterInterface, QDBusConnection::sessionBus(), this)), m_currentUserType(-1)
 {
     qDBusRegisterMetaType<SessionInfo>();
     qDBusRegisterMetaType<SessionInfoList>();
     struct passwd *pws;
     pws = getpwuid(getuid());
     m_currentUserName = QString(pws->pw_name);
-    qInfo() << "AccountsInfoModel constructor line 26" << "m_currentUserName:" << m_currentUserName;
+    qCInfo(app) << "AccountsInfoModel constructor line 26"
+            << "m_currentUserName:" << m_currentUserName;
     //获取online userList
     updateUserOnlineStatus();
-    qInfo() << "AccountsInfoModel constructor line 29" << "online user list:" << m_onlineUsers;
-    updateUserList(m_accountsInter->userList());
-    qInfo() << "AccountsInfoModel constructor line 31" << "Accounts user list:" << m_accountsInter->userList();
+    qCInfo(app) << "AccountsInfoModel constructor line 29"
+            << "online user list:" << m_onlineUsers;
 
-    connect(m_accountsInter, &Accounts::UserListChanged, this, &AccountsInfoModel::onUserListChanged, Qt::QueuedConnection);
-    connect(m_LoginInter, &LoginManager::SessionNew, this, &AccountsInfoModel::onSessionNew, Qt::QueuedConnection);
-    connect(m_LoginInter, &LoginManager::SessionRemoved, this, &AccountsInfoModel::onSessionNew, Qt::QueuedConnection);
+    QStringList userList = m_accountsInter->property("UserList").toStringList();
+    updateUserList(userList);
+    qCInfo(app) << "AccountsInfoModel constructor line 31"
+            << "Accounts user list:" << userList;
 
+    QDBusConnection::systemBus().connect(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, "UserListChanged",
+                                         this, SLOT(onUserListChanged(QStringList)));
+    QDBusConnection::systemBus().connect(LoginService, LoginPath, LoginInterface, "SessionNew",
+                                         this, SLOT(onSessionNew(QString, QDBusObjectPath)));
+    QDBusConnection::systemBus().connect(LoginService, LoginPath, LoginInterface, "SessionRemoved",
+                                         this, SLOT(onSessionNew(QString, QDBusObjectPath)));
+}
+
+AccountsInfoModel::~AccountsInfoModel()
+{
+    qDeleteAll(m_userMap.values());
+    m_userMap.clear();
 }
 
 void AccountsInfoModel::onUserListChanged(const QStringList &userPathList)
 {
     updateUserList(userPathList);
-    qInfo() << "get update:" << userPathList;
+    qCInfo(app) << "get update:" << userPathList;
 }
-
-
-
-
 
 void AccountsInfoModel::onSessionNew(const QString &in0, const QDBusObjectPath &in1)
 {
@@ -51,6 +64,7 @@ void AccountsInfoModel::onSessionNew(const QString &in0, const QDBusObjectPath &
     Q_UNUSED(in1);
     updateUserOnlineStatus();
 }
+
 void AccountsInfoModel::onSessionRemoved(const QString &in0, const QDBusObjectPath &in1)
 {
     Q_UNUSED(in0);
@@ -58,40 +72,45 @@ void AccountsInfoModel::onSessionRemoved(const QString &in0, const QDBusObjectPa
     updateUserOnlineStatus();
 }
 
-
 void AccountsInfoModel::updateUserList(const QStringList &userPathList)
 {
-    qInfo() << "AccountsInfoModel updateUserList line 61" << "updateUserList begins!" ;
+    qCInfo(app) << "AccountsInfoModel updateUserList line 61"
+            << "updateUserList begins!";
+    // 释放构造对象
+    qDeleteAll(m_userMap.values());
     m_userMap.clear();
+
     for (QString userPath : userPathList) {
-        AccountsUser *userDBus = new AccountsUser("com.deepin.daemon.Accounts", userPath, QDBusConnection::systemBus(), this);
+        QDBusInterface *userDBus = new QDBusInterface(common::systemInfo().AccountsService, userPath, common::systemInfo().UserInterface, QDBusConnection::systemBus(), this);
         User *newUser = new User;
-        newUser->setName(userDBus->userName());
-        newUser->setFullname(userDBus->fullName());
-        newUser->setIconFile(userDBus->iconFile());
-        newUser->setUserType(userDBus->accountType());
-        newUser->setUserUid(userDBus->uid());
+
+        newUser->setName(userDBus->property("UserName").toString());
+        newUser->setFullname(userDBus->property("FullName").toString());
+        newUser->setIconFile(userDBus->property("IconFile").toString());
+        newUser->setUserType(userDBus->property("AccountType").toInt());
+        newUser->setUserUid(userDBus->property("Uid").toString());
+
         //当前用户
         if (newUser->name() == m_currentUserName) {
             newUser->setIsCurrentUser(true);
             m_currentUserType = newUser->userType();
         }
-        qInfo() << "AccountsInfoModel updateUserList line 78" << "get user info of :" << newUser->name();
+        qCInfo(app) << "AccountsInfoModel updateUserList line 78"
+                << "get user info of :" << newUser->name();
         m_userMap.insert(newUser->name(), newUser);
 
+        delete userDBus;
     }
-
-
 }
-
 
 void AccountsInfoModel::updateUserOnlineStatus()
 {
-    qInfo() << "AccountsInfoModel updateUserOnlineStatus line 88" << "updateUserOnlineStatus begins!" ;
+    qCInfo(app) << "AccountsInfoModel updateUserOnlineStatus line 88"
+            << "updateUserOnlineStatus begins!";
     m_onlineUsers.clear();
 
     //异步获取SessionList
-    QDBusMessage message =  m_LoginInter->call("ListSessions");
+    QDBusMessage message = m_LoginInter->call("ListSessions");
     QDBusPendingReply<SessionInfoList> reply = m_LoginInter->asyncCall(QStringLiteral("ListSessions"));
     reply.waitForFinished();
     if (reply.isValid()) {
@@ -105,7 +124,6 @@ void AccountsInfoModel::updateUserOnlineStatus()
     Q_EMIT signalUserOnlineStatusUpdated();
 }
 
-
 QList<User *> AccountsInfoModel::userList() const
 {
     QList<User *> onlineUsers;
@@ -116,7 +134,8 @@ QList<User *> AccountsInfoModel::userList() const
             onlineUsers << user;
         }
     }
-    qInfo() << "AccountsInfoModel userList" << "get online users:" << m_onlineUsers;
+    qCInfo(app) << "AccountsInfoModel userList"
+            << "get online users:" << m_onlineUsers;
 
     return onlineUsers;
 }
@@ -137,19 +156,17 @@ bool AccountsInfoModel::lockSessionByUserName(const QString &userName)
     if (m_sessionList.size() > 0) {
         for (SessionInfo si : m_sessionList) {
             if (si.userName == userName) {
-                m_LoginInter->LockSession(si.sessionId);
+                m_LoginInter->call("LockSession", si.sessionId);
                 return true;
             }
         }
-        qDebug() << "cannot find session with this username!";
+        qCDebug(app) << "cannot find session with this username!";
         return false;
     } else {
-        qDebug() << "no session found!";
+        qCDebug(app) << "no session found!";
         return false;
     }
-
 }
-
 
 bool AccountsInfoModel::activateSessionByUserName(const QString &userName)
 {
@@ -159,48 +176,44 @@ bool AccountsInfoModel::activateSessionByUserName(const QString &userName)
         for (SessionInfo si : m_sessionList) {
             if (si.userName == userName) {
 
-                m_LoginInter->ActivateSession(si.sessionId);
+                m_LoginInter->call("ActivateSession", si.sessionId);
                 return true;
             }
-
         }
-        qDebug() << "cannot find session with this username!";
+        qCDebug(app) << "cannot find session with this username!";
         return false;
     } else {
-        qDebug() << "no session found!";
+        qCDebug(app) << "no session found!";
         return false;
     }
-
 }
 bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 {
     if (userName == m_currentUserName) {
         if (m_sessionList.size() > 0) {
-            qInfo() << "m_sessionList is OK";
+            qCInfo(app) << "m_sessionList is OK";
             for (SessionInfo si : m_sessionList) {
                 if (si.userName == userName) {
-                    qInfo() << "found" << userName << si.sessionId;
-                    qInfo() << m_LoginInter->TerminateSession(si.sessionId).error();
+                    qCInfo(app) << "found" << userName << si.sessionId;
+                    //                    qCInfo(app) << m_LoginInter->TerminateSession(si.sessionId).error();
                     return true;
                 }
-
             }
-            qDebug() << "cannot find session with current username!";
+            qCDebug(app) << "cannot find session with current username!";
 
         } else {
-            qDebug() << "no session found!";
-
+            qCDebug(app) << "no session found!";
         }
     } else {
         QStringList params;
 
         // check pkexec existance
-        if (!QFile::exists({PKEXEC_PATH})) {
+        if (!QFile::exists({ PKEXEC_PATH })) {
             return false;
         }
 
         // check kill existance
-        if (!QFile::exists({PKILL_PATH})) {
+        if (!QFile::exists({ PKILL_PATH })) {
             return false;
         }
 
@@ -208,20 +221,23 @@ bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 
         QProcess proc;
 
-        proc.start({PKEXEC_PATH}, params);
+        proc.start({ PKEXEC_PATH }, params);
         proc.waitForFinished();
         return true;
     }
     return false;
-
 }
 
 void AccountsInfoModel::EditAccount()
 {
-    if (m_controlInter)
-        m_controlInter->ShowPage("accounts", "Accounts Detail");
-
+    if (m_controlInter) {
+        bool version = common::systemInfo().isOldVersion();
+        if (version) {
+            //专业版v20接口：ShowPage(String module, String page)
+            m_controlInter->call("ShowPage", "accounts", "Accounts Detail");
+        } else {
+            //社区版V23接口：ShowPage(String url)
+            m_controlInter->call("ShowPage", "accounts");
+        }
+    }
 }
-
-
-
