@@ -1,0 +1,4 @@
+# This file is part of dde
+#Type Name                      ID                  GECOS              Home directory Shell
+u     deepin-daemon             -                   ""                  -              -
+u     deepin-admin-daemon       -                   ""                  -              -
