@@ -1,11 +1,23 @@
 [Unit]
 Description=Deepin system monitor system server
+Wants=dbus.socket
+After=dbus.socket
 
 [Service]
 Type=dbus
 BusName=com.deepin.SystemMonitorSystemServer
 ExecStart=/usr/lib/deepin-daemon/deepin-system-monitor-system-server
 StandardOutput=syslog
-CapabilityBoundingSet=~
 MemoryLimit=1G
 IOWeight=200
+User=deepin-daemon
+ProtectSystem=strict
+NoNewPrivileges=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+RestrictRealtime=yes
+RemoveIPC=yes
+MemoryDenyWriteExecute=yes
+
+[Install]
+WantedBy=multi-user.target
