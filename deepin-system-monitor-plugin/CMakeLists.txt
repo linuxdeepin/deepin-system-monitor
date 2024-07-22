@@ -74,5 +74,9 @@ add_custom_target(PLUGIN_QMFILES ALL DEPENDS ${APP_QM_FILES})
 INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 #INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
+INSTALL(FILES asserts/icons/deepin/builtin/actions/deepin-system-monitor_20px.svg
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/share/dde-dock/icons/dcc-setting
+  RENAME deepin-system-monitor.svg
+)
 #安装翻译文件
 install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-system-monitor-plugin/translations)
