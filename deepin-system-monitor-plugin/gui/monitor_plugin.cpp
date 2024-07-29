@@ -453,8 +453,22 @@ double MonitorPlugin::autoRateUnits(qlonglong speed, RateUnit &unit)
 
 void MonitorPlugin::openSystemMonitor()
 {
-    QProcess::startDetached("/usr/bin/deepin-system-monitor");
+    auto launchProcessByAM = [](){
+        QDBusMessage message = QDBusMessage::createMethodCall(
+                "org.desktopspec.ApplicationManager1",
+                "/org/desktopspec/ApplicationManager1/deepin_2dsystem_2dmonitor",
+                "org.desktopspec.ApplicationManager1.Application",
+                "Launch");
 
+        message << QString("") << QStringList() << QVariantMap();
+
+        QDBusMessage reply = QDBusConnection::sessionBus().call(message);
+        if (reply.type() != QDBusMessage::ReplyMessage) {
+            qCWarning(app) << "Launch deepin-system-monitor main process error:" << reply.errorMessage();
+            return;
+        }
+    };
+    launchProcessByAM();
     //QString cmd("qdbus com.deepin.SystemMonitorMain /com/deepin/SystemMonitorMain com.deepin.SystemMonitorMain.slotRaiseWindow");
     QString cmd("gdbus call -e -d  com.deepin.SystemMonitorMain -o /com/deepin/SystemMonitorMain -m com.deepin.SystemMonitorMain.slotRaiseWindow");
     QTimer::singleShot(200, this, [=]() { QProcess::startDetached(cmd); });
