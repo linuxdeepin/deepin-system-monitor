@@ -1,3 +1,10 @@
+deepin-system-monitor (6.0.22) unstable; urgency=medium
+
+  * chore: 使用am启动deepin-system-monitor
+  * feat: ddlog adaptation config
+
+ -- fuleyi <fuleyi@uniontech.com>  Mon, 29 Jul 2024 17:17:27 +0800
+
 deepin-system-monitor (6.0.21) unstable; urgency=medium
 
   * New version 6.0.21.
