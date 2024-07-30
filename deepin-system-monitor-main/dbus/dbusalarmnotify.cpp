@@ -82,8 +82,8 @@ void DBusAlarmNotify::showAlarmNotify(QString topic, QString msg, int timeout)
     QDBusMessage replyMsg = QDBusConnection::sessionBus().call(ddeNotify);
 
     if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-        qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde notify dbus method call fail , error name :"
-                       << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
+        qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde notify dbus method call unsuccess , unsuccess name :"
+                       << replyMsg.errorName() << " , unsuccess msg :" << replyMsg.errorMessage();
         QString cmd = QString("gdbus call -e -d  org.deepin.SystemMonitorDaemon -o /org/deepin/SystemMonitorDaemon -m org.deepin.SystemMonitorDaemon.setAlaramLastTimeInterval 0");
         QProcess::startDetached(cmd);
     } else {

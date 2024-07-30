@@ -93,7 +93,7 @@ bool NetifPacketCapture::hasDevIP()
     //获取网络IP(IPv4)
     if (ioctl(sockfd, SIOCGIFADDR, &ifr) == -1) {
         close(sockfd);
-        //qCDebug(app)<<"ioctl error!";
+        //qCDebug(app)<<"ioctl unsuccess!";
         return false;
     }
 
