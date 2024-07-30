@@ -67,9 +67,9 @@ close_stdout(void)
 {
 	if (flush_standard_stream(stdout) != 0 && !(errno == EPIPE)) {
 		if (errno)
-			warn(_("write error"));
+			warn(_("write unsuccess"));
 		else
-			warnx(_("write error"));
+			warnx(_("write unsuccess"));
 		_exit(CLOSE_EXIT_CODE);
 	}
 

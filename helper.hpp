@@ -4,9 +4,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
+#include "ddlog.h"
 
 #include <DSysInfo>
 #include <QDebug>
+
+using namespace DDLog;
 
 namespace common{
 
@@ -148,7 +151,7 @@ static inline const SystemState &systemInfo()
     static SystemState *state = nullptr;
     if (!state) {
         const auto version = DTK_CORE_NAMESPACE::DSysInfo::majorVersion();
-        qInfo() << "Running desktop environment version is:" << version << ", versionNumber:" << version.toLong();
+        qCInfo(app) << "Running desktop environment version is:" << version << ", versionNumber:" << version.toLong();
         if (!version.isEmpty() && version.toLong() <= 20) {
             state = new V20SystemState();
             state->updateVersion(true);

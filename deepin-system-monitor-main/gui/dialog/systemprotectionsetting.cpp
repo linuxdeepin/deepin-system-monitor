@@ -486,7 +486,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenterPage);
 
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
+            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call unsuccess , unsuccess name :"
                        << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
         }
 
@@ -514,7 +514,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenter);
 
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
+            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call unsuccess , unsuccess name :"
                        << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
         }
     }

@@ -61,7 +61,7 @@ static bool setServiceEnable(const QString &servieName, bool enable, QString &er
     }
 
     if (!errorString.isEmpty()) {
-        qCWarning(app) << QString("Set service %1 failed, error %1").arg(enable ? "enable" : "disable").arg(errorString);
+        qCWarning(app) << QString("Set service %1 failed, unsuccess %1").arg(enable ? "enable" : "disable").arg(errorString);
         return false;
     } else {
         qCDebug(app) << QString("Set service %1 ret: %2").arg(enable ? "enable" : "disable").arg(retMsg.value());

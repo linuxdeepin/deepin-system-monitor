@@ -148,7 +148,7 @@ namespace error {
 
 inline void print_errno(decltype(errno) e, const QString msg)
 {
-    qCWarning(app) << QString("Error: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
+    qCWarning(app) << QString("unsuccess: [%1] %2, ").arg(e).arg(strerror(e)) << msg;
 }
 
 }   // namespace error
