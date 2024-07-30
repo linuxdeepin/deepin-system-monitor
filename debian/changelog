@@ -1,4 +1,4 @@
-deepin-system-monitor (6.0.22) unstable; urgency=medium
+deepin-system-monitor (6.0.23) unstable; urgency=medium
 
   * chore: 使用am启动deepin-system-monitor
   * feat: ddlog adaptation config
