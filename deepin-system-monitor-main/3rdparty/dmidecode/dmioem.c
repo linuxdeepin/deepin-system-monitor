@@ -24,6 +24,7 @@
 
 #include "types.h"
 #include "util.h"
+#include "lscpu.h"
 #include "dmidecode.h"
 #include "dmioem.h"
 #include "dmiopt.h"
