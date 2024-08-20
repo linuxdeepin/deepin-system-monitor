@@ -47,6 +47,10 @@ public:
     QString DOCK_PATH;
     QString DOCK_INTERFACE;
 
+    inline bool isTreeLand() const
+    {
+        return qEnvironmentVariable("DDE_CURRENT_COMPOSITOR") == "TreeLand";
+    }
     inline bool isOldVersion() const
     {
         return m_isOldVersion;
