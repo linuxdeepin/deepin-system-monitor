@@ -27,6 +27,16 @@
       "description[zh_CN]": "启用DKapture eBPF监控进行进程数据收集",
       "permissions": "readwrite",
       "visibility": "public"
+    },
+    "displayMenuPauseAndRecovery": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Display pause recovery process",
+          "name[zh_CN]": "显示暂停恢复进程",
+          "description": "显示暂停恢复进程",
+          "permissions": "readwrite",
+          "visibility": "public"
     }
   }
 }
