@@ -14,6 +14,16 @@
       "description[zh_CN]": "日志规则",
       "permissions": "readwrite",
       "visibility": "public"
+    },
+    "displayMenuPauseAndRecovery": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Display pause recovery process",
+          "name[zh_CN]": "显示暂停恢复进程",
+          "description": "显示暂停恢复进程",
+          "permissions": "readwrite",
+          "visibility": "public"
     }
   }
 }
