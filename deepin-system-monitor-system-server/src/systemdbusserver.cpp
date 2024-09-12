@@ -24,10 +24,10 @@ const QString s_PolkitActionSet = "org.deepin.systemmonitor.systemserver.set";
 /**
    @brief polkit 鉴权，通过配置文件处理
  */
-bool checkAuthorization(qint64 pid, const QString &action)
+bool checkAuthorization(const QString &appBusName, const QString &action)
 {
     PolkitQt1::Authority::Result ret = PolkitQt1::Authority::instance()->checkAuthorizationSync(
-            action, PolkitQt1::UnixProcessSubject(pid), PolkitQt1::Authority::AllowUserInteraction);
+            action, PolkitQt1::SystemBusNameSubject(appBusName), PolkitQt1::Authority::AllowUserInteraction);
     if (PolkitQt1::Authority::Yes == ret) {
         return true;
     } else {
@@ -116,7 +116,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     }
 
     // 鉴权处理
-    if (!checkAuthorization(dbusCallerPid(), s_PolkitActionSet)) {
+    if (!checkAuthorization(message().service(), s_PolkitActionSet)) {
         qWarning() << qPrintable("Polkit authorization failed");
         return QString(strerror(EPERM));
     }
