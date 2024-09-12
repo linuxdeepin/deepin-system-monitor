@@ -660,11 +660,17 @@ void CPUSet::read_dmi_cache_info()
         if (!spnInfo.contains("KLVV", Qt::CaseInsensitive) && !spnInfo.contains("L540", Qt::CaseInsensitive) && !spnInfo.contains("KLVU", Qt::CaseInsensitive)
             && !spnInfo.contains("PGUV", Qt::CaseInsensitive) && !spnInfo.contains("PGUW", Qt::CaseInsensitive) && !spnInfo.contains("W585", Qt::CaseInsensitive)) {
 
-            process.start("bash", QStringList() << "-c"
-                                                << "dmidecode | grep -i \"String 4\"");
+            process.start("dmidecode");
             process.waitForStarted();
             process.waitForFinished();
             QString result = process.readAll();
+            QStringList lines = result.split('\n');
+            for (const QString &line : lines) {
+                if (line.contains("String 4", Qt::CaseInsensitive)) {
+                    result = line;
+                    break;
+                }
+            }
             if (!result.contains("PWC30", Qt::CaseInsensitive)   //w525
                 && !result.contains("PGUX", Qt::CaseInsensitive)) {
                 process.close();

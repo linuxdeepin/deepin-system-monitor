@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.1) unstable; urgency=medium
+
+  * fix: some security issues. 
+
+ -- wangrong <wangrong@uniontech.com>  Thu, 12 Sep 2024 15:20:25 +0800
+
 deepin-system-monitor (6.5.0) unstable; urgency=medium
 
   * New version 6.5.0.
