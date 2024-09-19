@@ -235,7 +235,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="33"/>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation>ПРЦ</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="35"/>
