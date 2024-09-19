@@ -250,12 +250,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Shared memory</source>
-        <translation type="unfinished"/>
+        <translation>الذاكرة المشتركة</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="39"/>
         <source>Virtual memory</source>
-        <translation type="unfinished"/>
+        <translation>الذاكرة الإفتراضية </translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>غير مدعوم</translation>
     </message>
 </context>
 <context>
