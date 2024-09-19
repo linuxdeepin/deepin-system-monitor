@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilisation globale</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilisation individuelle</translation>
     </message>
 </context>
 <context>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Fréquence</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Vendeur</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -110,7 +106,7 @@
     </message>
     <message>
         <source>Threads</source>
-        <translation>Fils</translation>
+        <translation>Threads</translation>
     </message>
     <message>
         <source>Host name</source>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Avertissement</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>L&apos;utilisation du processeur est supérieure à %1% !</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>L&apos;utilisation de la mémoire est supérieure à %1% !</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Affichage</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -384,7 +399,7 @@
     </message>
     <message>
         <source>Slab</source>
-        <translation>Dalle</translation>
+        <translation>Slab</translation>
     </message>
 </context>
 <context>
@@ -509,7 +524,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Préférences</translation>
     </message>
 </context>
 <context>
@@ -694,7 +709,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Téléversé</translation>
+        <translation>Téléversement</translation>
     </message>
     <message>
         <source>Network</source>
@@ -715,6 +730,13 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>Disks</source>
         <translation>Disques</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Chargement</translation>
     </message>
 </context>
 <context>
@@ -769,13 +791,6 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>All processes</source>
         <translation>Tous les processus</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Chargement</translation>
     </message>
 </context>
 <context>
@@ -938,31 +953,31 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Préférences</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Protection du système</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Afficher les avertissements que l&apos;utilisation dépasse les seuils</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Seuil d&apos;avertissement du processeur (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Seuil d&apos;avertissement de la mémoire (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Intervalle des avertissements (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
     </message>
 </context>
 <context>
@@ -985,11 +1000,19 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
 </context>
@@ -1036,7 +1059,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Actif</translation>
+        <translation type="vanished">Actif</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1044,7 +1067,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>État</translation>
+        <translation type="vanished">État</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1058,20 +1081,28 @@ Es-tu sûr de vouloir continuer ?</translation>
         <source>Startup Type</source>
         <translation>Type de démarrage</translation>
     </message>
+    <message>
+        <source>Start State</source>
+        <translation>État de début</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Tactique de début</translation>
+    </message>
 </context>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Préférences</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Modifiable)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Intervalle : %1-%2</translation>
     </message>
 </context>
 <context>
@@ -1110,7 +1141,7 @@ Es-tu sûr de vouloir continuer ?</translation>
         <source>Services</source>
         <translation>Services</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Utilisateurs</translation>
     </message>
