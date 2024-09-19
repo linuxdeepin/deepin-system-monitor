@@ -16,6 +16,14 @@
         <source>Hide details</source>
         <translation>Ukryj szczegóły</translation>
     </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation>Generalne użycie</translation>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation>Pojedyncze użycie</translation>
+    </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
@@ -55,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Częstotliwość</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Producent</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -325,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Ostrzeżenie</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Twoje użycie procesora przekracza %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Twoje zużycie pamięci przekracza %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Wyświetl</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -498,6 +521,13 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
+    </message>
+</context>
+<context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
@@ -539,7 +569,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Link quality</source>
-        <translation>Jakość łączenia</translation>
+        <translation>Jakość połączenia</translation>
     </message>
     <message>
         <source>Signal strength</source>
@@ -703,6 +733,13 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Wczytywanie</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -754,13 +791,6 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <source>All processes</source>
         <translation>Wszystkie procesy</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Wczytywanie</translation>
     </message>
 </context>
 <context>
@@ -921,6 +951,34 @@ Czy na pewno chcesz kontynuować?</translation>
         <source>Not support</source>
         <translation>Brak wsparcia</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>Ochrona systemu</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation>Wyświetlaj ostrzeżenia, gdy użycie przekracza progi</translation>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation>Próg ostrzeżenia procesora (%)</translation>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation>Próg ostrzeżenia pamięci (%)</translation>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation>Interwał ostrzeżenia (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Powiadomienia</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -942,11 +1000,19 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
 </context>
@@ -993,7 +1059,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktywny</translation>
+        <translation type="vanished">Aktywny</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1001,7 +1067,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Stan</translation>
+        <translation type="vanished">Stan</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1014,6 +1080,29 @@ Czy na pewno chcesz kontynuować?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Typ uruchomienia</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Status uruchomienia</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Metoda uruchomienia</translation>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation>(Modyfikowalny)</translation>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation>Zakres: %1-%2</translation>
     </message>
 </context>
 <context>
@@ -1052,7 +1141,7 @@ Czy na pewno chcesz kontynuować?</translation>
         <source>Services</source>
         <translation>Usługi</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Użytkownicy</translation>
     </message>
