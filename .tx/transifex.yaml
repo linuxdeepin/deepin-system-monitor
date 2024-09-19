@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+#
+# SPDX-License-Identifier: CC0-1.0
+filters:
+  - filter_type: file
+    source_file: deepin-system-monitor-main/translations/deepin-system-monitor.ts
+    file_format: QT
+    source_language: en_US
+    translation_files_expression: deepin-system-monitor-main/translations/deepin-system-monitor_<lang>.ts
+  - filter_type: file
+    source_file: deepin-system-monitor-main/translations/desktop/desktop.ts
+    file_format: QT
+    source_language: en_US
+    translation_files_expression: deepin-system-monitor-main/translations/desktop/desktop_<lang>.ts
+  - filter_type: file
+    source_file: deepin-system-monitor-main/translations/policy/policy.ts
+    file_format: QT
+    source_language: en_US
+    translation_files_expression: deepin-system-monitor-main/translations/policy/policy_<lang>.ts
+  - filter_type: file
+    source_file: deepin-system-monitor-plugin/translations/deepin-system-monitor-plugin_en.ts
+    file_format: QT
+    source_language: en_US
+    translation_files_expression: deepin-system-monitor-plugin/translations/deepin-system-monitor-plugin_<lang>.ts
+  - filter_type: file
+    source_file: deepin-system-monitor-plugin-popup/translations/deepin-system-monitor-plugin-popup_en.ts
+    file_format: QT
+    source_language: en_US
+    translation_files_expression: deepin-system-monitor-plugin-popup/translations/deepin-system-monitor-plugin-popup_<lang>.ts
+  - filter_type: file
+    source_file: deepin-system-monitor-system-server/translations/policy/policy.ts
+    file_format: QT
+    source_language: en_US
+    translation_files_expression: deepin-system-monitor-system-server/translations/policy/policy_<lang>.ts
+settings:
+  pr_branch_name: transifex_update_<br_unique_id>
