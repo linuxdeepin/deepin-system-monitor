@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bo">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>ཟློས་ཕྱོད།</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>བཟོ་མཁན།</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>རང་འགུལ་བསྐྱར་སློང་བྱེད་པ།</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -641,7 +656,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>བརྒྱུད་རིམ་མིང་།</translation>
+        <translation>མིང་།</translation>
     </message>
 </context>
 <context>
@@ -690,11 +705,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>བསྡུ་ལེན་བྱེད་བཞིན་པ།</translation>
+        <translation>ཕབ་ལེན།</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>བསྐུར་བཞིན་པ།</translation>
+        <translation>སྐྱེལ་འཇོག</translation>
     </message>
     <message>
         <source>Network</source>
@@ -715,6 +730,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Disks</source>
         <translation>སྡུད་སྡེར།</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>སྣོན་འཇུག</translation>
     </message>
 </context>
 <context>
@@ -769,13 +791,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>བརྒྱུད་རིམ་ཚང་མ།</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -879,7 +894,7 @@ Are you sure you want to continue?</source>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>བརྒྱུད་རིམ་མིང་།</translation>
+        <translation>མིང་།</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -949,10 +964,6 @@ Are you sure you want to continue?</source>
         <translation>གྲངས་ཚད་གཤམ་གྱི་ཁྱབ་ཁོངས་ལས་མཐོ་བ་ཡོད་སྐབས་རང་འགུལ་ངང་ཉེན་བརྡ་གཏོང་བ།</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>ཆ་འཕྲིན་བརྡ་ཐོ།</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU (%)ཟིན་པ།</translation>
     </message>
@@ -963,6 +974,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation>ཉེན་བརྡ་གཏོང་བའི་བར་ཐག(སྐར་མ)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>ཆ་འཕྲིན་བརྡ་ཐོ།</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service instance name</source>
         <translation>ཞབས་ཞུ་དངོས་དཔེའི་མིང་།</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation>བྱེད་སྒོ།</translation>
+        <translation type="vanished">བྱེད་སྒོ།</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>State</source>
-        <translation>རྣམ་པ།</translation>
+        <translation type="vanished">རྣམ་པ།</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>འགོ་སློང་ཐབས།</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>མ་ལག་ཞབས་ཞུ།</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
