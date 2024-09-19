@@ -34,12 +34,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="258"/>
         <source>Read</source>
-        <translation>Odczytywanie</translation>
+        <translation>Odczyt</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="259"/>
         <source>Write</source>
-        <translation>Zapisywanie</translation>
+        <translation>Zapis</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>
         <source>Upload</source>
-        <translation>Prześlij</translation>
+        <translation>Wysyłanie</translation>
     </message>
 </context>
 <context>
@@ -111,37 +111,37 @@
     <message>
         <location filename="../process/process.cpp" line="67"/>
         <source>Very high</source>
-        <translation>Bardzo wysoko</translation>
+        <translation>Bardzo wysoki</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="68"/>
         <source>High</source>
-        <translation>Wysoko</translation>
+        <translation>Wysoki</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="69"/>
         <source>Normal</source>
-        <translation>Normalnie</translation>
+        <translation>Normalny</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="70"/>
         <source>Low</source>
-        <translation>Nisko</translation>
+        <translation>Niski</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="71"/>
         <source>Very low</source>
-        <translation>Bardzo nisko</translation>
+        <translation>Bardzo niski</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="72"/>
         <source>Custom</source>
-        <translation>Własne</translation>
+        <translation>Niestandardowy</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="73"/>
         <source>Invalid</source>
-        <translation>Nieważny</translation>
+        <translation>Nieprawidłowy</translation>
     </message>
 </context>
 <context>
@@ -154,12 +154,12 @@
     <message>
         <location filename="../process/process_db.cpp" line="165"/>
         <source>Failed to pause process</source>
-        <translation>Nie można wstrzymać procesu</translation>
+        <translation>Nie udało się wstrzymać procesu</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to resume process</source>
-        <translation>Nie można wznowić procesu</translation>
+        <translation>Nie udało się wznowić procesu</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
@@ -202,17 +202,17 @@
     <message>
         <location filename="../common/common.cpp" line="76"/>
         <source>End process</source>
-        <translation>Koniec procesu</translation>
+        <translation>Zakończ proces</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="82"/>
         <source>Suspend process</source>
-        <translation>Zawieś proces</translation>
+        <translation>Wstrzymaj</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="88"/>
         <source>Resume process</source>
-        <translation>Wznów proces</translation>
+        <translation>Wznów</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="93"/>
@@ -222,7 +222,7 @@
     <message>
         <location filename="../common/common.cpp" line="99"/>
         <source>Kill process</source>
-        <translation>Zamknij proces</translation>
+        <translation>Zabij</translation>
     </message>
 </context>
 <context>
@@ -250,7 +250,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Shared memory</source>
-        <translation>Pamięć dzielona</translation>
+        <translation>Pamięć współdzielona</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="39"/>
@@ -260,7 +260,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
         <source>Upload</source>
-        <translation>Prześlij</translation>
+        <translation>Wysyłanie</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="43"/>
@@ -270,12 +270,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="45"/>
         <source>Disk read</source>
-        <translation>Dysk odczytany</translation>
+        <translation>Odczyt dysku</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="47"/>
         <source>Disk write</source>
-        <translation>Zapis na dysku</translation>
+        <translation>Zapis dysku</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="49"/>
@@ -285,7 +285,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="51"/>
         <source>Nice</source>
-        <translation>Miły</translation>
+        <translation>Poziom priorytetu(NI)</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="53"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../common/common.cpp" line="118"/>
         <source>Stop</source>
-        <translation>Zatrzynaj</translation>
+        <translation>Zatrzymaj</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="123"/>
