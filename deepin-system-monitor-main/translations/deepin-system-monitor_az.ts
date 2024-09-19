@@ -65,10 +65,6 @@
         <translation>Tezlik</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>İstehsalçı</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Soketlər</translation>
     </message>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>öz-özünə yenidən başlatmaq</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Xəbərdarlıq</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>MP-dən istifadə %1%-dən çoxdur!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Yaddaşdan istifadə %1%-dən çoxdur!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Görünüş</translation>
     </message>
 </context>
 <context>
@@ -655,7 +670,7 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <name>Process.Graph.Title</name>
     <message>
         <source>Memory</source>
-        <translation>Yddaş</translation>
+        <translation>Yaddaş</translation>
     </message>
     <message>
         <source>Receive</source>
@@ -678,7 +693,7 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Yddaş</translation>
+        <translation>Yaddaş</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -715,6 +730,13 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>Disks</source>
         <translation>Disklər</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Yüklənir</translation>
     </message>
 </context>
 <context>
@@ -769,13 +791,6 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>All processes</source>
         <translation>Bütün proseslər</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -949,10 +964,6 @@ Davam etmək istədiyinizə əminsiniz?</translation>
         <translation>İstifadə, göstərilən həddi aşdıqda xəbərdarlıqları göstərmək</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Bildirişlər</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>MP (CPU) xəbərdarlığı həddi (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Xəbərdarlıq aralığı (dəq)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Bildirişlər</translation>
     </message>
 </context>
 <context>
@@ -985,11 +1000,19 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OLDU</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OLDU</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
 </context>
@@ -1036,7 +1059,7 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktiv</translation>
+        <translation type="vanished">Aktiv</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1044,7 +1067,7 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Vəziyyət</translation>
+        <translation type="vanished">Vəziyyət</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1057,6 +1080,14 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Başladılma növü</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Başlama vəziyyət</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Başlama qaydası</translation>
     </message>
 </context>
 <context>
@@ -1109,6 +1140,28 @@ Davam etmək istədiyinizə əminsiniz?</translation>
     <message>
         <source>Services</source>
         <translation>Xidmətlər</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>İstifadəçilər</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>İnzibatçı</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Standart istifadəçi</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>İstifadəçi məlumatlarına düzəliş edin</translation>
     </message>
 </context>
 </TS>
