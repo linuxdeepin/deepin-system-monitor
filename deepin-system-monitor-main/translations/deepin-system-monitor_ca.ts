@@ -65,10 +65,6 @@
         <translation>Freqüència</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>Proveïdor</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Sòcols</translation>
     </message>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>autoreinici</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Avís</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>L&apos;ús de la CPU és superior al %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>L&apos;ús de la memòria és superior al %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Visualització</translation>
     </message>
 </context>
 <context>
@@ -718,6 +733,13 @@ Segur que voleu continuar?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Es carrega</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Segur que voleu continuar?</translation>
     <message>
         <source>All processes</source>
         <translation>Tots els processos</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Es carrega</translation>
     </message>
 </context>
 <context>
@@ -949,10 +964,6 @@ Segur que voleu continuar?</translation>
         <translation>Mostra avisos quan l&apos;ús superi els llindars.</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Notificacions</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Llindar d&apos;advertència de la CPU (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Interval d&apos;advertència (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notificacions</translation>
     </message>
 </context>
 <context>
@@ -985,11 +1000,19 @@ Segur que voleu continuar?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>D&apos;acord</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>D&apos;acord</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
 </context>
@@ -1036,7 +1059,7 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Actiu</translation>
+        <translation type="vanished">Actiu</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1044,7 +1067,7 @@ Segur que voleu continuar?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Estat</translation>
+        <translation type="vanished">Estat</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1057,6 +1080,14 @@ Segur que voleu continuar?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Tipus d&apos;inici</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Estat inicial</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Inici tàctic</translation>
     </message>
 </context>
 <context>
@@ -1110,7 +1141,7 @@ Segur que voleu continuar?</translation>
         <source>Services</source>
         <translation>Serveis</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Usuaris</translation>
     </message>
