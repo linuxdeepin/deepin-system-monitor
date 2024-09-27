@@ -24,7 +24,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.systemctl!message" line="0"/>
 			<source>Authentication is required to set service startup type</source>
-			<translation>Se requiere autenticación para establecer tipo de inicio del servicio</translation>
+			<translation>Se requiere autenticación para establecer el tipo de servicio de inicio</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.systemctl!description" line="0"/>

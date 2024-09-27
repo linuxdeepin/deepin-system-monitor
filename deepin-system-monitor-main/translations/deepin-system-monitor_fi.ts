@@ -65,10 +65,6 @@
         <translation>Taajuus</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>Valmistaja</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Korttipaikat</translation>
     </message>
@@ -325,11 +321,30 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>Epäonnistui</translation>
+        <translation>epäonnistui</translation>
     </message>
     <message>
         <source>auto-restart</source>
         <translation>autom-käynnistys</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Varoitus</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Suorittimen käyttö on korkeampi kuin %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Muistin käyttö on korkeampi kuin %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Katso</translation>
     </message>
 </context>
 <context>
@@ -718,6 +733,13 @@ Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Ladataan</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>All processes</source>
         <translation>Kaikki prosessit</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Ladataan</translation>
     </message>
 </context>
 <context>
@@ -847,7 +862,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>Tapa prosessi</translation>
+        <translation>Lopeta prosessi</translation>
     </message>
     <message>
         <source>Change priority</source>
@@ -883,11 +898,11 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Prosessori</translation>
+        <translation>Kuorma</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Muisti</translation>
+        <translation>Muisti </translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -949,10 +964,6 @@ Haluatko varmasti jatkaa?</translation>
         <translation>Näytä varoitukset, kun käyttö ylittää kynnysarvot</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Ilmoitukset</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU varoituskynnys (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Varoitusväli (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Ilmoitukset</translation>
     </message>
 </context>
 <context>
@@ -985,11 +1000,19 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Peru</translation>
     </message>
 </context>
@@ -1036,7 +1059,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktiivinen</translation>
+        <translation type="vanished">Aktiivinen</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1044,7 +1067,7 @@ Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Tila</translation>
+        <translation type="vanished">Tila</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1057,6 +1080,14 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Käynnistyksen tyyppi</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Aloitustila</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Aloitustaktiikka</translation>
     </message>
 </context>
 <context>
@@ -1110,7 +1141,7 @@ Haluatko varmasti jatkaa?</translation>
         <source>Services</source>
         <translation>Palvelut</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Käyttäjät</translation>
     </message>
