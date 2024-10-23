@@ -67,6 +67,27 @@ static float first_avaliable_cur_freq(struct lscpu_cxt *cxt, const struct lscpu_
 
     return 0.0f;
 }
+// 取所有CPU频率有效值中最大值
+static float max_avaliable_cur_freq(struct lscpu_cxt *cxt, const struct lscpu_cputype *ct)
+{
+    if (!cxt)
+        return 0.0f;
+
+    size_t i;
+    float res = 0.0f;
+
+    for (i = 0; i < cxt->npossibles; i++) {
+        struct lscpu_cpu *cpu = cxt->cpus[i];
+
+        if (!cpu || cpu->type != ct || !is_cpu_present(cxt, cpu))
+            continue;
+        if (cpu->mhz_cur_freq <= 0.0f)
+            continue;
+        res = max(res, cpu->mhz_cur_freq);
+    }
+
+    return res;
+}
 
 static void lscpu_free_context(struct lscpu_cxt *cxt)
 {
@@ -910,8 +931,8 @@ void CPUSet::read_lscpu()
             d->m_info.insert("CPU max MHz", maxMHz);
             QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)), 'f', 4);
             d->m_info.insert("CPU min MHz", minMHz);
-            // 取首个CPU频率有效值
-            QString nowMHz = QString::number(static_cast<double>(first_avaliable_cur_freq(cxt, ct)), 'f', 4);
+            // 取所有CPU频率有效值中最大值
+            QString nowMHz = QString::number(static_cast<double>(max_avaliable_cur_freq(cxt, ct)), 'f', 4);
             if (scal == 0.0f) {
                 nowMHz = "-";
             }
