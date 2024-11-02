@@ -332,19 +332,19 @@
     <name>DBusAlarmNotify</name>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Uyarı</translation>
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>CPU kullanımınız %1%&apos;den fazla!</translation>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>Bellek kullanımınız %1%&apos;den fazla!</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Görünüm</translation>
     </message>
 </context>
 <context>
@@ -1083,11 +1083,11 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>Başlangıç Durumu</translation>
     </message>
     <message>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>Taktiği başlat</translation>
     </message>
 </context>
 <context>
