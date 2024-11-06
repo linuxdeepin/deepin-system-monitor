@@ -201,23 +201,7 @@ int specialComType = -1;
 
 void WaylandSearchCentered()
 {
-#ifdef USE_DEEPIN_WAYLAND
-    auto e = QProcessEnvironment::systemEnvironment();
-
-    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
-    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
-
-    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
-        WaylandCentered = true;
-        if (!common::systemInfo().isOldVersion() && !common::systemInfo().isTreeLand())
-            qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
-    } else {
-        WaylandCentered = false;
-    }
-#else
     WaylandCentered = false;
-#endif //USE_DEEPIN_WAYLAND
-
 }
 
 static void init_shell_list()
