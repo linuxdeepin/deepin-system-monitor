@@ -375,7 +375,7 @@
     </message>
     <message>
         <source>Active</source>
-        <translation>Status</translation>
+        <translation>Ativo</translation>
     </message>
     <message>
         <source>Inactive</source>
