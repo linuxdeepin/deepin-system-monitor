@@ -1059,7 +1059,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation type="vanished">Status</translation>
+        <translation type="vanished">Ativo</translation>
     </message>
     <message>
         <source>Sub</source>
