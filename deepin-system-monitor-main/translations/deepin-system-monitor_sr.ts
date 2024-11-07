@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sr">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Радни такт</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Произвиђач</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -360,7 +375,7 @@
     </message>
     <message>
         <source>Active</source>
-        <translation>Активно</translation>
+        <translation>Активност</translation>
     </message>
     <message>
         <source>Inactive</source>
@@ -718,6 +733,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>Сви процеси</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -949,10 +964,6 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Обавештења</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation type="unfinished"/>
     </message>
@@ -963,6 +974,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Обавештења</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service instance name</source>
         <translation>Назив инстанце услуге</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation>Активност</translation>
+        <translation type="vanished">Активност</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>State</source>
-        <translation>Стање</translation>
+        <translation type="vanished">Стање</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Режим покретања</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>Услуге</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

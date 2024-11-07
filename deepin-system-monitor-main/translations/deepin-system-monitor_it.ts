@@ -19,11 +19,11 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilizzo generale</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilizzo individuale</translation>
     </message>
 </context>
 <context>
@@ -64,10 +64,6 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <source>Frequency</source>
         <translation>Frequenza</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Marca</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -209,7 +205,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>mascherato</translation>
+        <translation>mascherata</translation>
     </message>
     <message>
         <source>loaded</source>
@@ -331,6 +327,25 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <source>auto-restart</source>
         <translation>riavvia-automaticamente</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -504,6 +519,13 @@ Sicuro di voler terminarla?</translation>
         <source>End</source>
         <comment>button</comment>
         <translation>Termina</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Impostazioni</translation>
     </message>
 </context>
 <context>
@@ -712,6 +734,13 @@ Sicuro di voler terminarla?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Caricamento</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -763,13 +792,6 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>All processes</source>
         <translation>Tutti i Processi</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Caricamento</translation>
     </message>
 </context>
 <context>
@@ -932,31 +954,31 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Impostazioni</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Protezione di sistema</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Mostra avvisi quando l&apos;utilizzo supera le soglie di allerta</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Soglia di avviso CPU (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Soglia di avviso Memoria (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Intervallo avvisi (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notifiche</translation>
     </message>
 </context>
 <context>
@@ -979,11 +1001,19 @@ Sicuro di voler terminarla?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
 </context>
@@ -1030,7 +1060,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Attivo</translation>
+        <translation type="vanished">Attivo</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1038,7 +1068,7 @@ Sicuro di voler terminarla?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Stato</translation>
+        <translation type="vanished">Stato</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1052,20 +1082,28 @@ Sicuro di voler terminarla?</translation>
         <source>Startup Type</source>
         <translation>Tipo di avvio</translation>
     </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Impostazioni</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Modificabile)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Soglia: %1-%2</translation>
     </message>
 </context>
 <context>
@@ -1104,7 +1142,7 @@ Sicuro di voler terminarla?</translation>
         <source>Services</source>
         <translation>Servizi</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Utenti</translation>
     </message>

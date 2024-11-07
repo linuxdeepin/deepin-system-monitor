@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="id">
 <context>
     <name>App.About</name>
     <message>
@@ -65,10 +65,6 @@
         <translation>Frekuensi</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>Vendor</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Soket</translation>
     </message>
@@ -110,7 +106,7 @@
     </message>
     <message>
         <source>Threads</source>
-        <translation type="unfinished"/>
+        <translation>Utas</translation>
     </message>
     <message>
         <source>Host name</source>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -435,7 +450,7 @@
     </message>
     <message>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>Tulis</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
@@ -486,7 +501,8 @@ Anda yakin akan melanjutkannya?</translation>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Memaksa mengakhiri aplikasi ini dapat menyebabkan kehilangan data. 
+Apakah anda yakin ingin melanjutkan?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -613,7 +629,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>Pembawa TX</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -669,11 +685,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Baca diska</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Tulis diska</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -714,6 +730,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Disks</source>
         <translation>Diska</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -768,13 +791,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>Semua proses</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -890,11 +906,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Disk write</source>
-        <translation type="unfinished"/>
+        <translation>Tulis diska</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation type="unfinished"/>
+        <translation>Baca diska</translation>
     </message>
     <message>
         <source>Download</source>
@@ -926,14 +942,14 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation type="unfinished"/>
+        <translation>Memori virtual</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>Tidak didukung</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -948,10 +964,6 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation type="unfinished"/>
     </message>
@@ -961,6 +973,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -979,6 +995,16 @@ Are you sure you want to continue?</source>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>Service instance name</source>
+        <translation>Nama model layanan</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1029,19 +1055,19 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"/>
+        <translation>Muat</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktif</translation>
+        <translation type="vanished">Aktif</translation>
     </message>
     <message>
         <source>Sub</source>
-        <translation type="unfinished"/>
+        <translation>Sub</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Status</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1054,6 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Tipe Startup</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1075,26 +1109,26 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation type="unfinished"/>
+        <translation>Paksa akhiri aplikasi</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Luaskan</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation type="unfinished"/>
+        <translation>Ringkas</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Lihat</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Cari</translation>
     </message>
 </context>
 <context>
@@ -1105,6 +1139,28 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Services</source>
+        <translation>Layanan</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
         <translation type="unfinished"/>
     </message>
 </context>

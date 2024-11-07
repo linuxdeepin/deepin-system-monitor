@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt_BR">
 <context>
     <name>App.About</name>
     <message>
@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilização geral</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilização individual</translation>
     </message>
 </context>
 <context>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frequência</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Fabricante</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -173,7 +169,7 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>failed</translation>
+        <translation>falhou</translation>
     </message>
     <message>
         <source>activating</source>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Aviso</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Seu uso de CPU é maior que %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Seu uso de memória é maior que %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Exibir</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -360,7 +375,7 @@
     </message>
     <message>
         <source>Active</source>
-        <translation>Status</translation>
+        <translation>Ativo</translation>
     </message>
     <message>
         <source>Inactive</source>
@@ -678,7 +693,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>RAM</translation>
+        <translation>Memória</translation>
     </message>
     <message>
         <source>Swap</source>
@@ -715,6 +730,13 @@ Continuar?</translation>
     <message>
         <source>Disks</source>
         <translation>Discos</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Carregando</translation>
     </message>
 </context>
 <context>
@@ -769,13 +791,6 @@ Continuar?</translation>
     <message>
         <source>All processes</source>
         <translation>Todos os processos</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -949,10 +964,6 @@ Continuar?</translation>
         <translation>Mostrar avisos quando o uso exceder os limites</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Notificações</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Aviso sobre limite da CPU (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Continuar?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Intervalo entre avisos (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notificações</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Continuar?</translation>
     <message>
         <source>Service instance name</source>
         <translation>Nome de instância do serviço</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Status</translation>
+        <translation type="vanished">Ativo</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Continuar?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Estado</translation>
+        <translation type="vanished">Estado</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Continuar?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Tipo de Inicialização</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Estado inicial</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Tática inicial</translation>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Continuar?</translation>
     <message>
         <source>Services</source>
         <translation>Serviços</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Usuários</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Administrador</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Usuário padrão</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Editar informações da conta</translation>
     </message>
 </context>
 </TS>

@@ -65,10 +65,6 @@
         <translation>Snelheid</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>Maker</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Sockets</translation>
     </message>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Waarschuwing</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Het cpu-gebruik is meer dan %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Het geheugengebruik is meer dan %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Weergave</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -503,6 +518,13 @@ Weet je zeker dat je door wilt gaan?</translation>
         <source>End</source>
         <comment>button</comment>
         <translation>Beëindigen</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>Instellingen</translation>
     </message>
 </context>
 <context>
@@ -711,6 +733,13 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Bezig met laden…</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -762,13 +791,6 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>All processes</source>
         <translation>Alle processen</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Bezig met laden…</translation>
     </message>
 </context>
 <context>
@@ -942,10 +964,6 @@ Weet je zeker dat je door wilt gaan?</translation>
         <translation>Waarschuwingen tonen als het gebruik de drempelwaarden overstijgt</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Meldingen</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Waarschuwingsdrempelwaarde cpu-gebruik (in %)</translation>
     </message>
@@ -956,6 +974,10 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Waarschuwingtussenpoos (in min.)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Meldingen</translation>
     </message>
 </context>
 <context>
@@ -978,11 +1000,19 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Oké</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>Oké</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
 </context>
@@ -1029,7 +1059,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Actief</translation>
+        <translation type="vanished">Actief</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1037,7 +1067,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Status</translation>
+        <translation type="vanished">Status</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1050,6 +1080,14 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Soort opstart</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Beginstatus</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Starttechniek</translation>
     </message>
 </context>
 <context>
@@ -1103,7 +1141,7 @@ Weet je zeker dat je door wilt gaan?</translation>
         <source>Services</source>
         <translation>Diensten</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
