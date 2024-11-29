@@ -85,6 +85,11 @@ public Q_SLOTS:
      */
     void popupSettingsDialog();
 
+    /**
+     * @brief onKillProcess
+     */
+    void onKillProcess();
+
 protected:
     /**
      * @brief Initialize ui components

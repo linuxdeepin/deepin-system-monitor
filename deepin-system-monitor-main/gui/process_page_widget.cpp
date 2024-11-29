@@ -270,8 +270,8 @@ void ProcessPageWidget::initConnections()
 {
     auto *mainWindow = gApp->mainWindow();
     // kill application signal triggered, show application kill preview widget
-    connect(mainWindow, &MainWindow::killProcessPerformed, this,
-            &ProcessPageWidget::showWindowKiller);
+    // connect(mainWindow, &MainWindow::killProcessPerformed, this,
+    //         &ProcessPageWidget::showWindowKiller);
     // switch display mode signal triggered, switch performance display mode
     connect(mainWindow, &MainWindow::displayModeChanged, this,
             &ProcessPageWidget::switchDisplayMode);

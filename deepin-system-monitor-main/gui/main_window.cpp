@@ -110,12 +110,15 @@ void MainWindow::initUI()
     // adjust toolbar tab order
     setTabOrder(titlebar(), m_toolbar);
 
-    // kill process menu item
-    QAction *killAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
-    // control + alt + k
-    killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
-    // emit process kill requested signal if kill process menu item triggered
-    connect(killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral("org.kde.KWin"))) {
+        // kill process menu item
+        QAction *killAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
+        // control + alt + k
+        killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+        // emit process kill requested signal if kill process menu item triggered
+        connect(killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
+        menu->addAction(killAction);
+    }
 
     // display mode menu item
     DMenu *modeMenu = new DMenu(DApplication::translate("Title.Bar.Context.Menu", "View"), menu);
@@ -155,7 +158,6 @@ void MainWindow::initUI()
     QAction *settingAction(new QAction(tr("Settings"), this));
     connect(settingAction, &QAction::triggered, this, &MainWindow::popupSettingsDialog);
 
-    menu->addAction(killAction);
     menu->addSeparator();
     menu->addMenu(modeMenu);
 
@@ -249,6 +251,8 @@ void MainWindow::initConnections()
 
     connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToProcessWidget, this, &MainWindow::onDetailInfoByDbus, Qt::QueuedConnection);
     connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, &MainWindow::onDetailInfoByDbus, Qt::QueuedConnection);
+
+    connect(this, &MainWindow::killProcessPerformed, this, &MainWindow::onKillProcess);
 }
 
 // resize event handler
@@ -360,4 +364,15 @@ void MainWindow::popupSettingsDialog()
 
     // 销毁窗口
     dialog->deleteLater();
+}
+
+void MainWindow::onKillProcess()
+{
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral("org.kde.KWin"))) {
+        auto message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KWin"),
+                                                    QStringLiteral("/KWin"),
+                                                    QStringLiteral("org.kde.KWin"),
+                                                    QStringLiteral("killWindow"));
+        QDBusConnection::sessionBus().asyncCall(message);
+    }
 }
