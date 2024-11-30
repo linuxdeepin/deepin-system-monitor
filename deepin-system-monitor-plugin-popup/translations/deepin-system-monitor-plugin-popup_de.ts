@@ -194,7 +194,7 @@
         <location filename="../process/process_name.cpp" line="103"/>
         <location filename="../process/process_name.cpp" line="106"/>
         <source>Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation>Infobereich</translation>
     </message>
 </context>
 <context>
@@ -260,12 +260,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
         <source>Upload</source>
-        <translation>Hochladen</translation>
+        <translation>Upload</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="43"/>
         <source>Download</source>
-        <translation>Herunterladen</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="45"/>
