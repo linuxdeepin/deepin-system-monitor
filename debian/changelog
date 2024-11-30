@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.4) unstable; urgency=medium
+
+  * New version 6.5.4
+
+ -- wangrong <wangrong@uniontech.com>  Sat, 30 Nov 2024 14:44:44 +0800
+
 deepin-system-monitor (6.5.3) unstable; urgency=medium
 
   * remove kwayland-shell env
