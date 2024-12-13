@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <QStandardPaths>
+
 namespace util {
 
 #define MAX_BACKTRACE_FRAMES 128
@@ -52,7 +54,9 @@ static inline void printStacktrace(int signum)
     logstr[len] = 0;
 
     // open log output stream
-    std::string logN {"/tmp/"};
+    auto cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!cachePath.endsWith("/")) cachePath.append("/");
+    std::string logN {cachePath.toStdString()};
     logN.append(logstr);
     std::ofstream log(logN, std::ios::out);
 
