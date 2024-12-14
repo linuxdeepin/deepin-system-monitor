@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frequenz</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Anbieter</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Warnung</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Ihre CPU-Auslastung ist höher als %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Ihre Speicherbelegung ist höher als %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Ansicht</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -470,7 +485,7 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Beenden des Prozesses kann zu Datenverlust führen.
+        <translation>Das Beenden des Prozesses kann zu Datenverlust führen.
 Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
@@ -480,7 +495,7 @@ Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Erzwingtes Beenden des Prozesses kann zu Datenverlust führen.
+        <translation>Das erzwungene Beenden des Prozesses kann zu Datenverlust führen.
 Sind Sie sicher, dass Sie fortfahren möchten?</translation>
     </message>
     <message>
@@ -497,12 +512,12 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Ende erzwingen</translation>
+        <translation>Beenden erzwingen</translation>
     </message>
     <message>
         <source>End</source>
         <comment>button</comment>
-        <translation>Ende</translation>
+        <translation>Beenden</translation>
     </message>
 </context>
 <context>
@@ -690,11 +705,11 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Herunterladen</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Hochladen</translation>
+        <translation>Upload</translation>
     </message>
     <message>
         <source>Network</source>
@@ -715,6 +730,13 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Disks</source>
         <translation>Datenträger</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Wird geladen</translation>
     </message>
 </context>
 <context>
@@ -772,13 +794,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
 </context>
 <context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
@@ -816,7 +831,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation>Keine Antwort</translation>
+        <translation>Keine Rückmeldung</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -824,7 +839,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation>Infobereich</translation>
     </message>
 </context>
 <context>
@@ -899,11 +914,11 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Herunterladen</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Hochladen</translation>
+        <translation>Upload</translation>
     </message>
     <message>
         <source>PID</source>
@@ -949,10 +964,6 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
         <translation>Warnungen anzeigen, wenn die Auslastung die Schwellenwerte überschreitet</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Benachrichtigungen</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU-Warnschwellenwert (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Warnintervall (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Benachrichtigungen</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Service instance name</source>
         <translation>Name der Dienstinstanz</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktiv</translation>
+        <translation type="vanished">Aktiv</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Zustand</translation>
+        <translation type="vanished">Zustand</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Starttyp</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Startzustand</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Starttaktik</translation>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Sind Sie sicher, dass Sie fortfahren wollen?</translation>
     <message>
         <source>Services</source>
         <translation>Dienste</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Benutzer</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Administrator</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Standard-Benutzer</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Kontoinformationen bearbeiten</translation>
     </message>
 </context>
 </TS>

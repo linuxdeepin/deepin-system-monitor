@@ -260,12 +260,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
         <source>Upload</source>
-        <translation>上傳</translation>
+        <translation>正在發送</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="43"/>
         <source>Download</source>
-        <translation>下載</translation>
+        <translation>正在接收</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="45"/>
@@ -364,7 +364,7 @@
     <message>
         <location filename="../common/common.cpp" line="63"/>
         <source>Processes</source>
-        <translation>程式進程</translation>
+        <translation>進程</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="108"/>

@@ -65,10 +65,6 @@
         <translation>Frekvencia</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>Kereskedő</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Foglalatok</translation>
     </message>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>automatikus újraindítás</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Figyelmeztetés</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>A processzor használat nagyobb, mint %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>A memóriahasználat nagyobb, mint %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Nézet</translation>
     </message>
 </context>
 <context>
@@ -717,6 +732,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Betöltés</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -768,13 +790,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>Minden folyamat</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Betöltés</translation>
     </message>
 </context>
 <context>
@@ -838,7 +853,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>End process</source>
-        <translation>Folyamat leállítása</translation>
+        <translation>Folyamat befejezése</translation>
     </message>
     <message>
         <source>Resume process</source>
@@ -948,10 +963,6 @@ Are you sure you want to continue?</source>
         <translation>Figyelmeztetések megjelenítése, ha a használat meghaladja a küszöbértékeket</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Értesítések</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Processzor figyelmeztetési küszöbérték (%)</translation>
     </message>
@@ -962,6 +973,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation>Figyelmeztetési időköz (perc)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Értesítések</translation>
     </message>
 </context>
 <context>
@@ -984,11 +999,19 @@ Are you sure you want to continue?</source>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
 </context>
@@ -1035,7 +1058,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktív</translation>
+        <translation type="vanished">Aktív</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1043,7 +1066,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>State</source>
-        <translation>Állapot</translation>
+        <translation type="vanished">Állapot</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1056,6 +1079,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Indítási típus</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Kezdési állapot</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Kezdési taktika</translation>
     </message>
 </context>
 <context>
@@ -1109,7 +1140,7 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>Szolgáltatások</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Felhasználók</translation>
     </message>
