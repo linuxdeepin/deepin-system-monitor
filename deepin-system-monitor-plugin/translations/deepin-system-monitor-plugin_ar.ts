@@ -4,7 +4,7 @@
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="60"/>
         <source>System Monitor</source>
-        <translation>مراقب النظام</translation>
+        <translation>مُراقب النظام</translation>
     </message>
 </context>
 <context>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="147"/>
         <source>Open</source>
-        <translation>فتح</translation>
+        <translation>افتح</translation>
     </message>
 </context>
 <context>
@@ -20,7 +20,7 @@
     <message>
         <location filename="../gui/systemmonitortipswidget.cpp" line="85"/>
         <source>CPU</source>
-        <translation>المعالج</translation>
+        <translation>معالج</translation>
     </message>
 </context>
 <context>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../gui/systemmonitortipswidget.cpp" line="93"/>
         <source>MEM</source>
-        <translation type="unfinished"/>
+        <translation>ذاكرة</translation>
     </message>
 </context>
 </TS>
