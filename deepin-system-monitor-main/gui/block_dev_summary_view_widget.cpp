@@ -67,45 +67,45 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Model");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Read speed");
+                else if (column == 1)
+                    return QApplication::translate("DeailTableModelBlock", "Write speed");
                 break;
             case 1:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Write speed");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Capacity");
+                else if (column == 1)
+                    return QApplication::translate("DeailTableModelBlock", "Sectors read");
                 break;
             case 2:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors read");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Reads/s");
+                else if (column == 1)
+                    return QApplication::translate("DeailTableModelBlock", "Sectors read/s");
                 break;
             case 3:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors read/s");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Reads merged/s");
+                else if (column == 1)
+                    return QApplication::translate("DeailTableModelBlock", "Sectors written");
                 break;
             case 4:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors written");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Writes completed ");
+                else if (column == 1)
+                    return QApplication::translate("DeailTableModelBlock", "Writes merged");
                 break;
             case 5:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Writes merged");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Writes/s");
+                else if (column == 1)
+                    return QApplication::translate("DeailTableModelBlock", "Sectors written/s");
                 break;
             case 6:
                 if (column == 0)
-                    return QApplication::translate("DeailTableModelBlock", "Sectors written/s");
-                else if (column == 1)
                     return QApplication::translate("DeailTableModelBlock", "Writes merged/s");
+                else if (column == 1)
+                    return "";
                 break;
 
             }
@@ -113,45 +113,45 @@ protected:
             switch (row) {
             case 0:
                 if (column == 0)
-                    return m_blockInfo.model();
-                else if (column == 1)
                     return formatUnit_memory_disk(m_blockInfo.readSpeed(), B, 1);
+                else if (column == 1)
+                    return formatUnit_memory_disk(m_blockInfo.writeSpeed(), B, 1);
                 break;
             case 1:
                 if (column == 0)
-                    return formatUnit_memory_disk(m_blockInfo.writeSpeed(), B, 1);
-                else if (column == 1)
                     return formatUnit_memory_disk(m_blockInfo.capacity(), B, 1);
+                else if (column == 1)
+                    return m_blockInfo.blocksRead();
                 break;
             case  2:
                 if (column == 0)
-                    return m_blockInfo.blocksRead();
-                else if (column == 1)
                     return m_blockInfo.readRequestIssuedPerSecond();
+                else if (column == 1)
+                    return m_blockInfo.sectorsReadPerSecond();
                 break;
             case  3:
                 if (column == 0)
-                    return m_blockInfo.sectorsReadPerSecond();
-                else if (column == 1)
                     return m_blockInfo.readRequestMergedPerSecond();
+                else if (column == 1)
+                    return m_blockInfo.blocksWritten();
                 break;
             case  4:
                 if (column == 0)
-                    return m_blockInfo.blocksWritten();
-                else if (column == 1)
                     return m_blockInfo.writeComplete();
+                else if (column == 1)
+                    return m_blockInfo.writeMerged();
                 break;
             case  5:
                 if (column == 0)
-                    return m_blockInfo.writeMerged();
-                else if (column == 1)
                     return m_blockInfo.writeRequestIssuedPerSecond();
+                else if (column == 1)
+                    return m_blockInfo.sectorsWrittenPerSecond();
                 break;
             case  6:
                 if (column == 0)
-                    return m_blockInfo.sectorsWrittenPerSecond();
-                else if (column == 1)
                     return m_blockInfo.writeRequestMergedPerSecond();
+                else if (column == 1)
+                    return "";
                 break;
             }
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
