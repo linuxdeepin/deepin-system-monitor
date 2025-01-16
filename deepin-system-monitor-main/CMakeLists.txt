@@ -13,7 +13,7 @@ set(APP_RESOURCES ${APP_RES_ROOT}/${PROJECT_NAME}.qrc)
 set(DESKTOP_FILE ${PROJECT_NAME}.desktop)
 set(POLICY_FILE com.deepin.pkexec.${PROJECT_NAME}.policy)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wl,--as-need -fPIE")
@@ -25,7 +25,7 @@ endif ()
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
   add_definitions("-DQT_NO_DEBUG_OUTPUT")
 endif()
-if (USE_DEEPIN_WAYLAND)
+if (USE_DEEPIN_WAYLAND AND QT_VERSION LESS 6)
   add_definitions("-DUSE_DEEPIN_WAYLAND")
 endif()
 
@@ -37,29 +37,10 @@ include(CheckSymbolExists)
 check_symbol_exists(syscall "unistd.h" HAVE_SYS_CALL)
 check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 include(FindPkgConfig)
-if (USE_DEEPIN_WAYLAND)
-    find_package(DWayland)
-    find_package(KF5Wayland)
-    if (DWayland_FOUND)
-        message("DWayland founded.")
-        add_definitions(-DDWAYLAND)
-    elseif(KF5Wayland_FOUND)
-        message("KF5Wayland founded.")
-        add_definitions(-DKF5WAYLAND)
-    endif()
-endif()
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt5 COMPONENTS Gui REQUIRED)
-find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-find_package(Qt5 COMPONENTS DBus REQUIRED)
-find_package(Qt5 COMPONENTS Concurrent REQUIRED)
-find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
+find_package(${QT_NS} COMPONENTS Core Widgets Gui DBus Concurrent LinguistTools REQUIRED)
+find_package(${DTK_NS} COMPONENTS Core Gui Widget REQUIRED)
 
-find_package(DtkCore REQUIRED)
-find_package(DtkGui REQUIRED)
-find_package(DtkWidget REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
@@ -70,9 +51,6 @@ find_package(ICU COMPONENTS i18n uc REQUIRED)
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
-include_directories(${DtkCore_INCLUDE_DIRS})
-include_directories(${DtkGui_INCLUDE_DIRS})
-include_directories(${DtkWidget_INCLUDE_DIRS})
 
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
@@ -588,15 +566,14 @@ set(APP_CPP
     ${DMIDECODE}
 )
 set(LIBS
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::DBus
-    Qt5::Concurrent
-    Qt5::X11Extras
-    dtkcore
-    dtkwidget
-    dtkgui
+    ${QT_NS}::Core
+    ${QT_NS}::Widgets
+    ${QT_NS}::Gui
+    ${QT_NS}::DBus
+    ${QT_NS}::Concurrent
+    ${DTK_NS}::Core
+    ${DTK_NS}::Widget
+    ${DTK_NS}::Gui
     ${LIB_PCAP}
     ICU::i18n
     ICU::uc
@@ -607,19 +584,14 @@ set(LIBS
     ${LIB_NL3_ROUTE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
 #    ${DFrameworkDBus_LIBRARIES}   # chinalife
-    Dtk::Core
 )
 
-if (USE_DEEPIN_WAYLAND)
-    if (DWayland_FOUND)
-        list(APPEND LIBS DWaylandClient DWaylandServer)
-    else()
-        list(APPEND LIBS KF5::WaylandClient KF5::WaylandServer)
-    endif()
-endif()
-
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
-qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+if (QT_VERSION_MAJOR LESS 6)
+    qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+else()
+    qt6_add_translation(APP_QM_FILES ${APP_TS_FILES})
+endif()
 add_custom_target(QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 find_program(POLICY_TS_CONV deepin-policy-ts-convert REQUIRED)
@@ -657,5 +629,5 @@ message("-- DConfig is supported by DTK ${PROJECT_SOURCE_DIR}")
 set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.system-monitor.main.json)
 if (DEFINED DSG_DATA_DIR)
     message("-- DConfig is supported by DTK")
-    dconfig_meta_files(APPID ${APPID} FILES ${configFile})
+    dtk_add_config_meta_files(APPID ${APPID} FILES ${configFile})
 endif()

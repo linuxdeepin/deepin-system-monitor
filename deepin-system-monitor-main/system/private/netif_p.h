@@ -8,6 +8,7 @@
 
 // qt
 #include <QSharedData>
+#include <QList>
 
 // c++11
 #include <memory>

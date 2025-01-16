@@ -6,13 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt5 COMPONENTS Gui REQUIRED)
-find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-find_package(Qt5 COMPONENTS DBus REQUIRED)
-find_package(Qt5 COMPONENTS Concurrent REQUIRED)
-find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
+find_package(${QT_NS} COMPONENTS Core Widgets Gui DBus Concurrent Svg LinguistTools REQUIRED)
 
 set(APP_RES_ROOT asserts)
 set(APP_RESOURCES ${APP_RES_ROOT}/${PROJECT_NAME}.qrc)
@@ -21,12 +15,8 @@ set(APP_RESOURCES ${APP_RES_ROOT}/${PROJECT_NAME}.qrc)
 file(GLOB SRCS "*.h" "*.cpp" "gui/*.h" "gui/*.cpp" "dbus/*.h" "dbus/*.cpp")
 
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Svg REQUIRED)
-find_package(Qt5DBus REQUIRED)
-find_package(DtkWidget REQUIRED)
+find_package(${DTK_NS} REQUIRED COMPONENTS Widget)
 
-pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
 
 if (DdeDockInterface_FOUND)
@@ -46,16 +36,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${DdeDockInterface_INCLUDE_DIRS}
-  ${DtkWidget_INCLUDE_DIRS}
   ${QGSettings_INCLUDE_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  ${Qt5DBus_LIBRARIES}
-  ${DtkWidget_LIBRARIES}
-  ${Qt5Widgets_LIBRARIES}
-  ${Qt5Svg_LIBRARIES}
-  ${QGSettings_LIBRARIES}
+  ${QT_NS}::DBus
+  ${QT_NS}::Svg
+  ${DTK_NS}::Widget
 )
 
 #安全测试加固编译参数
@@ -68,7 +55,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-plugin
 
 #生成qm
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
-qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+if (QT_VERSION_MAJOR LESS 6)
+    qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+else()
+    qt6_add_translation(APP_QM_FILES ${APP_TS_FILES})
+endif()
 add_custom_target(PLUGIN_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)

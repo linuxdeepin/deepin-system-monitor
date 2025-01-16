@@ -24,7 +24,12 @@
 #include "service/system_service_entry.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
+#endif
 #include <DFontSizeManager>
 #include <DHeaderView>
 #include <DLabel>
@@ -361,7 +366,11 @@ void SystemServiceTableView::refreshServiceStatus(const QString sname)
 // filter service on specific pattern
 void SystemServiceTableView::search(const QString &pattern)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive));
+#else
+    m_proxyModel->setFilterRegularExpression(QRegularExpression(pattern, QRegularExpression::CaseInsensitiveOption));
+#endif
 
     // adjust search result tip label's position & visibility
     adjustInfoLabelVisibility();
@@ -406,7 +415,11 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
         new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_noMatchingResultLabel, DFontSizeManager::T4);
     // set text color
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->palette(m_noMatchingResultLabel);
+#else
+    auto palette = DPaletteHelper::instance()->palette(m_noMatchingResultLabel);
+#endif
     QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_noMatchingResultLabel->setPalette(palette);
@@ -540,7 +553,11 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
 
     // spinner instance
     m_spinner = new DSpinner(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto pa = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto pa = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     // set spinner color
     QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
     pa.setColor(DPalette::Highlight, hlBrush.color());
@@ -552,17 +569,30 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
 // initialize connections
 void SystemServiceTableView::initConnections()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     Q_ASSERT(dAppHelper != nullptr);
     // change search result tip label text color when theme type changed
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [ = ]() {
         auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, [ = ]() {
+        auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
         if (m_noMatchingResultLabel) {
             QColor labelColor = palette.color(DPalette::PlaceholderText);
             palette.setColor(DPalette::Text, labelColor);
             m_noMatchingResultLabel->setPalette(palette);
         }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         auto pa = DApplicationHelper::instance()->applicationPalette();
+#else
+        auto pa = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
         // set spinner color
         QBrush hlBrush = pa.color(DPalette::Active, DPalette::Highlight);
         pa.setColor(DPalette::Highlight, hlBrush.color());

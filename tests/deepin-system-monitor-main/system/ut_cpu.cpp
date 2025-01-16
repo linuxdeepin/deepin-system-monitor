@@ -74,11 +74,19 @@ TEST_F(UT_CPU, test_logicalIndex)
     process.start("cat /proc/cpuinfo");
     process.waitForFinished(3000);
     QString cpuinfo = process.readAllStandardOutput();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
+#else
+    QStringList processors = cpuinfo.split("\n\n", Qt::SkipEmptyParts);
+#endif
 
     for (int i = 0; i < 1; ++i) {
         core::system::CPUInfo info;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list = processors[i].split("\n", QString::SkipEmptyParts);
+#else
+        QStringList list = processors[i].split("\n", Qt::SkipEmptyParts);
+#endif
         for (QString text : list) {
             if (text.startsWith("processor")) {
                 info.setIndex(text.split(":").value(1).toInt());

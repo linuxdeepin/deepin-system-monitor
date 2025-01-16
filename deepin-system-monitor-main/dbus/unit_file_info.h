@@ -9,6 +9,7 @@
 #include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QtDBus>
+#include <QDebug>
 
 class UnitFileInfoData;
 class QDebug;
@@ -75,13 +76,6 @@ public:
     static void registerMetaType();
 
     /**
-     * @brief operator << Print UnitFileInfo object to debug stream
-     * @param debug Debug stream
-     * @param unit Unit file info
-     * @return Debug stream
-     */
-    friend QDebug &operator<<(QDebug debug, const UnitFileInfo &unit);
-    /**
      * @brief operator << Print UnitFileInfo object to DBus argument
      * @param argument DBus argument object
      * @param unit Unit file info
@@ -133,5 +127,13 @@ QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfoList &list)
  * @return DBus argument
  */
 const QDBusArgument &operator>>(const QDBusArgument &argument, UnitFileInfoList &list);
+
+/**
+ * @brief operator << Print UnitFileInfo object to debug stream
+ * @param debug Debug stream
+ * @param unit Unit file info
+ * @return Debug stream
+ */
+QDebug operator<<(QDebug debug, const UnitFileInfo &info);
 
 #endif  // UNIT_FILE_INFO_H

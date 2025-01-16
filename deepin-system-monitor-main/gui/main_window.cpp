@@ -17,16 +17,18 @@
 #include "common/eventlogutils.h"
 
 #include <DSettingsWidgetFactory>
-#include <DApplicationHelper>
 #include <DTitlebar>
 #ifdef DTKCORE_CLASS_DConfigFile
 #    include <DConfig>
 #endif
 #include <QKeyEvent>
 #include <QTimer>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
+#endif
 #include <QDBusConnection>
 #include <QJsonObject>
+#include <QActionGroup>
 
 using namespace core::process;
 using namespace common::init;
@@ -42,7 +44,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_settings = Settings::instance();
     setMinimumSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setMaximumSize(QApplication::desktop()->size());
+#else
+    setMaximumSize(QGuiApplication::primaryScreen()->size());
+#endif
     connect(this, &MainWindow::loadingStatusChanged, this, &MainWindow::onLoadStatusChanged);
 #ifdef DTKCORE_CLASS_DConfigFile
     //需要查询是否支持特殊机型静音恢复，例如hw机型
@@ -114,7 +120,11 @@ void MainWindow::initUI()
         // kill process menu item
         QAction *killAction = new QAction(DApplication::translate("Title.Bar.Context.Menu", "Force end application"), menu);
         // control + alt + k
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         killAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_K));
+#else
+        killAction->setShortcut(QKeyCombination(Qt::CTRL | Qt::ALT, Qt::Key_K));
+#endif
         // emit process kill requested signal if kill process menu item triggered
         connect(killAction, &QAction::triggered, this, [=]() { Q_EMIT killProcessPerformed(); });
         menu->addAction(killAction);

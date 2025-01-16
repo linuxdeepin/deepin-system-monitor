@@ -9,7 +9,11 @@
 #include "gui/base/base_item_delegate.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyle>
 
@@ -121,7 +125,11 @@ void BaseTableView::paintEvent(QPaintEvent *event)
     // DStyle object
     auto style = dynamic_cast<DStyle *>(DApplication::style());
     // global app helper instance
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     // global palette
     auto palette = dAppHelper->applicationPalette();
 

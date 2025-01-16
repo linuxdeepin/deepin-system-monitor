@@ -42,22 +42,46 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
 
     // 设置左侧字符串宽度
     if (cpu.length() == 3) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": 0") + cpu + QString(" "));
+#else
+        m_leftWidth = fontMetrics().horizontalAdvance(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": 0") + cpu + QString(" "));
+#endif
     } else {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_leftWidth = fontMetrics().width(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString(" "));
+#else
+        m_leftWidth = fontMetrics().horizontalAdvance(QString(" ") + DApplication::translate("Plugin.cpu", "CPU") + QString(": ") + cpu + QString(" "));
+#endif
     }
     // 左侧宽度预留20个像素
     m_leftWidth += 20;
 
     // 设置右侧字符串宽度
     if (downLoad.length() == 3) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_rightWidth = fontMetrics().width(QString("↓000") + downLoad + QString(" "));
+#else
+        m_rightWidth = fontMetrics().horizontalAdvance(QString("↓000") + downLoad + QString(" "));
+#endif
     } else if (downLoad.length() == 4) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_rightWidth = fontMetrics().width(QString("↓00") + downLoad + QString(" "));
+#else
+        m_rightWidth = fontMetrics().horizontalAdvance(QString("↓00") + downLoad + QString(" "));
+#endif
     } else if (downLoad.length() == 5) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_rightWidth = fontMetrics().width(QString("↓0") + downLoad + QString(" "));
+#else
+        m_rightWidth = fontMetrics().horizontalAdvance(QString("↓0") + downLoad + QString(" "));
+#endif
     } else {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_rightWidth = fontMetrics().width(QString("↓") + downLoad + QString(" "));
+#else
+        m_rightWidth = fontMetrics().horizontalAdvance(QString("↓") + downLoad + QString(" "));
+#endif
     }
     // 设置右侧字符串宽度预留20个像素
     m_rightWidth += 20;
@@ -111,7 +135,11 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
     //    int specialCharaWidth = fontMetrics().width(QString("↓"));
     int specialCharaWidth = 10;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int specialCharaHeight = fontMetrics().width(QString("1")) + 5;
+#else
+    int specialCharaHeight = fontMetrics().horizontalAdvance(QString("1")) + 5;
+#endif
     // 左侧空白区域
     int leftMargin = 10;
 

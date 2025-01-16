@@ -10,11 +10,11 @@
 #include <QThread>
 #include <QPixmapCache>
 
+#include "process_icon.h"
+
 namespace core {
 namespace process {
-
-class ProcessIcon;
-class ProcessIconCache : QObject
+class ProcessIconCache : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(ProcessIconCache)

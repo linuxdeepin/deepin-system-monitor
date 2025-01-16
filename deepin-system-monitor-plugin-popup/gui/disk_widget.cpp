@@ -10,7 +10,11 @@
 #include "dbus/dbuscallmaininterface.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyleHelper>
 
@@ -46,8 +50,13 @@ DiskWidget::DiskWidget(QWidget *parent)
         writeSpeeds->append(0);
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &DiskWidget::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &DiskWidget::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     changeFont(DApplication::font());
@@ -136,16 +145,28 @@ void DiskWidget::updateStatus()
     update();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void DiskWidget::changeTheme(DApplicationHelper::ColorType themeType)
+#else
+void DiskWidget::changeTheme(DGuiApplicationHelper::ColorType themeType)
+#endif
 {
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::ColorType::LightType:
+#endif
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_disk.png"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::ColorType::DarkType:
+#endif
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
@@ -156,7 +177,11 @@ void DiskWidget::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     ltextColor = palette.color(DPalette::TextTitle);
@@ -217,7 +242,11 @@ void DiskWidget::paintEvent(QPaintEvent *e)
     QString disksTitle = DApplication::translate("Disk.Widget", "Disk");
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int widthTitleTxt = fmTitle.width(disksTitle);
+#else
+    int widthTitleTxt = fmTitle.horizontalAdvance(disksTitle);
+#endif
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, disksTitle);

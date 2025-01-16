@@ -9,7 +9,11 @@
 #include "ui_common.h"
 #include "model/cpu_info_model.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DButtonBox>
 #include <DFrame>
 #include <DStackedWidget>
@@ -104,7 +108,11 @@ private Q_SLOTS:
      * @brief Change icons when theme changed
      * @param themeType Theme currently applied
      */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeIconTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeIconTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
 
     /**
      * @brief 列表数据刷新，更新应用和进程统计

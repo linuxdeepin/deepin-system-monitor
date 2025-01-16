@@ -16,7 +16,6 @@
 #include <QPainterPath>
 #include <QMouseEvent>
 #include <DApplication>
-#include <DApplicationHelper>
 
 
 /***************************************STUB begin*********************************************/

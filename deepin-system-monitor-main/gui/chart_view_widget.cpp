@@ -7,7 +7,11 @@
 #include "common/common.h"
 
 #include <QPainter>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DApplication>
 #include <DFontSizeManager>
 
@@ -21,7 +25,11 @@ ChartViewWidget::ChartViewWidget(ChartViewTypes types, QWidget *parent) : QWidge
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ChartViewWidget::changeFont);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ChartViewWidget::changeTheme);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ChartViewWidget::changeTheme);
+#endif
 }
 
 void ChartViewWidget::changeTheme()
@@ -34,9 +42,9 @@ void ChartViewWidget::setSpeedAxis(bool speed)
 {
     m_speedAxis = speed;
     if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
-        setAxisTitle(formatUnit_memory_disk(qMax(m_maxData1, m_maxData2), B, 1, true));
+        setAxisTitle(formatUnit_memory_disk(qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong()), B, 1, true));
     else
-        setAxisTitle(formatUnit_net(qMax(m_maxData1, m_maxData2), B, 1, true));
+        setAxisTitle(formatUnit_net(qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong()), B, 1, true));
 }
 
 void ChartViewWidget::setData1Color(const QColor &color)
@@ -51,10 +59,14 @@ void ChartViewWidget::addData1(const QVariant &data)
         m_listData1.pop_front();
     }
 
-    const QVariant &maxdata = *std::max_element(m_listData1.begin(), m_listData1.end());
+    auto maxElement = std::max_element(m_listData1.begin(), m_listData1.end(),
+        [](const QVariant &a, const QVariant &b) {
+            return a.toLongLong() < b.toLongLong();
+        });
+    const QVariant &maxdata = *maxElement;
     if (maxdata.toLongLong() > 0 && maxdata != m_maxData1) {
         m_maxData1 = QVariant(maxdata.toLongLong() * 1.1);
-        m_maxData = qMax(m_maxData1, m_maxData2);
+        m_maxData = qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong());
 
         // 这边需要通过当前的图标界面类型去区分, 内存和磁盘统一处理
         if (m_speedAxis) {
@@ -87,10 +99,14 @@ void ChartViewWidget::addData2(const QVariant &data)
         m_listData2.pop_front();
     }
 
-    const QVariant &maxdata = *std::max_element(m_listData2.begin(), m_listData2.end());
+    auto maxElement = std::max_element(m_listData2.begin(), m_listData2.end(),
+        [](const QVariant &a, const QVariant &b) {
+            return a.toDouble() < b.toDouble();
+        });
+    const QVariant &maxdata = *maxElement;
     if (maxdata.toLongLong() > 0 && maxdata != m_maxData2) {
         m_maxData2 = QVariant(maxdata.toLongLong() * 1.1);
-        m_maxData = qMax(m_maxData1, m_maxData2);
+        m_maxData = qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong());
 
         if (m_speedAxis) {
             if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
@@ -210,7 +226,11 @@ void ChartViewWidget::drawBackPixmap()
     QPainter painter(&m_backPixmap);
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
     frameColor.setAlphaF(0.3);
@@ -256,7 +276,11 @@ void ChartViewWidget::drawBackPixmap()
 
 void ChartViewWidget::drawAxisText(QPainter *painter)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     QColor color = palette.color(DPalette::ToolTipText);
     color.setAlphaF(0.3);

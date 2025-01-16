@@ -23,9 +23,12 @@
 #include "accounts_widget.h"
 #include <DFrame>
 #include <DWidget>
-#include <DApplicationHelper>
 #include <DLabel>
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 class ProcessTableView;
 
 
@@ -100,7 +103,11 @@ private:
     DLabel *m_DiskReadSummary = nullptr;
     DLabel *m_DiskWriteSummary = nullptr;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationHelper *m_dAppHelper = nullptr;
+#else
+    DGuiApplicationHelper *m_dAppHelper = nullptr;
+#endif
 
     QString m_currentUser {};
 };

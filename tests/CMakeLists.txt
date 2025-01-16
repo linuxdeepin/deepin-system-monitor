@@ -25,7 +25,7 @@ set(APP_RESOURCES ../deepin-system-monitor-main/${APP_RES_ROOT}/${PROJECT_NAME}.
 set(DESKTOP_FILE ${PROJECT_NAME}.desktop)
 set(POLICY_FILE com.deepin.pkexec.${PROJECT_NAME}.policy)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
@@ -57,18 +57,9 @@ check_symbol_exists(SYS_getrandom "sys/syscall.h" HAVE_SYS_GETRANDOM)
 configure_file(${CMAKE_HOME_DIRECTORY}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 include(FindPkgConfig)
 
-find_package(KF5Wayland)
-find_package(Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt5 COMPONENTS Gui REQUIRED)
-find_package(Qt5 COMPONENTS X11Extras REQUIRED)
-find_package(Qt5 COMPONENTS DBus REQUIRED)
-find_package(Qt5 COMPONENTS Concurrent REQUIRED)
-find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
+find_package(${QT_NS} COMPONENTS Core Widgets Gui DBus Concurrent LinguistTools REQUIRED)
+find_package(${DTK_NS} REQUIRED COMPONENTS Core Gui Widget)
 
-find_package(DtkCore REQUIRED)
-find_package(DtkGui REQUIRED)
-find_package(DtkWidget REQUIRED)
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
@@ -84,8 +75,6 @@ include_directories(${GTEST_INCLUDE_DIRS})
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
 pkg_search_module(LIB_UDEV REQUIRED libudev)
-include_directories(${DtkGui_INCLUDE_DIRS})
-include_directories(${DtkCore_INCLUDE_DIRS})
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
@@ -94,8 +83,6 @@ include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src)
-
-
 
 set(HPP_GLOBAL
     ${CMAKE_HOME_DIRECTORY}/config.h
@@ -574,7 +561,11 @@ set(APP_CPP
 )
 
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/translations/*.ts)
-qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+if (QT_VERSION_MAJOR LESS 6)
+    qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+else()
+    qt6_add_translation(APP_QM_FILES ${APP_TS_FILES})
+endif()
 add_custom_target(QMFILES_TEST ALL DEPENDS ${APP_QM_FILES})
 
 find_program(POLICY_TS_CONV deepin-policy-ts-convert REQUIRED)
@@ -615,8 +606,6 @@ set_target_properties(${PROJECT_NAME_TEST}
 
 target_include_directories(${PROJECT_NAME_TEST}
         PRIVATE
-        ${DtkWidget_INCLUDE_DIRS}
-        ${Qt5DBus_LIBRARIES}
         ${GTEST_INCLUDE_DIRS}
         ${LIB_NL3_INCLUDE_DIRS}
         ${LIB_NL3_ROUTE_INCLUDE_DIRS}
@@ -629,15 +618,14 @@ target_include_directories(${PROJECT_NAME_TEST}
         )
 
 target_link_libraries(${PROJECT_NAME_TEST}
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::DBus
-    Qt5::Concurrent
-    Qt5::X11Extras
-    dtkcore
-    dtkwidget
-    dtkgui
+    ${QT_NS}::Core
+    ${QT_NS}::Widgets
+    ${QT_NS}::Gui
+    ${QT_NS}::DBus
+    ${QT_NS}::Concurrent
+    ${DTK_NS}::Core
+    ${DTK_NS}::Gui
+    ${DTK_NS}::Widget
     KF5::WaylandClient
     KF5::WaylandServer
     ${LIB_PCAP}

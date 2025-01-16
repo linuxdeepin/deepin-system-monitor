@@ -14,7 +14,11 @@
 #include "gui/base/base_commandlink_button.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyleHelper>
 #include <DFontSizeManager>
@@ -173,7 +177,11 @@ void CompactCpuMonitor::resizeEvent(QResizeEvent *event)
 
 void CompactCpuMonitor::resizeItemRect()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 12, m_detailButton->fontMetrics().height() + 4);
+#else
+    m_detailButton->setFixedSize(m_detailButton->fontMetrics().horizontalAdvance(m_detailButton->text()) + 12, m_detailButton->fontMetrics().height() + 4);
+#endif
     const QSize &detailtextSize = m_detailButton->size();
     m_detailButton->setGeometry(this->width() - detailtextSize.width() + additionCPUPosX, additionCPUPoxY, detailtextSize.width(), detailtextSize.height());
 }
@@ -183,7 +191,11 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
 
     // init colors
     auto palette = dAppHelper->applicationPalette();
@@ -208,11 +220,20 @@ void CompactCpuMonitor::paintEvent(QPaintEvent *)
     QString cpuText = DApplication::translate("Process.Graph.View", "CPU");
     QString cpuStatText = QString::number(totalCpuPercent, 'f', 1).append('%');
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QRect cpuRect(pointerRadius * 2 + spacing - 2, 0, fm.width(cpuText), fm.height() + 4);
+#else
+    QRect cpuRect(pointerRadius * 2 + spacing - 2, 0, fm.horizontalAdvance(cpuText), fm.height() + 4);
+#endif
     QRect sectionRect(0, cpuRect.y() + qCeil((cpuRect.height() - pointerRadius) / 2.),
                       pointerRadius, pointerRadius);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QRect statRect(cpuRect.x() + cpuRect.width() + spacing, cpuRect.y(), fmStat.width(cpuStatText),
                    fmStat.height() + 4);
+#else
+    QRect statRect(cpuRect.x() + cpuRect.width() + spacing, cpuRect.y(), fmStat.horizontalAdvance(cpuStatText),
+                   fmStat.height() + 4);
+#endif
 
     m_detailButton->setText(m_detailButton->fontMetrics().elidedText(m_detailText, Qt::ElideRight, this->width() - statRect.right() - 2 * spacing));
     resizeItemRect();

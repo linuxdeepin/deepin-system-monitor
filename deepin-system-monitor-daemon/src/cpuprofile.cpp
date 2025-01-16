@@ -47,7 +47,11 @@ double CpuProfile::updateSystemCpuUsage()
         //         |user|nice|sys|idle|iowait|hardqirq|softirq|steal|guest|guest_nice|
 
         // 分割行数据
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList cpuStatus = QString(lineData).split(" ", QString::SkipEmptyParts);
+#else
+        QStringList cpuStatus = QString(lineData).split(" ", Qt::SkipEmptyParts);
+#endif
 
         // CPU状态应包含10个数据片段，有效数据 1-10，位置0不使用
         if (cpuStatus.size() < 11) {

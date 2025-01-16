@@ -37,6 +37,7 @@ using namespace core::wm;
 using namespace common::init;
 using namespace DDLog;
 
+#ifdef USE_DEEPIN_WAYLAND
 typedef int (*InitDtkWmDisplayPtr)();
 typedef void (*DestoryDtkWmDisplayPtr)();
 typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
@@ -45,6 +46,7 @@ typedef int (*GetAllWindowStatesListPtr)(WindowState **states);
 static InitDtkWmDisplayPtr InitDtkWmDisplay = nullptr;
 static DestoryDtkWmDisplayPtr DestoryDtkWmDisplay = nullptr;
 static GetAllWindowStatesListPtr GetAllWindowStatesList = nullptr;
+#endif
 
 // constructor
 XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent)

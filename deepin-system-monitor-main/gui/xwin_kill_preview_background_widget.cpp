@@ -7,7 +7,11 @@
 #include "ui_common.h"
 
 #include <DFontSizeManager>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DApplication>
 #include <DStyle>
@@ -60,7 +64,11 @@ void XWinKillPreviewBackgroundWidget::paintEvent(QPaintEvent *)
     painter.fillPath(path, Qt::red);
 
     // global palette
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     // DStyle instance
     auto *style = dynamic_cast<DStyle *>(this->style());
     // frame radius
@@ -68,7 +76,11 @@ void XWinKillPreviewBackgroundWidget::paintEvent(QPaintEvent *)
     // content margin
     auto margin = 10;
     // background color
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto background = palette.color(DPalette::Current, DPalette::Background);
+#else
+    auto background = palette.color(DPalette::Current, DPalette::Window);
+#endif
     // forground color
     auto foreground = palette.color(DPalette::Current, DPalette::Text);
 

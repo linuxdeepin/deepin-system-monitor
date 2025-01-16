@@ -8,7 +8,6 @@
 #include "mem_summary_view_widget.h"
 #include "system/system_monitor.h"
 
-#include <DApplicationHelper>
 #include <DApplication>
 #include <QVBoxLayout>
 

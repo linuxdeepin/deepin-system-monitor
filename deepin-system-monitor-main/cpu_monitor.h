@@ -6,15 +6,19 @@
 #ifndef CpuMONITOR_H
 #define CpuMONITOR_H
 
-#include <DApplicationHelper>
-
 #include <QIcon>
 #include <QList>
 #include <QWidget>
 #include <QPainterPath>
-#include <DCommandLinkButton>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
+#endif
+#include <DCommandLinkButton>
 
 class Settings;
 class QPropertyAnimation;
@@ -38,7 +42,11 @@ signals:
     void clicked(QString msgCode);
 
 public slots:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
     void updateStatus();
     void onDetailInfoClicked();
 

@@ -450,11 +450,19 @@ void CPUSet::read_overall_info()
     process.start("cat /proc/cpuinfo");
     process.waitForFinished(3000);
     QString cpuinfo = process.readAllStandardOutput();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
+#else
+    QStringList processors = cpuinfo.split("\n\n", Qt::SkipEmptyParts);
+#endif
 
     for (int i = 0; i < processors.count(); ++i) {
         CPUInfo info;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list = processors[i].split("\n", QString::SkipEmptyParts);
+#else
+        QStringList list = processors[i].split("\n", Qt::SkipEmptyParts);
+#endif
         for (QString text : list) {
             if (text.startsWith("processor")) {
                 info.setIndex(text.split(":").value(1).toInt());
@@ -478,10 +486,18 @@ void CPUSet::read_overall_info()
     process.start("lscpu");
     process.waitForFinished(3000);
     QString lscpu = process.readAllStandardOutput();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList lscpuList = lscpu.split("\n", QString::SkipEmptyParts);
+#else
+    QStringList lscpuList = lscpu.split("\n", Qt::SkipEmptyParts);
+#endif
     d->m_info.clear();
     for (QString lscpuLine : lscpuList) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList keyValue = lscpuLine.split(":", QString::SkipEmptyParts);
+#else
+        QStringList keyValue = lscpuLine.split(":", Qt::SkipEmptyParts);
+#endif
         if (keyValue.count() > 1)
             d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
     }

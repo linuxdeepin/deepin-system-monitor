@@ -16,7 +16,6 @@
 #include <QWidget>
 #include <QtDBus>
 #include <QtMath>
-#include <QtX11Extras/QX11Info>
 #include <QPainterPath>
 
 #include <fstream>
@@ -106,7 +105,11 @@ QSize getRenderSize(int fontSize, QString string)
     int width = 0;
     int height = 0;
     foreach (auto line, string.split("\n")) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         int lineWidth = fm.width(line);
+#else
+        int lineWidth = fm.horizontalAdvance(line);
+#endif
         int lineHeight = fm.height();
 
         if (lineWidth > width) {

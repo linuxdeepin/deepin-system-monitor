@@ -11,7 +11,6 @@
 #include "compact_network_monitor.h"
 #include "detailwidgetmanager.h"
 
-#include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
 
@@ -39,7 +38,11 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 
     // vertical layout to hold monitor instances
     QVBoxLayout *layout = new QVBoxLayout(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     layout->setMargin(0);
+#else
+    layout->setContentsMargins(0, 0, 0, 0);
+#endif
     layout->setSpacing(10);
     layout->addStretch(1);
     layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);

@@ -12,7 +12,11 @@
 #include "system/system_monitor.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 
 #include <QDebug>
@@ -45,8 +49,13 @@ NetworkMonitor::NetworkMonitor(QWidget *parent)
         uploadSpeeds->append(0);
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &NetworkMonitor::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetworkMonitor::updateStatus);
@@ -62,13 +71,25 @@ NetworkMonitor::~NetworkMonitor()
     delete uploadSpeeds;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
+#else
+void NetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeType)
+#endif
 {
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::LightType:
+#endif
         m_icon = QIcon(iconPathFromQrc("light/icon_network_light.svg"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::DarkType:
+#endif
         m_icon = QIcon(iconPathFromQrc("dark/icon_network_light.svg"));
         break;
     default:
@@ -76,7 +97,11 @@ void NetworkMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     ltextColor = palette.color(DPalette::TextTitle);

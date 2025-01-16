@@ -13,8 +13,11 @@
 //qt
 #include <DApplication>
 #include <QMouseEvent>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
 #include <DGuiApplicationHelper>
+#endif
 
 DWIDGET_USE_NAMESPACE
 using namespace core::system;
@@ -90,19 +93,31 @@ TEST_F(UT_CompactMemoryMonitor, test_onValueChanged)
 
 TEST_F(UT_CompactMemoryMonitor, test_changeTheme_01)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int themeType = DApplicationHelper::LightType;
+#else
+    int themeType = DGuiApplicationHelper::ColorType::LightType;
+#endif
     m_tester->changeTheme(themeType);
 }
 
 TEST_F(UT_CompactMemoryMonitor, test_changeTheme_02)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int themeType = DApplicationHelper::DarkType;
+#else
+    int themeType = DGuiApplicationHelper::ColorType::DarkType;
+#endif
     m_tester->changeTheme(themeType);
 }
 
 TEST_F(UT_CompactMemoryMonitor, test_changeTheme_03)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int themeType = DApplicationHelper::UnknownType;
+#else
+    int themeType = DGuiApplicationHelper::ColorType::UnknownType;
+#endif
     m_tester->changeTheme(themeType);
 }
 

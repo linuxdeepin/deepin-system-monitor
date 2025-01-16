@@ -17,6 +17,7 @@
 
 #include <QDebug>
 #include <QtConcurrent>
+#include <QRegularExpression>
 
 using namespace DDLog;
 ServiceManagerWorker::ServiceManagerWorker(QObject *parent)
@@ -266,7 +267,11 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
     if (fp) {
         while ((fgets(buf.data(), BLEN, fp))) {
             descStr = QString("Description=%1").arg(buf.data());
-            QStringList descStrList = descStr.split(QRegExp("[\n]"), QString::SkipEmptyParts);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
+#else
+            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
+#endif
             if (descStrList.size() > 0) {
                 descStr = descStrList.at(0);
                 b = true;

@@ -10,9 +10,12 @@
 #include "helper.hpp"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
-#include <DFontSizeManager>
+#else
 #include <DGuiApplicationHelper>
+#endif
+#include <DFontSizeManager>
 #include <DPalette>
 #include <DStyleHelper>
 
@@ -24,7 +27,9 @@
 #include <QScreen>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
+#endif
 #include <QApplication>
 #include <QPalette>
 #include <QTimer>
@@ -297,7 +302,11 @@ void MainWindow::initUI()
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     auto pal = qApp->palette();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     pal.setColor(QPalette::Background, QColor(0, 0, 0, 0));
+#else
+    pal.setColor(QPalette::ColorRole::Window, QColor(0, 0, 0, 0));
+#endif
     m_scrollArea->setPalette(pal);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollArea->setWidget(parentWidget);
@@ -324,8 +333,13 @@ void MainWindow::initAni()
     m_aniGroup->addAnimation(m_xAni);
     m_aniGroup->addAnimation(m_widthAni);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MainWindow::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 }
 
@@ -377,21 +391,39 @@ void MainWindow::initConnect()
     });
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void MainWindow::changeTheme(DApplicationHelper::ColorType themeType)
 {
+#else
+void MainWindow::changeTheme(DGuiApplicationHelper::ColorType themeType)
+{
+#endif
     // disable auto fill frame background
     QPalette palette;
     setAutoFillBackground(true);
 
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
         palette.setColor(QPalette::Background, QColor(210, 210, 210, 75));
+#else
+    case DGuiApplicationHelper::ColorType::LightType:
+        palette.setColor(QPalette::ColorRole::Window, QColor(210, 210, 210, 75));
+#endif
         m_scrollArea->verticalScrollBar()->setStyleSheet("QScrollBar::handle:vertical:hover{background-color:rgb(50,50,50);}");
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::ColorType::DarkType:
+#endif
         setAutoFillBackground(false);
         //Dark主题的透明度为204
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         palette.setColor(QPalette::Background, QColor(25, 25, 25, 204));
+#else
+        palette.setColor(QPalette::ColorRole::Window, QColor(25, 25, 25, 204));
+#endif
         m_scrollArea->verticalScrollBar()->setStyleSheet("QScrollBar::handle:vertical:hover{background-color:rgb(200,200,200);}");
         break;
     default:
@@ -466,7 +498,11 @@ void MainWindow::adjustPosition()
     m_scrollArea->horizontalScrollBar()->setEnabled(false);
 
     auto pal = qApp->palette();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     pal.setColor(QPalette::Background, QColor(0, 0, 0, 0));
+#else
+    pal.setColor(QPalette::ColorRole::Window, QColor(0, 0, 0, 0));
+#endif
     m_scrollArea->setPalette(pal);
     m_scrollArea->setWindowFlags(Qt::FramelessWindowHint);
     m_scrollArea->setFrameShape(QFrame::NoFrame);

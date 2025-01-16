@@ -229,7 +229,11 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
                 }
 
                 QImage img(max_w, max_h, QImage::Format_ARGB32);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 int byteCount = img.byteCount() / 4;
+#else
+                int byteCount = img.sizeInBytes() / 4;
+#endif
 
                 for (int i = 0; i < byteCount; ++i) {
                     //Save covert uchar* to uint*
