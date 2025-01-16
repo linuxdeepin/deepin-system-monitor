@@ -11,7 +11,11 @@
 #include "datadealsingleton.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyleHelper>
 
@@ -42,8 +46,13 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     setFixedSize(m_width, m_processWidgetHeight);
     setContentsMargins(0, 0, 0, 0);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &ProcessWidget::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &ProcessWidget::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     changeFont(DApplication::font());
@@ -64,7 +73,11 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     mainLayout->setMargin(0);
+#else
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+#endif
     mainLayout->addSpacing(35);
     mainLayout->addWidget(headerLabel);
     mainLayout->addWidget(m_processTableView);
@@ -98,16 +111,29 @@ void ProcessWidget::updateStatus(qreal cpuPercent, const QList<qreal> cPercents)
     update();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
+#else
+void ProcessWidget::changeTheme(DGuiApplicationHelper::ColorType themeType)
+{
+#endif
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::ColorType::LightType:
+#endif
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_list.png"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::ColorType::DarkType:
+#endif
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
@@ -118,7 +144,11 @@ void ProcessWidget::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     ltextColor = palette.color(DPalette::TextTitle);
@@ -169,7 +199,11 @@ void ProcessWidget::paintEvent(QPaintEvent *e)
     //标题
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int widthTitleTxt = fmTitle.width(tr("Processes"));
+#else
+    int widthTitleTxt = fmTitle.horizontalAdvance(tr("Processes"));
+#endif
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Processes"));

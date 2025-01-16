@@ -11,7 +11,11 @@
 #include "system/diskio_info.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 
 #include <QDebug>
@@ -21,6 +25,7 @@
 #include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 using namespace core::system;
 using namespace common;
 using namespace common::format;
@@ -117,7 +122,11 @@ void CompactDiskMonitor::paintEvent(QPaintEvent *)
     int margin = 10;
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     QColor tagColor = palette.color(DPalette::TextTitle);

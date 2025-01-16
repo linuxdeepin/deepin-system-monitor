@@ -17,7 +17,12 @@
 #include "process/process_db.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
+#endif
 #include <DDialog>
 #include <DErrorMessage>
 #include <DFontSizeManager>
@@ -62,7 +67,12 @@ ProcessTableView::ProcessTableView(DWidget *parent)
 
     // adjust search result tip label text color dynamically on theme type change
     onThemeTypeChanged();
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
+#endif
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 
@@ -77,7 +87,11 @@ ProcessTableView::~ProcessTableView()
 
 void ProcessTableView::onThemeTypeChanged()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
     m_notFoundLabel->setPalette(palette);
 
@@ -122,7 +136,11 @@ void ProcessTableView::initUI()
     m_notFoundLabel = new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_notFoundLabel, DFontSizeManager::T1);
     // change text color
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
+#else
+    auto palette = DPaletteHelper::instance()->palette(m_notFoundLabel);
+#endif
     QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_notFoundLabel->setPalette(palette);

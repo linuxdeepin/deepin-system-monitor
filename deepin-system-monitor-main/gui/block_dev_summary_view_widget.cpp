@@ -16,7 +16,11 @@
 #include "base/base_detail_item_delegate.h"
 
 #include <QHeaderView>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 #include <QPainter>
@@ -144,8 +148,13 @@ protected:
                     return m_blockInfo.writeRequestMergedPerSecond();
                 break;
             }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         } else if (role == Qt::TextColorRole) {
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+        } else if (role == Qt::ForegroundRole) {
+            const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
             return palette.color(DPalette::Text);
         }
         return QVariant();
@@ -256,7 +265,11 @@ void BlockDevSummaryViewWidget::paintEvent(QPaintEvent *event)
     DTableView::paintEvent(event);
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     QColor frameColor = palette.color(DPalette::FrameBorder);
     frameColor.setAlphaF(SUMMARY_CHART_LINE_ALPH);
     painter.setPen(QPen(frameColor, 1));

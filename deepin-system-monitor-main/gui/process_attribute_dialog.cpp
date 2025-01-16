@@ -9,7 +9,6 @@
 #include "common/common.h"
 
 #include <DApplication>
-#include <DApplicationHelper>
 #include <DFontSizeManager>
 #include <DFrame>
 #include <DLabel>
@@ -98,7 +97,11 @@ void ProcessAttributeDialog::initUI()
 
     // frame layout
     auto *vlayout = new QVBoxLayout(m_frame);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     vlayout->setMargin(m_margin);
+#else
+    vlayout->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
+#endif
     vlayout->setSpacing(m_margin);
 
     vlayout->addStretch(1);
@@ -122,7 +125,11 @@ void ProcessAttributeDialog::initUI()
     auto *grid = new QGridLayout(wnd);
     grid->setHorizontalSpacing(m_margin);
     grid->setVerticalSpacing(0);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     grid->setMargin(0);
+#else
+    grid->setContentsMargins(0, 0, 0, 0);
+#endif
 
     QString buf;
     buf = QString("%1:").arg(DApplication::translate("Process.Attributes.Dialog", "Name"));
@@ -219,9 +226,15 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
 
 void ProcessAttributeDialog::resizeItemWidget()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_procNameLabel->setFixedSize(m_procNameLabel->fontMetrics().width(m_procNameLabel->text()), m_procNameLabel->fontMetrics().height());
     m_procCmdLabel->setFixedSize(m_procCmdLabel->fontMetrics().width(m_procCmdLabel->text()), m_procCmdLabel->fontMetrics().height());
     m_procStartLabel->setFixedSize(m_procStartLabel->fontMetrics().width(m_procStartLabel->text()), m_procStartLabel->fontMetrics().height());
+#else
+    m_procNameLabel->setFixedSize(m_procNameLabel->fontMetrics().horizontalAdvance(m_procNameLabel->text()), m_procNameLabel->fontMetrics().height());
+    m_procCmdLabel->setFixedSize(m_procCmdLabel->fontMetrics().horizontalAdvance(m_procCmdLabel->text()), m_procCmdLabel->fontMetrics().height());
+    m_procStartLabel->setFixedSize(m_procStartLabel->fontMetrics().horizontalAdvance(m_procStartLabel->text()), m_procStartLabel->fontMetrics().height());
+#endif
 
     int procNametextH = qMin(120, int(m_procNameText->document()->size().height()));
     m_procNameText->setFixedSize(qMin(kPreferedTextWidth, m_procNameText->fontMetrics().size(Qt::TextSingleLine, m_procNameText->toPlainText()).width()), procNametextH);

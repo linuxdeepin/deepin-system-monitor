@@ -12,7 +12,11 @@
 #include "system/system_monitor.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyle>
 
@@ -33,7 +37,11 @@ const int pointsNumber = 30;
 CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
@@ -48,9 +56,13 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     for (int i = 0; i <= pointsNumber; i++) {
         uploadSpeeds->append(0);
     }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &CompactNetworkMonitor::changeTheme);
+#else
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this,
+            &CompactNetworkMonitor::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &CompactNetworkMonitor::updateStatus);
@@ -264,7 +276,11 @@ void CompactNetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeTy
     Q_UNUSED(themeType);
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     textColor = palette.color(DPalette::TextTitle);

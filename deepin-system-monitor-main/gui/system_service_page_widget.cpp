@@ -9,7 +9,11 @@
 #include "system_service_table_view.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DStyle>
 
 #include <QHBoxLayout>
@@ -20,7 +24,11 @@ SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     : DFrame(parent)
 {
     // global app helper instance
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     // global palette
     auto palette = dAppHelper->applicationPalette();
 
@@ -47,9 +55,17 @@ void SystemServicePageWidget::paintEvent(QPaintEvent *)
     path.addRect(QRectF(rect()));
     painter.setOpacity(1);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto bgColor = palette.color(DPalette::Background);
+#else
+    auto bgColor = palette.color(DPalette::Window);
+#endif
 
     // paint frame background
     painter.fillPath(path, bgColor);

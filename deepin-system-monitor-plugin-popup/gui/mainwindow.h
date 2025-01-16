@@ -164,7 +164,11 @@ private slots:
     //! \brief changeTheme 切换系统主题时，改变当前的显示内容
     //! \param themeType 主题类型
     //!
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
     //!
     //! \brief dbusPropertiesChanged 获取属性变化信号
     //! \param interface 接口，maps 数据，strs 名称

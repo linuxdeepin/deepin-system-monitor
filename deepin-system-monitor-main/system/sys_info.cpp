@@ -396,7 +396,11 @@ void SysInfo::read_loadavg(LoadAvg &loadAvg)
         */
 
         // 分割数据 取前3
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList cpuStatus =  QString(lineData).split(" ", QString::SkipEmptyParts);
+#else
+        QStringList cpuStatus =  QString(lineData).split(" ", Qt::SkipEmptyParts);
+#endif
 
         if (cpuStatus.size() > 3) {
             loadAvg->lavg_1m = cpuStatus[0].toFloat();

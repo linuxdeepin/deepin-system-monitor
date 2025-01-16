@@ -10,6 +10,8 @@
 #include "wm_atom.h"
 #include "wm_info.h"
 
+#include <QObject>
+
 namespace core {
 namespace process {
 class Process;

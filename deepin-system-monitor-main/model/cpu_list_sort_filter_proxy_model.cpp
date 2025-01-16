@@ -23,7 +23,11 @@ bool CPUListSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &)
     if (idx.isValid()) {
         QString lgIdx = QString("%1").arg(idx.data(CPUListModel::kPropCPUIndex).toInt());
         // search format (list of cpu indices with comma separated): 1,3,...,10,...,...
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         ok |= filterRegExp().pattern().contains(lgIdx);
+#else
+        ok |= filterRegularExpression().pattern().contains(lgIdx);
+#endif
     }
 
     return ok;

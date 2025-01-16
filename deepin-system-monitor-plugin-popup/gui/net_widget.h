@@ -9,11 +9,13 @@
 #include <QWidget>
 #include <QPainterPath>
 #include <QIcon>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
-
-//#include "net_read.h"
-
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
+#endif
 
 class NetWidget : public QWidget
 {
@@ -39,7 +41,11 @@ protected:
 private:
     void initConnection();
     void getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
     void changeFont(const QFont &font);
 
 private:

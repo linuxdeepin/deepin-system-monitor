@@ -7,9 +7,14 @@
 #define BASE_ITEM_DELEGATE_H
 
 #include <QStyledItemDelegate>
-#include <DApplicationHelper>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
+#endif
 
 class QModelIndex;
 class QPainter;
@@ -70,7 +75,11 @@ public:
                    const QModelIndex &index) override;
 private Q_SLOTS:
     //切换主题时更改ToolTip背景色
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
 
 protected:
     /**

@@ -22,7 +22,7 @@ extern "C" {
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
-
+#include <QRegularExpression>
 #include <ctype.h>
 #include <errno.h>
 #include <sched.h>
@@ -603,11 +603,19 @@ void CPUSet::read_overall_info()
     process.start("cat /proc/cpuinfo");
     process.waitForFinished(3000);
     QString cpuinfo = process.readAllStandardOutput();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
+#else
+    QStringList processors = cpuinfo.split("\n\n", Qt::SkipEmptyParts);
+#endif
 
     for (int i = 0; i < processors.count(); ++i) {
         CPUInfo info;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list = processors[i].split("\n", QString::SkipEmptyParts);
+#else
+        QStringList list = processors[i].split("\n", Qt::SkipEmptyParts);
+#endif
         for (QString text : list) {
             if (text.startsWith("processor")) {
                 info.setIndex(text.split(":").value(1).toInt());
@@ -705,7 +713,11 @@ void CPUSet::read_dmi_cache_info()
                                              << "cache");
     process.waitForFinished(-1);
     QString cacheinfo = process.readAllStandardOutput();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList caches = cacheinfo.split("\n\n", QString::SkipEmptyParts);
+#else
+    QStringList caches = cacheinfo.split("\n\n", Qt::SkipEmptyParts);
+#endif
     process.close();
 
     QList<QMap<QString, QString>> mapInfos;
@@ -722,7 +734,11 @@ void CPUSet::read_dmi_cache_info()
 
             QStringList words = line.split(": ");
             if (1 == words.size() && words[0].endsWith(":")) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 lasKey = words[0].replace(QRegExp(":$"), "");
+#else
+                lasKey = words[0].replace(QRegularExpression(":$"), "");
+#endif
                 mapInfo.insert(lasKey.trimmed(), " ");
             } else if (1 == words.size() && !lasKey.isEmpty()) {
                 mapInfo[lasKey.trimmed()] += words[0];
@@ -738,7 +754,11 @@ void CPUSet::read_dmi_cache_info()
     for (auto &item : mapInfos) {
         if (!item.contains("Socket Designation") || !item.contains("Maximum Size"))
             continue;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList strList = item["Maximum Size"].split(" ", QString::SkipEmptyParts);
+#else
+        QStringList strList = item["Maximum Size"].split(" ", Qt::SkipEmptyParts);
+#endif
         if (strList.size() != 2)
             continue;
 

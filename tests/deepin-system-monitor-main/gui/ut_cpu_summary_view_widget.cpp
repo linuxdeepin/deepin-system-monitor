@@ -15,7 +15,6 @@
 //Qt
 #include <QSignalSpy>
 #include <QApplication>
-#include <DApplicationHelper>
 
 /***************************************STUB begin*********************************************/
 bool stub_CPUSummaryTableModel_data_isValid_true()

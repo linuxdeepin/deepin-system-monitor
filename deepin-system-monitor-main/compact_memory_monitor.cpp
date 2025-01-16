@@ -10,7 +10,11 @@
 #include "system/system_monitor.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DHiDPIHelper>
 #include <DPalette>
 #include <DStyle>
@@ -31,7 +35,11 @@ using namespace core::system;
 CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     : QWidget(parent)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
@@ -39,8 +47,13 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
 
     setFixedHeight(150);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &CompactMemoryMonitor::changeTheme);
+#else
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this,
+            &CompactMemoryMonitor::changeTheme);
+#endif
 
     changeTheme(dAppHelper->themeType());
 
@@ -90,12 +103,20 @@ void CompactMemoryMonitor::onValueChanged()
 void CompactMemoryMonitor::changeTheme(int themeType)
 {
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::LightType:
+#endif
         memoryBackgroundColor = "#000000";
         swapBackgroundColor = "#000000";
 
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::DarkType:
+#endif
         memoryBackgroundColor = "#FFFFFF";
         swapBackgroundColor = "#FFFFFF";
 
@@ -105,7 +126,11 @@ void CompactMemoryMonitor::changeTheme(int themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     textColor = palette.color(DPalette::TextTitle);

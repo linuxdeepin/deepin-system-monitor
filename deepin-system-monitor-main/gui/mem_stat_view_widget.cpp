@@ -13,7 +13,11 @@
 #include <QtMath>
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 
 using namespace common::format;
 using namespace core::system;
@@ -79,7 +83,11 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
     painter.setFont(font);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     painter.setPen(palette.color(DPalette::TextTips));
 
@@ -87,11 +95,19 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
     int sectionSize = 6;
 
     QString memory = DApplication::translate("Process.Graph.Title", "Memory");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QRect memtitleRect(sectionSize + spacing, 0, painter.fontMetrics().width(memory), painter.fontMetrics().height());
+#else
+    QRect memtitleRect(sectionSize + spacing, 0, painter.fontMetrics().horizontalAdvance(memory), painter.fontMetrics().height());
+#endif
     painter.drawText(memtitleRect, Qt::AlignLeft | Qt::AlignVCenter, memory);
 
     QString swap = DApplication::translate("Process.Graph.View", "Swap");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y(), painter.fontMetrics().width(swap), painter.fontMetrics().height());
+#else
+    QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y(), painter.fontMetrics().horizontalAdvance(swap), painter.fontMetrics().height());
+#endif
     if (m_memInfo->swapTotal() > 0)
     {
         painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, swap);

@@ -12,7 +12,11 @@
 #include <QPainter>
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 
 using namespace common::format;
 using namespace core::system;
@@ -44,7 +48,11 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setFont(m_font);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     const DPalette &palette = dAppHelper->applicationPalette();
 
     const QColor &textColor = palette.color(DPalette::TextTips);
@@ -61,24 +69,39 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
         painter.setPen(textColor);
     }
 
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QRect ifnameRect(curXMargin, margin / 2, painter.fontMetrics().width(m_ifname), painter.fontMetrics().height());
+#else
+    QRect ifnameRect(curXMargin, margin / 2, painter.fontMetrics().horizontalAdvance(m_ifname), painter.fontMetrics().height());
+#endif
     painter.drawText(ifnameRect, Qt::AlignLeft | Qt::AlignVCenter, m_ifname);
 
     painter.setPen(textColor);
     if (m_mode == TITLE_HORIZONTAL) {
         QString strLeftBrackets = "(";
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect leftBracketsRect(ifnameRect.right() + spacing, ifnameRect.y(), painter.fontMetrics().width(strLeftBrackets), painter.fontMetrics().height());
+#else
+        QRect leftBracketsRect(ifnameRect.right() + spacing, ifnameRect.y(), painter.fontMetrics().horizontalAdvance(strLeftBrackets), painter.fontMetrics().height());
+#endif
         painter.drawText(leftBracketsRect, Qt::AlignLeft | Qt::AlignVCenter, strLeftBrackets);
 
         QString strRecvData = DApplication::translate("Process.Graph.Title", "Receive");
         strRecvData = strRecvData + " " + m_recv_bps;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect recvRect(leftBracketsRect.right() + spacing * 2 + sectionSize, ifnameRect.y(), painter.fontMetrics().width(strRecvData), painter.fontMetrics().height());
+#else
+        QRect recvRect(leftBracketsRect.right() + spacing * 2 + sectionSize, ifnameRect.y(), painter.fontMetrics().horizontalAdvance(strRecvData), painter.fontMetrics().height());
+#endif
         painter.drawText(recvRect, Qt::AlignLeft | Qt::AlignVCenter, strRecvData);
 
         QString strSentData = DApplication::translate("Process.Graph.View", "Send");
         strSentData = strSentData + " " + m_sent_bps + " )";
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect sentRect(sectionSize + recvRect.right() + 3 * spacing, ifnameRect.y(), painter.fontMetrics().width(strSentData), painter.fontMetrics().height());
+#else
+        QRect sentRect(sectionSize + recvRect.right() + 3 * spacing, ifnameRect.y(), painter.fontMetrics().horizontalAdvance(strSentData), painter.fontMetrics().height());
+#endif
         painter.drawText(sentRect, Qt::AlignLeft | Qt::AlignVCenter, strSentData);
 
         painter.setPen(Qt::NoPen);
@@ -91,12 +114,20 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
         QString strRecvData = DApplication::translate("Process.Graph.Title", "Receive");
         strRecvData = strRecvData + " " + m_recv_bps;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect recvRect(margin + spacing + sectionSize, ifnameRect.bottom(), painter.fontMetrics().width(strRecvData), painter.fontMetrics().height());
+#else
+        QRect recvRect(margin + spacing + sectionSize, ifnameRect.bottom(), painter.fontMetrics().horizontalAdvance(strRecvData), painter.fontMetrics().height());
+#endif
         painter.drawText(recvRect, Qt::AlignLeft | Qt::AlignVCenter, strRecvData);
 
         QString strSentData = DApplication::translate("Process.Graph.View", "Send");
         strSentData = strSentData  + " " + m_sent_bps;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect sentRect(margin + spacing + sectionSize, recvRect.bottom(), painter.fontMetrics().width(strSentData), painter.fontMetrics().height());
+#else
+        QRect sentRect(margin + spacing + sectionSize, recvRect.bottom(), painter.fontMetrics().horizontalAdvance(strSentData), painter.fontMetrics().height());
+#endif
         painter.drawText(sentRect, Qt::AlignLeft | Qt::AlignVCenter, strSentData);
 
 

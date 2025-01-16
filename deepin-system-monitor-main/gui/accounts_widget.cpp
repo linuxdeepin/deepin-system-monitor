@@ -45,7 +45,11 @@ void AccountsWidget::initUI()
     //    setBackgroundRole(DPalette::Window);
     // 禁用横向滚动条,防止内容被截断
     QVBoxLayout *mainContentLayout = new QVBoxLayout(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     mainContentLayout->setMargin(0);
+#else
+    mainContentLayout->setContentsMargins(0, 0, 0, 0);
+#endif
     mainContentLayout->setSpacing(0);
 
     mainContentLayout->addWidget(m_userlistView);

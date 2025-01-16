@@ -8,7 +8,6 @@
 
 #include <QWidget>
 #include <DCommandLinkButton>
-#include <DApplicationHelper>
 #include <DIconButton>
 #include <QVBoxLayout>
 #include <QPushButton>

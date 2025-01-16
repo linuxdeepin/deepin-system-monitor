@@ -55,7 +55,11 @@ void DesktopEntryCache::updateCache()
             entryWithDesktopFile(fileInfo.filePath());
         }
     } else {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList xdgDataDirPaths = xdgDataDirPath.split(":", QString::SkipEmptyParts);
+#else
+        QStringList xdgDataDirPaths = xdgDataDirPath.split(":", Qt::SkipEmptyParts);
+#endif
         for (auto path : xdgDataDirPaths) {
             auto fileInfoList = QDir(path.trimmed() + "/applications").entryInfoList(QDir::Files);
             for (auto &fileInfo : fileInfoList) {

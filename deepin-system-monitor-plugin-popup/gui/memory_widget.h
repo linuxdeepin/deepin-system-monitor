@@ -1,4 +1,3 @@
-// Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -9,9 +8,13 @@
 #include <QWidget>
 #include <QPainterPath>
 #include <QIcon>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
-
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
+#endif
 
 class QPropertyAnimation;
 
@@ -37,7 +40,11 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
     void changeFont(const QFont &font);
 
 private:

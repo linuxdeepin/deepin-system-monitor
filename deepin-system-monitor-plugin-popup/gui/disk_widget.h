@@ -9,10 +9,14 @@
 #include <QWidget>
 #include <QPainterPath>
 #include <QIcon>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
-
-
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
+#endif
 
 class DiskWidget : public QWidget
 {
@@ -36,7 +40,11 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
     void changeFont(const QFont &font);
 
     void getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue);

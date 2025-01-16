@@ -10,7 +10,11 @@
 #include "base/base_detail_item_delegate.h"
 
 #include <QHeaderView>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 #include <QPainter>
@@ -141,8 +145,13 @@ protected:
             default:
                 break;
             }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         } else if (role == Qt::TextColorRole) {
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+        } else if (role == Qt::ForegroundRole) {
+            const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
             return palette.color(DPalette::Text);
         }
 
@@ -217,7 +226,11 @@ void MemSummaryViewWidget::paintEvent(QPaintEvent *event)
 
     QPainter painter(this->viewport());
     painter.setRenderHint(QPainter::Antialiasing, true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     QColor frameColor = palette.color(DPalette::FrameBorder);
     frameColor.setAlphaF(SUMMARY_CHART_LINE_ALPH);
 

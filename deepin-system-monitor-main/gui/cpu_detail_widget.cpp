@@ -15,7 +15,11 @@
 #include "cpu_summary_view_widget.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyleHelper>
 #include <DLabel>
@@ -121,7 +125,11 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
     drawBackground(painter, graphicRect);
 
     //draw text
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     painter.setPen(palette.color(DPalette::TextTips));
     painter.setRenderHints(QPainter::Antialiasing);
@@ -211,7 +219,11 @@ void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
     QRect rect = QRect(0, 0, this->width() - (m_isHorizontalLast ? 1 : 0), this->height() - (m_isVerticalLast ? 1 : 0));
 
     // draw frame
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::FrameBorder);
     painter.setPen(frameColor);
@@ -238,7 +250,11 @@ void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
     drawBackground(painter, graphicRect);
 
     //draw text
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     painter.setPen(palette.color(DPalette::TextTips));
     painter.setRenderHints(QPainter::Antialiasing);
@@ -280,7 +296,11 @@ void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
 void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &graphicRect)
 {
     // draw frame
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     QColor frameColor = palette.color(DPalette::TextTips);
     frameColor.setAlphaF(0.3);
@@ -381,7 +401,11 @@ void CPUDetailGrapTable::setMutliCoreMode(bool isMutliCoreMode)
 void CPUDetailGrapTable::setSingleModeLayout(CPUInfoModel *model)
 {
     QGridLayout  *graphicsLayout = new QGridLayout(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     graphicsLayout->setMargin(0);
+#else
+    graphicsLayout->setContentsMargins(0, 0, 0, 0);
+#endif
     graphicsLayout->setHorizontalSpacing(10);
     graphicsLayout->setVerticalSpacing(10);
 
@@ -399,7 +423,11 @@ void CPUDetailGrapTable::setSingleModeLayout(CPUInfoModel *model)
 void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
 {
     QGridLayout  *graphicsLayout = new QGridLayout(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     graphicsLayout->setMargin(0);
+#else
+    graphicsLayout->setContentsMargins(0, 0, 0, 0);
+#endif
     graphicsLayout->setHorizontalSpacing(10);
     graphicsLayout->setVerticalSpacing(10);
 

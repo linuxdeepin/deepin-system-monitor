@@ -9,7 +9,11 @@
 #include "dbus/dbuscallmaininterface.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyleHelper>
 
@@ -39,8 +43,13 @@ CpuWidget::CpuWidget(QWidget *parent)
         downloadSpeeds->append(0);
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuWidget::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &CpuWidget::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     initConnection();
@@ -108,16 +117,28 @@ void CpuWidget::updateStatus()
     update();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
+#else
+void CpuWidget::changeTheme(DGuiApplicationHelper::ColorType themeType)
+#endif
 {
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::ColorType::LightType:
+#endif
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_cpu.png"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::ColorType::DarkType:
+#endif
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
@@ -128,7 +149,11 @@ void CpuWidget::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 #ifndef THEME_FALLBACK_COLOR
     ltextColor = palette.color(DPalette::TextTitle);
@@ -171,7 +196,11 @@ void CpuWidget::paintEvent(QPaintEvent *e)
     QString cpuTitle = DApplication::translate("Cpu.Widget", "CPU");
     painter.setFont(m_TitleFont);
     //    QFontMetrics fmTitle = painter.fontMetrics();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int widthTitle = fmTitleContent.width(cpuTitle);
+#else
+    int widthTitle = fmTitleContent.horizontalAdvance(cpuTitle);
+#endif
     int heightTitle = fmTitleContent.descent() + fmTitleContent.ascent();
     QRect cpuTitleRect(titleRect.x(), titleRect.y(), widthTitle, heightTitle);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, cpuTitle);

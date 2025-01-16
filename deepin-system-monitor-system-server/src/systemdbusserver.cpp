@@ -13,9 +13,14 @@
 #include <QProcess>
 #include <QTimer>
 #include <QDebug>
-
+#include <QRegularExpression>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <polkit-qt5-1/PolkitQt1/Authority>
 #include <polkit-qt5-1/PolkitQt1/Subject>
+#else
+#include <polkit-qt6-1/PolkitQt1/Authority>
+#include <polkit-qt6-1/PolkitQt1/Subject>
+#endif
 
 using namespace DDLog;
 
@@ -100,7 +105,11 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     }
 
     // 不允许包含';' ' '字符，服务名称长度同样限制
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (serviceName.isEmpty() || (serviceName.size() > SHRT_MAX) || serviceName.contains(QRegExp("[; ]"))) {
+#else
+    if (serviceName.isEmpty() || (serviceName.size() > SHRT_MAX) || serviceName.contains(QRegularExpression("[; ]"))) {
+#endif
         qWarning() << qPrintable("Invalid service name");
         return QString(strerror(EINVAL));
     }

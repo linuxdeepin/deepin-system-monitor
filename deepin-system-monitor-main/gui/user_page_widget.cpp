@@ -22,7 +22,12 @@
 #include "process_table_view.h"
 #include "model/process_table_model.h"
 #include <QLayout>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
+#endif
 #include <DApplication>
 #include <QPainterPath>
 
@@ -47,7 +52,11 @@ UserPageWidget::~UserPageWidget() {}
 // initialize ui components
 void UserPageWidget::initUI()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_dAppHelper = DApplicationHelper::instance();
+#else
+    m_dAppHelper = DGuiApplicationHelper::instance();
+#endif
     // process table view instance
     m_procTable = new ProcessTableView(this, m_currentUser);
     m_procTable->switchDisplayMode(kNoFilter);
@@ -160,7 +169,11 @@ void UserPageWidget::initUI()
     userInfoWideget->setLayout(contentlayout);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     layout->setMargin(10);
+#else
+    layout->setContentsMargins(10, 10, 10, 10);
+#endif
     layout->setSpacing(0);
     layout->addWidget(m_accountListWidget);
     layout->addWidget(userInfoWideget);
@@ -173,7 +186,11 @@ void UserPageWidget::initConnections()
 {
     connect(m_accountListWidget, &AccountsWidget::signalCurrentChanged, this, &UserPageWidget::onUserChanged);
     connect(m_procTable, &ProcessTableView::signalModelUpdated, this, &UserPageWidget::onTextContentChanged);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(m_dAppHelper, &DApplicationHelper::themeTypeChanged, this, &UserPageWidget::onThemeChanged);
+#else
+    connect(m_dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &UserPageWidget::onThemeChanged);
+#endif
     connect(m_procTable, &ProcessTableView::signalHeadchanged, this, &UserPageWidget::onHeaderChanged);
 }
 
@@ -185,10 +202,6 @@ void UserPageWidget::paintEvent(QPaintEvent *)
     QPainterPath path;
     path.addRect(QRectF(rect()));
     painter.setOpacity(1);
-
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
-    QColor bgColor = palette.color(DPalette::Background);
 }
 void UserPageWidget::onUserChanged()
 {
@@ -276,7 +289,11 @@ void UserPageWidget::setLabelFormat(DLabel *label, DPalette::ColorType corlorTyp
     label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     label->setElideMode(Qt::ElideRight);
     // change text color to text tips style
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto pa = DApplicationHelper::instance()->palette(label);
+#else
+    auto pa = DPaletteHelper::instance()->palette(label);
+#endif
     palette.setColor(DPalette::Text, palette.color(corlorType));
     label->setPalette(palette);
     label->adjustSize();
@@ -284,84 +301,89 @@ void UserPageWidget::setLabelFormat(DLabel *label, DPalette::ColorType corlorTyp
 
 void UserPageWidget::onThemeChanged()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto applicationPalette = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto applicationPalette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     if (m_CPULabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_CPULabel->setPalette(palette);
     }
     if (m_MemeryLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_MemeryLabel->setPalette(palette);
     }
     if (m_SMemLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_SMemLabel->setPalette(palette);
     }
     if (m_VMemLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_VMemLabel->setPalette(palette);
     }
     if (m_UploadLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_UploadLabel->setPalette(palette);
     }
     if (m_DownLoadLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_DownLoadLabel->setPalette(palette);
     }
     if (m_DiskReadLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_DiskReadLabel->setPalette(palette);
     }
     if (m_DiskWriteLabel) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
         m_DiskWriteLabel->setPalette(palette);
     }
 
     if (m_CPUUsageSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_CPUUsageSummary->setPalette(palette);
     }
     if (m_MemeryUsageSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_MemeryUsageSummary->setPalette(palette);
     }
     if (m_SMemUsageSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_SMemUsageSummary->setPalette(palette);
     }
     if (m_VMemUsageSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_VMemUsageSummary->setPalette(palette);
     }
     if (m_UploadSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_UploadSummary->setPalette(palette);
     }
     if (m_DownLoadSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_DownLoadSummary->setPalette(palette);
     }
     if (m_DiskReadSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_DiskReadSummary->setPalette(palette);
     }
     if (m_DiskWriteSummary) {
-        auto palette = DApplicationHelper::instance()->applicationPalette();
+        auto palette = applicationPalette;
         palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
         m_DiskWriteSummary->setPalette(palette);
     }

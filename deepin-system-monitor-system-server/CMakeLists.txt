@@ -6,7 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOMOC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
 
@@ -31,27 +31,25 @@ endforeach()
 file(GLOB_RECURSE SRC_CPP ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
 file(GLOB_RECURSE SRC_H ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
 
-find_package(Qt5 COMPONENTS Core DBus REQUIRED)
-find_package(PolkitQt5-1 REQUIRED)
-find_package(Dtk REQUIRED COMPONENTS Core)
+find_package(${QT_NS} COMPONENTS Core DBus REQUIRED)
+if (QT_VERSION_MAJOR LESS 6)
+    find_package(PolkitQt5-1 REQUIRED)
+else()
+    find_package(PolkitQt6-1 REQUIRED)
+endif()
+find_package(${DTK_NS} REQUIRED COMPONENTS Core)
 
 add_executable(${BIN_NAME}
     ${SRC_CPP}
     ${SRC_H}
 )
 
-target_include_directories(${BIN_NAME} PUBLIC
-  Qt5::Core
-  Qt5::DBus
-  PolkitQt5-1::Agent
-  Dtk::Core
-)
-
 target_link_libraries(${BIN_NAME} PRIVATE
-  Qt5::Core
-  Qt5::DBus
-  PolkitQt5-1::Agent
-  Dtk::Core
+    ${QT_NS}::Core
+    ${QT_NS}::DBus
+    $<$<VERSION_LESS:${QT_VERSION_MAJOR},6>:PolkitQt5-1::Agent>
+    $<$<VERSION_GREATER_EQUAL:${QT_VERSION_MAJOR},6>:PolkitQt6-1::Agent>
+    ${DTK_NS}::Core
 )
 
 # Use deepin-service-manager mange DBus servicde

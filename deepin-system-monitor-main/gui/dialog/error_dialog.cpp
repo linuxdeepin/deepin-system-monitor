@@ -7,7 +7,12 @@
 
 #include "gui/ui_common.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
+#endif
 #include <DFontSizeManager>
 
 #include <QApplication>
@@ -33,10 +38,18 @@ void ErrorDialog::initUI()
 
     m_detailLabel = new DLabel(this);
     // global palette of current theme
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto pa = DApplicationHelper::instance()->palette(m_detailLabel);
+#else
+    auto pa = DPaletteHelper::instance()->palette(m_detailLabel);
+#endif
     // get TextTips color from palette
     auto color = pa.color(DPalette::TextTips);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     pa.setColor(DPalette::Foreground, color);
+#else
+    pa.setColor(DPalette::Text, color);
+#endif
     // set palette for error detail label
     m_detailLabel->setPalette(pa);
     // bind font size

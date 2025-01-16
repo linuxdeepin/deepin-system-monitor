@@ -198,13 +198,21 @@ TEST_F(UT_ProcessPageWidget, test_showWindowKiller_01)
 
 TEST_F(UT_ProcessPageWidget, test_changeIconTheme_01)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationHelper::ColorType type = DApplicationHelper::ColorType::LightType;
+#else
+    DGuiApplicationHelper::ColorType type = DGuiApplicationHelper::ColorType::LightType;
+#endif
     m_tester->changeIconTheme(type);
 }
 
 TEST_F(UT_ProcessPageWidget, test_changeIconTheme_02)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationHelper::ColorType type = DApplicationHelper::ColorType::DarkType;
+#else
+    DGuiApplicationHelper::ColorType type = DGuiApplicationHelper::ColorType::DarkType;
+#endif
     m_tester->changeIconTheme(type);
 }
 
