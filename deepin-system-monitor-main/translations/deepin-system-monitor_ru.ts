@@ -336,11 +336,11 @@
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>Загрузка процессора превышает %1%!</translation>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>Your memory usage is higher than %1%!</translation>
     </message>
     <message>
         <source>View</source>
@@ -359,7 +359,7 @@
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished"/>
+        <translation>Общий</translation>
     </message>
     <message>
         <source>Cached</source>
@@ -371,7 +371,7 @@
     </message>
     <message>
         <source>Cached swap</source>
-        <translation type="unfinished"/>
+        <translation>Кэшированный своп</translation>
     </message>
     <message>
         <source>Active</source>
@@ -383,7 +383,7 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>Грязный</translation>
     </message>
     <message>
         <source>Mapped</source>
@@ -391,15 +391,15 @@
     </message>
     <message>
         <source>Total swap</source>
-        <translation type="unfinished"/>
+        <translation>Итого своп</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation type="unfinished"/>
+        <translation>Бесплатный обмен</translation>
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Плита</translation>
     </message>
 </context>
 <context>
@@ -426,11 +426,11 @@
     </message>
     <message>
         <source>Reads/s</source>
-        <translation type="unfinished"/>
+        <translation>Чтение/с</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation type="unfinished"/>
+        <translation>Чтение секторов/с</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
