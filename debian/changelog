@@ -1,3 +1,10 @@
+deepin-system-monitor (6.5.5) unstable; urgency=medium
+
+  * New version 6.5.5
+  * support Qt6
+
+ -- Wang Yu <wangyu@uniontch.com>  Mon, 20 Jan 2025 13:09:03 +0800
+
 deepin-system-monitor (6.5.4) unstable; urgency=medium
 
   * New version 6.5.4
