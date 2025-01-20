@@ -29,13 +29,18 @@ endforeach()
 file(GLOB_RECURSE SRC_CPP ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
 file(GLOB_RECURSE SRC_H ${CMAKE_CURRENT_LIST_DIR}/src/*.h)
 
+set(QT_VERSION_MAJOR 5)
+set(DTK_VERSION_MAJOR)
+set(QT_NS Qt${QT_VERSION_MAJOR})
+set(DTK_NS Dtk${DTK_VERSION_MAJOR})
+
 find_package(${QT_NS} COMPONENTS Core DBus REQUIRED)
 find_package(${DTK_NS} REQUIRED COMPONENTS Core)
 
 if (QT_VERSION_MAJOR LESS 6)
-qt5_add_resources(RESOURCES_FILE assets/${BIN_NAME}.qrc)
+    qt5_add_resources(RESOURCES_FILE assets/${BIN_NAME}.qrc)
 else()
-qt6_add_resources(RESOURCES_FILE assets/${BIN_NAME}.qrc)
+    qt6_add_resources(RESOURCES_FILE assets/${BIN_NAME}.qrc)
 endif()
 
 add_library(${BIN_NAME} MODULE
