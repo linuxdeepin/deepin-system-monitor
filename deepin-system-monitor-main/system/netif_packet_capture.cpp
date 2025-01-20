@@ -19,7 +19,7 @@
 #include <net/if.h>
 #include <QCoreApplication>
 #include <QProcess>
-
+#include <QRegularExpression>
 #ifndef IFNAMESZ
 #    define IFNAMESZ 16
 #endif
@@ -121,7 +121,11 @@ bool NetifPacketCapture::getCurrentDevName()
         outputList.removeFirst();
     QList<QStringList> totalList;
     foreach (QString tmpList, outputList) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList lineList = tmpList.split(QRegExp("\\s{1,}"));
+#else
+        QStringList lineList = tmpList.split(QRegularExpression("\\s{1,}"));
+#endif
         totalList.append(lineList);
     }
     // 设备和优先级列编号

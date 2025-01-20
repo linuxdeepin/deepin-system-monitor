@@ -116,13 +116,6 @@ void UnitFileInfo::registerMetaType()
     qDBusRegisterMetaType<UnitFileInfoList>();
 }
 
-// Print UnitFileInfo object to debug stream
-QDebug &operator<<(QDebug &debug, const UnitFileInfo &unit)
-{
-    debug << unit.getName() << unit.getStatus();
-    return debug;
-}
-
 // Output UnitFileInfo object to DBus argument
 QDBusArgument &operator<<(QDBusArgument &argument, const UnitFileInfo &unit)
 {
@@ -183,4 +176,10 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, UnitFileInfoList 
     }
     argument.endArray();
     return argument;
+}
+
+QDebug operator<<(QDebug debug, const UnitFileInfo &info)
+{
+    debug << info.getName() << info.getStatus();
+    return debug;
 }

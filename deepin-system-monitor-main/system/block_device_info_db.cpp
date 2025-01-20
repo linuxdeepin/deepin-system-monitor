@@ -111,7 +111,11 @@ void BlockDeviceInfoDB::readDiskInfo()
     QFileInfoList list = dir.entryInfoList();
     //获取实体磁盘
     for (int i = 0; i < list.size(); ++i) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QString t_link = list.at(i).readLink();
+#else
+        QString t_link = list.at(i).readSymLink();
+#endif
         if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("ram") && !list[i].fileName().contains("loop") && !t_link.contains("virtual")) {
             int index = -1;
             //  查找当前的device是否存在
@@ -135,7 +139,11 @@ void BlockDeviceInfoDB::readDiskInfo()
 
     //获取虚拟磁盘
     for (int i = 0; i < list.size(); ++i) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QString t_link = list.at(i).readLink();
+#else
+        QString t_link = list.at(i).readSymLink();
+#endif
         if (list[i].fileName() != "." && list[i].fileName() != ".." && !list[i].fileName().contains("ram") && !list[i].fileName().contains("loop") && t_link.contains("virtual")) {
             int index = -1;
             //  查找当前的device是否存在

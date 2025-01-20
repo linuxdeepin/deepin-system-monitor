@@ -18,7 +18,12 @@
 #include <QDebug>
 #include <QApplication>
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
+
 using namespace core::system;
 using namespace common::format;
 /***************************************STUB begin*********************************************/
@@ -263,7 +268,11 @@ protected:
                 break;
             }
         } else if (role == Qt::TextColorRole) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+            const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
             return palette.color(DPalette::Text);
         }
         return QVariant();

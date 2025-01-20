@@ -30,13 +30,21 @@ void ProcessSortFilterProxyModel::setSortFilterString(const QString &search)
     }
 
     // set search pattern & do the filter
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setFilterRegExp(QRegExp(search, Qt::CaseInsensitive));
+#else
+    setFilterRegularExpression(QRegularExpression(search, QRegularExpression::CaseInsensitiveOption));
+#endif
 }
 
 void ProcessSortFilterProxyModel::setFilterType(int type)
 {
     m_fileterType = type;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setFilterRegExp(filterRegExp());
+#else
+    setFilterRegularExpression(filterRegularExpression());
+#endif
 }
 
 int ProcessSortFilterProxyModel::rowCount(const QModelIndex &parent) const
@@ -64,10 +72,18 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
     const QModelIndex &name = sourceModel()->index(row, ProcessTableModel::kProcessNameColumn, parent);
     // display name or name matches pattern
     if (name.isValid()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         rc |= name.data().toString().contains(filterRegExp());
+#else
+        rc |= name.data().toString().contains(filterRegularExpression());
+#endif
         if (rc) return rc;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         rc |= name.data(Qt::UserRole).toString().contains(filterRegExp());
+#else
+        rc |= name.data(Qt::UserRole).toString().contains(filterRegularExpression());
+#endif
         if (rc) return rc;
 
         if (QLocale::system().language() == QLocale::Chinese) {
@@ -79,8 +95,13 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
     }
 
     // pid matches pattern
-    if (pid.isValid())
+    if (pid.isValid()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         rc |= pid.data().toString().contains(filterRegExp());
+#else
+        rc |= pid.data().toString().contains(filterRegularExpression());
+#endif
+    }
     if (rc) return rc;
 
     return false;
@@ -107,9 +128,9 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
 
         if (rc == 0) {
             return left.sibling(left.row(), ProcessTableModel::kProcessCPUColumn)
-                   .data(Qt::UserRole) <
+                   .data(Qt::UserRole).toDouble() <
                    right.sibling(right.row(), ProcessTableModel::kProcessCPUColumn)
-                   .data(Qt::UserRole);
+                   .data(Qt::UserRole).toDouble();
         } else
             return rc < 0;
     }
@@ -122,9 +143,9 @@ bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
 
         // compare cpu time first, then by memory usage
         if (qFuzzyCompare(lcpu.toReal(), rcpu.toReal())) {
-            return lmem < rmem;
+            return lmem.toULongLong() < rmem.toULongLong();
         } else {
-            return lcpu < rcpu;
+            return lcpu.toDouble() < rcpu.toDouble();
         }
     }
     default:

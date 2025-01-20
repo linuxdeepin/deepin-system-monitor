@@ -22,7 +22,11 @@ bool SystemServiceSortFilterProxyModel::canFetchMore(const QModelIndex &parent) 
 // fetches any available data for the items with the parent specified by the parent index
 void SystemServiceSortFilterProxyModel::fetchMore(const QModelIndex &parent)
 {
-    if (!filterRegExp().pattern().isEmpty()) {
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        if (!filterRegExp().pattern().isEmpty()) {
+    #else
+        if (!filterRegularExpression().pattern().isEmpty()) {
+    #endif
         // when search content is non-empty, to avoid model refresh malfunction,
         // we need load all contents in a batch.
         while (canFetchMore(parent)) {
@@ -52,12 +56,21 @@ bool SystemServiceSortFilterProxyModel::filterAcceptsRow(int row, const QModelIn
 
     // filters the row out if none of the service's name, description or pid matches the pattern
     bool rc = false;
-    if (index0.isValid())
-        rc |= sourceModel()->data(index0).toString().contains(filterRegExp());
-    if (index1.isValid())
-        rc |= sourceModel()->data(index1).toString().contains(filterRegExp());
-    if (index2.isValid())
-        rc |= sourceModel()->data(index2).toString().contains(filterRegExp());
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        if (index0.isValid())
+            rc |= sourceModel()->data(index0).toString().contains(filterRegExp());
+        if (index1.isValid())
+            rc |= sourceModel()->data(index1).toString().contains(filterRegExp());
+        if (index2.isValid())
+            rc |= sourceModel()->data(index2).toString().contains(filterRegExp());
+    #else
+        if (index0.isValid())
+            rc |= sourceModel()->data(index0).toString().contains(filterRegularExpression());
+        if (index1.isValid())
+            rc |= sourceModel()->data(index1).toString().contains(filterRegularExpression());
+        if (index2.isValid())
+            rc |= sourceModel()->data(index2).toString().contains(filterRegularExpression());
+    #endif
 
     return rc;
 }

@@ -11,7 +11,6 @@
 #include <DSwitchButton>
 #include <DLineEdit>
 #include <DPalette>
-#include <DApplicationHelper>
 #include <DLabel>
 
 #include <QStandardPaths>

@@ -12,7 +12,11 @@
 #include "system/system_monitor.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyle>
 
@@ -32,7 +36,11 @@ using namespace core::system;
 MemoryMonitor::MemoryMonitor(QWidget *parent)
     : QWidget(parent)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
 
     int statusBarMaxWidth = common::getStatusBarMaxWidth();
     setFixedWidth(statusBarMaxWidth);
@@ -40,7 +48,11 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
 
     setFixedHeight(160);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &MemoryMonitor::changeTheme);
+#else
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &MemoryMonitor::changeTheme);
+#endif
     m_themeType = dAppHelper->themeType();
     changeTheme(m_themeType);
 
@@ -76,18 +88,30 @@ void MemoryMonitor::onValueChanged()
     update();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
+#else
+void MemoryMonitor::changeTheme(DGuiApplicationHelper::ColorType themeType)
+#endif
 {
     m_themeType = themeType;
 
     switch (m_themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::LightType:
+#endif
         memoryBackgroundColor = "#000000";
         swapBackgroundColor = "#000000";
 
         m_icon = QIcon(iconPathFromQrc("light/icon_memory_light.svg"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::DarkType:
+#endif
         memoryBackgroundColor = "#FFFFFF";
         swapBackgroundColor = "#FFFFFF";
 
@@ -96,7 +120,11 @@ void MemoryMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 
 #ifndef THEME_FALLBACK_COLOR

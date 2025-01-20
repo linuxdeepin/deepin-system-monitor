@@ -102,7 +102,11 @@ void NetifSummaryViewWidget::paintEvent(QPaintEvent *event)
 
     QPainter painter(this->viewport());
     painter.setRenderHint(QPainter::Antialiasing, true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     QColor frameColor = palette.color(DPalette::FrameBorder);
     frameColor.setAlphaF(SUMMARY_CHART_LINE_ALPH);
 

@@ -10,7 +10,11 @@
 #include "dbus/dbuscallmaininterface.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyleHelper>
 
@@ -35,8 +39,13 @@ NetWidget::NetWidget(QWidget *parent)
     setFixedSize(m_width, 203);
     setContentsMargins(0, 0, 0, 0);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &NetWidget::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &NetWidget::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     changeFont(DApplication::font());
@@ -157,16 +166,29 @@ void NetWidget::updateStatus()
     update();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void NetWidget::changeTheme(DApplicationHelper::ColorType themeType)
 {
+#else
+void NetWidget::changeTheme(DGuiApplicationHelper::ColorType themeType)
+{
+#endif
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::ColorType::LightType:
+#endif
         m_titleTrans = Globals::TitleTransLight;
         m_contentTrans = Globals::contentTransLight;
         m_hoverTrans = Globals::hoverTransLight;
         m_icon = QIcon(QString(":/icons/deepin/builtin/light/icon_network.png"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::ColorType::DarkType:
+#endif
         m_titleTrans = Globals::TitleTransDark;
         m_contentTrans = Globals::contentTransDark;
         m_hoverTrans = Globals::hoverTransDark;
@@ -177,7 +199,11 @@ void NetWidget::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 
     textColor = palette.color(DPalette::Text);
@@ -211,7 +237,11 @@ void NetWidget::paintEvent(QPaintEvent *e)
     //标题
     painter.setFont(m_sectionFont);
     QFontMetrics fmTitle = painter.fontMetrics();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int widthTitleTxt = fmTitle.width(tr("Network"));
+#else
+    int widthTitleTxt = fmTitle.horizontalAdvance(tr("Network"));
+#endif
     int heightTitleTxt = fmTitle.descent()+fmTitle.ascent();
     QRect netTitleRect(titleRect.x(), titleRect.y(), widthTitleTxt, heightTitleTxt);
     painter.drawText(titleRect, Qt::AlignHCenter | Qt::AlignVCenter, tr("Network"));

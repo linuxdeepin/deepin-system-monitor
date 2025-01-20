@@ -15,7 +15,9 @@
 #include "3rdparty/dmidecode/dmidecode.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationSettings>
+#endif
 #include <DGuiApplicationHelper>
 #include <DMainWindow>
 #include <DWidgetUtil>
@@ -99,7 +101,9 @@ int main(int argc, char *argv[])
 
         QAccessible::installFactory(accessibleFactory);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         DApplicationSettings appSettings;
+#endif
 
         DLogManager::registerConsoleAppender();
         DLogManager::registerFileAppender();

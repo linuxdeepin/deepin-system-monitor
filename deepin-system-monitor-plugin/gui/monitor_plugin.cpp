@@ -10,14 +10,12 @@
 #include <QDBusConnectionInterface>
 #include <DGuiApplicationHelper>
 #include <DApplication>
-#include <DApplicationHelper>
 #include <DDBusSender>
 #include <QIcon>
 #include <DApplication>
-#include <QGSettings>
 #include <QPainter>
 #include <QFile>
-
+#include <QRegularExpression>
 namespace constantVal {
 const QString PLUGIN_STATE_KEY = "enable";
 }
@@ -328,7 +326,11 @@ void MonitorPlugin::calcCpuRate(qlonglong &totalCPU, qlonglong &availableCPU)
     QTextStream stream(&file);
     QString line = stream.readLine();
     if (!line.isNull()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list = line.split(QRegExp("\\s{1,}"));
+#else
+        QStringList list = line.split(QRegularExpression("\\s{1,}"));
+#endif
         for (auto v = list.begin() + 1; v != list.end(); ++v)
             totalCPU += (*v).toLongLong(&ok);
         if (list.size() > 4)
@@ -350,7 +352,11 @@ void MonitorPlugin::calcMemRate(qlonglong &memory, qlonglong &memoryAll)
     qlonglong buff[16] = { 0 };
     for (int i = 0; i <= 15; ++i) {
         QString line = stream.readLine();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list = line.split(QRegExp("\\s{1,}"));
+#else
+        QStringList list = line.split(QRegularExpression("\\s{1,}"));
+#endif
         if (list.size() >= 2) {
             buff[i] = list.at(1).toLongLong(&ok);
         }
@@ -376,8 +382,11 @@ void MonitorPlugin::calcNetRate(qlonglong &netDown, qlonglong &netUpload)
     line = stream.readLine();
     while (!line.isNull()) {
         line = line.trimmed();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list = line.split(QRegExp("\\s{1,}"));   // match number >= 1 space character
-
+#else
+        QStringList list = line.split(QRegularExpression("\\s{1,}"));
+#endif
         if (!list.isEmpty()) {
             down = list.at(1).toLongLong();
             upload = list.at(9).toLongLong();

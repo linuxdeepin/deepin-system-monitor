@@ -24,7 +24,12 @@
 #include "helper.hpp"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
+#endif
 #include <DDialog>
 #include <DErrorMessage>
 #include <DFontSizeManager>
@@ -46,6 +51,7 @@
 #include <QTimer>
 #include <QKeyEvent>
 #include <QShortcut>
+#include <QActionGroup>
 
 using namespace DDLog;
 using namespace common::init;
@@ -77,7 +83,11 @@ ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
     initConnections(settingsLoaded);
     // adjust search result tip label text color dynamically on theme type change
     onThemeTypeChanged();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ProcessTableView::onThemeTypeChanged);
+#endif
     if (!userName.isNull()) {
         m_cpuUsage = m_model->getTotalCPUUsage();
         m_memUsage = m_model->getTotalMemoryUsage();
@@ -99,7 +109,11 @@ ProcessTableView::~ProcessTableView()
 
 void ProcessTableView::onThemeTypeChanged()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
     palette.setColor(DPalette::Text, palette.color(DPalette::PlaceholderText));
     m_notFoundLabel->setPalette(palette);
 }
@@ -256,7 +270,11 @@ void ProcessTableView::openExecDirWithFM()
                                             QString devStr;
                                             do {
                                                 QString line = file.readLine();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                                                 auto works = line.split(" ", QString::SkipEmptyParts);
+#else
+                                                auto works = line.split(" ", Qt::SkipEmptyParts);
+#endif
                                                 if (works.size() > 9 && exeStr.startsWith(works[4]) && works[9].startsWith("/dev")) {
                                                     devStr = works[9];
                                                     if (!devStr.isEmpty()) {
@@ -433,7 +451,11 @@ void ProcessTableView::initUI(bool settingsLoaded)
     m_notFoundLabel = new DLabel(DApplication::translate("Common.Search", "No search results"), this);
     DFontSizeManager::instance()->bind(m_notFoundLabel, DFontSizeManager::T4);
     // change text color
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->palette(m_notFoundLabel);
+#else
+    auto palette = DPaletteHelper::instance()->palette(m_notFoundLabel);
+#endif
     QColor labelColor = palette.color(DPalette::PlaceholderText);
     palette.setColor(DPalette::Text, labelColor);
     m_notFoundLabel->setPalette(palette);

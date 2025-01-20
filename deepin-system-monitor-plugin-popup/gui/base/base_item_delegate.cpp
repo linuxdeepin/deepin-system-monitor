@@ -31,19 +31,37 @@ const int spacing = 10;
 BaseItemDelegate::BaseItemDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     changeTheme(dAppHelper->themeType());
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseItemDelegate::changeTheme);
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    changeTheme(dAppHelper->themeType());
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BaseItemDelegate::changeTheme);
+#endif
 }
 
 //切换主题时更改ToolTip背景色
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void BaseItemDelegate::changeTheme(DApplicationHelper::ColorType themeType)
+#else
+void BaseItemDelegate::changeTheme(DGuiApplicationHelper::ColorType themeType)
+#endif
 {
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         case DApplicationHelper::LightType:
+#else
+        case DGuiApplicationHelper::ColorType::LightType:
+#endif
            m_tipColor.setRgb(255,255,255,255);
             break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         case DApplicationHelper::DarkType:
+#else
+        case DGuiApplicationHelper::ColorType::DarkType:
+#endif
            m_tipColor.setRgb(0,0,0,200);
             break;
         default:
@@ -98,7 +116,11 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
 
     // global palette
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
 
     QPen forground;
     if (index.data(Qt::UserRole + 2).isValid()) {
@@ -126,8 +148,13 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         } else {
             // color used when it's normal row & hovered by mouse
             if (opt.state & DStyle::State_MouseOver) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 auto type = DApplicationHelper::instance()->themeType();
                 forground = style->adjustColor(forground.color(), 0, 0, type == DApplicationHelper::DarkType ? 20 : -50);
+#else
+                auto type = DGuiApplicationHelper::instance()->themeType();
+                forground = style->adjustColor(forground.color(), 0, 0, type == DGuiApplicationHelper::ColorType::DarkType ? 20 : -50);
+#endif
             }
         }
     }
@@ -281,7 +308,11 @@ bool BaseItemDelegate::helpEvent(QHelpEvent *e, QAbstractItemView *view,
                                    QString("<div>%1</div>").arg(tooltip.toString().toHtmlEscaped()),
                                    view);
                 QPalette palette = QToolTip::palette();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 palette.setColor(QPalette::ColorRole::Background, m_tipColor);
+#else
+                palette.setColor(QPalette::ColorRole::Window, m_tipColor);
+#endif
                 QToolTip::setPalette(palette);
                 return true;
             }

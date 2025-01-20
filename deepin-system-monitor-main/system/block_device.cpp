@@ -53,7 +53,11 @@ void BlockDevice::readDeviceInfo()
     do{
         line = in.readLine();
         if (!line.contains("loop")){
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             strList << line.split(" ", QString::SkipEmptyParts);
+#else
+            strList << line.split(" ", Qt::SkipEmptyParts);
+#endif
         }
     }while (!line.isNull());
     file.close();

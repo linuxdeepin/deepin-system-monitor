@@ -45,12 +45,19 @@ int main(int argc, char *argv[])
         qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DGuiApplicationHelper::setColorCompositingEnabled(true);
+#else
+    DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
+    DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::ColorCompositing, true);
+#endif
 
     //    DApplication *app = DApplication::globalApplication(argc, argv);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+#endif
     Application ac(argc, argv);
     ac.setAutoActivateWindows(true);
 

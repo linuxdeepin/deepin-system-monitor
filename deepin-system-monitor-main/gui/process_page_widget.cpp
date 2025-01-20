@@ -24,13 +24,20 @@
 #include "common/eventlogutils.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
+#endif
 #include <DFontSizeManager>
 #include <DLabel>
 #include <DStackedWidget>
 
 #include <QDebug>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
+#endif
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QKeyEvent>
@@ -77,7 +84,11 @@ ProcessPageWidget::~ProcessPageWidget() {}
 void ProcessPageWidget::initUI()
 {
     // global app helper instance
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#else
     auto *dAppHelper = DApplicationHelper::instance();
+#endif
     // global palette
     auto palette = dAppHelper->applicationPalette();
 
@@ -115,7 +126,11 @@ void ProcessPageWidget::initUI()
     // text aligment
     m_procViewMode->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     // change text color to text title style
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto pam = DApplicationHelper::instance()->palette(m_procViewMode);
+#else
+    auto pam = DPaletteHelper::instance()->palette(m_procViewMode);
+#endif
     palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
     m_procViewMode->setPalette(palette);
 
@@ -126,13 +141,22 @@ void ProcessPageWidget::initUI()
     m_procViewModeSummary->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_procViewModeSummary->setElideMode(Qt::ElideRight);
     // change text color to text tips style
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto pa = DApplicationHelper::instance()->palette(m_procViewModeSummary);
+#else
+    auto pa = DPaletteHelper::instance()->palette(m_procViewModeSummary);
+#endif
     palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
     m_procViewModeSummary->setPalette(palette);
 
     // change icon type when theme changed
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this,
             &ProcessPageWidget::changeIconTheme);
+#else
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this,
+            &ProcessPageWidget::changeIconTheme);
+#endif
 
     auto *modeButtonGroup = new DButtonBox(tw);
     modeButtonGroup->setFixedWidth(30 * 3);
@@ -290,16 +314,29 @@ void ProcessPageWidget::initConnections()
     // Note: do not update on non-GUI thread.
     connect(monitor, &SystemMonitor::appAndProcCountUpdate, this, &ProcessPageWidget::onAppAndProcCountUpdated);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
     // change text color dynamically on theme type change, if not do this way, text color wont synchronize with theme type
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, [=]() {
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, [=]() {
+#endif
         if (m_procViewMode) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+            auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
             palette.setColor(DPalette::Text, palette.color(DPalette::TextTitle));
             m_procViewMode->setPalette(palette);
         }
         if (m_procViewModeSummary) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+            auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
             palette.setColor(DPalette::Text, palette.color(DPalette::TextTips));
             m_procViewModeSummary->setPalette(palette);
         }
@@ -386,9 +423,17 @@ void ProcessPageWidget::paintEvent(QPaintEvent *)
     path.addRect(QRectF(rect()));
     painter.setOpacity(1);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     DPalette palette = dAppHelper->applicationPalette();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QColor bgColor = palette.color(DPalette::Background);
+#else
+    QColor bgColor = palette.color(DPalette::Window);
+#endif
 
     //    // 显示0.1s
     //    QTimer::singleShot(NORMAL_PERFORMANCE_CPU_LOADING_TIME, this, [ = ]() {m_loadingAndProcessTB->setCurrentWidget(m_procTable);});
@@ -419,7 +464,11 @@ void ProcessPageWidget::changeIconTheme(DGuiApplicationHelper::ColorType themeTy
     QIcon myProcIcon;
     QIcon allProcIcon;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (themeType == DApplicationHelper::LightType) {
+#else
+    if (themeType == DGuiApplicationHelper::LightType) {
+#endif
         // light theme icon
         appIcon.addFile(iconPathFromQrc("light/app_normal.svg"), {}, QIcon::Normal, QIcon::Off);
         appIcon.addFile(iconPathFromQrc("light/app_highlight.svg"), {}, QIcon::Normal, QIcon::On);
@@ -429,7 +478,11 @@ void ProcessPageWidget::changeIconTheme(DGuiApplicationHelper::ColorType themeTy
 
         allProcIcon.addFile(iconPathFromQrc("light/all_normal.svg"), {}, QIcon::Normal, QIcon::Off);
         allProcIcon.addFile(iconPathFromQrc("light/all_highlight.svg"), {}, QIcon::Normal, QIcon::On);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     } else if (themeType == DApplicationHelper::DarkType) {
+#else
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
+#endif
         // dark theme icon
         appIcon.addFile(iconPathFromQrc("dark/app_normal_dark.svg"), {}, QIcon::Normal, QIcon::Off);
         appIcon.addFile(iconPathFromQrc("dark/app_highlight.svg"), {}, QIcon::Normal, QIcon::On);

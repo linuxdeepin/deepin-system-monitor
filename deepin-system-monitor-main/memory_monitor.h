@@ -6,12 +6,16 @@
 #ifndef MemoryMONITOR_H
 #define MemoryMONITOR_H
 
-#include <DApplicationHelper>
-
 #include <QIcon>
 #include <QWidget>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DGUI_USE_NAMESPACE
+#endif
 
 class Settings;
 class QPropertyAnimation;
@@ -33,7 +37,11 @@ public:
     ~MemoryMonitor();
 
 private:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void changeTheme(DApplicationHelper::ColorType themeType);
+#else
+    void changeTheme(DGuiApplicationHelper::ColorType themeType);
+#endif
     void changeFont(const QFont &font);
 
 protected:
@@ -105,7 +113,12 @@ private:
     QPropertyAnimation *m_animation {};
 
     Settings *m_settings;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationHelper::ColorType m_themeType;
+#else
+    DGuiApplicationHelper::ColorType m_themeType;
+#endif
 };
 
 #endif

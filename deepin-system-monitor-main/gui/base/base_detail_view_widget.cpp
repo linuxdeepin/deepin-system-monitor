@@ -73,7 +73,11 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
     // adjust search result tip label text color dynamically on theme type change
     onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
+#endif
     // 当前的策略是为了解决页面切换时，焦点停留在按钮上，这样设置不会影响代码的逻辑
     if (stackViewWidget)
         stackViewWidget->setFocus();
@@ -134,12 +138,17 @@ void BaseDetailViewWidget::updateWidgetGrometry()
 {
     QFontMetrics titleFont(m_titleFont);
     const QMargins &margin = m_centralLayout->contentsMargins();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_arrowButton->setGeometry(margin.left() + titleFont.width(m_titleText) + 6, 10 + titleFont.height() / 2 - m_arrowButton->height() / 2, m_arrowButton->width(), m_arrowButton->height());
-
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
     const QSize &detailtextSize =  m_detailButton->size();
-    m_detailButton->setGeometry(this->width() - detailtextSize.width() - 6, 10 + titleFont.height() / 2 - detailtextSize.height() / 2, detailtextSize.width(), detailtextSize.height());
+#else
+    m_arrowButton->setGeometry(margin.left() + titleFont.horizontalAdvance(m_titleText) + 6, 10 + titleFont.height() / 2 - m_arrowButton->height() / 2, m_arrowButton->width(), m_arrowButton->height());
+    m_detailButton->setFixedSize(m_detailButton->fontMetrics().horizontalAdvance(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
+    const QSize &detailtextSize =  m_detailButton->size();
+#endif 
 
+    m_detailButton->setGeometry(this->width() - detailtextSize.width() - 6, 10 + titleFont.height() / 2 - detailtextSize.height() / 2, detailtextSize.width(), detailtextSize.height());
     m_switchButton->setGeometry(m_detailButton->x() - 30, 10 + titleFont.height() / 2 - m_switchButton->height() / 2, m_switchButton->width(), m_switchButton->height());
 }
 
@@ -165,23 +174,39 @@ void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(palette.color(DPalette::Base));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     painter.drawRoundRect(this->rect(), 2, 2);
+#else
+    painter.drawRoundedRect(this->rect(), 2, 2);
+#endif
 
     painter.setFont(m_titleFont);
     painter.setPen(palette.color(DPalette::Text));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QRect titleRect(m_centralLayout->contentsMargins().left(), 10, painter.fontMetrics().width(m_titleText), painter.fontMetrics().height());
+#else
+    QRect titleRect(m_centralLayout->contentsMargins().left(), 10, painter.fontMetrics().horizontalAdvance(m_titleText), painter.fontMetrics().height());
+#endif
     painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, m_titleText);
     m_centralLayout->setContentsMargins(16, titleRect.height() + 10, 16, 16);
 
     if (!m_detailText.isEmpty()) {
         painter.setFont(m_contentFont);
         painter.setPen(palette.color(DPalette::TextTips));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect detailRect(m_arrowButton->width() + titleRect.right() + 12, titleRect.y(), painter.fontMetrics().width(m_detailText), titleRect.height());
+#else
+        QRect detailRect(m_arrowButton->width() + titleRect.right() + 12, titleRect.y(), painter.fontMetrics().horizontalAdvance(m_detailText), titleRect.height());
+#endif
         painter.drawText(detailRect, Qt::AlignLeft | Qt::AlignVCenter, m_detailText);
     }
 }

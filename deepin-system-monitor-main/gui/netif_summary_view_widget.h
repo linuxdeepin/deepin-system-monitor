@@ -10,15 +10,20 @@
 #include <QHeaderView>
 #include <QAbstractTableModel>
 #include <QPainter>
-#include <DApplicationHelper>
 #include <QStyledItemDelegate>
 #include <QHeaderView>
-#include <DStyle>
-#include <DApplication>
 #include <QScroller>
 #include <QPainterPath>
-#include "system/netif.h"
 
+#include <DStyle>
+#include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
+
+#include "system/netif.h"
 #include "system/device_db.h"
 #include "common/common.h"
 #include "system/netif.h"
@@ -96,10 +101,18 @@ public:
                const QStyleOptionViewItem &option,
                const QModelIndex &index) const
     {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+        const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
         QBrush background;
         QColor backgroundColor;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         if (DApplicationHelper::instance()->themeType() == Dtk::Gui::DGuiApplicationHelper::ColorType::LightType)
+#else
+        if (DGuiApplicationHelper::instance()->themeType() == Dtk::Gui::DGuiApplicationHelper::ColorType::LightType)
+#endif
         {
             backgroundColor = QColor(0, 0, 0);
             backgroundColor.setAlphaF(0);
@@ -149,11 +162,19 @@ public:
                 if ((listKey.count() == listValue.count()) && (listValue.count() == 3)) {
                     // 获取key最宽的数值
                     QFontMetrics fm(painter->font());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)  
                     int iMaxW = fm.width(listKey[0]);
                     for (int i = 1; i < listKey.count(); ++i) {
                         if (iMaxW < fm.width(listKey[i]))
                             iMaxW = fm.width(listKey[i]);
                     }
+#else
+                    int iMaxW = fm.horizontalAdvance(listKey[0]);
+                    for (int i = 1; i < listKey.count(); ++i) {
+                        if (iMaxW < fm.horizontalAdvance(listKey[i]))
+                            iMaxW = fm.horizontalAdvance(listKey[i]);
+                    }
+#endif
 
                     // 绘制内容
                     for (int i = 0; i < listKey.count(); ++i) {
@@ -161,7 +182,11 @@ public:
                         QRect titleRect;
                         titleRect.setX(textRect.x());
                         titleRect.setY(textRect.y() + TOPMARGIN + i * fm.height());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                         titleRect.setWidth(fm.width(listKey[i]));
+#else
+                        titleRect.setWidth(fm.horizontalAdvance(listKey[i]));
+#endif
                         titleRect.setHeight(fm.height());
                         painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, listKey[i]);
 
@@ -169,7 +194,11 @@ public:
                         QRect valueRect;
                         valueRect.setX(textRect.x() + iMaxW + TEXTSPACING);
                         valueRect.setY(textRect.y() + TOPMARGIN + i * fm.height());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                         valueRect.setWidth(fm.width(listValue[i]));
+#else
+                        valueRect.setWidth(fm.horizontalAdvance(listValue[i]));
+#endif
                         valueRect.setHeight(fm.height());
                         painter->drawText(valueRect, Qt::AlignLeft | Qt::AlignVCenter, listValue[i]);
                     }

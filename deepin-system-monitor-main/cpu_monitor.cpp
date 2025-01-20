@@ -14,7 +14,11 @@
 #include "gui/base/base_commandlink_button.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyle>
 #include <DFontSizeManager>
@@ -42,8 +46,13 @@ CpuMonitor::CpuMonitor(QWidget *parent)
         cpuPercents->append(0);
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     connect(dAppHelper, &DApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
+#else
+    DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
+    connect(dAppHelper, &DGuiApplicationHelper::themeTypeChanged, this, &CpuMonitor::changeTheme);
+#endif
     changeTheme(dAppHelper->themeType());
 
     m_cpuInfomodel = CPUInfoModel::instance();
@@ -83,14 +92,27 @@ void CpuMonitor::setDetailButtonVisible(bool visible)
     m_detailButton->setVisible(visible);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
 {
+#else
+void CpuMonitor::changeTheme(DGuiApplicationHelper::ColorType themeType)
+{
+#endif
     switch (themeType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+#else
+    case DGuiApplicationHelper::LightType:
+#endif
         ringBackgroundColor = "#000000";
         m_icon = QIcon(iconPathFromQrc("light/icon_cpu_light.svg"));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+#else
+    case DGuiApplicationHelper::DarkType:
+#endif
         ringBackgroundColor = "#FFFFFF";
         m_icon = QIcon(iconPathFromQrc("dark/icon_cpu_light.svg"));
         break;
@@ -99,7 +121,11 @@ void CpuMonitor::changeTheme(DApplicationHelper::ColorType themeType)
     }
 
     // init colors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
     textColor = palette.color(DPalette::Text);
 #ifndef THEME_FALLBACK_COLOR
@@ -169,7 +195,11 @@ void CpuMonitor::resizeEvent(QResizeEvent *event)
 
 void CpuMonitor::resizeItemWidgetRect()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_detailButton->setFixedSize(m_detailButton->fontMetrics().width(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
+#else
+    m_detailButton->setFixedSize(m_detailButton->fontMetrics().horizontalAdvance(m_detailButton->text()) + 16, m_detailButton->fontMetrics().height() + 4);
+#endif
     const QSize &detailtextSize =  m_detailButton->size();
     m_detailButton->setGeometry(this->width() / 2 - detailtextSize.width() / 2 - 4, this->height() - detailtextSize.height() + 3, detailtextSize.width(), detailtextSize.height());
 }

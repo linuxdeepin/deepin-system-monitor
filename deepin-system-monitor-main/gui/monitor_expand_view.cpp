@@ -10,7 +10,6 @@
 #include "network_monitor.h"
 #include "detailwidgetmanager.h"
 
-#include <DApplicationHelper>
 #include <DPalette>
 #include <DStyle>
 
@@ -36,7 +35,11 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
 
     // monitor view layout
     QVBoxLayout *layout = new QVBoxLayout(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     layout->setMargin(0);
+#else
+    layout->setContentsMargins(0, 0, 0, 0);
+#endif
     layout->setSpacing(0);
     layout->addStretch(1);
     layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);

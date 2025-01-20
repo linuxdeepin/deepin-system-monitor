@@ -7,7 +7,11 @@
 #include "process/process_icon_cache.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyle>
 #include <DStyleHelper>
@@ -22,7 +26,7 @@
 #include <QToolTip>
 
 DWIDGET_USE_NAMESPACE
-
+DGUI_USE_NAMESPACE
 // content margin
 const int margin = 10;
 // content spacing
@@ -82,7 +86,11 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
 
     // global palette
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->applicationPalette();
+#else
+    auto palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
 
     QPen forground;
     if (index.data(Qt::UserRole + 2).isValid()) {
@@ -110,8 +118,13 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         } else {
             // color used when it's normal row & hovered by mouse
             if (opt.state & DStyle::State_MouseOver) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 auto type = DApplicationHelper::instance()->themeType();
                 forground = style->adjustColor(forground.color(), 0, 0, type == DApplicationHelper::DarkType ? 20 : -50);
+#else
+                auto type = DGuiApplicationHelper::instance()->themeType();
+                forground = style->adjustColor(forground.color(), 0, 0, type == DGuiApplicationHelper::ColorType::DarkType ? 20 : -50);
+#endif
             }
         }
     }
@@ -188,7 +201,8 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         // https://pms.uniontech.com/bug-view-239575.html
         const QString &procName = index.data(Qt::UserRole + 4).toString();
 
-        QPixmap  iconPixmap;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        QPixmap iconPixmap;
         core::process::ProcessIconCache::instance()->iconPixmapCache.find(procName, iconPixmap);
         if (!iconPixmap.isNull()) {
             painter->drawPixmap(iconRect, iconPixmap);
@@ -197,6 +211,16 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procName, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
+#else
+        QPixmap iconPixmap;
+        if (core::process::ProcessIconCache::instance()->iconPixmapCache.find(procName, &iconPixmap)) {
+            painter->drawPixmap(iconRect, iconPixmap);
+        } else {
+            const QPixmap &iconPix = icon.pixmap(iconRect.size());
+            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procName, iconPix);
+            painter->drawPixmap(iconRect, iconPix);
+        }
+#endif
     }
     // draw content text
     painter->setPen(forground);

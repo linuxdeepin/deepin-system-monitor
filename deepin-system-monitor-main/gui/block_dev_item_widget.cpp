@@ -13,7 +13,11 @@
 #include <QtMath>
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 
 DWIDGET_USE_NAMESPACE
 using namespace common::format;
@@ -97,12 +101,20 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
     painter.setFont(font);
     painter.setRenderHint(QPainter:: Antialiasing, true);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
+#else
+    auto *dAppHelper = DGuiApplicationHelper::instance();
+#endif
     auto palette = dAppHelper->applicationPalette();
 
     QString deviceName = m_blokeDeviceInfo.deviceName().data();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int deviceNameWidth = painter.fontMetrics().width(deviceName);
+#else
+    int deviceNameWidth = painter.fontMetrics().horizontalAdvance(deviceName);
+#endif
     int deviceNameHeight = painter.fontMetrics().height();
     QRect devtitleRect(curXMargin, margin, deviceNameWidth, deviceNameHeight);
 
@@ -129,14 +141,22 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
     QString writeTitle = QString("%1 %2")
                          .arg(tr("Write"))
                          .arg(formatUnit_memory_disk(m_blokeDeviceInfo.writeSpeed(), B, 1, true));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int readTitleWidth = painter.fontMetrics().width(readTitle);
+#else
+    int readTitleWidth = painter.fontMetrics().horizontalAdvance(readTitle);
+#endif
     int readTitleHeight = painter.fontMetrics().height();
     if (m_mode == TITLE_HORIZONTAL) {
 
         QRect memtitleRect(sectionSize + devtitleRect.right() + spacing * 2, devtitleRect.y() + deviceNameHeight, readTitleWidth, readTitleHeight);
         painter.drawText(memtitleRect, Qt::AlignLeft | Qt::AlignVCenter, readTitle);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y() + readTitleHeight, painter.fontMetrics().width(writeTitle), painter.fontMetrics().height());
+#else
+        QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y() + readTitleHeight, painter.fontMetrics().horizontalAdvance(writeTitle), painter.fontMetrics().height());
+#endif
         painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, writeTitle);
 
         painter.setPen(Qt::NoPen);
@@ -157,7 +177,11 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(writeColor);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QRect writeStrRect(devtitleRect.left() + spacing + sectionSize, readStrRect.y() + readTitleHeight, painter.fontMetrics().width(writeTitle), painter.fontMetrics().height());
+#else
+        QRect writeStrRect(devtitleRect.left() + spacing + sectionSize, readStrRect.y() + readTitleHeight, painter.fontMetrics().horizontalAdvance(writeTitle), painter.fontMetrics().height());
+#endif
         painter.drawEllipse(devtitleRect.left(), writeStrRect.y() + qCeil((writeStrRect.height() - sectionSize) / 2.0), sectionSize, sectionSize); // 写硬盘速度的颜色提示
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(writeStrRect, writeTitle);

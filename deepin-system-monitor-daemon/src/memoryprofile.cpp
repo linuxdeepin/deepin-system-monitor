@@ -36,9 +36,15 @@ double MemoryProfile::updateSystemMemoryUsage()
         }
 
         // 数据提取
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list1 = QString(lineData1).split(" ", QString::SkipEmptyParts);
         QStringList list2 = QString(lineData2).split(" ", QString::SkipEmptyParts);
         QStringList list3 = QString(lineData3).split(" ", QString::SkipEmptyParts);
+#else
+        QStringList list1 = QString(lineData1).split(" ", Qt::SkipEmptyParts);
+        QStringList list2 = QString(lineData2).split(" ", Qt::SkipEmptyParts);
+        QStringList list3 = QString(lineData3).split(" ", Qt::SkipEmptyParts);
+#endif
 
         if (list1.size() < 3 || list2.size() < 3 || list3.size() < 3) {
             qCWarning(app) << QString(" parse %1 file fail !").arg(PROC_MEM_INFOI_PATH) << list1 << list2 << list3;

@@ -8,7 +8,11 @@
 
 #include <DTableView>
 #include <QHeaderView>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 #include <QPainter>
@@ -199,8 +203,18 @@ protected:
             default:
                 break;
             }
-        } else if (role == Qt::TextColorRole) {
+        } else if (
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            role == Qt::TextColorRole
+#else
+            role == Qt::ForegroundRole
+#endif
+        ) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
+#else
+            const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
+#endif
             return palette.color(DPalette::Text);
         }
 

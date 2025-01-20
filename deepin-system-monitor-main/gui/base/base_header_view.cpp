@@ -6,7 +6,11 @@
 #include "base_header_view.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 #include <DPalette>
 #include <DStyle>
 #include <DStyleHelper>
@@ -58,7 +62,11 @@ void BaseHeaderView::paintEvent(QPaintEvent *event)
     innerPath.addRoundedRect(viewport()->rect(),8,8);
     outPath.addRect(viewport()->rect());
     outPath=outPath.subtracted(innerPath);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     painter.fillPath(outPath,DApplicationHelper::instance()->applicationPalette().color(DPalette::Active,DPalette::AlternateBase));
+#else
+    painter.fillPath(outPath,DGuiApplicationHelper::instance()->applicationPalette().color(DPalette::Active,DPalette::AlternateBase));
+#endif
 }
 
 void BaseHeaderView::focusInEvent(QFocusEvent *event)
