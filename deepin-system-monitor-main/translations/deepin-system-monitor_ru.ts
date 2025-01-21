@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Считывает объединенные/-ы</translation>
     </message>
     <message>
         <source>Sectors written</source>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Writes merged/s</translation>
     </message>
 </context>
 <context>
@@ -523,7 +523,7 @@ Are you sure you want to continue?</source>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки</translation>
     </message>
 </context>
 <context>
@@ -545,7 +545,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation type="unfinished"/>
+        <translation>Транслировать:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
@@ -976,7 +976,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Уведомления</translation>
     </message>
 </context>
 <context>
@@ -1149,7 +1149,7 @@ Are you sure you want to continue?</source>
     <name>User.Account.Type</name>
     <message>
         <source>Administrator</source>
-        <translation type="unfinished"/>
+        <translation>Администратор</translation>
     </message>
     <message>
         <source>Standard User</source>
