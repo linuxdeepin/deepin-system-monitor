@@ -65,10 +65,6 @@
         <translation>Частота</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>Виробник</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>Сокети</translation>
     </message>
@@ -325,11 +321,30 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>помилка</translation>
+        <translation>невдача</translation>
     </message>
     <message>
         <source>auto-restart</source>
         <translation>авто-перезапуск</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Попередження</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Процесор використано на понад %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Пам&apos;ять використано на понад %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Перегляд</translation>
     </message>
 </context>
 <context>
@@ -664,7 +679,7 @@ Are you sure you want to continue?</source>
     <name>Process.Graph.View</name>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation>ПРЦ</translation>
     </message>
     <message>
         <source>Disk read</source>
@@ -713,6 +728,13 @@ Are you sure you want to continue?</source>
     <message>
         <source>Disks</source>
         <translation>Диски</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Завантаження</translation>
     </message>
 </context>
 <context>
@@ -767,13 +789,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>Всі процеси</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Завантаження</translation>
     </message>
 </context>
 <context>
@@ -881,7 +896,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>CPU</source>
-        <translation>Процесор</translation>
+        <translation>ПРЦ</translation>
     </message>
     <message>
         <source>Memory</source>
@@ -947,10 +962,6 @@ Are you sure you want to continue?</source>
         <translation>Показувати попередження, якщо використання перевищує порогове значення</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Сповіщення</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Поріг попередження для процесора (%)</translation>
     </message>
@@ -961,6 +972,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation>Інтервал попередження (хв.)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Сповіщення</translation>
     </message>
 </context>
 <context>
@@ -983,11 +998,19 @@ Are you sure you want to continue?</source>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Гаразд</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>Гаразд</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
 </context>
@@ -1034,7 +1057,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation>Активний</translation>
+        <translation type="vanished">Активний</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1065,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>State</source>
-        <translation>Стан</translation>
+        <translation type="vanished">Стан</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1078,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>Тип запуску</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Стан запуску</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Тактика запуску</translation>
     </message>
 </context>
 <context>
@@ -1088,7 +1119,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>View</source>
-        <translation>Переглянути</translation>
+        <translation>Перегляд</translation>
     </message>
 </context>
 <context>
@@ -1108,7 +1139,7 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>Служби</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>

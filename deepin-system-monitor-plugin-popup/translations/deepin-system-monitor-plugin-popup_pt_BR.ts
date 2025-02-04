@@ -335,7 +335,7 @@
     <message>
         <location filename="../common/common.cpp" line="123"/>
         <source>Restart</source>
-        <translation>Reiniciar</translation>
+        <translation>Atualizar</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="128"/>

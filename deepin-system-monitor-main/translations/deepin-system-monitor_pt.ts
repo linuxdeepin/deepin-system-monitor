@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frequência</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Fornecedor</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>reiniciar-automaticamente</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Aviso</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Ver</translation>
     </message>
 </context>
 <context>
@@ -718,6 +733,13 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>A carregar</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>All processes</source>
         <translation>Todos os processos</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -887,7 +902,7 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Memória</translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -949,10 +964,6 @@ Tem a certeza de que deseja continuar?</translation>
         <translation>Mostrar avisos quando a utilização exceder os limites</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Notificações</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Aviso sobre limite da CPU (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Intervalo de avisos (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notificações</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Service instance name</source>
         <translation>Nome da instância do serviço</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Ativo</translation>
+        <translation type="vanished">Ativo</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Tem a certeza de que deseja continuar?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Estado</translation>
+        <translation type="vanished">Estado</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Tipo de arranque</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <source>Services</source>
         <translation>Serviços</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Utilizadores</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Administrador</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
