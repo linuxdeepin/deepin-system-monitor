@@ -40,8 +40,6 @@ UserPageWidget::UserPageWidget(DWidget *parent)
     struct passwd *pws;
     pws = getpwuid(getuid());
     m_currentUser = QString(pws->pw_name);
-    qCInfo(app) << "UserPageWidget Construction:"
-                << "currentuser:" << m_currentUser;
     initUI();
     initConnections();
 }
@@ -206,7 +204,6 @@ void UserPageWidget::paintEvent(QPaintEvent *)
 void UserPageWidget::onUserChanged()
 {
     QString userName = m_accountListWidget->getCurrentItemUserName();
-    qCInfo(app) << userName << "user changed";
     m_procTable->setUserModeName(userName);
     onTextContentChanged();
     update();

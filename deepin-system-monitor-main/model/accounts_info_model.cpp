@@ -26,17 +26,11 @@ AccountsInfoModel::AccountsInfoModel(QObject *parent)
     struct passwd *pws;
     pws = getpwuid(getuid());
     m_currentUserName = QString(pws->pw_name);
-    qCInfo(app) << "AccountsInfoModel constructor line 26"
-            << "m_currentUserName:" << m_currentUserName;
     //获取online userList
     updateUserOnlineStatus();
-    qCInfo(app) << "AccountsInfoModel constructor line 29"
-            << "online user list:" << m_onlineUsers;
 
     QStringList userList = m_accountsInter->property("UserList").toStringList();
     updateUserList(userList);
-    qCInfo(app) << "AccountsInfoModel constructor line 31"
-            << "Accounts user list:" << userList;
 
     QDBusConnection::systemBus().connect(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, "UserListChanged",
                                          this, SLOT(onUserListChanged(QStringList)));
@@ -74,8 +68,6 @@ void AccountsInfoModel::onSessionRemoved(const QString &in0, const QDBusObjectPa
 
 void AccountsInfoModel::updateUserList(const QStringList &userPathList)
 {
-    qCInfo(app) << "AccountsInfoModel updateUserList line 61"
-            << "updateUserList begins!";
     // 释放构造对象
     qDeleteAll(m_userMap.values());
     m_userMap.clear();
@@ -95,8 +87,6 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
             newUser->setIsCurrentUser(true);
             m_currentUserType = newUser->userType();
         }
-        qCInfo(app) << "AccountsInfoModel updateUserList line 78"
-                << "get user info of :" << newUser->name();
         m_userMap.insert(newUser->name(), newUser);
 
         delete userDBus;
@@ -105,8 +95,6 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
 
 void AccountsInfoModel::updateUserOnlineStatus()
 {
-    qCInfo(app) << "AccountsInfoModel updateUserOnlineStatus line 88"
-            << "updateUserOnlineStatus begins!";
     m_onlineUsers.clear();
 
     //异步获取SessionList
@@ -134,8 +122,6 @@ QList<User *> AccountsInfoModel::userList() const
             onlineUsers << user;
         }
     }
-    qCInfo(app) << "AccountsInfoModel userList"
-            << "get online users:" << m_onlineUsers;
 
     return onlineUsers;
 }
