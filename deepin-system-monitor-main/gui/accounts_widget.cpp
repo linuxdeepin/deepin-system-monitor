@@ -17,8 +17,6 @@ AccountsWidget::AccountsWidget(QWidget *parent)
     : QWidget(parent), m_userModel(new AccountsInfoModel(this)), m_userItemModel(new QStandardItemModel(this)), m_userlistView(new UserListView(this))
 {
     m_currentUserType = m_userModel->getCurrentUserType();
-    qCInfo(app) << "AccountsWidget Constructor line 20:"
-                << "current user type:" << m_currentUserType;
     initUI();
     initConnection();
     addInfo(m_userModel);
@@ -127,12 +125,8 @@ void AccountsWidget::onUpdateUserList()
 
 void AccountsWidget::addInfo(AccountsInfoModel *model)
 {
-    qCInfo(app) << "AccountsWidget addInfo line 130:"
-                << "add info from list:" << model->userList();
     //给账户列表添加用户
     for (auto user : model->userList()) {
-        qCInfo(app) << "AccountsWidget addInfo line 132:"
-                    << "add user to listview:" << user->name();
         addUser(user);
     }
 }
@@ -140,8 +134,6 @@ void AccountsWidget::addInfo(AccountsInfoModel *model)
 void AccountsWidget::addUser(User *user)
 {
     //active
-    qCInfo(app) << "AccountsWidget addUser line 141:"
-                << "addUser begins:" << user->name();
     m_userList << user;
     DStandardItem *item = new DStandardItem;
     item->setData(0, AccountsWidget::ItemDataRole);
@@ -153,9 +145,6 @@ void AccountsWidget::addUser(User *user)
     /* 用户列表显示用户类型 */
     auto *subTitleAction = new DViewItemAction;
     setTitelFunc(user->userType(), subTitleAction);
-
-    qCInfo(app) << "AccountsWidget addUser line 156:"
-                << "subTitleAction text:" << subTitleAction->text();
 
     subTitleAction->setFontSize(DFontSizeManager::T8);
     subTitleAction->setTextColorRole(DPalette::TextTips);
