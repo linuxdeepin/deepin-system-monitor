@@ -383,6 +383,10 @@ void MainWindow::onKillProcess()
                                                     QStringLiteral("/KWin"),
                                                     QStringLiteral("org.kde.KWin"),
                                                     QStringLiteral("killWindow"));
+        hide();
         QDBusConnection::sessionBus().asyncCall(message);
+        QTimer::singleShot(1000,this,[this](){
+            show();
+        });
     }
 }
