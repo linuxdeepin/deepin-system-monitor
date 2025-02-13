@@ -186,7 +186,17 @@ void openFilePathItem(const QString &path)
 {
     bool result = QProcess::startDetached(QString("dde-file-manager --show-item \"%1\"").arg(path));
     if (!result) {
-        QDesktopServices::openUrl(QUrl(path));
+        QUrl displayUrl = QUrl::fromLocalFile(path);
+        QDBusInterface interface(QStringLiteral("org.freedesktop.FileManager1"),
+                                        QStringLiteral("/org/freedesktop/FileManager1"),
+                                        QStringLiteral("org.freedesktop.FileManager1"));
+        if (interface.isValid()) {
+            QStringList list;
+            list << displayUrl.toString();
+            interface.call("ShowItems", list, "");
+        } else {
+            QDesktopServices::openUrl(displayUrl);
+        }
     }
 }
 
