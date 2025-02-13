@@ -277,7 +277,19 @@ bool SystemMonitorService::checkCpuAlarm()
     if (mCpuUsage >= mAlarmCpuUsage && diffTime >= timeGap) {
         mLastAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showCpuAlarmNotify \"%1\" ").arg(QString::number(mCpuUsage));
-        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
+        QTimer::singleShot(100, this, [=]() {
+            QStringList args;
+            args << "call" << "-e" << "-d" << "com.deepin.SystemMonitorServer"
+                 << "-o" << "/com/deepin/SystemMonitorServer"
+                 << "-m" << "com.deepin.SystemMonitorServer.showCpuAlarmNotify"
+                 << QString::number(mCpuUsage);
+            QProcess process;
+            process.start("gdbus", args);
+            process.waitForFinished(5000);
+            if (process.exitCode() != 0) {
+                QProcess::startDetached(cmd);
+            }
+        });
     }
 
     return false;
@@ -292,7 +304,19 @@ bool SystemMonitorService::checkMemoryAlarm()
     if (mMemoryUsage >= mAlarmMemoryUsage && diffTime > timeGap) {
         mLastAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showMemoryAlarmNotify \"%1\" ").arg(QString::number(mMemoryUsage));
-        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
+        QTimer::singleShot(100, this, [=]() {
+            QStringList args;
+            args << "call" << "-e" << "-d" << "com.deepin.SystemMonitorServer"
+                 << "-o" << "/com/deepin/SystemMonitorServer"
+                 << "-m" << "com.deepin.SystemMonitorServer.showMemoryAlarmNotify"
+                 << QString::number(mMemoryUsage);
+            QProcess process;
+            process.start("gdbus", args);
+            process.waitForFinished(5000);
+            if (process.exitCode() != 0) {
+                QProcess::startDetached(cmd);
+            }
+        });
     }
 
     return false;
