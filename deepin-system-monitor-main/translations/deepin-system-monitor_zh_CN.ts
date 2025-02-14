@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>App.About</name>
     <message>
@@ -104,7 +102,7 @@
     </message>
     <message>
         <source>Processes</source>
-        <translation>进程数</translation>
+        <translation>进程</translation>
     </message>
     <message>
         <source>Threads</source>
@@ -334,19 +332,19 @@
     <name>DBusAlarmNotify</name>
     <message>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>请注意！您的设备CPU占用已达%1%！</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>请注意！您的设备内存占用已达%1%！</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>View</source>
-        <translation>查看</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>进程名</translation>
+        <translation>名称</translation>
     </message>
 </context>
 <context>
@@ -916,11 +914,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>下载</translation>
+        <translation>正在接收</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>上传</translation>
+        <translation>正在发送</translation>
     </message>
     <message>
         <source>PID</source>
@@ -966,10 +964,6 @@ Are you sure you want to continue?</source>
         <translation>当数值高于以下阈值时自动报警</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>消息通知</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU占用 (%)</translation>
     </message>
@@ -980,6 +974,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation>预警间隔 (分钟)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>消息通知</translation>
     </message>
 </context>
 <context>
@@ -998,6 +996,16 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service instance name</source>
         <translation>服务实例名</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1050,16 +1058,16 @@ Are you sure you want to continue?</source>
         <translation>内存加载</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>启动状态</translation>
+        <source>Active</source>
+        <translation type="vanished">活动</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>运行状态</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>启用策略</translation>
+        <source>State</source>
+        <translation type="vanished">状态</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1072,6 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>启动方式</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1105,7 +1121,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>View</source>
-        <translation>视图</translation>
+        <translation>查看</translation>
     </message>
 </context>
 <context>
@@ -1119,13 +1135,13 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>程序进程</translation>
+        <translation>进程</translation>
     </message>
     <message>
         <source>Services</source>
         <translation>系统服务</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>用户</translation>
     </message>
