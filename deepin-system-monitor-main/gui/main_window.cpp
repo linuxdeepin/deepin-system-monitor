@@ -384,9 +384,15 @@ void MainWindow::onKillProcess()
                                                     QStringLiteral("org.kde.KWin"),
                                                     QStringLiteral("killWindow"));
         hide();
-        QDBusConnection::sessionBus().asyncCall(message);
-        QTimer::singleShot(1000,this,[this](){
-            show();
+        QTimer::singleShot(300,this,[this](){
+            auto message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KWin"),
+                                                        QStringLiteral("/KWin"),
+                                                        QStringLiteral("org.kde.KWin"),
+                                                        QStringLiteral("killWindow"));
+            QDBusConnection::sessionBus().asyncCall(message);
+            QTimer::singleShot(1000,this,[this](){
+                show();
+            });
         });
     }
 }
