@@ -287,7 +287,8 @@ bool SystemMonitorService::checkCpuAlarm()
             process.start("gdbus", args);
             process.waitForFinished(5000);
             if (process.exitCode() != 0) {
-                QProcess::startDetached(cmd);
+                process.start("gdbus", args);
+                process.waitForFinished(5000);
             }
         });
     }
@@ -314,7 +315,8 @@ bool SystemMonitorService::checkMemoryAlarm()
             process.start("gdbus", args);
             process.waitForFinished(5000);
             if (process.exitCode() != 0) {
-                QProcess::startDetached(cmd);
+                process.start("gdbus", args);
+                process.waitForFinished(5000);
             }
         });
     }

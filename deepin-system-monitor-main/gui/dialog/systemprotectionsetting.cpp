@@ -529,36 +529,38 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
 
     //QString cmd("qdbus org.deepin.SystemMonitorDaemon /org/deepin/SystemMonitorDaemon org.deepin.SystemMonitorDaemon.");
     //qdbus 改为gdbus
-    QString cmd("gdbus call -e -d  org.deepin.SystemMonitorDaemon -o /org/deepin/SystemMonitorDaemon -m org.deepin.SystemMonitorDaemon.");
-    bool needCall = false;
+    QString program = "gdbus";
+    QStringList arguments;
+    arguments << "call" << "-e" << "-d" << "org.deepin.SystemMonitorDaemon" 
+              << "-o" << "/org/deepin/SystemMonitorDaemon" 
+              << "-m" << "org.deepin.SystemMonitorDaemon.";
 
-    // 拼接dbus调用命令字串
+    // 根据不同的key添加对应的方法名和参数
     if (key == AlarmStatusOptionName) {
-        cmd.append("setSystemProtectionStatus ");   // Method Name
-        cmd.append(value.toString());   // value
-        needCall = true;
+        arguments.last().append("setSystemProtectionStatus");
+        arguments << value.toString();
     } else if (key == AlarmCpuUsageOptionName) {
-        cmd.append("setAlarmUsageOfCpu ");   // Method Name
-        cmd.append(value.toString());   // value
-        needCall = true;
+        arguments.last().append("setAlarmUsageOfCpu"); 
+        arguments << value.toString();
     } else if (key == AlarmMemUsageOptionName) {
-        cmd.append("setAlarmUsageOfMemory ");   // Method Name
-        cmd.append(value.toString());   // value
-        needCall = true;
+        arguments.last().append("setAlarmUsageOfMemory");
+        arguments << value.toString();
     } else if (key == AlarmIntervalOptionName) {
-        cmd.append("setAlarmMsgInterval ");   // Method Name
-        cmd.append(value.toString());   // value
-        needCall = true;
+        arguments.last().append("setAlarmMsgInterval");
+        arguments << value.toString();
     } else if (key == AlarmLastTimeOptionName) {
-        cmd.append("setAlarmLastTimeInterval ");   // Mehthod Name
-        cmd.append(value.toString());
-        needCall = true;
+        arguments.last().append("setAlarmLastTimeInterval");
+        arguments << value.toString();
+    } else {
+        return;
     }
 
-    if (needCall) {
-        qCDebug(app) << __FUNCTION__ << __LINE__ << "，dbus cmd：" << cmd;
-        QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
-    }
+    QTimer::singleShot(100, this, [=]() {
+        qCDebug(app) << __FUNCTION__ << __LINE__ << "，dbus cmd：" << program << arguments;
+        QProcess process;
+        process.start(program, arguments);
+        process.waitForFinished(5000);
+    });
 }
 
 DSettings *SystemProtectionSetting::getDSettingPointor()
