@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frekvence</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Výrobce</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -325,11 +321,30 @@
     </message>
     <message>
         <source>failed</source>
-        <translation>nezdařilo se</translation>
+        <translation>selhalo</translation>
     </message>
     <message>
         <source>auto-restart</source>
         <translation>automatický restart</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -348,7 +363,7 @@
     </message>
     <message>
         <source>Cached</source>
-        <translation>V mezipaměti</translation>
+        <translation>Ve vyrovnávací paměti</translation>
     </message>
     <message>
         <source>Buffers</source>
@@ -368,7 +383,7 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation>„Špinavé</translation>
+        <translation>„Špinavé“</translation>
     </message>
     <message>
         <source>Mapped</source>
@@ -492,7 +507,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Force End</source>
@@ -546,7 +561,7 @@ Opravdu chcete pokračovat?</translation>
     <name>NetInfoModel</name>
     <message>
         <source>Connection type</source>
-        <translation>Typ připojen</translation>
+        <translation>Typ připojení</translation>
     </message>
     <message>
         <source>ESSID</source>
@@ -648,7 +663,7 @@ Opravdu chcete pokračovat?</translation>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klepněte na program, který chcete ukončit</translation>
+        <translation>Klikněte na aplikaci, kterou chcete ukončit</translation>
     </message>
 </context>
 <context>
@@ -718,6 +733,13 @@ Opravdu chcete pokračovat?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Načítání</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>All processes</source>
         <translation>Všechny procesy</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -867,7 +882,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Change</source>
@@ -887,7 +902,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Paměť</translation>
+        <translation>Operační paměť </translation>
     </message>
     <message>
         <source>Disk write</source>
@@ -949,10 +964,6 @@ Opravdu chcete pokračovat?</translation>
         <translation>Zobrazit varování, pokud využití přesáhne nastavenou hranici</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Upozornění</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Práh varování ohledně procesoru (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Interval varování (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Upozornění</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Service instance name</source>
         <translation>Název instance služby</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktivita</translation>
+        <translation type="vanished">Činnost</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Status</translation>
+        <translation type="vanished">Stav</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Typ spouštění</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <source>Services</source>
         <translation>Služby</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

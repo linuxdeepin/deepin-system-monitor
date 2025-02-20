@@ -255,7 +255,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="39"/>
         <source>Virtual memory</source>
-        <translation type="unfinished"/>
+        <translation>Memori virtual</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
@@ -270,12 +270,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="45"/>
         <source>Disk read</source>
-        <translation>Baca disk</translation>
+        <translation>Baca diska</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="47"/>
         <source>Disk write</source>
-        <translation>Tulis disk</translation>
+        <translation>Tulis diska</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="49"/>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>Tidak didukung</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../common/common.cpp" line="69"/>
         <source>Force end application</source>
-        <translation type="unfinished"/>
+        <translation>Paksa akhiri aplikasi</translation>
     </message>
 </context>
 <context>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../common/common.cpp" line="108"/>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>Layanan</translation>
     </message>
 </context>
 </TS>

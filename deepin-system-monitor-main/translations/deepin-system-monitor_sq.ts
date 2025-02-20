@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>App.About</name>
     <message>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frekuencë</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Tregtues</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -333,10 +329,29 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Kujdes</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Përdorimi juaj i CPU-së është më lart se %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Përdorimi juaj i kujtesës është më lart se %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Shiheni</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
-        <translation>Të përdorur</translation>
+        <translation>Të përdorura</translation>
     </message>
     <message>
         <source>Available</source>
@@ -718,6 +733,13 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Po ngarkohet</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>All processes</source>
         <translation>Krejt proceset</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -949,10 +964,6 @@ Jeni i sigurt se doni të vazhdohet?</translation>
         <translation>Shfaq sinjalizime, kur përdorimi tejkalon pragjet</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Njoftime</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>Prag sinjalizimi për CPU-në (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Interval sinjalizimi (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Njoftime</translation>
     </message>
 </context>
 <context>
@@ -981,6 +996,16 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Service instance name</source>
         <translation>Emër instance shërbimi</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1034,7 +1059,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktiv</translation>
+        <translation type="vanished">Aktiv</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1042,7 +1067,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Gjendje</translation>
+        <translation type="vanished">Gjendje</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1080,14 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Lloj Nisjeje</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1107,6 +1140,28 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <source>Services</source>
         <translation>Shërbime</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Përdorues</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Përgjegjës</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Përdorues Standard</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Përpunoni hollësi llogarie</translation>
     </message>
 </context>
 </TS>

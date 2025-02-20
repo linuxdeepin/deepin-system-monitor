@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ms">
 <context>
     <name>App.About</name>
     <message>
@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Penggunaan keseluruhan</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Penggunaan individu</translation>
     </message>
 </context>
 <context>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frekuensi</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Pembekal</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -333,6 +329,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Amaran</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>Penggunaan CPU anda lebih tinggi berbanding %1%!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Penggunaan ingatan anda lebih tinggi berbanding %1%!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Lihat</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -509,7 +524,7 @@ Anda pasti mahu teruskannya?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Tetapan</translation>
     </message>
 </context>
 <context>
@@ -719,6 +734,13 @@ RX</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Memuatkan</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -770,13 +792,6 @@ RX</translation>
     <message>
         <source>All processes</source>
         <translation>Semua proses</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -939,31 +954,31 @@ RX</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Tetapan</translation>
     </message>
     <message>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Perlindungan Sistem</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Notifications</source>
-        <translation type="unfinished"/>
+        <translation>Tunjuk amaran ketika penggunaan melangkaui ambang</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Ambang amaran CPU (%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Ambang amaran ingatan (%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Sela amaran (min)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Pemberitahuan</translation>
     </message>
 </context>
 <context>
@@ -982,6 +997,16 @@ RX</translation>
     <message>
         <source>Service instance name</source>
         <translation>Nama tika perkhidmatan</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1035,7 +1060,7 @@ RX</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktif</translation>
+        <translation type="vanished">Aktif</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1043,7 +1068,7 @@ RX</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Keadaan</translation>
+        <translation type="vanished">Keadaan</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1057,20 +1082,28 @@ RX</translation>
         <source>Startup Type</source>
         <translation>Jenis Permulaan</translation>
     </message>
+    <message>
+        <source>Start State</source>
+        <translation>Keadaan Mula</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Taktik Mula</translation>
+    </message>
 </context>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Tetapan</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Boleh ubah suai)</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Julat: %1-%2</translation>
     </message>
 </context>
 <context>
@@ -1108,6 +1141,28 @@ RX</translation>
     <message>
         <source>Services</source>
         <translation>Perkhidmatan</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Pengguna</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Pentadbir</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Pengguna Biasa</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Sunting maklumat akaun</translation>
     </message>
 </context>
 </TS>
