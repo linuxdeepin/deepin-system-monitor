@@ -1,3 +1,10 @@
+deepin-system-monitor (6.5.7) unstable; urgency=medium
+
+  * fix: optimize gdbus call process in system monitor (#394)
+  * fix: optimize window kill process in KDE environment (#395)
+
+ -- renbin <renbin@uniontech.com>  Thu, 20 Feb 2025 19:34:23 +0800
+
 deepin-system-monitor (6.5.6) unstable; urgency=medium
 
   * chore: New version 6.5.6.
