@@ -102,7 +102,7 @@
     </message>
     <message>
         <source>Processes</source>
-        <translation>进程</translation>
+        <translation>进程数</translation>
     </message>
     <message>
         <source>Threads</source>
@@ -332,19 +332,19 @@
     <name>DBusAlarmNotify</name>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>警告</translation>
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>请注意！您的设备CPU占用已达%1%！</translation>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>请注意！您的设备内存占用已达%1%！</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>查看</translation>
     </message>
 </context>
 <context>
@@ -656,7 +656,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>名称</translation>
+        <translation>进程名</translation>
     </message>
 </context>
 <context>
@@ -914,11 +914,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>正在接收</translation>
+        <translation>下载</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>正在发送</translation>
+        <translation>上传</translation>
     </message>
     <message>
         <source>PID</source>
@@ -1083,11 +1083,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>启动状态</translation>
     </message>
     <message>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>启用策略</translation>
     </message>
 </context>
 <context>
@@ -1121,7 +1121,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>View</source>
-        <translation>查看</translation>
+        <translation>视图</translation>
     </message>
 </context>
 <context>
@@ -1135,7 +1135,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>进程</translation>
+        <translation>程序进程</translation>
     </message>
     <message>
         <source>Services</source>
