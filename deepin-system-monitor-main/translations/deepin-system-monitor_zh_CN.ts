@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>App.About</name>
     <message>
@@ -966,10 +964,6 @@ Are you sure you want to continue?</source>
         <translation>当数值高于以下阈值时自动报警</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>消息通知</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU占用 (%)</translation>
     </message>
@@ -980,6 +974,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation>预警间隔 (分钟)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>消息通知</translation>
     </message>
 </context>
 <context>
@@ -998,6 +996,16 @@ Are you sure you want to continue?</source>
     <message>
         <source>Service instance name</source>
         <translation>服务实例名</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1050,16 +1058,16 @@ Are you sure you want to continue?</source>
         <translation>内存加载</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>启动状态</translation>
+        <source>Active</source>
+        <translation type="vanished">活动</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>运行状态</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>启用策略</translation>
+        <source>State</source>
+        <translation type="vanished">状态</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1072,6 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>启动方式</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>启动状态</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>启用策略</translation>
     </message>
 </context>
 <context>
@@ -1125,7 +1141,7 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>系统服务</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>用户</translation>
     </message>

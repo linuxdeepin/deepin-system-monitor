@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_HK">
 <context>
     <name>App.About</name>
     <message>
@@ -65,10 +65,6 @@
         <translation>頻率</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>製造商</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>插槽</translation>
     </message>
@@ -106,7 +102,7 @@
     </message>
     <message>
         <source>Processes</source>
-        <translation>進程數</translation>
+        <translation>進程</translation>
     </message>
     <message>
         <source>Threads</source>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>自動重啟</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -641,7 +656,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>進程名</translation>
+        <translation>名稱</translation>
     </message>
 </context>
 <context>
@@ -718,6 +733,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>正在加載</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>所有進程</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>正在加載</translation>
     </message>
 </context>
 <context>
@@ -899,11 +914,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Download</source>
-        <translation>下載</translation>
+        <translation>正在接收</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>上傳</translation>
+        <translation>正在發送</translation>
     </message>
     <message>
         <source>PID</source>
@@ -949,10 +964,6 @@ Are you sure you want to continue?</source>
         <translation>當數值高於以下閾值時自動報警</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>消息通知</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU佔用 (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Warning interval (min)</source>
         <translation>預警間隔 (分鐘)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>消息通知</translation>
     </message>
 </context>
 <context>
@@ -985,11 +1000,19 @@ Are you sure you want to continue?</source>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>確 定</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>確 定</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>取 消</translation>
     </message>
 </context>
@@ -1035,16 +1058,16 @@ Are you sure you want to continue?</source>
         <translation>內存加載</translation>
     </message>
     <message>
-        <source>Start State</source>
-        <translation>啟動狀態</translation>
+        <source>Active</source>
+        <translation type="vanished">活動</translation>
     </message>
     <message>
         <source>Sub</source>
         <translation>運行狀態</translation>
     </message>
     <message>
-        <source>Start Tactic</source>
-        <translation>啟用策略</translation>
+        <source>State</source>
+        <translation type="vanished">狀態</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1057,6 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>啟動方式</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1090,7 +1121,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>View</source>
-        <translation>視圖</translation>
+        <translation>查看</translation>
     </message>
 </context>
 <context>
@@ -1104,13 +1135,13 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>程序進程</translation>
+        <translation>進程</translation>
     </message>
     <message>
         <source>Services</source>
         <translation>系統服務</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>用戶</translation>
     </message>

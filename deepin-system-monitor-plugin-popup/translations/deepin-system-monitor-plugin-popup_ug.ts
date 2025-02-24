@@ -136,7 +136,7 @@
     <message>
         <location filename="../process/process.cpp" line="72"/>
         <source>Custom</source>
-        <translation>Custom</translation>
+        <translation>بەلگىلەش</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="73"/>

@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Genel kullanım</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Bireysel kullanım</translation>
     </message>
 </context>
 <context>
@@ -63,10 +63,6 @@
     <message>
         <source>Frequency</source>
         <translation>Frekans</translation>
-    </message>
-    <message>
-        <source>Vendor</source>
-        <translation>Sağlayan</translation>
     </message>
     <message>
         <source>Sockets</source>
@@ -330,6 +326,25 @@
     <message>
         <source>auto-restart</source>
         <translation>otomatik yeniden başlat</translation>
+    </message>
+</context>
+<context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>Uyarı</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>CPU kullanımınız %1%&apos;den fazla!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>Bellek kullanımınız %1%&apos;den fazla!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>Görünüm</translation>
     </message>
 </context>
 <context>
@@ -718,6 +733,13 @@ Devam etmek istediğine emin misin?</translation>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>Yükleniyor</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +791,6 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>All processes</source>
         <translation>Tüm işlemler</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>Yükleniyor</translation>
     </message>
 </context>
 <context>
@@ -949,10 +964,6 @@ Devam etmek istediğine emin misin?</translation>
         <translation>Kullanım eşikleri aşıldığında uyarı göster</translation>
     </message>
     <message>
-        <source>Notifications</source>
-        <translation>Bildirimler</translation>
-    </message>
-    <message>
         <source>CPU warning threshold (%)</source>
         <translation>CPU uyarı eşiği (%)</translation>
     </message>
@@ -963,6 +974,10 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Warning interval (min)</source>
         <translation>Uyarı aralığı (dk)</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Bildirimler</translation>
     </message>
 </context>
 <context>
@@ -985,11 +1000,19 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Tamam</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>Tamam</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>İptal</translation>
     </message>
 </context>
@@ -1036,7 +1059,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktif</translation>
+        <translation type="vanished">Aktif</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -1044,7 +1067,7 @@ Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Durum</translation>
+        <translation type="vanished">Durum</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1057,6 +1080,14 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Startup Type</source>
         <translation>Başlangıç Türü</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>Başlangıç Durumu</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>Taktiği başlat</translation>
     </message>
 </context>
 <context>
@@ -1109,6 +1140,28 @@ Devam etmek istediğine emin misin?</translation>
     <message>
         <source>Services</source>
         <translation>Hizmetler</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>Kullanıcılar</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>Yönetici</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>Standart kullanıcı</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Kullanıcı bilgisini düzenle</translation>
     </message>
 </context>
 </TS>

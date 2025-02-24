@@ -21,7 +21,7 @@
         <location filename="../gui/cpu_widget.cpp" line="216"/>
         <location filename="../gui/cpu_widget.cpp" line="217"/>
         <source>Utilization</source>
-        <translation type="unfinished"/>
+        <translation>استخدام</translation>
     </message>
 </context>
 <context>
@@ -34,12 +34,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="258"/>
         <source>Read</source>
-        <translation type="unfinished"/>
+        <translation>قراءة</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="259"/>
         <source>Write</source>
-        <translation type="unfinished"/>
+        <translation>كتابة</translation>
     </message>
 </context>
 <context>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="260"/>
         <source>Total received</source>
-        <translation type="unfinished"/>
+        <translation>المجموع المستلم</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="262"/>
         <source>Total sent</source>
-        <translation type="unfinished"/>
+        <translation>المجموع المرسل</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>
@@ -250,12 +250,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Shared memory</source>
-        <translation type="unfinished"/>
+        <translation>ذاكرة gemeinsam</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="39"/>
         <source>Virtual memory</source>
-        <translation type="unfinished"/>
+        <translation>ذاكرة الظاهرية</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>غير مدعوم</translation>
     </message>
 </context>
 <context>

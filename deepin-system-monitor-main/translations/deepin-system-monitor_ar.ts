@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ar">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ar">
 <context>
     <name>App.About</name>
     <message>
@@ -13,6 +11,128 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailViewWidget</name>
+    <message>
+        <source>Hide details</source>
+        <translation>إخفاء التفاصيل</translation>
+    </message>
+    <message>
+        <source>Overall utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Individual utilization</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BlockDevItemWidget</name>
+    <message>
+        <source>Read</source>
+        <translation>قراءة</translation>
+    </message>
+    <message>
+        <source>Write</source>
+        <translation>كتابة</translation>
+    </message>
+</context>
+<context>
+    <name>CPUDetailGrapTableItem</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 ثانية </translation>
+    </message>
+</context>
+<context>
+    <name>CPUInfoModel</name>
+    <message>
+        <source>%1 days %2 hours %3 minutes</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>CPUSummaryTableModel</name>
+    <message>
+        <source>Utilization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Current frequency</source>
+        <translation>التردد الحالي</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation>التردد</translation>
+    </message>
+    <message>
+        <source>Sockets</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logical processors</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Virtualization</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>L1i cache</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>L1d cache</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>L2 cache</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>L3 cache</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Load average</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File descriptors</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Processes</source>
+        <translation>العمليات</translation>
+    </message>
+    <message>
+        <source>Threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Host name</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>OS type</source>
+        <translation>نوع نظام التشغيل</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>النسخة</translation>
+    </message>
+    <message>
+        <source>Up time</source>
+        <translation>وقت التشغيل</translation>
+    </message>
+</context>
+<context>
+    <name>ChartViewWidget</name>
+    <message>
+        <source>60 seconds</source>
+        <translation>60 ثانية </translation>
+    </message>
+</context>
+<context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
@@ -20,18 +140,17 @@
     </message>
 </context>
 <context>
-    <name>Core</name>
+    <name>CompactCpuMonitor</name>
     <message>
-        <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>تفاصيل</translation>
     </message>
+</context>
+<context>
+    <name>CpuMonitor</name>
     <message>
-        <source>5 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>15 minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Details</source>
+        <translation>تفاصيل</translation>
     </message>
 </context>
 <context>
@@ -210,36 +329,143 @@
     </message>
 </context>
 <context>
-    <name>DetailViewStackedWidget</name>
+    <name>DBusAlarmNotify</name>
     <message>
-        <source>View performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Warning</source>
+        <translation>تحذير</translation>
     </message>
     <message>
-        <source>Hiding performance parameters</source>
-        <translation type="unfinished"></translation>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>CPU</source>
-        <translation type="unfinished">المعالج</translation>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Memory</source>
-        <translation type="unfinished">الذاكرة</translation>
+        <source>View</source>
+        <translation>عرض</translation>
+    </message>
+</context>
+<context>
+    <name>DeailTableModel</name>
+    <message>
+        <source>Used</source>
+        <translation>المستخدم</translation>
     </message>
     <message>
-        <source>Netif</source>
-        <translation type="unfinished"></translation>
+        <source>Available</source>
+        <translation>المتاح</translation>
     </message>
     <message>
-        <source>BlockDev</source>
-        <translation type="unfinished"></translation>
+        <source>Shared</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cached</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Buffers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cached swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>تفعيل</translation>
+    </message>
+    <message>
+        <source>Inactive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dirty</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mapped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Total swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Free swap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Slab</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DeailTableModelBlock</name>
+    <message>
+        <source>Model</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Read speed</source>
+        <translation>سرعة القراءة</translation>
+    </message>
+    <message>
+        <source>Write speed</source>
+        <translation>سرعة الكتابة</translation>
+    </message>
+    <message>
+        <source>Capacity</source>
+        <translation>السعة</translation>
+    </message>
+    <message>
+        <source>Sectors read</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reads/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors read/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reads merged/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors written</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes completed </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes merged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sectors written/s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Writes merged/s</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Error.Dialog</name>
     <message>
         <source>OK</source>
+        <comment>button</comment>
         <translation>موافق</translation>
     </message>
 </context>
@@ -263,10 +489,6 @@ Are you sure you want to continue?</source>
 هل أنت متأكد من المتابعة؟</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation>إلغاء</translation>
-    </message>
-    <message>
         <source>End process</source>
         <translation>إنهاء العملية</translation>
     </message>
@@ -277,18 +499,149 @@ Are you sure you want to continue?</source>
 هل أنت متأكد من المتابعة؟</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation>انهاء</translation>
-    </message>
-    <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>قد يؤدي فرض إنهاء هذا التطبيق إلى فقدان البيانات
 هل أنت متأكد من المتابعة؟</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>إلغاء</translation>
+    </message>
+    <message>
         <source>Force End</source>
+        <comment>button</comment>
         <translation>انهاء اجباري</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <comment>button</comment>
+        <translation>انهاء</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Settings</source>
+        <translation>الإعدادات</translation>
+    </message>
+</context>
+<context>
+    <name>MemStatViewWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>الحجم</translation>
+    </message>
+</context>
+<context>
+    <name>NetInfoDetailItemDelegate</name>
+    <message>
+        <source>IP address:</source>
+        <translation>عنوان بروتوكول الإنترنت (IP)</translation>
+    </message>
+    <message>
+        <source>Netmask:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Broadcast:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prefixlen:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scope:</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>NetInfoModel</name>
+    <message>
+        <source>Connection type</source>
+        <translation>نوع الإتصال</translation>
+    </message>
+    <message>
+        <source>ESSID</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Link quality</source>
+        <translation>جودة الإتصال</translation>
+    </message>
+    <message>
+        <source>Signal strength</source>
+        <translation>قوة الإشارة</translation>
+    </message>
+    <message>
+        <source>Noise level</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MAC</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation>عرض النطاق الترددي</translation>
+    </message>
+    <message>
+        <source>RX packets</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX bytes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX errors</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX dropped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX overruns</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RX frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX packets</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX bytes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX errors</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX overruns</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX carrier</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>IPv4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>IPv6</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TX dropped</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -318,6 +671,10 @@ Are you sure you want to continue?</source>
     <message>
         <source>Memory</source>
         <translation>الذاكرة</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>المستلم</translation>
     </message>
 </context>
 <context>
@@ -355,10 +712,6 @@ Are you sure you want to continue?</source>
         <translation>الرفع</translation>
     </message>
     <message>
-        <source>Disk</source>
-        <translation>القرص</translation>
-    </message>
-    <message>
         <source>Network</source>
         <translation>الشبكة</translation>
     </message>
@@ -369,6 +722,21 @@ Are you sure you want to continue?</source>
     <message>
         <source>Total Sent</source>
         <translation>الإرسال الإجمالي</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>المرسل</translation>
+    </message>
+    <message>
+        <source>Disks</source>
+        <translation>الأقراص</translation>
+    </message>
+</context>
+<context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -508,16 +876,18 @@ Are you sure you want to continue?</source>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
+        <source>Custom Priority</source>
+        <translation>أولوية مخصصة</translation>
+    </message>
+    <message>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>إلغاء</translation>
     </message>
     <message>
         <source>Change</source>
+        <comment>button</comment>
         <translation>تغيير</translation>
-    </message>
-    <message>
-        <source>Custom Priority</source>
-        <translation>أولوية مخصصة</translation>
     </message>
 </context>
 <context>
@@ -566,6 +936,49 @@ Are you sure you want to continue?</source>
         <source>Priority</source>
         <translation>أولوية</translation>
     </message>
+    <message>
+        <source>Shared memory</source>
+        <translation>الذاكرة المشتركة</translation>
+    </message>
+    <message>
+        <source>Virtual memory</source>
+        <translation>الذاكرة الإفتراضية </translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Not support</source>
+        <translation>غير مدعوم</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>الإعدادات</translation>
+    </message>
+    <message>
+        <source>System Protection</source>
+        <translation>حماية النظام</translation>
+    </message>
+    <message>
+        <source>Show warnings when the usage exceeds the thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>CPU warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Memory warning threshold (%)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Warning interval (min)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>التنبيهات</translation>
+    </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
@@ -581,16 +994,26 @@ Are you sure you want to continue?</source>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
+        <source>Service instance name</source>
+        <translation>اسم مثيل الخدمة</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>OK</source>
         <translation>موافق</translation>
     </message>
     <message>
         <source>Cancel</source>
         <translation>إلغاء</translation>
-    </message>
-    <message>
-        <source>Service instance name</source>
-        <translation>اسم مثيل الخدمة</translation>
     </message>
 </context>
 <context>
@@ -636,7 +1059,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Active</source>
-        <translation>تفعيل</translation>
+        <translation type="vanished">تفعيل</translation>
     </message>
     <message>
         <source>Sub</source>
@@ -644,7 +1067,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>State</source>
-        <translation>حالة</translation>
+        <translation type="vanished">حالة</translation>
     </message>
     <message>
         <source>Description</source>
@@ -657,6 +1080,29 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>نوع بدء التشغيل</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>SystemProtectionSetting</name>
+    <message>
+        <source>Settings</source>
+        <translation>الإعدادات</translation>
+    </message>
+    <message>
+        <source>(Modifiable)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Range: %1-%2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -695,19 +1141,27 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>الخدمات</translation>
     </message>
+    <message>
+        <source>Users</source>
+        <translation>المستخدمون </translation>
+    </message>
 </context>
 <context>
-    <name>up %1 days(s)</name>
-    <message numerus="yes">
-        <source>SysInfo.Uptime</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>المسؤول</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>المستخدم الإفتراضي</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>تعديل معلومات الحساب</translation>
     </message>
 </context>
 </TS>
