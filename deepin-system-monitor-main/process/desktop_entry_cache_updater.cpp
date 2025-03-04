@@ -8,6 +8,9 @@
 #include <DDesktopEntry>
 #include <QDebug>
 #include <QDir>
+#include <QProcess>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 DCORE_USE_NAMESPACE
 
@@ -46,7 +49,31 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
 #endif
     QString exec = execList.size() > 1 ? execList.last().trimmed() : execStr.trimmed();
     exec = exec.remove("\"");
-    if (!tryExec.isEmpty()) {
+    if (tryExec == "/usr/bin/ll-cli") {
+        auto linglongStr = dde.stringValue("X-linglong");
+        if (!linglongStr.isEmpty()) {
+            // Use QProcess to get application info
+            QProcess process;
+            process.start("/usr/bin/ll-cli", QStringList() << "info" << linglongStr);
+            process.waitForFinished(5000);
+            QString output = QString::fromUtf8(process.readAllStandardOutput());
+
+            // Parse JSON output to get name field
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(output.toUtf8());
+            if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+                QJsonObject jsonObj = jsonDoc.object();
+                if (jsonObj.contains("name")) {
+                    entry->name = jsonObj["name"].toString();
+                }
+            }
+
+            if (!exec.isEmpty()) {
+                entry->exec = exec.split(' ');
+            } else {
+                entry->exec = tryExec.split(' ');
+            }
+        }
+    } else if (!tryExec.isEmpty()) {
         entry->exec = tryExec.split(' ');
         entry->name = QFileInfo(entry->exec[0]).baseName();
     } else if (!exec.isEmpty()) {
