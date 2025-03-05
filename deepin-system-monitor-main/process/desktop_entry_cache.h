@@ -43,12 +43,20 @@ private:
 
 inline bool DesktopEntryCache::contains(const QString &name) const
 {
-    return m_cache.contains(name);
+    for (auto &key : m_cache.keys()) {
+        if (key.toLower() == name.toLower())
+            return true;
+    }
+    return false;
 }
 
 inline const DesktopEntry DesktopEntryCache::entry(const QString &name) const
 {
-    return m_cache[name];
+    for (auto &key : m_cache.keys()) {
+        if (key.toLower() == name.toLower())
+            return m_cache[key];
+    }
+    return std::make_shared<struct desktop_entry_t>();
 }
 
 inline const DesktopEntry DesktopEntryCache::entryWithSubName(const QString &subName) const
