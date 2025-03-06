@@ -19,12 +19,13 @@ find_package(${DTK_NS} REQUIRED COMPONENTS Widget)
 
 pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
 
-if (DdeDockInterface_FOUND)
-    message("dde-dock founded: ${DdeDockInterface_VERSION}")
-    string(REGEX MATCH "^[0-9]" VERSION_MAJOR ${DdeDockInterface_VERSION})
-    if (VERSION_MAJOR STREQUAL "6" OR VERSION_MAJOR STRGREATER "6")
-        add_definitions(-DDDE_DOCK_MAJORV6)
-    endif()
+if(DdeDockInterface_FOUND)
+  message("dde-dock founded: ${DdeDockInterface_VERSION}")
+  string(REGEX MATCH "^[0-9]" VERSION_MAJOR ${DdeDockInterface_VERSION})
+
+  if(VERSION_MAJOR STREQUAL "6" OR VERSION_MAJOR STRGREATER "6")
+    add_definitions(-DDDE_DOCK_MAJORV6)
+  endif()
 endif()
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
@@ -45,7 +46,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   ${DTK_NS}::Widget
 )
 
-#安全测试加固编译参数
+# 安全测试加固编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -z relro -z now -z noexecstack -pie")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
@@ -53,21 +54,35 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wl,-Map=deepin-system-monitor-plugin.map")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-plugin.map")
 
-#生成qm
+# 生成qm
 file(GLOB APP_TS_FILES LIST_DIRECTORIES false translations/*.ts)
-if (QT_VERSION_MAJOR LESS 6)
-    qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
+
+if(QT_VERSION_MAJOR LESS 6)
+  qt5_add_translation(APP_QM_FILES ${APP_TS_FILES})
 else()
-    qt6_add_translation(APP_QM_FILES ${APP_TS_FILES})
+  qt6_add_translation(APP_QM_FILES ${APP_TS_FILES})
 endif()
+
 add_custom_target(PLUGIN_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 INSTALL(FILES com.deepin.dde.dock.module.system-monitor.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
-#INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
+
+# INSTALL(FILES com.deepin.system.monitor.plugin.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
-INSTALL(FILES asserts/icons/deepin/builtin/actions/deepin-system-monitor_20px.svg
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/share/dde-dock/icons/dcc-setting
-  RENAME deepin-system-monitor.svg
-)
-#安装翻译文件
+
+# install dde dock icon
+if(QT_VERSION_MAJOR EQUAL 6)
+  # according to pluginName()
+  INSTALL(FILES asserts/icons/deepin/builtin/dcc-deepin-system-monitor.dci
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/dde-dock/icons/dcc-setting
+    RENAME dcc-system-monitor.dci
+  )
+else()
+  INSTALL(FILES asserts/icons/deepin/builtin/actions/deepin-system-monitor_20px.svg
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/dde-dock/icons/dcc-setting
+    RENAME deepin-system-monitor.svg
+  )
+endif()
+
+# 安装翻译文件
 install(FILES ${APP_QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-system-monitor-plugin/translations)
