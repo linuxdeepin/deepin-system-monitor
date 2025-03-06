@@ -1,3 +1,12 @@
+deepin-system-monitor (6.5.8) unstable; urgency=medium
+
+  * i18n: Updates for project Deepin System Monitor (#370)
+  * chore: remove qt5 and dtkcore dependencies (#397)
+  * fix: add linglong app support in desktop entry cache updater (#398)
+  * fix: use dci icon replace svg icon(Bug: 303927)
+
+ -- renbin <renbin@uniontech.com>  Thu, 06 Mar 2025 19:07:09 +0800
+
 deepin-system-monitor (6.5.7) unstable; urgency=medium
 
   * fix: optimize gdbus call process in system monitor (#394)
