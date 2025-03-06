@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.8) unstable; urgency=medium
+
+  * chore: New version 6.5.8.
+
+ -- Wang Yu <wangyu@uniontch.com>  Thu, 06 Mar 2025 19:04:25 +0800
+
 deepin-system-monitor (6.5.7) unstable; urgency=medium
 
   * fix: optimize gdbus call process in system monitor (#394)
