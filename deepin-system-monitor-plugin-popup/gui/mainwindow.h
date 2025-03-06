@@ -9,7 +9,7 @@
 
 // dsmPluginPopup
 //#include "constants.h"
-#include "dde-dock/constants.h"
+//#include "dde-dock/constants.h"
 #include "dbus/systemmonitordbusadaptor.h"
 #include "dbus/dbusdockinterface.h"
 #include "cpu_widget.h"
