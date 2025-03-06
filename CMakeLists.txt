@@ -43,7 +43,7 @@ endif()
 #系统监视器主应用
 ADD_SUBDIRECTORY(deepin-system-monitor-main)
 #系统监视器插件
-ADD_SUBDIRECTORY(deepin-system-monitor-plugin)
+#ADD_SUBDIRECTORY(deepin-system-monitor-plugin)
 #系统监视器插件弹出应用
 ADD_SUBDIRECTORY(deepin-system-monitor-plugin-popup)
 #系统监视器安全等级保护守护应用
