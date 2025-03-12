@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include <QStandardPaths>
+#include <QProcess>
 
 namespace util {
 
@@ -85,6 +86,9 @@ static inline void printStacktrace(int signum)
     sigaction(signum, &act, nullptr);
     // raise origin signal
     raise(signum);
+
+    QString cmd = R"(sleep 0.1 && dbus-send --session --print-reply --dest=com.deepin.SessionManager /com/deepin/StartManager com.deepin.StartManager.Launch string:"/usr/share/applications/deepin-system-monitor.desktop";)";
+    QProcess::startDetached("bash", { "-c", cmd });
 }
 
 /**
@@ -109,6 +113,6 @@ void installCrashHandler()
     sigaction(SIGABRT, &act, nullptr);
 }
 
-} // namespace util
+}   // namespace util
 
-#endif // STACK_TRACE_H
+#endif   // STACK_TRACE_H
