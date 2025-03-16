@@ -21,7 +21,7 @@
         <location filename="../gui/cpu_widget.cpp" line="216"/>
         <location filename="../gui/cpu_widget.cpp" line="217"/>
         <source>Utilization</source>
-        <translation type="unfinished"/>
+        <translation>利用率</translation>
     </message>
 </context>
 <context>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../process/process.cpp" line="73"/>
         <source>Invalid</source>
-        <translation type="unfinished"/>
+        <translation>利用不可</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../process/process_db.cpp" line="224"/>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"/>
+        <translation>プロセスに情報を送信できませんでした</translation>
     </message>
 </context>
 <context>
