@@ -12,7 +12,7 @@
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="147"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>開く</translation>
     </message>
 </context>
 <context>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../gui/systemmonitortipswidget.cpp" line="93"/>
         <source>MEM</source>
-        <translation type="unfinished"/>
+        <translation>メモリ</translation>
     </message>
 </context>
 </TS>
