@@ -8,6 +8,7 @@
 
 #include <DSysInfo>
 #include <QDebug>
+#include <QDBusConnectionInterface>
 
 using namespace DDLog;
 
@@ -150,14 +151,17 @@ static inline const SystemState &systemInfo()
 {
     static SystemState *state = nullptr;
     if (!state) {
-        const auto version = DTK_CORE_NAMESPACE::DSysInfo::majorVersion();
-        qCInfo(app) << "Running desktop environment version is:" << version << ", versionNumber:" << version.toLong();
-        if (!version.isEmpty() && version.toLong() <= 20) {
+        const QString &testAddrV20 = "com.deepin.daemon.Appearance";
+
+        auto sessIface = QDBusConnection::sessionBus().interface();
+        if (sessIface->isServiceRegistered(testAddrV20)) {
             state = new V20SystemState();
             state->updateVersion(true);
+            qInfo() << "V20 DBus service detected, using V20SystemState";
         } else {
             state = new V23SystemState();
             state->updateVersion(false);
+            qInfo() << "V20 DBus service NOT detected, using V23SystemState";
         }
     }
     return *state;
