@@ -1,3 +1,11 @@
+deepin-system-monitor (6.5.9) unstable; urgency=medium
+
+  * [deepin-system-monitor] Updates for project Deepin System Monitor (#404)
+  * fix: adjust layout spacing and add Hebrew translation (#406)
+  * chore: update desktop file
+
+ -- renbin <renbin@uniontech.com>  Wed, 02 Apr 2025 16:09:33 +0800
+
 deepin-system-monitor (6.5.8) unstable; urgency=medium
 
   * chore: New version 6.5.8.
