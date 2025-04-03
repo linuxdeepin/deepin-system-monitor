@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>الاستخدام الكلي</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>الاستخدام الفردي</translation>
     </message>
 </context>
 <context>
@@ -47,14 +47,14 @@
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation type="unfinished"/>
+        <translation>%1 أيام %2 ساعة %3 دقيقة</translation>
     </message>
 </context>
 <context>
     <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
-        <translation type="unfinished"/>
+        <translation>الاستخدام</translation>
     </message>
     <message>
         <source>Current frequency</source>
@@ -66,39 +66,39 @@
     </message>
     <message>
         <source>Sockets</source>
-        <translation type="unfinished"/>
+        <translation>بوكات</translation>
     </message>
     <message>
         <source>Logical processors</source>
-        <translation type="unfinished"/>
+        <translation>معالجات منطقية</translation>
     </message>
     <message>
         <source>Virtualization</source>
-        <translation type="unfinished"/>
+        <translation>الأفتراضية</translation>
     </message>
     <message>
         <source>L1i cache</source>
-        <translation type="unfinished"/>
+        <translation>كاش L1i</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation type="unfinished"/>
+        <translation>كاش L1d</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation type="unfinished"/>
+        <translation>كاش L2</translation>
     </message>
     <message>
         <source>L3 cache</source>
-        <translation type="unfinished"/>
+        <translation>كاش L3</translation>
     </message>
     <message>
         <source>Load average</source>
-        <translation type="unfinished"/>
+        <translation>معدل الحمل</translation>
     </message>
     <message>
         <source>File descriptors</source>
-        <translation type="unfinished"/>
+        <translation>التص jurوص الملف</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -106,11 +106,11 @@
     </message>
     <message>
         <source>Threads</source>
-        <translation type="unfinished"/>
+        <translation>عنصر THREADS</translation>
     </message>
     <message>
         <source>Host name</source>
-        <translation type="unfinished"/>
+        <translation>اسم المستضيف</translation>
     </message>
     <message>
         <source>OS type</source>
@@ -336,11 +336,11 @@
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>استهلاك معالجك أعلى من %1%</translation>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>استهلاك пاومةك أعلى من %1%</translation>
     </message>
     <message>
         <source>View</source>
@@ -359,19 +359,19 @@
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished"/>
+        <translation>مشترك</translation>
     </message>
     <message>
         <source>Cached</source>
-        <translation type="unfinished"/>
+        <translation>محكم الصache</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation type="unfinished"/>
+        <translation>البوثرز</translation>
     </message>
     <message>
         <source>Cached swap</source>
-        <translation type="unfinished"/>
+        <translation>تبديل محكم الشايف</translation>
     </message>
     <message>
         <source>Active</source>
@@ -379,34 +379,34 @@
     </message>
     <message>
         <source>Inactive</source>
-        <translation type="unfinished"/>
+        <translation>غير نشط</translation>
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>مشوه</translation>
     </message>
     <message>
         <source>Mapped</source>
-        <translation type="unfinished"/>
+        <translation>مخرزا</translation>
     </message>
     <message>
         <source>Total swap</source>
-        <translation type="unfinished"/>
+        <translation>إجمالي التبديل</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation type="unfinished"/>
+        <translation>空間交換</translation>
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>استل</translation>
     </message>
 </context>
 <context>
     <name>DeailTableModelBlock</name>
     <message>
         <source>Model</source>
-        <translation type="unfinished"/>
+        <translation>النموذج</translation>
     </message>
     <message>
         <source>Read speed</source>
@@ -422,43 +422,43 @@
     </message>
     <message>
         <source>Sectors read</source>
-        <translation type="unfinished"/>
+        <translation>اقرأ مجالات</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation type="unfinished"/>
+        <translation>قراءات في الثانية</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation type="unfinished"/>
+        <translation>مجالات قرأ في الثانية</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>/navbar-objects/merged- mũiٍ‏تم في الثانية</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation type="unfinished"/>
+        <translation>تم написة مجالات</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation type="unfinished"/>
+        <translation>الihnامات مكتملة</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>ال Writes مدمجة</translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>كتابة في الثانية</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation type="unfinished"/>
+        <translation>مجالات مكتوبة في الثانية</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>ال نُسخة مدمجة في الثانية</translation>
     </message>
 </context>
 <context>
@@ -542,19 +542,19 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Netmask:</source>
-        <translation type="unfinished"/>
+        <translation>خمار الشبكة:</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation type="unfinished"/>
+        <translation>تنقل:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>الحctime:</translation>
     </message>
     <message>
         <source>Scope:</source>
-        <translation type="unfinished"/>
+        <translation>معرض:</translation>
     </message>
 </context>
 <context>
@@ -565,7 +565,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>ESSID</source>
-        <translation type="unfinished"/>
+        <translation>اسم مجموعة الشبكة</translation>
     </message>
     <message>
         <source>Link quality</source>
@@ -577,11 +577,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Noise level</source>
-        <translation type="unfinished"/>
+        <translation>مستوى الضوضاء</translation>
     </message>
     <message>
         <source>MAC</source>
-        <translation type="unfinished"/>
+        <translation>العنوان المتميّز لظلال الكابلات</translation>
     </message>
     <message>
         <source>Bandwidth</source>
@@ -589,59 +589,59 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>RX packets</source>
-        <translation type="unfinished"/>
+        <translation>بركات المدخلات</translation>
     </message>
     <message>
         <source>RX bytes</source>
-        <translation type="unfinished"/>
+        <translation>بايتس المدخل</translation>
     </message>
     <message>
         <source>RX errors</source>
-        <translation type="unfinished"/>
+        <translation>أخطاء المدخل</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation type="unfinished"/>
+        <translation>تخلى عن المدخل</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>التجاوزات على المدخل</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>مرamesة وردت</translation>
     </message>
     <message>
         <source>TX packets</source>
-        <translation type="unfinished"/>
+        <translation>تذاكر إرسال</translation>
     </message>
     <message>
         <source>TX bytes</source>
-        <translation type="unfinished"/>
+        <translation>بتات إرسال</translation>
     </message>
     <message>
         <source>TX errors</source>
-        <translation type="unfinished"/>
+        <translation>خطايات إرسال</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation> crossings إرسال</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>محرِّر إرسال</translation>
     </message>
     <message>
         <source>IPv4</source>
-        <translation type="unfinished"/>
+        <translation>IPv4</translation>
     </message>
     <message>
         <source>IPv6</source>
-        <translation type="unfinished"/>
+        <translation>IPv6</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>تذاكر محذوفة إرسال</translation>
     </message>
 </context>
 <context>
@@ -736,7 +736,7 @@ Are you sure you want to continue?</source>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation type="unfinished"/>
+        <translation>تحميل</translation>
     </message>
 </context>
 <context>
@@ -961,19 +961,19 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>إظهار التنبيهات عندما تتجاوز الاستخدام المعايير</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>حد_warنات CPU (%) </translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>حد_warنات الذاكرة (%) </translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>ص_majorنح Warning (دقائق</translation>
     </message>
     <message>
         <source>Notifications</source>
@@ -1083,11 +1083,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>حالة البدء</translation>
     </message>
     <message>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>technique البدء</translation>
     </message>
 </context>
 <context>
@@ -1098,11 +1098,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(قابل للتغيير</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>م范畴: %1-%2</translation>
     </message>
 </context>
 <context>
