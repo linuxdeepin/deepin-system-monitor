@@ -200,7 +200,7 @@
     </message>
     <message>
         <source>merged</source>
-        <translation type="unfinished"/>
+        <translation>përdorur</translation>
     </message>
     <message>
         <source>masked</source>
@@ -250,7 +250,7 @@
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation type="unfinished"/>
+        <translation>aktualizuar-dyndimë</translation>
     </message>
     <message>
         <source>masked</source>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>start-pre</source>
-        <translation type="unfinished"/>
+        <translation>përpara-lëshjes</translation>
     </message>
     <message>
         <source>start</source>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>start-post</source>
-        <translation type="unfinished"/>
+        <translation>përfundimtare-lëshjes</translation>
     </message>
     <message>
         <source>running</source>
@@ -285,7 +285,7 @@
     </message>
     <message>
         <source>exited</source>
-        <translation type="unfinished"/>
+        <translation>i iku</translation>
     </message>
     <message>
         <source>reload</source>
@@ -297,27 +297,27 @@
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation type="unfinished"/>
+        <translation>stop-watchdog</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation type="unfinished"/>
+        <translation>stop-sigterm</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation type="unfinished"/>
+        <translation>stop-sigkill</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation type="unfinished"/>
+        <translation>përfundimtare-stop</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation type="unfinished"/>
+        <translation>final-sigterm</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation type="unfinished"/>
+        <translation>final-sigkill</translation>
     </message>
     <message>
         <source>failed</source>
@@ -359,19 +359,19 @@
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished"/>
+        <translation>Jukshtuar</translation>
     </message>
     <message>
         <source>Cached</source>
-        <translation type="unfinished"/>
+        <translation>Shpenzuar</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation type="unfinished"/>
+        <translation>Buffëra</translation>
     </message>
     <message>
         <source>Cached swap</source>
-        <translation type="unfinished"/>
+        <translation>Shpenzim shpenzuar</translation>
     </message>
     <message>
         <source>Active</source>
@@ -383,11 +383,11 @@
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>Zëra</translation>
     </message>
     <message>
         <source>Mapped</source>
-        <translation type="unfinished"/>
+        <translation>Mapuar</translation>
     </message>
     <message>
         <source>Total swap</source>
@@ -399,7 +399,7 @@
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Slab</translation>
     </message>
 </context>
 <context>
@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Lidhjejë e kuptuar/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
@@ -442,11 +442,11 @@
     </message>
     <message>
         <source>Writes completed </source>
-        <translation type="unfinished"/>
+        <translation>Shkruar i përfunduar</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>Shkrimet lidhura</translation>
     </message>
     <message>
         <source>Writes/s</source>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>Shkrimet lidhura/s</translation>
     </message>
 </context>
 <context>
@@ -546,15 +546,15 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation type="unfinished"/>
+        <translation>Transmisioni i publikë:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>Prefixlen:</translation>
     </message>
     <message>
         <source>Scope:</source>
-        <translation type="unfinished"/>
+        <translation>Krahësia:</translation>
     </message>
 </context>
 <context>
@@ -585,7 +585,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Bandwidth</source>
-        <translation type="unfinished"/>
+        <translation>Kohësia</translation>
     </message>
     <message>
         <source>RX packets</source>
@@ -605,11 +605,11 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>RX overruns</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>RAM frame</translation>
     </message>
     <message>
         <source>TX packets</source>
@@ -625,7 +625,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation>TX overruns</translation>
     </message>
     <message>
         <source>TX carrier</source>
@@ -641,7 +641,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation type="unfinished"/>
+        <translation>TX dropped</translation>
     </message>
 </context>
 <context>
@@ -930,7 +930,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Nice</source>
-        <translation type="unfinished"/>
+        <translation>Nice</translation>
     </message>
     <message>
         <source>Priority</source>
@@ -1083,11 +1083,11 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>Përlancëzimi i pozicionit</translation>
     </message>
     <message>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>Metoda e përlancëzimit</translation>
     </message>
 </context>
 <context>
