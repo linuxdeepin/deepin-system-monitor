@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl_ES" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
 <context>
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="130"/>
         <source>No search results</source>
-        <translation>Non hai resultados para a túa busca</translation>
+        <translation>Không có kết quả tìm kiếm</translation>
     </message>
 </context>
 <context>
@@ -21,7 +21,7 @@
         <location filename="../gui/cpu_widget.cpp" line="216"/>
         <location filename="../gui/cpu_widget.cpp" line="217"/>
         <source>Utilization</source>
-        <translation>Utilización</translation>
+        <translation>Sử dụng</translation>
     </message>
 </context>
 <context>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="228"/>
         <source>Disk</source>
-        <translation>Disco</translation>
+        <translation>Ổ đĩa</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="258"/>
         <source>Read</source>
-        <translation>Lectura</translation>
+        <translation>Đọc</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="259"/>
         <source>Write</source>
-        <translation>Escritura</translation>
+        <translation>Ghi</translation>
     </message>
 </context>
 <context>
@@ -47,12 +47,12 @@
     <message>
         <location filename="../common/common.cpp" line="42"/>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation>Hệ thống</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="48"/>
         <source>Display shortcuts</source>
-        <translation>Amosar atallos</translation>
+        <translation>Hiển thị phím tắt</translation>
     </message>
 </context>
 <context>
@@ -60,18 +60,18 @@
     <message>
         <location filename="../gui/memory_widget.cpp" line="152"/>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Bộ nhớ</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="179"/>
         <location filename="../gui/memory_widget.cpp" line="188"/>
         <source>Swap</source>
-        <translation>Intercambiar</translation>
+        <translation>Thay thế</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="180"/>
         <source>Not enabled</source>
-        <translation>Non activo</translation>
+        <translation>Không kích hoạt</translation>
     </message>
 </context>
 <context>
@@ -79,22 +79,22 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="259"/>
         <source>Download</source>
-        <translation>Descargar</translation>
+        <translation>Tải xuống</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="260"/>
         <source>Total received</source>
-        <translation>Recibido total</translation>
+        <translation>Tổng đã nhận</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="262"/>
         <source>Total sent</source>
-        <translation>Enviado total</translation>
+        <translation>Tổng đã gửi</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>
         <source>Upload</source>
-        <translation>Actualizar</translation>
+        <translation>Tải lên</translation>
     </message>
 </context>
 <context>
@@ -103,7 +103,7 @@
         <location filename="../gui/net_widget.cpp" line="232"/>
         <location filename="../gui/net_widget.cpp" line="235"/>
         <source>Network</source>
-        <translation>Rede</translation>
+        <translation>Mạng</translation>
     </message>
 </context>
 <context>
@@ -111,37 +111,37 @@
     <message>
         <location filename="../process/process.cpp" line="67"/>
         <source>Very high</source>
-        <translation>Moi alto</translation>
+        <translation>Rất cao</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="68"/>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation>Cao</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="69"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Bình thường</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="70"/>
         <source>Low</source>
-        <translation>Baixo</translation>
+        <translation>Thấp</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="71"/>
         <source>Very low</source>
-        <translation>Moi baixo</translation>
+        <translation>Rất thấp</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="72"/>
         <source>Custom</source>
-        <translation>Personalizar</translation>
+        <translation>Tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="73"/>
         <source>Invalid</source>
-        <translation>Inválido</translation>
+        <translation>Không hợp lệ</translation>
     </message>
 </context>
 <context>
@@ -149,32 +149,32 @@
     <message>
         <location filename="../process/process_db.cpp" line="162"/>
         <source>Failed to end process</source>
-        <translation>Erro ao finalizar o proceso</translation>
+        <translation>Không thể kết thúc quá trình</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="165"/>
         <source>Failed to pause process</source>
-        <translation>Fallou o proceso de pausa</translation>
+        <translation>Không thể tạm dừng quá trình</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to resume process</source>
-        <translation>Erro ao continuar o proceso</translation>
+        <translation>Không thể tiếp tục quá trình</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
         <source>Failed to kill process</source>
-        <translation>Fallou o proceso de Kill</translation>
+        <translation>Không thể kết thúc quá trình</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Unknown error</source>
-        <translation>Erro descoñecido</translation>
+        <translation>Lỗi không xác định</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="224"/>
         <source>Failed in sending signal to process</source>
-        <translation>Erro ao enviar o sinal para procesar</translation>
+        <translation>Không thể gửi tín hiệu đến quá trình</translation>
     </message>
 </context>
 <context>
@@ -182,19 +182,19 @@
     <message>
         <location filename="../model/process_table_model.cpp" line="175"/>
         <source>No response</source>
-        <translation>Non hai resposta</translation>
+        <translation>Không có phản hồi</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.cpp" line="180"/>
         <source>Suspend</source>
-        <translation>Suspender</translation>
+        <translation>Dừng lại</translation>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="96"/>
         <location filename="../process/process_name.cpp" line="103"/>
         <location filename="../process/process_name.cpp" line="106"/>
         <source>Tray</source>
-        <translation>Bandexa</translation>
+        <translation>Khu vực thanh công cụ</translation>
     </message>
 </context>
 <context>
@@ -202,27 +202,27 @@
     <message>
         <location filename="../common/common.cpp" line="76"/>
         <source>End process</source>
-        <translation>O proceso rematou</translation>
+        <translation>Kết thúc quá trình</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="82"/>
         <source>Suspend process</source>
-        <translation>Suspender proceso</translation>
+        <translation>Dừng lại quá trình</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="88"/>
         <source>Resume process</source>
-        <translation>Retomar o proceso</translation>
+        <translation>Tiếp tục quá trình</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="93"/>
         <source>Properties</source>
-        <translation>Propiedades</translation>
+        <translation>Tính năng</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="99"/>
         <source>Kill process</source>
-        <translation>Proceso de Kill</translation>
+        <translation>Kết thúc quá trình</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="31"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Tên</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="33"/>
@@ -240,42 +240,42 @@
     <message>
         <location filename="../model/process_table_model.h" line="35"/>
         <source>User</source>
-        <translation>Usuario</translation>
+        <translation>Người dùng</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="37"/>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Bộ nhớ</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Shared memory</source>
-        <translation>Memoria compartida</translation>
+        <translation>Bộ nhớ chia sẻ</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="39"/>
         <source>Virtual memory</source>
-        <translation>Memoria virtual</translation>
+        <translation>Bộ nhớ ảo</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
         <source>Upload</source>
-        <translation>Actualizar</translation>
+        <translation>Tải lên</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="43"/>
         <source>Download</source>
-        <translation>Descargar</translation>
+        <translation>Tải về</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="45"/>
         <source>Disk read</source>
-        <translation>Lectura do disco</translation>
+        <translation>Đọc đĩa</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="47"/>
         <source>Disk write</source>
-        <translation>Disco de escritura</translation>
+        <translation>Viết đĩa</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="49"/>
@@ -285,12 +285,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="51"/>
         <source>Nice</source>
-        <translation>Bonito</translation>
+        <translation>Nice</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="53"/>
         <source>Priority</source>
-        <translation>Prioridade</translation>
+        <translation>Ưu tiên</translation>
     </message>
 </context>
 <context>
@@ -298,7 +298,7 @@
     <message>
         <location filename="../gui/process_widget.cpp" line="65"/>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Tên</translation>
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="72"/>
@@ -309,7 +309,7 @@
         <location filename="../gui/process_widget.cpp" line="182"/>
         <location filename="../gui/process_widget.cpp" line="185"/>
         <source>Processes</source>
-        <translation>Procesos</translation>
+        <translation>Quá trình</translation>
     </message>
 </context>
 <context>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation>Non se paxa</translation>
+        <translation>Không hỗ trợ</translation>
     </message>
 </context>
 <context>
@@ -325,22 +325,22 @@
     <message>
         <location filename="../common/common.cpp" line="113"/>
         <source>Start</source>
-        <translation>Comezar</translation>
+        <translation>Bắt đầu</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="118"/>
         <source>Stop</source>
-        <translation>Parar</translation>
+        <translation>Dừng</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="123"/>
         <source>Restart</source>
-        <translation>Volver a comezar</translation>
+        <translation>Khởi động lại</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="128"/>
         <source>Refresh</source>
-        <translation>Recargar</translation>
+        <translation>Làm mới</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../common/common.cpp" line="69"/>
         <source>Force end application</source>
-        <translation>Forzar o fin do aplicativo</translation>
+        <translation>Kết thúc ứng dụng (nghiêm trọng)</translation>
     </message>
 </context>
 <context>
@@ -356,7 +356,7 @@
     <message>
         <location filename="../common/common.cpp" line="54"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>Tìm kiếm</translation>
     </message>
 </context>
 <context>
@@ -364,12 +364,12 @@
     <message>
         <location filename="../common/common.cpp" line="63"/>
         <source>Processes</source>
-        <translation>Procesos</translation>
+        <translation>Quá trình</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="108"/>
         <source>Services</source>
-        <translation>Servizos</translation>
+        <translation>Dịch vụ</translation>
     </message>
 </context>
 </TS>

@@ -285,7 +285,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="51"/>
         <source>Nice</source>
-        <translation type="unfinished"/>
+        <translation>Gjësor</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="53"/>

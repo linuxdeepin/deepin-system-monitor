@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl_ES" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
 <context>
     <name>Plugin.DisplayName</name>
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="60"/>
         <source>System Monitor</source>
-        <translation>Monitor do sistema</translation>
+        <translation>Theo dõi hệ thống</translation>
     </message>
 </context>
 <context>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="147"/>
         <source>Open</source>
-        <translation>Abrir</translation>
+        <translation>Mở</translation>
     </message>
 </context>
 <context>

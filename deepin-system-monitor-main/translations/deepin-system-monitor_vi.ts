@@ -1,401 +1,403 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="vi">
 <context>
     <name>App.About</name>
     <message>
         <source>System Monitor</source>
-        <translation>Mbikëqyrës Sistemi</translation>
+        <translation>Theo dõi hệ thống</translation>
     </message>
     <message>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Mbikëqyrësi i Sistemit është një mjet për të mbikëqyrur në kohë reale ngarkesën e sistemit, për të parë dhe kontrolluar procese dhe shërbime që xhirojnë në sistemin tuaj.</translation>
+        <translation>Theo dõi hệ thống là công cụ để theo dõi tải hệ thống thời gian thực, xem và kiểm soát các quá trình và dịch vụ đang chạy trên hệ thống của bạn.</translation>
     </message>
 </context>
 <context>
     <name>BaseDetailViewWidget</name>
     <message>
         <source>Hide details</source>
-        <translation>Fshihi hollësitë</translation>
+        <translation>Ẩn chi tiết</translation>
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation>Përdorim i përgjithshëm</translation>
+        <translation>Sử dụng tổng thể</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation>Përdorim individual</translation>
+        <translation>Sử dụng cá nhân</translation>
     </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
     <message>
         <source>Read</source>
-        <translation>Lexim</translation>
+        <translation>Đọc</translation>
     </message>
     <message>
         <source>Write</source>
-        <translation>Shkrim</translation>
+        <translation>Viết</translation>
     </message>
 </context>
 <context>
     <name>CPUDetailGrapTableItem</name>
     <message>
         <source>60 seconds</source>
-        <translation>60 sekonda</translation>
+        <translation>60 giây</translation>
     </message>
 </context>
 <context>
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 ditë %2 orë %3 minuta</translation>
+        <translation>%1 ngày %2 giờ %3 phút</translation>
     </message>
 </context>
 <context>
     <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
-        <translation>Përdorim</translation>
+        <translation>Sử dụng</translation>
     </message>
     <message>
         <source>Current frequency</source>
-        <translation>Frekuenca e tanishme</translation>
+        <translation>Tần số hiện tại</translation>
     </message>
     <message>
         <source>Frequency</source>
-        <translation>Frekuencë</translation>
+        <translation>Tần số</translation>
     </message>
     <message>
         <source>Sockets</source>
-        <translation>Socket-e</translation>
+        <translation>Socket</translation>
     </message>
     <message>
         <source>Logical processors</source>
-        <translation>Procesorë logjikë</translation>
+        <translation>Phát sinh xử lý</translation>
     </message>
     <message>
         <source>Virtualization</source>
-        <translation>Virtualizim</translation>
+        <translation>Virtuaлизация</translation>
     </message>
     <message>
         <source>L1i cache</source>
-        <translation>Fshehtinë L1i</translation>
+        <translation>L1i cache</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation>Fshehtinë L1d</translation>
+        <translation>L1d cache</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation>Fshehtinë L2</translation>
+        <translation>L2 cache</translation>
     </message>
     <message>
         <source>L3 cache</source>
-        <translation>Fshehtinë L3</translation>
+        <translation>L3 cache</translation>
     </message>
     <message>
         <source>Load average</source>
-        <translation>Mesatare ngarkese</translation>
+        <translation>Trung bình tải</translation>
     </message>
     <message>
         <source>File descriptors</source>
-        <translation>Përshkrues kartelash</translation>
+        <translation>Mô tả tệp</translation>
     </message>
     <message>
         <source>Processes</source>
-        <translation>Procese</translation>
+        <translation>Quá trình</translation>
     </message>
     <message>
         <source>Threads</source>
-        <translation>Rrjedha</translation>
+        <translation>Sợi</translation>
     </message>
     <message>
         <source>Host name</source>
-        <translation>Emër strehe</translation>
+        <translation>Tên máy chủ</translation>
     </message>
     <message>
         <source>OS type</source>
-        <translation>Lloj OS-i</translation>
+        <translation>Loại hệ điều hành</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation>Version</translation>
+        <translation>Phiên bản</translation>
     </message>
     <message>
         <source>Up time</source>
-        <translation>Kohë në punë</translation>
+        <translation>Thời gian hoạt động</translation>
     </message>
 </context>
 <context>
     <name>ChartViewWidget</name>
     <message>
         <source>60 seconds</source>
-        <translation>60 sekonda</translation>
+        <translation>60 giây</translation>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <source>No search results</source>
-        <translation>S’ka përfundime kërkimi</translation>
+        <translation>Không tìm thấy kết quả</translation>
     </message>
 </context>
 <context>
     <name>CompactCpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation>Hollësi</translation>
+        <translation>Chi tiết</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation>Hollësi</translation>
+        <translation>Chi tiết</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Active.State</name>
     <message>
         <source>active</source>
-        <translation>aktiv</translation>
+        <translation>hoạt động</translation>
     </message>
     <message>
         <source>reloading</source>
-        <translation>po ringarkohet</translation>
+        <translation>đang tải lại</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation>jo aktiv</translation>
+        <translation>không hoạt động</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>i dështuar</translation>
+        <translation>thất bại</translation>
     </message>
     <message>
         <source>activating</source>
-        <translation>po aktivizohet</translation>
+        <translation>đang kích hoạt</translation>
     </message>
     <message>
         <source>deactivating</source>
-        <translation>po çaktivizohet</translation>
+        <translation>đang vô hiệu hóa</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Load.State</name>
     <message>
         <source>stub</source>
-        <translation>stub</translation>
+        <translation>sơ đồ</translation>
     </message>
     <message>
         <source>not-found</source>
-        <translation>s’u gjet</translation>
+        <translation>không tìm thấy</translation>
     </message>
     <message>
         <source>bad-setting</source>
-        <translation>parametër i gabuar</translation>
+        <translation>đặt cài đặt không hợp lệ</translation>
     </message>
     <message>
         <source>error</source>
-        <translation>gabim</translation>
+        <translation>lỗi</translation>
     </message>
     <message>
         <source>merged</source>
-        <translation>përdorur</translation>
+        <translation>đã hợp nhất</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>i maskuar</translation>
+        <translation>đã che giấu</translation>
     </message>
     <message>
         <source>loaded</source>
-        <translation>i ngarkuar</translation>
+        <translation>đã tải</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Startup.Mode</name>
     <message>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>không có dữ liệu</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>Tự động</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Dorazi</translation>
+        <translation>Tay</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.State</name>
     <message>
         <source>enabled</source>
-        <translation>i aktivizuar</translation>
+        <translation>kích hoạt</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>i çaktivizuar</translation>
+        <translation>không kích hoạt</translation>
     </message>
     <message>
         <source>static</source>
-        <translation>statik</translation>
+        <translation>định lượng</translation>
     </message>
     <message>
         <source>transient</source>
-        <translation>tranzient</translation>
+        <translation>thông qua</translation>
     </message>
     <message>
         <source>indirect</source>
-        <translation>i tërthortë</translation>
+        <translation>gián tiếp</translation>
     </message>
     <message>
         <source>enabled-runtime</source>
-        <translation>aktualizuar-dyndimë</translation>
+        <translation>cấu hình chạy</translation>
     </message>
     <message>
         <source>masked</source>
-        <translation>i maskuar</translation>
+        <translation>ẩn</translation>
     </message>
     <message>
         <source>generated</source>
-        <translation>prodhuar</translation>
+        <translation>tự sinh</translation>
     </message>
 </context>
 <context>
     <name>DBus.Unit.Sub.State</name>
     <message>
         <source>dead</source>
-        <translation>i vdekur</translation>
+        <translation>tử</translation>
     </message>
     <message>
         <source>start-pre</source>
-        <translation>përpara-lëshjes</translation>
+        <translation>trước khi khởi động</translation>
     </message>
     <message>
         <source>start</source>
-        <translation>nise</translation>
+        <translation>khởi động</translation>
     </message>
     <message>
         <source>start-post</source>
-        <translation>përfundimtare-lëshjes</translation>
+        <translation>sau khi khởi động</translation>
     </message>
     <message>
         <source>running</source>
-        <translation>xhiron</translation>
+        <translation>đang chạy</translation>
     </message>
     <message>
         <source>exited</source>
-        <translation>i iku</translation>
+        <translation>đã thoát</translation>
     </message>
     <message>
         <source>reload</source>
-        <translation>ringarkoje</translation>
+        <translation>tải lại</translation>
     </message>
     <message>
         <source>stop</source>
-        <translation>ndale</translation>
+        <translation>đóng</translation>
     </message>
     <message>
         <source>stop-watchdog</source>
-        <translation>stop-watchdog</translation>
+        <translation>đóng theo dõi</translation>
     </message>
     <message>
         <source>stop-sigterm</source>
-        <translation>stop-sigterm</translation>
+        <translation>đóng tín hiệu SIGTERM</translation>
     </message>
     <message>
         <source>stop-sigkill</source>
-        <translation>stop-sigkill</translation>
+        <translation>đóng tín hiệu SIGKILL</translation>
     </message>
     <message>
         <source>stop-post</source>
-        <translation>përfundimtare-stop</translation>
+        <translation>sau khi đóng</translation>
     </message>
     <message>
         <source>final-sigterm</source>
-        <translation>final-sigterm</translation>
+        <translation>tín hiệu SIGTERM cuối cùng</translation>
     </message>
     <message>
         <source>final-sigkill</source>
-        <translation>final-sigkill</translation>
+        <translation>tín hiệu SIGKILL cuối cùng</translation>
     </message>
     <message>
         <source>failed</source>
-        <translation>i dështuar</translation>
+        <translation>thất bại</translation>
     </message>
     <message>
         <source>auto-restart</source>
-        <translation>vetërinisu</translation>
+        <translation>tự khởi động lại</translation>
     </message>
 </context>
 <context>
     <name>DBusAlarmNotify</name>
     <message>
         <source>Warning</source>
-        <translation>Kujdes</translation>
+        <translation>Cảnh báo</translation>
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>Përdorimi juaj i CPU-së është më lart se %1%!</translation>
+        <translation>Sử dụng CPU của bạn cao hơn %1%!
+</translation>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>Përdorimi juaj i kujtesës është më lart se %1%!</translation>
+        <translation>Sử dụng bộ nhớ của bạn cao hơn %1%!
+</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Shiheni</translation>
+        <translation>Xem</translation>
     </message>
 </context>
 <context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
-        <translation>Të përdorura</translation>
+        <translation>Đã sử dụng</translation>
     </message>
     <message>
         <source>Available</source>
-        <translation>Të lira</translation>
+        <translation>Còn trống</translation>
     </message>
     <message>
         <source>Shared</source>
-        <translation>Jukshtuar</translation>
+        <translation>Chia sẻ</translation>
     </message>
     <message>
         <source>Cached</source>
-        <translation>Shpenzuar</translation>
+        <translation>Được lưu trữ</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation>Buffëra</translation>
+        <translation>Buffer</translation>
     </message>
     <message>
         <source>Cached swap</source>
-        <translation>Shpenzim shpenzuar</translation>
+        <translation>Đổi trang được lưu trữ</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktiv</translation>
+        <translation>Hoạt động</translation>
     </message>
     <message>
         <source>Inactive</source>
-        <translation>Jo aktiv</translation>
+        <translation>Không hoạt động</translation>
     </message>
     <message>
         <source>Dirty</source>
-        <translation>Zëra</translation>
+        <translation>Lỗi</translation>
     </message>
     <message>
         <source>Mapped</source>
-        <translation>Mapuar</translation>
+        <translation>Đã gắn</translation>
     </message>
     <message>
         <source>Total swap</source>
-        <translation>Swap gjithsej</translation>
+        <translation>Đổi trang tổng cộng</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation>Swap i lirë</translation>
+        <translation>Đổi trang trống</translation>
     </message>
     <message>
         <source>Slab</source>
@@ -406,59 +408,59 @@
     <name>DeailTableModelBlock</name>
     <message>
         <source>Model</source>
-        <translation>Model</translation>
+        <translation>Mô hình</translation>
     </message>
     <message>
         <source>Read speed</source>
-        <translation>Shpejtësi leximesh</translation>
+        <translation>Tốc độ đọc</translation>
     </message>
     <message>
         <source>Write speed</source>
-        <translation>Shpejtësi shkrimesh</translation>
+        <translation>Tốc độ ghi</translation>
     </message>
     <message>
         <source>Capacity</source>
-        <translation>Kapacitet</translation>
+        <translation>Dung lượng</translation>
     </message>
     <message>
         <source>Sectors read</source>
-        <translation>Sektorë të lexuar</translation>
+        <translation>Sector đã đọc</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation>Lexime/s</translation>
+        <translation>Đọc/s</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation>Sektorë të lexuar/s</translation>
+        <translation>Sector đọc/s</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation>Lidhjejë e kuptuar/s</translation>
+        <translation>Đọc hợp nhất/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation>Sektorë të shkruar</translation>
+        <translation>Sector đã ghi</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation>Shkruar i përfunduar</translation>
+        <translation>Viết hoàn thành</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation>Shkrimet lidhura</translation>
+        <translation>Viết hợp nhất</translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation>Shkrime/s</translation>
+        <translation>Ghi/s</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation>Sektorë të shkruar/s</translation>
+        <translation>Sectors written/s</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation>Shkrimet lidhura/s</translation>
+        <translation>Writes merged/s</translation>
     </message>
 </context>
 <context>
@@ -473,11 +475,11 @@
     <name>Help.Shortcut.System</name>
     <message>
         <source>System</source>
-        <translation>Sistem</translation>
+        <translation>Hệ thống</translation>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation>Shfaq shkurtore</translation>
+        <translation>Hiển thị phím tắt</translation>
     </message>
 </context>
 <context>
@@ -485,68 +487,71 @@
     <message>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Përfundimi i këtij procesi mund të shkaktojë humbje të dhënash.
-Jeni i sigurt se doni të vazhdohet?</translation>
+        <translation>Dừng quá trình này có thể gây mất dữ liệu.
+Bạn có chắc chắn muốn tiếp tục không?
+</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Përfundoje procesin</translation>
+        <translation>Dừng quá trình</translation>
     </message>
     <message>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Përfundimi me zor i këtij procesi mund të shkaktojë humbje të dhënash.
-Jeni i sigurt se doni të vazhdohet?</translation>
+        <translation>Dừng mạnh quá trình này có thể gây mất dữ liệu.
+Bạn có chắc chắn muốn tiếp tục không?
+</translation>
     </message>
     <message>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Përfundimi me zor i këtij aplikacioni mund të shkaktojë humbje të dhënash.
-Jeni i sigurt se doni të vazhdohet?</translation>
+        <translation>Dừng mạnh ứng dụng này có thể gây mất dữ liệu.
+Bạn có chắc chắn muốn tiếp tục không?
+</translation>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>Hủy bỏ</translation>
     </message>
     <message>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Detyro Përfundim</translation>
+        <translation>Dừng mạnh</translation>
     </message>
     <message>
         <source>End</source>
         <comment>button</comment>
-        <translation>Përfundoje</translation>
+        <translation>Dừng</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation>Rregullime</translation>
+        <translation>Cài đặt</translation>
     </message>
 </context>
 <context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
-        <translation>Madhësi</translation>
+        <translation>Kích thước</translation>
     </message>
 </context>
 <context>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <source>IP address:</source>
-        <translation>Adresë IP:</translation>
+        <translation>IP address:</translation>
     </message>
     <message>
         <source>Netmask:</source>
-        <translation>Netmask-ë:</translation>
+        <translation>Netmask:</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation>Transmisioni i publikë:</translation>
+        <translation>Broadcast:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
@@ -554,14 +559,14 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Scope:</source>
-        <translation>Krahësia:</translation>
+        <translation>Scope:</translation>
     </message>
 </context>
 <context>
     <name>NetInfoModel</name>
     <message>
         <source>Connection type</source>
-        <translation>Lloj lidhjeje</translation>
+        <translation>Loại kết nối</translation>
     </message>
     <message>
         <source>ESSID</source>
@@ -569,15 +574,15 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Link quality</source>
-        <translation>Cilësi lidhjeje</translation>
+        <translation>Chất lượng kết nối</translation>
     </message>
     <message>
         <source>Signal strength</source>
-        <translation>Fortësi sinjali</translation>
+        <translation>Độ mạnh tín hiệu</translation>
     </message>
     <message>
         <source>Noise level</source>
-        <translation>Nivel zhurmash</translation>
+        <translation>Mức độ nhiễu</translation>
     </message>
     <message>
         <source>MAC</source>
@@ -585,51 +590,51 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Bandwidth</source>
-        <translation>Kohësia</translation>
+        <translation>Độ rộng đường truyền</translation>
     </message>
     <message>
         <source>RX packets</source>
-        <translation>Paketa RX</translation>
+        <translation>Packets nhận</translation>
     </message>
     <message>
         <source>RX bytes</source>
-        <translation>Bajte RX</translation>
+        <translation>Bytes nhận</translation>
     </message>
     <message>
         <source>RX errors</source>
-        <translation>Gabime RX</translation>
+        <translation>Lỗi nhận</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation>RX të humbur</translation>
+        <translation>Được bỏ qua nhận</translation>
     </message>
     <message>
         <source>RX overruns</source>
-        <translation>RX overruns</translation>
+        <translation>Tràn nhận</translation>
     </message>
     <message>
         <source>RX frame</source>
-        <translation>RAM frame</translation>
+        <translation>Khung nhận</translation>
     </message>
     <message>
         <source>TX packets</source>
-        <translation>Paketa TX</translation>
+        <translation>Packets gửi</translation>
     </message>
     <message>
         <source>TX bytes</source>
-        <translation>Bajte TX</translation>
+        <translation>Bytes gửi</translation>
     </message>
     <message>
         <source>TX errors</source>
-        <translation>Gabime TX</translation>
+        <translation>Lỗi gửi</translation>
     </message>
     <message>
         <source>TX overruns</source>
-        <translation>TX overruns</translation>
+        <translation>Tràn gửi</translation>
     </message>
     <message>
         <source>TX carrier</source>
-        <translation>Operator TX</translation>
+        <translation>Truyền載器</translation>
     </message>
     <message>
         <source>IPv4</source>
@@ -641,40 +646,40 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>TX dropped</source>
-        <translation>TX dropped</translation>
+        <translation>Được bỏ qua gửi</translation>
     </message>
 </context>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
         <source>Command line</source>
-        <translation>Rresht urdhrash</translation>
+        <translation>Dòng lệnh</translation>
     </message>
     <message>
         <source>Start time</source>
-        <translation>Kohë fillimi</translation>
+        <translation>Thời gian bắt đầu</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Emër</translation>
+        <translation>Tên</translation>
     </message>
 </context>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
         <source>Click the application you want to end</source>
-        <translation>Klikoni mbi aplikacionin që doni të përfundohet</translation>
+        <translation>Nhấn vào ứng dụng bạn muốn kết thúc</translation>
     </message>
 </context>
 <context>
     <name>Process.Graph.Title</name>
     <message>
         <source>Memory</source>
-        <translation>Kujtesë</translation>
+        <translation>Bộ nhớ</translation>
     </message>
     <message>
         <source>Receive</source>
-        <translation>Marrje</translation>
+        <translation>Nhận</translation>
     </message>
 </context>
 <context>
@@ -685,216 +690,216 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Lexim në disk</translation>
+        <translation>Đọc đĩa</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Shkrim në disk</translation>
+        <translation>Viết đĩa</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Kujtesë</translation>
+        <translation>Bộ nhớ</translation>
     </message>
     <message>
         <source>Swap</source>
-        <translation>Swap</translation>
+        <translation>Hoán đổi</translation>
     </message>
     <message>
         <source>Not enabled</source>
-        <translation>I paaktivizuar</translation>
+        <translation>Không kích hoạt</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Shkarkim</translation>
+        <translation>Tải về</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Ngarkim</translation>
+        <translation>Tải lên</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation>Rrjet</translation>
+        <translation>Mạng</translation>
     </message>
     <message>
         <source>Total Received</source>
-        <translation>Të marrë gjithsej</translation>
+        <translation>Tổng đã nhận</translation>
     </message>
     <message>
         <source>Total Sent</source>
-        <translation>Të dërguar gjithsej</translation>
+        <translation>Tổng đã gửi</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Dërgim</translation>
+        <translation>Gửi</translation>
     </message>
     <message>
         <source>Disks</source>
-        <translation>Disqe</translation>
+        <translation>Ổ đĩa</translation>
     </message>
 </context>
 <context>
     <name>Process.Loading</name>
     <message>
         <source>Loading</source>
-        <translation>Po ngarkohet</translation>
+        <translation>Đang tải</translation>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
-        <translation>Shumë e lartë</translation>
+        <translation>Rất cao</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>E lartë</translation>
+        <translation>Cao</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation>Bình thường</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>E ulët</translation>
+        <translation>Thấp</translation>
     </message>
     <message>
         <source>Very low</source>
-        <translation>Shumë e ulët</translation>
+        <translation>Rất thấp</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Vetjake</translation>
+        <translation>Tùy chỉnh</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>E pavlefshme</translation>
+        <translation>Không hợp lệ</translation>
     </message>
     <message>
         <source>PID: %1, Error: [%2] %3</source>
-        <translation>PID: %1, Gabim: [%2] %3</translation>
+        <translation>PID: %1, Lỗi: [%2] %3</translation>
     </message>
     <message>
         <source>Failed to change process priority</source>
-        <translation>S’u arrit të ndryshohet përparësi procesi</translation>
+        <translation>Không thể thay đổi ưu tiên quá trình</translation>
     </message>
 </context>
 <context>
     <name>Process.Show.Mode</name>
     <message>
         <source>Applications</source>
-        <translation>Aplikacione</translation>
+        <translation>Ứng dụng</translation>
     </message>
     <message>
         <source>My processes</source>
-        <translation>Proceset e mia</translation>
+        <translation>Quá trình của tôi</translation>
     </message>
     <message>
         <source>All processes</source>
-        <translation>Krejt proceset</translation>
+        <translation>Tất cả quá trình</translation>
     </message>
 </context>
 <context>
     <name>Process.Signal</name>
     <message>
         <source>Failed to pause process</source>
-        <translation>S’u arrit të pushohej procesi</translation>
+        <translation>Không thể tạm dừng quá trình</translation>
     </message>
     <message>
         <source>Failed to resume process</source>
-        <translation>S’u arrit të rimerrej procesi</translation>
+        <translation>Không thể tiếp tục quá trình</translation>
     </message>
     <message>
         <source>Failed to kill process</source>
-        <translation>S’u arrit të asgjësohej procesi</translation>
+        <translation>Không thể kết thúc quá trình</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation>Gabim i panjohur</translation>
+        <translation>Lỗi không xác định</translation>
     </message>
     <message>
         <source>Failed in sending signal to process</source>
-        <translation>S’u arrit t’i dërgohej sinjal procesit</translation>
+        <translation>Fehler beim Senden des Signals an den Prozess</translation>
     </message>
     <message>
         <source>Failed to end process</source>
-        <translation>S’u arrit të përfundohej procesi</translation>
+        <translation>Không thể kết thúc quá trình</translation>
     </message>
 </context>
 <context>
     <name>Process.Summary</name>
     <message>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(Janë në punë %1 aplikacione dhe %2 procese)</translation>
+        <translation>(%1 ứng dụng và %2 quá trình đang chạy</translation>
     </message>
 </context>
 <context>
     <name>Process.Table</name>
     <message>
         <source>No response</source>
-        <translation>S’ka përgjigje</translation>
+        <translation>Không có phản hồi</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Pezulloje</translation>
+        <translation>Dừng lại</translation>
     </message>
     <message>
         <source>Tray</source>
-        <translation>Panel</translation>
+        <translation>Khu vực hệ thống</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
         <source>View command location</source>
-        <translation>Shihni vendndodhje urdhri</translation>
+        <translation>Xem vị trí lệnh</translation>
     </message>
     <message>
         <source>Properties</source>
-        <translation>Veti</translation>
+        <translation>Tính năng</translation>
     </message>
     <message>
         <source>End process</source>
-        <translation>Përfundoje procesin</translation>
+        <translation>Kết thúc quá trình</translation>
     </message>
     <message>
         <source>Resume process</source>
-        <translation>Rimerre procesin</translation>
+        <translation>Tiếp tục quá trình</translation>
     </message>
     <message>
         <source>Kill process</source>
-        <translation>Asgjësoje procesin</translation>
+        <translation>Killing quá trình</translation>
     </message>
     <message>
         <source>Change priority</source>
-        <translation>Ndryshojini përparësinë</translation>
+        <translation>Thay đổi ưu tiên</translation>
     </message>
     <message>
         <source>Suspend process</source>
-        <translation>Pezulloje procesin</translation>
+        <translation>Dừng lại quá trình</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
         <source>Custom Priority</source>
-        <translation>Përparësi Vetjake</translation>
+        <translation>Ưu tiên tùy chỉnh</translation>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>Huỷ bỏ</translation>
     </message>
     <message>
         <source>Change</source>
         <comment>button</comment>
-        <translation>Ndryshoje</translation>
+        <translation>Thay đổi</translation>
     </message>
 </context>
 <context>
     <name>Process.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>Emër</translation>
+        <translation>Tên</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -902,23 +907,23 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Kujtesë</translation>
+        <translation>Bộ nhớ</translation>
     </message>
     <message>
         <source>Disk write</source>
-        <translation>Shkrim në disk</translation>
+        <translation>Ghi đĩa</translation>
     </message>
     <message>
         <source>Disk read</source>
-        <translation>Lexim në disk</translation>
+        <translation>Đọc đĩa</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Shkarkim</translation>
+        <translation>Tải xuống</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Ngarkim</translation>
+        <translation>Tải lên</translation>
     </message>
     <message>
         <source>PID</source>
@@ -926,7 +931,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>User</source>
-        <translation>Përdorues</translation>
+        <translation>Người dùng</translation>
     </message>
     <message>
         <source>Nice</source>
@@ -934,68 +939,68 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Përparësi</translation>
+        <translation>Ưu tiên</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation>Kujtesë e përbashkët</translation>
+        <translation>Bộ nhớ chia sẻ</translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation>Kujtesë virtuale</translation>
+        <translation>Bộ nhớ ảo</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Not support</source>
-        <translation>Pa mbulim</translation>
+        <translation>Không hỗ trợ</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Rregullime</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System Protection</source>
-        <translation>Mbrojtje Sistemi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Shfaq sinjalizime, kur përdorimi tejkalon pragjet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation>Prag sinjalizimi për CPU-në (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation>Prag sinjalizimi për kujtesën (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Warning interval (min)</source>
-        <translation>Interval sinjalizimi (min)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Notifications</source>
-        <translation>Njoftime</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
         <source>Failed to set service startup type</source>
-        <translation>S’u arrit të caktohej lloj nisjeje shërbimi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Gabim: S’u arrit të caktohej lloj nisjeje shërbimi, për shkak të një nënprocesi të vithisur.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <source>Service instance name</source>
-        <translation>Emër instance shërbimi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>OK</source>
@@ -1009,69 +1014,69 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anuloje</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
         <source>Refresh</source>
-        <translation>Rifreskoje</translation>
+        <translation>Làm mới</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Nise</translation>
+        <translation>Bắt đầu</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Ndale</translation>
+        <translation>Dừng</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Rinise</translation>
+        <translation>Khởi động lại</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Dorazi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Startup type</source>
-        <translation>Lloj nisjeje</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Service.Table.Header</name>
     <message>
         <source>Name</source>
-        <translation>Emër</translation>
+        <translation>Tên</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Ngarkoje</translation>
+        <translation>Tải</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation type="vanished">Aktiv</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sub</source>
-        <translation>Sub</translation>
+        <translation>Phụ</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="vanished">Gjendje</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Description</source>
-        <translation>Përshkrim</translation>
+        <translation>Mô tả</translation>
     </message>
     <message>
         <source>PID</source>
@@ -1079,89 +1084,89 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <source>Startup Type</source>
-        <translation>Lloj Nisjeje</translation>
+        <translation>Loại khởi động</translation>
     </message>
     <message>
         <source>Start State</source>
-        <translation>Përlancëzimi i pozicionit</translation>
+        <translation>Trạng thái khởi động</translation>
     </message>
     <message>
         <source>Start Tactic</source>
-        <translation>Metoda e përlancëzimit</translation>
+        <translation>Phương thức khởi động</translation>
     </message>
 </context>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation>Rregullime</translation>
+        <translation>Cài đặt</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation>(I ndryshueshëm)</translation>
+        <translation>(Thay đổi được</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation>Interval: %1-%2</translation>
+        <translation>Khoảng: %1-%2</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <source>Force end application</source>
-        <translation>Detyro përfundim aplikacioni</translation>
+        <translation>Kết thúc ứng dụng</translation>
     </message>
     <message>
         <source>Expand</source>
-        <translation>Zgjeroje</translation>
+        <translation>Mở rộng</translation>
     </message>
     <message>
         <source>Compact</source>
-        <translation>Mblidhe</translation>
+        <translation>Tightly packed</translation>
     </message>
     <message>
         <source>View</source>
-        <translation>Shihni</translation>
+        <translation>Xem</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Search</name>
     <message>
         <source>Search</source>
-        <translation>Kërko</translation>
+        <translation>Tìm kiếm</translation>
     </message>
 </context>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
         <source>Processes</source>
-        <translation>Procese</translation>
+        <translation>Quá trình</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation>Shërbime</translation>
+        <translation>Dịch vụ</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation>Përdorues</translation>
+        <translation>Người dùng</translation>
     </message>
 </context>
 <context>
     <name>User.Account.Type</name>
     <message>
         <source>Administrator</source>
-        <translation>Përgjegjës</translation>
+        <translation>Quản trị viên</translation>
     </message>
     <message>
         <source>Standard User</source>
-        <translation>Përdorues Standard</translation>
+        <translation>Người dùng tiêu chuẩn</translation>
     </message>
 </context>
 <context>
     <name>User.Account.Operation</name>
     <message>
         <source>Edit account information</source>
-        <translation>Përpunoni hollësi llogarie</translation>
+        <translation>Sửa thông tin tài khoản</translation>
     </message>
 </context>
 </TS>

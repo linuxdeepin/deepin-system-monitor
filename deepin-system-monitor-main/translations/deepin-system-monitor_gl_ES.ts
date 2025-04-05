@@ -14,91 +14,91 @@
     <name>BaseDetailViewWidget</name>
     <message>
         <source>Hide details</source>
-        <translation type="unfinished"/>
+        <translation>Amosar detalls</translation>
     </message>
     <message>
         <source>Overall utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilización total</translation>
     </message>
     <message>
         <source>Individual utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilización individual</translation>
     </message>
 </context>
 <context>
     <name>BlockDevItemWidget</name>
     <message>
         <source>Read</source>
-        <translation type="unfinished"/>
+        <translation>Lectura</translation>
     </message>
     <message>
         <source>Write</source>
-        <translation type="unfinished"/>
+        <translation>Escritura</translation>
     </message>
 </context>
 <context>
     <name>CPUDetailGrapTableItem</name>
     <message>
         <source>60 seconds</source>
-        <translation type="unfinished"/>
+        <translation>60 segundos</translation>
     </message>
 </context>
 <context>
     <name>CPUInfoModel</name>
     <message>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation type="unfinished"/>
+        <translation>%1 días %2 horas %3 minutos</translation>
     </message>
 </context>
 <context>
     <name>CPUSummaryTableModel</name>
     <message>
         <source>Utilization</source>
-        <translation type="unfinished"/>
+        <translation>Utilización</translation>
     </message>
     <message>
         <source>Current frequency</source>
-        <translation type="unfinished"/>
+        <translation>Frequencia actual</translation>
     </message>
     <message>
         <source>Frequency</source>
-        <translation type="unfinished"/>
+        <translation>Frequencia</translation>
     </message>
     <message>
         <source>Sockets</source>
-        <translation type="unfinished"/>
+        <translation>Conxuntos</translation>
     </message>
     <message>
         <source>Logical processors</source>
-        <translation type="unfinished"/>
+        <translation>Procesadores lóxicos</translation>
     </message>
     <message>
         <source>Virtualization</source>
-        <translation type="unfinished"/>
+        <translation>Virtualización</translation>
     </message>
     <message>
         <source>L1i cache</source>
-        <translation type="unfinished"/>
+        <translation>Cache L1i</translation>
     </message>
     <message>
         <source>L1d cache</source>
-        <translation type="unfinished"/>
+        <translation>Cache L1d</translation>
     </message>
     <message>
         <source>L2 cache</source>
-        <translation type="unfinished"/>
+        <translation>Cache L2</translation>
     </message>
     <message>
         <source>L3 cache</source>
-        <translation type="unfinished"/>
+        <translation>Cache L3</translation>
     </message>
     <message>
         <source>Load average</source>
-        <translation type="unfinished"/>
+        <translation>Carga media</translation>
     </message>
     <message>
         <source>File descriptors</source>
-        <translation type="unfinished"/>
+        <translation>Descritores de ficheiros</translation>
     </message>
     <message>
         <source>Processes</source>
@@ -106,30 +106,30 @@
     </message>
     <message>
         <source>Threads</source>
-        <translation type="unfinished"/>
+        <translation>Xreds</translation>
     </message>
     <message>
         <source>Host name</source>
-        <translation type="unfinished"/>
+        <translation>Nome do servidor</translation>
     </message>
     <message>
         <source>OS type</source>
-        <translation type="unfinished"/>
+        <translation>Tipo de sistema operativo</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Versión</translation>
     </message>
     <message>
         <source>Up time</source>
-        <translation type="unfinished"/>
+        <translation>Tiempo de funcionamento</translation>
     </message>
 </context>
 <context>
     <name>ChartViewWidget</name>
     <message>
         <source>60 seconds</source>
-        <translation type="unfinished"/>
+        <translation>60 segundos</translation>
     </message>
 </context>
 <context>
@@ -143,14 +143,14 @@
     <name>CompactCpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation type="unfinished"/>
+        <translation>Detalles</translation>
     </message>
 </context>
 <context>
     <name>CpuMonitor</name>
     <message>
         <source>Details</source>
-        <translation type="unfinished"/>
+        <translation>Detalles</translation>
     </message>
 </context>
 <context>
@@ -332,46 +332,48 @@
     <name>DBusAlarmNotify</name>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Aviso</translation>
     </message>
     <message>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>O uso do seu procesador é superior a %1%!
+</translation>
     </message>
     <message>
         <source>Your memory usage is higher than %1%!</source>
-        <translation type="unfinished"/>
+        <translation>O uso da súa memoria é superior a %1%!
+</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Ver</translation>
     </message>
 </context>
 <context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
-        <translation type="unfinished"/>
+        <translation>Usado</translation>
     </message>
     <message>
         <source>Available</source>
-        <translation type="unfinished"/>
+        <translation>Dispoñible</translation>
     </message>
     <message>
         <source>Shared</source>
-        <translation type="unfinished"/>
+        <translation>Compartido</translation>
     </message>
     <message>
         <source>Cached</source>
-        <translation type="unfinished"/>
+        <translation>Caché</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation type="unfinished"/>
+        <translation>Buffers</translation>
     </message>
     <message>
         <source>Cached swap</source>
-        <translation type="unfinished"/>
+        <translation>Caché de swap</translation>
     </message>
     <message>
         <source>Active</source>
@@ -379,86 +381,86 @@
     </message>
     <message>
         <source>Inactive</source>
-        <translation type="unfinished"/>
+        <translation>Inactivo</translation>
     </message>
     <message>
         <source>Dirty</source>
-        <translation type="unfinished"/>
+        <translation>Contaminado</translation>
     </message>
     <message>
         <source>Mapped</source>
-        <translation type="unfinished"/>
+        <translation>Mapeado</translation>
     </message>
     <message>
         <source>Total swap</source>
-        <translation type="unfinished"/>
+        <translation>Total de swap</translation>
     </message>
     <message>
         <source>Free swap</source>
-        <translation type="unfinished"/>
+        <translation>Swap libre</translation>
     </message>
     <message>
         <source>Slab</source>
-        <translation type="unfinished"/>
+        <translation>Slab</translation>
     </message>
 </context>
 <context>
     <name>DeailTableModelBlock</name>
     <message>
         <source>Model</source>
-        <translation type="unfinished"/>
+        <translation>Modelo</translation>
     </message>
     <message>
         <source>Read speed</source>
-        <translation type="unfinished"/>
+        <translation>Velocidade de lectura</translation>
     </message>
     <message>
         <source>Write speed</source>
-        <translation type="unfinished"/>
+        <translation>Velocidade de escrita</translation>
     </message>
     <message>
         <source>Capacity</source>
-        <translation type="unfinished"/>
+        <translation>Capacidade</translation>
     </message>
     <message>
         <source>Sectors read</source>
-        <translation type="unfinished"/>
+        <translation>Sectores leidos</translation>
     </message>
     <message>
         <source>Reads/s</source>
-        <translation type="unfinished"/>
+        <translation>Lecturas/s</translation>
     </message>
     <message>
         <source>Sectors read/s</source>
-        <translation type="unfinished"/>
+        <translation>Sectores leidos/s</translation>
     </message>
     <message>
         <source>Reads merged/s</source>
-        <translation type="unfinished"/>
+        <translation>lecturas combinadas/s</translation>
     </message>
     <message>
         <source>Sectors written</source>
-        <translation type="unfinished"/>
+        <translation>sectores escritos</translation>
     </message>
     <message>
         <source>Writes completed </source>
-        <translation type="unfinished"/>
+        <translation>escribiúse escrituras completas</translation>
     </message>
     <message>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>escrituras combinadas</translation>
     </message>
     <message>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>escrituras/s</translation>
     </message>
     <message>
         <source>Sectors written/s</source>
-        <translation type="unfinished"/>
+        <translation>sectores escritos/s</translation>
     </message>
     <message>
         <source>Writes merged/s</source>
-        <translation type="unfinished"/>
+        <translation>escrituras combinadas/s</translation>
     </message>
 </context>
 <context>
@@ -524,84 +526,84 @@ Estás seguro de que queres continuar?</translation>
     <name>MainWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuración</translation>
     </message>
 </context>
 <context>
     <name>MemStatViewWidget</name>
     <message>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Tamaño</translation>
     </message>
 </context>
 <context>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <source>IP address:</source>
-        <translation type="unfinished"/>
+        <translation>Enderezo IP:</translation>
     </message>
     <message>
         <source>Netmask:</source>
-        <translation type="unfinished"/>
+        <translation>Máscara de red:</translation>
     </message>
     <message>
         <source>Broadcast:</source>
-        <translation type="unfinished"/>
+        <translation>Transmisión:</translation>
     </message>
     <message>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>Longitud de prefijo:</translation>
     </message>
     <message>
         <source>Scope:</source>
-        <translation type="unfinished"/>
+        <translation>Escanxamento:</translation>
     </message>
 </context>
 <context>
     <name>NetInfoModel</name>
     <message>
         <source>Connection type</source>
-        <translation type="unfinished"/>
+        <translation>Tipo de conexión</translation>
     </message>
     <message>
         <source>ESSID</source>
-        <translation type="unfinished"/>
+        <translation>ESSID</translation>
     </message>
     <message>
         <source>Link quality</source>
-        <translation type="unfinished"/>
+        <translation>Calidade da conexión</translation>
     </message>
     <message>
         <source>Signal strength</source>
-        <translation type="unfinished"/>
+        <translation>Forza da sinal</translation>
     </message>
     <message>
         <source>Noise level</source>
-        <translation type="unfinished"/>
+        <translation>Nivel de ruido</translation>
     </message>
     <message>
         <source>MAC</source>
-        <translation type="unfinished"/>
+        <translation>MAC</translation>
     </message>
     <message>
         <source>Bandwidth</source>
-        <translation type="unfinished"/>
+        <translation>Ancho de banda</translation>
     </message>
     <message>
         <source>RX packets</source>
-        <translation type="unfinished"/>
+        <translation>Paquetes RX</translation>
     </message>
     <message>
         <source>RX bytes</source>
-        <translation type="unfinished"/>
+        <translation>Bytes RX</translation>
     </message>
     <message>
         <source>RX errors</source>
-        <translation type="unfinished"/>
+        <translation>Erros RX</translation>
     </message>
     <message>
         <source>RX dropped</source>
-        <translation type="unfinished"/>
+        <translation>Paquetes RX descartados</translation>
     </message>
     <message>
         <source>RX overruns</source>
@@ -938,18 +940,18 @@ Estás seguro de que queres continuar?</translation>
     </message>
     <message>
         <source>Shared memory</source>
-        <translation type="unfinished"/>
+        <translation>Memoria compartida</translation>
     </message>
     <message>
         <source>Virtual memory</source>
-        <translation type="unfinished"/>
+        <translation>Memoria virtual</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>Non se paxa</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -1083,26 +1085,26 @@ Estás seguro de que queres continuar?</translation>
     </message>
     <message>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>Estado Inicial</translation>
     </message>
     <message>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>Táctica Inicial</translation>
     </message>
 </context>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuración</translation>
     </message>
     <message>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Modificable</translation>
     </message>
     <message>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Intervalo: %1-%2</translation>
     </message>
 </context>
 <context>
@@ -1143,25 +1145,25 @@ Estás seguro de que queres continuar?</translation>
     </message>
     <message>
         <source>Users</source>
-        <translation type="unfinished"/>
+        <translation>Usuarios</translation>
     </message>
 </context>
 <context>
     <name>User.Account.Type</name>
     <message>
         <source>Administrator</source>
-        <translation type="unfinished"/>
+        <translation>Administrador</translation>
     </message>
     <message>
         <source>Standard User</source>
-        <translation type="unfinished"/>
+        <translation>Usuario Estándar</translation>
     </message>
 </context>
 <context>
     <name>User.Account.Operation</name>
     <message>
         <source>Edit account information</source>
-        <translation type="unfinished"/>
+        <translation>Editar información de la cuenta</translation>
     </message>
 </context>
 </TS>
