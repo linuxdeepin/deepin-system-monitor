@@ -4,12 +4,12 @@
 		<message>
 			<location filename="org.deepin.systemmonitor.systemserver.set!message" line="0"/>
 			<source>Authentication is required to set service startup type</source>
-			<translation type="unfinished"/>
+			<translation>Zaustavljanje zacetnega vrata storitve je zahtevano prijavljenost</translation>
 		</message>
 		<message>
 			<location filename="org.deepin.systemmonitor.systemserver.set!description" line="0"/>
 			<source>Set service startup type</source>
-			<translation type="unfinished"/>
+			<translation>Nastavi vrsto zacetnega vrata storitve</translation>
 		</message>
 	</context>
 </TS>
