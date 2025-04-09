@@ -4,12 +4,12 @@
 		<message>
 			<location filename="org.deepin.systemmonitor.systemserver.set!message" line="0"/>
 			<source>Authentication is required to set service startup type</source>
-			<translation type="unfinished"/>
+			<translation>Tėkite autentifikacijos norint nustatyti paslaugos paleidimo tipą</translation>
 		</message>
 		<message>
 			<location filename="org.deepin.systemmonitor.systemserver.set!description" line="0"/>
 			<source>Set service startup type</source>
-			<translation type="unfinished"/>
+			<translation>Nustatyti paslaugos paleidimo tipą</translation>
 		</message>
 	</context>
 </TS>
