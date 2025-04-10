@@ -4,12 +4,12 @@
 		<message>
 			<location filename="org.deepin.systemmonitor.systemserver.set!message" line="0"/>
 			<source>Authentication is required to set service startup type</source>
-			<translation>সেবা শুরু ধরন নির্ধারণ করতে জন্য পরিচয় প্রয়োজন</translation>
+			<translation>সেবা শুরুর ধরন নির্ধারণে পরিচালনা করতে জারিফিকেশন প্রয়োজন</translation>
 		</message>
 		<message>
 			<location filename="org.deepin.systemmonitor.systemserver.set!description" line="0"/>
 			<source>Set service startup type</source>
-			<translation>সেবার শুরু ধরন নির্ধারণ করুন</translation>
+			<translation>সেবা শুরুর ধরন নির্ধারণ করুন</translation>
 		</message>
 	</context>
 </TS>
