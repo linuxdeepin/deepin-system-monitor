@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl" version="2.1">
 <context>
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="130"/>
         <source>No search results</source>
-        <translation>Nėra ieškojimo rezultatų</translation>
+        <translation>Ni rezultatov za iskanje</translation>
     </message>
 </context>
 <context>
@@ -21,7 +21,7 @@
         <location filename="../gui/cpu_widget.cpp" line="216"/>
         <location filename="../gui/cpu_widget.cpp" line="217"/>
         <source>Utilization</source>
-        <translation>Vartojimas</translation>
+        <translation>Uporaba</translation>
     </message>
 </context>
 <context>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="228"/>
         <source>Disk</source>
-        <translation>Diskas</translation>
+        <translation>Disk</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="258"/>
         <source>Read</source>
-        <translation>Perkrovimas</translation>
+        <translation> branje</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="259"/>
         <source>Write</source>
-        <translation>Rašymas</translation>
+        <translation> pisanje</translation>
     </message>
 </context>
 <context>
@@ -47,12 +47,12 @@
     <message>
         <location filename="../common/common.cpp" line="42"/>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation>Sistem</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="48"/>
         <source>Display shortcuts</source>
-        <translation>Rodyti įspūdžius</translation>
+        <translation>Pokaži bližnjice</translation>
     </message>
 </context>
 <context>
@@ -60,18 +60,18 @@
     <message>
         <location filename="../gui/memory_widget.cpp" line="152"/>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation>Pomnilnik</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="179"/>
         <location filename="../gui/memory_widget.cpp" line="188"/>
         <source>Swap</source>
-        <translation>Sukeitimų skaidinys</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="180"/>
         <source>Not enabled</source>
-        <translation>Neįjungta</translation>
+        <translation>Zapreščeno</translation>
     </message>
 </context>
 <context>
@@ -79,22 +79,22 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="259"/>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation> prenosi</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="260"/>
         <source>Total received</source>
-        <translation>Visas gautas</translation>
+        <translation>Celotno prejeto</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="262"/>
         <source>Total sent</source>
-        <translation>Visas išsiųstas</translation>
+        <translation>Celotno poslano</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation> Naložba</translation>
     </message>
 </context>
 <context>
@@ -103,7 +103,7 @@
         <location filename="../gui/net_widget.cpp" line="232"/>
         <location filename="../gui/net_widget.cpp" line="235"/>
         <source>Network</source>
-        <translation>Tinklas</translation>
+        <translation>Omrežje</translation>
     </message>
 </context>
 <context>
@@ -111,37 +111,37 @@
     <message>
         <location filename="../process/process.cpp" line="67"/>
         <source>Very high</source>
-        <translation>Pamirštas</translation>
+        <translation>Preprosto visoko</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="68"/>
         <source>High</source>
-        <translation>Aukštas</translation>
+        <translation>Visoko</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="69"/>
         <source>Normal</source>
-        <translation>Normalus</translation>
+        <translation>Normalno</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="70"/>
         <source>Low</source>
-        <translation> trumpas</translation>
+        <translation>Nizko</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="71"/>
         <source>Very low</source>
-        <translation>Labai trumpas</translation>
+        <translation>Preprosto nizko</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="72"/>
         <source>Custom</source>
-        <translation>Nustatytas</translation>
+        <translation>Prilagojen</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="73"/>
         <source>Invalid</source>
-        <translation>Neteisingas</translation>
+        <translation>Nedostopno</translation>
     </message>
 </context>
 <context>
@@ -149,32 +149,32 @@
     <message>
         <location filename="../process/process_db.cpp" line="162"/>
         <source>Failed to end process</source>
-        <translation>Neįmanoma pabaigti proceso</translation>
+        <translation>Neuspešno končanje procesa</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="165"/>
         <source>Failed to pause process</source>
-        <translation>Neįmanoma perrašyti proceso</translation>
+        <translation>Neuspešno prekajanje procesa</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to resume process</source>
-        <translation>Neįmanoma atnaujinti proceso</translation>
+        <translation>Naprejitev procesa je spodletela</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
         <source>Failed to kill process</source>
-        <translation>Neįmanoma užverti proceso</translation>
+        <translation>Ubište procesa je spodletelo</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Unknown error</source>
-        <translation>Nežinoma klaida</translation>
+        <translation>Neznana napaka</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="224"/>
         <source>Failed in sending signal to process</source>
-        <translation>Neįmanoma siųsti signalo procesui</translation>
+        <translation>Posiljanje signalov procesu je spodletelo</translation>
     </message>
 </context>
 <context>
@@ -182,19 +182,19 @@
     <message>
         <location filename="../model/process_table_model.cpp" line="175"/>
         <source>No response</source>
-        <translation>Nėra atsakymo</translation>
+        <translation>Ni odziva</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.cpp" line="180"/>
         <source>Suspend</source>
-        <translation>Pristabdyti</translation>
+        <translation>Suspendiraj</translation>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="96"/>
         <location filename="../process/process_name.cpp" line="103"/>
         <location filename="../process/process_name.cpp" line="106"/>
         <source>Tray</source>
-        <translation>Dėklas</translation>
+        <translation>Pleco</translation>
     </message>
 </context>
 <context>
@@ -202,27 +202,27 @@
     <message>
         <location filename="../common/common.cpp" line="76"/>
         <source>End process</source>
-        <translation>Užbaigti procesą</translation>
+        <translation>Konec procesa</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="82"/>
         <source>Suspend process</source>
-        <translation>Pristabdyti procesą</translation>
+        <translation>Suspendiraj proces</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="88"/>
         <source>Resume process</source>
-        <translation>Pratęsti procesą</translation>
+        <translation>Naprejitev procesa</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="93"/>
         <source>Properties</source>
-        <translation>Savybės</translation>
+        <translation>Lastnosti</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="99"/>
         <source>Kill process</source>
-        <translation>Užverti procesą</translation>
+        <translation>Ubiši proces</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="31"/>
         <source>Name</source>
-        <translation>Pavadinimas</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="33"/>
@@ -240,42 +240,42 @@
     <message>
         <location filename="../model/process_table_model.h" line="35"/>
         <source>User</source>
-        <translation>Naudotojas</translation>
+        <translation>Uporabnik</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="37"/>
         <source>Memory</source>
-        <translation>Atmintis</translation>
+        <translation>Pamet</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Shared memory</source>
-        <translation>Dalyvaujama atmintis</translation>
+        <translation>Deljena pamet</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="39"/>
         <source>Virtual memory</source>
-        <translation>Virtualusis atmintis</translation>
+        <translation>Vrnešna pamet</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="41"/>
         <source>Upload</source>
-        <translation>Išsiuntimas</translation>
+        <translation>Nalaganje</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="43"/>
         <source>Download</source>
-        <translation>Atsiuntimas</translation>
+        <translation>Prenosi</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="45"/>
         <source>Disk read</source>
-        <translation>Disko skaitymas</translation>
+        <translation> branje diska</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="47"/>
         <source>Disk write</source>
-        <translation>Disko rašymas</translation>
+        <translation>pisanje diska</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="49"/>
@@ -285,12 +285,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="51"/>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation>Ljubezen</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="53"/>
         <source>Priority</source>
-        <translation>Prioritetas</translation>
+        <translation>Prednost</translation>
     </message>
 </context>
 <context>
@@ -298,7 +298,7 @@
     <message>
         <location filename="../gui/process_widget.cpp" line="65"/>
         <source>Name</source>
-        <translation>Pavadinimas</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="72"/>
@@ -309,7 +309,7 @@
         <location filename="../gui/process_widget.cpp" line="182"/>
         <location filename="../gui/process_widget.cpp" line="185"/>
         <source>Processes</source>
-        <translation>Processai</translation>
+        <translation>Postopniški procesi</translation>
     </message>
 </context>
 <context>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation>Nėra palaikyti</translation>
+        <translation>Ne podpiram</translation>
     </message>
 </context>
 <context>
@@ -325,22 +325,22 @@
     <message>
         <location filename="../common/common.cpp" line="113"/>
         <source>Start</source>
-        <translation>Pradėti</translation>
+        <translation>Začni</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="118"/>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation>Zapri</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="123"/>
         <source>Restart</source>
-        <translation>Paleisti iš naujo</translation>
+        <translation>Ponovno začni</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="128"/>
         <source>Refresh</source>
-        <translation>Įkelti iš naujo</translation>
+        <translation>Osveži</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../common/common.cpp" line="69"/>
         <source>Force end application</source>
-        <translation>Tikslinti pabaigą</translation>
+        <translation>Zahtevno končaj aplikacijo</translation>
     </message>
 </context>
 <context>
@@ -356,7 +356,7 @@
     <message>
         <location filename="../common/common.cpp" line="54"/>
         <source>Search</source>
-        <translation>Paieška</translation>
+        <translation>Išči</translation>
     </message>
 </context>
 <context>
@@ -364,12 +364,12 @@
     <message>
         <location filename="../common/common.cpp" line="63"/>
         <source>Processes</source>
-        <translation>Processai</translation>
+        <translation>Postopniški procesi</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="108"/>
         <source>Services</source>
-        <translation>Sluokniniai</translation>
+        <translation>Usluge</translation>
     </message>
 </context>
 </TS>
