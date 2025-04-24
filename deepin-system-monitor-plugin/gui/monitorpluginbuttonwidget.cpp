@@ -161,7 +161,7 @@ const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const 
 {
     QIcon fallbackIcon = QIcon::fromTheme(fallbackIconName);
     QIcon icon = QIcon::fromTheme(iconName, fallbackIcon);
-    int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
+    int pixmapSize = size;
     if (!icon.isNull()) {
         QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
