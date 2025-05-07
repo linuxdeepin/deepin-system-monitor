@@ -89,15 +89,32 @@ void MonitorPluginButtonWidget::paintEvent(QPaintEvent *e)
         fallbackIconName = "dsm_pluginicon_dark";
     }
 
-    const auto ratio = devicePixelRatioF();
     painter.setOpacity(1);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing);
 
-    pixmap = loadSvg(iconName, fallbackIconName, ":/icons/deepin/builtin/actions/", iconSize, ratio);
+    // Use Qt's icon system to load icons directly instead of custom loadSvg function
+    // Reasons:
+    // 1. loadSvg function manually handles DPI scaling which causes duplicate scaling issues
+    // 2. Qt's icon system has built-in DPI handling mechanism, no manual intervention needed
+    // 3. Using QIcon::pixmap directly ensures correct icon display across different DPI settings
+    QIcon fallbackIcon = QIcon::fromTheme(fallbackIconName);
+    QIcon icon = QIcon::fromTheme(iconName, fallbackIcon);
+    if (!icon.isNull()) {
+        pixmap = icon.pixmap(QSize(iconSize, iconSize));
+    } else {
+        QString localIcon = QString(":/icons/deepin/builtin/actions/%1_20px.svg").arg(fallbackIconName);
+        QSvgRenderer renderer(localIcon);
+        pixmap = QPixmap(iconSize, iconSize);
+        pixmap.fill(Qt::transparent);
+        QPainter iconPainter(&pixmap);
+        renderer.render(&iconPainter);
+    }
 
-    const QRectF &rf = QRectF(rect());
-    const QRectF &rfp = QRectF(pixmap.rect());
-
-    painter.drawPixmap(rf.center() - rfp.center() / ratio, pixmap);
+    // Calculate the centered position of the icon in the window
+    // Use integer coordinates to avoid drawing position offset caused by floating point precision issues
+    int x = (width() - iconSize) / 2;
+    int y = (height() - iconSize) / 2;
+    painter.drawPixmap(x, y, pixmap);
 }
 
 void MonitorPluginButtonWidget::resizeEvent(QResizeEvent *event)
@@ -155,31 +172,6 @@ void MonitorPluginButtonWidget::leaveEvent(QEvent *event)
     update();
 
     QWidget::leaveEvent(event);
-}
-
-const QPixmap MonitorPluginButtonWidget::loadSvg(const QString &iconName, const QString &fallbackIconName, const QString &localPath, const int size, const qreal ratio)
-{
-    QIcon fallbackIcon = QIcon::fromTheme(fallbackIconName);
-    QIcon icon = QIcon::fromTheme(iconName, fallbackIcon);
-    int pixmapSize = size;
-    if (!icon.isNull()) {
-        QPixmap pixmap = icon.pixmap(pixmapSize);
-        pixmap.setDevicePixelRatio(ratio);
-        return pixmap;
-    }
-
-    QPixmap pixmap(pixmapSize, pixmapSize);
-    QString localIcon = QString("%1%2%3").arg(localPath).arg(fallbackIconName + "_20px").arg(fallbackIconName.contains(".svg") ? "" : ".svg");
-    QSvgRenderer renderer(localIcon);
-    pixmap.fill(Qt::transparent);
-
-    QPainter painter;
-    painter.begin(&pixmap);
-    renderer.render(&painter);
-    painter.end();
-    pixmap.setDevicePixelRatio(ratio);
-
-    return pixmap;
 }
 
 bool MonitorPluginButtonWidget::containCursorPos()
