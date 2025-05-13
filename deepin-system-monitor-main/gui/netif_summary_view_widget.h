@@ -310,7 +310,10 @@ public:
 
                 // 信号强度
                 stInfo.strKey = QApplication::translate("NetInfoModel", "Signal strength");
-                stInfo.strValue = QString("%1 dBm").arg(stNetifInfo->signalLevel());
+                auto strenth = stNetifInfo->signalLevel();
+                // 这个算法可能不是最准确的，后续如果有更准确的算法，可以替换，信号强度转信号等级
+                auto level = -100 + 70 * (1 - strenth / 100.0);
+                stInfo.strValue = QString("%1 dBm").arg(level);
                 m_listInfo << stInfo;
 
                 // 底噪

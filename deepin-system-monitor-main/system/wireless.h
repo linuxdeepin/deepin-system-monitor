@@ -18,9 +18,9 @@ public:
     ~wireless();
     // 服务器别号
     QByteArray essid();
-    unsigned char link_quality();
-    unsigned char signal_levle();
-    unsigned char noise_level();
+    uint8_t link_quality();
+    uint8_t signal_levle();
+    uint8_t noise_level();
 
     bool is_wireless();
 protected:
@@ -32,9 +32,9 @@ private:
     QByteArray m_ifname;
 
     QByteArray m_essid;
-    unsigned char m_link_quality;
-    unsigned char m_signal_levle;
-    unsigned char m_noise_level;
+    uint8_t m_link_quality;
+    uint8_t m_signal_level;
+    uint8_t m_noise_level;
 };
 
 
