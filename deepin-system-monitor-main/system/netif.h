@@ -153,6 +153,7 @@ protected:
     void updateLinkInfo(const NLLink *link);
     void updateWirelessInfo(); // ioctl
     void updateBrandInfo(); // udev
+    double getWirelessSpeed(const QString &interface); // iw dev <interface> link
 
 private:
     QSharedDataPointer<NetifInfoPrivate> d;

@@ -11,6 +11,8 @@
 #include "nl_hwaddr.h"
 
 #include <QProcess>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 #include <netlink/route/link.h>
 #include <netlink/addr.h>
@@ -116,23 +118,9 @@ void NetifInfo::updateWirelessInfo()
         d->iw_info->qual.level = wireless1.signal_levle();
         d->iw_info->qual.noise = wireless1.noise_level();
         // 速率
-        //无线网速率ioctl没有提供相关接口，目前采用调用iwlist命令的方式获取 #bug 111694
-        QProcess process;
-        QString cmd = QString("iwlist ") + d.data()->ifname + QString(" rate");
-        process.start(cmd);
-        process.waitForFinished(-1);
-        //获取输出
-        QString data = process.readAllStandardOutput();
-        QStringList datalist = data.trimmed().split(":");
-        if (datalist.size() > 0) {
-            QString speedString = datalist[datalist.size() - 1];
-            float fspeed = 0;
-            QStringList  list = speedString.split(" ");
-            if (list.size() > 0) {
-                fspeed = list[0].toFloat();
-            }
-            d->speed = static_cast<uint>(fspeed);
-        }
+        auto speed = getWirelessSpeed(d->ifname);
+        if (speed >= 0)
+            d->speed = static_cast<uint>(speed);
     } else {
         d->isWireless = false;
     }
@@ -154,6 +142,25 @@ void NetifInfo::updateBrandInfo()
     }
     close(fd);
 }
+
+double NetifInfo::getWirelessSpeed(const QString &interface) {
+    QProcess process;
+    process.start("iw", QStringList() << "dev" << interface << "link");
+    process.waitForFinished();
+    QString output = process.readAllStandardOutput();
+
+    // 解析发送速率，实测发现控制中心显示的速率是 tx bitrate，所以这里只捕获 tx bitrate
+    QRegularExpression txRegex("tx bitrate:\\s+(\\d+\\.?\\d*)\\s+(\\w+)");
+    QRegularExpressionMatch txMatch = txRegex.match(output);
+    
+    if (txMatch.hasMatch()) {
+        double rate = txMatch.captured(1).toDouble();
+        return static_cast<long>(rate);
+    }
+    
+    return -1;  // 表示无法获取速率
+}
+
 
 } // namespace system
 } // namespace core
