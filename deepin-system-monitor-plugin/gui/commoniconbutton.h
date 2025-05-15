@@ -48,7 +48,7 @@ protected:
 
 private:
     void refreshIcon();
-
+    int  getIconSize() const;
 private:
     QTimer *m_refreshTimer;
     QIcon m_icon;

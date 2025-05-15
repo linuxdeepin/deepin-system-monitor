@@ -11,7 +11,7 @@
 
 DGUI_USE_NAMESPACE
 
-constexpr int ICON_SIZE = 24;
+constexpr int BASE_ICON_SIZE = 24;
 
 CommonIconButton::CommonIconButton(QWidget *parent)
     : QWidget(parent)
@@ -24,7 +24,9 @@ CommonIconButton::CommonIconButton(QWidget *parent)
     , m_activeState(false)
 {
     setAccessibleName("IconButton");
-    setFixedSize(ICON_SIZE, ICON_SIZE);
+    // 使用适配后的图标大小
+    int iconSize = getIconSize();
+    setFixedSize(iconSize, iconSize);
     if (parent)
         setForegroundRole(parent->foregroundRole());
 
@@ -170,7 +172,9 @@ void CommonIconButton::paintEvent(QPaintEvent *e)
     if (m_hover && !m_hoverIcon.isNull()) {
         m_hoverIcon.paint(&painter, rect());
     } else if (!m_icon.isNull()) {
-        painter.drawPixmap(rect(), m_icon.pixmap(ICON_SIZE));
+        // 使用适配后的图标大小
+        int iconSize = getIconSize();
+        painter.drawPixmap(rect(), m_icon.pixmap(iconSize));
     }
 }
 
@@ -194,4 +198,12 @@ void CommonIconButton::mouseReleaseEvent(QMouseEvent *event)
 void CommonIconButton::refreshIcon()
 {
     setState(m_state);
+}
+
+int CommonIconButton::getIconSize() const
+{
+    // 获取设备像素比
+    qreal ratio = devicePixelRatio();
+    // 返回适配后的大小，向上取整确保不会太小
+    return qCeil(BASE_ICON_SIZE * ratio);
 }
