@@ -1,3 +1,10 @@
+deepin-system-monitor (6.5.14) unstable; urgency=medium
+
+  * Fix high dpi dislpay issue.
+  * Update version to 6.5.14.
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 15 May 2025 13:02:48 +0800
+
 deepin-system-monitor (6.5.13) unstable; urgency=medium
 
   * Fix abnormal display of tray icon on high DPI screens.
