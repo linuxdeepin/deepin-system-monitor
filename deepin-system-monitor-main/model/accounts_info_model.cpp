@@ -134,6 +134,8 @@ User::UserType AccountsInfoModel::getCurrentUserType() const
         return User::UserType::StandardUser;
     } else if (m_currentUserType == 1) {
         return User::UserType::Administrator;
+    } else {
+        return User::UserType::StandardUser;
     }
 }
 
