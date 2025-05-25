@@ -275,6 +275,7 @@ int parse_switch(const char *arg, const char *errmesg, ...)
 	va_end(ap);
 
 	errx(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, arg);
+	return 0;
 }
 
 #ifndef HAVE_MEMPCPY
@@ -448,6 +449,7 @@ err:
 		err(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
 
 	errx(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
+	return 0;
 }
 
 long double strtold_or_err(const char *str, const char *errmesg)
@@ -469,6 +471,7 @@ err:
 		err(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
 
 	errx(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
+	return 0;
 }
 
 long strtol_or_err(const char *str, const char *errmesg)
@@ -490,6 +493,7 @@ err:
 		err(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
 
 	errx(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
+	return 0;
 }
 
 unsigned long strtoul_or_err(const char *str, const char *errmesg)
@@ -511,6 +515,7 @@ err:
 		err(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
 
 	errx(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
+	return 0;
 }
 
 uintmax_t strtosize_or_err(const char *str, const char *errmesg)
@@ -524,6 +529,7 @@ uintmax_t strtosize_or_err(const char *str, const char *errmesg)
 		err(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
 
 	errx(STRTOXX_EXIT_CODE, "%s: '%s'", errmesg, str);
+	return 0;
 }
 
 
