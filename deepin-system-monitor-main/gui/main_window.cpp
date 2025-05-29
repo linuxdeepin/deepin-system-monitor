@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     //需要判断Dconfig文件是否合法
     if (dconfig && dconfig->isValid() && dconfig->keyList().contains("specialComType")) {
         specialComType = dconfig->value("specialComType").toInt();
+        qCDebug(app) << "Special computer type configured:" << specialComType;
     }
 #endif
 }
@@ -147,6 +148,7 @@ void MainWindow::initUI()
 
     // load display mode backup setting
     int mode = m_settings->getOption(kSettingKeyDisplayMode).toInt();
+    qCDebug(app) << "Loading display mode:" << mode;
     if (mode == kDisplayModeExpand) {
         expandModeAction->setChecked(true);
     } else if (mode == kDisplayModeCompact) {
@@ -155,10 +157,12 @@ void MainWindow::initUI()
 
     // emit display mode changed signal if ether expand or compact menu item triggered
     connect(expandModeAction, &QAction::triggered, this, [=]() {
+        qCDebug(app) << "Switching to expand mode";
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeExpand);
         Q_EMIT displayModeChanged(kDisplayModeExpand);
     });
     connect(compactModeAction, &QAction::triggered, this, [=]() {
+        qCDebug(app) << "Switching to compact mode";
         m_settings->setOption(kSettingKeyDisplayMode, kDisplayModeCompact);
         Q_EMIT displayModeChanged(kDisplayModeCompact);
     });
@@ -207,6 +211,7 @@ void MainWindow::initConnections()
 {
     connect(m_toolbar, &Toolbar::procTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Services")).arg(DApplication::translate("Title.Bar.Switch", "Processes")));
+        qCDebug(app) << "Switching to process page";
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_procPage);
 
@@ -217,6 +222,7 @@ void MainWindow::initConnections()
 
     connect(m_toolbar, &Toolbar::serviceTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
+        qCDebug(app) << "Switching to service page";
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_svcPage);
 
@@ -226,6 +232,7 @@ void MainWindow::initConnections()
     });
     connect(m_toolbar, &Toolbar::accountProcTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Users")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
+        qCDebug(app) << "Switching to account process page";
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_accountProcPage);
         m_accountProcPage->onUserChanged();
@@ -234,6 +241,7 @@ void MainWindow::initConnections()
         PERF_PRINT_END("POINT-05");
     });
     connect(gApp, &Application::backgroundTaskStateChanged, this, [=](Application::TaskState state) {
+        qCDebug(app) << "Background task state changed:" << state;
         if (state == Application::kTaskStarted) {
             // save last focused widget inside main window
             m_focusedWidget = gApp->mainWindow()->focusWidget();
@@ -254,8 +262,12 @@ void MainWindow::initConnections()
     if (QDBusConnection::sessionBus().isConnected()) {
         if (QDBusConnection::sessionBus().registerService(SERVICE_NAME)) {
             if (!QDBusConnection::sessionBus().registerObject(SERVICE_PATH, m_pDbusService, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
-                qCInfo(app) << "dbus init failed";
+                qCWarning(app) << "Failed to register DBus object at path:" << SERVICE_PATH;
+            } else {
+                qCDebug(app) << "Successfully registered DBus service:" << SERVICE_NAME << "at path:" << SERVICE_PATH;
             }
+        } else {
+            qCWarning(app) << "Failed to register DBus service:" << SERVICE_NAME;
         }
     }
 
@@ -291,18 +303,22 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::KeyPress) {
         auto *kev = dynamic_cast<QKeyEvent *>(event);
         if (kev->matches(QKeySequence::Quit)) {
+            qCDebug(app) << "ESC pressed, quitting application";
             // ESC pressed
             DApplication::quit();
             return true;
         } else if (kev->matches(QKeySequence::Find)) {
+            qCDebug(app) << "CTRL+F pressed, focusing search input";
             // CTRL + F pressed
             toolbar()->focusInput();
             return true;
         } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) && kev->key() == Qt::Key_K) {
+            qCDebug(app) << "CTRL+ALT+K pressed, triggering kill process";
             // CTRL + ALT + K pressed
             Q_EMIT killProcessPerformed();
             return true;
         } else if ((kev->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) && kev->key() == Qt::Key_Question) {
+            qCDebug(app) << "CTRL+SHIFT+? pressed, showing shortcut help";
             // CTRL + SHIFT + ? pressed
             common::displayShortcutHelpDialog(this->geometry());
             return true;
@@ -333,6 +349,7 @@ void MainWindow::onStartMonitorJob()
 void MainWindow::onDetailInfoByDbus(QString msgCode)
 {
     if (msgCode.compare(QString("MSG_PROCESS"), Qt::CaseInsensitive) == 0) {
+        qCDebug(app) << "Switching to process page with no filter";
         m_toolbar->clearSearchText();
         m_toolbar->setProcessButtonChecked(true);
         m_pages->setCurrentWidget(m_procPage);
@@ -346,10 +363,10 @@ void MainWindow::onDetailInfoByDbus(QString msgCode)
             m_settings->setOption(kSettingKeyProcessTabIndex, kFilterApps);
         }
     } else {
+        qCDebug(app) << "Switching to process page";
         m_toolbar->clearSearchText();
         m_toolbar->setProcessButtonChecked(true);
         m_pages->setCurrentWidget(m_procPage);
-        //        m_procPage->switchProcessPage();
         m_tbShadow->raise();
         m_tbShadow->show();
     }
@@ -378,6 +395,7 @@ void MainWindow::popupSettingsDialog()
 
 void MainWindow::onKillProcess()
 {
+    qCDebug(app) << "Kill process requested";
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral("org.kde.KWin"))) {
         auto message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KWin"),
                                                     QStringLiteral("/KWin"),
@@ -385,14 +403,18 @@ void MainWindow::onKillProcess()
                                                     QStringLiteral("killWindow"));
         hide();
         QTimer::singleShot(300,this,[this](){
+            qCDebug(app) << "Sending kill window request to KWin";
             auto message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KWin"),
                                                         QStringLiteral("/KWin"),
                                                         QStringLiteral("org.kde.KWin"),
                                                         QStringLiteral("killWindow"));
             QDBusConnection::sessionBus().asyncCall(message);
             QTimer::singleShot(1000,this,[this](){
+                qCDebug(app) << "Showing window after kill request";
                 show();
             });
         });
+    } else {
+        qCWarning(app) << "KWin service not available for kill process";
     }
 }

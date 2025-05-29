@@ -3,8 +3,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "animation_stackedwidget.h"
+#include "ddlog.h"
 
 #include <QPainter>
+
+using namespace DDLog;
 
 AnimationStackedWidget::AnimationStackedWidget(const AnimationOri ori, QWidget *parent)
     : QStackedWidget(parent)
@@ -60,9 +63,12 @@ void AnimationStackedWidget::setCurrent(int index)
 void AnimationStackedWidget::setCurrent(QWidget *widget)
 {
     int index = this->indexOf(widget);
-    if (index < 0)
+    if (index < 0) {
+        qCWarning(app) << "Invalid widget index:" << index;
         return;
+    }
 
+    qCDebug(app) << "Setting current widget to index:" << index;
     m_moveOri = getMoveOrientation(currentIndex(), index);
     setCurrentWidget(index, getBeginValue());
 }
@@ -71,13 +77,16 @@ void AnimationStackedWidget::setCurrentWidget(int &index, int beginWidth)
 {
     //如果正在动画，那么退出
     if (m_IsAnimation) {
+        qCDebug(app) << "Animation in progress, skipping setCurrentWidget";
         return;
     }
     //如果索引为当前索引则退出
     if (index == currentIndex()) {
+        qCDebug(app) << "Index is same as current, no animation needed";
         emit signalIsFinished();
         return;
     }
+    qCDebug(app) << "Starting animation to index:" << index << "with begin width:" << beginWidth;
     m_IsAnimation = true;
     m_NextIndex = index;
     //隐藏当前的widget
@@ -103,6 +112,7 @@ int AnimationStackedWidget::getBeginValue()
         value = widgetRect.height();
     }
     }
+    qCDebug(app) << "Calculated begin value:" << value << "for orientation:" << m_animationOri;
     return value;
 }
 
@@ -132,6 +142,7 @@ AnimationStackedWidget::MoveOrientation AnimationStackedWidget::getMoveOrientati
         break;
         }
     }
+    qCDebug(app) << "Calculated move orientation:" << moveOri << "from" << currIndex << "to" << nextIndex;
     return moveOri;
 }
 

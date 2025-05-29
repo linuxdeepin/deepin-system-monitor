@@ -1,6 +1,4 @@
-﻿
-
-// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+﻿// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -14,6 +12,7 @@
 #include "common/error_context.h"
 #include "settings.h"
 #include "toolbar.h"
+#include "ddlog.h"
 
 #include "model/system_service_sort_filter_proxy_model.h"
 #include "model/system_service_table_model.h"
@@ -43,6 +42,7 @@
 #include <QShortcut>
 #include <QDebug>
 
+using namespace DDLog;
 DWIDGET_USE_NAMESPACE
 
 // service table view backup setting key
@@ -66,6 +66,7 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
 
     // load backup settings
     bool settingsLoaded = loadSettings();
+    qCDebug(app) << "Settings loaded:" << settingsLoaded;
 
     // initialize ui components & connections
     initUI(settingsLoaded);
@@ -84,26 +85,31 @@ SystemServiceTableView::~SystemServiceTableView()
 // backup service table view settings
 void SystemServiceTableView::saveSettings()
 {
+    qCDebug(app) << "Saving system service table view settings";
     Settings *s = Settings::instance();
     if (s) {
         QByteArray buf = header()->saveState();
         s->setOption(kSettingsOption_ServiceTableHeaderState, buf.toBase64());
         s->flush();
+        qCDebug(app) << "Settings saved successfully";
     }
 }
 
 // load service table view settings from backup storage
 bool SystemServiceTableView::loadSettings()
 {
+    qCDebug(app) << "Loading system service table view settings";
     Settings *s = Settings::instance();
     if (s) {
         QVariant opt = s->getOption(kSettingsOption_ServiceTableHeaderState);
         if (opt.isValid()) {
             QByteArray buf = QByteArray::fromBase64(opt.toByteArray());
             header()->restoreState(buf);
+            qCDebug(app) << "Settings loaded successfully";
             return true;
         }
     }
+    qCDebug(app) << "No settings found";
     return false;
 }
 
@@ -129,10 +135,13 @@ void SystemServiceTableView::displayTableContextMenu(const QPoint &p)
 void SystemServiceTableView::startService()
 {
     // no selected item, do nothing
-    if (!m_selectedSName.isValid())
+    if (!m_selectedSName.isValid()) {
+        qCDebug(app) << "No service selected for starting";
         return;
+    }
 
     auto sname = m_selectedSName.toString();
+    qCDebug(app) << "Starting service:" << sname;
 
     // request service sub name if origin service name ends  with '@'
     if (sname.endsWith('@')) {
@@ -148,10 +157,14 @@ void SystemServiceTableView::startService()
         if (dialog.result() == QMessageBox::Ok) {
             // no service sub name given, do nothing
             auto subName = dialog.getServiceSubName();
-            if (subName.isEmpty())
+            if (subName.isEmpty()) {
+                qCDebug(app) << "No sub name provided for service:" << sname;
                 return;
+            }
             sname = sname.append(subName);
+            qCDebug(app) << "Using sub name:" << subName << "for service:" << sname;
         } else {  // cancel clicked
+            qCDebug(app) << "User cancelled sub name input for service:" << sname;
             return;
         }
     }
@@ -165,7 +178,10 @@ void SystemServiceTableView::startService()
         refreshServiceStatus(sname);
         // show error dialog when error occurred
         if (watcher->result()) {
+            qCWarning(app) << "Failed to start service:" << sname << "-" << watcher->result().getErrorName() << "-" << watcher->result().getErrorMessage();
             Q_EMIT mgr->errorOccurred(watcher->result());
+        } else {
+            qCDebug(app) << "Service started successfully:" << sname;
         }
         // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
@@ -186,10 +202,12 @@ void SystemServiceTableView::stopService()
 {
     // no selected item, do nothing
     if (!m_selectedSName.isValid()) {
+        qCDebug(app) << "No service selected for stopping";
         return;
     }
 
     auto sname = m_selectedSName.toString();
+    qCDebug(app) << "Stopping service:" << sname;
 
     // service id syntax: xxx@, requires service sub name from user if origin service name ends with '@'
     if (sname.endsWith('@')) {
@@ -205,10 +223,14 @@ void SystemServiceTableView::stopService()
         if (dialog.result() == QMessageBox::Ok) {
             auto subName = dialog.getServiceSubName();
             // no service sub name given, do nothing
-            if (subName.isEmpty())
+            if (subName.isEmpty()) {
+                qCDebug(app) << "No sub name provided for service:" << sname;
                 return;
+            }
             sname = sname.append(subName);
+            qCDebug(app) << "Using sub name:" << subName << "for service:" << sname;
         } else {
+            qCDebug(app) << "User cancelled sub name input for service:" << sname;
             return;
         }
     }
@@ -222,7 +244,10 @@ void SystemServiceTableView::stopService()
         refreshServiceStatus(sname);
         // show error dialog when error occurred
         if (watcher->result()) {
+            qCWarning(app) << "Failed to stop service:" << sname << "-" << watcher->result().getErrorName() << "-" << watcher->result().getErrorMessage();
             Q_EMIT mgr->errorOccurred(watcher->result());
+        } else {
+            qCDebug(app) << "Service stopped successfully:" << sname;
         }
         // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
@@ -243,10 +268,12 @@ void SystemServiceTableView::restartService()
 {
     // no selected item, do nothing
     if (!m_selectedSName.isValid()) {
+        qCDebug(app) << "No service selected for restarting";
         return;
     }
 
     auto sname = m_selectedSName.toString();
+    qCDebug(app) << "Restarting service:" << sname;
 
     // service id syntax: xxx@, requires service sub name from user if origin service name ends with '@'
     if (sname.endsWith('@')) {
@@ -262,10 +289,14 @@ void SystemServiceTableView::restartService()
         if (dialog.result() == QMessageBox::Ok) {
             auto subName = dialog.getServiceSubName();
             // no service sub name given, do nothing
-            if (subName.isEmpty())
+            if (subName.isEmpty()) {
+                qCDebug(app) << "No sub name provided for service:" << sname;
                 return;
+            }
             sname = sname.append(subName);
+            qCDebug(app) << "Using sub name:" << subName << "for service:" << sname;
         } else {
+            qCDebug(app) << "User cancelled sub name input for service:" << sname;
             return;
         }
     }
@@ -279,7 +310,10 @@ void SystemServiceTableView::restartService()
         refreshServiceStatus(sname);
         // show error dialog when error occurred
         if (watcher->result()) {
+            qCWarning(app) << "Failed to restart service:" << sname << "-" << watcher->result().getErrorName() << "-" << watcher->result().getErrorMessage();
             Q_EMIT mgr->errorOccurred(watcher->result());
+        } else {
+            qCDebug(app) << "Service restarted successfully:" << sname;
         }
         // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
@@ -300,10 +334,12 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
 {
     // no selected item, do nothing
     if (!m_selectedSName.isValid()) {
+        qCDebug(app) << "No service selected for setting startup mode";
         return;
     }
 
     auto sname = m_selectedSName.toString();
+    qCDebug(app) << "Setting startup mode for service:" << sname << "to auto:" << autoStart;
 
     auto *mgr = ServiceManager::instance();
     Q_ASSERT(mgr != nullptr);
@@ -314,7 +350,10 @@ void SystemServiceTableView::setServiceStartupMode(bool autoStart)
         refreshServiceStatus(sname);
         // show error dialog when error occurred
         if (watcher->result()) {
+            qCWarning(app) << "Failed to set startup mode for service:" << sname << "-" << watcher->result().getErrorName() << "-" << watcher->result().getErrorMessage();
             Q_EMIT mgr->errorOccurred(watcher->result());
+        } else {
+            qCDebug(app) << "Startup mode set successfully for service:" << sname;
         }
         // reset global background task state
         gApp->backgroundTaskStateChanged(Application::kTaskFinished);
@@ -394,6 +433,7 @@ void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
                                               const QItemSelection &deselected)
 {
     if (selected.size() <= 0) {
+        qCDebug(app) << "No service selected";
         return;
     }
 
@@ -401,6 +441,7 @@ void SystemServiceTableView::selectionChanged(const QItemSelection &selected,
     m_selectedSName = selected.indexes()
                       .value(SystemServiceTableModel::kSystemServiceNameColumn)
                       .data();
+    qCDebug(app) << "Selected service changed to:" << m_selectedSName.toString();
 
     BaseTableView::selectionChanged(selected, deselected);
 }
@@ -790,6 +831,7 @@ void SystemServiceTableView::initConnections()
 void SystemServiceTableView::onLoadServiceDataList()
 {
     if (!defer_initialized) {
+        qCDebug(app) << "Loading initial service data list";
         ServiceManager::instance()->updateServiceList();
         defer_initialized = true;
     }
@@ -807,9 +849,12 @@ int SystemServiceTableView::sizeHintForColumn(int column) const
 void SystemServiceTableView::refresh()
 {
     // while already in processing state, do nothing
-    if (m_loading)
+    if (m_loading) {
+        qCDebug(app) << "Already loading, skipping refresh";
         return;
+    }
 
+    qCDebug(app) << "Refreshing service list";
     // reset model & select service's name
     m_model->reset();
     m_selectedSName.clear();

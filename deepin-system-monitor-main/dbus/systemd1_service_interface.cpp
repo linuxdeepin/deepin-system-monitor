@@ -6,9 +6,12 @@
 #include "systemd1_service_interface.h"
 
 #include "environment_file.h"
+#include "ddlog.h"
 
 #include <QVariant>
 #include <QDBusInterface>
+
+using namespace DDLog;
 
 /*
  * Implementation of interface class Systemd1ServiceInterface
@@ -46,6 +49,7 @@ QPair<ErrorContext, quint32> Systemd1ServiceInterface::getMainPID() const
 
     // check reply
     if (msg.type() == QDBusMessage::ErrorMessage) {
+        qCWarning(app) << "DBus error getting main PID:" << msg.errorMessage();
         return {ec, pid};
     } else {
         Q_ASSERT(msg.type() == QDBusMessage::ReplyMessage);
@@ -53,6 +57,8 @@ QPair<ErrorContext, quint32> Systemd1ServiceInterface::getMainPID() const
         // check return type
         if (v.variant().type() == QVariant::UInt) {
             pid = qvariant_cast<quint32>(v.variant());
+        } else {
+            qCWarning(app) << "Invalid PID type received:" << v.variant().typeName();
         }
     }
 
@@ -62,6 +68,7 @@ QPair<ErrorContext, quint32> Systemd1ServiceInterface::getMainPID() const
 // Get memory usage of service's process
 QPair<ErrorContext, quint64> Systemd1ServiceInterface::getMemoryCurrent() const
 {
+    qCDebug(app) << "Getting current memory usage for service";
     // error context
     ErrorContext ec;
     // memory
@@ -76,6 +83,7 @@ QPair<ErrorContext, quint64> Systemd1ServiceInterface::getMemoryCurrent() const
 
     // check reply
     if (msg.type() == QDBusMessage::ErrorMessage) {
+        qCWarning(app) << "DBus error getting memory usage:" << msg.errorMessage();
         return {ec, mem};
     } else {
         Q_ASSERT(msg.type() == QDBusMessage::ReplyMessage);
@@ -83,6 +91,9 @@ QPair<ErrorContext, quint64> Systemd1ServiceInterface::getMemoryCurrent() const
         // check return type
         if (v.variant().type() == QVariant::ULongLong) {
             mem = qvariant_cast<quint64>(v.variant());
+            qCDebug(app) << "Retrieved memory usage:" << mem << "bytes";
+        } else {
+            qCWarning(app) << "Invalid memory usage type received:" << v.variant().typeName();
         }
     }
 
@@ -92,6 +103,7 @@ QPair<ErrorContext, quint64> Systemd1ServiceInterface::getMemoryCurrent() const
 // Get control group of service's process
 QPair<ErrorContext, QString> Systemd1ServiceInterface::getControlGroup() const
 {
+    qCDebug(app) << "Getting control group for service";
     // error context
     ErrorContext ec;
     // control group string
@@ -106,6 +118,7 @@ QPair<ErrorContext, QString> Systemd1ServiceInterface::getControlGroup() const
 
     // check reply
     if (msg.type() == QDBusMessage::ErrorMessage) {
+        qCWarning(app) << "DBus error getting control group:" << msg.errorMessage();
         return {ec, cg};
     } else {
         Q_ASSERT(msg.type() == QDBusMessage::ReplyMessage);
@@ -113,6 +126,9 @@ QPair<ErrorContext, QString> Systemd1ServiceInterface::getControlGroup() const
         // check return type
         if (v.variant().type() == QVariant::String) {
             cg = qvariant_cast<QString>(v.variant());
+            qCDebug(app) << "Retrieved control group:" << cg;
+        } else {
+            qCWarning(app) << "Invalid control group type received:" << v.variant().typeName();
         }
     }
 
@@ -122,6 +138,7 @@ QPair<ErrorContext, QString> Systemd1ServiceInterface::getControlGroup() const
 // Get environment file list of service
 QPair<ErrorContext, EnvironmentFileList> Systemd1ServiceInterface::getEnvironmentFiles() const
 {
+    qCDebug(app) << "Getting environment files for service";
     // error context
     ErrorContext ec;
     // environment file list
@@ -136,6 +153,7 @@ QPair<ErrorContext, EnvironmentFileList> Systemd1ServiceInterface::getEnvironmen
 
     // check reply
     if (msg.type() == QDBusMessage::ErrorMessage) {
+        qCWarning(app) << "DBus error getting environment files:" << msg.errorMessage();
         return {ec, list};
     } else {
         Q_ASSERT(msg.type() == QDBusMessage::ReplyMessage);
@@ -144,6 +162,9 @@ QPair<ErrorContext, EnvironmentFileList> Systemd1ServiceInterface::getEnvironmen
         // check signature
         if (args.currentSignature() == "a(sb)") {
             args >> list;
+            qCDebug(app) << "Retrieved" << list.size() << "environment files";
+        } else {
+            qCWarning(app) << "Invalid environment files signature received:" << args.currentSignature();
         }
     }
     return {ec, list};

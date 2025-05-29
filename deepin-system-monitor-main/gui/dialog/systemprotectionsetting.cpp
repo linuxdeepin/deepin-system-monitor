@@ -48,16 +48,17 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 {
     // 无效参数, 返回
     if (widget == nullptr || diff == 0.0) {
+        qCWarning(app) << "Invalid widget or diff value";
         return false;
     }
 
     // 获取系统字体大小设置
-
     QDBusInterface interface(common::systemInfo().AppearanceService,
                              common::systemInfo().AppearancePath,
                              common::systemInfo().AppearanceInterface);
     // 获取失败，返回
     if (interface.isValid() == false) {
+        qCWarning(app) << "Failed to create DBus interface for appearance service";
         return false;
     }
 
@@ -66,6 +67,7 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 
     // 获取系统字体大小非法 或者 调整后值非法， 返回
     if (sysFontSize == 0.0 || sysFontSize + diff <= 0) {
+        qCWarning(app) << "Invalid system font size:" << sysFontSize << "or adjusted size:" << (sysFontSize + diff);
         return false;
     }
 
@@ -130,13 +132,14 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createSettingLinkButtonHand
     option->setValue(option->defaultValue());
 
     option->connect(button, &DCommandLinkButton::clicked, option, [=]() {
-        qCDebug(app) << __FUNCTION__ << __LINE__ << "，will jump to dde setting center notification page!";
+        qCDebug(app) << "Settings button clicked, jumping to DDE setting center notification page";
         SystemProtectionSetting::instance()->onMessgaeSetting("");
     });
     if (widget != nullptr)
         widget->deleteLater();
     return optionWidget;
 }
+
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createProtectionSwitchHandle(QObject *obj)
 {
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
@@ -164,7 +167,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createProtectionSwitchHandl
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, widget);
     // Item操作修改Setting值
     option->connect(button, &DSwitchButton::clicked, option, [=](bool checked) {
-        qCDebug(app) << __FUNCTION__ << __LINE__ << ", new protection swich :" << checked;
+        qCDebug(app) << "Protection switch changed to:" << checked;
         if (checked != option->value().toBool()) {
             option->setValue(checked);
         }
@@ -201,8 +204,10 @@ void SystemProtectionSetting::setLastValidAlarm(DLineEdit *lineEdit, DTK_CORE_NA
 void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSettingsOption *option, int maxValue, int minValue)
 {
     QString key = option->key();
+    qCDebug(app) << "Line edit changed for option:" << key << "focus:" << focus;
     if (focus == false && edit->lineEdit()->selectedText().isEmpty()) {
         if (edit->text().isEmpty() || edit->text().toInt() < minValue || edit->text().toInt() > maxValue) {
+            qCWarning(app) << "Invalid input value:" << edit->text() << "for option:" << key;
             //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
             if (key == AlarmCpuUsageOptionName)
                 setLastValidAlarm(edit, option, maxValue, minValue, m_lastValidCPUValue);
@@ -224,7 +229,6 @@ void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSett
             option->setValue(m_lastValidInternalValue);
         }
     }
-    //    SystemProtectionSetting::instance()->regularNumber(edit);
 }
 
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
@@ -247,9 +251,6 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHand
     QIntValidator *validator = new QIntValidator(edit);
     validator->setRange(1, 100);
     edit->lineEdit()->setValidator(validator);
-
-    // 规范输入的文字信息（数字）
-    //    SystemProtectionSetting::instance()->regularNumber(edit);
 
     // 构建提示语
     DLabel *label = new DLabel(widget);
@@ -359,9 +360,6 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingH
     validator->setRange(1, 60);
     edit->lineEdit()->setValidator(validator);
 
-    // 规范输入的文字信息（数字）
-    //    SystemProtectionSetting::instance()->regularNumber(edit);
-
     // 构建提示语
     DLabel *label = new DLabel(widget);
     // 设置提示语为DTK提示语颜色
@@ -467,6 +465,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
     }
 
     if (genericName.isEmpty() == false) {
+        qCDebug(app) << "Found generic name:" << genericName << "opening specific notification page";
         // 跳转到设置页并指定Item
         QDBusMessage showDDEControlCenterPage = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
                                                                                common::systemInfo().ControlCenterPath,
@@ -485,14 +484,13 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenterPage);
 
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
-                       << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
+            qCWarning(app) << "Failed to call DDE control center DBus method, error name:" 
+                       << replyMsg.errorName() << "error message:" << replyMsg.errorMessage();
         }
 
     } else {
+        qCDebug(app) << "No generic name found, opening general notification page";
         // 跳转到设置页
-        // qdbus org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowModule notification
-
         QDBusMessage showDDEControlCenter;
         if (!common::systemInfo().isOldVersion()) {
             showDDEControlCenter = QDBusMessage::createMethodCall(common::systemInfo().ControlCenterService,
@@ -513,15 +511,15 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         QDBusMessage replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenter);
 
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-            qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde control center dbus method call fail , error name :"
-                       << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
+            qCWarning(app) << "Failed to call DDE control center DBus method, error name:" 
+                       << replyMsg.errorName() << "error message:" << replyMsg.errorMessage();
         }
     }
 }
 
 void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVariant &value)
 {
-    qCDebug(app) << __FUNCTION__ << __LINE__ << ", key:" << key << ", value:" << value;
+    qCDebug(app) << "Setting item changed - key:" << key << "value:" << value;
     // 使用QProcess执行dbus操作， 此操作是为了通知daemon进程，监测功能设置数据更改
     // 在执行 DSettingsDialog "恢复默认"按钮操作时，QDBusInterFace QDBusConnection 等操作会发生调用错误
     // 错误提示 org.freedesktop.DBus.Error.UnknownMethod
@@ -552,11 +550,12 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
         arguments.last().append("setAlarmLastTimeInterval");
         arguments << value.toString();
     } else {
+        qCWarning(app) << "Unknown setting key:" << key;
         return;
     }
 
     QTimer::singleShot(100, this, [=]() {
-        qCDebug(app) << __FUNCTION__ << __LINE__ << "，dbus cmd：" << program << arguments;
+        qCDebug(app) << "Executing DBus command:" << program << arguments;
         QProcess process;
         process.start(program, arguments);
         process.waitForFinished(5000);
@@ -597,6 +596,7 @@ void SystemProtectionSetting::onUpdateNewBackend()
                                     .arg(qApp->organizationName())
                                     .arg(qApp->applicationName());
 
+    qCDebug(app) << "Using config path:" << strConfigPath;
     Dtk::Core::QSettingBackend *newBackend = new QSettingBackend(strConfigPath);
     // 为DSetting更新数据后端
     mDsettings->setBackend(newBackend);

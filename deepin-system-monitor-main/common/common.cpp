@@ -176,16 +176,20 @@ void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWi
 
 bool startWithHanzi(const QString &text)
 {
-    if (text.isEmpty())
+    if (text.isEmpty()) {
+        qCDebug(app) << "Empty text provided to startWithHanzi check";
         return false;
+    }
 
     return text.at(0).script() == QChar::Script_Han;
 }
 
 void openFilePathItem(const QString &path)
 {
+    qCDebug(app) << "Attempting to open file path:" << path;
     bool result = QProcess::startDetached(QString("dde-file-manager --show-item \"%1\"").arg(path));
     if (!result) {
+        qCDebug(app) << "dde-file-manager launch failed, trying alternative methods";
         QUrl displayUrl = QUrl::fromLocalFile(path);
         QDBusInterface interface(QStringLiteral("org.freedesktop.FileManager1"),
                                         QStringLiteral("/org/freedesktop/FileManager1"),
@@ -193,10 +197,14 @@ void openFilePathItem(const QString &path)
         if (interface.isValid()) {
             QStringList list;
             list << displayUrl.toString();
+            qCDebug(app) << "Using DBus interface to show items";
             interface.call("ShowItems", list, "");
         } else {
+            qCDebug(app) << "Using QDesktopServices to open URL";
             QDesktopServices::openUrl(displayUrl);
         }
+    } else {
+        qCDebug(app) << "Successfully launched dde-file-manager";
     }
 }
 
@@ -232,6 +240,8 @@ static void init_shell_list()
             }
         }
         fclose(fp);
+    } else {
+        qCWarning(app) << "Failed to open /etc/shells";
     }
 }
 
@@ -249,13 +259,15 @@ static void init_path_list()
     // fill environment path
     auto paths = qgetenv("PATH");
     auto list = paths.split(':');
-    if (list.size() > 0)
+    if (list.size() > 0) {
         for (auto path : list)
             pathList << path;
-    else {
+        qCDebug(app) << "Added paths from environment:" << pathList;
+    } else {
         // use default path
         pathList << "/bin";
         pathList << "/usr/bin";
+        qCDebug(app) << "Using default paths:" << pathList;
     }
 }
 
@@ -267,7 +279,7 @@ static void get_HZ()
     long ticks;
 
     if ((ticks = sysconf(_SC_CLK_TCK)) == -1) {
-        perror("sysconf");
+        qCWarning(app) << "Failed to get system clock ticks:" << strerror(errno);
     }
 
     HZ = ulong(ticks);
@@ -280,7 +292,7 @@ static void get_kb_shift()
 
     /* One can also use getpagesize() to get the size of a page */
     if ((size = sysconf(_SC_PAGESIZE)) == -1) {
-        perror("sysconf");
+        qCWarning(app) << "Failed to get page size:" << strerror(errno);
     }
 
     size >>= 10; /* Assume that a page has a minimum size of 1 kB */
@@ -324,8 +336,10 @@ QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
 QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
 {
     int u = base;
-    if (!size.canConvert(QMetaType::Double))
+    if (!size.canConvert(QMetaType::Double)) {
+        qCWarning(app) << "Invalid size value type";
         return {};
+    }
     qreal v = size.toReal();
 
     while (v > 1024. && u <= EB) {
@@ -333,18 +347,23 @@ QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int
         u++;
     }
 
+    QString result;
     if (isSpeed) {
-        return QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixother[u]).arg("/s");
+        result = QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixother[u]).arg("/s");
+    } else {
+        result = QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixother[u]);
     }
-    return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixother[u]);
+    return result;
 }
 
 //网络统一单位
 QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
 {
     int u = base;
-    if (!size.canConvert(QMetaType::Double))
+    if (!size.canConvert(QMetaType::Double)) {
+        qCWarning(app) << "Invalid size value type";
         return {};
+    }
     qreal v = size.toReal();
 
     while (v > 1024. && u <= EB) {
@@ -352,11 +371,13 @@ QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, b
         u++;
     }
 
+    QString result;
     if (isSpeed) {
-        return QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixnet[u]).arg("/s");
+        result = QString("%1 %2%3").arg(v, 0, 'f', prec).arg(UnitSuffixnet[u]).arg("/s");
+    } else {
+        result = QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixnet[u]);
     }
-    //统一单位
-    return QString("%1 %2").arg(v, 0, 'f', prec).arg(UnitSuffixnet[u]);
+    return result;
 }
 
 // ::format::formatUnit

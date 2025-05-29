@@ -347,6 +347,7 @@ void XWinKillPreviewWidget::keyPressEvent(QKeyEvent *event)
 {
     // ESC pressed
     if (event->key() == Qt::Key_Escape) {
+        qCDebug(app) << "ESC pressed, closing preview widget";
         // restore main window state
         auto *mw = gApp->mainWindow();
         mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -460,22 +461,27 @@ void XWinKillPreviewWidget::print_window_states(const QVector<ClientManagement::
 void XWinKillPreviewWidget::setupRegistry(Registry *registry)
 {
     if (WaylandCentered) {
+        qCDebug(app) << "Setting up Wayland registry";
         connect(registry, &Registry::compositorAnnounced, this,
                 [this, registry](quint32 name, quint32 version) {
+                    qCDebug(app) << "Compositor announced, name:" << name << "version:" << version;
                     m_compositor = registry->createCompositor(name, version, this);
                 });
 
         connect(registry, &Registry::clientManagementAnnounced, this,
                 [this, registry](quint32 name, quint32 version) {
+                    qCDebug(app) << "Client management announced, name:" << name << "version:" << version;
                     m_clientManagement = registry->createClientManagement(name, version, this);
                     connect(m_clientManagement, &ClientManagement::windowStatesChanged, this,
                             [this] {
+                                qCDebug(app) << "Window states changed";
                                 m_windowStates = getAllWindowStates();
                             });
                 });
 
         connect(registry, &Registry::interfacesAnnounced, this,
                 [this] {
+                    qCDebug(app) << "All interfaces announced";
                     Q_ASSERT(m_compositor);
                     Q_ASSERT(m_clientManagement);
                     m_windowStates = getAllWindowStates();
@@ -493,12 +499,16 @@ QVector<ClientManagement::WindowState> XWinKillPreviewWidget::getAllWindowStates
 
     // 能解析到displayjack的接口，优先使用dispalayjack接口获取窗口状态
     if (GetAllWindowStatesList) {
+        qCDebug(app) << "Using displayjack interface to get window states";
         // 使用displayjack库接口获取窗口状态
         WindowState *pStates = nullptr;
         int nCount = GetAllWindowStatesList(&pStates);
-        if (nCount <= 0)
+        if (nCount <= 0) {
+            qCDebug(app) << "No window states found";
             return vWindowStates;
+        }
 
+        qCDebug(app) << "Found" << nCount << "window states";
         for (int i = 0; i < nCount; i++) {
             WindowState *p = &pStates[i];
             ClientManagement::WindowState windowState;
@@ -517,6 +527,7 @@ QVector<ClientManagement::WindowState> XWinKillPreviewWidget::getAllWindowStates
         }
         free(pStates);
     } else {
+        qCDebug(app) << "Using KDE interface to get window states";
         // 使用kde接口获取窗口状态
         Q_ASSERT(m_clientManagement);
         return m_clientManagement->getWindowStates();

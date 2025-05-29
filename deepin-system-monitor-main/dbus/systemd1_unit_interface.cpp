@@ -6,8 +6,10 @@
 #include "systemd1_unit_interface.h"
 
 #include "dbus_common.h"
+#include "ddlog.h"
 
 using namespace dbus::common;
+using namespace DDLog;
 
 /*
  * Implementation of interface class Systemd1UnitInterface
@@ -46,6 +48,7 @@ QPair<ErrorContext, QString> Systemd1UnitInterface::getId() const
 
     // check reply
     if (msg.type() == QDBusMessage::ErrorMessage) {
+        qCWarning(app) << "DBus error getting unit ID:" << msg.errorMessage();
         return {ec, id};
     } else {
         Q_ASSERT(msg.type() == QDBusMessage::ReplyMessage);
@@ -53,6 +56,8 @@ QPair<ErrorContext, QString> Systemd1UnitInterface::getId() const
         // check return type
         if (v.variant().type() == QVariant::String) {
             id = qvariant_cast<QString>(v.variant());
+        } else {
+            qCWarning(app) << "Invalid unit ID type received:" << v.variant().typeName();
         }
     }
 
@@ -75,6 +80,7 @@ QPair<ErrorContext, QString> Systemd1UnitInterface::getLoadState() const
 
     // check reply
     if (msg.type() == QDBusMessage::ErrorMessage) {
+        qCWarning(app) << "DBus error getting load state:" << msg.errorMessage();
         return {ec, state};
     } else {
         Q_ASSERT(msg.type() == QDBusMessage::ReplyMessage);
@@ -82,6 +88,8 @@ QPair<ErrorContext, QString> Systemd1UnitInterface::getLoadState() const
         // check return type
         if (v.variant().type() == QVariant::String) {
             state = qvariant_cast<QString>(v.variant());
+        } else {
+            qCWarning(app) << "Invalid load state type received:" << v.variant().typeName();
         }
     }
 
