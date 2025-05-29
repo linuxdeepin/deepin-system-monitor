@@ -7,6 +7,7 @@
 #include "../detail_view_stacked_widget.h"
 #include "base_commandlink_button.h"
 #include "gui/ui_common.h"
+#include "ddlog.h"
 
 #include <QPainter>
 #include <DApplication>
@@ -15,6 +16,8 @@
 #include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
+using namespace DDLog;
+
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 {
     m_centralLayout = new QVBoxLayout(this);
@@ -34,12 +37,15 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     m_switchIconLight = new QIcon(iconPathFromQrc("light/change_light.svg"));
     if (m_isMultiCoreMode) {
         m_switchButton->setToolTip(tr("Overall utilization"));
+        qCDebug(app) << "Setting initial tooltip to 'Overall utilization'";
     } else {
         m_switchButton->setToolTip(tr("Individual utilization"));
+        qCDebug(app) << "Setting initial tooltip to 'Individual utilization'";
     }
 
     connect(m_switchButton, &DIconButton::clicked, [ = ]() {
         m_isMultiCoreMode = !m_isMultiCoreMode;
+        qCDebug(app) << "Switching core mode to:" << (m_isMultiCoreMode ? "Multi-core" : "Single-core");
         emit sigClickSwitchMutliCoreButton(m_isMultiCoreMode);
         if (m_isMultiCoreMode) {
             m_switchButton->setToolTip(tr("Overall utilization"));
@@ -53,18 +59,21 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     m_arrowButton->setFixedSize(24, 24);
     m_arrowButton->setEnabledCircle(true);
     connect(m_arrowButton, &DIconButton::clicked, [ = ]() {
+        qCDebug(app) << "Showing performance menu";
         stackViewWidget->onShowPerformMenu(m_arrowButton->mapToGlobal(QPoint(0, m_arrowButton->height() + 6)));
     });
 
     connect(stackViewWidget, &DetailViewStackedWidget::signalIsFinished, this, [ = ]() {
         QString currentWidgetName = stackViewWidget->currentWidget()->objectName();
+        qCDebug(app) << "Current widget changed to:" << currentWidgetName;
         //CPUDetailWidget MemDetailViewWidget NetifDetailViewWidget BlockDevDetailViewWidget
         if (currentWidgetName == "CPUDetailWidget") {
             m_switchButton->setVisible(true);
+            qCDebug(app) << "Showing switch button for CPU detail view";
         } else {
             m_switchButton->setVisible(false);
+            qCDebug(app) << "Hiding switch button for non-CPU detail view";
         }
-
     });
 
     detailFontChanged(DApplication::font());
@@ -114,6 +123,7 @@ int BaseDetailViewWidget::titleHeight()
 
 void BaseDetailViewWidget::setTitle(const QString &text)
 {
+    qCDebug(app) << "Setting title to:" << text;
     m_titleText = text;
     update();
 }
@@ -125,6 +135,7 @@ QString BaseDetailViewWidget::title()
 
 void BaseDetailViewWidget::setDetail(const QString &text)
 {
+    qCDebug(app) << "Setting detail text to:" << text;
     m_detailText = text;
     update();
 }

@@ -48,6 +48,7 @@ static QString parseError(const QString &words, UErrorCode &ec, const UParseErro
 
 QString convHanToLatin(const QString &words)
 {
+    qCDebug(app) << "Converting Han characters to Latin:" << words;
     QString result {};
     UErrorCode ec = U_ZERO_ERROR;
     UParseError pe {};
@@ -59,7 +60,7 @@ QString convHanToLatin(const QString &words)
     tr->transliterate(ubuf);
 
     if (U_FAILURE(ec)) {
-        qCDebug(app) << parseError(words, ec, pe);
+        qCWarning(app) << "Failed to transliterate Han to Latin:" << parseError(words, ec, pe);
         result = words;
     } else {
         ec = U_ZERO_ERROR;
@@ -70,11 +71,12 @@ QString convHanToLatin(const QString &words)
         tr2->transliterate(ubuf);
 
         if (U_FAILURE(ec)) {
-            qCDebug(app) << parseError(words, ec, pe);
+            qCWarning(app) << "Failed to transliterate Latin to ASCII:" << parseError(words, ec, pe);
             result = words;
         } else {
             std::string buffer;
             result = QString::fromStdString(ubuf.toUTF8String(buffer));
+            qCDebug(app) << "Successfully converted to ASCII:" << result;
         }
     }
 

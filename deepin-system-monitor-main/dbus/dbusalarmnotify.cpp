@@ -30,6 +30,7 @@ DBusAlarmNotify &DBusAlarmNotify::getInstance()
 
 void DBusAlarmNotify::showAlarmNotify(const QStringList &allArguments)
 {
+    qCDebug(app) << "Processing alarm notification request with arguments:" << allArguments;
     if (allArguments[1].compare("cpu", Qt::CaseInsensitive) == 0) {
         bool isok = false;
         int cpuUsage = allArguments[2].toInt(&isok);
@@ -37,7 +38,10 @@ void DBusAlarmNotify::showAlarmNotify(const QStringList &allArguments)
             QString topic(tr("Warning"));
             QString msg = QString(tr("Your CPU usage is higher than %1%!")).arg(cpuUsage);
             int timeout = AlarmMessageTimeOut;
+            qCDebug(app) << "Showing CPU usage alarm - Usage:" << cpuUsage << "%";
             showAlarmNotify(topic, msg, timeout);
+        } else {
+            qCWarning(app) << "Invalid CPU usage value:" << allArguments[2];
         }
     } else if (allArguments[1].compare("memory", Qt::CaseInsensitive) == 0) {
         bool isok = false;
@@ -46,13 +50,19 @@ void DBusAlarmNotify::showAlarmNotify(const QStringList &allArguments)
             QString topic(tr("Warning"));
             QString msg = QString(tr("Your memory usage is higher than %1%!")).arg(memoryUsage);
             int timeout = AlarmMessageTimeOut;
+            qCDebug(app) << "Showing memory usage alarm - Usage:" << memoryUsage << "%";
             showAlarmNotify(topic, msg, timeout);
+        } else {
+            qCWarning(app) << "Invalid memory usage value:" << allArguments[2];
         }
+    } else {
+        qCWarning(app) << "Unknown alarm type:" << allArguments[1];
     }
 }
 
 void DBusAlarmNotify::showAlarmNotify(QString topic, QString msg, int timeout)
 {
+    qCDebug(app) << "Preparing notification - Topic:" << topic << "Message:" << msg << "Timeout:" << timeout;
     QDBusMessage ddeNotify = QDBusMessage::createMethodCall(common::systemInfo().NotificationService,
                                                             common::systemInfo().NotificationPath,
                                                             common::systemInfo().NotificationInterface,
@@ -82,14 +92,16 @@ void DBusAlarmNotify::showAlarmNotify(QString topic, QString msg, int timeout)
     QDBusMessage replyMsg = QDBusConnection::sessionBus().call(ddeNotify);
 
     if (replyMsg.type() == QDBusMessage::ErrorMessage) {
-        qCWarning(app) << __FUNCTION__ << __LINE__ << ", dde notify dbus method call fail , error name :"
-                       << replyMsg.errorName() << " , error msg :" << replyMsg.errorMessage();
+        qCWarning(app) << "Failed to send notification - Error:" << replyMsg.errorName() 
+                       << "Message:" << replyMsg.errorMessage();
         QString cmd = QString("gdbus call -e -d  org.deepin.SystemMonitorDaemon -o /org/deepin/SystemMonitorDaemon -m org.deepin.SystemMonitorDaemon.setAlaramLastTimeInterval 0");
         QProcess::startDetached(cmd);
+        qCDebug(app) << "Reset alarm timestamp due to notification failure";
     } else {
         qint64 lastAlarmTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
         QString cmd = QString("gdbus call -e -d  org.deepin.SystemMonitorDaemon -o /org/deepin/SystemMonitorDaemon -m org.deepin.SystemMonitorDaemon.setAlaramLastTimeInterval %1").arg(lastAlarmTimeStamp);
         QProcess::startDetached(cmd);
+        qCDebug(app) << "Updated alarm timestamp to:" << lastAlarmTimeStamp;
     }
 }
 

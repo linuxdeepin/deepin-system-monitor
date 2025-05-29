@@ -28,16 +28,20 @@ DBusObject &DBusObject::getInstance()
 
 bool DBusObject::registerOrNotify()
 {
+    qCDebug(app) << "Attempting to register DBus service:" << DBUS_SERVER;
     QDBusConnection dbus = QDBusConnection::sessionBus();
     if (!dbus.registerService(DBUS_SERVER)) {
+        qCDebug(app) << "Service already registered, attempting to notify existing instance";
         QDBusInterface notification(DBUS_SERVER, DBUS_SERVER_PATH, DBUS_SERVER, QDBusConnection::sessionBus());
         QList<QVariant> args;
         QString error = notification.callWithArgumentList(QDBus::Block, "handleWindow", args).errorMessage();
-        if (!error.isEmpty())
-            qCInfo(app) << error;
+        if (!error.isEmpty()) {
+            qCWarning(app) << "Failed to notify existing instance:" << error;
+        }
         return false;
     }
 
+    qCDebug(app) << "Registering DBus object at path:" << DBUS_SERVER_PATH;
     dbus.registerObject(DBUS_SERVER_PATH, this, QDBusConnection::ExportScriptableSlots);
 
     return true;

@@ -75,6 +75,7 @@ void AccountsWidget::initUI()
 
 void AccountsWidget::initConnection()
 {
+    qCDebug(app) << "Setting up signal connections";
     connect(m_userModel, &AccountsInfoModel::signalUserOnlineStatusUpdated, this, &AccountsWidget::onUpdateUserList);
     connect(m_userlistView, &QListView::clicked, this, &AccountsWidget::onItemClicked);
     connect(m_userlistView, &UserListView::signalRightButtonClicked, this, &AccountsWidget::onRightButtonClicked);
@@ -111,13 +112,15 @@ void AccountsWidget::onUpdateUserList()
     //原来已连接现在注销的用户
     for (auto user : m_userList) {
         if (!m_userModel->userList().contains(user)) {
+            qCDebug(app) << "Removing user:" << user->displayName();
             removeUser(user);
         }
     }
     //新增连接的用户
-    qCInfo(app) << m_userList.size() << m_userModel->userList().size();
+    qCInfo(app) << "Current user list size:" << m_userList.size() << "Model user list size:" << m_userModel->userList().size();
     for (auto user : m_userModel->userList()) {
         if (!m_userList.contains(user)) {
+            qCDebug(app) << "Adding new user:" << user->displayName();
             addUser(user);
         }
     }
@@ -174,12 +177,11 @@ void AccountsWidget::addUser(User *user)
     QPixmap pixmap = pixmapToRound(path);
 
     item->setIcon(QIcon(pixmap));
-
     item->setText(user->displayName());
-
     item->setToolTip(user->displayName());
 
     if (user->isCurrentUser()) {
+        qCDebug(app) << "Moving current user to top of list:" << user->displayName();
         //如果是当前用户
         auto tttitem = m_userItemModel->takeRow(m_userItemModel->rowCount() - 1);
         Q_ASSERT(tttitem[0] == item);
@@ -192,21 +194,16 @@ void AccountsWidget::addUser(User *user)
 
 void AccountsWidget::removeUser(User *user)
 {
+    qCDebug(app) << "Removing user:" << user->displayName();
     m_userItemModel->removeRow(m_userList.indexOf(user));
-
     m_userList.removeOne(user);
-
-    //    //对于删除的用户Item，不显示小圆点
-    //    for (int i = m_userItemModel->rowCount(); i < m_onlineIconList.size(); i++) {
-    //        m_onlineIconList.at(i)->setVisible(false);
-    //    }
-
     m_userlistView->update();
 }
 
 QPixmap AccountsWidget::pixmapToRound(const QPixmap &src)
 {
     if (src.isNull()) {
+        qCWarning(app) << "Attempted to convert null pixmap to round";
         return QPixmap();
     }
 
@@ -231,9 +228,11 @@ QString AccountsWidget::getCurrentItemUserName()
     //判断是否是全名
     for (auto *user : m_userList) {
         if (user->displayName() == m_userlistView->currentIndex().data().toString()) {
+            qCDebug(app) << "Found user name:" << user->name() << "for display name:" << user->displayName();
             return user->name();
         }
     }
+    qCDebug(app) << "Using display name as user name:" << m_userlistView->currentIndex().data().toString();
     return m_userlistView->currentIndex().data().toString();
 }
 
@@ -267,11 +266,15 @@ void AccountsWidget::onRightButtonClicked(const QPoint &p)
 
     m_contextMenu->popup(point);
 }
+
 void AccountsWidget::getUserToBeOperated(const QString &userName)
 {
+    qCDebug(app) << "Getting user to be operated:" << userName;
     for (auto *user : m_userList) {
         if (user->displayName() == userName) {
             m_userToBeOperated = user;
+            qCDebug(app) << "Found user:" << user->name();
+            break;
         }
     }
 }
@@ -288,6 +291,7 @@ void AccountsWidget::onDisconnectTriggered()
 
 void AccountsWidget::onLogoutTriggered()
 {
+    qCDebug(app) << "Logout triggered for user:" << m_userToBeOperated->name();
     // show confirm dialog
     KillProcessConfirmDialog dialog(this);
     dialog.setMessage(LogoutDescription);
@@ -296,10 +300,12 @@ void AccountsWidget::onLogoutTriggered()
                      DDialog::ButtonRecommend);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
+        qCDebug(app) << "User confirmed logout for:" << m_userToBeOperated->name();
         m_userModel->LogoutByUserName(m_userToBeOperated->name());
         //若为当前选中用户，进程列表切换到当前用户
         //todo
     } else {
+        qCDebug(app) << "User cancelled logout for:" << m_userToBeOperated->name();
         return;
     }
 }

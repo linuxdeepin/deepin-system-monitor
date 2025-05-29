@@ -40,6 +40,7 @@ double CpuProfile::updateSystemCpuUsage()
 
     QFile file(PROC_CPU_STAT_PATH);
     if (file.exists() && file.open(QFile::ReadOnly)) {
+        qCDebug(app) << "Reading CPU statistics from" << PROC_CPU_STAT_PATH;
         // 计算总的Cpu占用率，只需要读取第一行数据
         QByteArray lineData = file.readLine();
         file.close();
@@ -55,6 +56,7 @@ double CpuProfile::updateSystemCpuUsage()
 
         // CPU状态应包含10个数据片段，有效数据 1-10，位置0不使用
         if (cpuStatus.size() < 11) {
+            qCWarning(app) << "Invalid CPU status data format. Expected 11 fields, got" << cpuStatus.size();
             return cpuUsage;
         }
 
@@ -87,7 +89,7 @@ double CpuProfile::updateSystemCpuUsage()
                 (curCpuStat["idle"] + curCpuStat["iowait"]) - (mLastCpuStat["idle"] + mLastCpuStat["iowait"]);
 
         if (calcCpuTotal == 0.0) {
-            qCWarning(app) << " cpu total usage calc result equal 0 ! cpu stat [" << curCpuStat << "]";
+            qCWarning(app) << "CPU total usage calculation result is 0. Current CPU stats:" << curCpuStat;
             return cpuUsage;
         }
         // 上一个时间段内的Cpu使用情况
@@ -95,11 +97,12 @@ double CpuProfile::updateSystemCpuUsage()
 
         // 更新Cpu占用率
         mCpuUsage = cpuUsage;
+        qCDebug(app) << "Updated CPU usage:" << cpuUsage << "%";
 
         // 更新上一次CPU状态
         mLastCpuStat = curCpuStat;
     } else {
-        qCWarning(app) << QString(" file %1 open fail !").arg(PROC_CPU_STAT_PATH);
+        qCWarning(app) << "Failed to open CPU statistics file:" << PROC_CPU_STAT_PATH;
     }
 
     return cpuUsage;
