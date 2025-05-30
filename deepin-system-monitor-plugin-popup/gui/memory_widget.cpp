@@ -62,9 +62,7 @@ void MemoryWidget::updateStatus()
 {
     QString memUsage, memTotal, memPercent, swapUsage, swapTotal, swapPercent;
     if (!DataDealSingleton::getInstance().readMemInfo(memUsage, memTotal, memPercent, swapUsage, swapTotal, swapPercent))
-        qCInfo(app) << "failed";
-    //    qCInfo(app)<<"swapUsage: "<<swapUsage;
-    //    qCInfo(app)<<"swapTotal: "<<swapTotal;
+        qCWarning(app) << "Failed to read memory information";
 
     m_memPercent = memPercent;
     m_swapPercent = swapPercent;
@@ -73,8 +71,10 @@ void MemoryWidget::updateStatus()
     if (strsMemUsage.size() == 2) {
         m_memUsage = strsMemUsage.at(0);
         m_memUsageUnit = strsMemUsage.at(1);
-    } else
+    } else {
+        qCWarning(app) << "Invalid memory usage format:" << memUsage;
         return;
+    }
 
     m_memTotal = memTotal;
     //去除字符串空格 bug #111050
@@ -89,8 +89,10 @@ void MemoryWidget::updateStatus()
     if (strsSwapUsage.size() == 2) {
         m_swapUsage = strsSwapUsage.at(0);
         m_swapUnit = strsSwapUsage.at(1);
-    } else
+    } else {
+        qCWarning(app) << "Invalid swap usage format:" << swapUsage;
         return;
+    }
 
     m_swapTotal = swapTotal;
     //去除字符串空格 bug #111050
@@ -220,7 +222,6 @@ void MemoryWidget::paintEvent(QPaintEvent *e)
     QFontMetrics fmMem(m_memFont);
     QFontMetrics fmMemUnit(m_memUnitFont);
     QFontMetrics fmMemTxt(m_memTxtFont);
-    //    QFontMetrics fmMemTxt(m_memTxtFont);
 
     int letfsize = 36;
     int margin = 10;

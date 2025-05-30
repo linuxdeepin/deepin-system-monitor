@@ -34,9 +34,10 @@ bool checkAuthorization(const QString &appBusName, const QString &action)
     PolkitQt1::Authority::Result ret = PolkitQt1::Authority::instance()->checkAuthorizationSync(
             action, PolkitQt1::SystemBusNameSubject(appBusName), PolkitQt1::Authority::AllowUserInteraction);
     if (PolkitQt1::Authority::Yes == ret) {
+        qCDebug(app) << "Authorization check passed";
         return true;
     } else {
-        qWarning() << qPrintable("Policy authorization check failed!");
+        qCWarning(app) << "Policy authorization check failed for bus:" << appBusName;
         return false;
     }
 }
@@ -65,13 +66,16 @@ SystemDBusServer::SystemDBusServer(QObject *parent)
         QDBusConnection::RegisterOptions opts =
                 QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals | QDBusConnection::ExportAllProperties;
         if (!dbus.registerObject("/org/deepin/SystemMonitorSystemServer", this, opts)) {
-            qWarning() << qPrintable("Register dbus object failed") << dbus.lastError().message();
+            qCWarning(app) << "Failed to register DBus object:" << dbus.lastError().message();
         }
     } else {
-        qWarning() << qPrintable("Register dbus failed") << dbus.lastError().message();
+        qCWarning(app) << "Failed to register DBus service:" << dbus.lastError().message();
     }
     m_timer.setSingleShot(true);
-    connect(&m_timer, &QTimer::timeout, this, [=]() { qApp->exit(0); });
+    connect(&m_timer, &QTimer::timeout, this, [=]() { 
+        qCDebug(app) << "Timer timeout, exiting application";
+        qApp->exit(0); 
+    });
 }
 
 /**
@@ -100,7 +104,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 {
     // 调用者限制前台系统监视器程序
     if (!checkCaller()) {
-        qWarning() << qPrintable("Caller not authorized");
+        qCWarning(app) << "Unauthorized caller attempt to modify service:" << serviceName;
         return QString(strerror(EPERM));
     }
 
@@ -110,7 +114,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 #else
     if (serviceName.isEmpty() || (serviceName.size() > SHRT_MAX) || serviceName.contains(QRegularExpression("[; ]"))) {
 #endif
-        qWarning() << qPrintable("Invalid service name");
+        qCWarning(app) << "Invalid service name:" << serviceName;
         return QString(strerror(EINVAL));
     }
 
@@ -120,13 +124,13 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     listPorcess.waitForFinished();
     QByteArray serviceList = listPorcess.readAll();
     if (!serviceList.contains(serviceName.toUtf8())) {
-        qWarning() << qPrintable("Service not exists");
+        qCWarning(app) << "Service does not exist:" << serviceName;
         return QString(strerror(EINVAL));
     }
 
     // 鉴权处理
     if (!checkAuthorization(message().service(), s_PolkitActionSet)) {
-        qWarning() << qPrintable("Polkit authorization failed");
+        qCWarning(app) << "Polkit authorization failed for service:" << serviceName;
         return QString(strerror(EPERM));
     }
 
@@ -141,12 +145,15 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     process.waitForFinished();
     QString checkRet = process.readAll();
     if (enable && ("enabled" == checkRet)) {
+        qCDebug(app) << "Service successfully enabled:" << serviceName;
         return {};
     } else if (!enable && ("disabled" == checkRet)) {
+        qCDebug(app) << "Service successfully disabled:" << serviceName;
         return {};
     }
 
     // 返回命令执行结果
+    qCWarning(app) << "Service state change failed:" << errorRet;
     return errorRet;
 }
 
@@ -156,6 +163,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 qint64 SystemDBusServer::dbusCallerPid() const
 {
     if (!calledFromDBus()) {
+        qCDebug(app) << "Not called from DBus";
         return 0;
     }
 
@@ -164,6 +172,7 @@ qint64 SystemDBusServer::dbusCallerPid() const
         return static_cast<qint64>(interface->servicePid(message().service()).value());
     }
 
+    qCDebug(app) << "Failed to get DBus caller PID";
     return 0;
 }
 
@@ -173,6 +182,7 @@ qint64 SystemDBusServer::dbusCallerPid() const
 bool SystemDBusServer::checkCaller() const
 {
     if (!calledFromDBus()) {
+        qCDebug(app) << "Not called from DBus";
         return false;
     }
 
@@ -180,12 +190,12 @@ bool SystemDBusServer::checkCaller() const
     QString callerExe = getProcIdExe(callerPid);
     QString dbmExe = QStandardPaths::findExecutable("deepin-system-monitor", { "/usr/bin" });
 
-    qCDebug(app) << qPrintable("callerPid is: ") << callerPid << qPrintable("callerExe is:") << callerExe;
+    qCDebug(app) << "Checking caller authorization - PID:" << callerPid << "Executable:" << callerExe;
     if (callerExe != dbmExe) {
-        qCDebug(app) << qPrintable("caller not authorized");
+        qCWarning(app) << "Unauthorized caller:" << callerExe;
         return false;
     }
 
-    qCDebug(app) << qPrintable("caller authorized");
+    qCDebug(app) << "Caller authorized:" << callerExe;
     return true;
 }
