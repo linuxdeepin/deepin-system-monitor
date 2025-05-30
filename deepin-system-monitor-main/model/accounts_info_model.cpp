@@ -86,6 +86,7 @@ void AccountsInfoModel::updateUserList(const QStringList &userPathList)
         if (newUser->name() == m_currentUserName) {
             newUser->setIsCurrentUser(true);
             m_currentUserType = newUser->userType();
+            qCInfo(app) << "Current user type set to:" << m_currentUserType;
         }
         m_userMap.insert(newUser->name(), newUser);
 
@@ -103,9 +104,12 @@ void AccountsInfoModel::updateUserOnlineStatus()
     reply.waitForFinished();
     if (reply.isValid()) {
         m_sessionList = reply.value();
+        qCInfo(app) << "Retrieved" << m_sessionList.size() << "active sessions";
+    } else {
+        qCWarning(app) << "Failed to retrieve session list:" << reply.error().message();
     }
+    
     for (auto session : m_sessionList) {
-
         m_onlineUsers << session.userName;
     }
 
@@ -141,6 +145,7 @@ User::UserType AccountsInfoModel::getCurrentUserType() const
 
 bool AccountsInfoModel::lockSessionByUserName(const QString &userName)
 {
+    qCInfo(app) << "Attempting to lock session for user:" << userName;
     if (m_sessionList.size() > 0) {
         for (SessionInfo si : m_sessionList) {
             if (si.userName == userName) {
@@ -148,19 +153,18 @@ bool AccountsInfoModel::lockSessionByUserName(const QString &userName)
                 return true;
             }
         }
-        qCDebug(app) << "cannot find session with this username!";
+        qCWarning(app) << "Cannot find session for username:" << userName;
         return false;
     } else {
-        qCDebug(app) << "no session found!";
+        qCWarning(app) << "No active sessions found";
         return false;
     }
 }
 
 bool AccountsInfoModel::activateSessionByUserName(const QString &userName)
 {
-
+    qCInfo(app) << "Attempting to activate session for user:" << userName;
     if (m_sessionList.size() > 0) {
-
         for (SessionInfo si : m_sessionList) {
             if (si.userName == userName) {
 
@@ -168,47 +172,49 @@ bool AccountsInfoModel::activateSessionByUserName(const QString &userName)
                 return true;
             }
         }
-        qCDebug(app) << "cannot find session with this username!";
+        qCWarning(app) << "Cannot find session for username:" << userName;
         return false;
     } else {
-        qCDebug(app) << "no session found!";
+        qCWarning(app) << "No active sessions found";
         return false;
     }
 }
+
 bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 {
+    qCInfo(app) << "Attempting to logout user:" << userName;
     if (userName == m_currentUserName) {
         if (m_sessionList.size() > 0) {
-            qCInfo(app) << "m_sessionList is OK";
+            qCInfo(app) << "Processing logout for current user";
             for (SessionInfo si : m_sessionList) {
                 if (si.userName == userName) {
-                    qCInfo(app) << "found" << userName << si.sessionId;
-                    //                    qCInfo(app) << m_LoginInter->TerminateSession(si.sessionId).error();
+                    qCInfo(app) << "Found session for current user:" << userName << "Session ID:" << si.sessionId;
                     return true;
                 }
             }
-            qCDebug(app) << "cannot find session with current username!";
-
+            qCWarning(app) << "Cannot find session for current username:" << userName;
         } else {
-            qCDebug(app) << "no session found!";
+            qCWarning(app) << "No active sessions found for logout";
         }
     } else {
         QStringList params;
 
         // check pkexec existance
         if (!QFile::exists({ PKEXEC_PATH })) {
+            qCWarning(app) << "pkexec not found at:" << PKEXEC_PATH;
             return false;
         }
 
         // check kill existance
         if (!QFile::exists({ PKILL_PATH })) {
+            qCWarning(app) << "pkill not found at:" << PKILL_PATH;
             return false;
         }
 
         params << QString(PKILL_PATH) << QString("-u") << userName;
+        qCInfo(app) << "Executing pkexec with params:" << params.join(" ");
 
         QProcess proc;
-
         proc.start({ PKEXEC_PATH }, params);
         proc.waitForFinished();
         return true;
@@ -218,14 +224,17 @@ bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 
 void AccountsInfoModel::EditAccount()
 {
+    qCInfo(app) << "Opening account settings";
     if (m_controlInter) {
         bool version = common::systemInfo().isOldVersion();
         if (version) {
-            //专业版v20接口：ShowPage(String module, String page)
+            qCInfo(app) << "Using old version interface (v20)";
             m_controlInter->call("ShowPage", "accounts", "Accounts Detail");
         } else {
-            //社区版V23接口：ShowPage(String url)
+            qCInfo(app) << "Using new version interface (v23)";
             m_controlInter->call("ShowPage", "accounts");
         }
+    } else {
+        qCWarning(app) << "Control center interface not available";
     }
 }

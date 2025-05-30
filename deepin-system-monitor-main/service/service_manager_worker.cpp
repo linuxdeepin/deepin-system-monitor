@@ -20,6 +20,7 @@
 #include <QRegularExpression>
 
 using namespace DDLog;
+
 ServiceManagerWorker::ServiceManagerWorker(QObject *parent)
     : QObject(parent)
 {
@@ -36,17 +37,18 @@ void ServiceManagerWorker::startJob()
                                    kSystemDObjectPath.path(),
                                    QDBusConnection::systemBus());
 
+    qCDebug(app) << "Fetching unit files list";
     auto unitFilesResult = mgrIf.ListUnitFiles();
     ec = unitFilesResult.first;
     if (ec) {
-        qCDebug(app) << "ListUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "ListUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
     }
     UnitFileInfoList unitFiles = unitFilesResult.second;
 
     auto unitsResult = mgrIf.ListUnits();
     ec = unitsResult.first;
     if (ec) {
-        qCDebug(app) << "ListUnits failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "ListUnits failed:" << ec.getErrorName() << ec.getErrorMessage();
     }
     UnitInfoList units = unitsResult.second;
     for (auto u : units) {
@@ -82,7 +84,7 @@ void ServiceManagerWorker::startJob()
         auto id = unitIf.getId();
         ec1 = id.first;
         if (ec1) {
-            qCDebug(app) << "call getId failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+            qCWarning(app) << "Failed to get ID for unit" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setId(id.second);
         }
@@ -90,7 +92,7 @@ void ServiceManagerWorker::startJob()
         auto bStart = unitIf.canStart();
         ec1 = bStart.first;
         if (ec1) {
-            qCDebug(app) << "call canStart failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+            qCWarning(app) << "Failed to check if unit can start:" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setCanStart(bStart.second);
         }
@@ -98,7 +100,7 @@ void ServiceManagerWorker::startJob()
         auto bStop = unitIf.canStop();
         ec1 = bStop.first;
         if (ec1) {
-            qCDebug(app) << "call canStart failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+            qCWarning(app) << "Failed to check if unit can stop:" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setCanStop(bStop.second);
         }
@@ -106,7 +108,7 @@ void ServiceManagerWorker::startJob()
         auto bReload = unitIf.canReload();
         ec1 = bReload.first;
         if (ec1) {
-            qCDebug(app) << "call canStart failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+            qCWarning(app) << "Failed to check if unit can reload:" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setCanReload(bReload.second);
         }
@@ -118,7 +120,7 @@ void ServiceManagerWorker::startJob()
         auto pid = svcIf.getMainPID();
         ec1 = pid.first;
         if (ec1) {
-            qCDebug(app) << "getMainPID failed" << ec1.getErrorName() << ec1.getErrorMessage();
+            qCWarning(app) << "Failed to get main PID for unit" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setMainPID(pid.second);
         }
@@ -127,7 +129,7 @@ void ServiceManagerWorker::startJob()
         auto state = mgrIf.GetUnitFileState(unit.getName());
         ec1 = state.first;
         if (ec1) {
-            qCDebug(app) << "getUnitFileState failed" << ec1.getErrorName() << ec1.getErrorMessage();
+            qCWarning(app) << "Failed to get unit file state for" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
             entry.setState(state.second);
         }
@@ -194,7 +196,7 @@ void ServiceManagerWorker::startJob()
             auto id1 = unitIf.getId();
             ec1 = id1.first;
             if (ec1) {
-                qCDebug(app) << "call getId failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+                qCWarning(app) << "Failed to get ID for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setId(id1.second);
             }
@@ -202,7 +204,7 @@ void ServiceManagerWorker::startJob()
             auto desc = unitIf.getDescription();
             ec1 = desc.first;
             if (ec1) {
-                qCDebug(app) << "getDescription failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+                qCWarning(app) << "Failed to get description for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setDescription(desc.second);
             }
@@ -210,7 +212,7 @@ void ServiceManagerWorker::startJob()
             auto actState = unitIf.getActiveState();
             ec1 = actState.first;
             if (ec1) {
-                qCDebug(app) << "getActiveState failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+                qCWarning(app) << "Failed to get active state for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setActiveState(actState.second);
             }
@@ -218,7 +220,7 @@ void ServiceManagerWorker::startJob()
             auto loadState = unitIf.getLoadState();
             ec1 = loadState.first;
             if (ec1) {
-                qCDebug(app) << "getLoadState failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+                qCWarning(app) << "Failed to get load state for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setLoadState(loadState.second);
             }
@@ -226,7 +228,7 @@ void ServiceManagerWorker::startJob()
             auto subState = unitIf.getSubState();
             ec1 = subState.first;
             if (ec1) {
-                qCDebug(app) << "getSubState failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+                qCWarning(app) << "Failed to get sub state for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setSubState(subState.second);
             }
@@ -234,7 +236,7 @@ void ServiceManagerWorker::startJob()
             auto mainPID = svcIf.getMainPID();
             ec1 = mainPID.first;
             if (ec1) {
-                qCDebug(app) << "getMainPID failed:" << ec1.getErrorName() << ec1.getErrorMessage();
+                qCWarning(app) << "Failed to get main PID for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
                 entry.setMainPID(mainPID.second);
             }
@@ -285,8 +287,10 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
         if (b) {
             return descStr;
         } else {
+            qCWarning(app) << "No description found in unit file:" << path;
             return {};
         }
     }
+    qCWarning(app) << "Failed to open unit file:" << path;
     return {};
 }

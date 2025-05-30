@@ -105,6 +105,7 @@ void BlockDeviceInfoDB::readDiskInfo()
 {
     QDir dir(SYSFS_PATH_BLOCK);
     if (!dir.exists()) {
+        qCWarning(app) << "Block device directory does not exist:" << SYSFS_PATH_BLOCK;
         return;
     }
 
@@ -126,6 +127,7 @@ void BlockDeviceInfoDB::readDiskInfo()
                 }
             }
             if (index == -1) {   // 不存在的话将该disk存储起来
+                qCDebug(app) << "Adding new physical disk:" << list[i].fileName();
                 BlockDevice bd;
                 if (bd.readDeviceSize(list[i].fileName()) > 0) {
                     bd.setDeviceName(list[i].fileName().toLocal8Bit());
@@ -154,12 +156,14 @@ void BlockDeviceInfoDB::readDiskInfo()
                 }
             }
             if (index == -1) {   // 不存在的话将该disk存储起来
+                qCDebug(app) << "Adding new virtual disk:" << list[i].fileName();
                 BlockDevice bd;
                 if (bd.readDeviceSize(list[i].fileName()) > 0) {
                     bd.setDeviceName(list[i].fileName().toLocal8Bit());
                     m_deviceList << bd;
                 }
             } else {
+                qCDebug(app) << "Updating existing virtual disk:" << list[i].fileName();
                 m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit());   // 更新disk数据
             }
         }
@@ -174,6 +178,7 @@ void BlockDeviceInfoDB::readDiskInfo()
             }
         }
         if (!isFind) {
+            qCDebug(app) << "Removing device that no longer exists:" << m_deviceList[i].deviceName();
             m_deviceList.removeAt(i);
         }
     }

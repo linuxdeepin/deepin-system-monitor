@@ -55,6 +55,7 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
 void NetifPacketCapture::whetherDevChanged()
 {
     if (m_devName.isEmpty()) {
+        qCInfo(app) << "No current device, starting new monitor job";
         m_changedDev = true;
         startNetifMonitorJob();
     } else {
@@ -62,6 +63,7 @@ void NetifPacketCapture::whetherDevChanged()
         getCurrentDevName();
         //若新增网卡设备优先级高于当前使用网卡设备,则重新开始监测任务
         if (current_dev.compare(m_devName) != 0) {
+            qCInfo(app) << "Network device changed from" << current_dev << "to" << m_devName;
             m_changedDev = true;
             startNetifMonitorJob();
         }
@@ -75,14 +77,12 @@ bool NetifPacketCapture::hasDevIP()
     }
 
     struct sockaddr_in *addr {};
-    struct ifreq ifr
-    {
-    };
+    struct ifreq ifr {};
     char *address {};
     int sockfd;
     //设备名称过长
     if (m_devName.size() >= IFNAMSIZ) {
-        //qCDebug(app)<<"Device name too long! Invalid device Name!";
+        qCWarning(app) << "Device name too long:" << m_devName;
         return false;
     }
 
@@ -92,18 +92,19 @@ bool NetifPacketCapture::hasDevIP()
 
     //获取网络IP(IPv4)
     if (ioctl(sockfd, SIOCGIFADDR, &ifr) == -1) {
+        qCWarning(app) << "Failed to get IP address for device:" << m_devName;
         close(sockfd);
-        //qCDebug(app)<<"ioctl error!";
         return false;
     }
 
     addr = (struct sockaddr_in *)&(ifr.ifr_addr);
     address = inet_ntoa(addr->sin_addr);
     if (address) {
+        qCDebug(app) << "Device" << m_devName << "has IP:" << address;
         close(sockfd);
-        //cout<<"IP of  "<<m_devName<<" :" <<address;
         return true;
     } else {
+        qCWarning(app) << "No IP address found for device:" << m_devName;
         close(sockfd);
         return false;
     }
@@ -115,6 +116,7 @@ bool NetifPacketCapture::getCurrentDevName()
     process.start("route", QStringList() << "-n");
     process.waitForFinished(-1);
     QString output = QString(process.readAllStandardOutput());
+    
     // 先区分换行符号
     QStringList outputList = output.split("\n");
     if (outputList.size() > 0)
@@ -128,6 +130,7 @@ bool NetifPacketCapture::getCurrentDevName()
 #endif
         totalList.append(lineList);
     }
+
     // 设备和优先级列编号
     int metricColNum = 0;
     int devColNum = 0;
@@ -161,6 +164,7 @@ bool NetifPacketCapture::getCurrentDevName()
             }
         }
     }
+
     int minMetric = 0;
     QString perfectDev = "";
     for (int i = 0; i < metricList.size(); i++) {
@@ -179,11 +183,12 @@ bool NetifPacketCapture::getCurrentDevName()
 
     //无可用设备
     if (m_devName.isEmpty()) {
+        qCWarning(app) << "No suitable network device found";
         return false;
     }
     return true;
 }
-//
+
 void NetifPacketCapture::startNetifMonitorJob()
 {
     int rc = 0;
@@ -191,13 +196,14 @@ void NetifPacketCapture::startNetifMonitorJob()
 
     getCurrentDevName();
     if (m_devName.isEmpty()) {
+        qCWarning(app) << "Cannot start monitor job: no device available";
         return;
     }
 
     // create pcap handler
     m_handle = pcap_create(m_devName.toLocal8Bit().data(), errbuf);
     if (!m_handle) {
-        qCDebug(app) << "pcap_create failed: " << errbuf;
+        qCWarning(app) << "Failed to create pcap handler:" << errbuf;
         return;
     }
 
@@ -223,9 +229,9 @@ void NetifPacketCapture::startNetifMonitorJob()
     // activate pcap handler
     rc = pcap_activate(m_handle);
     if (rc > 0) {
-        qCDebug(app) << "pcap_activate warning: " << pcap_statustostr(rc);
+        qCWarning(app) << "pcap_activate warning:" << pcap_statustostr(rc);
     } else if (rc < 0) {
-        qCDebug(app) << "pcap_setnonblock failed: " << pcap_statustostr(rc);
+        qCWarning(app) << "pcap_activate failed:" << pcap_statustostr(rc);
         pcap_close(m_handle);
         return;
     }
@@ -233,9 +239,11 @@ void NetifPacketCapture::startNetifMonitorJob()
     // setm_timer->start(); non block dispatch mode
     rc = pcap_setnonblock(m_handle, 1, errbuf);
     if (rc == -1) {
+        qCWarning(app) << "Failed to set non-blocking mode:" << errbuf;
         pcap_close(m_handle);
         return;
     }
+
     go = true;
     m_timer->start();
 }
@@ -259,13 +267,17 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
     // parse packet & calculate payload
     PacketPayload payload = QSharedPointer<struct packet_payload_t>::create();
     auto ok = NetifPacketParser::parsePacket(hdr, packet, payload);
-    if (!ok)
+    if (!ok) {
+        qCDebug(app) << "Failed to parse packet";
         return;
+    }
+
     char dMac[256];
     auto *eth_hdr = reinterpret_cast<const struct ether_header *>(packet);
     sprintf(dMac, "%x:%x:%x:%x:%x:%x", (eth_hdr->ether_dhost)[0], (eth_hdr->ether_dhost)[1],
             (eth_hdr->ether_dhost)[2], (eth_hdr->ether_dhost)[3],
             (eth_hdr->ether_dhost)[4], (eth_hdr->ether_dhost)[5]);
+
     // calc hash from caputured packet's src:sport-dest:dport
     if (payload->sa_family == AF_INET) {
         // ipv4 packet payload
@@ -283,9 +295,12 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         util::common::hash(daddr_str, int(strlen(daddr_str)), util::common::global_seed, daddr_hpair);
         if (netifMonitorJob->m_ifaddrsHashCache.contains(saddr_hpair[0])) {
             payload->direction = kOutboundPacket;
+            qCDebug(app) << "Outbound packet:" << pattern;
         } else if (netifMonitorJob->m_ifaddrsHashCache.contains(daddr_hpair[0])) {
             payload->direction = kInboundPacket;
+            qCDebug(app) << "Inbound packet:" << pattern;
         } else {
+            qCDebug(app) << "Packet not matching local addresses:" << pattern;
             return;
         }
 
@@ -304,9 +319,12 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         util::common::hash(daddr6_str, int(strlen(daddr6_str)), util::common::global_seed, daddr6_hpair);
         if (netifMonitorJob->m_ifaddrsHashCache.contains(saddr6_hpair[0])) {
             payload->direction = kOutboundPacket;
+            qCDebug(app) << "Outbound packet:" << pattern;
         } else if (netifMonitorJob->m_ifaddrsHashCache.contains(daddr6_hpair[0])) {
             payload->direction = kInboundPacket;
+            qCDebug(app) << "Inbound packet:" << pattern;
         } else {
+            qCDebug(app) << "Packet not matching local addresses:" << pattern;
             return;
         }
 
@@ -335,6 +353,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         // the only thing we can do here is ignore this packet.
         return;
     }
+
     netifMonitorJob->m_localPendingPackets.enqueue(payload);
     auto npkts = netifMonitorJob->m_localPendingPackets.size();
     if (npkts >= PACKET_DISPATCH_QUEUE_LWAT && npkts < PACKET_DISPATCH_QUEUE_HWAT) {
@@ -347,6 +366,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
             netifMonitorJob->m_localPendingPackets.clear();
 
             netifMonitor->m_pktqWatcher.wakeAll();
+            qCDebug(app) << "Dispatched" << npkts << "packets (relaxed mode)";
         }
     } else if (npkts >= PACKET_DISPATCH_QUEUE_HWAT) {
         // otherwise we forcefully use lock instead
@@ -358,6 +378,7 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
         netifMonitorJob->m_localPendingPackets.clear();
 
         netifMonitor->m_pktqWatcher.wakeAll();
+        qCDebug(app) << "Dispatched" << npkts << "packets (force mode)";
     }
 }
 
@@ -365,9 +386,16 @@ void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char 
 void NetifPacketCapture::dispatchPackets()
 {
     usleep(20000);
-    if (!go) return;
+    if (!go) {
+        qCDebug(app) << "Packet capture stopped";
+        return;
+    }
     //无可用设备
-    if (m_devName.isEmpty()) return;
+    if (m_devName.isEmpty()) {
+        qCWarning(app) << "No device available for packet capture";
+        return;
+    }
+
     // check pending packets before dispatching packets
     auto npkts = m_localPendingPackets.size();
     if (npkts > 0) {
@@ -380,6 +408,7 @@ void NetifPacketCapture::dispatchPackets()
                 m_netifMonitor->m_pktqWatcher.wakeAll();
 
                 m_localPendingPackets.clear();
+                qCDebug(app) << "Dispatched" << npkts << "packets (relaxed mode)";
             }
         } else if (npkts >= PACKET_DISPATCH_QUEUE_HWAT) {
             // acquire lock forcefully if too many packets pending
@@ -390,6 +419,7 @@ void NetifPacketCapture::dispatchPackets()
             m_netifMonitor->m_pktqWatcher.wakeAll();
 
             m_localPendingPackets.clear();
+            qCDebug(app) << "Dispatched" << npkts << "packets (force mode)";
         }
     }
 
@@ -401,12 +431,15 @@ void NetifPacketCapture::dispatchPackets()
         // quit requested, break the loop then
         auto quit = m_quitRequested.load();
         if (quit) {
+            qCInfo(app) << "Quit requested, stopping packet capture";
             m_timer->stop();
             break;
         }
+
         // refresh m_sockStat cache every 2 seconds
         time_t now = time(nullptr);
         if (!last_sockstat || (now - last_sockstat) >= SOCKSTAT_REFRESH_INTERVAL) {
+            qCDebug(app) << "Refreshing socket statistics";
             m_sockStats.clear();
             SysInfo::readSockStat(m_sockStats);
             last_sockstat = now;
@@ -414,6 +447,7 @@ void NetifPacketCapture::dispatchPackets()
 
         // refresh m_ifaddrsHashCache every 10 seconds in case user change ip address on the fly
         if (!last_ifaddrs_refresh || (now - last_ifaddrs_refresh) >= IFADDRS_HASH_CACHE_REFRESH_INTERVAL) {
+            qCDebug(app) << "Refreshing interface address cache";
             refreshIfAddrsHashCache();
             last_ifaddrs_refresh = now;
         }
@@ -429,11 +463,12 @@ void NetifPacketCapture::dispatchPackets()
             return;
         } else if (nr == -1) {
             // error occurred while processing packets
-            qCDebug(app) << "pcap_dispatch failed: " << pcap_geterr(m_handle);
+            qCWarning(app) << "pcap_dispatch failed:" << pcap_geterr(m_handle);
             m_timer->stop();
             break;
         } else if (nr == -2) {
-            // breakloop requested (can only happen inside the callbackm_localPendingPackets function)
+            // breakloop requested (can only happen inside the callback function)
+            qCInfo(app) << "Break loop requested";
             m_timer->stop();
             break;
         }
@@ -449,7 +484,7 @@ bool readNetIfAddrs(NetIFAddrsMap &addrsMap)
 
     errno = 0;
     if (getifaddrs(&addr_hdr) == -1) {
-        qCWarning(app) << QString("getifaddrs failed: [%1] %2").arg(errno).arg(strerror(errno));
+        qCWarning(app) << "getifaddrs failed:" << strerror(errno);
         return false;
     }
 
@@ -472,10 +507,13 @@ bool readNetIfAddrs(NetIFAddrsMap &addrsMap)
     }
     freeifaddrs(addr_hdr);
 
-    if (addrsMap.size() > 0)
+    if (addrsMap.size() > 0) {
+        qCInfo(app) << "Found" << addrsMap.size() << "network interfaces";
         return true;
-    else
+    } else {
+        qCWarning(app) << "No network interfaces found";
         return false;
+    }
 }
 
 // refresh network interface hash cache

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "utils.h"
+#include "ddlog.h"
 
 #include <QApplication>
 #include <QDir>
@@ -28,6 +29,8 @@
 
 //DCORE_USE_NAMESPACE
 
+using namespace DDLog;
+
 namespace Utils {
 static QMap<QString, QString> desktopfileMaps = getDesktopfileMap();
 
@@ -51,8 +54,10 @@ int getStatusBarMaxWidth()
 
 bool startWithHanzi(const QString &text)
 {
-    if (text.isEmpty())
+    if (text.isEmpty()) {
+        qCDebug(app) << "Text is empty";
         return false;
+    }
 
     return text.at(0).script() == QChar::Script_Han;
 }
@@ -130,7 +135,7 @@ QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
         std::getline(fs, temp);
         fs.close();
     } catch (std::ifstream::failure &e) {
-        Q_UNUSED(e)
+        qCWarning(app) << "Failed to read process environment for pid" << pid << ":" << e.what();
         return "FAILED TO READ PROC";
     }
 
@@ -138,6 +143,7 @@ QString getProcessEnvironmentVariable(pid_t pid, QString environmentName)
     std::replace(temp.begin(), temp.end(), '\0', '\n');
 
     if (temp.size() < 1) {
+        qCDebug(app) << "Empty environment data for process" << pid;
         return "";
     }
 
@@ -159,7 +165,7 @@ QString getProcessCmdline(pid_t pid)
         std::getline(fs, temp);
         fs.close();
     } catch (std::ifstream::failure &e) {
-        Q_UNUSED(e)
+        qCWarning(app) << "Failed to read process command line for pid" << pid << ":" << e.what();
         return "FAILED TO READ PROC";
     }
 
@@ -167,6 +173,7 @@ QString getProcessCmdline(pid_t pid)
     std::replace(temp.begin(), temp.end(), '\0', ' ');
 
     if (temp.size() < 1) {
+        qCDebug(app) << "Empty command line data for process" << pid;
         return "";
     }
 

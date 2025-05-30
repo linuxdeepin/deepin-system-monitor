@@ -23,25 +23,25 @@ Netlink::Netlink()
     int rc = 0;
     m_sock = nl_socket_alloc();
     if (!m_sock) {
-        qCWarning(app) << "Error: nl_socket_alloc failed";
+        qCWarning(app) << "Failed to allocate netlink socket";
         return;
     }
 
     rc = nl_connect(m_sock, NETLINK_ROUTE);
     if (rc) {
-        qCWarning(app) << "Error: nl_connect failed";
+        qCWarning(app) << "Failed to connect netlink socket:" << nl_geterror(rc);
         return;
     }
 
     rc = rtnl_link_alloc_cache(m_sock, AF_UNSPEC, &m_linkCache);
     if (rc) {
-        qCWarning(app) << "Error: rtnl_link_alloc_cache failed";
+        qCWarning(app) << "Failed to allocate link cache:" << nl_geterror(rc);
         return;
     }
 
     rc = rtnl_addr_alloc_cache(m_sock, &m_addrCache);
     if (rc) {
-        qCWarning(app) << "Error: rtnl_addr_alloc_cache failed";
+        qCWarning(app) << "Failed to allocate address cache:" << nl_geterror(rc);
     }
 }
 

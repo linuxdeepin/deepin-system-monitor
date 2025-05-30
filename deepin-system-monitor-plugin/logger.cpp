@@ -31,9 +31,11 @@ MLogger::MLogger(QObject *parent)
 
     // watch dconfig
     connect(m_config, &DConfig::valueChanged, this, [this](const QString &key) {
-        qCCritical(app) << "value changed:" << key;
+        qCInfo(app) << "DConfig value changed for key:" << key;
         if (key == "log_rules") {
-            setRules(m_config->value(key).toByteArray());
+            QByteArray newRules = m_config->value(key).toByteArray();
+            qCDebug(app) << "Updating log rules to:" << newRules;
+            setRules(newRules);
         }
     });
 }
@@ -60,8 +62,10 @@ void MLogger::appendRules(const QString &rules)
             tmplist.removeAt(i);
             i--;
         }
-    if (tmplist.isEmpty())
+    if (tmplist.isEmpty()) {
+        qCDebug(app) << "No new rules to append";
         return;
+    }
     m_rules.isEmpty() ? m_rules = tmplist.join("\n")
                       : m_rules += "\n" + tmplist.join("\n");
 }

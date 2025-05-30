@@ -6,10 +6,12 @@
 #include "net_info.h"
 #include "common/common.h"
 #include "system/sys_info.h"
+#include "ddlog.h"
 
 #include <QScopedArrayPointer>
 
 using namespace common::error;
+using namespace DDLog;
 
 namespace core {
 namespace system {
@@ -64,7 +66,7 @@ void NetInfo::resdNetInfo()
     int rc;
 
     if ((fp = fopen(PROC_PATH_NET, "r")) == nullptr) {
-        print_errno(errno, QString("open %1 failed").arg(PROC_PATH_NET));
+        qCWarning(app) << "Failed to open" << PROC_PATH_NET << ":" << strerror(errno);
         return;
     }
 
@@ -108,7 +110,7 @@ void NetInfo::resdNetInfo()
     b = !ferror(fp) && b;
     fclose(fp);
     if (!b) {
-        print_errno(errno, QString("read %1 failed").arg(PROC_PATH_NET));
+        qCWarning(app) << "Failed to read network statistics from" << PROC_PATH_NET << ":" << strerror(errno);
     }
 
     m_netStat[kLastStat] = m_netStat[kCurrentStat];

@@ -160,24 +160,34 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
                 scan_tree(child.get());
 
             // map state
-            if (child->map_state != kViewableState)
+            if (child->map_state != kViewableState) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-viewable state";
                 continue;
+            }
 
             // window class
-            if (child->wclass != kInputOutputClass)
+            if (child->wclass != kInputOutputClass) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-input-output class";
                 continue;
+            }
 
-            if (child->pid == -1)
+            if (child->pid == -1) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to missing PID";
                 continue;
+            }
 
             // window type
             if (child->types.startsWith(kDockWindowType)
-                || child->types.startsWith(kDesktopWindowType))
+                || child->types.startsWith(kDesktopWindowType)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to dock/desktop type";
                 continue;
+            }
 
             // window state
-            if (child->states.contains(kHiddenState))
+            if (child->states.contains(kHiddenState)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to hidden state";
                 continue;
+            }
 
             WMWindowArea warea(new struct wm_window_area_t());
 
@@ -188,16 +198,18 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
                                        int(child->extents.right),
                                        int(child->extents.bottom) });
 
-            if (!rect.contains(pos))
+            if (!rect.contains(pos)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "as position is outside its bounds";
                 continue;
+            }
 
             // window adjusted rect (including bounding frame)
             warea->rect = rect;
             // pid
             warea->pid = child->pid;
-
             warea->wid = child->windowId;
 
+            qCDebug(app) << "Selected window" << childWindowId << "with PID" << child->pid;
             walist.push_back(std::move(warea));
         }
     };
@@ -210,8 +222,10 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 WMWId WMInfo::getRootWindow() const
 {
     if (m_tree && m_tree->root) {
+        qCDebug(app) << "Returning root window ID:" << m_tree->root->windowId;
         return m_tree->root->windowId;
     }
+    qCWarning(app) << "No root window available";
     return 0;
 }
 
@@ -219,6 +233,7 @@ bool WMInfo::isCursorHoveringDocks(const QPoint &pos) const
 {
     for (auto &dock : m_dockWindowList) {
         if (dock->rect.contains(pos)) {
+            qCDebug(app) << "Cursor is hovering over dock window" << dock->wid;
             return true;
         }
     }
@@ -249,23 +264,33 @@ std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) c
                 scan_tree(child.get(), area);
 
             // map state
-            if (child->map_state != kViewableState)
+            if (child->map_state != kViewableState) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-viewable state";
                 continue;
+            }
 
             // window class
-            if (child->wclass != kInputOutputClass)
+            if (child->wclass != kInputOutputClass) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-input-output class";
                 continue;
+            }
 
-            if (child->pid == -1)
+            if (child->pid == -1) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to missing PID";
                 continue;
+            }
 
             // window type (dock type should exclude from this)
-            if (child->types.startsWith(kDesktopWindowType))
+            if (child->types.startsWith(kDesktopWindowType)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to desktop type";
                 continue;
+            }
 
             // window state
-            if (child->states.contains(kHiddenState))
+            if (child->states.contains(kHiddenState)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to hidden state";
                 continue;
+            }
 
             // adjust child rect with frame extents
             auto adjusted = child->rect;
@@ -276,14 +301,17 @@ std::list<WMWindowArea> WMInfo::getHoveredByWindowList(WMWId wid, QRect &area) c
                     int(child->extents.bottom) });
 
             // translate child geom
-            if (!adjusted.intersects(area))
+            if (!adjusted.intersects(area)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "as it doesn't intersect with area";
                 continue;
+            }
 
             WMWindowArea warea(new struct wm_window_area_t());
             warea->rect = adjusted;
             warea->pid = child->pid;
             warea->wid = child->windowId;
 
+            qCDebug(app) << "Added window" << childWindowId << "with PID" << child->pid << "to hover list";
             list.push_back(std::move(warea));
         }
     };
@@ -303,7 +331,7 @@ void WMInfo::buildWindowTreeSchema()
     auto *conn = connection.get();
     err = xcb_connection_has_error(conn);
     if (err) {
-        qCDebug(app) << "Unable to connect to X server";
+        qCWarning(app) << "Failed to connect to X server:" << err;
         return;
     }
 
@@ -314,9 +342,10 @@ void WMInfo::buildWindowTreeSchema()
     xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
     int screenCount = xcb_setup_roots_length(setup);
     if (screenCount < screenNumber) {
-        qCDebug(app) << QString("Unable to access to screen %1, max is %2").arg(screenNumber).arg(screenCount - 1);
+        qCWarning(app) << "Requested screen" << screenNumber << "is out of range (max:" << screenCount - 1 << ")";
         return;
     }
+
     // get the screen we want from a list of screens in linked list structure
     for (int i = 0; i < screenNumber; i++)
         xcb_screen_next(&iter);
@@ -360,23 +389,33 @@ void WMInfo::findDockWindows()
                 scan_tree(child.get());
 
             // map state
-            if (child->map_state != kViewableState)
+            if (child->map_state != kViewableState) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-viewable state";
                 continue;
+            }
 
             // window class
-            if (child->wclass != kInputOutputClass)
+            if (child->wclass != kInputOutputClass) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-input-output class";
                 continue;
+            }
 
-            if (child->pid == -1)
+            if (child->pid == -1) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to missing PID";
                 continue;
+            }
 
             // window state
-            if (child->states.contains(kHiddenState))
+            if (child->states.contains(kHiddenState)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to hidden state";
                 continue;
+            }
 
             // window type (dock type should exclude from this)
-            if (!child->types.startsWith(kDockWindowType))
+            if (!child->types.startsWith(kDockWindowType)) {
+                qCDebug(app) << "Skipping window" << childWindowId << "due to non-dock type";
                 continue;
+            }
 
             WMWindowArea warea(new struct wm_window_area_t());
             warea->rect = child->rect;
@@ -475,6 +514,9 @@ xcb_atom_t WMInfo::getAtom(xcb_connection_t *conn, xcb_intern_atom_cookie_t &coo
     XInternAtomReply reply(xcb_intern_atom_reply(conn, cookie, nullptr));
     if (reply) {
         atom = reply->atom;
+        qCDebug(app) << "Got atom:" << atom;
+    } else {
+        qCWarning(app) << "Failed to get atom";
     }
     return atom;
 }
@@ -482,6 +524,7 @@ xcb_atom_t WMInfo::getAtom(xcb_connection_t *conn, xcb_intern_atom_cookie_t &coo
 QByteArray WMInfo::getAtomName(xcb_connection_t *conn, xcb_atom_t atom)
 {
     if (m_atomCache.find(atom) == m_atomCache.end()) {
+        qCDebug(app) << "Looking up name for atom:" << atom;
         AtomMeta meta(new struct atom_meta());
         meta->atom = atom;
 
@@ -491,6 +534,9 @@ QByteArray WMInfo::getAtomName(xcb_connection_t *conn, xcb_atom_t atom)
             auto len = xcb_get_atom_name_name_length(reply.get());
             auto name = xcb_get_atom_name_name(reply.get());
             meta->name = QByteArray { name, len };
+            qCDebug(app) << "Atom" << atom << "name:" << meta->name;
+        } else {
+            qCWarning(app) << "Failed to get name for atom:" << atom;
         }
         m_atomCache[atom] = std::move(meta);
     }

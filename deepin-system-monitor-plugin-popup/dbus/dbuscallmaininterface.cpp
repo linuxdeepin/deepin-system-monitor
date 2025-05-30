@@ -4,11 +4,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dbuscallmaininterface.h"
+#include "ddlog.h"
 
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDebug>
+
+using namespace DDLog;
 
 // 以下这个问题可以避免单例的内存泄露问题
 std::atomic<DbusCallMainInterface *> DbusCallMainInterface::s_Instance;
@@ -37,11 +40,10 @@ void DbusCallMainInterface::init()
 {
     // 1. 连接到dbus
     if (!QDBusConnection::sessionBus().isConnected()) {
-        fprintf(stderr, "Cannot connect to the D-Bus session bus./n"
-                "To start it, run:/n"
-                "/teval `dbus-launch --auto-syntax`/n");
+        qCWarning(app) << "Cannot connect to the D-Bus session bus. To start it, run: eval `dbus-launch --auto-syntax`";
     }
 
+    qCDebug(app) << "Creating DBus interface for service:" << SERVICE_NAME << "path:" << SERVICE_PATH;
     // 2. create interface
     mp_Iface = new QDBusInterface(SERVICE_NAME, SERVICE_PATH, "", QDBusConnection::sessionBus());
 }
