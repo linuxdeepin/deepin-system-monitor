@@ -116,6 +116,7 @@ ServiceManager::~ServiceManager()
 
 void ServiceManager::updateServiceList()
 {
+    qCInfo(app) << "Requesting service list update";
     Q_EMIT beginUpdateList();
 }
 
@@ -141,8 +142,7 @@ QString ServiceManager::normalizeServiceId(const QString &id, const QString &par
     return buf;
 }
 
-ErrorContext ServiceManager::startService(const QString &id,
-                                          const QString &param)
+ErrorContext ServiceManager::startService(const QString &id, const QString &param)
 {
     ErrorContext ec {};
     Systemd1ManagerInterface iface(DBUS_SYSTEMD1_SERVICE,
@@ -155,7 +155,7 @@ ErrorContext ServiceManager::startService(const QString &id,
     auto oResult = iface.StartUnit(buf, mode);
     ec = oResult.first;
     if (ec) {
-        qCDebug(app) << "StartUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to start service:" << buf << "Error:" << ec.getErrorName() << ec.getErrorMessage();
         return ec;
     }
     QDBusObjectPath o = oResult.second;
@@ -171,7 +171,7 @@ ErrorContext ServiceManager::startService(const QString &id,
             auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
             entry = updateServiceEntry(o1.path());
         } else {
-            qCDebug(app) << "GetUnit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+            qCWarning(app) << "Failed to get unit after start:" << buf << "Error:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
         }
     } else {
@@ -180,6 +180,7 @@ ErrorContext ServiceManager::startService(const QString &id,
     }
 
     if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        qCDebug(app) << "Service not in final state, starting timer for:" << buf;
         auto *timer = new CustomTimer { this };
         timer->start(o.path());
     }
@@ -200,7 +201,7 @@ ErrorContext ServiceManager::stopService(const QString &id)
     auto oResult = iface.StopUnit(buf, mode);
     ec = oResult.first;
     if (ec) {
-        qCDebug(app) << "Stop Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to stop service:" << buf << "Error:" << ec.getErrorName() << ec.getErrorMessage();
         return ec;
     }
     QDBusObjectPath o = oResult.second;
@@ -216,7 +217,7 @@ ErrorContext ServiceManager::stopService(const QString &id)
             auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
             entry = updateServiceEntry(o1.path());
         } else {
-            qCDebug(app) << "Get Unit failed:" << ec.getErrorName() << ec.getErrorMessage();
+            qCWarning(app) << "Failed to get unit after stop:" << buf << "Error:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
         }
     } else {
@@ -225,6 +226,7 @@ ErrorContext ServiceManager::stopService(const QString &id)
     }
 
     if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        qCDebug(app) << "Service not in final state, starting timer for:" << buf;
         auto *timer = new CustomTimer { this };
         timer->start(o.path());
     }
@@ -245,7 +247,7 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
     auto oResult = iface.RestartUnit(buf, mode);
     ec = oResult.first;
     if (ec) {
-        qCDebug(app) << "Restart Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to restart service:" << buf << "Error:" << ec.getErrorName() << ec.getErrorMessage();
         return ec;
     }
     QDBusObjectPath o = oResult.second;
@@ -261,7 +263,7 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
             auto o1 = Systemd1UnitInterface::normalizeUnitPath(buf);
             entry = updateServiceEntry(o1.path());
         } else {
-            qCDebug(app) << "Get Unit failed:" << buf << ec.getErrorName() << ec.getErrorMessage();
+            qCWarning(app) << "Failed to get unit after restart:" << buf << "Error:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
         }
     } else {
@@ -270,6 +272,7 @@ ErrorContext ServiceManager::restartService(const QString &id, const QString &pa
     }
 
     if (!isFinalState(entry.getActiveState().toLocal8Bit())) {
+        qCDebug(app) << "Service not in final state, starting timer for:" << buf;
         auto *timer = new CustomTimer { this };
         timer->start(o.path());
     }
@@ -291,7 +294,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         auto re = mgrIf.EnableUnitFiles({ entry.getId() });
         ec = re.first;
         if (ec) {
-            qCDebug(app) << "call EnableUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+            qCWarning(app) << "Failed to enable unit files:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
         }
         auto eResult = re.second;
@@ -299,7 +302,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         auto re = mgrIf.DisableUnitFiles({ entry.getId() });
         ec = re.first;
         if (ec) {
-            qCDebug(app) << "call DisableUnitFiles failed:" << ec.getErrorName() << ec.getErrorMessage();
+            qCWarning(app) << "Failed to disable unit files:" << ec.getErrorName() << ec.getErrorMessage();
             return ec;
         }
         auto dResult = re.second;
@@ -326,7 +329,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
     sbuf = {};
     rc = stat(BIN_PKEXEC_PATH, &sbuf);
     if (rc == -1) {
-        qCDebug(app) << "check pkexec existence failed";
+        qCWarning(app) << "pkexec not found at:" << BIN_PKEXEC_PATH;
         ec = errfmt(ec, errno, title, BIN_PKEXEC_PATH);
         return ec;
     }
@@ -336,7 +339,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
     sbuf = {};
     rc = stat(BIN_SYSTEMCTL_PATH, &sbuf);
     if (rc == -1) {
-        qCDebug(app) << "check systemctl existence failed";
+        qCWarning(app) << "systemctl not found at:" << BIN_SYSTEMCTL_PATH;
         ec = errfmt(ec, errno, title, BIN_SYSTEMCTL_PATH);
         return ec;
     }
@@ -347,12 +350,15 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         QString lineStr = file.readLine();
         developerMode = (!lineStr.isEmpty() && lineStr.trimmed() == "1");
     }
+    qCDebug(app) << "Developer mode:" << (developerMode ? "enabled" : "disabled");
+
     QProcess proc;
     proc.setProcessChannelMode(QProcess::MergedChannels);
     // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
     QString action = autoStart ? "enable" : "disable";
     bool useProcess = true;
     if (developerMode) {
+        qCDebug(app) << "Using pkexec for service control";
         proc.start(BIN_PKEXEC_PATH, { BIN_SYSTEMCTL_PATH, action, id });
     } else {
         // Bug 241793 非开发者模式，使用后端DBus服务设置启动方式
@@ -376,26 +382,21 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         proc.waitForFinished(-1);
         auto exitStatus = proc.exitStatus();
 
-        // exitStatus:
-        //      crashed
-        //
-        // exitCode:
-        //      127 (pkexec) - not auth/cant auth/error
-        //      126 (pkexec) - auth dialog dismissed
-        //      0 (systemctl) - ok
-        //      !0 (systemctl) - systemctl error, read stdout from child process
         if (exitStatus == QProcess::CrashExit) {
+            qCWarning(app) << "Process crashed while setting service startup mode";
             errno = 0;
             le = errfmt(le, errno, title, QApplication::translate("Service.Action.Set.Startup.Mode", "Error: Failed to set service startup type due to the crashed sub process."));
             return le;
         } else {
             auto exitCode = proc.exitCode();
             if (exitCode == 127 || exitCode == 126) {
+                qCWarning(app) << "Permission denied while setting service startup mode";
                 errno = EPERM;
                 le = errfmt(le, errno, title);
                 return le;
             } else if (exitCode != 0) {
                 auto buf = proc.readAllStandardOutput();
+                qCWarning(app) << "Failed to set service startup mode. Output:" << buf;
                 errno = 0;
                 le = errfmt(le, errno, title, buf);
                 return le;
@@ -421,6 +422,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
                 auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
                 updateServiceEntry(o.path());
             } else {
+                qCWarning(app) << "Failed to get unit after setting startup mode:" << buf;
                 return le;
             }
         } else {
@@ -433,6 +435,7 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
 
 SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
 {
+    qCDebug(app) << "Updating service entry for path:" << opath;
     ErrorContext ec;
     SystemServiceEntry entry {};
 
@@ -451,7 +454,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     QString id = idResult.second;
     auto sname = id;
     if (ec) {
-        qCDebug(app) << "getId failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get ID for path:" << opath << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         if (sname.endsWith(UnitTypeServiceSuffix)) {
             sname.chop(strlen(UnitTypeServiceSuffix));
@@ -463,7 +466,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto loadStateResult = unitIf.getLoadState();
     ec = loadStateResult.first;
     if (ec) {
-        qCDebug(app) << "getLoadState failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get load state for:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setLoadState(loadStateResult.second);
     }
@@ -471,7 +474,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto activeStateResult = unitIf.getActiveState();
     ec = activeStateResult.first;
     if (ec) {
-        qCDebug(app) << "getActiveState failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get active state for:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setActiveState(activeStateResult.second);
     }
@@ -479,7 +482,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto subStateResult = unitIf.getSubState();
     ec = subStateResult.first;
     if (ec) {
-        qCDebug(app) << "getSubState failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get sub state for:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setSubState(subStateResult.second);
     }
@@ -487,8 +490,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto unitFileStateResult = mgrIf.GetUnitFileState(id);
     ec = unitFileStateResult.first;
     if (ec) {
-        qCDebug(app) << "getUnitFileState failed:" << entry.getId() << ec.getErrorName()
-                     << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get unit file state for:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setState(unitFileStateResult.second);
         entry.setStartupType(ServiceManager::getServiceStartupType(
@@ -499,7 +501,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto descResult = unitIf.getDescription();
     ec = descResult.first;
     if (ec) {
-        qCDebug(app) << "getDescription failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get description for:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setDescription(descResult.second);
     }
@@ -507,7 +509,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto mainPIDResult = svcIf.getMainPID();
     ec = mainPIDResult.first;
     if (ec) {
-        qCDebug(app) << "getMainPID failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to get main PID for:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setMainPID(mainPIDResult.second);
     }
@@ -515,7 +517,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto canStartResult = unitIf.canStart();
     ec = canStartResult.first;
     if (ec) {
-        qCDebug(app) << "canStart failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to check if unit can start:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setCanStart(canStartResult.second);
     }
@@ -523,7 +525,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto canStopResult = unitIf.canStop();
     ec = canStopResult.first;
     if (ec) {
-        qCDebug(app) << "canStop failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to check if unit can stop:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setCanStop(canStopResult.second);
     }
@@ -531,7 +533,7 @@ SystemServiceEntry ServiceManager::updateServiceEntry(const QString &opath)
     auto canReloadResult = unitIf.canReload();
     ec = canReloadResult.first;
     if (ec) {
-        qCDebug(app) << "canReload failed:" << ec.getErrorName() << ec.getErrorMessage();
+        qCWarning(app) << "Failed to check if unit can reload:" << id << "Error:" << ec.getErrorName() << ec.getErrorMessage();
     } else {
         entry.setCanReload(canReloadResult.second);
     }

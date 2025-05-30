@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
             argument >> m_dbusPathList;
         }
     }
+
     initDBus();
     initUI();
     initAni();
@@ -112,17 +113,23 @@ MainWindow::~MainWindow()
 void MainWindow::Toggle()
 {
     if (m_hasComposite) {
-        if (m_aniGroup->state() == QAbstractAnimation::Running)
+        if (m_aniGroup->state() == QAbstractAnimation::Running) {
+            qCDebug(app) << "Animation is running, ignoring toggle request";
             return;
+        }
         if (isVisible()) {
+            qCDebug(app) << "Window is visible, hiding with animation";
             hideAni();
         } else {
+            qCDebug(app) << "Window is hidden, showing with animation";
             showAni();
         }
     } else {
         if (isVisible()) {
+            qCDebug(app) << "Window is visible, hiding without animation";
             hideAni();
         } else {
+            qCDebug(app) << "Window is hidden, showing without animation";
             showAni();
         }
     }
@@ -143,19 +150,24 @@ void MainWindow::geometryChanged()
 void MainWindow::showAni()
 {
     if (m_trickTimer->isActive()) {
+        qCDebug(app) << "Trick timer is active, ignoring show request";
         return;
     }
     //停止计时
     m_processEndTimer->stop();
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     m_trickTimer->start();
+    qCDebug(app) << "Starting show animation with scale:" << scale;
+
     if (!m_hasComposite) {
         int dockPos = DOCK_TOP;
         int displayMode = 0;
         if (m_daemonDockInter->isValid()) {
             dockPos = m_daemonDockInter->property("Position").toInt();
             displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+            qCDebug(app) << "Dock position:" << dockPos << "display mode:" << displayMode;
         }
+
         if (m_daemonDockInter->isValid() && dockPos == DOCK_RIGHT) {
             if (displayMode == 0) {
                 setGeometry(getDisplayScreen().x() + int(std::round(qreal(getDisplayScreen().width())) / scale) - m_rect.width() - m_dockInter->geometry().width() - Globals::WindowMargin - 2 * Globals::DockMargin, m_rect.y(), m_rect.width(), m_rect.height());
@@ -172,8 +184,8 @@ void MainWindow::showAni()
 
         return;
     }
-    setFixedWidth(0);
 
+    setFixedWidth(0);
     show();
     activateWindow();
     m_aniGroup->setDirection(QAbstractAnimation::Backward);
@@ -183,20 +195,24 @@ void MainWindow::showAni()
 void MainWindow::hideAni()
 {
     if (m_trickTimer->isActive()) {
+        qCDebug(app) << "Trick timer is active, ignoring hide request";
         return;
     }
 
     m_trickTimer->start();
     //不再使用开始计时
     m_processEndTimer->start();
+    qCDebug(app) << "Starting hide animation";
 
     if (!m_hasComposite) {
         hide();
+        qCDebug(app) << "Window hidden without animation";
         return;
     }
 
     m_aniGroup->setDirection(QAbstractAnimation::Forward);
     m_aniGroup->start();
+    qCDebug(app) << "Started hide animation";
 
     QTimer::singleShot(m_aniGroup->duration(), this, [=] { setVisible(false); });
 }
@@ -214,15 +230,20 @@ void MainWindow::startLoader()
 void MainWindow::Show()
 {
     if (m_trickTimer->isActive()) {
+        qCDebug(app) << "Trick timer is active, ignoring show request";
         return;
     }
 
     m_trickTimer->start();
+    qCDebug(app) << "Show requested";
 
-    if (m_aniGroup->state() == QAbstractAnimation::Running)
+    if (m_aniGroup->state() == QAbstractAnimation::Running) {
+        qCDebug(app) << "Animation is running, ignoring show request";
         return;
+    }
 
     if (!isVisible()) {
+        qCDebug(app) << "Window is hidden, showing";
         showAni();
     }
 }
@@ -230,15 +251,20 @@ void MainWindow::Show()
 void MainWindow::Hide()
 {
     if (m_trickTimer->isActive()) {
+        qCDebug(app) << "Trick timer is active, ignoring hide request";
         return;
     }
 
     m_trickTimer->start();
+    qCDebug(app) << "Hide requested";
 
-    if (m_aniGroup->state() == QAbstractAnimation::Running)
+    if (m_aniGroup->state() == QAbstractAnimation::Running) {
+        qCDebug(app) << "Animation is running, ignoring hide request";
         return;
+    }
 
     if (isVisible()) {
+        qCDebug(app) << "Window is visible, hiding";
         hideAni();
     }
 }
@@ -265,6 +291,7 @@ void MainWindow::registerMonitor()
         Q_UNUSED(flag);
         if (!geometry().contains(p))
             if (!isHidden()) {
+                qCDebug(app) << "Button press outside window, hiding";
                 hideAni();
             }
     });
@@ -360,8 +387,6 @@ void MainWindow::initConnect()
 
     connect(m_widthAni, &QVariantAnimation::valueChanged, this, [=](const QVariant &value) {
         int width = value.toInt();
-
-        //        move(int(std::round(qreal(m_rect.x() + m_rect.width()  + Globals::WindowMargin - width)) / qApp->primaryScreen()->devicePixelRatio()), m_rect.y());
         move(int(std::round(qreal(m_rect.x() + m_rect.width() + Globals::WindowMargin - width))), m_rect.y());
     });
 
@@ -369,12 +394,14 @@ void MainWindow::initConnect()
     connect(m_watcher, &QDBusServiceWatcher::serviceRegistered, this, [=](const QString &service) {
         if (common::systemInfo().MONITOR_SERVICE != service)
             return;
+        qCDebug(app) << "Monitor service registered";
         registerMonitor();
     });
 
     connect(m_watcher, &QDBusServiceWatcher::serviceUnregistered, this, [=](const QString &service) {
         if (common::systemInfo().MONITOR_SERVICE != service)
             return;
+        qCDebug(app) << "Monitor service unregistered";
         disconnect(m_regionMonitor);
     });
 
@@ -386,7 +413,7 @@ void MainWindow::initConnect()
 
     //5分钟没人使用，结束popup进程
     connect(m_processEndTimer, &QTimer::timeout, this, []() {
-        qCInfo(app) << "time is up! end process!";
+        qCInfo(app) << "Process end timer triggered, ending process";
         QProcess::startDetached(KILL_DBUS_COMMAND);
     });
 }
@@ -464,6 +491,8 @@ void MainWindow::adjustPosition()
     if (m_daemonDockInter->isValid()) {
         int dockPos = m_daemonDockInter->property("Position").toInt();
         int displayMode = m_daemonDockInter->property("DisplayMode").toInt();
+        qCDebug(app) << "Dock position:" << dockPos << "display mode:" << displayMode;
+
         switch (dockPos) {
         case DOCK_TOP:
             rect.moveTop(dockRect.height() + Globals::WindowMargin);
@@ -585,17 +614,19 @@ bool MainWindow::initDBus()
 {
     // 申请一个总线连接
     if (!QDBusConnection::sessionBus().isConnected()) {
+        qCWarning(app) << "Cannot connect to the D-Bus session bus";
         return false;
     }
 
     // 在总线连接上挂载服务，这样其他进程才能请求该服务
     if (!QDBusConnection::sessionBus().registerService(Globals::SERVICE_NAME)) {
+        qCWarning(app) << "Failed to register service:" << Globals::SERVICE_NAME;
         return false;
     }
 
     // 在挂载的服务上注册一个执行服务的对象
     if (!QDBusConnection::sessionBus().registerObject(Globals::SERVICE_PATH, m_systemMonitorDbusAdaptor, QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
-        qCInfo(app) << QDBusConnection::sessionBus().lastError();
+        qCWarning(app) << "Failed to register object:" << QDBusConnection::sessionBus().lastError().message();
         return false;
     }
 

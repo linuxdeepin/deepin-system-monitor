@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "process.h"
+#include "ddlog.h"
 #include "private/process_p.h"
 #include "system/device_db.h"
 #include "process/process_db.h"
@@ -42,6 +43,7 @@ using namespace common::init;
 using namespace common::core;
 using namespace common::error;
 using namespace core::system;
+using namespace DDLog;
 
 namespace core {
 namespace process {
@@ -125,7 +127,6 @@ void Process::readProcessVariableInfo()
 
     bool ok = true;
     ok = ok && readStat();
-//    readEnviron();
     readSchedStat();
     ok = ok && readStatm();
 
@@ -181,7 +182,7 @@ void Process::readProcessSimpleInfo()
 {
     d->valid = true;
     bool ok = true;
-readEnviron();
+    readEnviron();
     ok = ok && readStat();
     ok = ok && readStatus();
     ok = ok && readCmdline();
@@ -293,10 +294,14 @@ bool Process::readStat()
 
     errno = 0;
     sprintf(path, PROC_STAT_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access stat file for process" << d->pid;
+        return !ok;
+    }
         
     // open /proc/[pid]/stat
     if ((fd = open(path, O_RDONLY)) < 0) {
+        qCWarning(app) << "Failed to open stat file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
@@ -305,6 +310,7 @@ bool Process::readStat()
     sz = read(fd, buf.data(), 1024);
     close(fd);
     if (sz < 0) {
+        qCWarning(app) << "Failed to read stat file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
         return !ok;
     }
@@ -316,6 +322,7 @@ bool Process::readStat()
 
     pos = strrchr(buf.data(), ')');
     if (!pos) {
+        qCWarning(app) << "Invalid stat file format for process" << d->pid;
         return !ok;
     }
 
@@ -347,6 +354,7 @@ bool Process::readStat()
                 &d->guest_time, // 43
                 &d->cguest_time); // 44
     if (rc < 15) {
+        qCWarning(app) << "Failed to parse stat file for process" << d->pid << "Parsed fields:" << rc;
         return !ok;
     }
     // have guest & cguest time
@@ -369,18 +377,23 @@ bool Process::readCmdline()
     char *begin, *cur, *end;
 
     sprintf(path, PROC_CMDLINE_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access cmdline file for process" << d->pid;
+        return !ok;
+    }
 
     errno = 0;
     // open /proc/[pid]/cmdline
     uFile fp(fopen(path, "r"));
     if (!fp) {
+        qCWarning(app) << "Failed to open cmdline file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
 
     nb = fread(cmd.data(), 1, bsiz - 1, fp.get());
     if (ferror(fp.get())) {
+        qCWarning(app) << "Failed to read cmdline file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
         return !ok;
     }
@@ -417,12 +430,16 @@ void Process::readEnviron()
     int fd;
 
     sprintf(path, PROC_ENVIRON_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access environment file for process" << d->pid;
+        return;
+    }
 
     errno = 0;
     // open /proc/[pid]/environ
     fd = open(path, O_RDONLY);
     if (fd < 0) {
+        qCWarning(app) << "Failed to open environment file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return;
     }
@@ -434,6 +451,7 @@ void Process::readEnviron()
     close(fd);
 
     if (nb == 0 && errno != 0) {
+        qCWarning(app) << "Failed to read environment file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
         return;
     }
@@ -447,7 +465,7 @@ void Process::readEnviron()
                 d->environ[kvp[0]] = kvp[1];
             }
         }
-    } // ::if(sbuf)
+    }
 }
 
 // read /proc/[pid]/schedstat
@@ -462,11 +480,15 @@ void Process::readSchedStat()
 
     buf.reserve(bsiz);
     sprintf(path, PROC_SCHEDSTAT_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access schedstat file for process" << d->pid;
+        return;
+    }
 
     errno = 0;
     // open /proc/[pid]/schedstat
     if ((fd = open(path, O_RDONLY)) < 0) {
+        qCWarning(app) << "Failed to open schedstat file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return;
     }
@@ -475,6 +497,7 @@ void Process::readSchedStat()
     close(fd);
 
     if (n < 0) {
+        qCWarning(app) << "Failed to read schedstat file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
         return;
     }
@@ -483,6 +506,8 @@ void Process::readSchedStat()
     rc = sscanf(buf.data(), "%*u %llu %*d", &wtime);
     if (rc == 1) {
         d->wtime = wtime * HZ / 1000000000;
+    } else {
+        qCWarning(app) << "Failed to parse schedstat file for process" << d->pid;
     }
 }
 
@@ -496,12 +521,16 @@ bool Process::readStatus()
 
     buf.reserve(bsiz);
     sprintf(path, PROC_STATUS_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access status file for process" << d->pid;
+        return !ok;
+    }
 
     errno = 0;
     uFile fp(fopen(path, "r"));
     // open /proc/[pid]/status
     if (!fp) {
+        qCWarning(app) << "Failed to open status file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
@@ -525,9 +554,10 @@ bool Process::readStatus()
                    &d->sgid,
                    &d->fgid);
         }
-    } // ::while(fgets)
+    }
 
     if (ferror(fp.get())) {
+        qCWarning(app) << "Failed to read status file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
         return !ok;
     }
@@ -545,11 +575,15 @@ bool Process::readStatm()
     ssize_t nr;
 
     sprintf(path, PROC_STATM_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return !ok;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access statm file for process" << d->pid;
+        return !ok;
+    }
 
     errno = 0;
     // open /proc/[pid]/statm
     if ((fd = open(path, O_RDONLY)) < 0) {
+        qCWarning(app) << "Failed to open statm file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
@@ -557,6 +591,7 @@ bool Process::readStatm()
     nr = read(fd, buf, bsiz);
     close(fd);
     if (nr < 0) {
+        qCWarning(app) << "Failed to read statm file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
         return !ok;
     }
@@ -568,6 +603,7 @@ bool Process::readStatm()
         d->vmsize = 0;
         d->rss = 0;
         d->shm = 0;
+        qCWarning(app) << "Failed to parse statm file for process" << d->pid;
         print_errno(errno, QString("read %1 failed").arg(path));
     } else {
         // convert to kB
@@ -585,12 +621,16 @@ void Process::readIO()
     char path[128], buf[bsiz];
 
     sprintf(path, PROC_IO_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access IO file for process" << d->pid;
+        return;
+    }
 
     errno = 0;
     // open /proc/[pid]/io
     uFile fp(fopen(path, "r"));
     if (!fp) {
+        qCWarning(app) << "Failed to open IO file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return;
     }
@@ -604,8 +644,9 @@ void Process::readIO()
         } else if (!strncmp(buf, "cancelled_write_bytes", 21)) {
             sscanf(buf + 23, "%llu", &d->cancelled_write_bytes);
         }
-    } // ::while(fgets)
+    }
     if (ferror(fp.get())) {
+        qCWarning(app) << "Failed to read IO file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
     }
 }
@@ -618,12 +659,16 @@ void Process::readSockInodes()
     struct stat sbuf;
 
     sprintf(path, PROC_FD_PATH, d->pid);
-    if(access(path, R_OK) != 0)    return;     /* no such dirent (anymore) */
+    if(access(path, R_OK) != 0) {
+        qCWarning(app) << "Cannot access fd directory for process" << d->pid;
+        return;
+    }
 
     errno = 0;
     // open /proc/[pid]/fd dir
     uDir dir(opendir(path));
     if (!dir) {
+        qCWarning(app) << "Failed to open fd directory for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("open %1 failed").arg(path));
         return;
     }

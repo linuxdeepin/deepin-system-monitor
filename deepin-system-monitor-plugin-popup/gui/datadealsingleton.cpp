@@ -93,7 +93,6 @@ bool DataDealSingleton::readDiskInfo(QString &diskRead, QString &diskTotalSize, 
     qulonglong totalDiskAva = 0;
     for (int i = 0; i < infoDB.size(); ++i) {
         mapInfo.insert(infoDB[i].deviceName(), infoDB[i]);
-
         totalDiskAva += infoDB[i].capacity();
     }
 
@@ -107,6 +106,7 @@ bool DataDealSingleton::sendJumpWidgetMessage(const QString &dbusMessage)
 {
     //1000ms内重复点击,不响应
     if (m_popupTrickTimer->isActive()) {
+        qCDebug(app) << "Popup timer is active, ignoring request";
         return false;
     }
     m_popupTrickTimer->start();
@@ -118,6 +118,7 @@ bool DataDealSingleton::sendJumpWidgetMessage(const QString &dbusMessage)
     } else {
         rt = launchMainProcessByAM();
     }
+
     if (true == rt) {
         //2.跳转DBUS
         QTimer::singleShot(POPUP_WAITING_TIME, this, [=]() {
@@ -152,10 +153,10 @@ bool DataDealSingleton::launchMainProcessByAM() const
 
     QDBusMessage reply = QDBusConnection::sessionBus().call(message);
     if (reply.type() == QDBusMessage::ReplyMessage) {
-        qCDebug(app) << "Method call successful!";
+        qCDebug(app) << "Successfully launched main process via AM";
         return true;
     } else {
-        qCWarning(app) << "Launch deepin-system-monitor main process error:" << reply.errorMessage();
+        qCWarning(app) << "Failed to launch main process via AM:" << reply.errorMessage();
         return false;
     }
 }

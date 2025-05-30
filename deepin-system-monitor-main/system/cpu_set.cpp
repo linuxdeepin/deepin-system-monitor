@@ -316,10 +316,12 @@ CPUSet::CPUSet()
     : d(new CPUSetPrivate())
 {
 }
+
 CPUSet::CPUSet(const CPUSet &other)
     : d(other.d)
 {
 }
+
 CPUSet &CPUSet::operator=(const CPUSet &rhs)
 {
     if (this == &rhs)
@@ -490,9 +492,9 @@ void CPUSet::read_stats()
     int nr;
 
     if (!(fp = fopen(PROC_PATH_STAT, "r"))) {
-        print_errno(errno, QString("open %1 failed").arg(PROC_PATH_STAT));
+        qCWarning(app) << "Failed to open" << PROC_PATH_STAT << ":" << strerror(errno);
         return;
-    }   // ::if(fopen)
+    }
     fPtr.reset(fp);
 
     while (fgets(line.data(), BUFSIZ, fp)) {
@@ -530,10 +532,11 @@ void CPUSet::read_stats()
                         d->m_usage->cpu = cpu;
                         d->m_usage->total = d->m_stat->user + d->m_stat->nice + d->m_stat->sys + d->m_stat->idle + d->m_stat->iowait + d->m_stat->hardirq + d->m_stat->softirq + d->m_stat->steal;
                         d->m_usage->idle = d->m_stat->idle + d->m_stat->iowait;
-                    }   // ::if(usage)
-                } else
-                    print_errno(errno, QString("read %1 failed, cpu").arg(PROC_PATH_STAT));
-            }   // ::if(m_stat)
+                    }
+                } else {
+                    qCWarning(app) << "Failed to parse CPU stats from" << PROC_PATH_STAT;
+                }
+            }
         } else if (!strncmp(line.data(), "cpu", 3)) {
             // per cpu stat in jiffies
             auto stat = std::make_shared<struct cpu_stat_t>();
@@ -568,16 +571,14 @@ void CPUSet::read_stats()
 
                         d->m_statDB[stat->cpu] = stat;
                         d->m_usageDB[usage->cpu] = usage;
-                    }   //::if(usage)
-
-                } else
-                    print_errno(errno, QString("read %1 failed, cpu%2").arg(PROC_PATH_STAT).arg(ncpu));
-            }   // ::if(stat)
+                    }
+                } else {
+                    qCWarning(app) << "Failed to parse CPU" << ncpu << "stats from" << PROC_PATH_STAT;
+                }
+            }
         } else if (!strncmp(line.data(), "btime", 5)) {
             // read boot time in seconds since epoch
-            struct timeval btime
-            {
-            };
+            struct timeval btime {};
             long nsec {};
             int nm = sscanf(line.data() + 5, "%ld", &nsec);
             if (nm == 1) {
@@ -591,8 +592,9 @@ void CPUSet::read_stats()
         }   // ::if(btime)
     }   // ::while(fgets)
 
-    if (ferror(fp))
-        print_errno(errno, QString("read %1 failed").arg(PROC_PATH_STAT));
+    if (ferror(fp)) {
+        qCWarning(app) << "Error reading" << PROC_PATH_STAT << ":" << strerror(errno);
+    }
 }
 
 void CPUSet::read_overall_info()
@@ -679,11 +681,11 @@ void CPUSet::read_dmi_cache_info()
     //(specialComType>=1)如果是hw机型,略过之前的判断
     qCInfo(app) << "common::specialComType value is:" << specialComType;
     if (specialComType == 0) {
+        qCDebug(app) << "Skipping DMI cache info for non-special computer type";
         return;
     } else if (specialComType <= -1) {
-        qCInfo(app) << "use dmidecode check board type!";
-        process.start("dmidecode", QStringList() << "-s"
-                                                 << "system-product-name");
+        qCInfo(app) << "Using dmidecode to check board type";
+        process.start("dmidecode", QStringList() << "-s" << "system-product-name");
         process.waitForFinished(-1);
         QString spnInfo = process.readAllStandardOutput();
         if (!spnInfo.contains("KLVV", Qt::CaseInsensitive) && !spnInfo.contains("L540", Qt::CaseInsensitive) && !spnInfo.contains("KLVU", Qt::CaseInsensitive)
@@ -703,14 +705,14 @@ void CPUSet::read_dmi_cache_info()
             if (!result.contains("PWC30", Qt::CaseInsensitive)   //w525
                 && !result.contains("PGUX", Qt::CaseInsensitive)) {
                 process.close();
+                qCDebug(app) << "Not a special computer type, skipping DMI cache info";
                 return;
             }
         }
     }
-    qCInfo(app) << "Current is special computer type!";
+    qCInfo(app) << "Processing DMI cache info for special computer type";
 
-    process.start("dmidecode", QStringList() << "-t"
-                                             << "cache");
+    process.start("dmidecode", QStringList() << "-t" << "cache");
     process.waitForFinished(-1);
     QString cacheinfo = process.readAllStandardOutput();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -720,6 +722,7 @@ void CPUSet::read_dmi_cache_info()
 #endif
     process.close();
 
+    qCDebug(app) << "Found" << caches.size() << "cache entries in DMI information";
     QList<QMap<QString, QString>> mapInfos;
     foreach (const QString &item, caches) {
         if (item.isEmpty())
@@ -797,7 +800,7 @@ void CPUSet::read_lscpu()
     struct lscpu_cxt *cxt;   // CPU信息
     cxt = reinterpret_cast<struct lscpu_cxt *>(xcalloc(1, sizeof(struct lscpu_cxt)));   // 初始化信息
     if (!cxt) {
-        qCWarning(app) << __FUNCTION__ << " lscpu_cxt Init Faild!";
+        qCWarning(app) << "Failed to initialize lscpu context";
         return;
     }
     /* set default cpu display mode if none was specified */
@@ -808,16 +811,18 @@ void CPUSet::read_lscpu()
 
     cxt->syscpu = ul_new_path(_PATH_SYS_CPU);
     if (!cxt->syscpu) {
-        qCWarning(app) << __FUNCTION__ << "failed to initialize CPUs sysfs handler";
+        qCWarning(app) << "Failed to initialize CPUs sysfs handler";
         return;
     }
+
     if (cxt->prefix)
         ul_path_set_prefix(cxt->syscpu, cxt->prefix);
     cxt->procfs = ul_new_path("/proc");
     if (!cxt->procfs) {
-        qCWarning(app) << __FUNCTION__ << "failed to initialize procfs handler!";
+        qCWarning(app) << "Failed to initialize procfs handler";
         return;
     }
+
     if (cxt->prefix)
         ul_path_set_prefix(cxt->procfs, cxt->prefix);
 
@@ -978,7 +983,7 @@ void CPUSet::read_lscpu()
             d->m_info.insert("Flags", ct->flags);
         }
     } else {
-        qCWarning(app) << __FUNCTION__ << "ct init failed!";
+        qCWarning(app) << "Failed to get CPU type information";
         return;
     }
 

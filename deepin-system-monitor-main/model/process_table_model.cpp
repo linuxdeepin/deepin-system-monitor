@@ -23,8 +23,8 @@ ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
     : QAbstractTableModel(parent)
 {
     setUserModeName(username);
-    qCInfo(app) << "ProcessTableModel Constructor line 41:"
-                << "new model with name" << username;
+    qCInfo(app) << "Initializing ProcessTableModel for user:" << username;
+    
     //update model's process list cache on process list updated signal
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
     connect(monitor, &SystemMonitor::statInfoUpdated, this, &ProcessTableModel::updateProcessList);
@@ -85,7 +85,6 @@ void ProcessTableModel::updateProcessList()
 
 void ProcessTableModel::updateProcessListWithUserSpecified()
 {
-
     ProcessSet *processSet = ProcessDB::instance()->processSet();
     const QList<pid_t> &newpidlst = processSet->getPIDList();
     beginRemoveRows({}, 0, m_procIdList.size());
@@ -391,39 +390,51 @@ int ProcessTableModel::getProcessPriorityValue(pid_t pid) const
 // remove process entry from model with specified pid
 void ProcessTableModel::removeProcess(pid_t pid)
 {
-    qCWarning(app) << m_procIdList.count() << "1";
+    qCInfo(app) << "Removing process with PID:" << pid;
     int row = m_procIdList.indexOf(pid);
     if (row >= 0) {
         beginRemoveRows(QModelIndex(), row, row);
         m_procIdList.removeAt(row);
         m_processList.removeAt(row);
         endRemoveRows();
+        qCInfo(app) << "Process removed successfully";
+    } else {
+        qCWarning(app) << "Failed to remove process: PID" << pid << "not found";
     }
 }
 
 // update the state of the process entry with specified pid
 void ProcessTableModel::updateProcessState(pid_t pid, char state)
 {
+    qCInfo(app) << "Updating process state. PID:" << pid << "New state:" << state;
     int row = m_procIdList.indexOf(pid);
     if (row >= 0) {
         m_processList[row].setState(state);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
+        qCInfo(app) << "Process state updated successfully";
+    } else {
+        qCWarning(app) << "Failed to update process state: PID" << pid << "not found";
     }
 }
 
 // update priority of the process entry with specified pid
 void ProcessTableModel::updateProcessPriority(pid_t pid, int priority)
 {
+    qCInfo(app) << "Updating process priority. PID:" << pid << "New priority:" << priority;
     int row = m_procIdList.indexOf(pid);
     if (row >= 0) {
         m_processList[row].setPriority(priority);
         Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
+        qCInfo(app) << "Process priority updated successfully";
+    } else {
+        qCWarning(app) << "Failed to update process priority: PID" << pid << "not found";
     }
 }
 
 void ProcessTableModel::setUserModeName(const QString &userName)
 {
     if (userName != m_userModeName) {
+        qCInfo(app) << "Changing user mode from" << m_userModeName << "to" << userName;
         m_userModeName = userName;
         updateProcessListWithUserSpecified();
     }

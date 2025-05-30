@@ -37,7 +37,7 @@ void SystemMonitorTipsWidget::setSystemMonitorTipsText(QStringList strList)
         else if (i == 3)
             upLoad = m_textList.at(i);
         else
-            qCDebug(app) << "do not set the text";
+            qCWarning(app) << "Invalid text list index:" << i;
     }
 
     // 设置左侧字符串宽度
@@ -121,7 +121,7 @@ void SystemMonitorTipsWidget::paintEvent(QPaintEvent *event)
         else if (i == 3)
             upLoad = m_textList.at(i);
         else
-            qCDebug(app) << "do not set the text";
+            qCWarning(app) << "Invalid text list index during paint:" << i;
     }
 
     // 当没有数据更新时，设置默认的悬浮框内容
@@ -198,6 +198,7 @@ bool SystemMonitorTipsWidget::event(QEvent *event)
 {
     // 字体切换事件捕捉，当前获取到字体切换信号时，更新当前的悬浮框界面
     if (event->type() == QEvent::FontChange) {
+        qCDebug(app) << "Font changed, updating tips widget";
         if (m_textList.size() > 0)
             setSystemMonitorTipsText(m_textList);
         else
@@ -206,8 +207,10 @@ bool SystemMonitorTipsWidget::event(QEvent *event)
                                                    << "0KB/s"
                                                    << "0KB/s");
     } else if (event->type() == QEvent::Hide) {
+        qCDebug(app) << "Tips widget hidden";
         Q_EMIT visibleChanged(false);
     } else if (event->type() == QEvent::Show) {
+        qCDebug(app) << "Tips widget shown";
         Q_EMIT visibleChanged(true);
     }
 

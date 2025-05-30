@@ -68,7 +68,7 @@ void DiskIOInfo::readDiskIOStats()
     };
 
     if ((fp = fopen(PROC_PATH_DISK, "r")) == nullptr) {
-        print_errno(errno, QString("open %1 failed").arg(PROC_PATH_DISK));
+        qCWarning(app) << "Failed to open" << PROC_PATH_DISK << ":" << strerror(errno);
         return;
     }
 
@@ -104,7 +104,7 @@ void DiskIOInfo::readDiskIOStats()
     b = !ferror(fp) && b;
     fclose(fp);
     if (!b) {
-        print_errno(errno, QString("read %1 failed").arg(PROC_PATH_DISK));
+        qCWarning(app) << "Failed to read disk I/O statistics from" << PROC_PATH_DISK << ":" << strerror(errno);
     }
 }
 

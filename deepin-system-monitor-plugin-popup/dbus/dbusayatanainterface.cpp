@@ -5,12 +5,15 @@
 
 #include "dbusayatanainterface.h"
 #include "gui/datadealsingleton.h"
+#include "ddlog.h"
 
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDebug>
 #include <QFile>
+
+using namespace DDLog;
 
 // 以下这个问题可以避免单例的内存泄露问题
 std::atomic<DBusAyatanaInterface *> DBusAyatanaInterface::s_Instance;
@@ -39,8 +42,10 @@ void DBusAyatanaInterface::slotActiveApplicationChanged(QString path, QString ap
         QFile file(DEEPIN_AI_ASSISTANT_PATH);
         //判断路径文件是否存在
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qCWarning(DDLog::app) << "Failed to open AI assistant desktop file:" << file.errorString();
             return;
         }
+        
         QTextStream in(&file);
         QStringList nameList;
 
@@ -55,6 +60,7 @@ void DBusAyatanaInterface::slotActiveApplicationChanged(QString path, QString ap
             }
         }
         file.close();
+        
         // 判断文件是否包含指定字符串
         foreach (QString name, nameList) {
             if (name == reply.value()) {
@@ -69,9 +75,7 @@ void DBusAyatanaInterface::init()
 {
     // 1. 连接到dbus
     if (!QDBusConnection::sessionBus().isConnected()) {
-        fprintf(stderr, "Cannot connect to the D-Bus session bus./n"
-                "To start it, run:/n"
-                "/teval `dbus-launch --auto-syntax`/n");
+        qCWarning(app) << "Cannot connect to the D-Bus session bus. To start it, run: eval `dbus-launch --auto-syntax`";
     }
 
     // 2. create interface
