@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "process_table_view.h"
+#include "ddlog.h"
 
 #include "application.h"
 
@@ -45,6 +46,8 @@
 #include <QKeyEvent>
 #include <QShortcut>
 
+using namespace DDLog;
+
 // process table view backup setting key
 const QByteArray header_version = "_1.0.0";
 
@@ -75,7 +78,6 @@ ProcessTableView::ProcessTableView(DWidget *parent)
 #endif
 
     this->setAttribute(Qt::WA_TranslucentBackground, true);
-
     setHeaderHidden(true);
 }
 
@@ -116,14 +118,17 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 // filter process table based on searched text
 void ProcessTableView::search(const QString &text)
 {
+    qCDebug(app) << "Searching with text:" << text;
     m_proxyModel->setSortFilterString(text);
     // adjust search result tip label's visibility & position if needed
     adjustInfoLabelVisibility();
+    qCDebug(app) << "Search completed, adjusted label visibility";
 }
 
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
+    qCDebug(app) << "Switching display mode to:" << type;
     m_proxyModel->setFilterType(type);
 }
 
@@ -196,6 +201,7 @@ void ProcessTableView::initConnections()
     connect(m_model, &ProcessTableModel::modelUpdated, this, [&]() {
         adjustInfoLabelVisibility();
         if (m_selectedPID.isValid()) {
+            qCDebug(app) << "Restoring selection for PID:" << m_selectedPID;
             for (int i = 0; i < m_proxyModel->rowCount(); i++) {
                 if (m_proxyModel->data(m_proxyModel->index(i, ProcessTableModel::kProcessPIDColumn),
                                        Qt::UserRole) == m_selectedPID)

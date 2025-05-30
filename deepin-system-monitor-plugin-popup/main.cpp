@@ -24,6 +24,7 @@ using namespace DDLog;
 
 int main(int argc, char *argv[])
 {
+    qCInfo(app) << "Starting deepin-system-monitor-plugin-popup application";
 #ifdef DTKCORE_CLASS_DConfigFile
     MLogger();   // 日志处理要放在app之前，否则QApplication
             // 内部可能进行了日志打印，导致环境变量设置不生效
@@ -41,19 +42,20 @@ int main(int argc, char *argv[])
 
     // 前置wayland环境变量
     if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+        qCDebug(app) << "Wayland display detected, setting Wayland platform";
         qputenv("QT_QPA_PLATFORM", "wayland");
         qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    qCDebug(app) << "Setting Qt5 specific GUI attributes";
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DGuiApplicationHelper::setColorCompositingEnabled(true);
 #else
+    qCDebug(app) << "Setting Qt6 specific GUI attributes";
     DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
     DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::ColorCompositing, true);
 #endif
-
-    //    DApplication *app = DApplication::globalApplication(argc, argv);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -67,7 +69,7 @@ int main(int argc, char *argv[])
     ac.setApplicationVersion("1.0");
 
     if (!DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor-plugin-popup"))) {
-        qCDebug(app) << "set single instance failed!";
+        qCWarning(app) << "Failed to set single instance, another instance may be running";
         return -1;
     }
 
@@ -76,13 +78,17 @@ int main(int argc, char *argv[])
     MainWindow w;
     gApp->setMainWindow(&w);
 
+    qCDebug(app) << "Checking DBus interface";
     QDBusInterface interface("com.deepin.SystemMonitorPluginPopup", "/com/deepin/SystemMonitorPluginPopup",
                              "com.deepin.SystemMonitorPluginPopup",
                              QDBusConnection::sessionBus());
     if (!interface.isValid()) {
-        qCDebug(app) << "start loader...";
+        qCDebug(app) << "DBus interface not found, starting loader";
         w.startLoader();
+    } else {
+        qCDebug(app) << "DBus interface found, skipping loader";
     }
+
 #ifdef QT_DEBUG
     w.showAni();
 #endif

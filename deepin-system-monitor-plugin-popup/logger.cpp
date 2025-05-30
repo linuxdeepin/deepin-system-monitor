@@ -31,9 +31,11 @@ MLogger::MLogger(QObject *parent)
 
     // watch dconfig
     connect(m_config, &DConfig::valueChanged, this, [this](const QString &key) {
-        qCCritical(app) << "value changed:" << key;
+        qCDebug(app) << "DConfig value changed for key:" << key;
         if (key == "log_rules") {
-            setRules(m_config->value(key).toByteArray());
+            QByteArray newRules = m_config->value(key).toByteArray();
+            qCDebug(app) << "New log rules from DConfig:" << newRules;
+            setRules(newRules);
         }
     });
 }

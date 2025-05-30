@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "process.h"
+#include "ddlog.h"
 #include "process/private/process_p.h"
 #include "system/device_db.h"
 #include "process/process_db.h"
@@ -42,6 +43,7 @@ using namespace common::init;
 using namespace common::core;
 using namespace common::error;
 using namespace core::system;
+using namespace DDLog;
 
 namespace core {
 namespace process {
@@ -86,15 +88,18 @@ Process::Process()
 {
 
 }
+
 Process::Process(pid_t pid)
     : d(new ProcessPrivate())
 {
     d->pid = pid;
 }
+
 Process::Process(const Process &other)
     : d(other.d)
 {
 }
+
 Process &Process::operator=(const Process &rhs)
 {
     if (this == &rhs)
@@ -202,7 +207,7 @@ bool Process::readStat()
     sprintf(path, PROC_STAT_PATH, d->pid);
     // open /proc/[pid]/stat
     if ((fd = open(path, O_RDONLY)) < 0) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return !ok;
     }
 
@@ -210,7 +215,7 @@ bool Process::readStat()
     sz = read(fd, buf.data(), 1024);
     close(fd);
     if (sz < 0) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return !ok;
     }
     buf.data()[sz] = '\0';
@@ -221,6 +226,7 @@ bool Process::readStat()
 
     pos = strrchr(buf.data(), ')');
     if (!pos) {
+        qCWarning(app) << "Failed to find process name in stat file";
         return !ok;
     }
 
@@ -252,6 +258,7 @@ bool Process::readStat()
                 &d->guest_time, // 43
                 &d->cguest_time); // 44
     if (rc < 15) {
+        qCWarning(app) << "Failed to parse stat file, got" << rc << "fields";
         return !ok;
     }
     // have guest & cguest time
@@ -279,13 +286,13 @@ bool Process::readCmdline()
     // open /proc/[pid]/cmdline
     uFile fp(fopen(path, "r"));
     if (!fp) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return !ok;
     }
 
     nb = fread(cmd.data(), 1, bsiz - 1, fp.get());
     if (ferror(fp.get())) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return !ok;
     }
 
@@ -326,7 +333,7 @@ void Process::readEnviron()
     // open /proc/[pid]/environ
     fd = open(path, O_RDONLY);
     if (fd < 0) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return;
     }
 
@@ -337,7 +344,7 @@ void Process::readEnviron()
     close(fd);
 
     if (nb == 0 && errno != 0) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return;
     }
 
@@ -369,7 +376,7 @@ void Process::readSchedStat()
     errno = 0;
     // open /proc/[pid]/schedstat
     if ((fd = open(path, O_RDONLY)) < 0) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return;
     }
 
@@ -377,7 +384,7 @@ void Process::readSchedStat()
     close(fd);
 
     if (n < 0) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return;
     }
 
@@ -403,7 +410,7 @@ bool Process::readStatus()
     uFile fp(fopen(path, "r"));
     // open /proc/[pid]/status
     if (!fp) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return !ok;
     }
 
@@ -429,7 +436,7 @@ bool Process::readStatus()
     } // ::while(fgets)
 
     if (ferror(fp.get())) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return !ok;
     }
 
@@ -450,14 +457,14 @@ bool Process::readStatm()
     errno = 0;
     // open /proc/[pid]/statm
     if ((fd = open(path, O_RDONLY)) < 0) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return !ok;
     }
 
     nr = read(fd, buf, bsiz);
     close(fd);
     if (nr < 0) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
         return !ok;
     }
 
@@ -468,7 +475,7 @@ bool Process::readStatm()
         d->vmsize = 0;
         d->rss = 0;
         d->shm = 0;
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to parse statm file for PID" << pid();
     } else {
         // convert to kB
         d->vmsize <<= kb_shift;
@@ -490,7 +497,7 @@ void Process::readIO()
     // open /proc/[pid]/io
     uFile fp(fopen(path, "r"));
     if (!fp) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return;
     }
 
@@ -505,7 +512,7 @@ void Process::readIO()
         }
     } // ::while(fgets)
     if (ferror(fp.get())) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
     }
 }
 
@@ -522,7 +529,7 @@ void Process::readSockInodes()
     // open /proc/[pid]/fd dir
     uDir dir(opendir(path));
     if (!dir) {
-        print_errno(errno, QString("open %1 failed").arg(path));
+        qCWarning(app) << "Failed to open" << path << ":" << strerror(errno);
         return;
     }
 
@@ -544,7 +551,7 @@ void Process::readSockInodes()
         } // ::if(isdigit)
     } // ::while(readdir)
     if (errno) {
-        print_errno(errno, QString("read %1 failed").arg(path));
+        qCWarning(app) << "Failed to read" << path << ":" << strerror(errno);
     }
 }
 
