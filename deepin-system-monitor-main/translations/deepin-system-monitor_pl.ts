@@ -835,7 +835,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Zawieszony</translation>
+        <translation>Wstrzymany</translation>
     </message>
     <message>
         <source>Tray</source>
@@ -961,7 +961,7 @@ Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Wyświetlaj ostrzeżenia, gdy użycie przekracza progi</translation>
+        <translation>Wyświetl ostrzeżenia, gdy użycie przekroczy próg</translation>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>

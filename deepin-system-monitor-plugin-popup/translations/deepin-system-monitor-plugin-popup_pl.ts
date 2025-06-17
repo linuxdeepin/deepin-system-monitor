@@ -187,7 +187,7 @@
     <message>
         <location filename="../model/process_table_model.cpp" line="180"/>
         <source>Suspend</source>
-        <translation>Zawieszony</translation>
+        <translation>Wstrzymany</translation>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="96"/>
