@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.17) unstable; urgency=medium
+
+  * chore: Update CMakeLists.txt with additional compile flags
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 18 Jun 2025 17:30:37 +0800
+
 deepin-system-monitor (6.5.16) unstable; urgency=medium
 
   * Add compile flags
