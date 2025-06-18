@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.15) unstable; urgency=medium
+
+  * update dman's resources
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 18 Jun 2025 13:35:54 +0800
+
 deepin-system-monitor (6.5.14) unstable; urgency=medium
 
   * Fix high dpi dislpay issue.
