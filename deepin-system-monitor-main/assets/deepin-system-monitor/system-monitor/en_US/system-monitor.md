@@ -22,17 +22,13 @@ Click ![icon_menu](../common/icon_menu.svg)> **View** in the System Monitor inte
 | Network | Display the upload and download speed of the current network in real-time |
 | Disk    | Display the reading and writing speed in the current disk which is only in "Compact" view |
 
-![1|monitor](fig/expand.png)
-
-![1|monitor](fig/compact.png)
-
 #### View Hardware Info
 
 You can view the detailed hardware info in one of the following ways:
 
 - In the **Process** tab on the System Monitor interface, click the CPU, Memory, Network or Disk area on the left, the corresponding details will be displayed on the right.
 - In the **Process** tab on the System Monitor interface, click the **Details** icon on the left and the detailed CPU info will be displayed on the right by default. Click the ![down](../common/nextdown.svg) icon besides CPU to expand the drop-down list and view the detailed info on memory, network or disk.
-- Go to **Control Center > Personalization > Dock** and check **System Monitor** in the **Plugin Area** and the System Monitor icon ![icon](../common/system_monitor.svg) will be displayed in the Dock. Hover the mouse pointer over the icon, CPU, Memory and network upload and download info will be displayed. Click the icon to view the CPU, network, memory, disk and process information of the computer in the pop-up interface. Double-click the monitored area to view the detailed information of the corresponding module in System Monitor.
+- Go to **Control Center > Personalization > Dock** and check **System Monitor** in the **Plugin Area** and the System Monitor icon ![icon](../common/system_monitor.svg) will be displayed in the Dock. Hover the mouse pointer over the icon, CPU, Memory and network upload and download info will be displayed. Click the icon to run System Monitor.
 
 > ![notes](../common/notes.svg) Notes: On the System Monitor interface, click **Details** and then click the ![icon](../common/change.svg) icon to view the individual or overall information of CPU. Click **Hide details** to compact the detailed info.
 
@@ -48,7 +44,7 @@ Click the top right tabs on the System Monitoring interface to view **Applicatio
 - Click ![user](fig/my_process.png) to switch to **My processes**. 
 - Click ![all](fig/all_process.png) to switch to **All processes**.
 
-![1|monitor](fig/tab_switch.png)
+![1|sort](fig/tab.png)
 
 #### Adjust Process Order
 
@@ -86,8 +82,6 @@ System Monitor can be used to end processes.
 1. On the System Monitor interface, right-click the process you want to suspend.
 2. Select **Suspend process**. The process will be tagged with **(Suspend)** and turned red in the list. 
 3. Right-click it again and select **Resume process** to resume it.
-
-![1|pause](fig/suspend.png)
 
 #### Change Process Priority 
 
@@ -139,8 +133,6 @@ You can also right-click a system process and select **Restart**.
 On the "Users" tab, you can view the names and types of logged-in user accounts. After selecting an account, you can:
 - Right-click and select **Edit account information** to modify the account info in the Accounts window of Control Center.
 - View all processes under the account on the right, and right-click a process to end or suspend it, change its priority, etc.
-
-![user](fig/user.png)
 
 ## Main Menu
 
