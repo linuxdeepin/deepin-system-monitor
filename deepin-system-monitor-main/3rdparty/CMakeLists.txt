@@ -118,4 +118,8 @@ set(HEADER
 
 set(CMAKE_C_STANDARD 99)
 
+# 添加 PIC 标志确保位置无关代码，特别是在 aarch64 架构上
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
+
 add_executable(untitled lscpu.c ${MARTCOLS} ${HEADER} ${CFILE})
