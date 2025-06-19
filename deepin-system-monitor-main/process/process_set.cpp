@@ -176,8 +176,19 @@ void ProcessSet::scanProcess()
                 // when we start app with deepin-terminal, we should skip setting apptype as CurrentUser
                 const Process parentProc = getProcessById(m_pidCtoPMapping[pid]);
                 QString parentCmdLineString = parentProc.cmdlineString();
-                if (parentCmdLineString == QString("/bin/bash")) {
-                    continue;
+
+                /* 通过窗管接口获取到玲珑版本浏览器，wid 对应的 pid
+                 * 与玲珑浏览器本身的 pid 不一致，GuiApps 变量里
+                 * 没有该浏览器进程，因此进入到了这段代码被覆写了 appType 变量。
+                 * 而这段代码本身用于对“应用列表”内的浏览器进程进行去重，
+                 * 下面的代码原本条件是 ==，用于处理另一个 Bug
+                 * https://pms.uniontech.com/zentao/bug-view-82161.html
+                 * 此处兼容沿用该代码，放宽一点判定条件，改为 contains
+                 * 进行判定。玲珑应用也是通过 /bin/bash 启动的，因此需要
+                 * 兼容。
+                 */
+                if (parentCmdLineString.contains(QString("/bin/bash"))) {
+                  continue;
                 }
 
                 m_set[pid].setAppType(kFilterCurrentUser);
