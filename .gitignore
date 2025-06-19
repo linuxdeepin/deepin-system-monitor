@@ -11,3 +11,4 @@ config.h
 .cursorindexingignore
 .cursor
 .specstory
+.cache
