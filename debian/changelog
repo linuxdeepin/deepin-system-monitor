@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.19) unstable; urgency=medium
+
+  * fix: Update deepin-manual resources
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Mon, 23 Jun 2025 14:35:35 +0800
+
 deepin-system-monitor (6.5.18) unstable; urgency=medium
 
   * chore: New version 6.5.18.
