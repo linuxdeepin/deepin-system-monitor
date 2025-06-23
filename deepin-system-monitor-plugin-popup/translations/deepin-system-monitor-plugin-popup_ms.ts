@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ms">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ms">
 <context>
     <name>Common.Search</name>
     <message>
@@ -21,6 +19,8 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
         <translation>Penggunaan</translation>
     </message>
@@ -52,6 +52,7 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
         <translation>Silih</translation>
     </message>
@@ -71,12 +72,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="272"/>
         <source>Total received</source>
-        <translation>Jumlah yang diterima</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="274"/>
         <source>Total sent</source>
-        <translation>Jumlah yang dikirim</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="273"/>
@@ -88,6 +89,8 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Rangkaian</translation>
     </message>
@@ -258,6 +261,8 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
         <translation>Proses</translation>
     </message>
