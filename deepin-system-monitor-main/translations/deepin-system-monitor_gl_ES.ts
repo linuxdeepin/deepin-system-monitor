@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="gl_ES">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="gl_ES">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -660,7 +658,7 @@ Estás seguro de que queres continuar?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Saída</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -768,54 +766,54 @@ Estás seguro de que queres continuar?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>RX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>RX frame</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>TX packets</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>TX bytes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
         <source>TX errors</source>
-        <translation>TX errors</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>TX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>TX carrier</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
         <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
-        <translation>IPv4</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
         <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
-        <translation>IPv6</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>TX dropped</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -858,7 +856,7 @@ Estás seguro de que queres continuar?</translation>
         <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
         <source>Receive</source>
-        <translation>Recibir</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -938,13 +936,13 @@ Estás seguro de que queres continuar?</translation>
         <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
         <source>Send</source>
-        <translation>Enviar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="146"/>
         <source>Disks</source>
-        <translation>Discos</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -952,7 +950,7 @@ Estás seguro de que queres continuar?</translation>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="67"/>
         <source>Loading</source>
-        <translation>Cargando</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1230,37 +1228,37 @@ Estás seguro de que queres continuar?</translation>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation type="unfinished">Configuración</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>Protección do sistema</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Mostrar aviso cando o uso supera os límites</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>Límite de aviso de CPU (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Límite de aviso de memoria (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Intervalo de aviso (min)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
         <source>Notifications</source>
-        <translation>Notificacións</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
