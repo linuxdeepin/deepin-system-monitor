@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sk">
 <context>
     <name>Common.Search</name>
     <message>
@@ -21,8 +19,10 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
-        <translation>Využitie</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -35,12 +35,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="276"/>
         <source>Read</source>
-        <translation>Čítanie</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="277"/>
         <source>Write</source>
-        <translation>Zápis</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -52,6 +52,7 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
@@ -71,12 +72,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="272"/>
         <source>Total received</source>
-        <translation>Celkovo prijaté</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="274"/>
         <source>Total sent</source>
-        <translation>Celkovo odoslané</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="273"/>
@@ -88,6 +89,8 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Sieť</translation>
     </message>
@@ -97,37 +100,37 @@
     <message>
         <location filename="../process/process.cpp" line="54"/>
         <source>Very high</source>
-        <translation>Veľmi vysoké</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="55"/>
         <source>High</source>
-        <translation>Vysoké</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="56"/>
         <source>Normal</source>
-        <translation>Normálne</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="57"/>
         <source>Low</source>
-        <translation>Nízke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="58"/>
         <source>Very low</source>
-        <translation>Veľmi nízke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="59"/>
         <source>Custom</source>
-        <translation>Vlastné</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="60"/>
         <source>Invalid</source>
-        <translation>Neplatné</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -135,32 +138,32 @@
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to end process</source>
-        <translation>Zlyhalo ukončenie procesu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
         <source>Failed to pause process</source>
-        <translation>Zlyhalo pozastavenie procesu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Failed to resume process</source>
-        <translation>Zlyhalo obnovenie procesu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="177"/>
         <source>Failed to kill process</source>
-        <translation>Zlyhalo ukončenie procesu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="180"/>
         <source>Unknown error</source>
-        <translation>Neznámy chyba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="239"/>
         <source>Failed in sending signal to process</source>
-        <translation>Zlyhalo odoslanie signálu procesu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -201,12 +204,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
         <source>Shared memory</source>
-        <translation>Spoločná pamäť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
         <source>Virtual memory</source>
-        <translation>Virtuálna pamäť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="26"/>
@@ -236,12 +239,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="36"/>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Priority</source>
-        <translation>Priorita</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -258,6 +261,8 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
         <translation>Procesy</translation>
     </message>
@@ -267,7 +272,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="253"/>
         <source>Not support</source>
-        <translation>Nepodporované</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
