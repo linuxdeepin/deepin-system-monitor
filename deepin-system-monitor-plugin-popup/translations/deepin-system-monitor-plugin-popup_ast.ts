@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ast" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ast">
 <context>
     <name>Common.Search</name>
     <message>
@@ -19,7 +19,6 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="216"/>
-        <location filename="../gui/cpu_widget.cpp" line="217"/>
         <source>Utilization</source>
         <translation>Usu</translation>
     </message>
@@ -34,12 +33,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="258"/>
         <source>Read</source>
-        <translation type="unfinished"/>
+        <translation>Leer</translation>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="259"/>
         <source>Write</source>
-        <translation type="unfinished"/>
+        <translation>Escribir</translation>
     </message>
 </context>
 <context>
@@ -52,7 +51,7 @@
     <message>
         <location filename="../common/common.cpp" line="48"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Amos los atajos</translation>
     </message>
 </context>
 <context>
@@ -64,14 +63,13 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="179"/>
-        <location filename="../gui/memory_widget.cpp" line="188"/>
         <source>Swap</source>
         <translation>Intercambéu</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="180"/>
         <source>Not enabled</source>
-        <translation>Nun s&apos;activó</translation>
+        <translation>Nun s'activó</translation>
     </message>
 </context>
 <context>
@@ -84,12 +82,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="260"/>
         <source>Total received</source>
-        <translation type="unfinished"/>
+        <translation>Total recibíu</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="262"/>
         <source>Total sent</source>
-        <translation type="unfinished"/>
+        <translation>Total mandáu</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="261"/>
@@ -101,7 +99,6 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="232"/>
-        <location filename="../gui/net_widget.cpp" line="235"/>
         <source>Network</source>
         <translation>Rede</translation>
     </message>
@@ -111,7 +108,7 @@
     <message>
         <location filename="../process/process.cpp" line="67"/>
         <source>Very high</source>
-        <translation type="unfinished"/>
+        <translation>Muy altu</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="68"/>
@@ -131,17 +128,17 @@
     <message>
         <location filename="../process/process.cpp" line="71"/>
         <source>Very low</source>
-        <translation type="unfinished"/>
+        <translation>Muy baxu</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="72"/>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Personalizáu</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="73"/>
         <source>Invalid</source>
-        <translation type="unfinished"/>
+        <translation>Invalidu</translation>
     </message>
 </context>
 <context>
@@ -149,7 +146,7 @@
     <message>
         <location filename="../process/process_db.cpp" line="162"/>
         <source>Failed to end process</source>
-        <translation type="unfinished"/>
+        <translation>Fallo na terminación del procesu</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="165"/>
@@ -169,12 +166,12 @@
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Unknown error</source>
-        <translation type="unfinished"/>
+        <translation>Error desconocíu</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="224"/>
         <source>Failed in sending signal to process</source>
-        <translation type="unfinished"/>
+        <translation>Fallo na emisión del señal al procesu</translation>
     </message>
 </context>
 <context>
@@ -191,8 +188,6 @@
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="96"/>
-        <location filename="../process/process_name.cpp" line="103"/>
-        <location filename="../process/process_name.cpp" line="106"/>
         <source>Tray</source>
         <translation>Bandexa</translation>
     </message>
@@ -240,7 +235,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="35"/>
         <source>User</source>
-        <translation type="unfinished"/>
+        <translation>Usuario</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="37"/>
@@ -285,7 +280,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="51"/>
         <source>Nice</source>
-        <translation type="unfinished"/>
+        <translation>Nice</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="53"/>
@@ -307,7 +302,6 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="182"/>
-        <location filename="../gui/process_widget.cpp" line="185"/>
         <source>Processes</source>
         <translation>Procesos</translation>
     </message>
@@ -317,7 +311,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="267"/>
         <source>Not support</source>
-        <translation type="unfinished"/>
+        <translation>Non soporta</translation>
     </message>
 </context>
 <context>
@@ -348,7 +342,7 @@
     <message>
         <location filename="../common/common.cpp" line="69"/>
         <source>Force end application</source>
-        <translation type="unfinished"/>
+        <translation>Forzar la terminación de l'aplicación</translation>
     </message>
 </context>
 <context>

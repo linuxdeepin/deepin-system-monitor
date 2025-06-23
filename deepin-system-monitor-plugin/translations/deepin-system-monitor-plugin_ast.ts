@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ast" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ast">
 <context>
     <name>Plugin.DisplayName</name>
     <message>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="147"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Abrir</translation>
     </message>
 </context>
 <context>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../gui/systemmonitortipswidget.cpp" line="93"/>
         <source>MEM</source>
-        <translation type="unfinished"/>
+        <translation>MEM</translation>
     </message>
 </context>
 </TS>
