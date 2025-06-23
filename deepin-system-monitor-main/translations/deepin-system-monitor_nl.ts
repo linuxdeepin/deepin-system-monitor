@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuleren</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Weet je zeker dat je door wilt gaan?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Uitloggen</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
