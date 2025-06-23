@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="br">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="br">
 <context>
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="141"/>
         <source>No search results</source>
-        <translation>N'eus bet kavet disoc'h ebet</translation>
+        <translation>N&apos;eus bet kavet disoc&apos;h ebet</translation>
     </message>
 </context>
 <context>
@@ -21,8 +19,10 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
-        <translation>الاستخدام</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -35,12 +35,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="276"/>
         <source>Read</source>
-        <translation>القراءة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="277"/>
         <source>Write</source>
-        <translation>الكتابة</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -52,6 +52,7 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
         <translation>Eskemm</translation>
     </message>
@@ -71,12 +72,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="272"/>
         <source>Total received</source>
-        <translation>الإجمالي المستلم</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="274"/>
         <source>Total sent</source>
-        <translation>الإجمالي المرسل</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="273"/>
@@ -88,6 +89,8 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Rouedad</translation>
     </message>
@@ -135,22 +138,22 @@
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to end process</source>
-        <translation>C'hwitet ez eus bet war fin ar prosesus</translation>
+        <translation>C&apos;hwitet ez eus bet war fin ar prosesus</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
         <source>Failed to pause process</source>
-        <translation>N'heller ket paouez ar prosesus</translation>
+        <translation>N&apos;heller ket paouez ar prosesus</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Failed to resume process</source>
-        <translation>N'heller ket adkemer ar prosesus</translation>
+        <translation>N&apos;heller ket adkemer ar prosesus</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="177"/>
         <source>Failed to kill process</source>
-        <translation>N'heller ket lazhañ ar prosesus</translation>
+        <translation>N&apos;heller ket lazhañ ar prosesus</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="180"/>
@@ -160,7 +163,7 @@
     <message>
         <location filename="../process/process_db.cpp" line="239"/>
         <source>Failed in sending signal to process</source>
-        <translation>C'hwitet ez eus bet war gasadenn signal ar prosesus</translation>
+        <translation>C&apos;hwitet ez eus bet war gasadenn signal ar prosesus</translation>
     </message>
 </context>
 <context>
@@ -201,12 +204,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
         <source>Shared memory</source>
-        <translation>الذاكرة المشتركة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
         <source>Virtual memory</source>
-        <translation>الذاكرة virtue</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="26"/>
@@ -258,6 +261,8 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
         <translation>Prosesus</translation>
     </message>
@@ -267,7 +272,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="253"/>
         <source>Not support</source>
-        <translation>غير مدعوم</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
