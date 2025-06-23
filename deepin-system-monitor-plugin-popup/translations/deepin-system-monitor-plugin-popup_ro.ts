@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ro">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ro">
 <context>
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="141"/>
         <source>No search results</source>
-        <translation>Niciun rezultat de căutare</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -21,6 +19,8 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
         <translation>Utilizare</translation>
     </message>
@@ -35,12 +35,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="276"/>
         <source>Read</source>
-        <translation>Citește</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="277"/>
         <source>Write</source>
-        <translation>Scrie</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -52,6 +52,7 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
@@ -71,12 +72,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="272"/>
         <source>Total received</source>
-        <translation>Total primit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="274"/>
         <source>Total sent</source>
-        <translation>Total trimis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="273"/>
@@ -88,6 +89,8 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Rețea</translation>
     </message>
@@ -107,7 +110,7 @@
     <message>
         <location filename="../process/process.cpp" line="56"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="57"/>
@@ -117,17 +120,17 @@
     <message>
         <location filename="../process/process.cpp" line="58"/>
         <source>Very low</source>
-        <translation>Foarte scăzut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="59"/>
         <source>Custom</source>
-        <translation>Personalizat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process.cpp" line="60"/>
         <source>Invalid</source>
-        <translation>Invalid</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -135,32 +138,32 @@
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to end process</source>
-        <translation>Eșec în terminarea procesului</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
         <source>Failed to pause process</source>
-        <translation>Eșec în pauzarea procesului</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Failed to resume process</source>
-        <translation>Eșec în reluarea procesului</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="177"/>
         <source>Failed to kill process</source>
-        <translation>Eșec în terminarea forțată a procesului</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="180"/>
         <source>Unknown error</source>
-        <translation>Eroare necunoscută</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="239"/>
         <source>Failed in sending signal to process</source>
-        <translation>Eșec în trimiterea semnalului către proces</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -201,12 +204,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
         <source>Shared memory</source>
-        <translation>Memorie partajată</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
         <source>Virtual memory</source>
-        <translation>Memorie virtuală</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="26"/>
@@ -236,12 +239,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="36"/>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
         <source>Priority</source>
-        <translation>Prioritate</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -258,8 +261,10 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
-        <translation>Procese</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -267,7 +272,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="253"/>
         <source>Not support</source>
-        <translation>Neacceptat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
