@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuloje</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
