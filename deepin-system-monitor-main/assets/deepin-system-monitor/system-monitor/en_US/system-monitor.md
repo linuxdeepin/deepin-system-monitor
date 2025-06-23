@@ -151,8 +151,6 @@ On the System Monitor interface, Click ![icon_menu](../common/icon_menu.svg) > *
 
 - **System Protection**: Turned off by default. You are able to set a threshold for **CPU**,  **Memory**  and **Warning interval** respectively and there will be warnings displayed when the monitored values detected are higher than the thresholds.
 
-   > ![notes](../common/notes.svg) Notes:  If **Security Level** in **Security Center > Tools** are set as high, the system protection will be enabled automatically. Otherwise, it will be disabled automatically.
-
 - **Notifications**: Turned on by default. You are able to click **Settings** to turn on or off notifications in Control Center.
 
 ![pic](fig/settings.png)
