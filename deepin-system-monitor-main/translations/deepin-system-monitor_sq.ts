@@ -255,7 +255,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="153"/>
         <source>merged</source>
-        <translation>përdorur</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="154"/>
@@ -316,7 +316,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="280"/>
         <source>enabled-runtime</source>
-        <translation>aktualizuar-dyndimë</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="281"/>
@@ -339,7 +339,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="219"/>
         <source>start-pre</source>
-        <translation>përpara-lëshjes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="221"/>
@@ -349,7 +349,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="223"/>
         <source>start-post</source>
-        <translation>përfundimtare-lëshjes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="225"/>
@@ -359,7 +359,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="227"/>
         <source>exited</source>
-        <translation>i iku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="229"/>
@@ -374,32 +374,32 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="233"/>
         <source>stop-watchdog</source>
-        <translation>stop-watchdog</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="235"/>
         <source>stop-sigterm</source>
-        <translation>stop-sigterm</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="237"/>
         <source>stop-sigkill</source>
-        <translation>stop-sigkill</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="239"/>
         <source>stop-post</source>
-        <translation>përfundimtare-stop</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="241"/>
         <source>final-sigterm</source>
-        <translation>final-sigterm</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="243"/>
         <source>final-sigkill</source>
-        <translation>final-sigkill</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="245"/>
@@ -451,22 +451,22 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="68"/>
         <source>Shared</source>
-        <translation>Jukshtuar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="70"/>
         <source>Cached</source>
-        <translation>Shpenzuar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="74"/>
         <source>Buffers</source>
-        <translation>Buffëra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="76"/>
         <source>Cached swap</source>
-        <translation>Shpenzim shpenzuar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="80"/>
@@ -481,12 +481,12 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="86"/>
         <source>Dirty</source>
-        <translation>Zëra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="88"/>
         <source>Mapped</source>
-        <translation>Mapuar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="92"/>
@@ -501,7 +501,7 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="98"/>
         <source>Slab</source>
-        <translation>Slab</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -544,7 +544,7 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads merged/s</source>
-        <translation>Lidhjejë e kuptuar/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
@@ -554,12 +554,12 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Writes completed </source>
-        <translation>Shkruar i përfunduar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Writes merged</source>
-        <translation>Shkrimet lidhura</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
@@ -574,7 +574,7 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes merged/s</source>
-        <translation>Shkrimet lidhura/s</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -691,17 +691,17 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Broadcast:</source>
-        <translation>Transmisioni i publikë:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation>Prefixlen:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation>Krahësia:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -739,7 +739,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="328"/>
         <source>Bandwidth</source>
-        <translation>Kohësia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
@@ -764,12 +764,12 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>RX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>RAM frame</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
@@ -789,7 +789,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>TX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
@@ -811,7 +811,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>TX dropped</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1198,7 +1198,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../model/process_table_model.h" line="36"/>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
@@ -1369,12 +1369,12 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Përlancëzimi i pozicionit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Metoda e përlancëzimit</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
