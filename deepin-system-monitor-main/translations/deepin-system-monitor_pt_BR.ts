@@ -161,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -656,7 +656,7 @@ Continuar?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>Sair</translation>
     </message>
 </context>
 <context>
