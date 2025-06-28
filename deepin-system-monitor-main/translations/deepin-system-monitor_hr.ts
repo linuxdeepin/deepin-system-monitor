@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hr">
 <context>
     <name>App.About</name>
     <message>
@@ -26,13 +24,13 @@
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
-        <translation> Ukupna iskorištenost</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
-        <translation> Individualna iskorištenost</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -70,7 +68,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="91"/>
         <source>Utilization</source>
-        <translation> Iskorištenost</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
@@ -85,12 +83,12 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
         <source>Sockets</source>
-        <translation> Socketi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Logical processors</source>
-        <translation> Logički procesori</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
@@ -100,32 +98,32 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>L1i cache</source>
-        <translation> L1i cache</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1d cache</source>
-        <translation> L1d cache</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L2 cache</source>
-        <translation> L2 cache</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L3 cache</source>
-        <translation> L3 cache</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>Load average</source>
-        <translation> Prosečna opterećenost</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>File descriptors</source>
-        <translation> Datotečni opisnici</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
@@ -135,12 +133,12 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Threads</source>
-        <translation> Niti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Host name</source>
-        <translation> Ime hosta</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
@@ -155,7 +153,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Up time</source>
-        <translation> Vrijeme pokretanja</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Otkaži</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,7 +235,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="146"/>
         <source>stub</source>
-        <translation> stub</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="149"/>
@@ -257,12 +255,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="153"/>
         <source>merged</source>
-        <translation> merged</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="154"/>
         <source>masked</source>
-        <translation> masked</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="147"/>
@@ -303,12 +301,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="276"/>
         <source>static</source>
-        <translation> statički</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="277"/>
         <source>transient</source>
-        <translation> privremeni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="278"/>
@@ -318,17 +316,17 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="280"/>
         <source>enabled-runtime</source>
-        <translation> omogućen u vremenskom trenutku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="281"/>
         <source>masked</source>
-        <translation> masked</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="283"/>
         <source>generated</source>
-        <translation> generirano</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -336,12 +334,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="217"/>
         <source>dead</source>
-        <translation> mrtav</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="219"/>
         <source>start-pre</source>
-        <translation> početak pre</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="221"/>
@@ -351,17 +349,17 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="223"/>
         <source>start-post</source>
-        <translation> početak poslije</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="225"/>
         <source>running</source>
-        <translation> pokretni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="227"/>
         <source>exited</source>
-        <translation> izlazni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="229"/>
@@ -376,32 +374,32 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="233"/>
         <source>stop-watchdog</source>
-        <translation> zaustavi watchdog</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="235"/>
         <source>stop-sigterm</source>
-        <translation> zaustavi sigterm</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="237"/>
         <source>stop-sigkill</source>
-        <translation> zaustavi sigkill</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="239"/>
         <source>stop-post</source>
-        <translation>zausti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="241"/>
         <source>final-sigterm</source>
-        <translation>završeno sa sigterm</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="243"/>
         <source>final-sigkill</source>
-        <translation>završeno sa sigkill</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="245"/>
@@ -411,7 +409,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="247"/>
         <source>auto-restart</source>
-        <translation>automatski ponovni pokret</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -420,22 +418,22 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>Upozorenje</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>Vaša upotreba procesora je viša od %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>Vaša upotreba memorije je viša od %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished">Pogled</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -443,7 +441,7 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="62"/>
         <source>Used</source>
-        <translation>Korišteno</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="64"/>
@@ -453,22 +451,22 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="68"/>
         <source>Shared</source>
-        <translation>Dijeljeno</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="70"/>
         <source>Cached</source>
-        <translation>U cache</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="74"/>
         <source>Buffers</source>
-        <translation>Bufferi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="76"/>
         <source>Cached swap</source>
-        <translation>U cache swap</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="80"/>
@@ -478,17 +476,17 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="82"/>
         <source>Inactive</source>
-        <translation>Neaktivno</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="86"/>
         <source>Dirty</source>
-        <translation>Začinjeno</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="88"/>
         <source>Mapped</source>
-        <translation>Mapirano</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="92"/>
@@ -503,7 +501,7 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="98"/>
         <source>Slab</source>
-        <translation>Slab</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -531,52 +529,52 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
         <source>Sectors read</source>
-        <translation>Sektori pročitani</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
         <source>Reads/s</source>
-        <translation>Pročitano/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
         <source>Sectors read/s</source>
-        <translation>Pročitani sektor/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads merged/s</source>
-        <translation>Spajanje pročitanih/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
         <source>Sectors written</source>
-        <translation>Sektori napisani</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Writes completed </source>
-        <translation>Napisano</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Writes merged</source>
-        <translation>Spajanje napisanih</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes/s</source>
-        <translation>Napisano/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Sectors written/s</source>
-        <translation>Napisani sektor/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes merged/s</source>
-        <translation>Spajanje napisanih/s</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -644,7 +642,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../gui/process_table_view.cpp" line="375"/>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Prisilno završavanje</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="173"/>
@@ -658,7 +656,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Odjava</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -688,22 +686,22 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Netmask:</source>
-        <translation>Maska mreže:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Broadcast:</source>
-        <translation>Rasprostranjenje:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation>Дужина префикса:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation>Обим:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -731,7 +729,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="317"/>
         <source>Noise level</source>
-        <translation>Ниво шума</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="323"/>
@@ -741,62 +739,62 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="328"/>
         <source>Bandwidth</source>
-        <translation>Пропустна способност</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
         <source>RX packets</source>
-        <translation>Пакети RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="338"/>
         <source>RX bytes</source>
-        <translation>Бајтеви RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="343"/>
         <source>RX errors</source>
-        <translation>Грешке RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="348"/>
         <source>RX dropped</source>
-        <translation>RX изгубљено</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>RX превише учитани</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>RX фрејм</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>Пакети TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>Бајтеви TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
         <source>TX errors</source>
-        <translation>Грешке TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>TX превише учитани</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>TX носач</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
@@ -813,7 +811,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>TX изгубљено</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -839,7 +837,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="146"/>
         <source>Click the application you want to end</source>
-        <translation>Кликните на прикључену прилику коју желите да зауставите</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -856,7 +854,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
         <source>Receive</source>
-        <translation>Прими</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -873,12 +871,12 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="145"/>
         <source>Disk read</source>
-        <translation>Читање диска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="146"/>
         <source>Disk write</source>
-        <translation>Писање диска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="176"/>
@@ -936,7 +934,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
         <source>Send</source>
-        <translation>Пошаљи</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
@@ -950,7 +948,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="67"/>
         <source>Loading</source>
-        <translation>Учитавање</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1005,7 +1003,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../process/process_db.cpp" line="138"/>
         <location filename="../process/process_db.cpp" line="176"/>
         <source>Failed to change process priority</source>
-        <translation>Неуспешно промољење приоритета процеса</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1036,12 +1034,12 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../process/process_db.cpp" line="249"/>
         <source>Failed to resume process</source>
-        <translation>Неуспешно поновно покретање процеса</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="252"/>
         <source>Failed to kill process</source>
-        <translation>Неуспешно заустављање процеса</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="255"/>
@@ -1051,7 +1049,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../process/process_db.cpp" line="311"/>
         <source>Failed in sending signal to process</source>
-        <translation>Неуспешно пошаљиње сигнала процесу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="243"/>
@@ -1064,7 +1062,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="58"/>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(%1 прилика и %2 процеса се покреће)</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1084,7 +1082,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../process/process_name.cpp" line="89"/>
         <location filename="../process/process_name.cpp" line="92"/>
         <source>Tray</source>
-        <translation>Tray</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1116,7 +1114,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../common/common.cpp" line="85"/>
         <location filename="../gui/process_table_view.cpp" line="673"/>
         <source>Kill process</source>
-        <translation>Убаци процес</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="609"/>
@@ -1170,12 +1168,12 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../model/process_table_model.h" line="32"/>
         <source>Disk write</source>
-        <translation>Писање диска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="30"/>
         <source>Disk read</source>
-        <translation>Čitanje diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="28"/>
@@ -1200,7 +1198,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../model/process_table_model.h" line="36"/>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
@@ -1233,27 +1231,27 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>Sustavna zaštita</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Prikaži upozorenja kada se korištenje premaši pragove</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>Prag upozorenja za procesor (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Prag upozorenja za memoriju (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Interval upozorenja (min)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
@@ -1266,12 +1264,12 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../service/service_manager.cpp" line="322"/>
         <source>Failed to set service startup type</source>
-        <translation>Nije uspješno postavljen tip pokretanja usluge</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../service/service_manager.cpp" line="388"/>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Greška: Nije uspješno postavljen tip pokretanja usluge zbog prekida sub procesa.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1281,7 +1279,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../gui/system_service_table_view.cpp" line="216"/>
         <location filename="../gui/system_service_table_view.cpp" line="282"/>
         <source>Service instance name</source>
-        <translation>Naziv instance usluge</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="34"/>
@@ -1333,7 +1331,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="536"/>
         <source>Startup type</source>
-        <translation>Tip pokretanja</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1351,7 +1349,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="23"/>
         <source>Sub</source>
-        <translation>Pod</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="30"/>
@@ -1366,17 +1364,17 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="27"/>
         <source>Startup Type</source>
-        <translation>Tip pokretanja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Stanje pokretanja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Taktika pokretanja</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1389,13 +1387,13 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
         <source>(Modifiable)</source>
-        <translation>(Promjenjivo)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
         <source>Range: %1-%2</source>
-        <translation>Opseg: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1414,7 +1412,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/main_window.cpp" line="143"/>
         <source>Compact</source>
-        <translation>Kompaktan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="135"/>
@@ -1454,7 +1452,7 @@ Jeste li sigurni da želite nastaviti?</translation>
         <location filename="../gui/main_window.cpp" line="234"/>
         <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>Korisnici</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1462,7 +1460,7 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>Uredi informacije o računu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1470,12 +1468,12 @@ Jeste li sigurni da želite nastaviti?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>Administrator</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>Standardni korisnik</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -425,12 +423,12 @@
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>A utilização do seu CPU está acima de %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>A utilização da sua memória está acima de %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
@@ -658,7 +656,7 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Sair</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1371,12 +1369,12 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Estado de Início</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Tática de Início</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1462,7 +1460,7 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>Editar informações da conta</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1475,7 +1473,7 @@ Tem a certeza de que deseja continuar?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>Usuário Padrão</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

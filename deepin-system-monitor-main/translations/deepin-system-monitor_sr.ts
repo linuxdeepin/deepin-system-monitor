@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sr">
 <context>
     <name>App.About</name>
     <message>
@@ -26,13 +24,13 @@
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
-        <translation>Укупна употреба</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
-        <translation>Индивидуална употреба</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Откажи</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -420,22 +418,22 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>Предупреди</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>Ваша употреба ЦП је већа од %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>Ваша употреба памети је већа од %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished">Приказ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Одјави се</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -950,7 +948,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="67"/>
         <source>Loading</source>
-        <translation>Учитавање</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1238,22 +1236,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Прикажи предупредбе када се употреба превеличава од порочних вредности</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>Порочна вредност предупредбе за ЦП (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Порочна вредност предупредбе за памет (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Интервал предупредби (мин)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
@@ -1371,12 +1369,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Стартно стање</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Стартна тактика</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1389,13 +1387,13 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
         <source>(Modifiable)</source>
-        <translation>(Модификујући)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
         <source>Range: %1-%2</source>
-        <translation>Обим: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1454,7 +1452,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="234"/>
         <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>Корисници</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1462,7 +1460,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>Уреди информације о налогу</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1470,12 +1468,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>Администратор</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>Стандардни корисник</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
 <context>
     <name>App.About</name>
     <message>
@@ -26,13 +24,13 @@
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
-        <translation>Celková výbava</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
-        <translation>Individuální výbava</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -420,22 +418,22 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>Varování</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>Vaše využití procesoru je vyšší než %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>Vaše využití paměti je vyšší než %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished">Zobrazení</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Odhlásit se</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1371,12 +1369,12 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Stav spuštění</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Taktika spuštění</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1454,7 +1452,7 @@ Opravdu chcete pokračovat?</translation>
         <location filename="../gui/main_window.cpp" line="234"/>
         <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>Uživatelé</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1462,7 +1460,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>Upravit informace o účtu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1470,12 +1468,12 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>Administrátor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>Standardní uživatel</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

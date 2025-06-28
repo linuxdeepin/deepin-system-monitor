@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="da">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="da">
 <context>
     <name>Common.Search</name>
     <message>
@@ -21,8 +19,10 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
-        <translation>Brug</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -35,12 +35,12 @@
     <message>
         <location filename="../gui/disk_widget.cpp" line="276"/>
         <source>Read</source>
-        <translation>Læs</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/disk_widget.cpp" line="277"/>
         <source>Write</source>
-        <translation>Skriv</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -52,6 +52,7 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
@@ -71,12 +72,12 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="272"/>
         <source>Total received</source>
-        <translation>Total modtaget</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="274"/>
         <source>Total sent</source>
-        <translation>Total sendt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="273"/>
@@ -88,6 +89,8 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Netværk</translation>
     </message>
@@ -201,12 +204,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
         <source>Shared memory</source>
-        <translation>Delte hukommelse</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
         <source>Virtual memory</source>
-        <translation>Virtual hukommelse</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="26"/>
@@ -258,6 +261,8 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
         <translation>Processer</translation>
     </message>
@@ -267,7 +272,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="253"/>
         <source>Not support</source>
-        <translation>Ikke understøttet</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

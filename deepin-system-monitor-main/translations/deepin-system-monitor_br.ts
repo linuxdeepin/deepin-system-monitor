@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="br">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="br">
 <context>
     <name>App.About</name>
     <message>
@@ -20,19 +18,19 @@
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="28"/>
         <source>Hide details</source>
-        <translation>إخفاء التفاصيل</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
-        <translation>استخدام عام</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
-        <translation>استخدام فردي</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -40,12 +38,12 @@
     <message>
         <location filename="../gui/block_dev_item_widget.cpp" line="138"/>
         <source>Read</source>
-        <translation>قراءة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_item_widget.cpp" line="142"/>
         <source>Write</source>
-        <translation>كتابة</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -54,7 +52,7 @@
         <location filename="../gui/cpu_detail_widget.cpp" line="154"/>
         <location filename="../gui/cpu_detail_widget.cpp" line="268"/>
         <source>60 seconds</source>
-        <translation>60 ثانية</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -62,7 +60,7 @@
     <message>
         <location filename="../model/cpu_info_model.cpp" line="43"/>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 أيام %2 ساعات %3 دقائق</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -70,62 +68,62 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="91"/>
         <source>Utilization</source>
-        <translation>الاستخدام</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Current frequency</source>
-        <translation>التردد الحالي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Frequency</source>
-        <translation>التردد</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
         <source>Sockets</source>
-        <translation>الsockets</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Logical processors</source>
-        <translation>المعالجات المنطقية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
         <source>Virtualization</source>
-        <translation>الترميز الافتراضي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>L1i cache</source>
-        <translation>L1i ذاكرة التخزين المؤقت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1d cache</source>
-        <translation>L1d ذاكرة التخزين المؤقت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L2 cache</source>
-        <translation>L2 ذاكرة التخزين المؤقت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L3 cache</source>
-        <translation>L3 ذاكرة التخزين المؤقت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>Load average</source>
-        <translation>معدل الحمل</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>File descriptors</source>
-        <translation>مصفوفة وصف الملفات</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
@@ -135,27 +133,27 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Threads</source>
-        <translation>الخيوط</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Host name</source>
-        <translation>اسم المضيف</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>OS type</source>
-        <translation>نوع نظام التشغيل</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>Version</source>
-        <translation>النسخة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Up time</source>
-        <translation>وقت التشغيل</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Nullañ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -171,7 +169,7 @@
     <message>
         <location filename="../gui/chart_view_widget.cpp" line="293"/>
         <source>60 seconds</source>
-        <translation>60 ثانية</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -188,7 +186,7 @@
     <message>
         <location filename="../compact_cpu_monitor.cpp" line="87"/>
         <source>Details</source>
-        <translation>التفاصيل</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -196,7 +194,7 @@
     <message>
         <location filename="../cpu_monitor.cpp" line="70"/>
         <source>Details</source>
-        <translation>التفاصيل</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -420,22 +418,22 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>تحذير</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>استخدامك لوحدة المعالج متجاوز لـ %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>استخدامك للذاكرة متجاوز لـ %1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished">Gwelet</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -443,32 +441,32 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="62"/>
         <source>Used</source>
-        <translation>المستعمل</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="64"/>
         <source>Available</source>
-        <translation>متاح</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="68"/>
         <source>Shared</source>
-        <translation>المشاركة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="70"/>
         <source>Cached</source>
-        <translation>المخزن المؤقت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="74"/>
         <source>Buffers</source>
-        <translation>الuffers</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="76"/>
         <source>Cached swap</source>
-        <translation>التبديل المخزن المؤقت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="80"/>
@@ -478,32 +476,32 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="82"/>
         <source>Inactive</source>
-        <translation>غير النشطة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="86"/>
         <source>Dirty</source>
-        <translation>الغير نظيفة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="88"/>
         <source>Mapped</source>
-        <translation>المعلقة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="92"/>
         <source>Total swap</source>
-        <translation>التبديل الكلي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="94"/>
         <source>Free swap</source>
-        <translation>التبديل الخالي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="98"/>
         <source>Slab</source>
-        <translation>السلاب</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -511,72 +509,72 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="64"/>
         <source>Model</source>
-        <translation>النموذج</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="66"/>
         <source>Read speed</source>
-        <translation>سرعة القراءة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="70"/>
         <source>Write speed</source>
-        <translation>سرعة الكتابة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
         <source>Capacity</source>
-        <translation>السعة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
         <source>Sectors read</source>
-        <translation>الأقسام المُقرَأة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
         <source>Reads/s</source>
-        <translation>القراءات/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
         <source>Sectors read/s</source>
-        <translation>الأقسام المُقرَأة/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads merged/s</source>
-        <translation>القراءات المدمجة/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
         <source>Sectors written</source>
-        <translation>الأقسام المكتوبة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Writes completed </source>
-        <translation>القراءات/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Writes merged</source>
-        <translation>المدمجة الكتابة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes/s</source>
-        <translation>الكتابات/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Sectors written/s</source>
-        <translation>الأقسام المكتوبة/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes merged/s</source>
-        <translation>الكتابات المدمجة/الثانية</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>تسجيل الخروج</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -666,7 +664,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/main_window.cpp" line="172"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -674,7 +672,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/mem_stat_view_widget.cpp" line="47"/>
         <source>Size</source>
-        <translation>الحجم</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -683,27 +681,27 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>IP address:</source>
-        <translation>عنوان IP:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Netmask:</source>
-        <translation>Máscara de rede:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Broadcast:</source>
-        <translation>Transmissão:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation>Comprimento do prefixo:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation>Escopo:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -711,109 +709,109 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="293"/>
         <source>Connection type</source>
-        <translation>Tipo de conexão</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="301"/>
         <source>ESSID</source>
-        <translation>ESSID</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="307"/>
         <source>Link quality</source>
-        <translation>Qualidade do link</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="312"/>
         <source>Signal strength</source>
-        <translation>Força do sinal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="317"/>
         <source>Noise level</source>
-        <translation>Nível de ruído</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="323"/>
         <source>MAC</source>
-        <translation>MAC</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="328"/>
         <source>Bandwidth</source>
-        <translation>Largura de banda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
         <source>RX packets</source>
-        <translation>Pacotes RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="338"/>
         <source>RX bytes</source>
-        <translation>Bytes RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="343"/>
         <source>RX errors</source>
-        <translation>Erros RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="348"/>
         <source>RX dropped</source>
-        <translation>Pacotes RX descartados</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>RX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>RX frame</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>Pacotes TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>Bytes TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
         <source>TX errors</source>
-        <translation>Erros TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>TX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>TX carrier</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
         <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
-        <translation>IPv4</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
         <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
-        <translation>IPv6</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>Pacotes TX descartados</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -856,7 +854,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
         <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
         <source>Receive</source>
-        <translation>Receber</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -936,13 +934,13 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
         <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
         <source>Send</source>
-        <translation>Enviar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="146"/>
         <source>Disks</source>
-        <translation>Discos</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -950,7 +948,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="67"/>
         <source>Loading</source>
-        <translation>Carregando</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1210,12 +1208,12 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
         <source>Shared memory</source>
-        <translation>Memória compartilhada</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
         <source>Virtual memory</source>
-        <translation>الذاكرة الافتراضية</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1223,42 +1221,42 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../system/cpu_set.cpp" line="366"/>
         <source>Not support</source>
-        <translation>غير مدعوم</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>حماية النظام</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>عرض تحذيرات عندما تتجاوز الاستخدام الحدود</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>نسبة تحذير المعالج (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>نسبة تحذير الذاكرة (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>فترة التحذير (دقيقة)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
         <source>Notifications</source>
-        <translation>الإشعارات</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1371,12 +1369,12 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>حالة التشغيل</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>استراتيجية التشغيل</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1384,18 +1382,18 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="124"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
         <source>(Modifiable)</source>
-        <translation>(قابلة للتعديل)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
         <source>Range: %1-%2</source>
-        <translation>النطاق: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1454,7 +1452,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
         <location filename="../gui/main_window.cpp" line="234"/>
         <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>المستخدمين</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1462,7 +1460,7 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>تعديل معلومات الحساب</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1470,12 +1468,12 @@ Ha sur ho peus c&apos;hoant da genderc&apos;hel ganti?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>المدير</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>المستخدم العادي</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

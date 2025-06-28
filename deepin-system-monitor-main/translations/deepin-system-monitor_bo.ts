@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="bo">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bo">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">འདོར་བ།</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -420,22 +418,22 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>སྤྱི་དོན་གྱི་རྩོད་སྐོར</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>ཁྱོད་ཀྱི་CPU འགནາས་ཚོད་སྐོར་%1% འོན་ཀྱང་གཟིགས་ཡོད།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>ཁྱོད་ཀྱི་གྲངས་ཚོད་སྐོར་%1% འོན་ཀྱང་གཟིགས་ཡོད།</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished">མཐོང་རིས།</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>ཕྱིར་འོང་</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1371,12 +1369,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>འགོད་རྒྱུན་</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>འགོད་བྱེད་མེྡོ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1454,7 +1452,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="234"/>
         <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>རྒྱུན་ཆེད</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1462,7 +1460,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>རྒྱུན་ཆེད་གོང་གི་ཆ་འགོད་བཟོ་</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1470,12 +1468,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>དཔེ་སྤྱི་གི་དཔེ་</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>རྒྱུན་ཆེད་སྤྱི་</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

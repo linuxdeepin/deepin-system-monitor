@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fr">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Déconnexion</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1470,7 +1468,7 @@ Es-tu sûr de vouloir continuer ?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>Administrateur&#xa0;</translation>
+        <translation>Administrateur </translation>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>

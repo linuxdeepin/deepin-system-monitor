@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
 <context>
     <name>App.About</name>
     <message>
@@ -155,7 +153,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Up time</source>
-        <translation>Tiempo de disponibilidad</translation>
+        <translation>Tiempo de actividad</translation>
     </message>
 </context>
 <context>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -658,7 +656,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerrar sesión</translation>
     </message>
 </context>
 <context>
@@ -826,7 +824,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="145"/>
         <source>Start time</source>
-        <translation>Tiempo de inicio</translation>
+        <translation>Hora de inicio</translation>
     </message>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="135"/>

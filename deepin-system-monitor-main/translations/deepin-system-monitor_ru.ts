@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>App.About</name>
     <message>
         <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="96"/>
         <source>System Monitor</source>
         <translation>Системный Монитор</translation>
     </message>
@@ -23,11 +22,13 @@
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
         <translation>Общее потребление</translation>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
         <translation>Индивидуальное потребление</translation>
     </message>
@@ -49,6 +50,7 @@
     <name>CPUDetailGrapTableItem</name>
     <message>
         <location filename="../gui/cpu_detail_widget.cpp" line="154"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="268"/>
         <source>60 seconds</source>
         <translation>60 секунд</translation>
     </message>
@@ -159,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -174,6 +176,7 @@
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="477"/>
+        <location filename="../gui/system_service_table_view.cpp" line="456"/>
         <source>No search results</source>
         <translation>Поиск не дал результатов</translation>
     </message>
@@ -413,6 +416,7 @@
     <name>DBusAlarmNotify</name>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
+        <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
@@ -550,22 +554,22 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Writes completed </source>
-        <translation>Записи завершены </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Writes merged</source>
-        <translation>Записи объединены</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes/s</source>
-        <translation>Записи/с</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Sectors written/s</source>
-        <translation>Секторы записаны/с</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
@@ -606,6 +610,8 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="510"/>
+        <location filename="../gui/process_table_view.cpp" line="165"/>
+        <location filename="../gui/process_table_view.cpp" line="366"/>
         <source>End process</source>
         <translation>Завершить процесс</translation>
     </message>
@@ -624,12 +630,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="519"/>
+        <location filename="../gui/process_table_view.cpp" line="172"/>
+        <location filename="../gui/process_table_view.cpp" line="374"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="520"/>
+        <location filename="../gui/process_table_view.cpp" line="375"/>
         <source>Force End</source>
         <comment>button</comment>
         <translation>Принудительное закрытие</translation>
@@ -646,7 +655,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Выход</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -669,6 +678,7 @@ Are you sure you want to continue?</source>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>IP address:</source>
         <translation>IP-адрес:</translation>
     </message>
@@ -685,12 +695,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation>Длина префикса:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation>Диапазон:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -753,12 +763,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>Переполнения RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>Кадр RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
@@ -778,20 +788,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>Переполнения TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>Несущая TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
@@ -831,11 +843,15 @@ Are you sure you want to continue?</source>
     <name>Process.Graph.Title</name>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="144"/>
+        <location filename="../gui/mem_detail_view_widget.cpp" line="22"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="97"/>
+        <location filename="../memory_monitor.cpp" line="163"/>
         <source>Memory</source>
         <translation>Память</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
         <source>Receive</source>
         <translation>Прием</translation>
     </message>
@@ -844,6 +860,10 @@ Are you sure you want to continue?</source>
     <name>Process.Graph.View</name>
     <message>
         <location filename="../compact_cpu_monitor.cpp" line="220"/>
+        <location filename="../cpu_monitor.cpp" line="216"/>
+        <location filename="../cpu_monitor.cpp" line="225"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="352"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="143"/>
         <source>CPU</source>
         <translation>Процессор</translation>
     </message>
@@ -859,51 +879,65 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="176"/>
+        <location filename="../memory_monitor.cpp" line="189"/>
         <source>Memory</source>
         <translation>Память</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="187"/>
+        <location filename="../compact_memory_monitor.cpp" line="193"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="105"/>
+        <location filename="../memory_monitor.cpp" line="199"/>
+        <location filename="../memory_monitor.cpp" line="205"/>
         <source>Swap</source>
         <translation>Раздел подкачки</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="188"/>
+        <location filename="../memory_monitor.cpp" line="200"/>
         <source>Not enabled</source>
         <translation>Не подключен</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="152"/>
+        <location filename="../network_monitor.cpp" line="205"/>
         <source>Download</source>
         <translation>Загрузка</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="157"/>
+        <location filename="../network_monitor.cpp" line="210"/>
         <source>Upload</source>
         <translation>Отправка</translation>
     </message>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="145"/>
+        <location filename="../gui/netif_detail_view_widget.cpp" line="25"/>
+        <location filename="../network_monitor.cpp" line="187"/>
         <source>Network</source>
         <translation>Сеть</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="154"/>
+        <location filename="../network_monitor.cpp" line="207"/>
         <source>Total Received</source>
         <translation>Всего Получено</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="159"/>
+        <location filename="../network_monitor.cpp" line="212"/>
         <source>Total Sent</source>
         <translation>Всего Отправлено</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
         <source>Send</source>
         <translation>Передача</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="146"/>
         <source>Disks</source>
         <translation>Диски</translation>
     </message>
@@ -920,31 +954,37 @@ Are you sure you want to continue?</source>
     <name>Process.Priority</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="615"/>
+        <location filename="../process/process.cpp" line="54"/>
         <source>Very high</source>
         <translation>Очень высокий</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="623"/>
+        <location filename="../process/process.cpp" line="55"/>
         <source>High</source>
         <translation>Высокий</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="631"/>
+        <location filename="../process/process.cpp" line="56"/>
         <source>Normal</source>
         <translation>Нормальный</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="639"/>
+        <location filename="../process/process.cpp" line="57"/>
         <source>Low</source>
         <translation>Низкий</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="647"/>
+        <location filename="../process/process.cpp" line="58"/>
         <source>Very low</source>
         <translation>Очень низкий</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="655"/>
+        <location filename="../process/process.cpp" line="59"/>
         <source>Custom</source>
         <translation>Пользовательский</translation>
     </message>
@@ -960,6 +1000,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="138"/>
+        <location filename="../process/process_db.cpp" line="176"/>
         <source>Failed to change process priority</source>
         <translation>Не удалось изменить приоритет процесса</translation>
     </message>
@@ -1037,6 +1078,8 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="82"/>
+        <location filename="../process/process_name.cpp" line="89"/>
+        <location filename="../process/process_name.cpp" line="92"/>
         <source>Tray</source>
         <translation>Панель</translation>
     </message>
@@ -1050,21 +1093,25 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../common/common.cpp" line="79"/>
+        <location filename="../gui/process_table_view.cpp" line="666"/>
         <source>Properties</source>
         <translation>Свойства</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="62"/>
+        <location filename="../gui/process_table_view.cpp" line="590"/>
         <source>End process</source>
         <translation>Завершить процесс</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="74"/>
+        <location filename="../gui/process_table_view.cpp" line="602"/>
         <source>Resume process</source>
         <translation>Возобновить процесс</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="85"/>
+        <location filename="../gui/process_table_view.cpp" line="673"/>
         <source>Kill process</source>
         <translation>Убить процесс</translation>
     </message>
@@ -1075,6 +1122,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../common/common.cpp" line="68"/>
+        <location filename="../gui/process_table_view.cpp" line="596"/>
         <source>Suspend process</source>
         <translation>Приостановить процесс</translation>
     </message>
@@ -1177,32 +1225,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation type="unfinished">Настройки</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>Системная защита</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Показывать предупреждения, когда использование превышает пороги</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>Порог предупреждения по ЦП (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Порог предупреждения по памяти (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Интервал предупреждения (мин)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
@@ -1227,6 +1275,8 @@ Are you sure you want to continue?</source>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="150"/>
+        <location filename="../gui/system_service_table_view.cpp" line="216"/>
+        <location filename="../gui/system_service_table_view.cpp" line="282"/>
         <source>Service instance name</source>
         <translation>Наименование  службы</translation>
     </message>
@@ -1245,21 +1295,25 @@ Are you sure you want to continue?</source>
     <name>Service.Table.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="114"/>
+        <location filename="../gui/system_service_table_view.cpp" line="541"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="99"/>
+        <location filename="../gui/system_service_table_view.cpp" line="521"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="104"/>
+        <location filename="../gui/system_service_table_view.cpp" line="526"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="109"/>
+        <location filename="../gui/system_service_table_view.cpp" line="531"/>
         <source>Restart</source>
         <translation>Перезапустить</translation>
     </message>
@@ -1314,12 +1368,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Состояние запуска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Тактика запуска</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1327,23 +1381,25 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="124"/>
         <source>Settings</source>
-        <translation type="unfinished">Настройки</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
         <source>(Modifiable)</source>
-        <translation>(Изменяемый)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
         <source>Range: %1-%2</source>
-        <translation>Диапазон: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="55"/>
+        <location filename="../gui/main_window.cpp" line="122"/>
         <source>Force end application</source>
         <translation>Принудительное завершение приложения</translation>
     </message>
@@ -1367,6 +1423,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Search</name>
     <message>
         <location filename="../common/common.cpp" line="40"/>
+        <location filename="../gui/toolbar.cpp" line="84"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
@@ -1375,18 +1432,26 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <location filename="../common/common.cpp" line="49"/>
+        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/toolbar.cpp" line="43"/>
         <source>Processes</source>
         <translation>Процессы</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="94"/>
+        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/toolbar.cpp" line="51"/>
         <source>Services</source>
         <translation>Службы</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>Пользователи</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1394,7 +1459,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>Редактировать информацию о учетной записи</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1407,7 +1472,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>Стандартный пользователь</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

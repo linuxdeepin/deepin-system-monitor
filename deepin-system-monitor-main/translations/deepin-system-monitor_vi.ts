@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="vi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="vi">
 <context>
     <name>App.About</name>
     <message>
@@ -163,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation>Hủy bỏ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -663,7 +661,7 @@ Bạn có chắc chắn muốn tiếp tục không?
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Đăng xuất</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1233,37 +1231,37 @@ Bạn có chắc chắn muốn tiếp tục không?
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation type="unfinished">Cài đặt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>Bảo vệ hệ thống</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Hiển thị cảnh báo khi sử dụng vượt ngưỡng</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>Ngưỡng cảnh báo CPU (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Ngưỡng cảnh báo bộ nhớ (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Khoảng thời gian cảnh báo (phút)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
         <source>Notifications</source>
-        <translation>Thông báo</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1271,12 +1269,12 @@ Bạn có chắc chắn muốn tiếp tục không?
     <message>
         <location filename="../service/service_manager.cpp" line="322"/>
         <source>Failed to set service startup type</source>
-        <translation>Không thể thiết lập loại khởi động dịch vụ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../service/service_manager.cpp" line="388"/>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Lỗi: Không thể thiết lập loại khởi động dịch vụ do quá trình con bị hỏng.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1286,17 +1284,17 @@ Bạn có chắc chắn muốn tiếp tục không?
         <location filename="../gui/system_service_table_view.cpp" line="216"/>
         <location filename="../gui/system_service_table_view.cpp" line="282"/>
         <source>Service instance name</source>
-        <translation>Tên thực thể dịch vụ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="34"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="35"/>
         <source>Cancel</source>
-        <translation>Hủy bỏ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1328,17 +1326,17 @@ Bạn có chắc chắn muốn tiếp tục không?
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="537"/>
         <source>Auto</source>
-        <translation type="unfinished">Tự động</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="538"/>
         <source>Manual</source>
-        <translation type="unfinished">Tay</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="536"/>
         <source>Startup type</source>
-        <translation>Loại khởi động</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
