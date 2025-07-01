@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="he">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="he">
 <context>
     <name>App.About</name>
     <message>
         <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="96"/>
         <source>System Monitor</source>
         <translation>מוניטור מערכת</translation>
     </message>
@@ -19,17 +18,19 @@
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="28"/>
         <source>Hide details</source>
-        <translation>הצגת פרטים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
-        <translation>שימוש כללי</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
-        <translation>שימוש אישי</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -37,20 +38,21 @@
     <message>
         <location filename="../gui/block_dev_item_widget.cpp" line="138"/>
         <source>Read</source>
-        <translation>קריאה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_item_widget.cpp" line="142"/>
         <source>Write</source>
-        <translation>כתיבה</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>CPUDetailGrapTableItem</name>
     <message>
         <location filename="../gui/cpu_detail_widget.cpp" line="154"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="268"/>
         <source>60 seconds</source>
-        <translation>שעתיים</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -58,7 +60,7 @@
     <message>
         <location filename="../model/cpu_info_model.cpp" line="43"/>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 ימים %2 שעות %3 דקות</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -66,92 +68,92 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="91"/>
         <source>Utilization</source>
-        <translation>שימוש</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Current frequency</source>
-        <translation>הتردد הנוכחי</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Frequency</source>
-        <translation>تردد</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
         <source>Sockets</source>
-        <translation>סוקטים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Logical processors</source>
-        <translation>מעבדים לוגיים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
         <source>Virtualization</source>
-        <translation>הידרציה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>L1i cache</source>
-        <translation>סניף L1i</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1d cache</source>
-        <translation>סניף L1d</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L2 cache</source>
-        <translation>סניף L2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L3 cache</source>
-        <translation>סניף L3</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>Load average</source>
-        <translation>معدل עומס</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>File descriptors</source>
-        <translation>מפרטים קבצים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>Processes</source>
-        <translation type="unfinished">กระบวนות</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Threads</source>
-        <translation>תreads</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Host name</source>
-        <translation>שם המארח</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>OS type</source>
-        <translation>סוג מערכת הפעלה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>Version</source>
-        <translation>גרסה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Up time</source>
-        <translation>זמן הפעלה</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -159,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation type="unfinished">ביטול</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -167,13 +169,14 @@
     <message>
         <location filename="../gui/chart_view_widget.cpp" line="293"/>
         <source>60 seconds</source>
-        <translation>פרטים</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="477"/>
+        <location filename="../gui/system_service_table_view.cpp" line="456"/>
         <source>No search results</source>
         <translation>,No תוצאות לחיפוש</translation>
     </message>
@@ -183,7 +186,7 @@
     <message>
         <location filename="../compact_cpu_monitor.cpp" line="87"/>
         <source>Details</source>
-        <translation>אזהרה</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -191,7 +194,7 @@
     <message>
         <location filename="../cpu_monitor.cpp" line="70"/>
         <source>Details</source>
-        <translation>שימוש במעבד שלך גבוה יותר מ-%1%!</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -413,23 +416,24 @@
     <name>DBusAlarmNotify</name>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
+        <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>שימוש הזיכרון שלך גבוה יותר מ-%1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>שימוש שלך ב-CPU גבוה יותר מ-%1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>שימוש שלך הזיכרון גבוה יותר מ-%1%!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished">הצג</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -437,67 +441,67 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="62"/>
         <source>Used</source>
-        <translation>נעשה שימוש בו</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="64"/>
         <source>Available</source>
-        <translation>متاح</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="68"/>
         <source>Shared</source>
-        <translation>נشارك</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="70"/>
         <source>Cached</source>
-        <translation>נמחק</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="74"/>
         <source>Buffers</source>
-        <translation>бу퍼ס</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="76"/>
         <source>Cached swap</source>
-        <translation>החלפת זיכרון מוסתר</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="80"/>
         <source>Active</source>
-        <translation type="unfinished">פעיל</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="82"/>
         <source>Inactive</source>
-        <translation>לא פעיל</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="86"/>
         <source>Dirty</source>
-        <translation>בצורה לא נכונה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="88"/>
         <source>Mapped</source>
-        <translation>מופה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="92"/>
         <source>Total swap</source>
-        <translation>החלפת זיכרון כללית</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="94"/>
         <source>Free swap</source>
-        <translation>החלפת זיכרון פנימית</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="98"/>
         <source>Slab</source>
-        <translation>שבל</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -505,72 +509,72 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="64"/>
         <source>Model</source>
-        <translation>מודל</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="66"/>
         <source>Read speed</source>
-        <translation>מהירות קריאה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="70"/>
         <source>Write speed</source>
-        <translation>מהירות כתיבה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
         <source>Capacity</source>
-        <translation>קיבולת</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
         <source>Sectors read</source>
-        <translation>שכבות נקראו</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
         <source>Reads/s</source>
-        <translation>reads/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
         <source>Sectors read/s</source>
-        <translation>שכבות נקראו/שעתיים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads merged/s</source>
-        <translation>reads merged/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
         <source>Sectors written</source>
-        <translation>שכבות נכתבו</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Writes completed </source>
-        <translation>כתובות שהושלמו</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Writes merged</source>
-        <translation>כתובות מותאמות</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes/s</source>
-        <translation>writes/s</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Sectors written/s</source>
-        <translation>שכבות נכתבו/שעתיים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes merged/s</source>
-        <translation>writes merged/s</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -579,7 +583,7 @@
         <location filename="../gui/dialog/error_dialog.cpp" line="68"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished">אישור</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -607,6 +611,8 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="510"/>
+        <location filename="../gui/process_table_view.cpp" line="165"/>
+        <location filename="../gui/process_table_view.cpp" line="366"/>
         <source>End process</source>
         <translation>סיום התהליך</translation>
     </message>
@@ -628,21 +634,24 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="519"/>
+        <location filename="../gui/process_table_view.cpp" line="172"/>
+        <location filename="../gui/process_table_view.cpp" line="374"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>ביטול</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="520"/>
+        <location filename="../gui/process_table_view.cpp" line="375"/>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>סיום מוחלט</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="173"/>
         <source>End</source>
         <comment>button</comment>
-        <translation>סיום</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -650,7 +659,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>יציאה</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -658,7 +667,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/main_window.cpp" line="172"/>
         <source>Settings</source>
-        <translation>הגדרות</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -666,35 +675,36 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/mem_stat_view_widget.cpp" line="47"/>
         <source>Size</source>
-        <translation>גודל</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>IP address:</source>
-        <translation>כתובת IP:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Netmask:</source>
-        <translation>מסך רשת:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Broadcast:</source>
-        <translation>שידור:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation>طول תחומיית IPv6:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation>תחום:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -702,107 +712,109 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="293"/>
         <source>Connection type</source>
-        <translation>סוג חיבור</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="301"/>
         <source>ESSID</source>
-        <translation>ESSID</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="307"/>
         <source>Link quality</source>
-        <translation>คุณภาพสาย</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="312"/>
         <source>Signal strength</source>
-        <translation>กำลังสัญญาณ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="317"/>
         <source>Noise level</source>
-        <translation>ระดับเสียงรบกวน</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="323"/>
         <source>MAC</source>
-        <translation>MAC</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="328"/>
         <source>Bandwidth</source>
-        <translation>ขีดความสามารถในการส่งข้อมูล</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
         <source>RX packets</source>
-        <translation>แพ็กเก็ต RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="338"/>
         <source>RX bytes</source>
-        <translation>ไบต์ RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="343"/>
         <source>RX errors</source>
-        <translation>ข้อผิดพลาด RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="348"/>
         <source>RX dropped</source>
-        <translation>แพ็กเก็ต RX ที่ถูกทิ้ง</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>RX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>เฟรม RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>แพ็กเก็ต TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>ไบต์ TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
         <source>TX errors</source>
-        <translation>ข้อผิดพลาด TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>TX overruns</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>TX carrier</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
-        <translation>IPv4</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
-        <translation>IPv6</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>แพ็กเก็ต TX ที่ถูกทิ้ง</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -835,19 +847,27 @@ Are you sure you want to continue?</source>
     <name>Process.Graph.Title</name>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="144"/>
+        <location filename="../gui/mem_detail_view_widget.cpp" line="22"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="97"/>
+        <location filename="../memory_monitor.cpp" line="163"/>
         <source>Memory</source>
         <translation>זיכרון</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
         <source>Receive</source>
-        <translation>קבלה</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <location filename="../compact_cpu_monitor.cpp" line="220"/>
+        <location filename="../cpu_monitor.cpp" line="216"/>
+        <location filename="../cpu_monitor.cpp" line="225"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="352"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="143"/>
         <source>CPU</source>
         <translation>מעבד</translation>
     </message>
@@ -863,53 +883,67 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="176"/>
+        <location filename="../memory_monitor.cpp" line="189"/>
         <source>Memory</source>
         <translation>זיכרון</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="187"/>
+        <location filename="../compact_memory_monitor.cpp" line="193"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="105"/>
+        <location filename="../memory_monitor.cpp" line="199"/>
+        <location filename="../memory_monitor.cpp" line="205"/>
         <source>Swap</source>
         <translation>החלפה</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="188"/>
+        <location filename="../memory_monitor.cpp" line="200"/>
         <source>Not enabled</source>
         <translation>לא פעיל</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="152"/>
+        <location filename="../network_monitor.cpp" line="205"/>
         <source>Download</source>
         <translation>הורדה</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="157"/>
+        <location filename="../network_monitor.cpp" line="210"/>
         <source>Upload</source>
         <translation>העלאה</translation>
     </message>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="145"/>
+        <location filename="../gui/netif_detail_view_widget.cpp" line="25"/>
+        <location filename="../network_monitor.cpp" line="187"/>
         <source>Network</source>
         <translation>רשת</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="154"/>
+        <location filename="../network_monitor.cpp" line="207"/>
         <source>Total Received</source>
         <translation>总量接收</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="159"/>
+        <location filename="../network_monitor.cpp" line="212"/>
         <source>Total Sent</source>
         <translation>总量发送</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
         <source>Send</source>
-        <translation>שליחה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="146"/>
         <source>Disks</source>
-        <translation>דיסקים</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -917,38 +951,44 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="67"/>
         <source>Loading</source>
-        <translation>טוען</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Priority</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="615"/>
+        <location filename="../process/process.cpp" line="54"/>
         <source>Very high</source>
         <translation> מאוד גבוה</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="623"/>
+        <location filename="../process/process.cpp" line="55"/>
         <source>High</source>
         <translation>висOCK</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="631"/>
+        <location filename="../process/process.cpp" line="56"/>
         <source>Normal</source>
         <translation>רגילים</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="639"/>
+        <location filename="../process/process.cpp" line="57"/>
         <source>Low</source>
         <translation>נמוך</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="647"/>
+        <location filename="../process/process.cpp" line="58"/>
         <source>Very low</source>
         <translation> מאוד נמוך</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="655"/>
+        <location filename="../process/process.cpp" line="59"/>
         <source>Custom</source>
         <translation> Cástom</translation>
     </message>
@@ -964,6 +1004,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="138"/>
+        <location filename="../process/process_db.cpp" line="176"/>
         <source>Failed to change process priority</source>
         <translation>נכשל בהgemäßת עדיפות תהליך</translation>
     </message>
@@ -1041,6 +1082,8 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="82"/>
+        <location filename="../process/process_name.cpp" line="89"/>
+        <location filename="../process/process_name.cpp" line="92"/>
         <source>Tray</source>
         <translation>מדפסת</translation>
     </message>
@@ -1054,21 +1097,25 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../common/common.cpp" line="79"/>
+        <location filename="../gui/process_table_view.cpp" line="666"/>
         <source>Properties</source>
         <translation>מאפיינים</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="62"/>
+        <location filename="../gui/process_table_view.cpp" line="590"/>
         <source>End process</source>
         <translation>סיום התהליך</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="74"/>
+        <location filename="../gui/process_table_view.cpp" line="602"/>
         <source>Resume process</source>
         <translation>ה возיחת תהליך</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="85"/>
+        <location filename="../gui/process_table_view.cpp" line="673"/>
         <source>Kill process</source>
         <translation>הסתיים תהליך</translation>
     </message>
@@ -1079,6 +1126,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../common/common.cpp" line="68"/>
+        <location filename="../gui/process_table_view.cpp" line="596"/>
         <source>Suspend process</source>
         <translation>הסתיו תהליך</translation>
     </message>
@@ -1100,7 +1148,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="1058"/>
         <source>Change</source>
         <comment>button</comment>
-        <translation>לְשַׁקֵּל</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1181,37 +1229,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation>הגדרות</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>הגנה 시스템</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>הצגת 경고ים כאשר השימוש מتجاوز את הסף</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>סף 경고 ל-CPU (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>סף 경告 זיכרון (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>תקופת 경고 (דקות)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
         <source>Notifications</source>
-        <translation>התראות</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1231,6 +1279,8 @@ Are you sure you want to continue?</source>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="150"/>
+        <location filename="../gui/system_service_table_view.cpp" line="216"/>
+        <location filename="../gui/system_service_table_view.cpp" line="282"/>
         <source>Service instance name</source>
         <translation>שם דוגמה שירות</translation>
     </message>
@@ -1249,21 +1299,25 @@ Are you sure you want to continue?</source>
     <name>Service.Table.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="114"/>
+        <location filename="../gui/system_service_table_view.cpp" line="541"/>
         <source>Refresh</source>
         <translation>�新鲜</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="99"/>
+        <location filename="../gui/system_service_table_view.cpp" line="521"/>
         <source>Start</source>
         <translation>התחל</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="104"/>
+        <location filename="../gui/system_service_table_view.cpp" line="526"/>
         <source>Stop</source>
         <translation>עצור</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="109"/>
+        <location filename="../gui/system_service_table_view.cpp" line="531"/>
         <source>Restart</source>
         <translation>החל שוב</translation>
     </message>
@@ -1318,12 +1372,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>מצב הפעלה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>רמאות הפעלה</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1331,23 +1385,25 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="124"/>
         <source>Settings</source>
-        <translation>הגדרות</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
         <source>(Modifiable)</source>
-        <translation>(قابل לעריכה)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
         <source>Range: %1-%2</source>
-        <translation>טווח: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="55"/>
+        <location filename="../gui/main_window.cpp" line="122"/>
         <source>Force end application</source>
         <translation>סיים את האפליקציה ברצף</translation>
     </message>
@@ -1371,6 +1427,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Search</name>
     <message>
         <location filename="../common/common.cpp" line="40"/>
+        <location filename="../gui/toolbar.cpp" line="84"/>
         <source>Search</source>
         <translation>חיפוש</translation>
     </message>
@@ -1379,18 +1436,26 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <location filename="../common/common.cpp" line="49"/>
+        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/toolbar.cpp" line="43"/>
         <source>Processes</source>
         <translation>กระบวนות</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="94"/>
+        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/toolbar.cpp" line="51"/>
         <source>Services</source>
         <translation>שירותים</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
-        <translation>משתמשים</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1398,7 +1463,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="97"/>
         <source>Edit account information</source>
-        <translation>ערוך מידע החשבון</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1406,12 +1471,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Administrator</source>
-        <translation>מנהל</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="145"/>
         <source>Standard User</source>
-        <translation>משתמש סטנדרטי</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

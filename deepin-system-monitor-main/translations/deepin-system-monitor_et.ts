@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="et">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="et">
 <context>
     <name>App.About</name>
     <message>
         <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="96"/>
         <source>System Monitor</source>
         <translation>Süsteemi monitor</translation>
     </message>
@@ -23,11 +22,13 @@
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
         <source>Overall utilization</source>
         <translation>Kokku arvatud kasutamine</translation>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
         <source>Individual utilization</source>
         <translation>Singulárga kasutamine</translation>
     </message>
@@ -49,6 +50,7 @@
     <name>CPUDetailGrapTableItem</name>
     <message>
         <location filename="../gui/cpu_detail_widget.cpp" line="154"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="268"/>
         <source>60 seconds</source>
         <translation>60 sekundit</translation>
     </message>
@@ -159,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="298"/>
         <source>Cancel</source>
-        <translation>Tühista</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -174,6 +176,7 @@
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="477"/>
+        <location filename="../gui/system_service_table_view.cpp" line="456"/>
         <source>No search results</source>
         <translation>Otsimisel ei leitud tulemusi</translation>
     </message>
@@ -413,6 +416,7 @@
     <name>DBusAlarmNotify</name>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
+        <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
         <translation>Hoiatus</translation>
     </message>
@@ -608,6 +612,8 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="510"/>
+        <location filename="../gui/process_table_view.cpp" line="165"/>
+        <location filename="../gui/process_table_view.cpp" line="366"/>
         <source>End process</source>
         <translation>Lõpeta protsess</translation>
     </message>
@@ -627,12 +633,15 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="519"/>
+        <location filename="../gui/process_table_view.cpp" line="172"/>
+        <location filename="../gui/process_table_view.cpp" line="374"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Loetle</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="520"/>
+        <location filename="../gui/process_table_view.cpp" line="375"/>
         <source>Force End</source>
         <comment>button</comment>
         <translation>Lõpeta püüakse</translation>
@@ -649,7 +658,7 @@ Püüad otsesult jatuda?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="299"/>
         <source>Logout</source>
-        <translation>Logi välja</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -672,6 +681,7 @@ Püüad otsesult jatuda?</translation>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>IP address:</source>
         <translation>IP aadress:</translation>
     </message>
@@ -731,77 +741,79 @@ Püüad otsesult jatuda?</translation>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="328"/>
         <source>Bandwidth</source>
-        <translation>Bandwidth</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
         <source>RX packets</source>
-        <translation>Sisepakettide arv</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="338"/>
         <source>RX bytes</source>
-        <translation>Sisepakettide suurus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="343"/>
         <source>RX errors</source>
-        <translation>Sisepakettide vigad</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="348"/>
         <source>RX dropped</source>
-        <translation>Sisepakettide kaotus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>Sisepakettide ületused</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>Sisepakettide raam</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>Väljapakettide arv</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>Väljapakettide suurus</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
         <source>TX errors</source>
-        <translation>Väljapakettide vigad</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>Väljapakettide ületused</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>Väljapakettide kandja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
-        <translation>IPv4</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
-        <translation>IPv6</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>Väljapakettide kaotus</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -809,17 +821,17 @@ Püüad otsesult jatuda?</translation>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="140"/>
         <source>Command line</source>
-        <translation>Käsuread</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="145"/>
         <source>Start time</source>
-        <translation>Alustamise aeg</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="135"/>
         <source>Name</source>
-        <translation type="unfinished">Nimi</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -827,86 +839,108 @@ Püüad otsesult jatuda?</translation>
     <message>
         <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="146"/>
         <source>Click the application you want to end</source>
-        <translation>Klõpsa siin saabuvale rakendusele, mida soovid lõpeta</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Graph.Title</name>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="144"/>
+        <location filename="../gui/mem_detail_view_widget.cpp" line="22"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="97"/>
+        <location filename="../memory_monitor.cpp" line="163"/>
         <source>Memory</source>
-        <translation type="unfinished">Muist</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
         <source>Receive</source>
-        <translation>Saama</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Process.Graph.View</name>
     <message>
         <location filename="../compact_cpu_monitor.cpp" line="220"/>
+        <location filename="../cpu_monitor.cpp" line="216"/>
+        <location filename="../cpu_monitor.cpp" line="225"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="352"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="143"/>
         <source>CPU</source>
-        <translation type="unfinished">CPU</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="145"/>
         <source>Disk read</source>
-        <translation type="unfinished">Plaaditele lugemine</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="146"/>
         <source>Disk write</source>
-        <translation type="unfinished">Plaaditele kirjutamine</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="176"/>
+        <location filename="../memory_monitor.cpp" line="189"/>
         <source>Memory</source>
-        <translation type="unfinished">Muist</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="187"/>
+        <location filename="../compact_memory_monitor.cpp" line="193"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="105"/>
+        <location filename="../memory_monitor.cpp" line="199"/>
+        <location filename="../memory_monitor.cpp" line="205"/>
         <source>Swap</source>
         <translation>Vahetus</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="188"/>
+        <location filename="../memory_monitor.cpp" line="200"/>
         <source>Not enabled</source>
         <translation>Mitteaktilise</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="152"/>
+        <location filename="../network_monitor.cpp" line="205"/>
         <source>Download</source>
         <translation>Laeb alla</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="157"/>
+        <location filename="../network_monitor.cpp" line="210"/>
         <source>Upload</source>
         <translation>Laeb üles</translation>
     </message>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="145"/>
+        <location filename="../gui/netif_detail_view_widget.cpp" line="25"/>
+        <location filename="../network_monitor.cpp" line="187"/>
         <source>Network</source>
         <translation>Võrgustik</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="154"/>
+        <location filename="../network_monitor.cpp" line="207"/>
         <source>Total Received</source>
         <translation>Kokku saamud</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="159"/>
+        <location filename="../network_monitor.cpp" line="212"/>
         <source>Total Sent</source>
         <translation>Kokku saatud</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
         <source>Send</source>
         <translation>Saatmine</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="146"/>
         <source>Disks</source>
         <translation>Diskid</translation>
     </message>
@@ -923,31 +957,37 @@ Püüad otsesult jatuda?</translation>
     <name>Process.Priority</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="615"/>
+        <location filename="../process/process.cpp" line="54"/>
         <source>Very high</source>
         <translation>Väga kõrge</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="623"/>
+        <location filename="../process/process.cpp" line="55"/>
         <source>High</source>
         <translation>Kõrge</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="631"/>
+        <location filename="../process/process.cpp" line="56"/>
         <source>Normal</source>
         <translation>Normaalne</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="639"/>
+        <location filename="../process/process.cpp" line="57"/>
         <source>Low</source>
         <translation>Vähem kõrge</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="647"/>
+        <location filename="../process/process.cpp" line="58"/>
         <source>Very low</source>
         <translation>Väga väiksem</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="655"/>
+        <location filename="../process/process.cpp" line="59"/>
         <source>Custom</source>
         <translation>Mõista</translation>
     </message>
@@ -963,6 +1003,7 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="138"/>
+        <location filename="../process/process_db.cpp" line="176"/>
         <source>Failed to change process priority</source>
         <translation>Protsessi prioriteedi muutmine ebaõnnestus</translation>
     </message>
@@ -1040,6 +1081,8 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="82"/>
+        <location filename="../process/process_name.cpp" line="89"/>
+        <location filename="../process/process_name.cpp" line="92"/>
         <source>Tray</source>
         <translation>Põhikujundus</translation>
     </message>
@@ -1053,21 +1096,25 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="79"/>
+        <location filename="../gui/process_table_view.cpp" line="666"/>
         <source>Properties</source>
         <translation>Omadused</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="62"/>
+        <location filename="../gui/process_table_view.cpp" line="590"/>
         <source>End process</source>
         <translation>Lõpeta prosess</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="74"/>
+        <location filename="../gui/process_table_view.cpp" line="602"/>
         <source>Resume process</source>
         <translation>Taasalusta prosesse</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="85"/>
+        <location filename="../gui/process_table_view.cpp" line="673"/>
         <source>Kill process</source>
         <translation>Lõpetage prosess</translation>
     </message>
@@ -1078,6 +1125,7 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="68"/>
+        <location filename="../gui/process_table_view.cpp" line="596"/>
         <source>Suspend process</source>
         <translation>Pära prossess</translation>
     </message>
@@ -1230,6 +1278,8 @@ Püüad otsesult jatuda?</translation>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="150"/>
+        <location filename="../gui/system_service_table_view.cpp" line="216"/>
+        <location filename="../gui/system_service_table_view.cpp" line="282"/>
         <source>Service instance name</source>
         <translation>Teenuse näide nimi</translation>
     </message>
@@ -1248,21 +1298,25 @@ Püüad otsesult jatuda?</translation>
     <name>Service.Table.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="114"/>
+        <location filename="../gui/system_service_table_view.cpp" line="541"/>
         <source>Refresh</source>
         <translation>Pärast uuesti</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="99"/>
+        <location filename="../gui/system_service_table_view.cpp" line="521"/>
         <source>Start</source>
         <translation>Alusta</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="104"/>
+        <location filename="../gui/system_service_table_view.cpp" line="526"/>
         <source>Stop</source>
         <translation>Lõpeta</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="109"/>
+        <location filename="../gui/system_service_table_view.cpp" line="531"/>
         <source>Restart</source>
         <translation>Uuesti käivita</translation>
     </message>
@@ -1339,6 +1393,7 @@ Püüad otsesult jatuda?</translation>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
         <source>Range: %1-%2</source>
         <translation>Vahemik: %1-%2</translation>
     </message>
@@ -1347,6 +1402,7 @@ Püüad otsesult jatuda?</translation>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="55"/>
+        <location filename="../gui/main_window.cpp" line="122"/>
         <source>Force end application</source>
         <translation>Jagada rakendust</translation>
     </message>
@@ -1370,6 +1426,7 @@ Püüad otsesult jatuda?</translation>
     <name>Title.Bar.Search</name>
     <message>
         <location filename="../common/common.cpp" line="40"/>
+        <location filename="../gui/toolbar.cpp" line="84"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
@@ -1378,16 +1435,24 @@ Püüad otsesult jatuda?</translation>
     <name>Title.Bar.Switch</name>
     <message>
         <location filename="../common/common.cpp" line="49"/>
+        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/toolbar.cpp" line="43"/>
         <source>Processes</source>
         <translation>Protsessid</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="94"/>
+        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/toolbar.cpp" line="51"/>
         <source>Services</source>
         <translation> teenused</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/toolbar.cpp" line="58"/>
         <source>Users</source>
         <translation>Kasutajad</translation>
     </message>

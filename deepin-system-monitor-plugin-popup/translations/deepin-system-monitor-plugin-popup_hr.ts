@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hr">
 <context>
     <name>Common.Search</name>
     <message>
@@ -21,8 +19,10 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
-        <translation>Korist</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -52,6 +52,7 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
@@ -88,6 +89,8 @@
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Mreža</translation>
     </message>
@@ -145,12 +148,12 @@
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Failed to resume process</source>
-        <translation>Nije moguće ponovno pokrenuti proces</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="177"/>
         <source>Failed to kill process</source>
-        <translation>Nije moguće zatvoriti proces</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="180"/>
@@ -160,7 +163,7 @@
     <message>
         <location filename="../process/process_db.cpp" line="239"/>
         <source>Failed in sending signal to process</source>
-        <translation>Nije moguće poslati signal procesu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -221,12 +224,12 @@
     <message>
         <location filename="../model/process_table_model.h" line="30"/>
         <source>Disk read</source>
-        <translation>Čitanje diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="32"/>
         <source>Disk write</source>
-        <translation>Pisanje diska</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="34"/>
@@ -236,7 +239,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="36"/>
         <source>Nice</source>
-        <translation>Nice</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
@@ -258,6 +261,8 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
         <translation>Procesi</translation>
     </message>
