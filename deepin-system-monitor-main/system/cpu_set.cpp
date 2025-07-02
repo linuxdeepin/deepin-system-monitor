@@ -659,8 +659,7 @@ void CPUSet::read_overall_info()
 
 void CPUSet::read_dmi_cache_info()
 {
-    if (read_dmi_cache || (d->m_info.contains("L1d cache") && d->m_info.contains("L1i cache") && d->m_info.contains("L2 cache") && d->m_info.contains("L3 cache"))) {
-        read_dmi_cache = true;
+    if (read_dmi_cache) {
         return;
     }
 
@@ -768,6 +767,24 @@ void CPUSet::read_dmi_cache_info()
                 d->m_info.insert("L3 cache", QString::number(size) + " " + typeStr);
             }
         }
+    }
+}
+
+void CPUSet::read_cache_from_lscpu_cmd()
+{
+    if (read_dmi_cache)
+        return;   // 不要覆盖 dmidecode 获取的缓存信息
+
+    QProcess process;
+    QString command = "lscpu | grep cache";
+    process.start("bash", QStringList() << "-c" << command);
+    process.waitForFinished(3000);
+    QString cache = process.readAllStandardOutput();
+    QStringList cacheList = cache.split("\n", QString::SkipEmptyParts);
+    for (const QString &cacheLine : qAsConst(cacheList)) {
+        QStringList keyValue = cacheLine.split(":", QString::SkipEmptyParts);
+        if (keyValue.count() > 1)
+            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
     }
 }
 
@@ -973,6 +990,8 @@ void CPUSet::read_lscpu()
             d->m_info.insert("Hypervisor", "cxt->virt->hypervisor");
         }
     }
+
+#if 0   // 这套方式获取缓存可能存在一些问题，暂时注释掉，直接使用后面的 lscpu 命令获取
     /* Section: caches */
     if (cxt->ncaches) {
         const char *last = nullptr;
@@ -1003,6 +1022,11 @@ void CPUSet::read_lscpu()
             last = name;
         }
     }
+#endif
+
+    // 直接通过 lscpu 命令获取缓存信息，保持与 lscpu 命令一致；
+    // 部分厂商的设备会通过 dmidecode 覆盖 lscpu 命令获取的缓存信息，这里不会影响这类设备上的表现；
+    read_cache_from_lscpu_cmd();
     read_dmi_cache_info();
     // 某些CPU不带有缓存用‘-’替代
     if (!d->m_info.contains("L1d cache")) {
