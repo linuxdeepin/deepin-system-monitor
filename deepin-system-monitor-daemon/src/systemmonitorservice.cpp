@@ -83,7 +83,10 @@ SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
     connect(&mMoniterTimer, &QTimer::timeout, this, &SystemMonitorService::onMonitorTimeout);
 
     // 启动监测定时器
-    mMoniterTimer.start();
+    if (mProtectionStatus) {
+        mMoniterTimer.start();
+    }
+
     qCInfo(app) << "Started monitoring timer with interval:" << MonitorTimeOut << "ms";
 
     QDBusConnection::RegisterOptions opts =
@@ -257,6 +260,10 @@ void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVaria
         if (mSettings.isVaildValue(item, value.variant())) {
             if (item == AlarmStatusOptionName) {
                 mProtectionStatus = value.variant().toBool();
+                if (mProtectionStatus) {
+                    qCDebug(app) << "mProtectionStatus value:" << mProtectionStatus;
+                    mMoniterTimer.start();
+                }
             } else if (item == AlarmCpuUsageOptionName) {
                 mAlarmCpuUsage = value.variant().toInt();
             } else if (item == AlarmMemUsageOptionName) {
