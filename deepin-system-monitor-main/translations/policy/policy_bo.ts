@@ -31,5 +31,15 @@
 			<source>Set service startup type</source>
 			<translation>ཞབས་ཞུའི་འགོ་སློང་བྱེད་ཐབས་སྒྲིག་འགོད་བྱེད་པ།</translation>
 		</message>
+		<message>
+			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0"/>
+			<source>Logging out other users is required to change process priority</source>
+			<translation type="unfinished"/>
+		</message>
+		<message>
+			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0"/>
+			<source>Logout other users</source>
+			<translation type="unfinished"/>
+		</message>
 	</context>
 </TS>
