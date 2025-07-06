@@ -34,12 +34,12 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0"/>
 			<source>Logging out other users is required to change process priority</source>
-			<translation type="unfinished"/>
+			<translation>Es necesario cerrar la sesión de otros usuarios para cambiar la prioridad del proceso</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0"/>
 			<source>Logout other users</source>
-			<translation type="unfinished"/>
+			<translation>Cerrar sesión de otros usuarios</translation>
 		</message>
 	</context>
 </TS>
