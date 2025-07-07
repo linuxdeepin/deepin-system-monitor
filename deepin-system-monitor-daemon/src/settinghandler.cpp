@@ -26,6 +26,7 @@ const static int MaxAlarmInterval = 60;
 SettingHandler::SettingHandler(QObject *parent)
     : QObject(parent), mSettings(nullptr), mBackend(nullptr)
 {
+    qCDebug(app) << "SettingHandler constructor";
     QString orgName = qApp->organizationName();
     if (orgName.isEmpty()) {
         orgName = "deepin";
@@ -57,6 +58,8 @@ SettingHandler::SettingHandler(QObject *parent)
     if (mSettings != nullptr) {
         mSettings->setBackend(mBackend);
         qCInfo(app) << "Settings handler initialized successfully";
+    } else {
+        qCWarning(app) << "mSettings is null!";
     }
 }
 
@@ -64,22 +67,27 @@ SettingHandler::~SettingHandler()
 {
     qCDebug(app) << "Cleaning up settings handler";
     if (mSettings != nullptr) {
+        qCDebug(app) << "delete mSettings";
         mSettings->deleteLater();
     }
 
     if (mBackend != nullptr) {
+        qCDebug(app) << "delete mBackend";
         mBackend->deleteLater();
     }
 }
 
 bool SettingHandler::isCompelted()
 {
+    qCDebug(app) << "isCompelted";
     return (mBackend != nullptr && mSettings != nullptr);
 }
 
 QVariant SettingHandler::getOptionValue(const QString key)
 {
+    qCDebug(app) << "getOptionValue with key:" << key;
     if (isCompelted() && mSettings->keys().contains(key)) {
+        qCDebug(app) << "get option value success";
         return mSettings->getOption(key);
     } else {
         qCWarning(app) << "Failed to get option value for" << key
@@ -92,6 +100,7 @@ QVariant SettingHandler::getOptionValue(const QString key)
 
 bool SettingHandler::changedOptionValue(const QString key, const QVariant value)
 {
+    qCDebug(app) << "changedOptionValue with key:" << key << "value:" << value;
     if (isCompelted() && mSettings->keys().contains(key)) {
         auto opt = mSettings->option(key);
         opt->setValue(value);
@@ -109,6 +118,7 @@ bool SettingHandler::changedOptionValue(const QString key, const QVariant value)
 
 bool SettingHandler::isVaildValue(const QString key, const QVariant value)
 {
+    qCDebug(app) << "isVaildValue with key:" << key << "value:" << value;
     if (mValueRange.contains(key) && value.type() >= QVariant::Bool && value.type() <= QVariant::Double) {
         QPair<double, double> range = mValueRange[key];
         double valueD = value.toDouble();
@@ -117,11 +127,13 @@ bool SettingHandler::isVaildValue(const QString key, const QVariant value)
                      << "Range:" << range << "Valid:" << valid;
         return valid;
     }
+    qCDebug(app) << "no need to check value validation";
     return true;
 }
 
 QPair<double, double> SettingHandler::getValueRange(const QString key)
 {
+    qCDebug(app) << "getValueRange with key:" << key;
     QPair<double, double> range(0, 0);
     if (mValueRange.contains(key)) {
         range = mValueRange[key];
@@ -134,5 +146,6 @@ QPair<double, double> SettingHandler::getValueRange(const QString key)
 
 QList<QString> SettingHandler::itemKeys()
 {
+    qCDebug(app) << "itemKeys";
     return mSettings->keys();
 }

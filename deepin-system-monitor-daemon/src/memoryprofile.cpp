@@ -12,10 +12,12 @@ using namespace DDLog;
 MemoryProfile::MemoryProfile(QObject *parent)
     : QObject(parent), mMemUsage(0)
 {
+    qCDebug(app) << "MemoryProfile constructor";
 }
 
 double MemoryProfile::updateSystemMemoryUsage()
 {
+    qCDebug(app) << "updateSystemMemoryUsage";
     // 返回值，内存占用率
     double memUsage = 0;
 
@@ -39,6 +41,7 @@ double MemoryProfile::updateSystemMemoryUsage()
             return memUsage;
         }
 
+        qCDebug(app) << "Memory statistics data is not empty";
         // 数据提取
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList list1 = QString(lineData1).split(" ", QString::SkipEmptyParts);
@@ -58,6 +61,7 @@ double MemoryProfile::updateSystemMemoryUsage()
             return memUsage;
         }
 
+        qCDebug(app) << "Memory statistics data format is valid";
         QMap<QString, int> memDataMap;
         memDataMap[list1.at(0)] = list1.at(1).toInt();
         memDataMap[list2.at(0)] = list2.at(1).toInt();
@@ -65,6 +69,7 @@ double MemoryProfile::updateSystemMemoryUsage()
 
         // 为返回值赋值，计算内存占用率
         if (memDataMap.contains("MemTotal:") && memDataMap.contains("MemAvailable:") && memDataMap["MemTotal:"] != 0) {
+            qCDebug(app) << "Calculating memory usage";
             memUsage = (memDataMap["MemTotal:"] - memDataMap["MemAvailable:"]) * 100.0 / memDataMap["MemTotal:"];
             mMemUsage = memUsage;
             qCDebug(app) << "Updated memory usage:" << memUsage << "%"
@@ -83,5 +88,6 @@ double MemoryProfile::updateSystemMemoryUsage()
 
 double MemoryProfile::getMemUsage()
 {
+    // qCDebug(app) << "getMemUsage";
     return mMemUsage;
 }

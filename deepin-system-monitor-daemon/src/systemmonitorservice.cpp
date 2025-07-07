@@ -33,11 +33,13 @@ using namespace DDLog;
 // 通过PID获取进程名称
 QString getNameByPid(pid_t pid)
 {
+    // qCDebug(app) << "getNameByPid with pid:" << pid;
     QString name;
     QFile file(QString("/proc/%1/cmdline").arg(pid));
     if (file.open(QFile::ReadOnly)) {
         name = file.readLine();
         file.close();
+        // qCDebug(app) << "get process name success, name is" << name;
     }
     return name;
 }
@@ -57,6 +59,7 @@ SystemMonitorService::SystemMonitorService(const char *name, QObject *parent)
       mCpu(this),
       mMem(this)
 {
+    qCDebug(app) << "SystemMonitorService constructor";
     if (mSettings.isCompelted()) {
         qCDebug(app) << "Loading settings from configuration";
         mProtectionStatus = mSettings.getOptionValue(AlarmStatusOptionName).toBool();
@@ -245,6 +248,7 @@ void SystemMonitorService::setAlarmUsageOfMemory(int usage)
 void SystemMonitorService::showDeepinSystemMoniter()
 {
     PrintDBusCaller()
+    qCDebug(app) << "showDeepinSystemMoniter";
 
     QString cmd("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showDeepinSystemMoniter");
     QTimer::singleShot(100, this, [=]() { QProcess::startDetached(cmd); });
@@ -255,6 +259,7 @@ void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVaria
     qCDebug(app) << "Changing alarm item:" << item << "to value:" << value.variant();
     if (mSettings.itemKeys().contains(item) && mSettings.isVaildValue(item, value.variant())) {
         if (mSettings.isVaildValue(item, value.variant())) {
+            qCDebug(app) << "value is vaild";
             if (item == AlarmStatusOptionName) {
                 mProtectionStatus = value.variant().toBool();
             } else if (item == AlarmCpuUsageOptionName) {
@@ -280,6 +285,7 @@ void SystemMonitorService::changeAlarmItem(const QString &item, const QDBusVaria
 
 bool SystemMonitorService::checkCpuAlarm()
 {
+    qCDebug(app) << "checkCpuAlarm";
     qint64 curTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     qint64 diffTime = curTimeStamp - mLastAlarmTimeStamp;
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
@@ -289,6 +295,7 @@ bool SystemMonitorService::checkCpuAlarm()
         mLastAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showCpuAlarmNotify \"%1\" ").arg(QString::number(mCpuUsage));
         QTimer::singleShot(100, this, [=]() {
+            qCDebug(app) << "showCpuAlarmNotify";
             QStringList args;
             args << "call" << "-e" << "-d" << "com.deepin.SystemMonitorServer"
                  << "-o" << "/com/deepin/SystemMonitorServer"
@@ -310,6 +317,7 @@ bool SystemMonitorService::checkCpuAlarm()
 
 bool SystemMonitorService::checkMemoryAlarm()
 {
+    qCDebug(app) << "checkMemoryAlarm";
     qint64 curTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     qint64 diffTime = curTimeStamp - mLastAlarmTimeStamp;
     qint64 timeGap = 1000 * 60 * mAlarmInterval;
@@ -319,6 +327,7 @@ bool SystemMonitorService::checkMemoryAlarm()
         mLastAlarmTimeStamp = curTimeStamp;
         QString cmd = QString("gdbus call -e -d  com.deepin.SystemMonitorServer -o /com/deepin/SystemMonitorServer -m com.deepin.SystemMonitorServer.showMemoryAlarmNotify \"%1\" ").arg(QString::number(mMemoryUsage));
         QTimer::singleShot(100, this, [=]() {
+            qCDebug(app) << "showMemoryAlarmNotify";
             QStringList args;
             args << "call" << "-e" << "-d" << "com.deepin.SystemMonitorServer"
                  << "-o" << "/com/deepin/SystemMonitorServer"
@@ -340,6 +349,7 @@ bool SystemMonitorService::checkMemoryAlarm()
 
 void SystemMonitorService::onMonitorTimeout()
 {
+    qCDebug(app) << "onMonitorTimeout";
     // 获取CPU和内存占用
     mCpuUsage = static_cast<int>(mCpu.updateSystemCpuUsage());
     mMemoryUsage = static_cast<int>(mMem.updateSystemMemoryUsage());
@@ -347,6 +357,7 @@ void SystemMonitorService::onMonitorTimeout()
 
     // 进行警报检测
     if (mProtectionStatus) {
+        qCDebug(app) << "Protection status is enabled. Checking alarms...";
         checkCpuAlarm();
         checkMemoryAlarm();
     }

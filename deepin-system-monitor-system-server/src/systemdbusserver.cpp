@@ -47,22 +47,27 @@ bool checkAuthorization(const QString &appBusName, const QString &action)
  */
 static QString getProcIdExe(qint64 id)
 {
+    qCDebug(app) << "Getting executable for PID:" << id;
     QString execName;
     if (id > 0) {
         // Read contents of virtual /proc/{pid}/cmdline file
         QString exeSymlinkPath = QString("/proc/%1/exe").arg(id);
         char *actualpath = realpath(exeSymlinkPath.toStdString().c_str(), nullptr);
         execName = QString(actualpath);
+        free(actualpath); // free the memory allocated by realpath
     }
+    qCDebug(app) << "Executable for PID" << id << "is:" << execName;
     return execName;
 }
 
 SystemDBusServer::SystemDBusServer(QObject *parent)
     : QObject(parent)
 {
+    qCDebug(app) << "SystemDBusServer created";
     // name: 配置文件中的服务名称 org.deepin.SystemMonitorSystemServer
     QDBusConnection dbus = QDBusConnection::systemBus();
     if (dbus.registerService("org.deepin.SystemMonitorSystemServer")) {
+        qCDebug(app) << "Successfully registered service org.deepin.SystemMonitorSystemServer";
         QDBusConnection::RegisterOptions opts =
                 QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals | QDBusConnection::ExportAllProperties;
         if (!dbus.registerObject("/org/deepin/SystemMonitorSystemServer", this, opts)) {
@@ -83,6 +88,7 @@ SystemDBusServer::SystemDBusServer(QObject *parent)
  */
 void SystemDBusServer::exitDBusServer(int msec)
 {
+    qCDebug(app) << "Scheduling exit in" << msec << "ms";
     qApp->processEvents();
     m_timer.start(msec);
 }
@@ -92,6 +98,7 @@ void SystemDBusServer::exitDBusServer(int msec)
  */
 QString SystemDBusServer::setServiceEnable(const QString &serviceName, bool enable)
 {
+    qCDebug(app) << "setServiceEnable called for service:" << serviceName << "enable:" << enable;
     QString ret = setServiceEnableImpl(serviceName, enable);
     exitDBusServer(8000);
     return ret;
@@ -102,6 +109,7 @@ QString SystemDBusServer::setServiceEnable(const QString &serviceName, bool enab
  */
 QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool enable)
 {
+    qCDebug(app) << "setServiceEnableImpl called for service:" << serviceName << "enable:" << enable;
     // 调用者限制前台系统监视器程序
     if (!checkCaller()) {
         qCWarning(app) << "Unauthorized caller attempt to modify service:" << serviceName;
@@ -123,10 +131,12 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     listPorcess.start("systemctl", { "list-unit-files", "--type=service", "--no-pager" });
     listPorcess.waitForFinished();
     QByteArray serviceList = listPorcess.readAll();
+    qCDebug(app) << "Checking for service existence...";
     if (!serviceList.contains(serviceName.toUtf8())) {
         qCWarning(app) << "Service does not exist:" << serviceName;
         return QString(strerror(EINVAL));
     }
+    qCDebug(app) << "Service" << serviceName << "exists.";
 
     // 鉴权处理
     if (!checkAuthorization(message().service(), s_PolkitActionSet)) {
@@ -136,11 +146,13 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 
     // 执行设置
     QProcess process;
+    qCDebug(app) << "Executing 'systemctl" << (enable ? "enable" : "disable") << serviceName << "'";
     process.start("systemctl", { enable ? "enable" : "disable", serviceName });
     process.waitForFinished();
     QString errorRet = process.readAll();
 
     // 检测是否执行成功
+    qCDebug(app) << "Checking service status after operation...";
     process.start("systemctl", { "is-enabled", serviceName });
     process.waitForFinished();
     QString checkRet = process.readAll();
