@@ -26,6 +26,7 @@ MLogger::MLogger(QObject *parent)
     // set dconfig
     m_config = DConfig::create("deepin-system-monitor-server", "org.deepin.system-monitor.server");
     logRules = m_config->value("log_rules").toByteArray();
+    qCDebug(app) << "Log rules from DConfig:" << logRules;
     appendRules(logRules);
     setRules(m_rules);
 
@@ -33,6 +34,7 @@ MLogger::MLogger(QObject *parent)
     connect(m_config, &DConfig::valueChanged, this, [this](const QString &key) {
         qCCritical(app) << "value changed:" << key;
         if (key == "log_rules") {
+            qCDebug(app) << "log_rules changed in DConfig, updating rules...";
             setRules(m_config->value(key).toByteArray());
         }
     });
@@ -40,11 +42,13 @@ MLogger::MLogger(QObject *parent)
 
 MLogger::~MLogger()
 {
+    qCDebug(app) << "MLogger destroyed";
     m_config->deleteLater();
 }
 
 void MLogger::setRules(const QString &rules)
 {
+    qCDebug(app) << "Setting filter rules:" << rules;
     auto tmpRules = rules;
     m_rules = tmpRules.replace(";", "\n");
     QLoggingCategory::setFilterRules(m_rules);
@@ -52,6 +56,7 @@ void MLogger::setRules(const QString &rules)
 
 void MLogger::appendRules(const QString &rules)
 {
+    qCDebug(app) << "Appending filter rules:" << rules;
     QString tmpRules = rules;
     tmpRules = tmpRules.replace(";", "\n");
     auto tmplist = tmpRules.split('\n');
@@ -60,8 +65,11 @@ void MLogger::appendRules(const QString &rules)
             tmplist.removeAt(i);
             i--;
         }
-    if (tmplist.isEmpty())
+    if (tmplist.isEmpty()) {
+        qCDebug(app) << "No new rules to append";
         return;
+    }
     m_rules.isEmpty() ? m_rules = tmplist.join("\n")
                       : m_rules += "\n" + tmplist.join("\n");
+    qCDebug(app) << "Appended rules. New ruleset:" << m_rules;
 }

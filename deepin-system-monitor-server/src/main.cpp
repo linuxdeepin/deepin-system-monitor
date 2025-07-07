@@ -10,6 +10,9 @@
 #include "dtkcore_global.h"
 #include "dbusserver.h"
 #include "logger.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 int main(int argc, char *argv[])
 {
@@ -26,9 +29,11 @@ int main(int argc, char *argv[])
 #endif
 
     QCoreApplication a(argc, argv);
+    qCDebug(app) << "QCoreApplication created";
 
     DBusServer dbusServer;
     dbusServer.exitDBusServer(10000);
 
+    qCDebug(app) << "Starting server event loop...";
     return a.exec();
 }

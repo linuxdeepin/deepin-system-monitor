@@ -13,6 +13,7 @@ using namespace DDLog;
 CpuProfile::CpuProfile(QObject *parent)
     : QObject(parent), mCpuUsage(0.0)
 {
+    qCDebug(app) << "CpuProfile constructor";
     // mLastCpuStat用于记录Cpu状态
     // 各项数值是开机后各项工作的时间片总数
     // 初始化mLastCpuStat
@@ -35,6 +36,7 @@ CpuProfile::CpuProfile(QObject *parent)
 
 double CpuProfile::updateSystemCpuUsage()
 {
+    qCDebug(app) << "updateSystemCpuUsage";
     // 返回值，Cpu占用率
     double cpuUsage = 0.0;
 
@@ -60,6 +62,7 @@ double CpuProfile::updateSystemCpuUsage()
             return cpuUsage;
         }
 
+        qCDebug(app) << "cpuStatus data is valid";
         // 构建数据map，便于后期数据计算方式需求变更
         QMap<QString, int> curCpuStat;
         {
@@ -92,6 +95,7 @@ double CpuProfile::updateSystemCpuUsage()
             qCWarning(app) << "CPU total usage calculation result is 0. Current CPU stats:" << curCpuStat;
             return cpuUsage;
         }
+        qCDebug(app) << "calcCpuTotal is not 0";
         // 上一个时间段内的Cpu使用情况
         cpuUsage = (calcCpuTotal - calcCpuIdle) * 100.0 / calcCpuTotal;
 
@@ -110,10 +114,12 @@ double CpuProfile::updateSystemCpuUsage()
 
 QMap<QString, int> CpuProfile::cpuStat()
 {
+    // qCDebug(app) << "cpuStat";
     return mLastCpuStat;
 }
 
 double CpuProfile::getCpuUsage()
 {
+    // qCDebug(app) << "getCpuUsage";
     return mCpuUsage;
 }
