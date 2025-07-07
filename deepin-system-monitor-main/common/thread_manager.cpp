@@ -5,20 +5,27 @@
 
 #include "thread_manager.h"
 #include "base_thread.h"
+#include "ddlog.h"
 
 namespace common {
 namespace core {
 
+using namespace DDLog;
+
 Q_GLOBAL_STATIC(ThreadManager, theInstance)
 ThreadManager *ThreadManager::instance()
 {
+    // qCDebug(app) << "ThreadManager instance";
     return theInstance();
 }
 
 void ThreadManager::attach(BaseThread *thread)
 {
-    if (m_threadDB.contains(thread->threadKey()))
+    qCDebug(app) << "ThreadManager attach thread with key:" << thread->threadKey();
+    if (m_threadDB.contains(thread->threadKey())) {
+        qCDebug(app) << "thread already exists";
         return;
+    }
 
     m_threadDB[thread->threadKey()] = thread;
 }

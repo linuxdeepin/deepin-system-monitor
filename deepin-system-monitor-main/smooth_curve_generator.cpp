@@ -4,15 +4,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "smooth_curve_generator.h"
+#include "ddlog.h"
 
 #include <QPainterPath>
 #include <QPointF>
 
+using namespace DDLog;
+
 QPainterPath SmoothCurveGenerator::generateSmoothCurve(const QList<QPointF> &points)
 {
+    qCDebug(app) << "Generating smooth curve for" << points.size() << "points";
     QPainterPath path;
     int len = points.size();
+    // qCDebug(app) << "Generating smooth curve for" << len << "points";
     if (len < 2) {
+        // qCDebug(app) << "Not enough points to generate a curve, returning empty path";
         return path;
     }
 
@@ -27,11 +33,13 @@ QPainterPath SmoothCurveGenerator::generateSmoothCurve(const QList<QPointF> &poi
         path.cubicTo(firstControlPoints[i], secondControlPoints[i], points[i + 1]);
     }
 
+    qCDebug(app) << "Finished generating smooth curve";
     return path;
 }
 
 void SmoothCurveGenerator::calculateFirstControlPoints(double *&result, const double *rhs, int n)
 {
+    // qCDebug(app) << "Calculating first control points for" << n << "points";
     double *tmp = new double[n];
     double b = 2.0;
     result[0] = rhs[0] / b;
@@ -52,7 +60,9 @@ void SmoothCurveGenerator::calculateFirstControlPoints(double *&result, const do
 
 void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, QList<QPointF> *firstControlPoints, QList<QPointF> *secondControlPoints)
 {
+    // qCDebug(app) << "Calculating control points for" << knots.size() << "knots";
     int n = knots.size() - 1;
+    // qCDebug(app) << "Calculating control points for" << n + 1 << "knots";
     for (int i = 0; i < n; ++i) {
         firstControlPoints->append(QPointF());
         secondControlPoints->append(QPointF());
@@ -61,6 +71,7 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
     if (n == 1) {
         // Special case: Bezier curve should be a straight line.
         // P1 = (2P0 + P3) / 3
+        // qCDebug(app) << "Special case: n=1, creating a straight line";
         (*firstControlPoints)[0].rx() = (2 * knots[0].x() + knots[1].x()) / 3;
         (*firstControlPoints)[0].ry() = (2 * knots[0].y() + knots[1].y()) / 3;
         // P2 = 2P1 – P0
@@ -89,6 +100,8 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
     calculateFirstControlPoints(xs, rhsx, n);
     calculateFirstControlPoints(ys, rhsy, n);
 
+    // qCDebug(app) << "Calculated first control points, now filling output points";
+
     // Fill output control points.
     for (int i = 0; i < n; ++i) {
         (*firstControlPoints)[i].rx() = xs[i];
@@ -101,6 +114,8 @@ void SmoothCurveGenerator::calculateControlPoints(const QList<QPointF> &knots, Q
             (*secondControlPoints)[i].ry() = (knots[n].y() + ys[n - 1]) / 2;
         }
     }
+
+    // qCDebug(app) << "Finished calculating control points";
 
     delete[] xs;
     delete[] ys;

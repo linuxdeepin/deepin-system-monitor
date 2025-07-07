@@ -27,6 +27,7 @@ namespace common {
 // format icu error
 static QString parseError(const QString &words, UErrorCode &ec, const UParseError &pe)
 {
+    qCDebug(app) << "parseError with words:" << words;
     QString errbuf {};
 
     std::string pre {}, post {};
@@ -63,6 +64,7 @@ QString convHanToLatin(const QString &words)
         qCWarning(app) << "Failed to transliterate Han to Latin:" << parseError(words, ec, pe);
         result = words;
     } else {
+        qCDebug(app) << "Han to Latin success";
         ec = U_ZERO_ERROR;
         pe = {};
         unique_ptr<Transliterator> tr2(Transliterator::createInstance(
@@ -74,6 +76,7 @@ QString convHanToLatin(const QString &words)
             qCWarning(app) << "Failed to transliterate Latin to ASCII:" << parseError(words, ec, pe);
             result = words;
         } else {
+            qCDebug(app) << "Latin to ASCII success";
             std::string buffer;
             result = QString::fromStdString(ubuf.toUTF8String(buffer));
             qCDebug(app) << "Successfully converted to ASCII:" << result;

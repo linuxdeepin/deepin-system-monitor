@@ -7,6 +7,7 @@
 #include "stack_trace.h"
 #include "hash.h"
 #include "helper.hpp"
+#include "ddlog.h"
 
 #include <QPainter>
 #include <QString>
@@ -14,10 +15,13 @@
 #include <QDesktopServices>
 #include <QApplication>
 
+using namespace DDLog;
+
 namespace common {
 
 void displayShortcutHelpDialog(const QRect &rect)
 {
+    // qCDebug(app) << "displayShortcutHelpDialog at rect:" << rect;
     QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 
     QJsonObject shortcutObj;
@@ -137,6 +141,7 @@ void displayShortcutHelpDialog(const QRect &rect)
 
 int getStatusBarMaxWidth()
 {
+    // qCDebug(app) << "getStatusBarMaxWidth";
     // TODO: use more elegent way to calc bar width
     return 280;
 }
@@ -146,6 +151,7 @@ void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, in
                      double foregroundOpacity, QColor backgroundColor, double backgroundOpacity,
                      double percent)
 {
+    // qCDebug(app) << "drawLoadingRing";
     drawRing(painter, centerX, centerY, radius, penWidth, loadingAngle, rotationAngle,
              backgroundColor, backgroundOpacity);
     drawRing(painter, centerX, centerY, radius, penWidth, int(loadingAngle * percent), rotationAngle,
@@ -155,6 +161,7 @@ void drawLoadingRing(QPainter &painter, int centerX, int centerY, int radius, in
 void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWidth,
               int loadingAngle, int rotationAngle, QColor color, double opacity)
 {
+    // qCDebug(app) << "drawRing";
     QRect drawingRect;
 
     drawingRect.setX(centerX - radius + penWidth);
@@ -176,6 +183,7 @@ void drawRing(QPainter &painter, int centerX, int centerY, int radius, int penWi
 
 bool startWithHanzi(const QString &text)
 {
+    // qCDebug(app) << "startWithHanzi check text:" << text;
     if (text.isEmpty()) {
         qCDebug(app) << "Empty text provided to startWithHanzi check";
         return false;
@@ -219,14 +227,17 @@ int specialComType = -1;
 
 void WaylandSearchCentered()
 {
+    // qCDebug(app) << "WaylandSearchCentered";
     WaylandCentered = false;
 }
 
 static void init_shell_list()
 {
+    // qCDebug(app) << "init_shell_list";
     FILE *fp;
     fp = fopen("/etc/shells", "r");
     if (fp) {
+        // qCDebug(app) << "open /etc/shells success";
         char buf[128] {};
         char *s;
         while ((s = fgets(buf, 128, fp))) {
@@ -235,6 +246,7 @@ static void init_shell_list()
                 if (sh.endsWith('\n'))
                     sh.chop(1);
                 if (!shellList.contains(sh)) {
+                    // qCDebug(app) << "add shell:" << sh;
                     shellList << sh;
                 }
             }
@@ -247,6 +259,7 @@ static void init_shell_list()
 
 static void init_script_list()
 {
+    // qCDebug(app) << "init_script_list";
     // fill scripting lang list (!!far from complete)
     scriptList << "/usr/bin/python";
     scriptList << "/usr/bin/perl";
@@ -256,6 +269,7 @@ static void init_script_list()
 
 static void init_path_list()
 {
+    // qCDebug(app) << "init_path_list";
     // fill environment path
     auto paths = qgetenv("PATH");
     auto list = paths.split(':');
@@ -276,6 +290,7 @@ unsigned long HZ;
 
 static void get_HZ()
 {
+    // qCDebug(app) << "get_HZ";
     long ticks;
 
     if ((ticks = sysconf(_SC_CLK_TCK)) == -1) {
@@ -287,6 +302,7 @@ static void get_HZ()
 
 static void get_kb_shift()
 {
+    // qCDebug(app) << "get_kb_shift";
     int shift = 0;
     long size;
 
@@ -307,6 +323,7 @@ static void get_kb_shift()
 
 void global_init()
 {
+    // qCDebug(app) << "global_init";
     util::installCrashHandler();
     util::common::init_seed();
 
@@ -321,6 +338,7 @@ void global_init()
 
 QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
 {
+    // qCDebug(app) << "formatHz with freq:" << freq << "base:" << base << "prec:" << prec;
     int u = base;
     qreal v = freq;
 
@@ -335,6 +353,7 @@ QString format::formatHz(quint32 freq, format::HzUnit base, int prec)
 //内存、磁盘统一单位
 QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
 {
+    // qCDebug(app) << "formatUnit_memory_disk with size:" << size << "base:" << base << "prec:" << prec << "isSpeed:" << isSpeed;
     int u = base;
     if (!size.canConvert(QMetaType::Double)) {
         qCWarning(app) << "Invalid size value type";
@@ -359,6 +378,7 @@ QString format::formatUnit_memory_disk(QVariant size, format::SizeUnit base, int
 //网络统一单位
 QString format::formatUnit_net(QVariant size, format::SizeUnit base, int prec, bool isSpeed)
 {
+    // qCDebug(app) << "formatUnit_net with size:" << size << "base:" << base << "prec:" << prec << "isSpeed:" << isSpeed;
     int u = base;
     if (!size.canConvert(QMetaType::Double)) {
         qCWarning(app) << "Invalid size value type";

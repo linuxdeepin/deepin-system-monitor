@@ -13,6 +13,7 @@
 #include "dbus/dbus_object.h"
 #include "dbus/dbusalarmnotify.h"
 #include "3rdparty/dmidecode/dmidecode.h"
+#include "ddlog.h"
 
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -45,29 +46,36 @@ int main(int argc, char *argv[])
 #ifdef QT_DEBUG
     Dtk::Core::DLogManager::registerConsoleAppender();
 #endif
+    qCDebug(DDLog::app) << "Starting deepin-system-monitor";
 
     //Judge if Wayland
     WaylandSearchCentered();
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+        qCDebug(DDLog::app) << "XDG_CURRENT_DESKTOP is not deepin, setting it.";
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
 
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     Application app(argc, argv);
+    qCDebug(DDLog::app) << "Application object created";
     QCommandLineParser parser;
     parser.process(app);
     QStringList allArguments = parser.positionalArguments();
     if (allArguments.size() == 3 && allArguments.first().compare("alarm", Qt::CaseInsensitive) == 0) {
+        qCDebug(DDLog::app) << "Alarm command detected, showing notification and exiting.";
         app.loadTranslator();
         DBusAlarmNotify::getInstance().showAlarmNotify(allArguments);
         return 0;
     }
 
     //=======通知已经打开的进程
-    if (!DBusObject::getInstance().registerOrNotify())
+    if (!DBusObject::getInstance().registerOrNotify()) {
+        qCDebug(DDLog::app) << "Another instance is already running, exiting.";
         return 0;
+    }
 
     //获取dmidecode中CPU频率信息
+    qCDebug(DDLog::app) << "Getting CPU info from dmidecode";
     char *const cmd[] = { "dmidecode", "-t", "4" };
     get_cpuinfo_from_dmi(3, cmd);
     PERF_PRINT_BEGIN("POINT-01", "");
@@ -77,6 +85,7 @@ int main(int argc, char *argv[])
     DGuiApplicationHelper::setSingleInstanceInterval(-1);
     if (DGuiApplicationHelper::setSingleInstance(QString("deepin-system-monitor"),
                                                  DGuiApplicationHelper::UserScope)) {
+        qCDebug(DDLog::app) << "Successfully set single instance, starting main application";
         app.loadTranslator();
 
         const QString descriptionText = DApplication::translate(
@@ -118,10 +127,13 @@ int main(int argc, char *argv[])
                          &MainWindow::activateWindow);
 
         Dtk::Widget::moveToCenter(&mw);
+        qCDebug(DDLog::app) << "Showing main window";
         mw.show();
 
+        qCDebug(DDLog::app) << "Starting application event loop";
         return app.exec();
     }
 
+    qCDebug(DDLog::app) << "Could not set single instance, exiting.";
     return 0;
 }

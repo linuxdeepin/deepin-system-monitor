@@ -31,10 +31,12 @@ DWIDGET_USE_NAMESPACE
 using namespace common;
 using namespace common::format;
 using namespace core::system;
+using namespace DDLog;
 
 CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     : QWidget(parent)
 {
+    qCDebug(app) << "CompactMemoryMonitor constructor";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
 #else
@@ -73,38 +75,47 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
     connect(m_animation, &QPropertyAnimation::finished, this, &CompactMemoryMonitor::animationFinshed);
 }
 
-CompactMemoryMonitor::~CompactMemoryMonitor() {}
+CompactMemoryMonitor::~CompactMemoryMonitor() {
+    qCDebug(app) << "CompactMemoryMonitor destructor";
+}
 
 qreal CompactMemoryMonitor::progress() const
 {
+    qCDebug(app) << "progress";
     return m_progress;
 }
 void CompactMemoryMonitor::setProgress(qreal p)
 {
+    qCDebug(app) << "setProgress with p:" << p;
     m_progress = p;
 }
 
 void CompactMemoryMonitor::onStatInfoUpdated()
 {
+    qCDebug(app) << "onStatInfoUpdated";
     m_animation->start();
 }
 
 void CompactMemoryMonitor::animationFinshed()
 {
+    qCDebug(app) << "animationFinshed";
     m_lastMemPercent = (m_memInfo->memTotal() - m_memInfo->memAvailable()) * 1. / m_memInfo->memTotal();
     m_lastSwapPercent = (m_memInfo->swapTotal() - m_memInfo->swapFree()) * 1. / m_memInfo->swapTotal();
 }
 
 void CompactMemoryMonitor::onValueChanged()
 {
+    qCDebug(app) << "onValueChanged";
     this->update();
 }
 
 void CompactMemoryMonitor::changeTheme(int themeType)
 {
+    qCDebug(app) << "changeTheme with themeType:" << themeType;
     switch (themeType) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::LightType:
+        qCDebug(app) << "LightType";
 #else
     case DGuiApplicationHelper::LightType:
 #endif
@@ -114,6 +125,7 @@ void CompactMemoryMonitor::changeTheme(int themeType)
         break;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case DApplicationHelper::DarkType:
+        qCDebug(app) << "DarkType";
 #else
     case DGuiApplicationHelper::DarkType:
 #endif
@@ -122,6 +134,7 @@ void CompactMemoryMonitor::changeTheme(int themeType)
 
         break;
     default:
+        qCDebug(app) << "default theme type";
         break;
     }
 
@@ -145,6 +158,7 @@ void CompactMemoryMonitor::changeTheme(int themeType)
 
 void CompactMemoryMonitor::changeFont(const QFont &font)
 {
+    // qCDebug(app) << "changeFont";
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
     m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
@@ -168,6 +182,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
 
     // if memPercent is not valid, set it zero
     if (std::isnan(memPercent)) {
+        // qCWarning(app) << "memPercent is nan";
         memPercent = 0.0;
     }
     // Draw memory summary.
@@ -182,12 +197,14 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
     QString swapTitle = "";
     QString swapContent = "";
     if (m_memInfo->swapTotal() == 0) {
+        // qCDebug(app) << "swap not enabled";
         // After the memory and swap space text, add a space before the brackets
         swapTitle = QString("%1 (%2)")
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
                     .arg(DApplication::translate("Process.Graph.View", "Not enabled"));
         swapContent = "";
     } else {
+        // qCDebug(app) << "swap enabled";
         // After the memory and swap space text, add a space before the brackets
         swapTitle = QString("%1 (%2%)")
                     .arg(DApplication::translate("Process.Graph.View", "Swap"))
@@ -245,6 +262,7 @@ void CompactMemoryMonitor::paintEvent(QPaintEvent *)
 
     //未启用交换空间时，不显示交换空间数据
     if (m_memInfo->swapTotal()){
+        // qCDebug(app) << "swapTotal is not 0";
         painter.setFont(m_subContentFont);
         painter.setPen(QPen(summaryColor));
         painter.drawText(swapStatRect, Qt::AlignLeft | Qt::AlignVCenter, swapContent);

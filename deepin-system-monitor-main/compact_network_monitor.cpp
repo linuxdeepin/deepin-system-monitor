@@ -31,12 +31,14 @@ DWIDGET_USE_NAMESPACE
 using namespace core::system;
 using namespace common;
 using namespace common::format;
+using namespace DDLog;
 
 const int gridSize = 10;
 const int pointsNumber = 30;
 CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
     : QWidget(parent)
 {
+    qCDebug(app) << "CompactNetworkMonitor constructor";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
 #else
@@ -76,12 +78,14 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
 
 CompactNetworkMonitor::~CompactNetworkMonitor()
 {
+    qCDebug(app) << "CompactNetworkMonitor destructor";
     delete downloadSpeeds;
     delete uploadSpeeds;
 }
 
 void CompactNetworkMonitor::getPainterPathByData(QList<double> *listData, QPainterPath &path, qreal maxVlaue)
 {
+    qCDebug(app) << "getPainterPathByData";
     qreal offsetX = 0;
     qreal distance = (this->width() - 2) * 1.0 / pointsNumber;
     int dataCount = listData->size();
@@ -100,6 +104,7 @@ void CompactNetworkMonitor::getPainterPathByData(QList<double> *listData, QPaint
 
 void CompactNetworkMonitor::updateStatus()
 {
+    qCDebug(app) << "updateStatus";
     auto netInfo = DeviceDB::instance()->netInfo();
 
     m_totalRecvBytes = netInfo->totalRecvBytes();
@@ -138,6 +143,7 @@ void CompactNetworkMonitor::updateStatus()
 
 void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 {
+    // qCDebug(app) << "paintEvent";
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
@@ -273,6 +279,7 @@ void CompactNetworkMonitor::paintEvent(QPaintEvent *)
 
 void CompactNetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeType)
 {
+    qCDebug(app) << "changeTheme with themeType:" << themeType;
     Q_UNUSED(themeType);
 
     // init colors
@@ -295,6 +302,7 @@ void CompactNetworkMonitor::changeTheme(DGuiApplicationHelper::ColorType themeTy
 
 void CompactNetworkMonitor::changeFont(const QFont &font)
 {
+    // qCDebug(app) << "changeFont";
     m_contentFont = font;
     m_contentFont.setWeight(QFont::Medium);
     m_contentFont.setPointSizeF(m_contentFont.pointSizeF() - 1);
@@ -304,12 +312,16 @@ void CompactNetworkMonitor::changeFont(const QFont &font)
 
 void CompactNetworkMonitor::mouseReleaseEvent(QMouseEvent *ev)
 {
-    if (ev->button() == Qt::LeftButton)
+    // qCDebug(app) << "mouseReleaseEvent";
+    if (ev->button() == Qt::LeftButton) {
+        // qCDebug(app) << "mouseReleaseEvent left button";
         emit clicked("MSG_NET");
+    }
 }
 
 void CompactNetworkMonitor::mouseMoveEvent(QMouseEvent *event)
 {
+    // qCDebug(app) << "mouseMoveEvent";
     Q_UNUSED(event);
     return;
 }

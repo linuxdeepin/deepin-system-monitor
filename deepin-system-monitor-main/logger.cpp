@@ -33,6 +33,7 @@ MLogger::MLogger(QObject *parent)
     connect(m_config, &DConfig::valueChanged, this, [this](const QString &key) {
         qCCritical(app) << "value changed:" << key;
         if (key == "log_rules") {
+            qCDebug(app) << "log_rules changed, updating rules";
             setRules(m_config->value(key).toByteArray());
         }
     });
@@ -40,11 +41,13 @@ MLogger::MLogger(QObject *parent)
 
 MLogger::~MLogger()
 {
+    qCDebug(app) << "MLogger destructor";
     m_config->deleteLater();
 }
 
 void MLogger::setRules(const QString &rules)
 {
+    qCDebug(app) << "MLogger setRules:" << rules;
     auto tmpRules = rules;
     m_rules = tmpRules.replace(";", "\n");
     QLoggingCategory::setFilterRules(m_rules);
@@ -52,16 +55,20 @@ void MLogger::setRules(const QString &rules)
 
 void MLogger::appendRules(const QString &rules)
 {
+    qCDebug(app) << "MLogger appendRules:" << rules;
     QString tmpRules = rules;
     tmpRules = tmpRules.replace(";", "\n");
     auto tmplist = tmpRules.split('\n');
     for (int i = 0; i < tmplist.count(); i++)
         if (m_rules.contains(tmplist.at(i))) {
+            qCDebug(app) << "Rule already exists, removing from list:" << tmplist.at(i);
             tmplist.removeAt(i);
             i--;
         }
-    if (tmplist.isEmpty())
+    if (tmplist.isEmpty()) {
+        qCDebug(app) << "No new rules to add";
         return;
+    }
     m_rules.isEmpty() ? m_rules = tmplist.join("\n")
                       : m_rules += "\n" + tmplist.join("\n");
 }

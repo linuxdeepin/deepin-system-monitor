@@ -6,6 +6,7 @@
 #include "config.h"
 
 #include "hash.h"
+#include "ddlog.h"
 
 #include <QDebug>
 
@@ -22,6 +23,7 @@
 
 namespace util {
 namespace common {
+using namespace DDLog;
 
 // global seed
 uint32_t global_seed;
@@ -88,6 +90,7 @@ FORCE_INLINE uint64_t fmix64(uint64_t k)
 
 void hash_x86_32(const void *key, int len, uint32_t seed, uint32_t *out)
 {
+    // qCDebug(app) << "hash_x86_32";
     const uint8_t *data = reinterpret_cast<const uint8_t *>(key);
     const int nblocks = len / 4;
 
@@ -149,6 +152,7 @@ void hash_x86_32(const void *key, int len, uint32_t seed, uint32_t *out)
 
 void hash_x86_128(const void *key, const int len, uint32_t seed, uint64_t out[2])
 {
+    // qCDebug(app) << "hash_x86_128";
     const uint8_t *data = reinterpret_cast<const uint8_t *>(key);
     const int nblocks = len / 16;
 
@@ -318,6 +322,7 @@ void hash_x86_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
 
 void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2])
 {
+    // qCDebug(app) << "hash_x64_128";
     const uint8_t *data = reinterpret_cast<const uint8_t *>(key);
     const int nblocks = len / 16;
 
@@ -440,31 +445,37 @@ void hash_x64_128(const void *key, const int len, uint32_t seed, uint64_t out[2]
 // initialize global seed
 void init_seed()
 {
+    // qCDebug(app) << "init_seed";
     bool ok = false;
     int cnt = 0;
     Q_UNUSED(cnt);
 
 #define MAX_RETRY 6
 #if defined HAVE_SYS_RANDOM_H
+    // qCDebug(app) << "Init seed with getrandom";
     ssize_t nb {};
     // get random number in non-blocking mode, failure process after 6 retries
     do {
         nb = getrandom(&global_seed, sizeof(uint32_t), GRND_NONBLOCK);
         if (nb == sizeof(uint32_t)) {
+            // qCDebug(app) << "Getrandom success";
             ok = true;
             break;
         }
     } while (cnt++ < MAX_RETRY && (nb <= 0 || size_t(nb) < sizeof(uint32_t)));
 #elif defined HAVE_SYS_CALL && defined HAVE_SYS_GETRANDOM
+    // qCDebug(app) << "Init seed with syscall getrandom";
     errno = 0;
     int rc = syscall(SYS_getrandom, &global_seed, sizeof(uint32_t), 0);
     if (rc != -1) {
+        // qCDebug(app) << "Syscall getrandom success";
         ok = true;
     }
 #endif
 
     // read /dev/urandom instead
     if (!ok) {
+        // qCDebug(app) << "Init seed with /dev/urandom";
         int fd = open("/dev/urandom", O_RDONLY);
         if (fd == -1) {
             qCCritical(app) << "init seed from /dev/urandom failed";
@@ -477,6 +488,8 @@ void init_seed()
         }
         close(fd);
     }
+
+    // qCDebug(app) << "Initialized global seed:" << global_seed;
 }
 
 }   // namespace common

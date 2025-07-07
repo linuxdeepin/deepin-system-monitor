@@ -14,15 +14,18 @@ DebugTimeManager *DebugTimeManager::s_Instance = nullptr;
 
 DebugTimeManager::DebugTimeManager()
 {
+    qCDebug(app) << "DebugTimeManager constructor";
 }
 
 void DebugTimeManager::clear()
 {
+    qCDebug(app) << "DebugTimeManager clear";
     m_MapPoint.clear();
 }
 
 void DebugTimeManager::beginPointLinux(const QString &point, const QString &status)
 {
+    // qCDebug(app) << "DebugTimeManager beginPointLinux:" << point << "status:" << status;
     struct timeval tv;
     gettimeofday(&tv, nullptr);
 
@@ -33,7 +36,9 @@ void DebugTimeManager::beginPointLinux(const QString &point, const QString &stat
 }
 void DebugTimeManager::endPointLinux(const QString &point)
 {
+    // qCDebug(app) << "DebugTimeManager endPointLinux:" << point;
     if (m_MapPoint.find(point) != m_MapPoint.end()) {
+        // qCDebug(app) << "point found, calculating time";
         struct timeval tv;
         gettimeofday(&tv, nullptr);
         m_MapPoint[point].time = tv.tv_sec * 1000 + tv.tv_usec / 1000 - m_MapPoint[point].time;
