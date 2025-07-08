@@ -6,12 +6,16 @@
 #include "block_dev_detail_view_widget.h"
 #include "block_dev_stat_view_widget.h"
 #include "block_dev_summary_view_widget.h"
+#include "ddlog.h"
 
 #include <DApplication>
+
+using namespace DDLog;
 
 BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
+    qCDebug(app) << "BlockDevDetailViewWidget constructor";
     this->setObjectName("BlockDevDetailViewWidget");
 
     setTitle(DApplication::translate("Process.Graph.View", "Disks"));
@@ -26,10 +30,11 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
 
 BlockDevDetailViewWidget::~BlockDevDetailViewWidget()
 {
-
+    qCDebug(app) << "BlockDevDetailViewWidget destructor";
 }
 void BlockDevDetailViewWidget::detailFontChanged(const QFont &font)
 {
+    qCDebug(app) << "BlockDevDetailViewWidget font changed";
     BaseDetailViewWidget::detailFontChanged(font);
     m_blockStatWidget->fontChanged(font);
     m_blocksummaryWidget->fontChanged(font);

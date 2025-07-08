@@ -16,6 +16,7 @@ using namespace DDLog;
 AccountsWidget::AccountsWidget(QWidget *parent)
     : QWidget(parent), m_userModel(new AccountsInfoModel(this)), m_userItemModel(new QStandardItemModel(this)), m_userlistView(new UserListView(this))
 {
+    qCDebug(app) << "AccountsWidget constructor";
     m_currentUserType = m_userModel->getCurrentUserType();
     initUI();
     initConnection();
@@ -25,18 +26,22 @@ AccountsWidget::AccountsWidget(QWidget *parent)
 
 AccountsWidget::~AccountsWidget()
 {
+    qCDebug(app) << "AccountsWidget destructor";
     if (m_userItemModel) {
+        qCDebug(app) << "m_userItemModel is not null, clear it";
         m_userItemModel->clear();
         m_userItemModel->deleteLater();
         m_userItemModel = nullptr;
     }
     if (m_onlineIconList.size() > 0) {
+        qCDebug(app) << "m_onlineIconList is not empty, clear it";
         m_onlineIconList.clear();
     }
 }
 
 void AccountsWidget::initUI()
 {
+    qCDebug(app) << "initUI";
     // disable auto fill frame background
     setAutoFillBackground(false);
     // set frame background role
@@ -108,7 +113,7 @@ void AccountsWidget::initConnection()
 
 void AccountsWidget::onUpdateUserList()
 {
-
+    qCDebug(app) << "onUpdateUserList";
     //原来已连接现在注销的用户
     for (auto user : m_userList) {
         if (!m_userModel->userList().contains(user)) {
@@ -128,6 +133,7 @@ void AccountsWidget::onUpdateUserList()
 
 void AccountsWidget::addInfo(AccountsInfoModel *model)
 {
+    qCDebug(app) << "addInfo";
     //给账户列表添加用户
     for (auto user : model->userList()) {
         addUser(user);
@@ -136,6 +142,7 @@ void AccountsWidget::addInfo(AccountsInfoModel *model)
 
 void AccountsWidget::addUser(User *user)
 {
+    qCDebug(app) << "addUser: " << user->displayName();
     //active
     m_userList << user;
     DStandardItem *item = new DStandardItem;
@@ -202,6 +209,7 @@ void AccountsWidget::removeUser(User *user)
 
 QPixmap AccountsWidget::pixmapToRound(const QPixmap &src)
 {
+    qCDebug(app) << "pixmapToRound";
     if (src.isNull()) {
         qCWarning(app) << "Attempted to convert null pixmap to round";
         return QPixmap();
@@ -225,6 +233,7 @@ QPixmap AccountsWidget::pixmapToRound(const QPixmap &src)
 
 QString AccountsWidget::getCurrentItemUserName()
 {
+    qCDebug(app) << "getCurrentItemUserName";
     //判断是否是全名
     for (auto *user : m_userList) {
         if (user->displayName() == m_userlistView->currentIndex().data().toString()) {
@@ -238,6 +247,7 @@ QString AccountsWidget::getCurrentItemUserName()
 
 void AccountsWidget::onItemClicked(const QModelIndex &index)
 {
+    qCDebug(app) << "onItemClicked: " << index;
     m_userlistView->resetStatus(index);
     Q_EMIT signalCurrentChanged();
 }
@@ -245,7 +255,7 @@ void AccountsWidget::onItemClicked(const QModelIndex &index)
 // show process table view context menu on specified positon
 void AccountsWidget::onRightButtonClicked(const QPoint &p)
 {
-
+    qCDebug(app) << "onRightButtonClicked: " << p;
     QPoint point = mapToGlobal(p);
 
     //    QString name = m_userlistView->indexAt(p).data().toString();
@@ -281,11 +291,13 @@ void AccountsWidget::getUserToBeOperated(const QString &userName)
 
 void AccountsWidget::onConnectTriggered()
 {
+    qCDebug(app) << "onConnectTriggered";
     m_userModel->activateSessionByUserName(m_userToBeOperated->name());
 }
 
 void AccountsWidget::onDisconnectTriggered()
 {
+    qCDebug(app) << "onDisconnectTriggered";
     m_userModel->lockSessionByUserName(m_userToBeOperated->name());
 }
 
@@ -312,5 +324,6 @@ void AccountsWidget::onLogoutTriggered()
 
 void AccountsWidget::onEditAccountTriggered()
 {
+    qCDebug(app) << "onEditAccountTriggered";
     m_userModel->EditAccount();
 }

@@ -7,6 +7,7 @@
 
 #include "settings.h"
 #include "common/common.h"
+#include "ddlog.h"
 
 #include <DApplication>
 #include <DFontSizeManager>
@@ -48,6 +49,7 @@ ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid,
     , m_icon(icon)
     , m_pid(pid)
 {
+    qCDebug(app) << "ProcessAttributeDialog constructor for pid:" << pid;
     // get backup settings instance
     m_settings = Settings::instance();
     initUI();
@@ -62,6 +64,7 @@ ProcessAttributeDialog::ProcessAttributeDialog(pid_t pid,
 // initialize ui components
 void ProcessAttributeDialog::initUI()
 {
+    qCDebug(app) << "ProcessAttributeDialog initUI";
     m_margin = 10;
     // restore settings from backup config if previous size found, otherwise use default size
     int width = m_settings->getOption(kSettingKeyProcessAttributeDialogWidth, 600).toInt();
@@ -200,10 +203,13 @@ void ProcessAttributeDialog::initUI()
     m_procStartText->setText(QDateTime::fromSecsSinceEpoch(qint64(m_startTime)).toString("yyyy-MM-dd hh:mm:ss"));
 
     //如果命令行无值，隐藏该行
-    if(m_cmdline == "")
+    if (m_cmdline == "") {
+        qCDebug(app) << "hiding process command label due to empty command line";
         m_procCmdLabel->hide();
-    else
+    } else {
+        qCDebug(app) << "showing process command label";
         m_procCmdLabel->show();
+    }
 
     m_frame->setLayout(vlayout);
     setCentralWidget(m_frame);
@@ -212,10 +218,12 @@ void ProcessAttributeDialog::initUI()
 // resize event handler
 void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
 {
+    // qCDebug(app) << "ProcessAttributeDialog resizeEvent";
     DMainWindow::resizeEvent(event);
 
     // raise shadow widget on top
     if (m_frame) {
+        // qCDebug(app) << "ProcessAttributeDialog resizeEvent: m_frame is not null";
         m_tbShadow->setFixedWidth(m_frame->size().width());
         m_tbShadow->raise();
         m_tbShadow->show();
@@ -226,6 +234,7 @@ void ProcessAttributeDialog::resizeEvent(QResizeEvent *event)
 
 void ProcessAttributeDialog::resizeItemWidget()
 {
+    qCDebug(app) << "ProcessAttributeDialog resizeItemWidget";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_procNameLabel->setFixedSize(m_procNameLabel->fontMetrics().width(m_procNameLabel->text()), m_procNameLabel->fontMetrics().height());
     m_procCmdLabel->setFixedSize(m_procCmdLabel->fontMetrics().width(m_procCmdLabel->text()), m_procCmdLabel->fontMetrics().height());
@@ -251,6 +260,7 @@ void ProcessAttributeDialog::resizeItemWidget()
 // close event handler
 void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 {
+    qCDebug(app) << "ProcessAttributeDialog closeEvent";
     Q_UNUSED(event);
     DMainWindow::closeEvent(event);
     m_settings->setOption(kSettingKeyProcessAttributeDialogWidth, width());
@@ -260,24 +270,31 @@ void ProcessAttributeDialog::closeEvent(QCloseEvent *event)
 // event filters
 bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
 {
+    // qCDebug(app) << "ProcessAttributeDialog eventFilter";
     if (event->type() == QEvent::Show || event->type() == QEvent::FontChange) {
+        qCDebug(app) << "ProcessAttributeDialog eventFilter: Show or FontChange event";
         resizeItemWidget();
     } else if (event->type() == QEvent::KeyPress) {
+        qCDebug(app) << "ProcessAttributeDialog eventFilter: KeyPress event";
         // key press event
         if (obj == this) {
             auto *kev = dynamic_cast<QKeyEvent *>(event);
             // handle ESC key press event
             if (kev->matches(QKeySequence::Cancel)) {
+                qCDebug(app) << "ProcessAttributeDialog eventFilter: ESC key pressed, closing dialog";
                 close();
                 return true;
             }
         }
     } else if (event->type() == QEvent::MouseButtonPress) {
+        qCDebug(app) << "ProcessAttributeDialog eventFilter: MouseButtonPress event";
         // mouse button press event
         auto *ev = dynamic_cast<QMouseEvent *>(event);
         if (ev->button() & Qt::LeftButton) {
+            qCDebug(app) << "ProcessAttributeDialog eventFilter: Left mouse button pressed";
             DTextBrowser *textbrowser = dynamic_cast<DTextBrowser *>(obj->parent());
-            if (textbrowser) textbrowser->setFocus();
+            if (textbrowser)
+                textbrowser->setFocus();
 
             auto cur = m_procNameText->textCursor();
             cur.clearSelection();

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "xwin_kill_preview_background_widget.h"
+#include "ddlog.h"
 
 #include "ui_common.h"
 
@@ -27,6 +28,7 @@
 #include <QRegion>
 
 DWIDGET_USE_NAMESPACE
+using namespace DDLog;
 
 // default help tip icon size
 static const QSize kDefaultIconSize {50, 50};
@@ -36,6 +38,7 @@ XWinKillPreviewBackgroundWidget::XWinKillPreviewBackgroundWidget(QPixmap &backgr
     : QWidget(parent)
     , m_background(background)
 {
+    qCDebug(app) << "XWinKillPreviewBackgroundWidget constructor";
     initUI();
     initConnection();
 }
@@ -43,6 +46,7 @@ XWinKillPreviewBackgroundWidget::XWinKillPreviewBackgroundWidget(QPixmap &backgr
 // update selected region (window currently being hovered by mouse & intersects with current screen's preview widget)
 void XWinKillPreviewBackgroundWidget::updateSelection(const QRegion &region)
 {
+    qCDebug(app) << "XWinKillPreviewBackgroundWidget updateSelection";
     // coordinate translate
     m_selRegion = region.translated(-geometry().x(), -geometry().y());
     update();
@@ -51,6 +55,7 @@ void XWinKillPreviewBackgroundWidget::updateSelection(const QRegion &region)
 // paint event handler
 void XWinKillPreviewBackgroundWidget::paintEvent(QPaintEvent *)
 {
+    // qCDebug(app) << "XWinKillPreviewBackgroundWidget paintEvent";
     QPainter painter(this);
     QPainterPath path;
 
@@ -126,6 +131,7 @@ void XWinKillPreviewBackgroundWidget::paintEvent(QPaintEvent *)
 // initialize ui components
 void XWinKillPreviewBackgroundWidget::initUI()
 {
+    qCDebug(app) << "XWinKillPreviewBackgroundWidget initUI";
     Qt::WindowFlags flags {};
     flags |= Qt::Window;
     // always stay on top
@@ -158,4 +164,5 @@ void XWinKillPreviewBackgroundWidget::initUI()
 // initialize connections (nothing to do here)
 void XWinKillPreviewBackgroundWidget::initConnection()
 {
+    qCDebug(app) << "XWinKillPreviewBackgroundWidget initConnection";
 }

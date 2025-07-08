@@ -4,10 +4,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "netif_summary_view_widget.h"
+#include "ddlog.h"
 
-
-
-
+using namespace DDLog;
 using namespace core::system;
 using namespace common::format;
 
@@ -20,26 +19,30 @@ using namespace common::core;
 
 NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): QStyledItemDelegate(parent)
 {
+    qCDebug(app) << "NetInfoDetailItemDelegate constructor";
 }
 
 NetInfoDetailItemDelegate::~NetInfoDetailItemDelegate()
 {
+    qCDebug(app) << "NetInfoDetailItemDelegate destructor";
 }
 
 
 
 NetInfoModel::NetInfoModel(QObject *parent): QAbstractTableModel(parent)
 {
+    qCDebug(app) << "NetInfoModel constructor";
 }
 
 NetInfoModel::~NetInfoModel()
 {
-
+    qCDebug(app) << "NetInfoModel destructor";
 }
 
 NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
     : DTableView(parent)
 {
+    qCDebug(app) << "NetifSummaryViewWidget constructor";
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     this->horizontalHeader()->setVisible(false);
@@ -78,6 +81,7 @@ NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)
 
 void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
 {
+    qCDebug(app) << "NetifSummaryViewWidget onNetifItemClicked";
     // 按照点击IP刷新数据
     m_strCurrentKey = mac;
     m_netInfoModel->refreshNetifInfo(m_strCurrentKey);
@@ -85,6 +89,7 @@ void NetifSummaryViewWidget::onNetifItemClicked(const QString &mac)
 
 void NetifSummaryViewWidget::fontChanged(const QFont &font)
 {
+    qCDebug(app) << "NetifSummaryViewWidget fontChanged";
     m_font = font;
     this->setFont(m_font);;
     m_netInfoDetailItemDelegate->setFont(m_font);
@@ -93,11 +98,13 @@ void NetifSummaryViewWidget::fontChanged(const QFont &font)
 
 void NetifSummaryViewWidget::onModelUpdate()
 {
+    qCDebug(app) << "NetifSummaryViewWidget onModelUpdate";
     m_netInfoModel->refreshNetifInfo(m_strCurrentKey);  // 按时间间隔刷新数据
 }
 
 void NetifSummaryViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "NetifSummaryViewWidget paintEvent";
     DTableView::paintEvent(event);
 
     QPainter painter(this->viewport());

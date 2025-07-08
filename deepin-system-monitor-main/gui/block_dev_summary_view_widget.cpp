@@ -14,6 +14,7 @@
 #include "system/block_device_info_db.h"
 #include "system/device_db.h"
 #include "base/base_detail_item_delegate.h"
+#include "ddlog.h"
 
 #include <QHeaderView>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -31,6 +32,7 @@
 
 using namespace core::system;
 using namespace common::format;
+using namespace DDLog;
 
 #define SUMMARY_CHART_LINE_ALPH 0.13
 
@@ -42,19 +44,23 @@ public:
 protected:
     int rowCount(const QModelIndex &) const
     {
+        // qCDebug(app) << "DeailTableModelBlock::rowCount";
         return 7;
     }
 
     int columnCount(const QModelIndex &) const
     {
+        // qCDebug(app) << "DeailTableModelBlock::columnCount";
         return 2;
     }
 
     QVariant data(const QModelIndex &index, int role) const
     {
-
-        if (!index.isValid() || currDeciveName.isEmpty())
+        if (!index.isValid() || currDeciveName.isEmpty()) {
+            qCDebug(app) << "DeailTableModelBlock::data: Invalid index or empty device name";
             return QVariant();
+        }
+
         int row = index.row();
         int column = index.column();
         if (role == Qt::DisplayRole) {
@@ -157,6 +163,7 @@ protected:
 #endif
             return palette.color(DPalette::Text);
         }
+        qCDebug(app) << "DeailTableModelBlock::data: unhandled role " << role;
         return QVariant();
     }
 
@@ -171,9 +178,12 @@ public slots:
 public:
     void setCurrentName(const QString &str)
     {
+        // qCDebug(app) << "DeailTableModelBlock::setCurrentName:" << str;
         currDeciveName = str;
-        if (!str.isEmpty())
+        if (!str.isEmpty()) {
+            // qCDebug(app) << "DeailTableModelBlock::setCurrentName: device name is not empty";
             m_blockInfo = m_mapInfo.find(currDeciveName).value();
+        }
         updateModel();
     }
 
@@ -185,12 +195,14 @@ private:
 
 DeailTableModelBlock::DeailTableModelBlock(QObject *parent): QAbstractTableModel(parent)
 {
+    qCDebug(app) << "DeailTableModelBlock constructor";
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &DeailTableModelBlock::updateModel);
     updateModel();
 }
 
 void DeailTableModelBlock::updateModel()
 {
+    qCDebug(app) << "DeailTableModelBlock::updateModel";
     beginResetModel();
     const QList<BlockDevice> &infoDB = DeviceDB::instance()->blockDeviceInfoDB()->deviceList();
 
@@ -199,9 +211,11 @@ void DeailTableModelBlock::updateModel()
     }
 
     if (currDeciveName == "" && !infoDB.isEmpty()) {
+        qCDebug(app) << "DeailTableModelBlock::updateModel: current device name is empty, setting to first device";
         currDeciveName = infoDB[0].deviceName();
         m_blockInfo = infoDB[0];
     } else if (!infoDB.isEmpty()) {
+        qCDebug(app) << "DeailTableModelBlock::updateModel: updating info for" << currDeciveName;
         m_blockInfo = m_mapInfo.find(currDeciveName).value();
     }
 
@@ -210,12 +224,13 @@ void DeailTableModelBlock::updateModel()
 
 DeailTableModelBlock::~DeailTableModelBlock()
 {
-
+    qCDebug(app) << "DeailTableModelBlock destructor";
 }
 
 BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
     : DTableView(parent)
 {
+    qCDebug(app) << "BlockDevSummaryViewWidget constructor";
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     this->horizontalHeader()->setVisible(false);
@@ -251,17 +266,20 @@ BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)
 
 void BlockDevSummaryViewWidget::chageSummaryInfo(const QString &deviceName)
 {
+    qCDebug(app) << "BlockDevSummaryViewWidget::chageSummaryInfo for" << deviceName;
     m_model->setCurrentName(deviceName);
 }
 
 void BlockDevSummaryViewWidget::fontChanged(const QFont &font)
 {
+    qCDebug(app) << "BlockDevSummaryViewWidget::fontChanged";
     m_font = font;
     this->setFont(m_font);
     setFixedHeight(260);
 }
 void BlockDevSummaryViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "BlockDevSummaryViewWidget::paintEvent";
     DTableView::paintEvent(event);
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);

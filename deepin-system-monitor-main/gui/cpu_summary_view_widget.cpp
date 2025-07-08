@@ -4,27 +4,33 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "cpu_summary_view_widget.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 #define SUMMARY_CHART_LINE_ALPH 0.13
 
 CPUSummaryTableModel::CPUSummaryTableModel(CPUInfoModel *model, QObject *parent): QAbstractTableModel(parent), m_model(model)
 {
+    qCDebug(app) << "CPUSummaryTableModel constructor";
     connect(m_model, &CPUInfoModel::modelUpdated, this, &CPUSummaryTableModel::onModelUpdated);
 }
 
 CPUSummaryTableModel::~CPUSummaryTableModel()
 {
-
+    qCDebug(app) << "CPUSummaryTableModel destructor";
 }
 
 void CPUSummaryTableModel::onModelUpdated()
 {
+    qCDebug(app) << "CPUSummaryTableModel::onModelUpdated";
     QAbstractTableModel::dataChanged(index(0, 0), index(9, 1));
 }
 
 CPUDetailSummaryTable::CPUDetailSummaryTable(CPUInfoModel *dataModel, QWidget *parent)
     : DTableView(parent)
 {
+    qCDebug(app) << "CPUDetailSummaryTable constructor";
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     this->horizontalHeader()->setVisible(false);
@@ -57,11 +63,13 @@ CPUDetailSummaryTable::CPUDetailSummaryTable(CPUInfoModel *dataModel, QWidget *p
 
 void CPUDetailSummaryTable::onModelUpdate()
 {
+    qCDebug(app) << "CPUDetailSummaryTable::onModelUpdate";
     this->viewport()->update();
 }
 
 void CPUDetailSummaryTable::fontChanged(const QFont &font)
 {
+    // qCDebug(app) << "CPUDetailSummaryTable::fontChanged";
     m_font = font;
     this->setFont(m_font);
     setFixedHeight(260);
@@ -69,6 +77,7 @@ void CPUDetailSummaryTable::fontChanged(const QFont &font)
 
 void CPUDetailSummaryTable::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "CPUDetailSummaryTable::paintEvent";
     DTableView::paintEvent(event);
 
     QPainter painter(this->viewport());

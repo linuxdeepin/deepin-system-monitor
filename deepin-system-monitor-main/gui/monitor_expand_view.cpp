@@ -9,16 +9,20 @@
 #include "memory_monitor.h"
 #include "network_monitor.h"
 #include "detailwidgetmanager.h"
+#include "ddlog.h"
 
 #include <DPalette>
 #include <DStyle>
 
 #include <QVBoxLayout>
 
+using namespace DDLog;
+
 // constructor
 MonitorExpandView::MonitorExpandView(QWidget *parent)
     : DFrame(parent)
 {
+    qCDebug(app) << "MonitorExpandView constructor";
     // disable auto fill frame background
     setAutoFillBackground(false);
     // set background role
@@ -54,6 +58,7 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     connect(m_cpuMonitor, &CpuMonitor::signalDetailInfoClicked, this, &MonitorExpandView::signalDetailInfoClicked);
     // 连接dbus发来的信号
     connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, [=](QString msgCode) {
+        qCDebug(app) << "Received signal from DBus to show detail info:" << msgCode;
         emit signalDetailInfoByDbus(msgCode);
     });
 
@@ -65,5 +70,6 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
 
 void MonitorExpandView::setDetailButtonVisible(bool visible)
 {
+    qCDebug(app) << "Setting detail button visibility to:" << visible;
     m_cpuMonitor->setDetailButtonVisible(visible);
 }
