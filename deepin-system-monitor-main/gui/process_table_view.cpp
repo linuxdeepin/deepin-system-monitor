@@ -67,6 +67,7 @@ static QMetaObject::Connection m_pControlConnection = QMetaObject::Connection();
 ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
     : BaseTableView(parent), m_useModeName(userName)
 {
+    qCDebug(app) << "ProcessTableView created with userName:" << userName;
     // install event filter for table view to handle key events
     installEventFilter(this);
 
@@ -103,12 +104,14 @@ ProcessTableView::ProcessTableView(DWidget *parent, QString userName)
 // destructor
 ProcessTableView::~ProcessTableView()
 {
+    qCDebug(app) << "ProcessTableView destroyed";
     // backup table view settings
     saveSettings();
 }
 
 void ProcessTableView::onThemeTypeChanged()
 {
+    qCDebug(app) << "ProcessTableView onThemeTypeChanged";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto palette = DApplicationHelper::instance()->applicationPalette();
 #else
@@ -120,15 +123,18 @@ void ProcessTableView::onThemeTypeChanged()
 
 QString ProcessTableView::getProcessName(int pid)
 {
+    qCDebug(app) << "Getting process name for pid:" << pid;
     return m_model->getProcess(qvariant_cast<pid_t>(pid)).name();
 }
 
 // event filter
 bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 {
+    // qCDebug(app) << "ProcessTableView eventFilter";
     // handle key press events for process table view
     if (obj == this) {
         if (event->type() == QEvent::KeyPress) {
+            qCDebug(app) << "ProcessTableView eventFilter: KeyPress";
             auto *kev = dynamic_cast<QKeyEvent *>(event);
             // ALT+M show context menu
             if (kev->modifiers() == Qt::ALT && kev->key() == Qt::Key_M) {
@@ -154,6 +160,7 @@ bool ProcessTableView::eventFilter(QObject *obj, QEvent *event)
 // end process handler
 void ProcessTableView::endProcess()
 {
+    qCDebug(app) << "Attempting to end process with selected PID:" << m_selectedPID;
     // no selected item, do nothing
     if (m_selectedPID.isNull()) {
         qCDebug(app) << "No process selected for ending";
@@ -174,6 +181,7 @@ void ProcessTableView::endProcess()
                      DDialog::ButtonWarning);
     dialog.exec();
     if (dialog.result() == QMessageBox::Ok) {
+        qCDebug(app) << "ProcessTableView endProcess: User confirmed ending process";
         Process proc = m_model->getProcess(qvariant_cast<pid_t>(m_selectedPID));
         qCDebug(app) << "User confirmed ending process:" << proc.name() << "(" << m_selectedPID << ")";
         QJsonObject obj {
@@ -192,6 +200,7 @@ void ProcessTableView::endProcess()
 // pause process handler
 void ProcessTableView::pauseProcess()
 {
+    qCDebug(app) << "Attempting to pause process with selected PID:" << m_selectedPID;
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
     // no selected item or app self been selected, then do nothing
     if (m_selectedPID.isNull() || ProcessDB::instance()->isCurrentProcess(pid)) {
@@ -205,6 +214,7 @@ void ProcessTableView::pauseProcess()
 // resume process handler
 void ProcessTableView::resumeProcess()
 {
+    qCDebug(app) << "Attempting to resume process with selected PID:" << m_selectedPID;
     auto pid = qvariant_cast<pid_t>(m_selectedPID);
     //no selected item or app self been selected, then do nothing
     if (m_selectedPID.isNull() || ProcessDB::instance()->isCurrentProcess(pid)) {
@@ -219,6 +229,7 @@ void ProcessTableView::resumeProcess()
 // open process bin path in file manager
 void ProcessTableView::openExecDirWithFM()
 {
+    qCDebug(app) << "Attempting to open exec directory for selected PID:" << m_selectedPID;
     // selection check needed
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
@@ -335,6 +346,7 @@ void ProcessTableView::openExecDirWithFM()
 // show process attribute dialog
 void ProcessTableView::showProperties()
 {
+    qCDebug(app) << "Showing properties for selected PID:" << m_selectedPID;
     // selection valid check
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
@@ -355,6 +367,7 @@ void ProcessTableView::showProperties()
 // kill process handler
 void ProcessTableView::killProcess()
 {
+    qCDebug(app) << "Attempting to kill process with selected PID:" << m_selectedPID;
     // no selected item, do nothing
     if (m_selectedPID.isNull()) {
         qCDebug(app) << "No process selected for killing";
@@ -393,6 +406,7 @@ void ProcessTableView::killProcess()
 // filter process table based on searched text
 void ProcessTableView::search(const QString &text)
 {
+    qCDebug(app) << "Searching for text:" << text;
     m_proxyModel->setSortFilterString(text);
     // adjust search result tip label's visibility & position if needed
     adjustInfoLabelVisibility();
@@ -402,13 +416,14 @@ void ProcessTableView::search(const QString &text)
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
-
+    qCDebug(app) << "Switching display mode to:" << type;
     m_proxyModel->setFilterType(type);
 }
 
 // change process priority
 void ProcessTableView::changeProcessPriority(int priority)
 {
+    qCDebug(app) << "Changing process priority for selected PID:" << m_selectedPID << "to" << priority;
     // check selection first
     if (m_selectedPID.isValid()) {
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
@@ -452,6 +467,7 @@ bool ProcessTableView::loadSettings(const QString &flag)
 // save table view settings to backup storage
 void ProcessTableView::saveSettings()
 {
+    qCDebug(app) << "Saving settings";
     Settings *s = Settings::instance();
     if (s) {
         QByteArray buf = header()->saveState();
@@ -470,7 +486,7 @@ void ProcessTableView::saveSettings()
 // initialize ui components
 void ProcessTableView::initUI(bool settingsLoaded)
 {
-
+    qCDebug(app) << "Initializing UI components";
     setAccessibleName("ProcessTableView");
 
     // search result not found tip label instance
@@ -518,6 +534,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
     // if no backup settings loaded, show default style
     if (!settingsLoaded) {
+        qCDebug(app) << "No settings loaded, using default style";
         // proc name
         setColumnWidth(ProcessTableModel::kProcessNameColumn, 300);
         setColumnHidden(ProcessTableModel::kProcessNameColumn, false);
@@ -578,6 +595,7 @@ void ProcessTableView::initUI(bool settingsLoaded)
 // initialize connections
 void ProcessTableView::initConnections(bool settingsLoaded)
 {
+    qCDebug(app) << "Initializing connections";
     auto *mainWindow = gApp->mainWindow();
     // connect search slot to toolbar's search signal
     connect(mainWindow->toolbar(), &Toolbar::search, this, &ProcessTableView::search);
@@ -839,6 +857,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 
     // set default header context menu checkable state when settings load without success
     if (!settingsLoaded) {
+        qCDebug(app) << "Settings not loaded, using default header context menu checkable state";
         cpuHeaderAction->setChecked(true);
         memHeaderAction->setChecked(true);
         sharememHeaderAction->setChecked(false);
@@ -944,6 +963,7 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 // show process table view context menu on specified positon
 void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)
 {
+    qCDebug(app) << "Displaying process table context menu";
     if (selectedIndexes().size() == 0) {
         qCDebug(app) << "No process selected for context menu";
         return;
@@ -957,12 +977,14 @@ void ProcessTableView::displayProcessTableContextMenu(const QPoint &p)
 // show process header view context menu on specified position
 void ProcessTableView::displayProcessTableHeaderContextMenu(const QPoint &p)
 {
+    qCDebug(app) << "Displaying process table header context menu";
     m_headerContextMenu->popup(mapToGlobal(p));
 }
 
 // resize event handler
 void ProcessTableView::resizeEvent(QResizeEvent *event)
 {
+    // qCDebug(app) << "Resizing process table view";
     // adjust search result tip label's visibility & position when resizing
     adjustInfoLabelVisibility();
 
@@ -972,6 +994,7 @@ void ProcessTableView::resizeEvent(QResizeEvent *event)
 // show event handler
 void ProcessTableView::showEvent(QShowEvent *)
 {
+    // qCDebug(app) << "Showing process table view";
     // hide search result not found on initial show
     if (m_notFoundLabel) {
         m_notFoundLabel->hide();
@@ -982,8 +1005,10 @@ void ProcessTableView::showEvent(QShowEvent *)
 void ProcessTableView::selectionChanged(const QItemSelection &selected,
                                         const QItemSelection &deselected)
 {
+    qCDebug(app) << "Selection changed in process table view";
     // if no selection, do nothing
     if (selected.size() <= 0) {
+        qCDebug(app) << "No selection in process table view";
         return;
     }
 
@@ -995,6 +1020,7 @@ void ProcessTableView::selectionChanged(const QItemSelection &selected,
 // return hinted size for specified column, so column can be resized to a prefered width when double clicked
 int ProcessTableView::sizeHintForColumn(int column) const
 {
+    qCDebug(app) << "Getting size hint for column" << column;
     int margin = 10;
     return std::max(header()->sizeHintForColumn(column) + margin * 2,
                     DTreeView::sizeHintForColumn(column) + margin * 2);
@@ -1003,6 +1029,7 @@ int ProcessTableView::sizeHintForColumn(int column) const
 // adjust search result tip label's visibility & position
 void ProcessTableView::adjustInfoLabelVisibility()
 {
+    qCDebug(app) << "Adjusting search result tip label visibility";
     setUpdatesEnabled(false);
     // show search not found label only when proxy model is empty & search text input is none empty
     m_notFoundLabel->setVisible(m_proxyModel->rowCount() == 0
@@ -1016,6 +1043,7 @@ void ProcessTableView::adjustInfoLabelVisibility()
 // show customize process priority dialog
 void ProcessTableView::customizeProcessPriority()
 {
+    qCDebug(app) << "Customizing process priority";
     // priority dialog instance
     DDialog *prioDialog = new DDialog(this);
     prioDialog->setIcon(QIcon::fromTheme("dialog-warning"));
@@ -1039,6 +1067,7 @@ void ProcessTableView::customizeProcessPriority()
     // set initial slider & tip value based on current process priority
     QString prio { "0" };
     if (m_selectedPID.isValid()) {
+        qCDebug(app) << "Selected PID is valid:" << m_selectedPID;
         pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
         slider->setValue(m_model->getProcessPriorityValue(pid));
         Process selectedProcess = m_model->getProcess(pid);
@@ -1075,6 +1104,7 @@ void ProcessTableView::customizeProcessPriority()
 
 void ProcessTableView::setUserModeName(const QString &userName)
 {
+    qCDebug(app) << "Current user mode name:" << m_useModeName;
     if (userName != m_useModeName) {
         qCDebug(app) << "Setting user mode name to:" << userName;
         m_useModeName = userName;

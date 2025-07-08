@@ -24,6 +24,7 @@
 // in the LICENSE file.
 
 #include "onlineicon.h"
+#include "ddlog.h"
 
 #include <QStyle>
 #include <QPainter>
@@ -33,10 +34,13 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 
+using namespace DDLog;
+
 OnlineIcon::OnlineIcon(QWidget *parent)
     : QWidget(parent)
     , m_shadowEffect(new QGraphicsDropShadowEffect(this))
 {
+    qCDebug(app) << "OnlineIcon constructor";
     m_shadowEffect->setColor(QColor(0, 0, 0, 16));      // 阴影的颜色
     m_shadowEffect->setOffset(0, 2);
     setGraphicsEffect(m_shadowEffect);
@@ -44,6 +48,7 @@ OnlineIcon::OnlineIcon(QWidget *parent)
 
 void OnlineIcon::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "OnlineIcon paintEvent";
     QPainter painter(this);
     painter.save();
     painter.setRenderHints(QPainter::Antialiasing);
@@ -64,5 +69,6 @@ void OnlineIcon::paintEvent(QPaintEvent *event)
 
 void OnlineIcon::setColor(QColor color)
 {
+    // qCDebug(app) << "Setting color to:" << color;
     m_color = color;
 }

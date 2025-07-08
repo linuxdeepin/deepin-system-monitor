@@ -13,6 +13,7 @@
 #include "model/cpu_list_model.h"
 #include "system/cpu_set.h"
 #include "cpu_summary_view_widget.h"
+#include "ddlog.h"
 
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -40,20 +41,23 @@
 DWIDGET_USE_NAMESPACE
 
 using namespace common;
+using namespace DDLog;
 
 CPUDetailGrapTableItem::CPUDetailGrapTableItem(CPUInfoModel *model, int index, QWidget *parent): QWidget(parent), m_cpuInfomodel(model), m_index(index)
 {
+    qCDebug(app) << "CPUDetailGrapTableItem constructor for index" << index;
     m_cpuInfomodel = CPUInfoModel::instance();
     connect(m_cpuInfomodel, &CPUInfoModel::modelUpdated, this, &CPUDetailGrapTableItem::updateStat);
 }
 
 CPUDetailGrapTableItem::~CPUDetailGrapTableItem()
 {
-
+    qCDebug(app) << "CPUDetailGrapTableItem destructor for index" << m_index;
 }
 
 void CPUDetailGrapTableItem::setMode(int mode)
 {
+    qCDebug(app) << "CPUDetailGrapTableItem::setMode" << mode;
     m_mode = mode;
     setToolTip(3 == m_mode ? ("CPU" + QString::number(m_index)) : "");
     update();
@@ -61,33 +65,39 @@ void CPUDetailGrapTableItem::setMode(int mode)
 
 void CPUDetailGrapTableItem::sethorizontal(bool isHorizontalLast)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::sethorizontal: " << isHorizontalLast;
     m_isHorizontalLast = isHorizontalLast;
 }
 
 void CPUDetailGrapTableItem::setVerticalLast(bool isVerticalLast)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::setVerticalLast: " << isVerticalLast;
     m_isVerticalLast = isVerticalLast;
 }
 
 void CPUDetailGrapTableItem::setColor(QColor color)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::setColor";
     m_color = color;
     update();
 }
 
 void CPUDetailGrapTableItem::updateStat()
 {
+    qCDebug(app) << "CPUDetailGrapTableItem::updateStat";
     // 多核模式时保留原来逻辑
     if (m_isMutliCoreMode) {
-        if (std::isnan(m_cpuInfomodel->cpuPercentList().value(m_index)))
+        if (std::isnan(m_cpuInfomodel->cpuPercentList().value(m_index))) {
             m_cpuPercents.insert(0, 0);
-        else
+        } else {
             m_cpuPercents.insert(0, m_cpuInfomodel->cpuPercentList().value(m_index) / 100.0);
+        }
     } else {
-        if (std::isnan(m_cpuInfomodel->cpuAllPercent()))
+        if (std::isnan(m_cpuInfomodel->cpuAllPercent())) {
             m_cpuPercents.insert(0, 0);
-        else
+        } else {
             m_cpuPercents.insert(0, m_cpuInfomodel->cpuAllPercent() / 100.0);
+        }
     }
     while (m_cpuPercents.count() > 31)
         m_cpuPercents.pop_back();
@@ -97,6 +107,7 @@ void CPUDetailGrapTableItem::updateStat()
 
 void CPUDetailGrapTableItem::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::paintEvent";
     Q_UNUSED(event)
 
     QPainter painter(this);
@@ -111,6 +122,7 @@ void CPUDetailGrapTableItem::paintEvent(QPaintEvent *event)
 
 void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::drawNormalMode";
     const int pensize = 1;
     QFont font = DApplication::font();
     font.setPointSizeF(font.pointSizeF() - 1);
@@ -135,8 +147,10 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
     painter.setRenderHints(QPainter::Antialiasing);
 
     if (m_isMutliCoreMode) {
+        // qCDebug(app) << "m_isMutliCoreMode";
         painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignLeft | Qt::AlignTop, "CPU" + QString::number(m_index));
     } else {
+        // qCDebug(app) << "m_isMutliCoreMode not";
         painter.drawText(QRect(pensize, 0, this->width() - 2 * pensize, textHeight), Qt::AlignLeft | Qt::AlignTop, "CPU");
     }
 
@@ -182,6 +196,7 @@ void CPUDetailGrapTableItem::drawNormalMode(QPainter &painter)
 
 void CPUDetailGrapTableItem::drawSimpleMode(QPainter &painter)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::drawSimpleMode";
     //draw background
     const int pensize = 1;
     QRect graphicRect = QRect(pensize, pensize, this->width() - 2 * pensize, this->height() - 2 * pensize);
@@ -216,6 +231,7 @@ void CPUDetailGrapTableItem::drawSimpleMode(QPainter &painter)
 
 void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::drawTextMode";
     QRect rect = QRect(0, 0, this->width() - (m_isHorizontalLast ? 1 : 0), this->height() - (m_isVerticalLast ? 1 : 0));
 
     // draw frame
@@ -236,6 +252,7 @@ void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
 
 void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::drawSingleCoreMode";
     const int pensize = 1;
     QFont font = DApplication::font();
     font.setPointSizeF(font.pointSizeF() - 1);
@@ -295,6 +312,7 @@ void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
 
 void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &graphicRect)
 {
+    // qCDebug(app) << "CPUDetailGrapTableItem::drawBackground";
     // draw frame
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
@@ -338,6 +356,7 @@ void CPUDetailGrapTableItem::drawBackground(QPainter &painter, const QRect &grap
 
 CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 {
+    qCDebug(app) << "CPUDetailWidget constructor";
     this->setObjectName("CPUDetailWidget");
 
     TimePeriod period(TimePeriod::kNoPeriod, {2, 0});
@@ -364,15 +383,19 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 
 void CPUDetailWidget::detailFontChanged(const QFont &font)
 {
+    qCDebug(app) << "CPUDetailWidget::detailFontChanged";
     BaseDetailViewWidget::detailFontChanged(font);
     m_summary->fontChanged(font);
 }
 
 CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QWidget(parent)
 {
+    qCDebug(app) << "CPUDetailGrapTable constructor";
     if (m_isMutliCoreMode) {
+        qCDebug(app) << "Setting multi-core layout";
         setMultiModeLayout(model);
     } else {
+        qCDebug(app) << "Setting single-core layout";
         setSingleModeLayout(model);
     }
     m_cpuInfoModel = model;
@@ -380,6 +403,7 @@ CPUDetailGrapTable::CPUDetailGrapTable(CPUInfoModel *model, QWidget *parent): QW
 
 void CPUDetailGrapTable::setMutliCoreMode(bool isMutliCoreMode)
 {
+    qCDebug(app) << "CPUDetailGrapTable::setMutliCoreMode" << isMutliCoreMode;
     m_isMutliCoreMode = isMutliCoreMode;
     // 获取当前布局所有的子控件，删除子控件
     QLayout *p = this->layout();
@@ -392,14 +416,17 @@ void CPUDetailGrapTable::setMutliCoreMode(bool isMutliCoreMode)
     this->layout()->removeItem(this->layout()->itemAt(0));
     delete this->layout();
     if (m_isMutliCoreMode) {
+        qCDebug(app) << "Switching to multi-core layout";
         setMultiModeLayout(m_cpuInfoModel);
     } else {
+        qCDebug(app) << "Switching to single-core layout";
         setSingleModeLayout(m_cpuInfoModel);
     }
 }
 
 void CPUDetailGrapTable::setSingleModeLayout(CPUInfoModel *model)
 {
+    qCDebug(app) << "CPUDetailGrapTable::setSingleModeLayout";
     QGridLayout  *graphicsLayout = new QGridLayout(this);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     graphicsLayout->setMargin(0);
@@ -422,6 +449,7 @@ void CPUDetailGrapTable::setSingleModeLayout(CPUInfoModel *model)
 
 void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
 {
+    qCDebug(app) << "CPUDetailGrapTable::setMultiModeLayout";
     QGridLayout  *graphicsLayout = new QGridLayout(this);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     graphicsLayout->setMargin(0);
@@ -452,12 +480,14 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
               << "#A005CE";
 
     if (1 == cpuCount) {
+        qCDebug(app) << "CPU count is 1";
         CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, 0, this);
         item->setMode(1);
         item->setMultiCoreMode(false);
         item->setColor(cpuColors[0]);
         graphicsLayout->addWidget(item, 0, 0);
     } else if (2 == cpuCount) {
+        qCDebug(app) << "CPU count is 2";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -467,6 +497,7 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
             graphicsLayout->addWidget(item, i / 2, i % 2);
         }
     } else if (4 == cpuCount) {
+        qCDebug(app) << "CPU count is 4";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -477,6 +508,7 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
         }
 
     } else if (8 == cpuCount) {
+        qCDebug(app) << "CPU count is 8";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -486,6 +518,7 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
             graphicsLayout->addWidget(item, i / 4, i % 4);
         }
     } else if (16 == cpuCount) {
+        qCDebug(app) << "CPU count is 16";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -495,6 +528,7 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
             graphicsLayout->addWidget(item, i / 4, i % 4);
         }
     } else if (32 == cpuCount) {//8*4
+        qCDebug(app) << "CPU count is 32";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -507,6 +541,7 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
         graphicsLayout->setHorizontalSpacing(6);
         graphicsLayout->setVerticalSpacing(6);
     } else if (32 < cpuCount) {
+        qCDebug(app) << "CPU count is greater than 32";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -524,6 +559,7 @@ void CPUDetailGrapTable::setMultiModeLayout(CPUInfoModel *model)
         graphicsLayout->setVerticalSpacing(0);
     } else {
         //模式2
+        qCDebug(app) << "CPU count is less than 32";
         for (int i = 0; i < cpuCount; ++i) {
             CPUDetailGrapTableItem *item = new CPUDetailGrapTableItem(model, i, this);
             item->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

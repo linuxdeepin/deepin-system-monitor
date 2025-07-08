@@ -8,13 +8,16 @@
 
 #include "system/device_db.h"
 #include "system/netif_info_db.h"
+#include "ddlog.h"
 
 #include <QDebug>
 
 const int itemSpace = 6;
+using namespace DDLog;
 using namespace core::system;
 NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : DScrollArea(parent)
 {
+    qCDebug(app) << "NetifStatViewWidget constructor";
     m_centralWidget = new QWidget(this);
     this->setWidget(m_centralWidget);
     this->setFrameShape(QFrame::NoFrame);
@@ -24,12 +27,14 @@ NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : DScrollArea(parent)
 
 void NetifStatViewWidget::resizeEvent(QResizeEvent *event)
 {
+    // qCDebug(app) << "NetifStatViewWidget resizeEvent";
     QScrollArea::resizeEvent(event);
     updateWidgetGeometry();
 }
 
 void NetifStatViewWidget::fontChanged(const QFont &font)
 {
+    qCDebug(app) << "NetifStatViewWidget fontChanged";
     for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
         NetifItemViewWidget *itemView = iter.value();
         itemView->fontChanged(font);
@@ -38,16 +43,19 @@ void NetifStatViewWidget::fontChanged(const QFont &font)
 
 void NetifStatViewWidget::onModelUpdate()
 {
+    qCDebug(app) << "NetifStatViewWidget onModelUpdate";
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
     for (auto iter = netifInfoDB.begin(); iter != netifInfoDB.end(); iter++) {
         const QByteArray &mac = iter.key();
         if (!m_mapItemView.contains(mac)) {
+            qCDebug(app) << "Creating new NetifItemViewWidget for MAC:" << mac;
             NetifItemViewWidget *itemWidget = new NetifItemViewWidget(m_centralWidget, mac);
             connect(itemWidget, &NetifItemViewWidget::clicked, this, &NetifStatViewWidget::onSetItemActiveStatus);
             itemWidget->updateData(iter.value());
 
             m_mapItemView.insert(mac, itemWidget);
         } else {
+            qCDebug(app) << "Updating existing NetifItemViewWidget for MAC:" << mac;
             NetifItemViewWidget *itemWidget = m_mapItemView.value(mac);
             itemWidget->updateData(iter.value());
         }
@@ -56,6 +64,7 @@ void NetifStatViewWidget::onModelUpdate()
 
     int netifCnt = netifInfoDB.size();
     if (!m_initStatus && netifCnt > 0) {
+        qCDebug(app) << "Initializing active item, count:" << netifCnt;
         m_initStatus = true;
         if (netifCnt > 1) {
             onSetItemActiveStatus(netifInfoDB.begin().key());
@@ -66,6 +75,7 @@ void NetifStatViewWidget::onModelUpdate()
     }
 
     if (netifCnt > 0 && !netifInfoDB.contains(m_currentMac)) {
+        qCDebug(app) << "Current active MAC not found, resetting to the first one.";
         if (netifInfoDB.size()  == 1) {
             m_mapItemView.value(netifInfoDB.begin().key())->updateActiveStatus(false);
         } else {
@@ -79,6 +89,7 @@ void NetifStatViewWidget::onModelUpdate()
 
 void NetifStatViewWidget::onSetItemActiveStatus(const QString &mac)
 {
+    qCDebug(app) << "onSetItemActiveStatus for MAC:" << mac;
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
     int netCount  = netifInfoDB.size();
     m_currentMac = mac.toUtf8();
@@ -86,9 +97,11 @@ void NetifStatViewWidget::onSetItemActiveStatus(const QString &mac)
     for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
         NetifItemViewWidget *itemView = iter.value();
         if (netCount > 1 && iter.key() == mac) {
+            qCDebug(app) << "Activating item:" << mac;
             itemView->updateActiveStatus(true);
             emit netifItemClicked(mac);
         } else {
+            qCDebug(app) << "Deactivating item:" << iter.key();
             itemView->updateActiveStatus(false);
         }
     }
@@ -96,19 +109,25 @@ void NetifStatViewWidget::onSetItemActiveStatus(const QString &mac)
 
 void NetifStatViewWidget::updateWidgetGeometry()
 {
+    qCDebug(app) << "updateWidgetGeometry";
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
     int netCount  = netifInfoDB.size();
 
-    if (netCount == 1)
+    if (netCount == 1) {
+        qCDebug(app) << "Layout for 1 item";
         showItemOnlyeOne();
-    else if (netCount == 2)
+    } else if (netCount == 2) {
+        qCDebug(app) << "Layout for 2 items";
         showItemDouble();
-    else if (netCount > 2)
+    } else if (netCount > 2) {
+        qCDebug(app) << "Layout for more than 2 items";
         showItemLgDouble();
+    }
 }
 
 void NetifStatViewWidget::showItemOnlyeOne()
 {
+    qCDebug(app) << "showItemOnlyeOne";
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
     for (auto iter = m_mapItemView.begin(); iter != m_mapItemView.end(); iter++) {
         NetifItemViewWidget *itemView = iter.value();
@@ -128,6 +147,7 @@ void NetifStatViewWidget::showItemOnlyeOne()
 
 void NetifStatViewWidget::showItemDouble()
 {
+    qCDebug(app) << "showItemDouble";
     int itemOffsetX = 0;
     int itemHeight  = this->height();
     int itemWidth   = (this->width() - itemSpace) / 2;
@@ -154,6 +174,7 @@ void NetifStatViewWidget::showItemDouble()
 
 void NetifStatViewWidget::showItemLgDouble()
 {
+    qCDebug(app) << "showItemLgDouble";
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
 
     int itemHeight  = this->height() / 2;

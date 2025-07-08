@@ -7,6 +7,7 @@
 
 #include "main_window.h"
 #include "system_service_table_view.h"
+#include "ddlog.h"
 
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -19,10 +20,13 @@
 #include <QHBoxLayout>
 #include <QPainterPath>
 
+using namespace DDLog;
+
 // constructor
 SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     : DFrame(parent)
 {
+    qCDebug(app) << "SystemServicePageWidget created";
     // global app helper instance
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
@@ -44,11 +48,15 @@ SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     setLayout(layout);
 }
 // destructor
-SystemServicePageWidget::~SystemServicePageWidget() {}
+SystemServicePageWidget::~SystemServicePageWidget()
+{
+    // qCDebug(app) << "SystemServicePageWidget destroyed";
+}
 
 // paint event handler
 void SystemServicePageWidget::paintEvent(QPaintEvent *)
 {
+    // qCDebug(app) << "Painting system service page widget";
     QPainter painter(this);
 
     QPainterPath path;

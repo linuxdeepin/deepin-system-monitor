@@ -8,6 +8,7 @@
 #include "system/mem.h"
 #include "common/common.h"
 #include "base/base_detail_item_delegate.h"
+#include "ddlog.h"
 
 #include <QHeaderView>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -22,6 +23,7 @@
 #include <DStyle>
 #include <QScroller>
 
+using namespace DDLog;
 using namespace core::system;
 using namespace common::format;
 
@@ -49,13 +51,16 @@ protected:
 
     QVariant data(const QModelIndex &index, int role) const
     {
-        if (!index.isValid())
+        if (!index.isValid()) {
+            qCDebug(app) << "DeailTableModel::data invalid index";
             return QVariant();
+        }
 
         int row = index.row();
         int column = index.column();
 
         if (role == Qt::DisplayRole) {
+            qCDebug(app) << "DeailTableModel::data role is Qt::DisplayRole, row:" << row << "column:" << column;
             switch (row) {
             case 0:
                 if (column == 0)
@@ -101,6 +106,7 @@ protected:
                 break;
             }
         } else if (role == Qt::UserRole) {
+            qCDebug(app) << "DeailTableModel::data role is Qt::UserRole, row:" << row << "column:" << column;
             switch (row) {
             case 0:
                 if (column == 0)
@@ -147,9 +153,11 @@ protected:
             }
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         } else if (role == Qt::TextColorRole) {
+            qCDebug(app) << "DeailTableModel::data role is Qt::TextColorRole, row:" << row << "column:" << column;
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
 #else
         } else if (role == Qt::ForegroundRole) {
+            qCDebug(app) << "DeailTableModel::data role is Qt::ForegroundRole, row:" << row << "column:" << column;
             const auto &palette = DGuiApplicationHelper::instance()->applicationPalette();
 #endif
             return palette.color(DPalette::Text);
@@ -166,17 +174,19 @@ protected:
 
 DeailTableModel::DeailTableModel(QObject *parent): QAbstractTableModel(parent)
 {
+    qCDebug(app) << "DeailTableModel constructor";
     m_memInfo = DeviceDB::instance()->memInfo();
 }
 
 DeailTableModel::~DeailTableModel()
 {
-
+    qCDebug(app) << "DeailTableModel destructor";
 }
 
 MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)
     : DTableView(parent)
 {
+    qCDebug(app) << "MemSummaryViewWidget constructor";
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     this->horizontalHeader()->setVisible(false);
@@ -211,17 +221,20 @@ MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)
 
 void MemSummaryViewWidget::onModelUpdate()
 {
+    // qCDebug(app) << "MemSummaryViewWidget onModelUpdate";
     this->viewport()->update();
 }
 
 void MemSummaryViewWidget::fontChanged(const QFont &font)
 {
+    // qCDebug(app) << "MemSummaryViewWidget fontChanged";
     m_font = font;
     this->setFont(m_font);
 }
 
 void MemSummaryViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "MemSummaryViewWidget paintEvent";
     DTableView::paintEvent(event);
 
     QPainter painter(this->viewport());

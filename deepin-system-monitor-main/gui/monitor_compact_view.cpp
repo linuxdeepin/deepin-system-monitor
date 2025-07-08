@@ -10,16 +10,20 @@
 #include "compact_memory_monitor.h"
 #include "compact_network_monitor.h"
 #include "detailwidgetmanager.h"
+#include "ddlog.h"
 
 #include <DPalette>
 #include <DStyle>
 
 #include <QVBoxLayout>
 
+using namespace DDLog;
+
 // constructor
 MonitorCompactView::MonitorCompactView(QWidget *parent)
     : DFrame(parent)
 {
+    qCDebug(app) << "MonitorCompactView constructor";
     // disable auto fill frame background
     setAutoFillBackground(false);
     // set frame background role
@@ -60,6 +64,7 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
     connect(m_cpuMonitor, &CompactCpuMonitor::signalDetailInfoClicked, this, &MonitorCompactView::signalDetailInfoClicked);
     // 连接dbus发来的信号
     connect(&DetailWidgetManager::getInstance(), &DetailWidgetManager::sigJumpToDetailWidget, this, [=](QString msgCode) {
+        qCDebug(app) << "Received signal from DBus to show detail info:" << msgCode;
         emit signalDetailInfoByDbus(msgCode);
     });
 
@@ -72,5 +77,6 @@ MonitorCompactView::MonitorCompactView(QWidget *parent)
 
 void MonitorCompactView::setDetailButtonVisible(bool visible)
 {
+    qCDebug(app) << "Setting detail button visibility to:" << visible;
     m_cpuMonitor->setDetailButtonVisible(visible);
 }

@@ -37,6 +37,7 @@ using namespace DDLog;
 UserPageWidget::UserPageWidget(DWidget *parent)
     : DFrame(parent)
 {
+    qCDebug(app) << "UserPageWidget constructor";
     struct passwd *pws;
     pws = getpwuid(getuid());
     m_currentUser = QString(pws->pw_name);
@@ -45,11 +46,15 @@ UserPageWidget::UserPageWidget(DWidget *parent)
 }
 
 // destructor
-UserPageWidget::~UserPageWidget() {}
+UserPageWidget::~UserPageWidget()
+{
+    qCDebug(app) << "UserPageWidget destructor";
+}
 
 // initialize ui components
 void UserPageWidget::initUI()
 {
+    qCDebug(app) << "UserPageWidget initUI";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_dAppHelper = DApplicationHelper::instance();
 #else
@@ -182,6 +187,7 @@ void UserPageWidget::initUI()
 }
 void UserPageWidget::initConnections()
 {
+    qCDebug(app) << "UserPageWidget initConnections";
     connect(m_accountListWidget, &AccountsWidget::signalCurrentChanged, this, &UserPageWidget::onUserChanged);
     connect(m_procTable, &ProcessTableView::signalModelUpdated, this, &UserPageWidget::onTextContentChanged);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -203,6 +209,7 @@ void UserPageWidget::paintEvent(QPaintEvent *)
 }
 void UserPageWidget::onUserChanged()
 {
+    qCDebug(app) << "UserPageWidget onUserChanged";
     QString userName = m_accountListWidget->getCurrentItemUserName();
     m_procTable->setUserModeName(userName);
     onTextContentChanged();
@@ -211,6 +218,7 @@ void UserPageWidget::onUserChanged()
 
 void UserPageWidget::onTextContentChanged()
 {
+    qCDebug(app) << "UserPageWidget onTextContentChanged";
 
     m_CPUUsageSummary->setText(QString("%1%").arg(m_procTable->getUserCPUUsage(), 0, 'f', 1));
 
@@ -249,6 +257,7 @@ void UserPageWidget::onTextContentChanged()
 
 void UserPageWidget::onHeaderChanged()
 {
+    qCDebug(app) << "UserPageWidget onHeaderChanged";
     m_CPULabel->setVisible(!m_procTable->isColumnHidden(1));
     m_CPUUsageSummary->setVisible(!m_procTable->isColumnHidden(1));
 
@@ -278,6 +287,7 @@ void UserPageWidget::onHeaderChanged()
 
 void UserPageWidget::setLabelFormat(DLabel *label, DPalette::ColorType corlorType)
 {
+    qCDebug(app) << "UserPageWidget setLabelFormat for label:" << label->text();
 
     auto palette = m_dAppHelper->applicationPalette();
 
@@ -298,6 +308,7 @@ void UserPageWidget::setLabelFormat(DLabel *label, DPalette::ColorType corlorTyp
 
 void UserPageWidget::onThemeChanged()
 {
+    qCDebug(app) << "UserPageWidget onThemeChanged";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto applicationPalette = DApplicationHelper::instance()->applicationPalette();
 #else

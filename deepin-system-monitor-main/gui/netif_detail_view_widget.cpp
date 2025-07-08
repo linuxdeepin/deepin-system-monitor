@@ -7,13 +7,16 @@
 #include "netif_stat_view_widget.h"
 #include "netif_summary_view_widget.h"
 #include "system/system_monitor.h"
+#include "ddlog.h"
 
 #include <DApplication>
 
+using namespace DDLog;
 using namespace core::system;
 NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     : BaseDetailViewWidget(parent)
 {
+    qCDebug(app) << "NetifDetailViewWidget constructor";
     this->setObjectName("NetifDetailViewWidget");
 
     m_netifstatWIdget = new NetifStatViewWidget(this);
@@ -33,11 +36,12 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
 
 NetifDetailViewWidget::~NetifDetailViewWidget()
 {
-
+    qCDebug(app) << "NetifDetailViewWidget destructor";
 }
 
 void NetifDetailViewWidget::detailFontChanged(const QFont &font)
 {
+    qCDebug(app) << "NetifDetailViewWidget detailFontChanged";
     BaseDetailViewWidget::detailFontChanged(font);
 
     m_netifstatWIdget->fontChanged(font);
@@ -46,6 +50,7 @@ void NetifDetailViewWidget::detailFontChanged(const QFont &font)
 
 void NetifDetailViewWidget::updateData()
 {
+    qCDebug(app) << "NetifDetailViewWidget updateData";
     m_netifstatWIdget->onModelUpdate();
     m_netifsummaryWidget->onModelUpdate();
 }

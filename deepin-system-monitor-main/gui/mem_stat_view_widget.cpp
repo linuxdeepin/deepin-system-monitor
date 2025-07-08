@@ -8,6 +8,7 @@
 #include "common/common.h"
 #include "system/device_db.h"
 #include "system/mem.h"
+#include "ddlog.h"
 
 #include <QPainter>
 #include <QtMath>
@@ -19,11 +20,13 @@
 #include <DGuiApplicationHelper>
 #endif
 
+using namespace DDLog;
 using namespace common::format;
 using namespace core::system;
 
 MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
 {
+    qCDebug(app) << "MemStatViewWidget constructor";
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_memChartWidget = new ChartViewWidget(ChartViewWidget::ChartViewTypes::MEM_CHART, this);
@@ -37,11 +40,13 @@ MemStatViewWidget::MemStatViewWidget(QWidget *parent) : QWidget(parent)
 
 void MemStatViewWidget::fontChanged(const QFont &font)
 {
+    qCDebug(app) << "MemStatViewWidget fontChanged";
     m_font = font;
 }
 
 void MemStatViewWidget::onModelUpdate()
 {
+    qCDebug(app) << "MemStatViewWidget onModelUpdate";
     // After memory size text, add a space before the brackets
     QString memoryDetail = QString("%1 (%2)")
                            .arg(tr("Size"))
@@ -55,11 +60,14 @@ void MemStatViewWidget::onModelUpdate()
 
 void MemStatViewWidget::updateWidgetGeometry()
 {
+    qCDebug(app) << "MemStatViewWidget updateWidgetGeometry";
     int avgWidth = this->width();
     if (m_memInfo->swapTotal() > 0) {
+        qCDebug(app) << "Swap detected, adjusting layout for two charts";
         avgWidth = this->width() / 2 - 10;
         m_swapChartWidget->setVisible(true);
     } else {
+        qCDebug(app) << "No swap detected, using layout for one chart";
         m_swapChartWidget->setVisible(false);
     }
 
@@ -70,12 +78,14 @@ void MemStatViewWidget::updateWidgetGeometry()
 
 void MemStatViewWidget::resizeEvent(QResizeEvent *event)
 {
+    // qCDebug(app) << "MemStatViewWidget resizeEvent";
     QWidget::resizeEvent(event);
     updateWidgetGeometry();
 }
 
 void MemStatViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "MemStatViewWidget paintEvent";
     QWidget::paintEvent(event);
     QPainter painter(this);
     QFont font = DApplication::font();
@@ -110,6 +120,7 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
 #endif
     if (m_memInfo->swapTotal() > 0)
     {
+        // qCDebug(app) << "Swap detected, drawing swap title";
         painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, swap);
         painter.setPen(Qt::NoPen);
         painter.setBrush(swapColor);
@@ -119,5 +130,4 @@ void MemStatViewWidget::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::NoPen);
     painter.setBrush(memoryColor);
     painter.drawEllipse(0, memtitleRect.y() + qCeil((memtitleRect.height() - sectionSize) / 2.0), sectionSize, sectionSize);
-
-    }
+}

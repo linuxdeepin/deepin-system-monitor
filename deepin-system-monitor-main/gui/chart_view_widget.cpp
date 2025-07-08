@@ -5,6 +5,7 @@
 
 #include "chart_view_widget.h"
 #include "common/common.h"
+#include "ddlog.h"
 
 #include <QPainter>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -16,11 +17,13 @@
 #include <DFontSizeManager>
 
 using namespace common::format;
+using namespace DDLog;
 
 DWIDGET_USE_NAMESPACE
 const int allDatacount = 30;
 ChartViewWidget::ChartViewWidget(ChartViewTypes types, QWidget *parent) : QWidget(parent), m_viewType(types)
 {
+    qCDebug(app) << "ChartViewWidget constructor, type:" << m_viewType;
     changeFont(DApplication::font());
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
             this, &ChartViewWidget::changeFont);
@@ -34,12 +37,14 @@ ChartViewWidget::ChartViewWidget(ChartViewTypes types, QWidget *parent) : QWidge
 
 void ChartViewWidget::changeTheme()
 {
+    qCDebug(app) << "ChartViewWidget::changeTheme";
     drawBackPixmap();
     update();
 }
 
 void ChartViewWidget::setSpeedAxis(bool speed)
 {
+    qCDebug(app) << "ChartViewWidget::setSpeedAxis:" << speed;
     m_speedAxis = speed;
     if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
         setAxisTitle(formatUnit_memory_disk(qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong()), B, 1, true));
@@ -49,13 +54,16 @@ void ChartViewWidget::setSpeedAxis(bool speed)
 
 void ChartViewWidget::setData1Color(const QColor &color)
 {
+    qCDebug(app) << "ChartViewWidget::setData1Color";
     m_data1Color = color;
 }
 
 void ChartViewWidget::addData1(const QVariant &data)
 {
+    // qCDebug(app) << "ChartViewWidget::addData1";
     m_listData1 << data;
     if (m_listData1.size() > allDatacount + 1) {
+        qCDebug(app) << "Data1 list is full, pop one";
         m_listData1.pop_front();
     }
 
@@ -65,6 +73,7 @@ void ChartViewWidget::addData1(const QVariant &data)
         });
     const QVariant &maxdata = *maxElement;
     if (maxdata.toLongLong() > 0 && maxdata != m_maxData1) {
+        qCDebug(app) << "Updating max data 1";
         m_maxData1 = QVariant(maxdata.toLongLong() * 1.1);
         m_maxData = qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong());
 
@@ -77,6 +86,7 @@ void ChartViewWidget::addData1(const QVariant &data)
         }
 
     } else {
+        qCDebug(app) << "Data 1 is zero, setting axis to zero";
         // when the data hold the zero num,we should set the chart max value as 0
         if (m_speedAxis) {
             if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
@@ -89,6 +99,7 @@ void ChartViewWidget::addData1(const QVariant &data)
 
 void ChartViewWidget::setData2Color(const QColor &color)
 {
+    qCDebug(app) << "ChartViewWidget::setData2Color";
     m_data2Color = color;
 }
 
@@ -96,6 +107,7 @@ void ChartViewWidget::addData2(const QVariant &data)
 {
     m_listData2 << data;
     if (m_listData2.size() > allDatacount + 1) {
+        qCDebug(app) << "Data2 list is full, pop one";
         m_listData2.pop_front();
     }
 
@@ -105,6 +117,7 @@ void ChartViewWidget::addData2(const QVariant &data)
         });
     const QVariant &maxdata = *maxElement;
     if (maxdata.toLongLong() > 0 && maxdata != m_maxData2) {
+        qCDebug(app) << "Updating max data 2";
         m_maxData2 = QVariant(maxdata.toLongLong() * 1.1);
         m_maxData = qMax(m_maxData1.toLongLong(), m_maxData2.toLongLong());
 
@@ -114,6 +127,7 @@ void ChartViewWidget::addData2(const QVariant &data)
             else
                 setAxisTitle(formatUnit_net(m_maxData, B, 1, true));
         } else {
+            qCDebug(app) << "Data 2 is zero, setting axis to zero";
             // when the data hold the zero num,we should set the chart max value as 0
             if (m_speedAxis) {
                 if (m_viewType == BLOCK_CHART || m_viewType == MEM_CHART)
@@ -128,24 +142,28 @@ void ChartViewWidget::addData2(const QVariant &data)
 
 void ChartViewWidget::setAxisTitle(const QString &text)
 {
+    qCDebug(app) << "ChartViewWidget::setAxisTitle:" << text;
     m_axisTitle = text;
     update();
 }
 
 void ChartViewWidget::changeFont(const QFont &font)
 {
+    qCDebug(app) << "ChartViewWidget::changeFont";
     Q_UNUSED(font)
     m_textfont = DFontSizeManager::instance()->get(DFontSizeManager::T8);
 }
 
 void ChartViewWidget::resizeEvent(QResizeEvent *event)
 {
+    // qCDebug(app) << "ChartViewWidget::resizeEvent";
     QWidget::resizeEvent(event);
     drawBackPixmap();
 }
 
 void ChartViewWidget::getPainterPathByData(const QList<QVariant> &listData, QPainterPath &path, QVariant maxYvalue)
 {
+    // qCDebug(app) << "ChartViewWidget::getPainterPathByData";
     qreal offsetX = 0;
     qreal distance = m_chartRect.width() * 1.0 / allDatacount;
     int dataCount = listData.size();
@@ -181,8 +199,11 @@ void ChartViewWidget::getPainterPathByData(const QList<QVariant> &listData, QPai
 
 void ChartViewWidget::drawData1(QPainter *painter)
 {
-    if (m_listData1.size() <= 0)
+    // qCDebug(app) << "ChartViewWidget::drawData1";
+    if (m_listData1.size() <= 0) {
+        qCDebug(app) << "No data for drawData1";
         return;
+    }
 
     painter->save();
     painter->setClipRect(m_chartRect.adjusted(1, -1, 1, 1));
@@ -199,8 +220,11 @@ void ChartViewWidget::drawData1(QPainter *painter)
 
 void ChartViewWidget::drawData2(QPainter *painter)
 {
-    if (m_listData2.size() <= 0)
+    // qCDebug(app) << "ChartViewWidget::drawData2";
+    if (m_listData2.size() <= 0) {
+        qCDebug(app) << "No data for drawData2";
         return;
+    }
 
     painter->save();
     painter->setClipRect(m_chartRect.adjusted(1, -1, 1, 1));
@@ -217,8 +241,11 @@ void ChartViewWidget::drawData2(QPainter *painter)
 
 void ChartViewWidget::drawBackPixmap()
 {
-    if (this->width() == 0 || this->height() == 0)
+    // qCDebug(app) << "ChartViewWidget::drawBackPixmap";
+    if (this->width() == 0 || this->height() == 0) {
+        qCDebug(app) << "Cannot draw back pixmap, invalid widget size";
         return;
+    }
 
     m_backPixmap = QPixmap(this->size());
     m_backPixmap.fill(Qt::transparent);
@@ -276,6 +303,7 @@ void ChartViewWidget::drawBackPixmap()
 
 void ChartViewWidget::drawAxisText(QPainter *painter)
 {
+    // qCDebug(app) << "ChartViewWidget::drawAxisText";
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     auto *dAppHelper = DApplicationHelper::instance();
 #else
@@ -295,6 +323,7 @@ void ChartViewWidget::drawAxisText(QPainter *painter)
 
 void ChartViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "ChartViewWidget::paintEvent";
     QWidget::paintEvent(event);
 
     QPainter painter(this);

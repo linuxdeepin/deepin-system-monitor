@@ -7,6 +7,7 @@
 #include "chart_view_widget.h"
 #include "common/common.h"
 #include "system/netif.h"
+#include "ddlog.h"
 
 #include <QtMath>
 #include <QPainter>
@@ -18,6 +19,7 @@
 #include <DGuiApplicationHelper>
 #endif
 
+using namespace DDLog;
 using namespace common::format;
 using namespace core::system;
 
@@ -29,6 +31,7 @@ const int TextSpacing = 12;
 DWIDGET_USE_NAMESPACE
 NetifItemViewWidget::NetifItemViewWidget(QWidget *parent, const QByteArray &mac) : QWidget(parent)
 {
+    qCDebug(app) << "NetifItemViewWidget constructor for MAC:" << mac;
     m_mac = mac;
     m_ifname = "Ethernet";
 
@@ -41,6 +44,7 @@ NetifItemViewWidget::NetifItemViewWidget(QWidget *parent, const QByteArray &mac)
 
 void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "NetifItemViewWidget paintEvent";
     QWidget::paintEvent(event);
 
     int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
@@ -57,6 +61,7 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
     const QColor &textColor = palette.color(DPalette::TextTips);
     if (m_isActive) {
+        // qCDebug(app) << "NetifItemViewWidget paintEvent: active";
         painter.setPen(Qt::NoPen);
         QColor selectColor = palette.color(DPalette::Highlight);
         selectColor.setAlphaF(0.1);
@@ -66,6 +71,7 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
         painter.setPen(palette.color(DPalette::Highlight));
     } else {
+        // qCDebug(app) << "NetifItemViewWidget paintEvent: inactive";
         painter.setPen(textColor);
     }
 
@@ -142,18 +148,21 @@ void NetifItemViewWidget::paintEvent(QPaintEvent *event)
 
 void NetifItemViewWidget::resizeEvent(QResizeEvent *event)
 {
+    // qCDebug(app) << "NetifItemViewWidget resizeEvent";
     QWidget::resizeEvent(event);
     updateWidgetGeometry();
 }
 
 void NetifItemViewWidget::mousePressEvent(QMouseEvent *event)
 {
+    qCDebug(app) << "NetifItemViewWidget mousePressEvent";
     QWidget::mousePressEvent(event);
     emit clicked(m_mac);
 }
 
 void NetifItemViewWidget::fontChanged(const QFont &font)
 {
+    // qCDebug(app) << "NetifItemViewWidget fontChanged";
     m_font = font;
     this->setFont(m_font);
     updateWidgetGeometry();
@@ -161,12 +170,14 @@ void NetifItemViewWidget::fontChanged(const QFont &font)
 
 void NetifItemViewWidget::setMode(int mode)
 {
+    qCDebug(app) << "Setting mode to:" << mode;
     m_mode = mode;
     this->update();
 }
 
 void NetifItemViewWidget::updateData(const std::shared_ptr<class core::system::NetifInfo> &netifInfo)
 {
+    qCDebug(app) << "Updating data for interface:" << netifInfo->ifname();
     m_ChartWidget->addData1(netifInfo->recv_bps());
     m_ChartWidget->addData2(netifInfo->sent_bps());
 
@@ -180,17 +191,21 @@ void NetifItemViewWidget::updateData(const std::shared_ptr<class core::system::N
 
 void NetifItemViewWidget::updateActiveStatus(bool active)
 {
+    qCDebug(app) << "Updating active status to:" << active;
     m_isActive = active;
     update();
 }
 
 void NetifItemViewWidget::updateWidgetGeometry()
 {
+    qCDebug(app) << "Updating widget geometry for mode:" << m_mode;
     int fontHeight = QFontMetrics(m_font).height();
     int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
     if (m_mode == TITLE_HORIZONTAL) {
+        qCDebug(app) << "Updating widget geometry for horizontal mode";
         m_ChartWidget->setGeometry(curXMargin, TextSpacing, this->width() - 2 * curXMargin, this->height() - TextSpacing - margin);
     } else {
+        qCDebug(app) << "Updating widget geometry for vertical mode";
         m_ChartWidget->setGeometry(curXMargin, fontHeight * 2 + TextSpacing, this->width() - 2 * curXMargin, this->height() - fontHeight * 2 - TextSpacing - margin);
     }
 }
