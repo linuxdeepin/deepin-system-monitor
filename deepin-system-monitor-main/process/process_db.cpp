@@ -32,6 +32,7 @@ const int DesktopEntryTimeCount = 150; // 5 minutes interval
 ProcessDB::ProcessDB(QObject *parent)
     : QObject(parent)
 {
+    qCDebug(app) << "ProcessDB object created";
     m_procSet = new ProcessSet();
     m_windowList = new WMWindowList();
     m_desktopEntryCache = new DesktopEntryCache();
@@ -44,6 +45,7 @@ ProcessDB::ProcessDB(QObject *parent)
 
 ProcessDB::~ProcessDB()
 {
+    qCDebug(app) << "ProcessDB object destroyed";
     if (m_procSet) {
         delete m_procSet;
         m_procSet = nullptr;
@@ -56,63 +58,77 @@ ProcessDB::~ProcessDB()
         delete m_desktopEntryCache;
         m_desktopEntryCache = nullptr;
     }
+    qCDebug(app) << "ProcessDB object fully destroyed";
 }
 
 ProcessDB *ProcessDB::instance()
 {
+    // qCDebug(app) << "Getting ProcessDB instance";
     auto *thread = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread);
     return thread->systemMonitorInstance()->processDB();
 }
 
 uid_t ProcessDB::processEuid()
 {
+    qCDebug(app) << "Getting process EUID:" << m_euid;
     return m_euid;
 }
 
 ProcessSet *ProcessDB::processSet()
 {
+    qCDebug(app) << "Getting process set";
     return m_procSet;
 }
 
 WMWindowList *ProcessDB::windowList()
 {
+    qCDebug(app) << "Getting window list";
     return m_windowList;
 }
 
 DesktopEntryCache *ProcessDB::desktopEntryCache()
 {
+    qCDebug(app) << "Getting desktop entry cache";
     return m_desktopEntryCache;
 }
 
 bool ProcessDB::isCurrentProcess(pid_t pid)
 {
     pid_t cur = getpid();
-    return pid == cur;
+    bool isCurrent = (pid == cur);
+    // qCDebug(app) << "Checking if PID" << pid << "is current process:" << isCurrent;
+    return isCurrent;
 }
 
 void ProcessDB::endProcess(pid_t pid)
 {
+    qCDebug(app) << "Ending process with PID:" << pid;
     sendSignalToProcess(pid, SIGTERM);
 }
 
 void ProcessDB::pauseProcess(pid_t pid)
 {
+    qCDebug(app) << "Pausing process with PID:" << pid;
     sendSignalToProcess(pid, SIGSTOP);
 }
 
 void ProcessDB::resumeProcess(pid_t pid)
 {
+    qCDebug(app) << "Resuming process with PID:" << pid;
     sendSignalToProcess(pid, SIGCONT);
 }
 
 void ProcessDB::killProcess(pid_t pid)
 {
+    qCDebug(app) << "Killing process with PID:" << pid;
     sendSignalToProcess(pid, SIGKILL);
 }
 
 void ProcessDB::update()
 {
+    qCDebug(app) << "ProcessDB::update() called";
     if (m_desktopEntryTimeCount++ && m_desktopEntryTimeCount >= DesktopEntryTimeCount) {
+        qCDebug(app) << "Updating desktop entry cache";
         m_desktopEntryTimeCount = 0;
         m_desktopEntryCache->updateCache();
     }
@@ -123,11 +139,13 @@ void ProcessDB::update()
 
 void ProcessDB::setProcessPriority(pid_t pid, int priority)
 {
+    qCDebug(app) << "setProcessPriority called for pid" << pid << "with priority" << priority;
     emit signalProcessPrioritysetChanged(pid, priority);
 }
 
 void ProcessDB::onProcessPrioritysetChanged(pid_t pid, int priority)
 {
+    qCDebug(app) << "onProcessPrioritysetChanged called for pid" << pid << "with priority" << priority;
     sched_param param {};
     ErrorContext ec {};
 
@@ -151,6 +169,7 @@ void ProcessDB::onProcessPrioritysetChanged(pid_t pid, int priority)
 
     // we dont support adjust realtime sched process's priority
     if (param.sched_priority == 0) {
+        qCDebug(app) << "Process has dynamic priority, attempting to change. PID:" << pid;
         // dynamic priority
         if (priority > kVeryLowPriorityMin)
             priority = kVeryLowPriorityMin;
@@ -160,6 +179,7 @@ void ProcessDB::onProcessPrioritysetChanged(pid_t pid, int priority)
         errno = 0;
         rc = setpriority(PRIO_PROCESS, id_t(pid), priority);
         if (rc == -1 && errno != 0) {
+            qCDebug(app) << "setpriority failed with errno" << errno;
             if (errno == EACCES || errno == EPERM) {
                 qCInfo(app) << "Permission denied, attempting to change priority using pkexec. PID:" << pid;
                 // call pkexec to change priority
@@ -206,6 +226,7 @@ void ProcessDB::onProcessPrioritysetChanged(pid_t pid, int priority)
 
 void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
 {
+    qCDebug(app) << "sendSignalToProcess called for pid" << pid << "with signal" << signal;
     ErrorContext ec = {};
     auto errfmt = [ = ](decltype(errno) err, const QString & title, int p, int sig,
     ErrorContext & ectx) -> ErrorContext & {
@@ -266,6 +287,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
                 ec1 = errfmt(code, fmsg(signal), pid, signal, ec1);
                 Q_EMIT processControlResultReady(ec1);
             } else {
+                qCDebug(app) << "Successfully sent signal using pkexec. PID:" << pid << "Signal:" << signal;
                 emitSignal(signal);
             }
         });
@@ -276,8 +298,10 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
         int rc = 0;
         errno = 0;
         ErrorContext ec1 = {};
+        qCDebug(app) << "Calling kill for pid" << pid << "with signal" << signal;
         rc = kill(pid, signal);
         if (rc == -1 && errno != 0) {
+            qCDebug(app) << "kill failed with errno" << errno;
             if (errno == EPERM) {
                 qCInfo(app) << "Permission denied, using pkexec to send signal. PID:" << pid;
                 pctl(pid, signal);
@@ -288,6 +312,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
                 return;
             }
         } else {
+            qCDebug(app) << "Successfully sent signal. PID:" << pid << "Signal:" << signal;
             emitSignal(signal);
         }
     };
@@ -300,6 +325,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
         qCInfo(app) << "Sending SIGCONT before" << signal << "to process" << pid;
         rc = kill(pid, SIGCONT);
         if (rc == -1 && errno != 0) {
+            qCDebug(app) << "kill(SIGCONT) failed with errno" << errno;
             // not authorized, use pkexec instead
             if (errno == EPERM) {
                 qCInfo(app) << "Permission denied for SIGCONT, using pkexec. PID:" << pid;
@@ -314,6 +340,7 @@ void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
                 return;
             }
         } else {
+            qCDebug(app) << "Successfully sent SIGCONT, proceeding with original signal. PID:" << pid;
             pkill(pid, signal);
         }
     } else {

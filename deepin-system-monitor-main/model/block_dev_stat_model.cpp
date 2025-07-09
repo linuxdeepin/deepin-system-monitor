@@ -4,11 +4,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "block_dev_stat_model.h"
-
+#include "ddlog.h"
 #include "common/common.h"
 
 using namespace common::core;
 using namespace common::format;
+using namespace DDLog;
 
 // model constructor
 BlockDevStatModel::BlockDevStatModel(const TimePeriod &period, QObject *parent)
@@ -16,33 +17,43 @@ BlockDevStatModel::BlockDevStatModel(const TimePeriod &period, QObject *parent)
     , m_ioSampleDB(new IOSample(period))
     , m_iopsSampleDB(new IOPSSample(period))
 {
+    qCDebug(app) << "BlockDevStatModel constructor";
 }
 
 int BlockDevStatModel::rowCount(const QModelIndex &) const
 {
-    if (m_iopsSampleDB && m_ioSampleDB && m_iopsSampleDB->count() == m_ioSampleDB->count())
+    if (m_iopsSampleDB && m_ioSampleDB && m_iopsSampleDB->count() == m_ioSampleDB->count()) {
         return m_iopsSampleDB->count();
-    else
+    } else {
+        qCDebug(app) << "BlockDevStatModel::rowCount invalid data, returning 0";
         return 0;
+    }
 }
 
 int BlockDevStatModel::columnCount(const QModelIndex &) const
 {
+    // qCDebug(app) << "BlockDevStatModel::columnCount";
     return kStatPropMax;
 }
 
 QVariant BlockDevStatModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || !m_ioSampleDB.get() || !m_iopsSampleDB.get())
+    if (!index.isValid() || !m_ioSampleDB.get() || !m_iopsSampleDB.get()) {
+        qCDebug(app) << "BlockDevStatModel::data invalid index or data";
         return {};
+    }
 
-    if (index.row() < 0 || index.row() >= int(m_iopsSampleDB->count()))
+    if (index.row() < 0 || index.row() >= int(m_iopsSampleDB->count())) {
+        qCDebug(app) << "BlockDevStatModel::data row out of bounds";
         return {};
+    }
 
     auto *io = m_ioSampleDB->sample(index.row());
     auto *iops = m_iopsSampleDB->sample(index.row());
 
     if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
+        qCDebug(app) << "BlockDevStatModel::data Display/Accessible role for row" << index.row() << "col"
+                     << index.column();
         switch (index.column()) {
         case kStatTotalRead: {
             if (io)
@@ -73,6 +84,8 @@ QVariant BlockDevStatModel::data(const QModelIndex &index, int role) const
         } // ::switch
     } // ::if(displayRole || accessibleRole)
     else if (role == kValueRole) {
+        qCDebug(app) << "BlockDevStatModel::data Value role for row" << index.row() << "col"
+                     << index.column();
         switch (index.column()) {
         case kStatTotalRead: {
             if (io)

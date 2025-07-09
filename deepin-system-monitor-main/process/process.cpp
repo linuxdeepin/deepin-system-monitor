@@ -50,6 +50,7 @@ namespace process {
 
 QString getPriorityName(int prio)
 {
+    qCDebug(app) << "Getting priority name for value:" << prio;
     const static QMap<ProcessPriority, QString> priorityMap = {
         {kVeryHighPriority, QApplication::translate("Process.Priority", "Very high")},
         {kHighPriority, QApplication::translate("Process.Priority", "High")},
@@ -67,11 +68,13 @@ QString getPriorityName(int prio)
         p = kCustomPriority;
     }
 
+    qCDebug(app) << "Priority maps to:" << priorityMap[p];
     return priorityMap[p];
 }
 
 ProcessPriority getProcessPriorityStub(int prio)
 {
+    qCDebug(app) << "Getting process priority stub for value:" << prio;
     if (prio == 0) {
         return kNormalPriority;
     } else if (prio == kVeryHighPriority || prio == kHighPriority || prio == kLowPriority || prio == kVeryLowPriority) {
@@ -86,21 +89,24 @@ ProcessPriority getProcessPriorityStub(int prio)
 Process::Process()
     : d(new ProcessPrivate())
 {
-
+    qCDebug(app) << "Process object created";
 }
 Process::Process(pid_t pid)
     : d(new ProcessPrivate())
 {
+    qCDebug(app) << "Process object created for pid" << pid;
     d->pid = pid;
 }
 Process::Process(const Process &other)
     : d(other.d)
 {
+    qCDebug(app) << "Process object copied from pid" << other.d->pid;
 }
 Process &Process::operator=(const Process &rhs)
 {
     if (this == &rhs)
         return *this;
+    // qCDebug(app) << "Process object assigned from pid" << rhs.d->pid;
 
     d = rhs.d;
     return *this;
@@ -108,21 +114,26 @@ Process &Process::operator=(const Process &rhs)
 
 Process::~Process()
 {
+    qCDebug(app) << "Process object destroyed for pid" << (d ? d->pid : -1);
 }
 
 time_t Process::startTime() const
 {
     auto *monitor = ThreadManager::instance()->thread<SystemMonitorThread>(BaseThread::kSystemMonitorThread)->systemMonitorInstance();
-    return monitor->sysInfo()->btime().tv_sec + time_t(d->start_time / HZ);
+    time_t st = monitor->sysInfo()->btime().tv_sec + time_t(d->start_time / HZ);
+    qCDebug(app) << "Start time for pid" << d->pid << "is" << st;
+    return st;
 }
 
 timeval Process::procuptime() const
 {
+    qCDebug(app) << "Process uptime for pid" << d->pid << "is" << d->uptime.tv_sec << "s";
     return d->uptime;
 }
 
 void Process::readProcessVariableInfo()
 {
+    qCDebug(app) << "Reading variable info for pid" << d->pid;
     d->valid = true;
 
     bool ok = true;
@@ -143,6 +154,7 @@ void Process::readProcessVariableInfo()
     auto validrecentPtr = recentProcptr.lock();
     qreal timedelta = d->stime + d->utime;
     if (validrecentPtr) {
+        qCDebug(app) << "Found recent process stage for pid" << d->pid;
         timedelta = timedelta - validrecentPtr->ptime;
         struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
         d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
@@ -176,10 +188,12 @@ void Process::readProcessVariableInfo()
     d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
 
     d->valid = d->valid && ok;
+    qCDebug(app) << "Finished reading variable info for pid" << d->pid << "valid:" << d->valid;
 }
 
 void Process::readProcessSimpleInfo()
 {
+    qCDebug(app) << "Reading simple info for pid" << d->pid;
     d->valid = true;
     bool ok = true;
     readEnviron();
@@ -198,16 +212,20 @@ void Process::readProcessSimpleInfo()
     if (euid == d->uid && (wmwindowList->isGuiApp(d->pid)
                            || wmwindowList->isTrayApp(d->pid)
                            || wmwindowList->isDesktopEntryApp(d->pid))) {
+        qCDebug(app) << "Process" << d->pid << "is a GUI/Tray/Desktop app";
         d->apptype = kFilterApps;
     } else if (euid == d->uid) {
+        qCDebug(app) << "Process" << d->pid << "is a current user app";
         d->apptype = kFilterCurrentUser;
     }
 
     d->valid = d->valid && ok;
+    qCDebug(app) << "Finished reading simple info for pid" << d->pid << "valid:" << d->valid;
 }
 
 void Process::readProcessInfo()
 {
+    qCDebug(app) << "Reading full process info for pid" << d->pid;
     d->valid = true;
 
     bool ok = true;
@@ -233,6 +251,7 @@ void Process::readProcessInfo()
     auto validrecentPtr = recentProcptr.lock();
     qreal timedelta = d->stime + d->utime;
     if (validrecentPtr) {
+        qCDebug(app) << "Found recent process stage for pid" << d->pid;
         timedelta = timedelta - validrecentPtr->ptime;
         struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
         d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
@@ -255,8 +274,10 @@ void Process::readProcessInfo()
     if (euid == d->uid && (wmwindowList->isGuiApp(d->pid)
                            || wmwindowList->isTrayApp(d->pid)
                            || wmwindowList->isDesktopEntryApp(d->pid))) {
+        qCDebug(app) << "Process" << d->pid << "is a GUI/Tray/Desktop app";
         d->apptype = kFilterApps;
     } else if (euid == d->uid) {
+        qCDebug(app) << "Process" << d->pid << "is a current user app";
         d->apptype = kFilterCurrentUser;
     }
 
@@ -278,11 +299,13 @@ void Process::readProcessInfo()
     d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
 
     d->valid = d->valid && ok;
+    qCDebug(app) << "Finished reading full info for pid" << d->pid << "valid:" << d->valid;
 }
 
 // read /proc/[pid]/stat
 bool Process::readStat()
 {
+    qCDebug(app) << "Reading stat for pid" << d->pid;
     bool ok {true};
     char path[256];
     QByteArray buf;
@@ -362,12 +385,14 @@ bool Process::readStat()
         d->guest_time = d->cguest_time = 0;
     }
 
+    qCDebug(app) << "Successfully read stat for pid" << d->pid;
     return ok;
 }
 
 // read /proc/[pid]/cmdline
 bool Process::readCmdline()
 {
+    qCDebug(app) << "Reading cmdline for pid" << d->pid;
     bool ok = true;
     char path[128] {};
     const size_t bsiz = 4096;
@@ -416,12 +441,14 @@ bool Process::readCmdline()
         d->cmdline << buf;
     }
 
+    qCDebug(app) << "Successfully read cmdline for pid" << d->pid;
     return ok;
 }
 
 // read /proc/[pid]/environ
 void Process::readEnviron()
 {
+    qCDebug(app) << "Reading environ for pid" << d->pid;
     const size_t sz = 1024;
     char path[128] {};
     ssize_t nb;
@@ -431,7 +458,7 @@ void Process::readEnviron()
 
     sprintf(path, PROC_ENVIRON_PATH, d->pid);
     if(access(path, R_OK) != 0) {
-        qCWarning(app) << "Cannot access environment file for process" << d->pid;
+        // qCWarning(app) << "Cannot access environment file for process" << d->pid;
         return;
     }
 
@@ -457,6 +484,7 @@ void Process::readEnviron()
     }
 
     if (sbuf.size() > 0) {
+        qCDebug(app) << "Processing environment variables for pid" << d->pid;
         auto elist = sbuf.split('\0');
         for (auto it : elist) {
             // it: name=value pair
@@ -466,11 +494,13 @@ void Process::readEnviron()
             }
         }
     }
+    qCDebug(app) << "Finished reading environ for pid" << d->pid;
 }
 
 // read /proc/[pid]/schedstat
 void Process::readSchedStat()
 {
+    qCDebug(app) << "Reading schedstat for pid" << d->pid;
     const size_t bsiz = 1024;
     QByteArray buf;
     char path[128];
@@ -506,9 +536,11 @@ void Process::readSchedStat()
     rc = sscanf(buf.data(), "%*u %llu %*d", &wtime);
     if (rc == 1) {
         d->wtime = wtime * HZ / 1000000000;
+        qCDebug(app) << "Successfully parsed schedstat for pid" << d->pid;
     } else {
         qCWarning(app) << "Failed to parse schedstat file for process" << d->pid;
     }
+    qCDebug(app) << "Finished reading schedstat for pid" << d->pid;
 }
 
 // read /proc/[pid]/status
@@ -562,6 +594,7 @@ bool Process::readStatus()
         return !ok;
     }
 
+    qCDebug(app) << "Successfully read status for pid" << d->pid;
     return ok;
 }
 
@@ -622,7 +655,7 @@ void Process::readIO()
 
     sprintf(path, PROC_IO_PATH, d->pid);
     if(access(path, R_OK) != 0) {
-        qCWarning(app) << "Cannot access IO file for process" << d->pid;
+        // qCWarning(app) << "Cannot access IO file for process" << d->pid;
         return;
     }
 
@@ -649,6 +682,8 @@ void Process::readIO()
         qCWarning(app) << "Failed to read IO file for process" << d->pid << "Error:" << strerror(errno);
         print_errno(errno, QString("read %1 failed").arg(path));
     }
+
+    qCDebug(app) << "Finished reading IO for pid" << d->pid;
 }
 
 // read /proc/[pid]/fd
@@ -660,7 +695,7 @@ void Process::readSockInodes()
 
     sprintf(path, PROC_FD_PATH, d->pid);
     if(access(path, R_OK) != 0) {
-        qCWarning(app) << "Cannot access fd directory for process" << d->pid;
+        // qCWarning(app) << "Cannot access fd directory for process" << d->pid;
         return;
     }
 
@@ -728,6 +763,7 @@ QString Process::name() const
 
 void Process::setName(const QString &name)
 {
+    // qCDebug(app) << "Set name for pid" << d->pid << "to" << name;
     d->name = name;
 }
 

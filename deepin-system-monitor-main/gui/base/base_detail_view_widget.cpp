@@ -20,6 +20,7 @@ using namespace DDLog;
 
 BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 {
+    qCDebug(app) << "BaseDetailViewWidget constructor";
     m_centralLayout = new QVBoxLayout(this);
     m_centralLayout->setContentsMargins(16, 10, 16, 16);
     m_centralLayout->setSpacing(16);
@@ -94,12 +95,15 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
 BaseDetailViewWidget::~BaseDetailViewWidget()
 {
+    qCDebug(app) << "BaseDetailViewWidget destructor";
     if (m_switchIconDark) {
+        qCDebug(app) << "Deleting m_switchIconDark";
         delete m_switchIconDark;
         m_switchIconDark = nullptr;
     }
 
     if (m_switchIconLight) {
+        qCDebug(app) << "Deleting m_switchIconLight";
         delete m_switchIconLight;
         m_switchIconLight = nullptr;
     }
@@ -107,6 +111,7 @@ BaseDetailViewWidget::~BaseDetailViewWidget()
 
 void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 {
+    qCDebug(app) << "detailFontChanged";
     m_titleFont = font;
     m_titleFont.setPointSizeF(m_titleFont.pointSizeF() + 12);
 
@@ -118,6 +123,7 @@ void BaseDetailViewWidget::detailFontChanged(const QFont &font)
 
 int BaseDetailViewWidget::titleHeight()
 {
+    // qCDebug(app) << "titleHeight";
     return QFontMetrics(m_titleFont).height();
 }
 
@@ -130,6 +136,7 @@ void BaseDetailViewWidget::setTitle(const QString &text)
 
 QString BaseDetailViewWidget::title()
 {
+    // qCDebug(app) << "Getting title:" << m_titleText;
     return m_titleText;
 }
 
@@ -142,11 +149,13 @@ void BaseDetailViewWidget::setDetail(const QString &text)
 
 QString BaseDetailViewWidget::detail()
 {
+    // qCDebug(app) << "Getting detail text:" << m_detailText;
     return m_detailText;
 }
 
 void BaseDetailViewWidget::updateWidgetGrometry()
 {
+    qCDebug(app) << "updateWidgetGrometry";
     QFontMetrics titleFont(m_titleFont);
     const QMargins &margin = m_centralLayout->contentsMargins();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -165,21 +174,26 @@ void BaseDetailViewWidget::updateWidgetGrometry()
 
 void BaseDetailViewWidget::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
+    qCDebug(app) << "onThemeTypeChanged, themeType:" << themeType;
     if (themeType == DGuiApplicationHelper::DarkType) {
+        qCDebug(app) << "Dark theme";
         m_switchButton->setIcon(*m_switchIconDark);
     } else if (themeType == DGuiApplicationHelper::LightType) {
+        qCDebug(app) << "Light theme";
         m_switchButton->setIcon(*m_switchIconLight);
     }
 }
 
 void BaseDetailViewWidget::resizeEvent(QResizeEvent *event)
 {
+    qCDebug(app) << "resizeEvent";
     QWidget::resizeEvent(event);
     updateWidgetGrometry();
 }
 
 void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "paintEvent";
     QWidget::paintEvent(event);
 
     QPainter painter(this);
@@ -224,6 +238,7 @@ void BaseDetailViewWidget::paintEvent(QPaintEvent *event)
 
 void BaseDetailViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    // qCDebug(app) << "mouseMoveEvent";
     Q_UNUSED(event)
     //not Todo
 }

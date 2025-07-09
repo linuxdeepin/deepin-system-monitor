@@ -6,6 +6,7 @@
 #include "error_dialog.h"
 
 #include "gui/ui_common.h"
+#include "ddlog.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationHelper>
@@ -19,9 +20,12 @@
 #include <QMap>
 #include <QDebug>
 
+using namespace DDLog;
+
 // Show error dialog
 void ErrorDialog::show(QWidget *parent, const QString &errMsg, const QString &detail)
 {
+    qCDebug(app) << "Showing ErrorDialog with message:" << errMsg << "detail:" << detail;
     auto *dlg = new ErrorDialog(errMsg, detail, parent);
     dlg->exec();
 }
@@ -29,6 +33,7 @@ void ErrorDialog::show(QWidget *parent, const QString &errMsg, const QString &de
 // Initialize UI elements
 void ErrorDialog::initUI()
 {
+    qCDebug(app) << "Initializing ErrorDialog UI";
     // set dialog icon
     setIcon(QIcon::fromTheme("dialog-warning"));
     // set dialog attribute
@@ -72,5 +77,6 @@ void ErrorDialog::initUI()
 ErrorDialog::ErrorDialog(const QString &errMsg, const QString &detail, QWidget *parent)
     : DDialog(parent), m_errMsg(errMsg), m_detail(detail)
 {
+    qCDebug(app) << "ErrorDialog constructor";
     initUI();
 }

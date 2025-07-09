@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "process_set.h"
+#include "ddlog.h"
 #include "process/process_db.h"
 #include "common/common.h"
 #include "wm/wm_window_list.h"
@@ -26,6 +27,7 @@ ProcessSet::ProcessSet()
     , m_pidCtoPMapping {}
     , m_pidPtoCMapping {}
 {
+    qCDebug(app) << "ProcessSet object created";
 }
 
 ProcessSet::ProcessSet(const ProcessSet &other)
@@ -34,6 +36,7 @@ ProcessSet::ProcessSet(const ProcessSet &other)
     , m_pidCtoPMapping(other.m_pidCtoPMapping)
     , m_pidPtoCMapping(other.m_pidPtoCMapping)
 {
+    qCDebug(app) << "ProcessSet object copied";
     m_prePid.clear();
     m_curPid.clear();
     m_pidMyApps.clear();
@@ -43,6 +46,7 @@ ProcessSet::ProcessSet(const ProcessSet &other)
 
 void ProcessSet::mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps)
 {
+    qCDebug(app) << "Merging sub-process net IO for ppid" << ppid;
     auto it = m_pidPtoCMapping.find(ppid);
     while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
         mergeSubProcNetIO(it.value(), recvBps, sendBps);
@@ -56,6 +60,7 @@ void ProcessSet::mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps)
 
 void ProcessSet::mergeSubProcCpu(pid_t ppid, qreal &cpu)
 {
+    qCDebug(app) << "Merging sub-process CPU for ppid" << ppid;
     auto it = m_pidPtoCMapping.find(ppid);
     while (it != m_pidPtoCMapping.end() && it.key() == ppid) {
         mergeSubProcCpu(it.value(), cpu);
@@ -68,12 +73,15 @@ void ProcessSet::mergeSubProcCpu(pid_t ppid, qreal &cpu)
 
 void ProcessSet::refresh()
 {
+    qCDebug(app) << "Refreshing process set";
     scanProcess();
 }
 
 void ProcessSet::scanProcess()
 {
+    qCDebug(app) << "Scanning processes";
     for (auto iter = m_set.begin(); iter != m_set.end(); iter++) {
+        qCDebug(app) << "Storing recent stage for pid" << iter->pid();
         std::shared_ptr<RecentProcStage> procstage = std::make_shared<RecentProcStage>();
         procstage->ptime = iter->utime() + iter->stime();
         procstage->read_bytes = iter->readBytes();
@@ -93,14 +101,18 @@ void ProcessSet::scanProcess()
     while (iter.hasNext()) {
         Process proc = iter.next();
 
-        if(!m_curPid.contains(proc.pid()))
+        if(!m_curPid.contains(proc.pid())) {
+            qCDebug(app) << "Found process with pid" << proc.pid();
             m_curPid.append(proc.pid());
+        }
 
     }
 
     if(m_prePid != m_curPid) {
+        qCDebug(app) << "Process list changed";
         for (auto it = m_prePid.begin(); it != m_prePid.end();) {
             if (!m_curPid.contains(*it)) {
+                // qCDebug(app) << "Removing obsolete pid" << *it;
                 if (m_simpleSet.contains(*it))
                     m_simpleSet.remove(*it);
                 if (m_pidMyApps.contains(*it))
@@ -113,6 +125,7 @@ void ProcessSet::scanProcess()
 
         for (const pid_t &pid : m_curPid) {
             if(!m_prePid.contains(pid)){ //add  new process pid
+                // qCDebug(app) << "Adding new pid" << pid;
                 Process proc(pid);
                 proc.readProcessSimpleInfo();
                 if(!m_simpleSet.contains(pid))
@@ -135,6 +148,7 @@ void ProcessSet::scanProcess()
         //     ((kFilterCurrentUser == index) && (proc.appType() <= kFilterCurrentUser)) ||
         //         (kNoFilter == index))
                 {
+            //  qCDebug(app) << "Reading variable info for pid" << pid;
              proc.readProcessVariableInfo();  //
                if (!proc.isValid())
                      continue;
@@ -152,12 +166,14 @@ void ProcessSet::scanProcess()
         b = wmwindowList->isGuiApp(ppid);
         if (!b && m_pidCtoPMapping.contains(ppid))
         {
+            qCDebug(app) << "Recursively checking for GUI ancestor for ppid" << ppid;
             b = anyRootIsGuiProc(m_pidCtoPMapping[ppid]);
         }
         return b;
     };
 
     for (const pid_t &pid : m_pidMyApps) {
+        // qCDebug(app) << "Merging stats for my app with pid" << pid;
         qreal recvBps = 0;
         qreal sendBps = 0;
         mergeSubProcNetIO(pid, recvBps, sendBps);
@@ -169,9 +185,11 @@ void ProcessSet::scanProcess()
 
         if (!wmwindowList->isGuiApp(pid))
         {
+            qCDebug(app) << "Process is not a GUI app, checking for GUI ancestor. Pid:" << pid;
             // only if no ancestor process is gui app we keep this process
             if (m_pidCtoPMapping.contains(pid) &&
                     anyRootIsGuiProc(m_pidCtoPMapping[pid])) {
+                qCDebug(app) << "Found GUI ancestor for pid" << pid;
 
                 // when we start app with deepin-terminal, we should skip setting apptype as CurrentUser
                 const Process parentProc = getProcessById(m_pidCtoPMapping[pid]);
@@ -188,6 +206,7 @@ void ProcessSet::scanProcess()
                  * 兼容。
                  */
                 if (parentCmdLineString.contains(QString("/bin/bash"))) {
+                  qCDebug(app) << "Parent process is bash, skipping app type change for pid" << pid;
                   continue;
                 }
 
@@ -202,6 +221,7 @@ void ProcessSet::scanProcess()
 
 ProcessSet::Iterator::Iterator()
 {
+    // qCDebug(app) << "ProcessSet::Iterator created";
     errno = 0;
     auto *dp = opendir(PROC_PATH);
     if (!dp) {
@@ -222,6 +242,7 @@ Process ProcessSet::Iterator::next()
 {
     if (m_dirent && isdigit(m_dirent->d_name[0])) {
         auto pid = pid_t(atoi(m_dirent->d_name));
+        // qCDebug(app) << "Iterator returning next pid" << pid;
         Process proc(pid);
 
         advance();
@@ -241,6 +262,7 @@ void ProcessSet::Iterator::advance()
         else 
             break;
     }
+    // qCDebug(app) << "Iterator advanced to" << (m_dirent ? m_dirent->d_name : "end");
     if (!m_dirent && errno) {
         print_errno(errno, "read /proc failed");
     }
@@ -260,6 +282,7 @@ QList<pid_t> ProcessSet::getPIDList() const
 {
     // 当系统读取到的m_set为空时,通过keys()函数返回会造成段错误 原因是keys函数效率低下,会造成大量的内存拷贝
     // 替换方案是
+    qCDebug(app) << "Getting PID list";
     QList<pid_t> pidList {};
     pidList.clear();
     int size = m_set.size();
@@ -275,17 +298,20 @@ QList<pid_t> ProcessSet::getPIDList() const
 
 void ProcessSet::removeProcess(pid_t pid)
 {
+    // qCDebug(app) << "Removing process with pid" << pid;
     m_set.remove(pid);
 }
 
 void ProcessSet::updateProcessState(pid_t pid, char state)
 {
+    qCDebug(app) << "Updating process state for pid" << pid << "to" << state;
     if (m_set.contains(pid))
         m_set[pid].setState(state);
 }
 
 void ProcessSet::updateProcessPriority(pid_t pid, int priority)
 {
+    qCDebug(app) << "Updating process priority for pid" << pid << "to" << priority;
     if (m_set.contains(pid))
         m_set[pid].setPriority(priority);
 }

@@ -24,6 +24,9 @@
  */
 
 #include "user.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 User::User(QObject *parent)
     : QObject(parent)
@@ -34,17 +37,18 @@ User::User(QObject *parent)
     , m_fullname("")
     , m_iconFile("")
 {
-
+    qCDebug(app) << "User object created";
 }
 
 User::~User()
 {
-
+    qCDebug(app) << "User object destroyed";
 }
 
 void User::setName(const QString &name)
 {
     if (name != m_name) {
+        qCDebug(app) << "Setting user name to" << name;
         m_name = name;
     }
 }
@@ -52,13 +56,16 @@ void User::setName(const QString &name)
 void User::setFullname(const QString &fullname)
 {
     if (fullname != m_fullname) {
+        qCDebug(app) << "Setting user fullname to" << fullname;
         m_fullname = fullname;
     }
 }
 
 const QString User::displayName() const
 {
-    return m_fullname.isEmpty() ? m_name : m_fullname;
+    QString name = m_fullname.isEmpty() ? m_name : m_fullname;
+    qCDebug(app) << "Display name is" << name;
+    return name;
 }
 
 void User::setIsCurrentUser(bool isCurrentUser)
@@ -66,6 +73,7 @@ void User::setIsCurrentUser(bool isCurrentUser)
     if (isCurrentUser == m_isCurrentUser)
         return;
 
+    qCDebug(app) << "Setting isCurrentUser to" << isCurrentUser;
     m_isCurrentUser = isCurrentUser;
 }
 
@@ -74,6 +82,7 @@ void User::setUserType(const int userType)
     if (m_userType == userType) {
         return;
     }
+    qCDebug(app) << "Setting user type to" << userType;
     m_userType = userType;
 }
 
@@ -83,6 +92,7 @@ void User::setIconFile(const QString &iconFile)
     if (m_iconFile == iconFile) {
         return;
     }
+    qCDebug(app) << "Setting icon file to" << iconFile;
     m_iconFile = iconFile;
 }
 
@@ -91,12 +101,14 @@ void User::setUserUid(const QString &uid)
     if (m_uid == uid) {
         return;
     }
+    qCDebug(app) << "Setting user UID to" << uid;
     m_uid = uid;
 }
 
 void User::setOnline(bool online)
 {
     if (m_online != online) {
+        qCDebug(app) << "Setting online status to" << online;
         m_online = online;
     }
 }

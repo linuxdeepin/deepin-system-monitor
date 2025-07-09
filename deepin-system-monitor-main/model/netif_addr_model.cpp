@@ -4,6 +4,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "netif_addr_model.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 NetifAddrModel::NetifAddrModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -11,22 +14,29 @@ NetifAddrModel::NetifAddrModel(QObject *parent)
     , m_addr6DB {}
     , m_addrDB {}
 {
+    qCDebug(app) << "NetifAddrModel constructor";
 }
 
 int NetifAddrModel::rowCount(const QModelIndex &) const
 {
-    return m_addrDB.size() + m_addr4DB.size() + m_addr6DB.size();
+    int count = m_addrDB.size() + m_addr4DB.size() + m_addr6DB.size();
+    // qCDebug(app) << "NetifAddrModel rowCount:" << count;
+    return count;
 }
 
 int NetifAddrModel::columnCount(const QModelIndex &) const
 {
+    // qCDebug(app) << "NetifAddrModel columnCount:" << kAddrTypeMax;
     return kAddrTypeMax;
 }
 
 QVariant NetifAddrModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
+        qCDebug(app) << "NetifAddrModel::data invalid index";
         return {};
+    }
+    // qCDebug(app) << "NetifAddrModel::data for index" << index << "role" << role;
 
     if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         switch (index.column()) {

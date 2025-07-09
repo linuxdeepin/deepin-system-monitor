@@ -4,15 +4,19 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "model_manager.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 Q_GLOBAL_STATIC(ModelManager, theInstance)
 ModelManager::ModelManager(QObject *parent)
     : QObject(parent)
 {
-
+    qCDebug(app) << "ModelManager constructor";
 }
 
 ModelManager *ModelManager::instance()
 {
+    // qCDebug(app) << "ModelManager::instance()";
     return theInstance();
 }
