@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "gui_apps_cache.h"
+#include "ddlog.h"
 
 #include "wm/wm_info.h"
 #include "wm/wm_window_list.h"
@@ -15,6 +16,7 @@ namespace process {
 
 GuiAppsCache::GuiAppsCache()
 {
+    qCDebug(app) << "GuiAppsCache created";
 }
 
 } // namespace process

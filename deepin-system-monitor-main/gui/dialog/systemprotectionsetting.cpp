@@ -46,6 +46,7 @@ using namespace DDLog;
 // 修改控件字体大小
 bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 {
+    qCDebug(app) << "changeWidgetFontSizeByDiffWithSystem";
     // 无效参数, 返回
     if (widget == nullptr || diff == 0.0) {
         qCWarning(app) << "Invalid widget or diff value";
@@ -72,6 +73,7 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
     }
 
     // 获得当前字体
+    qCDebug(app) << "Changing widget font size, system font size:" << sysFontSize << "diff:" << diff;
     QFont font = widget->font();
     // 重设字体大小
     font.setPointSizeF(sysFontSize + diff);
@@ -84,6 +86,7 @@ bool changeWidgetFontSizeByDiffWithSystem(QWidget *widget, double diff)
 SystemProtectionSetting::SystemProtectionSetting(QObject *parent)
     : QObject(parent), mBackend(nullptr), mDsettings(nullptr), mDaemonInterface("org.deepin.SystemMonitorDaemon", "/org/deepin/SystemMonitorDaemon", "org.deepin.SystemMonitorDaemon")
 {
+    qCDebug(app) << "SystemProtectionSetting constructor";
     mDaemonInterface.setParent(this);
     // json文件加载setting基本结构
     mDsettings = DSettings::fromJsonFile(":/resources/settings.json");
@@ -98,11 +101,14 @@ SystemProtectionSetting::SystemProtectionSetting(QObject *parent)
 
 SystemProtectionSetting::~SystemProtectionSetting()
 {
+    qCDebug(app) << "SystemProtectionSetting destructor";
     if (mDsettings != nullptr) {
+        qCDebug(app) << "Deleting mDsettings";
         mDsettings->deleteLater();
     }
 
     if (mBackend != nullptr) {
+        qCDebug(app) << "Deleting mBackend";
         mBackend->deleteLater();
     }
 }
@@ -110,11 +116,13 @@ SystemProtectionSetting::~SystemProtectionSetting()
 // 返回全局单例
 SystemProtectionSetting *SystemProtectionSetting::instance()
 {
+    qCDebug(app) << "SystemProtectionSetting instance";
     return theInstance;
 }
 
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createSettingLinkButtonHandle(QObject *obj)
 {
+    qCDebug(app) << "createSettingLinkButtonHandle";
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     // 构建自定义Item
@@ -142,6 +150,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createSettingLinkButtonHand
 
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createProtectionSwitchHandle(QObject *obj)
 {
+    qCDebug(app) << "createProtectionSwitchHandle";
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     // 构建自定义Item
@@ -175,6 +184,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createProtectionSwitchHandl
 
     // 用于恢复默认时，Item的数据更新
     button->connect(option, &DSettingsOption::valueChanged, button, [=]() {
+        qCDebug(app) << "Protection switch value changed, updating button state";
         if (option->value().toBool() != button->isChecked()) {
             button->setChecked(option->value().toBool());
         }
@@ -187,10 +197,13 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createProtectionSwitchHandl
 
 void SystemProtectionSetting::setLastValidAlarm(DLineEdit *lineEdit, DTK_CORE_NAMESPACE::DSettingsOption *option, int maxValue, int minValue, int num)
 {
+    qCDebug(app) << "setLastValidAlarm";
     if (num >= minValue && num <= maxValue) {
+        qCDebug(app) << "setLastValidAlarm, num:" << num;
         lineEdit->setText(QString::number(num));
         option->setValue(num);
     } else {
+        qCDebug(app) << "setLastValidAlarm, num is invalid, num:" << num;
         //用上次的合法值设置
         if (option->key() == AlarmCpuUsageOptionName)
             lineEdit->setText(QString::number(m_lastValidCPUValue));
@@ -206,6 +219,7 @@ void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSett
     QString key = option->key();
     qCDebug(app) << "Line edit changed for option:" << key << "focus:" << focus;
     if (focus == false && edit->lineEdit()->selectedText().isEmpty()) {
+        qCDebug(app) << "Line edit changed for option:" << key << "focus:" << focus << "text:" << edit->text();
         if (edit->text().isEmpty() || edit->text().toInt() < minValue || edit->text().toInt() > maxValue) {
             qCWarning(app) << "Invalid input value:" << edit->text() << "for option:" << key;
             //如果上次设置值合法，当前输入值不合法，显示上次输入的合法值
@@ -233,6 +247,7 @@ void SystemProtectionSetting::lineEditChanged(bool focus, DLineEdit *edit, DSett
 
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHandle(QObject *obj)
 {
+    qCDebug(app) << "createAlarmUsgaeSettingHandle";
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     // 构建自定义Item
@@ -341,6 +356,7 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmUsgaeSettingHand
 
 QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingHandle(QObject *obj)
 {
+    qCDebug(app) << "createAlarmIntervalSettingHandle";
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     // 构建自定义Item
@@ -443,12 +459,14 @@ QPair<QWidget *, QWidget *> SystemProtectionSetting::createAlarmIntervalSettingH
 
 void SystemProtectionSetting::onMessgaeSetting(QVariant value)
 {
+    qCDebug(app) << "onMessgaeSetting";
     Q_UNUSED(value);
     QString genericName;
     QFile desktopFile("/usr/share/applications/deepin-system-monitor.desktop");
 
     // 解析desktop文件，获取当前 GenericName
     if (desktopFile.exists() && desktopFile.open(QFile::ReadOnly)) {
+        qCDebug(app) << "desktopFile exists";
         QLocale locale;
         QString searchString;
         searchString = QString("GenericName[%1]").arg(locale.name());
@@ -564,11 +582,13 @@ void SystemProtectionSetting::onSettingItemChanged(const QString &key, const QVa
 
 DSettings *SystemProtectionSetting::getDSettingPointor()
 {
+    // qCDebug(app) << "getDSettingPointor";
     return mDsettings;
 }
 
 void SystemProtectionSetting::regularNumber(DLineEdit *lineEdit)
 {
+    qCDebug(app) << "regularNumber";
     // 失去焦点时
     connect(lineEdit, &DLineEdit::focusChanged, SystemProtectionSetting::instance(), [=]() {
         if (lineEdit) {
@@ -590,6 +610,7 @@ void SystemProtectionSetting::regularNumber(DLineEdit *lineEdit)
 
 void SystemProtectionSetting::onUpdateNewBackend()
 {
+    qCDebug(app) << "onUpdateNewBackend";
     // 创建新的数据后端，应对可能的设置数据变化
     QString strConfigPath = QString("%1/%2/%3/protection.conf")
                                     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))

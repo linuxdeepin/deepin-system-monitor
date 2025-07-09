@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "tray_apps_cache.h"
+#include "ddlog.h"
 
 #include "wm/wm_info.h"
 #include "wm/wm_window_list.h"
@@ -15,10 +16,12 @@ namespace process {
 
 TrayAppsCache::TrayAppsCache()
 {
+    qCDebug(app) << "TrayAppsCache object created";
 }
 
 void TrayAppsCache::updateCache(const QList<pid_t> &cache)
 {
+    qCDebug(app) << "Updating tray apps cache with" << cache.size() << "pids";
     m_cache = cache;
 }
 

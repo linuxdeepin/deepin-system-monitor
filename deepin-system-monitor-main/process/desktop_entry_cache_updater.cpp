@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "desktop_entry_cache_updater.h"
+#include "ddlog.h"
 
 #include <DDesktopEntry>
 #include <QDebug>
@@ -13,6 +14,7 @@
 #include <QJsonObject>
 
 DCORE_USE_NAMESPACE
+using namespace DDLog;
 
 namespace core {
 namespace process {
@@ -24,7 +26,9 @@ DesktopEntryCacheUpdater::DesktopEntryCacheUpdater(QObject *parent)
 
 DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
 {
+    qCDebug(app) << "Creating desktop entry for file:" << fileInfo.filePath();
     if (!fileInfo.exists()) {
+        qCDebug(app) << "File does not exist:" << fileInfo.filePath();
         return {};
     }
 
@@ -36,6 +40,7 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     // icon name
     auto icon = dde.stringValue("Icon");
     if (!icon.isEmpty()) {
+        qCDebug(app) << "Icon found:" << icon;
         entry->icon = icon;
     }
 
@@ -50,8 +55,10 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     QString exec = execList.size() > 1 ? execList.last().trimmed() : execStr.trimmed();
     exec = exec.remove("\"");
     if (tryExec == "/usr/bin/ll-cli") {
+        qCDebug(app) << "Found linglong app";
         auto linglongStr = dde.stringValue("X-linglong");
         if (!linglongStr.isEmpty()) {
+            qCDebug(app) << "linglong string:" << linglongStr;
             // Use QProcess to get application info
             QProcess process;
             process.start("/usr/bin/ll-cli", QStringList() << "info" << linglongStr);
@@ -61,33 +68,43 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
             // Parse JSON output to get name field
             QJsonDocument jsonDoc = QJsonDocument::fromJson(output.toUtf8());
             if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+                qCDebug(app) << "Parsing linglong info json";
                 QJsonObject jsonObj = jsonDoc.object();
                 if (jsonObj.contains("name")) {
                     entry->name = jsonObj["name"].toString();
+                    qCDebug(app) << "Found name in linglong json:" << entry->name;
                 }
             }
 
             if (!exec.isEmpty()) {
+                qCDebug(app) << "Exec is not empty, use exec";
                 entry->exec = exec.split(' ');
             } else {
+                qCDebug(app) << "Exec is empty, use tryExec";
                 entry->exec = tryExec.split(' ');
             }
         }
     } else if (!tryExec.isEmpty()) {
+        qCDebug(app) << "Using TryExec:" << tryExec;
         entry->exec = tryExec.split(' ');
         entry->name = QFileInfo(entry->exec[0]).baseName();
     } else if (!exec.isEmpty()) {
+        qCDebug(app) << "Using Exec:" << exec;
         entry->exec = exec.split(' ');
         entry->name = QFileInfo(entry->exec[0]).baseName();
     } else {
+        qCDebug(app) << "Using dde.name():" << dde.name();
         entry->name = dde.name().toLower();
     }
     // dde-file-manager plugins
     if (execStr.contains("dde-file-manager") && execStr.contains("plugin")) {
+        qCDebug(app) << "Found dde-file-manager plugin";
         entry->name = fileInfo.completeBaseName();
     }
     if (icon.contains("dde-file-manager")) {
+        qCDebug(app) << "Icon contains dde-file-manager";
         if (dde.stringValue("GenericName").trimmed() != "File Manager") {
+            qCDebug(app) << "Not a file manager, skipping";
             return {};
         }
         entry->exec.clear();
@@ -98,10 +115,12 @@ DesktopEntry DesktopEntryCacheUpdater::createEntry(const QFileInfo &fileInfo)
     // startup wm class & name
     auto wmclass = dde.stringValue("StartupWMClass").toLower();
     if (!wmclass.isEmpty()) {
+        qCDebug(app) << "Found StartupWMClass:" << wmclass;
         entry->startup_wm_class = wmclass;
         entry->name = wmclass;
     }
 
+    qCDebug(app) << "Desktop entry created:" << entry->name;
     return entry;
 }
 

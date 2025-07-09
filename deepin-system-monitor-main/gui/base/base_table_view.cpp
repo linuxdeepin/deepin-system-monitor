@@ -7,6 +7,7 @@
 
 #include "base_header_view.h"
 #include "base_item_delegate.h"
+#include "ddlog.h"
 
 #include <DApplication>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -28,12 +29,14 @@
 #include <QScrollBar>
 #include <QFocusEvent>
 
+using namespace DDLog;
 #define HEADER_MIN_SECTION_SIZE 120
 
 // default constructor
 BaseTableView::BaseTableView(DWidget *parent)
     : DTreeView(parent)
 {
+    qCDebug(app) << "BaseTableView constructor";
     // enable touch event handling
     setAttribute(Qt::WA_AcceptTouchEvents);
 
@@ -96,10 +99,13 @@ BaseTableView::BaseTableView(DWidget *parent)
 // set view model
 void BaseTableView::setModel(QAbstractItemModel *model)
 {
+    qCDebug(app) << "setModel";
     DTreeView::setModel(model);
     // listen on modelReset signal, reset any hovered or pressed index
     if (model) {
+        qCDebug(app) << "Connecting model reset signal";
         connect(model, &QAbstractItemModel::modelReset, this, [ = ]() {
+            qCDebug(app) << "Model reset, clearing hover and pressed states";
             m_hover = {};
             m_pressed = {};
         });
@@ -112,6 +118,7 @@ void BaseTableView::setModel(QAbstractItemModel *model)
 // paint event handler
 void BaseTableView::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(app) << "BaseTableView paintEvent";
     // viewport's painter object
     QPainter painter(viewport());
     painter.save();
@@ -123,8 +130,10 @@ void BaseTableView::paintEvent(QPaintEvent *event)
     QWidget *wnd = DApplication::activeWindow();
     DPalette::ColorGroup cg;
     if (!wnd) {
+        qCDebug(app) << "No active window";
         cg = DPalette::Inactive;
     } else {
+        qCDebug(app) << "Active window found";
         cg = DPalette::Active;
     }
 
@@ -271,6 +280,7 @@ void BaseTableView::drawRow(QPainter *painter, const QStyleOptionViewItem &optio
 
 void BaseTableView::focusInEvent(QFocusEvent *event)
 {
+    // qCDebug(app) << "focusInEvent reason: " << event->reason();
     DTreeView::focusInEvent(event);
     m_focusReason =  event->reason();
 }
@@ -278,10 +288,12 @@ void BaseTableView::focusInEvent(QFocusEvent *event)
 // current selected item changed handler
 void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    // qCDebug(app) << "currentChanged from" << previous << "to" << current;
     DTreeView::currentChanged(current, previous);
 
     // update previous item's paint region
     if (previous.isValid()) {
+        qCDebug(app) << "Updating previous item";
         QRect previousRect = visualRect(previous);
         previousRect.setX(0);
         previousRect.setWidth(viewport()->width());
@@ -290,6 +302,7 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
     }
     // update current item's paint region
     if (current.isValid()) {
+        qCDebug(app) << "Updating current item";
         QRect currentRect = visualRect(current);
         currentRect.setX(0);
         currentRect.setWidth(viewport()->width());
@@ -301,8 +314,10 @@ void BaseTableView::currentChanged(const QModelIndex &current, const QModelIndex
 // viewport event handler
 bool BaseTableView::viewportEvent(QEvent *event)
 {
+    // qCDebug(app) << "viewportEvent type: " << event->type();
     switch (event->type()) {
     case QEvent::HoverLeave: {
+        // qCDebug(app) << "HoverLeave event";
         // hover leave event, update last hovered item's visual region
         if (m_hover.isValid()) {
             auto rect = visualRect(m_hover);
@@ -315,6 +330,7 @@ bool BaseTableView::viewportEvent(QEvent *event)
     }
     case QEvent::HoverEnter:
     case QEvent::HoverMove: {
+        // qCDebug(app) << "HoverEnter or HoverMove event";
         // hover move event, update both last & current hovered item's visual region
         auto *hev = dynamic_cast<QHoverEvent *>(event);
         auto oldHover = m_hover;
@@ -339,6 +355,7 @@ bool BaseTableView::viewportEvent(QEvent *event)
     case QEvent::MouseButtonRelease:
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress: {
+        // qCDebug(app) << "MouseMove or MouseButtonRelease or MouseButtonDblClick or MouseButtonPress event";
         auto *mev = dynamic_cast<QMouseEvent *>(event);
         auto newIndex = indexAt(mev->pos());
         QRegion region;
@@ -376,8 +393,10 @@ bool BaseTableView::viewportEvent(QEvent *event)
 // scroll viewport to ensure specified indexed item be visible
 void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint hint)
 {
+    qCDebug(app) << "scrollTo index: " << index << " hint: " << hint;
     // check index validity
     if (!(index.isValid() && index.row() >= 0 && index.column() >= 0 && index.model() == model())) {
+        qCDebug(app) << "scrollTo: invalid index";
         return;
     }
 
@@ -392,14 +411,17 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
                indexRowSizeHint(index));
 
     if (rect.isEmpty()) {
+        qCDebug(app) << "scrollTo: rect is empty, nothing to do";
         // nothing to do
     } else if (hint == EnsureVisible && area.contains(rect)) {
+        qCDebug(app) << "scrollTo: item is already visible";
         viewport()->update(QRect {0,
                                   indexRowSizeHint(index) * index.row() - verticalScrollBar()->value(),
                                   viewport()->width(),
                                   indexRowSizeHint(index)});
         // nothing to do
     } else {
+        qCDebug(app) << "scrollTo: scrolling to make item visible";
         // current item above viewport rect
         bool above = (hint == EnsureVisible
                       && (rect.top() < area.top()
@@ -410,12 +432,16 @@ void BaseTableView::scrollTo(const QModelIndex &index, QAbstractItemView::Scroll
                       && rect.height() < area.height());
 
         int verticalValue = verticalScrollBar()->value();
-        if (hint == PositionAtTop || above)
+        if (hint == PositionAtTop || above) {
+            qCDebug(app) << "scrollTo: positioning at top";
             verticalValue += rect.top();
-        else if (hint == PositionAtBottom || below)
+        } else if (hint == PositionAtBottom || below) {
+            qCDebug(app) << "scrollTo: positioning at bottom";
             verticalValue += rect.bottom() - area.height();
-        else if (hint == PositionAtCenter)
+        } else if (hint == PositionAtCenter) {
+            qCDebug(app) << "scrollTo: positioning at center";
             verticalValue += rect.top() - ((area.height() - rect.height()) / 2);
+        }
         // adjust scroll bar to a new position to ensure item visible
         verticalScrollBar()->setValue(verticalValue);
     }

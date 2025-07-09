@@ -6,15 +6,20 @@
 #include "cpu_list_sort_filter_proxy_model.h"
 
 #include "cpu_list_model.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 CPUListSortFilterProxyModel::CPUListSortFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
     , m_sortKey {kSortByIndex}
 {
+    qCDebug(app) << "CPUListSortFilterProxyModel constructor";
 }
 
 bool CPUListSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &) const
 {
+    qCDebug(app) << "CPUListSortFilterProxyModel::filterAcceptsRow for row" << row;
     bool ok = false;
     ;
 
@@ -30,20 +35,24 @@ bool CPUListSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &)
 #endif
     }
 
+    qCDebug(app) << "filterAcceptsRow returns" << ok;
     return ok;
 }
 
 bool CPUListSortFilterProxyModel::filterAcceptsColumn(int column, const QModelIndex &parent) const
 {
+    qCDebug(app) << "CPUListSortFilterProxyModel::filterAcceptsColumn for column" << column;
     return QSortFilterProxyModel::filterAcceptsColumn(column, parent);
 }
 
 bool CPUListSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+    qCDebug(app) << "CPUListSortFilterProxyModel::lessThan";
     QModelIndex idx;
 
     switch (m_sortKey) {
     case kSortByIndex: {
+        qCDebug(app) << "Sorting by index";
         int lhs {0}, rhs {0};
 
         idx = sourceModel()->index(left.row(), 0);
@@ -57,6 +66,7 @@ bool CPUListSortFilterProxyModel::lessThan(const QModelIndex &left, const QModel
         return lhs < rhs;
     }
     case kSortByUsage: {
+        qCDebug(app) << "Sorting by usage";
         qreal lhs {.0}, rhs {.0};
 
         idx = sourceModel()->index(left.row(), CPUListModel::kPropCPUUsage);
