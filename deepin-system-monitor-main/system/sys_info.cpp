@@ -53,6 +53,7 @@ namespace system {
 SysInfo::SysInfo()
     : d(new SysInfoPrivate())
 {
+    qCDebug(app) << "SysInfo created";
     d->loadAvg = std::make_shared<struct load_avg_t>();
 }
 
@@ -72,7 +73,7 @@ SysInfo &SysInfo::operator=(const SysInfo &rhs)
 
 SysInfo::~SysInfo()
 {
-
+    // qCDebug(app) << "SysInfo destroyed";
 }
 
 SysInfo *SysInfo::instance()
@@ -83,9 +84,11 @@ SysInfo *SysInfo::instance()
 
 bool SysInfo::readSockStat(SockStatMap &statMap)
 {
+    qCDebug(app) << "Reading socket statistics...";
     bool ok {true};
 
     auto parseSocks = [](int family, int proto, const char *proc, SockStatMap & statMap) -> bool {
+        qCDebug(app) << "Parsing socket stats from" << proc;
         bool ok {true};
         FILE *fp {};
         const size_t BLEN = 4096;
@@ -97,6 +100,7 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
         QByteArray fmtbuf {};
         uint64_t cchash[2] {};
         QString patternA {}, patternB {};
+        int count = 0;
 
         errno = 0;
         if (!(fp = fopen(proc, "r")))
@@ -126,6 +130,7 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
             if (ino == 0) {
                 continue;
             }
+            count++;
 
             stat->ino = ino;
             stat->sa_family = family;
@@ -201,6 +206,7 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
         }
         fclose(fp);
 
+        qCDebug(app) << "Parsed" << count << "socket entries from" << proc;
         return ok;
     };
 
@@ -211,11 +217,13 @@ bool SysInfo::readSockStat(SockStatMap &statMap)
     ok = parseSocks(AF_INET6, IPPROTO_TCP, PROC_PATH_SOCK_TCP6, statMap) && ok;
     ok = parseSocks(AF_INET6, IPPROTO_UDP, PROC_PATH_SOCK_UDP6, statMap) && ok;
 
+    qCDebug(app) << "Finished reading socket statistics. Total entries:" << statMap.size() << "Success:" << ok;
     return ok;
 }
 
 void SysInfo::readSysInfo()
 {
+    qCDebug(app) << "Reading dynamic system info...";
     d->nfds = read_file_nr();
     d->nprocs = read_processes();
     d->nthrs = read_threads();
@@ -223,10 +231,12 @@ void SysInfo::readSysInfo()
     read_uptime(d->uptime);
     read_btime(d->btime);
     read_loadavg(d->loadAvg);
+    qCDebug(app) << "Dynamic system info read:" << "nfds=" << d->nfds << "nprocs=" << d->nprocs << "nthrs=" << d->nthrs;
 }
 
 void SysInfo::readSysInfoStatic()
 {
+    qCDebug(app) << "Reading static system info...";
     d->uid = getuid();
     d->euid = geteuid();
     d->gid = getgid();
@@ -244,6 +254,7 @@ void SysInfo::readSysInfoStatic()
     d->hostname = read_hostname();
     d->arch = read_arch();
     d->version = read_version();
+    qCDebug(app) << "Static system info read:" << "user=" << d->user_name << "host=" << d->hostname << "arch=" << d->arch;
 }
 
 quint32 SysInfo::read_file_nr()

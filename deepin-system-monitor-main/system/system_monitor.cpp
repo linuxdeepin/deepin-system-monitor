@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "system_monitor.h"
+#include "ddlog.h"
 
 #include "device_db.h"
 #include "process/process_db.h"
@@ -14,6 +15,7 @@
 #include <QTimerEvent>
 
 using namespace common::core;
+using namespace DDLog;
 
 namespace core {
 namespace system {
@@ -24,11 +26,13 @@ SystemMonitor::SystemMonitor(QObject *parent)
     , m_deviceDB(new DeviceDB())
     , m_processDB(new ProcessDB(this))
 {
+    qCDebug(app) << "SystemMonitor created";
     m_sysInfo->readSysInfoStatic();
 }
 
 SystemMonitor::~SystemMonitor()
 {
+    qCDebug(app) << "SystemMonitor destroyed";
     m_basictimer.stop();
     if (m_sysInfo) {
         delete m_sysInfo;
@@ -66,6 +70,7 @@ SysInfo *SystemMonitor::SystemMonitor::sysInfo()
 
 void SystemMonitor::startMonitorJob()
 {
+    qCDebug(app) << "Starting monitor job";
     common::init::global_init();
 
     m_basictimer.stop();
@@ -78,11 +83,14 @@ void SystemMonitor::timerEvent(QTimerEvent *event)
 
     QObject::timerEvent(event);
     if (event->timerId() == m_basictimer.timerId()) {
+        // qCDebug(app) << "Timer event triggered, cnt =" << cnt;
         if(cnt & 0x0001){
+            // qCDebug(app) << "Updating system info, device DB, and process DB";
             m_sysInfo->readSysInfo();
             m_deviceDB->update();
             m_processDB->update();
         } else {
+            // qCDebug(app) << "Emitting statInfoUpdated and recounting apps/processes";
             emit statInfoUpdated();
             recountAppAndProcess();
         }
@@ -93,6 +101,7 @@ void SystemMonitor::timerEvent(QTimerEvent *event)
 
 void SystemMonitor::updateSystemMonitorInfo()
 {
+    qCDebug(app) << "Forcing update of system monitor info";
     m_sysInfo->readSysInfo();
     m_deviceDB->update();
     m_processDB->update();
@@ -106,6 +115,7 @@ void SystemMonitor::updateSystemMonitorInfo()
  */
 void SystemMonitor::recountAppAndProcess()
 {
+    qCDebug(app) << "Recounting apps and processes";
     ProcessSet *processSet = m_processDB->processSet();
     // count all app
     const QList<pid_t> &newpidlst = processSet->getPIDList();
@@ -116,6 +126,7 @@ void SystemMonitor::recountAppAndProcess()
             appCount++;
     }
 
+    qCDebug(app) << "App count:" << appCount << "Process count:" << newpidlst.size();
     emit appAndProcCountUpdate(appCount, newpidlst.size());
 }
 

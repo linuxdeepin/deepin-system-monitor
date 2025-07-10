@@ -95,14 +95,17 @@ get_child(struct udev *udev, struct udev_device *parent, const char *subsystem)
 BlockDeviceInfoDB::BlockDeviceInfoDB()
     : m_deviceList {}
 {
+    qCDebug(app) << "BlockDeviceInfoDB constructor";
 }
 
 BlockDeviceInfoDB::~BlockDeviceInfoDB()
 {
+    qCDebug(app) << "BlockDeviceInfoDB destructor";
 }
 
 void BlockDeviceInfoDB::readDiskInfo()
 {
+    qCDebug(app) << "Starting to read disk info";
     QDir dir(SYSFS_PATH_BLOCK);
     if (!dir.exists()) {
         qCWarning(app) << "Block device directory does not exist:" << SYSFS_PATH_BLOCK;
@@ -134,6 +137,7 @@ void BlockDeviceInfoDB::readDiskInfo()
                     m_deviceList << bd;
                 }
             } else {
+                qCDebug(app) << "Updating existing physical disk:" << list[i].fileName();
                 m_deviceList[index].setDeviceName(list[i].fileName().toLocal8Bit());   // 更新disk数据
             }
         }
@@ -182,6 +186,7 @@ void BlockDeviceInfoDB::readDiskInfo()
             m_deviceList.removeAt(i);
         }
     }
+    qCDebug(app) << "Finished reading disk info";
 }
 
 //static void enum_block()
@@ -271,6 +276,7 @@ void BlockDeviceInfoDB::readDiskInfo()
 
 void BlockDeviceInfoDB::update()
 {
+    qCDebug(app) << "Updating BlockDeviceInfoDB";
     readDiskInfo();
 
     // TODO: enum device in /sys/block => phy & virtual

@@ -13,12 +13,15 @@ namespace wm {
 
 WMConnection::WMConnection(const QByteArray &display)
 {
+    qCDebug(app) << "Creating WMConnection for display:" << (display.isEmpty() ? "default" : display.constData());
     m_conn = XConnection(xcb_connect(display.isEmpty() ? nullptr : display.constData(), &m_screenNumber));
     auto *conn = m_conn.get();
     if (conn && xcb_connection_has_error(conn)) {
         qCWarning(app) << "Failed to connect to X server:" << xcb_connection_has_error(conn);
+        m_conn.reset(); // clear the connection
         return;
     }
+    qCDebug(app) << "XCB connection successful, screen number:" << m_screenNumber;
     m_atoms.initialize(conn);
 
     m_setup = xcb_get_setup(conn);
@@ -36,10 +39,12 @@ WMConnection::WMConnection(const QByteArray &display)
     m_screen = iter.data;
 
     m_root = m_screen->root;
+    qCDebug(app) << "Found screen" << m_screenNumber << "with root window ID:" << m_root;
 }
 
 WMConnection::~WMConnection()
 {
+    qCDebug(app) << "Destroying WMConnection";
 }
 
 }   // namespace wm

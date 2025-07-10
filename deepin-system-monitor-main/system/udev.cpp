@@ -4,20 +4,29 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "udev.h"
+#include "ddlog.h"
 
 #include <libudev.h>
 
+using namespace DDLog;
 namespace core {
 namespace system {
 
 UDev::UDev()
 {
+    qCDebug(app) << "Creating UDev object";
     m_udev = udev_new();
+    if (!m_udev) {
+        qCWarning(app) << "Failed to create udev context";
+    }
 }
 
 UDev::~UDev()
 {
-    udev_unref(m_udev);
+    qCDebug(app) << "Destroying UDev object";
+    if (m_udev) {
+        udev_unref(m_udev);
+    }
 }
 
 } // namespace system

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "netif_info_db.h"
+#include "ddlog.h"
 
 #include "nl_link.h"
 #include "nl_addr.h"
@@ -17,16 +18,20 @@
 
 #include <memory>
 using namespace common::core;
+using namespace DDLog;
+
 namespace core {
 namespace system {
 
 NetifInfoDB::NetifInfoDB()
     : m_netlink(new Netlink())
 {
+    qCDebug(app) << "NetifInfoDB constructor";
 }
 
 void NetifInfoDB::update_addr()
 {
+    qCDebug(app) << "Updating network addresses...";
     AddrIterator iter = m_netlink->addrIterator();
     m_addrIpv4DB.clear();
     m_addrIpv6DB.clear();
@@ -51,11 +56,12 @@ void NetifInfoDB::update_addr()
             m_addrIpv6DB.insert(it->ifindex(), ip6net);
         }
     }
-
+    qCDebug(app) << "Finished updating addresses. Found" << m_addrIpv4DB.size() << "IPv4 and" << m_addrIpv6DB.size() << "IPv6 addresses.";
 }
 // 更新网络信息
 void NetifInfoDB::update_netif_info()
 {
+    qCDebug(app) << "Updating network interface info...";
     LinkIterator iter = m_netlink->linkIterator();
     QMap<QByteArray, NetifInfoPtr> old_infoDB = m_infoDB;
 
@@ -67,6 +73,7 @@ void NetifInfoDB::update_netif_info()
         auto it = iter.next();
 
         if (it->ifname() == "lo") {
+            qCDebug(app) << "Skipping loopback interface";
             continue;
         }
         NetifInfoPtr item = std::make_shared<NetifInfo>();
@@ -92,15 +99,19 @@ void NetifInfoDB::update_netif_info()
             qreal sent_bps = txdiff / interval;
             item->set_recv_bps(recv_bps);
             item->set_sent_bps(sent_bps);
+            // qCDebug(app) << "Updated rate for" << it->ifname() << ": recv=" << recv_bps << "B/s, sent=" << sent_bps << "B/s";
         }
 
         m_infoDB.insert(it->addr(), item);
     }
+    qCDebug(app) << "Finished updating network interface info. Found" << m_infoDB.size() << "interfaces.";
 }
 void NetifInfoDB::update()
 {
+    qCDebug(app) << "Updating NetifInfoDB...";
     this->update_addr();
     this->update_netif_info();
+    qCDebug(app) << "NetifInfoDB update finished.";
 }
 
 } // namespace system
