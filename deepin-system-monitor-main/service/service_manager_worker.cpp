@@ -24,10 +24,12 @@ using namespace DDLog;
 ServiceManagerWorker::ServiceManagerWorker(QObject *parent)
     : QObject(parent)
 {
+    qCDebug(app) << "ServiceManagerWorker object created";
 }
 
 void ServiceManagerWorker::startJob()
 {
+    qCDebug(app) << "ServiceManagerWorker starting job";
     QList<SystemServiceEntry> list;
     // id hash, only keys are used here
     QHash<QString, int> hash;
@@ -63,6 +65,7 @@ void ServiceManagerWorker::startJob()
         return unit.getName().endsWith(UnitTypeServiceSuffix);
     };
     std::function<SystemServiceEntry(const UnitInfo &)> mapUnit = [&mgrIf](const UnitInfo &unit) {
+        qCDebug(app) << "Mapping unit:" << unit.getName();
         ErrorContext ec1 {};
         SystemServiceEntry entry {};
         // SName
@@ -86,6 +89,7 @@ void ServiceManagerWorker::startJob()
         if (ec1) {
             qCWarning(app) << "Failed to get ID for unit" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
+            qCDebug(app) << "Successfully got ID for unit" << unit.getName() << ":" << id.second;
             entry.setId(id.second);
         }
 
@@ -94,6 +98,7 @@ void ServiceManagerWorker::startJob()
         if (ec1) {
             qCWarning(app) << "Failed to check if unit can start:" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
+            qCDebug(app) << "Successfully checked if unit can start for unit" << unit.getName() << ":" << bStart.second;
             entry.setCanStart(bStart.second);
         }
 
@@ -102,6 +107,7 @@ void ServiceManagerWorker::startJob()
         if (ec1) {
             qCWarning(app) << "Failed to check if unit can stop:" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
+            qCDebug(app) << "Successfully checked if unit can stop for unit" << unit.getName() << ":" << bStop.second;
             entry.setCanStop(bStop.second);
         }
 
@@ -110,6 +116,7 @@ void ServiceManagerWorker::startJob()
         if (ec1) {
             qCWarning(app) << "Failed to check if unit can reload:" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
+            qCDebug(app) << "Successfully checked if unit can reload for unit" << unit.getName() << ":" << bReload.second;
             entry.setCanReload(bReload.second);
         }
 
@@ -122,6 +129,7 @@ void ServiceManagerWorker::startJob()
         if (ec1) {
             qCWarning(app) << "Failed to get main PID for unit" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
+            qCDebug(app) << "Successfully got main PID for unit" << unit.getName() << ":" << pid.second;
             entry.setMainPID(pid.second);
         }
 
@@ -131,6 +139,7 @@ void ServiceManagerWorker::startJob()
         if (ec1) {
             qCWarning(app) << "Failed to get unit file state for" << unit.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
         } else {
+            qCDebug(app) << "Successfully got unit file state for unit" << unit.getName() << ":" << state.second;
             entry.setState(state.second);
         }
 
@@ -147,6 +156,7 @@ void ServiceManagerWorker::startJob()
     };
     auto fltufe = QtConcurrent::filter(units, fltUnits);
     fltufe.waitForFinished();
+    qCDebug(app) << "Finished filtering units";
     auto ufe = QtConcurrent::mappedReduced<QList<SystemServiceEntry>>(units, mapUnit, addServiceEntryFromUnitInfo);
 
     std::function<void(QList<SystemServiceEntry> & elist, const SystemServiceEntry &entry)> addServiceEntryFromUnitFileInfo;
@@ -167,6 +177,7 @@ void ServiceManagerWorker::startJob()
     };
     std::function<SystemServiceEntry(const UnitFileInfo &)> mapUnitFiles;
     mapUnitFiles = [](const UnitFileInfo &unf) {
+        qCDebug(app) << "Mapping unit file:" << unf.getName();
         SystemServiceEntry entry {};
         ErrorContext ec1 {};
 
@@ -180,6 +191,7 @@ void ServiceManagerWorker::startJob()
                 entry.getSName(),
                 entry.getState()));
         if (sname.endsWith('@')) {
+            qCDebug(app) << "Unit file is a template:" << unf.getName();
             // read description from unit file
             auto desc = readUnitDescriptionFromUnitFile(unf.getName());
             entry.setDescription(desc);
@@ -198,6 +210,7 @@ void ServiceManagerWorker::startJob()
             if (ec1) {
                 qCWarning(app) << "Failed to get ID for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
+                qCDebug(app) << "Successfully got ID for unit file" << unf.getName() << ":" << id1.second;
                 entry.setId(id1.second);
             }
 
@@ -206,6 +219,7 @@ void ServiceManagerWorker::startJob()
             if (ec1) {
                 qCWarning(app) << "Failed to get description for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
+                qCDebug(app) << "Successfully got description for unit file" << unf.getName();
                 entry.setDescription(desc.second);
             }
 
@@ -214,6 +228,7 @@ void ServiceManagerWorker::startJob()
             if (ec1) {
                 qCWarning(app) << "Failed to get active state for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
+                qCDebug(app) << "Successfully got active state for unit file" << unf.getName() << ":" << actState.second;
                 entry.setActiveState(actState.second);
             }
 
@@ -222,6 +237,7 @@ void ServiceManagerWorker::startJob()
             if (ec1) {
                 qCWarning(app) << "Failed to get load state for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
+                qCDebug(app) << "Successfully got load state for unit file" << unf.getName() << ":" << loadState.second;
                 entry.setLoadState(loadState.second);
             }
 
@@ -230,6 +246,7 @@ void ServiceManagerWorker::startJob()
             if (ec1) {
                 qCWarning(app) << "Failed to get sub state for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
+                qCDebug(app) << "Successfully got sub state for unit file" << unf.getName() << ":" << subState.second;
                 entry.setSubState(subState.second);
             }
 
@@ -238,6 +255,7 @@ void ServiceManagerWorker::startJob()
             if (ec1) {
                 qCWarning(app) << "Failed to get main PID for unit file" << unf.getName() << ":" << ec1.getErrorName() << ec1.getErrorMessage();
             } else {
+                qCDebug(app) << "Successfully got main PID for unit file" << unf.getName() << ":" << mainPID.second;
                 entry.setMainPID(mainPID.second);
             }
         }
@@ -246,18 +264,23 @@ void ServiceManagerWorker::startJob()
     };
     auto fltuffe = QtConcurrent::filter(unitFiles, fltUnitFiles);
     fltuffe.waitForFinished();
+    qCDebug(app) << "Finished filtering unit files";
     auto uffe = QtConcurrent::mappedReduced<QList<SystemServiceEntry>>(unitFiles, mapUnitFiles, addServiceEntryFromUnitFileInfo);
 
     ufe.waitForFinished();
+    qCDebug(app) << "Finished mapping units";
     uffe.waitForFinished();
+    qCDebug(app) << "Finished mapping unit files";
 
     list << ufe.result();
     list << uffe.result();
+    qCDebug(app) << "Emitting resultReady with" << list.size() << "services";
     Q_EMIT resultReady(list);
 }
 
 QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &path)
 {
+    qCDebug(app) << "Reading unit description from file:" << path;
     FILE *fp { nullptr };
     const int BLEN { 2048 };
     QByteArray buf { BLEN, 0 };
@@ -267,6 +290,7 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
     fp = fopen(path.toLocal8Bit(), "r");
     QString descStr;
     if (fp) {
+        qCDebug(app) << "Successfully opened unit file:" << path;
         while ((fgets(buf.data(), BLEN, fp))) {
             descStr = QString("Description=%1").arg(buf.data());
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -277,6 +301,7 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
             if (descStrList.size() > 0) {
                 descStr = descStrList.at(0);
                 b = true;
+                qCDebug(app) << "Found description in unit file:" << descStr;
                 break;
             } else {
                 b = false;

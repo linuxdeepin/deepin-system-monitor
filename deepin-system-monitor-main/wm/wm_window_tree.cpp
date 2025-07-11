@@ -4,7 +4,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "wm_window_tree.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 WMWindowTree::WMWindowTree()
 {
+    // qCDebug(app) << "WMWindowTree created";
 }

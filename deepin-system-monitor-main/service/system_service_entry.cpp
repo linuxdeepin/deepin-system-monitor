@@ -4,10 +4,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "system_service_entry.h"
+#include "ddlog.h"
+
+using namespace DDLog;
 
 SystemServiceEntry::SystemServiceEntry()
     : data(new SystemServiceEntryData)
 {
+    // qCDebug(app) << "SystemServiceEntry default constructor called";
 }
 SystemServiceEntry::SystemServiceEntry(const QString &id,
                                        const QString &sname,
@@ -24,6 +28,7 @@ SystemServiceEntry::SystemServiceEntry(const QString &id,
                                        bool canStop)
     : data(new SystemServiceEntryData)
 {
+    // qCDebug(app) << "SystemServiceEntry constructor called with id:" << id;
     setId(id);
     setSName(sname);
     setLoadState(loadState);
@@ -42,10 +47,12 @@ SystemServiceEntry::SystemServiceEntry(const QString &id,
 SystemServiceEntry::SystemServiceEntry(const SystemServiceEntry &rhs)
     : data(rhs.data)
 {
+    // qCDebug(app) << "SystemServiceEntry copy constructor called for id:" << rhs.getId();
 }
 
 SystemServiceEntry &SystemServiceEntry::operator=(const SystemServiceEntry &rhs)
 {
+    // qCDebug(app) << "SystemServiceEntry assignment operator called for id:" << rhs.getId();
     if (this != &rhs)
         data.operator = (rhs.data);
     return *this;

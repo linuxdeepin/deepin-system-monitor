@@ -42,6 +42,7 @@ namespace system {
 NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *parent)
     : QObject(parent), m_netifMonitor(netIfmontor)
 {
+    qCDebug(app) << "NetifPacketCapture constructor";
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
     // dispatch packets on timerout signal
@@ -54,6 +55,7 @@ NetifPacketCapture::NetifPacketCapture(NetifMonitor *netIfmontor, QObject *paren
 
 void NetifPacketCapture::whetherDevChanged()
 {
+    qCDebug(app) << "Checking if network device has changed...";
     if (m_devName.isEmpty()) {
         qCInfo(app) << "No current device, starting new monitor job";
         m_changedDev = true;
@@ -61,6 +63,7 @@ void NetifPacketCapture::whetherDevChanged()
     } else {
         QString current_dev = m_devName;
         getCurrentDevName();
+        qCDebug(app) << "Current device:" << current_dev << ", Best available device:" << m_devName;
         //若新增网卡设备优先级高于当前使用网卡设备,则重新开始监测任务
         if (current_dev.compare(m_devName) != 0) {
             qCInfo(app) << "Network device changed from" << current_dev << "to" << m_devName;
@@ -72,7 +75,8 @@ void NetifPacketCapture::whetherDevChanged()
 
 bool NetifPacketCapture::hasDevIP()
 {
-    if (!m_devName.isEmpty()) {
+    if (m_devName.isEmpty()) {
+        qCWarning(app) << "hasDevIP check failed: device name is empty.";
         return false;
     }
 
@@ -112,6 +116,7 @@ bool NetifPacketCapture::hasDevIP()
 
 bool NetifPacketCapture::getCurrentDevName()
 {
+    qCDebug(app) << "Getting current best network device name...";
     QProcess process;
     process.start("route", QStringList() << "-n");
     process.waitForFinished(-1);
@@ -180,6 +185,7 @@ bool NetifPacketCapture::getCurrentDevName()
         }
     }
     m_devName = perfectDev;
+    qCDebug(app) << "Determined best device:" << m_devName << "with metric:" << minMetric;
 
     //无可用设备
     if (m_devName.isEmpty()) {
@@ -191,6 +197,7 @@ bool NetifPacketCapture::getCurrentDevName()
 
 void NetifPacketCapture::startNetifMonitorJob()
 {
+    qCDebug(app) << "Attempting to start network monitor job...";
     int rc = 0;
     char errbuf[PCAP_ERRBUF_SIZE] {};
 
@@ -199,6 +206,7 @@ void NetifPacketCapture::startNetifMonitorJob()
         qCWarning(app) << "Cannot start monitor job: no device available";
         return;
     }
+    qCDebug(app) << "Starting monitor job on device:" << m_devName;
 
     // create pcap handler
     m_handle = pcap_create(m_devName.toLocal8Bit().data(), errbuf);
@@ -235,6 +243,7 @@ void NetifPacketCapture::startNetifMonitorJob()
         pcap_close(m_handle);
         return;
     }
+    qCDebug(app) << "pcap handler activated successfully.";
 
     // setm_timer->start(); non block dispatch mode
     rc = pcap_setnonblock(m_handle, 1, errbuf);
@@ -243,13 +252,16 @@ void NetifPacketCapture::startNetifMonitorJob()
         pcap_close(m_handle);
         return;
     }
+    qCDebug(app) << "pcap handler set to non-blocking mode.";
 
     go = true;
     m_timer->start();
+    qCDebug(app) << "Packet capture job started. Dispatch timer initiated.";
 }
 
 void pcap_callback(u_char *context, const struct pcap_pkthdr *hdr, const u_char *packet)
 {
+    qCDebug(app) << "pcap_callback triggered for a packet";
     QByteArray fmtbuf;
     uint64_t hash {}, cchash[2] {};
     QString pattern {};
@@ -508,7 +520,7 @@ bool readNetIfAddrs(NetIFAddrsMap &addrsMap)
     freeifaddrs(addr_hdr);
 
     if (addrsMap.size() > 0) {
-        qCInfo(app) << "Found" << addrsMap.size() << "network interfaces";
+        // qCInfo(app) << "Found" << addrsMap.size() << "network interfaces";
         return true;
     } else {
         qCWarning(app) << "No network interfaces found";

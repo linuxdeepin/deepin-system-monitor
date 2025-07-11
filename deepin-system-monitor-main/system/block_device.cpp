@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "block_device.h"
+#include "ddlog.h"
 #include <QDateTime>
 #include <QFile>
 #include <QSharedData>
@@ -16,13 +17,16 @@ namespace system {
 BlockDevice::BlockDevice()
     : d(new BlockDevicePrivate())
 {
+    qCDebug(app) << "BlockDevice default constructor";
 }
 BlockDevice::BlockDevice(const BlockDevice &other)
     : d(other.d)
 {
+    qCDebug(app) << "BlockDevice copy constructor";
 }
 BlockDevice &BlockDevice::operator=(const BlockDevice &rhs)
 {
+    qCDebug(app) << "BlockDevice assignment operator";
     if (this == &rhs)
         return *this;
 
@@ -31,19 +35,21 @@ BlockDevice &BlockDevice::operator=(const BlockDevice &rhs)
 }
 BlockDevice::~BlockDevice()
 {
-
+    qCDebug(app) << "BlockDevice destructor";
 }
 void BlockDevice::setDeviceName(const QByteArray &deviceName)
 {
+    qCDebug(app) << "Setting device name to" << deviceName;
     d->name = deviceName;
     readDeviceInfo();
 }
 
 void BlockDevice::readDeviceInfo()
 {
-
+    qCDebug(app) << "Reading device info for" << d->name;
     QFile file(PROC_PATH_DISK);
     if (!file.open(QIODevice::ReadOnly)) {
+        qCWarning(app) << "Failed to open" << PROC_PATH_DISK;
         return;
     }
     QList<QStringList> strList;
@@ -61,10 +67,12 @@ void BlockDevice::readDeviceInfo()
         }
     }while (!line.isNull());
     file.close();
+    qCDebug(app) << "Read" << strList.size() << "lines from" << PROC_PATH_DISK;
 
     for (int i = 0; i < strList.size(); ++i) {
         QStringList deviceInfo = strList[i];
         if (deviceInfo.size() > 16 && deviceInfo[2] == d->name) {
+            qCDebug(app) << "Found device" << d->name << "in disk stats";
             m_time_sec = QDateTime::currentSecsSinceEpoch();
             timevalList[0] = timevalList[1];
             timevalList[1] = SysInfo::instance()->uptime();
@@ -100,6 +108,7 @@ void BlockDevice::readDeviceInfo()
             d->write_merged = deviceInfo[8].toULongLong();
             d->discard_sector = deviceInfo[16].toULongLong();
             d->_time_Sec = QDateTime::currentSecsSinceEpoch();
+            qCDebug(app) << "Finished processing device info for" << d->name;
             break;
         }
     }
@@ -109,29 +118,36 @@ void BlockDevice::readDeviceInfo()
 void BlockDevice::readDeviceModel()
 {
     QString Path = QString(SYSFS_PATH_MODEL).arg(d->name.data());
+    qCDebug(app) << "Reading device model from" << Path;
     QFile file(Path);
     if (!file.open(QIODevice::ReadOnly)) {
+        qCWarning(app) << "Failed to open" << Path;
         return;
     }
     QString model = file.readLine().replace("\n", "").trimmed();
     d->model = model;
+    qCDebug(app) << "Device model for" << d->name << "is" << model;
     file.close();
 }
 
 quint64 BlockDevice::readDeviceSize(const QString &deviceName)
 {
     QString path = QString(SYSFS_PATH_SIZE).arg(deviceName);
+    qCDebug(app) << "Reading device size from" << path;
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
+        qCWarning(app) << "Failed to open" << path;
         return 0;
     }
     quint64 size = file.readLine().replace("\n", "").trimmed().toULongLong() * SECTOR_SIZE;
     file.close();
+    qCDebug(app) << "Device" << deviceName << "size is" << size;
     return size;
 }
 
 void BlockDevice::calcDiskIoStates(const QStringList &diskInfo)
 {
+    qCDebug(app) << "Calculating disk IO states for" << d->name;
     quint64 curr_read_sector =  diskInfo[5].toULongLong();
     quint64 curr_write_sector = diskInfo[9].toULongLong();
     quint64 curr_discard_sector = diskInfo[16].toULongLong();
@@ -154,6 +170,7 @@ void BlockDevice::calcDiskIoStates(const QStringList &diskInfo)
 
     d->read_speed = rsize / static_cast<quint64>(interval);
     d->wirte_speed = wsize / static_cast<quint64>(interval);
+    qCDebug(app) << d->name << "read speed:" << d->read_speed << "B/s, write speed:" << d->wirte_speed << "B/s";
 }
 
 } // namespace system

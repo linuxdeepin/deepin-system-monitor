@@ -137,17 +137,19 @@ using XConnection = std::unique_ptr<xcb_connection_t, XDisconnector>;
 
 WMInfo::WMInfo()
 {
+    qCDebug(app) << "WMInfo created, building window tree and finding dock windows...";
     buildWindowTreeSchema();
     findDockWindows();
 }
 
 WMInfo::~WMInfo()
 {
+    qCDebug(app) << "WMInfo destroyed";
 }
 
 std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 {
-
+    qCDebug(app) << "Selecting window at position:" << pos;
     std::list<WMWindowArea> walist;
 
     std::function<void(const struct wm_window_ext_t *)> scan_tree;
@@ -216,6 +218,7 @@ std::list<WMWindowArea> WMInfo::selectWindow(const QPoint &pos) const
 
     scan_tree(m_tree->root);
 
+    qCDebug(app) << "Window selection scan complete, found" << walist.size() << "matching windows";
     return walist;
 }
 

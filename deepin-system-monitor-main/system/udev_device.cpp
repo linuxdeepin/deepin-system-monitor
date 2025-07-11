@@ -5,25 +5,35 @@
 
 #include "udev_device.h"
 #include "udev.h"
+#include "ddlog.h"
 
 #include <libudev.h>
 
+using namespace DDLog;
 namespace core {
 namespace system {
 
 UDevDevice::UDevDevice(const UDev *udev, const char *path)
 {
+    qCDebug(app) << "Creating UDevDevice from syspath:" << path;
     m_device = udev_device_new_from_syspath(udev->handle(), path);
+    if (!m_device) {
+        qCWarning(app) << "Failed to create udev_device from path:" << path;
+    }
 }
 
 UDevDevice::UDevDevice(HANDLE udevice)
 {
+    qCDebug(app) << "Creating UDevDevice from existing handle";
     m_device = udevice;
 }
 
 UDevDevice::~UDevDevice()
 {
-    udev_device_unref(m_device);
+    qCDebug(app) << "Destroying UDevDevice";
+    if (m_device) {
+        udev_device_unref(m_device);
+    }
 }
 
 } // namespace system

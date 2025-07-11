@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "nl_hwaddr.h"
+#include "ddlog.h"
+
 #include <net/if.h>
 #include <unistd.h>
 #include <linux/sockios.h>
@@ -11,8 +13,11 @@
 #include <net/if_arp.h>
 #include <QObject>
 
+using namespace DDLog;
+
 static int maclen(unsigned family = ARPHRD_ETHER)
 {
+    qCDebug(app) << "Getting mac length for family" << family;
     switch (family) {
     case ARPHRD_INFINIBAND:
         return 20;
@@ -28,6 +33,8 @@ static string getmac(const unsigned char *mac, unsigned family = ARPHRD_ETHER)
     string result = "";
     bool valid = false;
 
+    qCDebug(app) << "Getting mac string for family" << family;
+
     for (int i = 0; i < maclen(family); i++) {
         snprintf(buff, sizeof(buff), "%02x", mac[i]);
 
@@ -39,10 +46,13 @@ static string getmac(const unsigned char *mac, unsigned family = ARPHRD_ETHER)
             result += ":" + string(buff);
     }
 
-    if (valid)
+    if (valid) {
+        qCDebug(app) << "Valid mac found:" << result.c_str();
         return result;
-    else
+    } else {
+        qCDebug(app) << "Invalid or zero mac, returning empty string";
         return "";
+    }
 }
 
 string uppercase(const string &s)
@@ -58,24 +68,35 @@ string uppercase(const string &s)
 
 static bool isVirtual(const string &MAC)
 {
-    if (MAC.length() < 8)
+    if (MAC.length() < 8) {
+        qCDebug(app) << "MAC address too short to be virtual:" << MAC.c_str();
         return false;
+    }
 
     string manufacturer = uppercase(MAC.substr(0, 8));
+    qCDebug(app) << "Checking for virtual MAC, manufacturer:" << manufacturer.c_str();
 
     if ((manufacturer == "00:05:69") ||
-            (manufacturer == "00:0C:29") || (manufacturer == "00:50:56"))
+            (manufacturer == "00:0C:29") || (manufacturer == "00:50:56")) {
+        qCDebug(app) << "VMware MAC detected";
         return true;    // VMware
-    if (manufacturer == "00:1C:42")
+    }
+    if (manufacturer == "00:1C:42") {
+        qCDebug(app) << "Parallels MAC detected";
         return true;    // Parallels
-    if (manufacturer == "0A:00:27")
+    }
+    if (manufacturer == "0A:00:27") {
+        qCDebug(app) << "VirtualBox MAC detected";
         return true;    // VirtualBox
+    }
 
+    qCDebug(app) << "MAC is not from a known virtual adapter";
     return false;
 }
 
 static QString hwname(int t)
 {
+    qCDebug(app) << "Getting hardware name for type" << t;
     switch (t) {
     case ARPHRD_ETHER:
         return "Ethernet";
@@ -104,12 +125,14 @@ static QString hwname(int t)
     case ARPHRD_SIT:
         return "IP6inIP4";
     default:
+        qCDebug(app) << "Unknown hardware type:" << t;
         return "";
     }
 }
 
 NLHWAddr::NLHWAddr(const QByteArray &ifname)
 {
+    qCDebug(app) << "NLHWAddr constructor for interface:" << ifname;
     m_conn_type = "";
     m_ifname = ifname;
     m_is_virtual = false;
@@ -119,16 +142,20 @@ NLHWAddr::NLHWAddr(const QByteArray &ifname)
 
 void NLHWAddr::initData()
 {
+    qCDebug(app) << "Initializing NLHWAddr data for" << m_ifname;
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(ifr));
     //设备名称长度检查
-    if (m_ifname.size() < IFNAMSIZ)
+    if (m_ifname.size() < IFNAMSIZ) {
         strcpy(ifr.ifr_name, m_ifname);
+    }
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
     if (ioctl(fd, SIOCGIFHWADDR, &ifr) == 0) {
+        qCDebug(app) << "ioctl SIOCGIFHWADDR successful for" << m_ifname;
         string hwaddr = getmac(reinterpret_cast<unsigned char *>(ifr.ifr_hwaddr.sa_data), ifr.ifr_hwaddr.sa_family);
         m_sa_family = ifr.ifr_hwaddr.sa_family;
         if (m_sa_family >= 256) {
+            qCDebug(app) << "sa_family > 256, marking as virtual";
             m_is_virtual = true;
         }
         m_conn_type = hwname(m_sa_family).toUtf8();

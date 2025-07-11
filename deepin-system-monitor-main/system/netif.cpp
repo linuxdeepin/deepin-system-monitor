@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "netif.h"
+#include "ddlog.h"
 
 #include "nl_addr.h"
 #include "nl_link.h"
@@ -18,19 +19,24 @@
 #include<unistd.h>
 #include<sys/ioctl.h>
 
+using namespace DDLog;
+
 namespace core {
 namespace system {
 
 NetifInfo::NetifInfo()
     : d(new NetifInfoPrivate())
 {
+    qCDebug(app) << "NetifInfo constructor";
 }
 NetifInfo::NetifInfo(const NetifInfo &other)
     : d(other.d)
 {
+    qCDebug(app) << "NetifInfo copy constructor";
 }
 NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
 {
+    qCDebug(app) << "NetifInfo assignment operator";
     if (this == &rhs)
         return *this;
 
@@ -39,6 +45,7 @@ NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
 }
 NetifInfo::~NetifInfo()
 {
+    qCDebug(app) << "NetifInfo destructor";
 }
 
 
@@ -54,15 +61,20 @@ void NetifInfo::set_sent_bps(qreal sent_bps)
 
 void NetifInfo::updateHWAddr(const QByteArray ifname)
 {
+    qCDebug(app) << "Updating HW address info for" << ifname;
     NLHWAddr nl_hwaddr(ifname);
     d->conn_type = nl_hwaddr.conn_type();
-
+    qCDebug(app) << "Connection type for" << ifname << "is" << d->conn_type;
 }
 
 void NetifInfo::updateLinkInfo(const NLLink *link)
 {
-    if (!link)
+    if (!link) {
+        qCWarning(app) << "updateLinkInfo called with null link";
         return;
+    }
+
+    qCDebug(app) << "Updating link info for" << link->ifname();
 
     d->index = link->ifindex();
     d->ifname = link->ifname();
@@ -104,12 +116,15 @@ void NetifInfo::updateLinkInfo(const NLLink *link)
     this->updateWirelessInfo();
     this->updateBrandInfo();
     this->updateHWAddr(d->ifname);
+    qCDebug(app) << "Finished updating link info for" << d->ifname;
 }
 
 void NetifInfo::updateWirelessInfo()
 {
+    qCDebug(app) << "Updating wireless info for" << d->ifname;
     wireless wireless1(d->ifname);
     if (wireless1.is_wireless()) {
+        qCDebug(app) << d->ifname << "is a wireless device";
         d->isWireless = true;
         d->iw_info->essid = wireless1.essid();
         d->iw_info->qual.qual = wireless1.link_quality();
@@ -119,10 +134,12 @@ void NetifInfo::updateWirelessInfo()
         //无线网速率ioctl没有提供相关接口，目前采用调用iwlist命令的方式获取 #bug 111694
         QProcess process;
         QString cmd = QString("iwlist ") + d.data()->ifname + QString(" rate");
+        qCDebug(app) << "Executing command:" << cmd;
         process.start(cmd);
         process.waitForFinished(-1);
         //获取输出
         QString data = process.readAllStandardOutput();
+        qCDebug(app) << "iwlist output:" << data.trimmed();
         QStringList datalist = data.trimmed().split(":");
         if (datalist.size() > 0) {
             QString speedString = datalist[datalist.size() - 1];
@@ -132,14 +149,17 @@ void NetifInfo::updateWirelessInfo()
                 fspeed = list[0].toFloat();
             }
             d->speed = static_cast<uint>(fspeed);
+            qCDebug(app) << "Parsed wireless speed:" << d->speed << "Mb/s";
         }
     } else {
+        qCDebug(app) << d->ifname << "is not a wireless device";
         d->isWireless = false;
     }
 }
 
 void NetifInfo::updateBrandInfo()
 {
+    qCDebug(app) << "Updating brand info for" << d->ifname;
     struct ifreq ifr;
     struct ethtool_cmd ecmd;
 
@@ -151,6 +171,7 @@ void NetifInfo::updateBrandInfo()
     int fd = socket(PF_INET, SOCK_DGRAM, 0);
     if (ioctl(fd, SIOCETHTOOL, &ifr) == 0) {
         d->speed   = ecmd.speed;
+        qCDebug(app) << "Got speed via ioctl:" << d->speed;
     }
     close(fd);
 }

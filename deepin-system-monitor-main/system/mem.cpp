@@ -22,15 +22,18 @@ namespace system {
 MemInfo::MemInfo()
     : d(new MemInfoPrivate())
 {
+    qCDebug(app) << "MemInfo constructor";
 }
 
 MemInfo::MemInfo(const MemInfo &other)
     : d(other.d)
 {
+    qCDebug(app) << "MemInfo copy constructor";
 }
 
 MemInfo &MemInfo::operator=(const MemInfo &rhs)
 {
+    qCDebug(app) << "MemInfo assignment operator";
     if (this == &rhs)
         return *this;
 
@@ -40,6 +43,7 @@ MemInfo &MemInfo::operator=(const MemInfo &rhs)
 
 MemInfo::~MemInfo()
 {
+    qCDebug(app) << "MemInfo destructor";
 }
 
 qulonglong MemInfo::memTotal() const
@@ -109,6 +113,7 @@ qulonglong MemInfo::mapped() const
 
 void MemInfo::readMemInfo()
 {
+    qCDebug(app) << "Reading memory info from" << PROC_PATH_MEM;
     FILE *fp;
     uFile ufp;
     const size_t BUFLEN = 512;
@@ -208,7 +213,7 @@ void MemInfo::readMemInfo()
         if (ferror(fp)) {
             qCWarning(app) << "Error reading" << PROC_PATH_MEM << ":" << strerror(errno);
         }
-
+        qCDebug(app) << "Finished reading memory info.";
         return;
     } // ::if(fopen)
 

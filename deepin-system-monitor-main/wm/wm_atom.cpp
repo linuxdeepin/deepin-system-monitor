@@ -4,21 +4,25 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "wm_atom.h"
+#include "ddlog.h"
 
 #include <QByteArrayList>
 
 #include "xcb/xcb.h"
 
+using namespace DDLog;
 namespace core {
 namespace wm {
 
 WMAtom::WMAtom()
     : m_atoms(ATOM_MAX)
 {
+    qCDebug(app) << "WMAtom created";
 }
 
 void WMAtom::initialize(xcb_connection_t *connection)
 {
+    qCDebug(app) << "Initializing XCB atoms...";
     const char *atomNames[] = {
         "WM_STATE\0",
         "WM_NAME\0",
@@ -76,9 +80,16 @@ void WMAtom::initialize(xcb_connection_t *connection)
 
     for (i = 0; i < ATOM_MAX; i++) {
         auto *reply = xcb_intern_atom_reply(connection, cookies[i], nullptr);
-        m_atoms[i] = reply->atom;
-        free(reply);
+        if (reply) {
+            m_atoms[i] = reply->atom;
+            qCDebug(app) << "Interned atom" << atomNames[i] << "to ID" << reply->atom;
+            free(reply);
+        } else {
+            qCWarning(app) << "Failed to intern atom" << atomNames[i];
+            m_atoms[i] = XCB_ATOM_NONE;
+        }
     }
+    qCDebug(app) << "XCB atom initialization complete";
 }
 
 } // namespace wm

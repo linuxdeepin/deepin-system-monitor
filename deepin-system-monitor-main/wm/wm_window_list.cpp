@@ -11,11 +11,13 @@
 #include "process/process_db.h"
 #include "common/common.h"
 #include "helper.hpp"
+#include "ddlog.h"
 
 #include <QtDBus>
 
 #include <xcb/xcb.h>
 
+using namespace DDLog;
 using namespace core::process;
 using namespace common::core;
 using namespace common::init;
@@ -40,6 +42,7 @@ const int offsetImagePointerWH = 2;
 WMWindowList::WMWindowList(QObject *parent)
     : QObject(parent)
 {
+    qCDebug(app) << "WMWindowList created";
 }
 
 void WMWindowList::addDesktopEntryApp(Process *proc)
@@ -48,6 +51,7 @@ void WMWindowList::addDesktopEntryApp(Process *proc)
         return;
 
     auto pid = proc->pid();
+    qCDebug(app) << "Considering pid" << pid << "for desktop entry app cache";
 
     if (!isTrayApp(pid)
             && !isGuiApp(pid)
@@ -86,13 +90,16 @@ void WMWindowList::addDesktopEntryApp(Process *proc)
             }
         }
 
-        if (!bb)
+        if (!bb) {
+            qCDebug(app) << "Pid" << pid << "is a shell/script, not adding to desktop entry cache";
             m_desktopEntryCache << pid;
+        }
     }
 }
 
 int WMWindowList::getAppCount()
 {
+    qCDebug(app) << "Calculating app count...";
     //Judge whether the current user is root
     Process proc(static_cast<int>(qApp->applicationPid()));
     //read Process Info
@@ -158,26 +165,34 @@ int WMWindowList::getAppCount()
 
 bool WMWindowList::isTrayApp(pid_t pid) const
 {
-    return m_trayAppcache.find(pid) != m_trayAppcache.end();
+    bool result = m_trayAppcache.find(pid) != m_trayAppcache.end();
+    // qCDebug(app) << "Checking if pid" << pid << "is a tray app:" << result;
+    return result;
 }
 
 bool WMWindowList::isGuiApp(pid_t pid) const
 {
-    return m_guiAppcache.find(pid) != m_guiAppcache.end();
+    bool result = m_guiAppcache.find(pid) != m_guiAppcache.end();
+    // qCDebug(app) << "Checking if pid" << pid << "is a GUI app:" << result;
+    return result;
 }
 
 bool WMWindowList::isDesktopEntryApp(pid_t pid) const
 {
-    return m_desktopEntryCache.contains(pid);
+    bool result = m_desktopEntryCache.contains(pid);
+    // qCDebug(app) << "Checking if pid" << pid << "is a desktop entry app:" << result;
+    return result;
 }
 
 void WMWindowList::removeDesktopEntryApp(pid_t pid)
 {
+    qCDebug(app) << "Removing pid" << pid << "from desktop entry app cache";
     m_desktopEntryCache.removeAll(pid);
 }
 
 QImage WMWindowList::getWindowIcon(pid_t pid) const
 {
+    qCDebug(app) << "Getting window icon for pid:" << pid;
     auto search = m_guiAppcache.find(pid);
     WMWId winId = UINT32_MAX;
     if (search != m_guiAppcache.end()) {
@@ -190,8 +205,10 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
 
     if (reply) {
         int len = xcb_get_property_value_length(reply.get());
-        if (len < 2)
+        if (len < 2) {
+            qCDebug(app) << "No valid icon data found for pid:" << pid;
             return {};
+        }
 
         uint *data = reinterpret_cast<uint *>(xcb_get_property_value(reply.get()));
         if (data) {
@@ -243,11 +260,13 @@ QImage WMWindowList::getWindowIcon(pid_t pid) const
             }
         }
     }
+    qCDebug(app) << "Failed to get/parse window icon for pid:" << pid;
     return {};
 }
 
 QString WMWindowList::getWindowTitle(pid_t pid) const
 {
+    qCDebug(app) << "Getting window title for pid:" << pid;
     // process may have multiple window opened, each with a different title
     auto range = m_guiAppcache.equal_range(pid);
     QList<QString> titles;
@@ -266,6 +285,7 @@ QString WMWindowList::getWindowTitle(pid_t pid) const
     } else if (titles.size() == 1) {
         return titles[0];
     } else {
+        qCWarning(app) << "Could not find window ID for pid:" << pid;
         return {};
     }
 }
@@ -329,6 +349,7 @@ void WMWindowList::updateWindowListCache()
 
 pid_t WMWindowList::getWindowPid(WMWId winId) const
 {
+    qCDebug(app) << "Getting PID for window ID:" << winId;
     auto *conn = m_conn.xcb_connection();
     auto pidCookie = xcb_get_property(conn, 0, winId, m_conn.atom(WMAtom::_NET_WM_PID), XCB_ATOM_CARDINAL, 0, 4);
 
@@ -342,6 +363,7 @@ pid_t WMWindowList::getWindowPid(WMWId winId) const
 
 QByteArray WMWindowList::getAtomName(xcb_connection_t *conn, xcb_atom_t atom) const
 {
+    qCDebug(app) << "Getting name for atom ID:" << atom;
     AtomMeta meta(new struct atom_meta());
     meta->atom = atom;
 
@@ -358,6 +380,7 @@ QByteArray WMWindowList::getAtomName(xcb_connection_t *conn, xcb_atom_t atom) co
 
 QStringList WMWindowList::getWindowType(WMWId winId) const
 {
+    qCDebug(app) << "Getting window type for window ID:" << winId;
     QStringList windowType;
     auto *conn = m_conn.xcb_connection();
     auto windowTypeCookie = xcb_get_property(conn, 0, winId, m_conn.atom(WMAtom::_NET_WM_WINDOW_TYPE), XCB_ATOM_ATOM, 0, BUFSIZ);
@@ -375,6 +398,7 @@ QStringList WMWindowList::getWindowType(WMWId winId) const
 
 WMWindow WMWindowList::getWindowInfo(WMWId winId)
 {
+    qCDebug(app) << "Getting window info for window ID:" << winId;
     WMWindow window(new struct wm_window_t());
     window->winId = winId;
 
@@ -412,6 +436,7 @@ WMWindow WMWindowList::getWindowInfo(WMWId winId)
     }
 
     if (len != 0) {
+        qCDebug(app) << "Window name:" << name << "Length:" << len << "Encoding:" << encoding;
         if (encoding == XCB_ATOM_STRING) {
             window->title = QString::fromLocal8Bit(name, len);
         } else if (encoding == m_conn.atom(WMAtom::UTF8_STRING)) {
