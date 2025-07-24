@@ -17,6 +17,7 @@
 #include <QList>
 #include <QDebug>
 #include <QApplication>
+#include <QVariantMap>
 
 #include <memory>
 
@@ -767,6 +768,108 @@ int Process::appType() const
 void Process::setAppType(int type)
 {
     d->apptype = type;
+}
+
+void Process::applyDKaptureData(const QVariantMap &pidData)
+{
+    // 设置基本状态信息
+    if (pidData.contains("state")) {
+        setState(pidData["state"].toString().at(0).toLatin1());
+    }
+    if (pidData.contains("priority")) {
+        setPriority(pidData["priority"].toInt());
+    }
+    if (pidData.contains("comm")) {
+        setName(pidData["comm"].toString());
+    }
+    
+    // 设置 CPU 时间相关数据
+    if (pidData.contains("utime")) {
+        d->utime = pidData["utime"].toULongLong();
+    }
+    if (pidData.contains("stime")) {
+        d->stime = pidData["stime"].toULongLong();
+    }
+    if (pidData.contains("cutime")) {
+        d->cutime = pidData["cutime"].toULongLong();
+    }
+    if (pidData.contains("cstime")) {
+        d->cstime = pidData["cstime"].toULongLong();
+    }
+    
+    // 设置内存相关数据（使用与main程序相同的转换逻辑）
+    // DKapture STAT中的rss和vsize是字节数（与/proc/[pid]/stat一致）
+    if (pidData.contains("rss")) {
+        d->rss = pidData["rss"].toULongLong() >> 10; // 字节转KB
+    }
+    if (pidData.contains("vsize")) {
+        d->vmsize = pidData["vsize"].toULongLong() >> 10; // 字节转KB  
+    }
+    
+    // DKapture STATM中的数据是页数（与/proc/[pid]/statm一致）
+    if (pidData.contains("memory_resident")) {
+        qulonglong residentPages = pidData["memory_resident"].toULongLong();
+        d->rss = residentPages << kb_shift; // 页数转KB，与readStatm()一致
+    }
+    if (pidData.contains("memory_size")) {
+        qulonglong memorySizePages = pidData["memory_size"].toULongLong();
+        d->vmsize = memorySizePages << kb_shift; // 页数转KB，与readStatm()一致
+    }
+    if (pidData.contains("memory_shared")) {
+        qulonglong sharedPages = pidData["memory_shared"].toULongLong();
+        d->shm = sharedPages << kb_shift; // 页数转KB，与readStatm()一致
+    }
+    
+    // 设置其他基本信息
+    if (pidData.contains("ppid")) {
+        d->ppid = pidData["ppid"].toInt();
+    }
+    if (pidData.contains("num_threads")) {
+        d->nthreads = pidData["num_threads"].toInt();
+    }
+    if (pidData.contains("nice")) {
+        d->nice = pidData["nice"].toInt();
+    }
+    if (pidData.contains("start_time")) {
+        d->start_time = pidData["start_time"].toULongLong();
+    }
+    
+    // 设置 I/O 相关数据
+    if (pidData.contains("read_bytes")) {
+        d->read_bytes = pidData["read_bytes"].toULongLong();
+    }
+    if (pidData.contains("write_bytes")) {
+        d->write_bytes = pidData["write_bytes"].toULongLong();
+    }
+    if (pidData.contains("cancelled_write_bytes")) {
+        d->cancelled_write_bytes = pidData["cancelled_write_bytes"].toULongLong();
+    }
+    
+    // 标记进程为有效
+    d->valid = true;
+    
+    // 读取一些无法通过 DKapture 获取的基本信息
+    // 只读取必要信息，不重新读取 stat/statm 等已有数据
+    readCmdline();       // 读取命令行
+    readEnviron();       // 读取环境变量
+    // readSockInodes();    // plugin-popup 不需要网络流量计算
+    
+    d->usrerName = SysInfo::userName(d->uid);
+    d->proc_name.refreashProcessName(this);
+    d->proc_icon.refreashProcessIcon(this);
+    d->uptime = SysInfo::instance()->uptime();
+    
+    // plugin-popup 是轻量级组件，网络数据由calculateProcessMetrics统一处理
+    // 避免重复网络计算
+    
+    auto netpair = d->networkIOSample->recentSamplePair();
+    struct IOPS netiops = IOSampleFrame::iops(netpair.first, netpair.second);
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
+    
+    // qCInfo(app) << "Applied DKapture data to process" << pid() 
+    //             << "- rss:" << (d->rss / 1024) << "KB"
+    //             << "- vmsize:" << (d->vmsize / 1024) << "KB"
+    //             << "- cpu_time:" << (d->utime + d->stime);
 }
 
 } // namespace process

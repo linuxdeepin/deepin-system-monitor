@@ -118,6 +118,23 @@ public:
     void readProcessSimpleInfo();
     void readProcessVariableInfo();
 
+    // DKapture methods removed - now handled by system service
+
+    /**
+     * @brief Calculates derived metrics (CPU, IOPS) from raw data.
+     * @param useDKaptureCPU true if using DKapture CPU data (already incremental),
+     *                       false for traditional method (needs delta calculation)
+     */
+    void calculateProcessMetrics(bool useDKaptureCPU = false);
+    
+    // Helper methods for DKapture integration
+    void setUptime(const timeval &uptime);
+    void refreashProcessName();
+    void refreashProcessIcon();
+    void setUserName(const QString &userName);
+    
+    // DKapture data application method
+    void applyDKaptureData(const QVariantMap &pidData);
 private:
     /**
      * @brief Read /proc/[pid]/stat

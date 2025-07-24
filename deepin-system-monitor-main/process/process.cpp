@@ -17,6 +17,7 @@
 #include <QList>
 #include <QDebug>
 #include <QApplication>
+#include <QVariantMap>
 
 #include <memory>
 
@@ -147,45 +148,7 @@ void Process::readProcessVariableInfo()
     d->proc_name.refreashProcessName(this);
     d->uptime = SysInfo::instance()->uptime();
 
-    CPUSet *cpuset = DeviceDB::instance()->cpuSet();
-    ProcessSet *procset =  ProcessDB::instance()->processSet();
-
-    auto recentProcptr = procset->getRecentProcStage(d->pid);
-    auto validrecentPtr = recentProcptr.lock();
-    qreal timedelta = d->stime + d->utime;
-    if (validrecentPtr) {
-        qCDebug(app) << "Found recent process stage for pid" << d->pid;
-        timedelta = timedelta - validrecentPtr->ptime;
-        struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
-        d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
-
-        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {0, 0}));
-    }
-    d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
-
-    struct DiskIO io = {d->read_bytes, d->write_bytes, d->cancelled_write_bytes};
-    d->diskIOSample->addSample(new DISKIOSampleFrame(d->uptime, io));
-
-    auto pair = d->diskIOSample->recentSamplePair();
-    struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
-    d->diskIOSpeedSample->addSample(new IOPSSampleFrame(iops));
-
-    qulonglong sum_recv = 0;
-    qulonglong sum_send = 0;
-
-    for (int i = 0; i < d->sockInodes.size(); ++i) {
-        SockIOStat sockIOStat;
-        bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
-        if (result) {
-            sum_recv += sockIOStat->rx_bytes;
-            sum_send += sockIOStat->tx_bytes;
-        }
-    }
-    d->networkIOSample->addSample(new IOSampleFrame(d->uptime, {sum_recv, sum_send}));
-
-    auto netpair = d->networkIOSample->recentSamplePair();
-    struct IOPS netiops = IOSampleFrame::iops(netpair.first, netpair.second);
-    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
+    calculateProcessMetrics();
 
     d->valid = d->valid && ok;
     qCDebug(app) << "Finished reading variable info for pid" << d->pid << "valid:" << d->valid;
@@ -772,6 +735,59 @@ QString Process::displayName() const
     return d->proc_name.displayName();
 }
 
+void Process::calculateProcessMetrics(bool useDKaptureCPU)
+{
+    // qCInfo(app) << "Calculating metrics for pid" << d->pid;
+    CPUSet *cpuset = DeviceDB::instance()->cpuSet();
+    ProcessSet *procset =  ProcessDB::instance()->processSet();
+
+    // CPU时间处理：根据数据源选择不同的计算方式
+    qreal timedelta = d->stime + d->utime;
+    auto recentProcptr = procset->getRecentProcStage(d->pid);
+    auto validrecentPtr = recentProcptr.lock();
+    
+    if (!useDKaptureCPU && validrecentPtr) {
+        // 传统方式：需要减去历史值计算增量
+        timedelta = timedelta - validrecentPtr->ptime;
+        struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
+        d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
+        d->networkIOSample->addSample(new IOSampleFrame(validrecentPtr->uptime, {0, 0}));
+    } else if (useDKaptureCPU && validrecentPtr) {
+        // DKapture方式：CPU时间已是增量，但磁盘IO仍需要从历史数据获取
+        struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
+        d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
+    }
+    
+    d->cpuUsageSample->addSample(new CPUUsageSampleFrame(qMax(0., timedelta) / cpuset->getUsageTotalDelta() * 100));
+
+    struct DiskIO io = {d->read_bytes, d->write_bytes, d->cancelled_write_bytes};
+    d->diskIOSample->addSample(new DISKIOSampleFrame(d->uptime, io));
+
+    auto pair = d->diskIOSample->recentSamplePair();
+    struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
+    d->diskIOSpeedSample->addSample(new IOPSSampleFrame(iops));
+
+    // 网络流量：统一使用传统方式
+    qulonglong sum_recv = 0;
+    qulonglong sum_send = 0;
+
+    for (int i = 0; i < d->sockInodes.size(); ++i) {
+        SockIOStat sockIOStat;
+        bool result = NetifMonitor::instance()->getSockIOStatByInode(d->sockInodes[i], sockIOStat);
+        if (result) {
+            sum_recv += sockIOStat->rx_bytes;
+            sum_send += sockIOStat->tx_bytes;
+        }
+    }
+    d->networkIOSample->addSample(new IOSampleFrame(d->uptime, {sum_recv, sum_send}));
+
+    auto netpair = d->networkIOSample->recentSamplePair();
+    struct IOPS netiops = IOSampleFrame::iops(netpair.first, netpair.second);
+    d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
+}
+
+
+
 QIcon Process::icon() const
 {
     return d->proc_icon.icon();
@@ -944,6 +960,144 @@ int Process::appType() const
 void Process::setAppType(int type)
 {
     d->apptype = type;
+}
+
+// DKapture update methods removed - now handled by system service
+
+void Process::setUptime(const timeval &uptime)
+{
+    d->uptime = uptime;
+}
+
+void Process::refreashProcessName()
+{
+    d->proc_name.refreashProcessName(this);
+}
+
+void Process::refreashProcessIcon()
+{
+    d->proc_icon.refreashProcessIcon(this);
+}
+
+void Process::setUserName(const QString &userName)
+{
+    d->usrerName = userName;
+}
+
+void Process::applyDKaptureData(const QVariantMap &data)
+{
+
+    
+    // 设置基本状态信息
+    if (data.contains("state")) {
+        setState(data["state"].toString().at(0).toLatin1());
+    }
+    if (data.contains("priority")) {
+        setPriority(data["priority"].toInt());
+    }
+    if (data.contains("comm")) {
+        setName(data["comm"].toString());
+    }
+    
+    // 设置 CPU 时间相关数据
+    // 后端已经处理了DKapture累积数据的增量计算，这里接收的是增量值
+    if (data.contains("utime")) {
+        d->utime = data["utime"].toULongLong();
+    }
+    if (data.contains("stime")) {
+        d->stime = data["stime"].toULongLong();
+    }
+    if (data.contains("cutime")) {
+        d->cutime = data["cutime"].toULongLong();
+    }
+    if (data.contains("cstime")) {
+        d->cstime = data["cstime"].toULongLong();
+    }
+    
+
+    
+    // 设置内存数据（DKapture返回的是原始格式，需要按照传统方式转换）
+    // DKapture STAT中的rss和vsize是字节数（与/proc/[pid]/stat一致）
+    if (data.contains("rss")) {
+        d->rss = data["rss"].toULongLong() >> 10; // 字节转KB
+    }
+    if (data.contains("vsize")) {
+        d->vmsize = data["vsize"].toULongLong() >> 10; // 字节转KB  
+    }
+    
+    // DKapture STATM中的数据是页数（与/proc/[pid]/statm一致）
+    if (data.contains("memory_resident")) {
+        qulonglong residentPages = data["memory_resident"].toULongLong();
+        d->rss = residentPages << kb_shift; // 页数转KB，与readStatm()一致
+    }
+    if (data.contains("memory_size")) {
+        qulonglong memorySizePages = data["memory_size"].toULongLong();
+        d->vmsize = memorySizePages << kb_shift; // 页数转KB，与readStatm()一致
+    }
+    if (data.contains("memory_shared")) {
+        qulonglong sharedPages = data["memory_shared"].toULongLong();
+        d->shm = sharedPages << kb_shift; // 页数转KB，与readStatm()一致
+    }
+    int pid = 0;
+    if (data.contains("pid")) {
+        pid = data["pid"].toInt();
+    }
+    
+    // 设置其他基本信息
+    if (data.contains("ppid")) {
+        d->ppid = data["ppid"].toInt();
+    }
+    if (data.contains("num_threads")) {
+        d->nthreads = data["num_threads"].toInt();
+    }
+    if (data.contains("nice")) {
+        d->nice = data["nice"].toInt();
+    }
+    if (data.contains("start_time")) {
+        d->start_time = data["start_time"].toULongLong();
+    }
+    
+    // 设置 I/O 相关数据
+    if (data.contains("read_bytes")) {
+        d->read_bytes = data["read_bytes"].toULongLong();
+    }
+    if (data.contains("write_bytes")) {
+        d->write_bytes = data["write_bytes"].toULongLong();
+    }
+    if (data.contains("cancelled_write_bytes")) {
+        d->cancelled_write_bytes = data["cancelled_write_bytes"].toULongLong();
+    }
+
+    // 网络流量数据改为使用传统方式获取 - 避免DKapture系统级vs用户态数据差异
+    // 后端已禁用网络数据发送，前端使用传统socket inode方式获取网络流量
+    // if (data.contains("network_rx_bytes")) {
+    //     network_rx = data["network_rx_bytes"].toULongLong();
+    // }
+    // if (data.contains("network_tx_bytes")) {
+    //     network_tx = data["network_tx_bytes"].toULongLong();
+    // }
+    
+    // 标记进程为有效
+    d->valid = true;
+
+    // 读取一些无法通过 DKapture 获取的基本信息
+    // 只读取必要信息，不重新读取 stat/statm 等已有数据
+    readCmdline();       // 读取命令行
+    readEnviron();       // 读取环境变量
+    readSockInodes();    // 读取网络 socket inodes（网络流量计算必需）
+    
+    d->usrerName = SysInfo::userName(d->uid);
+    d->proc_name.refreashProcessName(this);
+    d->proc_icon.refreashProcessIcon(this);
+    d->uptime = SysInfo::instance()->uptime();
+    
+    // 使用DKapture模式的metrics计算 - CPU数据已是增量
+    calculateProcessMetrics(true);
+
+    // qCInfo(app) << "Applied DKapture data to process" << pid() 
+    //             << "- rss:" << (d->rss / 1024) << "KB"
+    //             << "- vmsize:" << (d->vmsize / 1024) << "KB"
+    //             << "- cpu_time:" << (d->utime + d->stime);
 }
 
 } // namespace process

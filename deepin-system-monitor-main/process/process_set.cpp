@@ -8,9 +8,12 @@
 #include "process/process_db.h"
 #include "common/common.h"
 #include "wm/wm_window_list.h"
+#include "system_service_client.h"
+#include "process/private/process_p.h"
 // #include "settings.h"
 
 #include <QDebug>
+#include <QFile>
 
 #include <errno.h>
 
@@ -26,8 +29,31 @@ ProcessSet::ProcessSet()
     , m_recentProcStage {}
     , m_pidCtoPMapping {}
     , m_pidPtoCMapping {}
+    , m_systemServiceClient(nullptr)
+    , m_useSystemService(false)
 {
     qCDebug(app) << "ProcessSet object created";
+    
+    // 初始化系统服务客户端并检测DKapture可用性
+    qCInfo(app) << "Initializing system service client";
+    m_systemServiceClient = new SystemServiceClient();
+
+    // 尝试启动系统服务
+    if (!m_systemServiceClient->isServiceAvailable()) {
+        qCInfo(app) << "System service not available, attempting to start";
+        m_systemServiceClient->startSystemService();
+    }
+
+    // 检测DKapture可用性并设置使用标志，之后直接使用此标志
+    m_useSystemService = m_systemServiceClient 
+                         && m_systemServiceClient->isServiceAvailable() 
+                         && m_systemServiceClient->isDKaptureAvailable();
+    
+    if (m_useSystemService) {
+        qCInfo(app) << "DKapture system service detected and enabled";
+    } else {
+        qCInfo(app) << "DKapture not available, will use traditional /proc scanning";
+    }
 }
 
 ProcessSet::ProcessSet(const ProcessSet &other)
@@ -42,6 +68,14 @@ ProcessSet::ProcessSet(const ProcessSet &other)
     m_pidMyApps.clear();
     m_simpleSet.clear();
     // m_settings = Settings::instance();
+}
+
+ProcessSet::~ProcessSet()
+{
+    if (m_systemServiceClient) {
+        delete m_systemServiceClient;
+        m_systemServiceClient = nullptr;
+    }
 }
 
 void ProcessSet::mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps)
@@ -80,6 +114,13 @@ void ProcessSet::refresh()
 void ProcessSet::scanProcess()
 {
     qCDebug(app) << "Scanning processes";
+    
+    if (m_useSystemService) {
+        qCDebug(app) << "Using DKapture enhanced scanning";
+    } else {
+        qCDebug(app) << "Using traditional /proc scanning";
+    }
+    
     for (auto iter = m_set.begin(); iter != m_set.end(); iter++) {
         qCDebug(app) << "Storing recent stage for pid" << iter->pid();
         std::shared_ptr<RecentProcStage> procstage = std::make_shared<RecentProcStage>();
@@ -142,21 +183,43 @@ void ProcessSet::scanProcess()
     // const QVariant &vindex = m_settings->getOption(kSettingKeyProcessTabIndex, kFilterApps);
     // int index = vindex.toInt();
 
+    // 尝试获取DKapture数据
+    bool useDKaptureData = false;
+    QVariantMap dkaptureData;
+    
+    if (m_useSystemService) {
+        QVariantMap response = m_systemServiceClient->getProcessInfoBatch(m_prePid);
+        if (response["success"].toBool()) {
+            dkaptureData = response["data"].toMap();
+            useDKaptureData = true;
+            qCInfo(app) << "Successfully got DKapture data for" << dkaptureData.size() << "processes";
+        } else {
+            qCWarning(app) << "Failed to get DKapture data:" << response["error"].toString();
+            qCWarning(app) << "Falling back to traditional /proc scanning";
+        }
+    }
+    
+    // 统一处理所有进程
     for (const pid_t &pid : m_prePid) {
         Process proc = m_simpleSet[pid];
-        // if( ((kFilterApps == index) && (proc.appType()<= kFilterApps)) ||
-        //     ((kFilterCurrentUser == index) && (proc.appType() <= kFilterCurrentUser)) ||
-        //         (kNoFilter == index))
-                {
-            //  qCDebug(app) << "Reading variable info for pid" << pid;
-             proc.readProcessVariableInfo();  //
-               if (!proc.isValid())
-                     continue;
-
-               m_set.insert(proc.pid(), proc);
-               m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
-               m_pidCtoPMapping.insert(proc.pid(), proc.ppid());
+        
+        if (useDKaptureData && dkaptureData.contains(QString::number(pid))) {
+            // 使用DKapture数据
+            QVariantMap pidData = dkaptureData[QString::number(pid)].toMap();
+            qCDebug(app) << "Applying DKapture data to process" << pid;
+            proc.applyDKaptureData(pidData);
+        } else {
+            // 使用传统方式（包括DKapture获取失败或没有该进程数据的情况）
+            qCDebug(app) << "Using traditional /proc reading for process" << pid;
+            proc.readProcessVariableInfo();
+            if (!proc.isValid()) {
+                continue;
+            }
         }
+        
+        m_set.insert(proc.pid(), proc);
+        m_pidPtoCMapping.insert(proc.ppid(), proc.pid());
+        m_pidCtoPMapping.insert(proc.pid(), proc.ppid());
     }
 
     std::function<bool(pid_t ppid)> anyRootIsGuiProc;
@@ -315,6 +378,8 @@ void ProcessSet::updateProcessPriority(pid_t pid, int priority)
     if (m_set.contains(pid))
         m_set[pid].setPriority(priority);
 }
+
+
 
 } // namespace process
 } // namespace core
