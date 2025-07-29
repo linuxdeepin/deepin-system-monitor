@@ -491,7 +491,7 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
                                                                                "ShowPage");
         QList<QVariant> args;
         if (!common::systemInfo().isOldVersion()) {
-            args << QString("notification/%1").append(genericName);
+            args << QString("notification/%1").arg(genericName);
         } else {
             args.append("notification");
             args.append(genericName);
@@ -504,6 +504,15 @@ void SystemProtectionSetting::onMessgaeSetting(QVariant value)
         if (replyMsg.type() == QDBusMessage::ErrorMessage) {
             qCWarning(app) << "Failed to call DDE control center DBus method, error name:" 
                        << replyMsg.errorName() << "error message:" << replyMsg.errorMessage();
+            // 尝试使用通用页面
+            QList<QVariant> nargs;
+            nargs << QString("notification");
+            showDDEControlCenterPage.setArguments(nargs);
+            replyMsg = QDBusConnection::sessionBus().call(showDDEControlCenterPage);
+            if (replyMsg.type() == QDBusMessage::ErrorMessage) {
+                qCWarning(app) << "Finally failed to call DDE control center DBus method, error name:" 
+                            << replyMsg.errorName() << "error message:" << replyMsg.errorMessage();
+            }
         }
 
     } else {
