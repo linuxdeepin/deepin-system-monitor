@@ -177,6 +177,7 @@ void ProcessAttributeDialog::initUI()
     m_procStartText->viewport()->setBackgroundRole(QPalette::Window);
     m_procStartText->setWordWrapMode(QTextOption::WrapAnywhere);
     m_procStartText->document()->setDocumentMargin(0);
+    m_procStartText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     grid->addWidget(m_procNameLabel, 0, 0, Qt::AlignTop | Qt::AlignRight);
     grid->addWidget(m_procNameText, 0, 1, Qt::AlignTop | Qt::AlignLeft);
@@ -304,9 +305,12 @@ bool ProcessAttributeDialog::eventFilter(QObject *obj, QEvent *event)
             cur.clearSelection();
             m_procCmdText->setTextCursor(cur);
 
-            cur = m_procStartText->textCursor();
-            cur.clearSelection();
-            m_procStartText->setTextCursor(cur);
+            // Clear selection of process start time text if it exists and the event object is not its viewport
+            if (m_procStartText->textCursor().hasSelection() && obj != m_procStartText->viewport()) {
+                cur = m_procStartText->textCursor();
+                cur.clearSelection();
+                m_procStartText->setTextCursor(cur);
+            }
         }
     }
 
