@@ -2,13 +2,13 @@
 <context>
     <name>App.About</name>
     <message>
-        <location filename="../main.cpp" line="92"/>
-        <location filename="../main.cpp" line="96"/>
+        <location filename="../main.cpp" line="101"/>
+        <location filename="../main.cpp" line="105"/>
         <source>System Monitor</source>
         <translation>Systeemmonitor</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="82"/>
+        <location filename="../main.cpp" line="91"/>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation>Systeemmonitor is een hulpprogramma voor het monitoren van systeembelasting en het bekijken en beheren van processen en achtergronddiensten.</translation>
     </message>
@@ -16,19 +16,19 @@
 <context>
     <name>BaseDetailViewWidget</name>
     <message>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="28"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="29"/>
         <source>Hide details</source>
         <translation>Informatie verbergen</translation>
     </message>
     <message>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="51"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="40"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="52"/>
         <source>Overall utilization</source>
         <translation>Algeheel gebruik</translation>
     </message>
     <message>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="53"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="43"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="54"/>
         <source>Individual utilization</source>
         <translation>Individueel gebruik</translation>
     </message>
@@ -36,12 +36,12 @@
 <context>
     <name>BlockDevItemWidget</name>
     <message>
-        <location filename="../gui/block_dev_item_widget.cpp" line="138"/>
+        <location filename="../gui/block_dev_item_widget.cpp" line="154"/>
         <source>Read</source>
         <translation>Uitgelezen</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_item_widget.cpp" line="142"/>
+        <location filename="../gui/block_dev_item_widget.cpp" line="158"/>
         <source>Write</source>
         <translation>Weggeschreven</translation>
     </message>
@@ -49,8 +49,8 @@
 <context>
     <name>CPUDetailGrapTableItem</name>
     <message>
-        <location filename="../gui/cpu_detail_widget.cpp" line="154"/>
-        <location filename="../gui/cpu_detail_widget.cpp" line="268"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="168"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="285"/>
         <source>60 seconds</source>
         <translation>60 seconden</translation>
     </message>
@@ -58,7 +58,7 @@
 <context>
     <name>CPUInfoModel</name>
     <message>
-        <location filename="../model/cpu_info_model.cpp" line="43"/>
+        <location filename="../model/cpu_info_model.cpp" line="49"/>
         <source>%1 days %2 hours %3 minutes</source>
         <translation>%1 dagen, %2 uur, %3 minuten</translation>
     </message>
@@ -72,13 +72,13 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Current frequency</source>
-        <translation>Huidige snelheid</translation>
+        <source>Average frequency</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
-        <source>Frequency</source>
-        <translation>Snelheid</translation>
+        <source>Max frequency</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -159,7 +159,7 @@
 <context>
     <name>Cancel</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="298"/>
+        <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -167,7 +167,7 @@
 <context>
     <name>ChartViewWidget</name>
     <message>
-        <location filename="../gui/chart_view_widget.cpp" line="293"/>
+        <location filename="../gui/chart_view_widget.cpp" line="321"/>
         <source>60 seconds</source>
         <translation>60 seconden</translation>
     </message>
@@ -175,8 +175,8 @@
 <context>
     <name>Common.Search</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="477"/>
-        <location filename="../gui/system_service_table_view.cpp" line="456"/>
+        <location filename="../gui/process_table_view.cpp" line="493"/>
+        <location filename="../gui/system_service_table_view.cpp" line="476"/>
         <source>No search results</source>
         <translation>Geen zoekresultaat</translation>
     </message>
@@ -184,7 +184,7 @@
 <context>
     <name>CompactCpuMonitor</name>
     <message>
-        <location filename="../compact_cpu_monitor.cpp" line="87"/>
+        <location filename="../compact_cpu_monitor.cpp" line="89"/>
         <source>Details</source>
         <translation>Informatie</translation>
     </message>
@@ -192,7 +192,7 @@
 <context>
     <name>CpuMonitor</name>
     <message>
-        <location filename="../cpu_monitor.cpp" line="70"/>
+        <location filename="../cpu_monitor.cpp" line="72"/>
         <source>Details</source>
         <translation>Informatie</translation>
     </message>
@@ -439,67 +439,67 @@
 <context>
     <name>DeailTableModel</name>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="62"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="67"/>
         <source>Used</source>
         <translation>Gebruikt</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="64"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="69"/>
         <source>Available</source>
         <translation>Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="68"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="73"/>
         <source>Shared</source>
         <translation>Gedeeld</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="70"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="75"/>
         <source>Cached</source>
         <translation>Gecachet</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="74"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="79"/>
         <source>Buffers</source>
         <translation>Buffers</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="76"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="81"/>
         <source>Cached swap</source>
         <translation>Gecachet wisselgeheugen</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="80"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="85"/>
         <source>Active</source>
         <translation>Actief</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="82"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="87"/>
         <source>Inactive</source>
         <translation>Inactief</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="86"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="91"/>
         <source>Dirty</source>
         <translation>Dirty</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="88"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="93"/>
         <source>Mapped</source>
         <translation>Toegewezen</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="92"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="97"/>
         <source>Total swap</source>
         <translation>Totaal wisselgeheugen</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="94"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="99"/>
         <source>Free swap</source>
         <translation>Vrij wisselgeheugen</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="98"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="103"/>
         <source>Slab</source>
         <translation>Model</translation>
     </message>
@@ -507,72 +507,72 @@
 <context>
     <name>DeailTableModelBlock</name>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="64"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="70"/>
         <source>Model</source>
         <translation>Model</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="66"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
         <source>Read speed</source>
         <translation>Leessnelheid</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="70"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
         <source>Write speed</source>
         <translation>Schrijfsnelheid</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
         <source>Capacity</source>
         <translation>Capaciteit</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
         <source>Sectors read</source>
         <translation>Uitgelezen sectoren</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads/s</source>
         <translation>Uitgelezen/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
         <source>Sectors read/s</source>
         <translation>Uitgelezen sectoren/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Reads merged/s</source>
         <translation>Uitgelezen+samengevoegd/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Sectors written</source>
         <translation>Weggeschreven sectoren</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes completed </source>
         <translation>Voltooide wegschrijvingen</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Writes merged</source>
         <translation>Samengevoegde wegschrijvingen</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes/s</source>
         <translation>Weggeschreven/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="106"/>
         <source>Sectors written/s</source>
         <translation>Weggeschreven sectoren/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="108"/>
         <source>Writes merged/s</source>
         <translation>Samengevoegde wegschrijvingen/s</translation>
     </message>
@@ -580,7 +580,7 @@
 <context>
     <name>Error.Dialog</name>
     <message>
-        <location filename="../gui/dialog/error_dialog.cpp" line="68"/>
+        <location filename="../gui/dialog/error_dialog.cpp" line="73"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Oké</translation>
@@ -589,12 +589,12 @@
 <context>
     <name>Help.Shortcut.System</name>
     <message>
-        <location filename="../common/common.cpp" line="28"/>
+        <location filename="../common/common.cpp" line="32"/>
         <source>System</source>
         <translation>Systeem</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="34"/>
+        <location filename="../common/common.cpp" line="38"/>
         <source>Display shortcuts</source>
         <translation>Sneltoetsen tonen</translation>
     </message>
@@ -602,50 +602,50 @@
 <context>
     <name>Kill.Process.Dialog</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="166"/>
+        <location filename="../gui/process_table_view.cpp" line="173"/>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
 Weet je zeker dat je wilt doorgaan?</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="510"/>
-        <location filename="../gui/process_table_view.cpp" line="165"/>
-        <location filename="../gui/process_table_view.cpp" line="366"/>
+        <location filename="../gui/process_page_widget.cpp" line="530"/>
+        <location filename="../gui/process_table_view.cpp" line="172"/>
+        <location filename="../gui/process_table_view.cpp" line="379"/>
         <source>End process</source>
         <translation>Proces beëindigen</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="367"/>
+        <location filename="../gui/process_table_view.cpp" line="380"/>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Het beëindigen van dit proces kan gegevensverlies veroorzaken.
 Weet je zeker dat je wilt doorgaan?</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="511"/>
+        <location filename="../gui/process_page_widget.cpp" line="531"/>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Het beëindigen van dit programma kan gegevensverlies veroorzaken.
 Weet je zeker dat je door wilt gaan?</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="519"/>
-        <location filename="../gui/process_table_view.cpp" line="172"/>
-        <location filename="../gui/process_table_view.cpp" line="374"/>
+        <location filename="../gui/process_page_widget.cpp" line="539"/>
+        <location filename="../gui/process_table_view.cpp" line="179"/>
+        <location filename="../gui/process_table_view.cpp" line="387"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="520"/>
-        <location filename="../gui/process_table_view.cpp" line="375"/>
+        <location filename="../gui/process_page_widget.cpp" line="540"/>
+        <location filename="../gui/process_table_view.cpp" line="388"/>
         <source>Force End</source>
         <comment>button</comment>
         <translation>Geforceerd afsluiten</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="173"/>
+        <location filename="../gui/process_table_view.cpp" line="180"/>
         <source>End</source>
         <comment>button</comment>
         <translation>Beëindigen</translation>
@@ -654,7 +654,7 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Logout</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="299"/>
+        <location filename="../gui/accounts_widget.cpp" line="311"/>
         <source>Logout</source>
         <translation>Afmelden</translation>
     </message>
@@ -662,7 +662,7 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.cpp" line="172"/>
+        <location filename="../gui/main_window.cpp" line="181"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
@@ -670,7 +670,7 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>MemStatViewWidget</name>
     <message>
-        <location filename="../gui/mem_stat_view_widget.cpp" line="47"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="52"/>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
@@ -817,17 +817,17 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
-        <location filename="../gui/process_attribute_dialog.cpp" line="140"/>
+        <location filename="../gui/process_attribute_dialog.cpp" line="143"/>
         <source>Command line</source>
         <translation>Opdrachtregel</translation>
     </message>
     <message>
-        <location filename="../gui/process_attribute_dialog.cpp" line="145"/>
+        <location filename="../gui/process_attribute_dialog.cpp" line="148"/>
         <source>Start time</source>
         <translation>Starttijd</translation>
     </message>
     <message>
-        <location filename="../gui/process_attribute_dialog.cpp" line="135"/>
+        <location filename="../gui/process_attribute_dialog.cpp" line="138"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
@@ -835,7 +835,7 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
-        <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="146"/>
+        <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="152"/>
         <source>Click the application you want to end</source>
         <translation>Klik op het programma dat je wilt beëindigen</translation>
     </message>
@@ -843,16 +843,16 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Graph.Title</name>
     <message>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="144"/>
-        <location filename="../gui/mem_detail_view_widget.cpp" line="22"/>
-        <location filename="../gui/mem_stat_view_widget.cpp" line="97"/>
-        <location filename="../memory_monitor.cpp" line="163"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="183"/>
+        <location filename="../gui/mem_detail_view_widget.cpp" line="25"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="107"/>
+        <location filename="../memory_monitor.cpp" line="177"/>
         <source>Memory</source>
         <translation>Geheugen</translation>
     </message>
     <message>
-        <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
-        <location filename="../gui/netif_item_view_widget.cpp" line="115"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="95"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="121"/>
         <source>Receive</source>
         <translation>Ontvangen</translation>
     </message>
@@ -860,85 +860,85 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Graph.View</name>
     <message>
-        <location filename="../compact_cpu_monitor.cpp" line="220"/>
-        <location filename="../cpu_monitor.cpp" line="216"/>
-        <location filename="../cpu_monitor.cpp" line="225"/>
-        <location filename="../gui/cpu_detail_widget.cpp" line="352"/>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="143"/>
+        <location filename="../compact_cpu_monitor.cpp" line="233"/>
+        <location filename="../cpu_monitor.cpp" line="233"/>
+        <location filename="../cpu_monitor.cpp" line="242"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="371"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="182"/>
         <source>CPU</source>
         <translation>Processor</translation>
     </message>
     <message>
-        <location filename="../compact_disk_monitor.cpp" line="145"/>
+        <location filename="../compact_disk_monitor.cpp" line="153"/>
         <source>Disk read</source>
         <translation>Schijfuitlezing</translation>
     </message>
     <message>
-        <location filename="../compact_disk_monitor.cpp" line="146"/>
+        <location filename="../compact_disk_monitor.cpp" line="154"/>
         <source>Disk write</source>
         <translation>Schijfwegschrijving</translation>
     </message>
     <message>
-        <location filename="../compact_memory_monitor.cpp" line="176"/>
-        <location filename="../memory_monitor.cpp" line="189"/>
+        <location filename="../compact_memory_monitor.cpp" line="191"/>
+        <location filename="../memory_monitor.cpp" line="203"/>
         <source>Memory</source>
         <translation>Geheugen</translation>
     </message>
     <message>
-        <location filename="../compact_memory_monitor.cpp" line="187"/>
-        <location filename="../compact_memory_monitor.cpp" line="193"/>
-        <location filename="../gui/mem_stat_view_widget.cpp" line="105"/>
-        <location filename="../memory_monitor.cpp" line="199"/>
-        <location filename="../memory_monitor.cpp" line="205"/>
+        <location filename="../compact_memory_monitor.cpp" line="203"/>
+        <location filename="../compact_memory_monitor.cpp" line="210"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="115"/>
+        <location filename="../memory_monitor.cpp" line="214"/>
+        <location filename="../memory_monitor.cpp" line="221"/>
         <source>Swap</source>
         <translation>Wisselgeheugen</translation>
     </message>
     <message>
-        <location filename="../compact_memory_monitor.cpp" line="188"/>
-        <location filename="../memory_monitor.cpp" line="200"/>
+        <location filename="../compact_memory_monitor.cpp" line="204"/>
+        <location filename="../memory_monitor.cpp" line="215"/>
         <source>Not enabled</source>
         <translation>Niet ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="152"/>
-        <location filename="../network_monitor.cpp" line="205"/>
+        <location filename="../compact_network_monitor.cpp" line="158"/>
+        <location filename="../network_monitor.cpp" line="216"/>
         <source>Download</source>
         <translation>Downloaden</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="157"/>
-        <location filename="../network_monitor.cpp" line="210"/>
+        <location filename="../compact_network_monitor.cpp" line="163"/>
+        <location filename="../network_monitor.cpp" line="221"/>
         <source>Upload</source>
         <translation>Uploaden</translation>
     </message>
     <message>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="145"/>
-        <location filename="../gui/netif_detail_view_widget.cpp" line="25"/>
-        <location filename="../network_monitor.cpp" line="187"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="184"/>
+        <location filename="../gui/netif_detail_view_widget.cpp" line="28"/>
+        <location filename="../network_monitor.cpp" line="198"/>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="154"/>
-        <location filename="../network_monitor.cpp" line="207"/>
+        <location filename="../compact_network_monitor.cpp" line="160"/>
+        <location filename="../network_monitor.cpp" line="218"/>
         <source>Total Received</source>
         <translation>Totaal ontvangen</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="159"/>
-        <location filename="../network_monitor.cpp" line="212"/>
+        <location filename="../compact_network_monitor.cpp" line="165"/>
+        <location filename="../network_monitor.cpp" line="223"/>
         <source>Total Sent</source>
         <translation>Totaal verstuurd</translation>
     </message>
     <message>
-        <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
-        <location filename="../gui/netif_item_view_widget.cpp" line="124"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="104"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="130"/>
         <source>Send</source>
         <translation>Verstuurd</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="146"/>
+        <location filename="../gui/block_dev_detail_view_widget.cpp" line="21"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="185"/>
         <source>Disks</source>
         <translation>Schijven</translation>
     </message>
@@ -954,54 +954,54 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Priority</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="615"/>
-        <location filename="../process/process.cpp" line="54"/>
+        <location filename="../gui/process_table_view.cpp" line="633"/>
+        <location filename="../process/process.cpp" line="55"/>
         <source>Very high</source>
         <translation>Erg hoog</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="623"/>
-        <location filename="../process/process.cpp" line="55"/>
+        <location filename="../gui/process_table_view.cpp" line="641"/>
+        <location filename="../process/process.cpp" line="56"/>
         <source>High</source>
         <translation>Hoog</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="631"/>
-        <location filename="../process/process.cpp" line="56"/>
+        <location filename="../gui/process_table_view.cpp" line="649"/>
+        <location filename="../process/process.cpp" line="57"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="639"/>
-        <location filename="../process/process.cpp" line="57"/>
+        <location filename="../gui/process_table_view.cpp" line="657"/>
+        <location filename="../process/process.cpp" line="58"/>
         <source>Low</source>
         <translation>Laag</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="647"/>
-        <location filename="../process/process.cpp" line="58"/>
+        <location filename="../gui/process_table_view.cpp" line="665"/>
+        <location filename="../process/process.cpp" line="59"/>
         <source>Very low</source>
         <translation>Erg laag</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="655"/>
-        <location filename="../process/process.cpp" line="59"/>
+        <location filename="../gui/process_table_view.cpp" line="673"/>
+        <location filename="../process/process.cpp" line="60"/>
         <source>Custom</source>
         <translation>Aangepast</translation>
     </message>
     <message>
-        <location filename="../process/process.cpp" line="60"/>
+        <location filename="../process/process.cpp" line="61"/>
         <source>Invalid</source>
         <translation>Ongeldig</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="179"/>
+        <location filename="../process/process_db.cpp" line="199"/>
         <source>PID: %1, Error: [%2] %3</source>
         <translation>PID: %1, Foutmelding: [%2] %3</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="138"/>
-        <location filename="../process/process_db.cpp" line="176"/>
+        <location filename="../process/process_db.cpp" line="156"/>
+        <location filename="../process/process_db.cpp" line="196"/>
         <source>Failed to change process priority</source>
         <translation>Het aanpassen van de procesprioriteit is mislukt</translation>
     </message>
@@ -1027,32 +1027,32 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <location filename="../process/process_db.cpp" line="246"/>
+        <location filename="../process/process_db.cpp" line="267"/>
         <source>Failed to pause process</source>
         <translation>Het proces kan niet worden onderbroken</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="249"/>
+        <location filename="../process/process_db.cpp" line="270"/>
         <source>Failed to resume process</source>
         <translation>Het proces kan niet worden hervat</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="252"/>
+        <location filename="../process/process_db.cpp" line="273"/>
         <source>Failed to kill process</source>
         <translation>Het proces kan niet worden vernietigd</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="255"/>
+        <location filename="../process/process_db.cpp" line="276"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="311"/>
+        <location filename="../process/process_db.cpp" line="337"/>
         <source>Failed in sending signal to process</source>
         <translation>Er kan geen signaal worden verstuurd naar het proces</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="243"/>
+        <location filename="../process/process_db.cpp" line="264"/>
         <source>Failed to end process</source>
         <translation>Het proces kan niet worden beëindigd</translation>
     </message>
@@ -1068,19 +1068,19 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Table</name>
     <message>
-        <location filename="../model/process_table_model.cpp" line="240"/>
+        <location filename="../model/process_table_model.cpp" line="269"/>
         <source>No response</source>
         <translation>Geen antwoord</translation>
     </message>
     <message>
-        <location filename="../model/process_table_model.cpp" line="245"/>
+        <location filename="../model/process_table_model.cpp" line="275"/>
         <source>Suspend</source>
         <translation>Onderbreken</translation>
     </message>
     <message>
-        <location filename="../process/process_name.cpp" line="82"/>
-        <location filename="../process/process_name.cpp" line="89"/>
-        <location filename="../process/process_name.cpp" line="92"/>
+        <location filename="../process/process_name.cpp" line="90"/>
+        <location filename="../process/process_name.cpp" line="99"/>
+        <location filename="../process/process_name.cpp" line="104"/>
         <source>Tray</source>
         <translation>Systeemvak</translation>
     </message>
@@ -1088,42 +1088,42 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="662"/>
+        <location filename="../gui/process_table_view.cpp" line="680"/>
         <source>View command location</source>
         <translation>Opdrachtlocatie tonen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="79"/>
-        <location filename="../gui/process_table_view.cpp" line="666"/>
+        <location filename="../common/common.cpp" line="83"/>
+        <location filename="../gui/process_table_view.cpp" line="684"/>
         <source>Properties</source>
         <translation>Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="62"/>
-        <location filename="../gui/process_table_view.cpp" line="590"/>
+        <location filename="../common/common.cpp" line="66"/>
+        <location filename="../gui/process_table_view.cpp" line="608"/>
         <source>End process</source>
         <translation>Proces beëindigen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="74"/>
-        <location filename="../gui/process_table_view.cpp" line="602"/>
+        <location filename="../common/common.cpp" line="78"/>
+        <location filename="../gui/process_table_view.cpp" line="620"/>
         <source>Resume process</source>
         <translation>Proces hervatten</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="85"/>
-        <location filename="../gui/process_table_view.cpp" line="673"/>
+        <location filename="../common/common.cpp" line="89"/>
+        <location filename="../gui/process_table_view.cpp" line="691"/>
         <source>Kill process</source>
         <translation>Geforceerd beëindigen</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="609"/>
+        <location filename="../gui/process_table_view.cpp" line="627"/>
         <source>Change priority</source>
         <translation>Prioriteit aanpassen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="68"/>
-        <location filename="../gui/process_table_view.cpp" line="596"/>
+        <location filename="../common/common.cpp" line="72"/>
+        <location filename="../gui/process_table_view.cpp" line="614"/>
         <source>Suspend process</source>
         <translation>Proces onderbreken</translation>
     </message>
@@ -1131,18 +1131,18 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="1024"/>
+        <location filename="../gui/process_table_view.cpp" line="1052"/>
         <source>Custom Priority</source>
         <translation>Aangepaste prioriteit</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="1056"/>
+        <location filename="../gui/process_table_view.cpp" line="1085"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="1058"/>
+        <location filename="../gui/process_table_view.cpp" line="1087"/>
         <source>Change</source>
         <comment>button</comment>
         <translation>Aanpassen</translation>
@@ -1219,7 +1219,7 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../system/cpu_set.cpp" line="366"/>
+        <location filename="../system/cpu_set.cpp" line="426"/>
         <source>Not support</source>
         <translation>Niet ondersteund</translation>
     </message>
@@ -1262,12 +1262,12 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
-        <location filename="../service/service_manager.cpp" line="322"/>
+        <location filename="../service/service_manager.cpp" line="342"/>
         <source>Failed to set service startup type</source>
         <translation>Kan het soort opstart niet instellen</translation>
     </message>
     <message>
-        <location filename="../service/service_manager.cpp" line="388"/>
+        <location filename="../service/service_manager.cpp" line="408"/>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
         <translation>Foutmelding: kan het soort opstart niet instellen wegens een gecrasht onderliggend proces.</translation>
     </message>
@@ -1275,19 +1275,19 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="150"/>
-        <location filename="../gui/system_service_table_view.cpp" line="216"/>
-        <location filename="../gui/system_service_table_view.cpp" line="282"/>
+        <location filename="../gui/system_service_table_view.cpp" line="157"/>
+        <location filename="../gui/system_service_table_view.cpp" line="224"/>
+        <location filename="../gui/system_service_table_view.cpp" line="292"/>
         <source>Service instance name</source>
         <translation>Naam van dienstproces</translation>
     </message>
     <message>
-        <location filename="../gui/service_name_sub_input_dialog.cpp" line="34"/>
+        <location filename="../gui/service_name_sub_input_dialog.cpp" line="38"/>
         <source>OK</source>
         <translation>Oké</translation>
     </message>
     <message>
-        <location filename="../gui/service_name_sub_input_dialog.cpp" line="35"/>
+        <location filename="../gui/service_name_sub_input_dialog.cpp" line="39"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -1295,41 +1295,41 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
-        <location filename="../common/common.cpp" line="114"/>
-        <location filename="../gui/system_service_table_view.cpp" line="541"/>
+        <location filename="../common/common.cpp" line="118"/>
+        <location filename="../gui/system_service_table_view.cpp" line="562"/>
         <source>Refresh</source>
         <translation>Verversen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="99"/>
-        <location filename="../gui/system_service_table_view.cpp" line="521"/>
+        <location filename="../common/common.cpp" line="103"/>
+        <location filename="../gui/system_service_table_view.cpp" line="542"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="104"/>
-        <location filename="../gui/system_service_table_view.cpp" line="526"/>
+        <location filename="../common/common.cpp" line="108"/>
+        <location filename="../gui/system_service_table_view.cpp" line="547"/>
         <source>Stop</source>
         <translation>Stoppen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="109"/>
-        <location filename="../gui/system_service_table_view.cpp" line="531"/>
+        <location filename="../common/common.cpp" line="113"/>
+        <location filename="../gui/system_service_table_view.cpp" line="552"/>
         <source>Restart</source>
         <translation>Herstarten</translation>
     </message>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="537"/>
+        <location filename="../gui/system_service_table_view.cpp" line="558"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="538"/>
+        <location filename="../gui/system_service_table_view.cpp" line="559"/>
         <source>Manual</source>
         <translation>Handmatig</translation>
     </message>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="536"/>
+        <location filename="../gui/system_service_table_view.cpp" line="557"/>
         <source>Startup type</source>
         <translation>Soort opstart</translation>
     </message>
@@ -1380,18 +1380,18 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="124"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="132"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
         <translation>(aanpasbaar)</translation>
     </message>
     <message>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="371"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
         <translation>Tussen de %1-%2</translation>
     </message>
@@ -1399,23 +1399,23 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
-        <location filename="../common/common.cpp" line="55"/>
-        <location filename="../gui/main_window.cpp" line="122"/>
+        <location filename="../common/common.cpp" line="59"/>
+        <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
         <translation>Programma geforceerd beëindigen</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="140"/>
+        <location filename="../gui/main_window.cpp" line="147"/>
         <source>Expand</source>
         <translation>Uitklappen</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="143"/>
+        <location filename="../gui/main_window.cpp" line="150"/>
         <source>Compact</source>
         <translation>Compact</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="135"/>
+        <location filename="../gui/main_window.cpp" line="142"/>
         <source>View</source>
         <translation>Weergave</translation>
     </message>
@@ -1423,8 +1423,8 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Title.Bar.Search</name>
     <message>
-        <location filename="../common/common.cpp" line="40"/>
-        <location filename="../gui/toolbar.cpp" line="84"/>
+        <location filename="../common/common.cpp" line="44"/>
+        <location filename="../gui/toolbar.cpp" line="95"/>
         <source>Search</source>
         <translation>Zoeken</translation>
     </message>
@@ -1432,25 +1432,25 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
-        <location filename="../common/common.cpp" line="49"/>
-        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../common/common.cpp" line="53"/>
         <location filename="../gui/main_window.cpp" line="224"/>
-        <location filename="../gui/toolbar.cpp" line="43"/>
+        <location filename="../gui/main_window.cpp" line="235"/>
+        <location filename="../gui/toolbar.cpp" line="45"/>
         <source>Processes</source>
         <translation>Processen</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="94"/>
-        <location filename="../gui/main_window.cpp" line="213"/>
+        <location filename="../common/common.cpp" line="98"/>
         <location filename="../gui/main_window.cpp" line="224"/>
-        <location filename="../gui/main_window.cpp" line="234"/>
-        <location filename="../gui/toolbar.cpp" line="51"/>
+        <location filename="../gui/main_window.cpp" line="235"/>
+        <location filename="../gui/main_window.cpp" line="245"/>
+        <location filename="../gui/toolbar.cpp" line="53"/>
         <source>Services</source>
         <translation>Diensten</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="234"/>
-        <location filename="../gui/toolbar.cpp" line="58"/>
+        <location filename="../gui/main_window.cpp" line="245"/>
+        <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
@@ -1458,7 +1458,7 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>User.Account.Operation</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="97"/>
+        <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
         <translation>Accountinformatie bewerken</translation>
     </message>
@@ -1466,12 +1466,12 @@ Weet je zeker dat je door wilt gaan?</translation>
 <context>
     <name>User.Account.Type</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="145"/>
+        <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Administrator</source>
         <translation>Beheerder</translation>
     </message>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="145"/>
+        <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Standard User</source>
         <translation>Standaardgebruiker</translation>
     </message>
