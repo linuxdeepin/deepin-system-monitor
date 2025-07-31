@@ -44,6 +44,8 @@ public://info
 
     QString maxFreq() const;
 
+    QString avgFreq() const;
+
     QString l1dCache() const;
 
     QString l1iCache() const;

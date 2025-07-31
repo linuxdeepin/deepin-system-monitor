@@ -4,12 +4,13 @@
 <context>
     <name>App.About</name>
     <message>
-        <location filename="../main.cpp" line="92"/>
+        <location filename="../main.cpp" line="101"/>
+        <location filename="../main.cpp" line="105"/>
         <source>System Monitor</source>
         <translation>Sistema Monitora</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="82"/>
+        <location filename="../main.cpp" line="91"/>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
         <translation>Sistema Monitora da herramienta batetik sistema karga real-time, prozesuak eta zerbitzuak aztertzen eta kontrolatzen dira zure sistemaan.</translation>
     </message>
@@ -17,17 +18,19 @@
 <context>
     <name>BaseDetailViewWidget</name>
     <message>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="28"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="29"/>
         <source>Hide details</source>
         <translation>Detallean egokia</translation>
     </message>
     <message>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="39"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="40"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="52"/>
         <source>Overall utilization</source>
         <translation>Karga orokorra</translation>
     </message>
     <message>
-        <location filename="../gui/base/base_detail_view_widget.cpp" line="42"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="43"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="54"/>
         <source>Individual utilization</source>
         <translation>Karga individuala</translation>
     </message>
@@ -35,12 +38,12 @@
 <context>
     <name>BlockDevItemWidget</name>
     <message>
-        <location filename="../gui/block_dev_item_widget.cpp" line="138"/>
+        <location filename="../gui/block_dev_item_widget.cpp" line="154"/>
         <source>Read</source>
         <translation>Irakurri</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_item_widget.cpp" line="142"/>
+        <location filename="../gui/block_dev_item_widget.cpp" line="158"/>
         <source>Write</source>
         <translation>Idatzi</translation>
     </message>
@@ -48,7 +51,8 @@
 <context>
     <name>CPUDetailGrapTableItem</name>
     <message>
-        <location filename="../gui/cpu_detail_widget.cpp" line="154"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="168"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="285"/>
         <source>60 seconds</source>
         <translation>60 segundo</translation>
     </message>
@@ -56,7 +60,7 @@
 <context>
     <name>CPUInfoModel</name>
     <message>
-        <location filename="../model/cpu_info_model.cpp" line="43"/>
+        <location filename="../model/cpu_info_model.cpp" line="49"/>
         <source>%1 days %2 hours %3 minutes</source>
         <translation>%1 egun %2 ordu %3 minuto</translation>
     </message>
@@ -70,13 +74,13 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Current frequency</source>
-        <translation>Frenketza orokorra</translation>
+        <source>Average frequency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
-        <source>Frequency</source>
-        <translation>Frenketza</translation>
+        <source>Max frequency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -157,7 +161,7 @@
 <context>
     <name>Cancel</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="298"/>
+        <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>
@@ -165,7 +169,7 @@
 <context>
     <name>ChartViewWidget</name>
     <message>
-        <location filename="../gui/chart_view_widget.cpp" line="293"/>
+        <location filename="../gui/chart_view_widget.cpp" line="321"/>
         <source>60 seconds</source>
         <translation>60 segundo</translation>
     </message>
@@ -173,7 +177,8 @@
 <context>
     <name>Common.Search</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="477"/>
+        <location filename="../gui/process_table_view.cpp" line="493"/>
+        <location filename="../gui/system_service_table_view.cpp" line="476"/>
         <source>No search results</source>
         <translation>Bilaketa emaitza ez da</translation>
     </message>
@@ -181,7 +186,7 @@
 <context>
     <name>CompactCpuMonitor</name>
     <message>
-        <location filename="../compact_cpu_monitor.cpp" line="87"/>
+        <location filename="../compact_cpu_monitor.cpp" line="89"/>
         <source>Details</source>
         <translation>Detallean</translation>
     </message>
@@ -189,7 +194,7 @@
 <context>
     <name>CpuMonitor</name>
     <message>
-        <location filename="../cpu_monitor.cpp" line="70"/>
+        <location filename="../cpu_monitor.cpp" line="72"/>
         <source>Details</source>
         <translation>Detallean</translation>
     </message>
@@ -413,6 +418,7 @@
     <name>DBusAlarmNotify</name>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
+        <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
         <translation>Kontsulta</translation>
     </message>
@@ -435,67 +441,67 @@
 <context>
     <name>DeailTableModel</name>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="62"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="67"/>
         <source>Used</source>
         <translation>Erabili</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="64"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="69"/>
         <source>Available</source>
         <translation>Disponibila</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="68"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="73"/>
         <source>Shared</source>
         <translation>Zaharrak</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="70"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="75"/>
         <source>Cached</source>
         <translation>Cache</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="74"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="79"/>
         <source>Buffers</source>
         <translation>Buffer</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="76"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="81"/>
         <source>Cached swap</source>
         <translation>Swap cache</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="80"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="85"/>
         <source>Active</source>
         <translation type="unfinished">Active</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="82"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="87"/>
         <source>Inactive</source>
         <translation>Inaktibo</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="86"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="91"/>
         <source>Dirty</source>
         <translation>Mendekoa</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="88"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="93"/>
         <source>Mapped</source>
         <translation>Mapatuta</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="92"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="97"/>
         <source>Total swap</source>
         <translation>Swap osoa</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="94"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="99"/>
         <source>Free swap</source>
         <translation>Swap libera</translation>
     </message>
     <message>
-        <location filename="../gui/mem_summary_view_widget.cpp" line="98"/>
+        <location filename="../gui/mem_summary_view_widget.cpp" line="103"/>
         <source>Slab</source>
         <translation>Slab</translation>
     </message>
@@ -503,72 +509,72 @@
 <context>
     <name>DeailTableModelBlock</name>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="64"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="70"/>
         <source>Model</source>
         <translation>Modeloa</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="66"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
         <source>Read speed</source>
         <translation>Lortze speedoak</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="70"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
         <source>Write speed</source>
         <translation>Idazte speedoak</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="72"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
         <source>Capacity</source>
         <translation>Kapazitatea</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="76"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
         <source>Sectors read</source>
         <translation>Sektoreak lortze</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="78"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads/s</source>
         <translation>Ler/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="82"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
         <source>Sectors read/s</source>
         <translation>Sektorek irakurri/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Reads merged/s</source>
         <translation>Lerak merged/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
         <source>Sectors written</source>
         <translation>Sektorek idatzi</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes completed </source>
         <translation>Idatziak amaitu</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Writes merged</source>
         <translation>Idatziak merged</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes/s</source>
         <translation>Idatzi/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="106"/>
         <source>Sectors written/s</source>
         <translation>Sektorek idatzi/s</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
+        <location filename="../gui/block_dev_summary_view_widget.cpp" line="108"/>
         <source>Writes merged/s</source>
         <translation>Idatziak merged/s</translation>
     </message>
@@ -576,7 +582,7 @@
 <context>
     <name>Error.Dialog</name>
     <message>
-        <location filename="../gui/dialog/error_dialog.cpp" line="68"/>
+        <location filename="../gui/dialog/error_dialog.cpp" line="73"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished">OK</translation>
@@ -585,12 +591,12 @@
 <context>
     <name>Help.Shortcut.System</name>
     <message>
-        <location filename="../common/common.cpp" line="28"/>
+        <location filename="../common/common.cpp" line="32"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="34"/>
+        <location filename="../common/common.cpp" line="38"/>
         <source>Display shortcuts</source>
         <translation>Sakaturiak erakutsi</translation>
     </message>
@@ -598,45 +604,50 @@
 <context>
     <name>Kill.Process.Dialog</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="166"/>
+        <location filename="../gui/process_table_view.cpp" line="173"/>
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Prozesu hau amaitzeak datu galdeak izan daiteke.
 Seguru zaitez hurrengoa jarri nahi duzula?</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="510"/>
+        <location filename="../gui/process_page_widget.cpp" line="530"/>
+        <location filename="../gui/process_table_view.cpp" line="172"/>
+        <location filename="../gui/process_table_view.cpp" line="379"/>
         <source>End process</source>
         <translation>Prozesu amaitu</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="367"/>
+        <location filename="../gui/process_table_view.cpp" line="380"/>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Prozesu hau eraginkorra amaitzeak datu galdeak izan daiteke.
 Seguru zaitez hurrengoa jarri nahi duzula?</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="511"/>
+        <location filename="../gui/process_page_widget.cpp" line="531"/>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Aplikazio hau eraginkorra amaitzeak datu galdeak izan daiteke.
 Seguru zaitez hurrengoa jarri nahi duzula?</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="519"/>
+        <location filename="../gui/process_page_widget.cpp" line="539"/>
+        <location filename="../gui/process_table_view.cpp" line="179"/>
+        <location filename="../gui/process_table_view.cpp" line="387"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">Cancel</translation>
     </message>
     <message>
-        <location filename="../gui/process_page_widget.cpp" line="520"/>
+        <location filename="../gui/process_page_widget.cpp" line="540"/>
+        <location filename="../gui/process_table_view.cpp" line="388"/>
         <source>Force End</source>
         <comment>button</comment>
         <translation type="unfinished">Force End</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="173"/>
+        <location filename="../gui/process_table_view.cpp" line="180"/>
         <source>End</source>
         <comment>button</comment>
         <translation type="unfinished">End</translation>
@@ -645,7 +656,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Logout</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="299"/>
+        <location filename="../gui/accounts_widget.cpp" line="311"/>
         <source>Logout</source>
         <translation>Logout</translation>
     </message>
@@ -653,7 +664,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../gui/main_window.cpp" line="172"/>
+        <location filename="../gui/main_window.cpp" line="181"/>
         <source>Settings</source>
         <translation>Ezarpenak</translation>
     </message>
@@ -661,7 +672,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>MemStatViewWidget</name>
     <message>
-        <location filename="../gui/mem_stat_view_widget.cpp" line="47"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="52"/>
         <source>Size</source>
         <translation>Neurria</translation>
     </message>
@@ -670,6 +681,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>IP address:</source>
         <translation>IP helbidea:</translation>
     </message>
@@ -788,11 +800,13 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
@@ -805,17 +819,17 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Attributes.Dialog</name>
     <message>
-        <location filename="../gui/process_attribute_dialog.cpp" line="140"/>
+        <location filename="../gui/process_attribute_dialog.cpp" line="143"/>
         <source>Command line</source>
         <translation>Ordaintze lerroa</translation>
     </message>
     <message>
-        <location filename="../gui/process_attribute_dialog.cpp" line="145"/>
+        <location filename="../gui/process_attribute_dialog.cpp" line="148"/>
         <source>Start time</source>
         <translation>Hasiera denbora</translation>
     </message>
     <message>
-        <location filename="../gui/process_attribute_dialog.cpp" line="135"/>
+        <location filename="../gui/process_attribute_dialog.cpp" line="138"/>
         <source>Name</source>
         <translation>Izena</translation>
     </message>
@@ -823,7 +837,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Choose.Window.Dialog</name>
     <message>
-        <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="146"/>
+        <location filename="../gui/xwin_kill_preview_background_widget.cpp" line="152"/>
         <source>Click the application you want to end</source>
         <translation>Saiatu aplikazioa bukatu nahi duzun</translation>
     </message>
@@ -831,12 +845,16 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Graph.Title</name>
     <message>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="144"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="183"/>
+        <location filename="../gui/mem_detail_view_widget.cpp" line="25"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="107"/>
+        <location filename="../memory_monitor.cpp" line="177"/>
         <source>Memory</source>
         <translation>Hitzaren memoria</translation>
     </message>
     <message>
-        <location filename="../gui/netif_item_view_widget.cpp" line="89"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="95"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="121"/>
         <source>Receive</source>
         <translation>Jasotzen</translation>
     </message>
@@ -844,67 +862,85 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Graph.View</name>
     <message>
-        <location filename="../compact_cpu_monitor.cpp" line="220"/>
+        <location filename="../compact_cpu_monitor.cpp" line="233"/>
+        <location filename="../cpu_monitor.cpp" line="233"/>
+        <location filename="../cpu_monitor.cpp" line="242"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="371"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="182"/>
         <source>CPU</source>
         <translation>CPU</translation>
     </message>
     <message>
-        <location filename="../compact_disk_monitor.cpp" line="145"/>
+        <location filename="../compact_disk_monitor.cpp" line="153"/>
         <source>Disk read</source>
         <translation>Disko irakurketa</translation>
     </message>
     <message>
-        <location filename="../compact_disk_monitor.cpp" line="146"/>
+        <location filename="../compact_disk_monitor.cpp" line="154"/>
         <source>Disk write</source>
         <translation>Disko idazketa</translation>
     </message>
     <message>
-        <location filename="../compact_memory_monitor.cpp" line="176"/>
+        <location filename="../compact_memory_monitor.cpp" line="191"/>
+        <location filename="../memory_monitor.cpp" line="203"/>
         <source>Memory</source>
         <translation>Hitzaren memoria</translation>
     </message>
     <message>
-        <location filename="../compact_memory_monitor.cpp" line="187"/>
+        <location filename="../compact_memory_monitor.cpp" line="203"/>
+        <location filename="../compact_memory_monitor.cpp" line="210"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="115"/>
+        <location filename="../memory_monitor.cpp" line="214"/>
+        <location filename="../memory_monitor.cpp" line="221"/>
         <source>Swap</source>
         <translation>Swap</translation>
     </message>
     <message>
-        <location filename="../compact_memory_monitor.cpp" line="188"/>
+        <location filename="../compact_memory_monitor.cpp" line="204"/>
+        <location filename="../memory_monitor.cpp" line="215"/>
         <source>Not enabled</source>
         <translation>Gaituta ez da</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="152"/>
+        <location filename="../compact_network_monitor.cpp" line="158"/>
+        <location filename="../network_monitor.cpp" line="216"/>
         <source>Download</source>
         <translation>Jasotzen</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="157"/>
+        <location filename="../compact_network_monitor.cpp" line="163"/>
+        <location filename="../network_monitor.cpp" line="221"/>
         <source>Upload</source>
         <translation>Iritzia</translation>
     </message>
     <message>
-        <location filename="../gui/detail_view_stacked_widget.cpp" line="145"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="184"/>
+        <location filename="../gui/netif_detail_view_widget.cpp" line="28"/>
+        <location filename="../network_monitor.cpp" line="198"/>
         <source>Network</source>
         <translation>Zarabidea</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="154"/>
+        <location filename="../compact_network_monitor.cpp" line="160"/>
+        <location filename="../network_monitor.cpp" line="218"/>
         <source>Total Received</source>
         <translation>Guztira jasotzen</translation>
     </message>
     <message>
-        <location filename="../compact_network_monitor.cpp" line="159"/>
+        <location filename="../compact_network_monitor.cpp" line="165"/>
+        <location filename="../network_monitor.cpp" line="223"/>
         <source>Total Sent</source>
         <translation>Guztira bidet</translation>
     </message>
     <message>
-        <location filename="../gui/netif_item_view_widget.cpp" line="98"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="104"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="130"/>
         <source>Send</source>
         <translation>Bidet</translation>
     </message>
     <message>
-        <location filename="../gui/block_dev_detail_view_widget.cpp" line="17"/>
+        <location filename="../gui/block_dev_detail_view_widget.cpp" line="21"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="185"/>
         <source>Disks</source>
         <translation>Diskoen</translation>
     </message>
@@ -920,47 +956,54 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Priority</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="615"/>
+        <location filename="../gui/process_table_view.cpp" line="633"/>
+        <location filename="../process/process.cpp" line="55"/>
         <source>Very high</source>
         <translation>Berezi altua</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="623"/>
+        <location filename="../gui/process_table_view.cpp" line="641"/>
+        <location filename="../process/process.cpp" line="56"/>
         <source>High</source>
         <translation>Altua</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="631"/>
+        <location filename="../gui/process_table_view.cpp" line="649"/>
+        <location filename="../process/process.cpp" line="57"/>
         <source>Normal</source>
         <translation>Normala</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="639"/>
+        <location filename="../gui/process_table_view.cpp" line="657"/>
+        <location filename="../process/process.cpp" line="58"/>
         <source>Low</source>
         <translation>Baxua</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="647"/>
+        <location filename="../gui/process_table_view.cpp" line="665"/>
+        <location filename="../process/process.cpp" line="59"/>
         <source>Very low</source>
         <translation>Berezi baxua</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="655"/>
+        <location filename="../gui/process_table_view.cpp" line="673"/>
+        <location filename="../process/process.cpp" line="60"/>
         <source>Custom</source>
         <translation>Erabiltzailearen</translation>
     </message>
     <message>
-        <location filename="../process/process.cpp" line="60"/>
+        <location filename="../process/process.cpp" line="61"/>
         <source>Invalid</source>
         <translation>Baliogabea</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="179"/>
+        <location filename="../process/process_db.cpp" line="199"/>
         <source>PID: %1, Error: [%2] %3</source>
         <translation>PID: %1, Errorea: [%2] %3</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="138"/>
+        <location filename="../process/process_db.cpp" line="156"/>
+        <location filename="../process/process_db.cpp" line="196"/>
         <source>Failed to change process priority</source>
         <translation>Prozesuaren prioritatea aldatzea huts egin du</translation>
     </message>
@@ -986,32 +1029,32 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Signal</name>
     <message>
-        <location filename="../process/process_db.cpp" line="246"/>
+        <location filename="../process/process_db.cpp" line="267"/>
         <source>Failed to pause process</source>
         <translation>Prozesuaren pausatzea huts egin du</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="249"/>
+        <location filename="../process/process_db.cpp" line="270"/>
         <source>Failed to resume process</source>
         <translation>Prozesuaren berresumatzea huts egin du</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="252"/>
+        <location filename="../process/process_db.cpp" line="273"/>
         <source>Failed to kill process</source>
         <translation>Prozesuaren zaharratzea huts egin du</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="255"/>
+        <location filename="../process/process_db.cpp" line="276"/>
         <source>Unknown error</source>
         <translation>Ezezaguna errorea</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="311"/>
+        <location filename="../process/process_db.cpp" line="337"/>
         <source>Failed in sending signal to process</source>
         <translation>Prozesuari signal bidetzean huts egin du</translation>
     </message>
     <message>
-        <location filename="../process/process_db.cpp" line="243"/>
+        <location filename="../process/process_db.cpp" line="264"/>
         <source>Failed to end process</source>
         <translation>Prozesuaren amaitzea huts egin du</translation>
     </message>
@@ -1027,17 +1070,19 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Table</name>
     <message>
-        <location filename="../model/process_table_model.cpp" line="240"/>
+        <location filename="../model/process_table_model.cpp" line="269"/>
         <source>No response</source>
         <translation>No response</translation>
     </message>
     <message>
-        <location filename="../model/process_table_model.cpp" line="245"/>
+        <location filename="../model/process_table_model.cpp" line="275"/>
         <source>Suspend</source>
         <translation>Pausatu</translation>
     </message>
     <message>
-        <location filename="../process/process_name.cpp" line="82"/>
+        <location filename="../process/process_name.cpp" line="90"/>
+        <location filename="../process/process_name.cpp" line="99"/>
+        <location filename="../process/process_name.cpp" line="104"/>
         <source>Tray</source>
         <translation>Tray</translation>
     </message>
@@ -1045,37 +1090,42 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Table.Context.Menu</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="662"/>
+        <location filename="../gui/process_table_view.cpp" line="680"/>
         <source>View command location</source>
         <translation>Komentatu ordenearen kokalekua</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="79"/>
+        <location filename="../common/common.cpp" line="83"/>
+        <location filename="../gui/process_table_view.cpp" line="684"/>
         <source>Properties</source>
         <translation>Propietateak</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="62"/>
+        <location filename="../common/common.cpp" line="66"/>
+        <location filename="../gui/process_table_view.cpp" line="608"/>
         <source>End process</source>
         <translation>Prozesuaren amaitzea</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="74"/>
+        <location filename="../common/common.cpp" line="78"/>
+        <location filename="../gui/process_table_view.cpp" line="620"/>
         <source>Resume process</source>
         <translation>Prozesuaren berresumatzea</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="85"/>
+        <location filename="../common/common.cpp" line="89"/>
+        <location filename="../gui/process_table_view.cpp" line="691"/>
         <source>Kill process</source>
         <translation>Matxatza procesua</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="609"/>
+        <location filename="../gui/process_table_view.cpp" line="627"/>
         <source>Change priority</source>
         <translation>Aldatu prioritatea</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="68"/>
+        <location filename="../common/common.cpp" line="72"/>
+        <location filename="../gui/process_table_view.cpp" line="614"/>
         <source>Suspend process</source>
         <translation>Pausatu procesua</translation>
     </message>
@@ -1083,18 +1133,18 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Process.Table.Custom.Priority.Dialog</name>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="1024"/>
+        <location filename="../gui/process_table_view.cpp" line="1052"/>
         <source>Custom Priority</source>
         <translation>Prioritate pertsonalizatua</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="1056"/>
+        <location filename="../gui/process_table_view.cpp" line="1085"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">Cancel</translation>
     </message>
     <message>
-        <location filename="../gui/process_table_view.cpp" line="1058"/>
+        <location filename="../gui/process_table_view.cpp" line="1087"/>
         <source>Change</source>
         <comment>button</comment>
         <translation type="unfinished">Change</translation>
@@ -1171,7 +1221,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../system/cpu_set.cpp" line="366"/>
+        <location filename="../system/cpu_set.cpp" line="426"/>
         <source>Not support</source>
         <translation>Ez da onartzen</translation>
     </message>
@@ -1214,12 +1264,12 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Service.Action.Set.Startup.Mode</name>
     <message>
-        <location filename="../service/service_manager.cpp" line="322"/>
+        <location filename="../service/service_manager.cpp" line="342"/>
         <source>Failed to set service startup type</source>
         <translation>Ezin izan da zerbitzuaren hasieratze modua ezarri</translation>
     </message>
     <message>
-        <location filename="../service/service_manager.cpp" line="388"/>
+        <location filename="../service/service_manager.cpp" line="408"/>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
         <translation>Errorea: Ezin izan da zerbitzuaren hasieratze modua ezarri, sub-prozesua kaltetzeagatik.</translation>
     </message>
@@ -1227,17 +1277,19 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Service.Instance.Name.Dialog</name>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="150"/>
+        <location filename="../gui/system_service_table_view.cpp" line="157"/>
+        <location filename="../gui/system_service_table_view.cpp" line="224"/>
+        <location filename="../gui/system_service_table_view.cpp" line="292"/>
         <source>Service instance name</source>
         <translation>Zerbitzu instantzia izena</translation>
     </message>
     <message>
-        <location filename="../gui/service_name_sub_input_dialog.cpp" line="34"/>
+        <location filename="../gui/service_name_sub_input_dialog.cpp" line="38"/>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
     <message>
-        <location filename="../gui/service_name_sub_input_dialog.cpp" line="35"/>
+        <location filename="../gui/service_name_sub_input_dialog.cpp" line="39"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>
@@ -1245,37 +1297,41 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Service.Table.Context.Menu</name>
     <message>
-        <location filename="../common/common.cpp" line="114"/>
+        <location filename="../common/common.cpp" line="118"/>
+        <location filename="../gui/system_service_table_view.cpp" line="562"/>
         <source>Refresh</source>
         <translation>Berriztu</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="99"/>
+        <location filename="../common/common.cpp" line="103"/>
+        <location filename="../gui/system_service_table_view.cpp" line="542"/>
         <source>Start</source>
         <translation>Hasieratu</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="104"/>
+        <location filename="../common/common.cpp" line="108"/>
+        <location filename="../gui/system_service_table_view.cpp" line="547"/>
         <source>Stop</source>
         <translation>Berretze</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="109"/>
+        <location filename="../common/common.cpp" line="113"/>
+        <location filename="../gui/system_service_table_view.cpp" line="552"/>
         <source>Restart</source>
         <translation>Berrabiarra</translation>
     </message>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="537"/>
+        <location filename="../gui/system_service_table_view.cpp" line="558"/>
         <source>Auto</source>
         <translation>Automatikoa</translation>
     </message>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="538"/>
+        <location filename="../gui/system_service_table_view.cpp" line="559"/>
         <source>Manual</source>
         <translation>Manuala</translation>
     </message>
     <message>
-        <location filename="../gui/system_service_table_view.cpp" line="536"/>
+        <location filename="../gui/system_service_table_view.cpp" line="557"/>
         <source>Startup type</source>
         <translation>Abiaraztea mota</translation>
     </message>
@@ -1326,17 +1382,18 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>SystemProtectionSetting</name>
     <message>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="124"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="132"/>
         <source>Settings</source>
         <translation>Ezarpenak</translation>
     </message>
     <message>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="156"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
         <translation>(Aldaketa egitea posa</translation>
     </message>
     <message>
-        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="263"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
         <translation>Barrua: %1-%2</translation>
     </message>
@@ -1344,22 +1401,23 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Title.Bar.Context.Menu</name>
     <message>
-        <location filename="../common/common.cpp" line="55"/>
+        <location filename="../common/common.cpp" line="59"/>
+        <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
         <translation>Zorrotz amaieratu aplikazioa</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="140"/>
+        <location filename="../gui/main_window.cpp" line="147"/>
         <source>Expand</source>
         <translation>Hargatze</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="143"/>
+        <location filename="../gui/main_window.cpp" line="150"/>
         <source>Compact</source>
         <translation>Kompaktua</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="135"/>
+        <location filename="../gui/main_window.cpp" line="142"/>
         <source>View</source>
         <translation>Ikusi</translation>
     </message>
@@ -1367,7 +1425,8 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Title.Bar.Search</name>
     <message>
-        <location filename="../common/common.cpp" line="40"/>
+        <location filename="../common/common.cpp" line="44"/>
+        <location filename="../gui/toolbar.cpp" line="95"/>
         <source>Search</source>
         <translation>Bilatu</translation>
     </message>
@@ -1375,17 +1434,25 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>Title.Bar.Switch</name>
     <message>
-        <location filename="../common/common.cpp" line="49"/>
+        <location filename="../common/common.cpp" line="53"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="235"/>
+        <location filename="../gui/toolbar.cpp" line="45"/>
         <source>Processes</source>
         <translation>Prozesuak</translation>
     </message>
     <message>
-        <location filename="../common/common.cpp" line="94"/>
+        <location filename="../common/common.cpp" line="98"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="235"/>
+        <location filename="../gui/main_window.cpp" line="245"/>
+        <location filename="../gui/toolbar.cpp" line="53"/>
         <source>Services</source>
         <translation>Servizioak</translation>
     </message>
     <message>
-        <location filename="../gui/main_window.cpp" line="234"/>
+        <location filename="../gui/main_window.cpp" line="245"/>
+        <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
         <translation>Erabiltzaileak</translation>
     </message>
@@ -1393,7 +1460,7 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>User.Account.Operation</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="97"/>
+        <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
         <translation>Aukera kontu informazioa</translation>
     </message>
@@ -1401,12 +1468,12 @@ Seguru zaitez hurrengoa jarri nahi duzula?</translation>
 <context>
     <name>User.Account.Type</name>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="145"/>
+        <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Administrator</source>
         <translation>Administratzailea</translation>
     </message>
     <message>
-        <location filename="../gui/accounts_widget.cpp" line="145"/>
+        <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Standard User</source>
         <translation>Estandarra erabiltzailea</translation>
     </message>
