@@ -100,6 +100,41 @@ static float max_avaliable_cur_freq(struct lscpu_cxt *cxt, const struct lscpu_cp
     return res;
 }
 
+// 取所有CPU频率有效值中平均值
+static float avg_avaliable_cur_freq(struct lscpu_cxt *cxt, const struct lscpu_cputype *ct)
+{
+    qCDebug(app) << "Getting average available current frequency";
+    if (!cxt) {
+        qCWarning(app) << "lscpu_cxt is null";
+        return 0.0f;
+    }
+
+    size_t i;
+    float sum = 0.0f;
+    size_t count = 0;
+
+    for (i = 0; i < cxt->npossibles; i++) {
+        struct lscpu_cpu *cpu = cxt->cpus[i];
+
+        if (!cpu || cpu->type != ct || !is_cpu_present(cxt, cpu))
+            continue;
+        if (cpu->mhz_cur_freq <= 0.0f)
+            continue;
+
+        sum += cpu->mhz_cur_freq;
+        count++;
+    }
+
+    if (count == 0) {
+        qCDebug(app) << "No valid frequencies found for average calculation";
+        return 0.0f;
+    }
+
+    float avg = sum / count;
+    qCDebug(app) << "Average available frequency is" << avg << "from" << count << "CPUs";
+    return avg;
+}
+
 static void lscpu_free_context(struct lscpu_cxt *cxt)
 {
     size_t i;
@@ -416,6 +451,16 @@ QString CPUSet::maxFreq() const
     //获取最大CPU频率数值，单位MHz
     qreal MaxFreq = mIsEmptyModelName ? d->m_info.value(QStringLiteral("CPU 最大 MHz")).toDouble() : d->m_info.value("CPU max MHz").toDouble();
     return common::format::formatHz(static_cast<uint>(MaxFreq), common::format::MHz);
+}
+
+QString CPUSet::avgFreq() const
+{
+    qCDebug(app) << "Getting average CPU frequency";
+    if (d->m_info.value("CPU avg MHz") == "-") {
+        qCDebug(app) << "Average CPU frequency not available";
+        return "-";
+    }
+    return common::format::formatHz(d->m_info.value("CPU avg MHz").toDouble(), common::format::MHz);
 }
 
 QString CPUSet::l1dCache() const
@@ -1037,11 +1082,15 @@ void CPUSet::read_lscpu()
             d->m_info.insert("CPU min MHz", minMHz);
             // 取所有CPU频率有效值中最大值
             QString nowMHz = QString::number(static_cast<double>(max_avaliable_cur_freq(cxt, ct)), 'f', 4);
+            // 取所有CPU频率有效值中平均值
+            QString avgMHz = QString::number(static_cast<double>(avg_avaliable_cur_freq(cxt, ct)), 'f', 4);
             if (scal == 0.0f) {
                 nowMHz = "-";
+                avgMHz = "-";
             }
             d->m_info.insert("CPU MHz", nowMHz);
-            qCDebug(app) << "Populated frequency: Min=" << minMHz << "Max=" << maxMHz << "Current=" << nowMHz;
+            d->m_info.insert("CPU avg MHz", avgMHz);
+            qCDebug(app) << "Populated frequency: Min=" << minMHz << "Max=" << maxMHz << "Current=" << nowMHz << "Average=" << avgMHz;
         } else {
             if (CurrentCPUFreq > 0) {
                 d->m_info.insert("CPU MHz", QString::number(CurrentCPUFreq));

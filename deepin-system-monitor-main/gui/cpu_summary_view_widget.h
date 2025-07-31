@@ -90,12 +90,12 @@ protected:
                 if (column == 0)
                     return QApplication::translate("CPUSummaryTableModel", "Utilization"); //百分比显示，为CPU的总体利用率，显示精度为1%，2秒刷新1次；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Current frequency");//显示当前CPU的实际运行速度，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
+                    return QApplication::translate("CPUSummaryTableModel", "Average frequency");//显示CPU的平均频率，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
                 break;
 
             case 1:
                 if (column == 0)    //m_model->cpuSet()->modelName()); //CPU属于的名字及其编号、标称主频；
-                    return QApplication::translate("CPUSummaryTableModel", "Frequency");//最小频率  ~ 最大频率；
+                    return QApplication::translate("CPUSummaryTableModel", "Max frequency");//最大频率；
                 else if (column == 1)
                     return QApplication::translate("CPUSummaryTableModel", "Up time");//最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
                 break;
@@ -150,11 +150,11 @@ protected:
                 if (column == 0)
                     return  QString::number(m_model->cpuAllPercent(), 'f', 0) + "%";
                 else if (column == 1)
-                    return m_model->cpuSet()->curFreq();
+                    return m_model->cpuSet()->avgFreq();
                 break;
             case 1:
                 if (column == 0)
-                    return m_model->cpuSet()->minFreq() + " ~ " + m_model->cpuSet()->maxFreq();
+                    return m_model->cpuSet()->curFreq();
                 else if (column == 1)
                     return m_model->uptime();
                 break;
