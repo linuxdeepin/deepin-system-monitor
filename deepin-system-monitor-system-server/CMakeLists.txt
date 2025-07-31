@@ -10,6 +10,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
 
+# DKapture support configuration for system server
+option(ENABLE_DKAPTURE "Enable DKapture eBPF monitoring support" ON)
+if(ENABLE_DKAPTURE)
+    add_definitions(-DENABLE_DKAPTURE)
+    message(STATUS "DKapture eBPF monitoring support: ENABLED")
+else()
+    message(STATUS "DKapture eBPF monitoring support: DISABLED")
+endif()
+
 # 设置包含头文件的时候不用包含路径 begin ****************************************************************************************
 MACRO(SUBDIRLIST result curdir)
   FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)

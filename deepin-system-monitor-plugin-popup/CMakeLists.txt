@@ -235,6 +235,7 @@ SET(CPP_PROCESS
     ${MAIN_APP_DIR}/process/process_name.cpp
     ${MAIN_APP_DIR}/process/process_name_cache.cpp
     ${MAIN_APP_DIR}/process/process_controller.cpp
+    ${MAIN_APP_DIR}/process/system_service_client.cpp
 )
 set(APP_HPP
     ${CMAKE_HOME_DIRECTORY}/config.h

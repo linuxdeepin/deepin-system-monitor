@@ -117,6 +117,9 @@ public:
     void readProcessInfo();
     void readProcessVariableInfo();
     void readProcessSimpleInfo();
+    
+    // DKapture data application method
+    void applyDKaptureData(const QVariantMap &pidData);
 
 private:
     /**
