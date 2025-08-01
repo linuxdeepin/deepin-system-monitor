@@ -73,12 +73,12 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Average frequency</source>
-        <translation type="unfinished"/>
+        <translation>Keskitaajuus</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation type="unfinished"/>
+        <translation>Suurin taajuus</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
