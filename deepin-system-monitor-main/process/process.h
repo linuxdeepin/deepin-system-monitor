@@ -115,9 +115,19 @@ public:
     qulonglong sentBytes() const;
 
     void readProcessInfo();
-    void readProcessSimpleInfo();
+    void readProcessSimpleInfo(bool skipStatReading = false); // 统一方法，可选择跳过stat读取
     void readProcessVariableInfo();
 
+    void calculateProcessMetrics();
+    
+    // Helper methods for DKapture integration
+    void setUptime(const timeval &uptime);
+    void refreashProcessName();
+    void refreashProcessIcon();
+    void setUserName(const QString &userName);
+    
+    // DKapture data application method
+    void applyDKaptureData(const QVariantMap &pidData);
 private:
     /**
      * @brief Read /proc/[pid]/stat
