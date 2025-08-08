@@ -42,7 +42,7 @@ public:
         return *this;
     }
     ~ErrorContextData() {
-        qCDebug(app) << "ErrorContextData destructor";
+        // qCDebug(app) << "ErrorContextData destructor";
     }
 
     friend class ErrorContext;
@@ -96,7 +96,7 @@ ErrorContext &ErrorContext::operator=(const ErrorContext &rhs)
     return *this;
 }
 ErrorContext::~ErrorContext() {
-    qCDebug(app) << "ErrorContext destructor";
+    // qCDebug(app) << "ErrorContext destructor";
 }
 
 // overloaded compare operator

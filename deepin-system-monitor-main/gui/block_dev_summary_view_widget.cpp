@@ -224,7 +224,7 @@ void DeailTableModelBlock::updateModel()
 
 DeailTableModelBlock::~DeailTableModelBlock()
 {
-    qCDebug(app) << "DeailTableModelBlock destructor";
+    // qCDebug(app) << "DeailTableModelBlock destructor";
 }
 
 BlockDevSummaryViewWidget::BlockDevSummaryViewWidget(QWidget *parent)

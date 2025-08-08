@@ -100,7 +100,7 @@ BlockDeviceInfoDB::BlockDeviceInfoDB()
 
 BlockDeviceInfoDB::~BlockDeviceInfoDB()
 {
-    qCDebug(app) << "BlockDeviceInfoDB destructor";
+    // qCDebug(app) << "BlockDeviceInfoDB destructor";
 }
 
 void BlockDeviceInfoDB::readDiskInfo()

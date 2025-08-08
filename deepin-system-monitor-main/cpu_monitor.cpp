@@ -80,7 +80,7 @@ CpuMonitor::CpuMonitor(QWidget *parent)
 
 CpuMonitor::~CpuMonitor()
 {
-    qCDebug(app) << "CpuMonitor destructor";
+    // qCDebug(app) << "CpuMonitor destructor";
     delete cpuPercents;
 }
 

@@ -24,7 +24,7 @@ AnimationStackedWidget::AnimationStackedWidget(const AnimationOri ori, QWidget *
 
 AnimationStackedWidget::~AnimationStackedWidget()
 {
-    qCDebug(app) << "AnimationStackedWidget destructor";
+    // qCDebug(app) << "AnimationStackedWidget destructor";
     if (m_Animation) {
         delete m_Animation;
         m_Animation = nullptr;

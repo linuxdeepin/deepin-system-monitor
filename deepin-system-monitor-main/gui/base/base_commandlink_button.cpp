@@ -18,7 +18,7 @@ BaseCommandLinkButton::BaseCommandLinkButton(const QString name, QWidget *parent
 
 BaseCommandLinkButton::~BaseCommandLinkButton()
 {
-    qCDebug(app) << "BaseCommandLinkButton destructor";
+    // qCDebug(app) << "BaseCommandLinkButton destructor";
 }
 
 bool BaseCommandLinkButton::eventFilter(QObject *obj, QEvent *event)

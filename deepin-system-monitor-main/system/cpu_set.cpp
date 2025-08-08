@@ -386,7 +386,7 @@ CPUSet &CPUSet::operator=(const CPUSet &rhs)
 
 CPUSet::~CPUSet()
 {
-    qCDebug(app) << "CPUSet destructor";
+    // qCDebug(app) << "CPUSet destructor";
     // NOTE: don't delete d here, it's a shared pointer
 }
 

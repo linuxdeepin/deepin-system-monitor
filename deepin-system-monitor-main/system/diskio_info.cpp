@@ -32,7 +32,7 @@ DiskIOInfo::DiskIOInfo()
 
 DiskIOInfo::~DiskIOInfo()
 {
-    qCDebug(app) << "DiskIOInfo destructor";
+    // qCDebug(app) << "DiskIOInfo destructor";
 }
 
 qreal DiskIOInfo::diskIoReadBps()

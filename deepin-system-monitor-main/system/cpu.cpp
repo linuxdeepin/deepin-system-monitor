@@ -57,7 +57,7 @@ CPUInfo &CPUInfo::operator=(const CPUInfo &rhs)
 }
 CPUInfo::~CPUInfo()
 {
-    qCDebug(app) << "CPUInfo destructor for index" << d->index;
+    // qCDebug(app) << "CPUInfo destructor for index" << d->index;
 }
 
 int CPUInfo::logicalIndex() const

@@ -18,7 +18,7 @@ CPUSummaryTableModel::CPUSummaryTableModel(CPUInfoModel *model, QObject *parent)
 
 CPUSummaryTableModel::~CPUSummaryTableModel()
 {
-    qCDebug(app) << "CPUSummaryTableModel destructor";
+    // qCDebug(app) << "CPUSummaryTableModel destructor";
 }
 
 void CPUSummaryTableModel::onModelUpdated()

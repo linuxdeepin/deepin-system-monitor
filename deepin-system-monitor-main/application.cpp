@@ -34,7 +34,7 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    qCDebug(app) << "Application destructor";
+    // qCDebug(app) << "Application destructor";
 }
 
 void Application::setCurrentTaskState(TaskState taskState)

@@ -24,7 +24,7 @@ NetInfoDetailItemDelegate::NetInfoDetailItemDelegate(QObject *parent): QStyledIt
 
 NetInfoDetailItemDelegate::~NetInfoDetailItemDelegate()
 {
-    qCDebug(app) << "NetInfoDetailItemDelegate destructor";
+    // qCDebug(app) << "NetInfoDetailItemDelegate destructor";
 }
 
 
@@ -36,7 +36,7 @@ NetInfoModel::NetInfoModel(QObject *parent): QAbstractTableModel(parent)
 
 NetInfoModel::~NetInfoModel()
 {
-    qCDebug(app) << "NetInfoModel destructor";
+    // qCDebug(app) << "NetInfoModel destructor";
 }
 
 NetifSummaryViewWidget::NetifSummaryViewWidget(QWidget *parent)

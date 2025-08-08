@@ -48,7 +48,7 @@ UserPageWidget::UserPageWidget(DWidget *parent)
 // destructor
 UserPageWidget::~UserPageWidget()
 {
-    qCDebug(app) << "UserPageWidget destructor";
+    // qCDebug(app) << "UserPageWidget destructor";
 }
 
 // initialize ui components

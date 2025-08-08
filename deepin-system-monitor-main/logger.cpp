@@ -41,7 +41,7 @@ MLogger::MLogger(QObject *parent)
 
 MLogger::~MLogger()
 {
-    qCDebug(app) << "MLogger destructor";
+    // qCDebug(app) << "MLogger destructor";
     m_config->deleteLater();
 }
 

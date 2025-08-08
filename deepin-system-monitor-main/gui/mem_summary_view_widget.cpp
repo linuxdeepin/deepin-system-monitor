@@ -180,7 +180,7 @@ DeailTableModel::DeailTableModel(QObject *parent): QAbstractTableModel(parent)
 
 DeailTableModel::~DeailTableModel()
 {
-    qCDebug(app) << "DeailTableModel destructor";
+    // qCDebug(app) << "DeailTableModel destructor";
 }
 
 MemSummaryViewWidget::MemSummaryViewWidget(QWidget *parent)

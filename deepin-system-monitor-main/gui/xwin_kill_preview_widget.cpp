@@ -89,7 +89,7 @@ XWinKillPreviewWidget::XWinKillPreviewWidget(QWidget *parent)
 // destructor
 XWinKillPreviewWidget::~XWinKillPreviewWidget()
 {
-    qCDebug(app) << "XWinKillPreviewWidget destructor";
+    // qCDebug(app) << "XWinKillPreviewWidget destructor";
     // restore window state
     auto *mw = gApp->mainWindow();
     mw->setWindowState((mw->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -101,13 +101,13 @@ XWinKillPreviewWidget::~XWinKillPreviewWidget()
 
 #ifdef USE_DEEPIN_WAYLAND
     if (WaylandCentered) {
-        qCDebug(app) << "Quitting connection thread";
+        // qCDebug(app) << "Quitting connection thread";
         m_connectionThread->quit();
         m_connectionThread->wait();
         m_connectionThreadObject->deleteLater();
 
         if (DestoryDtkWmDisplay) {
-            qCDebug(app) << "Destroying DtkWmDisplay";
+            // qCDebug(app) << "Destroying DtkWmDisplay";
             DestoryDtkWmDisplay();
         }
     }

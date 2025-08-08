@@ -35,7 +35,7 @@ BlockDevice &BlockDevice::operator=(const BlockDevice &rhs)
 }
 BlockDevice::~BlockDevice()
 {
-    qCDebug(app) << "BlockDevice destructor";
+    // qCDebug(app) << "BlockDevice destructor";
 }
 void BlockDevice::setDeviceName(const QByteArray &deviceName)
 {

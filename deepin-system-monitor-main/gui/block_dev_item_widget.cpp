@@ -40,9 +40,9 @@ BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
 
 BlockDevItemWidget::~BlockDevItemWidget()
 {
-    qCDebug(app) << "BlockDevItemWidget destructor";
+    // qCDebug(app) << "BlockDevItemWidget destructor";
     if (m_memChartWidget) {
-        qCDebug(app) << "Deleting m_memChartWidget";
+        // qCDebug(app) << "Deleting m_memChartWidget";
         delete m_memChartWidget;
         m_memChartWidget = nullptr;
     }

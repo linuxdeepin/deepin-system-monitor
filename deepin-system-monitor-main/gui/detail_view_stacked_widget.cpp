@@ -26,29 +26,29 @@ DetailViewStackedWidget::DetailViewStackedWidget(QWidget *parent) : AnimationSta
 
 DetailViewStackedWidget::~DetailViewStackedWidget()
 {
-    qCDebug(app) << "DetailViewStackedWidget destructor";
+    // qCDebug(app) << "DetailViewStackedWidget destructor";
     if (m_processWidget) {
-        qCDebug(app) << "Deleting process widget";
+        // qCDebug(app) << "Deleting process widget";
         delete m_processWidget;
         m_processWidget = nullptr;
     }
     if (m_cpudetailWidget) {
-        qCDebug(app) << "Deleting CPU detail widget";
+        // qCDebug(app) << "Deleting CPU detail widget";
         delete m_cpudetailWidget;
         m_cpudetailWidget = nullptr;
     }
     if (m_memDetailWidget) {
-        qCDebug(app) << "Deleting memory detail widget";
+        // qCDebug(app) << "Deleting memory detail widget";
         delete m_memDetailWidget;
         m_memDetailWidget = nullptr;
     }
     if (m_netifDetailWidget) {
-        qCDebug(app) << "Deleting network interface detail widget";
+        // qCDebug(app) << "Deleting network interface detail widget";
         delete m_netifDetailWidget;
         m_netifDetailWidget = nullptr;
     }
     if (m_blockDevDetailWidget) {
-        qCDebug(app) << "Deleting block device detail widget";
+        // qCDebug(app) << "Deleting block device detail widget";
         delete m_blockDevDetailWidget;
         m_blockDevDetailWidget = nullptr;
     }

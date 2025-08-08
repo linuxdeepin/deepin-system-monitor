@@ -64,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    qCDebug(app) << "MainWindow destructor";
+    // qCDebug(app) << "MainWindow destructor";
     PERF_PRINT_END("POINT-02");
     if (m_pDbusService) {
         delete m_pDbusService;

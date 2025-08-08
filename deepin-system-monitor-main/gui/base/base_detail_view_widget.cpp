@@ -95,15 +95,15 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
 BaseDetailViewWidget::~BaseDetailViewWidget()
 {
-    qCDebug(app) << "BaseDetailViewWidget destructor";
+    // qCDebug(app) << "BaseDetailViewWidget destructor";
     if (m_switchIconDark) {
-        qCDebug(app) << "Deleting m_switchIconDark";
+        // qCDebug(app) << "Deleting m_switchIconDark";
         delete m_switchIconDark;
         m_switchIconDark = nullptr;
     }
 
     if (m_switchIconLight) {
-        qCDebug(app) << "Deleting m_switchIconLight";
+        // qCDebug(app) << "Deleting m_switchIconLight";
         delete m_switchIconLight;
         m_switchIconLight = nullptr;
     }
