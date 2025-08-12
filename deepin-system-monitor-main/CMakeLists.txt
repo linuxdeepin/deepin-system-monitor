@@ -317,6 +317,7 @@ set(CPP_PROCESS
     process/desktop_entry_cache.cpp
     process/desktop_entry_cache_updater.cpp
     process/process_db.cpp
+    process/system_service_client.cpp
 )
 
 set(HPP_SERVICE
