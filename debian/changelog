@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.29) unstable; urgency=medium
+
+  * chore: Add Lao language translations in policy files
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 14 Aug 2025 16:47:11 +0800
+
 deepin-system-monitor (6.5.28) unstable; urgency=medium
 
   * chore: Add support for Lao language translation
