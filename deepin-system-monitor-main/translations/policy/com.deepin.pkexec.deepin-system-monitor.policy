@@ -87,6 +87,8 @@
 		<message xml:lang="zh_CN">更改进程优先级需要授权</message>
 		<description xml:lang="zh_HK">更改進程nice值</description>
 		<message xml:lang="zh_HK">改變進程優先級需要認證</message>
+		<description xml:lang="lo">ປ່ຽນຄ່າ nice ຂອງໂປຣເຊດ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອປ່ຽນລະດັບຄວາມສຳຄັນຂອງໂປຣເຊດ</message>
 		<description xml:lang="zh_TW">更改進程nice值</description>
 		<message xml:lang="zh_TW">改變進程優先度需要認證</message>
 	</action>
@@ -173,6 +175,8 @@
 		<message xml:lang="zh_CN">控制其他用户的进程需要授权</message>
 		<description xml:lang="zh_HK">強制結束進程</description>
 		<message xml:lang="zh_HK">控制其他用戶的進程需要認證</message>
+		<description xml:lang="lo">ຢຸດໂປຣເຊດດ້ວຍການບັງຄັບ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອຄວບຄຸມໂປຣເຊດຂອງຜູ້ໃຊ້ອື່ນ</message>
 		<description xml:lang="zh_TW">強制結束進程</description>
 		<message xml:lang="zh_TW">控制其他使用者的進程需要認證</message>
 	</action>
@@ -259,6 +263,8 @@
 		<message xml:lang="zh_CN">设置进程启动方式需要授权</message>
 		<description xml:lang="zh_HK">設置服務的啟動方式</description>
 		<message xml:lang="zh_HK">設置服務的啟動方式需要認證</message>
+		<description xml:lang="lo">ຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</message>
 		<description xml:lang="zh_TW">設定服務的啟動方式</description>
 		<message xml:lang="zh_TW">設定服務的啟動方式需要認證</message>
 	</action>
@@ -273,6 +279,8 @@
 		</defaults>
 		<annotate key="org.freedesktop.policykit.exec.path">/usr/bin/pkill</annotate>
 		<annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+		<description xml:lang="lo">ອອກຈາກລະບົບຜູ້ໃຊ້ອື່ນ</description>
+		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອອອກຈາກລະບົບຜູ້ໃຊ້ອື່ນ</message>
 		<message xml:lang="zh_CN">注销其它用户需要授权</message>
 	</action>
 </policyconfig>
