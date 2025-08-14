@@ -31,5 +31,15 @@
 		<source>Set service startup type</source>
 		<translation>ຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</translation>
 	</message>
+	<message>
+		<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0"/>
+		<source>Logging out other users is required to change process priority</source>
+		<translation>ຕ້ອງການການຢັ້ງຢືນເພື່ອອອກຈາກລະບົບຜູ້ໃຊ້ອື່ນ</translation>
+	</message>
+	<message>
+		<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0"/>
+		<source>Logout other users</source>
+		<translation>ອອກຈາກລະບົບຜູ້ໃຊ້ອື່ນ</translation>
+	</message>
 </context>
 </TS>
