@@ -5,6 +5,7 @@
     <name>App.About</name>
     <message>
         <location filename="../main.cpp" line="101"/>
+        <location filename="../main.cpp" line="105"/>
         <source>System Monitor</source>
         <translation>ຕິດຕາມລະບົບ</translation>
     </message>
@@ -23,11 +24,13 @@
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="40"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="52"/>
         <source>Overall utilization</source>
         <translation>ການໃຊ້ງານທັງໝົດ</translation>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="43"/>
+        <location filename="../gui/base/base_detail_view_widget.cpp" line="54"/>
         <source>Individual utilization</source>
         <translation>ການໃຊ້ງານຕົວຕົນ</translation>
     </message>
@@ -49,6 +52,7 @@
     <name>CPUDetailGrapTableItem</name>
     <message>
         <location filename="../gui/cpu_detail_widget.cpp" line="168"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="285"/>
         <source>60 seconds</source>
         <translation>60 ວິນາທີ</translation>
     </message>
@@ -174,6 +178,7 @@
     <name>Common.Search</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="493"/>
+        <location filename="../gui/system_service_table_view.cpp" line="476"/>
         <source>No search results</source>
         <translation>ບໍ່ມີຜົນໄດ້ຮັບການຄົ້ນຫາ</translation>
     </message>
@@ -413,6 +418,7 @@
     <name>DBusAlarmNotify</name>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
+        <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
         <translation>ຄວາມເຕືອນ</translation>
     </message>
@@ -606,6 +612,8 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="530"/>
+        <location filename="../gui/process_table_view.cpp" line="172"/>
+        <location filename="../gui/process_table_view.cpp" line="379"/>
         <source>End process</source>
         <translation>ຢຸດຂະບວນການ</translation>
     </message>
@@ -625,12 +633,15 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="539"/>
+        <location filename="../gui/process_table_view.cpp" line="179"/>
+        <location filename="../gui/process_table_view.cpp" line="387"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>ຍົກເລີກ</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="540"/>
+        <location filename="../gui/process_table_view.cpp" line="388"/>
         <source>Force End</source>
         <comment>button</comment>
         <translation>ປິດໃນທີ່ບໍ່ບໍ່ໄດ້</translation>
@@ -670,6 +681,7 @@ Are you sure you want to continue?</source>
     <name>NetInfoDetailItemDelegate</name>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>IP address:</source>
         <translation>ທີ່ຢູ່ IP:</translation>
     </message>
@@ -788,11 +800,13 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="269"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="282"/>
+        <location filename="../gui/netif_summary_view_widget.h" line="284"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
@@ -832,11 +846,15 @@ Are you sure you want to continue?</source>
     <name>Process.Graph.Title</name>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="183"/>
+        <location filename="../gui/mem_detail_view_widget.cpp" line="25"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="107"/>
+        <location filename="../memory_monitor.cpp" line="177"/>
         <source>Memory</source>
         <translation>ຄວາມຈຳ</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="95"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="121"/>
         <source>Receive</source>
         <translation>ຮັບ</translation>
     </message>
@@ -845,8 +863,12 @@ Are you sure you want to continue?</source>
     <name>Process.Graph.View</name>
     <message>
         <location filename="../compact_cpu_monitor.cpp" line="233"/>
+        <location filename="../cpu_monitor.cpp" line="233"/>
+        <location filename="../cpu_monitor.cpp" line="242"/>
+        <location filename="../gui/cpu_detail_widget.cpp" line="371"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="182"/>
         <source>CPU</source>
-        <translation>CPU</translation>
+        <translation>ຊີພີຢ</translation>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="153"/>
@@ -860,51 +882,65 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="191"/>
+        <location filename="../memory_monitor.cpp" line="203"/>
         <source>Memory</source>
         <translation>ຄວາມຈຳ</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="203"/>
+        <location filename="../compact_memory_monitor.cpp" line="210"/>
+        <location filename="../gui/mem_stat_view_widget.cpp" line="115"/>
+        <location filename="../memory_monitor.cpp" line="214"/>
+        <location filename="../memory_monitor.cpp" line="221"/>
         <source>Swap</source>
         <translation>ແລກປ່ຽນ</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="204"/>
+        <location filename="../memory_monitor.cpp" line="215"/>
         <source>Not enabled</source>
         <translation>ບໍ່ໄດ້ເປີດໃຊ້</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="158"/>
+        <location filename="../network_monitor.cpp" line="216"/>
         <source>Download</source>
         <translation>ດາວນ໌ໂລດ</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="163"/>
+        <location filename="../network_monitor.cpp" line="221"/>
         <source>Upload</source>
         <translation>ອັບໂຫຼດ</translation>
     </message>
     <message>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="184"/>
+        <location filename="../gui/netif_detail_view_widget.cpp" line="28"/>
+        <location filename="../network_monitor.cpp" line="198"/>
         <source>Network</source>
         <translation>ເຄື່ອຂ່າວ</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="160"/>
+        <location filename="../network_monitor.cpp" line="218"/>
         <source>Total Received</source>
         <translation>ທັງໝົດທີ່ຮັບ</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="165"/>
+        <location filename="../network_monitor.cpp" line="223"/>
         <source>Total Sent</source>
         <translation>ທັງໝົດທີ່ສົ່ງ</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="104"/>
+        <location filename="../gui/netif_item_view_widget.cpp" line="130"/>
         <source>Send</source>
         <translation>ສົ່ງ</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_detail_view_widget.cpp" line="21"/>
+        <location filename="../gui/detail_view_stacked_widget.cpp" line="185"/>
         <source>Disks</source>
         <translation>ດິສ</translation>
     </message>
@@ -921,36 +957,42 @@ Are you sure you want to continue?</source>
     <name>Process.Priority</name>
     <message>
         <location filename="../gui/process_table_view.cpp" line="633"/>
+        <location filename="../process/process.cpp" line="56"/>
         <source>Very high</source>
         <translation>ສູງຫຼາຍ</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="641"/>
+        <location filename="../process/process.cpp" line="57"/>
         <source>High</source>
         <translation>ສູງ</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="649"/>
+        <location filename="../process/process.cpp" line="58"/>
         <source>Normal</source>
         <translation>ປົກກະຕິ</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="657"/>
+        <location filename="../process/process.cpp" line="59"/>
         <source>Low</source>
         <translation>ຕຳ່</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="665"/>
+        <location filename="../process/process.cpp" line="60"/>
         <source>Very low</source>
         <translation>ຕຳ່ໆ</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="673"/>
+        <location filename="../process/process.cpp" line="61"/>
         <source>Custom</source>
         <translation>ປັບແຕ່ງ</translation>
     </message>
     <message>
-        <location filename="../process/process.cpp" line="61"/>
+        <location filename="../process/process.cpp" line="62"/>
         <source>Invalid</source>
         <translation>ບໍ່ຖືກຕ້ອງ</translation>
     </message>
@@ -961,6 +1003,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="156"/>
+        <location filename="../process/process_db.cpp" line="196"/>
         <source>Failed to change process priority</source>
         <translation>ບໍ່ສາມາດປ່ຽນຄວາມສຳຄັນຂອງຂະບວນການ</translation>
     </message>
@@ -1038,6 +1081,8 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="90"/>
+        <location filename="../process/process_name.cpp" line="99"/>
+        <location filename="../process/process_name.cpp" line="104"/>
         <source>Tray</source>
         <translation>ຕູ້</translation>
     </message>
@@ -1051,21 +1096,25 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../common/common.cpp" line="83"/>
+        <location filename="../gui/process_table_view.cpp" line="684"/>
         <source>Properties</source>
         <translation>ຄຸນສົມບັດ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="66"/>
+        <location filename="../gui/process_table_view.cpp" line="608"/>
         <source>End process</source>
         <translation>ຢຸດການປະຕິບັດ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="78"/>
+        <location filename="../gui/process_table_view.cpp" line="620"/>
         <source>Resume process</source>
         <translation>ເລີ່ມຕົ້ນການປະຕິບັດອີກຄັ້ງ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="89"/>
+        <location filename="../gui/process_table_view.cpp" line="691"/>
         <source>Kill process</source>
         <translation>ຂ້າການປະຕິບັດ</translation>
     </message>
@@ -1076,6 +1125,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../common/common.cpp" line="72"/>
+        <location filename="../gui/process_table_view.cpp" line="614"/>
         <source>Suspend process</source>
         <translation>ຢຸດການປະຕິບັດ</translation>
     </message>
@@ -1228,6 +1278,8 @@ Are you sure you want to continue?</source>
     <name>Service.Instance.Name.Dialog</name>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="157"/>
+        <location filename="../gui/system_service_table_view.cpp" line="224"/>
+        <location filename="../gui/system_service_table_view.cpp" line="292"/>
         <source>Service instance name</source>
         <translation>ຊື່ຕົວຢ່າງບໍລິການ</translation>
     </message>
@@ -1246,21 +1298,25 @@ Are you sure you want to continue?</source>
     <name>Service.Table.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="118"/>
+        <location filename="../gui/system_service_table_view.cpp" line="562"/>
         <source>Refresh</source>
         <translation>ຕັ້ງຄ່າອີກຄັ້ງ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="103"/>
+        <location filename="../gui/system_service_table_view.cpp" line="542"/>
         <source>Start</source>
         <translation>ເລີ່ມ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="108"/>
+        <location filename="../gui/system_service_table_view.cpp" line="547"/>
         <source>Stop</source>
         <translation>ຢຸດ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="113"/>
+        <location filename="../gui/system_service_table_view.cpp" line="552"/>
         <source>Restart</source>
         <translation>ຮັບປະກັນອີກຄັ້ງ</translation>
     </message>
@@ -1315,7 +1371,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="32"/>
         <source>PID</source>
-        <translation>PID</translation>
+        <translation>ເລກຂະບວນການ</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="27"/>
@@ -1337,6 +1393,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
+        <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
         <translation>ເຄື່ອງໝາຍ: %1-%2</translation>
     </message>
@@ -1345,6 +1402,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Context.Menu</name>
     <message>
         <location filename="../common/common.cpp" line="59"/>
+        <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
         <translation>ປິດໂປຼແກຼມດ້ວຍການບັງຄັບ</translation>
     </message>
@@ -1368,6 +1426,7 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Search</name>
     <message>
         <location filename="../common/common.cpp" line="44"/>
+        <location filename="../gui/toolbar.cpp" line="95"/>
         <source>Search</source>
         <translation>ຄົ້ນຫາ</translation>
     </message>
@@ -1376,16 +1435,24 @@ Are you sure you want to continue?</source>
     <name>Title.Bar.Switch</name>
     <message>
         <location filename="../common/common.cpp" line="53"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="235"/>
+        <location filename="../gui/toolbar.cpp" line="45"/>
         <source>Processes</source>
         <translation>ຂັ້ນຕອນ</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="98"/>
+        <location filename="../gui/main_window.cpp" line="224"/>
+        <location filename="../gui/main_window.cpp" line="235"/>
+        <location filename="../gui/main_window.cpp" line="245"/>
+        <location filename="../gui/toolbar.cpp" line="53"/>
         <source>Services</source>
         <translation>ບໍລິການ</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="245"/>
+        <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
         <translation>ຜູ້ໃຊ້</translation>
     </message>
