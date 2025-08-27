@@ -161,7 +161,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Otkaži</translation>
     </message>
 </context>
 <context>
@@ -418,7 +418,7 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Upozorenje</translation>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
@@ -433,7 +433,7 @@
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Pogled</translation>
     </message>
 </context>
 <context>
