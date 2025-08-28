@@ -8,7 +8,14 @@ build/
 .vscode/*
 .directory
 config.h
+
+# AI config files
 .cursorindexingignore
 .cursor
 .specstory
 .cache
+.serena/
+.kilocode/
+.claude/
+.kiro/
+.spec-workflow/

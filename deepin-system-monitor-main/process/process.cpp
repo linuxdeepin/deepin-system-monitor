@@ -750,7 +750,19 @@ void Process::calculateProcessMetrics()
     qreal timedelta = d->stime + d->utime;
     if (validrecentPtr) {
         qCDebug(app) << "Found recent process stage for pid" << d->pid;
-        timedelta = timedelta - validrecentPtr->ptime;
+        qreal previousTime = validrecentPtr->ptime;
+        timedelta = timedelta - previousTime;
+        
+        // Check for abnormal time delta that might indicate data corruption
+        // If current time is much smaller than previous time, it suggests the current data was corrected
+        if (timedelta < -1000) { // If delta is very negative (more than 1000 jiffies)
+            qCInfo(app) << "Detected corrected CPU time for PID" << d->pid 
+                       << "- current:" << (d->stime + d->utime) << "previous:" << previousTime
+                       << "delta:" << timedelta << ". Using current time as baseline.";
+            // Use current time as the baseline, effectively treating this as a new process
+            timedelta = d->stime + d->utime;
+        }
+        
         struct DiskIO io = {validrecentPtr->read_bytes, validrecentPtr->write_bytes, validrecentPtr->cancelled_write_bytes};
         d->diskIOSample->addSample(new DISKIOSampleFrame(validrecentPtr->uptime, io));
 
@@ -1092,14 +1104,17 @@ void Process::applyDKaptureData(const QVariantMap &data)
     //     network_tx = data["network_tx_bytes"].toULongLong();
     // }
     
-    // 标记进程为有效
+    // 标记进程为有效，但需要检查关键数据读取是否成功
     d->valid = true;
+    bool ok = true;
 
-    // 读取一些无法通过 DKapture 获取的基本信息
-    // 只读取必要信息，不重新读取 stat/statm 等已有数据
-    readCmdline();       // 读取命令行
-    readEnviron();       // 读取环境变量
-    readSockInodes();    // 读取网络 socket inodes（网络流量计算必需）
+    // 读取关键信息并检查成功性
+    ok = ok && readCmdline();    // cmdline是必需的，失败则进程无效
+    readEnviron();             // environ失败可以容忍
+    readSockInodes();          // sockInodes失败可以容忍
+
+    // 只有关键操作都成功才保持进程有效
+    d->valid = d->valid && ok;
     
     d->usrerName = SysInfo::userName(d->uid);
     d->proc_name.refreashProcessName(this);

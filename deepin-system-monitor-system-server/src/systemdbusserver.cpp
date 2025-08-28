@@ -18,6 +18,9 @@
 #include <QProcess>
 #include <QTimer>
 #include <QFile>
+
+#include <sys/sysinfo.h>
+#include <unistd.h>
 #include <QStringList>
 #include <QDebug>
 #include <QRegularExpression>
@@ -346,7 +349,7 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
             context.server = this;
             
             // 设置回调函数来处理 DKapture 数据
-            auto callback = [](void *ctx, const void *data, size_t data_sz) -> int {
+            auto callback = [](void *ctx, const void *data, size_t /*data_sz*/) -> int {
                 DKaptureContext *context = static_cast<DKaptureContext *>(ctx);
                 const DKapture::DataHdr *hdr = static_cast<const DKapture::DataHdr *>(data);
                 
@@ -392,12 +395,43 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
                         qulonglong dk_stime = stat->stime / DK_CONVERSION_FACTOR;
                         qulonglong dk_cutime = stat->cutime / DK_CONVERSION_FACTOR;
                         qulonglong dk_cstime = stat->cstime / DK_CONVERSION_FACTOR;
+
+                        // Convert back to jiffies for frontend compatibility
+                        // Frontend expects utime/stime in jiffies, not seconds
+                        long hz = sysconf(_SC_CLK_TCK);  // Get system HZ value
+                        qulonglong dk_utime_jiffies = dk_utime * hz;  // Convert seconds back to jiffies
+                        qulonglong dk_stime_jiffies = dk_stime * hz;
+                        qulonglong dk_cutime_jiffies = dk_cutime * hz;
+                        qulonglong dk_cstime_jiffies = dk_cstime * hz;
                         
-                        pidData["utime"] = dk_utime;
-                        pidData["stime"] = dk_stime;
-                        pidData["cutime"] = dk_cutime;
-                        pidData["cstime"] = dk_cstime;
-                        pidData["cpu_time"] = dk_utime + dk_stime;
+                        // Check for abnormal CPU time values that could cause overflow
+                        // Use system uptime as a reasonable upper bound
+                        struct sysinfo si;
+                        if (sysinfo(&si) == 0) {
+                            qulonglong system_uptime_jiffies = si.uptime * hz;
+                            qulonglong total_cpu_jiffies = dk_utime_jiffies + dk_stime_jiffies;
+                            
+                            if (total_cpu_jiffies > system_uptime_jiffies * 2) { // Allow 2x system uptime as buffer
+                                qCWarning(app) << "SystemServer: Abnormally large DKapture CPU time for PID" << hdr->pid
+                                              << "- total CPU jiffies:" << total_cpu_jiffies 
+                                              << "system uptime jiffies:" << system_uptime_jiffies
+                                              << ". Data may be corrupted, setting to safe values.";
+                                
+                                // Set to very small values to prevent frontend calculation issues
+                                // This ensures CPU usage will be close to 0% rather than astronomical values
+                                dk_utime_jiffies = hz;  // 1 second worth of jiffies
+                                dk_stime_jiffies = hz;  // 1 second worth of jiffies  
+                                dk_cutime_jiffies = 0;
+                                dk_cstime_jiffies = 0;
+                            }
+                        }
+
+                        // Store in jiffies for frontend compatibility
+                        pidData["utime"] = dk_utime_jiffies;
+                        pidData["stime"] = dk_stime_jiffies;
+                        pidData["cutime"] = dk_cutime_jiffies;
+                        pidData["cstime"] = dk_cstime_jiffies;
+                        pidData["cpu_time"] = dk_utime + dk_stime; // Keep original seconds for reference
                         
 
                         pidData["priority"] = stat->priority;

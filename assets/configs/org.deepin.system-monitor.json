@@ -14,6 +14,19 @@
       "description[zh_CN]": "日志规则",
       "permissions": "readwrite",
       "visibility": "public"
+    },
+    "enable_dkapture": {
+      "value": false,
+      "serial": 0,
+      "flags": [
+        "global"
+      ],
+      "name": "Enable DKapture",
+      "name[zh_CN]": "启用DKapture",
+      "description": "Enable DKapture eBPF monitoring for process data collection",
+      "description[zh_CN]": "启用DKapture eBPF监控进行进程数据收集",
+      "permissions": "readwrite",
+      "visibility": "public"
     }
   }
 }

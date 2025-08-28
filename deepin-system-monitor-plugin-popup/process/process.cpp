@@ -870,14 +870,17 @@ void Process::applyDKaptureData(const QVariantMap &pidData)
                     << "- rq_wait_time_ns:" << rq_wait_time_ns << "-> wtime:" << d->wtime;
     }
     
-    // 标记进程为有效
+    // 标记进程为有效，但需要检查关键数据读取是否成功
     d->valid = true;
+    bool ok = true;
     
-    // 读取一些无法通过 DKapture 获取的基本信息
-    // 只读取必要信息，不重新读取 stat/statm 等已有数据
-    readCmdline();       // 读取命令行
-    readEnviron();       // 读取环境变量
-    // readSockInodes();    // plugin-popup 不需要网络流量计算
+    // 读取关键信息并检查成功性
+    ok = ok && readCmdline();    // cmdline是必需的，失败则进程无效
+    readEnviron();             // environ失败可以容忍
+    // readSockInodes();        // plugin-popup 不需要网络流量计算
+    
+    // 只有关键操作都成功才保持进程有效
+    d->valid = d->valid && ok;
     
     d->usrerName = SysInfo::userName(d->uid);
     d->proc_name.refreashProcessName(this);
