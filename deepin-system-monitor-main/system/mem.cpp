@@ -43,7 +43,7 @@ MemInfo &MemInfo::operator=(const MemInfo &rhs)
 
 MemInfo::~MemInfo()
 {
-    qCDebug(app) << "MemInfo destructor";
+    // qCDebug(app) << "MemInfo destructor";
 }
 
 qulonglong MemInfo::memTotal() const

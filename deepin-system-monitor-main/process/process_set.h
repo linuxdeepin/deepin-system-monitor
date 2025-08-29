@@ -10,6 +10,7 @@
 #include "common/common.h"
 
 #include <QMap>
+#include <DConfig>
 
 #include <dirent.h>
 
@@ -88,6 +89,9 @@ private:
     // System service client for DKapture data
     SystemServiceClient *m_systemServiceClient;
     bool m_useSystemService;
+    
+    // DConfig for configuration management
+    DTK_CORE_NAMESPACE::DConfig *m_config;
 
     friend class Iterator;
 };

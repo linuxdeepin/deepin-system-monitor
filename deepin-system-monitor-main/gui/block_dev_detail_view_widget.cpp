@@ -30,7 +30,7 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
 
 BlockDevDetailViewWidget::~BlockDevDetailViewWidget()
 {
-    qCDebug(app) << "BlockDevDetailViewWidget destructor";
+    // qCDebug(app) << "BlockDevDetailViewWidget destructor";
 }
 void BlockDevDetailViewWidget::detailFontChanged(const QFont &font)
 {

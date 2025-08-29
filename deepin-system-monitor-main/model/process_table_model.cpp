@@ -103,7 +103,8 @@ void ProcessTableModel::updateProcessListWithUserSpecified()
     int raw;
     for (const auto &pid : newpidlst) {
         Process changedProc = processSet->getProcessById(pid);
-        if (changedProc.userName() == m_userModeName) {
+        // 确保进程有效且用户名匹配
+        if (changedProc.isValid() && changedProc.userName() == m_userModeName) {
             // qCDebug(app) << "Adding process with PID:" << pid << "for user" << m_userModeName;
             raw = m_procIdList.size();
             beginInsertRows({}, raw, raw);
@@ -125,11 +126,18 @@ void ProcessTableModel::updateProcessListDelay()
     QList<pid_t> oldpidlst = m_procIdList;
 
     for (const auto &pid : newpidlst) {
+        Process proc = processSet->getProcessById(pid);
+        // 只处理有效进程
+        if (!proc.isValid()) {
+            qCDebug(app) << "Skipping invalid process with PID:" << pid;
+            continue;
+        }
+        
         int row = m_procIdList.indexOf(pid);
         if (row >= 0) {
             // qCDebug(app) << "Updating process at row:" << row;
             // update
-            m_processList[row] = processSet->getProcessById(pid);
+            m_processList[row] = proc;
             Q_EMIT dataChanged(index(row, 0), index(row, columnCount() - 1));
         } else {
             // insert
@@ -137,7 +145,7 @@ void ProcessTableModel::updateProcessListDelay()
             row = m_procIdList.size();
             beginInsertRows({}, row, row);
             m_procIdList << pid;
-            m_processList << processSet->getProcessById(pid);
+            m_processList << proc;
             endInsertRows();
         }
     }

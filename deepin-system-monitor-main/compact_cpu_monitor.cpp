@@ -98,7 +98,7 @@ CompactCpuMonitor::CompactCpuMonitor(QWidget *parent)
 }
 
 CompactCpuMonitor::~CompactCpuMonitor() {
-    qCDebug(app) << "CompactCpuMonitor destructor";
+    // qCDebug(app) << "CompactCpuMonitor destructor";
 }
 
 void CompactCpuMonitor::onDetailInfoClicked()

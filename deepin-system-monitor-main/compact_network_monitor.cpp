@@ -78,7 +78,7 @@ CompactNetworkMonitor::CompactNetworkMonitor(QWidget *parent)
 
 CompactNetworkMonitor::~CompactNetworkMonitor()
 {
-    qCDebug(app) << "CompactNetworkMonitor destructor";
+    // qCDebug(app) << "CompactNetworkMonitor destructor";
     delete downloadSpeeds;
     delete uploadSpeeds;
 }

@@ -25,7 +25,7 @@ NetInfo::NetInfo()
 
 NetInfo::~NetInfo()
 {
-    qCDebug(app) << "NetInfo destructor";
+    // qCDebug(app) << "NetInfo destructor";
 }
 
 qreal NetInfo::recvBps()

@@ -39,38 +39,38 @@ DeviceDB::DeviceDB()
 
 DeviceDB::~DeviceDB()
 {
-    qCDebug(app) << "DeviceDB destructor: Cleaning up all device info objects...";
+    // qCDebug(app) << "DeviceDB destructor: Cleaning up all device info objects...";
     if (m_diskIoInfo) {
-        qCDebug(app) << "DeviceDB destructor: Deleting DiskIOInfo.";
+        // qCDebug(app) << "DeviceDB destructor: Deleting DiskIOInfo.";
         delete m_diskIoInfo;
         m_diskIoInfo  = nullptr;
     }
     if (m_memInfo) {
-        qCDebug(app) << "DeviceDB destructor: Deleting MemInfo.";
+        // qCDebug(app) << "DeviceDB destructor: Deleting MemInfo.";
         delete m_memInfo;
         m_memInfo  = nullptr;
     }
     if (m_cpuSet) {
-        qCDebug(app) << "DeviceDB destructor: Deleting CPUSet.";
+        // qCDebug(app) << "DeviceDB destructor: Deleting CPUSet.";
         delete m_cpuSet;
         m_cpuSet  = nullptr;
     }
     if (m_blkDevInfoDB) {
-        qCDebug(app) << "DeviceDB destructor: Deleting BlockDeviceInfoDB.";
+        // qCDebug(app) << "DeviceDB destructor: Deleting BlockDeviceInfoDB.";
         delete m_blkDevInfoDB;
         m_blkDevInfoDB  = nullptr;
     }
     if (m_netifInfoDB) {
-        qCDebug(app) << "DeviceDB destructor: Deleting NetifInfoDB.";
+        // qCDebug(app) << "DeviceDB destructor: Deleting NetifInfoDB.";
         delete m_netifInfoDB;
         m_netifInfoDB  = nullptr;
     }
     if (m_netInfo) {
-        qCDebug(app) << "DeviceDB destructor: Deleting NetInfo.";
+        // qCDebug(app) << "DeviceDB destructor: Deleting NetInfo.";
         delete m_netInfo;
         m_netInfo  = nullptr;
     }
-    qCDebug(app) << "DeviceDB destruction finished.";
+    // qCDebug(app) << "DeviceDB destruction finished.";
 }
 
 void DeviceDB::update()

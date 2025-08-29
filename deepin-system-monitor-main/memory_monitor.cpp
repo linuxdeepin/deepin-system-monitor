@@ -75,7 +75,7 @@ MemoryMonitor::MemoryMonitor(QWidget *parent)
 
 MemoryMonitor::~MemoryMonitor()
 {
-    qCDebug(app) << "MemoryMonitor destructor";
+    // qCDebug(app) << "MemoryMonitor destructor";
 }
 
 void MemoryMonitor::onStatInfoUpdated()

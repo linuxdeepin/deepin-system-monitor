@@ -22,7 +22,7 @@ Settings::Settings()
 
 Settings::~Settings()
 {
-    qCDebug(app) << "Destroying settings object";
+    // qCDebug(app) << "Destroying settings object";
     m_settings->deleteLater();
 }
 
@@ -33,7 +33,7 @@ Settings *Settings::instance()
 
 void Settings::flush()
 {
-    qCDebug(app) << "Flushing settings";
+    // qCDebug(app) << "Flushing settings";
     m_settings->sync();
 }
 

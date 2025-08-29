@@ -101,14 +101,14 @@ SystemProtectionSetting::SystemProtectionSetting(QObject *parent)
 
 SystemProtectionSetting::~SystemProtectionSetting()
 {
-    qCDebug(app) << "SystemProtectionSetting destructor";
+    // qCDebug(app) << "SystemProtectionSetting destructor";
     if (mDsettings != nullptr) {
-        qCDebug(app) << "Deleting mDsettings";
+        // qCDebug(app) << "Deleting mDsettings";
         mDsettings->deleteLater();
     }
 
     if (mBackend != nullptr) {
-        qCDebug(app) << "Deleting mBackend";
+        // qCDebug(app) << "Deleting mBackend";
         mBackend->deleteLater();
     }
 }
@@ -116,7 +116,7 @@ SystemProtectionSetting::~SystemProtectionSetting()
 // 返回全局单例
 SystemProtectionSetting *SystemProtectionSetting::instance()
 {
-    qCDebug(app) << "SystemProtectionSetting instance";
+    // qCDebug(app) << "SystemProtectionSetting instance";
     return theInstance;
 }
 

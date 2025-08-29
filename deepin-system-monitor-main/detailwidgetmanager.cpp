@@ -54,5 +54,5 @@ DetailWidgetManager::DetailWidgetManager(QObject *parent)
 
 DetailWidgetManager::~DetailWidgetManager()
 {
-    qCDebug(app) << "DetailWidgetManager destructor";
+    // qCDebug(app) << "DetailWidgetManager destructor";
 }

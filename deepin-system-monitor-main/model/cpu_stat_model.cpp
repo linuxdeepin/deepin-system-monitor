@@ -19,7 +19,7 @@ CPUStatModel::CPUStatModel(const TimePeriod &period, QObject *parent)
 
 CPUStatModel::~CPUStatModel()
 {
-    qCDebug(app) << "CPUStatModel destructor";
+    // qCDebug(app) << "CPUStatModel destructor";
 }
 
 int CPUStatModel::rowCount(const QModelIndex &) const

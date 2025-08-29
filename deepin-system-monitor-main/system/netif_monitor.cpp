@@ -35,7 +35,7 @@ NetifMonitor *NetifMonitor::instance()
 
 NetifMonitor::~NetifMonitor()
 {
-    qCDebug(app) << "NetifMonitor destructor";
+    // qCDebug(app) << "NetifMonitor destructor";
     // async request monitor job quit
     m_netifCapture->requestQuit();
     // monitor thread quit

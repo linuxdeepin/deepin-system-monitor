@@ -130,7 +130,7 @@ Toolbar::Toolbar(QWidget *parent)
 // destructor
 Toolbar::~Toolbar()
 {
-    qCDebug(app) << "Toolbar destructor";
+    // qCDebug(app) << "Toolbar destructor";
 }
 
 // event filter

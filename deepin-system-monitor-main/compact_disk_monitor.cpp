@@ -62,7 +62,7 @@ CompactDiskMonitor::CompactDiskMonitor(QWidget *parent)
 
 CompactDiskMonitor::~CompactDiskMonitor()
 {
-    qCDebug(app) << "CompactDiskMonitor destructor";
+    // qCDebug(app) << "CompactDiskMonitor destructor";
     delete readSpeeds;
     delete writeSpeeds;
 }

@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QElapsedTimer>
+#include <DConfig>
 
 #include <errno.h>
 
@@ -32,28 +33,47 @@ ProcessSet::ProcessSet()
     , m_pidPtoCMapping {}
     , m_systemServiceClient(nullptr)
     , m_useSystemService(false)
+    , m_config(nullptr)
 {
     qCDebug(app) << "ProcessSet object created";
     
-    // 初始化系统服务客户端并检测DKapture可用性
-    qCInfo(app) << "Initializing system service client";
-    m_systemServiceClient = new SystemServiceClient();
-
-    // 尝试启动系统服务
-    if (!m_systemServiceClient->isServiceAvailable()) {
-        qCInfo(app) << "System service not available, attempting to start";
-        m_systemServiceClient->startSystemService();
+    // 初始化DConfig
+    m_config = DTK_CORE_NAMESPACE::DConfig::create("deepin-system-monitor", "org.deepin.system-monitor");
+    if (!m_config) {
+        qCWarning(app) << "Failed to create DConfig instance, DKapture will be disabled";
+    }
+    
+    // 检查DConfig中的DKapture启用设置
+    bool dkaptureEnabled = false;
+    if (m_config) {
+        dkaptureEnabled = m_config->value("enable_dkapture", false).toBool();
+        qCInfo(app) << "DKapture enabled in config:" << dkaptureEnabled;
     }
 
-    // 检测DKapture可用性并设置使用标志，之后直接使用此标志
-    m_useSystemService = m_systemServiceClient 
-                         && m_systemServiceClient->isServiceAvailable() 
-                         && m_systemServiceClient->isDKaptureAvailable();
-    
-    if (m_useSystemService) {
-        qCInfo(app) << "DKapture system service detected and enabled";
+    // 只有在配置启用时才初始化系统服务客户端
+    if (dkaptureEnabled) {
+        qCInfo(app) << "Initializing system service client (DKapture enabled in config)";
+        m_systemServiceClient = new SystemServiceClient();
+
+        // 尝试启动系统服务
+        if (!m_systemServiceClient->isServiceAvailable()) {
+            qCInfo(app) << "System service not available, attempting to start";
+            m_systemServiceClient->startSystemService();
+        }
+
+        // 检测DKapture可用性并设置使用标志
+        m_useSystemService = m_systemServiceClient 
+                             && m_systemServiceClient->isServiceAvailable() 
+                             && m_systemServiceClient->isDKaptureAvailable();
+        
+        if (m_useSystemService) {
+            qCInfo(app) << "DKapture system service detected and enabled";
+        } else {
+            qCInfo(app) << "DKapture not available, will use traditional /proc scanning";
+        }
     } else {
-        qCInfo(app) << "DKapture not available, will use traditional /proc scanning";
+        qCInfo(app) << "DKapture disabled in configuration, using traditional /proc scanning";
+        m_useSystemService = false;
     }
 }
 
@@ -62,12 +82,18 @@ ProcessSet::ProcessSet(const ProcessSet &other)
     , m_recentProcStage(other.m_recentProcStage)
     , m_pidCtoPMapping(other.m_pidCtoPMapping)
     , m_pidPtoCMapping(other.m_pidPtoCMapping)
+    , m_systemServiceClient(nullptr)
+    , m_useSystemService(other.m_useSystemService)
+    , m_config(nullptr)
 {
     qCDebug(app) << "ProcessSet object copied";
     m_prePid.clear();
     m_curPid.clear();
     m_pidMyApps.clear();
     m_simpleSet.clear();
+    
+    // Note: We don't copy the system service client or config, 
+    // as they should be managed by the original instance
     // m_settings = Settings::instance();
 }
 
@@ -76,6 +102,11 @@ ProcessSet::~ProcessSet()
     if (m_systemServiceClient) {
         delete m_systemServiceClient;
         m_systemServiceClient = nullptr;
+    }
+    
+    if (m_config) {
+        m_config->deleteLater();
+        m_config = nullptr;
     }
 }
 
@@ -185,7 +216,11 @@ void ProcessSet::scanProcess()
                 if(!m_simpleSet.contains(pid))
                      m_simpleSet.insert(proc.pid(), proc);
 
-                // 注意：appType判断将在DKapture数据应用后进行，以确保UID等信息完整
+                // readProcessSimpleInfo 中设置类型，FIXME: 如果在后面加入，则列表不更新
+                if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
+                    qCDebug(app) << "Adding new app process to list:" << proc.pid();
+                    m_pidMyApps << proc.pid();
+                }
             }
         }
         m_prePid = m_curPid;
@@ -195,14 +230,12 @@ void ProcessSet::scanProcess()
     // int index = vindex.toInt();
 
     // 尝试获取DKapture数据
-    bool useDKaptureData = false;
     QVariantMap dkaptureData;
     
     if (m_useSystemService) {
         QVariantMap response = m_systemServiceClient->getProcessInfoBatch(m_prePid);
         if (response["success"].toBool()) {
             dkaptureData = response["data"].toMap();
-            useDKaptureData = true;
             qCInfo(app) << "Successfully got DKapture data for" << dkaptureData.size() << "processes";
         } else {
             qCWarning(app) << "Failed to get DKapture data:" << response["error"].toString();
@@ -214,7 +247,7 @@ void ProcessSet::scanProcess()
     for (const pid_t &pid : m_prePid) {
         Process proc = m_simpleSet[pid];
         
-        if (useDKaptureData && dkaptureData.contains(QString::number(pid))) {
+        if (dkaptureData.contains(QString::number(pid))) {
             // 使用DKapture数据
             QVariantMap pidData = dkaptureData[QString::number(pid)].toMap();
             qCDebug(app) << "Applying DKapture data to process" << pid;
@@ -223,14 +256,11 @@ void ProcessSet::scanProcess()
             // 使用传统方式（包括DKapture获取失败或没有该进程数据的情况）
             qCDebug(app) << "Using traditional /proc reading for process" << pid;
             proc.readProcessVariableInfo();
-            if (!proc.isValid()) {
-                continue;
-            }
         }
 
-        if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
-            qCDebug(app) << "Adding new app process to list:" << proc.pid();
-            m_pidMyApps << proc.pid();
+        if (!proc.isValid()) {
+            qCWarning(app) << "Process" << pid << "invalid application, skipping";
+            continue;
         }
 
         m_set.insert(proc.pid(), proc);
@@ -258,9 +288,15 @@ void ProcessSet::scanProcess()
         mergeSubProcNetIO(pid, recvBps, sendBps);
         m_set[pid].setNetIoBps(recvBps, sendBps);
 
-        qreal ptotalCpu = 0.;
-        mergeSubProcCpu(pid, ptotalCpu);
-        m_set[pid].setCpu(ptotalCpu);
+        // In DKapture mode, each subprocess is displayed separately, so no need to merge CPU
+        if (!m_useSystemService) {
+            qreal ptotalCpu = 0.;
+            mergeSubProcCpu(pid, ptotalCpu);
+            m_set[pid].setCpu(ptotalCpu);
+            qCDebug(app) << "Traditional mode: merged CPU for PID" << pid << "total:" << ptotalCpu;
+        } else {
+            qCDebug(app) << "DKapture mode: skipping CPU merge for PID" << pid << "current CPU:" << m_set[pid].cpu();
+        }
 
         if (!wmwindowList->isGuiApp(pid))
         {

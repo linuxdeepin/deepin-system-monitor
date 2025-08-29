@@ -36,7 +36,7 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
 
 NetifDetailViewWidget::~NetifDetailViewWidget()
 {
-    qCDebug(app) << "NetifDetailViewWidget destructor";
+    // qCDebug(app) << "NetifDetailViewWidget destructor";
 }
 
 void NetifDetailViewWidget::detailFontChanged(const QFont &font)

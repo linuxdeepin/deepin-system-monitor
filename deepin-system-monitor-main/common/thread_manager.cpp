@@ -21,9 +21,9 @@ ThreadManager *ThreadManager::instance()
 
 void ThreadManager::attach(BaseThread *thread)
 {
-    qCDebug(app) << "ThreadManager attach thread with key:" << thread->threadKey();
+    // qCDebug(app) << "ThreadManager attach thread with key:" << thread->threadKey();
     if (m_threadDB.contains(thread->threadKey())) {
-        qCDebug(app) << "thread already exists";
+        // qCDebug(app) << "thread already exists";
         return;
     }
 

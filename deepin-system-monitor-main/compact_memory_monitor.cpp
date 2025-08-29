@@ -76,7 +76,7 @@ CompactMemoryMonitor::CompactMemoryMonitor(QWidget *parent)
 }
 
 CompactMemoryMonitor::~CompactMemoryMonitor() {
-    qCDebug(app) << "CompactMemoryMonitor destructor";
+    // qCDebug(app) << "CompactMemoryMonitor destructor";
 }
 
 qreal CompactMemoryMonitor::progress() const

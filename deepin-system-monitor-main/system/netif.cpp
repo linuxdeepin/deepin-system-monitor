@@ -45,7 +45,7 @@ NetifInfo &NetifInfo::operator=(const NetifInfo &rhs)
 }
 NetifInfo::~NetifInfo()
 {
-    qCDebug(app) << "NetifInfo destructor";
+    // qCDebug(app) << "NetifInfo destructor";
 }
 
 

@@ -26,15 +26,15 @@ AccountsWidget::AccountsWidget(QWidget *parent)
 
 AccountsWidget::~AccountsWidget()
 {
-    qCDebug(app) << "AccountsWidget destructor";
+    // qCDebug(app) << "AccountsWidget destructor";
     if (m_userItemModel) {
-        qCDebug(app) << "m_userItemModel is not null, clear it";
+        // qCDebug(app) << "m_userItemModel is not null, clear it";
         m_userItemModel->clear();
         m_userItemModel->deleteLater();
         m_userItemModel = nullptr;
     }
     if (m_onlineIconList.size() > 0) {
-        qCDebug(app) << "m_onlineIconList is not empty, clear it";
+        // qCDebug(app) << "m_onlineIconList is not empty, clear it";
         m_onlineIconList.clear();
     }
 }

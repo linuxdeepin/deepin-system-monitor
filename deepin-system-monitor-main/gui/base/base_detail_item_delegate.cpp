@@ -35,7 +35,7 @@ BaseDetailItemDelegate::BaseDetailItemDelegate(QObject *parent)
 
 BaseDetailItemDelegate::~BaseDetailItemDelegate()
 {
-    qCDebug(app) << "BaseDetailItemDelegate destructor";
+    // qCDebug(app) << "BaseDetailItemDelegate destructor";
 }
 
 void BaseDetailItemDelegate::paint(QPainter *painter,

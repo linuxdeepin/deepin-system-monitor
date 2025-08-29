@@ -52,7 +52,7 @@ CPUDetailGrapTableItem::CPUDetailGrapTableItem(CPUInfoModel *model, int index, Q
 
 CPUDetailGrapTableItem::~CPUDetailGrapTableItem()
 {
-    qCDebug(app) << "CPUDetailGrapTableItem destructor for index" << m_index;
+    // qCDebug(app) << "CPUDetailGrapTableItem destructor for index" << m_index;
 }
 
 void CPUDetailGrapTableItem::setMode(int mode)

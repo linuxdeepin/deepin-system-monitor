@@ -26,16 +26,16 @@ NetifMonitorThread::NetifMonitorThread(QObject *parent)
 
 NetifMonitorThread::~NetifMonitorThread()
 {
-    qCDebug(app) << "NetifMonitorThread destructor";
+    // qCDebug(app) << "NetifMonitorThread destructor";
     m_netifMonitor->requestQuit();
     m_netIfmoniterThread.quit();
     m_netIfmoniterThread.wait();
-    qCDebug(app) << "NetifMonitorThread: m_netIfmoniterThread finished";
+    // qCDebug(app) << "NetifMonitorThread: m_netIfmoniterThread finished";
 
     m_netifMonitor->deleteLater();
     quit();
     wait();
-    qCDebug(app) << "NetifMonitorThread finished";
+    // qCDebug(app) << "NetifMonitorThread finished";
 }
 
 NetifMonitor *NetifMonitorThread::netifJobInstance() const
