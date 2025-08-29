@@ -1,6 +1,12 @@
+deepin-system-monitor (6.5.31) unstable; urgency=medium
+
+  * Update version to 6.5.31.
+
+ -- re2zero <yangwu@uniontech.com>  Fri, 29 Aug 2025 11:38:09 +0800
+
 deepin-system-monitor (6.5.30) unstable; urgency=medium
 
-  * Update version to 6.5.30. 
+  * Update version to 6.5.30.
 
  -- Tian ShiLin <tianshilin@uniontech.com>  Thu, 21 Aug 2025 16:57:59 +0800
 
