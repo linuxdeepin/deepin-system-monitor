@@ -74,88 +74,93 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Average frequency</source>
-        <translation type="unfinished"></translation>
+        <source>Frequency</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequency</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
+        <source>Average frequency</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
+        <source>Up time</source>
+        <translation>Masa hidup</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Sockets</source>
         <translation>Soket</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
         <source>Logical processors</source>
         <translation>Pemproses logikal</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>Virtualization</source>
         <translation>Pemayaan</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1i cache</source>
         <translation>Cache L1i</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L1d cache</source>
         <translation>Cache L1d</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L2 cache</source>
         <translation>Cache L2</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>L3 cache</source>
         <translation>Cache L3</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>Load average</source>
         <translation>Purata beban</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>File descriptors</source>
         <translation>Huraian fail</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Processes</source>
         <translation>Proses</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Threads</source>
         <translation>Jaluran</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>Host name</source>
         <translation>Nama hos</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
         <translation>Jenis OS</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
         <source>Version</source>
         <translation>Versi</translation>
-    </message>
-    <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
-        <source>Up time</source>
-        <translation>Masa hidup</translation>
     </message>
 </context>
 <context>

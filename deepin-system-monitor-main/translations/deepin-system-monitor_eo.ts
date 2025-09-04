@@ -74,88 +74,93 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Average frequency</source>
-        <translation type="unfinished"></translation>
+        <source>Frequency</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequency</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
+        <source>Average frequency</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
+        <source>Up time</source>
+        <translation>Tempo de la starto</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Sockets</source>
         <translation>Soketoj</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
         <source>Logical processors</source>
         <translation>Logikaj procezoj</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>Virtualization</source>
         <translation>Virtualigo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1i cache</source>
         <translation>L1i kazo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L1d cache</source>
         <translation>L1d kazo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L2 cache</source>
         <translation>L2 kazo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>L3 cache</source>
         <translation>L3 kazo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>Load average</source>
         <translation>Promedio de la carico</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>File descriptors</source>
         <translation>Dosieroj de la indikatoroj</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Processes</source>
-        <translation type="unfinished">Processes</translation>
+        <translation>Processes</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Threads</source>
         <translation>Tredoj</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>Host name</source>
         <translation>Host-nomo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
         <translation>Sistemo tipo</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
         <source>Version</source>
         <translation>Versio</translation>
-    </message>
-    <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
-        <source>Up time</source>
-        <translation>Tempo de la starto</translation>
     </message>
 </context>
 <context>

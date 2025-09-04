@@ -68,7 +68,7 @@ private:
 protected:
     int rowCount(const QModelIndex &) const
     {
-        return 9;
+        return 10;
     }
 
     int columnCount(const QModelIndex &) const
@@ -90,55 +90,59 @@ protected:
                 if (column == 0)
                     return QApplication::translate("CPUSummaryTableModel", "Utilization"); //百分比显示，为CPU的总体利用率，显示精度为1%，2秒刷新1次；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Average frequency");//显示CPU的平均频率，单位说明：如果当前CPU速度大于1GHz，单位为GHz；如果当前CPU速度小于1GHz，显示单位为MHz；
+                    return QApplication::translate("CPUSummaryTableModel", "Frequency");//显示CPU的频率范围（最小频率~最大频率）；
                 break;
 
             case 1:
-                if (column == 0)    //m_model->cpuSet()->modelName()); //CPU属于的名字及其编号、标称主频；
+                if (column == 0)
                     return QApplication::translate("CPUSummaryTableModel", "Max frequency");//最大频率；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Up time");//最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
+                    return QApplication::translate("CPUSummaryTableModel", "Average frequency");//平均频率；
                 break;
             case 2:
-                if (column == 0)    //m_model->cpuSet()->coreId(0));   //处理器ID
-                    return QApplication::translate("CPUSummaryTableModel", "Sockets"); //插槽
+                if (column == 0)
+                    return QApplication::translate("CPUSummaryTableModel", "Up time");//最近一次开机到目前的运行时间。格式 天（DDDD）：小时（HH）：分钟（MM），60分自动进位到1小时；24小时自动进位为1天；最大支持 9999天；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Logical processors"); //逻辑处理器数量；（格式：数字）
+                    return QApplication::translate("CPUSummaryTableModel", "Sockets"); //插槽
                 break;
             case 3:
                 if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "Virtualization"); //虚拟化机制；（Intel 的VT-x，AMD的AMD-v），如果当前CPU不支持虚拟化，显示“不支持”；
+                    return QApplication::translate("CPUSummaryTableModel", "Logical processors"); //逻辑处理器数量；（格式：数字）
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "L1i cache");//L1缓存（指令）：1级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
+                    return QApplication::translate("CPUSummaryTableModel", "Virtualization"); //虚拟化机制；（Intel 的VT-x，AMD的AMD-v），如果当前CPU不支持虚拟化，显示"不支持"；
                 break;
             case 4:
                 if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "L1d cache");//L1缓存（数据）：1级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
+                    return QApplication::translate("CPUSummaryTableModel", "L1i cache");//L1缓存（指令）：1级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "L2 cache");//L2缓存：2级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
+                    return QApplication::translate("CPUSummaryTableModel", "L1d cache");//L1缓存（数据）：1级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
                 break;
             case 5:
                 if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "L3 cache");//L3缓存：3级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
+                    return QApplication::translate("CPUSummaryTableModel", "L2 cache");//L2缓存：2级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Load average"); //负载均衡：Load Average 就是一段时间 (1 分钟、5分钟、15分钟) 内平均 Load；
+                    return QApplication::translate("CPUSummaryTableModel", "L3 cache");//L3缓存：3级缓存大小；（单位：小于1K，用B；小于1M，用KB；大于1M：用MB；）
                 break;
             case 6:
                 if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "File descriptors");//文件描述符数
+                    return QApplication::translate("CPUSummaryTableModel", "Load average"); //负载均衡：Load Average 就是一段时间 (1 分钟、5分钟、15分钟) 内平均 Load；
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Processes"); //进程数量（格式：数字）
+                    return QApplication::translate("CPUSummaryTableModel", "File descriptors");//文件描述符数
                 break;
             case 7:
                 if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "Threads");//线程数量（格式：数字）
+                    return QApplication::translate("CPUSummaryTableModel", "Processes"); //进程数量（格式：数字）
                 else if (column == 1)
-                    return QApplication::translate("CPUSummaryTableModel", "Host name");//显示主机名称。（格式：字符串）
+                    return QApplication::translate("CPUSummaryTableModel", "Threads");//线程数量（格式：数字）
                 break;
             case 8:
                 if (column == 0)
-                    return QApplication::translate("CPUSummaryTableModel", "OS type");//系统类型
+                    return QApplication::translate("CPUSummaryTableModel", "Host name");//显示主机名称。（格式：字符串）
                 else if (column == 1)
+                    return QApplication::translate("CPUSummaryTableModel", "OS type");//系统类型
+                break;
+            case 9:
+                if (column == 0)
                     return QApplication::translate("CPUSummaryTableModel", "Version"); //版本号
                 break;
             default:
@@ -149,55 +153,67 @@ protected:
             case 0:
                 if (column == 0)
                     return  QString::number(m_model->cpuAllPercent(), 'f', 0) + "%";
-                else if (column == 1)
-                    return m_model->cpuSet()->avgFreq();
+                else if (column == 1) {
+                    // 显示频率范围：最小频率~最大频率
+                    QString minFreq = m_model->cpuSet()->minFreq();
+                    QString maxFreq = m_model->cpuSet()->maxFreq();
+                    if (minFreq != "-" && maxFreq != "-") {
+                        return QString("%1~%2").arg(minFreq).arg(maxFreq);
+                    } else {
+                        return "-";
+                    }
+                }
                 break;
             case 1:
                 if (column == 0)
                     return m_model->cpuSet()->curFreq();
                 else if (column == 1)
-                    return m_model->uptime();
+                    return m_model->cpuSet()->avgFreq();
                 break;
             case 2:
                 if (column == 0)
-                    return m_model->cpuSet()->socketCount() == 0 ? "-" : QString::number(m_model->cpuSet()->socketCount());
+                    return m_model->uptime();
                 else if (column == 1)
-                    return QString::number(m_model->cpuSet()->cpuCount());
+                    return m_model->cpuSet()->socketCount() == 0 ? "-" : QString::number(m_model->cpuSet()->socketCount());
                 break;
             case 3:
                 if (column == 0)
-                    return m_model->cpuSet()->virtualization();
+                    return QString::number(m_model->cpuSet()->cpuCount());
                 else if (column == 1)
-                    return m_model->cpuSet()->l1iCache();
+                    return m_model->cpuSet()->virtualization();
                 break;
             case 4:
                 if (column == 0)
-                    return m_model->cpuSet()->l1dCache();
+                    return m_model->cpuSet()->l1iCache();
                 else if (column == 1)
-                    return m_model->cpuSet()->l2Cache();
+                    return m_model->cpuSet()->l1dCache();
                 break;
             case 5:
                 if (column == 0)
-                    return m_model->cpuSet()->l3Cache();
+                    return m_model->cpuSet()->l2Cache();
                 else if (column == 1)
-                    return m_model->loadavg();
+                    return m_model->cpuSet()->l3Cache();
                 break;
             case 6:
                 if (column == 0)
-                    return QString::number(m_model->nFileDescriptors());
+                    return m_model->loadavg();
                 else if (column == 1)
-                    return  QString::number(m_model->nProcesses());
+                    return QString::number(m_model->nFileDescriptors());
                 break;
             case 7:
                 if (column == 0)
-                    return QString::number(m_model->nThreads());
+                    return  QString::number(m_model->nProcesses());
                 else if (column == 1)
-                    return  m_model->hostname();
+                    return QString::number(m_model->nThreads());
                 break;
             case 8:
                 if (column == 0)
-                    return m_model->osType();
+                    return  m_model->hostname();
                 else if (column == 1)
+                    return m_model->osType();
+                break;
+            case 9:
+                if (column == 0)
                     return m_model->osVersion();
                 break;
             default:
