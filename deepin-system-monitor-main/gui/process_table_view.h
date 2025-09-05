@@ -181,6 +181,11 @@ private:
      * @brief Customize process priority handler
      */
     void customizeProcessPriority();
+    /**
+     * @brief Check if the executable file of selected process exists
+     * @return true if file exists, false otherwise
+     */
+    bool checkExecFileExists();
 
 private:
     // Process model for process table view

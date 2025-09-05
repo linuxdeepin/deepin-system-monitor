@@ -70,92 +70,97 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="91"/>
         <source>Utilization</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Average frequency</source>
-        <translation type="unfinished"></translation>
+        <source>Frequency</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequency</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
-        <source>Up time</source>
-        <translation type="unfinished"></translation>
+        <source>Average frequency</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
-        <source>Sockets</source>
-        <translation type="unfinished"></translation>
+        <source>Up time</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
-        <source>Logical processors</source>
-        <translation type="unfinished"></translation>
+        <source>Sockets</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
-        <source>Virtualization</source>
-        <translation type="unfinished"></translation>
+        <source>Logical processors</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
-        <source>L1i cache</source>
-        <translation type="unfinished"></translation>
+        <source>Virtualization</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
-        <source>L1d cache</source>
-        <translation type="unfinished"></translation>
+        <source>L1i cache</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
-        <source>L2 cache</source>
-        <translation type="unfinished"></translation>
+        <source>L1d cache</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
-        <source>L3 cache</source>
-        <translation type="unfinished"></translation>
+        <source>L2 cache</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
-        <source>Load average</source>
-        <translation type="unfinished"></translation>
+        <source>L3 cache</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
-        <source>File descriptors</source>
-        <translation type="unfinished"></translation>
+        <source>Load average</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
-        <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <source>File descriptors</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
-        <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <source>Processes</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
-        <source>Host name</source>
-        <translation type="unfinished"></translation>
+        <source>Threads</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
-        <source>OS type</source>
-        <translation type="unfinished"></translation>
+        <source>Host name</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
+        <source>OS type</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
