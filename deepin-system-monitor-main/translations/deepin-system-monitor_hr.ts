@@ -72,88 +72,93 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Average frequency</source>
-        <translation>Prosječna frekvencija</translation>
+        <source>Frequency</source>
+        <translation>Frekvencija</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Maksimalna frekvencija</translation>
+        <translation>Frekvencija</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
+        <source>Average frequency</source>
+        <translation>Prosječna frekvencija</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
-        <source>Sockets</source>
+        <source>Up time</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
-        <source>Logical processors</source>
+        <source>Sockets</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
+        <source>Logical processors</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>Virtualization</source>
         <translation>Virtualizacija</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1i cache</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L1d cache</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L2 cache</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>L3 cache</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>Load average</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>File descriptors</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Processes</source>
         <translation>Procesi</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Threads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>Host name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
         <translation>Vrsta operativnog sustava</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
         <source>Version</source>
         <translation>Inačica</translation>
-    </message>
-    <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
-        <source>Up time</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
