@@ -72,88 +72,93 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Average frequency</source>
-        <translation type="unfinished"/>
+        <source>Frequency</source>
+        <translation>چاستوتا</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
+        <translation>چاستوتا</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
+        <source>Average frequency</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
+        <source>Up time</source>
+        <translation>ئىشلىگەن ۋاقىت</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Sockets</source>
         <translation>ئوقۇر</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
         <source>Logical processors</source>
         <translation>لوگىكىلىق بىر تەرەپ قىلغۇچ</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>Virtualization</source>
         <translation>مەۋھۇملاشتۇرۇش</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1i cache</source>
         <translation>L1 غەملەك (بۇيرۇق)</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L1d cache</source>
         <translation>L1 غەملەك (سانلىق مەلۇمات)</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L2 cache</source>
         <translation>L2 غەملەك</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>L3 cache</source>
         <translation>L3 غەملەك</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>Load average</source>
         <translation>يۈك تەڭپۇڭلۇقى</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>File descriptors</source>
         <translation>ھۆججەت چۈشەندۈرۈلۈش خەت سانى</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Processes</source>
         <translation>جەريانلار</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Threads</source>
         <translation>لىنىيە سانى</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>Host name</source>
         <translation>ئاپپارات نامى</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
         <translation>تىپى</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
         <source>Version</source>
         <translation>نەشرى</translation>
-    </message>
-    <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
-        <source>Up time</source>
-        <translation>ئىشلىگەن ۋاقىت</translation>
     </message>
 </context>
 <context>
