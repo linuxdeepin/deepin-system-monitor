@@ -44,16 +44,10 @@ ProcessTableModel::ProcessTableModel(QObject *parent, const QString &username)
     connect(ProcessDB::instance(), &ProcessDB::processPriorityChanged, this,
             &ProcessTableModel::updateProcessPriority);
 
-    // 由于之前获取dapplication::themetypechanged改变信号在有些平台获取不到，现通过获取DPlatformtheme方式获取
-    static QPointer<DPlatformTheme> theme;
-
-    if (!theme) {
-        theme = DGuiApplicationHelper::instance()->applicationTheme();
-        connect(theme, &DPlatformTheme::iconThemeNameChanged, this, [=]() {
-            qCDebug(app) << "Icon theme changed, updating process list";
-            updateProcessList();
-        });
-    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [=]() {
+        qCDebug(app) << "theme changed, updating process list";
+        updateProcessList();
+    });
 }
 
 char ProcessTableModel::getProcessState(pid_t pid) const

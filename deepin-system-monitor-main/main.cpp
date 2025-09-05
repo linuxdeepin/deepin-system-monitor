@@ -27,11 +27,23 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QAccessible>
+#include <QTimer>
+#include <signal.h>
 #include "logger.h"
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
 using namespace common::init;
+
+static Application *g_app = nullptr;
+
+void signalHandler(int signal)
+{
+    qCDebug(DDLog::app) << "Received signal:" << signal;
+    if (g_app) {
+        QTimer::singleShot(0, g_app, &Application::quit);
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +69,11 @@ int main(int argc, char *argv[])
 
     Application::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     Application app(argc, argv);
+    g_app = &app;
+    
+    // 注册信号处理器以确保优雅退出
+    signal(SIGTERM, signalHandler);
+    
     qCDebug(DDLog::app) << "Application object created";
     QCommandLineParser parser;
     parser.process(app);
@@ -131,9 +148,12 @@ int main(int argc, char *argv[])
         mw.show();
 
         qCDebug(DDLog::app) << "Starting application event loop";
-        return app.exec();
+        int result = app.exec();
+        g_app = nullptr;
+        return result;
     }
 
     qCDebug(DDLog::app) << "Could not set single instance, exiting.";
+    g_app = nullptr;
     return 0;
 }

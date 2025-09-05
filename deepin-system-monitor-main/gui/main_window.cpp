@@ -66,6 +66,15 @@ MainWindow::~MainWindow()
 {
     // qCDebug(app) << "MainWindow destructor";
     PERF_PRINT_END("POINT-02");
+
+    // 先注销DBus服务
+    if (QDBusConnection::sessionBus().isConnected()) {
+        QDBusConnection::sessionBus().unregisterObject(SERVICE_PATH);
+        QDBusConnection::sessionBus().unregisterService(SERVICE_NAME);
+        // qCDebug(app) << "DBus service unregistered";
+    }
+
+    // 然后删除DBus服务对象
     if (m_pDbusService) {
         delete m_pDbusService;
         m_pDbusService = nullptr;

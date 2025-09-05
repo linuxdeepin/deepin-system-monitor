@@ -55,6 +55,9 @@ void ProcessSortFilterProxyModel::setFilterType(int type)
 // filters the row of specified parent with given pattern
 bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
+    if (!sourceModel() || row < 0 || row >= sourceModel()->rowCount(parent)) {
+        return false;
+    }
     // qCDebug(app) << "Filtering row" << row;
     bool filter = false;
     const QModelIndex &pid = sourceModel()->index(row, ProcessTableModel::kProcessPIDColumn, parent);
@@ -140,6 +143,9 @@ bool ProcessSortFilterProxyModel::filterAcceptsRow(int row, const QModelIndex &p
 // compare two items with the specified index
 bool ProcessSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+    if (!left.isValid() || !right.isValid() || !left.model() || !right.model()) {
+        return false;
+    }
     qCDebug(app) << "lessThan sorting on column:" << sortColumn();
     int sortcolumn = sortColumn();
     switch (sortcolumn) {
