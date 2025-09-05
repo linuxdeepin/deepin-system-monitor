@@ -72,88 +72,93 @@
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
-        <source>Average frequency</source>
-        <translation>Średnia częstotliwość</translation>
+        <source>Frequency</source>
+        <translation>Częstotliwość</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Maks. częstotliwość</translation>
+        <translation>Częstotliwość</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
+        <source>Average frequency</source>
+        <translation>Średnia częstotliwość</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
+        <source>Up time</source>
+        <translation>Czas działania</translation>
+    </message>
+    <message>
+        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
         <source>Sockets</source>
         <translation>Gniazd</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
         <source>Logical processors</source>
         <translation>Procesorów logicznych</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="110"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
         <source>Virtualization</source>
         <translation>Wirtualizacja</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="112"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
         <source>L1i cache</source>
         <translation>L1i cache</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="116"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
         <source>L1d cache</source>
         <translation>L1d cache</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="118"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
         <source>L2 cache</source>
         <translation>L2 cache</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="122"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
         <source>L3 cache</source>
         <translation>L3 cache</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="124"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
         <source>Load average</source>
         <translation>Średnie obciążenie</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="128"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
         <source>File descriptors</source>
         <translation>Deskryptorów pliku</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="130"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
         <source>Processes</source>
         <translation>Procesów</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="134"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
         <source>Threads</source>
         <translation>Wątków</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="136"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
         <source>Host name</source>
         <translation>Nazwa hosta</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="140"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
         <translation>Zestaw instrukcji</translation>
     </message>
     <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
+        <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
         <source>Version</source>
         <translation>Wersja</translation>
-    </message>
-    <message>
-        <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
-        <source>Up time</source>
-        <translation>Czas działania</translation>
     </message>
 </context>
 <context>
