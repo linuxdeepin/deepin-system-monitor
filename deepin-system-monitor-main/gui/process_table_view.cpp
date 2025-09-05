@@ -5,6 +5,9 @@
 #include "ddlog.h"
 #include "process_table_view.h"
 
+#include <unistd.h>
+#include <climits>
+
 #include "application.h"
 #include "main_window.h"
 #include "kill_process_confirm_dialog.h"
@@ -341,6 +344,31 @@ void ProcessTableView::openExecDirWithFM()
             }
         }   // ::if(cmdline)
     }   // ::if(selectedPID)
+}
+
+// check if executable file exists
+bool ProcessTableView::checkExecFileExists()
+{
+    if (!m_selectedPID.isValid()) {
+        return false;
+    }
+
+    pid_t pid = qvariant_cast<pid_t>(m_selectedPID);
+
+    char path[PATH_MAX];
+    ssize_t len = readlink(QString("/proc/%1/exe").arg(pid).toLocal8Bit().data(), path, sizeof(path) - 1);
+    if (len == -1) {
+        return false;
+    }
+    path[len] = '\0';
+    QString cmdline = QString::fromLocal8Bit(path);
+    qCDebug(app) << "cmdline:" << cmdline << "pid:" << pid;
+
+    if (cmdline.isEmpty()) {
+        return false;
+    }
+
+    return QFile::exists(cmdline);
 }
 
 // show process attribute dialog
@@ -738,6 +766,8 @@ void ProcessTableView::initConnections(bool settingsLoaded)
                 // unexpected, do nothing
             }
             }
+
+            openExecDirAction->setEnabled(checkExecFileExists());
         }
     });
 

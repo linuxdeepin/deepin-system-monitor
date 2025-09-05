@@ -200,9 +200,11 @@ void ProcessSet::scanProcess()
         }
 
         for (const pid_t &pid : m_curPid) {
-            if(!m_prePid.contains(pid)){ //add  new process pid
-                // qCDebug(app) << "Adding new pid" << pid;
-                Process proc(pid);
+            Process proc;
+            bool isNewProcess = !m_prePid.contains(pid);
+
+            if (isNewProcess) {
+                proc = Process(pid);
 
                 // 优化：在DKapture模式下跳过stat读取，避免冗余读取/proc/[pid]/stat
                 if (m_useSystemService) {
@@ -215,11 +217,55 @@ void ProcessSet::scanProcess()
 
                 if(!m_simpleSet.contains(pid))
                      m_simpleSet.insert(proc.pid(), proc);
+            } else {
+                proc = m_simpleSet.value(pid);
+            }
 
-                // readProcessSimpleInfo 中设置类型，FIXME: 如果在后面加入，则列表不更新
-                if (proc.appType() == kFilterApps && !wmwindowList->isTrayApp(proc.pid())) {
-                    qCDebug(app) << "Adding new app process to list:" << proc.pid();
-                    m_pidMyApps << proc.pid();
+            if (proc.appType() == kFilterApps) {
+                bool isTrayApp = wmwindowList->isTrayApp(proc.pid());
+                if (!isTrayApp) {
+                    if (!m_pidMyApps.contains(proc.pid())) {
+                        qCDebug(app) << "Adding" << (isNewProcess ? "new" : "existing") << "app process to list:" << proc.pid();
+                        m_pidMyApps << proc.pid();
+                    }
+                } else {
+                    qCDebug(app) << "Process" << proc.pid() << "is a tray app, not adding to applications list";
+                }
+            }
+            else if (proc.appType() == kFilterCurrentUser) {
+                bool isGuiApp = wmwindowList->isGuiApp(proc.pid());
+                bool isTrayApp = wmwindowList->isTrayApp(proc.pid());
+                bool isDesktopEntryApp = wmwindowList->isDesktopEntryApp(proc.pid());
+
+                qCDebug(app) << "Reevaluating pid" << proc.pid() << ":"
+                             << "isGuiApp=" << isGuiApp
+                             << "isTrayApp=" << isTrayApp
+                             << "isDesktopEntryApp=" << isDesktopEntryApp
+                             << "currently in m_pidMyApps:" << m_pidMyApps.contains(proc.pid());
+
+                if (isGuiApp || isTrayApp || isDesktopEntryApp) {
+                    qCDebug(app) << "Process" << proc.pid() << "now has window, reclassifying as app";
+                    proc.setAppType(kFilterApps);
+                    if (!isNewProcess) {
+                        m_simpleSet.insert(pid, proc);
+                    }
+
+                    if (isTrayApp) {
+                        if (m_pidMyApps.contains(proc.pid())) {
+                            qCInfo(app) << "Removing tray app process from list:" << proc.pid();
+                            m_pidMyApps.removeOne(proc.pid());
+                        }
+                    } else {
+                        if (!m_pidMyApps.contains(proc.pid())) {
+                            qCInfo(app) << "Adding reevaluated app process to list:" << proc.pid();
+                            m_pidMyApps << proc.pid();
+                        }
+                    }
+                } else {
+                    if (m_pidMyApps.contains(proc.pid())) {
+                        qCInfo(app) << "Removing non-window process from applications list:" << proc.pid();
+                        m_pidMyApps.removeOne(proc.pid());
+                    }
                 }
             }
         }
@@ -435,7 +481,6 @@ void ProcessSet::updateProcessPriority(pid_t pid, int priority)
     if (m_set.contains(pid))
         m_set[pid].setPriority(priority);
 }
-
 
 
 } // namespace process
