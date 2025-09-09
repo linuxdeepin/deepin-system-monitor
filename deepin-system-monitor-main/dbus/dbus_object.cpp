@@ -18,12 +18,16 @@ QAtomicPointer<DBusObject> DBusObject::instance;
 
 DBusObject &DBusObject::getInstance()
 {
-    if (instance.testAndSetOrdered(nullptr, nullptr)) {
+    DBusObject *tmp = instance.loadAcquire();
+    if (!tmp) {
         QMutexLocker locker(&mutex);
-
-        instance.testAndSetOrdered(nullptr, new DBusObject);
+        tmp = instance.loadAcquire();
+        if (!tmp) {
+            tmp = new DBusObject();
+            instance.storeRelease(tmp);
+        }
     }
-    return *instance;
+    return *tmp;
 }
 
 bool DBusObject::registerOrNotify()

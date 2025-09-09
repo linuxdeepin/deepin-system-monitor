@@ -24,16 +24,24 @@ SystemMonitorThread::SystemMonitorThread(QObject *parent)
 {
     qCDebug(app) << "SystemMonitorThread created";
     m_monitor->moveToThread(this);
-    connect(this, &QThread::finished, this, &QObject::deleteLater);
     connect(this, &QThread::started, m_monitor, &SystemMonitor::startMonitorJob);
 }
 
 SystemMonitorThread::~SystemMonitorThread()
 {
     qCDebug(app) << "SystemMonitorThread destroyed, quitting and waiting for thread to finish";
-    m_monitor->deleteLater();
-    quit();
-    wait();
+
+    if (isRunning()) {
+        quit();
+        if (!wait(200)) {
+            qCWarning(app) << "SystemMonitorThread failed to quit in time, terminating";
+            terminate();
+            wait(100);
+        }
+    }
+
+    delete m_monitor;
+    m_monitor = nullptr;
 }
 
 SystemMonitor *SystemMonitorThread::systemMonitorInstance() const
