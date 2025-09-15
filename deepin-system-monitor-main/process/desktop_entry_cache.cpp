@@ -57,6 +57,17 @@ void DesktopEntryCache::updateCache()
     m_cache.clear();
 
     QString xdgDataDirPath(getenv("XDG_DATA_DIRS"));
+    QString xdgDataHomePath(getenv("XDG_DATA_HOME"));
+    // Add XDG_DATA_HOME to XDG_DATA_DIRS
+    if (!xdgDataHomePath.isEmpty()) {
+        if (!xdgDataDirPath.isEmpty()) {
+            xdgDataDirPath += ":" + xdgDataHomePath;
+        } else {
+            xdgDataDirPath = xdgDataHomePath;
+        }
+        qCDebug(app) << "XDG_DATA_DIRS:" << xdgDataDirPath;
+    }
+
     if (xdgDataDirPath.isEmpty()) {
         qCDebug(app) << "XDG_DATA_DIRS is empty, using default path";
         auto fileInfoList = QDir(DESKTOP_ENTRY_PATH).entryInfoList(QDir::Files);
