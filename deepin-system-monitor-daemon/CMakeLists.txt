@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_NAME deepin-system-monitor)
 set(BIN_NAME ${PROJECT_NAME}-daemon)
