@@ -1,0 +1,179 @@
+name: Build deepin-system-monitor on Arch Linux
+
+# This workflow builds deepin-system-monitor on Arch Linux
+# Dependencies are based on debian/control file with Arch Linux equivalents
+# Special dependencies are built from source when packages are not available
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Run in container
+        run: |
+          cat /etc/pacman.d/mirrorlist
+          pacman-key --init
+          pacman --noconfirm --noprogressbar -Syu
+
+      - name: Install base dependencies
+        run: |
+          # Base build tools from debian/control
+          pacman -Syu --noconfirm --noprogressbar base-devel git cmake pkg-config
+          pacman -Syu --noconfirm --noprogressbar fakeroot sudo extra-cmake-modules
+
+      - name: Install Qt6 dependencies
+        run: |
+          # Qt6 dependencies matching debian/control: qt6-base-dev, qt6-svg-dev, qt6-tools-dev
+          pacman -Syu --noconfirm --noprogressbar qt6-base qt6-svg qt6-tools
+          # qt6-tools-dev-tools equivalent
+          pacman -Syu --noconfirm --noprogressbar qt6-declarative
+
+      - name: Install DTK dependencies
+        run: |
+          # DTK dependencies from debian/control: libdtk6core-dev, libdtk6gui-dev, libdtk6widget-dev
+          pacman -Syu --noconfirm --noprogressbar dtk6core dtk6gui dtk6widget
+
+      - name: Install X11 and graphics dependencies
+        run: |
+          # X11 libraries from debian/control: libxcb1-dev, libxext-dev, libxcb-util0-dev, libxcb-icccm4-dev
+          pacman -Syu --noconfirm --noprogressbar libxcb libxext xcb-util xcb-util-wm
+          # Additional X11 testing and cursor libraries
+          pacman -Syu --noconfirm --noprogressbar libxtst libxcursor
+
+      - name: Install system monitoring dependencies
+        run: |
+          # System monitoring libraries from debian/control: libpcap-dev, libnl-3-dev, libnl-route-3-dev, libudev-dev
+          # Note: libnl-route functionality is included in libnl package on Arch Linux
+          pacman -Syu --noconfirm --noprogressbar libpcap libnl systemd-libs
+
+      - name: Install ICU and additional dependencies
+        run: |
+          # ICU from debian/control: libicu-dev
+          pacman -Syu --noconfirm --noprogressbar icu
+          # deepin-gettext-tools (contains deepin-policy-ts-convert)
+          pacman -Syu --noconfirm --noprogressbar deepin-gettext-tools
+
+      - name: Install testing dependencies
+        run: |
+          # Testing frameworks from debian/control: libgtest-dev, libgmock-dev
+          pacman -Syu --noconfirm --noprogressbar gtest gmock
+
+      - name: Install polkit dependency
+        run: |
+          # Install polkit-gobject-1 required for building polkit-qt-1
+          pacman -Syu --noconfirm --noprogressbar polkit
+
+      - name: Build and Install Polkit-Qt
+        run: |
+          echo "Building polkit-qt from source..."
+          # From debian/control: libpolkit-qt6-1-dev | libpolkit-qt5-1-dev
+          git clone https://github.com/deepin-community/polkit-qt-1.git --depth 1
+          cd polkit-qt-1
+          mkdir -p build-qt6
+          cd build-qt6
+          cmake .. \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DQT_MAJOR_VERSION=6
+          cmake --build .
+          cmake --install .
+          echo "✅ polkit-qt-1 (Qt6) built and installed from source"
+
+      - name: Build and Install dde-tray-loader
+        run: |
+          # From debian/control: dde-tray-loader-dev | dde-dock-dev
+          echo "Building dde-tray-loader from source..."
+          git clone https://github.com/linuxdeepin/dde-tray-loader.git --depth 1
+          cd dde-tray-loader
+          mkdir -p build
+          cd build
+          cmake .. \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
+          cmake --install .
+          echo "✅ dde-tray-loader built and installed from source"
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure and Build deepin-system-monitor
+        run: |
+          echo "Working directory:" $PWD
+          echo "Configuring deepin-system-monitor..."
+          mkdir -p build
+          cd build
+          cmake .. \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DQT_VERSION_MAJOR=6 \
+            -DCMAKE_CXX_STANDARD=17
+          echo "Building deepin-system-monitor..."
+          cmake --build .
+          echo "✅ deepin-system-monitor built successfully!"
+
+      - name: Install deepin-system-monitor to staging directory
+        run: |
+          echo "Installing deepin-system-monitor to staging directory..."
+          mkdir -p /tmp/deepin-system-monitor-install
+          DESTDIR=/tmp/deepin-system-monitor-install cmake --install build
+          echo "✅ deepin-system-monitor installed to staging directory"
+
+          echo "Installed files:"
+          find /tmp/deepin-system-monitor-install -type f | head -20
+          echo "Total files installed: $(find /tmp/deepin-system-monitor-install -type f | wc -l)"
+
+      - name: Create deepin-system-monitor installation package
+        run: |
+          cd /tmp/deepin-system-monitor-install
+
+          # Install zip if not available
+          pacman -Syu --noconfirm zip
+
+          # Create package info
+          echo "Creating package info..."
+          cat > PACKAGE_INFO.txt << EOF
+          Package: deepin-system-monitor-archlinux-build
+          Version: $(date +%Y%m%d-%H%M%S)
+          Architecture: x86_64
+          Built-on: Arch Linux
+          Built-with: Qt6 and DTK
+          CMake-Config: -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DQT_VERSION_MAJOR=6
+
+          Installation Instructions:
+          1. Extract this package to /
+          2. Run: sudo ldconfig (if libraries are included)
+          3. Ensure dependencies are installed on target system
+          4. Set capabilities: sudo setcap cap_kill,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+ep /usr/bin/deepin-system-monitor
+
+          Dependencies built from source:
+          - polkit-qt-1 (Qt6 version)
+          - Note: dde-tray-loader/dde-dock not available in Arch Linux, some tray features may be limited
+
+          Files included in this package:
+          EOF
+          find . -type f | sort >> PACKAGE_INFO.txt
+
+          # Create the zip package
+          zip -r /tmp/deepin-system-monitor-archlinux-$(date +%Y%m%d-%H%M%S).zip .
+          echo "✅ deepin-system-monitor installation package created"
+
+          ls -la /tmp/deepin-system-monitor-archlinux-*.zip
+
+      - name: Upload deepin-system-monitor ArchLinux build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deepin-system-monitor-archlinux-build
+          path: "/tmp/deepin-system-monitor-archlinux-*.zip"
+          if-no-files-found: error
+          retention-days: 30
