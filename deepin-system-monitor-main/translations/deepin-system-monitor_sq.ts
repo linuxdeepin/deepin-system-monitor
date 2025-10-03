@@ -83,7 +83,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation type="unfinished"/>
+        <translation>Frekuencë mesatare</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Anuloje</translation>
     </message>
 </context>
 <context>
@@ -661,7 +661,7 @@ Jeni i sigurt se doni të vazhdohet?</translation>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="311"/>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>Dalje</translation>
     </message>
 </context>
 <context>
