@@ -1407,7 +1407,7 @@ Continuar?</translation>
         <location filename="../common/common.cpp" line="59"/>
         <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
-        <translation>Forçar encerramento de aplicativo</translation>
+        <translation>Forçar encerramento</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="147"/>
