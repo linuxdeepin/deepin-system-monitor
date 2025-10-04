@@ -471,7 +471,7 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="81"/>
         <source>Cached swap</source>
-        <translation>SWAP em cache</translation>
+        <translation>Swap em cache</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="85"/>
@@ -501,7 +501,7 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="99"/>
         <source>Free swap</source>
-        <translation>SWAP livre</translation>
+        <translation>Swap livre</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="103"/>
@@ -887,7 +887,7 @@ Continuar?</translation>
         <location filename="../compact_memory_monitor.cpp" line="191"/>
         <location filename="../memory_monitor.cpp" line="203"/>
         <source>Memory</source>
-        <translation>Memória</translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="203"/>
@@ -896,7 +896,7 @@ Continuar?</translation>
         <location filename="../memory_monitor.cpp" line="214"/>
         <location filename="../memory_monitor.cpp" line="221"/>
         <source>Swap</source>
-        <translation>SWAP</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="204"/>
@@ -933,7 +933,7 @@ Continuar?</translation>
         <location filename="../compact_network_monitor.cpp" line="165"/>
         <location filename="../network_monitor.cpp" line="223"/>
         <source>Total Sent</source>
-        <translation>Total Enviado</translation>
+        <translation>Total enviado</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="104"/>
