@@ -496,7 +496,7 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="97"/>
         <source>Total swap</source>
-        <translation>SWAP total</translation>
+        <translation>Swap total</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="99"/>
@@ -927,7 +927,7 @@ Continuar?</translation>
         <location filename="../compact_network_monitor.cpp" line="160"/>
         <location filename="../network_monitor.cpp" line="218"/>
         <source>Total Received</source>
-        <translation>Total Baixado</translation>
+        <translation>Total recebido</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="165"/>
@@ -1422,7 +1422,7 @@ Continuar?</translation>
     <message>
         <location filename="../gui/main_window.cpp" line="142"/>
         <source>View</source>
-        <translation>Visualização</translation>
+        <translation>Exibição</translation>
     </message>
 </context>
 <context>
