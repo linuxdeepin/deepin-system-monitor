@@ -54,7 +54,7 @@
         <location filename="../gui/memory_widget.cpp" line="210"/>
         <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
-        <translation>SWAP</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="211"/>
