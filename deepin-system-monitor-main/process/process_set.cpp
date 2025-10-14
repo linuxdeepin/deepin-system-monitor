@@ -22,6 +22,7 @@
 #define PROC_PATH "/proc"
 
 using namespace common::error;
+DCORE_USE_NAMESPACE
 
 namespace core {
 namespace process {
@@ -38,7 +39,7 @@ ProcessSet::ProcessSet()
     qCDebug(app) << "ProcessSet object created";
     
     // 初始化DConfig
-    m_config = DTK_CORE_NAMESPACE::DConfig::create("deepin-system-monitor", "org.deepin.system-monitor");
+    m_config = DConfig::create("org.deepin.system-monitor", "org.deepin.system-monitor");
     if (!m_config) {
         qCWarning(app) << "Failed to create DConfig instance, DKapture will be disabled";
     }
@@ -148,14 +149,14 @@ void ProcessSet::scanProcess()
     QElapsedTimer timer;
     timer.start();
 
-    qCDebug(app) << "Scanning processes";
-    
+    qCInfo(app) << "Scanning processes";
+
     if (m_useSystemService) {
-        qCDebug(app) << "Using DKapture enhanced scanning";
+        qCInfo(app) << "Using DKapture enhanced scanning";
     } else {
-        qCDebug(app) << "Using traditional /proc scanning";
+        qCInfo(app) << "Using traditional /proc scanning";
     }
-    
+
     for (auto iter = m_set.begin(); iter != m_set.end(); iter++) {
         qCDebug(app) << "Storing recent stage for pid" << iter->pid();
         std::shared_ptr<RecentProcStage> procstage = std::make_shared<RecentProcStage>();
