@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
 Build-Depends: 
- debhelper (>= 11), 
+ debhelper-compat (= 11),
  cmake,
  pkg-config,
  qt6-base-dev,
