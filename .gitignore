@@ -19,3 +19,14 @@ config.h
 .claude/
 .kiro/
 .spec-workflow/
+
+# build output
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/deepin-system-monitor.debhelper.log
+debian/deepin-system-monitor.postrm.debhelper
+debian/deepin-system-monitor.substvars
+debian/deepin-system-monitor/
+debian/files
+obj-x86_64-linux-gnu/
+

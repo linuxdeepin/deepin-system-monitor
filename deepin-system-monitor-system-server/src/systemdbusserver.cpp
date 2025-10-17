@@ -141,11 +141,6 @@ QString SystemDBusServer::setServiceEnable(const QString &serviceName, bool enab
 QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool enable)
 {
     qCDebug(app) << "setServiceEnableImpl called for service:" << serviceName << "enable:" << enable;
-    // 调用者限制前台系统监视器程序
-    if (!checkCaller()) {
-        qCWarning(app) << "Unauthorized caller attempt to modify service:" << serviceName;
-        return QString(strerror(EPERM));
-    }
 
     // 不允许包含';' ' '字符，服务名称长度同样限制
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -219,30 +214,6 @@ qint64 SystemDBusServer::dbusCallerPid() const
     return 0;
 }
 
-/**
-   @return 返回调用者是否为前台的系统监视器程序
- */
-bool SystemDBusServer::checkCaller() const
-{
-    if (!calledFromDBus()) {
-        qCDebug(app) << "Not called from DBus";
-        return false;
-    }
-
-    qint64 callerPid = dbusCallerPid();
-    QString callerExe = getProcIdExe(callerPid);
-    QString dbmExe = QStandardPaths::findExecutable("deepin-system-monitor", { "/usr/bin" });
-
-    qCDebug(app) << "Checking caller authorization - PID:" << callerPid << "Executable:" << callerExe;
-    if (callerExe != dbmExe) {
-        qCWarning(app) << "Unauthorized caller:" << callerExe;
-        return false;
-    }
-
-    qCDebug(app) << "Caller authorized:" << callerExe;
-    return true;
-}
-
 // ================== DKapture 相关实现 ==================
 
 void SystemDBusServer::initializeDKapture()
@@ -281,12 +252,6 @@ bool SystemDBusServer::isDKaptureAvailable()
 
     // 重置退出定时器
     resetExitTimer();
-    
-    // 检查调用者授权
-    if (!checkCaller()) {
-        qCWarning(app) << "SystemServer: Unauthorized caller for isDKaptureAvailable";
-        return false;
-    }
 
 #ifdef ENABLE_DKAPTURE
     bool available = m_dkaptureInitialized && m_dkaptureManager && m_dkaptureManager->isAvailable();
@@ -308,13 +273,6 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
     QVariantMap result;
     result["success"] = false;
     result["error"] = "Unknown error";
-    
-    // 检查调用者授权
-    if (!checkCaller()) {
-        qCWarning(app) << "SystemServer: Unauthorized caller for getProcessInfoBatch";
-        result["error"] = "Unauthorized";
-        return result;
-    }
 
 #ifdef ENABLE_DKAPTURE
     if (!isDKaptureAvailable()) {

@@ -14,7 +14,7 @@ Thanks a lot for [Lily Rivers](https://github.com/VioletDarkKitty/system-monito
 * cd build
 * qmake ..
 * make
-* sudo setcap cap_kill,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+ep ./deepin-system-monitor
+* sudo setcap cap_net_raw+ep ./deepin-system-monitor
 
 ## 用法
 
