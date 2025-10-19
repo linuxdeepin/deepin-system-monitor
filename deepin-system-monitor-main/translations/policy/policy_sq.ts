@@ -34,12 +34,12 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0"/>
 			<source>Logging out other users is required to change process priority</source>
-			<translation type="unfinished"/>
+			<translation>Që të ndryshohet përparësi procesi, lypset nxjerrje jashtë llogarish e përdoruesve të tjerëmirëfilltësim</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0"/>
 			<source>Logout other users</source>
-			<translation type="unfinished"/>
+			<translation>Nxirr nga llogari përdorues të tjerë</translation>
 		</message>
 	</context>
 </TS>
