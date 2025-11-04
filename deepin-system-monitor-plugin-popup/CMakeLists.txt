@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall ")
-set(CMAKE_CXX_FLAGS "-Wl,--as-need -fPIE")
+set(CMAKE_CXX_FLAGS "-Wl,--as-needed -fPIE")
 set(CMAKE_EXE_LINKER_FLAGS "-pie")
 
 set(MAIN_APP_DIR ${CMAKE_SOURCE_DIR}/deepin-system-monitor-main)
@@ -47,7 +47,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wl,-Map=deepin-system-monitor-pluign-popup.map")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-popup.map")
-#pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
 #pkg_check_modules(DdeDockInterface REQUIRED dde-dock)
 
@@ -59,8 +58,6 @@ pkg_search_module(LIB_UDEV REQUIRED libudev)
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
-
-#include_directories(${QGSettings_INCLUDE_DIRS})
 
 include_directories(${DtkGui_INCLUDE_DIRS})
 include_directories(${DtkCore_INCLUDE_DIRS})
@@ -291,7 +288,6 @@ target_link_libraries(${PROJECT_NAME}
     ${LIB_NL3_ROUTE_LIBRAIES}
     ${LIB_UDEV_LIBRARIES}
     ${LIB_DDEDOCK}
-#    gsettings-qt
 )
 
 

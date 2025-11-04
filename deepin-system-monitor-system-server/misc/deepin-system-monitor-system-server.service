@@ -7,7 +7,6 @@ BusName=com.deepin.SystemMonitorSystemServer
 User=root
 ExecStart=/usr/lib/deepin-daemon/deepin-system-monitor-system-server
 StandardOutput=syslog
-CapabilityBoundingSet=~
 MemoryMax=1G
 IOWeight=200
 ProtectSystem=strict

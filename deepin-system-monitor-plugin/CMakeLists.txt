@@ -37,7 +37,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${DdeDockInterface_INCLUDE_DIRS}
-  ${QGSettings_INCLUDE_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
