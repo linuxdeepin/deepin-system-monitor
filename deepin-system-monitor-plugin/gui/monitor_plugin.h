@@ -53,7 +53,6 @@ using namespace Dock;
 #define PLUGIN_METADATA()  Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "system-monitor.json")
 #endif
 
-class QGSettings;
 //!
 //! \brief The MonitorPlugin class
 //! 实现插件接口对象的类

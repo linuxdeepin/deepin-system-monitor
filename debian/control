@@ -27,7 +27,7 @@ Build-Depends:
  libgtest-dev,
  libgmock-dev,
  libpolkit-qt6-1-dev | libpolkit-qt5-1-dev
-Standards-Version: 3.9.8
+Standards-Version: 4.6.2
 Homepage: https://github.com/linuxdeepin/deepin-system-monitor
 
 Package: deepin-system-monitor
