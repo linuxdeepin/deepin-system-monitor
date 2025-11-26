@@ -31,6 +31,10 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -Wl,--gc-sections")
 endif()
 
+#安全加固编译参数
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -pie -fstack-protector-all")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -pie -fstack-protector-all")
+
 #判断龙芯架构
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
     SET(IS_LOONGARCH_TYPE 1)
