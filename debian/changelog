@@ -1,3 +1,9 @@
+deepin-system-monitor (6.5.37) unstable; urgency=medium
+
+  * chore: Update compiler flags for security enhancements
+
+ -- wangrong <wangrong@uniontech.com>  Thu, 27 Nov 2025 10:41:18 +0800
+
 deepin-system-monitor (6.5.36) unstable; urgency=medium
 
   * refactor: Service safety rectification
