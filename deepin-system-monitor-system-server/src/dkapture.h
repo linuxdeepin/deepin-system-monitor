@@ -17,6 +17,22 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+// 提前包含 sys/mount.h，避免 struct mount_attr 重复定义
+#ifndef __VMLINUX_H__
+#include <sys/mount.h>
+#endif
+
+// mount_attr 结构体兼容性定义（Linux 5.12+ 引入）
+// 仅在系统头文件未定义时才定义
+#if !defined(MOUNT_ATTR_SIZE_VER0) && !defined(_LINUX_MOUNT_H)
+struct mount_attr {
+    uint64_t attr_set;
+    uint64_t attr_clr;
+    uint64_t propagation;
+    uint64_t userns_fd;
+};
+#endif
+
 #define TASK_COMM_LEN 16
 struct FileLog;
 
@@ -761,9 +777,7 @@ struct SeekLog : public FileLog
 #define DATA_LEN 512
 #define PATH_MAX 4096
 
-#ifndef __VMLINUX_H__
-#include <sys/mount.h>
-#endif
+// sys/mount.h 已在文件开头包含
 
 struct mount_args
 {

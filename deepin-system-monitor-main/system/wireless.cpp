@@ -14,13 +14,15 @@
 #include <QDBusReply>
 #include <QDebug>
 
+using namespace DDLog;
+
 namespace core{
 namespace system{
 
 wireless::wireless()
     : m_bwireless(false)
     , m_link_quality(0)
-    , m_signal_levle(0)
+    , m_signal_level(0)
     , m_noise_level(0)
 {
     qCDebug(app) << "wireless object created with default constructor";

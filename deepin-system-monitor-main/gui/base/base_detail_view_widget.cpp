@@ -82,10 +82,11 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
             this, &BaseDetailViewWidget::detailFontChanged);
 
     // adjust search result tip label text color dynamically on theme type change
-    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    onThemeTypeChanged(DApplicationHelper::instance()->themeType());
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
 #else
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BaseDetailViewWidget::onThemeTypeChanged);
 #endif
     // 当前的策略是为了解决页面切换时，焦点停留在按钮上，这样设置不会影响代码的逻辑
@@ -172,6 +173,19 @@ void BaseDetailViewWidget::updateWidgetGrometry()
     m_switchButton->setGeometry(m_detailButton->x() - 30, 10 + titleFont.height() / 2 - m_switchButton->height() / 2, m_switchButton->width(), m_switchButton->height());
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+void BaseDetailViewWidget::onThemeTypeChanged(DApplicationHelper::ColorType themeType)
+{
+    qCDebug(app) << "onThemeTypeChanged, themeType:" << themeType;
+    if (themeType == DApplicationHelper::DarkType) {
+        qCDebug(app) << "Dark theme";
+        m_switchButton->setIcon(*m_switchIconDark);
+    } else if (themeType == DApplicationHelper::LightType) {
+        qCDebug(app) << "Light theme";
+        m_switchButton->setIcon(*m_switchIconLight);
+    }
+}
+#else
 void BaseDetailViewWidget::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
     qCDebug(app) << "onThemeTypeChanged, themeType:" << themeType;
@@ -183,6 +197,7 @@ void BaseDetailViewWidget::onThemeTypeChanged(DGuiApplicationHelper::ColorType t
         m_switchButton->setIcon(*m_switchIconLight);
     }
 }
+#endif
 
 void BaseDetailViewWidget::resizeEvent(QResizeEvent *event)
 {

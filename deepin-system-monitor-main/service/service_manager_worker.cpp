@@ -293,10 +293,10 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
         qCDebug(app) << "Successfully opened unit file:" << path;
         while ((fgets(buf.data(), BLEN, fp))) {
             descStr = QString("Description=%1").arg(buf.data());
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
             QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
 #else
-            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
+            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), QString::SkipEmptyParts);
 #endif
             if (descStrList.size() > 0) {
                 descStr = descStrList.at(0);

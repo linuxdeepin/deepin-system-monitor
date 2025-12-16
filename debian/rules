@@ -5,6 +5,13 @@ include /usr/share/dpkg/default.mk
 DEB_BUILD_ARCH ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 DH_AUTO_ARGS = --parallel --buildsystem=cmake
 
+# 检测 Qt 版本，优先 Qt6，回退 Qt5
+ifneq (,$(wildcard /usr/lib/*/cmake/Qt6Core))
+    QT_VERSION_MAJOR = 6
+else
+    QT_VERSION_MAJOR = 5
+endif
+
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
@@ -14,5 +21,6 @@ export DH_VERBOSE=1
 override_dh_auto_configure:
 	dh_auto_configure -- \
 	-DCMAKE_BUILD_TYPE=Release \
+	-DQT_VERSION_MAJOR=$(QT_VERSION_MAJOR) \
 	-DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_OFF" \
 	-DAPP_VERSION=$(DEB_VERSION_UPSTREAM) -DVERSION=$(DEB_VERSION_UPSTREAM) LIB_INSTALL_DIR=/usr/lib/$(DEB_HOST_MULTIARCH)

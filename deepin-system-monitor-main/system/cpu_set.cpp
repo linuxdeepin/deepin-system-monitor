@@ -34,6 +34,13 @@ DCORE_USE_NAMESPACE
 #define PROC_PATH_STAT "/proc/stat"
 #define PROC_PATH_CPUINFO "/proc/cpuinfo"
 
+// Qt5/Qt6 兼容：QString::split 的分隔行为参数
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+#define SPLIT_SKIP_EMPTY Qt::SkipEmptyParts
+#else
+#define SPLIT_SKIP_EMPTY QString::SkipEmptyParts
+#endif
+
 using namespace common::error;
 using namespace common::alloc;
 using namespace common::init;
@@ -712,21 +719,13 @@ void CPUSet::read_overall_info()
     process.start("cat /proc/cpuinfo");
     process.waitForFinished(3000);
     QString cpuinfo = process.readAllStandardOutput();
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
-#else
-    QStringList processors = cpuinfo.split("\n\n", Qt::SkipEmptyParts);
-#endif
+    QStringList processors = cpuinfo.split("\n\n", SPLIT_SKIP_EMPTY);
     qCDebug(app) << "Found" << processors.count() << "processors in /proc/cpuinfo";
 
     for (int i = 0; i < processors.count(); ++i) {
         // qCDebug(app) << "Parsing processor" << i;
         CPUInfo info;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QStringList list = processors[i].split("\n", QString::SkipEmptyParts);
-#else
-        QStringList list = processors[i].split("\n", Qt::SkipEmptyParts);
-#endif
+        QStringList list = processors[i].split("\n", SPLIT_SKIP_EMPTY);
         for (QString text : list) {
             if (text.startsWith("processor")) {
                 info.setIndex(text.split(":").value(1).toInt());
@@ -828,11 +827,7 @@ void CPUSet::read_dmi_cache_info()
     process.start("dmidecode", QStringList() << "-t" << "cache");
     process.waitForFinished(-1);
     QString cacheinfo = process.readAllStandardOutput();
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QStringList caches = cacheinfo.split("\n\n", QString::SkipEmptyParts);
-#else
-    QStringList caches = cacheinfo.split("\n\n", Qt::SkipEmptyParts);
-#endif
+    QStringList caches = cacheinfo.split("\n\n", SPLIT_SKIP_EMPTY);
     process.close();
 
     qCDebug(app) << "Found" << caches.size() << "cache entries in DMI information";
@@ -870,11 +865,7 @@ void CPUSet::read_dmi_cache_info()
     for (auto &item : mapInfos) {
         if (!item.contains("Socket Designation") || !item.contains("Maximum Size"))
             continue;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QStringList strList = item["Maximum Size"].split(" ", QString::SkipEmptyParts);
-#else
-        QStringList strList = item["Maximum Size"].split(" ", Qt::SkipEmptyParts);
-#endif
+        QStringList strList = item["Maximum Size"].split(" ", SPLIT_SKIP_EMPTY);
         if (strList.size() != 2)
             continue;
 
@@ -917,9 +908,9 @@ void CPUSet::read_cache_from_lscpu_cmd()
     process.start("bash", QStringList() << "-c" << command);
     process.waitForFinished(3000);
     QString cache = process.readAllStandardOutput();
-    QStringList cacheList = cache.split("\n", QString::SkipEmptyParts);
+    QStringList cacheList = cache.split("\n", SPLIT_SKIP_EMPTY);
     for (const QString &cacheLine : qAsConst(cacheList)) {
-        QStringList keyValue = cacheLine.split(":", QString::SkipEmptyParts);
+        QStringList keyValue = cacheLine.split(":", SPLIT_SKIP_EMPTY);
         if (keyValue.count() > 1)
             d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
     }
