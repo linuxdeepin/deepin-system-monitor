@@ -8,6 +8,7 @@
 
 #include <QJsonObject>
 #include <string>
+#include <thread>
 
 class EventLogUtils
 {

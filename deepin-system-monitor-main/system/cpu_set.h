@@ -84,6 +84,9 @@ private:
      */
     void read_lscpu();
     void read_overall_info();
+    QPair<float, float> read_cpu_freq_range_by_cpu7();
+
+    void read_cache_from_lscpu_cmd();
 
 private:
     QSharedDataPointer<CPUSetPrivate> d;

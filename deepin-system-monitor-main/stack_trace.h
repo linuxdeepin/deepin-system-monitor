@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <QStandardPaths>
+#include <QProcess>
+
 namespace util {
 
 #define MAX_BACKTRACE_FRAMES 128
@@ -52,7 +55,9 @@ static inline void printStacktrace(int signum)
     logstr[len] = 0;
 
     // open log output stream
-    std::string logN {"/tmp/"};
+    auto cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!cachePath.endsWith("/")) cachePath.append("/");
+    std::string logN {cachePath.toStdString()};
     logN.append(logstr);
     std::ofstream log(logN, std::ios::out);
 
@@ -81,6 +86,9 @@ static inline void printStacktrace(int signum)
     sigaction(signum, &act, nullptr);
     // raise origin signal
     raise(signum);
+
+    QString cmd = R"(sleep 0.1 && dbus-send --session --print-reply --dest=com.deepin.SessionManager /com/deepin/StartManager com.deepin.StartManager.Launch string:"/usr/share/applications/deepin-system-monitor.desktop";)";
+    QProcess::startDetached("bash", { "-c", cmd });
 }
 
 /**
@@ -105,6 +113,6 @@ void installCrashHandler()
     sigaction(SIGABRT, &act, nullptr);
 }
 
-} // namespace util
+}   // namespace util
 
-#endif // STACK_TRACE_H
+#endif   // STACK_TRACE_H

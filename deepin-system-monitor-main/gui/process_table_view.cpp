@@ -649,6 +649,14 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     // ALT + C
     resumeProcAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
     connect(resumeProcAction, &QAction::triggered, this, &ProcessTableView::resumeProcess);
+    DConfig *config = DConfig::create("org.deepin.system-monitor", "org.deepin.system-monitor");
+    if(config) {
+        QVariant varMenu = config->value("displayMenuPauseAndRecovery");
+        if(varMenu.isValid() && varMenu.toInt() == 0) {
+            pauseProcAction->setVisible(false);
+            resumeProcAction->setVisible(false);
+        }
+    }
 
     // change priority dialog
     auto *chgProcPrioMenu = m_contextMenu->addMenu(

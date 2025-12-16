@@ -12,6 +12,8 @@
 #include "nl_hwaddr.h"
 
 #include <QProcess>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 #include <netlink/route/link.h>
 #include <netlink/addr.h>
@@ -175,6 +177,25 @@ void NetifInfo::updateBrandInfo()
     }
     close(fd);
 }
+
+double NetifInfo::getWirelessSpeed(const QString &interface) {
+    QProcess process;
+    process.start("iw", QStringList() << "dev" << interface << "link");
+    process.waitForFinished();
+    QString output = process.readAllStandardOutput();
+
+    // 解析发送速率，实测发现控制中心显示的速率是 tx bitrate，所以这里只捕获 tx bitrate
+    QRegularExpression txRegex("tx bitrate:\\s+(\\d+\\.?\\d*)\\s+(\\w+)");
+    QRegularExpressionMatch txMatch = txRegex.match(output);
+    
+    if (txMatch.hasMatch()) {
+        double rate = txMatch.captured(1).toDouble();
+        return static_cast<long>(rate);
+    }
+    
+    return -1;  // 表示无法获取速率
+}
+
 
 } // namespace system
 } // namespace core

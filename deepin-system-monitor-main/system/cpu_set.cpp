@@ -23,6 +23,10 @@ extern "C" {
 #include <QTextStream>
 #include <QProcess>
 #include <QRegularExpression>
+
+#include <DConfig>
+DCORE_USE_NAMESPACE
+
 #include <ctype.h>
 #include <errno.h>
 #include <sched.h>
@@ -903,6 +907,24 @@ void CPUSet::read_dmi_cache_info()
     }
 }
 
+void CPUSet::read_cache_from_lscpu_cmd()
+{
+    if (read_dmi_cache)
+        return;   // 不要覆盖 dmidecode 获取的缓存信息
+
+    QProcess process;
+    QString command = "lscpu | grep cache";
+    process.start("bash", QStringList() << "-c" << command);
+    process.waitForFinished(3000);
+    QString cache = process.readAllStandardOutput();
+    QStringList cacheList = cache.split("\n", QString::SkipEmptyParts);
+    for (const QString &cacheLine : qAsConst(cacheList)) {
+        QStringList keyValue = cacheLine.split(":", QString::SkipEmptyParts);
+        if (keyValue.count() > 1)
+            d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
+    }
+}
+
 // 获取CPU信息 ut001987
 void CPUSet::read_lscpu()
 {
@@ -1075,11 +1097,34 @@ void CPUSet::read_lscpu()
             d->m_info.insert("CPU static MHz", ct->static_mhz);
         }
         if (ct->has_freq) {
+            auto KeyCPUMaxFreq = "CPU max MHz";
+            auto KeyCPUMinFreq = "CPU min MHz";
+            auto toDoubleStr = [](float v) {
+                return QString::number(static_cast<double>(v), 'f', 4);
+            };
+
             float scal = lsblk_cputype_get_scalmhz(cxt, ct);
-            QString maxMHz = QString::number(static_cast<double>(lsblk_cputype_get_maxmhz(cxt, ct)), 'f', 4);
-            d->m_info.insert("CPU max MHz", maxMHz);
-            QString minMHz = QString::number(static_cast<double>(lsblk_cputype_get_minmhz(cxt, ct)), 'f', 4);
-            d->m_info.insert("CPU min MHz", minMHz);
+            QString maxMHz = toDoubleStr(lsblk_cputype_get_maxmhz(cxt, ct));
+            d->m_info.insert(KeyCPUMaxFreq, maxMHz);
+            QString minMHz = toDoubleStr(lsblk_cputype_get_minmhz(cxt, ct));
+            d->m_info.insert(KeyCPUMinFreq, minMHz);
+
+            // 根据配置项决定是否从 CPU7 读取频率
+            DConfig *dconfig = DConfig::create("org.deepin.system-monitor", "org.deepin.system-monitor");
+            bool readFromCPU7 = false;
+            if (dconfig && dconfig->isValid() && dconfig->keyList().contains("readCPUFreqByCPU7")) {
+                readFromCPU7 = (dconfig->value("readCPUFreqByCPU7").toInt() != 0);
+            }
+            if (dconfig) {
+                dconfig->deleteLater();
+            }
+
+            if (readFromCPU7) {
+                auto freq = read_cpu_freq_range_by_cpu7();
+                d->m_info.insert(KeyCPUMinFreq, toDoubleStr(freq.first));
+                d->m_info.insert(KeyCPUMaxFreq, toDoubleStr(freq.second));
+            }
+
             // 取所有CPU频率有效值中最大值
             QString nowMHz = QString::number(static_cast<double>(max_avaliable_cur_freq(cxt, ct)), 'f', 4);
             // 取所有CPU频率有效值中平均值
@@ -1128,6 +1173,8 @@ void CPUSet::read_lscpu()
         }
     }
     qCDebug(app) << "Populating cache information...";
+
+#if 0   // 这套方式获取缓存可能存在一些问题，暂时注释掉，直接使用后面的 lscpu 命令获取
     /* Section: caches */
     if (cxt->ncaches) {
         const char *last = nullptr;
@@ -1158,6 +1205,11 @@ void CPUSet::read_lscpu()
             last = name;
         }
     }
+#endif
+
+    // 直接通过 lscpu 命令获取缓存信息，保持与 lscpu 命令一致；
+    // 部分厂商的设备会通过 dmidecode 覆盖 lscpu 命令获取的缓存信息，这里不会影响这类设备上的表现；
+    read_cache_from_lscpu_cmd();
     read_dmi_cache_info();
     // 某些CPU不带有缓存用‘-’替代
     if (!d->m_info.contains("L1d cache")) {
@@ -1197,6 +1249,47 @@ qulonglong CPUSet::getUsageTotalDelta() const
         return 1;
 
     return d->cpusageTotal[kCurrentStat] - d->cpusageTotal[kLastStat];
+}
+
+/**
+ * @brief 读取 CPU7 的频率范围（最小频率和最大频率）
+ * @return QPair<float, float> 第一个元素是最小频率（MHz），第二个元素是最大频率（MHz）
+ *         如果读取失败，返回 (0.0, 0.0)
+ */
+QPair<float, float> CPUSet::read_cpu_freq_range_by_cpu7()
+{
+    float minFreq = 0.0f;
+    float maxFreq = 0.0f;
+
+    // 读取最小频率
+    QFile minFile("/sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq");
+    if (minFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&minFile);
+        QString content = in.readLine().trimmed();
+        bool ok = false;
+        unsigned long freqKhz = content.toULong(&ok);
+        if (ok) {
+            // 将 KHz 转换为 MHz
+            minFreq = freqKhz / 1000.0f;
+        }
+        minFile.close();
+    }
+
+    // 读取最大频率
+    QFile maxFile("/sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq");
+    if (maxFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&maxFile);
+        QString content = in.readLine().trimmed();
+        bool ok = false;
+        unsigned long freqKhz = content.toULong(&ok);
+        if (ok) {
+            // 将 KHz 转换为 MHz
+            maxFreq = freqKhz / 1000.0f;
+        }
+        maxFile.close();
+    }
+
+    return qMakePair(minFreq, maxFreq);
 }
 
 }   // namespace system
