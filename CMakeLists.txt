@@ -87,19 +87,24 @@ set(system_monitor_plugin assets/configs/org.deepin.system-monitor.plugin.json)
 set(system_monitor_plugin_popup assets/configs/org.deepin.system-monitor.plugin.popup.json)
 set(system_monitor_plugin_server assets/configs/org.deepin.system-monitor.server.json)
 
-if (DEFINED DSG_DATA_DIR)
+# DTK6 提供 dtk_add_config_meta_files 命令，DTK5 需要手动安装
+# 需要显式引入 DConfig 模块以确保 DSG_DATA_DIR 在当前作用域可用
+if (DTK_VERSION_MAJOR EQUAL 6)
+    find_package(Dtk6DConfig QUIET)
+endif()
+
+if (COMMAND dtk_add_config_meta_files)
     dtk_add_config_meta_files(APPID ${APPID} FILES ${system_monitor_main})
     dtk_add_config_meta_files(APPID ${APPID} FILES ${system_monitor_daemon})
     dtk_add_config_meta_files(APPID ${APPID} FILES ${system_monitor_plugin})
     dtk_add_config_meta_files(APPID ${APPID} FILES ${system_monitor_plugin_popup})
     dtk_add_config_meta_files(APPID ${APPID} FILES ${system_monitor_plugin_server})
-    message("-- DConfig is supported by DTK")
+    message("-- DConfig is supported by DTK (using dtk_add_config_meta_files)")
 else()
     install(FILES ${system_monitor_main} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
     install(FILES ${system_monitor_daemon} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
     install(FILES ${system_monitor_plugin} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
     install(FILES ${system_monitor_plugin_popup} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
     install(FILES ${system_monitor_plugin_server} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
-
-    message("-- DConfig is not supported by DTK")
+    message("-- DConfig fallback: installing config files directly")
 endif()

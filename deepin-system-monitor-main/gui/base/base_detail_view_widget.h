@@ -12,8 +12,16 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-class BaseCommandLinkButton;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
 DWIDGET_USE_NAMESPACE
+#else
+#include <DGuiApplicationHelper>
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
+#endif
+
+class BaseCommandLinkButton;
 class BaseDetailViewWidget : public QWidget
 {
     Q_OBJECT
@@ -48,7 +56,11 @@ private:
     //!
     //! \brief onThemeTypeChanged 主题背景切换
     //!
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    void onThemeTypeChanged(DApplicationHelper::ColorType themeType);
+#else
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+#endif
 
 protected:
     void resizeEvent(QResizeEvent *event);

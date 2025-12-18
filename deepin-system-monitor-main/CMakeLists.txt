@@ -623,9 +623,11 @@ install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets/deepin-system-monitor DESTINA
 
 #hw机型增加DConfig配置
 set(APPID org.deepin.system-monitor)
-message("-- DConfig is supported by DTK ${PROJECT_SOURCE_DIR}")
 set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.system-monitor.main.json)
-if (DEFINED DSG_DATA_DIR)
-    message("-- DConfig is supported by DTK")
+if (COMMAND dtk_add_config_meta_files)
+    message("-- DConfig is supported by DTK (main app)")
     dtk_add_config_meta_files(APPID ${APPID} FILES ${configFile})
+else()
+    message("-- DConfig fallback: installing config file directly (main app)")
+    install(FILES ${configFile} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${APPID}/)
 endif()

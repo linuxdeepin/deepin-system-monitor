@@ -15,7 +15,19 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/mount.h>
 #include <netinet/in.h>
+
+// mount_attr 结构体在 Linux 5.12+ 内核中定义，旧内核需要手动定义
+#ifndef MOUNT_ATTR_SIZE_VER0
+struct mount_attr {
+    uint64_t attr_set;
+    uint64_t attr_clr;
+    uint64_t propagation;
+    uint64_t userns_fd;
+};
+#define MOUNT_ATTR_SIZE_VER0 32
+#endif
 
 #define TASK_COMM_LEN 16
 struct FileLog;
@@ -760,10 +772,6 @@ struct SeekLog : public FileLog
 #define FS_NAME_LEN 32
 #define DATA_LEN 512
 #define PATH_MAX 4096
-
-#ifndef __VMLINUX_H__
-#include <sys/mount.h>
-#endif
 
 struct mount_args
 {

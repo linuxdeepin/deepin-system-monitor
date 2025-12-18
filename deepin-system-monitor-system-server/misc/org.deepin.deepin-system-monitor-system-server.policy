@@ -18,6 +18,8 @@
 		<message xml:lang="ar">المصادقة مطلوبة لتعيين نوع بدء تشغيل الخدمة</message>
 		<description xml:lang="az">Xidmətin başladılma növünü təyin edin</description>
 		<message xml:lang="az">Xidmətin başladılma növünü təyin etmək üçün doğrulama tələb olunur</message>
+		<description xml:lang="bn">সেবা শুরুর ধরন নির্ধারণ করুন</description>
+		<message xml:lang="bn">সেবা শুরুর ধরন নির্ধারণে পরিচালনা করতে জারিফিকেশন প্রয়োজন</message>
 		<description xml:lang="bo">ཞབས་ཞུའི་འགོ་སློང་བྱེད་ཐབས་སྒྲིག་འགོད་བྱེད་པ།</description>
 		<message xml:lang="bo">ཞབས་ཞུའི་འགོ་སློང་ཐབས་སྒྲིག་འགོད་བྱེད་པར་དཔང་དཔྱད་བྱ་དགོས།</message>
 		<description xml:lang="br">Termeniñ doare loc'hañ ar servij</description>
@@ -32,12 +34,16 @@
 		<message xml:lang="de">Authentifizierung ist erforderlich, um den Starttyp des Dienstes einzustellen</message>
 		<description xml:lang="es">Establecer tipo de inicio del servicio</description>
 		<message xml:lang="es">Se requiere autenticación para establecer el tipo de servicio de inicio</message>
+		<description xml:lang="et">Määrake süsteemi käivitusrakendus</description>
+		<message xml:lang="et">Süsteemi käivitusrakenduse määramiseks on vajalik autentimine</message>
 		<description xml:lang="fi">Palvelun käynnistystyypin vaihto</description>
 		<message xml:lang="fi">Palvelun käynnistystyypin vaihtamiseen vaaditaan todennus</message>
 		<description xml:lang="fr">Définir le type de démarrage du service</description>
 		<message xml:lang="fr">L'authentification est requise pour définir le type de démarrage du service</message>
 		<description xml:lang="gl_ES">Estableza o tipo de inicio de servizo</description>
 		<message xml:lang="gl_ES">A autenticación é necesaria para configurar o tipo de inicio de servizo</message>
+		<description xml:lang="he">הגדרת סוג הפעלת שירות</description>
+		<message xml:lang="he">נדרש אימות כדי להגדיר את סוג הפעלת השירות</message>
 		<description xml:lang="hu">Állítsa be a szolgáltatás indítási típusát</description>
 		<message xml:lang="hu">Hitelesítés szükséges a szolgáltatás indítási típusának beállításához</message>
 		<description xml:lang="id">Setel tipe layanan startup</description>
@@ -46,6 +52,10 @@
 		<message xml:lang="it">Autenticazione richiesta per variare il tipo di avvio automatico</message>
 		<description xml:lang="ko">서비스 시작 유형 설정</description>
 		<message xml:lang="ko">서비스 시작 유형을 설정하려면 인증이 필요합니다.</message>
+		<description xml:lang="lo">ຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</description>
+		<message xml:lang="lo">ການຢືນຢັນຕ້ອງການເພື່ອຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</message>
+		<description xml:lang="lt">Nustatyti paslaugos paleidimo tipą</description>
+		<message xml:lang="lt">Tėkite autentifikacijos norint nustatyti paslaugos paleidimo tipą</message>
 		<description xml:lang="ms">Tetapkan jenis permulaan perkhidmatan</description>
 		<message xml:lang="ms">Pengesahihan diperlukan untuk menetapkan jenis permulaan perkhidmatan</message>
 		<description xml:lang="nl">Soort opstart instellen</description>
@@ -58,6 +68,8 @@
 		<message xml:lang="pt_BR">A autenticação é necessária para definir o tipo de inicialização do serviço</message>
 		<description xml:lang="ru">Задать тип запуска службы</description>
 		<message xml:lang="ru">Требуется  аутентификация для установки типа запуска службы </message>
+		<description xml:lang="sl">Nastavi vrsto zacetnega vrata storitve</description>
+		<message xml:lang="sl">Zaustavljanje zacetnega vrata storitve je zahtevano prijavljenost</message>
 		<description xml:lang="sq">Caktoni lloj nisjeje shërbimi</description>
 		<message xml:lang="sq">Që të caktohet lloj nisjeje shërbimi, lyspet mirëfilltësim</message>
 		<description xml:lang="sr">Постави режим покретања услуге</description>
@@ -68,12 +80,12 @@
 		<message xml:lang="ug">مۇلازىمەت باشلاش تىپىنى تەڭشەش ئۈچۈن دەلىللەش تەلەپ قىلىنىدۇ</message>
 		<description xml:lang="uk">Встановлення типу запуску служби</description>
 		<message xml:lang="uk">Для встановлення типу запуску служби слід пройти розпізнавання</message>
+		<description xml:lang="vi">Thiết lập loại khởi động dịch vụ</description>
+		<message xml:lang="vi">Bạn cần xác thực để thiết lập loại khởi động dịch vụ</message>
 		<description xml:lang="zh_CN">设置服务的启动方式</description>
 		<message xml:lang="zh_CN">设置服务的启动方式需要认证</message>
 		<description xml:lang="zh_HK">設置服務的啟動方式</description>
 		<message xml:lang="zh_HK">設置服務的啟動方式需要認證</message>
-		<description xml:lang="lo">ຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</description>
-		<message xml:lang="lo">ຕ້ອງການການຢັ້ງຢືນເພື່ອຕັ້ງປະເພດການເລີ່ມຕົ້ນຂອງບໍລິການ</message>
 		<description xml:lang="zh_TW">設定服務的啟動方式</description>
 		<message xml:lang="zh_TW">設定服務的啟動方式需要認證</message>
 	</action>

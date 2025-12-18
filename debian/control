@@ -2,20 +2,20 @@ Source: deepin-system-monitor
 Section: utils
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
-Build-Depends: 
+Build-Depends:
  debhelper-compat (= 11),
  cmake,
  pkg-config,
- qt6-base-dev,
- qt6-svg-dev,
- qt6-tools-dev,
- libdtk6core-dev,
- libdtk6gui-dev,
- libdtk6widget-dev,
+ qt6-base-dev | qtbase5-dev,
+ qt6-svg-dev | libqt5svg5-dev,
+ qt6-tools-dev | qttools5-dev,
+ qt6-tools-dev-tools | qttools5-dev-tools,
+ libdtk6core-dev | libdtkcore-dev,
+ libdtk6gui-dev | libdtkgui-dev,
+ libdtk6widget-dev | libdtkwidget-dev,
  libxcb1-dev,
  libxext-dev,
  libpcap-dev,
- qt6-tools-dev-tools,
  libicu-dev,
  deepin-gettext-tools,
  libxcb-util0-dev,

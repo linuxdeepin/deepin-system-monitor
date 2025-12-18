@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QTimer>
+#include <QtMath>
 
 #include <DGuiApplicationHelper>
 

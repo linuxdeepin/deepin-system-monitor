@@ -172,7 +172,11 @@ void BaseDetailViewWidget::updateWidgetGrometry()
     m_switchButton->setGeometry(m_detailButton->x() - 30, 10 + titleFont.height() / 2 - m_switchButton->height() / 2, m_switchButton->width(), m_switchButton->height());
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+void BaseDetailViewWidget::onThemeTypeChanged(DApplicationHelper::ColorType themeType)
+#else
 void BaseDetailViewWidget::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+#endif
 {
     qCDebug(app) << "onThemeTypeChanged, themeType:" << themeType;
     if (themeType == DGuiApplicationHelper::DarkType) {

@@ -301,8 +301,12 @@ QVariantMap SystemDBusServer::getProcessInfoBatch(const QList<int> &pids)
                 QVariantMap *processData;
                 SystemDBusServer *server;
             } context;
-            
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
             context.targetPids = QSet<int>(pids.begin(), pids.end());
+#else
+            context.targetPids = QSet<int>::fromList(pids);
+#endif
             context.processData = &processData;
             context.server = this;
             

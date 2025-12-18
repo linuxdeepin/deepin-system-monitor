@@ -294,7 +294,7 @@ QString ServiceManagerWorker::readUnitDescriptionFromUnitFile(const QString &pat
         while ((fgets(buf.data(), BLEN, fp))) {
             descStr = QString("Description=%1").arg(buf.data());
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
+            QStringList descStrList = descStr.split(QRegularExpression("[\n]"), QString::SkipEmptyParts);
 #else
             QStringList descStrList = descStr.split(QRegularExpression("[\n]"), Qt::SkipEmptyParts);
 #endif
