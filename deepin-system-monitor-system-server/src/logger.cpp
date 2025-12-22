@@ -24,7 +24,7 @@ MLogger::MLogger(QObject *parent)
     m_rules = logRules;
 
     // set dconfig
-    m_config = DConfig::create("deepin-system-monitor-server", "org.deepin.system-monitor.server");
+    m_config = DConfig::create("org.deepin.system-monitor", "org.deepin.system-monitor.server");
     logRules = m_config->value("log_rules").toByteArray();
     qCDebug(app) << "Log rules from DConfig:" << logRules;
     appendRules(logRules);
