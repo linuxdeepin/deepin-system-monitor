@@ -44,14 +44,17 @@ else()
     SET(IS_LOONGARCH_TYPE 0)
 endif()
 
-if (NOT DEFINED QT_VERSION_MAJOR)
-    set(QT_VERSION_MAJOR 6)
-endif()
-if (QT_VERSION_MAJOR EQUAL 6)
+# Auto-detect Qt version (tries Qt6 first, falls back to Qt5)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+message(STATUS "Found Qt version: ${QT_VERSION_MAJOR}")
+
+# Map to DTK version (Qt6→DTK6, Qt5→DTK5)
+if (QT_VERSION_MAJOR MATCHES 6)
     set(DTK_VERSION_MAJOR 6)
 else()
     set(DTK_VERSION_MAJOR)
 endif()
+message(STATUS "Build with DTK: ${DTK_VERSION_MAJOR}")
 set(QT_NS Qt${QT_VERSION_MAJOR})
 set(DTK_NS Dtk${DTK_VERSION_MAJOR})
 
@@ -90,7 +93,7 @@ set(system_monitor_plugin_server assets/configs/org.deepin.system-monitor.server
 # DTK6 提供 dtk_add_config_meta_files 命令，DTK5 需要手动安装
 # 需要显式引入 DConfig 模块以确保 DSG_DATA_DIR 在当前作用域可用
 if (DTK_VERSION_MAJOR EQUAL 6)
-    find_package(Dtk6DConfig QUIET)
+    find_package(Dtk${DTK_VERSION_MAJOR}DConfig QUIET)
 endif()
 
 if (COMMAND dtk_add_config_meta_files)

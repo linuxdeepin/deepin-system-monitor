@@ -62,7 +62,7 @@ find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 # For UT Test
 find_package(GTest REQUIRED)
-find_package(Qt5Test REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Test REQUIRED)
 find_package(Threads REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
@@ -632,7 +632,7 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${LIB_NL3_ROUTE_LIBRARIES}
     ${LIB_UDEV_LIBRARIES}
     Threads::Threads
-    Qt5::Test
+    Qt${QT_VERSION_MAJOR}::Test
     ${GTEST_LIBRARYS}
     ${GTEST_MAIN_LIBRARYS}
     gmock

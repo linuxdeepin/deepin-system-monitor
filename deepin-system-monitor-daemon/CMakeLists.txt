@@ -54,8 +54,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wl,-Map=deepin-system-monitor-daemon.map
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-daemon.map")
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    EXECUTE_PROCESS(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/share/user/)
-    EXECUTE_PROCESS(COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_NAME}.json ${CMAKE_BINARY_DIR}/share/system/)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/user/)
+    EXECUTE_PROCESS(COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_NAME}.json ${CMAKE_BINARY_DIR}/share/user/)
 else()
     install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-service-manager/)
     install(FILES ${BIN_NAME}.json DESTINATION share/deepin-service-manager/user/)
