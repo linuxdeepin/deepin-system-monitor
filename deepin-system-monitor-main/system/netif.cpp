@@ -150,8 +150,8 @@ double NetifInfo::getWirelessSpeed(const QString &interface) {
     QProcess process;
     process.start("iw", QStringList() << "dev" << interface << "link");
 
-    // 添加3秒超时保护，避免 iw 命令在内核 Netlink 通信时卡死
-    if (!process.waitForFinished(3000)) {
+    // 添加1秒超时保护，避免 iw 命令在内核 Netlink 通信时卡死
+    if (!process.waitForFinished(1000)) {
         qCWarning(app) << "iw command timeout for interface:" << interface;
         process.kill();
         process.waitForFinished();
