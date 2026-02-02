@@ -64,8 +64,12 @@ static QString getProcIdExe(qint64 id)
         // Read contents of virtual /proc/{pid}/cmdline file
         QString exeSymlinkPath = QString("/proc/%1/exe").arg(id);
         char *actualpath = realpath(exeSymlinkPath.toStdString().c_str(), nullptr);
-        execName = QString(actualpath);
-        free(actualpath); // free the memory allocated by realpath
+        if (actualpath) {
+            execName = QString(actualpath);
+            free(actualpath); // free the memory allocated by realpath
+        } else {
+            qCWarning(app) << "Failed to resolve path for PID" << id;
+        }
     }
     qCDebug(app) << "Executable for PID" << id << "is:" << execName;
     return execName;
