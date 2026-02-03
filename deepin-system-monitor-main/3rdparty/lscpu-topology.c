@@ -586,7 +586,7 @@ float lsblk_cputype_get_maxmhz(struct lscpu_cxt *cxt, struct lscpu_cputype *ct)
 	for (i = 0; i < cxt->npossibles; i++) {
 		struct lscpu_cpu *cpu = cxt->cpus[i];
 
-		if (!cpu || cpu->type != ct || !is_cpu_present(cxt, cpu))
+		if (!cpu || !is_cpu_present(cxt, cpu))
 			continue;
 		res = max(res, cpu->mhz_max_freq);
 	}
