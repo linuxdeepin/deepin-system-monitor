@@ -82,7 +82,7 @@ static float max_avaliable_cur_freq(struct lscpu_cxt *cxt, const struct lscpu_cp
     for (i = 0; i < cxt->npossibles; i++) {
         struct lscpu_cpu *cpu = cxt->cpus[i];
 
-        if (!cpu || cpu->type != ct || !is_cpu_present(cxt, cpu))
+        if (!cpu || !is_cpu_present(cxt, cpu))
             continue;
         if (cpu->mhz_cur_freq <= 0.0f)
             continue;
