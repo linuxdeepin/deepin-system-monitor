@@ -344,7 +344,7 @@ TEST_F(UT_ProcessTableView, test_onThemeTypeChanged_01)
 
 TEST_F(UT_ProcessTableView, test_loadSettings_01)
 {
-    m_tester->loadSettings();
+    m_tester->loadSettings(QStringLiteral("process_table_header_state"));
 }
 
 
@@ -471,8 +471,6 @@ TEST_F(UT_ProcessTableView, test_customizeProcessPriority_02)
 
     EXPECT_TRUE(m_tester->m_selectedPID.isValid());
 }
-
-
 
 
 

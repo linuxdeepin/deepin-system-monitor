@@ -71,14 +71,15 @@ TEST_F(UT_CPU, test_logicalIndex)
     QList<CPUInfo> infos;
 
     QProcess process;
-    process.start("cat /proc/cpuinfo");
-    process.waitForFinished(3000);
+    process.start("cat", QStringList() << "/proc/cpuinfo");
+    ASSERT_TRUE(process.waitForFinished(3000));
     QString cpuinfo = process.readAllStandardOutput();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
 #else
     QStringList processors = cpuinfo.split("\n\n", Qt::SkipEmptyParts);
 #endif
+    ASSERT_FALSE(processors.isEmpty());
 
     for (int i = 0; i < 1; ++i) {
         core::system::CPUInfo info;
@@ -214,4 +215,3 @@ TEST_F(UT_CPU, test_setCacheSize)
     qInfo()<<"cacheSize:"<<m_tester->cacheSize();
     EXPECT_EQ("10", m_tester->cacheSize());
 }
-

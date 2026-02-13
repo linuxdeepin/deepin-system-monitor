@@ -13,6 +13,7 @@
  * @brief Detail view stacked widget (main content stacked area)
  */
 class MemDetailViewWidget;
+class GpuDetailViewWidget;
 class NetifDetailViewWidget;
 class BlockDevDetailViewWidget;
 
@@ -41,11 +42,13 @@ private:
 
     QWidget *m_processWidget = nullptr;
     QWidget *m_cpudetailWidget = nullptr;
+    QWidget *m_gpuDetailWidget = nullptr;
     QWidget *m_memDetailWidget = nullptr;
     QWidget *m_netifDetailWidget = nullptr;
     QWidget *m_blockDevDetailWidget = nullptr;
 
     QAction *cpuAct;
+    QAction *gpuAct;
     QAction *memAct;
     QAction *netifAct;
     QAction *blockDevAct;

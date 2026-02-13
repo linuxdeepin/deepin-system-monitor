@@ -1069,7 +1069,9 @@ TEST_F(UT_ProcessTableModel, test_getProcessPriority_002)
 TEST_F(UT_ProcessTableModel, test_removeProcess_001)
 {
      pid_t pid = getpid();
+     Process proc(pid);
      m_tester->m_procIdList << pid;
+     m_tester->m_processList << proc;
      m_tester->removeProcess(pid);
 }
 
