@@ -9,7 +9,6 @@
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
-#include <QStandardPaths>
 #include <QProcess>
 #include <QTimer>
 #include <QDebug>
@@ -34,26 +33,6 @@ bool checkAuthorization(const QString &appBusName, const QString &action)
         qWarning() << qPrintable("Policy authorization check failed!");
         return false;
     }
-}
-
-/**
-   @return 返回PID对应的可执行程序名称
- */
-static QString getProcIdExe(qint64 id)
-{
-    QString execName;
-    if (id > 0) {
-        // Read contents of virtual /proc/{pid}/cmdline file
-        QString exeSymlinkPath = QString("/proc/%1/exe").arg(id);
-        char *actualpath = realpath(exeSymlinkPath.toStdString().c_str(), nullptr);
-        if (actualpath) {
-            execName = QString(actualpath);
-            free(actualpath); // free the memory allocated by realpath
-        } else {
-            qWarning() << "Failed to resolve path for PID" << id;
-        }
-    }
-    return execName;
 }
 
 SystemDBusServer::SystemDBusServer(QObject *parent)
@@ -98,12 +77,6 @@ QString SystemDBusServer::setServiceEnable(const QString &serviceName, bool enab
  */
 QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool enable)
 {
-    // 调用者限制前台系统监视器程序
-    if (!checkCaller()) {
-        qWarning() << qPrintable("Caller not authorized");
-        return QString(strerror(EPERM));
-    }
-
     // 不允许包含';' ' '字符，服务名称长度同样限制
     if (serviceName.isEmpty() || (serviceName.size() > SHRT_MAX) || serviceName.contains(QRegExp("[; ]"))) {
         qWarning() << qPrintable("Invalid service name");
@@ -144,44 +117,4 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
 
     // 返回命令执行结果
     return errorRet;
-}
-
-/**
-   @return DBus 调用者的PID
- */
-qint64 SystemDBusServer::dbusCallerPid() const
-{
-    if (!calledFromDBus()) {
-        return 0;
-    }
-
-    auto interface = connection().interface();
-    if (interface) {
-        return static_cast<qint64>(interface->servicePid(message().service()).value());
-    }
-
-    return 0;
-}
-
-/**
-   @return 返回调用者是否为前台的系统监视器程序
- */
-bool SystemDBusServer::checkCaller() const
-{
-    if (!calledFromDBus()) {
-        return false;
-    }
-
-    qint64 callerPid = dbusCallerPid();
-    QString callerExe = getProcIdExe(callerPid);
-    QString dbmExe = QStandardPaths::findExecutable("deepin-system-monitor", { "/usr/bin" });
-
-    qCDebug(app) << qPrintable("callerPid is: ") << callerPid << qPrintable("callerExe is:") << callerExe;
-    if (callerExe != dbmExe) {
-        qCDebug(app) << qPrintable("caller not authorized");
-        return false;
-    }
-
-    qCDebug(app) << qPrintable("caller authorized");
-    return true;
 }
