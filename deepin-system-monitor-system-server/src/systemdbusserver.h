@@ -25,8 +25,6 @@ public Q_SLOTS:
 
 private:
     QString setServiceEnableImpl(const QString &serviceName, bool enable);
-    qint64 dbusCallerPid() const;
-    bool checkCaller() const;
 
 private:
     QTimer m_timer;
