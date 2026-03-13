@@ -57,7 +57,10 @@ void BlockDevItemWidget::updateWidgetGeometry()
     int curXMargin = m_mode == TITLE_HORIZONTAL ? 0 : margin;
     if (m_mode == TITLE_HORIZONTAL) {
         qCDebug(app) << "BlockDevItemWidget updateWidgetGeometry m_mode == TITLE_HORIZONTAL";
-        m_memChartWidget->setGeometry(curXMargin, TextSpacing, this->width() - 2 * curXMargin, this->height() - TextSpacing - margin);
+        // 为设备名和读写两行文本预留空间，避免图表覆盖左上角文字。
+        // 单盘布局下标题区实际高度略高一些，这里按三行字体高度预留，视觉上更对齐。
+        int top = fontHeight * 3 + TextSpacing;
+        m_memChartWidget->setGeometry(curXMargin, top, this->width() - 2 * curXMargin, this->height() - top - margin);
     } else {
         qCDebug(app) << "BlockDevItemWidget updateWidgetGeometry m_mode == TITLE_VERTICAL";
         m_memChartWidget->setGeometry(curXMargin, fontHeight * 2 + TextSpacing, this->width() - 2 * curXMargin, this->height() - fontHeight * 2 - TextSpacing - margin);
