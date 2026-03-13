@@ -77,7 +77,8 @@ void BlockStatViewWidget::showItem1()
     qCDebug(app) << "BlockStatViewWidget showItem1";
     BlockDevItemWidget *item = m_listBlockItemWidget.at(0);
     item->updateData(m_listDevice[0]);
-    item->setMode(BlockDevItemWidget::TITLE_HORIZONTAL);
+    // 单个设备时也采用垂直布局，保证设备名/读写三行文本与多设备时的排版一致，避免错位
+    item->setMode(BlockDevItemWidget::TITLE_VERTICAL);
     item->show();
 
     m_mapDeviceItemWidget.insert(m_listDevice[0].deviceName(), item);
