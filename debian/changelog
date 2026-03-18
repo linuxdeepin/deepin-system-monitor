@@ -1,3 +1,13 @@
+deepin-system-monitor (6.5.39) unstable; urgency=medium
+
+  * chore: Update dman's resources
+  * fix: adjust widget geometry to prevent overlap of text and chart
+  * chore: correct pronoun in README.md
+  * chore(CI): add debian check workflow
+  * fix: correct "Max frequency" translation in zh_HK and zh_TW
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 18 Mar 2026 10:02:50 +0800
+
 deepin-system-monitor (6.5.38) unstable; urgency=medium
 
   * fix: handle failure in resolving executable path for process ID
