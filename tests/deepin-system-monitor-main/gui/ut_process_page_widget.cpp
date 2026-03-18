@@ -216,9 +216,9 @@ TEST_F(UT_ProcessPageWidget, test_changeIconTheme_02)
     m_tester->changeIconTheme(type);
 }
 
-TEST_F(UT_ProcessPageWidget, test_onStatInfoUpdated_01)
+TEST_F(UT_ProcessPageWidget, test_onAppAndProcCountUpdated_01)
 {
-    m_tester->onStatInfoUpdated();
+    m_tester->onAppAndProcCountUpdated(0, 0);
 }
 
 TEST_F(UT_ProcessPageWidget, test_onDetailWidgetChanged_01)

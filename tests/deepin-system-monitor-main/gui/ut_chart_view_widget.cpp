@@ -175,13 +175,14 @@ TEST_F(UT_ChartViewWidget, test_resizeEvent_01)
 
 TEST_F(UT_ChartViewWidget, test_changeFont_01)
 {
+    const QFont originFont = m_tester->m_textfont;
+
     QFont font;
     font.setBold(true);
     font.setPointSizeF(10.0);
     m_tester->changeFont(font);
 
-    EXPECT_EQ(m_tester->m_textfont.bold(), font.bold());
-    EXPECT_EQ(m_tester->m_textfont.pointSizeF(), font.pointSizeF() -2);
+    EXPECT_EQ(m_tester->m_textfont, originFont);
 }
 
 TEST_F(UT_ChartViewWidget, test_changeTheme_01)
@@ -270,8 +271,6 @@ TEST_F(UT_ChartViewWidget, test_getPainterPathByData_01)
 
     m_tester->getPainterPathByData(listData, path, maxYvalue);
 }
-
-
 
 
 
