@@ -5,12 +5,12 @@
         <location filename="../main.cpp" line="101"/>
         <location filename="../main.cpp" line="105"/>
         <source>System Monitor</source>
-        <translation>Системный Монитор</translation>
+        <translation>Системный монитор</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="91"/>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>Системный монитор - это инструмент для мониторинга загрузки системы в реальном времени, а также просмотра и управления запущенными процессами и службами.</translation>
+        <translation>Системный монитор — это инструмент для наблюдения за загрузкой системы в реальном времени, просмотра процессов и служб, а также управления ими.</translation>
     </message>
 </context>
 <context>
@@ -24,13 +24,13 @@
         <location filename="../gui/base/base_detail_view_widget.cpp" line="40"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="52"/>
         <source>Overall utilization</source>
-        <translation>Общее потребление</translation>
+        <translation>Общее использование</translation>
     </message>
     <message>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="43"/>
         <location filename="../gui/base/base_detail_view_widget.cpp" line="54"/>
         <source>Individual utilization</source>
-        <translation>Индивидуальное потребление</translation>
+        <translation>Индивидуальное использование</translation>
     </message>
 </context>
 <context>
@@ -60,7 +60,7 @@
     <message>
         <location filename="../model/cpu_info_model.cpp" line="49"/>
         <source>%1 days %2 hours %3 minutes</source>
-        <translation>%1 дней %2 часов %3 минут</translation>
+        <translation>%1 дн. %2 ч %3 мин</translation>
     </message>
 </context>
 <context>
@@ -78,12 +78,12 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Частота</translation>
+        <translation>Макс. частота</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation type="unfinished"/>
+        <translation>Средняя частота</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -153,7 +153,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="142"/>
         <source>OS type</source>
-        <translation>Тип системы</translation>
+        <translation>Тип ОС</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="146"/>
@@ -183,7 +183,7 @@
         <location filename="../gui/process_table_view.cpp" line="493"/>
         <location filename="../gui/system_service_table_view.cpp" line="476"/>
         <source>No search results</source>
-        <translation>Поиск не дал результатов</translation>
+        <translation>Нет результатов поиска</translation>
     </message>
 </context>
 <context>
@@ -207,7 +207,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="165"/>
         <source>active</source>
-        <translation>активный</translation>
+        <translation>активен</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="167"/>
@@ -217,12 +217,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="169"/>
         <source>inactive</source>
-        <translation>неактивный</translation>
+        <translation>неактивен</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="170"/>
         <source>failed</source>
-        <translation>неудавшийся</translation>
+        <translation>ошибка</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="172"/>
@@ -250,7 +250,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="151"/>
         <source>bad-setting</source>
-        <translation>несоответствующая настройка</translation>
+        <translation>неверная настройка</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="152"/>
@@ -260,12 +260,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="153"/>
         <source>merged</source>
-        <translation>объединенный</translation>
+        <translation>объединён</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="154"/>
         <source>masked</source>
-        <translation>скрытый</translation>
+        <translation>скрыт</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="147"/>
@@ -283,7 +283,7 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="295"/>
         <source>Auto</source>
-        <translation>Авто</translation>
+        <translation>Автоматически</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="296"/>
@@ -296,12 +296,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="274"/>
         <source>enabled</source>
-        <translation>включен</translation>
+        <translation>включён</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="275"/>
         <source>disabled</source>
-        <translation>отключен</translation>
+        <translation>отключён</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="276"/>
@@ -321,17 +321,17 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="280"/>
         <source>enabled-runtime</source>
-        <translation>включен-runtime</translation>
+        <translation>включён-во время работы</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="281"/>
         <source>masked</source>
-        <translation>скрытый</translation>
+        <translation>скрыт</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="283"/>
         <source>generated</source>
-        <translation>сгенерированный</translation>
+        <translation>сгенерирован</translation>
     </message>
 </context>
 <context>
@@ -339,12 +339,12 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="217"/>
         <source>dead</source>
-        <translation>несуществующий</translation>
+        <translation>остановлен</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="219"/>
         <source>start-pre</source>
-        <translation>запуск перед</translation>
+        <translation>запуск-pre</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="221"/>
@@ -364,52 +364,52 @@
     <message>
         <location filename="../dbus/dbus_common.h" line="227"/>
         <source>exited</source>
-        <translation>завершенный</translation>
+        <translation>завершён</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="229"/>
         <source>reload</source>
-        <translation>перезагрузить</translation>
+        <translation>перезагрузка</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="231"/>
         <source>stop</source>
-        <translation>остановить</translation>
+        <translation>остановка</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="233"/>
         <source>stop-watchdog</source>
-        <translation>стоп-watchdog</translation>
+        <translation>остановка-watchdog</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="235"/>
         <source>stop-sigterm</source>
-        <translation>стоп-sigterm</translation>
+        <translation>остановка-sigterm</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="237"/>
         <source>stop-sigkill</source>
-        <translation>стоп-sigkill</translation>
+        <translation>остановка-sigkill</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="239"/>
         <source>stop-post</source>
-        <translation>стоп-post</translation>
+        <translation>остановка-post</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="241"/>
         <source>final-sigterm</source>
-        <translation>окончательный-sigterm</translation>
+        <translation>финальный-sigterm</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="243"/>
         <source>final-sigkill</source>
-        <translation>окончательный-sigkill</translation>
+        <translation>финальный-sigkill</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="245"/>
         <source>failed</source>
-        <translation>неудавшийся</translation>
+        <translation>ошибка</translation>
     </message>
     <message>
         <location filename="../dbus/dbus_common.h" line="247"/>
@@ -423,17 +423,17 @@
         <location filename="../dbus/dbusalarmnotify.cpp" line="38"/>
         <location filename="../dbus/dbusalarmnotify.cpp" line="50"/>
         <source>Warning</source>
-        <translation>Внимание</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="39"/>
         <source>Your CPU usage is higher than %1%!</source>
-        <translation>Загрузка процессора превышает %1%!</translation>
+        <translation>Загрузка вашего процессора превышает %1%!</translation>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="51"/>
         <source>Your memory usage is higher than %1%!</source>
-        <translation>Your memory usage is higher than %1%!</translation>
+        <translation>Использование вашей памяти превышает %1%!</translation>
     </message>
     <message>
         <location filename="../dbus/dbusalarmnotify.cpp" line="71"/>
@@ -456,12 +456,12 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="73"/>
         <source>Shared</source>
-        <translation>Общий</translation>
+        <translation>Разделяемая</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="75"/>
         <source>Cached</source>
-        <translation>Кэш</translation>
+        <translation>Кэшировано</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="79"/>
@@ -471,22 +471,22 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="81"/>
         <source>Cached swap</source>
-        <translation>Кэшированный своп</translation>
+        <translation>Кэшированный swap</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="85"/>
         <source>Active</source>
-        <translation>Активный</translation>
+        <translation>Активная</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="87"/>
         <source>Inactive</source>
-        <translation>Неактивно</translation>
+        <translation>Неактивная</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="91"/>
         <source>Dirty</source>
-        <translation>Грязный</translation>
+        <translation>Грязная</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="93"/>
@@ -496,17 +496,17 @@
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="97"/>
         <source>Total swap</source>
-        <translation>Итого своп</translation>
+        <translation>Всего swap</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="99"/>
         <source>Free swap</source>
-        <translation>Бесплатный обмен</translation>
+        <translation>Свободно swap</translation>
     </message>
     <message>
         <location filename="../gui/mem_summary_view_widget.cpp" line="103"/>
         <source>Slab</source>
-        <translation>Плита</translation>
+        <translation>Slab</translation>
     </message>
 </context>
 <context>
@@ -539,7 +539,7 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="84"/>
         <source>Reads/s</source>
-        <translation>Чтение/с</translation>
+        <translation>Чтений/с</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="88"/>
@@ -549,7 +549,7 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="90"/>
         <source>Reads merged/s</source>
-        <translation>Считывает объединенные/-ы</translation>
+        <translation>Объединённых чтений/с</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="94"/>
@@ -559,27 +559,27 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes completed </source>
-        <translation type="unfinished"/>
+        <translation>Записей завершено</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Writes merged</source>
-        <translation type="unfinished"/>
+        <translation>Объединённых записей</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes/s</source>
-        <translation type="unfinished"/>
+        <translation>Записей/с</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="106"/>
         <source>Sectors written/s</source>
-        <translation type="unfinished"/>
+        <translation>Запись секторов/с</translation>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="108"/>
         <source>Writes merged/s</source>
-        <translation>Writes merged/s</translation>
+        <translation>Объединённых записей/с</translation>
     </message>
 </context>
 <context>
@@ -588,7 +588,7 @@
         <location filename="../gui/dialog/error_dialog.cpp" line="73"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>ОК</translation>
     </message>
 </context>
 <context>
@@ -601,7 +601,7 @@
     <message>
         <location filename="../common/common.cpp" line="38"/>
         <source>Display shortcuts</source>
-        <translation>Показать ярлыки</translation>
+        <translation>Показать сочетания клавиш</translation>
     </message>
 </context>
 <context>
@@ -625,13 +625,14 @@ Are you sure you want to continue?</source>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Принудительное завершение этого процесса может привести к потере данных.
-Вы уверены что хотите продолжить?</translation>
+Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="531"/>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
-        <translation>Принудительное завершение работы этого приложения может привести к потере данных. Вы уверены, что хотите продолжить?</translation>
+        <translation>Принудительное завершение этого приложения может привести к потере данных.
+Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="539"/>
@@ -646,13 +647,13 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="388"/>
         <source>Force End</source>
         <comment>button</comment>
-        <translation>Принудительное закрытие</translation>
+        <translation>Принудительно завершить</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="180"/>
         <source>End</source>
         <comment>button</comment>
-        <translation>Завершение</translation>
+        <translation>Завершить</translation>
     </message>
 </context>
 <context>
@@ -660,7 +661,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="311"/>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>Выйти</translation>
     </message>
 </context>
 <context>
@@ -695,17 +696,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="157"/>
         <source>Broadcast:</source>
-        <translation>Транслировать:</translation>
+        <translation>Широковещательный:</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation type="unfinished"/>
+        <translation>Длина префикса:</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation type="unfinished"/>
+        <translation>Область действия:</translation>
     </message>
 </context>
 <context>
@@ -713,7 +714,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="293"/>
         <source>Connection type</source>
-        <translation>Тип соединения</translation>
+        <translation>Тип подключения</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="301"/>
@@ -743,7 +744,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="328"/>
         <source>Bandwidth</source>
-        <translation>Полоса пропускания</translation>
+        <translation>Пропускная способность</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="333"/>
@@ -758,32 +759,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="343"/>
         <source>RX errors</source>
-        <translation>Ошибок приема</translation>
+        <translation>Ошибок приёма</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="348"/>
         <source>RX dropped</source>
-        <translation>Потери при приеме</translation>
+        <translation>Потерь при приёме</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation type="unfinished"/>
+        <translation>Переполнений при приёме</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation type="unfinished"/>
+        <translation>Кадровых ошибок приёма</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
         <source>TX packets</source>
-        <translation>Отправлено пакетов</translation>
+        <translation>Передано пакетов</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="368"/>
         <source>TX bytes</source>
-        <translation>Отправлено байт</translation>
+        <translation>Передано байт</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="373"/>
@@ -793,12 +794,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation type="unfinished"/>
+        <translation>Переполнений при передаче</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation type="unfinished"/>
+        <translation>Потерь несущей при передаче</translation>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
@@ -815,7 +816,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="378"/>
         <source>TX dropped</source>
-        <translation>Потери при передаче</translation>
+        <translation>Потерь при передаче</translation>
     </message>
 </context>
 <context>
@@ -858,7 +859,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/netif_item_view_widget.cpp" line="95"/>
         <location filename="../gui/netif_item_view_widget.cpp" line="121"/>
         <source>Receive</source>
-        <translation>Прием</translation>
+        <translation>Приём</translation>
     </message>
 </context>
 <context>
@@ -870,7 +871,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/cpu_detail_widget.cpp" line="371"/>
         <location filename="../gui/detail_view_stacked_widget.cpp" line="182"/>
         <source>CPU</source>
-        <translation>Процессор</translation>
+        <translation>ЦП</translation>
     </message>
     <message>
         <location filename="../compact_disk_monitor.cpp" line="153"/>
@@ -895,13 +896,13 @@ Are you sure you want to continue?</source>
         <location filename="../memory_monitor.cpp" line="214"/>
         <location filename="../memory_monitor.cpp" line="221"/>
         <source>Swap</source>
-        <translation>Раздел подкачки</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../compact_memory_monitor.cpp" line="204"/>
         <location filename="../memory_monitor.cpp" line="215"/>
         <source>Not enabled</source>
-        <translation>Не подключен</translation>
+        <translation>Не включён</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="158"/>
@@ -926,13 +927,13 @@ Are you sure you want to continue?</source>
         <location filename="../compact_network_monitor.cpp" line="160"/>
         <location filename="../network_monitor.cpp" line="218"/>
         <source>Total Received</source>
-        <translation>Всего Получено</translation>
+        <translation>Всего получено</translation>
     </message>
     <message>
         <location filename="../compact_network_monitor.cpp" line="165"/>
         <location filename="../network_monitor.cpp" line="223"/>
         <source>Total Sent</source>
-        <translation>Всего Отправлено</translation>
+        <translation>Всего отправлено</translation>
     </message>
     <message>
         <location filename="../gui/netif_item_view_widget.cpp" line="104"/>
@@ -973,7 +974,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/process_table_view.cpp" line="649"/>
         <location filename="../process/process.cpp" line="57"/>
         <source>Normal</source>
-        <translation>Нормальный</translation>
+        <translation>Обычный</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="657"/>
@@ -996,7 +997,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../process/process.cpp" line="61"/>
         <source>Invalid</source>
-        <translation>Недействительный</translation>
+        <translation>Неверный</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="199"/>
@@ -1043,7 +1044,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../process/process_db.cpp" line="273"/>
         <source>Failed to kill process</source>
-        <translation>Не удалось убить процесс</translation>
+        <translation>Не удалось завершить процесс</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="276"/>
@@ -1066,7 +1067,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="58"/>
         <source>(%1 applications and %2 processes are running)</source>
-        <translation>(%1 приложений и %2 процессов выполняется)</translation>
+        <translation>(Выполняется %1 приложений и %2 процессов)</translation>
     </message>
 </context>
 <context>
@@ -1079,14 +1080,14 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/process_table_model.cpp" line="275"/>
         <source>Suspend</source>
-        <translation>Приостановить</translation>
+        <translation>Приостановлен</translation>
     </message>
     <message>
         <location filename="../process/process_name.cpp" line="90"/>
         <location filename="../process/process_name.cpp" line="99"/>
         <location filename="../process/process_name.cpp" line="104"/>
         <source>Tray</source>
-        <translation>Панель</translation>
+        <translation>Трей</translation>
     </message>
 </context>
 <context>
@@ -1094,7 +1095,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_table_view.cpp" line="680"/>
         <source>View command location</source>
-        <translation>Посмотреть расположение команды</translation>
+        <translation>Просмотреть расположение команды</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="83"/>
@@ -1118,7 +1119,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/common.cpp" line="89"/>
         <location filename="../gui/process_table_view.cpp" line="691"/>
         <source>Kill process</source>
-        <translation>Убить процесс</translation>
+        <translation>Принудительно завершить процесс</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="627"/>
@@ -1137,7 +1138,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_table_view.cpp" line="1052"/>
         <source>Custom Priority</source>
-        <translation>Пользовательский Приоритет</translation>
+        <translation>Пользовательский приоритет</translation>
     </message>
     <message>
         <location filename="../gui/process_table_view.cpp" line="1085"/>
@@ -1162,7 +1163,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/process_table_model.h" line="18"/>
         <source>CPU</source>
-        <translation>Процессор</translation>
+        <translation>ЦП</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="22"/>
@@ -1202,7 +1203,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/process_table_model.h" line="36"/>
         <source>Nice</source>
-        <translation>Хороший</translation>
+        <translation>Nice</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="38"/>
@@ -1212,7 +1213,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
         <source>Shared memory</source>
-        <translation>Общая память</translation>
+        <translation>Разделяемая память</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
@@ -1230,32 +1231,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation type="unfinished"/>
+        <translation>Защита системы</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation type="unfinished"/>
+        <translation>Показывать предупреждения при превышении пороговых значений</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Порог предупреждения ЦП (%)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation type="unfinished"/>
+        <translation>Порог предупреждения памяти (%)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation type="unfinished"/>
+        <translation>Интервал предупреждения (мин)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
@@ -1273,7 +1274,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../service/service_manager.cpp" line="408"/>
         <source>Error: Failed to set service startup type due to the crashed sub process.</source>
-        <translation>Ошибка: не удалось установить тип запуска службы из-за сбоя вспомогательного процесса.</translation>
+        <translation>Ошибка: не удалось установить тип запуска службы из-за сбоя подпроцесса.</translation>
     </message>
 </context>
 <context>
@@ -1283,12 +1284,12 @@ Are you sure you want to continue?</source>
         <location filename="../gui/system_service_table_view.cpp" line="224"/>
         <location filename="../gui/system_service_table_view.cpp" line="292"/>
         <source>Service instance name</source>
-        <translation>Наименование  службы</translation>
+        <translation>Имя экземпляра службы</translation>
     </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="38"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>ОК</translation>
     </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="39"/>
@@ -1325,7 +1326,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="558"/>
         <source>Auto</source>
-        <translation>Авто</translation>
+        <translation>Автоматически</translation>
     </message>
     <message>
         <location filename="../gui/system_service_table_view.cpp" line="559"/>
@@ -1348,12 +1349,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="18"/>
         <source>Load</source>
-        <translation>Загрузить</translation>
+        <translation>Загрузка</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="23"/>
         <source>Sub</source>
-        <translation>Подчиненный</translation>
+        <translation>Под</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="30"/>
@@ -1368,17 +1369,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="27"/>
         <source>Startup Type</source>
-        <translation>Тип Запуска</translation>
+        <translation>Тип запуска</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>Состояние запуска</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>Тактика запуска</translation>
     </message>
 </context>
 <context>
@@ -1386,18 +1387,18 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="132"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Изменяемый)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Диапазон: %1-%2</translation>
     </message>
 </context>
 <context>
@@ -1406,12 +1407,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/common.cpp" line="59"/>
         <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
-        <translation>Принудительное завершение приложения</translation>
+        <translation>Принудительно завершить приложение</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="147"/>
         <source>Expand</source>
-        <translation>Расширенный</translation>
+        <translation>Развернуть</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="150"/>
@@ -1456,7 +1457,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="245"/>
         <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
-        <translation type="unfinished"/>
+        <translation>Пользователи</translation>
     </message>
 </context>
 <context>
@@ -1464,7 +1465,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
-        <translation type="unfinished"/>
+        <translation>Редактировать учётную запись</translation>
     </message>
 </context>
 <context>
@@ -1477,7 +1478,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Standard User</source>
-        <translation type="unfinished"/>
+        <translation>Обычный пользователь</translation>
     </message>
 </context>
 </TS>
