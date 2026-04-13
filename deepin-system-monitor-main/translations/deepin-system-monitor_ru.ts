@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>App.About</name>
     <message>
@@ -75,17 +73,17 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Frequency</source>
-        <translation></translation>
+        <translation>Частота</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Frequency</translation>
+        <translation>Частота</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -168,7 +166,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
@@ -561,22 +559,22 @@
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="96"/>
         <source>Writes completed </source>
-        <translation>Записи завершены </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="100"/>
         <source>Writes merged</source>
-        <translation>Записи объединены</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="102"/>
         <source>Writes/s</source>
-        <translation>Записи/с</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="106"/>
         <source>Sectors written/s</source>
-        <translation>Секторы записаны/с</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/block_dev_summary_view_widget.cpp" line="108"/>
@@ -662,7 +660,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="311"/>
         <source>Logout</source>
-        <translation>Выход</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -702,12 +700,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Prefixlen:</source>
-        <translation>Длина префикса:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="159"/>
         <source>Scope:</source>
-        <translation>Диапазон:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -770,12 +768,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="353"/>
         <source>RX overruns</source>
-        <translation>Переполнения RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="358"/>
         <source>RX frame</source>
-        <translation>Кадр RX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="363"/>
@@ -795,12 +793,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="383"/>
         <source>TX overruns</source>
-        <translation>Переполнения TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="388"/>
         <source>TX carrier</source>
-        <translation>Несущая TX</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/netif_summary_view_widget.h" line="267"/>
@@ -1232,32 +1230,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="10"/>
         <source>Settings</source>
-        <translation type="unfinished">Настройки</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="11"/>
         <source>System Protection</source>
-        <translation>Системная защита</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="12"/>
         <source>Show warnings when the usage exceeds the thresholds</source>
-        <translation>Показывать предупреждения, когда использование превышает пороги</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="13"/>
         <source>CPU warning threshold (%)</source>
-        <translation>Порог предупреждения по ЦП (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="14"/>
         <source>Memory warning threshold (%)</source>
-        <translation>Порог предупреждения по памяти (%)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="15"/>
         <source>Warning interval (min)</source>
-        <translation>Интервал предупреждения (мин)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/settingsdialog.cpp" line="16"/>
@@ -1375,12 +1373,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation>Состояние запуска</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation>Тактика запуска</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1388,18 +1386,18 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="132"/>
         <source>Settings</source>
-        <translation type="unfinished">Настройки</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
-        <translation>(Изменяемый)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
-        <translation>Диапазон: %1-%2</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1458,7 +1456,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="245"/>
         <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
-        <translation>Пользователи</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1466,7 +1464,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
-        <translation>Редактировать информацию о учетной записи</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1479,7 +1477,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Standard User</source>
-        <translation>Стандартный пользователь</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
