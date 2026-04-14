@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -103,7 +103,7 @@ void ProcessAttributeDialog::initUI()
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     vlayout->setMargin(m_margin);
 #else
-    vlayout->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
+    vlayout->setContentsMargins(m_margin, 0, m_margin, m_margin);
 #endif
     vlayout->setSpacing(m_margin);
 
@@ -119,6 +119,7 @@ void ProcessAttributeDialog::initUI()
     m_appNameLabel->setElideMode(Qt::ElideMiddle);
     m_appNameLabel->setAlignment(Qt::AlignCenter);
     vlayout->addWidget(m_appNameLabel, 0, Qt::AlignCenter);
+    vlayout->addSpacing(3 * m_margin);
 
     // background frame
     auto *wnd = new QWidget(m_frame);
