@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ddlog.h"
@@ -71,9 +71,9 @@ void DBusAlarmNotify::showAlarmNotify(QString topic, QString msg, int timeout)
     action << "_open1" << tr("View");   //添加按钮
     QVariantMap inform;   //按钮的点击操作
     // 操作打开系统监视器
-    QString openSystemMonitor = QString("qdbus,org.deepin.SystemMonitorDaemon,"
-                                        "/org/deepin/SystemMonitorDaemon,"
-                                        "org.deepin.SystemMonitorDaemon.showDeepinSystemMoniter");
+    QString openSystemMonitor = QString("qdbus,com.deepin.SystemMonitorServer,"
+                                        "/com/deepin/SystemMonitorServer,"
+                                        "com.deepin.SystemMonitorServer.showDeepinSystemMoniter");
 
     inform.insert(QString("x-deepin-action-_open1"), openSystemMonitor);
 
