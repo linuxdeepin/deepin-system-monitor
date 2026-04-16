@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,6 +10,11 @@
 #include "ddlog.h"
 
 #include <DApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <DApplicationHelper>
+#else
+#include <DGuiApplicationHelper>
+#endif
 
 using namespace DDLog;
 using namespace core::system;
@@ -30,6 +35,14 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
     m_centralLayout->addWidget(m_netifsummaryWidget);
 
     detailFontChanged(DApplication::font());
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    connect(DApplicationHelper::instance(), &DApplicationHelper::fontChanged,
+            this, &NetifDetailViewWidget::detailFontChanged);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged,
+            this, &NetifDetailViewWidget::detailFontChanged);
+#endif
 
     updateData();
 }
