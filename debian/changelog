@@ -1,3 +1,13 @@
+deepin-system-monitor (6.5.40) unstable; urgency=medium
+
+  * chore: Update version to 6.5.40
+  * fix(dialog): ensure error dialog stays on top
+  * fix(gui): fix font change not updating interface
+  * fix(dbus): correct DBus service name in alarm notification
+  * fix(gui): adjust spacing between app name label and content area
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 16 Apr 2026 20:29:22 +0800
+
 deepin-system-monitor (6.5.39) unstable; urgency=medium
 
   * chore: Update dman's resources
