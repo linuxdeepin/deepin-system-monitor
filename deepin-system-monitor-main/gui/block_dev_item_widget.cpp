@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -36,6 +36,14 @@ BlockDevItemWidget::BlockDevItemWidget(QWidget *parent) : QWidget(parent)
     m_memChartWidget->setSpeedAxis(true);
     m_memChartWidget->setData1Color(readColor);
     m_memChartWidget->setData2Color(writeColor);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    connect(DApplicationHelper::instance(), &DApplicationHelper::fontChanged,
+            this, &BlockDevItemWidget::fontChanged);
+#else
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged,
+            this, &BlockDevItemWidget::fontChanged);
+#endif
 }
 
 BlockDevItemWidget::~BlockDevItemWidget()
@@ -161,21 +169,19 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
                          .arg(tr("Write"))
                          .arg(formatUnit_memory_disk(m_blokeDeviceInfo.writeSpeed(), B, 1, true));
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    int readTitleWidth = painter.fontMetrics().width(readTitle);
+    int readTitleWidth = painter.fontMetrics().width(readTitle) + TextSpacing;
+    int writeTitleWidth = painter.fontMetrics().width(writeTitle) + TextSpacing;
 #else
-    int readTitleWidth = painter.fontMetrics().horizontalAdvance(readTitle);
+    int readTitleWidth = painter.fontMetrics().horizontalAdvance(readTitle) + TextSpacing;
+    int writeTitleWidth = painter.fontMetrics().horizontalAdvance(writeTitle) + TextSpacing;
 #endif
-    int readTitleHeight = painter.fontMetrics().height();
+    int titleHeight = painter.fontMetrics().height();
     if (m_mode == TITLE_HORIZONTAL) {
         // qCDebug(app) << "BlockDevItemWidget paintEvent m_mode == TITLE_HORIZONTAL";
-        QRect memtitleRect(sectionSize + devtitleRect.right() + spacing * 2, devtitleRect.y() + deviceNameHeight, readTitleWidth, readTitleHeight);
+        QRect memtitleRect(sectionSize + devtitleRect.right() + spacing * 2, devtitleRect.y() + deviceNameHeight, readTitleWidth, titleHeight);
         painter.drawText(memtitleRect, Qt::AlignLeft | Qt::AlignVCenter, readTitle);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y() + readTitleHeight, painter.fontMetrics().width(writeTitle), painter.fontMetrics().height());
-#else
-        QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y() + readTitleHeight, painter.fontMetrics().horizontalAdvance(writeTitle), painter.fontMetrics().height());
-#endif
+        QRect swaptitleRect(sectionSize + memtitleRect.right() + 2 * spacing, memtitleRect.y() + titleHeight, writeTitleWidth, titleHeight);
         painter.drawText(swaptitleRect, Qt::AlignLeft | Qt::AlignVCenter, writeTitle);
 
         painter.setPen(Qt::NoPen);
@@ -189,7 +195,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(readColor);
 
-        QRect readStrRect(devtitleRect.left() + spacing + sectionSize, devtitleRect.y() + deviceNameHeight, readTitleWidth, readTitleHeight);
+        QRect readStrRect(devtitleRect.left() + spacing + sectionSize, devtitleRect.y() + deviceNameHeight, readTitleWidth, titleHeight);
         painter.drawEllipse(devtitleRect.left(), readStrRect.y() + qCeil((readStrRect.height() - sectionSize) / 2.0), sectionSize, sectionSize); // 读硬盘速度的颜色提示
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(readStrRect, readTitle);
@@ -197,11 +203,7 @@ void BlockDevItemWidget::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::NoPen);
         painter.setBrush(writeColor);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QRect writeStrRect(devtitleRect.left() + spacing + sectionSize, readStrRect.y() + readTitleHeight, painter.fontMetrics().width(writeTitle), painter.fontMetrics().height());
-#else
-        QRect writeStrRect(devtitleRect.left() + spacing + sectionSize, readStrRect.y() + readTitleHeight, painter.fontMetrics().horizontalAdvance(writeTitle), painter.fontMetrics().height());
-#endif
+        QRect writeStrRect(devtitleRect.left() + spacing + sectionSize, readStrRect.y() + titleHeight, writeTitleWidth, titleHeight);
         painter.drawEllipse(devtitleRect.left(), writeStrRect.y() + qCeil((writeStrRect.height() - sectionSize) / 2.0), sectionSize, sectionSize); // 写硬盘速度的颜色提示
         painter.setPen(palette.color(DPalette::TextTips));
         painter.drawText(writeStrRect, writeTitle);
