@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -76,7 +76,6 @@ void BlockStatViewWidget::showItem1()
 {
     qCDebug(app) << "BlockStatViewWidget showItem1";
     BlockDevItemWidget *item = m_listBlockItemWidget.at(0);
-    item->updateData(m_listDevice[0]);
     // 单个设备时也采用垂直布局，保证设备名/读写三行文本与多设备时的排版一致，避免错位
     item->setMode(BlockDevItemWidget::TITLE_VERTICAL);
     item->show();
@@ -105,9 +104,6 @@ void BlockStatViewWidget::showItem2()
     BlockDevItemWidget *item2 = m_listBlockItemWidget.at(1);
     item1->show();
     item2->show();
-
-    item1->updateData(m_listDevice[0]);
-    item2->updateData(m_listDevice[1]);
 
     item1->setMode(BlockDevItemWidget::TITLE_VERTICAL);
     item2->setMode(BlockDevItemWidget::TITLE_VERTICAL);
@@ -171,7 +167,6 @@ void BlockStatViewWidget::showItemLg2(int count)
             // qCDebug(app) << "Item" << i << "is active";
             noSelect = false;
         }
-        itemWidget->updateData(m_listDevice[i]);
     }
 
     if (noSelect) {
@@ -215,4 +210,11 @@ void BlockStatViewWidget::onUpdateData()
         connect(item, &BlockDevItemWidget::clicked, this, &BlockStatViewWidget::onSetItemStatus);
     }
     updateWidgetGeometry();
+
+    // The data update is decoupled from the geometric layout, 
+    // preventing repeated data addition during resizeEvent that 
+    // could cause the chart to shift left.
+    for (int i = 0; i < deviceCount && i < m_listBlockItemWidget.size(); i++) {
+        m_listBlockItemWidget[i]->updateData(m_listDevice[i]);
+    }
 }
