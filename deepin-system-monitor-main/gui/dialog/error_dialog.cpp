@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -38,6 +38,8 @@ void ErrorDialog::initUI()
     setIcon(QIcon::fromTheme("dialog-warning"));
     // set dialog attribute
     setAttribute(Qt::WA_DeleteOnClose);
+    // set window to stay on top so user can see error messages
+    setWindowFlags(windowFlags() | Qt::BypassWindowManagerHint);
     // set maximum width to avoid displaying extra wide dialog
     setMaximumWidth(720);
 
