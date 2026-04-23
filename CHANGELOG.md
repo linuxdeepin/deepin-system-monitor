@@ -4,106 +4,93 @@ SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-<a name=""></a>
-##  1.5.0 (2019-04-09)
-
-
-
-
-<a name="1.4.8.1"></a>
-## 1.4.8.1 (2019-01-25)
-
-
-
-
-<a name="1.4.8"></a>
-##  1.4.8 (2018-11-23)
-
-
-#### Features
-
-* **desktop:**  add deepin vendor. ([d48d0ad3](https://github.com/linuxdeepin/deepin-system-monitor/commit/d48d0ad34c9ed869b36e6df1fb23a448008a19c5))
-
-
-
-<a name="1.4.7"></a>
-## 1.4.7 (2018-11-09)
-
-
-#### Bug Fixes
-
-*   can not find some icons. ([9b5f6e32](https://github.com/linuxdeepin/deepin-system-monitor/commit/9b5f6e32dc76d4cc95e155efab5c7108ba8c5502))
-*   remove tooltip delay hiding. ([2491c04d](https://github.com/linuxdeepin/deepin-system-monitor/commit/2491c04dd90c351149ca47a9b2de929850aebfe8))
-
-
-
-<a name="1.4.6"></a>
-### 1.4.6 (2018-08-12)
-
-
-#### Bug Fixes
-
-*   remove click focus. ([c55009ed](https://github.com/linuxdeepin/deepin-system-monitor/commit/c55009ede66ba61c45236ad8885788d10e68bdca))
-*   no display decimals. ([8d229df7](https://github.com/linuxdeepin/deepin-system-monitor/commit/8d229df7585564350c1a00af4b856728a36d2d4f))
-
-
-
-<a name="1.4.5"></a>
-### 1.4.5 (2018-07-20)
-
-
-
-
 # Change Log
+
 Deepin system monitor: a more user-friendly system monitor.
 
 ## [Unreleased]
 
-## [1.4.4] - 2018-05-14
-- HiDPI: fixed attribute dialog's icon is not clear.
-- HiDPI: fixed listview icon is not render smooth.
-- Add tray prefix in title if process is tray process.
-- Adjust network grid padding, make it in visible center of left panel.
-- Fixed arithmetic overflow error when calcuate disk read/write io.
-- Adjust curve width.
+### Features
 
-## [1.4.3] - 2018-03-14
-- Update manual.
-- Fixed display error cause by mismatch type: double -> unsigned long.
-- Add detach function to avoid segfault when exit application.
+* Add dedicated GPU detail page and wire left-panel GPU click to real GPU details.
+* Add NPU detection/aggregation paths and show GPU/NPU usage in detail view.
+* Improve GPU engine metrics collection, including 3D/compute/copy/video engine naming.
 
-## [1.4.2] - 2018-03-06
-- Change code version.
+### Improvements
 
-## [1.4.1] - 2018-03-06
-- Init object double/float value, avoid use un-init value to draw wrong result. Create function 'filterInvalidNumber' to filter Inf/NaN numnber.
+* Improve integrated vs external GPU classification logic (shared-memory iGPU handling).
+* Refine left-panel monitor layout with CPU/GPU same-row split and dynamic hide when GPU is not present.
+* Update GPU detail memory fields/ordering to align with current detail-page design.
 
-## [1.4] - 2018-03-01
-- Update translations.
-- Follow DTK's API
-- Move end process dialog at center of window.
-- Add compact mode, provide multi-cpu graphics.
-- Add disk monitor graphics.
-- Fixed getcmdline crash error cause by cmdline.length() == 0
-- Fix searchbar focus problem.
-- Use default icon instead, if not found "Icon=" line in desktop file.
+### Build & Test
 
-## [1.3.7] - 2017-11-28
-- Split flatpak cmdline's fullpath to get real filename to find location of flatpak application.
+* Refresh Qt6 test compatibility in multiple suites and fix missing test-link sources.
+* Update build docs with required test dependencies (`libgtest-dev`, `libgmock-dev`).
 
-## [1.3.6.1] - 2017-11-22
-- Update translation
+## [6.5.38] - 2026-02-05
 
-## [1.3.6] - 2017-11-06
-- Make interactive kill support FlatPak application window
-- Make first tab display FlatPak application process
-- Click 'location' menu item to find FlatPak application location
-- Fix the bug that which command that can't found location of dde-file-manager and nautils
-- Fix cursor not hide after interactive kill
-- Find desktop file from process name if found environ variable 'GIO_LAUNCHED_DESKTOP_FILE' failed from tray process
-- Find icon from FlatPak application's local directory
-- Rasie window to top of stack window list after call deepin-system-monitor command again
-- Change code with DTK's newest setFrame API
-- Synchronous translation
+* fix: handle failure in resolving executable path for process ID
+* chore: update version to 6.5.38
 
+## [6.5.37] - 2025-11-27
 
+* chore: update compiler flags for security enhancements
+
+## [6.5.36] - 2025-11-06
+
+* refactor: service safety rectification
+* fix: fix service security issues
+
+## [6.5.35] - 2025-10-14
+
+* fix: can not get dconfig value issue
+* chore: update version to 6.5.35
+
+## [6.5.34] - 2025-10-10
+
+* fix: add XDG_DATA_HOME to XDG_DATA_DIRS
+* chore: update version to 6.5.34
+
+## [6.5.33] - 2025-09-18
+
+* fix: fix coredump issue
+
+## [6.5.32] - 2025-09-05
+
+* feat: change CPU processor details page content
+
+## [6.5.31] - 2025-08-29
+
+* fix: high CPU and empty info issue on dkapture model
+
+## [6.5.30] - 2025-08-21
+
+* maintenance release
+
+## [6.5.29] - 2025-08-14
+
+* chore: add Lao language translations in policy files
+
+## [6.5.28] - 2025-08-13
+
+* chore: add support for Lao language translation
+
+## [6.5.27] - 2025-08-07
+
+* chore: add new Lao translation file
+
+## [6.5.26] - 2025-07-31
+
+* feat: add average CPU frequency calculation and display
+
+## [6.5.25] - 2025-07-31
+
+* fix: corrected string formatting in system protection settings
+
+## [6.5.24] - 2025-07-11
+
+* chore: add more logs
+
+## [6.5.23] - 2025-07-09
+
+* chore: update deepin-manual resources

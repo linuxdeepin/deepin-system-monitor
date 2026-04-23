@@ -85,9 +85,11 @@ set(HPP_GLOBAL
     application.h
     stack_trace.h
     cpu_monitor.h
+    gpu_monitor.h
     memory_monitor.h
     network_monitor.h
     compact_cpu_monitor.h
+    compact_gpu_monitor.h
     compact_memory_monitor.h
     compact_network_monitor.h
     compact_disk_monitor.h
@@ -101,9 +103,11 @@ set(CPP_GLOBAL
     main.cpp
     application.cpp
     cpu_monitor.cpp
+    gpu_monitor.cpp
     memory_monitor.cpp
     network_monitor.cpp
     compact_cpu_monitor.cpp
+    compact_gpu_monitor.cpp
     compact_memory_monitor.cpp
     compact_network_monitor.cpp
     compact_disk_monitor.cpp
@@ -181,7 +185,7 @@ set(HPP_MODEL
     model/model_manager.h
     model/accounts_info_model.h
     model/user.h
-
+    model/gpu_info_model.h
 )
 set(CPP_MODEL
     model/system_service_table_model.cpp
@@ -202,6 +206,7 @@ set(CPP_MODEL
     model/model_manager.cpp
     model/accounts_info_model.cpp
     model/user.cpp
+    model/gpu_info_model.cpp
 )
 
 set(HPP_GUI
@@ -228,6 +233,7 @@ set(HPP_GUI
     gui/xwin_kill_preview_widget.h
     gui/xwin_kill_preview_background_widget.h
     gui/mem_detail_view_widget.h
+    gui/gpu_detail_view_widget.h
     gui/mem_summary_view_widget.h
     gui/mem_stat_view_widget.h
     gui/block_dev_detail_view_widget.h
@@ -274,6 +280,7 @@ set(CPP_GUI
     gui/xwin_kill_preview_widget.cpp
     gui/xwin_kill_preview_background_widget.cpp
     gui/mem_detail_view_widget.cpp
+    gui/gpu_detail_view_widget.cpp
     gui/mem_summary_view_widget.cpp
     gui/mem_stat_view_widget.cpp
     gui/block_dev_detail_view_widget.cpp
@@ -373,6 +380,7 @@ set(HPP_SYSTEM
     system/wireless.h
     system/diskio_info.h
     system/net_info.h
+    system/gpu_info.h
 )
 set(CPP_SYSTEM
     system/system_monitor.cpp
@@ -400,6 +408,7 @@ set(CPP_SYSTEM
     system/wireless.cpp
     system/diskio_info.cpp
     system/net_info.cpp
+    system/gpu_info.cpp
 )
 
 set(HPP_WM

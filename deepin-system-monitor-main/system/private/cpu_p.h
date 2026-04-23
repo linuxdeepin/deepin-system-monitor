@@ -8,6 +8,7 @@
 
 #include <QSharedData>
 
+#include <list>
 #include <memory>
 
 namespace core {

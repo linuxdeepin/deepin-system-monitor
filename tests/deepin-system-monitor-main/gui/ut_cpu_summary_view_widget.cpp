@@ -447,7 +447,7 @@ TEST_F(UT_CPUSummaryTableModel, test_data_29)
     stub.set(ADDR(QModelIndex, row), stub_CPUSummaryTableModel_data_index_row_6);
     stub.set(ADDR(QModelIndex, column), stub_CPUSummaryTableModel_data_index_column_1);
     QModelIndex index;
-    m_tester->data(index, Qt::TextColorRole);
+    m_tester->data(index, Qt::ForegroundRole);
 }
 
 TEST_F(UT_CPUSummaryTableModel, test_data_30)
@@ -457,7 +457,7 @@ TEST_F(UT_CPUSummaryTableModel, test_data_30)
     stub.set(ADDR(QModelIndex, row), stub_CPUSummaryTableModel_data_index_row_7);
     stub.set(ADDR(QModelIndex, column), stub_CPUSummaryTableModel_data_index_column_1);
     QModelIndex index;
-    m_tester->data(index, Qt::TextColorRole);
+    m_tester->data(index, Qt::ForegroundRole);
 }
 
 TEST_F(UT_CPUSummaryTableModel, test_data_31)
@@ -467,7 +467,7 @@ TEST_F(UT_CPUSummaryTableModel, test_data_31)
     stub.set(ADDR(QModelIndex, row), stub_CPUSummaryTableModel_data_index_row_7);
     stub.set(ADDR(QModelIndex, column), stub_CPUSummaryTableModel_data_index_column_0);
     QModelIndex index;
-    m_tester->data(index, Qt::TextColorRole);
+    m_tester->data(index, Qt::ForegroundRole);
 }
 
 TEST_F(UT_CPUSummaryTableModel, test_data_32)
@@ -477,7 +477,7 @@ TEST_F(UT_CPUSummaryTableModel, test_data_32)
     stub.set(ADDR(QModelIndex, row), stub_CPUSummaryTableModel_data_index_row_8);
     stub.set(ADDR(QModelIndex, column), stub_CPUSummaryTableModel_data_index_column_1);
     QModelIndex index;
-    m_tester->data(index, Qt::TextColorRole);
+    m_tester->data(index, Qt::ForegroundRole);
 }
 
 TEST_F(UT_CPUSummaryTableModel, test_data_33)
@@ -487,7 +487,7 @@ TEST_F(UT_CPUSummaryTableModel, test_data_33)
     stub.set(ADDR(QModelIndex, row), stub_CPUSummaryTableModel_data_index_row_8);
     stub.set(ADDR(QModelIndex, column), stub_CPUSummaryTableModel_data_index_column_0);
     QModelIndex index;
-    m_tester->data(index, Qt::TextColorRole);
+    m_tester->data(index, Qt::ForegroundRole);
 }
 
 TEST_F(UT_CPUSummaryTableModel, test_data_34)
