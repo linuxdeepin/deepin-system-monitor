@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ddlog.h"
@@ -53,6 +53,7 @@
 #include <QProcess>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QScrollBar>
 #include <QShortcut>
 #include <QActionGroup>
 
@@ -941,12 +942,14 @@ void ProcessTableView::initConnections(bool settingsLoaded)
     connect(m_model, &ProcessTableModel::modelUpdated, this, [&]() {
         adjustInfoLabelVisibility();
         if (m_selectedPID.isValid()) {
+            int scrollPos = verticalScrollBar()->value();
             for (int i = 0; i < m_proxyModel->rowCount(); i++) {
                 if (m_proxyModel->data(m_proxyModel->index(i, ProcessTableModel::kProcessPIDColumn),
                                        Qt::UserRole)
                     == m_selectedPID)
                     this->setCurrentIndex(m_proxyModel->index(i, 0));
             }
+            verticalScrollBar()->setValue(scrollPos);
         }
         if (!m_useModeName.isNull()) {
             m_cpuUsage = m_model->getTotalCPUUsage();
@@ -1146,6 +1149,7 @@ void ProcessTableView::setUserModeName(const QString &userName)
     if (userName != m_useModeName) {
         qCDebug(app) << "Setting user mode name to:" << userName;
         m_useModeName = userName;
+        m_selectedPID.clear();
         m_model->setUserModeName(m_useModeName);
     }
 }
