@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
 <context>
     <name>App.About</name>
     <message>
@@ -12,7 +10,7 @@
     <message>
         <location filename="../main.cpp" line="91"/>
         <source>System Monitor is a tool to monitor realtime system load, view and control processes and services running on your system.</source>
-        <translation>System Monitor to narzędzie do monitorowania obciążenia systemu w czasie rzeczywistym, przeglądania i kontrolowania procesów i usług działających w systemie.</translation>
+        <translation>Monitor systemu to narzędzie do monitorowania obciążenia systemu w czasie rzeczywistym, przeglądania i kontrolowania procesów i usług działających w systemie.</translation>
     </message>
 </context>
 <context>
@@ -75,17 +73,17 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Frequency</source>
-        <translation></translation>
+        <translation>Częstotliwość</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Frequency</translation>
+        <translation>Częstotliwość</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation></translation>
+        <translation>Średnia częstotliwość</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -168,7 +166,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuluj</translation>
+        <translation>Anuluj</translation>
     </message>
 </context>
 <context>
