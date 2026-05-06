@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 #include <QToolTip>
+#include <QGuiApplication>
 
 using namespace DDLog;
 DWIDGET_USE_NAMESPACE
@@ -225,28 +226,36 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         // 原有QPixmapCache::find接口返回的pixmap指针为空，改为返回pixmap引用对象，保证能根据进程名从缓存中获取到图标资源
         // https://pms.uniontech.com/bug-view-239575.html
         const QString &procName = index.data(Qt::UserRole + 4).toString();
+        // Get device pixel ratio to ensure sharp icons at high DPI scaling
+        qreal dpr = painter->device()->devicePixelRatioF();
+        // Include DPR in cache key to auto-generate new icons when scale changes
+        QString cacheKey = QString("%1@%2").arg(procName).arg(dpr);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QPixmap iconPixmap;
-        core::process::ProcessIconCache::instance()->iconPixmapCache.find(procName, iconPixmap);
+        core::process::ProcessIconCache::instance()->iconPixmapCache.find(cacheKey, iconPixmap);
         if (!iconPixmap.isNull()) {
             // qCDebug(app) << "BaseItemDelegate paint: Drawing icon from cache for process" << procName;
             painter->drawPixmap(iconRect, iconPixmap);
         } else {
             // qCDebug(app) << "BaseItemDelegate paint: Icon not in cache, generating and drawing for process" << procName;
-            const QPixmap &iconPix = icon.pixmap(iconRect.size());
-            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procName, iconPix);
+            // Use DPR to generate correctly sized pixmap for high DPI scaling
+            QPixmap iconPix = icon.pixmap(iconRect.size() * dpr);
+            iconPix.setDevicePixelRatio(dpr);
+            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(cacheKey, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
 #else
         QPixmap iconPixmap;
-        if (core::process::ProcessIconCache::instance()->iconPixmapCache.find(procName, &iconPixmap)) {
+        if (core::process::ProcessIconCache::instance()->iconPixmapCache.find(cacheKey, &iconPixmap)) {
             // qCDebug(app) << "BaseItemDelegate paint: Drawing icon from cache for process" << procName;
             painter->drawPixmap(iconRect, iconPixmap);
         } else {
             // qCDebug(app) << "BaseItemDelegate paint: Icon not in cache, generating and drawing for process" << procName;
-            const QPixmap &iconPix = icon.pixmap(iconRect.size());
-            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(procName, iconPix);
+            // Use DPR to generate correctly sized pixmap for high DPI scaling
+            QPixmap iconPix = icon.pixmap(iconRect.size() * dpr);
+            iconPix.setDevicePixelRatio(dpr);
+            core::process::ProcessIconCache::instance()->iconPixmapCache.insert(cacheKey, iconPix);
             painter->drawPixmap(iconRect, iconPix);
         }
 #endif
