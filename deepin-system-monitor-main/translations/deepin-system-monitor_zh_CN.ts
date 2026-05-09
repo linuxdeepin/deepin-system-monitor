@@ -128,6 +128,13 @@
     </message>
 </context>
 <context>
+    <name>Cancel</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取 消</translation>
+    </message>
+</context>
+<context>
     <name>ChartViewWidget</name>
     <message>
         <source>60 seconds</source>
@@ -407,10 +414,6 @@
 <context>
     <name>DeailTableModelBlock</name>
     <message>
-        <source>Model</source>
-        <translation>型号</translation>
-    </message>
-    <message>
         <source>Read speed</source>
         <translation>读取速度</translation>
     </message>
@@ -520,6 +523,13 @@ Are you sure you want to continue?</source>
         <source>End</source>
         <comment>button</comment>
         <translation>结束进程</translation>
+    </message>
+</context>
+<context>
+    <name>Logout</name>
+    <message>
+        <source>Logout</source>
+        <translation>登出</translation>
     </message>
 </context>
 <context>
@@ -1125,9 +1135,16 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>系统服务</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>用户</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>修改帐户信息</translation>
     </message>
 </context>
 <context>
@@ -1139,13 +1156,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Standard User</source>
         <translation>标准用户</translation>
-    </message>
-</context>
-<context>
-    <name>User.Account.Operation</name>
-    <message>
-        <source>Edit account information</source>
-        <translation>修改帐户信息</translation>
     </message>
 </context>
 </TS>

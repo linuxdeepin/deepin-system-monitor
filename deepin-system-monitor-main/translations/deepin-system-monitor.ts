@@ -128,6 +128,13 @@
     </message>
 </context>
 <context>
+    <name>Cancel</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
+    </message>
+</context>
+<context>
     <name>ChartViewWidget</name>
     <message>
         <source>60 seconds</source>
@@ -407,10 +414,6 @@
 <context>
     <name>DeailTableModelBlock</name>
     <message>
-        <source>Model</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Read speed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -520,6 +523,13 @@ Are you sure you want to continue?</translation>
         <source>End</source>
         <comment>button</comment>
         <translation type="unfinished">End</translation>
+    </message>
+</context>
+<context>
+    <name>Logout</name>
+    <message>
+        <source>Logout</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1001,16 +1011,6 @@ Are you sure you want to continue?</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
-        <translation type="obsolete">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="obsolete">Cancel</translation>
-    </message>
-    <message>
-        <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
     <message>
@@ -1060,16 +1060,8 @@ Are you sure you want to continue?</translation>
         <translation>Load</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation type="vanished">Active</translation>
-    </message>
-    <message>
         <source>Sub</source>
         <translation>Sub</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation type="vanished">State</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1149,6 +1141,13 @@ Are you sure you want to continue?</translation>
     </message>
 </context>
 <context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>Edit account information</translation>
+    </message>
+</context>
+<context>
     <name>User.Account.Type</name>
     <message>
         <source>Administrator</source>
@@ -1157,13 +1156,6 @@ Are you sure you want to continue?</translation>
     <message>
         <source>Standard User</source>
         <translation>Standard User</translation>
-    </message>
-</context>
-<context>
-    <name>User.Account.Operation</name>
-    <message>
-        <source>Edit account information</source>
-        <translation>Edit account information</translation>
     </message>
 </context>
 </TS>
