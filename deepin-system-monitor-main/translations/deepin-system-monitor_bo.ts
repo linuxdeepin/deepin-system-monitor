@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="bo">
 <context>
     <name>App.About</name>
     <message>
@@ -65,10 +67,6 @@
         <translation>ཟློས་ཕྱོད།</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>བཟོ་མཁན།</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>འཇུག་ཤུར།</translation>
     </message>
@@ -127,6 +125,13 @@
     <message>
         <source>Up time</source>
         <translation>འཁོར་སྐྱོད་དུས་ཡུན།</translation>
+    </message>
+</context>
+<context>
+    <name>Cancel</name>
+    <message>
+        <source>Cancel</source>
+        <translation>འདོར་བ།</translation>
     </message>
 </context>
 <context>
@@ -333,6 +338,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>ཉེན་བརྡ།</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>དོ་སྣང་གནང་རོགས། ཁྱེད་ཀྱི་ཡོ་བྱད་CPU​ བེད་སྤྱོད་ཚད་%1% ལ་སླེབས་ཟིན།</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>དོ་སྣང་གནང་རོགས། ཁྱེད་ཀྱི་ཡོ་བྱད་མེམ་མོ་རི​ (内存) བེད་སྤྱོད་ཚད་%1% ལ་སླེབས་ཟིན།</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>མཐོང་རིས།</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -389,10 +413,6 @@
 </context>
 <context>
     <name>DeailTableModelBlock</name>
-    <message>
-        <source>Model</source>
-        <translation>བཟོ་རྟགས།</translation>
-    </message>
     <message>
         <source>Read speed</source>
         <translation>ཀློག་པའི་མྱུར་ཚད།</translation>
@@ -503,6 +523,13 @@ Are you sure you want to continue?</source>
         <source>End</source>
         <comment>button</comment>
         <translation>བརྒྱུད་རིམ་མཇུག་སྒྲིལ་བ།</translation>
+    </message>
+</context>
+<context>
+    <name>Logout</name>
+    <message>
+        <source>Logout</source>
+        <translation>ཐོ་འགྲོལ།</translation>
     </message>
 </context>
 <context>
@@ -718,6 +745,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>མངོན་འགྱུར་བྱེད་པ་ན</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +803,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>བརྒྱུད་རིམ་ཚང་མ།</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1033,16 +1060,8 @@ Are you sure you want to continue?</source>
         <translation>ནང་གསོག་སྣོན་འཇུག</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>བྱེད་སྒོ།</translation>
-    </message>
-    <message>
         <source>Sub</source>
         <translation>བཀོལ་སྤྱོད་རྣམ་པ།</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation>རྣམ་པ།</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1074,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>འགོ་སློང་ཐབས།</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>འགོ་ཚུགས་གནས་ཚུལ།</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>སྲིད་ཇུས་སྤྱོད་པ།</translation>
     </message>
 </context>
 <context>
@@ -1107,6 +1134,28 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>མ་ལག་ཞབས་ཞུ།</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>བེད་སྤྱོད་པ།</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>རྩིས་ཐོ་དང་འབྲེལ་ཡོད་དང་གསར་བཅོས།</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>དོ་དམ་པ།</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>ཚད་གཞིའི་བེད་སྤྱོད་པ།</translation>
     </message>
 </context>
 </TS>

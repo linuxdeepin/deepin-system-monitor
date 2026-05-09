@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_TW">
 <context>
     <name>App.About</name>
     <message>
@@ -65,10 +67,6 @@
         <translation>頻率</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>製造商</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>插槽</translation>
     </message>
@@ -127,6 +125,13 @@
     <message>
         <source>Up time</source>
         <translation>執行時間</translation>
+    </message>
+</context>
+<context>
+    <name>Cancel</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取 消</translation>
     </message>
 </context>
 <context>
@@ -333,6 +338,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>請注意！您的裝置 CPU​ 使用率已達 %1%！</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>請注意！您的裝置 記憶體​ 使用率已達 %1%！</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>檢視</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -389,10 +413,6 @@
 </context>
 <context>
     <name>DeailTableModelBlock</name>
-    <message>
-        <source>Model</source>
-        <translation>型號</translation>
-    </message>
     <message>
         <source>Read speed</source>
         <translation>讀取速度</translation>
@@ -503,6 +523,13 @@ Are you sure you want to continue?</source>
         <source>End</source>
         <comment>button</comment>
         <translation>結束進程</translation>
+    </message>
+</context>
+<context>
+    <name>Logout</name>
+    <message>
+        <source>Logout</source>
+        <translation>登出</translation>
     </message>
 </context>
 <context>
@@ -718,6 +745,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>正在載入</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +803,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>所有進程</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation>正在載入</translation>
     </message>
 </context>
 <context>
@@ -984,12 +1011,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>OK</source>
-        <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>button</comment>
         <translation>取 消</translation>
     </message>
 </context>
@@ -1110,9 +1135,16 @@ Are you sure you want to continue?</source>
         <source>Services</source>
         <translation>系統服務</translation>
     </message>
-   <message>
+    <message>
         <source>Users</source>
         <translation>使用者</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>修改帳戶訊息</translation>
     </message>
 </context>
 <context>
@@ -1124,13 +1156,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>Standard User</source>
         <translation>標準使用者</translation>
-    </message>
-</context>
-<context>
-    <name>User.Account.Operation</name>
-    <message>
-        <source>Edit account information</source>
-        <translation>修改帳戶訊息</translation>
     </message>
 </context>
 </TS>

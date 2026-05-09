@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ug">
 <context>
     <name>App.About</name>
     <message>
@@ -65,10 +67,6 @@
         <translation>چاستوتا</translation>
     </message>
     <message>
-        <source>Vendor</source>
-        <translation>ياسىغۇچى</translation>
-    </message>
-    <message>
         <source>Sockets</source>
         <translation>ئوقۇر</translation>
     </message>
@@ -127,6 +125,13 @@
     <message>
         <source>Up time</source>
         <translation>ئىشلىگەن ۋاقىت</translation>
+    </message>
+</context>
+<context>
+    <name>Cancel</name>
+    <message>
+        <source>Cancel</source>
+        <translation>بىكار قىلىش</translation>
     </message>
 </context>
 <context>
@@ -333,6 +338,25 @@
     </message>
 </context>
 <context>
+    <name>DBusAlarmNotify</name>
+    <message>
+        <source>Warning</source>
+        <translation>ئاگاھلاندۇرۇش</translation>
+    </message>
+    <message>
+        <source>Your CPU usage is higher than %1%!</source>
+        <translation>دىققەت قىلىڭ! ئۈسكۈنىڭىزنىڭ CPU​ ئىشلىتىش نىسبىتى %1% كە يەتتى!</translation>
+    </message>
+    <message>
+        <source>Your memory usage is higher than %1%!</source>
+        <translation>دىققەت قىلىڭ! ئۈسكۈنىڭىزنىڭ ئىچكى ساقلىغۇچ​ ئىشلىتىش نىسبىتى %1% كە!</translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation>كۆرۈش</translation>
+    </message>
+</context>
+<context>
     <name>DeailTableModel</name>
     <message>
         <source>Used</source>
@@ -389,10 +413,6 @@
 </context>
 <context>
     <name>DeailTableModelBlock</name>
-    <message>
-        <source>Model</source>
-        <translation>تىپى</translation>
-    </message>
     <message>
         <source>Read speed</source>
         <translation>ئوقۇش سۈرئىتى</translation>
@@ -503,6 +523,13 @@ Are you sure you want to continue?</source>
         <source>End</source>
         <comment>button</comment>
         <translation>ئاخىرلاشتۇرۇش</translation>
+    </message>
+</context>
+<context>
+    <name>Logout</name>
+    <message>
+        <source>Logout</source>
+        <translation>ھېساباتتىن چىقىش</translation>
     </message>
 </context>
 <context>
@@ -718,6 +745,13 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
+    <name>Process.Loading</name>
+    <message>
+        <source>Loading</source>
+        <translation>يۈكلەۋاتىدۇ</translation>
+    </message>
+</context>
+<context>
     <name>Process.Priority</name>
     <message>
         <source>Very high</source>
@@ -769,13 +803,6 @@ Are you sure you want to continue?</source>
     <message>
         <source>All processes</source>
         <translation>بارلىق جەريانلار</translation>
-    </message>
-</context>
-<context>
-    <name>Process.Loading</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -954,11 +981,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>CPU warning threshold (%)</source>
-        <translation>CPU نىڭ ئىشلىتىلىشى  (%)</translation>
+        <translation>CPU نىڭ ئىشلىتىلىشى &#xa0;(%)</translation>
     </message>
     <message>
         <source>Memory warning threshold (%)</source>
-        <translation>ئىچكى ساقلىغۇچنىڭ ئىشلىتىلىشى  (%)</translation>
+        <translation>ئىچكى ساقلىغۇچنىڭ ئىشلىتىلىشى &#xa0;(%)</translation>
     </message>
     <message>
         <source>Warning interval (min)</source>
@@ -1033,16 +1060,8 @@ Are you sure you want to continue?</source>
         <translation>چۈشۈرۈش</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>ئاكتىپ</translation>
-    </message>
-    <message>
         <source>Sub</source>
         <translation>قوشۇمچە</translation>
-    </message>
-    <message>
-        <source>State</source>
-        <translation>ھالەت</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1055,6 +1074,14 @@ Are you sure you want to continue?</source>
     <message>
         <source>Startup Type</source>
         <translation>باشلاش تىپى</translation>
+    </message>
+    <message>
+        <source>Start State</source>
+        <translation>قوزغىلىش ھالىتى</translation>
+    </message>
+    <message>
+        <source>Start Tactic</source>
+        <translation>سىياسەتنى قوزغىتىش</translation>
     </message>
 </context>
 <context>
@@ -1107,6 +1134,28 @@ Are you sure you want to continue?</source>
     <message>
         <source>Services</source>
         <translation>مۇلازىمەتلەر</translation>
+    </message>
+    <message>
+        <source>Users</source>
+        <translation>ئىشلەتكۈچى</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Operation</name>
+    <message>
+        <source>Edit account information</source>
+        <translation>ھېسابات ئۇچۇرىنى تەھرىرلەش</translation>
+    </message>
+</context>
+<context>
+    <name>User.Account.Type</name>
+    <message>
+        <source>Administrator</source>
+        <translation>باشقۇرغۇچى</translation>
+    </message>
+    <message>
+        <source>Standard User</source>
+        <translation>ئۆلچەملىك ئىشلەتكۈچى</translation>
     </message>
 </context>
 </TS>
