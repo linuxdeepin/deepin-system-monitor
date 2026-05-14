@@ -117,8 +117,8 @@ void BaseItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (opt.state & DStyle::State_Enabled) {
         if (opt.state & DStyle::State_Selected) {
             // qCDebug(app) << "BaseItemDelegate paint: Item is selected.";
-            // selected row's color
-            forground.setColor(palette.color(cg, DPalette::TextLively));
+            // selected row's color - use HighlightedText for better contrast on highlight background
+            forground.setColor(palette.color(cg, DPalette::HighlightedText));
             if (opt.state & DStyle::State_Sunken) {
                 // qCDebug(app) << "BaseItemDelegate paint: Item is sunken.";
                 // color used when current row pressed by mouse
