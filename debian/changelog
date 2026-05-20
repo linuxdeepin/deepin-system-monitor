@@ -1,3 +1,10 @@
+deepin-system-monitor (6.5.44) unstable; urgency=medium
+
+  * chore: Update version to 6.5.44
+  * fix(dbus): defer ControlCenter DBus interface init to first use
+
+ -- Wang Yu <wangyu@uniontech.com>  Wed, 20 May 2026 16:35:50 +0800
+
 deepin-system-monitor (6.5.43) unstable; urgency=medium
 
   * chore: Update version to 6.5.43
