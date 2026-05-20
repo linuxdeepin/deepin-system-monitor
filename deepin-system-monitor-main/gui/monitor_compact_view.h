@@ -11,6 +11,7 @@
 DWIDGET_USE_NAMESPACE
 
 class CompactCpuMonitor;
+class CompactGpuMonitor;
 class CompactMemoryMonitor;
 class CompactNetworkMonitor;
 class CompactDiskMonitor;
@@ -47,6 +48,8 @@ signals:
 private:
     // Compact cpu view instance
     CompactCpuMonitor *m_cpuMonitor {};
+    // Compact gpu view instance
+    CompactGpuMonitor *m_gpuMonitor {};
     // Compact memory view instance
     CompactMemoryMonitor *m_memoryMonitor {};
     // Compact network view instance

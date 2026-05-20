@@ -12,7 +12,7 @@
 
 // Display mode enum
 enum DisplayMode { kDisplayModeCompact = 0, kDisplayModeExpand };
-enum DisplayModuleIndex {kDisPlayCPUIndex = 1, kDisPlayMemoryIndex = 2, kDisPlayNetIfIndex = 3, kDisPlayBlockIndex = 4};
+enum DisplayModuleIndex {kDisPlayCPUIndex = 1, kDisPlayGPUIndex = 2, kDisPlayMemoryIndex = 3, kDisPlayNetIfIndex = 4, kDisPlayBlockIndex = 5};
 
 /**
  * @brief Format QColor to human friendly text

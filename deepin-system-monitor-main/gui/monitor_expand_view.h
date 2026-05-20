@@ -11,6 +11,7 @@
 DWIDGET_USE_NAMESPACE
 
 class CpuMonitor;
+class GpuMonitor;
 class MemoryMonitor;
 class NetworkMonitor;
 
@@ -42,6 +43,8 @@ signals:
 private:
     // Cpu monitor view
     CpuMonitor *m_cpuMonitor {};
+    // Gpu monitor view
+    GpuMonitor *m_gpuMonitor {};
     // Memory monitor view
     MemoryMonitor *m_memoryMonitor {};
     // Network monitor view

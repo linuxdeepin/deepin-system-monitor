@@ -11,6 +11,7 @@
 #include "system/cpu_set.h"
 #include "system/diskio_info.h"
 #include "system/net_info.h"
+#include "system/gpu_info.h"
 
 //gtest
 #include "stub.h"
@@ -92,6 +93,14 @@ TEST_F(UT_DeviceDB, test_netInfo)
     sleep(2);
     m_tester->update();
 
+}
+
+TEST_F(UT_DeviceDB, test_gpuInfoSet)
+{
+    m_tester->update();
+    EXPECT_TRUE(m_tester->gpuInfoSet() != nullptr);
+    // GPU count could be 0 or more depending on the system
+    EXPECT_GE(m_tester->gpuInfoSet()->gpuCount(), 0);
 }
 
 

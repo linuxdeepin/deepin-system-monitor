@@ -267,7 +267,7 @@ protected:
                     return m_blockInfo.writeRequestMergedPerSecond();
                 break;
             }
-        } else if (role == Qt::TextColorRole) {
+        } else if (role == Qt::ForegroundRole) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const auto &palette = DApplicationHelper::instance()->applicationPalette();
 #else
@@ -663,7 +663,7 @@ TEST_F(UT_DeailTableModelBlock, test_data_29)
     stub.set(ADDR(QModelIndex, column), stub_data_index_column_1);
     QModelIndex index;
     m_tester2->currDeciveName = "11";
-    m_tester2->data(index, Qt::TextColorRole);
+    m_tester2->data(index, Qt::ForegroundRole);
 }
 
 TEST_F(UT_DeailTableModelBlock, test_flags_01)

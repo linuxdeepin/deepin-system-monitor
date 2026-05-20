@@ -16,6 +16,7 @@ class CPUSet;
 class SystemMonitor;
 class DiskIOInfo;
 class NetInfo;
+class GPUInfoSet;
 
 /**
  * @brief The DeviceDB class
@@ -34,6 +35,7 @@ public:
     BlockDeviceInfoDB *blockDeviceInfoDB();
     DiskIOInfo *diskIoInfo();
     NetInfo *netInfo();
+    GPUInfoSet *gpuInfoSet();
 
     void update();
 
@@ -44,6 +46,7 @@ private:
     BlockDeviceInfoDB *m_blkDevInfoDB;
     DiskIOInfo *m_diskIoInfo;
     NetInfo *m_netInfo;
+    GPUInfoSet *m_gpuInfoSet;
 };
 
 } // namespace system
