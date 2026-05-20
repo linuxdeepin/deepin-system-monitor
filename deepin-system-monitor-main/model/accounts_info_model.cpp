@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "accounts_info_model.h"
 #include "helper.hpp"
 #include "ddlog.h"
@@ -19,7 +23,14 @@ const QString LoginPath = "/org/freedesktop/login1";
 const QString LoginInterface = "org.freedesktop.login1.Manager";
 
 AccountsInfoModel::AccountsInfoModel(QObject *parent)
-    : QObject(parent), m_accountsInter(new QDBusInterface(common::systemInfo().AccountsService, common::systemInfo().AccountsPath, common::systemInfo().AccountsInterface, QDBusConnection::systemBus(), this)), m_LoginInter(new QDBusInterface(LoginService, LoginPath, LoginInterface, QDBusConnection::systemBus(), this)), m_controlInter(new QDBusInterface(common::systemInfo().ControlCenterService, common::systemInfo().ControlCenterPath, common::systemInfo().ControlCenterInterface, QDBusConnection::sessionBus(), this)), m_currentUserType(-1)
+    : QObject(parent)
+    , m_accountsInter(new QDBusInterface(common::systemInfo().AccountsService,
+                                         common::systemInfo().AccountsPath,
+                                         common::systemInfo().AccountsInterface,
+                                         QDBusConnection::systemBus(), this))
+    , m_LoginInter(new QDBusInterface(LoginService, LoginPath, LoginInterface,
+                                      QDBusConnection::systemBus(), this))
+    , m_currentUserType(-1)
 {
     qDBusRegisterMetaType<SessionInfo>();
     qDBusRegisterMetaType<SessionInfoList>();
@@ -225,6 +236,12 @@ bool AccountsInfoModel::LogoutByUserName(const QString &userName)
 void AccountsInfoModel::EditAccount()
 {
     qCInfo(app) << "Opening account settings";
+    if (!m_controlInter) {
+        m_controlInter = new QDBusInterface(common::systemInfo().ControlCenterService,
+                                            common::systemInfo().ControlCenterPath,
+                                            common::systemInfo().ControlCenterInterface,
+                                            QDBusConnection::sessionBus(), this);
+    }
     if (m_controlInter) {
         bool version = common::systemInfo().isOldVersion();
         if (version) {

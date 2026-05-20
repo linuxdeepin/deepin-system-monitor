@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef ACCOUNTS_INFO_MODEL_H
 #define ACCOUNTS_INFO_MODEL_H
 #include "user.h"
@@ -87,7 +91,7 @@ private:
     QMap<QString, User * > m_userMap ;
     QStringList m_onlineUsers;
     QDBusInterface *m_LoginInter;
-    QDBusInterface *m_controlInter;
+    QDBusInterface *m_controlInter = nullptr;
     QString m_currentUserName;
     int m_currentUserType;
     SessionInfoList m_sessionList {};
