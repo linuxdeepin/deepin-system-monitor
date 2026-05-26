@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
 <context>
     <name>App.About</name>
     <message>
@@ -75,22 +73,22 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="93"/>
         <source>Frequency</source>
-        <translation></translation>
+        <translation>Frecuencia</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="98"/>
         <source>Max frequency</source>
-        <translation>Frequency</translation>
+        <translation>Frecuencia</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation></translation>
+        <translation>Frecuencia media</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
         <source>Up time</source>
-        <translation>Tiempo de disponibilidad</translation>
+        <translation>Tiempo de actividad</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="106"/>
@@ -168,7 +166,7 @@
     <message>
         <location filename="../gui/accounts_widget.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -663,7 +661,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="311"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerrar sesión</translation>
     </message>
 </context>
 <context>
@@ -831,7 +829,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="148"/>
         <source>Start time</source>
-        <translation>Tiempo de inicio</translation>
+        <translation>Hora de inicio</translation>
     </message>
     <message>
         <location filename="../gui/process_attribute_dialog.cpp" line="138"/>
@@ -1311,7 +1309,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/common.cpp" line="103"/>
         <location filename="../gui/system_service_table_view.cpp" line="542"/>
         <source>Start</source>
-        <translation>Inicio</translation>
+        <translation>Iniciar</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="108"/>
