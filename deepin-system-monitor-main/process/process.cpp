@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -740,6 +740,11 @@ QString Process::displayName() const
     return d->proc_name.displayName();
 }
 
+void Process::setDisplayName(const QString &name)
+{
+    d->proc_name.setDisplayName(name);
+}
+
 void Process::calculateProcessMetrics()
 {
     CPUSet *cpuset = DeviceDB::instance()->cpuSet();
@@ -817,6 +822,12 @@ void Process::setCpu(qreal cpu)
 qulonglong Process::memory() const
 {
     return d->rss - d->shm;
+}
+
+void Process::setMemory(qulonglong memory)
+{
+    // memory = rss - shm, so rss = memory + shm
+    d->rss = memory + d->shm;
 }
 
 qulonglong Process::vtrmemory() const
@@ -967,6 +978,26 @@ int Process::appType() const
 void Process::setAppType(int type)
 {
     d->apptype = type;
+}
+
+QString Process::instancePath() const
+{
+    return d->m_instancePath;
+}
+
+void Process::setInstancePath(const QString &path)
+{
+    d->m_instancePath = path;
+}
+
+QString Process::appId() const
+{
+    return d->m_appId;
+}
+
+void Process::setAppId(const QString &appId)
+{
+    d->m_appId = appId;
 }
 
 // DKapture update methods removed - now handled by system service

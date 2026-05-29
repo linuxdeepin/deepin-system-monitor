@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -10,6 +10,7 @@
 #include "wm/wm_window_list.h"
 #include "system_service_client.h"
 #include "process/private/process_p.h"
+#include "am_icon_manager.h"
 // #include "settings.h"
 
 #include <QDebug>
@@ -264,7 +265,7 @@ void ProcessSet::scanProcess()
                     }
                 } else {
                     if (m_pidMyApps.contains(proc.pid())) {
-                        qCInfo(app) << "Removing non-window process from applications list:" << proc.pid();
+                        qCDebug(app) << "Removing non-window process from applications list:" << proc.pid();
                         m_pidMyApps.removeOne(proc.pid());
                     }
                 }
@@ -380,6 +381,9 @@ void ProcessSet::scanProcess()
 
     m_recentProcStage.clear();
 
+    // Group processes by AM instance for linglong apps
+    groupProcessesByAMInstance();
+
     // 性能统计
     qint64 elapsed = timer.elapsed();
     QString mode = m_useSystemService ? "DKapture" : "Traditional";
@@ -481,6 +485,110 @@ void ProcessSet::updateProcessPriority(pid_t pid, int priority)
     qCDebug(app) << "Updating process priority for pid" << pid << "to" << priority;
     if (m_set.contains(pid))
         m_set[pid].setPriority(priority);
+}
+
+void ProcessSet::groupProcessesByAMInstance()
+{
+    if (!AMIconManager::instance()->isAMAvailable())
+        return;
+
+    // Preserve previous scan's pid→instance mapping so we can recover sub-processes
+    // that were lost from m_pidMyApps during rebuilds (m_prePid != m_curPid).
+    // m_pidMyApps is unreliable for AM grouping because:
+    //   1. It's only rebuilt when process list changes
+    //   2. During rebuild, sub-processes without windows get removed
+    QMap<pid_t, QString> prevPidToInstance = std::move(m_pidToInstance);
+    m_instanceGroups.clear();
+
+    // Step 1: Discover AM instances from processes currently in m_pidMyApps.
+    // At least one process per instance (the main launcher) should always be here.
+    QMap<QString, AMInstanceGroup> instanceGroups;
+    for (const pid_t &pid : m_pidMyApps) {
+        if (!m_set.contains(pid))
+            continue;
+        AMProcessGroupInfo info = AMIconManager::instance()->getProcessGroupInfo(pid);
+        if (!info.isValid())
+            continue;
+        AMInstanceGroup &group = instanceGroups[info.instancePath];
+        if (group.instancePath.isEmpty()) {
+            group.instancePath = info.instancePath;
+            group.appId = info.appId;
+            group.displayName = info.displayName;
+        }
+        group.allPids.append(pid);
+        m_pidToInstance[pid] = info.instancePath;
+    }
+
+    // Step 2: Recover previously-known sub-processes from cache.
+    // These PIDs may have been dropped from m_pidMyApps during a rebuild,
+    // but they are still running and in m_set.
+    for (auto it = prevPidToInstance.begin(); it != prevPidToInstance.end(); ++it) {
+        pid_t pid = it.key();
+        const QString &instancePath = it.value();
+        if (!m_set.contains(pid) || m_pidToInstance.contains(pid))
+            continue;
+        if (instanceGroups.contains(instancePath)) {
+            instanceGroups[instancePath].allPids.append(pid);
+            m_pidToInstance[pid] = instancePath;
+        }
+    }
+
+    // Step 3: For each AM instance: aggregate stats, hide sub-processes, set display name.
+    for (auto it = instanceGroups.begin(); it != instanceGroups.end(); ++it) {
+        AMInstanceGroup &group = it.value();
+        pid_t mainPid = group.allPids.first();
+
+        if (group.allPids.size() > 1) {
+            mainPid = *std::min_element(group.allPids.begin(), group.allPids.end());
+            group.mainPid = mainPid;
+
+            // Hide sub-processes from "My Apps" view
+            for (pid_t pid : group.allPids) {
+                if (pid == mainPid)
+                    continue;
+                m_set[pid].setAppType(kFilterCurrentUser);
+            }
+
+            // Aggregate memory (never merged by existing code)
+            Process &mainProc = m_set[mainPid];
+            qulonglong totalMemory = mainProc.memory();
+            for (pid_t pid : group.allPids) {
+                if (pid == mainPid)
+                    continue;
+                totalMemory += m_set[pid].memory();
+            }
+            mainProc.setMemory(totalMemory);
+
+            // Aggregate CPU only in DKapture mode (traditional mode already merges via mergeSubProcCpu)
+            if (m_useSystemService) {
+                qreal totalCpu = mainProc.cpu();
+                for (pid_t pid : group.allPids) {
+                    if (pid == mainPid)
+                        continue;
+                    totalCpu += m_set[pid].cpu();
+                }
+                mainProc.setCpu(totalCpu);
+            }
+
+            // TODO: Aggregate NetIO for AM instance processes.
+            // Cannot simply sum allPids NetIO here because Phase 4 (mergeSubProcNetIO)
+            // already merged tree-descendant NetIO into the main process.
+            // Adding AM sibling NetIO would double-count tree-merged processes.
+            // Solution: save per-process "own" NetIO before Phase 4, then aggregate
+            // only AM siblings that are NOT tree descendants of mainPid.
+
+            m_instanceGroups[group.instancePath] = group;
+        }
+
+        // Set AM display name on main process for ALL instances (including single-process)
+        if (!group.displayName.isEmpty() && m_set.contains(mainPid))
+            m_set[mainPid].setDisplayName(group.displayName);
+    }
+}
+
+AMInstanceGroup ProcessSet::getInstanceGroup(const QString &instancePath) const
+{
+    return m_instanceGroups.value(instancePath);
 }
 
 

@@ -1,10 +1,12 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "process_icon.h"
 #include "ddlog.h"
+
+#include "am_icon_manager.h"
 
 #include "process_icon_cache.h"
 #include "process.h"
@@ -150,6 +152,23 @@ std::shared_ptr<icon_data_t> ProcessIcon::getIcon(Process *proc)
     std::shared_ptr<icon_data_t> iconDataPtr;
     auto processDB = ProcessDB::instance();
     WMWindowList *windowList = processDB->windowList();
+    
+    // ===== NEW: Try AM first on V20+ systems =====
+    if (AMIconManager::instance()->isAMAvailable()) {
+        QString iconName = AMIconManager::instance()->getIconByPid(proc->pid());
+        if (!iconName.isEmpty()) {
+            auto *iconData = new struct icon_data_name_type();
+            iconData->type = kIconDataNameType;
+            iconData->proc_name = proc->name();
+            iconData->icon_name = iconName;
+            iconData->desktopentry = true;
+            iconDataPtr.reset(iconData);
+            windowList->addDesktopEntryApp(proc);
+            return iconDataPtr;
+        }
+    }
+    // ===== END NEW =====
+    
     DesktopEntryCache *desktopEntryCache = processDB->desktopEntryCache();
 
     if (!proc->cmdline().isEmpty()) {
