@@ -2,7 +2,7 @@ name: Build deepin-system-monitor on Arch Linux
 
 # This workflow builds deepin-system-monitor on Arch Linux
 # Dependencies are based on debian/control file with Arch Linux equivalents
-# Special dependencies are built from source when packages are not available
+# deepin-system-monitor dependencies are available as pre-built packages in Arch Linux [extra]
 
 on:
   push:
@@ -67,41 +67,9 @@ jobs:
           # Testing frameworks from debian/control: libgtest-dev, libgmock-dev
           pacman -Syu --noconfirm --noprogressbar gtest gmock
 
-      - name: Install polkit dependency
+      - name: Install deepin-tray-loader
         run: |
-          # Install polkit-gobject-1 required for building polkit-qt-1
-          pacman -Syu --noconfirm --noprogressbar polkit
-
-      - name: Build and Install Polkit-Qt
-        run: |
-          echo "Building polkit-qt from source..."
-          # From debian/control: libpolkit-qt6-1-dev | libpolkit-qt5-1-dev
-          git clone https://github.com/deepin-community/polkit-qt-1.git --depth 1
-          cd polkit-qt-1
-          mkdir -p build-qt6
-          cd build-qt6
-          cmake .. \
-            -DCMAKE_INSTALL_PREFIX=/usr \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DQT_MAJOR_VERSION=6
-          cmake --build .
-          cmake --install .
-          echo "✅ polkit-qt-1 (Qt6) built and installed from source"
-
-      - name: Build and Install dde-tray-loader
-        run: |
-          # From debian/control: dde-tray-loader-dev | dde-dock-dev
-          echo "Building dde-tray-loader from source..."
-          git clone https://github.com/linuxdeepin/dde-tray-loader.git --depth 1
-          cd dde-tray-loader
-          mkdir -p build
-          cd build
-          cmake .. \
-            -DCMAKE_INSTALL_PREFIX=/usr \
-            -DCMAKE_BUILD_TYPE=Release
-          cmake --build .
-          cmake --install .
-          echo "✅ dde-tray-loader built and installed from source"
+          pacman -Syu --noconfirm --noprogressbar deepin-tray-loader
 
       - uses: actions/checkout@v4
         with:
@@ -156,9 +124,9 @@ jobs:
           3. Ensure dependencies are installed on target system
           4. Set capabilities: sudo setcap cap_kill,cap_net_raw,cap_dac_read_search,cap_sys_ptrace+ep /usr/bin/deepin-system-monitor
 
-          Dependencies built from source:
-          - polkit-qt-1 (Qt6 version)
-          - Note: dde-tray-loader/dde-dock not available in Arch Linux, some tray features may be limited
+          Dependencies:
+          - All packages from Arch Linux [extra] repo
+          - No source builds required
 
           Files included in this package:
           EOF
