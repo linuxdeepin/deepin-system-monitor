@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -131,6 +131,8 @@ public:
         , environ(other.environ)
         , uptime {other.uptime}
         , sockInodes(other.sockInodes)
+        , m_instancePath(other.m_instancePath)
+        , m_appId(other.m_appId)
         , cpuTimeSample(std::unique_ptr<CPUTimeSample>(new CPUTimeSample(*(other.cpuTimeSample))))
         , cpuUsageSample(std::unique_ptr<CPUUsageSample>(new CPUUsageSample(*(other.cpuUsageSample))))
         , networkIOSample(std::unique_ptr<IOSample>(new IOSample(*(other.networkIOSample))))
@@ -198,6 +200,10 @@ private:
     struct timeval uptime;
 
     QList<ino_t> sockInodes; // socket inodes opened by this process
+
+    // AM instance info for process grouping (linglong apps)
+    QString m_instancePath;
+    QString m_appId;
 
     // only 2 samples are kept here for each process, to avoid too much memory
     // consumption if there're too many processes

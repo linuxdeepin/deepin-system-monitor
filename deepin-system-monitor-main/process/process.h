@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -64,12 +64,27 @@ public:
     int appType() const;
     void setAppType(int type);
 
+    /**
+     * @brief Get the AM instance path this process belongs to
+     * @return Instance path (empty if not managed by AM)
+     */
+    QString instancePath() const;
+    void setInstancePath(const QString &path);
+
+    /**
+     * @brief Get the AM application ID
+     * @return Application ID (e.g., "com.qq.im.linglong")
+     */
+    QString appId() const;
+    void setAppId(const QString &appId);
+
     qulonglong utime() const;
     qulonglong stime() const;
 
     QString name() const;
     void setName(const QString &name);
     QString displayName() const;
+    void setDisplayName(const QString &name);
 
     QIcon icon() const;
 
@@ -77,6 +92,7 @@ public:
     void setCpu(qreal cpu);
 
     qulonglong memory() const;
+    void setMemory(qulonglong memory);
     qulonglong vtrmemory() const;
     qulonglong sharememory() const;
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -14,6 +14,8 @@
 
 #include <dirent.h>
 
+#include "am_icon_manager.h"
+
 using namespace common::alloc;
 
 // class Settings;
@@ -26,6 +28,14 @@ enum FilterType { kFilterApps,
                   kFilterCurrentUser,
                   kNoFilter
                 };
+
+struct AMInstanceGroup {
+    QString instancePath;
+    QString appId;
+    QString displayName;
+    pid_t mainPid = 0;
+    QList<pid_t> allPids;
+};
 
 struct RecentProcStage {
     qulonglong ptime = 0;
@@ -54,10 +64,13 @@ public:
 
     void refresh();
 
+    AMInstanceGroup getInstanceGroup(const QString &instancePath) const;
+
 private:
     void scanProcess();
     void mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps);
     void mergeSubProcCpu(pid_t ppid, qreal &cpu);
+    void groupProcessesByAMInstance();
 
     class Iterator
     {
@@ -85,7 +98,11 @@ private:
     QList<pid_t> m_prePid;
     QList<pid_t> m_curPid;
     QList<pid_t> m_pidMyApps;
-    
+
+    // AM instance grouping
+    QMap<QString, AMInstanceGroup> m_instanceGroups;
+    QMap<pid_t, QString> m_pidToInstance;
+
     // System service client for DKapture data
     SystemServiceClient *m_systemServiceClient;
     bool m_useSystemService;
