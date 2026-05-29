@@ -212,6 +212,7 @@ SET(HPP_PROCESS
     ${MAIN_APP_DIR}/process/process_name.h
     ${MAIN_APP_DIR}/process/process_name_cache.h
     ${MAIN_APP_DIR}/process/process_controller.h
+    ${MAIN_APP_DIR}/process/am_icon_manager.h
 )
 
 SET(CPP_PROCESS
@@ -226,6 +227,7 @@ SET(CPP_PROCESS
     ${MAIN_APP_DIR}/process/process_name_cache.cpp
     ${MAIN_APP_DIR}/process/process_controller.cpp
     ${MAIN_APP_DIR}/process/system_service_client.cpp
+    ${MAIN_APP_DIR}/process/am_icon_manager.cpp
 )
 set(APP_HPP
     ${CMAKE_HOME_DIRECTORY}/config.h
