@@ -13,6 +13,7 @@
 #include <QDBusObjectPath>
 #include <QDebug>
 #include <QDBusUnixFileDescriptor>
+#include <DDesktopEntry>
 #include <cerrno>
 #include <cstring>
 #include <signal.h>
@@ -286,11 +287,28 @@ AMProcessGroupInfo AMIconManager::identifyProcess(int pidfd)
 
     // Get icon name
     result.iconName = getIconByAppId(result.appId);
-
-    // Get display name
     result.displayName = getAppNameByAppId(result.appId);
 
+    result.linglongAppId = resolveLinglongAppId(result.appId);
+
     return result;
+}
+
+QString AMIconManager::resolveLinglongAppId(const QString &appId)
+{
+    if (m_linglongAppIdCache.contains(appId)) {
+        return m_linglongAppIdCache[appId];
+    }
+
+    QString desktopPath = QString("/var/lib/linglong/entries/apps/share/applications/%1.desktop").arg(appId);
+    if (!QFile::exists(desktopPath)) {
+        m_linglongAppIdCache[appId] = QString();
+        return QString();
+    }
+    DDesktopEntry entry(desktopPath);
+    QString linglongId = entry.stringValue("X-linglong");
+    m_linglongAppIdCache[appId] = linglongId;
+    return linglongId;
 }
 
 QString AMIconManager::getIconByPid(pid_t pid)
