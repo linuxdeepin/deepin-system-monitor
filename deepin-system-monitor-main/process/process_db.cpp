@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -13,6 +13,8 @@
 #include "process_name.h"
 #include "process_name_cache.h"
 #include "process_controller.h"
+#include "linglong_controller.h"
+#include "am_icon_manager.h"
 #include "priority_controller.h"
 
 #include <QReadLocker>
@@ -227,6 +229,40 @@ void ProcessDB::onProcessPrioritysetChanged(pid_t pid, int priority)
 void ProcessDB::sendSignalToProcess(pid_t pid, int signal)
 {
     qCDebug(app) << "sendSignalToProcess called for pid" << pid << "with signal" << signal;
+
+    AMProcessGroupInfo groupInfo = AMIconManager::instance()->getProcessGroupInfo(pid);
+    if (groupInfo.isValid() && groupInfo.isLinglong() && (signal == SIGTERM || signal == SIGKILL)) {
+        qCInfo(app) << "Linglong process detected, using ll-cli kill. PID:" << pid
+                     << "appId:" << groupInfo.linglongAppId << "signal:" << signal;
+        auto *ctrl = new LinglongController(groupInfo.linglongAppId, signal, this);
+        connect(ctrl, &LinglongController::resultReady, this, [this, pid, signal, groupInfo](int code) {
+            if (code != 0) {
+                qCWarning(app) << "ll-cli kill failed. PID:" << pid << "appId:" << groupInfo.linglongAppId << "rc:" << code;
+                ErrorContext ec {};
+                ec.setCode(ErrorContext::kErrorTypeSystem);
+                ec.setSubCode(code);
+                ec.setErrorName(signal == SIGTERM
+                                     ? QApplication::translate("Process.Signal", "Failed to end process")
+                                     : QApplication::translate("Process.Signal", "Failed to kill process"));
+                ec.setErrorMessage(QString("PID: %1, AppId: %2, ll-cli kill failed with code: %3")
+                                       .arg(pid)
+                                       .arg(groupInfo.linglongAppId)
+                                       .arg(code));
+                Q_EMIT processControlResultReady(ec);
+            } else {
+                qCInfo(app) << "ll-cli kill succeeded. PID:" << pid << "appId:" << groupInfo.linglongAppId;
+                if (signal == SIGTERM) {
+                    Q_EMIT processEnded(pid);
+                } else {
+                    Q_EMIT processKilled(pid);
+                }
+            }
+        });
+        connect(ctrl, &LinglongController::finished, ctrl, &QObject::deleteLater);
+        ctrl->execute();
+        return;
+    }
+
     ErrorContext ec = {};
     auto errfmt = [ = ](decltype(errno) err, const QString & title, int p, int sig,
     ErrorContext & ectx) -> ErrorContext & {

@@ -29,11 +29,13 @@ namespace process {
  */
 struct AMProcessGroupInfo
 {
-    QString appId;              // Application ID (e.g., "qq")
+    QString appId;              // Application ID from AM (e.g., "deepin-editor")
+    QString linglongAppId;     // Full linglong appId for ll-cli (e.g., "org.deepin.editor"), empty if not linglong
     QString instancePath;       // Instance object path from AM
     QString iconName;           // Icon name for this application
     QString displayName;        // Localized display name from AM (e.g., "QQ")
     bool isValid() const { return !appId.isEmpty() && !instancePath.isEmpty(); }
+    bool isLinglong() const { return !linglongAppId.isEmpty(); }
 };
 
 /**
@@ -118,6 +120,8 @@ private:
      */
     AMProcessGroupInfo identifyProcess(int pidfd);
 
+    QString resolveLinglongAppId(const QString &appId);
+
 private:
     QDBusInterface *m_amInterface {nullptr};
     bool m_amAvailable {false};
@@ -132,6 +136,9 @@ private:
 
     // PID to process group info cache
     QMap<pid_t, AMProcessGroupInfo> m_pidToGroupCache;
+
+    // linglong appId cache: AM appId -> linglong reverse domain appId
+    QHash<QString, QString> m_linglongAppIdCache;
 
     mutable std::mutex m_cacheMutex;
     
