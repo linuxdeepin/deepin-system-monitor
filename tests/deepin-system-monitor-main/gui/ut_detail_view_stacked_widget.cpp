@@ -146,6 +146,7 @@ TEST_F(UT_DetailViewStackedWidget, test_onDetailInfoClicked_04)
 
 TEST_F(UT_DetailViewStackedWidget, test_onSwitchProcessPage_01)
 {
+    m_tester->addProcessWidget(m_widget);
     m_tester->onSwitchProcessPage();
     EXPECT_EQ(m_tester->currentWidget(), m_tester->m_processWidget);
 }

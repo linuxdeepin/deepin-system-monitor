@@ -216,10 +216,11 @@ TEST_F(UT_ProcessPageWidget, test_changeIconTheme_02)
     m_tester->changeIconTheme(type);
 }
 
-TEST_F(UT_ProcessPageWidget, test_onStatInfoUpdated_01)
-{
-    m_tester->onStatInfoUpdated();
-}
+// TODO: onStatInfoUpdated removed from ProcessPageWidget, test disabled
+// TEST_F(UT_ProcessPageWidget, test_onStatInfoUpdated_01)
+// {
+//     m_tester->onStatInfoUpdated();
+// }
 
 TEST_F(UT_ProcessPageWidget, test_onDetailWidgetChanged_01)
 {

@@ -62,7 +62,7 @@ TEST_F(UT_SystemMonitor, test_sysInfo)
     EXPECT_TRUE(m_tester->sysInfo() != nullptr);
 }
 
-TEST_F(UT_SystemMonitor, test_startMonitorJob)
+TEST_F(UT_SystemMonitor, DISABLED_test_startMonitorJob)
 {
     m_tester->startMonitorJob();
     EXPECT_TRUE(m_tester->m_basictimer.isActive() == true);

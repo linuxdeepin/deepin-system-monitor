@@ -48,7 +48,13 @@ public:
     virtual void TearDown()
     {
         if (m_tester) {
-            delete m_tester;
+            // Use hide + deleteLater instead of direct delete to avoid
+            // signal callbacks to partially-destructed child widgets
+            m_tester->hide();
+            m_tester->deleteLater();
+            // Process events to allow deferred deletion to complete
+            QCoreApplication::processEvents();
+            QCoreApplication::processEvents();
             m_tester = nullptr;
         }
     }
@@ -59,7 +65,8 @@ protected:
 
 TEST_F(UT_MainWindow, initTest)
 {
-
+    // MainWindow creates ProcessPageWidget with DBus connections;
+    // skip detailed testing under offscreen/limited env.
 }
 
 TEST_F(UT_MainWindow, test_toolbar_01)

@@ -31,10 +31,11 @@ bool stub_modPath_readDeviceSize(void*, QFile::OpenMode)
     return false;
 }
 
-bool stub_contains(const QStringRef &s, Qt::CaseSensitivity cs)
-{
-    return true;
-}
+// Qt6: QStringRef removed, stub commented out (unused, was only referenced in commented-out test)
+// bool stub_contains(const QStringView &s, Qt::CaseSensitivity cs)
+// {
+//     return true;
+// }
 
 /***************************************STUB end**********************************************/
 

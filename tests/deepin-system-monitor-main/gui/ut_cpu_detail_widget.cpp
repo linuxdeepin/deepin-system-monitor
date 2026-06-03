@@ -274,7 +274,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setSingleModeLayout_01)
 {
     m_tester2->setSingleModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -285,7 +285,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_01)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu1);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -297,7 +297,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_02)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu2);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -309,7 +309,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_04)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu4);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -321,7 +321,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_08)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu8);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -333,7 +333,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_16)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu16);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -345,7 +345,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_32)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu32);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -357,7 +357,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_64)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu64);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
@@ -368,7 +368,7 @@ TEST_F(UT_CPUDetailGrapTable, test_setMultiModeLayout_0)
     stub.set(sysconf, stub_setMultiModeLayout_sysconf_cpu0);
     m_tester2->setMultiModeLayout(m_tester2->m_cpuInfoModel);
 
-    EXPECT_EQ(m_tester2->layout()->margin(), 0);
+    EXPECT_EQ(m_tester2->layout()->contentsMargins().left(), 0);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->verticalSpacing(), 10);
     EXPECT_EQ(dynamic_cast<QGridLayout*>(m_tester2->layout())->horizontalSpacing(), 10);
 }
