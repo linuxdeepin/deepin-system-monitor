@@ -86,9 +86,11 @@ set(HPP_GLOBAL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/application.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/stack_trace.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/cpu_monitor.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gpu_monitor.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/memory_monitor.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/network_monitor.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_cpu_monitor.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_gpu_monitor.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_memory_monitor.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_network_monitor.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_disk_monitor.h
@@ -100,9 +102,11 @@ set(HPP_GLOBAL
 set(CPP_GLOBAL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/application.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/cpu_monitor.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gpu_monitor.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/memory_monitor.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/network_monitor.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_cpu_monitor.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_gpu_monitor.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_memory_monitor.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_network_monitor.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/compact_disk_monitor.cpp
@@ -115,6 +119,7 @@ set(CPP_GLOBAL
 set(HPP_COMMON
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/common.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/error_context.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/eventlogutils.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/hash.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/han_latin.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/perf.h
@@ -126,6 +131,7 @@ set(HPP_COMMON
 set(CPP_COMMON
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/common.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/error_context.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/eventlogutils.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/hash.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/han_latin.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/perf.cpp
@@ -174,6 +180,9 @@ set(HPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_info_model.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_info_sort_filter_proxy_model.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/model_manager.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/gpu_info_model.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/accounts_info_model.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/user.h
 )
 set(CPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/system_service_table_model.cpp
@@ -192,6 +201,9 @@ set(CPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_stat_model.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_info_sort_filter_proxy_model.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/model_manager.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/gpu_info_model.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/accounts_info_model.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/user.cpp
 )
 
 set(HPP_GUI
@@ -218,6 +230,7 @@ set(HPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/xwin_kill_preview_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/xwin_kill_preview_background_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/mem_detail_view_widget.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/gpu_detail_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/mem_summary_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/mem_stat_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_detail_view_widget.h
@@ -226,6 +239,9 @@ set(HPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/netif_stat_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/netif_item_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/netif_summary_view_widget.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/accounts_widget.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_list_view.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_page_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/detail_view_stacked_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/chart_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_stat_view_widget.h
@@ -259,6 +275,7 @@ set(CPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/xwin_kill_preview_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/xwin_kill_preview_background_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/mem_detail_view_widget.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/gpu_detail_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/mem_summary_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/mem_stat_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_detail_view_widget.cpp
@@ -267,6 +284,9 @@ set(CPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/netif_summary_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/netif_stat_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/netif_item_view_widget.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/accounts_widget.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_list_view.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_page_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/detail_view_stacked_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/chart_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/animation_stackedwidget.cpp
@@ -290,6 +310,7 @@ set(HPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache_updater.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_db.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/system_service_client.h
 )
 set(CPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process.cpp
@@ -303,6 +324,7 @@ set(CPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache_updater.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_db.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/system_service_client.cpp
 )
 
 set(HPP_SERVICE
@@ -351,6 +373,7 @@ set(HPP_SYSTEM
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/wireless.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/diskio_info.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/net_info.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/gpu_info.h
 )
 
 set(CPP_SYSTEM
@@ -379,6 +402,7 @@ set(CPP_SYSTEM
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/wireless.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/diskio_info.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/net_info.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/system/gpu_info.cpp
 )
 
 set(HPP_WM
@@ -563,7 +587,7 @@ endif()
 add_custom_target(QMFILES_TEST ALL DEPENDS ${APP_QM_FILES})
 
 find_program(POLICY_TS_CONV deepin-policy-ts-convert REQUIRED)
-add_custom_target(APP_POLICY_FILE_TEST
+add_custom_target(APP_POLICY_FILE_TEST_UT
     ALL
     COMMAND ${POLICY_TS_CONV} ts2policy ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/translations/policy/${POLICY_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/translations/policy/ ${POLICY_FILE}.tmp
     COMMAND mv ${POLICY_FILE}.tmp ${POLICY_FILE}
@@ -600,6 +624,7 @@ set_target_properties(${PROJECT_NAME_TEST}
 
 target_include_directories(${PROJECT_NAME_TEST}
         PRIVATE
+        ${CMAKE_HOME_DIRECTORY}
         ${GTEST_INCLUDE_DIRS}
         ${LIB_NL3_INCLUDE_DIRS}
         ${LIB_NL3_ROUTE_INCLUDE_DIRS}
@@ -620,8 +645,10 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${DTK_NS}::Core
     ${DTK_NS}::Gui
     ${DTK_NS}::Widget
-    KF5::WaylandClient
-    KF5::WaylandServer
+    $<$<TARGET_EXISTS:KF5::WaylandClient>:KF5::WaylandClient>
+    $<$<TARGET_EXISTS:KF5::WaylandServer>:KF5::WaylandServer>
+    $<$<TARGET_EXISTS:KF6::WaylandClient>:KF6::WaylandClient>
+    $<$<TARGET_EXISTS:KF6::WaylandServer>:KF6::WaylandServer>
     ${LIB_PCAP}
     ICU::i18n
     ICU::uc

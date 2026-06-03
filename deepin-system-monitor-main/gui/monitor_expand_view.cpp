@@ -6,14 +6,18 @@
 #include "monitor_expand_view.h"
 
 #include "cpu_monitor.h"
+#include "gpu_monitor.h"
 #include "memory_monitor.h"
 #include "network_monitor.h"
 #include "detailwidgetmanager.h"
 #include "ddlog.h"
+#include "common/common.h"
+#include "model/gpu_info_model.h"
 
 #include <DPalette>
 #include <DStyle>
 
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 using namespace DDLog;
@@ -32,10 +36,19 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
 
     // cpu monitor view
     m_cpuMonitor = new CpuMonitor(this);
+    // gpu monitor view
+    m_gpuMonitor = new GpuMonitor(this);
     // memory monitor view
     m_memoryMonitor = new MemoryMonitor(this);
     // network monitor view
     m_networkMonitor = new NetworkMonitor(this);
+
+    const int totalWidth = common::getStatusBarMaxWidth();
+    const int pairSpacing = 8;
+    const int cpuWidth = totalWidth * 63 / 100;
+    const int gpuWidth = totalWidth - cpuWidth - pairSpacing;
+    m_cpuMonitor->setFixedWidth(cpuWidth);
+    m_gpuMonitor->setFixedWidth(gpuWidth);
 
     // monitor view layout
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -45,8 +58,34 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
     layout->setContentsMargins(0, 0, 0, 0);
 #endif
     layout->setSpacing(0);
+
+    QWidget *cpuGpuRow = new QWidget(this);
+    QHBoxLayout *cpuGpuLayout = new QHBoxLayout(cpuGpuRow);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    cpuGpuLayout->setMargin(0);
+#else
+    cpuGpuLayout->setContentsMargins(0, 0, 0, 0);
+#endif
+    cpuGpuLayout->setSpacing(pairSpacing);
+    cpuGpuLayout->addWidget(m_cpuMonitor);
+    cpuGpuLayout->addWidget(m_gpuMonitor);
+    cpuGpuRow->setFixedWidth(totalWidth);
+
+    auto refreshGpuVisibility = [=]() {
+        const bool hasGpu = GPUInfoModel::instance()->gpuCount() > 0;
+        m_gpuMonitor->setVisible(hasGpu);
+        if (hasGpu) {
+            m_cpuMonitor->setFixedWidth(cpuWidth);
+            m_gpuMonitor->setFixedWidth(gpuWidth);
+        } else {
+            m_cpuMonitor->setFixedWidth(totalWidth);
+        }
+    };
+    refreshGpuVisibility();
+    connect(GPUInfoModel::instance(), &GPUInfoModel::modelUpdated, this, refreshGpuVisibility);
+
     layout->addStretch(1);
-    layout->addWidget(m_cpuMonitor, 0, Qt::AlignHCenter);
+    layout->addWidget(cpuGpuRow, 0, Qt::AlignHCenter);
     layout->addStretch(2);
     layout->addWidget(m_memoryMonitor, 0, Qt::AlignHCenter);
     layout->addStretch(2);
@@ -64,6 +103,7 @@ MonitorExpandView::MonitorExpandView(QWidget *parent)
 
     //点击左侧区域触发跳转
     connect(m_cpuMonitor, &CpuMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
+    connect(m_gpuMonitor, &GpuMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
     connect(m_memoryMonitor, &MemoryMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
     connect(m_networkMonitor, &NetworkMonitor::clicked, &DetailWidgetManager::getInstance(), &DetailWidgetManager::jumpDetailWidget);
 }

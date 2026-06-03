@@ -12,6 +12,7 @@
 #include "netif_info_db.h"
 #include "diskio_info.h"
 #include "net_info.h"
+#include "gpu_info.h"
 #include "common/thread_manager.h"
 #include "system/system_monitor.h"
 #include "system/system_monitor_thread.h"
@@ -34,12 +35,17 @@ DeviceDB::DeviceDB()
     m_blkDevInfoDB = new BlockDeviceInfoDB();
     m_diskIoInfo = new DiskIOInfo();
     m_netInfo = new NetInfo();
+    m_gpuInfoSet = new GPUInfoSet();
     qCDebug(app) << "DeviceDB construction finished.";
 }
 
 DeviceDB::~DeviceDB()
 {
     // qCDebug(app) << "DeviceDB destructor: Cleaning up all device info objects...";
+    if (m_gpuInfoSet) {
+        delete m_gpuInfoSet;
+        m_gpuInfoSet = nullptr;
+    }
     if (m_diskIoInfo) {
         // qCDebug(app) << "DeviceDB destructor: Deleting DiskIOInfo.";
         delete m_diskIoInfo;
@@ -82,6 +88,7 @@ void DeviceDB::update()
     m_blkDevInfoDB->update();
     m_diskIoInfo->update();
     m_netInfo->resdNetInfo();
+    m_gpuInfoSet->update();
     qCDebug(app) << "DeviceDB update finished.";
 }
 
@@ -126,6 +133,11 @@ NetInfo *DeviceDB::netInfo()
 {
     // qCDebug(app) << "DeviceDB: Getting NetInfo.";
     return m_netInfo;
+}
+
+GPUInfoSet *DeviceDB::gpuInfoSet()
+{
+    return m_gpuInfoSet;
 }
 
 } // namespace system

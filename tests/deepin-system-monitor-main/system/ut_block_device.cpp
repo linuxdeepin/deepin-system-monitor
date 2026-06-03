@@ -31,8 +31,10 @@ bool stub_modPath_readDeviceSize(void*, QFile::OpenMode)
     return false;
 }
 
-bool stub_contains(const QStringRef &s, Qt::CaseSensitivity cs)
+bool stub_contains(const QStringView &s, Qt::CaseSensitivity cs)
 {
+    Q_UNUSED(s)
+    Q_UNUSED(cs)
     return true;
 }
 
@@ -276,5 +278,4 @@ TEST_F(UT_BlockDevice, test_writeSpeed)
     m_tester->readDeviceInfo();
     m_tester->writeSpeed();
 }
-
 
