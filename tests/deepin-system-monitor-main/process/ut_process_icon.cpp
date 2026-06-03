@@ -185,7 +185,7 @@ TEST_F(UT_ProcessIcon, test_getIcon_008)
     Stub b;
     b.set(ADDR(QByteArrayList,isEmpty),stub_getIcon_isEmpty);
     Stub b1;
-    b1.set(ADDR(QList<QString> ,contains),stub_getIcon_isTrayApp);
+    b1.set((bool(QList<QString>::*)(const QString&)const)&QList<QString>::contains, stub_getIcon_isTrayApp);
     m_tester->getIcon(proc);
     delete proc;
 }

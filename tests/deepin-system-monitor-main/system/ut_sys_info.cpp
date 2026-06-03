@@ -60,7 +60,7 @@ TEST_F(UT_SysInfo, test_readSockStat)
 
 TEST_F(UT_SysInfo, test_readSysInfo)
 {
-    EXPECT_TRUE(m_tester->d->version  != true);
+    EXPECT_FALSE(m_tester->d->version.isEmpty());
 }
 
 TEST_F(UT_SysInfo, test_read_file_nr_01)

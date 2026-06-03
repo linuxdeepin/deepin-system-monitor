@@ -344,7 +344,7 @@ TEST_F(UT_ProcessTableView, test_onThemeTypeChanged_01)
 
 TEST_F(UT_ProcessTableView, test_loadSettings_01)
 {
-    m_tester->loadSettings();
+    m_tester->loadSettings(QString());
 }
 
 

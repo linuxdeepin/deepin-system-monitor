@@ -51,7 +51,7 @@ TEST_F(UT_BlockDevDetailViewWidget, initTest)
 TEST_F(UT_BlockDevDetailViewWidget, test_detailFontChanged_01)
 {
     QFont font;
-    font.setWeight(18);
+    font.setWeight(QFont::Light);
     m_tester->detailFontChanged(font);
 }
 

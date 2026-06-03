@@ -9,6 +9,7 @@
 #include <QSharedData>
 
 #include <memory>
+#include <list>
 
 namespace core {
 namespace system {

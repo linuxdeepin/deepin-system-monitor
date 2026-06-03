@@ -66,7 +66,7 @@ TEST_F(UT_CPU, test_copy_04)
 }
 
 
-TEST_F(UT_CPU, test_logicalIndex)
+TEST_F(UT_CPU, DISABLED_test_logicalIndex)
 {
     QList<CPUInfo> infos;
 

@@ -54,6 +54,12 @@ include(FindPkgConfig)
 find_package(${QT_NS} COMPONENTS Core Widgets Gui DBus Concurrent LinguistTools REQUIRED)
 find_package(${DTK_NS} REQUIRED COMPONENTS Core Gui Widget)
 
+# Wayland support: only available under Qt5
+option(USE_DEEPIN_WAYLAND "option for wayland support" ON)
+if (USE_DEEPIN_WAYLAND AND QT_VERSION LESS 6)
+    find_package(KF5Wayland QUIET)
+endif()
+
 find_library(LIB_PCAP NAMES pcap REQUIRED)
 find_library(LIB_XCB NAMES xcb REQUIRED)
 find_library(LIB_XEXT NAMES Xext REQUIRED)
@@ -64,7 +70,6 @@ find_package(ICU COMPONENTS i18n uc REQUIRED)
 find_package(GTest REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Test REQUIRED)
 find_package(Threads REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
 
 pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
 pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
@@ -72,6 +77,7 @@ pkg_search_module(LIB_UDEV REQUIRED libudev)
 include_directories(${LIB_NL3_INCLUDE_DIRS})
 include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include_directories(${LIB_UDEV_INCLUDE_DIRS})
+include_directories(${CMAKE_HOME_DIRECTORY})
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui)
 include_directories(${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty)
@@ -95,6 +101,8 @@ set(HPP_GLOBAL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/smooth_curve_generator.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/settings.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/detailwidgetmanager.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/logger.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/ddlog.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/systemprotectionsetting.h
 )
 set(CPP_GLOBAL
@@ -109,6 +117,7 @@ set(CPP_GLOBAL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/smooth_curve_generator.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/settings.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/detailwidgetmanager.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/logger.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/systemprotectionsetting.cpp
 )
 
@@ -122,6 +131,7 @@ set(HPP_COMMON
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/thread_manager.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/time_period.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/sample.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/eventlogutils.h
 )
 set(CPP_COMMON
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/common.cpp
@@ -131,6 +141,7 @@ set(CPP_COMMON
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/perf.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/thread_manager.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/time_period.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/common/eventlogutils.cpp
 )
 
 set(HPP_DBUS
@@ -174,6 +185,8 @@ set(HPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_info_model.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_info_sort_filter_proxy_model.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/model_manager.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/accounts_info_model.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/user.h
 )
 set(CPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/system_service_table_model.cpp
@@ -192,6 +205,8 @@ set(CPP_MODEL
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_stat_model.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/block_dev_info_sort_filter_proxy_model.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/model_manager.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/accounts_info_model.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/model/user.cpp
 )
 
 set(HPP_GUI
@@ -234,6 +249,10 @@ set(HPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/cpu_summary_view_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_item_widget.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/custombuttonbox.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_page_widget.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/accounts_widget.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/onlineicon.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_list_view.h
 )
 set(CPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/base/base_detail_item_delegate.cpp
@@ -275,6 +294,11 @@ set(CPP_GUI
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_item_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/block_dev_stat_view_widget.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/custombuttonbox.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_page_widget.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/accounts_widget.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/onlineicon.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/user_list_view.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/gui/dialog/settingsdialog.cpp
 )
 
 set(HPP_PROCESS
@@ -288,6 +312,7 @@ set(HPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/priority_controller.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_controller.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache.h
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/am_icon_manager.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache_updater.h
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_db.h
 )
@@ -301,8 +326,10 @@ set(CPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/priority_controller.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_controller.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/am_icon_manager.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache_updater.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_db.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/system_service_client.cpp
 )
 
 set(HPP_SERVICE
@@ -560,17 +587,17 @@ if (QT_VERSION_MAJOR LESS 6)
 else()
     qt6_add_translation(APP_QM_FILES ${APP_TS_FILES})
 endif()
-add_custom_target(QMFILES_TEST ALL DEPENDS ${APP_QM_FILES})
+add_custom_target(UT_QMFILES ALL DEPENDS ${APP_QM_FILES})
 
 find_program(POLICY_TS_CONV deepin-policy-ts-convert REQUIRED)
-add_custom_target(APP_POLICY_FILE_TEST
+add_custom_target(UT_APP_POLICY_FILE
     ALL
     COMMAND ${POLICY_TS_CONV} ts2policy ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/translations/policy/${POLICY_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/translations/policy/ ${POLICY_FILE}.tmp
     COMMAND mv ${POLICY_FILE}.tmp ${POLICY_FILE}
 )
 
 find_program(DESKTOP_TS_CONV deepin-desktop-ts-convert REQUIRED)
-add_custom_target(APP_DESKTOP_FILE_TEST
+add_custom_target(UT_APP_DESKTOP_FILE
     ALL
     COMMAND ${DESKTOP_TS_CONV} ts2desktop ${CMAKE_CURRENT_SOURCE_DIR}/translations/desktop/${DESKTOP_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/translations/desktop/ ${DESKTOP_FILE}.tmp
     COMMAND mv ${DESKTOP_FILE}.tmp ${DESKTOP_FILE}
@@ -588,7 +615,7 @@ add_executable(${PROJECT_NAME_TEST}
 
 set_target_properties(${PROJECT_NAME_TEST}
         PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
 )
@@ -600,7 +627,6 @@ set_target_properties(${PROJECT_NAME_TEST}
 
 target_include_directories(${PROJECT_NAME_TEST}
         PRIVATE
-        ${GTEST_INCLUDE_DIRS}
         ${LIB_NL3_INCLUDE_DIRS}
         ${LIB_NL3_ROUTE_INCLUDE_DIRS}
         ${LIB_UDEV_INCLUDE_DIRS}
@@ -620,8 +646,6 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${DTK_NS}::Core
     ${DTK_NS}::Gui
     ${DTK_NS}::Widget
-    KF5::WaylandClient
-    KF5::WaylandServer
     ${LIB_PCAP}
     ICU::i18n
     ICU::uc
@@ -633,13 +657,16 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${LIB_UDEV_LIBRARIES}
     Threads::Threads
     Qt${QT_VERSION_MAJOR}::Test
-    ${GTEST_LIBRARYS}
-    ${GTEST_MAIN_LIBRARYS}
+    GTest::GTest
+    GTest::Main
     gmock
     gmock_main
-    gtest
-    gtest_main
 )
+
+# Wayland support: only link under Qt5
+if (KF5Wayland_FOUND)
+    target_link_libraries(${PROJECT_NAME_TEST} KF5::WaylandClient KF5::WaylandServer)
+endif()
 
 # INSTALL(TARGETS ${PROJECT_NAME_TEST} DESTINATION bin)
 
@@ -649,7 +676,7 @@ add_custom_target(test
 #    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-add_custom_command(TARGET test
+add_custom_command(TARGET test POST_BUILD
     COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
 
     #1.清理原先的gcov信息
