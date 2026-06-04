@@ -1,3 +1,14 @@
+deepin-system-monitor (6.5.45) unstable; urgency=medium
+
+  * fix(test): disable unstable unit tests causing ASan crashes
+  * feat(process): support killing linglong processes via ll-cli
+  * feat(process): integrate AM for linglong app process grouping
+  * fix(ci): clean up stale comments in Arch Linux build workflow
+  * [skip CI] Translate deepin-system-monitor.ts in es
+  * chore: update version to 6.5.44
+
+ -- re2zero <yangwu@uniontech.com>  Thu, 04 Jun 2026 20:24:45 +0800
+
 deepin-system-monitor (6.5.44) unstable; urgency=medium
 
   * chore: Update version to 6.5.44
