@@ -312,11 +312,14 @@ bool Process::readStat()
 
     // get process name between (...)
     begin = strchr(buf.data(), '(');
+    if (!begin) {
+        return false;
+    }
     begin += 1;
 
     pos = strrchr(buf.data(), ')');
     if (!pos) {
-        return !ok;
+        return false;
     }
 
     *pos = '\0';
