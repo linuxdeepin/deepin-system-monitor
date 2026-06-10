@@ -147,13 +147,18 @@ bool NetifPacketCapture::getCurrentDevName()
     for (int i = 0; i < totalList.size(); i++) {
         auto list = totalList[i];
         if (list.size() > devColNum && list.size() > metricColNum) {
+            bool ok = false;
+            int metric = list[metricColNum].toInt(&ok);
+            if (!ok || metric < 0) {
+                continue;
+            }
             // 默认网卡
             if (!list.isEmpty() && list.first() == "0.0.0.0") {
                 metricList.clear();
-                metricList.append(QPair<QString, int>(list[devColNum], list[metricColNum].toInt()));
+                metricList.append(QPair<QString, int>(list[devColNum], metric));
                 break;
             } else {
-                metricList.append(QPair<QString, int>(list[devColNum], list[metricColNum].toInt()));
+                metricList.append(QPair<QString, int>(list[devColNum], metric));
             }
         }
     }
