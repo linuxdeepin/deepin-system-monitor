@@ -51,12 +51,14 @@ void ProcessController::execute()
     // check pkexec existance
     if (!QFile::exists({CMD_PKEXEC})) {
         Q_EMIT resultReady(ENOENT);
-        exit(ENOENT);
+        Q_EMIT finished();
+        return;
     }
     // check kill existance
     if (!QFile::exists({CMD_KILL})) {
         Q_EMIT resultReady(ENOENT);
-        exit(ENOENT);
+        Q_EMIT finished();
+        return;
     }
 
     // format: kill -{signal} {pid}
