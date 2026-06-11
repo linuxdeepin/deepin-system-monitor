@@ -125,8 +125,8 @@ bool NetifPacketCapture::getCurrentDevName()
         totalList.append(lineList);
     }
     // 设备和优先级列编号
-    int metricColNum = 0;
-    int devColNum = 0;
+    int metricColNum = -1;
+    int devColNum = -1;
     QList<QPair<QString, int>> metricList = {};
     QString devName = "";
     if (totalList.size() > 0) {
@@ -139,6 +139,10 @@ bool NetifPacketCapture::getCurrentDevName()
                 devColNum = j;
             }
         }
+    }
+
+    if (metricColNum < 0 || devColNum < 0) {
+        return false;
     }
 
     if (totalList.size() > 0)

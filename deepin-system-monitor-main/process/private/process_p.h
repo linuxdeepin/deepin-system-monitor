@@ -123,7 +123,7 @@ public:
         , read_bytes(other.read_bytes)
         , write_bytes(other.write_bytes)
         , cancelled_write_bytes(other.cancelled_write_bytes)
-        , usrerName(other.name)
+        , usrerName(other.usrerName)
         , name(other.name)
         , proc_name(other.proc_name)
         , proc_icon(other.proc_icon)
