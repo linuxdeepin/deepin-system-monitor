@@ -25,6 +25,18 @@ void stub_onModelUpdate_updateData()
 {
     return;
 }
+
+static int g_stubNetifCount = 0;
+const QMap<QByteArray, NetifInfoPtr> stub_updateWidgetGeometry_infoDB_custom()
+{
+    QMap<QByteArray, NetifInfoPtr> map;
+    NetifInfoPtr ptr;
+    for (int i = 0; i < g_stubNetifCount; ++i) {
+        map.insert(QByteArray::number(i + 1), ptr);
+    }
+    return map;
+}
+
 const QMap<QByteArray, NetifInfoPtr> stub_updateWidgetGeometry_infoDB_1()
 {
     QMap<QByteArray, NetifInfoPtr> map;
@@ -113,6 +125,42 @@ protected:
 TEST_F(UT_NetifStatViewWidget, initTest)
 {
 
+}
+
+TEST_F(UT_NetifStatViewWidget, test_scrollBarPolicy_01)
+{
+    Stub stub;
+    stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_updateWidgetGeometry_infoDB_custom);
+
+    g_stubNetifCount = 5;
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOn);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+
+    g_stubNetifCount = 4;
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+
+    g_stubNetifCount = 1;
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+}
+
+TEST_F(UT_NetifStatViewWidget, test_scrollBarPolicy_02)
+{
+    Stub stub;
+    stub.set(ADDR(core::system::NetifInfoDB, infoDB), stub_updateWidgetGeometry_infoDB_custom);
+
+    g_stubNetifCount = 5;
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOn);
+
+    static QResizeEvent event(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&event);
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOn);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
 }
 
 TEST_F(UT_NetifStatViewWidget, test_updateWidgetGeometry_01)
