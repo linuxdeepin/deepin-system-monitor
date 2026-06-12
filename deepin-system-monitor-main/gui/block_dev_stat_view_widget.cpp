@@ -19,6 +19,7 @@ BlockStatViewWidget::BlockStatViewWidget(QWidget *parent) : QScrollArea(parent)
     m_centralWidget = new QWidget(this);
     this->setWidget(m_centralWidget);
     this->setFrameShape(QFrame::NoFrame);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     onUpdateData();
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &BlockStatViewWidget::onUpdateData);
@@ -43,6 +44,9 @@ void BlockStatViewWidget::updateWidgetGeometry()
     if (deviceCount <= 0) {
         return ;
     }
+
+    setHorizontalScrollBarPolicy(deviceCount > 4 ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     if (deviceCount == 1) {
         showItem1();

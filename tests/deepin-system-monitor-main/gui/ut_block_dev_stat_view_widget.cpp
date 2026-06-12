@@ -75,6 +75,57 @@ TEST_F(UT_BlockStatViewWidget, initTest)
 
 }
 
+TEST_F(UT_BlockStatViewWidget, test_scrollBarPolicy_01)
+{
+    Stub stub;
+    stub.set(ADDR(BlockStatViewWidget, showItem1), stub_updateWidgetGeometry_showItem1);
+    stub.set(ADDR(BlockStatViewWidget, showItemLg2), stub_updateWidgetGeometry_showItemLg2);
+
+    m_tester->m_listDevice.clear();
+    for (int i = 0; i < 5; ++i) {
+        BlockDevice blockDev;
+        m_tester->m_listDevice.append(blockDev);
+    }
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOn);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+
+    m_tester->m_listDevice.clear();
+    for (int i = 0; i < 4; ++i) {
+        BlockDevice blockDev;
+        m_tester->m_listDevice.append(blockDev);
+    }
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+
+    m_tester->m_listDevice.clear();
+    BlockDevice blockDev;
+    m_tester->m_listDevice.append(blockDev);
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+}
+
+TEST_F(UT_BlockStatViewWidget, test_scrollBarPolicy_02)
+{
+    m_tester->m_listDevice.clear();
+    for (int i = 0; i < 5; ++i) {
+        BlockDevice blockDev;
+        m_tester->m_listDevice.append(blockDev);
+    }
+
+    Stub stub;
+    stub.set(ADDR(BlockStatViewWidget, showItemLg2), stub_updateWidgetGeometry_showItemLg2);
+    m_tester->updateWidgetGeometry();
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOn);
+
+    static QResizeEvent re(QSize(10, 10), QSize(20, 20));
+    m_tester->resizeEvent(&re);
+    EXPECT_EQ(m_tester->horizontalScrollBarPolicy(), Qt::ScrollBarAlwaysOn);
+    EXPECT_EQ(m_tester->verticalScrollBarPolicy(), Qt::ScrollBarAlwaysOff);
+}
+
 TEST_F(UT_BlockStatViewWidget, test_resizeEvent_01)
 {
     static QResizeEvent re(QSize(10, 10), QSize(20, 20));

@@ -18,6 +18,7 @@ NetifStatViewWidget::NetifStatViewWidget(QWidget *parent) : DScrollArea(parent)
     m_centralWidget = new QWidget(this);
     this->setWidget(m_centralWidget);
     this->setFrameShape(QFrame::NoFrame);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_info = DeviceDB::instance()->netifInfoDB();
 }
@@ -98,6 +99,9 @@ void NetifStatViewWidget::updateWidgetGeometry()
 {
     const QMap<QByteArray, NetifInfoPtr> &netifInfoDB = m_info->infoDB();
     int netCount  = netifInfoDB.size();
+
+    setHorizontalScrollBarPolicy(netCount > 4 ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     if (netCount == 1)
         showItemOnlyeOne();
