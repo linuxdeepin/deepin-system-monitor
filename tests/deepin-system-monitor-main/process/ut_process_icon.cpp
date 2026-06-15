@@ -179,7 +179,7 @@ TEST_F(UT_ProcessIcon, test_getIcon_007)
     delete proc;
 }
 
-TEST_F(UT_ProcessIcon, test_getIcon_008)
+TEST_F(UT_ProcessIcon, DISABLED_test_getIcon_008)  // 全局桩化 QList<QString>::contains 导致越界崩溃，禁用（见 b982e692 同类问题）
 {
     Process *proc = new Process();
     Stub b;
