@@ -72,3 +72,44 @@ TEST_F(UT_WMWindowList, test_getWindowPid_001)
 {
     m_tester->getWindowPid(1000);
 }
+
+// isDesktopEntryApp：注入 pid 到 m_desktopEntryCache 后返回 true，否则 false
+TEST_F(UT_WMWindowList, test_isDesktopEntryApp_001)
+{
+    pid_t pid = 5678;
+    EXPECT_FALSE(m_tester->isDesktopEntryApp(pid));
+
+    m_tester->m_desktopEntryCache << pid;
+    EXPECT_TRUE(m_tester->isDesktopEntryApp(pid));
+}
+
+// isTrayApp：注入 pid 到 m_trayAppcache 后返回 true，否则 false
+TEST_F(UT_WMWindowList, test_isTrayApp_001)
+{
+    pid_t pid = 6789;
+    EXPECT_FALSE(m_tester->isTrayApp(pid));
+
+    m_tester->m_trayAppcache[pid] = std::make_unique<wm_window_t>();
+    EXPECT_TRUE(m_tester->isTrayApp(pid));
+}
+
+// isGuiApp：注入 pid 到 m_guiAppcache 后返回 true，否则 false
+TEST_F(UT_WMWindowList, test_isGuiApp_001)
+{
+    pid_t pid = 7890;
+    EXPECT_FALSE(m_tester->isGuiApp(pid));
+
+    m_tester->m_guiAppcache[pid] = std::make_unique<wm_window_t>();
+    EXPECT_TRUE(m_tester->isGuiApp(pid));
+}
+
+// removeDesktopEntryApp：命中分支（先注入再移除）
+TEST_F(UT_WMWindowList, test_removeDesktopEntryApp_002)
+{
+    pid_t pid = 8901;
+    m_tester->m_desktopEntryCache << pid;
+    ASSERT_TRUE(m_tester->isDesktopEntryApp(pid));
+
+    m_tester->removeDesktopEntryApp(pid);
+    EXPECT_FALSE(m_tester->isDesktopEntryApp(pid));
+}

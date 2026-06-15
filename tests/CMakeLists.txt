@@ -330,6 +330,7 @@ set(CPP_PROCESS
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/desktop_entry_cache_updater.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/process_db.cpp
     ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/system_service_client.cpp
+    ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/process/linglong_controller.cpp
 )
 
 set(HPP_SERVICE
