@@ -1099,3 +1099,95 @@ TEST_F(UT_ProcessTableModel, test_updateProcessPriority_001)
      m_tester->updateProcessPriority(pid,priority);
 
 }
+
+// getProcessPriorityValue：pid 不在列表 → 兜底 kNormalPriority(0)
+TEST_F(UT_ProcessTableModel, test_getProcessPriorityValue_001)
+{
+    pid_t pid = 999999; // 不在 m_procIdList 中
+    EXPECT_EQ(m_tester->getProcessPriorityValue(pid), kNormalPriority);
+}
+
+// getProcessPriorityValue：pid 在列表中 → 返回该进程的 priority
+TEST_F(UT_ProcessTableModel, test_getProcessPriorityValue_002)
+{
+    pid_t pid = getpid(); // 当前测试进程真实存在
+    m_tester->m_procIdList << pid;
+    // 仅断言能取到非异常值（覆盖 found 分支），具体 nice 值随环境
+    int val = m_tester->getProcessPriorityValue(pid);
+    EXPECT_TRUE(val >= -20 && val <= 19);
+}
+
+// setUserModeName：设置相同名称走守卫提前返回分支（不触发刷新）
+TEST_F(UT_ProcessTableModel, test_setUserModeName_001)
+{
+    m_tester->setUserModeName(""); // 首次设置
+    m_tester->setUserModeName(""); // 相同值 → 守卫提前返回
+}
+
+// getTotalCPUUsage：空列表为 0；注入带 cpu 的进程后求和
+TEST_F(UT_ProcessTableModel, test_getTotalCPUUsage_001)
+{
+    EXPECT_NEAR(m_tester->getTotalCPUUsage(), 0.0, 0.001);
+
+    Process p1, p2;
+    p1.setCpu(10.5);
+    p2.setCpu(20.0);
+    m_tester->m_processList << p1 << p2;
+    EXPECT_NEAR(m_tester->getTotalCPUUsage(), 30.5, 0.001);
+}
+
+// getTotalMemoryUsage
+TEST_F(UT_ProcessTableModel, test_getTotalMemoryUsage_001)
+{
+    EXPECT_NEAR(m_tester->getTotalMemoryUsage(), 0.0, 0.001);
+
+    Process p1, p2;
+    p1.setMemory(1024);
+    p2.setMemory(2048);
+    m_tester->m_processList << p1 << p2;
+    EXPECT_NEAR(m_tester->getTotalMemoryUsage(), 3072.0, 0.001);
+}
+
+// getTotalDownload / getTotalUpload：setNetIoBps 同时设置 recv/send
+TEST_F(UT_ProcessTableModel, test_getTotalDownload_001)
+{
+    Process p1, p2;
+    p1.setNetIoBps(100.0, 50.0); // recv=100, send=50
+    p2.setNetIoBps(200.0, 25.0); // recv=200, send=25
+    m_tester->m_processList << p1 << p2;
+    EXPECT_NEAR(m_tester->getTotalDownload(), 300.0, 0.001);
+}
+
+TEST_F(UT_ProcessTableModel, test_getTotalUpload_001)
+{
+    Process p1, p2;
+    p1.setNetIoBps(100.0, 50.0);
+    p2.setNetIoBps(200.0, 25.0);
+    m_tester->m_processList << p1 << p2;
+    EXPECT_NEAR(m_tester->getTotalUpload(), 75.0, 0.001);
+}
+
+// vtrmemory/sharememory/readBps/writeBps 无 setter，默认 0；注入进程覆盖循环体
+TEST_F(UT_ProcessTableModel, test_getTotalVirtualMemoryUsage_001)
+{
+    m_tester->m_processList << Process() << Process();
+    EXPECT_NEAR(m_tester->getTotalVirtualMemoryUsage(), 0.0, 0.001);
+}
+
+TEST_F(UT_ProcessTableModel, test_getTotalSharedMemoryUsage_001)
+{
+    m_tester->m_processList << Process() << Process();
+    EXPECT_NEAR(m_tester->getTotalSharedMemoryUsage(), 0.0, 0.001);
+}
+
+TEST_F(UT_ProcessTableModel, test_getTotalDiskRead_001)
+{
+    m_tester->m_processList << Process() << Process();
+    EXPECT_NEAR(m_tester->getTotalDiskRead(), 0.0, 0.001);
+}
+
+TEST_F(UT_ProcessTableModel, test_getTotalDiskWrite_001)
+{
+    m_tester->m_processList << Process() << Process();
+    EXPECT_NEAR(m_tester->getTotalDiskWrite(), 0.0, 0.001);
+}

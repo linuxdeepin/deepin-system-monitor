@@ -103,3 +103,27 @@ TEST_F(UT_ServiceManager, test_updateServiceEntry_01)
 {
     m_tester->updateServiceEntry("");
 }
+
+// getServiceStartupType 分支1: isUnitNoOp(空状态) → N/A
+TEST_F(UT_ServiceManager, test_getServiceStartupType_noop_empty)
+{
+    EXPECT_EQ(ServiceManager::getServiceStartupType("ssh.service", ""), QString(kServiceNAStartup));
+}
+
+// getServiceStartupType 分支2: id 以 "@" 结尾（模板单元）→ N/A
+TEST_F(UT_ServiceManager, test_getServiceStartupType_template_suffix)
+{
+    EXPECT_EQ(ServiceManager::getServiceStartupType("getty@", "enabled"), QString(kServiceNAStartup));
+}
+
+// getServiceStartupType 分支3: enabled 状态 → Auto（走 isUnitStateEnabled 纯查表，无子进程）
+TEST_F(UT_ServiceManager, test_getServiceStartupType_auto)
+{
+    EXPECT_EQ(ServiceManager::getServiceStartupType("ssh.service", kUnitStateEnabledText), QString(kServiceAutoStartup));
+}
+
+// getServiceStartupType 分支4: disabled 状态 → Manual
+TEST_F(UT_ServiceManager, test_getServiceStartupType_manual)
+{
+    EXPECT_EQ(ServiceManager::getServiceStartupType("ssh.service", kUnitStateDisabledText), QString(kServiceManualStartup));
+}
