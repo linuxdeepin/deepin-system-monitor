@@ -145,6 +145,22 @@ TEST_F(UT_BlockDevice, test_calcDiskIoStates)
      }
 }
 
+TEST_F(UT_BlockDevice, test_calcDiskIoStates_subSecondInterval)
+{
+    QStringList diskInfo { "8", "0", "sda", "10", "0", "100", "0", "20", "0", "200", "0", "0", "0", "0", "0", "0", "5" };
+
+    m_tester->d->blk_read = 50;
+    m_tester->d->blk_wrtn = 100;
+    m_tester->d->discard_sector = 1;
+    m_tester->timevalList[0] = timeval { 10, 900000 };
+    m_tester->timevalList[1] = timeval { 11, 100000 };
+
+    m_tester->calcDiskIoStates(diskInfo);
+
+    EXPECT_GT(m_tester->readSpeed(), 0ULL);
+    EXPECT_GT(m_tester->writeSpeed(), 0ULL);
+}
+
 TEST_F(UT_BlockDevice, test_deviceName)
 {
     m_tester->deviceName();
