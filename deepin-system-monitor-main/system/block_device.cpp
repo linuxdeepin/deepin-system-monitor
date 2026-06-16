@@ -146,10 +146,10 @@ void BlockDevice::calcDiskIoStates(const QStringList &diskInfo)
     //  auto interval = (m_time_sec > d->_time_Sec) ? (m_time_sec - d->_time_Sec) : 1;
     auto ltime = prev_time.tv_sec + prev_time.tv_usec * 1. / 1000000;
     auto rtime = cur_time.tv_sec + cur_time.tv_usec * 1. / 1000000;
-    auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
+    auto interval = (rtime > ltime) ? (rtime - ltime) : 1.0;
 
-    d->read_speed = rsize / static_cast<quint64>(interval);
-    d->wirte_speed = wsize / static_cast<quint64>(interval);
+    d->read_speed = static_cast<quint64>(rsize / interval);
+    d->wirte_speed = static_cast<quint64>(wsize / interval);
 }
 
 } // namespace system
