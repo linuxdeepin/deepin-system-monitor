@@ -89,7 +89,7 @@ void NetifMonitor::handleNetData()
                     hist->rx_bytes += payload->payload;
                     hist->rx_packets++;
                 } else if (payload->direction == kOutboundPacket) {
-                    hist->tx_bytes += (payload->payload * 2);
+                    hist->tx_bytes += payload->payload;
                     hist->tx_packets++;
                 }
                 // qCDebug(app) << "Updated existing stat for inode" << ino << ": rx_bytes=" << hist->rx_bytes << "tx_bytes=" << hist->tx_bytes;
