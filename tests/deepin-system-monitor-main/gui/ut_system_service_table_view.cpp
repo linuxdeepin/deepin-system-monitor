@@ -50,6 +50,13 @@ void stub_refresh_updateServiceList()
     return;
 }
 
+static int g_updateServiceListCount = 0;
+
+void stub_count_updateServiceList()
+{
+    ++g_updateServiceListCount;
+}
+
 Settings* stub_loadSettings_instance()
 {
     return nullptr;
@@ -236,6 +243,42 @@ TEST_F(UT_SystemServiceTableView, test_onLoadServiceDataList_01)
     Stub stub;
     stub.set(ADDR(ServiceManager, updateServiceList), stub_refresh_updateServiceList);
     m_tester->onLoadServiceDataList();
+}
+
+TEST_F(UT_SystemServiceTableView, test_loadServiceDataIfNeeded_01)
+{
+    g_updateServiceListCount = 0;
+    Stub stub;
+    stub.set(ADDR(ServiceManager, updateServiceList), stub_count_updateServiceList);
+
+    m_tester->loadServiceDataIfNeeded();
+
+    EXPECT_EQ(g_updateServiceListCount, 1);
+}
+
+TEST_F(UT_SystemServiceTableView, test_loadServiceDataIfNeeded_02)
+{
+    g_updateServiceListCount = 0;
+    Stub stub;
+    stub.set(ADDR(ServiceManager, updateServiceList), stub_count_updateServiceList);
+
+    m_tester->loadServiceDataIfNeeded();
+    m_tester->m_serviceDataLoaded = true;
+    m_tester->loadServiceDataIfNeeded();
+
+    EXPECT_EQ(g_updateServiceListCount, 1);
+}
+
+TEST_F(UT_SystemServiceTableView, test_refresh_after_loaded_01)
+{
+    g_updateServiceListCount = 0;
+    Stub stub;
+    stub.set(ADDR(ServiceManager, updateServiceList), stub_count_updateServiceList);
+
+    m_tester->m_serviceDataLoaded = true;
+    m_tester->refresh();
+
+    EXPECT_EQ(g_updateServiceListCount, 1);
 }
 
 TEST_F(UT_SystemServiceTableView, test_sizeHintForColumn_01)
