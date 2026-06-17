@@ -113,3 +113,42 @@ TEST_F(UT_UnitFileInfo, test_Operator_02)
    const UnitFileInfo other;
    m_tester->operator==(other);
 }
+
+// ========== 新增：覆盖序列化操作符 ==========
+#include <QDebug>
+#include <QDBusArgument>
+#include <QDataStream>
+
+TEST_F(UT_UnitFileInfo, test_qdebug_operator)
+{
+    m_tester->setName("unit.service");
+    m_tester->setStatus("enabled");
+    QString buf;
+    QDebug debug(&buf);
+    debug << *m_tester;
+    EXPECT_FALSE(buf.isEmpty());
+}
+
+TEST_F(UT_UnitFileInfo, test_qdbusargument_output_operator)
+{
+    m_tester->setName("unit.service");
+    m_tester->setStatus("enabled");
+    QDBusArgument arg;
+    arg << *m_tester;
+    SUCCEED();
+}
+
+TEST_F(UT_UnitFileInfo, test_qdatastream_operators)
+{
+    m_tester->setName("unit.service");
+    m_tester->setStatus("enabled");
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << *m_tester;
+
+    QDataStream in(&block, QIODevice::ReadOnly);
+    UnitFileInfo dst;
+    in >> dst;
+    EXPECT_EQ(dst.getName(), "unit.service");
+    EXPECT_EQ(dst.getStatus(), "enabled");
+}
