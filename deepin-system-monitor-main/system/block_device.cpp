@@ -69,18 +69,22 @@ void BlockDevice::readDeviceInfo()
             calcDiskIoStates(deviceInfo);
             readDeviceModel();
             d->capacity = readDeviceSize(deviceInfo[2]);
+            auto safeDelta = [](quint64 current, quint64 previous) -> quint64 {
+                return (current >= previous) ? (current - previous) : 0;
+            };
+
             if (d->read_iss != 0)
-                d->r_ps = (deviceInfo[3].toULongLong() - d->read_iss) / static_cast<quint64>(interval);
+                d->r_ps = safeDelta(deviceInfo[3].toULongLong(), d->read_iss) / static_cast<quint64>(interval);
             if (d->blk_read != 0)
-                d->rsec_ps = (deviceInfo[5].toULongLong() - d->blk_read) / static_cast<quint64>(interval);
+                d->rsec_ps = safeDelta(deviceInfo[5].toULongLong(), d->blk_read) / static_cast<quint64>(interval);
             if (d->blk_wrtn != 0)
-                d->wsec_ps = (deviceInfo[9].toULongLong() - d->blk_wrtn) / static_cast<quint64>(interval);
+                d->wsec_ps = safeDelta(deviceInfo[9].toULongLong(), d->blk_wrtn) / static_cast<quint64>(interval);
             if (d->read_merged != 0)
-                d->rrqm_ps = (deviceInfo[4].toULongLong() - d->read_merged) / static_cast<quint64>(interval);
+                d->rrqm_ps = safeDelta(deviceInfo[4].toULongLong(), d->read_merged) / static_cast<quint64>(interval);
             if (d->write_com != 0)
-                d->w_ps = (deviceInfo[7].toULongLong() - d->write_com) / static_cast<quint64>(interval);
+                d->w_ps = safeDelta(deviceInfo[7].toULongLong(), d->write_com) / static_cast<quint64>(interval);
             if (d->write_merged != 0)
-                d->wrqm_ps = (deviceInfo[8].toULongLong() - d->write_merged) / static_cast<quint64>(interval);
+                d->wrqm_ps = safeDelta(deviceInfo[8].toULongLong(), d->write_merged) / static_cast<quint64>(interval);
             d->blk_read = deviceInfo[5].toULongLong();
             d->bytes_read = deviceInfo[5].toULongLong() * SECTOR_SIZE;
             if (deviceInfo[3].toULongLong() != 0)
