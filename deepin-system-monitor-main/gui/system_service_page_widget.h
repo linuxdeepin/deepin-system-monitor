@@ -38,6 +38,10 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:
+    /**
+     * @brief Load service table data on first demand
+     */
+    void loadServiceDataIfNeeded();
 
 Q_SIGNALS:
 

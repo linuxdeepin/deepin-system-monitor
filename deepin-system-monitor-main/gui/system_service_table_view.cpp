@@ -7,6 +7,7 @@
 
 #include "system_service_table_view.h"
 
+#include "ddlog.h"
 #include "application.h"
 #include "main_window.h"
 #include "dialog/error_dialog.h"
@@ -39,12 +40,10 @@
 #include <QDebug>
 
 DWIDGET_USE_NAMESPACE
+using namespace DDLog;
 
 // service table view backup setting key
 static const char *kSettingsOption_ServiceTableHeaderState = "service_table_header_state";
-
-// multithread unsafe
-static bool defer_initialized {false};
 
 // constructor
 SystemServiceTableView::SystemServiceTableView(DWidget *parent)
@@ -65,8 +64,6 @@ SystemServiceTableView::SystemServiceTableView(DWidget *parent)
     // initialize ui components & connections
     initUI(settingsLoaded);
     initConnections();
-
-    QTimer::singleShot(100, this, SLOT(onLoadServiceDataList()));
 }
 
 // destructor
@@ -731,6 +728,7 @@ void SystemServiceTableView::initConnections()
         m_spinner->stop();
 
         m_loading = false;
+        m_serviceDataLoaded = true;
     });
 
     // we need override currentRowChanged method to overcome incremental service list fetch glitch, if user use [down] key
@@ -757,12 +755,20 @@ void SystemServiceTableView::initConnections()
     });
 }
 
+void SystemServiceTableView::loadServiceDataIfNeeded()
+{
+    qCDebug(app) << "Loading service data list on demand";
+    if (m_loading || m_serviceDataLoaded) {
+        qCDebug(app) << "Service data already loading or loaded, skipping";
+        return;
+    }
+
+    ServiceManager::instance()->updateServiceList();
+}
+
 void SystemServiceTableView::onLoadServiceDataList()
 {
-    if (!defer_initialized) {
-        ServiceManager::instance()->updateServiceList();
-        defer_initialized = true;
-    }
+    loadServiceDataIfNeeded();
 }
 
 // size hint for column to help calculate prefered section width while user double clicked section's gripper
@@ -783,6 +789,7 @@ void SystemServiceTableView::refresh()
     // reset model & select service's name
     m_model->reset();
     m_selectedSName.clear();
+    m_serviceDataLoaded = false;
 
     ServiceManager::instance()->updateServiceList();
 }

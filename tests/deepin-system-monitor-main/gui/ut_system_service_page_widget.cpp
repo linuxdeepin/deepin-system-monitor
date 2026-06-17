@@ -53,3 +53,9 @@ TEST_F(UT_SystemServicePageWidget, test_paintEvent_01)
     EXPECT_TRUE(!m_tester->grab().isNull());
 }
 
+TEST_F(UT_SystemServicePageWidget, test_loadServiceDataIfNeeded_01)
+{
+    m_tester->loadServiceDataIfNeeded();
+    EXPECT_NE(m_tester, nullptr);
+}
+

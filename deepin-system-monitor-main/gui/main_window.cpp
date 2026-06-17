@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "ddlog.h"
@@ -207,6 +207,7 @@ void MainWindow::initConnections()
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Processes")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
         m_toolbar->clearSearchText();
         m_pages->setCurrentWidget(m_svcPage);
+        m_svcPage->loadServiceDataIfNeeded();
 
         m_tbShadow->raise();
         m_tbShadow->show();

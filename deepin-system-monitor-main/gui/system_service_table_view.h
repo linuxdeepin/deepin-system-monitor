@@ -75,6 +75,10 @@ public Q_SLOTS:
      */
     void setServiceStartupMode(bool autoStart);
     /**
+     * @brief Load service table data on first demand
+     */
+    void loadServiceDataIfNeeded();
+    /**
      * @brief Refresh service table
      */
     void refresh();
@@ -209,6 +213,8 @@ private:
 
     // Service loading status flag
     bool m_loading {false};
+    // Service data loaded flag
+    bool m_serviceDataLoaded {false};
 };
 
 #endif  // SYSTEM_SERVICE_TABLE_VIEW_H

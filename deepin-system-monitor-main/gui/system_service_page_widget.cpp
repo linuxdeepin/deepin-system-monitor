@@ -38,6 +38,12 @@ SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
 // destructor
 SystemServicePageWidget::~SystemServicePageWidget() {}
 
+void SystemServicePageWidget::loadServiceDataIfNeeded()
+{
+    if (m_svcTableView)
+        m_svcTableView->loadServiceDataIfNeeded();
+}
+
 // paint event handler
 void SystemServicePageWidget::paintEvent(QPaintEvent *)
 {
