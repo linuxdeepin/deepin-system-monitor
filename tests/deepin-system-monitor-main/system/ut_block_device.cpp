@@ -161,6 +161,51 @@ TEST_F(UT_BlockDevice, test_calcDiskIoStates_subSecondInterval)
     EXPECT_GT(m_tester->writeSpeed(), 0ULL);
 }
 
+TEST_F(UT_BlockDevice, test_readDeviceInfo_counterRollback)
+{
+    QFile file(PROC_PATH_DISK);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
+    QStringList deviceInfo;
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        const QString line = in.readLine();
+        if (line.contains("loop")) {
+            continue;
+        }
+
+        const QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        if (fields.size() > 16) {
+            deviceInfo = fields;
+            break;
+        }
+    }
+    file.close();
+
+    if (deviceInfo.isEmpty()) {
+        return;
+    }
+
+    m_tester->d->name = deviceInfo[2].toLocal8Bit();
+    m_tester->d->read_iss = deviceInfo[3].toULongLong() + 1;
+    m_tester->d->read_merged = deviceInfo[4].toULongLong() + 1;
+    m_tester->d->blk_read = deviceInfo[5].toULongLong() + 1;
+    m_tester->d->write_com = deviceInfo[7].toULongLong() + 1;
+    m_tester->d->write_merged = deviceInfo[8].toULongLong() + 1;
+    m_tester->d->blk_wrtn = deviceInfo[9].toULongLong() + 1;
+
+    m_tester->readDeviceInfo();
+
+    EXPECT_EQ(0, m_tester->readRequestIssuedPerSecond());
+    EXPECT_EQ(0, m_tester->readRequestMergedPerSecond());
+    EXPECT_EQ(0, m_tester->sectorsReadPerSecond());
+    EXPECT_EQ(0, m_tester->writeRequestIssuedPerSecond());
+    EXPECT_EQ(0, m_tester->writeRequestMergedPerSecond());
+    EXPECT_EQ(0, m_tester->sectorsWrittenPerSecond());
+}
+
 TEST_F(UT_BlockDevice, test_deviceName)
 {
     m_tester->deviceName();
