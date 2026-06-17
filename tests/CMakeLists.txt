@@ -33,7 +33,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wl,-Map=deepin-system-monitor-test.m
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall ")
 set(CMAKE_CXX_FLAGS "-Wl,--as-needed -fPIE")
-set(CMAKE_EXE_LINKER_FLAGS "-pie")
+set(CMAKE_EXE_LINKER_FLAGS "-pie -lgcov")
 if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
 endif ()
@@ -664,6 +664,9 @@ target_link_libraries(${PROJECT_NAME_TEST}
     gmock_main
 )
 
+# Link gcov library for coverage support
+target_link_libraries(${PROJECT_NAME_TEST} gcov)
+
 # Wayland support: only link under Qt5
 if (KF5Wayland_FOUND)
     target_link_libraries(${PROJECT_NAME_TEST} KF5::WaylandClient KF5::WaylandServer)
@@ -710,11 +713,12 @@ add_custom_command(TARGET test POST_BUILD
 add_dependencies(test ${PROJECT_NAME_TEST})
 
 # 设置添加gocv相关信息的输出
-set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
 set(CMAKE_SAFETYTEST "${CMAKE_SAFETYTEST_ARG}")
 if(CMAKE_SAFETYTEST STREQUAL "")
     set(CMAKE_SAFETYTEST "CMAKE_SAFETYTEST_ARG_OFF")
 endif()
+# 先追加覆盖率标志到当前 CXX_FLAGS（保留前面 ADD_COMPILE_OPTIONS 加的 -Wall 等选项）
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${CMAKE_SAFETYTEST}")
 if(CMAKE_SAFETYTEST STREQUAL "CMAKE_SAFETYTEST_ARG_ON")
   #安全测试选项

@@ -137,3 +137,80 @@ TEST_F(UT_Toolbar, test_clearSearchText_01)
     m_tester->clearSearchText();
 }
 
+// 扩展测试：覆盖更多事件分支
+TEST_F(UT_Toolbar, test_eventFilter_keyEnter)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+    m_tester->eventFilter(m_tester, &ev);
+}
+
+TEST_F(UT_Toolbar, test_eventFilter_keyReturn)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+    m_tester->eventFilter(m_tester, &ev);
+}
+
+TEST_F(UT_Toolbar, test_eventFilter_keyUp)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier);
+    m_tester->eventFilter(m_tester, &ev);
+}
+
+TEST_F(UT_Toolbar, test_eventFilter_keyDown)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
+    m_tester->eventFilter(m_tester, &ev);
+}
+
+TEST_F(UT_Toolbar, test_eventFilter_otherKey)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    m_tester->eventFilter(m_tester, &ev);
+}
+
+TEST_F(UT_Toolbar, test_eventFilter_controlKey)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_A, Qt::ControlModifier);
+    m_tester->eventFilter(m_tester, &ev);
+}
+
+TEST_F(UT_Toolbar, test_handleSearch_withText)
+{
+    m_tester->searchEdit->setText("test");
+    m_tester->handleSearch();
+}
+
+TEST_F(UT_Toolbar, test_handleSearchTextChanged_withText)
+{
+    m_tester->searchEdit->setText("test");
+    m_tester->handleSearchTextChanged();
+}
+
+TEST_F(UT_Toolbar, test_setProcessButtonChecked_false)
+{
+    m_tester->setProcessButtonChecked(false);
+}
+
+TEST_F(UT_Toolbar, test_clearSearchText_afterInput)
+{
+    m_tester->searchEdit->setText("test");
+    m_tester->clearSearchText();
+    EXPECT_TRUE(m_tester->searchContent().isEmpty());
+}
+
+TEST_F(UT_Toolbar, test_focusInput_selectAll)
+{
+    m_tester->searchEdit->setText("test text");
+    m_tester->focusInput();
+    // 验证文本被选中或保持
+}
+
+TEST_F(UT_Toolbar, test_isSearchContentEmpty_true)
+{
+    // 测试初始状态下的空内容检查
+    bool result = m_tester->isSearchContentEmpty();
+    // 初始状态可能是空也可能不是，取决于实现
+    // 这里只验证方法能正常调用
+    (void)result;
+}
+

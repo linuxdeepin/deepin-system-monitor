@@ -6,6 +6,7 @@
 //self
 #include "model/process_table_model.h"
 #include "process/process.h"
+#include "process/private/process_p.h"
 #include "process/process_db.h"
 #include "common/common.h"
 //gtest
@@ -1191,3 +1192,165 @@ TEST_F(UT_ProcessTableModel, test_getTotalDiskWrite_001)
     m_tester->m_processList << Process() << Process();
     EXPECT_NEAR(m_tester->getTotalDiskWrite(), 0.0, 0.001);
 }
+
+// ========== 新增：用真实 index 直接驱动 data() 全部分支（不依赖 stub 顺序，更稳定） ==========
+// 这些测试覆盖 DisplayRole/DecorationRole/UserRole/UserRole+1/TextAlignmentRole/UserRole+2
+// 以及各 column 的 switch 分支，避免既有 stub 版测试的 flakiness。
+namespace {
+Process makeValidProcess()
+{
+    Process p(getpid());
+    p.d->valid = true;  // 标记为有效，使 data() 越过 isValid 早退
+    p.setCpu(12.5);
+    p.setMemory(4096);
+    p.setPriority(0);
+    p.setState('R');
+    p.setName("utproc");
+    p.setDisplayName("utproc");
+    p.setNetIoBps(100.0, 200.0);
+    p.setUserName("utuser");
+    return p;
+}
+} // namespace
+
+TEST_F(UT_ProcessTableModel, test_data_displayRole_allColumns_realIndex)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+
+    int cols[] = {
+        ProcessTableModel::kProcessNameColumn,
+        ProcessTableModel::kProcessCPUColumn,
+        ProcessTableModel::kProcessUserColumn,
+        ProcessTableModel::kProcessMemoryColumn,
+        ProcessTableModel::kProcessShareMemoryColumn,
+        ProcessTableModel::kProcessVTRMemoryColumn,
+        ProcessTableModel::kProcessUploadColumn,
+        ProcessTableModel::kProcessDownloadColumn,
+        ProcessTableModel::kProcessDiskReadColumn,
+        ProcessTableModel::kProcessDiskWriteColumn,
+        ProcessTableModel::kProcessPIDColumn,
+        ProcessTableModel::kProcessNiceColumn,
+        ProcessTableModel::kProcessPriorityColumn,
+    };
+    for (int c : cols) {
+        QModelIndex idx = m_tester->createIndex(0, c);
+        QVariant v = m_tester->data(idx, Qt::DisplayRole);
+        EXPECT_TRUE(v.isValid()) << "DisplayRole col=" << c;
+    }
+}
+
+TEST_F(UT_ProcessTableModel, test_data_displayRole_nameColumn_zombieState)
+{
+    Process p = makeValidProcess();
+    p.setState('Z');
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessNameColumn);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_TRUE(v.isValid());
+    EXPECT_TRUE(v.toString().contains("utproc"));
+}
+
+TEST_F(UT_ProcessTableModel, test_data_displayRole_nameColumn_suspendedState)
+{
+    Process p = makeValidProcess();
+    p.setState('T');
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessNameColumn);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_TRUE(v.isValid());
+}
+
+TEST_F(UT_ProcessTableModel, test_data_displayRole_nameColumn_normalState)
+{
+    Process p = makeValidProcess();
+    p.setState('R'); // 非 Z/T，不进入状态修饰分支
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessNameColumn);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_EQ(v.toString(), QString("utproc"));
+}
+
+TEST_F(UT_ProcessTableModel, test_data_decorationRole_nameColumn)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessNameColumn);
+    // decoration 分支，icon 可能为空但不崩
+    m_tester->data(idx, Qt::DecorationRole);
+}
+
+TEST_F(UT_ProcessTableModel, test_data_decorationRole_otherColumn_returnsInvalid)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessCPUColumn);
+    QVariant v = m_tester->data(idx, Qt::DecorationRole);
+    EXPECT_FALSE(v.isValid());
+}
+
+TEST_F(UT_ProcessTableModel, test_data_userRole_allColumns)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+    int cols[] = {
+        ProcessTableModel::kProcessNameColumn,
+        ProcessTableModel::kProcessMemoryColumn,
+        ProcessTableModel::kProcessShareMemoryColumn,
+        ProcessTableModel::kProcessVTRMemoryColumn,
+        ProcessTableModel::kProcessCPUColumn,
+        ProcessTableModel::kProcessUploadColumn,
+        ProcessTableModel::kProcessDownloadColumn,
+        ProcessTableModel::kProcessPIDColumn,
+        ProcessTableModel::kProcessDiskReadColumn,
+        ProcessTableModel::kProcessDiskWriteColumn,
+        ProcessTableModel::kProcessNiceColumn,
+    };
+    for (int c : cols) {
+        QModelIndex idx = m_tester->createIndex(0, c);
+        QVariant v = m_tester->data(idx, Qt::UserRole);
+        EXPECT_TRUE(v.isValid()) << "UserRole col=" << c;
+    }
+}
+
+TEST_F(UT_ProcessTableModel, test_data_userRolePlus1_uploadDownload)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+    QModelIndex idxU = m_tester->createIndex(0, ProcessTableModel::kProcessUploadColumn);
+    EXPECT_TRUE(m_tester->data(idxU, Qt::UserRole + 1).isValid());
+    QModelIndex idxD = m_tester->createIndex(0, ProcessTableModel::kProcessDownloadColumn);
+    EXPECT_TRUE(m_tester->data(idxD, Qt::UserRole + 1).isValid());
+    // 其它列返回无效
+    QModelIndex idxOther = m_tester->createIndex(0, ProcessTableModel::kProcessCPUColumn);
+    EXPECT_FALSE(m_tester->data(idxOther, Qt::UserRole + 1).isValid());
+}
+
+TEST_F(UT_ProcessTableModel, test_data_textAlignmentRole)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessNameColumn);
+    QVariant v = m_tester->data(idx, Qt::TextAlignmentRole);
+    EXPECT_TRUE(v.isValid());
+}
+
+TEST_F(UT_ProcessTableModel, test_data_invalidProcess_returnsInvalid)
+{
+    // 默认构造的 Process isValid()=false → data 返回空
+    Process p;
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(0, ProcessTableModel::kProcessNameColumn);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_FALSE(v.isValid());
+}
+
+TEST_F(UT_ProcessTableModel, test_data_outOfBoundsRow_returnsInvalid)
+{
+    Process p = makeValidProcess();
+    m_tester->m_processList << p;
+    QModelIndex idx = m_tester->createIndex(100, 0);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_FALSE(v.isValid());
+}
+

@@ -189,3 +189,56 @@ TEST_F(UT_ProcessIcon, DISABLED_test_getIcon_008)  // 全局桩化 QList<QString
     m_tester->getIcon(proc);
     delete proc;
 }
+
+// 扩展测试：覆盖更多路径
+TEST_F(UT_ProcessIcon, test_getIcon_noCmdline)
+{
+    // 测试没有命令行的进程
+    Process *proc = new Process();
+    proc->d->cmdline.clear();
+    m_tester->getIcon(proc);
+    delete proc;
+}
+
+TEST_F(UT_ProcessIcon, test_getIcon_withDesktopFile)
+{
+    // 测试有桌面文件的环境变量
+    Process *proc = new Process();
+    proc->d->environ.insert("XDG_CURRENT_DESKTOP", "Deepin");
+    proc->d->environ.insert("GIO_LAUNCHED_DESKTOP_FILE", "/usr/share/applications/test.desktop");
+    m_tester->getIcon(proc);
+    delete proc;
+}
+
+TEST_F(UT_ProcessIcon, test_refreashProcessIcon_multiple)
+{
+    // 测试多次刷新
+    Process *proc = new Process();
+    proc->d->pid = 1;
+    proc->d->name = "init";
+    m_tester->refreashProcessIcon(proc);
+    m_tester->refreashProcessIcon(proc);  // 第二次调用
+    delete proc;
+}
+
+TEST_F(UT_ProcessIcon, test_defaultIconData_withValidPath)
+{
+    // 测试默认图标数据
+    QString path = "/usr/share/icons/hicolor/48x48/apps/system.png";
+    m_tester->defaultIconData(path);
+}
+
+TEST_F(UT_ProcessIcon, test_terminalIconData_withValidPath)
+{
+    // 测试终端图标数据
+    QString path = "/usr/share/icons/hicolor/48x48/apps/terminal.png";
+    m_tester->terminalIconData(path);
+}
+
+TEST_F(UT_ProcessIcon, test_icon_multipleCalls)
+{
+    // 多次调用 icon() 方法
+    m_tester->icon();
+    m_tester->icon();
+    m_tester->icon();
+}

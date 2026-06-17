@@ -107,3 +107,57 @@ TEST(UT_Common, test_global_init_01)
 {
     global_init();
 }
+
+// ========== 新增：覆盖 format::formatUnit_memory_disk / formatUnit_net 各分支 ==========
+#include "common/common.h"
+using namespace common::format;
+
+TEST(UT_Common, test_formatUnit_memory_disk_invalidType_returnsEmpty)
+{
+    // 不可转为 Double 的类型 → 返回空
+    QVariant invalid = QVariant::fromValue<QObject*>(nullptr);
+    QString r = formatUnit_memory_disk(invalid);
+    EXPECT_TRUE(r.isEmpty());
+}
+
+TEST(UT_Common, test_formatUnit_memory_disk_smallValue)
+{
+    // 小于 1024 不进位
+    QString r = formatUnit_memory_disk(QVariant(512.0), B, 1, false);
+    EXPECT_FALSE(r.isEmpty());
+    EXPECT_TRUE(r.contains("B"));
+}
+
+TEST(UT_Common, test_formatUnit_memory_disk_largeValue_unitEscalation)
+{
+    // 大于 1024 多次 → 单位递进到 KB/MB/GB
+    QString r = formatUnit_memory_disk(QVariant(1024.0 * 1024 * 1024 * 5), B, 2, false);
+    EXPECT_FALSE(r.isEmpty());
+    EXPECT_TRUE(r.contains("GB"));
+}
+
+TEST(UT_Common, test_formatUnit_memory_disk_speedFlag)
+{
+    QString r = formatUnit_memory_disk(QVariant(2048.0), B, 1, true);
+    EXPECT_TRUE(r.contains("/s"));
+}
+
+TEST(UT_Common, test_formatUnit_net_invalidType_returnsEmpty)
+{
+    QVariant invalid = QVariant::fromValue<QObject*>(nullptr);
+    QString r = formatUnit_net(invalid);
+    EXPECT_TRUE(r.isEmpty());
+}
+
+TEST(UT_Common, test_formatUnit_net_smallValue)
+{
+    QString r = formatUnit_net(QVariant(100.0), B, 1, false);
+    EXPECT_FALSE(r.isEmpty());
+}
+
+TEST(UT_Common, test_formatUnit_net_largeValue_speedFlag)
+{
+    QString r = formatUnit_net(QVariant(1024.0 * 1024 * 2), B, 1, true);
+    EXPECT_FALSE(r.isEmpty());
+    EXPECT_TRUE(r.contains("/s"));
+}

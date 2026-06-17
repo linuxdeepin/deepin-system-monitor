@@ -658,6 +658,67 @@ TEST_F(UT_Process, test_readSockInodes_002)
 
 }
 
+// ========== 新增：覆盖 getPriorityName 全部分支（纯逻辑，无 IO 依赖） ==========
+
+TEST(UT_Process_getPriorityName, VeryHighPriority)
+{
+    EXPECT_EQ(getPriorityName(kVeryHighPriority), QApplication::translate("Process.Priority", "Very high"));
+}
+
+TEST(UT_Process_getPriorityName, HighPriority)
+{
+    EXPECT_EQ(getPriorityName(kHighPriority), QApplication::translate("Process.Priority", "High"));
+}
+
+TEST(UT_Process_getPriorityName, NormalPriority)
+{
+    EXPECT_EQ(getPriorityName(kNormalPriority), QApplication::translate("Process.Priority", "Normal"));
+}
+
+TEST(UT_Process_getPriorityName, LowPriority)
+{
+    EXPECT_EQ(getPriorityName(kLowPriority), QApplication::translate("Process.Priority", "Low"));
+}
+
+TEST(UT_Process_getPriorityName, VeryLowPriority)
+{
+    EXPECT_EQ(getPriorityName(kVeryLowPriority), QApplication::translate("Process.Priority", "Very low"));
+}
+
+TEST(UT_Process_getPriorityName, CustomPriority_inRange)
+{
+    // 处于 [kVeryHighPriorityMax=-20, kVeryLowPriorityMin=19] 之间且非标准值 → Custom
+    EXPECT_EQ(getPriorityName(-5), QApplication::translate("Process.Priority", "Custom"));
+    EXPECT_EQ(getPriorityName(5), QApplication::translate("Process.Priority", "Custom"));
+    EXPECT_EQ(getPriorityName(-15), QApplication::translate("Process.Priority", "Custom"));
+    EXPECT_EQ(getPriorityName(15), QApplication::translate("Process.Priority", "Custom"));
+}
+
+TEST(UT_Process_getPriorityName, InvalidPriority_outOfRange)
+{
+    // 超出范围的极端值 → Invalid
+    EXPECT_EQ(getPriorityName(-100), QApplication::translate("Process.Priority", "Invalid"));
+    EXPECT_EQ(getPriorityName(100), QApplication::translate("Process.Priority", "Invalid"));
+    EXPECT_EQ(getPriorityName(INT_MAX), QApplication::translate("Process.Priority", "Invalid"));
+}
+
+// ========== 覆盖 getProcessPriorityStub 全部分支 ==========
+TEST(UT_Process_getProcessPriorityStub, allBranches)
+{
+    EXPECT_EQ(getProcessPriorityStub(0), kNormalPriority);
+    EXPECT_EQ(getProcessPriorityStub(kVeryHighPriority), kVeryHighPriority);
+    EXPECT_EQ(getProcessPriorityStub(kHighPriority), kHighPriority);
+    EXPECT_EQ(getProcessPriorityStub(kLowPriority), kLowPriority);
+    EXPECT_EQ(getProcessPriorityStub(kVeryLowPriority), kVeryLowPriority);
+    // 自定义区间
+    EXPECT_EQ(getProcessPriorityStub(-5), kCustomPriority);
+    EXPECT_EQ(getProcessPriorityStub(5), kCustomPriority);
+    // 无效
+    EXPECT_EQ(getProcessPriorityStub(-100), kInvalidPriority);
+    EXPECT_EQ(getProcessPriorityStub(100), kInvalidPriority);
+}
+
+
 TEST_F(UT_Process, test_readProcessInfo_001)
 {
 

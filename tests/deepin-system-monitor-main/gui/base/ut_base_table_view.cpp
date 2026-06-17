@@ -227,6 +227,83 @@ TEST_F(UT_BaseTableView, test_scrollTo_01)
     m_tester->scrollTo(index);
 }
 
+// 扩展测试
+TEST_F(UT_BaseTableView, test_focusOutEvent)
+{
+    static QFocusEvent ev(QEvent::FocusOut, Qt::OtherFocusReason);
+    m_tester->focusOutEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_escape)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_delete)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Delete, Qt::NoModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_up)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_down)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_pageUp)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_pageDown)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_home)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_Home, Qt::ControlModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_keyPressEvent_end)
+{
+    static QKeyEvent ev(QEvent::KeyPress, Qt::Key_End, Qt::ControlModifier);
+    m_tester->keyPressEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_mouseDoubleClickEvent)
+{
+    static QMouseEvent ev(QEvent::MouseButtonDblClick, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mouseDoubleClickEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_resizeEvent)
+{
+    static QResizeEvent ev(QSize(100, 100), QSize(200, 200));
+    m_tester->resizeEvent(&ev);
+}
+
+TEST_F(UT_BaseTableView, test_currentChanged_invalid)
+{
+    // 测试 currentChanged 与无效索引
+    Stub stub;
+    stub.set(ADDR(QModelIndex, isValid), stub_BaseTableView_currentChanged_isValid);
+    QModelIndex invalid;
+    QModelIndex prev;
+    m_tester->currentChanged(invalid, prev);
+}
+
 
 
 

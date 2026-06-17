@@ -531,3 +531,122 @@ TEST_F(UT_SystemServiceTableModel, test_updateServiceList_001)
     QList<SystemServiceEntry> List {};
     m_tester->updateServiceList(List);
 }
+
+// ========== 新增：用真实 createIndex 驱动 data() 全部分支，避免 stub 版 flakiness ==========
+
+namespace {
+SystemServiceEntry makeServiceEntry(const QString &name)
+{
+    SystemServiceEntry e;
+    e.setSName(name);
+    e.setLoadState("loaded");
+    e.setActiveState("active");
+    e.setSubState("running");
+    e.setState("active");
+    e.setStartupType("auto");
+    e.setDescription("unit test service");
+    e.setMainPID(1234);
+    return e;
+}
+} // namespace
+
+TEST_F(UT_SystemServiceTableModel, test_data_displayRole_allColumns_realIndex)
+{
+    SystemServiceEntry e = makeServiceEntry("svc1");
+    m_tester->m_svcList << "svc1";
+    m_tester->m_svcMap.insert("svc1", e);
+
+    int cols[] = {
+        SystemServiceTableModel::kSystemServiceNameColumn,
+        SystemServiceTableModel::kSystemServiceLoadStateColumn,
+        SystemServiceTableModel::kSystemServiceActiveStateColumn,
+        SystemServiceTableModel::kSystemServiceSubStateColumn,
+        SystemServiceTableModel::kSystemServiceStateColumn,
+        SystemServiceTableModel::kSystemServiceStartupModeColumn,
+        SystemServiceTableModel::kSystemServiceDescriptionColumn,
+        SystemServiceTableModel::kSystemServicePIDColumn,
+    };
+    for (int c : cols) {
+        QModelIndex idx = m_tester->createIndex(0, c);
+        QVariant v = m_tester->data(idx, Qt::DisplayRole);
+        EXPECT_TRUE(v.isValid()) << "DisplayRole col=" << c;
+    }
+}
+
+TEST_F(UT_SystemServiceTableModel, test_data_displayRole_PID_zero_returnsInvalid)
+{
+    SystemServiceEntry e = makeServiceEntry("svc0");
+    e.setMainPID(0);
+    m_tester->m_svcList << "svc0";
+    m_tester->m_svcMap.insert("svc0", e);
+
+    QModelIndex idx = m_tester->createIndex(0, SystemServiceTableModel::kSystemServicePIDColumn);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_FALSE(v.isValid());  // pid==0 → QVariant()
+}
+
+TEST_F(UT_SystemServiceTableModel, test_data_accessibleTextRole_nameColumn)
+{
+    SystemServiceEntry e = makeServiceEntry("svcA");
+    m_tester->m_svcList << "svcA";
+    m_tester->m_svcMap.insert("svcA", e);
+
+    QModelIndex idx = m_tester->createIndex(0, SystemServiceTableModel::kSystemServiceNameColumn);
+    QVariant v = m_tester->data(idx, Qt::AccessibleTextRole);
+    EXPECT_TRUE(v.isValid());
+    EXPECT_EQ(v.toString(), "svcA");
+}
+
+TEST_F(UT_SystemServiceTableModel, test_data_textAlignmentRole_realIndex)
+{
+    SystemServiceEntry e = makeServiceEntry("svcT");
+    m_tester->m_svcList << "svcT";
+    m_tester->m_svcMap.insert("svcT", e);
+
+    QModelIndex idx = m_tester->createIndex(0, 0);
+    QVariant v = m_tester->data(idx, Qt::TextAlignmentRole);
+    EXPECT_TRUE(v.isValid());
+}
+
+TEST_F(UT_SystemServiceTableModel, test_data_otherRole_returnsInvalid)
+{
+    SystemServiceEntry e = makeServiceEntry("svcO");
+    m_tester->m_svcList << "svcO";
+    m_tester->m_svcMap.insert("svcO", e);
+
+    QModelIndex idx = m_tester->createIndex(0, 0);
+    QVariant v = m_tester->data(idx, Qt::FontRole);
+    EXPECT_FALSE(v.isValid());
+}
+
+TEST_F(UT_SystemServiceTableModel, test_data_rowOutOfBounds_returnsInvalid)
+{
+    SystemServiceEntry e = makeServiceEntry("svcB");
+    m_tester->m_svcList << "svcB";
+    m_tester->m_svcMap.insert("svcB", e);
+
+    QModelIndex idx = m_tester->createIndex(100, 0);
+    QVariant v = m_tester->data(idx, Qt::DisplayRole);
+    EXPECT_FALSE(v.isValid());
+}
+
+TEST_F(UT_SystemServiceTableModel, test_updateServiceEntry_replaceExisting)
+{
+    // 先添加，再用同名 entry 替换（命中 replace 分支）
+    SystemServiceEntry e1 = makeServiceEntry("rep");
+    m_tester->updateServiceEntry(e1);
+    EXPECT_EQ(m_tester->m_svcList.size(), 1);
+
+    SystemServiceEntry e2 = makeServiceEntry("rep");
+    e2.setDescription("updated");
+    m_tester->updateServiceEntry(e2);
+    EXPECT_EQ(m_tester->m_svcList.size(), 1);
+    EXPECT_EQ(m_tester->m_svcMap["rep"].getDescription(), "updated");
+}
+
+TEST_F(UT_SystemServiceTableModel, test_updateServiceEntry_emptyName_skipped)
+{
+    SystemServiceEntry e;  // 空 sname
+    m_tester->updateServiceEntry(e);
+    EXPECT_EQ(m_tester->m_svcList.size(), 0);
+}

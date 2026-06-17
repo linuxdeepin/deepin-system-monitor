@@ -436,7 +436,7 @@ WMWindow WMWindowList::getWindowInfo(WMWId winId)
     }
 
     if (len != 0) {
-        qCDebug(app) << "Window name:" << name << "Length:" << len << "Encoding:" << encoding;
+        qCDebug(app) << "Window name:" << QByteArray::fromRawData(name, len) << "Length:" << len << "Encoding:" << encoding;
         if (encoding == XCB_ATOM_STRING) {
             window->title = QString::fromLocal8Bit(name, len);
         } else if (encoding == m_conn.atom(WMAtom::UTF8_STRING)) {

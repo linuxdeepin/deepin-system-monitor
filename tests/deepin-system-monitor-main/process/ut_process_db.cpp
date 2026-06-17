@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -208,5 +208,62 @@ TEST_F(UT_ProcessDB, test_onProcessPrioritysetChanged_001)
 TEST_F(UT_ProcessDB, test_sendSignalToProcess_001)
 {
     m_tester->sendSignalToProcess(100000,SIGCONT);
+}
+
+// 扩展 sendSignalToProcess 测试
+TEST_F(UT_ProcessDB, test_sendSignalToProcess_SIGTERM)
+{
+    // 测试 SIGTERM 信号（会先发 SIGCONT）
+    m_tester->sendSignalToProcess(100000, SIGTERM);
+}
+
+TEST_F(UT_ProcessDB, test_sendSignalToProcess_SIGKILL)
+{
+    // 测试 SIGKILL 信号（会先发 SIGCONT）
+    m_tester->sendSignalToProcess(100000, SIGKILL);
+}
+
+TEST_F(UT_ProcessDB, test_sendSignalToProcess_SIGSTOP)
+{
+    // 测试 SIGSTOP 信号
+    m_tester->sendSignalToProcess(100000, SIGSTOP);
+}
+
+TEST_F(UT_ProcessDB, test_windowList)
+{
+    // 测试 windowList() 方法
+    auto* wl = m_tester->windowList();
+    EXPECT_NE(wl, nullptr);
+}
+
+TEST_F(UT_ProcessDB, test_desktopEntryCache)
+{
+    // 测试 desktopEntryCache() 方法
+    auto* cache = m_tester->desktopEntryCache();
+    EXPECT_NE(cache, nullptr);
+}
+
+TEST_F(UT_ProcessDB, test_onProcessPrioritysetChanged_priorityChange)
+{
+    // 测试 onProcessPrioritysetChanged 的优先级设置分支
+    // sched_priority == 0 (dynamic priority) 时走 setpriority 分支
+    Stub b1;
+    b1.set(ADDR(ProcessDB, processPriorityChanged), stub_onProcessPrioritysetChanged_processPriorityChanged);
+    Stub b2;
+    b2.set(ADDR(ProcessDB, processControlResultReady), stub_onProcessPrioritysetChanged_processControlResultReady);
+
+    m_tester->onProcessPrioritysetChanged(1, 0);  // PID 1 通常有 dynamic priority
+}
+
+TEST_F(UT_ProcessDB, test_onProcessPrioritysetChanged_permissionDenied)
+{
+    // 测试 onProcessPrioritysetChanged 权限不足时的分支
+    Stub b1;
+    b1.set(ADDR(ProcessDB, priorityPromoteResultReady), stub_onProcessPrioritysetChanged_priorityPromoteResultReady);
+    Stub b2;
+    b2.set(ADDR(PriorityController, execute), stub_onProcessPrioritysetChanged_execute);
+
+    // 使用无效 PID 触发权限错误分支
+    m_tester->onProcessPrioritysetChanged(1, 19);  // 最高优先级
 }
 

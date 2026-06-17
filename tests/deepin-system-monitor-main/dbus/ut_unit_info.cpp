@@ -332,3 +332,50 @@ TEST_F(UT_UnitInfo, test_operator_02)
     const UnitInfo other;
     m_tester->operator==(other);
 }
+
+// ========== 新增：覆盖 QDebug / QDBusArgument / QDataStream 序列化操作符 ==========
+#include <QDebug>
+#include <QDBusArgument>
+#include <QDataStream>
+#include <QBuffer>
+
+TEST_F(UT_UnitInfo, test_qdebug_operator)
+{
+    UnitInfo u("name", "desc", "loaded", "active", "running", "followed",
+               "/path", 123, "job", "/jobpath");
+    QString buf;
+    QDebug debug(&buf);
+    debug << u;
+    EXPECT_FALSE(buf.isEmpty());
+}
+
+TEST_F(UT_UnitInfo, test_qdbusargument_output_operator)
+{
+    UnitInfo u("name", "desc", "loaded", "active", "running", "followed",
+               "/path", 123, "job", "/jobpath");
+    QDBusArgument arg;
+    arg << u;  // 仅验证不崩溃，覆盖 << 操作符
+    SUCCEED();
+}
+
+TEST_F(UT_UnitInfo, test_qdatastream_operators)
+{
+    // 写入
+    UnitInfo src("name", "desc", "loaded", "active", "running", "followed",
+                 "/path", 123, "job", "/jobpath");
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << src;
+
+    // 读回，覆盖 >> 操作符
+    QDataStream in(&block, QIODevice::ReadOnly);
+    UnitInfo dst;
+    in >> dst;
+    EXPECT_EQ(dst.getName(), "name");
+    EXPECT_EQ(dst.getDescription(), "desc");
+    EXPECT_EQ(dst.getLoadState(), "loaded");
+    EXPECT_EQ(dst.getActiveState(), "active");
+    EXPECT_EQ(dst.getSubState(), "running");
+    EXPECT_EQ(dst.getFollowedBy(), "followed");
+    EXPECT_EQ(dst.getJobId(), quint32(123));
+}

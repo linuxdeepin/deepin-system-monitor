@@ -17,6 +17,9 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include <QTableView>
+#include <QStyleOptionViewItem>
+#include <QIcon>
+#include <QHelpEvent>
 #include <DStyle>
 DWIDGET_USE_NAMESPACE;
 /***************************************STUB begin*********************************************/
@@ -235,3 +238,105 @@ TEST_F(UT_BaseItemDelegate, test_initStyleOption_01)
     static QModelIndex index;
     m_tester->initStyleOption(&option, index);
 }
+
+// ========== 新增：覆盖 paint 的 Disabled 状态、decoration 绘制、default 分支等 ==========
+
+TEST_F(UT_BaseItemDelegate, test_paint_disabledState)
+{
+    // state 不含 State_Enabled → 命中 cg = DPalette::Disabled 分支
+    static QPixmap pix(100, 100);
+    static QPainter painter(&pix);
+    QStyleOptionViewItem option;
+    option.state = QStyle::State_None;  // 未启用
+    option.viewItemPosition = QStyleOptionViewItem::OnlyOne;
+    QModelIndex index;
+    Stub stub;
+    stub.set(ADDR(QModelIndex, isValid), stub_BaseItemDelegate_paint_isVaild);
+    m_tester->paint(&painter, option, index);
+}
+
+TEST_F(UT_BaseItemDelegate, test_paint_defaultViewItemPosition)
+{
+    // viewItemPosition 为默认(Invalid) → switch default 分支，调用父类 paint 后 return
+    static QPixmap pix(100, 100);
+    static QPainter painter(&pix);
+    QStyleOptionViewItem option;
+    option.state = DStyle::State_Enabled;
+    QModelIndex index;
+    Stub stub;
+    stub.set(ADDR(QModelIndex, isValid), stub_BaseItemDelegate_paint_isVaild);
+    m_tester->paint(&painter, option, index);
+}
+
+TEST_F(UT_BaseItemDelegate, test_paint_beginningWithDecoration)
+{
+    // Beginning + HasDecoration → 走 icon 绘制分支
+    static QPixmap pix(200, 100);
+    static QPainter painter(&pix);
+    QStyleOptionViewItem option;
+    option.state = DStyle::State_Enabled;
+    option.viewItemPosition = QStyleOptionViewItem::Beginning;
+    option.features = QStyleOptionViewItem::HasDecoration | QStyleOptionViewItem::HasDisplay;
+    option.icon = QIcon();
+    option.text = "test";
+    QModelIndex index;
+    Stub stub;
+    stub.set(ADDR(QModelIndex, isValid), stub_BaseItemDelegate_paint_isVaild);
+    m_tester->paint(&painter, option, index);
+}
+
+TEST_F(UT_BaseItemDelegate, test_paint_onlyOneNoDecoration)
+{
+    // OnlyOne 且无 decoration → 走 text-only 布局
+    static QPixmap pix(200, 100);
+    static QPainter painter(&pix);
+    QStyleOptionViewItem option;
+    option.state = DStyle::State_Enabled;
+    option.viewItemPosition = QStyleOptionViewItem::OnlyOne;
+    option.features = QStyleOptionViewItem::HasDisplay;
+    option.text = "hello";
+    QModelIndex index;
+    Stub stub;
+    stub.set(ADDR(QModelIndex, isValid), stub_BaseItemDelegate_paint_isVaild);
+    m_tester->paint(&painter, option, index);
+}
+
+TEST_F(UT_BaseItemDelegate, test_paint_invalidIndexCallsSuper)
+{
+    // 无效 index → 直接调用父类 paint 返回
+    static QPixmap pix(100, 100);
+    static QPainter painter(&pix);
+    QStyleOptionViewItem option;
+    QModelIndex index;  // 默认无效
+    m_tester->paint(&painter, option, index);
+}
+
+TEST_F(UT_BaseItemDelegate, test_helpEvent_nullEvent)
+{
+    // e 或 view 为空 → 返回 false
+    static QStyleOptionViewItem option;
+    static QModelIndex index;
+    EXPECT_FALSE(m_tester->helpEvent(nullptr, nullptr, option, index));
+}
+
+TEST_F(UT_BaseItemDelegate, test_helpEvent_nonToolTipEvent)
+{
+    // 非 ToolTip 事件 → 调用父类 helpEvent
+    static QHelpEvent he(QEvent::MouseMove, QPoint(0, 0), QPoint(0, 0));
+    static QWidget parent;
+    static QTableView view(&parent);
+    static QStyleOptionViewItem option;
+    static QModelIndex index;
+    m_tester->helpEvent(&he, &view, option, index);
+}
+
+TEST_F(UT_BaseItemDelegate, test_sizeHint_minHeight)
+{
+    // sizeHint 确保 max(36, h) 分支
+    QStyleOptionViewItem option;
+    option.rect = QRect(0, 0, 100, 20);  // 小高度
+    QModelIndex index;
+    QSize s = m_tester->sizeHint(option, index);
+    EXPECT_GE(s.height(), 36);
+}
+
