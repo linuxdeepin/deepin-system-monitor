@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -108,7 +108,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     // 检测是否执行成功
     process.start("systemctl", { "is-enabled", serviceName });
     process.waitForFinished();
-    QString checkRet = process.readAll();
+    QString checkRet = QString::fromLocal8Bit(process.readAll()).trimmed();
     if (enable && ("enabled" == checkRet)) {
         return {};
     } else if (!enable && ("disabled" == checkRet)) {
