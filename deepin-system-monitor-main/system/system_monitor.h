@@ -6,8 +6,11 @@
 #ifndef SYSTEM_MONITOR_H
 #define SYSTEM_MONITOR_H
 
+#include "dmi_cpu_info.h"
+
 #include <QObject>
 #include <QBasicTimer>
+#include <QFutureWatcher>
 
 namespace core {
 namespace process {
@@ -20,6 +23,7 @@ using namespace core::process;
 namespace core {
 namespace system {
 
+class CPUSet;
 class DeviceDB;
 class SysInfo;
 
@@ -48,8 +52,17 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private:
+    enum class DmiLoadState {
+        NotStarted,
+        Loading,
+        Loaded,
+        Failed
+    };
+
     void updateSystemMonitorInfo();
     void recountAppAndProcess();
+    void startDmiCpuInfoLoadIfNeeded();
+    void onDmiCpuInfoLoadFinished();
 
 private:
     SysInfo      *m_sysInfo;
@@ -57,6 +70,9 @@ private:
     ProcessDB    *m_processDB;
 
     QBasicTimer m_basictimer;
+    QFutureWatcher<DmiCpuInfo> *m_dmiCpuInfoWatcher {};
+    DmiLoadState m_dmiLoadState {DmiLoadState::NotStarted};
+    DmiCpuInfo (*m_dmiCpuInfoReader)() {};
 };
 
 } // namespace system

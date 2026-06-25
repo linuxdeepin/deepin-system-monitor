@@ -11,6 +11,7 @@
 #include <gtest/gtest.h>
 
 //qt
+#include <QSignalSpy>
 #include <QTimerEvent>
 
 using namespace core::system;
@@ -38,6 +39,30 @@ protected:
     SystemMonitor *m_tester;
 };
 
+static DmiCpuInfo stub_readDmiCpuInfo_for_system_monitor()
+{
+    DmiCpuInfo info;
+    info.hasCpuFrequency = true;
+    info.cpuMHz = "1600";
+    info.cpuMaxMHz = "3000";
+    return info;
+}
+
+TEST_F(UT_SystemMonitor, test_startDmiCpuInfoLoadIfNeeded_01)
+{
+    m_tester->m_dmiCpuInfoReader = stub_readDmiCpuInfo_for_system_monitor;
+    QSignalSpy spy(m_tester->m_dmiCpuInfoWatcher, &QFutureWatcher<DmiCpuInfo>::finished);
+
+    m_tester->startDmiCpuInfoLoadIfNeeded();
+    EXPECT_EQ(m_tester->m_dmiLoadState, SystemMonitor::DmiLoadState::Loading);
+
+    ASSERT_TRUE(spy.wait(1000));
+    EXPECT_EQ(m_tester->m_dmiLoadState, SystemMonitor::DmiLoadState::Loaded);
+
+    m_tester->startDmiCpuInfoLoadIfNeeded();
+    EXPECT_EQ(m_tester->m_dmiLoadState, SystemMonitor::DmiLoadState::Loaded);
+}
+
 TEST_F(UT_SystemMonitor, initTest)
 {
 }
@@ -64,8 +89,12 @@ TEST_F(UT_SystemMonitor, test_sysInfo)
 
 TEST_F(UT_SystemMonitor, test_startMonitorJob)
 {
+    m_tester->m_dmiCpuInfoReader = stub_readDmiCpuInfo_for_system_monitor;
+    QSignalSpy spy(m_tester->m_dmiCpuInfoWatcher, &QFutureWatcher<DmiCpuInfo>::finished);
+
     m_tester->startMonitorJob();
     EXPECT_TRUE(m_tester->m_basictimer.isActive() == true);
+    ASSERT_TRUE(spy.wait(1000));
 }
 
 TEST_F(UT_SystemMonitor, test_timerEvent)

@@ -5,6 +5,7 @@
 
 #include "system_monitor.h"
 
+#include "cpu_set.h"
 #include "device_db.h"
 #include "process/process_db.h"
 #include "process/desktop_entry_cache_updater.h"
@@ -12,6 +13,7 @@
 #include "sys_info.h"
 
 #include <QTimerEvent>
+#include <QtConcurrent>
 
 using namespace common::core;
 
@@ -23,8 +25,12 @@ SystemMonitor::SystemMonitor(QObject *parent)
     , m_sysInfo(new SysInfo())
     , m_deviceDB(new DeviceDB())
     , m_processDB(new ProcessDB(this))
+    , m_dmiCpuInfoReader(CPUSet::readDmiCpuInfo)
 {
     m_sysInfo->readSysInfoStatic();
+    m_dmiCpuInfoWatcher = new QFutureWatcher<DmiCpuInfo>(this);
+    connect(m_dmiCpuInfoWatcher, &QFutureWatcher<DmiCpuInfo>::finished,
+            this, &SystemMonitor::onDmiCpuInfoLoadFinished);
 }
 
 SystemMonitor::~SystemMonitor()
@@ -71,6 +77,32 @@ void SystemMonitor::startMonitorJob()
     m_basictimer.stop();
     m_basictimer.start(1000, Qt::VeryCoarseTimer, this);
     updateSystemMonitorInfo();
+    startDmiCpuInfoLoadIfNeeded();
+}
+
+void SystemMonitor::startDmiCpuInfoLoadIfNeeded()
+{
+    if (m_dmiLoadState != DmiLoadState::NotStarted)
+        return;
+
+    m_dmiLoadState = DmiLoadState::Loading;
+    auto reader = m_dmiCpuInfoReader;
+    m_dmiCpuInfoWatcher->setFuture(QtConcurrent::run([reader]() {
+        return reader();
+    }));
+}
+
+void SystemMonitor::onDmiCpuInfoLoadFinished()
+{
+    DmiCpuInfo info = m_dmiCpuInfoWatcher->result();
+    if (!info.hasData()) {
+        m_dmiLoadState = DmiLoadState::Failed;
+        return;
+    }
+
+    m_deviceDB->cpuSet()->applyDmiCpuInfo(info);
+    m_dmiLoadState = DmiLoadState::Loaded;
+    emit statInfoUpdated();
 }
 static uint cnt = 0 ;
 void SystemMonitor::timerEvent(QTimerEvent *event)

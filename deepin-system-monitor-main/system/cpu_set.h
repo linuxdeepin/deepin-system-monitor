@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,7 @@
 #define CPUSET_H
 
 #include "cpu.h"
+#include "dmi_cpu_info.h"
 #include "3rdparty/dmidecode/dmidecode.h"
 #include <QList>
 #include <QSharedDataPointer>
@@ -14,6 +15,7 @@ namespace core {
 namespace system {
 
 class CPUSetPrivate;
+
 class CPUSet
 {
     friend class Process;
@@ -70,6 +72,8 @@ public://usage
 
 public:
     void update();
+    void applyDmiCpuInfo(const DmiCpuInfo &info);
+    static DmiCpuInfo readDmiCpuInfo();
 
 private:
     void read_stats();
@@ -81,6 +85,7 @@ private:
      * @brief read_lscpu 通过lscpu读取CPU信息
      */
     void read_lscpu();
+    void applyDmiCpuInfoToCurrentInfo();
     void read_overall_info();
     QPair<float, float> read_cpu_freq_range_by_cpu7();
 
