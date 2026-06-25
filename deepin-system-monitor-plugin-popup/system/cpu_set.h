@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,7 @@
 #define CPUSET_H
 
 #include "system/cpu.h"
+#include "system/dmi_cpu_info.h"
 
 #include <QList>
 #include <QSharedDataPointer>
@@ -70,11 +71,14 @@ public://usage
 
 public:
     void update();
+    void applyDmiCpuInfo(const DmiCpuInfo &info);
+    static DmiCpuInfo readDmiCpuInfo();
 
 private:
     void read_stats();
 
     void read_overall_info();
+    void applyDmiCpuInfoToCurrentInfo();
 
 private:
     QSharedDataPointer<CPUSetPrivate> d;

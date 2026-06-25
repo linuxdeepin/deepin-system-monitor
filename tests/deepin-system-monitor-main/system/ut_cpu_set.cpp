@@ -7,6 +7,7 @@
 #include "system/cpu_set.h"
 #include "system/cpu.h"
 #include "system/private/cpu_set_p.h"
+#include "common/common.h"
 
 //gtest
 #include "stub.h"
@@ -323,4 +324,36 @@ TEST_F(UT_CPUSet, test_getUsageTotalDelta_02)
     m_tester->d->cpusageTotal[kCurrentStat] = 0;
     qulonglong totalDelta = m_tester->getUsageTotalDelta();
     EXPECT_NE(totalDelta, 0);
+}
+
+TEST_F(UT_CPUSet, test_applyDmiCpuInfo_01)
+{
+    DmiCpuInfo info;
+    info.hasCpuFrequency = true;
+    info.cpuMHz = "1800";
+    info.cpuMaxMHz = "3200";
+    info.cacheInfo.insert("L1d cache", "64 KiB");
+    info.cacheInfo.insert("L2 cache", "2 MiB");
+
+    m_tester->applyDmiCpuInfo(info);
+
+    EXPECT_EQ(m_tester->curFreq(), common::format::formatHz(1800, common::format::MHz));
+    EXPECT_EQ(m_tester->maxFreq(), common::format::formatHz(3200, common::format::MHz));
+    EXPECT_EQ(m_tester->l1dCache(), "64 KiB");
+    EXPECT_EQ(m_tester->l2Cache(), "2 MiB");
+}
+
+TEST_F(UT_CPUSet, test_DmiCpuInfo_hasData_01)
+{
+    DmiCpuInfo emptyInfo;
+    EXPECT_FALSE(emptyInfo.hasData());
+
+    DmiCpuInfo freqInfo;
+    freqInfo.hasCpuFrequency = true;
+    freqInfo.cpuMHz = "1200";
+    EXPECT_TRUE(freqInfo.hasData());
+
+    DmiCpuInfo cacheInfo;
+    cacheInfo.cacheInfo.insert("L3 cache", "8 MiB");
+    EXPECT_TRUE(cacheInfo.hasData());
 }

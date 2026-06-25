@@ -63,6 +63,13 @@ public:
         , m_usage(std::make_shared<cpu_usage_t>(*(other.m_usage)))
         , m_info(other.m_info)
     {
+        m_lscpuCacheInfoRead = other.m_lscpuCacheInfoRead;
+        m_hasDmiCpuInfo = other.m_hasDmiCpuInfo;
+        m_dmiHasCpuFrequency = other.m_dmiHasCpuFrequency;
+        m_dmiCpuMHz = other.m_dmiCpuMHz;
+        m_dmiCpuMaxMHz = other.m_dmiCpuMaxMHz;
+        m_dmiCacheInfo = other.m_dmiCacheInfo;
+
         for (auto &stat : other.m_statDB) {
             if (stat) {
                 auto cp = std::make_shared<cpu_stat_t>(*stat);
@@ -104,6 +111,12 @@ private:
     friend class CPUSet;
 
     QMap<QString, QString> m_info;   //overall info
+    bool m_lscpuCacheInfoRead {false};
+    bool m_hasDmiCpuInfo {false};
+    bool m_dmiHasCpuFrequency {false};
+    QString m_dmiCpuMHz;
+    QString m_dmiCpuMaxMHz;
+    QMap<QString, QString> m_dmiCacheInfo;
     QList<CPUInfo> m_infos;         //per cpu info
 };
 

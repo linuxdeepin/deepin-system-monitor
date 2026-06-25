@@ -486,7 +486,39 @@ void CPUSet::read_overall_info()
             d->m_info[keyValue.value(0).trimmed()] = keyValue.value(1).trimmed();
     }
 
+    applyDmiCpuInfoToCurrentInfo();
     d->m_infos = infos;
+}
+
+DmiCpuInfo CPUSet::readDmiCpuInfo()
+{
+    return DmiCpuInfo();
+}
+
+void CPUSet::applyDmiCpuInfo(const DmiCpuInfo &info)
+{
+    d->m_hasDmiCpuInfo = info.hasData();
+    d->m_dmiHasCpuFrequency = info.hasCpuFrequency;
+    d->m_dmiCpuMHz = info.cpuMHz;
+    d->m_dmiCpuMaxMHz = info.cpuMaxMHz;
+    d->m_dmiCacheInfo = info.cacheInfo;
+
+    applyDmiCpuInfoToCurrentInfo();
+}
+
+void CPUSet::applyDmiCpuInfoToCurrentInfo()
+{
+    if (!d->m_hasDmiCpuInfo)
+        return;
+
+    if (d->m_dmiHasCpuFrequency && !d->m_dmiCpuMHz.isEmpty())
+        d->m_info.insert("CPU MHz", d->m_dmiCpuMHz);
+
+    if (d->m_dmiHasCpuFrequency && !d->m_dmiCpuMaxMHz.isEmpty())
+        d->m_info.insert("CPU max MHz", d->m_dmiCpuMaxMHz);
+
+    for (auto it = d->m_dmiCacheInfo.cbegin(); it != d->m_dmiCacheInfo.cend(); ++it)
+        d->m_info.insert(it.key(), it.value());
 }
 
 qulonglong CPUSet::getUsageTotalDelta() const

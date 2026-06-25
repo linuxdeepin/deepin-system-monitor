@@ -38,10 +38,20 @@ using namespace common::alloc;
 using namespace common::init;
 using namespace DDLog;
 
-static bool read_dmi_cache = false;
-
 namespace core {
 namespace system {
+
+static bool waitForProcessFinished(QProcess &process)
+{
+    if (process.waitForFinished(3000))
+        return true;
+
+    if (process.state() != QProcess::NotRunning) {
+        process.kill();
+        process.waitForFinished(1000);
+    }
+    return false;
+}
 
 /**
    @brief 获取首个有效CPU的当前频率，参考 util-linux 中 lscpu 读取 /proc/cpuinfo 的首个 cpu 的 mhz 信息。
@@ -660,32 +670,35 @@ void CPUSet::read_overall_info()
     d->m_infos = infos;
 }
 
-void CPUSet::read_dmi_cache_info()
+DmiCpuInfo CPUSet::readDmiCpuInfo()
 {
-    if (read_dmi_cache) {
-        return;
+    DmiCpuInfo info;
+
+    char *const cmd[] = {"dmidecode", "-t", "4"};
+    get_cpuinfo_from_dmi(3, cmd);
+    if (CurrentCPUFreq > 0) {
+        info.hasCpuFrequency = true;
+        info.cpuMHz = QString::number(CurrentCPUFreq);
+        info.cpuMaxMHz = QString::number(MaxCPUFreq);
     }
 
-    read_dmi_cache = true;
     QProcess process;
-    //(specialComType=0)如果不是特殊机型直接返回;
-    //(specialComType<=-1)如果是未知类型，则使用之前的判断;
-    //(specialComType>=1)如果是hw机型,略过之前的判断
     qCInfo(app) << "common::specialComType value is:" << specialComType;
-    if (specialComType == 0) {
-        return;
-    } else if (specialComType <= -1) {
+    if (specialComType == 0)
+        return info;
+
+    if (specialComType <= -1) {
         qCInfo(app) << "use dmidecode check board type!";
         process.start("dmidecode", QStringList() << "-s"
                                                  << "system-product-name");
-        process.waitForFinished(-1);
+        if (!waitForProcessFinished(process))
+            return info;
         QString spnInfo = process.readAllStandardOutput();
         if (!spnInfo.contains("KLVV", Qt::CaseInsensitive) && !spnInfo.contains("L540", Qt::CaseInsensitive) && !spnInfo.contains("KLVU", Qt::CaseInsensitive)
             && !spnInfo.contains("PGUV", Qt::CaseInsensitive) && !spnInfo.contains("PGUW", Qt::CaseInsensitive) && !spnInfo.contains("W585", Qt::CaseInsensitive)) {
-
             process.start("dmidecode");
-            process.waitForStarted();
-            process.waitForFinished();
+            if (!waitForProcessFinished(process))
+                return info;
             QString result = process.readAll();
             QStringList lines = result.split('\n');
             for (const QString &line : lines) {
@@ -694,18 +707,18 @@ void CPUSet::read_dmi_cache_info()
                     break;
                 }
             }
-            if (!result.contains("PWC30", Qt::CaseInsensitive)   //w525
-                && !result.contains("PGUX", Qt::CaseInsensitive)) {
+            if (!result.contains("PWC30", Qt::CaseInsensitive) && !result.contains("PGUX", Qt::CaseInsensitive)) {
                 process.close();
-                return;
+                return info;
             }
         }
     }
-    qCInfo(app) << "Current is special computer type!";
 
+    qCInfo(app) << "Current is special computer type!";
     process.start("dmidecode", QStringList() << "-t"
                                              << "cache");
-    process.waitForFinished(-1);
+    if (!waitForProcessFinished(process))
+        return info;
     QString cacheinfo = process.readAllStandardOutput();
     QStringList caches = cacheinfo.split("\n\n", QString::SkipEmptyParts);
     process.close();
@@ -715,7 +728,6 @@ void CPUSet::read_dmi_cache_info()
         if (item.isEmpty())
             continue;
         QMap<QString, QString> mapInfo;
-
         QStringList lines = item.split("\n");
         QString lasKey;
         foreach (const QString &line, lines) {
@@ -747,9 +759,8 @@ void CPUSet::read_dmi_cache_info()
         QString typeStr = strList.last();
         if (typeStr.compare("KB", Qt::CaseInsensitive) == 0)
             typeStr = "KiB";
-        else if (typeStr.compare("MB", Qt::CaseInsensitive) == 0) {
+        else if (typeStr.compare("MB", Qt::CaseInsensitive) == 0)
             typeStr = "MiB";
-        }
         int size = strList.first().toInt();
         if (item["Socket Designation"].contains("L1")) {
             int l1Size = size / 2;
@@ -757,26 +768,34 @@ void CPUSet::read_dmi_cache_info()
                 l1Size /= 1024;
                 typeStr = "MiB";
             }
-            d->m_info.insert("L1d cache", QString::number(l1Size) + " " + typeStr);
-            d->m_info.insert("L1i cache", QString::number(l1Size) + " " + typeStr);
+            info.cacheInfo.insert("L1d cache", QString::number(l1Size) + " " + typeStr);
+            info.cacheInfo.insert("L1i cache", QString::number(l1Size) + " " + typeStr);
         } else {
             if (size >= 1024 && typeStr == "KiB") {
                 size /= 1024;
                 typeStr = "MiB";
             }
-            if (item["Socket Designation"].contains("L2")) {
-                d->m_info.insert("L2 cache", QString::number(size) + " " + typeStr);
-            } else if (item["Socket Designation"].contains("L3")) {
-                d->m_info.insert("L3 cache", QString::number(size) + " " + typeStr);
-            }
+            if (item["Socket Designation"].contains("L2"))
+                info.cacheInfo.insert("L2 cache", QString::number(size) + " " + typeStr);
+            else if (item["Socket Designation"].contains("L3"))
+                info.cacheInfo.insert("L3 cache", QString::number(size) + " " + typeStr);
         }
     }
+
+    return info;
+}
+
+void CPUSet::read_dmi_cache_info()
+{
+    return;
 }
 
 void CPUSet::read_cache_from_lscpu_cmd()
 {
-    if (read_dmi_cache)
-        return;   // 不要覆盖 dmidecode 获取的缓存信息
+    if (d->m_lscpuCacheInfoRead)
+        return;
+
+    d->m_lscpuCacheInfoRead = true;
 
     QProcess process;
     QString command = "lscpu | grep cache";
@@ -981,12 +1000,7 @@ void CPUSet::read_lscpu()
             }
             d->m_info.insert("CPU MHz", nowMHz);
         } else {
-            if (CurrentCPUFreq > 0) {
-                d->m_info.insert("CPU MHz", QString::number(CurrentCPUFreq));
-                d->m_info.insert("CPU max MHz", QString::number(MaxCPUFreq));
-            } else {
-                d->m_info.insert("CPU MHz", "-");
-            }
+            d->m_info.insert("CPU MHz", "-");
         }
         if (ct->bogomips) {
             d->m_info.insert("BogoMIPS", ct->bogomips);
@@ -1067,6 +1081,7 @@ void CPUSet::read_lscpu()
     if (!d->m_info.contains("L3 cache")) {
         d->m_info.insert("L3 cache", "-");
     }
+    applyDmiCpuInfoToCurrentInfo();
     for (size_t i = 0; i < cxt->necaches; i++) {
         struct lscpu_cache *ca = &cxt->ecaches[i];
         if (ca->size == 0)
@@ -1083,6 +1098,32 @@ void CPUSet::read_lscpu()
         }
     }
     lscpu_free_context(cxt);
+}
+
+void CPUSet::applyDmiCpuInfo(const DmiCpuInfo &info)
+{
+    d->m_hasDmiCpuInfo = info.hasData();
+    d->m_dmiHasCpuFrequency = info.hasCpuFrequency;
+    d->m_dmiCpuMHz = info.cpuMHz;
+    d->m_dmiCpuMaxMHz = info.cpuMaxMHz;
+    d->m_dmiCacheInfo = info.cacheInfo;
+
+    applyDmiCpuInfoToCurrentInfo();
+}
+
+void CPUSet::applyDmiCpuInfoToCurrentInfo()
+{
+    if (!d->m_hasDmiCpuInfo)
+        return;
+
+    if (d->m_dmiHasCpuFrequency && !d->m_dmiCpuMHz.isEmpty())
+        d->m_info.insert("CPU MHz", d->m_dmiCpuMHz);
+
+    if (d->m_dmiHasCpuFrequency && !d->m_dmiCpuMaxMHz.isEmpty())
+        d->m_info.insert("CPU max MHz", d->m_dmiCpuMaxMHz);
+
+    for (auto it = d->m_dmiCacheInfo.cbegin(); it != d->m_dmiCacheInfo.cend(); ++it)
+        d->m_info.insert(it.key(), it.value());
 }
 
 qulonglong CPUSet::getUsageTotalDelta() const
