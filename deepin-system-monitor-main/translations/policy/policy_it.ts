@@ -31,5 +31,15 @@
 			<source>Set service startup type</source>
 			<translation>Imposta tipo di avvio del servizio</translation>
 		</message>
+		<message>
+			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!message" line="0"/>
+			<source>Logging out other users is required to change process priority</source>
+			<translation>È necessario disconnettere gli altri utenti per modificare la priorità del processo</translation>
+		</message>
+		<message>
+			<location filename="com.deepin.pkexec.deepin-system-monitor.logout!description" line="0"/>
+			<source>Logout other users</source>
+			<translation>Disconnetti altri utenti</translation>
+		</message>
 	</context>
 </TS>
