@@ -87,8 +87,13 @@ static inline void printStacktrace(int signum)
     // raise origin signal
     raise(signum);
 
-    QString cmd = R"(sleep 0.1 && dbus-send --session --print-reply --dest=com.deepin.SessionManager /com/deepin/StartManager com.deepin.StartManager.Launch string:"/usr/share/applications/deepin-system-monitor.desktop";)";
-    QProcess::startDetached("bash", { "-c", cmd });
+    QStringList arguments;
+    arguments << "--session" << "--print-reply"
+              << "--dest=com.deepin.SessionManager"
+              << "/com/deepin/StartManager"
+              << "com.deepin.StartManager.Launch"
+              << "string:/usr/share/applications/deepin-system-monitor.desktop";
+    QProcess::startDetached("dbus-send", arguments);
 }
 
 /**
