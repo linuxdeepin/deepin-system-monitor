@@ -86,7 +86,16 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     // 判断服务是否存在
     QProcess listPorcess;
     listPorcess.start("systemctl", { "list-unit-files", "--type=service", "--no-pager" });
-    listPorcess.waitForFinished();
+    if (!listPorcess.waitForStarted()) {
+        qCWarning(app) << "Failed to start systemctl list-unit-files";
+        return QString(strerror(EIO));
+    }
+    if (!listPorcess.waitForFinished(30000)) {
+        qCWarning(app) << "systemctl list-unit-files timed out";
+        listPorcess.kill();
+        listPorcess.waitForFinished();
+        return QString(strerror(EIO));
+    }
     QByteArray serviceList = listPorcess.readAll();
     if (!serviceList.contains(serviceName.toUtf8())) {
         qWarning() << qPrintable("Service not exists");
@@ -102,12 +111,30 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
     // 执行设置
     QProcess process;
     process.start("systemctl", { enable ? "enable" : "disable", serviceName });
-    process.waitForFinished();
+    if (!process.waitForStarted()) {
+        qCWarning(app) << "Failed to start systemctl enable/disable";
+        return QString(strerror(EIO));
+    }
+    if (!process.waitForFinished(30000)) {
+        qCWarning(app) << "systemctl enable/disable timed out";
+        process.kill();
+        process.waitForFinished();
+        return QString(strerror(EIO));
+    }
     QString errorRet = process.readAll();
 
     // 检测是否执行成功
     process.start("systemctl", { "is-enabled", serviceName });
-    process.waitForFinished();
+    if (!process.waitForStarted()) {
+        qCWarning(app) << "Failed to start systemctl is-enabled";
+        return QString(strerror(EIO));
+    }
+    if (!process.waitForFinished(30000)) {
+        qCWarning(app) << "systemctl is-enabled timed out";
+        process.kill();
+        process.waitForFinished();
+        return QString(strerror(EIO));
+    }
     QString checkRet = QString::fromLocal8Bit(process.readAll()).trimmed();
     if (enable && ("enabled" == checkRet)) {
         return {};
