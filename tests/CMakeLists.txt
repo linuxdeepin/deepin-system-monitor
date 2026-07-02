@@ -626,6 +626,7 @@ target_include_directories(${PROJECT_NAME_TEST}
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/include
         ${CMAKE_HOME_DIRECTORY}/${PROJECT_NAME}-main/3rdparty/libsmartcols/src
+        ${CMAKE_HOME_DIRECTORY}/deepin-system-monitor-system-server/src
         )
 
 target_link_libraries(${PROJECT_NAME_TEST}
