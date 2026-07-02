@@ -4,6 +4,7 @@
 
 #include "systemdbusserver.h"
 #include "ddlog.h"
+#include "service_name_validator.h"
 
 #include <QCoreApplication>
 #include <QDBusMessage>
@@ -77,8 +78,8 @@ QString SystemDBusServer::setServiceEnable(const QString &serviceName, bool enab
  */
 QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool enable)
 {
-    // 不允许包含';' ' '字符，服务名称长度同样限制
-    if (serviceName.isEmpty() || (serviceName.size() > SHRT_MAX) || serviceName.contains(QRegExp("[; ]"))) {
+    // 服务名白名单校验：拦截空串、超长、控制字符（制表符/换行等）及缺少 .service 后缀
+    if (!isValidServiceName(serviceName)) {
         qWarning() << qPrintable("Invalid service name");
         return QString(strerror(EINVAL));
     }
@@ -97,7 +98,7 @@ QString SystemDBusServer::setServiceEnableImpl(const QString &serviceName, bool 
         return QString(strerror(EIO));
     }
     QByteArray serviceList = listPorcess.readAll();
-    if (!serviceList.contains(serviceName.toUtf8())) {
+    if (!serviceExistsInList(serviceName, serviceList)) {
         qWarning() << qPrintable("Service not exists");
         return QString(strerror(EINVAL));
     }
