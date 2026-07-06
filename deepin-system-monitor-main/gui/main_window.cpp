@@ -87,6 +87,15 @@ void MainWindow::onLoadStatusChanged(bool loading)
     titlebar()->setMenuDisabled(loading);
 }
 
+UserPageWidget *MainWindow::ensureUserPage()
+{
+    if (!m_accountProcPage) {
+        m_accountProcPage = new UserPageWidget(m_pages);
+        m_pages->addWidget(m_accountProcPage);
+    }
+    return m_accountProcPage;
+}
+
 // initialize ui components
 void MainWindow::initUI()
 {
@@ -179,12 +188,13 @@ void MainWindow::initUI()
 
     m_procPage = new ProcessPageWidget(m_pages);
     m_svcPage = new SystemServicePageWidget(m_pages);
-    m_accountProcPage = new UserPageWidget(m_pages);
+    // user 页改为首次点击 user tab 时懒创建（ensureUserPage），
+    // 避免其构造链（AccountsWidget -> AccountsInfoModel）里的
+    // accounts/login1 DBus 进入启动路径。
 
     m_pages->setContentsMargins(0, 0, 0, 0);
     m_pages->addWidget(m_procPage);
     m_pages->addWidget(m_svcPage);
-    m_pages->addWidget(m_accountProcPage);
     m_tbShadow->raise();
 
     installEventFilter(this);
@@ -216,6 +226,7 @@ void MainWindow::initConnections()
     connect(m_toolbar, &Toolbar::accountProcTabButtonClicked, this, [=]() {
         PERF_PRINT_BEGIN("POINT-05", QString("switch(%1->%2)").arg(DApplication::translate("Title.Bar.Switch", "Users")).arg(DApplication::translate("Title.Bar.Switch", "Services")));
         m_toolbar->clearSearchText();
+        ensureUserPage();
         m_pages->setCurrentWidget(m_accountProcPage);
         m_accountProcPage->onUserChanged();
         m_tbShadow->raise();

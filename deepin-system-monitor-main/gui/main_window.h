@@ -127,6 +127,12 @@ private:
     ProcessPageWidget *m_procPage = nullptr;
     SystemServicePageWidget *m_svcPage = nullptr;
     UserPageWidget *m_accountProcPage = nullptr;
+
+    /**
+     * @brief 首次点击 user tab 时懒创建 user 页，避免 accounts/login1 DBus 进入启动路径
+     * @return user 页（调用后永不为 null）
+     */
+    UserPageWidget *ensureUserPage();
     bool m_initLoad = false;
     DShadowLine *m_tbShadow  = nullptr;
     QWidget *m_focusedWidget = nullptr;

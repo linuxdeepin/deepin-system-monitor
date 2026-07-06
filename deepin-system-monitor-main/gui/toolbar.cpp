@@ -73,9 +73,18 @@ Toolbar::Toolbar(QWidget *parent)
     m_accountProcBtn->installEventFilter(this);
 
     // emit button clicked signal when process or service tab button toggled
-    connect(m_procBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT procTabButtonClicked(); });
-    connect(m_svcBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT serviceTabButtonClicked(); });
-    connect(m_accountProcBtn, &DButtonBoxButton::toggled, this, [ = ](bool) { Q_EMIT accountProcTabButtonClicked(); });
+    connect(m_procBtn, &DButtonBoxButton::toggled, this, [ = ](bool checked) {
+        if (checked)
+            Q_EMIT procTabButtonClicked();
+    });
+    connect(m_svcBtn, &DButtonBoxButton::toggled, this, [ = ](bool checked) {
+        if (checked)
+            Q_EMIT serviceTabButtonClicked();
+    });
+    connect(m_accountProcBtn, &DButtonBoxButton::toggled, this, [ = ](bool checked) {
+        if (checked)
+            Q_EMIT accountProcTabButtonClicked();
+    });
     // search text editor instance
     searchEdit = new DSearchEdit(this);
     // set the search edit text max length

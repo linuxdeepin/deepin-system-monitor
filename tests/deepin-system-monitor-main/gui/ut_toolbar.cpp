@@ -116,6 +116,30 @@ TEST_F(UT_Toolbar, test_setProcessButtonChecked_01)
     m_tester->setProcessButtonChecked(true);
 }
 
+TEST_F(UT_Toolbar, test_tab_uncheck_does_not_emit_clicked_signal)
+{
+    auto buttons = m_tester->findChildren<DButtonBoxButton *>();
+    ASSERT_GE(buttons.size(), 2);
+
+    DButtonBoxButton *checkedButton = nullptr;
+    DButtonBoxButton *uncheckedButton = nullptr;
+    for (auto *button : buttons) {
+        if (button->isChecked()) {
+            checkedButton = button;
+        } else if (!uncheckedButton) {
+            uncheckedButton = button;
+        }
+    }
+
+    ASSERT_NE(checkedButton, nullptr);
+    ASSERT_NE(uncheckedButton, nullptr);
+
+    QSignalSpy processSpy(m_tester, &Toolbar::procTabButtonClicked);
+    uncheckedButton->setChecked(true);
+
+    EXPECT_EQ(processSpy.count(), 0);
+}
+
 TEST_F(UT_Toolbar, test_focusInput_01)
 {
     m_tester->focusInput();
@@ -136,4 +160,3 @@ TEST_F(UT_Toolbar, test_clearSearchText_01)
 {
     m_tester->clearSearchText();
 }
-
