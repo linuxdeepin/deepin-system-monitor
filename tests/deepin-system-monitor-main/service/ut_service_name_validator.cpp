@@ -21,6 +21,10 @@ TEST_F(UT_ServiceNameValidator, ValidNames)
     EXPECT_TRUE(isValidServiceName("getty@.service"));
     EXPECT_TRUE(isValidServiceName("getty@tty1.service"));
     EXPECT_TRUE(isValidServiceName("a-b_c.d@e.service"));
+    EXPECT_TRUE(isValidServiceName("foo\\x20bar.service"));
+    EXPECT_TRUE(isValidServiceName("foo\\x3bbar.service"));
+    EXPECT_TRUE(isValidServiceName("foo\\x5cbar.service"));
+    EXPECT_TRUE(isValidServiceName("dbus.s\\x65rvice.service"));
 }
 
 TEST_F(UT_ServiceNameValidator, InvalidEmptyAndSuffix)
@@ -36,8 +40,18 @@ TEST_F(UT_ServiceNameValidator, InvalidControlChars)
     EXPECT_FALSE(isValidServiceName("db us.service"));  // 空格
     EXPECT_FALSE(isValidServiceName("db\tus.service")); // 制表符
     EXPECT_FALSE(isValidServiceName("db\nus.service"));  // 换行
+    EXPECT_FALSE(isValidServiceName("dbus.service\n"));  // 尾部换行
+    EXPECT_FALSE(isValidServiceName("dbus.service\r"));  // 尾部回车
     EXPECT_FALSE(isValidServiceName("db;us.service"));  // 分号
     EXPECT_FALSE(isValidServiceName("dbus;"));
+    EXPECT_FALSE(isValidServiceName("db/us.service"));   // 路径分隔符
+    EXPECT_FALSE(isValidServiceName("\\x2f.service"));   // 转义路径分隔符
+    EXPECT_FALSE(isValidServiceName("\\x2F.service"));   // 转义路径分隔符
+    EXPECT_FALSE(isValidServiceName("db\\x2fus.service"));
+    EXPECT_FALSE(isValidServiceName("db\\us.service"));  // 非 systemd 转义的反斜杠
+    EXPECT_FALSE(isValidServiceName("db\\\\us.service")); // 非 systemd 转义的反斜杠
+    EXPECT_FALSE(isValidServiceName("db\\xZZ.service")); // 非法 systemd 转义
+    EXPECT_FALSE(isValidServiceName("dbus.\\x73ervice")); // 后缀必须是字面 .service
 }
 
 TEST_F(UT_ServiceNameValidator, InvalidTooLong)
@@ -63,6 +77,15 @@ TEST_F(UT_ServiceNameValidator, ExistsExactMatch)
     EXPECT_TRUE(serviceExistsInList("dbus.service", kSampleList));
     EXPECT_TRUE(serviceExistsInList("cron.service", kSampleList));
     EXPECT_TRUE(serviceExistsInList("getty@.service", kSampleList));
+}
+
+TEST_F(UT_ServiceNameValidator, ExistsWithTabSeparatedColumns)
+{
+    const QByteArray list =
+        "UNIT FILE\tSTATE\tPRESET\n"
+        "dbus.service\tstatic\t-\n";
+
+    EXPECT_TRUE(serviceExistsInList("dbus.service", list));
 }
 
 TEST_F(UT_ServiceNameValidator, NotExistsSubstringOrSuffix)
