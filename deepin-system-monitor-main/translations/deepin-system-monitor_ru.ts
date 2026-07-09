@@ -611,7 +611,7 @@
         <source>Ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Завершение этого процесса может привести к потере данных.
-Вы уверены, что хотите продолжить?</translation>
+Уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="530"/>
@@ -625,14 +625,14 @@ Are you sure you want to continue?</source>
         <source>Force ending this process may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Принудительное завершение этого процесса может привести к потере данных.
-Вы уверены, что хотите продолжить?</translation>
+Уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="531"/>
         <source>Force ending this application may cause data loss.
 Are you sure you want to continue?</source>
         <translation>Принудительное завершение этого приложения может привести к потере данных.
-Вы уверены, что хотите продолжить?</translation>
+Уверены, что хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../gui/process_page_widget.cpp" line="539"/>
@@ -1465,7 +1465,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
-        <translation>Редактировать учётную запись</translation>
+        <translation>Править учётную запись</translation>
     </message>
 </context>
 <context>
