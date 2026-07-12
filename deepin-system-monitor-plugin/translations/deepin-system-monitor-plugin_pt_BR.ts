@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt_BR">
 <context>
     <name>Plugin.DisplayName</name>
     <message>
         <location filename="../gui/monitor_plugin.cpp" line="45"/>
         <source>System Monitor</source>
-        <translation>Monitor de Sistema</translation>
+        <translation>Monitor do Sistema</translation>
     </message>
 </context>
 <context>
