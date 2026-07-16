@@ -143,9 +143,11 @@ QString ProcessName::getDisplayName(Process *proc)
             return QString(joined);
         }
 
-        if (proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE") && proc->environ().contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && proc->environ()["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == proc->pid()) {
+        QHash<QString, QString> allEnviron = proc->environ();
+        if (allEnviron.contains("GIO_LAUNCHED_DESKTOP_FILE") && ((allEnviron.contains("XDG_DATA_DIRS") && !allEnviron["XDG_DATA_DIRS"].isEmpty())
+                                                                 || (allEnviron.contains("GIO_LAUNCHED_DESKTOP_FILE_PID") && allEnviron["GIO_LAUNCHED_DESKTOP_FILE_PID"].toInt() == proc->pid()))) {
             // has gio info set in environment
-            auto desktopFile = proc->environ()["GIO_LAUNCHED_DESKTOP_FILE"];
+            auto desktopFile = allEnviron["GIO_LAUNCHED_DESKTOP_FILE"];
             auto entry = desktopEntryCache->entryWithDesktopFile(desktopFile);
             if (entry && !entry->displayName.isEmpty())
                 return entry->displayName;
