@@ -114,6 +114,8 @@ public:
     qulonglong recvBytes() const;
     qulonglong sentBytes() const;
 
+    void detach();
+
     void readProcessInfo();
     void readProcessSimpleInfo();
     void readProcessVariableInfo();
