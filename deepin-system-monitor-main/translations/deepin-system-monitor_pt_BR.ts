@@ -588,7 +588,7 @@
         <location filename="../gui/dialog/error_dialog.cpp" line="73"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -1289,7 +1289,7 @@ Continuar?</translation>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="38"/>
         <source>OK</source>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../gui/service_name_sub_input_dialog.cpp" line="39"/>
