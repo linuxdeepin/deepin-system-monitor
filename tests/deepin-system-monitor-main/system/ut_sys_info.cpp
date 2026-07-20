@@ -60,6 +60,8 @@ TEST_F(UT_SysInfo, test_readSockStat)
 
 TEST_F(UT_SysInfo, test_readSysInfo)
 {
+    // version is populated by readSysInfoStatic() (readSysInfo() only refreshes dynamic fields)
+    m_tester->readSysInfoStatic();
     EXPECT_FALSE(m_tester->d->version.isEmpty());
 }
 
