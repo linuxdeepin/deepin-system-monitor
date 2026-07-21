@@ -1168,7 +1168,7 @@ Continuar?</translation>
     <message>
         <location filename="../model/process_table_model.h" line="22"/>
         <source>Memory</source>
-        <translation>Memória</translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="32"/>
