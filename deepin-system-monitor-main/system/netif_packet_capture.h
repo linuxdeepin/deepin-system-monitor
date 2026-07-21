@@ -90,6 +90,8 @@ private:
     pcap_if_t *m_alldevs {};
     //判断网卡是否变更定时器
     QTimer *m_timerChangeDev {};
+    // last time stale sock io stat cleanup ran
+    time_t m_lastSockIOCleanup {};
     friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
 };

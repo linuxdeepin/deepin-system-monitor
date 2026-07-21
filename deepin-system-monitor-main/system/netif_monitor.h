@@ -53,6 +53,16 @@ public:
     void startNetmonitorJob();
 
     void handleNetData();
+
+    /**
+     * @brief Remove stale socket io stat entries whose inodes are no longer
+     *        present in the current kernel socket table, preventing unbounded
+     *        growth of m_sockIOStatMap when entries are no longer consumed
+     *        by getSockIOStatByInode.
+     * @param activeSockStats Current snapshot of open sockets from
+     *        /proc/net/tcp(6) and /proc/net/udp(6)
+     */
+    void cleanupStaleSockIOStats(const SockStatMap &activeSockStats);
 public:
     /**
      * @brief Get socket io stat data with specified inode (thread safe accessor)
@@ -70,8 +80,6 @@ public:
         // check stat data existence
         if (m_sockIOStatMap.contains(ino)) {
             stat = m_sockIOStatMap[ino];
-            // remove stat data from cache
-            m_sockIOStatMap.remove(ino);
             ok = true;
         }
 
