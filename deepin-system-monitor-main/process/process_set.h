@@ -29,6 +29,8 @@ struct RecentProcStage {
     qulonglong read_bytes = 0; // disk read bytes
     qulonglong write_bytes = 0; // disk write bytes
     qulonglong cancelled_write_bytes = 0;
+    qulonglong recv_bytes = 0; // network received bytes (cumulative)
+    qulonglong sent_bytes = 0; // network sent bytes (cumulative)
     timeval uptime = {0, 0};
 };
 

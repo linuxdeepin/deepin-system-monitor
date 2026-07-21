@@ -143,8 +143,14 @@ public:
         auto rtime = rhs->ts.tv_sec + rhs->ts.tv_usec * 1. / 1000000;
         auto interval = (rtime > ltime) ? (rtime - ltime) : 1;
 
-        auto inBps = rhs->data.inBytes / interval;
-        auto outBps = rhs->data.outBytes / interval;
+        // calculate rate using delta between current and previous samples
+        // (same approach as diskiops), so that the consume-once behavior of
+        // getSockIOStatByInode is no longer required
+        auto rdiff = (rhs->data.inBytes < lhs->data.inBytes) ? 0 : (rhs->data.inBytes - lhs->data.inBytes);
+        auto wdiff = (rhs->data.outBytes < lhs->data.outBytes) ? 0 : (rhs->data.outBytes - lhs->data.outBytes);
+
+        auto inBps = qreal(rdiff) / interval;
+        auto outBps = qreal(wdiff) / interval;
 
         return {inBps, outBps};
     }
