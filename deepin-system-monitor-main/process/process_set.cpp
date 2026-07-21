@@ -79,6 +79,8 @@ void ProcessSet::scanProcess()
         procstage->read_bytes = iter->readBytes();
         procstage->write_bytes = iter->writeBytes();
         procstage->cancelled_write_bytes = iter->cancelledWriteBytes();
+        procstage->recv_bytes = iter->recvBytes();
+        procstage->sent_bytes = iter->sentBytes();
         procstage->uptime = iter->procuptime();
         m_recentProcStage[iter->pid()] = procstage;
     }
