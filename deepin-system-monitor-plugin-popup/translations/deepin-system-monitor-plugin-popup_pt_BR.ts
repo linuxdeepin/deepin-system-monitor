@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt_BR">
 <context>
     <name>Common.Search</name>
     <message>
@@ -50,13 +48,13 @@
     <message>
         <location filename="../gui/memory_widget.cpp" line="178"/>
         <source>Memory</source>
-        <translation>Memória</translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
         <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
-        <translation>SWAP</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="211"/>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="22"/>
         <source>Memory</source>
-        <translation>Memória</translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="23"/>
