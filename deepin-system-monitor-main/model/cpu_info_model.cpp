@@ -13,6 +13,13 @@
 #include "ddlog.h"
 
 #include <QApplication>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QRegExp>
+#else
+#include <QRegularExpression>
+#endif
+
+#include <algorithm>
 
 using namespace DDLog;
 
@@ -101,8 +108,32 @@ QList<qreal> CPUInfoModel::cpuPercentList() const
 {
     qCDebug(app) << "CPUInfoModel::cpuPercentList()";
     QList<qreal> percentList;
-    const auto &usageSampleList = m_singleUsageSample.values();
-    for (const auto &sample : usageSampleList) {
+
+    // m_singleUsageSample is keyed by "cpuN"; QMap orders keys by byte-wise
+    // lexicographic order, so with 10+ cores "cpu10" sorts before "cpu2",
+    // mismatching the numeric order used by top / /proc/stat. Sort by N
+    // numerically so the returned index aligns with the CPU number.
+    QList<QByteArray> names = m_singleUsageSample.keys();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // Qt5: QRegExp is deprecated but available; use indexIn + cap to extract digits
+    static QRegExp re(R"(\d+)");
+    std::sort(names.begin(), names.end(), [](const QByteArray &a, const QByteArray &b) {
+        re.indexIn(QString::fromLatin1(a));
+        int na = re.cap(0).toInt();
+        re.indexIn(QString::fromLatin1(b));
+        int nb = re.cap(0).toInt();
+        return na < nb;
+    });
+#else
+    // Qt6: QRegularExpression, match + captured
+    static const QRegularExpression re(R"(\d+)");
+    std::sort(names.begin(), names.end(), [](const QByteArray &a, const QByteArray &b) {
+        return re.match(QString::fromLatin1(a)).captured(0).toInt()
+             < re.match(QString::fromLatin1(b)).captured(0).toInt();
+    });
+#endif
+    for (const auto &name : names) {
+        const auto &sample = m_singleUsageSample.value(name);
         const auto &pair = sample->recentSamplePair();
         percentList << CPUUsageSampleFrame::cpupc(pair.first, pair.second);
     }

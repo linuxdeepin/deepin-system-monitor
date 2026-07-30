@@ -247,7 +247,7 @@ void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
     painter.drawRect(rect);
 
     painter.setPen(m_color);
-    painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(m_index) * 100, 'f', 1) + "%");
+    painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(0) * 100, 'f', 1) + "%");
 }
 
 void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
