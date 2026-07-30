@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -247,7 +247,7 @@ void CPUDetailGrapTableItem::drawTextMode(QPainter &painter)
     painter.drawRect(rect);
 
     painter.setPen(m_color);
-    painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(m_index) * 100, 'f', 1) + "%");
+    painter.drawText(rect, Qt::AlignCenter, QString::number(m_cpuPercents.value(0) * 100, 'f', 1) + "%");
 }
 
 void CPUDetailGrapTableItem::drawSingleCoreMode(QPainter &painter)
