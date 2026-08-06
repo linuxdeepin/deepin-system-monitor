@@ -38,6 +38,11 @@ Files: README.md README.zh_CN.md
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
+# REPORT
+Files: REPORT_ATSPI.md
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # tests
 Files: tests/*
 Copyright: UnionTech Software Technology Co., Ltd.
