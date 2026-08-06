@@ -43,6 +43,11 @@ Files: tests/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
+# at-spi expected names
+Files: tests/at/spi/expected_names.yaml
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # assets
 Files: deepin-system-monitor-daemon/assets/* deepin-system-monitor-main/assets/* deepin-system-monitor-plugin/asserts/* deepin-system-monitor-plugin-popup/asserts/*
 Copyright: UnionTech Software Technology Co., Ltd.

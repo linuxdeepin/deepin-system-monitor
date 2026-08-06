@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -19,6 +19,8 @@ QuickPanelWidget::QuickPanelWidget(QWidget* parent)
     , m_icon(new CommonIconButton(this))
     , m_description(new DLabel(this))
 {
+    setObjectName("QuickPanelWidget");
+    setAccessibleName("QuickPanelWidget");
     initUI();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &QuickPanelWidget::refreshBg);
 }

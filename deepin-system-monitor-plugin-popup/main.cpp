@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,7 @@
 #include "dde-dock/constants.h"
 #include "application.h"
 #include "ddlog.h"
+#include "accessible.h"
 
 //#include "clipboard_adaptor.h"
 #include "logger.h"
@@ -72,6 +73,8 @@ int main(int argc, char *argv[])
         qCWarning(app) << "Failed to set single instance, another instance may be running";
         return -1;
     }
+
+    QAccessible::installFactory(accessibleFactory);
 
     ac.loadTranslator();
 
