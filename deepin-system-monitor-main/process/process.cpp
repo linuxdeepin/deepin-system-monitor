@@ -174,6 +174,11 @@ void Process::readProcessVariableInfo()
     struct IOPS netiops = IOSampleFrame::iops(netpair.first, netpair.second);
     d->networkBandwidthSample->addSample(new IOPSSampleFrame(netiops));
 
+    // Refresh icon (re-populates desktop entry cache cleared each round) and
+    // recompute appType so processes initially misclassified can be corrected.
+    d->proc_icon.refreashProcessIcon(this);
+    refreshAppType();
+
     d->valid = d->valid && ok;
 }
 
@@ -190,17 +195,7 @@ readEnviron();
     d->proc_name.refreashProcessName(this);
     d->proc_icon.refreashProcessIcon(this);
 
-    d->apptype = kNoFilter;
-    const QVariant &euid = ProcessDB::instance()->processEuid();
-    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
-
-    if (euid == d->uid && (wmwindowList->isGuiApp(d->pid)
-                           || wmwindowList->isTrayApp(d->pid)
-                           || wmwindowList->isDesktopEntryApp(d->pid))) {
-        d->apptype = kFilterApps;
-    } else if (euid == d->uid) {
-        d->apptype = kFilterCurrentUser;
-    }
+    refreshAppType();
 
     d->valid = d->valid && ok;
 }
@@ -247,17 +242,7 @@ void Process::readProcessInfo()
     struct IOPS iops = DISKIOSampleFrame::diskiops(pair.first, pair.second);
     d->diskIOSpeedSample->addSample(new IOPSSampleFrame(iops));
 
-    d->apptype = kNoFilter;
-    const QVariant &euid = ProcessDB::instance()->processEuid();
-    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
-
-    if (euid == d->uid && (wmwindowList->isGuiApp(d->pid)
-                           || wmwindowList->isTrayApp(d->pid)
-                           || wmwindowList->isDesktopEntryApp(d->pid))) {
-        d->apptype = kFilterApps;
-    } else if (euid == d->uid) {
-        d->apptype = kFilterCurrentUser;
-    }
+    refreshAppType();
 
     qulonglong sum_recv = 0;
     qulonglong sum_send = 0;
@@ -866,6 +851,21 @@ int Process::appType() const
 void Process::setAppType(int type)
 {
     d->apptype = type;
+}
+
+void Process::refreshAppType()
+{
+    d->apptype = kNoFilter;
+    const QVariant &euid = ProcessDB::instance()->processEuid();
+    WMWindowList *wmwindowList = ProcessDB::instance()->windowList();
+
+    if (euid == d->uid && (wmwindowList->isGuiApp(d->pid)
+                           || wmwindowList->isTrayApp(d->pid)
+                           || wmwindowList->isDesktopEntryApp(d->pid))) {
+        d->apptype = kFilterApps;
+    } else if (euid == d->uid) {
+        d->apptype = kFilterCurrentUser;
+    }
 }
 
 } // namespace process
