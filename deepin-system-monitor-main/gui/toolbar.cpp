@@ -15,6 +15,7 @@
 
 #include <QDebug>
 #include <QEvent>
+#include <QResizeEvent>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QTimer>
@@ -162,6 +163,16 @@ bool Toolbar::eventFilter(QObject *obj, QEvent *event)
 
     // propogate other events to base handler
     return DWidget::eventFilter(obj, event);
+}
+
+void Toolbar::resizeEvent(QResizeEvent *event)
+{
+    DWidget::resizeEvent(event);
+
+    const int maxWidth = 360;
+    const int minWidth = 200;
+    int searchWidth = qBound(minWidth, width() / 3, maxWidth);
+    searchEdit->setFixedWidth(searchWidth);
 }
 
 // emit search signal only after timed out, and current search input's text same as cached one
