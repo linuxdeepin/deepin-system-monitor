@@ -7,6 +7,7 @@ Build-Depends:
  cmake,
  pkg-config,
  qt6-base-dev,
+ qt6-declarative-dev,
  qt6-svg-dev,
  qt6-tools-dev,
  qt6-tools-dev-tools,
@@ -40,3 +41,14 @@ Recommends: uos-reporter, deepin-event-log
 Replaces: deepin-system-monitor-plugin
 Description: A system monitor tool.
  System Monitor is a system tool monitoring and managing hardware load, program running and system services. It's capable to real-time monitor CPU status, memory footprint, and upload/download speed, manage system and application processes, search and force end processes as well.
+
+Package: deepin-system-monitor-dde-shell-plugin
+Architecture: any
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ dde-tray-loader | dde-dock
+Replaces: deepin-system-monitor-plugin
+Description: System monitor card plugin for dde-dock (V3)
+ A DDE dock V3 card plugin that displays CPU usage, memory usage,
+ and network speed in the dock panel card area. Also provides a
+ quick panel entry in the system tray.
