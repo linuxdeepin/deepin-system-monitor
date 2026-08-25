@@ -49,7 +49,7 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
 # translations
-Files: deepin-system-monitor-main/translations/* deepin-system-monitor-plugin/translations/* deepin-system-monitor-plugin-popup/translations/* deepin-system-monitor-system-server/translations/*
+Files: deepin-system-monitor-main/translations/* deepin-system-monitor-plugin/translations/* deepin-system-monitor-plugin-popup/translations/* deepin-system-monitor-system-server/translations/* deepin-system-monitor-dde-shell-plugin/translations/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
@@ -167,3 +167,8 @@ License: CC-BY-4.0
 Files: *.desktop
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
+
+# deepin-system-monitor-dde-shell-plugin
+Files: deepin-system-monitor-dde-shell-plugin/*.h deepin-system-monitor-dde-shell-plugin/*.cpp deepin-system-monitor-dde-shell-plugin/resources/qml/*.qml
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
