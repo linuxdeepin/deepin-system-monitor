@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -46,13 +46,15 @@ std::mutex ServiceManager::m_mutex;
 /**
    @brief 非开发者模式下，使用后端 DBus 服务设置 systemd 服务 \a serviceName 的启动模式
  */
-static bool setServiceEnable(const QString &servieName, bool enable, QString &errorString)
+bool ServiceManager::setServiceEnable(const QString &serviceName,
+                                      bool enable,
+                                      QString &errorString)
 {
     QDBusInterface interface("org.deepin.SystemMonitorSystemServer",
                              "/org/deepin/SystemMonitorSystemServer",
                              "org.deepin.SystemMonitorSystemServer",
                              QDBusConnection::systemBus());
-    QDBusReply<QString> retMsg = interface.call("setServiceEnable", servieName, enable);
+    QDBusReply<QString> retMsg = interface.call("setServiceEnable", serviceName, enable);
     errorString.clear();
     if (!retMsg.isValid()) {
         errorString = retMsg.error().message();
@@ -350,18 +352,19 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
     QProcess proc;
     proc.setProcessChannelMode(QProcess::MergedChannels);
     // {BIN_PKEXEC_PATH} {BIN_SYSTEMCTL_PATH} {enable/disable} {service}
-    QString action = autoStart ? "enable" : "disable";
+    const QString action = autoStart ? "enable" : "disable";
+    const QString serviceId = normalizeServiceId(id);
     bool useProcess = true;
     if (developerMode) {
-        proc.start(BIN_PKEXEC_PATH, { BIN_SYSTEMCTL_PATH, action, id });
+        proc.start(BIN_PKEXEC_PATH, { BIN_SYSTEMCTL_PATH, action, serviceId });
     } else {
         // Bug 241793 非开发者模式，使用后端DBus服务设置启动方式
 #if 0
-        proc.start(BIN_SYSTEMCTL_PATH, {action, id});
+        proc.start(BIN_SYSTEMCTL_PATH, {action, serviceId});
 #else
         useProcess = false;
         QString errorString;
-        bool dbusRet = setServiceEnable(id, autoStart, errorString);
+        bool dbusRet = setServiceEnable(serviceId, autoStart, errorString);
         if (!dbusRet) {
             errno = 0;
             ErrorContext errCtx {};
@@ -413,12 +416,11 @@ ErrorContext ServiceManager::setServiceStartupMode(const QString &id, bool autoS
         Systemd1ManagerInterface mgrIf(DBUS_SYSTEMD1_SERVICE,
                                        kSystemDObjectPath.path(),
                                        QDBusConnection::systemBus());
-        auto buf = normalizeServiceId(id, {});
-        auto re = mgrIf.GetUnit(buf);
+        auto re = mgrIf.GetUnit(serviceId);
         le = re.first;
         if (le) {
             if (le.getCode() == 3) {
-                auto o = Systemd1UnitInterface::normalizeUnitPath(buf);
+                auto o = Systemd1UnitInterface::normalizeUnitPath(serviceId);
                 updateServiceEntry(o.path());
             } else {
                 return le;
