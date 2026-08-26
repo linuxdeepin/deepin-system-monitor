@@ -92,6 +92,10 @@ public Q_SLOTS:
     ErrorContext setServiceStartupMode(const QString &id, bool autoStart);
 
 private:
+    static bool setServiceEnable(const QString &serviceName,
+                                 bool enable,
+                                 QString &errorString);
+
     explicit ServiceManager(QObject *parent = nullptr);
     ~ServiceManager();
 
