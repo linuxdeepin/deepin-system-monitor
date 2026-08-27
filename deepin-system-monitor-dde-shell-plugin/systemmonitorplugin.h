@@ -12,7 +12,6 @@
 #include <QScopedPointer>
 
 class QQuickView;
-class QLabel;
 
 class SystemMonitorPlugin : public QObject, public PluginsItemInterfaceV3
 {
@@ -49,9 +48,6 @@ private:
 
     QScopedPointer<SystemMonitorApplet> m_applet;
     mutable QPointer<QQuickView> m_cardView;
-
-    class QuickPanelWidget;
-    QScopedPointer<QuickPanelWidget> m_quickPanelWidget;
 };
 
 #endif // SYSTEMMONITORPLUGIN_H
