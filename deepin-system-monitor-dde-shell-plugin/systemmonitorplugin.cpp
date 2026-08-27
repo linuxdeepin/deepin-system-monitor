@@ -9,14 +9,9 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <QQmlEngine>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QCoreApplication>
-#include <QMouseEvent>
-#include <QIcon>
 #include <DGuiApplicationHelper>
 #include <DStandardPaths>
 
@@ -25,110 +20,6 @@ DCORE_USE_NAMESPACE
 
 #define SYSTEM_MONITOR_KEY "system-monitor"
 #define STATE_KEY "enable"
-
-// ── Inline QuickPanelWidget ─────────────────────────────────────────
-
-class SystemMonitorPlugin::QuickPanelWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit QuickPanelWidget(SystemMonitorApplet *applet, QWidget *parent = nullptr)
-        : QWidget(parent)
-        , m_applet(applet)
-    {
-        setFixedHeight(Dock::QUICK_ITEM_HEIGHT);
-        setAttribute(Qt::WA_TranslucentBackground);
-
-        auto *mainLayout = new QHBoxLayout(this);
-        mainLayout->setContentsMargins(10, 8, 10, 8);
-        mainLayout->setSpacing(8);
-
-        // Icon area
-        m_iconLabel = new QLabel(this);
-        m_iconLabel->setFixedSize(Dock::QUICK_PANEL_ICON_SIZE);
-        m_iconLabel->setPixmap(QIcon::fromTheme(QStringLiteral("deepin-system-monitor"),
-                                                   QIcon::fromTheme(QStringLiteral("utilities-system-monitor")))
-                                   .pixmap(Dock::QUICK_PANEL_ICON_SIZE));
-        mainLayout->addWidget(m_iconLabel);
-
-        // Text area
-        auto *textLayout = new QVBoxLayout;
-        textLayout->setSpacing(1);
-
-        m_titleLabel = new QLabel(pluginDisplayName_static(), this);
-        m_titleLabel->setObjectName("QuickPanelTitle");
-        QFont titleFont;
-        titleFont.setWeight(QFont::Medium);
-        m_titleLabel->setFont(titleFont);
-
-        m_statsLabel = new QLabel(this);
-        m_statsLabel->setObjectName("QuickPanelStats");
-
-        textLayout->addWidget(m_titleLabel);
-        textLayout->addWidget(m_statsLabel);
-        mainLayout->addLayout(textLayout, 1);
-
-        connect(m_applet, &SystemMonitorApplet::systemStatsChanged, this, [this] {
-            updateStatsText();
-        });
-
-        updateStatsText();
-        updateThemeColors();
-
-        // Follow system theme changes
-        connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [this] {
-            updateThemeColors();
-        });
-    }
-
-    static QString pluginDisplayName_static()
-    {
-        return QCoreApplication::translate("Plugin.DisplayName", "System Monitor");
-    }
-
-    bool isDarkTheme() const
-    {
-        return DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType;
-    }
-
-    void updateThemeColors()
-    {
-        const bool dark = isDarkTheme();
-        const QColor titleColor = dark ? QColor(255, 255, 255, 245) : QColor(0, 0, 0, 235);
-        const QColor statsColor = dark ? QColor(255, 255, 255, 173) : QColor(0, 0, 0, 148);
-
-        m_titleLabel->setPalette(QPalette(titleColor));
-        m_titleLabel->setAttribute(Qt::WA_TranslucentBackground, false);
-        m_statsLabel->setPalette(QPalette(statsColor));
-        m_statsLabel->setAttribute(Qt::WA_TranslucentBackground, false);
-    }
-
-    void updateStatsText()
-    {
-        m_statsLabel->setText(
-            QStringLiteral("CPU %1%  |  MEM %2%")
-                .arg(m_applet->cpuUsage())
-                .arg(m_applet->memoryUsage()));
-    }
-
-Q_SIGNALS:
-    void clicked();
-
-protected:
-    void mouseReleaseEvent(QMouseEvent *event) override
-    {
-        if (event->button() == Qt::LeftButton)
-            Q_EMIT clicked();
-        QWidget::mouseReleaseEvent(event);
-    }
-
-private:
-    SystemMonitorApplet *m_applet = nullptr;
-    QLabel *m_iconLabel = nullptr;
-    QLabel *m_titleLabel = nullptr;
-    QLabel *m_statsLabel = nullptr;
-};
 
 // ── SystemMonitorPlugin ────────────────────────────────────────────────
 
@@ -171,24 +62,18 @@ void SystemMonitorPlugin::init(PluginProxyInterface *proxyInter)
     // Create applet (backend data model)
     m_applet.reset(new SystemMonitorApplet(this));
 
-    // Create quick panel widget
-    m_quickPanelWidget.reset(new QuickPanelWidget(m_applet.data()));
-    connect(m_quickPanelWidget.data(), &QuickPanelWidget::clicked, m_applet.data(), &SystemMonitorApplet::openSystemMonitor);
-
     refreshPluginItemsVisible();
 }
 
 QWidget *SystemMonitorPlugin::itemWidget(const QString &itemKey)
 {
-    if (itemKey == Dock::QUICK_ITEM_KEY) {
-        return m_quickPanelWidget.data();
-    }
+    Q_UNUSED(itemKey)
     return nullptr;
 }
 
 Dock::PluginFlags SystemMonitorPlugin::flags() const
 {
-    return Dock::Type_Quick | Dock::Quick_Panel_Single | Dock::Attribute_HasCard;
+    return Dock::Attribute_HasCard;
 }
 
 bool SystemMonitorPlugin::pluginIsDisable()
@@ -289,5 +174,3 @@ void SystemMonitorPlugin::refreshPluginItemsVisible()
     m_proxyInter->itemAdded(this, SYSTEM_MONITOR_KEY);
 }
 
-// Required for Q_OBJECT in cpp file
-#include "systemmonitorplugin.moc"
