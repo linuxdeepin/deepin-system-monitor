@@ -6,6 +6,7 @@
 //self
 #include "model/process_table_model.h"
 #include "process/process_db.h"
+#include "process/private/process_p.h"
 #include "common/common.h"
 //gtest
 #include "stub.h"
@@ -1094,5 +1095,51 @@ TEST_F(UT_ProcessTableModel, test_updateProcessPriority_001)
      m_tester->m_processList << proc;
 
      m_tester->updateProcessPriority(pid,priority);
+
+}
+
+TEST_F(UT_ProcessTableModel, test_applicationResourcesOnlyUsedInApplicationsMode)
+{
+    const pid_t pid = 401;
+    Process proc(pid);
+    proc.d->valid = true;
+    proc.d->rss = 13;
+    proc.setCpu(1);
+    proc.setNetIoBps(2, 3);
+
+    m_tester->m_procIdList << pid;
+    m_tester->m_processList << proc;
+
+    ApplicationResource resource;
+    resource.cpu = 6;
+    resource.recvBps = 12;
+    resource.sentBps = 15;
+    resource.memory = 50;
+    ProcessSet processSet;
+    processSet.m_applicationResources.insert(pid, resource);
+    m_tester->m_applicationResources = processSet.getApplicationResources();
+
+    m_tester->setDisplayMode(kFilterApps);
+    EXPECT_DOUBLE_EQ(m_tester->data(m_tester->index(0, ProcessTableModel::kProcessCPUColumn),
+                                    Qt::UserRole).toDouble(),
+                     6);
+    EXPECT_EQ(m_tester->data(m_tester->index(0, ProcessTableModel::kProcessMemoryColumn),
+                             Qt::UserRole).toULongLong(),
+              50U);
+    EXPECT_DOUBLE_EQ(m_tester->data(m_tester->index(0, ProcessTableModel::kProcessUploadColumn),
+                                    Qt::UserRole).toDouble(),
+                     15);
+    EXPECT_DOUBLE_EQ(m_tester->data(m_tester->index(0, ProcessTableModel::kProcessDownloadColumn),
+                                    Qt::UserRole).toDouble(),
+                     12);
+    EXPECT_DOUBLE_EQ(m_tester->getTotalMemoryUsage(), 13);
+
+    m_tester->setDisplayMode(kNoFilter);
+    EXPECT_DOUBLE_EQ(m_tester->data(m_tester->index(0, ProcessTableModel::kProcessCPUColumn),
+                                    Qt::UserRole).toDouble(),
+                     1);
+    EXPECT_EQ(m_tester->data(m_tester->index(0, ProcessTableModel::kProcessMemoryColumn),
+                             Qt::UserRole).toULongLong(),
+              13U);
 
 }

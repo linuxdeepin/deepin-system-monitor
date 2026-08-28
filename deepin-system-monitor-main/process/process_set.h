@@ -17,6 +17,10 @@ using namespace common::alloc;
 
 // class Settings;
 namespace core {
+namespace wm {
+class WMWindowList;
+}
+
 namespace process {
 
 enum FilterType { kFilterApps,
@@ -34,6 +38,13 @@ struct RecentProcStage {
     timeval uptime = {0, 0};
 };
 
+struct ApplicationResource {
+    qreal cpu = 0;
+    qreal recvBps = 0;
+    qreal sentBps = 0;
+    qulonglong memory = 0;
+};
+
 class ProcessSet
 {
 public:
@@ -47,6 +58,7 @@ public:
     void updateProcessState(pid_t pid, char state);
     void updateProcessPriority(pid_t pid, int priority);
     std::weak_ptr<RecentProcStage> getRecentProcStage(pid_t pid) const;
+    QMap<pid_t, ApplicationResource> getApplicationResources() const;
 
     void refresh();
 
@@ -54,6 +66,10 @@ private:
     void scanProcess();
     void mergeSubProcNetIO(pid_t ppid, qreal &recvBps, qreal &sendBps);
     void mergeSubProcCpu(pid_t ppid, qreal &cpu);
+    void mergeSubProcMemory(pid_t ppid, qulonglong &memory);
+    QMap<pid_t, QList<pid_t>> collapseDesktopLaunchGroups(
+            core::wm::WMWindowList *windowList, uid_t euid);
+    void aggregateProcessGroup(pid_t representativePid, const QList<pid_t> &memberPids);
 
     class Iterator
     {
@@ -74,6 +90,7 @@ private:
     // Settings *m_settings = nullptr;
     QMap<pid_t, Process> m_simpleSet;
     QMap<pid_t, Process> m_set;
+    QMap<pid_t, ApplicationResource> m_applicationResources;
     QMap<pid_t, std::shared_ptr<RecentProcStage>> m_recentProcStage {};
 
     QMap<pid_t, pid_t> m_pidCtoPMapping {}; // child to parent pid mapping
