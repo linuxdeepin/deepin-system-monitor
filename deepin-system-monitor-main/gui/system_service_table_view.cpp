@@ -1,5 +1,5 @@
-﻿// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+﻿// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -537,61 +537,80 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
 
     // service table view context menu instance
     m_contextMenu = new DMenu(this);
+    m_contextMenu->setObjectName("ServiceContextMenu");
+    m_contextMenu->setAccessibleName("ServiceContextMenu");
     // start service action
     m_startServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Start"));
     // ALT + S
+    m_startServiceAction->setObjectName("StartServiceAction");
     m_startServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
     // stop service action
     m_stopServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Stop"));
     // ALT + T
+    m_stopServiceAction->setObjectName("StopServiceAction");
     m_stopServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
     // restart service action
     m_restartServiceAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Restart"));
     // ALT + R
+    m_restartServiceAction->setObjectName("RestartServiceAction");
     m_restartServiceAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
     // service startup mode action
     m_setServiceStartupModeMenu =
         m_contextMenu->addMenu(DApplication::translate("Service.Table.Context.Menu", "Startup type"));
     m_setAutoStartAction = m_setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Auto"));
+    m_setAutoStartAction->setObjectName("SetAutoStartAction");
+    m_setServiceStartupModeMenu->setObjectName("SetServiceStartupModeMenu");
+    m_setServiceStartupModeMenu->setAccessibleName("SetServiceStartupModeMenu");
     m_setManualStartAction = m_setServiceStartupModeMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Manual"));
+    m_setManualStartAction->setObjectName("SetManualStartAction");
     // refresh context menu item
     m_refreshAction =
         m_contextMenu->addAction(DApplication::translate("Service.Table.Context.Menu", "Refresh"));
     // F5
+    m_refreshAction->setObjectName("RefreshAction");
     m_refreshAction->setShortcut(QKeySequence(QKeySequence::Refresh));
 
     // >>> header context menu instance
     m_headerContextMenu = new DMenu(this);
+    m_headerContextMenu->setObjectName("ServiceHeaderContextMenu");
+    m_headerContextMenu->setAccessibleName("ServiceHeaderContextMenu");
     // load state column action
     m_loadStateHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceLoadState));
+    m_loadStateHeaderAction->setObjectName("LoadStateHeaderAction");
     m_loadStateHeaderAction->setCheckable(true);
     // active state column action
     m_activeStateHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceActiveState));
+    m_activeStateHeaderAction->setObjectName("ActiveStateHeaderAction");
     m_activeStateHeaderAction->setCheckable(true);
     // sub state column action
     m_subStateHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceSubState));
+    m_subStateHeaderAction->setObjectName("SubStateHeaderAction");
     m_subStateHeaderAction->setCheckable(true);
     // state column action
     m_stateHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceState));
+    m_stateHeaderAction->setObjectName("StateHeaderAction");
     m_stateHeaderAction->setCheckable(true);
     // description column action
     m_descriptionHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceDescription));
+    m_descriptionHeaderAction->setObjectName("DescriptionHeaderAction");
     m_descriptionHeaderAction->setCheckable(true);
     // pid column
     m_pidHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServicePID));
+    m_pidHeaderAction->setObjectName("PidHeaderAction");
     m_pidHeaderAction->setCheckable(true);
     // startup mode column
     m_startupModeHeaderAction = m_headerContextMenu->addAction(
                                     DApplication::translate("Service.Table.Header", kSystemServiceStartupMode));
+    m_startupModeHeaderAction->setObjectName("StartupModeHeaderAction");
     m_startupModeHeaderAction->setCheckable(true);
 
     // set default checkable state when backup settings load without success
@@ -606,12 +625,16 @@ void SystemServiceTableView::initUI(bool settingsLoaded)
 
     // refresh service table shortcut
     m_refreshKP = new QShortcut(QKeySequence(QKeySequence::Refresh), this);
+    m_refreshKP->setObjectName("RefreshKp");
     // start service shortcut
     m_startKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this);
+    m_startKP->setObjectName("StartKp");
     // stop service shortcut
     m_stopKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_T), this);
+    m_stopKP->setObjectName("StopKp");
     // restart service shortcut
     m_restartKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_R), this);
+    m_restartKP->setObjectName("RestartKp");
 
     // spinner instance
     m_spinner = new DSpinner(this);

@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -232,6 +232,8 @@ void ProcessPageWidget::initUI()
 
     // process table view instance
     m_procTable = new ProcessTableView(m_processWidget);
+    m_procTable->setObjectName("ProcTable");
+    m_procTable->setAccessibleName("ProcTable");
 
     m_loadingAndProcessTB->addWidget(m_procTable);
     m_loadingAndProcessTB->addWidget(m_spinnerWidget);

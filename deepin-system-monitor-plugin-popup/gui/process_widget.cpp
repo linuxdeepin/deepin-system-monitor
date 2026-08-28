@@ -1,5 +1,5 @@
-// Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -63,6 +63,8 @@ ProcessWidget::ProcessWidget(QWidget *parent)
             this, &ProcessWidget::changeFont);
 
     m_processTableView = new ProcessTableView(this);
+    m_processTableView->setObjectName("ProcessTableView");
+    m_processTableView->setAccessibleName("ProcessTableView");
 
     QHBoxLayout *headerLayout = new QHBoxLayout(this);
     DLabel *headerLabel = new DLabel(this);

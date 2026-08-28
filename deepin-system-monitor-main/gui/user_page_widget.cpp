@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2021 ~ 2022 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2021 - 2026 Uniontech Software Technology Co.,Ltd
 *
 * Author:      lishiqi <lishiqi@uniontech.com>
 * Maintainer:  lishiqi <lishiqi@uniontech.com>
@@ -62,6 +62,8 @@ void UserPageWidget::initUI()
 #endif
     // process table view instance
     m_procTable = new ProcessTableView(this, m_currentUser);
+    m_procTable->setObjectName("UserProcTable");
+    m_procTable->setAccessibleName("UserProcTable");
     m_procTable->switchDisplayMode(kNoFilter);
 
     // content margin
