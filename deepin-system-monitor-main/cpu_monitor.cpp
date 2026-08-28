@@ -1,5 +1,5 @@
-// Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -70,6 +70,8 @@ CpuMonitor::CpuMonitor(QWidget *parent)
     });
 
     m_detailButton = new BaseCommandLinkButton(tr("Details"), this);
+    m_detailButton->setObjectName("CpuDetailButton");
+    m_detailButton->setAccessibleName("CpuDetailButton");
     DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     connect(m_detailButton, &BaseCommandLinkButton::clicked, this, &CpuMonitor::onDetailInfoClicked);
 

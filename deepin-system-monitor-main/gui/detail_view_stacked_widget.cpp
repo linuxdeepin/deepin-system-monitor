@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -179,10 +179,16 @@ void DetailViewStackedWidget::onShowPerformMenu(QPoint pos)
     if (m_menu == nullptr) {
         qCDebug(app) << "Menu is null, creating new one";
         m_menu = new DMenu(this);
+        m_menu->setObjectName("Menu");
+        m_menu->setAccessibleName("Menu");
         cpuAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "CPU"));
+        cpuAct->setObjectName("CpuAct");
         memAct = m_menu->addAction(DApplication::translate("Process.Graph.Title", "Memory"));
+        memAct->setObjectName("MemAct");
         netifAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Network"));
+        netifAct->setObjectName("NetifAct");
         blockDevAct = m_menu->addAction(DApplication::translate("Process.Graph.View", "Disks"));
+        blockDevAct->setObjectName("BlockDevAct");
 
         QActionGroup *actionGroup = new QActionGroup(m_menu);
         actionGroup->addAction(cpuAct);

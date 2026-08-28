@@ -154,6 +154,8 @@ void ProcessAttributeDialog::initUI()
 
     // process name text
     m_procNameText = new DTextBrowser(wnd);
+    m_procNameText->setObjectName("ProcNameText");
+    m_procNameText->setAccessibleName("ProcNameText");
     m_procNameText->setFrameStyle(QFrame::NoFrame);
     m_procNameText->setFocusPolicy(Qt::ClickFocus);
     m_procNameText->setReadOnly(true);
@@ -163,6 +165,8 @@ void ProcessAttributeDialog::initUI()
 
     // process command line text
     m_procCmdText = new DTextBrowser(wnd);
+    m_procCmdText->setObjectName("ProcCmdText");
+    m_procCmdText->setAccessibleName("ProcCmdText");
     m_procCmdText->setFrameStyle(QFrame::NoFrame);
     m_procCmdText->setFocusPolicy(Qt::ClickFocus);
     m_procCmdText->setReadOnly(true);
@@ -172,6 +176,8 @@ void ProcessAttributeDialog::initUI()
 
     // process start time text
     m_procStartText = new DTextBrowser(wnd);
+    m_procStartText->setObjectName("ProcStartText");
+    m_procStartText->setAccessibleName("ProcStartText");
     m_procStartText->setFrameStyle(QFrame::NoFrame);
     m_procStartText->setFocusPolicy(Qt::ClickFocus);
     m_procStartText->setReadOnly(true);

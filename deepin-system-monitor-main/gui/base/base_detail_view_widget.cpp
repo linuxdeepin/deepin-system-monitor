@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -27,10 +27,14 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
 
     DetailViewStackedWidget *stackViewWidget = dynamic_cast<DetailViewStackedWidget *>(parent);
     m_detailButton = new BaseCommandLinkButton(tr("Hide details"), this);
+    m_detailButton->setObjectName("DetailButton");
+    m_detailButton->setAccessibleName("DetailButton");
     DFontSizeManager::instance()->bind(m_detailButton, DFontSizeManager::T8, QFont::Medium);
     connect(m_detailButton, &BaseCommandLinkButton::clicked, stackViewWidget, &DetailViewStackedWidget::onSwitchProcessPage);
 
     m_switchButton = new DIconButton(DStyle::SP_ReduceElement, this);
+    m_switchButton->setObjectName("SwitchButton");
+    m_switchButton->setAccessibleName("SwitchButton");
     m_switchButton->setIconSize(QSize(12, 12));
     m_switchButton->setFixedSize(30, 30);
     m_switchButton->setEnabledCircle(true);
@@ -56,6 +60,8 @@ BaseDetailViewWidget::BaseDetailViewWidget(QWidget *parent) : QWidget(parent)
     });
 
     m_arrowButton = new DIconButton(DStyle::SP_ReduceElement, this);
+    m_arrowButton->setObjectName("ArrowButton");
+    m_arrowButton->setAccessibleName("ArrowButton");
     m_arrowButton->setIconSize(QSize(10, 10));
     m_arrowButton->setFixedSize(24, 24);
     m_arrowButton->setEnabledCircle(true);

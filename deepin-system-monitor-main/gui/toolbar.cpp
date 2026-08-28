@@ -1,5 +1,5 @@
-// Copyright (C) 2011 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -39,10 +39,14 @@ Toolbar::Toolbar(QWidget *parent)
 
     // tab button group
     m_switchFuncTabBtnGrp = new CustomButtonBox(this);
+    m_switchFuncTabBtnGrp->setObjectName("SwitchFuncTabBtnGrp");
+    m_switchFuncTabBtnGrp->setAccessibleName("SwitchFuncTabBtnGrp");
     m_switchFuncTabBtnGrp->setFixedWidth(240);
     // process tab button instance
     m_procBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Processes"), m_switchFuncTabBtnGrp);
+    m_procBtn->setObjectName("ProcBtn");
+    m_procBtn->setAccessibleName("ProcBtn");
     m_procBtn->setCheckable(true);
     m_procBtn->setChecked(true);
     m_procBtn->setFocusPolicy(Qt::TabFocus);
@@ -51,6 +55,8 @@ Toolbar::Toolbar(QWidget *parent)
     // service tab button instance
     m_svcBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Services"), m_switchFuncTabBtnGrp);
+    m_svcBtn->setObjectName("SvcBtn");
+    m_svcBtn->setAccessibleName("SvcBtn");
     m_svcBtn->setCheckable(true);
     m_svcBtn->setFocusPolicy(Qt::TabFocus);
 
@@ -58,6 +64,8 @@ Toolbar::Toolbar(QWidget *parent)
     // user process tab button instance
     m_accountProcBtn = new DButtonBoxButton(
         DApplication::translate("Title.Bar.Switch", "Users"), m_switchFuncTabBtnGrp);
+    m_accountProcBtn->setObjectName("AccountProcBtn");
+    m_accountProcBtn->setAccessibleName("AccountProcBtn");
     m_accountProcBtn->setCheckable(true);
     m_accountProcBtn->setFocusPolicy(Qt::TabFocus);
 
@@ -89,6 +97,8 @@ Toolbar::Toolbar(QWidget *parent)
     });
     // search text editor instance
     searchEdit = new DSearchEdit(this);
+    searchEdit->setObjectName("SearchEdit");
+    searchEdit->setAccessibleName("SearchEdit");
     // set the search edit text max length
     searchEdit->lineEdit()->setMaxLength(MAX_TEXT_LEN);
     searchEdit->setFixedWidth(360);

@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -364,6 +364,8 @@ CPUDetailWidget::CPUDetailWidget(QWidget *parent) : BaseDetailViewWidget(parent)
 
     m_graphicsTable = new CPUDetailGrapTable(cpuInfomodel, this);
     m_summary  = new  CPUDetailSummaryTable(cpuInfomodel, this);
+    m_summary->setObjectName("Summary");
+    m_summary->setAccessibleName("Summary");
 
     m_centralLayout->addWidget(m_graphicsTable);
     m_centralLayout->addWidget(m_summary);

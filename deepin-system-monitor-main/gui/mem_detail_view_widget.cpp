@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -21,6 +21,8 @@ MemDetailViewWidget::MemDetailViewWidget(QWidget *parent)
     this->setObjectName("MemDetailViewWidget");
     m_memstatWIdget = new MemStatViewWidget(this);
     m_memsummaryWidget = new MemSummaryViewWidget(this);
+    m_memsummaryWidget->setObjectName("MemsummaryWidget");
+    m_memsummaryWidget->setAccessibleName("MemsummaryWidget");
 
     setTitle(DApplication::translate("Process.Graph.Title", "Memory"));
     m_centralLayout->addWidget(m_memstatWIdget);

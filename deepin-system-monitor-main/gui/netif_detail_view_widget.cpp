@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -26,6 +26,8 @@ NetifDetailViewWidget::NetifDetailViewWidget(QWidget *parent)
 
     m_netifstatWIdget = new NetifStatViewWidget(this);
     m_netifsummaryWidget = new NetifSummaryViewWidget(this);
+    m_netifsummaryWidget->setObjectName("NetifsummaryWidget");
+    m_netifsummaryWidget->setAccessibleName("NetifsummaryWidget");
 
     connect(SystemMonitor::instance(), &SystemMonitor::statInfoUpdated, this, &NetifDetailViewWidget::updateData);
     connect(m_netifstatWIdget, &NetifStatViewWidget::netifItemClicked, m_netifsummaryWidget, &NetifSummaryViewWidget::onNetifItemClicked);

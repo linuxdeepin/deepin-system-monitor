@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -43,6 +43,8 @@ SystemServicePageWidget::SystemServicePageWidget(DWidget *parent)
     auto *layout = new QHBoxLayout(this);
     // service table view instance
     m_svcTableView = new SystemServiceTableView(this);
+    m_svcTableView->setObjectName("SvcTableView");
+    m_svcTableView->setAccessibleName("SvcTableView");
     layout->addWidget(m_svcTableView);
     layout->setContentsMargins(margin, margin, margin, margin);
     setLayout(layout);

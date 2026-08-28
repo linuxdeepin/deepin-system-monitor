@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -29,6 +29,8 @@ ServiceNameSubInputDialog::ServiceNameSubInputDialog(DWidget *parent)
 
     // service sub name text editor
     m_nameLineEdit = new DLineEdit(this);
+    m_nameLineEdit->setObjectName("NameLineEdit");
+    m_nameLineEdit->setAccessibleName("NameLineEdit");
     Q_ASSERT(m_nameLineEdit);
     addContent(m_nameLineEdit);
     // set max service name

@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -559,7 +559,11 @@ void ProcessTableView::initUI(bool settingsLoaded)
 
     // context menu & header context menu instance
     m_contextMenu = new DMenu(this);
+    m_contextMenu->setObjectName("ProcessContextMenu");
+    m_contextMenu->setAccessibleName("ProcessContextMenu");
     m_headerContextMenu = new DMenu(this);
+    m_headerContextMenu->setObjectName("ProcessHeaderContextMenu");
+    m_headerContextMenu->setAccessibleName("ProcessHeaderContextMenu");
 
     // if no backup settings loaded, show default style
     if (!settingsLoaded) {
@@ -966,18 +970,23 @@ void ProcessTableView::initConnections(bool settingsLoaded)
 
     // end process shortcut
     m_endProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_E), this);
+    m_endProcKP->setObjectName("EndProcKp");
     connect(m_endProcKP, &QShortcut::activated, this, &ProcessTableView::endProcess);
     // pause process shortcut
     m_pauseProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_P), this);
+    m_pauseProcKP->setObjectName("PauseProcKp");
     connect(m_pauseProcKP, &QShortcut::activated, this, &ProcessTableView::pauseProcess);
     // resume process shortcut
     m_resumeProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_C), this);
+    m_resumeProcKP->setObjectName("ResumeProcKp");
     connect(m_resumeProcKP, &QShortcut::activated, this, &ProcessTableView::resumeProcess);
     // view process attribute shortcut
     m_viewPropKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Return), this);
+    m_viewPropKP->setObjectName("ViewPropKp");
     connect(m_viewPropKP, &QShortcut::activated, this, &ProcessTableView::showProperties);
     // kill process shortcut
     m_killProcKP = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_K), this);
+    m_killProcKP->setObjectName("KillProcKp");
     connect(m_killProcKP, &QShortcut::activated, this, &ProcessTableView::killProcess);
 
     //show error dialog if change priority failed

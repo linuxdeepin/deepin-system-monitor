@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -21,6 +21,8 @@ BlockDevDetailViewWidget::BlockDevDetailViewWidget(QWidget *parent)
     setTitle(DApplication::translate("Process.Graph.View", "Disks"));
     m_blockStatWidget = new BlockStatViewWidget(this);
     m_blocksummaryWidget = new BlockDevSummaryViewWidget(this);
+    m_blocksummaryWidget->setObjectName("BlocksummaryWidget");
+    m_blocksummaryWidget->setAccessibleName("BlocksummaryWidget");
     m_centralLayout->addWidget(m_blockStatWidget);
     m_centralLayout->addWidget(m_blocksummaryWidget);
     connect(m_blockStatWidget, &BlockStatViewWidget::changeInfo, m_blocksummaryWidget, &BlockDevSummaryViewWidget::chageSummaryInfo);

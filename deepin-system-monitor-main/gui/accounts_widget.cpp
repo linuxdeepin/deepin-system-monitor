@@ -58,6 +58,8 @@ void AccountsWidget::initUI()
     mainContentLayout->addWidget(m_userlistView);
 
     m_userlistView->setFrameShape(QFrame::NoFrame);
+    m_userlistView->setObjectName("UserlistView");
+    m_userlistView->setAccessibleName("UserlistView");
     m_userlistView->setViewportMargins(ScrollAreaMargins);
     m_userlistView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_userlistView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -76,6 +78,8 @@ void AccountsWidget::initUI()
 
     setFixedWidth(250);
     m_contextMenu = new DMenu(this);
+    m_contextMenu->setObjectName("AccountsContextMenu");
+    m_contextMenu->setAccessibleName("AccountsContextMenu");
 }
 
 void AccountsWidget::initConnection()

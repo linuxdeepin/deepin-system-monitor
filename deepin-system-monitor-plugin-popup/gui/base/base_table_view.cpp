@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -41,6 +41,8 @@ BaseTableView::BaseTableView(DWidget *parent)
 
     // set header view instance
     m_headerView = new BaseHeaderView(Qt::Horizontal, this);
+    m_headerView->setObjectName("HeaderView");
+    m_headerView->setAccessibleName("HeaderView");
     setHeader(m_headerView);
     // section movable
     m_headerView->setSectionsMovable(true);
