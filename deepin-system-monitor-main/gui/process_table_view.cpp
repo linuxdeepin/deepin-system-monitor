@@ -365,7 +365,7 @@ void ProcessTableView::search(const QString &text)
 // switch process table view display mode
 void ProcessTableView::switchDisplayMode(FilterType type)
 {
-
+    m_model->setDisplayMode(type);
     m_proxyModel->setFilterType(type);
 }
 

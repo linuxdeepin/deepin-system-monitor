@@ -111,6 +111,7 @@ void ProcessTableModel::updateProcessListDelay()
 {
     ProcessSet *processSet = ProcessDB::instance()->processSet();
     const QList<pid_t> &newpidlst = processSet->getPIDList();
+    m_applicationResources = processSet->getApplicationResources();
     QList<pid_t> oldpidlst = m_procIdList;
 
     for (const auto &pid : newpidlst) {
@@ -229,9 +230,20 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
     if (!proc.isValid())
         return {};
 
+    const int column = index.column();
+    const bool resourceColumn = column == kProcessCPUColumn
+            || column == kProcessMemoryColumn
+            || column == kProcessUploadColumn
+            || column == kProcessDownloadColumn;
+    ApplicationResource appResource;
+    const bool useAppResource = m_displayMode == kFilterApps && resourceColumn
+            && m_applicationResources.contains(proc.pid());
+    if (useAppResource)
+        appResource = m_applicationResources.value(proc.pid());
+
     if (role == Qt::DisplayRole || role == Qt::AccessibleTextRole) {
         QString name;
-        switch (index.column()) {
+        switch (column) {
         case kProcessNameColumn: {
             // prepended tag based on process state
             name = proc.displayName();
@@ -251,13 +263,13 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         }
         case kProcessCPUColumn:
             // formated cpu percent utilization
-            return QString("%1%").arg(proc.cpu(), 0, 'f', 1);
+            return QString("%1%").arg(useAppResource ? appResource.cpu : proc.cpu(), 0, 'f', 1);
         case kProcessUserColumn:
             // process's user name
             return proc.userName();
         case kProcessMemoryColumn:
             // formatted memory usage
-            return formatUnit_memory_disk(proc.memory(), KB);
+            return formatUnit_memory_disk(useAppResource ? appResource.memory : proc.memory(), KB);
         case kProcessShareMemoryColumn:
             // formatted memory usage
             return formatUnit_memory_disk(proc.sharememory(), KB);
@@ -266,10 +278,12 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             return formatUnit_memory_disk(proc.vtrmemory(), KB);
         case kProcessUploadColumn:
             // formatted upload speed text
-            return formatUnit_net(8 * proc.sentBps(), B, 1, true);
+            return formatUnit_net(8 * (useAppResource ? appResource.sentBps : proc.sentBps()),
+                                  B, 1, true);
         case kProcessDownloadColumn:
             // formated download speed text
-            return formatUnit_net(8 * proc.recvBps(), B, 1, true);
+            return formatUnit_net(8 * (useAppResource ? appResource.recvBps : proc.recvBps()),
+                                  B, 1, true);
         case kProcessDiskReadColumn:
             // formatted disk read speed text
             return formatUnit_memory_disk(proc.readBps(), B, 1, true);
@@ -292,7 +306,7 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             break;
         }
     } else if (role == Qt::DecorationRole) {
-        switch (index.column()) {
+        switch (column) {
         case kProcessNameColumn:
             // process icon
             return proc.icon();
@@ -300,22 +314,22 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
             return {};
         }
     } else if (role == Qt::UserRole) {
-        // get process's raw data
-        switch (index.column()) {
+        // get numeric data used by sorting
+        switch (column) {
         case kProcessNameColumn:
             return proc.name();
         case kProcessMemoryColumn:
-            return proc.memory();
+            return useAppResource ? appResource.memory : proc.memory();
         case kProcessShareMemoryColumn:
             return proc.sharememory();
         case kProcessVTRMemoryColumn:
             return proc.vtrmemory();
         case kProcessCPUColumn:
-            return proc.cpu();
+            return useAppResource ? appResource.cpu : proc.cpu();
         case kProcessUploadColumn:
-            return proc.sentBps();
+            return useAppResource ? appResource.sentBps : proc.sentBps();
         case kProcessDownloadColumn:
-            return proc.recvBps();
+            return useAppResource ? appResource.recvBps : proc.recvBps();
         case kProcessPIDColumn:
             return proc.pid();
         case kProcessDiskReadColumn:
@@ -329,11 +343,11 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == (Qt::UserRole + 1)) {
         // get process's extra data
-        switch (index.column()) {
+        switch (column) {
         case kProcessUploadColumn:
-            return proc.sentBps();
+            return useAppResource ? appResource.sentBps : proc.sentBps();
         case kProcessDownloadColumn:
-            return proc.recvBps();
+            return useAppResource ? appResource.recvBps : proc.recvBps();
         default:
             return {};
         }
@@ -342,7 +356,7 @@ QVariant ProcessTableModel::data(const QModelIndex &index, int role) const
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     } else if (role == Qt::UserRole + 2) {
         // text color role based on process's state
-        if (index.column() == kProcessNameColumn) {
+        if (column == kProcessNameColumn) {
             char state = proc.state();
             if (state == 'Z' || state == 'T') {
                 return QVariant(int(Dtk::Gui::DPalette::TextWarning));
@@ -426,6 +440,18 @@ void ProcessTableModel::setUserModeName(const QString &userName)
     if (userName != m_userModeName) {
         m_userModeName = userName;
         updateProcessListWithUserSpecified();
+    }
+}
+
+void ProcessTableModel::setDisplayMode(FilterType type)
+{
+    if (m_displayMode == type)
+        return;
+
+    m_displayMode = type;
+    if (!m_processList.isEmpty()) {
+        Q_EMIT dataChanged(index(0, kProcessCPUColumn),
+                           index(m_processList.size() - 1, kProcessDownloadColumn));
     }
 }
 

@@ -141,7 +141,8 @@ public:
      * @return Process entry item
      */
     Process getProcess(pid_t pid) const;
-   void setUserModeName(const QString &userName);
+    void setUserModeName(const QString &userName);
+    void setDisplayMode(FilterType type);
     qreal getTotalCPUUsage();
     qreal getTotalMemoryUsage();
     qreal getTotalDownload();
@@ -182,8 +183,10 @@ private Q_SLOTS:
 private:
     QList<pid_t> m_procIdList; // pid list
     QList<Process> m_processList; // pid list
+    QMap<pid_t, ApplicationResource> m_applicationResources;
 
     QString m_userModeName {};
+    FilterType m_displayMode = kNoFilter;
 };
 
 #endif  // PROCESS_TABLE_MODEL_H
