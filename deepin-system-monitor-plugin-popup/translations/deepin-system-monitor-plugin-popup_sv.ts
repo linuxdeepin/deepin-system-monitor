@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv">
 <context>
     <name>Common.Search</name>
     <message>
@@ -21,6 +19,8 @@
     <name>CpuWidget</name>
     <message>
         <location filename="../gui/cpu_widget.cpp" line="229"/>
+        <location filename="../gui/cpu_widget.cpp" line="231"/>
+        <location filename="../gui/cpu_widget.cpp" line="232"/>
         <source>Utilization</source>
         <translation>Användning</translation>
     </message>
@@ -52,13 +52,14 @@
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="210"/>
+        <location filename="../gui/memory_widget.cpp" line="218"/>
         <source>Swap</source>
-        <translation>Växling</translation>
+        <translation>Swap</translation>
     </message>
     <message>
         <location filename="../gui/memory_widget.cpp" line="211"/>
         <source>Not enabled</source>
-        <translation>Aktiverat</translation>
+        <translation>Ej aktiverad</translation>
     </message>
 </context>
 <context>
@@ -66,7 +67,7 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="271"/>
         <source>Download</source>
-        <translation>Ladda ner</translation>
+        <translation>Nedladdning</translation>
     </message>
     <message>
         <location filename="../gui/net_widget.cpp" line="272"/>
@@ -81,13 +82,15 @@
     <message>
         <location filename="../gui/net_widget.cpp" line="273"/>
         <source>Upload</source>
-        <translation>Ladda upp</translation>
+        <translation>Uppladdning</translation>
     </message>
 </context>
 <context>
     <name>NetWidget</name>
     <message>
         <location filename="../gui/net_widget.cpp" line="241"/>
+        <location filename="../gui/net_widget.cpp" line="243"/>
+        <location filename="../gui/net_widget.cpp" line="247"/>
         <source>Network</source>
         <translation>Nätverk</translation>
     </message>
@@ -97,7 +100,7 @@
     <message>
         <location filename="../process/process.cpp" line="54"/>
         <source>Very high</source>
-        <translation>Höga</translation>
+        <translation>Mycket hög</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="55"/>
@@ -112,12 +115,12 @@
     <message>
         <location filename="../process/process.cpp" line="57"/>
         <source>Low</source>
-        <translation>Låga</translation>
+        <translation>Låg</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="58"/>
         <source>Very low</source>
-        <translation>Läga</translation>
+        <translation>Mycket låg</translation>
     </message>
     <message>
         <location filename="../process/process.cpp" line="59"/>
@@ -135,32 +138,32 @@
     <message>
         <location filename="../process/process_db.cpp" line="168"/>
         <source>Failed to end process</source>
-        <translation>Misslyckades med att avsluta processen</translation>
+        <translation>Det gick inte att avsluta processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="171"/>
         <source>Failed to pause process</source>
-        <translation>Misslyckades med att pausa processen</translation>
+        <translation>Det gick inte att pausa processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="174"/>
         <source>Failed to resume process</source>
-        <translation>Misslyckades med att återuppta processen</translation>
+        <translation>Det gick inte att återuppta processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="177"/>
         <source>Failed to kill process</source>
-        <translation>Misslyckades med att avsluta processen</translation>
+        <translation>Det gick inte att döda processen</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="180"/>
         <source>Unknown error</source>
-        <translation>Okänd fel</translation>
+        <translation>Okänt fel</translation>
     </message>
     <message>
         <location filename="../process/process_db.cpp" line="239"/>
         <source>Failed in sending signal to process</source>
-        <translation>Misslyckades med att skicka signal till processen</translation>
+        <translation>Det gick inte att skicka signal till processen</translation>
     </message>
 </context>
 <context>
@@ -168,7 +171,7 @@
     <message>
         <location filename="../model/process_table_model.cpp" line="174"/>
         <source>No response</source>
-        <translation>Ingen svar</translation>
+        <translation>Inget svar</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.cpp" line="179"/>
@@ -206,7 +209,7 @@
     <message>
         <location filename="../model/process_table_model.h" line="24"/>
         <source>Virtual memory</source>
-        <translation>Virtualt minne</translation>
+        <translation>Virtuellt minne</translation>
     </message>
     <message>
         <location filename="../model/process_table_model.h" line="26"/>
@@ -258,6 +261,8 @@
     </message>
     <message>
         <location filename="../gui/process_widget.cpp" line="203"/>
+        <location filename="../gui/process_widget.cpp" line="205"/>
+        <location filename="../gui/process_widget.cpp" line="209"/>
         <source>Processes</source>
         <translation>Processer</translation>
     </message>
@@ -267,7 +272,7 @@
     <message>
         <location filename="../system/cpu_set.cpp" line="253"/>
         <source>Not support</source>
-        <translation>Ej stöd</translation>
+        <translation>Stöds inte</translation>
     </message>
 </context>
 </TS>
