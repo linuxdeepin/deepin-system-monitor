@@ -83,7 +83,7 @@
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="100"/>
         <source>Average frequency</source>
-        <translation type="unfinished"/>
+        <translation>Genomsnittlig frekvens</translation>
     </message>
     <message>
         <location filename="../gui/cpu_summary_view_widget.h" line="104"/>
@@ -1372,12 +1372,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../model/system_service_table_model.h" line="21"/>
         <source>Start State</source>
-        <translation type="unfinished"/>
+        <translation>Starttillstånd</translation>
     </message>
     <message>
         <location filename="../model/system_service_table_model.h" line="25"/>
         <source>Start Tactic</source>
-        <translation type="unfinished"/>
+        <translation>Startstrategi</translation>
     </message>
 </context>
 <context>
@@ -1385,18 +1385,18 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="132"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="165"/>
         <source>(Modifiable)</source>
-        <translation type="unfinished"/>
+        <translation>(Ändringsbar)</translation>
     </message>
     <message>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="278"/>
         <location filename="../gui/dialog/systemprotectionsetting.cpp" line="387"/>
         <source>Range: %1-%2</source>
-        <translation type="unfinished"/>
+        <translation>Intervall: %1–%2</translation>
     </message>
 </context>
 <context>
@@ -1405,22 +1405,22 @@ Are you sure you want to continue?</source>
         <location filename="../common/common.cpp" line="59"/>
         <location filename="../gui/main_window.cpp" line="129"/>
         <source>Force end application</source>
-        <translation type="unfinished"/>
+        <translation>Tvångsavsluta program</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="147"/>
         <source>Expand</source>
-        <translation type="unfinished"/>
+        <translation>Expandera</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="150"/>
         <source>Compact</source>
-        <translation type="unfinished"/>
+        <translation>Kompakt</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="142"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Visa</translation>
     </message>
 </context>
 <context>
@@ -1440,7 +1440,7 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="235"/>
         <location filename="../gui/toolbar.cpp" line="45"/>
         <source>Processes</source>
-        <translation type="unfinished"/>
+        <translation>Processer</translation>
     </message>
     <message>
         <location filename="../common/common.cpp" line="98"/>
@@ -1449,13 +1449,13 @@ Are you sure you want to continue?</source>
         <location filename="../gui/main_window.cpp" line="245"/>
         <location filename="../gui/toolbar.cpp" line="53"/>
         <source>Services</source>
-        <translation type="unfinished"/>
+        <translation>Tjänster</translation>
     </message>
     <message>
         <location filename="../gui/main_window.cpp" line="245"/>
         <location filename="../gui/toolbar.cpp" line="60"/>
         <source>Users</source>
-        <translation type="unfinished"/>
+        <translation>Användare</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1463,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="102"/>
         <source>Edit account information</source>
-        <translation type="unfinished"/>
+        <translation>Redigera kontoinformation</translation>
     </message>
 </context>
 <context>
@@ -1471,12 +1471,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Administrator</source>
-        <translation type="unfinished"/>
+        <translation>Administratör</translation>
     </message>
     <message>
         <location filename="../gui/accounts_widget.cpp" line="152"/>
         <source>Standard User</source>
-        <translation type="unfinished"/>
+        <translation>Standardanvändare</translation>
     </message>
 </context>
 </TS>
